@@ -1,0 +1,10 @@
+[package]
+name = "openapi"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+proc-macro2 = "1.0.84"
+sw4rm-rs = "0.2.0"
+sw4rm-rs-generation = "0.2.0"
+syn = { version = "2", features = ["full", "extra-traits"] }
