@@ -1,27 +1,17 @@
-use std::env;
 use std::fs::File;
 use std::io::Read;
-use std::process;
+use openapiv3::OpenAPI;
+use serde_json;
+
 
 fn main() {
-    let mut args = env::args();
-    let _ = args.next(); // executable name
+//    let data = from_path("data/vi_json_openapi_specification_v8_0_2_0.yaml");
+    let mut file = File::open("data/vi_json_openapi_specification_v8_0_2_0.json").expect("unable to open file");
 
-    let filename = match (args.next(), args.next()) {
-        (Some(filename), None) => filename,
-        _ => {
-            eprintln!("Usage: dump-syntax path/to/filename.rs");
-            process::exit(1);
-        }
-    };
+    let mut data = String::new();
+    file.read_to_string(&mut data).expect("unable to read file");    
+    //let data = include_str!("data/vi_json_openapi_specification_v8_0_2_0.yaml");
+    let openapi: OpenAPI = serde_json::from_str(&data).expect("Could not deserialize input"); // Change OpenAPI to Value
+    println!("{:?}", openapi);
 
-    let mut file = File::open(&filename).expect("unable to open file");
-
-    let mut src = String::new();
-    file.read_to_string(&mut src).expect("unable to read file");
-
-    let syntax = syn::parse_file(&src).expect("unable to parse file");
-
-    // Debug impl is available if Syn is built with "extra-traits" feature.
-    println!("{:#?}", syntax);
 }
