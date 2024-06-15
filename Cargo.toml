@@ -12,3 +12,6 @@ syn = { version = "2", features = ["full", "extra-traits", "parsing"] }
 prettyplease = "0.2"
 thiserror = "1.0.61"
 serde = "1.0.203"
+quote = "1.0.36"
+indexmap = "2.2.6"
+convert_case = "0.6.0"
