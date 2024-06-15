@@ -1,6 +1,9 @@
-use openapiv3::{OpenAPI, ReferenceOr, Schema, SchemaKind};
-use std::io::Read;
+use openapiv3::{AnySchema, OpenAPI, ReferenceOr, Schema, SchemaKind};
+use printer::{Printer, StdoutPrinter};
+use std::{f32::consts::E, io::Read};
 use convert_case::{Case, Casing};
+
+mod printer;
 
 // Error is an error type for Project.
 #[derive(Debug, thiserror::Error)]
@@ -15,25 +18,27 @@ pub enum Error {
     Cycle(String),
     #[error("Invalid reference format `{}`", .0)]
     InvalidReference(String),
+    #[error("Unsupported type `{}`", .0)]
+    UnsupportedType(String),
 }
 
 // Result is a type alias for handling errors.
 pub type Result<T> = std::result::Result<T, Error>;
 
-/// A project manages the stats of an OpenAPI specification.
-/// It is created from a file and additional files may be
+/// An APISpec manages a compilation uint of OpenAPI specifications. At present
+/// one is supported. It is created from a file and additional files may be
 /// loaded to resolve references.
-pub struct Project {
+pub struct APISpec {
     spec: openapiv3::OpenAPI,
     // TODO: Support multiple specs and cross file references.
     //specs: HashMap<String, openapiv3::OpenAPI>,
 }
 
-impl Project {
+impl APISpec {
     /// Create a new project from a file.
-    pub fn new(file: &str) -> Result<Project> {
+    pub fn new(file: &str) -> Result<APISpec> {
         let openapi = load_openapi(file)?;
-        Result::Ok(Project { spec: openapi })
+        Result::Ok(APISpec { spec: openapi })
     }
 
     /// Resolve schema by schema name.
@@ -91,8 +96,8 @@ impl Project {
         }
     }
 
-    fn resolve_reference<'a>(&'a self, reference: &String, mut stack: Vec<String>) -> std::prelude::v1::Result<&Schema, Error> {
-        let schema_name = reference.trim_start_matches("#/components/schemas/");
+    fn resolve_reference<'a>(&'a self, reference: &String, mut stack: Vec<String>) -> Result<&Schema> {
+        let schema_name = parse_schema_from_reference(reference)?;
         if schema_name.len() == reference.len() {
             return Err(Error::InvalidReference(reference.to_string()));
         }
@@ -125,6 +130,14 @@ impl Project {
     }
 }
 
+fn parse_schema_from_reference(reference: &String) -> Result<&str> {
+    if ! reference.starts_with("#/components/schemas/") {
+        return Err(Error::InvalidReference(reference.to_string()));
+    }
+    let schema_name = reference.trim_start_matches("#/components/schemas/");
+    Ok(schema_name)
+}
+
 /// Load an OpenAPI specification from a file.
 fn load_openapi(file: &str) -> Result<openapiv3::OpenAPI> {
     let mut file = std::fs::File::open(file)?;
@@ -137,28 +150,25 @@ fn load_openapi(file: &str) -> Result<openapiv3::OpenAPI> {
 /// Print hierarchy of schemas. Prints ASCII art hirarchy of schemas starting from the given schema.
 /// If the schema has child schemas, they will be printed on new line with increased indentation.
 /// If the child schema has child schemas, they will be printed on new line with increased indentation.
-pub fn print_schema_hierarchy(project: &Project, schema: String, indent: usize) -> Result<()> {
+pub fn print_schema_hierarchy(project: &APISpec, schema: String) -> Result<()> {
+    let printer = &mut  StdoutPrinter::new(None, None);
     let h = resolve_schema_hierarchy(project)?;
-    print_schema_hierarchy_internal(&h, &schema, indent)
+    print_schema_hierarchy_internal(&h, &schema, printer)
 }
 
 fn print_schema_hierarchy_internal(
     hierarchy: &std::collections::HashMap<String, Vec<String>>,
     schema: &String,
-    indent: usize,
+    printer: &mut dyn Printer,
 ) -> Result<()> {
     match hierarchy.get(schema) {
         Some(children) => {
-            println!(
-                "{:indent$}{} {}",
-                "",
-                schema,
-                children.len(),
-                indent = indent
-            );
+            printer.println(format!("{} {}", schema, children.len()).as_str());
+            printer.indent();
             for child in children {
-                print_schema_hierarchy_internal(hierarchy, child, indent + 2)?;
+                print_schema_hierarchy_internal(hierarchy, child, printer)?;
             }
+            printer.dedent();
         }
         None => {
             return Err(Error::NotFound(schema.to_string()));
@@ -168,85 +178,100 @@ fn print_schema_hierarchy_internal(
 }
 
 /// Generate Rust code for given schema.
-/// The generated code is a struct definition for the schema.
-/// The struct name is the schema name.
-/// The struct fields are the properties of the schema.
-/// The struct fields are named after the properties of the schema.
-/// The struct fields are typed according to the type of the properties of the schema.
-/// Returns a string of Rust code.
-/// The generated code is formatted using prettyplease.
-pub fn generate_rust_code(project: &Project, schemaName: String) -> Result<String> {
+pub fn generate_rust_code(project: &APISpec, schemaName: String, printer: &mut dyn Printer) -> Result<()> {
     let refOrschema = project.get_schema(&schemaName)?;
     match refOrschema {
-        ReferenceOr::Item(schema) => generate_rust_code_for_schema(project, schemaName, schema),
+        ReferenceOr::Item(schema) => generate_rust_code_for_schema(project, schemaName, schema, printer),
         ReferenceOr::Reference { reference } => {
-            Ok(format!("\n// `{schemaName}` schema is reference to `{reference}`").into())
+            // TODO
+            printer.print(format!("\n// `{schemaName}` schema is reference to `{reference}`").as_str());
+            Ok(())
         }
     }
 }
 
 fn generate_rust_code_for_schema(
-    project: &Project,
-    schemaName: String,
+    project: &APISpec,
+    schema_name: String,
     schema: &Schema,
-) -> Result<String> {
-    let mut code = String::new();
-    code = format!("#[derive(Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize)]\n");
-    code.push_str(format!("pub struct {} {{\n", schemaName).as_str());
+    printer: &mut dyn Printer,
+) -> Result<()> {
+    printer.println(format!("#[derive(Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize)]").as_str());
+    printer.println(format!("pub struct {} {{", schema_name).as_str());
+    printer.indent();
     match &schema.schema_kind {
         SchemaKind::Any(anySchema) => {
-            let properties = &anySchema.properties;
-            render_properties(&mut code, project, properties)?;
+            render_properties(project, anySchema, printer)?;
         }
         SchemaKind::Type(openapiv3::Type::Object(object_schema)) => {}
         _ => {
-            let kind = &schema.schema_kind;
-            code.push_str(
-                format!("    // TODO: Implement support for {schemaName} schema: {kind:?}\n")
-                    .as_str(),
-            );
+            printer.println(format!("// TODO: Implement support for {} schema: {:?}", 
+                                    schema_name, 
+                                    &schema.schema_kind
+                                ).as_str());
         }
     }
-    code.push_str("}\n");
-    Ok(code)
+    printer.dedent();
+    printer.println("}");
+    Ok(())
 }
 
 fn render_properties(
-    code: &mut String,
-    project: &Project,
-    properties: &indexmap::map::IndexMap<String, ReferenceOr<Box<Schema>>>,
+    project: &APISpec,
+    schema: &AnySchema,
+    printer: &mut dyn printer::Printer,
 ) -> Result<()> {
-    for (name, property) in properties.iter() {
-        let property = project.resolve_boxed_schema(property)?;
-        let property_type = get_property_type(project, property);
-        let field_name = name.to_case(Case::Snake); 
-        code.push_str(format!("    #[serde(rename = \"{}\")]\n", name).as_str());
-        code.push_str(format!("    pub {}: {},\n", field_name, property_type).as_str());
+    for (name, property) in schema.properties.iter() {
+        let mut property_type = get_property_type(project, property)?;
+        let field_name = name.to_case(Case::Snake);
+        let required = schema.required.contains(&name);
+        if !required {
+            property_type = format!("Option<{}>", property_type);
+        }
+        printer.println(format!("#[serde(rename = \"{}\")]", name).as_str());
+        printer.println(format!("pub {}: {},", field_name, property_type).as_str());
     }
     Ok(())
 }
 
-fn get_property_type(project: &Project, property: &Schema) -> String {
-    match &property.schema_kind {
-        SchemaKind::Type(openapiv3::Type::String(_)) => "String".to_string(),
-        SchemaKind::Type(openapiv3::Type::Integer(_)) => "i64".to_string(),
-        SchemaKind::Type(openapiv3::Type::Number(_)) => "f64".to_string(),
-        SchemaKind::Type(openapiv3::Type::Boolean(_)) => "bool".to_string(),
-        // SchemaKind::Type(openapiv3::Type::Array(array_schema)) => {
-        //     let items = project.resolve_boxed_schema(&array_schema.items)?;
-        //     format!("Vec<{}>", get_property_type(project, items))
-        // },
-        // SchemaKind::Type(openapiv3::Type::Object(object_schema)) => {
-        //     let properties = object_schema.properties;
-        //     format!("{}{}", "{", "}")
-        // },
-        _ => "Any".to_string(),
+fn get_property_type(project: &APISpec, property: &ReferenceOr<Box<Schema>>) -> Result<String> {
+    match property {
+        ReferenceOr::Item(schema) => get_schema_type(project, schema.as_ref()),
+        ReferenceOr::Reference { reference } => {
+            let schema_name = parse_schema_from_reference(reference)?;
+            Ok(schema_name.to_string())
+        }
+        
     }
+}
+
+fn get_schema_type(project: &APISpec, property: &Schema) -> Result<String> {
+    let mut str = String::new();
+    let mut res = match &property.schema_kind {
+        SchemaKind::Type(openapiv3::Type::String(_)) => "String",
+        SchemaKind::Type(openapiv3::Type::Integer(_)) => "i64",
+        SchemaKind::Type(openapiv3::Type::Number(_)) => "f64",
+        SchemaKind::Type(openapiv3::Type::Boolean(_)) => "bool",
+        SchemaKind::Type(openapiv3::Type::Array(array_schema)) => {
+            let items = &array_schema.items;
+            match items {
+                None => return Err(Error::UnsupportedType(format!("Array without items: {:?}", property))),
+                Some(items) => {
+                    str = format!("Vec<{}>", get_property_type(project, items)?);
+                    str.as_str()
+                }
+            }
+        },
+        SchemaKind::Type(openapiv3::Type::Object(_)) => 
+            return Err(Error::UnsupportedType(format!("Object schema: {:?}", property))),
+        _ => return Err(Error::UnsupportedType(format!("Unsupported schema: {:?}", property))),
+    };
+    Ok(res.to_string())
 }
 
 /// Resolve hierarchy of schemas. Returns a Map of schema names to their children schema names.
 fn resolve_schema_hierarchy(
-    project: &Project,
+    project: &APISpec,
 ) -> Result<std::collections::HashMap<String, Vec<String>>> {
     let mut hierarchy = std::collections::HashMap::new();
 
@@ -268,36 +293,29 @@ mod tests {
     use serde_json;
     use std::io::Read;
 
-    fn load_openapi() -> openapiv3::OpenAPI {
-        let mut file = std::fs::File::open("data/vi_json_openapi_specification_v8_0_2_0.json")
-            .expect("unable to open file");
-        let mut data = String::new();
-        file.read_to_string(&mut data).expect("unable to read file");
-        let openapi: openapiv3::OpenAPI =
-            serde_json::from_str(&data).expect("Could not deserialize input");
-        openapi
+    fn load_openapi() -> APISpec {
+        APISpec::new("data/vi_json_openapi_specification_v8_0_2_0.json")
+            .expect("Could not load openapi")
     }
 
     #[test]
     fn test_print_schema() {
-        let openapi = load_openapi();
-        let project = Project { spec: openapi };
-        let code = generate_rust_code(&project, "VirtualEthernetCard".to_string())
+        let project = load_openapi();
+        let mut printer = StdoutPrinter::new(None, None);
+        generate_rust_code(&project, "ConfigTarget".to_string(), &mut printer)
             .expect("Could not generate rust code");
-        println!("{}", code);
     }
 
     #[test]
     fn print_schema_hierarchy_test() {
-        let openapi = load_openapi();
-        let project = Project { spec: openapi };
-        print_schema_hierarchy(&project, "VirtualDevice".to_string(), 0)
+        let project = load_openapi();
+        print_schema_hierarchy(&project, "VirtualDevice".to_string())
             .expect("Could not print schema hierarchy");
     }
 
     #[test]
     fn count_schema() {
-        let openapi = load_openapi();
+        let openapi = load_openapi().spec;
         let mut count = 0;
         for (_, schema) in openapi.components.unwrap().schemas.iter() {
             count += 1;
