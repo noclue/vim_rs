@@ -1,5 +1,8 @@
 use serde;
 
+
+type MoTypesEnum = String;
+
 #[derive(Debug, serde::Deserialize)]
 struct Device {
     key: i32,

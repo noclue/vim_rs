@@ -2,7 +2,6 @@
 name = "vim-rs"
 version = "0.1.0"
 edition = "2021"
-crate-type = ["staticlib"]
 
 [dependencies]
 openapiv3 = "2.0.0"
