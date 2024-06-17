@@ -24,3 +24,67 @@ fn main() {
     // println!("{:?}", openapi);
 
 }
+
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    const DEVICE: &str = r#"
+            {
+                "_typeName": "VirtualVmxnet3",
+                "key": 4000,
+                "deviceInfo": {
+                    "_typeName": "Description",
+                    "label": "Network adapter 1",
+                    "summary": "VM Network"
+                },
+                "backing": {
+                    "_typeName": "VirtualEthernetCardNetworkBackingInfo",
+                    "deviceName": "VM Network",
+                    "useAutoDetect": false,
+                    "network": {
+                        "_typeName": "ManagedObjectReference",
+                        "value": "network-27",
+                        "type": "Network"
+                    }
+                },
+                "connectable": {
+                    "_typeName": "VirtualDeviceConnectInfo",
+                    "migrateConnect": "unset",
+                    "startConnected": true,
+                    "allowGuestControl": false,
+                    "connected": false,
+                    "status": "untried"
+                },
+                "controllerKey": 100,
+                "unitNumber": 7,
+                "addressType": "assigned",
+                "macAddress": "00:50:56:ac:4d:ed",
+                "wakeOnLanEnabled": true,
+                "resourceAllocation": {
+                    "_typeName": "VirtualEthernetCardResourceAllocation",
+                    "reservation": 0,
+                    "share": {
+                        "_typeName": "SharesInfo",
+                        "shares": 50,
+                        "level": "normal"
+                    },
+                    "limit": -1
+                },
+                "uptCompatibilityEnabled": true,
+                "uptv2Enabled": false
+            }
+        "#;
+
+    #[test]
+    fn test_parse_device() {
+        let device: output::BaseVirtualDevice = serde_json::from_str(DEVICE).unwrap();
+        let output::BaseVirtualDevice::VirtualEthernetCard(ethernet_card) = device else {
+            panic!("Expected VirtualEthernetCard, got {:?}", device);
+        };
+        let output::BaseVirtualEthernetCard::VirtualVmxnet(vmxnet) = ethernet_card else {
+            panic!("Expected VirtualVmxnet, got {:?}", ethernet_card);
+        };
+    }
+}

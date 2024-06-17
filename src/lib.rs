@@ -271,11 +271,11 @@ pub fn generate_rust_code(
         }
         SchemaKind::Type(openapiv3::Type::Object(_)) => {
             emit_struct_type(project, &schema_name, schema, printer)?;
-            emit_enum_type(project, &schema_name, schema, printer)?;
+            emit_base_type(project, &schema_name, schema, printer)?;
         }
         SchemaKind::Any(_) => {
             emit_struct_type(project, &schema_name, schema, printer)?;
-            emit_enum_type(project, &schema_name, schema, printer)?;
+            emit_base_type(project, &schema_name, schema, printer)?;
         }
         _ => {
             return Err(Error::UnsupportedType(format!(
@@ -288,24 +288,24 @@ pub fn generate_rust_code(
     Ok(())
 }
 
+
 /// Emit Rust enum type with all children schemas and the current schema.
-fn emit_enum_type(
+fn emit_base_type(
     project: &APISpec,
     schema_name: &String,
     schema: &Schema,
     printer: &mut dyn Printer,
 ) -> Result<()> {
-    let pascal_case = schema_name.to_case(Case::Pascal);
     let children = project.get_children(schema_name)?;
-    let super_ = get_parent_schema(schema)?;
-    if super_.is_none() && children.len() == 0 {
+    if children.len() == 0 {
         return Ok(());
     }
+    let pascal_case = schema_name.to_case(Case::Pascal);
     let discriminator_value = schema_name;
     let discriminator = project.resolve_discriminator(schema_name, schema)?;
     printer.println("#[derive(Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize)]")?;
     printer.println(format!("#[serde(tag = \"{}\")]", discriminator).as_str())?;
-    printer.println(format!("pub enum {}_Enum {{", pascal_case).as_str())?;
+    printer.println(format!("pub enum Base{} {{", pascal_case).as_str())?;
     printer.indent();
     if pascal_case != *discriminator_value {
         printer.println(format!("#[serde(rename = \"{}\")]", discriminator_value).as_str())?;
@@ -317,7 +317,7 @@ fn emit_enum_type(
         if child_pascal_case != *child{
             printer.println(format!("#[serde(rename = \"{}\")]", child).as_str())?;
         }
-        printer.println(format!("{}({}),", child_pascal_case, child_pascal_case).as_str())?;
+        printer.println(format!("{}({}),", child_pascal_case, get_type_name(project, child)?).as_str())?;
     }
     printer.dedent();
     printer.println("}")?;
@@ -392,12 +392,25 @@ fn emit_props2(
     Ok(())
 }
 
+/// Get the Rust name for an openAPI schema. If the schema has children, return Base{PascalCase}.
+/// If the schema does not have children, return PascalCase.
+fn get_type_name(project: &APISpec, schema_name: &str) -> Result<String> {
+    let pascal_case = schema_name.to_case(Case::Pascal);
+    let children = project.get_children(schema_name)?;
+    if children.len() == 0 {
+        return Ok(pascal_case);
+    }
+    Ok(format!("Base{}", pascal_case))
+}
+
+
 fn get_property_type(project: &APISpec, property: &ReferenceOr<Box<Schema>>) -> Result<String> {
     match property {
         ReferenceOr::Item(schema) => get_schema_type(project, schema.as_ref()),
         ReferenceOr::Reference { reference } => {
             let schema_name = parse_schema_from_reference(reference)?;
-            Ok(format!("Box<{}>",schema_name.to_case(Case::Pascal)))
+            let type_name = get_type_name(project, schema_name)?;
+            Ok(format!("Box<{}>",type_name))
         }
     }
 }
