@@ -312,7 +312,20 @@ fn emit_base_type(
     }
     printer.println(format!("{}({}),", pascal_case, pascal_case).as_str())?;
 
+    let mut base_types: Vec<&String> = Vec::new();
     for child in children {
+        if project.get_children(child)?.len() > 0 {
+            base_types.push(child);
+            continue;
+        }
+        let child_pascal_case = child.to_case(Case::Pascal);
+        if child_pascal_case != *child{
+            printer.println(format!("#[serde(rename = \"{}\")]", child).as_str())?;
+        }
+        printer.println(format!("{}({}),", child_pascal_case, get_type_name(project, child)?).as_str())?;
+    }
+    for child in base_types {
+        printer.println("#[serde(untagged)]")?;
         let child_pascal_case = child.to_case(Case::Pascal);
         if child_pascal_case != *child{
             printer.println(format!("#[serde(rename = \"{}\")]", child).as_str())?;
