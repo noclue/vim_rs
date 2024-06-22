@@ -352,19 +352,21 @@ fn emit_struct_type(
         printer.println(format!("#[serde(flatten)]").as_str())?;
         printer.println(format!("pub {}_: {},", super_.to_case(Case::Snake), super_.to_case(Case::Pascal)).as_str())?;
     }
-    emit_props(schema, project, printer)?;
+    let discriminator: String = project.resolve_discriminator(schema_name, schema).unwrap_or("".to_string());
+    emit_props(schema, &discriminator, project, printer)?;
     printer.dedent();
     printer.println("}")?;
     Ok(())
 }
 
-fn emit_props(schema: &Schema, project: &APISpec, printer: &mut dyn Printer) -> Result<()> {
+fn emit_props(schema: &Schema, discriminator: &str, project: &APISpec, printer: &mut dyn Printer) -> Result<()> {
     let res = match &schema.schema_kind {
         SchemaKind::Any(any_schema) => {
             emit_props2(
                 project,
                 &any_schema.properties,
                 &any_schema.required,
+                discriminator,
                 printer,
             )?;
         }
@@ -373,6 +375,7 @@ fn emit_props(schema: &Schema, project: &APISpec, printer: &mut dyn Printer) -> 
                 project,
                 &object_schema.properties,
                 &object_schema.required,
+                discriminator,
                 printer,
             )?;
         }
@@ -390,9 +393,13 @@ fn emit_props2(
     project: &APISpec,
     properties: &indexmap::IndexMap<String, ReferenceOr<Box<Schema>>>,
     required: &Vec<String>,
+    discriminator: &str,
     printer: &mut dyn printer::Printer,
 ) -> Result<()> {
     for (name, property) in properties.iter() {
+        if name == discriminator {
+            continue; // skip discriminator as Serde will handle it
+        }
         let mut property_type = get_property_type(project, property)?;
         let field_name = name.to_case(Case::Snake);
         let required = required.contains(&name);
