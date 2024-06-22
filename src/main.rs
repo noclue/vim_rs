@@ -1,7 +1,20 @@
+//mod output;
 
-use serde_json;
+#[derive(Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(tag = "_typeName")]
+pub enum BaseAny {
+    #[serde(untagged)]
+    VirtualDevice(BaseVirtualDevice),
+    #[serde(untagged)]
+    Array(Arrays),
+}
 
-// mod output;
+#[derive(Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(tag = "_typeName", content = "_value")]
+pub enum Arrays {
+    ArrayOfString(Vec<String>),
+    ArrayOfInt(Vec<i64>),
+}
 
 #[derive(Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
 pub struct VirtualDevice {
@@ -163,6 +176,7 @@ fn main() {
 #[cfg(test)]
 mod tests {
     use super::*;
+    //use crate::output::*;
 
     const DEVICE: &str = r#"
             {
@@ -195,5 +209,16 @@ mod tests {
         // } else {
         //     panic!("unexpected device type: {:?}", device);
         // }
+    }
+
+    #[test]
+    fn test_parse_array_of_int() {
+        let array: BaseAny = serde_json::from_str(r#"{"_typeName":"ArrayOfInt","_value":[1,2,3]}"#).unwrap();
+        dbg!(&array);
+        if let BaseAny::Array(Arrays::ArrayOfInt(array)) = array {
+            assert_eq!(array, vec![1, 2, 3]);
+        } else {
+            panic!("unexpected array type: {:?}", array);
+        }
     }
 }
