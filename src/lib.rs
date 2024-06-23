@@ -3,8 +3,6 @@ use openapiv3::{ReferenceOr, Schema, SchemaKind};
 use printer::Printer;
 use check_keyword::CheckKeyword;
 use spec::{APISpec, get_parent_schema, parse_schema_from_reference};
-
-mod check_keyword;
 mod printer;
 mod spec;
 
