@@ -1,6 +1,6 @@
-use std::io::Read;
-use std::collections::HashMap;
 use openapiv3::{ReferenceOr, Schema, SchemaKind};
+use std::collections::HashMap;
+use std::io::Read;
 
 use crate::printer;
 
@@ -40,20 +40,28 @@ impl APISpec {
     /// Create a new project from a file.
     pub fn new(file: &str) -> Result<APISpec> {
         let openapi = load_openapi(file)?;
-        let mut self_ = APISpec { spec: openapi, children: HashMap::new()};
+        let mut self_ = APISpec {
+            spec: openapi,
+            children: HashMap::new(),
+        };
         self_.children = self_.resolve_schema_hierarchy()?;
         Ok(self_)
     }
 
     pub fn get_components(&self) -> Result<&openapiv3::Components> {
-        self.spec.components.as_ref()
+        self.spec
+            .components
+            .as_ref()
             .ok_or(Error::InvalidApiSpecs("Components not found".to_string()))
     }
 
     pub fn resolve_discriminator_by_name(&self, schema_name: &str) -> Result<String> {
         let schema_or_ref = self.get_schema(schema_name)?;
         let ReferenceOr::Item(schema) = schema_or_ref else {
-            return Err(Error::InvalidReference(format!("{} is not a schema", schema_name)));
+            return Err(Error::InvalidReference(format!(
+                "{} is not a schema",
+                schema_name
+            )));
         };
         self.resolve_discriminator(schema_name, schema)
     }
@@ -61,7 +69,10 @@ impl APISpec {
     pub fn resolve_discriminator(&self, schema_name: &str, schema: &Schema) -> Result<String> {
         let Some(discriminator) = &schema.schema_data.discriminator else {
             let Some(parent) = get_parent_schema(schema)? else {
-                return Err(Error::InvalidApiSpecs(format!("{} does not have a discriminator", schema_name)));
+                return Err(Error::InvalidApiSpecs(format!(
+                    "{} does not have a discriminator",
+                    schema_name
+                )));
             };
             return self.resolve_discriminator_by_name(&parent);
         };
@@ -154,12 +165,10 @@ impl APISpec {
     }
 
     /// Resolve hierarchy of schemas. Returns a Map of schema names to their children schema names.
-    fn resolve_schema_hierarchy(
-        &self
-    ) -> Result<std::collections::HashMap<String, Vec<String>>> {
+    fn resolve_schema_hierarchy(&self) -> Result<std::collections::HashMap<String, Vec<String>>> {
         let mut hierarchy = std::collections::HashMap::new();
 
-        for (name, schema) in self.spec.components.as_ref().unwrap().schemas.iter() {
+        for (name, schema) in self.get_components()?.schemas.iter() {
             let schema = self.resolve_schema(schema)?;
             let parent = get_parent_schema(schema)?;
             if let Some(parent_name) = parent {
@@ -170,7 +179,6 @@ impl APISpec {
         }
         Ok(hierarchy)
     }
-
 }
 
 /// Load an OpenAPI specification from a file.
