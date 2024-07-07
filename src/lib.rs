@@ -5,6 +5,7 @@ use check_keyword::CheckKeyword;
 use spec::{APISpec, get_parent_schema, parse_schema_from_reference};
 mod printer;
 mod spec;
+mod oas30;
 
 // Error is an error type for Project.
 #[derive(Debug, thiserror::Error)]

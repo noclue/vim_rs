@@ -34,6 +34,8 @@ pub type Result<T> = std::result::Result<T, Error>;
 pub struct APISpec {
     spec: openapiv3::OpenAPI,
     children: HashMap<String, Vec<String>>,
+    structures: Vec<String>,
+    primitives: HashMap<String, String>,
 }
 
 impl APISpec {
@@ -43,9 +45,72 @@ impl APISpec {
         let mut self_ = APISpec {
             spec: openapi,
             children: HashMap::new(),
+            structures: Vec::new(),
+            primitives: HashMap::new(),
         };
         self_.children = self_.resolve_schema_hierarchy()?;
+        self_.compute_structures_and_primitives()?;
         Ok(self_)
+    }
+
+
+    /// Compute structures and enums from the schemas.
+    /// If the schema is an object, add it to the structures.
+    /// If the schema is an enum, add it to the enums.
+    /// If the schema is neither an object nor an enum ignore it.
+    fn compute_structures_and_primitives(&mut self) -> Result<()> {
+        Ok(())
+        // for (name, refOrschema) in self.get_components()?.schemas.iter() {
+        //     let ReferenceOr::Item(schema) = refOrschema else {
+        //         continue;
+        //     };
+        //     match &schema.schema_kind {
+        //         SchemaKind::Type(openapiv3::Type::String(_)) => {
+        //             self.primitives.insert(name.to_string(), "String".to_string());
+        //         }
+        //         SchemaKind::Type(openapiv3::Type::Integer(_)) => {
+        //             self.primitives.insert(name.to_string(), "i64".to_string());
+        //         }
+        //         SchemaKind::Type(openapiv3::Type::Number(_)) => {
+        //             self.primitives.insert(name.to_string(), "f64".to_string());
+        //         }
+        //         SchemaKind::Type(openapiv3::Type::Boolean(_)) => {
+        //             self.primitives.insert(name.to_string(), "bool".to_string());
+        //         }
+        //         SchemaKind::Type(openapiv3::Type::Array(array_schema)) => {
+        //             let items = &array_schema.items;
+        //             match items {
+        //                 None => {
+        //                     return Err(Error::UnsupportedType(format!(
+        //                         "Schema {} is an array without items: {:?}",
+        //                         schema_name,
+        //                         schema
+        //                     )))
+        //                 }
+        //                 Some(items) => {
+        //                     let item_type = get_property_type(project, items)?;
+        //                     printer.println(format!("pub type {} = Vec<{}>;", pascal_case, item_type).as_str())?;
+        //                 }
+        //             }
+        //         }
+        //         SchemaKind::Type(openapiv3::Type::Object(_)) => {
+        //             emit_struct_type(project, &schema_name, schema, printer)?;
+        //             emit_base_type(project, &schema_name, schema, printer)?;
+        //         }
+        //         SchemaKind::Any(_) => {
+        //             emit_struct_type(project, &schema_name, schema, printer)?;
+        //             emit_base_type(project, &schema_name, schema, printer)?;
+        //         }
+        //         _ => {
+        //             return Err(Error::UnsupportedType(format!(
+        //                 "Unsupported schema {} of type: {:?}",
+        //                 name,
+        //                 schema.schema_kind
+        //             )));
+        //         }
+        //     }        
+        // }
+        // Ok(())
     }
 
     pub fn get_components(&self) -> Result<&openapiv3::Components> {
