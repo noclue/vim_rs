@@ -922,6 +922,10 @@ pub struct Schema {
     pub extensions: HashMap<String, serde_json::Value>,
 }
 
+impl Schema {
+    //
+}
+
 // From https://spec.openapis.org/oas/v3.0.3#data-types TODO: I am unsure where all schema types are
 // defined. Is there "any" type? I found `null`` is not supported and instead `nullable` should be
 // used in https://spec.openapis.org/oas/v3.0.3#data-types There is list of 6 types excluding
