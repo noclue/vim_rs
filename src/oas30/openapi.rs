@@ -812,32 +812,94 @@ struct Schema {
     /// The value of "type" MUST be a string, representing the type of the schema.
     #[serde(rename = "type")]
     schema_type: Option<SchemaType>,
+    /// This keyword's value MUST be an array. This array SHOULD have at least one element.
+    /// 
+    /// Elements of the array MUST be objects. Inline or referenced schema MUST be of a Schema
+    /// Object and not a standard JSON Schema.
+    /// 
+    /// An instance validates successfully against this keyword if it validates successfully against
+    /// all schemas defined by this keyword's value.
     #[serde(rename = "allOf")]
     all_of: Option<Vec<RefOr<Schema>>>,
+    /// This keyword's value MUST be an array. This array SHOULD have at least one element.
+    /// 
+    /// Elements of the array MUST be objects. Inline or referenced schema MUST be of a Schema
+    /// Object and not a standard JSON Schema.
+    /// 
+    /// An instance validates successfully against this keyword if it validates successfully against
+    /// exactly one schema defined by this keyword's value.
     #[serde(rename = "oneOf")]
     one_of: Option<Vec<RefOr<Schema>>>,
+    /// This keyword's value MUST be an array. This array SHOULD have at least one element.
+    /// 
+    /// Elements of the array MUST be objects. Inline or referenced schema MUST be of a Schema
+    /// Object and not a standard JSON Schema.
+    /// 
+    /// An instance validates successfully against this keyword if it validates successfully against
+    /// at least one schema defined by this keyword's value.
     #[serde(rename = "anyOf")]
     any_of: Option<Vec<RefOr<Schema>>>,
+    /// This keyword's value MUST be an object.  Inline or referenced schema MUST be of a Schema
+    /// Object and not a standard JSON Schema.
+    /// 
+    /// An instance is valid against this keyword if it fails to validate successfully against the
+    /// schema defined by this keyword.
     not: Option<RefOr<Schema>>,
     /// The value of "items" MUST be an object, and that object MUST be a valid JSON Schema. This
     /// object defines the schema for items in arrays. `items` MUST be present if the `type` is
     /// `array`.
     #[serde(rename = "items")]
     items: Option<RefOr<Schema>>,
+    /// The value of "properties" MUST be an object. Each value of this object MUST be an object, 
+    /// and each object MUST be a valid schema.
+    /// 
+    /// Property definitions MUST be a Schema Object and not a standard JSON Schema (inline or
+    /// referenced).
     #[serde(rename = "properties")]
     properties: Option<HashMap<String, RefOr<Schema>>>,
+    /// The value of "additionalProperties" MUST be a boolean or a schema. If `true` is provided,
+    /// then the object can have any property. If `false` is provided, then the object cannot have
+    /// any additional properties. If a schema is provided, then the object properties MUST match
+    /// the schema.
+    /// 
+    /// Inline or referenced schema MUST be of a Schema Object and not a standard JSON Schema.
     #[serde(rename = "additionalProperties")]
     additional_properties: Option<RefOr<Schema>>,
+    /// The value of "description" MUST be a string. a description will provide explanation about
+    /// the purpose of the instance described by this schema.
+    /// 
+    /// [CommonMark syntax](https://spec.commonmark.org/) MAY be used for rich text representation.
     description: Option<String>,
     /// See [Data Type Formats](https://spec.openapis.org/oas/v3.0.3#dataTypeFormat) for further
     /// details. While relying on JSON Schema’s defined formats, the OAS offers a few additional
     /// predefined formats.
     format: Option<DataFormat>,
+    /// The default value represents what would be assumed by the consumer of the input as the value
+    /// of the schema if one is not provided. Unlike JSON Schema, the value MUST conform to the
+    /// defined type for the Schema Object defined at the same level. For example, if type is
+    /// string, then default can be "foo" but cannot be 1.
     default: Option<serde_json::Value>,
+    /// A `true`` value adds "null" to the allowed type specified by the type keyword, only if type
+    /// is explicitly defined within the same Schema Object. Other Schema Object constraints retain
+    /// their defined behavior, and therefore may disallow the use of `null` as a value. A `false`
+    /// value leaves the specified or default type unmodified. The default value is `false`.
     nullable: Option<bool>,
+    /// Adds support for polymorphism. The discriminator is an object name that is used to
+    /// differentiate between other schemas which may satisfy the payload description. See
+    /// [Composition and
+    /// Inheritance](https://spec.openapis.org/oas/v3.0.3#composition-and-inheritance-polymorphism)
+    /// for more details.
     discriminator: Option<Discriminator>,
+    /// Relevant only for Schema `"properties"` definitions. Declares the property as "read only".
+    /// This means that it MAY be sent as part of a response but SHOULD NOT be sent as part of the
+    /// request. If the property is marked as readOnly being `true`, then the `writeOnly` property
+    /// MUST be `false`. Default value is `false`.
     #[serde(rename = "readOnly")]
     read_only: Option<bool>,
+    /// Relevant only for Schema `"properties"` definitions. Declares the property as "write only".
+    /// Therefore, it MAY be sent as part of a request but SHOULD NOT be sent as part of the
+    /// response. If the property is marked as `writeOnly` being `true`, then the `readOnly`
+    /// property MUST be `false`. Default value is `false`.
     #[serde(rename = "writeOnly")]
     write_only: Option<bool>,
     /// This may be used only on properties schemas. It has no effect on root schemas. Adds
