@@ -3,7 +3,7 @@ use std::collections::HashMap;
 
 // From https://spec.openapis.org/oas/v3.0.3#schema
 /// This is the root document object of the OpenAPI document.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, PartialEq)]
 pub struct OpenAPI {
     /// This string MUST be the semantic version number of the OpenAPI Specification version that
     /// the OpenAPI document uses. The openapi field SHOULD be used by tooling specifications and
@@ -38,10 +38,10 @@ pub struct OpenAPI {
     pub extensions: HashMap<String, serde_json::Value>,
 }
 
-// From https://spec.openapis.org/oas/v3.0.3#info-object 
+// From https://spec.openapis.org/oas/v3.0.3#info-object
 /// The object provides metadata about the API. The metadata MAY be used by the clients if needed,
 /// and MAY be presented in editing or documentation generation tools for convenience.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, PartialEq)]
 pub struct Info {
     /// The title of the API.
     pub title: String,
@@ -63,7 +63,7 @@ pub struct Info {
 
 // From https://spec.openapis.org/oas/v3.0.3#contact-object
 /// Contact information for the exposed API.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, PartialEq)]
 pub struct Contact {
     /// The identifying name of the contact person/organization.
     pub name: Option<String>,
@@ -79,7 +79,7 @@ pub struct Contact {
 
 // From https://spec.openapis.org/oas/v3.0.3#license-object
 /// License information for the exposed API.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, PartialEq)]
 pub struct License {
     /// The license name used for the API.
     pub name: String,
@@ -90,9 +90,9 @@ pub struct License {
     pub extensions: HashMap<String, serde_json::Value>,
 }
 
-// From https://spec.openapis.org/oas/v3.0.3#server-object 
+// From https://spec.openapis.org/oas/v3.0.3#server-object
 /// An object representing a Server.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, PartialEq)]
 pub struct Server {
     /// A URL to the target host. This URL supports Server Variables and MAY be relative, to
     /// indicate that the host location is relative to the location where the OpenAPI document is
@@ -109,9 +109,9 @@ pub struct Server {
     pub extensions: HashMap<String, serde_json::Value>,
 }
 
-// From https://spec.openapis.org/oas/v3.0.3#server-variable-object 
+// From https://spec.openapis.org/oas/v3.0.3#server-variable-object
 /// An object representing a Server Variable for server URL template substitution.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, PartialEq)]
 pub struct ServerVariable {
     /// An enumeration of string values to be used if the substitution options are from a limited
     /// set. The array SHOULD NOT be empty.
@@ -134,7 +134,7 @@ pub struct ServerVariable {
 /// Holds a set of reusable objects for different aspects of the OAS. All objects defined within the
 /// components object will have no effect on the API unless they are explicitly referenced from
 /// properties outside the components object.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, PartialEq)]
 pub struct Components {
     /// An object to hold reusable Schema Objects.
     pub schemas: Option<HashMap<String, RefOr<Schema>>>,
@@ -161,11 +161,11 @@ pub struct Components {
     pub extensions: HashMap<String, serde_json::Value>,
 }
 
-// From https://spec.openapis.org/oas/v3.0.3#path-item-object 
+// From https://spec.openapis.org/oas/v3.0.3#path-item-object
 /// Describes the operations available on a single path. A Path Item may be empty, due to ACL
 /// constraints. The path itself is still exposed to the documentation viewer but they will not know
 /// which operations and parameters are available.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, PartialEq)]
 pub struct PathItem {
     /// Allows for an external definition of this path item. The referenced structure MUST be in the
     /// format of a Path Item Object. In case a Path Item Object field appears both in the defined
@@ -206,9 +206,9 @@ pub struct PathItem {
     pub extensions: HashMap<String, serde_json::Value>,
 }
 
-// From https://spec.openapis.org/oas/v3.0.3#operation-object 
+// From https://spec.openapis.org/oas/v3.0.3#operation-object
 /// Describes a single API operation on a path.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, PartialEq)]
 pub struct Operation {
     /// A list of tags for API documentation control. Tags can be used for logical grouping of
     /// operations by resources or any other qualifier.
@@ -264,9 +264,9 @@ pub struct Operation {
     pub extensions: HashMap<String, serde_json::Value>,
 }
 
-// From https://spec.openapis.org/oas/v3.0.3#external-documentation-object 
+// From https://spec.openapis.org/oas/v3.0.3#external-documentation-object
 /// Allows referencing an external resource for extended documentation.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, PartialEq)]
 pub struct ExternalDocumentation {
     /// A short description of the target documentation. CommonMark syntax MAY be used for rich text
     /// representation.
@@ -278,9 +278,9 @@ pub struct ExternalDocumentation {
     pub extensions: HashMap<String, serde_json::Value>,
 }
 
-// From https://spec.openapis.org/oas/v3.0.3#parameter-object 
+// From https://spec.openapis.org/oas/v3.0.3#parameter-object
 /// Describes a single operation parameter.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, PartialEq)]
 pub struct Parameter {
     /// The name of the parameter. Parameter names are case sensitive.
     pub name: String,
@@ -335,9 +335,9 @@ pub struct Parameter {
     pub extensions: HashMap<String, serde_json::Value>,
 }
 
-// From https://spec.openapis.org/oas/v3.0.3#parameter-location 
+// From https://spec.openapis.org/oas/v3.0.3#parameter-location
 /// The location of the parameter. Possible values are "query", "header", "path" or "cookie".
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, PartialEq)]
 pub enum ParameterLocation {
     /// Query parameters are defined using the query parameters object.
     #[serde(rename = "query")]
@@ -356,10 +356,10 @@ pub enum ParameterLocation {
     Other(String),
 }
 
-// From https://spec.openapis.org/oas/v3.0.3#style-values 
+// From https://spec.openapis.org/oas/v3.0.3#style-values
 /// Describes how the parameter value will be serialized depending on the type of the parameter
 /// value.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, PartialEq)]
 pub enum StyleValues {
     /// Path-style parameters defined by
     /// [RFC6570](https://tools.ietf.org/html/rfc6570#section-3.2.7)
@@ -381,14 +381,14 @@ pub enum StyleValues {
     #[serde(rename = "simple")]
     Simple,
     /// Space separated array values. This option replaces collectionFormat equal to ssv from
-    /// OpenAPI 2.0. 
+    /// OpenAPI 2.0.
     #[serde(rename = "spaceDelimited")]
     SpaceDelimited,
     /// Pipe separated array values. This option replaces collectionFormat equal to pipes from
     /// OpenAPI 2.0.
     #[serde(rename = "pipeDelimited")]
     PipeDelimited,
-    /// Provides a simple way of rendering nested objects using form parameters. 
+    /// Provides a simple way of rendering nested objects using form parameters.
     #[serde(rename = "deepObject")]
     DeepObject,
     #[serde(untagged)]
@@ -396,7 +396,7 @@ pub enum StyleValues {
 }
 
 // From https://spec.openapis.org/oas/v3.0.3#request-body-object Describes a single request body.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, PartialEq)]
 pub struct RequestBody {
     /// A brief description of the request body. This could contain examples of use. CommonMark
     /// syntax MAY be used for rich text representation.
@@ -414,7 +414,7 @@ pub struct RequestBody {
 
 // From https://spec.openapis.org/oas/v3.0.3#media-type-object Each Media Type Object provides
 // schema and examples for the media type identified by its key.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, PartialEq)]
 pub struct MediaType {
     /// The schema defining the content of the request, response, or parameter.
     pub schema: Option<RefOr<Schema>>,
@@ -436,7 +436,7 @@ pub struct MediaType {
 
 // From https://spec.openapis.org/oas/v3.0.3#encoding-object A single encoding definition applied to
 // a single schema property.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, PartialEq)]
 pub struct Encoding {
     /// The Content-Type for encoding a specific property.
     #[serde(rename = "contentType")]
@@ -469,7 +469,7 @@ pub struct Encoding {
 /// response and any known errors. The default MAY be used as a default response object for all HTTP
 /// codes that are not covered individually by the specification. The Responses Object MUST contain
 /// at least one response code, and it SHOULD be the response for a successful operation call.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, PartialEq)]
 pub struct Responses {
     /// The documentation of responses other than the ones declared for specific HTTP response
     /// codes. Use this field to cover undeclared responses. A Reference Object can link to a
@@ -494,7 +494,7 @@ pub struct Responses {
 
 // From https://spec.openapis.org/oas/v3.0.3#response-object Describes a single response from an API
 // Operation, including design-time, static links to operations based on the response.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, PartialEq)]
 pub struct Response {
     /// A short description of the response. CommonMark syntax MAY be used for rich text
     /// representation.
@@ -520,7 +520,7 @@ pub struct Response {
 // of requests that may be initiated by the API provider and the expected responses. The key value
 // used to identify the callback object is an expression, evaluated at runtime, that identifies a
 // URL to use for the callback operation.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, PartialEq)]
 pub struct Callback {
     /// A Path Item Object used to define a callback request and expected responses. A complete
     /// example is available.
@@ -533,7 +533,7 @@ pub struct Callback {
 
 // From https://spec.openapis.org/oas/v3.0.3#example-object
 /// Each Example Object provides an example of an instance for an schema.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, PartialEq)]
 pub struct Example {
     /// Short description for the example.
     pub summary: Option<String>,
@@ -565,7 +565,7 @@ pub struct Example {
 /// For computing links, and providing instructions to execute them, a runtime expression is used
 /// for accessing values in an operation and using them as parameters while invoking the linked
 /// operation.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, PartialEq)]
 pub struct Link {
     /// A relative or absolute URI reference to an OAS operation. This field is mutually exclusive
     /// of the operationId field, and MUST point to an Operation Object. Relative operationRef
@@ -598,7 +598,7 @@ pub struct Link {
 // From https://spec.openapis.org/oas/v3.0.3#header-object
 /// Describes a single header parameter. A Header Object allows the definition of a header for a
 /// response.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, PartialEq)]
 pub struct Header {
     /// A brief description of the parameter. This could contain examples of use. CommonMark syntax
     /// MAY be used for rich text representation.
@@ -650,7 +650,7 @@ pub struct Header {
 // From https://spec.openapis.org/oas/v3.0.3#tag-object
 /// Adds metadata to a single tag that is used by the Operation Object. It is not mandatory to have
 /// a Tag Object per tag used there.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, PartialEq)]
 pub struct Tag {
     /// The name of the tag.
     pub name: String,
@@ -676,21 +676,26 @@ pub struct Tag {
 ///
 /// This object cannot be extended with additional properties and any properties added SHALL be
 /// ignored.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, PartialEq)]
 pub struct Reference {
     /// The reference string.
     #[serde(rename = "$ref")]
     pub reference: String,
 }
 
-/// A simple utility enum to allow for either a direct value or a reference to a value.
-#[derive(Debug, Serialize, Deserialize)]
+/// OpenAPI 3.0 on mulitple places uses reference or actual object. This enum is used to represent
+/// that.
+#[derive(Debug, Serialize, Deserialize, PartialEq)]
 #[serde(untagged)]
 pub enum RefOr<T> {
+    /// A reference to a value
+    Ref{
+        /// The reference string.
+        #[serde(rename = "$ref")]
+        reference: String,
+    },
     /// A value
     Val(Box<T>),
-    /// A reference to a value
-    Ref(Reference),
 }
 
 // From https://spec.openapis.org/oas/v3.0.3#schema-object
@@ -700,7 +705,7 @@ pub enum RefOr<T> {
 ///
 /// For more information about the properties, see JSON Schema Core and JSON Schema Validation.
 /// Unless stated otherwise, the property definitions follow the JSON Schema.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, PartialEq, Default)]
 pub struct Schema {
     /// The value of "title" MUST be a string.
     pub title: Option<String>,
@@ -813,35 +818,35 @@ pub struct Schema {
     #[serde(rename = "type")]
     pub schema_type: Option<SchemaType>,
     /// This keyword's value MUST be an array. This array SHOULD have at least one element.
-    /// 
+    ///
     /// Elements of the array MUST be objects. Inline or referenced schema MUST be of a Schema
     /// Object and not a standard JSON Schema.
-    /// 
+    ///
     /// An instance validates successfully against this keyword if it validates successfully against
     /// all schemas defined by this keyword's value.
     #[serde(rename = "allOf")]
     pub all_of: Option<Vec<RefOr<Schema>>>,
     /// This keyword's value MUST be an array. This array SHOULD have at least one element.
-    /// 
+    ///
     /// Elements of the array MUST be objects. Inline or referenced schema MUST be of a Schema
     /// Object and not a standard JSON Schema.
-    /// 
+    ///
     /// An instance validates successfully against this keyword if it validates successfully against
     /// exactly one schema defined by this keyword's value.
     #[serde(rename = "oneOf")]
     pub one_of: Option<Vec<RefOr<Schema>>>,
     /// This keyword's value MUST be an array. This array SHOULD have at least one element.
-    /// 
+    ///
     /// Elements of the array MUST be objects. Inline or referenced schema MUST be of a Schema
     /// Object and not a standard JSON Schema.
-    /// 
+    ///
     /// An instance validates successfully against this keyword if it validates successfully against
     /// at least one schema defined by this keyword's value.
     #[serde(rename = "anyOf")]
     pub any_of: Option<Vec<RefOr<Schema>>>,
     /// This keyword's value MUST be an object.  Inline or referenced schema MUST be of a Schema
     /// Object and not a standard JSON Schema.
-    /// 
+    ///
     /// An instance is valid against this keyword if it fails to validate successfully against the
     /// schema defined by this keyword.
     pub not: Option<RefOr<Schema>>,
@@ -850,9 +855,9 @@ pub struct Schema {
     /// `array`.
     #[serde(rename = "items")]
     pub items: Option<RefOr<Schema>>,
-    /// The value of "properties" MUST be an object. Each value of this object MUST be an object, 
+    /// The value of "properties" MUST be an object. Each value of this object MUST be an object,
     /// and each object MUST be a valid schema.
-    /// 
+    ///
     /// Property definitions MUST be a Schema Object and not a standard JSON Schema (inline or
     /// referenced).
     #[serde(rename = "properties")]
@@ -861,13 +866,13 @@ pub struct Schema {
     /// then the object can have any property. If `false` is provided, then the object cannot have
     /// any additional properties. If a schema is provided, then the object properties MUST match
     /// the schema.
-    /// 
+    ///
     /// Inline or referenced schema MUST be of a Schema Object and not a standard JSON Schema.
     #[serde(rename = "additionalProperties")]
     pub additional_properties: Option<RefOr<Schema>>,
     /// The value of "description" MUST be a string. a description will provide explanation about
     /// the purpose of the instance described by this schema.
-    /// 
+    ///
     /// [CommonMark syntax](https://spec.commonmark.org/) MAY be used for rich text representation.
     pub description: Option<String>,
     /// See [Data Type Formats](https://spec.openapis.org/oas/v3.0.3#dataTypeFormat) for further
@@ -922,8 +927,371 @@ pub struct Schema {
     pub extensions: HashMap<String, serde_json::Value>,
 }
 
+use crate::oas30::aux::{Error, Validate};
+impl Validate for Schema {
+    fn validate(&self) -> Result<(), super::aux::Error> {
+        let Some(schema_type) = &self.schema_type else {
+            return Err(super::aux::Error::MissingField("type".to_string()));
+        };
+        match schema_type {
+            SchemaType::String => self.validate_string(),
+            SchemaType::Boolean => self.validate_boolean(),
+            SchemaType::Number => self.validate_number(),
+            SchemaType::Integer => self.validate_integer(),
+            SchemaType::Object => self.validate_object(),
+            SchemaType::Array => self.validate_array(),
+            _ => Ok(()),
+        }
+    }
+}
+
 impl Schema {
-    //
+    const TITLE: u64 = 1;
+    const MULTIPLE_OF: u64 = 2;
+    const MAXIMUM: u64 = 4;
+    const EXCLUSIVE_MAXIMUM: u64 = 8;
+    const MINIMUM: u64 = 16;
+    const EXCLUSIVE_MINIMUM: u64 = 32;
+    const MAX_LENGTH: u64 = 64;
+    const MIN_LENGTH: u64 = 128;
+    const PATTERN: u64 = 256;
+    const MAX_ITEMS: u64 = 512;
+    const MIN_ITEMS: u64 = 1024;
+    const UNIQUE_ITEMS: u64 = 2048;
+    const MAX_PROPERTIES: u64 = 4096;
+    const MIN_PROPERTIES: u64 = 8192;
+    const REQUIRED: u64 = 16384;
+    const ENUMERATION: u64 = 32768;
+    const SCHEMA_TYPE: u64 = 65536;
+    const ALL_OF: u64 = 131072;
+    const ONE_OF: u64 = 262144;
+    const ANY_OF: u64 = 524288;
+    const NOT: u64 = 1048576;
+    const ITEMS: u64 = 2097152;
+    const PROPERTIES: u64 = 4194304;
+    const ADDITIONAL_PROPERTIES: u64 = 8388608;
+    const DESCRIPTION: u64 = 16777216;
+    const FORMAT: u64 = 33554432;
+    const DEFAULT: u64 = 67108864;
+    const NULLABLE: u64 = 134217728;
+    const DISCRIMINATOR: u64 = 268435456;
+    const READ_ONLY: u64 = 536870912;
+    const WRITE_ONLY: u64 = 1073741824;
+    const XML: u64 = 2147483648;
+    const EXTERNAL_DOCS: u64 = 4294967296;
+    const EXAMPLE: u64 = 8589934592;
+    const DEPRECATED: u64 = 17179869184;
+    const EXTENSIONS: u64 = 34359738368;
+
+    fn validate_number(&self) -> Result<(), Error> {
+        self.validate_numeric(SchemaType::Number)
+    }
+    fn validate_integer(&self) -> Result<(), Error> {
+        self.validate_numeric(SchemaType::Integer)
+    }
+    fn validate_numeric(&self, schema_type: SchemaType) -> Result<(), Error> {
+        self.validate_allowed(
+            schema_type,
+            Self::TITLE
+                | Self::MULTIPLE_OF
+                | Self::MAXIMUM
+                | Self::EXCLUSIVE_MAXIMUM
+                | Self::MINIMUM
+                | Self::EXCLUSIVE_MINIMUM
+                | Self::ENUMERATION
+                | Self::SCHEMA_TYPE
+                | Self::DESCRIPTION
+                | Self::FORMAT
+                | Self::DEFAULT
+                | Self::NULLABLE
+                | Self::READ_ONLY
+                | Self::WRITE_ONLY
+                | Self::XML
+                | Self::EXTERNAL_DOCS
+                | Self::EXAMPLE
+                | Self::DEPRECATED
+                | Self::EXTENSIONS,
+        )
+    }
+    fn validate_string(&self) -> Result<(), Error> {
+        self.validate_allowed(
+            SchemaType::String,
+            Self::TITLE
+                | Self::MAX_LENGTH
+                | Self::MIN_LENGTH
+                | Self::PATTERN
+                | Self::ENUMERATION
+                | Self::SCHEMA_TYPE
+                | Self::DESCRIPTION
+                | Self::FORMAT
+                | Self::DEFAULT
+                | Self::NULLABLE
+                | Self::READ_ONLY
+                | Self::WRITE_ONLY
+                | Self::XML
+                | Self::EXTERNAL_DOCS
+                | Self::EXAMPLE
+                | Self::DEPRECATED
+                | Self::EXTENSIONS,
+        )
+    }
+    fn validate_boolean(&self) -> Result<(), Error> {
+        self.validate_allowed(
+            SchemaType::Boolean,
+            Self::TITLE
+                | Self::SCHEMA_TYPE
+                | Self::DESCRIPTION
+                | Self::DEFAULT
+                | Self::NULLABLE
+                | Self::READ_ONLY
+                | Self::WRITE_ONLY
+                | Self::XML
+                | Self::EXTERNAL_DOCS
+                | Self::EXAMPLE
+                | Self::DEPRECATED
+                | Self::EXTENSIONS,
+        )
+    }
+    fn validate_object(&self) -> Result<(), Error> {
+        self.validate_allowed(
+            SchemaType::Object,
+            Self::TITLE
+                | Self::MAX_PROPERTIES
+                | Self::MIN_PROPERTIES
+                | Self::REQUIRED
+                | Self::SCHEMA_TYPE
+                | Self::ALL_OF
+                | Self::ONE_OF
+                | Self::ANY_OF
+                | Self::NOT
+                | Self::PROPERTIES
+                | Self::ADDITIONAL_PROPERTIES
+                | Self::DESCRIPTION
+                | Self::DEFAULT
+                | Self::NULLABLE
+                | Self::DISCRIMINATOR
+                | Self::READ_ONLY
+                | Self::WRITE_ONLY
+                | Self::XML
+                | Self::EXTERNAL_DOCS
+                | Self::EXAMPLE
+                | Self::DEPRECATED
+                | Self::EXTENSIONS,
+        )
+    }
+
+    fn validate_array(&self) -> Result<(), Error> {
+        self.validate_allowed(
+            SchemaType::Array,
+            Self::TITLE
+                | Self::MAX_ITEMS
+                | Self::MIN_ITEMS
+                | Self::UNIQUE_ITEMS
+                | Self::ITEMS
+                | Self::SCHEMA_TYPE
+                | Self::DESCRIPTION
+                | Self::DEFAULT
+                | Self::NULLABLE
+                | Self::READ_ONLY
+                | Self::WRITE_ONLY
+                | Self::XML
+                | Self::EXTERNAL_DOCS
+                | Self::EXAMPLE
+                | Self::DEPRECATED
+                | Self::EXTENSIONS,
+        )
+    }
+
+    fn validate_allowed(&self, schema_type: SchemaType, allowed: u64) -> Result<(), Error> {
+        if allowed & Self::TITLE == 0 && self.title.is_some() {
+            return Err(Error::SchemaInvalidField(schema_type, "title".to_string()));
+        }
+        if allowed & Self::MULTIPLE_OF == 0 && self.multiple_of.is_some() {
+            return Err(Error::SchemaInvalidField(
+                schema_type,
+                "multipleOf".to_string(),
+            ));
+        }
+        if allowed & Self::MAXIMUM == 0 && self.maximum.is_some() {
+            return Err(Error::SchemaInvalidField(
+                schema_type,
+                "maximum".to_string(),
+            ));
+        }
+        if allowed & Self::EXCLUSIVE_MAXIMUM == 0 && self.exclusive_maximum.is_some() {
+            return Err(Error::SchemaInvalidField(
+                schema_type,
+                "exclusiveMaximum".to_string(),
+            ));
+        }
+        if allowed & Self::MINIMUM == 0 && self.minimum.is_some() {
+            return Err(Error::SchemaInvalidField(
+                schema_type,
+                "minimum".to_string(),
+            ));
+        }
+        if allowed & Self::EXCLUSIVE_MINIMUM == 0 && self.exclusive_minimum.is_some() {
+            return Err(Error::SchemaInvalidField(
+                schema_type,
+                "exclusiveMinimum".to_string(),
+            ));
+        }
+        if allowed & Self::MAX_LENGTH == 0 && self.max_length.is_some() {
+            return Err(Error::SchemaInvalidField(
+                schema_type,
+                "maxLength".to_string(),
+            ));
+        }
+        if allowed & Self::MIN_LENGTH == 0 && self.min_length.is_some() {
+            return Err(Error::SchemaInvalidField(
+                schema_type,
+                "minLength".to_string(),
+            ));
+        }
+        if allowed & Self::PATTERN == 0 && self.pattern.is_some() {
+            return Err(Error::SchemaInvalidField(
+                schema_type,
+                "pattern".to_string(),
+            ));
+        }
+        if allowed & Self::MAX_ITEMS == 0 && self.max_items.is_some() {
+            return Err(Error::SchemaInvalidField(
+                schema_type,
+                "maxItems".to_string(),
+            ));
+        }
+        if allowed & Self::MIN_ITEMS == 0 && self.min_items.is_some() {
+            return Err(Error::SchemaInvalidField(
+                schema_type,
+                "minItems".to_string(),
+            ));
+        }
+        if allowed & Self::UNIQUE_ITEMS == 0 && self.unique_items.is_some() {
+            return Err(Error::SchemaInvalidField(
+                schema_type,
+                "uniqueItems".to_string(),
+            ));
+        }
+        if allowed & Self::MAX_PROPERTIES == 0 && self.max_properties.is_some() {
+            return Err(Error::SchemaInvalidField(
+                schema_type,
+                "maxProperties".to_string(),
+            ));
+        }
+        if allowed & Self::MIN_PROPERTIES == 0 && self.min_properties.is_some() {
+            return Err(Error::SchemaInvalidField(
+                schema_type,
+                "minProperties".to_string(),
+            ));
+        }
+        if allowed & Self::REQUIRED == 0 && self.required.is_some() {
+            return Err(Error::SchemaInvalidField(
+                schema_type,
+                "required".to_string(),
+            ));
+        }
+        if allowed & Self::ENUMERATION == 0 && self.enumeration.is_some() {
+            return Err(Error::SchemaInvalidField(schema_type, "enum".to_string()));
+        }
+        if allowed & Self::SCHEMA_TYPE == 0 && self.schema_type.is_some() {
+            return Err(Error::SchemaInvalidField(schema_type, "type".to_string()));
+        }
+        if allowed & Self::ALL_OF == 0 && self.all_of.is_some() {
+            return Err(Error::SchemaInvalidField(schema_type, "allOf".to_string()));
+        }
+        if allowed & Self::ONE_OF == 0 && self.one_of.is_some() {
+            return Err(Error::SchemaInvalidField(schema_type, "oneOf".to_string()));
+        }
+        if allowed & Self::ANY_OF == 0 && self.any_of.is_some() {
+            return Err(Error::SchemaInvalidField(schema_type, "anyOf".to_string()));
+        }
+        if allowed & Self::NOT == 0 && self.not.is_some() {
+            return Err(Error::SchemaInvalidField(schema_type, "not".to_string()));
+        }
+        if allowed & Self::ITEMS == 0 && self.items.is_some() {
+            return Err(Error::SchemaInvalidField(schema_type, "items".to_string()));
+        }
+        if allowed & Self::PROPERTIES == 0 && self.properties.is_some() {
+            return Err(Error::SchemaInvalidField(
+                schema_type,
+                "properties".to_string(),
+            ));
+        }
+        if allowed & Self::ADDITIONAL_PROPERTIES == 0 && self.additional_properties.is_some() {
+            return Err(Error::SchemaInvalidField(
+                schema_type,
+                "additionalProperties".to_string(),
+            ));
+        }
+        if allowed & Self::DESCRIPTION == 0 && self.description.is_some() {
+            return Err(Error::SchemaInvalidField(
+                schema_type,
+                "description".to_string(),
+            ));
+        }
+        if allowed & Self::FORMAT == 0 && self.format.is_some() {
+            return Err(Error::SchemaInvalidField(schema_type, "format".to_string()));
+        }
+        if allowed & Self::DEFAULT == 0 && self.default.is_some() {
+            return Err(Error::SchemaInvalidField(
+                schema_type,
+                "default".to_string(),
+            ));
+        }
+        if allowed & Self::NULLABLE == 0 && self.nullable.is_some() {
+            return Err(Error::SchemaInvalidField(
+                schema_type,
+                "nullable".to_string(),
+            ));
+        }
+        if allowed & Self::DISCRIMINATOR == 0 && self.discriminator.is_some() {
+            return Err(Error::SchemaInvalidField(
+                schema_type,
+                "discriminator".to_string(),
+            ));
+        }
+        if allowed & Self::READ_ONLY == 0 && self.read_only.is_some() {
+            return Err(Error::SchemaInvalidField(
+                schema_type,
+                "readOnly".to_string(),
+            ));
+        }
+        if allowed & Self::WRITE_ONLY == 0 && self.write_only.is_some() {
+            return Err(Error::SchemaInvalidField(
+                schema_type,
+                "writeOnly".to_string(),
+            ));
+        }
+        if allowed & Self::XML == 0 && self.xml.is_some() {
+            return Err(Error::SchemaInvalidField(schema_type, "xml".to_string()));
+        }
+        if allowed & Self::EXTERNAL_DOCS == 0 && self.external_docs.is_some() {
+            return Err(Error::SchemaInvalidField(
+                schema_type,
+                "externalDocs".to_string(),
+            ));
+        }
+        if allowed & Self::EXAMPLE == 0 && self.example.is_some() {
+            return Err(Error::SchemaInvalidField(
+                schema_type,
+                "example".to_string(),
+            ));
+        }
+        if allowed & Self::DEPRECATED == 0 && self.deprecated.is_some() {
+            return Err(Error::SchemaInvalidField(
+                schema_type,
+                "deprecated".to_string(),
+            ));
+        }
+        if allowed & Self::EXTENSIONS == 0 && !self.extensions.is_empty() {
+            return Err(Error::SchemaInvalidField(
+                schema_type,
+                "extensions".to_string(),
+            ));
+        }
+
+        Ok(())
+    }
 }
 
 // From https://spec.openapis.org/oas/v3.0.3#data-types TODO: I am unsure where all schema types are
@@ -934,7 +1302,7 @@ impl Schema {
 // spec insists on using `integer` as additional type it seems
 // https://spec.openapis.org/oas/v3.0.3#data-types
 /// The value of "type" MUST be a string, representing the type of the schema.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, PartialEq)]
 pub enum SchemaType {
     /// Value MUST be a number without fractional part
     #[serde(rename = "integer")]
@@ -966,7 +1334,7 @@ pub enum SchemaType {
 /// accompanied by a format property follow the type definition in the JSON Schema. Tools that do
 /// not recognize a specific format MAY default back to the type alone, as if the format is not
 /// specified.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, PartialEq)]
 pub enum DataFormat {
     /// signed 32 bits
     #[serde(rename = "int32")]
@@ -1007,7 +1375,7 @@ pub enum DataFormat {
 /// document of an alternative schema based on the value associated with it.
 ///
 /// When using the discriminator, inline schemas will not be considered.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, PartialEq)]
 pub struct Discriminator {
     /// The name of the property in the payload that will hold the discriminator value.
     #[serde(rename = "propertyName")]
@@ -1018,7 +1386,7 @@ pub struct Discriminator {
 
 // From https://spec.openapis.org/oas/v3.0.3#xml-object
 /// A metadata object that allows for more fine-tuned XML model definitions.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, PartialEq)]
 pub struct XML {
     /// Replaces the name of the element/attribute used for the described schema property. When
     /// defined within items, it will affect the name of the individual XML elements within the
@@ -1050,7 +1418,7 @@ pub struct XML {
 /// (implicit, client credentials, password and authorization code) as defined in
 /// [RFC6749](https://tools.ietf.org/html/rfc6749), and [OpenID Connect
 /// Discovery](https://tools.ietf.org/html/draft-ietf-oauth-discovery-06).
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, PartialEq)]
 pub struct SecurityScheme {
     /// The type of the security scheme. Valid values are "apiKey", "http", "oauth2",
     /// "openIdConnect".
@@ -1087,7 +1455,7 @@ pub struct SecurityScheme {
 
 // From https://spec.openapis.org/oas/v3.0.3#security-scheme-type
 /// The type of the security scheme. Valid values are "apiKey", "http", "oauth2", "openIdConnect".
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, PartialEq)]
 pub enum SecuritySchemeType {
     /// API key
     #[serde(rename = "apiKey")]
@@ -1108,7 +1476,7 @@ pub enum SecuritySchemeType {
 
 // From https://spec.openapis.org/oas/v3.0.3#oauth-flows-object
 /// Allows configuration of the supported OAuth Flows.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, PartialEq)]
 pub struct OAuthFlows {
     /// Configuration for the OAuth Implicit flow
     #[serde(rename = "implicit")]
@@ -1131,7 +1499,7 @@ pub struct OAuthFlows {
 
 // From https://spec.openapis.org/oas/v3.0.3#oauth-flow-object
 /// Configuration details for a supported OAuth Flow
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, PartialEq)]
 pub struct OAuthFlow {
     /// The authorization URL to be used for this flow. This MUST be in the form of a URL. This is
     /// required for "implicit" and "authorizationCode" flows.
@@ -1164,7 +1532,7 @@ pub struct OAuthFlow {
 /// When a list of Security Requirement Objects is defined on the OpenAPI Object or Operation
 /// Object, only one of Security Requirement Objects in the list needs to be satisfied to authorize
 /// the request.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, PartialEq)]
 pub struct SecurityRequirement {
     /// Each name MUST correspond to a security scheme which is declared in the Security Schemes
     /// under the Components Object.
@@ -1172,14 +1540,72 @@ pub struct SecurityRequirement {
     pub requirements: HashMap<String, Vec<String>>,
 }
 
-
 #[cfg(test)]
 mod tests {
+    use super::*;
+    use serde_json::json;
+
     #[test]
     pub fn load_openapi() {
         let openapi = include_str!("../../data/vi_json_openapi_specification_v8_0_2_0.json");
         let spec: super::OpenAPI = serde_json::from_str(openapi).unwrap();
         let schemas = spec.components.unwrap().schemas.unwrap();
-        dbg!(schemas.iter().filter(|i| i.0.starts_with("ArrayOf")).count());
+        dbg!(schemas
+            .iter()
+            .filter(|i| i.0.starts_with("ArrayOf"))
+            .count());
+    }
+
+    #[test]
+    fn test_schema_type_deserialization() {
+        let schema_type = json!("integer");
+        let schema_type: SchemaType = serde_json::from_value(schema_type).unwrap();
+        assert_eq!(schema_type, SchemaType::Integer);
+        let schema_type = json!("animal");
+        let schema_type: SchemaType = serde_json::from_value(schema_type).unwrap();
+        assert_eq!(schema_type, SchemaType::Other("animal".to_string()));
+    }
+
+    #[test]
+    fn test_ref_or_deserialization() {
+        let ref_or = json!({"$ref": "#/components/schemas/Animal"});
+        let ref_or: RefOr<Schema> = serde_json::from_value(ref_or).unwrap();
+        assert_eq!(ref_or, RefOr::Ref{reference:"#/components/schemas/Animal".to_string()});
+        let ref_or = json!({"type": "string"});
+        let ref_or: RefOr<Schema> = serde_json::from_value(ref_or).unwrap();
+        assert_eq!(ref_or, RefOr::Val(Box::new(Schema {
+            schema_type: Some(SchemaType::String),
+            ..Default::default()
+        })));
+    }
+
+    #[test]
+    fn test_schema_validation() {
+        let valid_string = "{
+            \"type\": \"string\",
+            \"title\": \"Test\",
+            \"maxLength\": 10,
+            \"minLength\": 5,
+            \"pattern\": \"^a.*$\",
+            \"enum\": [\"a\", \"b\"],
+            \"format\": \"date\",
+            \"default\": \"a\",
+            \"nullable\": true,
+            \"example\": \"a\",
+            \"deprecated\": true,
+            \"extensions\": {\"x-test\": 1}
+        }";
+        let schema: Schema = serde_json::from_str(valid_string).unwrap();
+        assert_eq!(schema.validate(), Ok(()));
+        let invalid_string = "{
+            \"type\": \"string\",
+            \"title\": \"Test\",
+            \"items\": {\"type\": \"string\"}
+        }";
+        let schema: Schema = serde_json::from_str(invalid_string).unwrap();
+        assert_eq!(
+            schema.validate(),
+            Err(Error::SchemaInvalidField(SchemaType::String, "items".to_string()))
+        );
     }
 }

@@ -23,11 +23,11 @@ impl OpenAPIProcessor {
     }
 }
 
-fn compute_schema_registry(model: &OpenAPI) ->  HashMap<String, SchemaDetails> {
-    let Some(schemas) = get_schemas(model) else {
+// fn compute_schema_registry(model: &OpenAPI) ->  HashMap<String, SchemaDetails> {
+//     let Some(schemas) = get_schemas(model) else {
 
-    };
-}
+//     };
+// }
 
 
 /// Checks if a schema is object.
@@ -42,11 +42,11 @@ fn is_enum(schema: &Schema) -> bool {
     if schema.schema_type != Some(SchemaType::String) {
         return false;
     }
-    schema.enum_values.is_some()
+    schema.enumeration.is_some()
 }
 
 fn get_schemas(model: &OpenAPI) -> Option<&HashMap<String, RefOr<Schema>>> {
-    let Some(components) = model.components else {
+    let Some(ref components) = model.components else {
         return None;
     };
     let Some(ref schemas_map) = components.schemas else {
@@ -67,10 +67,10 @@ fn get_parent_ref(schema: &Schema) -> Option<String> {
     if all_of.len() != 1 {
         return None;
     }
-    let RefOr::Ref(reference ) = &all_of[0] else {
+    let RefOr::Ref{reference} = &all_of[0] else {
         return None;
     };
-    return Some(reference.reference);
+    return Some(reference.clone());
 }
 
 /// Type of vi_json schema. We will want to differentiate the following:
@@ -98,7 +98,7 @@ pub struct SchemaDetails {
     references: Vec<String>,
 }
 
-pub impl SchemaDetails {
+impl SchemaDetails {
     fn new(schema: String) -> SchemaDetails {
         SchemaDetails {
             schema: schema,
@@ -106,54 +106,5 @@ pub impl SchemaDetails {
             children: Vec::new(),
             references: Vec::new(),
         }
-    }
-}
-
-pub struct SchemaRegistry {
-    /// The schema details map schema reference to their details
-    details: HashMap<String, SchemaDetails>,
-}
-
-impl SchemaRegistry {
-    /// Create a new schema registry
-    pub fn new() -> SchemaRegistry {
-        SchemaRegistry {
-            details: HashMap::new(),
-        }
-    }
-
-    /// Add a schema to the registry
-    pub fn add_schema(&mut self, schema: Schema, parent: Option<String>) {
-        let schema_class = classify_schema(&schema);
-        let schema_name = schema.name.clone();
-        let schema_details = SchemaDetails {
-            schema: schema,
-            parent: parent,
-            children: Vec::new(),
-            references: Vec::new(),
-        };
-        self.details.insert(schema_name, schema_details);
-    }
-
-    /// Add a reference to a schema
-    pub fn add_reference(&mut self, schema_name: String, reference: String) {
-        let schema_details = self.details.get_mut(&schema_name).unwrap();
-        schema_details.references.push(reference);
-    }
-
-    /// Add a child to a schema
-    pub fn add_child(&mut self, schema_name: String, child: String) {
-        let schema_details = self.details.get_mut(&schema_name).unwrap();
-        schema_details.children.push(child);
-    }
-
-
-fn classify_schema(schema: &Schema) -> SchemaClass {
-    if schema.properties.is_some() {
-        SchemaClass::Object
-    } else if schema.items.is_some() {
-        SchemaClass::Array
-    } else {
-        SchemaClass::Scalar
     }
 }
