@@ -1,6 +1,6 @@
 // Auxiliary types supporting the OpenAPI Rust representation
 
-use super::openapi::SchemaType;
+use super::schema::SchemaType;
 
 
 #[derive(Debug, thiserror::Error, PartialEq)]

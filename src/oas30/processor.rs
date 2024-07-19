@@ -1,7 +1,7 @@
 
 use std::{collections::HashMap, hash::Hash};
 
-use crate::oas30::openapi::{OpenAPI, Schema, SchemaType, RefOr};
+use super::*;
 
 
 
