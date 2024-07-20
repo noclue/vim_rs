@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 /// Describes how the parameter value will be serialized depending on the type of the parameter
 /// value.
 #[derive(Debug, Serialize, Deserialize, PartialEq)]
-pub enum StyleValues {
+pub enum Style {
     /// Path-style parameters defined by
     /// [RFC6570](https://tools.ietf.org/html/rfc6570#section-3.2.7)
     #[serde(rename = "matrix")]

@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
-use super::param::ParameterLocation;
+use super::*;
 
 // From https://spec.openapis.org/oas/v3.0.3#security-scheme-object
 /// Defines a security scheme that can be used by the operations. Supported schemes are HTTP
@@ -22,7 +22,7 @@ pub struct SecurityScheme {
     pub name: Option<String>,
     /// The location of the API key. Valid values are "query" or "header" or "cookie".
     #[serde(rename = "in")]
-    pub location: Option<ParameterLocation>,
+    pub location: Option<Location>,
     /// The name of the HTTP Authorization scheme to be used in the Authorization header as defined
     /// in RFC7235.
     #[serde(rename = "scheme")]

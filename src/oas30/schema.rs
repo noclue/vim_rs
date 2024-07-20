@@ -1,7 +1,6 @@
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
-use super::reference::RefOr;
-use super::doc::ExternalDocumentation;
+use super::*;
 
 // From https://spec.openapis.org/oas/v3.0.3#schema-object
 /// The Schema Object allows the definition of input and output data types. These types can be

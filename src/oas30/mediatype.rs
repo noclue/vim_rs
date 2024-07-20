@@ -1,10 +1,6 @@
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
-use super::reference::RefOr;
-use super::doc::Example;
-use super::schema::Schema;
-use super::header::Header;
-use super::param_style::StyleValues;
+use super::*;
 
 
 
@@ -31,6 +27,7 @@ pub struct MediaType {
 }
 
 // From https://spec.openapis.org/oas/v3.0.3#encoding-object 
+// It is only used in MediaType so no separate file is created for it
 /// A single encoding definition applied to a single schema property.
 #[derive(Debug, Serialize, Deserialize, PartialEq)]
 pub struct Encoding {
@@ -42,7 +39,7 @@ pub struct Encoding {
     /// section. This property SHALL be ignored if the request body media type is not a multipart.
     pub headers: Option<HashMap<String, RefOr<Header>>>,
     /// Describes how a specific property value will be serialized depending on its type.
-    pub style: Option<StyleValues>,
+    pub style: Option<Style>,
     /// When this is true, property values of type array or object generate separate parameters for
     /// each value of the array, or key-value pair of the map. For other types of properties this
     /// property has no effect. When style is form, the default value is true. For all other styles,

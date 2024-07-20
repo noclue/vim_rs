@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
-use super::operation::PathItem;
+use super::*;
 
 // From https://spec.openapis.org/oas/v3.0.3#callback-object A map of possible out-of band callbacks
 // related to the parent operation. Each value in the map is a Path Item Object that describes a set

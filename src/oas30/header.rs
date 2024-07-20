@@ -1,9 +1,6 @@
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
-use super::reference::RefOr;
-use super::doc::Example;
-use super::schema::Schema;
-use super::param_style::StyleValues;
+use super::*;
 
 // From https://spec.openapis.org/oas/v3.0.3#header-object
 /// Describes a single header parameter. A Header Object allows the definition of a header for a
@@ -25,7 +22,7 @@ pub struct Header {
     /// value. Default values (based on value of in): for query - form; for path - simple; for
     /// header - simple; for cookie - form.
     #[serde(rename = "style")]
-    pub serialization_style: Option<StyleValues>,
+    pub serialization_style: Option<Style>,
     /// When this is true, parameter values of type array or object generate separate parameters for
     /// each value of the array or key-value pair of the map. For other types of parameters this
     /// property has no effect. When style is form, the default value is true. For all other styles,
@@ -46,13 +43,15 @@ pub struct Header {
     pub example: Option<serde_json::Value>,
     /// Examples of the parameter
     pub examples: Option<HashMap<String, RefOr<Example>>>,
-    // TODO Spec does not say anything about the `content`` field
+    // TODO Spec does not say anything about the `content`` field and it seems particularly odd for 
+    // header
     // A map containing the representations for the parameter. The key is the media type and the
     // value describes it. The map MUST only contain one entry. This property is REQUIRED when the
     // requestBody property is in use and the media type of the request is not
     // application/x-www-form-urlencoded. The map key MUST be the media type and the value MUST be
     // a MediaType Object.
     // pub content: Option<HashMap<String, MediaType>>,
+    
     /// Spec Extensions
     #[serde(flatten)]
     pub extensions: HashMap<String, serde_json::Value>,

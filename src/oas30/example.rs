@@ -1,19 +1,6 @@
-use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
+use serde::{Deserialize, Serialize};
 
-// From https://spec.openapis.org/oas/v3.0.3#external-documentation-object
-/// Allows referencing an external resource for extended documentation.
-#[derive(Debug, Serialize, Deserialize, PartialEq)]
-pub struct ExternalDocumentation {
-    /// A short description of the target documentation. CommonMark syntax MAY be used for rich text
-    /// representation.
-    pub description: Option<String>,
-    /// The URL for the target documentation. Value MUST be in the format of a URL.
-    pub url: String,
-    /// Spec Extensions
-    #[serde(flatten)]
-    pub extensions: HashMap<String, serde_json::Value>,
-}
 
 // From https://spec.openapis.org/oas/v3.0.3#example-object
 /// Each Example Object provides an example of an instance for an schema.

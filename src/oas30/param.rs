@@ -1,10 +1,6 @@
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
-use super::reference::RefOr;
-use super::doc::Example;
-use super::schema::Schema;
-use super::mediatype::MediaType;
-use super::param_style::StyleValues;
+use super::*;
 
 // From https://spec.openapis.org/oas/v3.0.3#parameter-object
 /// Describes a single operation parameter.
@@ -14,7 +10,7 @@ pub struct Parameter {
     pub name: String,
     /// The location of the parameter. Possible values are "query", "header", "path" or "cookie".
     #[serde(rename = "in")]
-    pub location: ParameterLocation,
+    pub location: Location,
     /// A brief description of the parameter. This could contain examples of use. CommonMark syntax
     /// MAY be used for rich text representation.
     pub description: Option<String>,
@@ -31,7 +27,7 @@ pub struct Parameter {
     /// value. Default values (based on value of in): for query - form; for path - simple; for
     /// header - simple; for cookie - form.
     #[serde(rename = "style")]
-    pub serialization_style: Option<StyleValues>,
+    pub serialization_style: Option<Style>,
     /// When this is true, parameter values of type array or object generate separate parameters for
     /// each value of the array or key-value pair of the map. For other types of parameters this
     /// property has no effect. When style is form, the default value is true. For all other styles,
@@ -63,24 +59,5 @@ pub struct Parameter {
     pub extensions: HashMap<String, serde_json::Value>,
 }
 
-// From https://spec.openapis.org/oas/v3.0.3#parameter-location
-/// The location of the parameter. Possible values are "query", "header", "path" or "cookie".
-#[derive(Debug, Serialize, Deserialize, PartialEq)]
-pub enum ParameterLocation {
-    /// Query parameters are defined using the query parameters object.
-    #[serde(rename = "query")]
-    Query,
-    /// Header parameters are used to send additional data to the server.
-    #[serde(rename = "header")]
-    Header,
-    /// Path parameters are defined using the path parameters object.
-    #[serde(rename = "path")]
-    Path,
-    /// Cookie parameters provide data to the server via the cookie header.
-    #[serde(rename = "cookie")]
-    Cookie,
-    /// Other type not known by this library
-    #[serde(untagged)]
-    Other(String),
-}
+
 
