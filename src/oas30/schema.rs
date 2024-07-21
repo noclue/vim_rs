@@ -1,5 +1,5 @@
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
+use std::{collections::HashMap, fmt::Display};
 use super::*;
 
 // From https://spec.openapis.org/oas/v3.0.3#schema-object
@@ -12,17 +12,19 @@ use super::*;
 #[derive(Debug, Serialize, Deserialize, PartialEq, Default)]
 pub struct Schema {
     /// The value of "title" MUST be a string.
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub title: Option<String>,
     // Validation rules from
     // https://datatracker.ietf.org/doc/html/draft-wright-json-schema-validation-00#section-5
     /// The value of "multipleOf" MUST be a number, strictly greater than 0. A numeric instance is
     /// only valid if division by this keyword's value results in an integer.
-    #[serde(rename = "multipleOf")]
+    #[serde(rename = "multipleOf", skip_serializing_if = "Option::is_none")]
     pub multiple_of: Option<f64>,
     /// The value of "maximum" MUST be a number, representing an upper limit for a numeric instance.
     /// If the instance is a number, then this keyword validates if "exclusiveMaximum" is true and
     /// instance is less than the provided value, or else if the instance is less than or exactly
     /// equal to the provided value.
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub maximum: Option<f64>,
     /// The value of "exclusiveMaximum" MUST be a boolean, representing whether the limit in
     /// "maximum" is exclusive or not.  An undefined value is the same as false.
@@ -30,17 +32,18 @@ pub struct Schema {
     /// If "exclusiveMaximum" is true, then a numeric instance SHOULD NOT be equal to the value
     /// specified in "maximum".  If "exclusiveMaximum" is false (or not specified), then a numeric
     /// instance MAY be equal to the value of "maximum".
-    #[serde(rename = "exclusiveMaximum")]
+    #[serde(rename = "exclusiveMaximum", skip_serializing_if = "Option::is_none")]
     pub exclusive_maximum: Option<bool>,
     /// The value of "minimum" MUST be a number, representing a lower limit for a numeric instance.
     ///
     /// If the instance is a number, then this keyword validates if "exclusiveMinimum" is true and
     /// instance is greater than the provided value, or else if the instance is greater than or
     /// exactly equal to the provided value.
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub minimum: Option<f64>,
     /// The value of "exclusiveMinimum" MUST be a boolean, representing whether the limit in
     /// "minimum" is exclusive or not.  An undefined value is the same as false.
-    #[serde(rename = "exclusiveMinimum")]
+    #[serde(rename = "exclusiveMinimum", skip_serializing_if = "Option::is_none")]
     pub exclusive_minimum: Option<bool>,
     /// The value of "maxLength" MUST be a non-negative integer. A string instance is valid against
     /// this keyword if its length is less than, or equal to, the value of this keyword.
@@ -49,7 +52,7 @@ pub struct Schema {
     /// 7159 [RFC7159].
     ///
     /// This keyword can be used to control the maximum length of strings.
-    #[serde(rename = "maxLength")]
+    #[serde(rename = "maxLength", skip_serializing_if = "Option::is_none")]
     pub max_length: Option<u64>,
     /// The value of "minLength" MUST be a non-negative integer. A string instance is valid against
     /// this keyword if its length is greater than, or equal to, the value of this keyword.
@@ -58,54 +61,54 @@ pub struct Schema {
     /// 7159 [RFC7159].
     ///
     /// "minLength", if absent, may be considered as 0.
-    #[serde(rename = "minLength")]
+    #[serde(rename = "minLength", skip_serializing_if = "Option::is_none")]
     pub min_length: Option<u64>,
     /// This string SHOULD be a valid regular expression, according to the ECMA 262 regular
     /// expression dialect.
     ///
     /// A string instance is considered valid if the regular expression matches the instance
     /// successfully. Recall: regular expressions are not implicitly anchored.
-    #[serde(rename = "pattern")]
+    #[serde(rename = "pattern", skip_serializing_if = "Option::is_none")]
     pub pattern: Option<String>,
     /// The value of "maxItems" MUST be a non-negative integer. An array instance is valid against
     /// "maxItems" if its size is less than, or equal to, the value of this keyword.
     ///
     /// This keyword can be used to control the maximum number of items in an array.
-    #[serde(rename = "maxItems")]
+    #[serde(rename = "maxItems", skip_serializing_if = "Option::is_none")]
     pub max_items: Option<u64>,
     /// The value of "minItems" MUST be a non-negative integer. An array instance is valid against
     /// "minItems" if its size is greater than, or equal to, the value of this keyword.
     ///
     /// This keyword can be used to control the minimum number of items in an array.
-    #[serde(rename = "minItems")]
+    #[serde(rename = "minItems", skip_serializing_if = "Option::is_none")]
     pub min_items: Option<u64>,
     /// The value of "uniqueItems" MUST be a boolean. If this keyword has boolean value false, the
     /// instance validates successfully. If it has boolean value true, the instance validates
     /// successfully if all of its elements are unique.
     ///
     /// If not present, this keyword may be considered as being present with boolean value false.
-    #[serde(rename = "uniqueItems")]
+    #[serde(rename = "uniqueItems", skip_serializing_if = "Option::is_none")]
     pub unique_items: Option<bool>,
     /// The value of "maxProperties" MUST be a non-negative integer. An object instance is valid
     /// against "maxProperties" if its number of properties is less than, or equal to, the value of
     /// this keyword.
     ///
     /// This keyword can be used to control the maximum number of properties in an object.
-    #[serde(rename = "maxProperties")]
+    #[serde(rename = "maxProperties", skip_serializing_if = "Option::is_none")]
     pub max_properties: Option<u64>,
     /// The value of "minProperties" MUST be a non-negative integer. An object instance is valid
     /// against "minProperties" if its number of properties is greater than, or equal to, the value
     /// of this keyword.
     ///
     /// This keyword can be used to control the minimum number of properties in an object.
-    #[serde(rename = "minProperties")]
+    #[serde(rename = "minProperties", skip_serializing_if = "Option::is_none")]
     pub min_properties: Option<u64>,
     /// The value of this keyword MUST be an array.  This array MUST have at least one element.
     /// Elements of this array MUST be strings, and MUST be unique.
     ///
     /// An object instance is valid against this keyword if its property set contains all elements
     /// in this keyword's array value.
-    #[serde(rename = "required")]
+    #[serde(rename = "required", skip_serializing_if = "Option::is_none")]
     pub required: Option<Vec<String>>,
     // from
     // https://datatracker.ietf.org/doc/html/draft-wright-json-schema-validation-00#section-5.20
@@ -116,10 +119,10 @@ pub struct Schema {
     ///
     /// An instance validates successfully against this keyword if its value is equal to one of the
     /// elements in this keyword's array value.
-    #[serde(rename = "enum")]
+    #[serde(rename = "enum", skip_serializing_if = "Option::is_none")]
     pub enumeration: Option<Vec<serde_json::Value>>,
     /// The value of "type" MUST be a string, representing the type of the schema.
-    #[serde(rename = "type")]
+    #[serde(rename = "type", skip_serializing_if = "Option::is_none")]
     pub schema_type: Option<SchemaType>,
     /// This keyword's value MUST be an array. This array SHOULD have at least one element.
     ///
@@ -128,7 +131,7 @@ pub struct Schema {
     ///
     /// An instance validates successfully against this keyword if it validates successfully against
     /// all schemas defined by this keyword's value.
-    #[serde(rename = "allOf")]
+    #[serde(rename = "allOf", skip_serializing_if = "Option::is_none")]
     pub all_of: Option<Vec<RefOr<Schema>>>,
     /// This keyword's value MUST be an array. This array SHOULD have at least one element.
     ///
@@ -137,7 +140,7 @@ pub struct Schema {
     ///
     /// An instance validates successfully against this keyword if it validates successfully against
     /// exactly one schema defined by this keyword's value.
-    #[serde(rename = "oneOf")]
+    #[serde(rename = "oneOf", skip_serializing_if = "Option::is_none")]
     pub one_of: Option<Vec<RefOr<Schema>>>,
     /// This keyword's value MUST be an array. This array SHOULD have at least one element.
     ///
@@ -146,25 +149,26 @@ pub struct Schema {
     ///
     /// An instance validates successfully against this keyword if it validates successfully against
     /// at least one schema defined by this keyword's value.
-    #[serde(rename = "anyOf")]
+    #[serde(rename = "anyOf", skip_serializing_if = "Option::is_none")]
     pub any_of: Option<Vec<RefOr<Schema>>>,
     /// This keyword's value MUST be an object.  Inline or referenced schema MUST be of a Schema
     /// Object and not a standard JSON Schema.
     ///
     /// An instance is valid against this keyword if it fails to validate successfully against the
     /// schema defined by this keyword.
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub not: Option<RefOr<Schema>>,
     /// The value of "items" MUST be an object, and that object MUST be a valid JSON Schema. This
     /// object defines the schema for items in arrays. `items` MUST be present if the `type` is
     /// `array`.
-    #[serde(rename = "items")]
+    #[serde(rename = "items", skip_serializing_if = "Option::is_none")]
     pub items: Option<RefOr<Schema>>,
     /// The value of "properties" MUST be an object. Each value of this object MUST be an object,
     /// and each object MUST be a valid schema.
     ///
     /// Property definitions MUST be a Schema Object and not a standard JSON Schema (inline or
     /// referenced).
-    #[serde(rename = "properties")]
+    #[serde(rename = "properties", skip_serializing_if = "Option::is_none")]
     pub properties: Option<HashMap<String, RefOr<Schema>>>,
     /// The value of "additionalProperties" MUST be a boolean or a schema. If `true` is provided,
     /// then the object can have any property. If `false` is provided, then the object cannot have
@@ -172,66 +176,72 @@ pub struct Schema {
     /// the schema.
     ///
     /// Inline or referenced schema MUST be of a Schema Object and not a standard JSON Schema.
-    #[serde(rename = "additionalProperties")]
+    #[serde(rename = "additionalProperties", skip_serializing_if = "Option::is_none")]
     pub additional_properties: Option<RefOr<Schema>>,
     /// The value of "description" MUST be a string. a description will provide explanation about
     /// the purpose of the instance described by this schema.
     ///
     /// [CommonMark syntax](https://spec.commonmark.org/) MAY be used for rich text representation.
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
     /// See [Data Type Formats](https://spec.openapis.org/oas/v3.0.3#dataTypeFormat) for further
     /// details. While relying on JSON Schema’s defined formats, the OAS offers a few additional
     /// predefined formats.
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub format: Option<DataFormat>,
     /// The default value represents what would be assumed by the consumer of the input as the value
     /// of the schema if one is not provided. Unlike JSON Schema, the value MUST conform to the
     /// defined type for the Schema Object defined at the same level. For example, if type is
     /// string, then default can be "foo" but cannot be 1.
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub default: Option<serde_json::Value>,
     /// A `true`` value adds "null" to the allowed type specified by the type keyword, only if type
     /// is explicitly defined within the same Schema Object. Other Schema Object constraints retain
     /// their defined behavior, and therefore may disallow the use of `null` as a value. A `false`
     /// value leaves the specified or default type unmodified. The default value is `false`.
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub nullable: Option<bool>,
     /// Adds support for polymorphism. The discriminator is an object name that is used to
     /// differentiate between other schemas which may satisfy the payload description. See
     /// [Composition and
     /// Inheritance](https://spec.openapis.org/oas/v3.0.3#composition-and-inheritance-polymorphism)
     /// for more details.
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub discriminator: Option<Discriminator>,
     /// Relevant only for Schema `"properties"` definitions. Declares the property as "read only".
     /// This means that it MAY be sent as part of a response but SHOULD NOT be sent as part of the
     /// request. If the property is marked as readOnly being `true`, then the `writeOnly` property
     /// MUST be `false`. Default value is `false`.
-    #[serde(rename = "readOnly")]
+    #[serde(rename = "readOnly", skip_serializing_if = "Option::is_none")]
     pub read_only: Option<bool>,
     /// Relevant only for Schema `"properties"` definitions. Declares the property as "write only".
     /// Therefore, it MAY be sent as part of a request but SHOULD NOT be sent as part of the
     /// response. If the property is marked as `writeOnly` being `true`, then the `readOnly`
     /// property MUST be `false`. Default value is `false`.
-    #[serde(rename = "writeOnly")]
+    #[serde(rename = "writeOnly", skip_serializing_if = "Option::is_none")]
     pub write_only: Option<bool>,
     /// This may be used only on properties schemas. It has no effect on root schemas. Adds
     /// additional metadata to describe the XML representation of this property.
-    #[serde(rename = "xml")]
+    #[serde(rename = "xml", skip_serializing_if = "Option::is_none")]
     pub xml: Option<XML>,
     /// Additional external documentation for this schema.
-    #[serde(rename = "externalDocs")]
+    #[serde(rename = "externalDocs", skip_serializing_if = "Option::is_none")]
     pub external_docs: Option<ExternalDocumentation>,
     /// A free-form property to include an example of an instance for this schema. To represent
     /// examples that cannot be naturally represented in JSON or YAML, a string value can be used to
     /// contain the example with escaping where necessary.
-    #[serde(rename = "example")]
+    #[serde(rename = "example", skip_serializing_if = "Option::is_none")]
     pub example: Option<serde_json::Value>,
     /// Specifies that a schema is deprecated and SHOULD be transitioned out of usage. Default value
     /// is false.
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub deprecated: Option<bool>,
     /// Spec Extensions
     #[serde(flatten)]
     pub extensions: HashMap<String, serde_json::Value>,
 }
 
-use crate::oas30::aux::{Error, Validate};
+
 impl Validate for Schema {
     fn validate(&self) -> Result<(), super::aux::Error> {
         let Some(schema_type) = &self.schema_type else {
@@ -288,10 +298,18 @@ impl Schema {
     const EXTENSIONS: u64 = 34359738368;
 
     fn validate_number(&self) -> Result<(), Error> {
-        self.validate_numeric(SchemaType::Number)
+        self.validate_numeric(SchemaType::Number)?;
+        if let Some(enum_items) = &self.enumeration {
+            self.validate_enum_values(enum_items, serde_json::Value::is_number)?;
+        }
+        Ok(())
     }
     fn validate_integer(&self) -> Result<(), Error> {
-        self.validate_numeric(SchemaType::Integer)
+        self.validate_numeric(SchemaType::Integer)?;
+        if let Some(enum_items) = &self.enumeration {
+            self.validate_enum_values(enum_items, serde_json::Value::is_i64)?;
+        }
+        Ok(())
     }
     fn validate_numeric(&self, schema_type: SchemaType) -> Result<(), Error> {
         self.validate_allowed(
@@ -337,7 +355,11 @@ impl Schema {
                 | Self::EXAMPLE
                 | Self::DEPRECATED
                 | Self::EXTENSIONS,
-        )
+        )?;
+        if let Some(enum_items) = &self.enumeration {
+            self.validate_enum_values(enum_items, serde_json::Value::is_string)?;
+        }
+        Ok(())
     }
     fn validate_boolean(&self) -> Result<(), Error> {
         self.validate_allowed(
@@ -406,6 +428,17 @@ impl Schema {
         )
     }
 
+    fn validate_enum_values<F>(&self, items: &Vec<serde_json::Value>, check: F) -> Result<(), Error> 
+    where
+        F: Fn(&serde_json::Value) -> bool
+    {
+        for (i, item) in items.iter().enumerate() {
+            if !check(item) {
+                return Err(Error::SchemaInvalidEnumValue{index:i, value: item.to_string()});
+            }
+        }
+        Ok(())
+    }
     fn validate_allowed(&self, schema_type: SchemaType, allowed: u64) -> Result<(), Error> {
         if allowed & Self::TITLE == 0 && self.title.is_some() {
             return Err(Error::SchemaInvalidField(schema_type, "title".to_string()));
@@ -630,6 +663,20 @@ pub enum SchemaType {
     Other(String),
 }
 
+impl Display for SchemaType {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            SchemaType::Integer => write!(f, "integer"),
+            SchemaType::Number => write!(f, "number"),
+            SchemaType::String => write!(f, "string"),
+            SchemaType::Boolean => write!(f, "boolean"),
+            SchemaType::Object => write!(f, "object"),
+            SchemaType::Array => write!(f, "array"),
+            SchemaType::Other(s) => write!(f, "{}", s),
+        }
+    }
+}
+
 // From https://spec.openapis.org/oas/v3.0.3#data-types
 /// Primitives have an optional modifier property: format. OAS uses several known formats to define
 /// in fine detail the data type being used. However, to support documentation needs, the format
@@ -670,6 +717,23 @@ pub enum DataFormat {
     /// Other type not known by this library. Some common examples are `email`, `uuid`, etc.
     #[serde(untagged)]
     Other(String),
+}
+
+impl Display for DataFormat {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            DataFormat::Int32 => write!(f, "int32"),
+            DataFormat::Int64 => write!(f, "int64"),
+            DataFormat::Float => write!(f, "float"),
+            DataFormat::Double => write!(f, "double"),
+            DataFormat::Byte => write!(f, "byte"),
+            DataFormat::Binary => write!(f, "binary"),
+            DataFormat::Date => write!(f, "date"),
+            DataFormat::DateTime => write!(f, "date-time"),
+            DataFormat::Password => write!(f, "password"),
+            DataFormat::Other(s) => write!(f, "{}", s),
+        }
+    }
 }
 
 // From https://spec.openapis.org/oas/v3.0.3#discriminator-object
@@ -714,4 +778,29 @@ pub struct XML {
     /// items).
     #[serde(rename = "wrapped")]
     pub wrapped: Option<bool>,
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use serde_json;
+
+    #[test]
+    fn test_deserialize() {
+        let json = r#"{
+            "type": "string"
+        }"#;
+        let schema: Schema = serde_json::from_str(json).unwrap();
+        assert_eq!(schema.schema_type.unwrap(), SchemaType::String);
+    }
+
+    #[test]
+    fn test_serialize() {
+        let schema = Schema {
+            schema_type: Some(SchemaType::String),
+            ..Default::default()
+        };
+        let json = serde_json::to_string(&schema).unwrap();
+        assert_eq!(json, r#"{"type":"string"}"#);
+    }
 }

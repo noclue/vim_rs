@@ -6,6 +6,7 @@ use spec::{APISpec, get_parent_schema, parse_schema_from_reference};
 mod printer;
 mod spec;
 mod oas30;
+mod vim_model;
 
 // Error is an error type for Project.
 #[derive(Debug, thiserror::Error)]

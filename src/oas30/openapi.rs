@@ -195,7 +195,7 @@ mod tests {
             \"extensions\": {\"x-test\": 1}
         }";
         let schema: Schema = serde_json::from_str(valid_string).unwrap();
-        assert_eq!(schema.validate(), Ok(()));
+        assert!(schema.validate().is_ok());
         let invalid_string = "{
             \"type\": \"string\",
             \"title\": \"Test\",
