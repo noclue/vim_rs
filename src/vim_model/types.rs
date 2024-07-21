@@ -1,3 +1,5 @@
+use check_keyword::CheckKeyword;
+use convert_case::{Case, Casing};
 use indexmap::IndexMap;
 
 use super::*;
@@ -56,6 +58,12 @@ pub struct Struct {
     pub parent: Option<String>,
 }
 
+impl Struct {
+    pub fn rust_name(&self) -> String {
+        self.name.to_case(Case::Pascal)
+    }
+}
+
 /// Represents a Vim Property model.
 /// For example:
 /// ```yaml
@@ -72,7 +80,13 @@ pub struct Property {
     pub name: String,
     pub description: Option<String>,
     pub optional: bool,
-    pub type_: VimType,
+    pub vim_type: VimType,
+}
+
+impl Property {
+    pub fn rust_name(&self) -> String {
+        self.name.to_case(Case::Snake).into_safe()
+    }
 }
 
 /// Represents a Vim PropertyType model.
@@ -100,7 +114,6 @@ pub enum VimType {
     Double,
     DateTime,
     Array(Box<VimType>),
-    Enum(String),
     Struct(String),
 }
 
@@ -109,7 +122,7 @@ impl TryFrom<&RefOr<Schema>> for VimType {
     fn try_from(schema: &RefOr<Schema>) -> Result<Self> {
         match schema {
             RefOr::Ref { reference } => Ok(VimType::Struct(
-                reference_to_rust_name(reference)?.to_string(),
+                reference_to_schema_name(reference)?.to_string(),
             )),
             RefOr::Val(inline_schema) => match inline_schema.as_ref() {
                 Schema {
@@ -191,7 +204,7 @@ pub struct RequestType {
 ///
 /// Box types are grouped by their parent and their name. Thus we can emit a Rust enum that can be
 /// processed by serde. For example:
-/// ```rust
+/// ```test
 /// #[derive(Serialize, Deserialize)]
 /// #[derive(Debug, PartialEq, Serialize, Deserialize)]
 /// #[serde(tag = "_typeName", content = "_value")]
@@ -235,4 +248,67 @@ pub struct VimModel {
     pub request_types: IndexMap<String, RequestType>,
     /// The BoxType classes grouped by their parent struct type and by property name.
     pub box_types_by_parent: IndexMap<String, IndexMap<String, BoxType>>,
+}
+
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_string_try_from() {
+        let schema = Schema {
+            schema_type: Some(SchemaType::String),
+            ..Default::default()
+        };
+        let typ = VimType::try_from(&RefOr::Val(Box::new(schema))).unwrap();
+        assert_eq!(typ, VimType::String);
+    }
+
+    #[test]
+    fn test_datetime_try_from() {
+        let schema = Schema {
+            schema_type: Some(SchemaType::String),
+            format: Some(DataFormat::DateTime),
+            ..Default::default()
+        };
+        let typ = VimType::try_from(&RefOr::Val(Box::new(schema))).unwrap();
+        assert_eq!(typ, VimType::DateTime);
+    }
+
+    #[test]
+    fn test_string_array_try_from() {
+        let schema = Schema {
+            schema_type: Some(SchemaType::Array),
+            items: Some(RefOr::Val(Box::new(Schema {
+                schema_type: Some(SchemaType::String),
+                ..Default::default()
+            }))),
+            ..Default::default()
+        };
+        let typ = VimType::try_from(&RefOr::Val(Box::new(schema))).unwrap();
+        assert_eq!(typ, VimType::Array(Box::new(VimType::String)));
+    }
+
+    #[test]
+    fn test_unsafe_property_name() {
+        let prop = Property {
+            name: "Crate".to_string(),
+            description: None,
+            optional: false,
+            vim_type: VimType::String,
+        };
+        assert_eq!(prop.rust_name(), "crate_");
+    }
+
+    #[test]
+    fn test_mixed_struct_name() {
+        let str = Struct {
+            name: "StructCrate_Enum".to_string(),
+            description: None,
+            properties: IndexMap::new(),
+            parent: None,
+        };
+        assert_eq!(str.rust_name(), "StructCrateEnum");
+    }
 }

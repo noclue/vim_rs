@@ -105,8 +105,8 @@ fn build_request_type(schema_name: &str, schema: &Schema) -> Result<RequestType>
             RefOr::Ref { .. } => None,
         };
         let property = Property {
-            name: property_name.to_case(Case::Snake),
-            type_ : VimType::try_from(ref_or_property)?,
+            name: property_name.clone(),
+            vim_type : VimType::try_from(ref_or_property)?,
             optional: !required.contains(&property_name.to_string()),
             description: description.cloned(),
         };
@@ -144,11 +144,6 @@ fn get_parent_schema(schema: &Schema) -> Option<&String> {
     None
 }
 
-
-pub fn reference_to_rust_name(reference: &String) -> Result<String> {
-    let schema_name = reference_to_schema_name(reference)?;
-    Ok(schema_name.to_case(Case::Pascal))
-}
 pub fn reference_to_schema_name(reference: &String) -> Result<&str> {
         if !reference.starts_with("#/components/schemas/") {
         return Err(Error::InvalidReference(reference.to_string()));
@@ -220,13 +215,13 @@ mod tests {
         assert_eq!(test_request_type.properties.len(), 2);
         let test_request_type_prop = test_request_type.properties.get("foo").unwrap();
         assert_eq!(test_request_type_prop.name, "foo");
-        assert_eq!(test_request_type_prop.type_, VimType::String);
+        assert_eq!(test_request_type_prop.vim_type, VimType::String);
         assert_eq!(test_request_type_prop.optional, false);
         assert_eq!(test_request_type_prop.description, Some("test description".to_string()));
 
         let test_request_type_prop = test_request_type.properties.get("bar").unwrap();
         assert_eq!(test_request_type_prop.name, "bar");
-        assert_eq!(test_request_type_prop.type_, VimType::Struct("BaseConfigInfoDiskFileBackingInfoProvisioningTypeEnum".to_string()));
+        assert_eq!(test_request_type_prop.vim_type, VimType::Struct("BaseConfigInfoDiskFileBackingInfoProvisioningType_enum".to_string()));
         assert_eq!(test_request_type_prop.optional, true);
         assert_eq!(test_request_type_prop.description, None);
     }
