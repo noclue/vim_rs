@@ -108,6 +108,8 @@ impl Property {
 pub enum VimType {
     Boolean,
     String,
+    Int8,
+    Int16,
     Int32,
     Int64,
     Float,
@@ -152,11 +154,26 @@ impl TryFrom<&RefOr<Schema>> for VimType {
                 Schema {
                     schema_type: Some(SchemaType::Integer),
                     ..
-                } => match &inline_schema.format {
-                    Some(DataFormat::Int32) => Ok(VimType::Int32),
-                    Some(DataFormat::Int64) => Ok(VimType::Int64),
-                    Some(format) => Err(super::Error::UnsupportedFormat(format.to_string())),
-                    None => Err(super::Error::MissingFormat(SchemaType::Integer.to_string())),
+                } => match &inline_schema.as_ref() {
+                    Schema {
+                        format: Some(DataFormat::Int32),
+                        ..
+                    } => Ok(VimType::Int32),
+                    Schema {
+                        format: Some(DataFormat::Int64),
+                        ..
+                    } => Ok(VimType::Int64),
+                    Schema {
+                        minimum: Some(-128.0),
+                        maximum: Some(127.0),
+                        ..
+                    } => Ok(VimType::Int8),
+                    Schema {
+                        minimum: Some(-32768.0),
+                        maximum: Some(32767.0),
+                        ..
+                    } => Ok(VimType::Int16),
+                    _ => Err(super::Error::UnsupportedFormat(SchemaType::Integer.to_string())),
                 },
                 Schema {
                     schema_type: Some(SchemaType::Array),
@@ -175,33 +192,9 @@ impl TryFrom<&RefOr<Schema>> for VimType {
     }
 }
 
-/// Represents a Vim RequestType.
-/// For example:
-/// ```yaml
-/// AcquireGenericServiceTicketRequestType:
-/// type: object
-/// description: |2
-///   The parameters of *SessionManager.AcquireGenericServiceTicket*.
-/// properties:
-///   spec:
-///     description: |2
-///       specification for the service request which will be
-///       invoked with the ticket.
-///     $ref: '#/components/schemas/SessionManagerServiceRequestSpec'
-/// required:
-///   - spec
-/// ```
-/// There is no parent field because RequestType is not a child of any other type.
-#[derive(Debug, PartialEq)]
-pub struct RequestType {
-    pub name: String,
-    pub description: Option<String>,
-    pub properties: IndexMap<String, Property>,
-}
-
 /// Represents a Vim BoxType. This is a type that has single required property. No inherited
 /// properties from all of except discriminator. Boxes have parent classes. No descendants.
-///
+/// 
 /// Box types are grouped by their parent and their name. Thus we can emit a Rust enum that can be
 /// processed by serde. For example:
 /// ```test
@@ -216,6 +209,10 @@ pub struct RequestType {
 /// ```
 /// `_typeName` is the discriminator. `_value` is the actual value. The enum variants are named
 /// after the type name and the type reflects the schema type.
+///
+/// In vim all box types extend from `Any` and have `_value`` property. So we need not store the
+/// parent class or property name. We only need a list of box types with their type, name and
+/// description.
 ///
 /// For example:
 /// ```yaml
@@ -234,10 +231,9 @@ pub struct RequestType {
 #[derive(Debug, PartialEq)]
 pub struct BoxType {
     pub name: String,
-    pub description: String,
-    pub property_name: String,
+    pub description: Option<String>,
     pub property_type: VimType,
-    pub parent: Option<String>,
+    pub discriminator_value: Option<String>,
 }
 
 /// Represents the VIM API data model build from OpenAPI model.
@@ -245,9 +241,7 @@ pub struct BoxType {
 pub struct VimModel {
     pub enums: IndexMap<String, Enum>,
     pub structs: IndexMap<String, Struct>,
-    pub request_types: IndexMap<String, RequestType>,
-    /// The BoxType classes grouped by their parent struct type and by property name.
-    pub box_types_by_parent: IndexMap<String, IndexMap<String, BoxType>>,
+    pub any_value_types: IndexMap<String, BoxType>,
 }
 
 
