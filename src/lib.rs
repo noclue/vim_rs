@@ -7,6 +7,7 @@ mod printer;
 mod spec;
 mod oas30;
 mod vim_model;
+mod rs_emitter;
 
 // Error is an error type for Project.
 #[derive(Debug, thiserror::Error)]

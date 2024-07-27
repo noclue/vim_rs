@@ -28,6 +28,7 @@ pub struct Enum {
     pub name: String,
     pub description: Option<String>,
     pub variants: Vec<String>,
+    pub discriminator_value: Option<String>,
 }
 
 /// Represents a Vim Struct model. All of these except the `Any` type have a parent.
@@ -56,6 +57,7 @@ pub struct Struct {
     pub description: Option<String>,
     pub properties: IndexMap<String, Property>,
     pub parent: Option<String>,
+    pub discriminator_value: Option<String>,
 }
 
 impl Struct {
@@ -302,6 +304,7 @@ mod tests {
             description: None,
             properties: IndexMap::new(),
             parent: None,
+            discriminator_value: None,
         };
         assert_eq!(str.rust_name(), "StructCrateEnum");
     }

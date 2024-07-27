@@ -1,8 +1,6 @@
 use super::*;
 use crate::oas30::*;
-use convert_case::{Case, Casing};
 use indexmap::IndexMap;
-use serde_json::to_string;
 use std::fmt::Debug;
 use std::io::Read;
 
@@ -74,6 +72,7 @@ pub fn load_vim_model(model: &OpenAPI) -> Result<VimModel> {
                     name: schema_name.to_string(),
                     description: schema.description.clone(),
                     variants: as_string_values(values)?,
+                    discriminator_value: None,
                 };
                 vim_model.enums.insert(schema_name.to_string(), enumeration);
             }
@@ -117,15 +116,49 @@ pub fn load_vim_model(model: &OpenAPI) -> Result<VimModel> {
             }
             _ => {
                 dbg!("unhandled schema: {:?}", schema_name);
-                // TODO
+                return Err(Error::UnsupportedType(schema_name.to_string()));
             }
         }
     }
+    // Apply Discriminator translation from Any type discriminator mapping
+    // Example:
+    //  discriminator:
+    //    propertyName: _typeName
+    //    mapping:
+    //      boolean: '#/components/schemas/PrimitiveBoolean'
+    //      byte: '#/components/schemas/PrimitiveByte'
+    //      short: '#/components/schemas/PrimitiveShort'
+    //      int: '#/components/schemas/PrimitiveInt'
+    let any = schemas.get(&"Any".to_string()).ok_or_else(|| Error::InvalidReference("Any".to_string()))?;
+
+    let RefOr::Val(ref schema) = any else {
+        return Err(Error::InvalidReference("Any".to_string()));
+    };
+    let discriminator = schema.as_ref().discriminator.as_ref().ok_or_else(|| Error::MissingField("#/components/schemas/Any/discriminator".to_string()))?;
+    let Some(mapping) = discriminator.mapping.as_ref() else {
+        return Err(Error::MissingField("#/components/schemas/Any/discriminator/mapping".to_string()));
+    };
+    for (alias, type_ref) in mapping {
+        let type_name = reference_to_schema_name(type_ref)?.to_string();
+        if let Some(vim_type) = vim_model.any_value_types.get_mut(&type_name) {
+            vim_type.discriminator_value = Some(alias.to_string());
+            continue;
+        }
+        if let Some(vim_type) = vim_model.structs.get_mut(&type_name) {
+            vim_type.discriminator_value = Some(alias.to_string());
+            continue;
+        }
+        if let Some(vim_type) = vim_model.enums.get_mut(&type_name) {
+            vim_type.discriminator_value = Some(alias.to_string());
+            continue;
+        }
+        return Err(Error::InvalidReference(type_name));
+    };
     Ok(vim_model)
 }
 
-static empty_vec: Vec<String> = Vec::new();
-static none_str: String = String::new();
+static EMPTY_VEC: Vec<String> = Vec::new();
+static NONE_STR: String = String::new();
 
 fn build_struct_type(schema_name: &str, schema: &Schema) -> Result<Struct> {
     let properties = convert_properties(schema_name, schema)?;
@@ -134,6 +167,7 @@ fn build_struct_type(schema_name: &str, schema: &Schema) -> Result<Struct> {
         description: schema.description.clone(),
         properties,
         parent: get_parent_schema(schema),
+        discriminator_value: None,
     })
 }
 
@@ -142,7 +176,7 @@ fn convert_properties(schema_name: &str, schema: &Schema) -> Result<IndexMap<Str
     let Some(ref properties) = schema.properties else {
         return Ok(result);
     };
-    let required = schema.required.as_ref().unwrap_or(&empty_vec);
+    let required = schema.required.as_ref().unwrap_or(&EMPTY_VEC);
     for (property_name, ref_or_property) in properties {
         let description = match ref_or_property {
             RefOr::Val(property) => property.description.as_ref(),
@@ -216,6 +250,23 @@ mod tests {
             "paths": {},
             "components": {
                 "schemas": {
+                    "Any": {
+                        "type": "object",
+                        "description": "The base of all data types. Not to be used directly on the wire.\n",
+                        "properties": {
+                          "_typeName": {
+                            "description": "The type discriminator. Refers to the name of a valid data object type.\n",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "_typeName"
+                        ],
+                        "discriminator": {
+                          "propertyName": "_typeName",
+                          "mapping": {}
+                        }
+                    },
                     "test": {
                         "description": "test",
                         "type": "string",
@@ -243,6 +294,23 @@ mod tests {
             "paths": {},
             "components": {
                 "schemas": {
+                    "Any": {
+                        "type": "object",
+                        "description": "The base of all data types. Not to be used directly on the wire.\n",
+                        "properties": {
+                          "_typeName": {
+                            "description": "The type discriminator. Refers to the name of a valid data object type.\n",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "_typeName"
+                        ],
+                        "discriminator": {
+                          "propertyName": "_typeName",
+                          "mapping": {}
+                        }
+                    },
                     "TestRequestType": {
                         "description": "test",
                         "type": "object",
@@ -295,6 +363,25 @@ mod tests {
             "paths": {},
             "components": {
                 "schemas": {
+                    "Any": {
+                        "type": "object",
+                        "description": "The base of all data types. Not to be used directly on the wire.\n",
+                        "properties": {
+                          "_typeName": {
+                            "description": "The type discriminator. Refers to the name of a valid data object type.\n",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "_typeName"
+                        ],
+                        "discriminator": {
+                          "propertyName": "_typeName",
+                          "mapping": {
+                            "boolean": "#/components/schemas/PrimitiveBoolean",
+                          }
+                        }
+                    },
                     "PrimitiveBoolean": {
                         "type": "object",
                         "description": "A boxed Boolean primitive. To be used in *Any* placeholders.\n",
@@ -318,13 +405,14 @@ mod tests {
         let open_api = serde_json::from_value::<OpenAPI>(value).unwrap();
         let vim_model = load_vim_model(&open_api).unwrap();
         assert_eq!(vim_model.any_value_types.len(), 1);
-        let test_request_type = vim_model.any_value_types.get(&"PrimitiveBoolean".to_string()).unwrap();
-        assert_eq!(test_request_type.name, "PrimitiveBoolean".to_string());
+        let boxed_type = vim_model.any_value_types.get(&"PrimitiveBoolean".to_string()).unwrap();
+        assert_eq!(boxed_type.name, "PrimitiveBoolean".to_string());
         assert_eq!(
-            test_request_type.description,
+            boxed_type.description,
             Some("A boxed Boolean primitive. To be used in *Any* placeholders.\n".to_string())
         );
-        assert_eq!(test_request_type.property_type, VimType::Boolean);
+        assert_eq!(boxed_type.property_type, VimType::Boolean);
+        assert_eq!(boxed_type.discriminator_value , Some("boolean".to_string()));
     }
 
 
