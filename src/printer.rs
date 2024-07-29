@@ -39,6 +39,7 @@ impl StdoutPrinter {
         Self { indent: 0, indent_string }
     }
 }
+
 impl Printer for StdoutPrinter{
     /// Print a string with a newline.
     fn println(&mut self, s: &str) -> Result<()> {

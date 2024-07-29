@@ -1,3 +1,5 @@
+use std::cell::RefCell;
+
 use check_keyword::CheckKeyword;
 use convert_case::{Case, Casing};
 use indexmap::IndexMap;
@@ -58,6 +60,7 @@ pub struct Struct {
     pub properties: IndexMap<String, Property>,
     pub parent: Option<String>,
     pub discriminator_value: Option<String>,
+    pub children: Vec<String>,
 }
 
 impl Struct {
@@ -118,14 +121,14 @@ pub enum VimType {
     Double,
     DateTime,
     Array(Box<VimType>),
-    Struct(String),
+    Reference(String),
 }
 
 impl TryFrom<&RefOr<Schema>> for VimType {
     type Error = super::Error;
     fn try_from(schema: &RefOr<Schema>) -> Result<Self> {
         match schema {
-            RefOr::Ref { reference } => Ok(VimType::Struct(
+            RefOr::Ref { reference, ..} => Ok(VimType::Reference(
                 reference_to_schema_name(reference)?.to_string(),
             )),
             RefOr::Val(inline_schema) => match inline_schema.as_ref() {
@@ -242,7 +245,7 @@ pub struct BoxType {
 #[derive(Debug, PartialEq)]
 pub struct VimModel {
     pub enums: IndexMap<String, Enum>,
-    pub structs: IndexMap<String, Struct>,
+    pub structs: IndexMap<String, RefCell<Struct>>,
     pub any_value_types: IndexMap<String, BoxType>,
 }
 
@@ -305,6 +308,7 @@ mod tests {
             properties: IndexMap::new(),
             parent: None,
             discriminator_value: None,
+            children: vec![],
         };
         assert_eq!(str.rust_name(), "StructCrateEnum");
     }

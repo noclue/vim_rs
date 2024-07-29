@@ -21,6 +21,8 @@ pub enum RefOr<T> {
         /// The reference string.
         #[serde(rename = "$ref")]
         reference: String,
+        /// An optional, string description. This is non-standard but used in the VIM API definition.
+        description: Option<String>,
     },
     /// A value
     Val(Box<T>),
@@ -33,7 +35,7 @@ mod tests {
 
     #[test]
     fn test_ref_or_serialization() {
-        let ref_or: RefOr<Schema> = RefOr::Ref{reference: "#/components/schemas/Animal".to_string()};
+        let ref_or: RefOr<Schema> = RefOr::Ref{reference: "#/components/schemas/Animal".to_string(), description: None};
         assert_eq!(serde_json::to_value(ref_or).unwrap(), json!({"$ref": "#/components/schemas/Animal"}));
     }
 
@@ -41,7 +43,7 @@ mod tests {
     fn test_ref_or_deserialization() {
         let ref_or = json!({"$ref": "#/components/schemas/Animal"});
         let ref_or: RefOr<Schema> = serde_json::from_value(ref_or).unwrap();
-        assert_eq!(ref_or, RefOr::Ref{reference: "#/components/schemas/Animal".to_string()});
+        assert_eq!(ref_or, RefOr::Ref{reference: "#/components/schemas/Animal".to_string(), description: None});
     }
 
     #[test]
@@ -49,7 +51,7 @@ mod tests {
         let ref_or = json!({"description": "test", "$ref": "#/components/schemas/Animal"});
         let ref_or: RefOr<Schema> = serde_json::from_value(ref_or).unwrap();
         // `description` is ignored as the `$ref` schema has no support for additional fields
-        assert_eq!(ref_or, RefOr::Ref{reference: "#/components/schemas/Animal".to_string()});
+        assert_eq!(ref_or, RefOr::Ref{reference: "#/components/schemas/Animal".to_string(), description: None});
 
     }
 }

@@ -5,9 +5,9 @@ use check_keyword::CheckKeyword;
 use spec::{APISpec, get_parent_schema, parse_schema_from_reference};
 mod printer;
 mod spec;
-mod oas30;
-mod vim_model;
-mod rs_emitter;
+pub mod oas30;
+pub mod vim_model;
+pub mod rs_emitter;
 
 // Error is an error type for Project.
 #[derive(Debug, thiserror::Error)]

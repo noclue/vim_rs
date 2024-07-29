@@ -1,8 +1,8 @@
 use super::*;
 use crate::oas30::*;
 use indexmap::IndexMap;
+use std::cell::RefCell;
 use std::fmt::Debug;
-use std::io::Read;
 
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
@@ -47,7 +47,72 @@ pub fn load_vim_model(model: &OpenAPI) -> Result<VimModel> {
         return Err(Error::MissingField("#/components/schemas".to_string()));
     };
 
-    for (schema_name, ref_or_schema) in schemas {
+    transform_schemas(schemas, &mut vim_model)?;
+    process_discriminator_mappings(schemas, &mut vim_model)?;
+    compute_heirarchy(&mut vim_model)?;
+    Ok(vim_model)
+}
+
+/// Populate the `children` of structs in the model.
+fn compute_heirarchy(vim_model: &mut VimModel) -> Result<()> {
+    for (_, vim_type) in &vim_model.structs {
+        let Some(parent) = &vim_type.borrow().parent else {
+            continue;
+        };
+        vim_model
+            .structs
+            .get(parent)
+            .ok_or_else(|| Error::InvalidReference(parent.clone()))?
+            .borrow_mut()
+            .children
+            .push(vim_type.borrow().name.clone());
+    }
+    Ok(())
+}
+
+fn process_discriminator_mappings(
+    schemas: &std::collections::HashMap<String, RefOr<Schema>>,
+    vim_model: &mut VimModel,
+) -> Result<()> {
+    let any = schemas
+        .get(&"Any".to_string())
+        .ok_or_else(|| Error::InvalidReference("Any".to_string()))?;
+    let RefOr::Val(ref schema) = any else {
+        return Err(Error::InvalidReference("Any".to_string()));
+    };
+    let discriminator =
+        schema.as_ref().discriminator.as_ref().ok_or_else(|| {
+            Error::MissingField("#/components/schemas/Any/discriminator".to_string())
+        })?;
+    let Some(mapping) = discriminator.mapping.as_ref() else {
+        return Err(Error::MissingField(
+            "#/components/schemas/Any/discriminator/mapping".to_string(),
+        ));
+    };
+    for (alias, type_ref) in mapping {
+        let type_name = reference_to_schema_name(type_ref)?.to_string();
+        if let Some(vim_type) = vim_model.any_value_types.get_mut(&type_name) {
+            vim_type.discriminator_value = Some(alias.to_string());
+            continue;
+        }
+        if let Some(vim_type) = vim_model.structs.get_mut(&type_name) {
+            vim_type.borrow_mut().discriminator_value = Some(alias.to_string());
+            continue;
+        }
+        if let Some(vim_type) = vim_model.enums.get_mut(&type_name) {
+            vim_type.discriminator_value = Some(alias.to_string());
+            continue;
+        }
+        return Err(Error::InvalidReference(type_name));
+    }
+    Ok(())
+}
+
+fn transform_schemas(
+    schemas: &std::collections::HashMap<String, RefOr<Schema>>,
+    vim_model: &mut VimModel,
+) -> Result<()> {
+    Ok(for (schema_name, ref_or_schema) in schemas {
         let RefOr::Val(ref schema) = ref_or_schema else {
             return Err(Error::UnsupportedSchemaReferenceType(
                 schema_name.to_string(),
@@ -98,20 +163,13 @@ pub fn load_vim_model(model: &OpenAPI) -> Result<VimModel> {
                 );
             }
             Schema {
-                // Any arm
-                schema_type: Some(SchemaType::Object),
-                ..
-            } if schema_name == "Any" => {
-                dbg!("Skipping Any schema");
-            }
-            Schema {
                 // Struct arm
                 schema_type: Some(SchemaType::Object),
                 ..
             } => {
                 vim_model.structs.insert(
                     schema_name.to_string(),
-                    build_struct_type(schema_name, schema)?,
+                    RefCell::new(build_struct_type(schema_name, schema)?),
                 );
             }
             _ => {
@@ -119,46 +177,10 @@ pub fn load_vim_model(model: &OpenAPI) -> Result<VimModel> {
                 return Err(Error::UnsupportedType(schema_name.to_string()));
             }
         }
-    }
-    // Apply Discriminator translation from Any type discriminator mapping
-    // Example:
-    //  discriminator:
-    //    propertyName: _typeName
-    //    mapping:
-    //      boolean: '#/components/schemas/PrimitiveBoolean'
-    //      byte: '#/components/schemas/PrimitiveByte'
-    //      short: '#/components/schemas/PrimitiveShort'
-    //      int: '#/components/schemas/PrimitiveInt'
-    let any = schemas.get(&"Any".to_string()).ok_or_else(|| Error::InvalidReference("Any".to_string()))?;
-
-    let RefOr::Val(ref schema) = any else {
-        return Err(Error::InvalidReference("Any".to_string()));
-    };
-    let discriminator = schema.as_ref().discriminator.as_ref().ok_or_else(|| Error::MissingField("#/components/schemas/Any/discriminator".to_string()))?;
-    let Some(mapping) = discriminator.mapping.as_ref() else {
-        return Err(Error::MissingField("#/components/schemas/Any/discriminator/mapping".to_string()));
-    };
-    for (alias, type_ref) in mapping {
-        let type_name = reference_to_schema_name(type_ref)?.to_string();
-        if let Some(vim_type) = vim_model.any_value_types.get_mut(&type_name) {
-            vim_type.discriminator_value = Some(alias.to_string());
-            continue;
-        }
-        if let Some(vim_type) = vim_model.structs.get_mut(&type_name) {
-            vim_type.discriminator_value = Some(alias.to_string());
-            continue;
-        }
-        if let Some(vim_type) = vim_model.enums.get_mut(&type_name) {
-            vim_type.discriminator_value = Some(alias.to_string());
-            continue;
-        }
-        return Err(Error::InvalidReference(type_name));
-    };
-    Ok(vim_model)
+    })
 }
 
 static EMPTY_VEC: Vec<String> = Vec::new();
-static NONE_STR: String = String::new();
 
 fn build_struct_type(schema_name: &str, schema: &Schema) -> Result<Struct> {
     let properties = convert_properties(schema_name, schema)?;
@@ -168,6 +190,7 @@ fn build_struct_type(schema_name: &str, schema: &Schema) -> Result<Struct> {
         properties,
         parent: get_parent_schema(schema),
         discriminator_value: None,
+        children: vec![],
     })
 }
 
@@ -180,11 +203,17 @@ fn convert_properties(schema_name: &str, schema: &Schema) -> Result<IndexMap<Str
     for (property_name, ref_or_property) in properties {
         let description = match ref_or_property {
             RefOr::Val(property) => property.description.as_ref(),
-            RefOr::Ref { .. } => None,
+            RefOr::Ref { description, .. } => description.as_ref(),
         };
         let property = Property {
             name: property_name.clone(),
-            vim_type: VimType::try_from(ref_or_property).or_else(|op| Err(Error::FieldDecodingError(schema_name.to_string(), property_name.to_string(), Box::new(op))))?,
+            vim_type: VimType::try_from(ref_or_property).or_else(|op| {
+                Err(Error::FieldDecodingError(
+                    schema_name.to_string(),
+                    property_name.to_string(),
+                    Box::new(op),
+                ))
+            })?,
             optional: !required.contains(&property_name.to_string()),
             description: description.cloned(),
         };
@@ -218,7 +247,7 @@ fn as_string(value: &serde_json::Value) -> Result<String> {
 fn get_parent_schema(schema: &Schema) -> Option<String> {
     let all_of = schema.all_of.as_ref()?;
     if all_of.len() == 1 {
-        if let RefOr::Ref { ref reference } = &all_of[0] {
+        if let RefOr::Ref { ref reference, ..} = &all_of[0] {
             return Some(trim_schema_prefix(reference).to_string());
         }
     }
@@ -241,6 +270,7 @@ fn trim_schema_prefix(reference: &String) -> &str {
 mod tests {
     use super::*;
     use serde_json::json;
+    use std::io::Read;
 
     #[test]
     fn test_enum_load() {
@@ -330,8 +360,8 @@ mod tests {
         });
         let open_api = serde_json::from_value::<OpenAPI>(value).unwrap();
         let vim_model = load_vim_model(&open_api).unwrap();
-        assert_eq!(vim_model.structs.len(), 1);
-        let test_request_type = vim_model.structs.get("TestRequestType").unwrap();
+        assert_eq!(vim_model.structs.len(), 2);
+        let test_request_type = vim_model.structs.get("TestRequestType").unwrap().borrow();
         assert_eq!(test_request_type.name, "TestRequestType");
         assert_eq!(test_request_type.description, Some("test".to_string()));
         assert_eq!(test_request_type.properties.len(), 2);
@@ -349,10 +379,77 @@ mod tests {
         assert_eq!(test_request_type_prop.name, "bar");
         assert_eq!(
             test_request_type_prop.vim_type,
-            VimType::Struct("BaseConfigInfoDiskFileBackingInfoProvisioningType_enum".to_string())
+            VimType::Reference("BaseConfigInfoDiskFileBackingInfoProvisioningType_enum".to_string())
         );
         assert_eq!(test_request_type_prop.optional, true);
         assert_eq!(test_request_type_prop.description, None);
+    }
+
+    #[test]
+    fn test_struct_load() {
+        let value = json!({
+            "openapi": "3.0.3",
+            "info": {"title": "test", "version": "1.0.0"},
+            "paths": {},
+            "components": {
+                "schemas": {
+                    "Any": {
+                        "type": "object",
+                        "description": "The base of all data types. Not to be used directly on the wire.\n",
+                        "properties": {
+                            "_typeName": {
+                            "description": "The type discriminator. Refers to the name of a valid data object type.\n",
+                            "type": "string"
+                            }
+                        },
+                        "required": [
+                            "_typeName"
+                        ],
+                        "discriminator": {
+                            "propertyName": "_typeName",
+                            "mapping": {}
+                        }
+                    },
+                    "MethodFault": {
+                        "type": "object",
+                        "description": "The base data object type for all the object model faults\nthat an application might handle.\n",
+                        "properties": {
+                            "faultCause": {
+                            "description": "Fault which is the cause of this fault.\n",
+                            "$ref": "#/components/schemas/MethodFault"
+                            },
+                            "faultMessage": {
+                            "description": "Message which has details about the error\nMessage can also contain a key to message catalog which\ncan be used to generate better localized messages.\n",
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/components/schemas/LocalizableMessage"
+                            }
+                            }
+                        },
+                        "allOf": [
+                            {
+                            "$ref": "#/components/schemas/Any"
+                            }
+                        ]
+                    },
+                }
+            }
+        });
+        let open_api = serde_json::from_value::<OpenAPI>(value).unwrap();
+        let vim_model = load_vim_model(&open_api).unwrap();
+        assert_eq!(vim_model.structs.len(), 2);
+        let test_struct = vim_model.structs.get("MethodFault").unwrap().borrow();
+        assert_eq!(test_struct.name, "MethodFault");
+        assert_eq!(test_struct.description, Some("The base data object type for all the object model faults\nthat an application might handle.\n".to_string()));
+        assert_eq!(test_struct.properties.len(), 2);
+        assert_eq!(test_struct.parent, Some("Any".to_string()));
+        let test_request_type_prop = test_struct.properties.get("faultCause").unwrap();
+        assert_eq!(test_request_type_prop.name, "faultCause");
+        assert_eq!(test_request_type_prop.vim_type, VimType::Reference("MethodFault".to_string()));
+        assert_eq!(test_request_type_prop.optional, true);
+
+        let any = vim_model.structs.get("Any").unwrap().borrow();
+        assert_eq!(any.children, vec!["MethodFault".to_string()]);
     }
 
     #[test]
@@ -405,19 +502,22 @@ mod tests {
         let open_api = serde_json::from_value::<OpenAPI>(value).unwrap();
         let vim_model = load_vim_model(&open_api).unwrap();
         assert_eq!(vim_model.any_value_types.len(), 1);
-        let boxed_type = vim_model.any_value_types.get(&"PrimitiveBoolean".to_string()).unwrap();
+        let boxed_type = vim_model
+            .any_value_types
+            .get(&"PrimitiveBoolean".to_string())
+            .unwrap();
         assert_eq!(boxed_type.name, "PrimitiveBoolean".to_string());
         assert_eq!(
             boxed_type.description,
             Some("A boxed Boolean primitive. To be used in *Any* placeholders.\n".to_string())
         );
         assert_eq!(boxed_type.property_type, VimType::Boolean);
-        assert_eq!(boxed_type.discriminator_value , Some("boolean".to_string()));
+        assert_eq!(boxed_type.discriminator_value, Some("boolean".to_string()));
     }
 
-
     fn load_openapi() -> OpenAPI {
-        let mut file = std::fs::File::open("data/vi_json_openapi_specification_v8_0_2_0.json").unwrap();
+        let mut file =
+            std::fs::File::open("data/vi_json_openapi_specification_v8_0_2_0.json").unwrap();
         let mut data = String::new();
         file.read_to_string(&mut data).unwrap();
         let openapi: OpenAPI = serde_json::from_str(&data).unwrap();
@@ -430,6 +530,6 @@ mod tests {
         let vim_model = load_vim_model(&model).unwrap();
         assert_eq!(vim_model.any_value_types.len(), 3071);
         assert_eq!(vim_model.enums.len(), 414);
-        assert_eq!(vim_model.structs.len(), 3696);
+        assert_eq!(vim_model.structs.len(), 3697);
     }
 }
