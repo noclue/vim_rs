@@ -120,6 +120,7 @@ pub enum VimType {
     Float,
     Double,
     DateTime,
+    Binary,
     Array(Box<VimType>),
     Reference(String),
 }

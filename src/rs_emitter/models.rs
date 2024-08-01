@@ -168,6 +168,8 @@ fn to_rust_type(vim_model: &VimModel, vim_type: &VimType) -> Result<String> {
         VimType::Double => Ok("f64".to_string()),
         VimType::DateTime => Ok("chrono::DateTime<chrono::Utc>".to_string()),
         VimType::Array(nested_type) => Ok(format!("Vec<{}>", to_rust_type(vim_model, nested_type)?)),
+        // TODO: Add Box only for traits and when there is a loop (e.g. MethodDault contains
+        // Option<MethodFault> and without Box it cannot be compiled)
         VimType::Reference(ref_name) => Ok(format!("Box<{}>", to_struct_type(vim_model, ref_name)?)),
     }
 }
