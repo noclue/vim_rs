@@ -22,6 +22,7 @@ pub enum RefOr<T> {
         #[serde(rename = "$ref")]
         reference: String,
         /// An optional, string description. This is non-standard but used in the VIM API definition.
+        #[serde(skip_serializing_if = "Option::is_none")]
         description: Option<String>,
     },
     /// A value
@@ -51,7 +52,7 @@ mod tests {
         let ref_or = json!({"description": "test", "$ref": "#/components/schemas/Animal"});
         let ref_or: RefOr<Schema> = serde_json::from_value(ref_or).unwrap();
         // `description` is ignored as the `$ref` schema has no support for additional fields
-        assert_eq!(ref_or, RefOr::Ref{reference: "#/components/schemas/Animal".to_string(), description: None});
+        assert_eq!(ref_or, RefOr::Ref{reference: "#/components/schemas/Animal".to_string(), description: Some("test".to_string())});
 
     }
 }

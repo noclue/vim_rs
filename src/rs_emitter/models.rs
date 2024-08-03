@@ -117,6 +117,7 @@ fn emit_structs(vim_model: &VimModel, printer: &mut dyn Printer) -> Result<()> {
         if struct_type.parent.is_none() && struct_type.name != "Any" { continue; }
         emit_doc(&struct_type.description, printer)?;
         emit_struct_type(&vim_model, name, &struct_type, printer)?;
+        emit_base_trait(&vim_model, name, &struct_type, printer)?;
     }
     Ok(())
 }
@@ -145,14 +146,22 @@ fn emit_struct_fields(vim_model: &VimModel, vim_type: &Struct, printer: &mut dyn
     if vim_type.properties.is_empty() { return Ok(()); }
     printer.println(&format!("// Fields of {}", vim_type.name))?;
     for (prop_name, property) in &vim_type.properties {
-        emit_doc(&property.description, printer)?;
-        let field_name = to_field_name(&prop_name);
-        let field_type = to_rust_type(vim_model, &property.vim_type)?;
-        if &field_name != prop_name {
-            printer.println(&format!("#[serde(rename = \"{}\")]", prop_name))?;
-        }
-        printer.println(&format!("{field_name}: {field_type},"))?;
+        emit_struct_field(vim_model, prop_name, property, printer)?;
     }
+    Ok(())
+}
+
+fn emit_struct_field(vim_model: &VimModel, prop_name: &str, property: &Property, printer: &mut dyn Printer) -> Result<()> {
+    emit_doc(&property.description, printer)?;
+    let field_name = to_field_name(&prop_name);
+    let mut field_type = to_rust_type(vim_model, &property.vim_type)?;
+    if &field_name != prop_name {
+        printer.println(&format!("#[serde(rename = \"{}\")]", prop_name))?;
+    }
+    if property.optional {
+        field_type = format!("pub {field_name}: Option<{field_type}>,", field_name = field_name, field_type = field_type);
+    }
+    printer.println(&format!("{field_name}: {field_type},"))?;
     Ok(())
 }
 
@@ -160,6 +169,7 @@ fn to_rust_type(vim_model: &VimModel, vim_type: &VimType) -> Result<String> {
     match &vim_type {
         VimType::Boolean => Ok("bool".to_string()),
         VimType::String => Ok("String".to_string()),
+        VimType::Binary => Ok("Vec<u8>".to_string()),
         VimType::Int8 => Ok("i8".to_string()),
         VimType::Int16 => Ok("i16".to_string()),
         VimType::Int32 => Ok("i32".to_string()),
@@ -190,4 +200,26 @@ fn to_struct_type(vim_model: &VimModel, ref_name: &str) -> Result<String> {
     } else {
         Err(Error::TypeNotFound(ref_name.to_string()))
     }
+}
+
+const DISCRIMINATOR: &str = "_typeName";
+
+fn emit_base_trait(vim_model: &VimModel, name: &str, vim_type: &Struct, printer: &mut dyn Printer) -> Result<()> {
+    if vim_type.children.is_empty() { return Ok(()); }
+    let struct_name = to_type_name(name);
+    let operation_name = to_fn_name(name);
+    printer.println(&format!("#[typetag::serde(tag = \"{}\")]", DISCRIMINATOR))?;
+    printer.println(&format!("pub trait Base{} {{", struct_name))?;
+    printer.indent();
+    printer.println(&format!("fn {}(&self) -> &{};", operation_name, struct_name))?;
+    printer.dedent();
+    printer.println("}")?;
+    // Emit implementation for the base trait returning `self` tagged with `#[typetag::serde]`
+    printer.println(&format!("#[typetag::serde]"))?;
+    printer.println(&format!("impl Base{} for {} {{", struct_name, struct_name))?;
+    printer.indent();
+    printer.println(&format!("fn {}(&self) -> &{} {{ self }}", operation_name, struct_name))?;
+    printer.dedent();
+    printer.println("}")?;
+    Ok(())
 }
