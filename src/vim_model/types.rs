@@ -65,7 +65,19 @@ pub struct Struct {
 
 impl Struct {
     pub fn rust_name(&self) -> String {
-        self.name.to_case(Case::Pascal)
+        self.name.to_case(Case::Pascal).into_safe()
+    }
+
+    pub fn discriminator(&self) -> String {
+        self.name.clone()
+    }
+
+    pub fn has_parent(&self) -> bool {
+        self.parent.is_some()
+    }
+
+    pub fn has_children(&self) -> bool {
+        !self.children.is_empty()
     }
 }
 
@@ -142,6 +154,11 @@ impl TryFrom<&RefOr<Schema>> for VimType {
                     format: Some(DataFormat::DateTime),
                     ..
                 } => Ok(VimType::DateTime),
+                Schema {
+                    schema_type: Some(SchemaType::String),
+                    format: Some(DataFormat::Byte),
+                    ..
+                } => Ok(VimType::Binary),
                 Schema {
                     schema_type: Some(SchemaType::String),
                     ..
