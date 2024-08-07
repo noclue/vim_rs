@@ -26,7 +26,7 @@ pub fn emit_data_types(vim_model: &VimModel, printer: &mut dyn Printer) -> Resul
     emit_struct_type_table(vim_model, printer)?;
     emit_enums(vim_model, printer)?;
     emit_structs(vim_model, printer)?;
-    // TODO emit_boxed_types(vim_model, printer)?;
+    emit_boxed_types(vim_model, printer)?;
     Ok(())
 }
 
@@ -81,12 +81,13 @@ fn emit_struct_type_table(vim_model: &VimModel, printer: &mut dyn Printer) -> Re
     printer.println("let mut map = std::collections::HashMap::new();")?;
     for (name, vim_type_cell) in &vim_model.structs {
         let mut vim_type = vim_type_cell.borrow();
-        if vim_type.parent.is_none() && vim_type.name != "Any" { continue; }
+        if vim_type.parent.is_none() { continue; }
         printer.print_indent()?;
         let type_name = to_type_name(name);
         printer.print(format!("map.insert(any::TypeId::of::<{type_name}>(), vec![any::TypeId::of::<{type_name}>()").as_str())?;
         let mut parent_opt = vim_type.parent.as_ref();
         while let Some(parent_name) = parent_opt {
+            if parent_name == "Any" { break; } // Skip the Any type
             let type_name = to_type_name(parent_name);
             printer.print(format!(", any::TypeId::of::<{}>", type_name).as_str())?;
             let Some(parent_cell) = vim_model.structs.get(parent_name) else { 
@@ -113,6 +114,10 @@ fn emit_struct_type_table(vim_model: &VimModel, printer: &mut dyn Printer) -> Re
 fn emit_structs(vim_model: &VimModel, printer: &mut dyn Printer) -> Result<()> {
     for (name, vim_type_cell) in &vim_model.structs {
         let struct_type = vim_type_cell.borrow();
+        if struct_type.name == "Any" {
+            emit_root_type(&vim_model, &struct_type, printer)?;
+            continue;
+        }
         //if struct_type.parent.is_none() && struct_type.name != "Any" { continue; } // Skip request types
         emit_doc(&struct_type.description, printer)?;
         emit_struct_type(&vim_model, name, &struct_type, printer)?;
@@ -121,6 +126,33 @@ fn emit_structs(vim_model: &VimModel, printer: &mut dyn Printer) -> Result<()> {
         emit_typed_trait(&struct_type, printer)?;
         // TODO emit_default_trait(&struct_type, printer)?;
     }
+    Ok(())
+}
+
+fn emit_root_type(vim_model: &VimModel, vim_type: &Struct, printer: &mut dyn Printer) -> Result<()> {
+    emit_doc(&vim_type.description, printer)?;
+    printer.println("#[derive(Debug, PartialEq, Serialize, Deserialize)]")?;
+    printer.println("#[serde(tag = \"_typeName\")]")?;
+    printer.println(&format!("pub enum {} {{", vim_type.rust_name()))?;
+    printer.indent();
+    for name in &vim_type.children { // Render leaf nodes first expecting them to be tagged
+        let child_type = vim_model.structs.get(name).ok_or_else(|| Error::TypeNotFound(name.clone()))?.borrow();
+        if !child_type.children.is_empty() { continue; }
+        let rust_name = child_type.rust_name();
+        printer.println(&format!("{rust_name}({rust_name}),"))?;
+    }
+
+    for name in &vim_type.children { // Render non-leaf nodes untagged as we will rely on the Base* types for each of them
+        let child_type = vim_model.structs.get(name).ok_or_else(|| Error::TypeNotFound(name.clone()))?.borrow();
+        if child_type.children.is_empty() { continue; }
+        let rust_name = child_type.rust_name();
+        printer.println("#[serde(untagged)]")?;
+        printer.println(&format!("{rust_name}(Box<dyn Base{rust_name}>),"))?;
+    }
+    printer.println("#[serde(untagged)]")?;
+    printer.println(&format!("Value(ValueElements),"))?;
+    printer.dedent();
+    printer.println("}")?;
     Ok(())
 }
 
@@ -141,11 +173,11 @@ fn emit_struct_type(vim_model: &VimModel, name: &str, vim_type: &Struct, printer
 }
 
 fn emit_types_field(vim_type: &Struct, printer: &mut dyn Printer) -> Result<()> {
-    if !(vim_type.has_children() || vim_type.has_parent())  { return Ok(()); } // No inheritance
+    if !needs_typed_trait(vim_type)  { return Ok(()); } // No inheritance emulation
     let struct_name = vim_type.rust_name();
     printer.println(&format!("#[deprecated(note = \"This field is not intended to be used. Please initialize with the default value or using '{}::get_types()'.\")]", struct_name))?;
     printer.println(&format!("#[serde(skip, default = \"{}::get_types\")]", struct_name))?;
-    printer.println("types_: &'static Vec<TypeId>,")?;
+    printer.println("types_: &'static Vec<any::TypeId>,")?;
     Ok(())
 }
 
@@ -165,10 +197,11 @@ fn has_binary_fields(vim_type: &Struct) -> bool {
 
 fn emit_struct_all_fields(vim_model: &VimModel, vim_type: &Struct, printer: &mut dyn Printer) -> Result<()> {
     if let Some(parent) = vim_type.parent.as_ref() {
-        if parent == "Any" { return Ok(()); } // WE do not need to emit fields for the Any type
-        let parent_model_ref = vim_model.structs.get(parent).ok_or_else(|| Error::TypeNotFound(parent.clone()))?.borrow();
-        let parent_model: &Struct = parent_model_ref.borrow();
-        emit_struct_all_fields(vim_model, parent_model, printer)?;
+        if parent != "Any" { // WE do not need to emit fields for the Any type
+            let parent_model_ref = vim_model.structs.get(parent).ok_or_else(|| Error::TypeNotFound(parent.clone()))?.borrow();
+            let parent_model: &Struct = parent_model_ref.borrow();
+            emit_struct_all_fields(vim_model, parent_model, printer)?;
+        }
     }
     emit_struct_fields(vim_model, vim_type, printer)
 }
@@ -223,10 +256,10 @@ fn to_struct_type(vim_model: &VimModel, ref_name: &str) -> Result<String> {
     // If we cannot find the struct thisis programatic error
     let rust_name = to_type_name(ref_name);
     if let Some(struct_type) = vim_model.structs.get(ref_name) {
-        if struct_type.borrow().has_children() {
-            Ok(format!("dyn Base{}", ref_name))
+        if struct_type.borrow().has_children() && struct_type.borrow().name != "Any" {
+            Ok(format!("dyn Base{}", rust_name))
         } else {
-            Ok(ref_name.to_string())
+            Ok(rust_name.to_string())
         }            
     } else if let Some(_) = vim_model.enums.get(ref_name) {
         Ok(rust_name)
@@ -239,6 +272,7 @@ const DISCRIMINATOR: &str = "_typeName";
 
 fn emit_base_trait(name: &str, vim_type: &Struct, printer: &mut dyn Printer) -> Result<()> {
     if !vim_type.has_children() { return Ok(()); }
+    if vim_type.name == "Any" { return Ok(()); } // Skip the Any type
     let struct_name = to_type_name(name);
     let operation_name = to_fn_name(name);
     printer.println(&format!("#[typetag::serde(tag = \"{}\")]", DISCRIMINATOR))?;
@@ -267,6 +301,7 @@ fn emit_inherited_traits(vim_model: &VimModel, name: &str, vim_type: &Struct, pr
 }
 
 fn emit_parent_trait(vim_model: &VimModel, wsdl_name: &str, type_name: &str, parent_name: &str, parent_type: &Struct, printer: &mut dyn Printer) -> Result<()> {
+    if parent_name == "Any" { return Ok(()); } // Skip the Any type as it is enum
     if wsdl_name != type_name {
         printer.println(&format!("#[typetag::serde(name = \"{wsdl_name}\")]"))?;
     } else {
@@ -274,7 +309,7 @@ fn emit_parent_trait(vim_model: &VimModel, wsdl_name: &str, type_name: &str, par
     }
     printer.println(&format!("impl Base{} for {} {{", to_type_name(parent_name), type_name))?;
     printer.indent();
-    printer.println(&format!("fn {}(&self) -> &{} {{ cast_as(self).unwrap() }}", to_fn_name(parent_name), to_type_name(parent_name)))?;
+    printer.println(&format!("fn {}(&self) -> &{} {{ crate::typed::cast_as(self).unwrap() }}", to_fn_name(parent_name), to_type_name(parent_name)))?;
     printer.dedent();
     printer.println("}")?;
     if let Some(parent) = parent_type.parent.as_ref() {
@@ -286,13 +321,43 @@ fn emit_parent_trait(vim_model: &VimModel, wsdl_name: &str, type_name: &str, par
 }
 
 fn emit_typed_trait(vim_type: &Struct, printer: &mut dyn Printer) -> Result<()> {
-    if !(vim_type.has_children() || vim_type.has_parent())  { return Ok(()); } // No inheritance
+    if !needs_typed_trait(vim_type) { return Ok(()); }
     let struct_name = vim_type.rust_name();
-    printer.println(&format!("impl typed::Typed for {} {{", struct_name))?;
+    printer.println(&format!("impl crate::typed::Typed for {} {{", struct_name))?;
     printer.indent();
-    printer.println(&format!("fn get_types() -> &'static Vec<any::TypeId> {{ typed::get_hierarchy(&any::TypeId::of::<{}>()) }}", struct_name))?;
-    printer.println("fn types(&self) -> &Vec<any::TypeId> {{ &self.types_ }}")?;
+    printer.println(&format!("fn get_types() -> &'static Vec<any::TypeId> {{ get_hierarchy(&any::TypeId::of::<{}>()) }}", struct_name))?;
+    printer.println("fn types(&self) -> &Vec<any::TypeId> { &self.types_ }")?;
     printer.dedent();
     printer.println("}")?;
     Ok(())
 }
+
+fn needs_typed_trait(vim_type: &Struct) -> bool {
+    if !vim_type.has_children() { // Childless do not need Typed if they have no parent or their parent is Any
+        let Some(ref parent) = vim_type.parent else { return false; }; // No inheritance
+        if parent == "Any" { return false; } // Skip types without children whose parent is Any as Any is enum
+    } 
+    true
+}
+
+
+/// Emit any value types from VimModel like ArrayOfInt, ArrayOfString, etc.
+fn emit_boxed_types(vim_model: &VimModel, printer: &mut dyn Printer) -> Result<()> {
+    printer.println("#[derive(Debug, PartialEq, Serialize, Deserialize)]")?;
+    printer.println("#[serde(tag = \"_typeName\", content = \"_value\")]")?;
+    printer.println("pub enum ValueElements {")?;
+    printer.indent();
+    for (_, box_type) in &vim_model.any_value_types {
+        emit_doc(&box_type.description, printer)?;
+        let type_name = to_type_name(&box_type.name);
+        if type_name != box_type.name {
+            printer.println(&format!("#[serde(rename = \"{}\")]", box_type.name))?;
+        }
+        let rust_type = to_rust_type(vim_model, &box_type.property_type)?;
+        printer.println(&format!("{type_name}({rust_type}),"))?;
+    }
+    printer.dedent();
+    printer.println("}")?;
+    Ok(())
+}
+
