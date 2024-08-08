@@ -69,7 +69,7 @@ fn emit_doc(doc_string: &Option<String>, printer: &mut dyn Printer) -> Result<()
 }
 
 fn emit_struct_type_table(vim_model: &VimModel, printer: &mut dyn Printer) -> Result<()> {    
-    printer.println("static mut TYPE_MAP: Option<std::collections::HashMap<TypeId, Vec<TypeId>>> = None;")?;
+    printer.println("static mut TYPE_MAP: Option<std::collections::HashMap<any::TypeId, Vec<any::TypeId>>> = None;")?;
     printer.println("static START: std::sync::Once = std::sync::Once::new();")?;
 
     printer.newline()?;
