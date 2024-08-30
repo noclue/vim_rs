@@ -34,6 +34,7 @@ pub fn emit_data_types(vim_model: &VimModel, printer: &mut dyn Printer) -> Resul
 fn emit_use_statements(printer: &mut dyn Printer) -> Result<()> {
     printer.println("use std::{any, fmt::Debug};")?;
     printer.println("use serde::{Deserialize, Serialize};")?;
+    printer.println("use crate::typed::Typed;")?;
     printer.newline()?;
     Ok(())
 }
@@ -44,7 +45,7 @@ fn emit_enums(vim_model: &VimModel, printer: &mut dyn Printer) -> Result<()> {
 
         let enum_name = to_type_name(&vim_enum.name); 
 
-        printer.println("#[derive(Debug, PartialEq, Serialize, Deserialize)]")?;
+        printer.println("#[derive(Debug, Serialize, Deserialize)]")?;
         printer.println(&format!("pub enum {} {{", enum_name))?;
         printer.indent();
         for value in &vim_enum.variants {
@@ -89,7 +90,7 @@ fn emit_struct_type_table(vim_model: &VimModel, printer: &mut dyn Printer) -> Re
         while let Some(parent_name) = parent_opt {
             if parent_name == "Any" { break; } // Skip the Any type
             let type_name = to_type_name(parent_name);
-            printer.print(format!(", any::TypeId::of::<{}>", type_name).as_str())?;
+            printer.print(format!(", any::TypeId::of::<{}>()", type_name).as_str())?;
             let Some(parent_cell) = vim_model.structs.get(parent_name) else { 
                 return Err(Error::TypeNotFound(parent_name.to_string()));
             };
@@ -131,7 +132,7 @@ fn emit_structs(vim_model: &VimModel, printer: &mut dyn Printer) -> Result<()> {
 
 fn emit_root_type(vim_model: &VimModel, vim_type: &Struct, printer: &mut dyn Printer) -> Result<()> {
     emit_doc(&vim_type.description, printer)?;
-    printer.println("#[derive(Debug, PartialEq, Serialize, Deserialize)]")?;
+    printer.println("#[derive(Debug, Serialize, Deserialize)]")?;
     printer.println("#[serde(tag = \"_typeName\")]")?;
     printer.println(&format!("pub enum {} {{", vim_type.rust_name()))?;
     printer.indent();
@@ -161,7 +162,7 @@ fn emit_struct_type(vim_model: &VimModel, name: &str, vim_type: &Struct, printer
     if has_binary_fields_in_hierarchy(vim_model, vim_type)? {
         printer.println("#[serde_with::serde_as]")?;
     }
-    printer.println(&format!("#[derive(Debug, PartialEq, Serialize, Deserialize)]"))?;
+    printer.println(&format!("#[derive(Debug, Serialize, Deserialize)]"))?;
     printer.println("#[repr(C, align(8))]")?;
     printer.println(&format!("pub struct {struct_name} {{"))?;
     printer.indent();
@@ -242,7 +243,7 @@ fn to_rust_type(vim_model: &VimModel, vim_type: &VimType) -> Result<String> {
         VimType::Int64 => Ok("i64".to_string()),
         VimType::Float => Ok("f32".to_string()),
         VimType::Double => Ok("f64".to_string()),
-        VimType::DateTime => Ok("chrono::DateTime<chrono::Utc>".to_string()),
+        VimType::DateTime => Ok("String".to_string()),
         VimType::Array(nested_type) => Ok(format!("Vec<{}>", to_rust_type(vim_model, nested_type)?)),
         // TODO: Add Box only for traits and when there is a loop (e.g. MethodDault contains
         // Option<MethodFault> and without Box it cannot be compiled)
@@ -276,7 +277,7 @@ fn emit_base_trait(name: &str, vim_type: &Struct, printer: &mut dyn Printer) -> 
     let struct_name = to_type_name(name);
     let operation_name = to_fn_name(name);
     printer.println(&format!("#[typetag::serde(tag = \"{}\")]", DISCRIMINATOR))?;
-    printer.println(&format!("pub trait Base{} {{", struct_name))?;
+    printer.println(&format!("pub trait Base{} : Debug + crate::typed::Typed {{", struct_name))?;
     printer.indent();
     printer.println(&format!("fn {}(&self) -> &{};", operation_name, struct_name))?;
     printer.dedent();
@@ -343,7 +344,7 @@ fn needs_typed_trait(vim_type: &Struct) -> bool {
 
 /// Emit any value types from VimModel like ArrayOfInt, ArrayOfString, etc.
 fn emit_boxed_types(vim_model: &VimModel, printer: &mut dyn Printer) -> Result<()> {
-    printer.println("#[derive(Debug, PartialEq, Serialize, Deserialize)]")?;
+    printer.println("#[derive(Debug, Serialize, Deserialize)]")?;
     printer.println("#[serde(tag = \"_typeName\", content = \"_value\")]")?;
     printer.println("pub enum ValueElements {")?;
     printer.indent();
