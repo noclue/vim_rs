@@ -20,6 +20,11 @@ pub fn to_field_name(name: &str) -> String {
     name.to_case(Case::Snake).into_safe()
 }
 
+pub fn getter_name(name: &str) -> String {
+    format!("get_{}", name.to_case(Case::Snake))
+}
+
+
 pub fn to_fn_name(name: &str) -> String {
     name.to_case(Case::Snake).into_safe()
 }
