@@ -32,6 +32,8 @@ pub fn emit_data_types(vim_model: &VimModel, printer: &mut dyn Printer) -> Resul
 
     emit_enums(vim_model, printer)?;
     emit_structs(vim_model, printer)?;
+    emit_value_deserializers(vim_model, printer)?;
+    emit_object_deserializers(vim_model, printer)?;
     // emit_boxed_types(vim_model, printer)?;
     Ok(())
 }
@@ -275,8 +277,6 @@ fn get_ref_type_declaration(vim_model: &VimModel, ref_name: &str) -> Result<Stri
     }
 }
 
-const DISCRIMINATOR: &str = "_typeName";
-
 // To allow for polymorphic fields every structure type that is extended will have a trait
 // alternative implemented that will be passed a dynamic reference. This trait will be implemented
 // all of the structure type descendants. The trait will provide access to the struct type fields
@@ -406,6 +406,70 @@ fn emit_vim_object_impl_for_trait(printer: &mut dyn Printer, data_type: &std::ce
 }
 
 
+fn emit_value_deserializers(vim_model: &VimModel, printer: &mut dyn Printer) -> Result<()> {
+
+    printer.println("type ValueDeserializer = fn(v: &RawValue) -> Result<VimAny, serde_json::Error>;")?;
+    printer.println("static mut VALUE_DESERIALIZER_MAP: Option<std::collections::HashMap<&str, Box<ValueDeserializer>>> = None;")?;
+    printer.println("static INITIALIZE_VALUE_DESERIALIZERS: std::sync::Once = std::sync::Once::new();")?;
+    
+    printer.println("fn get_value_deserializer(type_name: &str) -> Option<&'static Box<ValueDeserializer>> {")?;
+    printer.indent();
+    printer.println("INITIALIZE_VALUE_DESERIALIZERS.call_once(|| {")?;
+    printer.indent();
+    printer.println("let mut value_deserializers: HashMap<&str, Box<ValueDeserializer>> = HashMap::new();")?;
+    for (type_name, box_type) in &vim_model.any_value_types {
+        let value_type = to_rust_type(vim_model, &box_type.property_type)?;
+        let discriminator = box_type.discriminator_value.as_ref().unwrap_or(type_name);
+        printer.println(&format!(r#"value_deserializers.insert("{discriminator}", Box::new(|v| {{"#))?;
+        printer.indent();
+        printer.println(&format!("let value: {value_type} = de::Deserialize::deserialize(v)"))?;
+        printer.indent();
+        printer.println(".map_err(de::Error::custom)?;")?;
+        printer.dedent();
+        printer.println("return Ok(VimAny::Value(Box::new(value)));")?;
+        printer.dedent();
+        printer.println("}));")?;
+
+    }
+    printer.println("unsafe { VALUE_DESERIALIZER_MAP = Some(value_deserializers); }")?;
+    printer.dedent();
+    printer.println("});")?;
+    printer.println("let map = unsafe { VALUE_DESERIALIZER_MAP.as_ref().unwrap() };")?;
+    printer.println("map.get(type_name)")?;
+    printer.dedent();
+    printer.println("}")?;
+    Ok(())
+}
+
+fn emit_object_deserializers(vim_model: &VimModel, printer: &mut dyn Printer) -> Result<()> {
+    printer.println("type AnyDeserializer<'a> = de::value::MapDeserializer<'a, std::vec::IntoIter<(String, &'a RawValue)>, serde_json::Error>;")?;
+    printer.println("type ObjectDeserializer = fn(AnyDeserializer) -> Result<VimAny, serde_json::Error>;")?;
+    printer.println("static mut OBJECT_DESERIALIZER_MAP: Option<std::collections::HashMap<&str, Box<ObjectDeserializer>>> = None;")?;
+    printer.println("static INITIALIZE_OBJECT_DESERIALIZERS: std::sync::Once = std::sync::Once::new();")?;
+    printer.println("fn get_object_deserializer(type_name: &str) -> Option<&'static Box<ObjectDeserializer>> {")?;
+    printer.indent();
+    printer.println("INITIALIZE_OBJECT_DESERIALIZERS.call_once(|| {")?;
+    printer.indent();
+    printer.println("let mut object_deserializers: HashMap<&str, Box<ObjectDeserializer>> = HashMap::new();")?;
+
+    for discriminator in vim_model.structs.keys() {
+        let data_type = to_type_name(discriminator);
+        printer.println(&format!(r#"object_deserializers.insert("{discriminator}", Box::new(|ds: AnyDeserializer| -> Result<VimAny, serde_json::Error> {{"#))?;
+        printer.indent();
+        printer.println(&format!(r#"let obj = {data_type}::deserialize(ds).map_err(de::Error::custom).map(|obj|VimAny::Object(Box::new(obj)))?;"#))?;
+        printer.println("Ok(obj)")?;
+        printer.dedent();
+        printer.println("}));")?;
+    };
+    printer.println("unsafe { OBJECT_DESERIALIZER_MAP = Some(object_deserializers); }")?;
+    printer.dedent();
+    printer.println("});")?;
+    printer.println("let map = unsafe { OBJECT_DESERIALIZER_MAP.as_ref().unwrap() };")?;
+    printer.println("map.get(type_name)")?;
+    printer.dedent();
+    printer.println("}")?;
+    Ok(())
+}
 
 
 // fn emit_parent_trait(vim_model: &VimModel, wsdl_name: &str, type_name: &str, parent_name: &str, parent_type: &Struct, printer: &mut dyn Printer) -> Result<()> {
