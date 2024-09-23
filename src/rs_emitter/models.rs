@@ -1,7 +1,6 @@
 // Generator for Rust data models from vim
 
 use std::borrow::Borrow;
-use std::default;
 
 use crate::vim_model::VimModel;
 
@@ -23,7 +22,6 @@ pub enum Error {
 // Result is a type alias for handling errors.
 pub type Result<T> = std::result::Result<T, Error>;
 
-
 pub fn emit_data_types(vim_model: &VimModel, printer: &mut dyn Printer) -> Result<()> {
     emit_use_statements(printer)?;
     emit_common_types(printer)?;
@@ -34,6 +32,7 @@ pub fn emit_data_types(vim_model: &VimModel, printer: &mut dyn Printer) -> Resul
     emit_structs(vim_model, printer)?;
     emit_value_deserializers(vim_model, printer)?;
     emit_object_deserializers(vim_model, printer)?;
+    emit_any_deserialization(printer)?;
     // emit_boxed_types(vim_model, printer)?;
     Ok(())
 }
@@ -143,16 +142,12 @@ fn emit_structs(vim_model: &VimModel, printer: &mut dyn Printer) -> Result<()> {
     for (name, vim_type_cell) in &vim_model.structs {
         let struct_type = vim_type_cell.borrow();
         if struct_type.name == "Any" {
-            emit_root_type(&vim_model, &struct_type, printer)?;
             continue;
         }
-        //if struct_type.parent.is_none() && struct_type.name != "Any" { continue; } // Skip request types
         emit_struct_type(&vim_model, name, &struct_type, printer)?;
         emit_trait_type(&vim_model, name, &struct_type, printer)?;
         emit_inherited_traits(&vim_model, printer, name)?;
         emit_vim_object_trait(&vim_model, printer, name)?;
-        //emit_typed_trait(&struct_type, printer)?;
-        // TODO emit_default_trait(&struct_type, printer)?;
     }
     Ok(())
 }
@@ -301,7 +296,7 @@ fn emit_trait_type(vim_model: &VimModel, name: &str, vim_type: &Struct, printer:
     }
     printer.dedent();
     printer.println("}")?;
-    Ok(())
+    emit_trait_deserialization(printer, name, vim_type)
 }
 
 fn emit_trait_field(vim_model: &VimModel, printer: &mut dyn Printer, prop_name: &str, property: &Property) -> Result<()> {
@@ -315,6 +310,42 @@ fn emit_trait_field(vim_model: &VimModel, printer: &mut dyn Printer, prop_name: 
         field_type = format!("&{field_type}");
     }
     printer.println(&format!("fn {field_name}(&self) -> {field_type};"))?;
+    Ok(())
+}
+
+fn emit_trait_deserialization(printer: &mut dyn Printer, type_name: &str, vim_type: &Struct) -> Result<()> {
+    let trait_name = format!("{}Trait", to_type_name(type_name));
+    let type_field_name = vim_type.field_name();
+    printer.println(&format!(r#"impl<'de> Deserialize<'de> for Box<dyn {trait_name}> {{
+    fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {{
+        deserializer.deserialize_map({trait_name}Visitor)
+    }}
+}}
+
+struct {trait_name}Visitor;
+
+impl<'de> Visitor<'de> for {trait_name}Visitor {{
+    type Value = Box<dyn {trait_name}>;
+
+    fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {{
+        formatter.write_str("a valid {trait_name} JSON object with a _typeName field")
+}}
+
+    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
+    where
+        A: MapAccess<'de>,
+    {{
+        let deserializer = serde::de::value::MapAccessDeserializer::new(&mut map);
+        let any: VimAny = serde::de::Deserialize::deserialize(deserializer)?;
+        match any {{
+            VimAny::Object(obj) => Ok(obj.as_{type_field_name}_box().map_err(de::Error::custom)?),
+            VimAny::Value(value) => {{
+                Err(de::Error::custom(format!("expected object not wrapped value: {{:?}}", value)))
+            }}
+        }}
+    }}
+}}
+"#))?;
     Ok(())
 }
 
@@ -471,148 +502,56 @@ fn emit_object_deserializers(vim_model: &VimModel, printer: &mut dyn Printer) ->
     Ok(())
 }
 
-
-// fn emit_parent_trait(vim_model: &VimModel, wsdl_name: &str, type_name: &str, parent_name: &str, parent_type: &Struct, printer: &mut dyn Printer) -> Result<()> {
-//     if parent_name == "Any" { return Ok(()); } // Skip the Any type as it is enum
-//     if wsdl_name != type_name {
-//         printer.println(&format!("#[typetag::serde(name = \"{wsdl_name}\")]"))?;
-//     } else {
-//         printer.println(&format!("#[typetag::serde]"))?;
-//     }
-//     printer.println(&format!("impl Base{} for {} {{", to_type_name(parent_name), type_name))?;
-//     printer.indent();
-//     printer.println(&format!("fn {}(&self) -> &{} {{ crate::typed::cast_as(self).unwrap() }}", to_fn_name(parent_name), to_type_name(parent_name)))?;
-//     printer.dedent();
-//     printer.println("}")?;
-//     if let Some(parent) = parent_type.parent.as_ref() {
-//         let parent_model_ref = vim_model.structs.get(parent).ok_or_else(|| Error::TypeNotFound(parent.clone()))?.borrow();
-//         let parent_model: &Struct = parent_model_ref.borrow();
-//         emit_parent_trait(vim_model, wsdl_name, type_name, parent, parent_model, printer)?;
-//     }
-//     Ok(())
-// }
-
-fn emit_typed_trait(vim_type: &Struct, printer: &mut dyn Printer) -> Result<()> {
-    if !needs_typed_trait(vim_type) { return Ok(()); }
-    let struct_name = vim_type.rust_name();
-    printer.println(&format!("impl crate::typed::Typed for {} {{", struct_name))?;
-    printer.indent();
-    printer.println(&format!("fn get_types() -> &'static Vec<any::TypeId> {{ get_hierarchy(&any::TypeId::of::<{}>()) }}", struct_name))?;
-    printer.println("fn types(&self) -> &Vec<any::TypeId> { &self.types_ }")?;
-    printer.dedent();
-    printer.println("}")?;
-    Ok(())
+fn emit_any_deserialization(printer: &mut dyn Printer) -> Result<()> {
+    printer.println(r#"enum VimAny {
+    Object(Box<dyn VimObject>),
+    Value(Box<dyn Any>)
 }
 
-fn needs_typed_trait(vim_type: &Struct) -> bool {
-    if !vim_type.has_children() { // Childless do not need Typed if they have no parent or their parent is Any
-        let Some(ref parent) = vim_type.parent else { return false; }; // No inheritance
-        if parent == "Any" { return false; } // Skip types without children whose parent is Any as Any is enum
-    } 
-    true
+impl<'de> Deserialize<'de> for VimAny {
+    fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        deserializer.deserialize_map(VimAnyVisitor)
+    }
 }
 
+struct VimAnyVisitor;
 
-// TODO Delete. This is not needed anymore
-fn emit_types_field(vim_type: &Struct, printer: &mut dyn Printer) -> Result<()> {
-    if !needs_typed_trait(vim_type)  { return Ok(()); } // No inheritance emulation
-    let struct_name = vim_type.rust_name();
-    printer.println(&format!("#[deprecated(note = \"This field is not intended to be used. Please initialize with the default value or using '{}::get_types()'.\")]", struct_name))?;
-    printer.println(&format!("#[serde(skip, default = \"{}::get_types\")]", struct_name))?;
-    printer.println("types_: &'static Vec<any::TypeId>,")?;
-    Ok(())
-}
+impl<'de> Visitor<'de> for VimAnyVisitor {
+    type Value = VimAny;
 
-fn emit_root_type(vim_model: &VimModel, vim_type: &Struct, printer: &mut dyn Printer) -> Result<()> {
-    emit_doc(&vim_type.description, printer)?;
-    printer.println("#[derive(Debug, Serialize, Deserialize)]")?;
-    printer.println("#[serde(tag = \"_typeName\")]")?;
-    printer.println(&format!("pub enum {} {{", vim_type.rust_name()))?;
-    printer.indent();
-    for name in &vim_type.children { // Render leaf nodes first expecting them to be tagged
-        let child_type = vim_model.structs.get(name).ok_or_else(|| Error::TypeNotFound(name.clone()))?.borrow();
-        if !child_type.children.is_empty() { continue; }
-        let rust_name = child_type.rust_name();
-        printer.println(&format!("{rust_name}({rust_name}),"))?;
+    fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        formatter.write_str("vim JSON object with _typeName field discrimnator")
     }
 
-    for name in &vim_type.children { // Render non-leaf nodes untagged as we will rely on the Base* types for each of them
-        let child_type = vim_model.structs.get(name).ok_or_else(|| Error::TypeNotFound(name.clone()))?.borrow();
-        if child_type.children.is_empty() { continue; }
-        let rust_name = child_type.rust_name();
-        printer.println("#[serde(untagged)]")?;
-        printer.println(&format!("{rust_name}(Box<dyn Base{rust_name}>),"))?;
-    }
-    printer.println("#[serde(untagged)]")?;
-    printer.println(&format!("Value(ValueElements),"))?;
-    printer.dedent();
-    printer.println("}")?;
-    Ok(())
-}
-
-
-/// Emit any value types from VimModel like ArrayOfInt, ArrayOfString, etc.
-fn emit_boxed_types(vim_model: &VimModel, printer: &mut dyn Printer) -> Result<()> {
-    printer.println("#[derive(Debug, Serialize, Deserialize)]")?;
-    printer.println("#[serde(tag = \"_typeName\", content = \"_value\")]")?;
-    printer.println("pub enum ValueElements {")?;
-    printer.indent();
-    for (_, box_type) in &vim_model.any_value_types {
-        emit_doc(&box_type.description, printer)?;
-        let type_name = to_type_name(&box_type.name);
-        if type_name != box_type.name {
-            printer.println(&format!("#[serde(rename = \"{}\")]", box_type.name))?;
+    fn visit_map<A: MapAccess<'de>>(self, mut map: A) -> Result<Self::Value, A::Error> {
+        let mut type_name = None;
+        let mut map_data: Vec<(String, &RawValue)> = Vec::new();
+        while let Some(key) = map.next_key::<String>()? {
+            if key == "_typeName" {
+                if type_name.is_some() {
+                    return Err(de::Error::duplicate_field("_typeName"));
+                }
+                let value: String = map.next_value()?;
+                type_name = Some(value);
+            } else {
+                let value: &RawValue = map.next_value()?;
+                map_data.push((key, value));
+            }
         }
-        let rust_type = to_rust_type(vim_model, &box_type.property_type)?;
-        printer.println(&format!("{type_name}({rust_type}),"))?;
-    }
-    printer.dedent();
-    printer.println("}")?;
-    Ok(())
-}
+        let type_name: String = type_name.ok_or_else(|| de::Error::missing_field("_typeName"))?;
 
-
-
-
-fn DELETE_emit_struct_type_table(vim_model: &VimModel, printer: &mut dyn Printer) -> Result<()> {    
-    printer.println("static mut TYPE_MAP: Option<std::collections::HashMap<any::TypeId, Vec<any::TypeId>>> = None;")?;
-    printer.println("static START: std::sync::Once = std::sync::Once::new();")?;
-
-    printer.newline()?;
-    
-    printer.println("fn get_hierarchy(t: &any::TypeId) -> &'static Vec<any::TypeId> {")?;
-    printer.indent();
-    printer.println("START.call_once(|| {")?;
-    printer.indent();
-    printer.println("let mut map = std::collections::HashMap::new();")?;
-    for (name, vim_type_cell) in &vim_model.structs {
-        let mut vim_type = vim_type_cell.borrow();
-        if vim_type.parent.is_none() { continue; }
-        printer.print_indent()?;
-        let type_name = to_type_name(name);
-        printer.print(format!("map.insert(any::TypeId::of::<{type_name}>(), vec![any::TypeId::of::<{type_name}>()").as_str())?;
-        let mut parent_opt = vim_type.parent.as_ref();
-        while let Some(parent_name) = parent_opt {
-            if parent_name == "Any" { break; } // Skip the Any type
-            let type_name = to_type_name(parent_name);
-            printer.print(format!(", any::TypeId::of::<{}>()", type_name).as_str())?;
-            let Some(parent_cell) = vim_model.structs.get(parent_name) else { 
-                return Err(Error::TypeNotFound(parent_name.to_string()));
-            };
-            vim_type = parent_cell.borrow(); // We need this reference alive for te loop to turn
-            parent_opt = vim_type.parent.as_ref();
+        // Process value elements
+        if map_data.len() == 1 && map_data[0].0 == "_value" {
+            let v: &RawValue = map_data.get(0).ok_or_else(|| de::Error::missing_field("_value"))?.1;
+            if let Some(value_deserializer) = get_value_deserializer(&type_name) {
+                return value_deserializer(v).map_err(de::Error::custom);
+            }
         }
-        printer.print("]);")?;
-        printer.newline()?;
+        let ds = de::value::MapDeserializer::new(map_data.into_iter());
+        let deser = get_object_deserializer(&type_name)
+            .ok_or_else(|| de::Error::custom(format!("unknown variant `{type_name}`")))?;
+        deser(ds).map_err(de::Error::custom)
     }
-    printer.println("unsafe { TYPE_MAP = Some(map); }")?;
-    printer.dedent();
-    printer.println("});")?;
-    printer.println("let map = unsafe { TYPE_MAP.as_ref().unwrap() };")?;
-    printer.println("let Some(types) = map.get(t) else { panic!(\"Type Id {:?} not found in the type map\", t); };")?;
-    printer.println("types")?;
-    printer.dedent();
-    printer.println("}")?;
-    
+}"#)?;
     Ok(())
 }
