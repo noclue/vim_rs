@@ -18,7 +18,7 @@ fn main() {
     use rs_emitter::emit_data_types;
     let model = load_openapi();
     let vim_model = vim_model::load_vim_model(&model).unwrap();
-    let file = std::fs::File::create("output.rs").expect("Could not create file");
+    let file = std::fs::File::create("vim.rs").expect("Could not create file");
     let mut printer = printer::FilePrinter::new(file, None, None);
     emit_data_types(&vim_model, &mut printer).unwrap();
 }
