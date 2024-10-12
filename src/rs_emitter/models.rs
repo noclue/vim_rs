@@ -24,80 +24,28 @@ pub type Result<T> = std::result::Result<T, Error>;
 
 pub fn emit_data_types(vim_model: &VimModel, printer: &mut dyn Printer) -> Result<()> {
     emit_use_statements(printer)?;
-    emit_common_types(printer)?;
     emit_vim_object(vim_model, printer)?;
-    //emit_struct_type_table(vim_model, printer)?;
 
     emit_enums(vim_model, printer)?;
     emit_structs(vim_model, printer)?;
-    emit_value_deserializers(vim_model, printer)?;
-    emit_object_deserializers(vim_model, printer)?;
-    emit_any_deserialization(printer)?;
+    emit_vimany(printer)?;
     emit_boxed_types(vim_model, printer)?;
     Ok(())
 }
 
 fn emit_use_statements(printer: &mut dyn Printer) -> Result<()> {
-    printer.println("use erased_serde::serialize_trait_object;")?;
     printer.println("use std::{any, fmt};")?;
-    printer.println("use serde::Deserialize;")?;
-    printer.println("use serde::de::{self, MapAccess, Visitor};")?;
-    printer.println("use serde_json::value::RawValue;")?;
     printer.println("use std::collections::HashMap;")?;
 
     printer.newline()?;
     Ok(())
 }
 
-fn emit_common_types(printer: &mut dyn Printer) -> Result<()> {
-    printer.println(r#"pub trait AsAny: any::Any {
-        fn as_any_ref(&self) -> &dyn any::Any;
-        fn as_any_box(self: Box<Self>) -> Box<dyn any::Any>;
-    }
 
-    impl<T: VimObjectTrait + 'static> AsAny for T {
-        fn as_any_ref(&self) -> &dyn any::Any {
-            self
-        }
-        fn as_any_box(self: Box<Self>) -> Box<dyn any::Any> {
-            self
-        }
-    }
-
-type _CastResult<T> = Result<T, String>;
-    "#)?;
-    Ok(())
-}
-
-
-
-fn emit_vim_object(vim_model: &VimModel, printer: &mut dyn Printer) -> Result<()> {
-    printer.println(r#"pub trait VimObjectTrait : AsAny  + std::fmt::Debug + erased_serde::Serialize {"#)?;
-    printer.indent();
-    emit_vim_object_declarations(vim_model, ANY, printer)?;
-    printer.dedent();
+fn emit_vim_object(_: &VimModel, printer: &mut dyn Printer) -> Result<()> {
+    printer.println(r#"pub trait VimObjectTrait : std::fmt::Debug {"#)?;
     printer.println("}")?;
-    printer.println("serialize_trait_object!(VimObjectTrait);")?;
     Ok(())
-}
-
-fn emit_vim_object_declarations(vim_model: &VimModel, type_name: &str, printer: &mut dyn Printer) -> Result<()> {
-    let structure = get_structure(vim_model, type_name)?;
-    Ok(for child in &structure.children {
-        let child_struct = get_structure(vim_model, child)?;
-        if child_struct.has_children() {
-            printer.println(&format!("fn is_{}(&self) -> bool {{ false }}", child_struct.field_name()))?;
-            printer.println(&format!(r#"fn as_{}_ref(&self) -> _CastResult<&dyn {}Trait> {{ Err("Not an {}".to_string()) }}"#, 
-                            child_struct.field_name(),
-                            child_struct.rust_name(),
-                            child_struct.rust_name()))?;
-            printer.println(&format!(r#"fn as_{}_box(self: Box<Self>) -> _CastResult<Box<dyn {}Trait>> {{ Err("Not an {}".to_string()) }}"#, 
-                            child_struct.field_name(),
-                            child_struct.rust_name(), 
-                            child_struct.rust_name()))?;
-            emit_vim_object_declarations(vim_model, child, printer)?;
-        }
-    })
 }
 
 fn emit_enums(vim_model: &VimModel, printer: &mut dyn Printer) -> Result<()> {
@@ -106,29 +54,20 @@ fn emit_enums(vim_model: &VimModel, printer: &mut dyn Printer) -> Result<()> {
 
         let enum_name = to_type_name(&vim_enum.name); 
 
-        printer.println("#[derive(Debug, serde::Serialize, serde::Deserialize)]")?;
+        printer.println("#[derive(Debug)]")?;
         printer.println(&format!("pub enum {} {{", enum_name))?;
         printer.indent();
         for value in &vim_enum.variants {
             let variant = to_enum_variant(&value);
-            if value != &variant {
-                printer.println(&format!("#[serde(rename = \"{}\")]", value))?;
-            }
             printer.println(&format!("{},", variant))?;
         }
         // Make enums open i.e. handle unknown values possibly from future API servers
         printer.println("/// This variant handles values not known at compile time.")?;
-        printer.println("#[serde(untagged)]")?;
         printer.println("Other_(String),")?;
         printer.dedent();
         printer.println("}")?;
     }
     Ok(())
-}
-
-fn get_structure<'a>(vim_model: &'a VimModel, type_name: &str) -> Result<std::cell::Ref<'a, Struct>> {
-    let structure = vim_model.structs.get(type_name).ok_or_else(|| Error::TypeNotFound(type_name.to_string()))?.borrow();
-    Ok(structure)
 }
 
 fn emit_doc(doc_string: &Option<String>, printer: &mut dyn Printer) -> Result<()> {
@@ -156,8 +95,7 @@ fn emit_structs(vim_model: &VimModel, printer: &mut dyn Printer) -> Result<()> {
 fn emit_struct_type(vim_model: &VimModel, name: &str, vim_type: &Struct, printer: &mut dyn Printer) -> Result<()> {
     emit_doc(&vim_type.description, printer)?;
     let struct_name = to_type_name(name);
-    printer.println(&format!("#[derive(Debug, serde::Serialize, serde::Deserialize)]"))?;
-    printer.println(r#"#[serde(tag="_typeName")]"#)?;
+    printer.println(&format!("#[derive(Debug)]"))?;
     printer.println(&format!("pub struct {struct_name} {{"))?;
     printer.indent();
     emit_struct_all_fields(vim_model, vim_type, printer)?;
@@ -191,17 +129,6 @@ fn emit_struct_field(vim_model: &VimModel, prop_name: &str, property: &Property,
     let mut field_type = to_rust_type(vim_model, &property.vim_type)?;
     if property.optional {
         field_type = format!("Option<{field_type}>", field_type = field_type);
-        printer.println(&format!("#[serde(default)]"))?;
-    }
-    if &field_name != prop_name {
-        printer.println(&format!("#[serde(rename = \"{}\")]", prop_name))?;
-    }
-    if property.vim_type == VimType::Binary {
-        if property.optional {
-            printer.println(r#"#[serde(with = "super::base64::option")]"#)?;
-        } else {
-            printer.println(r#"#[serde(with = "super::base64::vec")]"#)?;
-        }
     }
     printer.println(&format!("pub {field_name}: {field_type},"))?;
     Ok(())
@@ -283,15 +210,14 @@ fn emit_trait_type(vim_model: &VimModel, name: &str, vim_type: &Struct, printer:
         parent_trait
     });
     emit_doc(&vim_type.description, printer)?;
-    printer.println(&format!("pub trait {}Trait : {}Trait + std::fmt::Debug {{", struct_name, base_trait))?;
+    printer.println(&format!("pub trait {}Trait : {}Trait {{", struct_name, base_trait))?;
     printer.indent();
     for (prop_name, property) in &vim_type.properties {
         emit_trait_field(vim_model, printer, prop_name, property)?;
     }
     printer.dedent();
     printer.println("}")?;
-    printer.println(&format!("serialize_trait_object!({}Trait);", struct_name))?;
-    emit_trait_deserialization(printer, name, vim_type)
+    Ok(())
 }
 
 fn emit_trait_field(vim_model: &VimModel, printer: &mut dyn Printer, prop_name: &str, property: &Property) -> Result<()> {
@@ -314,42 +240,6 @@ fn getter_return_type(vim_model: &VimModel, property: &Property) -> Result<Strin
         field_type = "&str".to_string();
     }
     Ok(field_type)
-}
-
-fn emit_trait_deserialization(printer: &mut dyn Printer, type_name: &str, vim_type: &Struct) -> Result<()> {
-    let trait_name = format!("{}Trait", to_type_name(type_name));
-    let type_field_name = vim_type.field_name();
-    printer.println(&format!(r#"impl<'de> serde::de::Deserialize<'de> for Box<dyn {trait_name}> {{
-    fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {{
-        deserializer.deserialize_map({trait_name}Visitor)
-    }}
-}}
-
-struct {trait_name}Visitor;
-
-impl<'de> Visitor<'de> for {trait_name}Visitor {{
-    type Value = Box<dyn {trait_name}>;
-
-    fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {{
-        formatter.write_str("a valid {trait_name} JSON object with a _typeName field")
-}}
-
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: MapAccess<'de>,
-    {{
-        let deserializer = serde::de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = serde::de::Deserialize::deserialize(deserializer)?;
-        match any {{
-            VimAny::Object(obj) => Ok(obj.as_{type_field_name}_box().map_err(de::Error::custom)?),
-            VimAny::Value(value) => {{
-                Err(de::Error::custom(format!("expected object not wrapped value: {{:?}}", value)))
-            }}
-        }}
-    }}
-}}
-"#))?;
-    Ok(())
 }
 
 fn emit_inherited_traits(vim_model: &VimModel, printer: &mut dyn Printer, type_name: &String) -> Result<()> {
@@ -398,182 +288,35 @@ fn emit_field_getter(vim_model: &VimModel, printer: &mut dyn Printer, prop_name:
 
 fn emit_vim_object_trait(vim_model: &VimModel, printer: &mut dyn Printer, type_name: &String) -> Result<()> {
     let struct_name = &to_type_name(&type_name);
-    let mut data_type = vim_model.structs.get(type_name).ok_or_else(|| Error::TypeNotFound(type_name.clone()))?.borrow();
+    let data_type = vim_model.structs.get(type_name).ok_or_else(|| Error::TypeNotFound(type_name.clone()))?.borrow();
 
     // AnyType and the _value types do not need VimObjectTrait impl
-    let Some(parent_name) = &data_type.parent else { return Ok(()); };
+    let Some(_) = &data_type.parent else { return Ok(()); };
 
-    printer.println(&format!("impl VimObjectTrait for {} {{", struct_name))?;
-    printer.indent();
-
-    if data_type.has_children() {
-        emit_vim_object_impl_for_trait(printer, &data_type)?;
-    }
-    let mut parent_opt = data_type.parent.as_ref();
-    while let Some(parent_name) = parent_opt {
-        if ANY == parent_name { break; }
-        data_type = vim_model.structs.get(parent_name).ok_or_else(|| Error::TypeNotFound(parent_name.clone()))?.borrow();
-        emit_vim_object_impl_for_trait(printer, &data_type)?;
-        parent_opt = data_type.parent.as_ref();
-    }
-
-    printer.dedent();
-    printer.println("}")?;
+    printer.println(&format!("impl VimObjectTrait for {} {{ }}", struct_name))?;
 
     Ok(())
 }
 
-fn emit_vim_object_impl_for_trait(printer: &mut dyn Printer, data_type: &std::cell::Ref<'_, Struct>) -> Result<()> {
-    printer.println(&format!("fn is_{}(&self) -> bool {{ true }}", data_type.field_name()))?;
-    printer.println(&format!(r#"fn as_{}_ref(&self) -> _CastResult<&dyn {}Trait> {{ Ok(self) }}"#, 
-                    data_type.field_name(),
-                    data_type.rust_name()))?;
-    printer.println(&format!(r#"fn as_{}_box(self: Box<Self>) -> _CastResult<Box<dyn {}Trait>> {{ Ok(self) }}"#, 
-                    data_type.field_name(),
-                    data_type.rust_name()))?;
-    Ok(())
-}
-
-
-fn emit_value_deserializers(vim_model: &VimModel, printer: &mut dyn Printer) -> Result<()> {
-
-    printer.println("type _ValueDeserializer = fn(v: &RawValue) -> Result<VimAny, serde_json::Error>;")?;
-    printer.println("static mut VALUE_DESERIALIZER_MAP: Option<std::collections::HashMap<&str, Box<_ValueDeserializer>>> = None;")?;
-    printer.println("static INITIALIZE_VALUE_DESERIALIZERS: std::sync::Once = std::sync::Once::new();")?;
-    
-    printer.println("fn get_value_deserializer(type_name: &str) -> Option<&'static Box<_ValueDeserializer>> {")?;
-    printer.indent();
-    printer.println("INITIALIZE_VALUE_DESERIALIZERS.call_once(|| {")?;
-    printer.indent();
-    printer.println("let mut value_deserializers: HashMap<&str, Box<_ValueDeserializer>> = HashMap::new();")?;
-    for (type_name, box_type) in &vim_model.any_value_types {
-        if type_name == ANY {
-            continue;
-        }
-        let enum_name = to_type_name(&box_type.name);
-        let value_type = to_rust_type(vim_model, &box_type.property_type)?;
-        let discriminator = box_type.discriminator_value.as_ref().unwrap_or(type_name);
-        printer.println(&format!(r#"value_deserializers.insert("{discriminator}", Box::new(|v| {{"#))?;
-        printer.indent();
-        printer.println(&format!("let value: {value_type} = de::Deserialize::deserialize(v)"))?;
-        printer.indent();
-        printer.println(".map_err(de::Error::custom)?;")?;
-        printer.dedent();
-        printer.println(&format!("return Ok(VimAny::Value(ValueElements::{enum_name}(value)));"))?;
-        printer.dedent();
-        printer.println("}));")?;
-
-    }
-    printer.println("unsafe { VALUE_DESERIALIZER_MAP = Some(value_deserializers); }")?;
-    printer.dedent();
-    printer.println("});")?;
-    printer.println("let map = unsafe { VALUE_DESERIALIZER_MAP.as_ref().unwrap() };")?;
-    printer.println("map.get(type_name)")?;
-    printer.dedent();
-    printer.println("}")?;
-    Ok(())
-}
-
-fn emit_object_deserializers(vim_model: &VimModel, printer: &mut dyn Printer) -> Result<()> {
-    printer.println("type AnyDeserializer<'a> = de::value::MapDeserializer<'a, std::vec::IntoIter<(String, &'a RawValue)>, serde_json::Error>;")?;
-    printer.println("type ObjectDeserializer = fn(AnyDeserializer) -> Result<VimAny, serde_json::Error>;")?;
-    printer.println("static mut OBJECT_DESERIALIZER_MAP: Option<std::collections::HashMap<&str, Box<ObjectDeserializer>>> = None;")?;
-    printer.println("static INITIALIZE_OBJECT_DESERIALIZERS: std::sync::Once = std::sync::Once::new();")?;
-    printer.println("fn get_object_deserializer(type_name: &str) -> Option<&'static Box<ObjectDeserializer>> {")?;
-    printer.indent();
-    printer.println("INITIALIZE_OBJECT_DESERIALIZERS.call_once(|| {")?;
-    printer.indent();
-    printer.println("let mut object_deserializers: HashMap<&str, Box<ObjectDeserializer>> = HashMap::new();")?;
-
-    for (discriminator, data_type) in &vim_model.structs {
-        if discriminator == ANY { continue; }
-        if !data_type.borrow().has_parent() { continue; }; // RequestTypes do not have parent and are not via inheritance
-        let data_type = to_type_name(discriminator);
-        printer.println(&format!(r#"object_deserializers.insert("{discriminator}", Box::new(|ds: AnyDeserializer| -> Result<VimAny, serde_json::Error> {{"#))?;
-        printer.indent();
-        printer.println(&format!(r#"let obj = {data_type}::deserialize(ds).map_err(de::Error::custom).map(|obj|VimAny::Object(Box::new(obj)))?;"#))?;
-        printer.println("Ok(obj)")?;
-        printer.dedent();
-        printer.println("}));")?;
-    };
-    printer.println("unsafe { OBJECT_DESERIALIZER_MAP = Some(object_deserializers); }")?;
-    printer.dedent();
-    printer.println("});")?;
-    printer.println("let map = unsafe { OBJECT_DESERIALIZER_MAP.as_ref().unwrap() };")?;
-    printer.println("map.get(type_name)")?;
-    printer.dedent();
-    printer.println("}")?;
-    Ok(())
-}
-
-fn emit_any_deserialization(printer: &mut dyn Printer) -> Result<()> {
-    printer.println("#[derive(Debug, serde::Serialize)]")?;
-    printer.println(r#"#[serde(untagged)]
-pub enum VimAny {
+fn emit_vimany(printer: &mut dyn Printer) -> Result<()> {
+    printer.println("#[derive(Debug)]")?;
+    printer.println(r#"pub enum VimAny {
     Object(Box<dyn VimObjectTrait>),
     Value(ValueElements),
 }
-
-impl<'de> Deserialize<'de> for VimAny {
-    fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        deserializer.deserialize_map(VimAnyVisitor)
-    }
-}
-
-struct VimAnyVisitor;
-
-impl<'de> Visitor<'de> for VimAnyVisitor {
-    type Value = VimAny;
-
-    fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-        formatter.write_str("vim JSON object with _typeName field discrimnator")
-    }
-
-    fn visit_map<A: MapAccess<'de>>(self, mut map: A) -> Result<Self::Value, A::Error> {
-        let mut type_name = None;
-        let mut map_data: Vec<(String, &RawValue)> = Vec::new();
-        while let Some(key) = map.next_key::<String>()? {
-            if key == "_typeName" {
-                if type_name.is_some() {
-                    return Err(de::Error::duplicate_field("_typeName"));
-                }
-                let value: String = map.next_value()?;
-                type_name = Some(value);
-            } else {
-                let value: &RawValue = map.next_value()?;
-                map_data.push((key, value));
-            }
-        }
-        let type_name: String = type_name.ok_or_else(|| de::Error::missing_field("_typeName"))?;
-
-        // Process value elements
-        if map_data.len() == 1 && map_data[0].0 == "_value" {
-            let v: &RawValue = map_data.get(0).ok_or_else(|| de::Error::missing_field("_value"))?.1;
-            if let Some(value_deserializer) = get_value_deserializer(&type_name) {
-                return value_deserializer(v).map_err(de::Error::custom);
-            }
-        }
-        let ds = de::value::MapDeserializer::new(map_data.into_iter());
-        let deser = get_object_deserializer(&type_name)
-            .ok_or_else(|| de::Error::custom(format!("unknown variant `{type_name}`")))?;
-        deser(ds).map_err(de::Error::custom)
-    }
-}"#)?;
+"#)?;
     Ok(())
 }
 
-/// Emit any value types from VimModel like ArrayOfInt, ArrayOfString, etc.
+/// Emit boxed value types from Vim like ArrayOfInt, ArrayOfString, Boolean etc.
 fn emit_boxed_types(vim_model: &VimModel, printer: &mut dyn Printer) -> Result<()> {
-    printer.println("#[derive(Debug, serde::Serialize, serde::Deserialize)]")?;
-    printer.println("#[serde(tag = \"_typeName\", content = \"_value\")]")?;
+    printer.println("#[derive(Debug)]")?;
     printer.println("pub enum ValueElements {")?;
     printer.indent();
     for (_, box_type) in &vim_model.any_value_types {
         emit_doc(&box_type.description, printer)?;
-        let type_name = to_type_name(&box_type.name);
-        if type_name != box_type.name {
-            printer.println(&format!("#[serde(rename = \"{}\")]", box_type.name))?;
-        }
+        let name = box_type.discriminator_value.as_ref().unwrap_or(&box_type.name);
+        let type_name = to_type_name(name);
         let rust_type = to_rust_type(vim_model, &box_type.property_type)?;
         printer.println(&format!("{type_name}({rust_type}),"))?;
     }
