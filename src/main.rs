@@ -15,10 +15,11 @@ fn load_openapi() -> oas30::OpenAPI {
 }
 
 fn main() {
-    use rs_emitter::emit_data_types;
+    use crate::rs_emitter::RsEmitter;
     let model = load_openapi();
     let vim_model = vim_model::load_vim_model(&model).unwrap();
     let file = std::fs::File::create("vim.rs").expect("Could not create file");
     let mut printer = printer::FilePrinter::new(file, None, None);
-    emit_data_types(&vim_model, &mut printer).unwrap();
+    let mut emitter = RsEmitter::new(&vim_model, &mut printer);
+    emitter.emit_data_types().unwrap();
 }

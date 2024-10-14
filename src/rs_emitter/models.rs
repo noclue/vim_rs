@@ -45,11 +45,12 @@ impl<'a> RsEmitter<'a> {
     fn emit_use_statements(&mut self) -> Result<()> {
         self.printer.println("use std::{any, fmt};")?;
         self.printer.println("use std::collections::HashMap;")?;
+        self.printer.println("use traitcast::{TraitcastFrom, Traitcast};")?;
         self.printer.newline()?;
         Ok(())
     }
     fn emit_vim_object(&mut self) -> Result<()> {
-        self.printer.println(r#"pub trait VimObjectTrait : std::fmt::Debug {"#)?;
+        self.printer.println(r#"pub trait VimObjectTrait : TraitcastFrom + std::fmt::Debug {"#)?;
         self.printer.println("}")?;
         Ok(())
     }
@@ -262,19 +263,28 @@ impl<'a> RsEmitter<'a> {
     }
     
     fn emit_inherited_traits(&mut self, type_name: &String) -> Result<()> {
+        let mut traits = Vec::<String>::new();
         let struct_name = &to_type_name(&type_name);
         let mut data_type = self.vim_model.structs.get(type_name).ok_or_else(|| Error::TypeNotFound(type_name.clone()))?.borrow();
         if data_type.has_children() {
             self.emit_trait_implementation(&data_type, struct_name)?;
+            traits.push(format!("{}Trait", to_type_name(&data_type.name)));
         }
         let mut parent_opt = data_type.parent.as_ref();
         while let Some(parent_name) = parent_opt {
             if ANY == parent_name { break; }
             data_type = self.vim_model.structs.get(parent_name).ok_or_else(|| Error::TypeNotFound(parent_name.clone()))?.borrow();
             self.emit_trait_implementation(&data_type, struct_name)?;
+            traits.push(format!("{}Trait", to_type_name(&data_type.name)));
             parent_opt = data_type.parent.as_ref();
         }
-    
+
+        if data_type.parent.is_some() || data_type.has_children() {
+            // Emit trait cast macro for the structure type e.g. traitcast::traitcast!(struct A: Foo, Bar);
+            traits.push("VimObjectTrait".to_string());
+            self.printer.println(&format!("traitcast::traitcast!(struct {} : {});", struct_name, traits.join(", ")))?;
+        }
+
         Ok(())
     }
     
