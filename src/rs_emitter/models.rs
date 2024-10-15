@@ -45,13 +45,98 @@ impl<'a> RsEmitter<'a> {
     fn emit_use_statements(&mut self) -> Result<()> {
         self.printer.println("use std::{any, fmt};")?;
         self.printer.println("use std::collections::HashMap;")?;
-        self.printer.println("use traitcast::{TraitcastFrom, Traitcast};")?;
         self.printer.newline()?;
         Ok(())
     }
     fn emit_vim_object(&mut self) -> Result<()> {
-        self.printer.println(r#"pub trait VimObjectTrait : TraitcastFrom + std::fmt::Debug {"#)?;
-        self.printer.println("}")?;
+        self.printer.println(r#"/// Casts trait object to Any. This is the first step in casting between trait objects.
+/// 
+/// See the `AnyInto` struct for the second step.
+pub trait AsAny {
+    /// Cast a reference to a trait object.
+    fn as_any_ref<'a>(&'a self) -> &'a dyn any::Any;
+
+    /// Cast to a boxed reference to a trait object.
+    fn as_any_box(self: Box<Self>) -> Box<dyn any::Any>;
+
+    /// Get the underlying type identifier.
+    fn type_id(&self) -> std::any::TypeId {
+        self.as_any_ref().type_id()
+    }
+}
+
+
+impl<T> AsAny for T
+where
+    T: Sized + 'static,
+{
+    fn as_any_ref<'a>(&'a self) -> &'a dyn any::Any {
+        self
+    }
+
+    fn as_any_box(self: Box<Self>) -> Box<dyn any::Any> {
+        self
+    }
+}
+
+
+impl AsAny for dyn any::Any {
+    fn as_any_ref<'a>(&'a self) -> &'a dyn any::Any {
+        self
+    }
+
+    fn as_any_box(self: Box<Self>) -> Box<dyn any::Any> {
+        self
+    }
+}
+
+/// Casts one trait to another using type methods. For example:
+/// ```
+/// let data_object: &dyn DataObjectTrait = &VirtualDevice {
+///     unit_number: Some(1),
+///     controller_key: Some(2),
+///     key: 3,
+///     numa_node: Some(4),
+/// };
+/// let virtual_device: &dyn VirtualDeviceTrait = data_object.into_ref().unwrap();
+/// 
+/// ```
+pub trait CastFrom<From: ?Sized> {
+    fn from_ref<'a>(from: &'a From) -> Option<&'a Self>;
+    fn from_box(from: Box<From>) -> Result<Box<Self>, Box<dyn any::Any>>;
+}
+
+
+pub trait CastInto<To: ?Sized> {
+    fn into_ref<'a>(self: &'a Self) -> Option<&'a To>;
+    fn into_box(self: Box<Self>) -> Result<Box<To>, Box<dyn any::Any>>;
+}
+
+impl<To: CastFrom<T> + ?Sized, T: ?Sized + 'static> CastInto<To> for T {
+    fn into_ref<'a>(self: &'a Self) -> Option<&'a To> {
+        CastFrom::from_ref(self)
+    }
+
+    fn into_box(self: Box<Self>) -> Result<Box<To>, Box<dyn any::Any + 'static>> {
+        CastFrom::from_box(self)
+    }
+}
+
+/// Holder for cast function pointers. We have one of those for each struct implementing a trait.
+/// Thus casting between traits is implemented. First we cast to `dyn any::Any` using the `AsAny`
+/// functionality, then we look up the `AnyInto` instance and use it to cast to the target trait.
+/// 
+/// The functions in `AnyInto`` typically downcast the `dyn any::Any` to the specific struct type, and
+/// then it is converted by the compiler to a fat pointer of the trait type.
+pub struct AnyInto<To> 
+    where To: ?Sized {
+    pub to_ref: fn(&dyn any::Any) -> Option<&To>,
+    pub to_box: fn(Box<dyn any::Any>) -> Result<Box<To>, Box<dyn any::Any>>,
+}
+
+pub trait VimObjectTrait: AsAny + std::fmt::Debug {}
+
+impl<T> VimObjectTrait for T where T: AsAny + std::fmt::Debug {}"#)?;
         Ok(())
     }
     fn emit_vimany(&mut self) -> Result<()> {
@@ -95,7 +180,6 @@ impl<'a> RsEmitter<'a> {
             self.emit_struct_type(name, &struct_type)?;
             self.emit_trait_type(name, &struct_type)?;
             self.emit_inherited_traits(name)?;
-            self.emit_vim_object_trait(name)?;
         }
         Ok(())
     }
@@ -237,6 +321,7 @@ impl<'a> RsEmitter<'a> {
         }
         self.printer.dedent();
         self.printer.println("}")?;
+        self.emit_any_into_trait(name)?;
         Ok(())
     }
     
@@ -245,6 +330,56 @@ impl<'a> RsEmitter<'a> {
         let field_name = getter_name(&prop_name);
         let field_type = self.getter_return_type(property)?;
         self.printer.println(&format!("fn {field_name}(&self) -> {field_type};"))?;
+        Ok(())
+    }
+
+    fn emit_any_into_trait(&mut self, name: &str) -> Result<()> {
+        let fn_name = any_into_name(name);
+        let type_name = to_type_name(name);
+        self.printer.println(&format!(r#"pub fn {fn_name}(from: std::any::TypeId) -> Option<&'static AnyInto<dyn {type_name}Trait>> {{
+    static mut TYPE_MAP: Option<std::collections::HashMap<std::any::TypeId, AnyInto<dyn {type_name}Trait>>> = None;
+    static RUN_ONCE: std::sync::Once = std::sync::Once::new();
+    RUN_ONCE.call_once(|| {{
+        let mut map: std::collections::HashMap<std::any::TypeId, AnyInto<dyn {type_name}Trait>> = std::collections::HashMap::new();"#))?;
+        // TODO Populate the map with the AnyInto instances by walking the struct hierarchy and adding all child types
+        self.emit_any_into_map_entries(name)?;
+        self.printer.println(r#"        unsafe {
+            TYPE_MAP = Some(map);
+        }
+    });
+    unsafe {
+        TYPE_MAP.as_ref().unwrap().get(&from)
+    }
+}"#)?;
+        self.printer.print(&format!(r#"impl<From: AsAny + ?Sized + 'static> CastFrom<From> for dyn {type_name}Trait {{
+    fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {{
+        let into = {fn_name}(from.type_id())?;
+        (into.to_ref)(from.as_any_ref())
+    }}
+
+    fn from_box(from: Box<From>) -> Result<Box<Self>, Box<dyn any::Any + 'static>> {{
+        let Some(into) = {fn_name}(from.as_ref().type_id()) else {{
+            return Err(from.as_any_box());
+        }};
+        (into.to_box)(from.as_any_box())
+    }}
+}}"#))?;
+        Ok(())
+    }
+
+    fn emit_any_into_map_entries(&mut self, name: &str) -> Result<()> {
+        let type_name = to_type_name(name);
+        self.printer.println(&format!(r#"        map.insert(std::any::TypeId::of::<{type_name}>(), AnyInto {{
+            to_ref: |value| {{ Some(value.downcast_ref::<{type_name}>()?) }},
+            to_box: |value| {{ Ok(value.downcast::<{type_name}>()?) }},
+        }});"#))?;
+
+        let Some(struct_type) = self.vim_model.structs.get(name) else {
+            return Err(Error::TypeNotFound(name.to_string()));
+        };
+        for child_name in &struct_type.borrow().children {
+            self.emit_any_into_map_entries(child_name)?;
+        };
         Ok(())
     }
     
@@ -263,26 +398,17 @@ impl<'a> RsEmitter<'a> {
     }
     
     fn emit_inherited_traits(&mut self, type_name: &String) -> Result<()> {
-        let mut traits = Vec::<String>::new();
         let struct_name = &to_type_name(&type_name);
         let mut data_type = self.vim_model.structs.get(type_name).ok_or_else(|| Error::TypeNotFound(type_name.clone()))?.borrow();
         if data_type.has_children() {
             self.emit_trait_implementation(&data_type, struct_name)?;
-            traits.push(format!("{}Trait", to_type_name(&data_type.name)));
         }
         let mut parent_opt = data_type.parent.as_ref();
         while let Some(parent_name) = parent_opt {
             if ANY == parent_name { break; }
             data_type = self.vim_model.structs.get(parent_name).ok_or_else(|| Error::TypeNotFound(parent_name.clone()))?.borrow();
             self.emit_trait_implementation(&data_type, struct_name)?;
-            traits.push(format!("{}Trait", to_type_name(&data_type.name)));
             parent_opt = data_type.parent.as_ref();
-        }
-
-        if data_type.parent.is_some() || data_type.has_children() {
-            // Emit trait cast macro for the structure type e.g. traitcast::traitcast!(struct A: Foo, Bar);
-            traits.push("VimObjectTrait".to_string());
-            self.printer.println(&format!("traitcast::traitcast!(struct {} : {});", struct_name, traits.join(", ")))?;
         }
 
         Ok(())
@@ -312,18 +438,6 @@ impl<'a> RsEmitter<'a> {
             field_access = format!("&{field_access}");
         }
         self.printer.println(&format!("fn {getter_name}(&self) -> {field_type} {{ {field_access} }}"))?;
-        Ok(())
-    }
-    
-    fn emit_vim_object_trait(&mut self, type_name: &String) -> Result<()> {
-        let struct_name = &to_type_name(&type_name);
-        let data_type = self.vim_model.structs.get(type_name).ok_or_else(|| Error::TypeNotFound(type_name.clone()))?.borrow();
-    
-        // AnyType and the _value types do not need VimObjectTrait impl
-        let Some(_) = &data_type.parent else { return Ok(()); };
-    
-        self.printer.println(&format!("impl VimObjectTrait for {} {{ }}", struct_name))?;
-    
         Ok(())
     }
 }
