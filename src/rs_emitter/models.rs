@@ -228,11 +228,12 @@ impl<T> VimObjectTrait for T where T: AsAny + std::fmt::Debug + erased_serde::Se
     fn emit_struct_type(&mut self, name: &str, vim_type: &Struct) -> Result<()> {
         self.emit_doc(&vim_type.description)?;
         let struct_name = to_type_name(name);
+        let discriminator = vim_type.discriminator_value.clone().unwrap_or(name.to_string()); 
         self.printer.println("#[derive(Debug, serde::Deserialize, serde::Serialize)]")?;
-        if struct_name == name {
+        if struct_name == discriminator {
             self.printer.println(r#"#[serde(tag="_typeName")]"#)?;
         } else {
-            self.printer.println(&format!(r#"#[serde(rename = "{name}", tag = "_typeName")]"#))?;
+            self.printer.println(&format!(r#"#[serde(rename = "{discriminator}", tag = "_typeName")]"#))?;
         }
         self.printer.println(&format!("pub struct {struct_name} {{"))?;
         self.printer.indent();
@@ -267,7 +268,7 @@ impl<T> VimObjectTrait for T where T: AsAny + std::fmt::Debug + erased_serde::Se
         let mut field_type = self.to_rust_type(&property.vim_type)?;
         if property.optional {
             field_type = format!("Option<{field_type}>", field_type = field_type);
-            self.printer.println(&format!("#[serde(default)]"))?;
+            self.printer.println(&format!("#[serde(default, skip_serializing_if = \"Option::is_none\")]"))?;
         }
         if field_name != prop_name {
             self.printer.println(&format!(r#"#[serde(rename = "{prop_name}")]"#))?;
