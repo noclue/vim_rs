@@ -1,4 +1,3 @@
-
 use std::io::Write;
 
 #[derive(Debug, thiserror::Error)]
@@ -26,11 +25,13 @@ pub struct StdoutPrinter {
 
 pub enum IndentType {
     Space,
+    #[allow(dead_code)]
     Tab,
 }
 
 impl StdoutPrinter {
     /// Create a new printer. By default uses 4 spaces for indentation.
+    #[allow(dead_code)]
     pub fn new(indent_type: Option<IndentType>, indent_size: Option<usize>) -> Self {
         let indent_string = match indent_type.unwrap_or(IndentType::Space) {
             IndentType::Space => " ".repeat(indent_size.unwrap_or(4)),
