@@ -1,0 +1,10 @@
+[package]
+name = "vim"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+base64 = "0.22.1"
+erased-serde = "0.4.5"
+serde = { version = "1.0.210", features = ["derive"] }
+serde_json = { version = "1.0.129", features = ["raw_value"] }
