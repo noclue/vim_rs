@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use indexmap::IndexMap;
 use serde::{Deserialize, Serialize};
 
 // From https://spec.openapis.org/oas/v3.0.3#server-object
@@ -14,10 +14,10 @@ pub struct Server {
     pub description: Option<String>,
     /// A map between a variable name and its value. The value is used for substitution in the
     /// server's URL template.
-    pub variables: Option<HashMap<String, ServerVariable>>,
+    pub variables: Option<IndexMap<String, ServerVariable>>,
     /// Spec Extensions
     #[serde(flatten)]
-    pub extensions: HashMap<String, serde_json::Value>,
+    pub extensions: IndexMap<String, serde_json::Value>,
 }
 
 // From https://spec.openapis.org/oas/v3.0.3#server-variable-object
@@ -38,5 +38,5 @@ pub struct ServerVariable {
     pub description: Option<String>,
     /// Spec Extensions
     #[serde(flatten)]
-    pub extensions: HashMap<String, serde_json::Value>,
+    pub extensions: IndexMap<String, serde_json::Value>,
 }

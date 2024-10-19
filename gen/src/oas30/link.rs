@@ -1,5 +1,5 @@
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
+use indexmap::IndexMap;
 use super::server::Server;
 
 
@@ -32,7 +32,7 @@ pub struct Link {
     /// be a constant or an expression to be evaluated and passed to the linked operation. The
     /// parameter name can be qualified using the parameter location [{in}.]{name} for operations
     /// that use parameters.
-    pub parameters: Option<HashMap<String, serde_json::Value>>,
+    pub parameters: Option<IndexMap<String, serde_json::Value>>,
     /// A literal value or {expression} to use as a request body when calling the target operation.
     #[serde(rename = "requestBody")]
     pub request_body: Option<serde_json::Value>,
@@ -42,5 +42,5 @@ pub struct Link {
     pub server: Option<Server>,
     /// Spec Extensions
     #[serde(flatten)]
-    pub extensions: HashMap<String, serde_json::Value>,
+    pub extensions: IndexMap<String, serde_json::Value>,
 }

@@ -1,5 +1,5 @@
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
+use indexmap::IndexMap;
 use super::*;
 
 // From https://spec.openapis.org/oas/v3.0.3#parameter-object
@@ -47,16 +47,16 @@ pub struct Parameter {
     /// SHALL override the example provided by the schema.
     pub example: Option<serde_json::Value>,
     /// Examples of the parameter
-    pub examples: Option<HashMap<String, RefOr<Example>>>,
+    pub examples: Option<IndexMap<String, RefOr<Example>>>,
     /// A map containing the representations for the parameter. The key is the media type and the
     /// value describes it. The map MUST only contain one entry. This property is REQUIRED when the
     /// requestBody property is in use and the media type of the request is not
     /// application/x-www-form-urlencoded. The map key MUST be the media type and the value MUST be
     /// a MediaType Object.
-    pub content: Option<HashMap<String, MediaType>>,
+    pub content: Option<IndexMap<String, MediaType>>,
     /// Spec Extensions
     #[serde(flatten)]
-    pub extensions: HashMap<String, serde_json::Value>,
+    pub extensions: IndexMap<String, serde_json::Value>,
 }
 
 

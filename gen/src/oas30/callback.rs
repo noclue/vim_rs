@@ -1,5 +1,5 @@
+use indexmap::IndexMap;
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
 use super::*;
 
 // From https://spec.openapis.org/oas/v3.0.3#callback-object A map of possible out-of band callbacks
@@ -12,8 +12,8 @@ pub struct Callback {
     /// A Path Item Object used to define a callback request and expected responses. A complete
     /// example is available.
     #[serde(flatten)]
-    pub callbacks: HashMap<String, PathItem>,
+    pub callbacks: IndexMap<String, PathItem>,
     /// Spec Extensions
     #[serde(flatten)]
-    pub extensions: HashMap<String, serde_json::Value>,
+    pub extensions: IndexMap<String, serde_json::Value>,
 }

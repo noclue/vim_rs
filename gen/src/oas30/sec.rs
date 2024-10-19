@@ -1,5 +1,5 @@
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
+use indexmap::IndexMap;
 use super::*;
 
 // From https://spec.openapis.org/oas/v3.0.3#security-scheme-object
@@ -40,7 +40,7 @@ pub struct SecurityScheme {
     pub open_id_connect_url: Option<String>,
     /// Spec Extensions
     #[serde(flatten)]
-    pub extensions: HashMap<String, serde_json::Value>,
+    pub extensions: IndexMap<String, serde_json::Value>,
 }
 
 // From https://spec.openapis.org/oas/v3.0.3#security-scheme-type
@@ -84,7 +84,7 @@ pub struct OAuthFlows {
     pub authorization_code: Option<OAuthFlow>,
     /// Spec Extensions
     #[serde(flatten)]
-    pub extensions: HashMap<String, serde_json::Value>,
+    pub extensions: IndexMap<String, serde_json::Value>,
 }
 
 // From https://spec.openapis.org/oas/v3.0.3#oauth-flow-object
@@ -104,10 +104,10 @@ pub struct OAuthFlow {
     pub refresh_url: Option<String>,
     /// The available scopes for the OAuth2 security scheme. A map between the scope name and a
     /// short description for it. The map MAY be empty.
-    pub scopes: Option<HashMap<String, String>>,
+    pub scopes: Option<IndexMap<String, String>>,
     /// Spec Extensions
     #[serde(flatten)]
-    pub extensions: HashMap<String, serde_json::Value>,
+    pub extensions: IndexMap<String, serde_json::Value>,
 }
 
 // From https://spec.openapis.org/oas/v3.0.3#security-requirement-object
@@ -127,5 +127,5 @@ pub struct SecurityRequirement {
     /// Each name MUST correspond to a security scheme which is declared in the Security Schemes
     /// under the Components Object.
     #[serde(flatten)]
-    pub requirements: HashMap<String, Vec<String>>,
+    pub requirements: IndexMap<String, Vec<String>>,
 }

@@ -16,8 +16,6 @@ On a decent box compiling `vim-tests` for first time with new `vim` version take
 
 To generate new `vim` content run `gen/src/main`.
 
-Each run produces new vim.rs that is not comparable to the previous one using diff. Reason is that the order of elements `HashMap` in Rust changes on each run. This can be changed by using IndexMap in the future to preserve original order.
-
 ## Updating the OpenAPI specification
 
 The OpenAPI specification is held in `gen/data`. We use a JSON conversion of the original specification as `DatastoreAccessible_enum` with values `True` and `False` is ambigously rendered in YAML i.e. as per the YAML specs the values are interpreted as boolean constants and not strings.

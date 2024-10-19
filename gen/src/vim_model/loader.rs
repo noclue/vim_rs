@@ -71,7 +71,7 @@ fn compute_heirarchy(vim_model: &mut VimModel) -> Result<()> {
 }
 
 fn process_discriminator_mappings(
-    schemas: &std::collections::HashMap<String, RefOr<Schema>>,
+    schemas: &indexmap::IndexMap<String, RefOr<Schema>>,
     vim_model: &mut VimModel,
 ) -> Result<()> {
     let any = schemas
@@ -109,7 +109,7 @@ fn process_discriminator_mappings(
 }
 
 fn transform_schemas(
-    schemas: &std::collections::HashMap<String, RefOr<Schema>>,
+    schemas: &indexmap::IndexMap<String, RefOr<Schema>>,
     vim_model: &mut VimModel,
 ) -> Result<()> {
     Ok(for (schema_name, ref_or_schema) in schemas {

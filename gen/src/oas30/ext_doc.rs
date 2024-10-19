@@ -1,5 +1,6 @@
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
+use indexmap::IndexMap;
+
 
 // From https://spec.openapis.org/oas/v3.0.3#external-documentation-object
 /// Allows referencing an external resource for extended documentation.
@@ -12,5 +13,5 @@ pub struct ExternalDocumentation {
     pub url: String,
     /// Spec Extensions
     #[serde(flatten)]
-    pub extensions: HashMap<String, serde_json::Value>,
+    pub extensions: IndexMap<String, serde_json::Value>,
 }

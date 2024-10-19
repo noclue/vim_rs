@@ -1,5 +1,5 @@
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
+use indexmap::IndexMap;
 use super::*;
 
 
@@ -16,14 +16,14 @@ pub struct MediaType {
     /// override the example provided by the schema.
     pub example: Option<serde_json::Value>,
     /// Examples of the media type
-    pub examples: Option<HashMap<String, RefOr<Example>>>,
+    pub examples: Option<IndexMap<String, RefOr<Example>>>,
     /// A map between a property name and its encoding information. The key, being the property
     /// name, MUST exist in the schema as a property. The encoding object SHALL only apply to
     /// requestBody objects when the media type is multipart or application/x-www-form-urlencoded.
-    pub encoding: Option<HashMap<String, Encoding>>,
+    pub encoding: Option<IndexMap<String, Encoding>>,
     /// Spec Extensions
     #[serde(flatten)]
-    pub extensions: HashMap<String, serde_json::Value>,
+    pub extensions: IndexMap<String, serde_json::Value>,
 }
 
 // From https://spec.openapis.org/oas/v3.0.3#encoding-object 
@@ -37,7 +37,7 @@ pub struct Encoding {
     /// A map allowing additional information to be provided as headers, for example
     /// Content-Disposition. Content-Type is described separately and SHALL be ignored in this
     /// section. This property SHALL be ignored if the request body media type is not a multipart.
-    pub headers: Option<HashMap<String, RefOr<Header>>>,
+    pub headers: Option<IndexMap<String, RefOr<Header>>>,
     /// Describes how a specific property value will be serialized depending on its type.
     pub style: Option<Style>,
     /// When this is true, property values of type array or object generate separate parameters for
@@ -52,5 +52,5 @@ pub struct Encoding {
     pub allow_reserved: Option<bool>,
     /// Spec Extensions
     #[serde(flatten)]
-    pub extensions: HashMap<String, serde_json::Value>,
+    pub extensions: IndexMap<String, serde_json::Value>,
 }

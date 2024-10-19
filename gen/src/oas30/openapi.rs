@@ -1,5 +1,5 @@
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
+use indexmap::IndexMap;
 use super::*;
 
 // From https://spec.openapis.org/oas/v3.0.3#schema
@@ -18,7 +18,7 @@ pub struct OpenAPI {
     /// Server Object with a url value of /.
     pub servers: Option<Vec<Server>>,
     /// The available paths and operations for the API.
-    pub paths: HashMap<String, PathItem>,
+    pub paths: IndexMap<String, PathItem>,
     /// An element to hold various schemas for the specification.
     pub components: Option<Components>,
     /// A declaration of which security mechanisms can be used across the API. The list of values
@@ -36,7 +36,7 @@ pub struct OpenAPI {
     pub external_docs: Option<ExternalDocumentation>,
     /// Spec Extensions
     #[serde(flatten)]
-    pub extensions: HashMap<String, serde_json::Value>,
+    pub extensions: IndexMap<String, serde_json::Value>,
 }
 
 // From https://spec.openapis.org/oas/v3.0.3#info-object
@@ -59,7 +59,7 @@ pub struct Info {
     pub license: Option<License>,
     /// Spec Extensions
     #[serde(flatten)]
-    pub extensions: HashMap<String, serde_json::Value>,
+    pub extensions: IndexMap<String, serde_json::Value>,
 }
 
 // From https://spec.openapis.org/oas/v3.0.3#contact-object
@@ -75,7 +75,7 @@ pub struct Contact {
     pub email: Option<String>,
     /// Spec Extensions
     #[serde(flatten)]
-    pub extensions: HashMap<String, serde_json::Value>,
+    pub extensions: IndexMap<String, serde_json::Value>,
 }
 
 // From https://spec.openapis.org/oas/v3.0.3#license-object
@@ -88,7 +88,7 @@ pub struct License {
     pub url: Option<String>,
     /// Spec Extensions
     #[serde(flatten)]
-    pub extensions: HashMap<String, serde_json::Value>,
+    pub extensions: IndexMap<String, serde_json::Value>,
 }
 
 // from https://spec.openapis.org/oas/v3.0.3#components-object
@@ -98,28 +98,28 @@ pub struct License {
 #[derive(Debug, Serialize, Deserialize, PartialEq)]
 pub struct Components {
     /// An object to hold reusable Schema Objects.
-    pub schemas: Option<HashMap<String, RefOr<Schema>>>,
+    pub schemas: Option<IndexMap<String, RefOr<Schema>>>,
     /// An object to hold reusable Response Objects.
-    pub responses: Option<HashMap<String, RefOr<Response>>>,
+    pub responses: Option<IndexMap<String, RefOr<Response>>>,
     /// An object to hold reusable Parameter Objects.
-    pub parameters: Option<HashMap<String, RefOr<Parameter>>>,
+    pub parameters: Option<IndexMap<String, RefOr<Parameter>>>,
     /// An object to hold reusable Example Objects.
-    pub examples: Option<HashMap<String, RefOr<Example>>>,
+    pub examples: Option<IndexMap<String, RefOr<Example>>>,
     /// An object to hold reusable Request Body Objects.
     #[serde(rename = "requestBodies")]
-    pub request_bodies: Option<HashMap<String, RefOr<RequestBody>>>,
+    pub request_bodies: Option<IndexMap<String, RefOr<RequestBody>>>,
     /// An object to hold reusable Header Objects.
-    pub headers: Option<HashMap<String, RefOr<Header>>>,
+    pub headers: Option<IndexMap<String, RefOr<Header>>>,
     /// An object to hold reusable Security Scheme Objects.
     #[serde(rename = "securitySchemes")]
-    pub security_schemes: Option<HashMap<String, RefOr<SecurityScheme>>>,
+    pub security_schemes: Option<IndexMap<String, RefOr<SecurityScheme>>>,
     /// An object to hold reusable Link Objects.
-    pub links: Option<HashMap<String, RefOr<Link>>>,
+    pub links: Option<IndexMap<String, RefOr<Link>>>,
     /// An object to hold reusable Callback Objects.
-    pub callbacks: Option<HashMap<String, RefOr<Callback>>>,
+    pub callbacks: Option<IndexMap<String, RefOr<Callback>>>,
     /// Spec Extensions
     #[serde(flatten)]
-    pub extensions: HashMap<String, serde_json::Value>,
+    pub extensions: IndexMap<String, serde_json::Value>,
 }
 
 // From https://spec.openapis.org/oas/v3.0.3#tag-object
@@ -136,7 +136,7 @@ pub struct Tag {
     pub external_docs: Option<ExternalDocumentation>,
     /// Spec Extensions
     #[serde(flatten)]
-    pub extensions: HashMap<String, serde_json::Value>,
+    pub extensions: IndexMap<String, serde_json::Value>,
 }
 
 #[cfg(test)]

@@ -1,5 +1,6 @@
 use serde::{Deserialize, Serialize};
-use std::{collections::HashMap, fmt::Display};
+use std::fmt::Display;
+use indexmap::IndexMap;
 use super::*;
 
 // From https://spec.openapis.org/oas/v3.0.3#schema-object
@@ -169,7 +170,7 @@ pub struct Schema {
     /// Property definitions MUST be a Schema Object and not a standard JSON Schema (inline or
     /// referenced).
     #[serde(rename = "properties", skip_serializing_if = "Option::is_none")]
-    pub properties: Option<HashMap<String, RefOr<Schema>>>,
+    pub properties: Option<IndexMap<String, RefOr<Schema>>>,
     /// The value of "additionalProperties" MUST be a boolean or a schema. If `true` is provided,
     /// then the object can have any property. If `false` is provided, then the object cannot have
     /// any additional properties. If a schema is provided, then the object properties MUST match
@@ -238,7 +239,7 @@ pub struct Schema {
     pub deprecated: Option<bool>,
     /// Spec Extensions
     #[serde(flatten)]
-    pub extensions: HashMap<String, serde_json::Value>,
+    pub extensions: IndexMap<String, serde_json::Value>,
 }
 
 
@@ -749,7 +750,7 @@ pub struct Discriminator {
     #[serde(rename = "propertyName")]
     pub property_name: String,
     /// An object to hold mappings between payload values and schema names or references.
-    pub mapping: Option<HashMap<String, String>>,
+    pub mapping: Option<IndexMap<String, String>>,
 }
 
 // From https://spec.openapis.org/oas/v3.0.3#xml-object

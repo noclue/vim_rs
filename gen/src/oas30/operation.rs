@@ -1,5 +1,5 @@
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
+use indexmap::IndexMap;
 use super::*;
 
 // From https://spec.openapis.org/oas/v3.0.3#operation-object
@@ -42,7 +42,7 @@ pub struct Operation {
     /// provider and the expected responses. The key value used to identify the callback object is
     /// an expression, evaluated at runtime, that identifies a URL to use for the callback
     /// operation.
-    pub callbacks: Option<HashMap<String, RefOr<Callback>>>,
+    pub callbacks: Option<IndexMap<String, RefOr<Callback>>>,
     /// Declares this operation to be deprecated. Consumers SHOULD refrain from usage of the
     /// declared operation. Default value is false.
     pub deprecated: Option<bool>,
@@ -57,7 +57,7 @@ pub struct Operation {
     pub servers: Option<Vec<Server>>,
     /// Spec Extensions
     #[serde(flatten)]
-    pub extensions: HashMap<String, serde_json::Value>,
+    pub extensions: IndexMap<String, serde_json::Value>,
 }
 
 
@@ -70,12 +70,12 @@ pub struct RequestBody {
     /// The content of the request body. The key is a media type or media type range and the value
     /// describes it. For requests that match multiple keys, only the most specific key is
     /// applicable. e.g. text/plain overrides text/*
-    pub content: HashMap<String, MediaType>,
+    pub content: IndexMap<String, MediaType>,
     /// Determines if the request body is required in the request. Defaults to false.
     pub required: Option<bool>,
     /// Spec Extensions
     #[serde(flatten)]
-    pub extensions: HashMap<String, serde_json::Value>,
+    pub extensions: IndexMap<String, serde_json::Value>,
 }
 
 
@@ -105,10 +105,10 @@ pub struct Responses {
     /// defined using an explicit code, the explicit code definition takes precedence over the range
     /// definition for that code.
     #[serde(flatten)]
-    pub responses: HashMap<String, RefOr<Response>>,
+    pub responses: IndexMap<String, RefOr<Response>>,
     /// Spec Extensions
     #[serde(flatten)]
-    pub extensions: HashMap<String, serde_json::Value>,
+    pub extensions: IndexMap<String, serde_json::Value>,
 }
 
 // From https://spec.openapis.org/oas/v3.0.3#response-object 
@@ -121,16 +121,16 @@ pub struct Response {
     pub description: String,
     /// Maps a header name to its definition. RFC7230 states header names are case-insensitive. If a
     /// response header is defined with the name "Content-Type", it SHALL be ignored.
-    pub headers: Option<HashMap<String, RefOr<Header>>>,
+    pub headers: Option<IndexMap<String, RefOr<Header>>>,
     /// A map containing descriptions of potential response payloads. The key is a media type or
     /// media type range and the value describes it. For responses that match multiple keys, only
     /// the most specific key is applicable. e.g. text/plain overrides text/*
-    pub content: Option<HashMap<String, MediaType>>,
+    pub content: Option<IndexMap<String, MediaType>>,
     /// A map of operations links that can be followed from the response. The key of the map is a
     /// short name for the link, following the naming constraints of the names for Component
     /// Objects.
-    pub links: Option<HashMap<String, RefOr<Link>>>,
+    pub links: Option<IndexMap<String, RefOr<Link>>>,
     /// Spec Extensions
     #[serde(flatten)]
-    pub extensions: HashMap<String, serde_json::Value>,
+    pub extensions: IndexMap<String, serde_json::Value>,
 }

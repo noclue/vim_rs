@@ -8,6 +8,6 @@ serde_json = "1.0.117"
 thiserror = "1.0.61"
 serde = { version = "1.0.203", features = ["derive"] }
 quote = "1.0.37"
-indexmap = "2.2.6"
+indexmap = { version = "2.2.6", features = ["serde"] }
 convert_case = "0.6.0"
 check_keyword = "0.3.1"
