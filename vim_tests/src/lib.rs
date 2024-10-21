@@ -1,10 +1,13 @@
 mod url_template;
 
-use hyper::HeaderMap;
+use std::sync::Arc;
+
+use tokio::sync::RwLock;
 use url_template::substitute;
 use vim::vim;
 
 const AUTHN_HEADER: &str = "vmware-api-session-id";
+const API_RELEASE: &str = "8.0.2.0";
 
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
@@ -16,25 +19,48 @@ pub enum Error {
     SerdeError(#[from] serde_json::Error),
     #[error("Missing or Invalid session key")]
     MissingOrInvalidSessionKey,
+    #[error("Invalid object type {0} expected: {1}")]
+    InvalidObjectType(String, String),
 }
 
 pub type Result<T> = std::result::Result<T, Error>;
 
 pub struct VimClient {
     pub http_client: reqwest::Client,
-    pub session_key: Option<String>,
+    pub session_key: RwLock<Option<String>>,
     pub base_url: String,
 }
 
-
+/// Client for the VI JSON API that handles basic HTTP requests and authentication headers
 impl VimClient {
-    pub fn get(&self, path: &str) -> reqwest::RequestBuilder
+
+    /// Create a new client for the VI/JSON API
+    /// 
+    /// * `http_client` - reqwest::Client instance with preset TCP, TLS and HTTP options
+    /// * `server_address` - vCenter server FQDN or IP address
+    /// * `release` - vCenter API release version e.g. "8.0.3.0". If not provided, the default is 
+    ///              API_RELEASE
+    pub fn new(http_client: reqwest::Client, server_address: &str, release: Option<&str>) -> Self {
+        let release = release.unwrap_or(API_RELEASE);
+        // From the VI/JSON OpenAPI spec https://{vcenter-host}/sdk/vim25/{release}
+        let base_url = format!("https://{}/sdk/vim25/{}", server_address, release);
+        let session_key = RwLock::new(None);
+        Self {
+            http_client,
+            session_key,
+            base_url: base_url.to_string(),
+        }
+    }
+
+    /// Prepare GET request
+    pub fn get_request(&self, path: &str) -> reqwest::RequestBuilder
     {
         let url = format!("{}{}", self.base_url, path);
         self.http_client.get(&url)
     }
 
-    pub fn post<B>(&self, path: &str, payload: &B) -> reqwest::RequestBuilder
+    /// Prepare POST request with a body
+    pub fn post_request<B>(&self, path: &str, payload: &B) -> reqwest::RequestBuilder
     where
         B: serde::Serialize,
     {
@@ -43,81 +69,98 @@ impl VimClient {
         req.header("Content-Type", "application/json").json(payload)
     }
 
+    /// Prepare POST request without a body
     pub fn post_bare(&self, path: &str) -> reqwest::RequestBuilder
     {
         let url = format!("{}{}", self.base_url, path);
         self.http_client.post(&url)
     }
 
-    async fn execute<T>(&self, mut req: reqwest::RequestBuilder) -> Result<(T, HeaderMap)> 
+    /// Execute a request that returns a response body
+    pub async fn execute<T>(&self, mut req: reqwest::RequestBuilder) -> Result<T> 
     where T: serde::de::DeserializeOwned 
     {
-        if let Some(session_key) = &self.session_key {
-            req = req.header(AUTHN_HEADER, session_key);
-        }
+        req = self.prepare(req).await;
         let res = req.send().await?;
-        if !res.status().is_success() {
-            let fault: Box<dyn vim::MethodFaultTrait> = res.json().await?;
-            return Err(Error::MethodFault(fault));
-        }
-        let headers = res.headers().clone();
+        let res = self.process_response(res).await?;
         let content: T = res.json().await?;
-        Ok((content, headers))
+        Ok(content)
     }
 
-    async fn execute_void(&self, mut req: reqwest::RequestBuilder) -> Result<()> 
+    /// Execute a request that does not return a response body
+    pub async fn execute_void(&self, mut req: reqwest::RequestBuilder) -> Result<()> 
     {
-        if let Some(session_key) = &self.session_key {
-            req = req.header(AUTHN_HEADER, session_key);
-        }
+        req = self.prepare(req).await;
         let res = req.send().await?;
-        if !res.status().is_success() {
-            let fault: Box<dyn vim::MethodFaultTrait> = res.json().await?;
-            return Err(Error::MethodFault(fault));
-        }
+        let _ = self.process_response(res).await?;
         Ok(())
     }
 
+    /// Add authn header to request
+    async fn prepare(&self, mut req: reqwest::RequestBuilder) -> reqwest::RequestBuilder {
+        let session_key = self.session_key.read().await;
+        if let Some(value) = session_key.as_ref() {
+            req = req.header(AUTHN_HEADER, value);
+        }
+        req
+    }
+
+    /// Handle authn header update and error unmarsalling
+    async fn process_response(&self, res: reqwest::Response) -> Result<reqwest::Response> {
+        if res.status().is_success() && res.headers().contains_key(AUTHN_HEADER) {
+            let session_key = res.headers().get(AUTHN_HEADER).unwrap().to_str().map_err(|_| Error::MissingOrInvalidSessionKey)?.to_string();
+            let mut key_holder = self.session_key.write().await;
+            *key_holder = Some(session_key);
+        }
+        if !res.status().is_success() {
+            let fault: Box<dyn vim::MethodFaultTrait> = res.json().await?;
+            return Err(Error::MethodFault(fault));
+        }
+        Ok(res)
+    }
+
 }
 
-pub struct ServiceInstance<'a> {
-    client: &'a VimClient,
+pub struct ServiceInstance {
+    client: Arc<VimClient>,
     mo_id: String,
 }
 
-impl ServiceInstance<'_> {
+impl ServiceInstance {
     pub async fn get_content(&self) -> Result<vim::ServiceContent> {
         let path = substitute("/ServiceInstance/{moId}/content", &vec![("moId", &self.mo_id)]);
-        let req = self.client.get(&path);
-        Ok(self.client.execute(req).await?.0)
+        let req = self.client.get_request(&path);
+        Ok(self.client.execute(req).await?)
     }
 }
 
 
-pub struct SessionManager<'a> {
-    client: &'a VimClient,
+pub struct SessionManager {
+    client: Arc<VimClient>,
     mo_id: String,
 }
 
-impl SessionManager<'_> {
-    pub async fn login(&self, user_name: &str, password: &str, locale: Option<&str>) -> Result<(vim::UserSession,VimClient)> {
+impl SessionManager {
+    pub fn new(client: Arc<VimClient>, mo_ref: &vim::ManagedObjectReference) -> Result<Self> {
+        // TODO Add PartialEq to enums in vim.rs
+        // if mo_ref.r#type != vim::MoTypesEnum::SessionManager {
+        //     return Err(Error::InvalidObjectType(mo_ref.type_.clone(), "SessionManager".to_string()));
+        // }
+        Ok(Self {
+            client,
+            mo_id: mo_ref.value.clone(),
+        })
+    }
+    pub async fn login(&self, user_name: &str, password: &str, locale: Option<&str>) -> Result<vim::UserSession> {
         let login = vim::LoginRequestType {
             user_name: user_name.to_string(),
             password: password.to_string(),
             locale: locale.map(|s| s.to_string()),
         };
         let path = substitute("/SessionManager/{moId}/Login", &vec![("moId", &self.mo_id)]);
-        let req = self.client.post(&path, &login);
-        let (session, headers): (vim::UserSession, HeaderMap) = self.client.execute(req).await?;
-        let Some(session_key) = headers.get(AUTHN_HEADER) else {
-            return Err(Error::MissingOrInvalidSessionKey);
-        };
-        let client = VimClient {
-            http_client: self.client.http_client.clone(),
-            session_key: Some(session_key.to_str().map_err(|_| Error::MissingOrInvalidSessionKey)?.to_string()),
-            base_url: self.client.base_url.clone(),
-        };
-        Ok((session, client))
+        let req = self.client.post_request(&path, &login);
+        let session: vim::UserSession = self.client.execute(req).await?;
+        Ok(session)
     }
     pub async fn logout(&self) -> Result<()> {
         let path = substitute("/SessionManager/{moId}/Logout", &vec![("moId", &self.mo_id)]);
@@ -132,7 +175,8 @@ impl SessionManager<'_> {
 
 #[cfg(test)]
 mod tests {
-    use std::env;
+    use std::{env, sync::Arc};
+    use super::{VimClient, ServiceInstance, SessionManager};
 
     use reqwest::ClientBuilder;
     use vim::vim;
@@ -204,31 +248,21 @@ mod tests {
                                 .danger_accept_invalid_hostnames(true)
                                 .build()
                                 .unwrap();
-        let anonymous_client = super::VimClient {
-            http_client: client,
-            session_key: None,
-            base_url: "https://vc8.home/sdk/vim25/8.0.2.0".to_string(),
-        };
-        let service_instance = super::ServiceInstance {
-            client: &anonymous_client,
+        let client = Arc::new(VimClient::new(client, "vc8.home", None));
+        let service_instance = ServiceInstance {
+            client: client.clone(),
             mo_id: "ServiceInstance".to_string(),
         };
         let content = service_instance.get_content().await.unwrap();
-        let session_manager_mo = content.session_manager.unwrap().value;
-        let anon_session_manager = super::SessionManager {
-            client: &anonymous_client,
-            mo_id: session_manager_mo.clone(),
-        };
-        let (session, vim_client) = anon_session_manager.login(
+        let session_manager_mo_ref = content.session_manager.unwrap();
+        let session_manager = SessionManager::new(client.clone(), &session_manager_mo_ref).unwrap();
+        let session = session_manager.login(
                             &env::var("VC_USERNAME").unwrap(),
                             &env::var("VC_PASSWORD").unwrap(), 
                             None).await.unwrap();
         println!("{:?}", session);
-        let session_manager = super::SessionManager {
-            client: &vim_client,
-            mo_id: session_manager_mo.clone(),
-        };
         session_manager.logout().await.unwrap();
+        println!("Logged out");
     }
 
 
