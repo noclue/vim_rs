@@ -29,6 +29,8 @@ pub enum Error {
     MissingFormat(String),
     #[error("{0}::{1} field decoding error: {2}")]
     FieldDecodingError(String, String, Box<Error>),
+    #[error("Invalid operation: {0} {1} {2}")]
+    InvalidOperation(String, String, String),
 }
 
 // Result is a type alias for handling errors.
@@ -39,6 +41,7 @@ pub fn load_vim_model(model: &OpenAPI) -> Result<VimModel> {
         enums: IndexMap::new(),
         structs: IndexMap::new(),
         any_value_types: IndexMap::new(),
+        managed_objects: IndexMap::new(),
     };
     let Some(ref components) = model.components.as_ref() else {
         return Err(Error::MissingField("#/components".to_string()));
@@ -50,6 +53,8 @@ pub fn load_vim_model(model: &OpenAPI) -> Result<VimModel> {
     transform_schemas(schemas, &mut vim_model)?;
     process_discriminator_mappings(schemas, &mut vim_model)?;
     compute_heirarchy(&mut vim_model)?;
+    load_managed_objects(&model, &mut vim_model)?;
+    transform_paths(&model, &mut vim_model)?;
     Ok(vim_model)
 }
 
@@ -264,6 +269,46 @@ pub fn reference_to_schema_name(reference: &String) -> Result<&str> {
 
 fn trim_schema_prefix(reference: &String) -> &str {
     reference.trim_start_matches("#/components/schemas/")
+}
+
+fn load_managed_objects(model: &OpenAPI, vim_model: &mut VimModel) -> Result<()> {
+    let Some(tags) = model.tags.as_ref() else {
+        return Err(Error::MissingField("#/tags".to_string()));
+    };
+    for tag in tags {
+        let tag_name = &tag.name;
+        let tag_description = &tag.description;
+        let managed_object = ManagedObject {
+            name: tag_name.clone(),
+            description: tag_description.clone(),
+            methods: vec![],
+        };
+        vim_model.managed_objects.insert(tag_name.clone(), managed_object);
+    }
+    Ok(())
+}
+
+fn transform_paths(model: &OpenAPI, vim_model: &mut VimModel) -> Result<()> {
+    for (path, path_item) in &model.paths {
+        if let Some(operation) = &path_item.get {
+            let tags = operation.tags.unwrap_or(EMPTY_VEC);
+            if tags.is_empty() || tags.len() > 1 {
+                return Err(Error::InvalidOperation("get".to_string(), path.to_string(), "expected single tag".to_string()));
+            }
+            let tag = &tags[0];
+            let managed_object = vim_model.managed_objects.get_mut(tag).ok_or_else(|| Error::InvalidReference(tag.clone()))?;
+            let method = Method {
+                name: "get".to_string(),
+                description: operation.description.clone(),
+                path: path.to_string(),
+                http_method: HttpMethod::Get,
+                input: None,
+                output: todo!(),
+            };
+        }
+
+    }
+    Ok(())
 }
 
 #[cfg(test)]

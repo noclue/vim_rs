@@ -45,11 +45,7 @@ impl VimClient {
         // From the VI/JSON OpenAPI spec https://{vcenter-host}/sdk/vim25/{release}
         let base_url = format!("https://{}/sdk/vim25/{}", server_address, release);
         let session_key = RwLock::new(None);
-        Self {
-            http_client,
-            session_key,
-            base_url: base_url.to_string(),
-        }
+        Self {http_client, session_key, base_url}
     }
 
     /// Prepare GET request

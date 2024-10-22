@@ -264,12 +264,36 @@ pub struct BoxType {
     pub discriminator_value: Option<String>,
 }
 
+#[derive(Debug, PartialEq)]
+pub struct ManagedObject {
+    pub name: String,
+    pub description: Option<String>,
+    pub methods: Vec<Method>,
+}
+
+#[derive(Debug, PartialEq)]
+pub struct Method {
+    pub name: String,
+    pub description: Option<String>,
+    pub path: String,
+    pub http_method: HttpMethod,
+    pub input: Option<String>,
+    pub output: Option<String>,
+}
+
+#[derive(Debug, PartialEq)]
+pub enum HttpMethod {
+    Get,
+    Post,
+}
+
 /// Represents the VIM API data model build from OpenAPI model.
 #[derive(Debug, PartialEq)]
 pub struct VimModel {
     pub enums: IndexMap<String, Enum>,
     pub structs: IndexMap<String, RefCell<Struct>>,
     pub any_value_types: IndexMap<String, BoxType>,
+    pub managed_objects: IndexMap<String, ManagedObject>,
 }
 
 
