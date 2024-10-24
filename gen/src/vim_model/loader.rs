@@ -4,6 +4,7 @@ use indexmap::IndexMap;
 use std::cell::RefCell;
 use std::fmt::Debug;
 
+
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
     #[error("Missing field: {0}")]
@@ -291,24 +292,76 @@ fn load_managed_objects(model: &OpenAPI, vim_model: &mut VimModel) -> Result<()>
 fn transform_paths(model: &OpenAPI, vim_model: &mut VimModel) -> Result<()> {
     for (path, path_item) in &model.paths {
         if let Some(operation) = &path_item.get {
-            let tags = operation.tags.unwrap_or(EMPTY_VEC);
+            let tags = operation.tags.as_ref().unwrap_or(&EMPTY_VEC);
             if tags.is_empty() || tags.len() > 1 {
                 return Err(Error::InvalidOperation("get".to_string(), path.to_string(), "expected single tag".to_string()));
             }
             let tag = &tags[0];
             let managed_object = vim_model.managed_objects.get_mut(tag).ok_or_else(|| Error::InvalidReference(tag.clone()))?;
-            let method = Method {
-                name: "get".to_string(),
-                description: operation.description.clone(),
-                path: path.to_string(),
-                http_method: HttpMethod::Get,
-                input: None,
-                output: todo!(),
-            };
+            let name = operation.operation_id.as_ref().ok_or_else(|| Error::MissingField(format!("{}/operationId", path)))?;
+            let name = name.split_once("_").ok_or_else(|| Error::InvalidOperation("get".to_string(), path.to_string(), "expected operationId to be in the format <class>_<method>".to_string()))?.0;
+            let name = name.split_at_checked(3).ok_or_else(|| Error::InvalidOperation("get".to_string(), path.to_string(), "expected read operationId to start with 'get'".to_string()))?.1;
+            managed_object.methods.push(Method { 
+                name: name.to_string(), 
+                description: operation.description.clone(), 
+                path: path.to_string(), 
+                http_method: HttpMethod::Get, 
+                input: None, 
+                output: get_success_return_type(operation, "get", path)?, 
+            });
         }
-
+        if let Some(operation) = &path_item.post {
+            let tags = operation.tags.as_ref().unwrap_or(&EMPTY_VEC);
+            if tags.is_empty() || tags.len() > 1 {
+                return Err(Error::InvalidOperation("post".to_string(), path.to_string(), "expected single tag".to_string()));
+            }
+            let tag = &tags[0];
+            let managed_object = vim_model.managed_objects.get_mut(tag).ok_or_else(|| Error::InvalidReference(tag.clone()))?;
+            let name = operation.operation_id.as_ref().ok_or_else(|| Error::MissingField(format!("{}/operationId", path)))?;
+            let name = name.split_once("_").ok_or_else(|| Error::InvalidOperation("get".to_string(), path.to_string(), "expected operationId to be in the format <class>_<method>".to_string()))?.0;
+            managed_object.methods.push(Method { 
+                name: name.to_string(), 
+                description: operation.description.clone(), 
+                path: path.to_string(), 
+                http_method: HttpMethod::Post, 
+                input: get_request_type(operation, "post", path)?, 
+                output: get_success_return_type(operation, "post", path)?, 
+            });
+        }
     }
     Ok(())
+}
+
+// TODO Handle required vs optional body in request and reposnes i.e. "schema": { "nullable": true }
+
+fn get_request_type(operation: &Operation, verb: &str, path: &str) -> Result<Option<VimType>> {
+    let request_body = operation.request_body.as_ref().ok_or_else(|| Error::InvalidOperation(verb.to_string(), path.to_string(), "expected request body".to_string()))?;
+    let RefOr::Val(request_body) = request_body else {
+        return Ok(None);
+    };
+    let content = &request_body.content;
+    let content = content.get("application/json").ok_or_else(|| Error::InvalidOperation(verb.to_string(), path.to_string(), "expected request body application/json content".to_string()))?;
+    let schema = content.schema.as_ref().ok_or_else(|| Error::InvalidOperation(verb.to_string(), path.to_string(), "expected request body schema".to_string()))?;
+    Ok(Some(VimType::try_from(schema)?))
+}
+
+
+fn get_success_return_type(operation: &Operation, verb: &str, path: &str) -> Result<Option<VimType>> {
+    let responses = &operation.responses;
+    for (status_code, response) in &responses.responses {
+        if status_code.starts_with("2") {
+            let RefOr::Val(ref response) = response else {
+                return Err(Error::InvalidOperation(verb.to_string(), path.to_string(), "expected response".to_string()));
+            };
+            let Some(content) = response.content.as_ref() else {
+                return Ok(None); // No content type, no return type
+            };
+            let content = content.get("application/json").ok_or_else(|| Error::InvalidOperation(verb.to_string(), path.to_string(), "expected response application/json content".to_string()))?;
+            let schema = content.schema.as_ref().ok_or_else(|| Error::InvalidOperation(verb.to_string(), path.to_string(), "expected success response schema".to_string()))?;
+            return Ok(Some(VimType::try_from(schema)?));
+        }
+    }
+    Err(Error::InvalidOperation("verb".to_string(), path.to_string(), "expected 2xx response".to_string()))
 }
 
 #[cfg(test)]

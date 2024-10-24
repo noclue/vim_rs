@@ -277,8 +277,8 @@ pub struct Method {
     pub description: Option<String>,
     pub path: String,
     pub http_method: HttpMethod,
-    pub input: Option<String>,
-    pub output: Option<String>,
+    pub input: Option<VimType>,
+    pub output: Option<VimType>,
 }
 
 #[derive(Debug, PartialEq)]
