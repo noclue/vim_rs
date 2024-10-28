@@ -55,7 +55,7 @@ pub fn load_vim_model(model: &OpenAPI) -> Result<VimModel> {
     process_discriminator_mappings(schemas, &mut vim_model)?;
     compute_heirarchy(&mut vim_model)?;
     load_managed_objects(&model, &mut vim_model)?;
-    transform_paths(&model, &mut vim_model)?;
+    //transform_paths(&model, &mut vim_model)?;
     Ok(vim_model)
 }
 
@@ -274,7 +274,7 @@ fn trim_schema_prefix(reference: &String) -> &str {
 
 fn load_managed_objects(model: &OpenAPI, vim_model: &mut VimModel) -> Result<()> {
     let Some(tags) = model.tags.as_ref() else {
-        return Err(Error::MissingField("#/tags".to_string()));
+        return Ok(());
     };
     for tag in tags {
         let tag_name = &tag.name;
@@ -384,6 +384,7 @@ mod tests {
             "openapi": "3.0.3",
             "info": {"title": "test", "version": "1.0.0"},
             "paths": {},
+            "tags": [],
             "components": {
                 "schemas": {
                     "Any": {
@@ -428,6 +429,7 @@ mod tests {
             "openapi": "3.0.3",
             "info": {"title": "test", "version": "1.0.0"},
             "paths": {},
+            "tags": [],
             "components": {
                 "schemas": {
                     "Any": {
@@ -497,6 +499,7 @@ mod tests {
             "openapi": "3.0.3",
             "info": {"title": "test", "version": "1.0.0"},
             "paths": {},
+            "tags": [],
             "components": {
                 "schemas": {
                     "Any": {
