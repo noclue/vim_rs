@@ -301,13 +301,15 @@ fn transform_paths(model: &OpenAPI, vim_model: &mut VimModel) -> Result<()> {
             let name = operation.operation_id.as_ref().ok_or_else(|| Error::MissingField(format!("{}/operationId", path)))?;
             let name = name.split_once("_").ok_or_else(|| Error::InvalidOperation("get".to_string(), path.to_string(), "expected operationId to be in the format <class>_<method>".to_string()))?.0;
             let name = name.split_at_checked(3).ok_or_else(|| Error::InvalidOperation("get".to_string(), path.to_string(), "expected read operationId to start with 'get'".to_string()))?.1;
+            let (return_type, optional) = get_success_return_type(operation, "get", path)?;
             managed_object.methods.push(Method { 
                 name: name.to_string(), 
                 description: operation.description.clone(), 
                 path: path.to_string(), 
                 http_method: HttpMethod::Get, 
                 input: None, 
-                output: get_success_return_type(operation, "get", path)?, 
+                output: return_type, 
+                optional_response: optional,
             });
         }
         if let Some(operation) = &path_item.post {
@@ -319,13 +321,15 @@ fn transform_paths(model: &OpenAPI, vim_model: &mut VimModel) -> Result<()> {
             let managed_object = vim_model.managed_objects.get_mut(tag).ok_or_else(|| Error::InvalidReference(tag.clone()))?;
             let name = operation.operation_id.as_ref().ok_or_else(|| Error::MissingField(format!("{}/operationId", path)))?;
             let name = name.split_once("_").ok_or_else(|| Error::InvalidOperation("get".to_string(), path.to_string(), "expected operationId to be in the format <class>_<method>".to_string()))?.0;
+            let (return_type, optional) = get_success_return_type(operation, "get", path)?;
             managed_object.methods.push(Method { 
                 name: name.to_string(), 
                 description: operation.description.clone(), 
                 path: path.to_string(), 
                 http_method: HttpMethod::Post, 
                 input: get_request_type(operation, "post", path)?, 
-                output: get_success_return_type(operation, "post", path)?, 
+                output: return_type, 
+                optional_response: optional,
             });
         }
     }
@@ -346,7 +350,7 @@ fn get_request_type(operation: &Operation, verb: &str, path: &str) -> Result<Opt
 }
 
 
-fn get_success_return_type(operation: &Operation, verb: &str, path: &str) -> Result<Option<VimType>> {
+fn get_success_return_type(operation: &Operation, verb: &str, path: &str) -> Result<(Option<VimType>,bool)> {
     let responses = &operation.responses;
     for (status_code, response) in &responses.responses {
         if status_code.starts_with("2") {
@@ -354,11 +358,15 @@ fn get_success_return_type(operation: &Operation, verb: &str, path: &str) -> Res
                 return Err(Error::InvalidOperation(verb.to_string(), path.to_string(), "expected response".to_string()));
             };
             let Some(content) = response.content.as_ref() else {
-                return Ok(None); // No content type, no return type
+                return Ok((None, false)); // No content type, no return type
             };
             let content = content.get("application/json").ok_or_else(|| Error::InvalidOperation(verb.to_string(), path.to_string(), "expected response application/json content".to_string()))?;
             let schema = content.schema.as_ref().ok_or_else(|| Error::InvalidOperation(verb.to_string(), path.to_string(), "expected success response schema".to_string()))?;
-            return Ok(Some(VimType::try_from(schema)?));
+            let nullable = match schema {
+                RefOr::Val(schema) => schema.nullable.unwrap_or(false),
+                _ => false,
+            };
+            return Ok((Some(VimType::try_from(schema)?), nullable));
         }
     }
     Err(Error::InvalidOperation("verb".to_string(), path.to_string(), "expected 2xx response".to_string()))

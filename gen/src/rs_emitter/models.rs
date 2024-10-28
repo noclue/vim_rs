@@ -146,6 +146,7 @@ serialize_trait_object!(VimObjectTrait);
 impl<T> VimObjectTrait for T where T: AsAny + std::fmt::Debug + erased_serde::Serialize {}"#)?;
         Ok(())
     }
+
     fn emit_vimany(&mut self) -> Result<()> {
         self.printer.println("#[derive(Debug, serde::Serialize)]")?;
         self.printer.println("#[serde(untagged)]")?;
@@ -318,7 +319,7 @@ impl<T> VimObjectTrait for T where T: AsAny + std::fmt::Debug + erased_serde::Se
             // there may not be need for a Box. For example when all members are primitive it is safe to
             // not box a struct.
             let struct_ref = struct_type.borrow();
-            if struct_ref.has_children() && struct_ref.name != "Any" {
+            if struct_ref.has_children() {
                 Ok(format!("Box<dyn {}Trait>", rust_name))
             } else {
                 Ok(format!("Box<{}>", rust_name))
@@ -330,10 +331,10 @@ impl<T> VimObjectTrait for T where T: AsAny + std::fmt::Debug + erased_serde::Se
         }
     }
     
-    // To allow for polymorphic fields every structure type that is extended will have a trait
-    // alternative implemented that will be passed a dynamic reference. This trait will be implemented
+    // To allow for polymorphic fields every structure type that has descendants will have a trait
+    // alternative that will be passed as dynamic reference. This trait will be implemented for
     // all of the structure type descendants. The trait will provide access to the struct type fields
-    // and will extend the VimObjectTrait as to allow casting between traits.
+    // and will extend the VimObjectTrait as to allow up and down casts.
     fn emit_trait_type(&mut self, name: &str, vim_type: &Struct) -> Result<()> {
         if !vim_type.has_children() { return Ok(()); }
         if ANY == vim_type.name { return Ok(()); } // Skip the Any type

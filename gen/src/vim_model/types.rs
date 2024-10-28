@@ -279,6 +279,7 @@ pub struct Method {
     pub http_method: HttpMethod,
     pub input: Option<VimType>,
     pub output: Option<VimType>,
+    pub optional_response: bool,
 }
 
 #[derive(Debug, PartialEq)]
