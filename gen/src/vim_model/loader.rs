@@ -30,8 +30,8 @@ pub enum Error {
     MissingFormat(String),
     #[error("{0}::{1} field decoding error: {2}")]
     FieldDecodingError(String, String, Box<Error>),
-    #[error("Invalid operation: {0} {1} {2}")]
-    InvalidOperation(String, String, String),
+    #[error("Invalid operation: {0} {1}")]
+    InvalidOperation(String, String),
 }
 
 // Result is a type alias for handling errors.
@@ -55,7 +55,7 @@ pub fn load_vim_model(model: &OpenAPI) -> Result<VimModel> {
     process_discriminator_mappings(schemas, &mut vim_model)?;
     compute_heirarchy(&mut vim_model)?;
     load_managed_objects(&model, &mut vim_model)?;
-    //transform_paths(&model, &mut vim_model)?;
+    transform_paths(&model, &mut vim_model)?;
     Ok(vim_model)
 }
 
@@ -292,76 +292,98 @@ fn load_managed_objects(model: &OpenAPI, vim_model: &mut VimModel) -> Result<()>
 fn transform_paths(model: &OpenAPI, vim_model: &mut VimModel) -> Result<()> {
     for (path, path_item) in &model.paths {
         if let Some(operation) = &path_item.get {
-            let tags = operation.tags.as_ref().unwrap_or(&EMPTY_VEC);
-            if tags.is_empty() || tags.len() > 1 {
-                return Err(Error::InvalidOperation("get".to_string(), path.to_string(), "expected single tag".to_string()));
-            }
-            let tag = &tags[0];
-            let managed_object = vim_model.managed_objects.get_mut(tag).ok_or_else(|| Error::InvalidReference(tag.clone()))?;
-            let name = operation.operation_id.as_ref().ok_or_else(|| Error::MissingField(format!("{}/operationId", path)))?;
-            let name = name.split_once("_").ok_or_else(|| Error::InvalidOperation("get".to_string(), path.to_string(), "expected operationId to be in the format <class>_<method>".to_string()))?.0;
-            let name = name.split_at_checked(3).ok_or_else(|| Error::InvalidOperation("get".to_string(), path.to_string(), "expected read operationId to start with 'get'".to_string()))?.1;
-            let (return_type, optional) = get_success_return_type(operation, "get", path)?;
-            managed_object.methods.push(Method { 
-                name: name.to_string(), 
-                description: operation.description.clone(), 
-                path: path.to_string(), 
-                http_method: HttpMethod::Get, 
-                input: None, 
-                output: return_type, 
-                optional_response: optional,
-            });
+            add_method(operation, path, vim_model,
+                property_name(operation, path)?,
+                HttpMethod::Get,
+                None)?;
         }
         if let Some(operation) = &path_item.post {
-            let tags = operation.tags.as_ref().unwrap_or(&EMPTY_VEC);
-            if tags.is_empty() || tags.len() > 1 {
-                return Err(Error::InvalidOperation("post".to_string(), path.to_string(), "expected single tag".to_string()));
-            }
-            let tag = &tags[0];
-            let managed_object = vim_model.managed_objects.get_mut(tag).ok_or_else(|| Error::InvalidReference(tag.clone()))?;
-            let name = operation.operation_id.as_ref().ok_or_else(|| Error::MissingField(format!("{}/operationId", path)))?;
-            let name = name.split_once("_").ok_or_else(|| Error::InvalidOperation("get".to_string(), path.to_string(), "expected operationId to be in the format <class>_<method>".to_string()))?.0;
-            let (return_type, optional) = get_success_return_type(operation, "get", path)?;
-            managed_object.methods.push(Method { 
-                name: name.to_string(), 
-                description: operation.description.clone(), 
-                path: path.to_string(), 
-                http_method: HttpMethod::Post, 
-                input: get_request_type(operation, "post", path)?, 
-                output: return_type, 
-                optional_response: optional,
-            });
+            add_method(operation, path, vim_model,
+                 method_name(operation, path)?,
+                 HttpMethod::Post,
+                 get_request_type(operation, path)?)?;
         }
     }
     Ok(())
 }
 
-// TODO Handle required vs optional body in request and reposnes i.e. "schema": { "nullable": true }
+fn add_method(operation: &Operation, path: &String, vim_model: &mut VimModel, name: &str, method: HttpMethod, request_type: Option<VimType>) -> Result<()> {
+    let tag = get_tag(operation, path)?;
+    let managed_object = ensure_managed_object(vim_model, tag);
+    let (return_type, optional) = get_success_return_type(operation, path)?;
+    managed_object.methods.push(Method { 
+        name: name.to_string(), 
+        description: operation.description.clone(), 
+        path: path.to_string(), 
+        http_method: method, 
+        input: request_type, 
+        output: return_type, 
+        optional_response: optional,
+    });
+    Ok(())
+}
 
-fn get_request_type(operation: &Operation, verb: &str, path: &str) -> Result<Option<VimType>> {
-    let request_body = operation.request_body.as_ref().ok_or_else(|| Error::InvalidOperation(verb.to_string(), path.to_string(), "expected request body".to_string()))?;
+fn method_name<'a>(operation: &'a Operation, path: &String) -> Result<&'a str> {
+    let name = operation.operation_id.as_ref().ok_or_else(|| Error::MissingField(format!("{}/operationId", path)))?;
+    let name = name.split_once("_").ok_or_else(|| Error::InvalidOperation(operation.operation_id.as_ref().unwrap_or(path).clone(), "expected operationId to be in the format <class>_<method>".to_string()))?.0;
+    Ok(name)
+}
+
+fn get_tag<'a>(operation: &'a Operation, path: &String) -> Result<&'a String> {
+    let tags = operation.tags.as_ref().unwrap_or(&EMPTY_VEC);
+    if tags.is_empty() || tags.len() > 1 {
+        return Err(Error::InvalidOperation(operation.operation_id.as_ref().unwrap_or(path).clone(), "expected single tag".to_string()));
+    }
+    let tag = &tags[0];
+    Ok(tag)
+}
+
+fn property_name<'a>(operation: &'a Operation, path: &String) -> Result<&'a str> {
+    let op_name = operation.operation_id.as_ref().ok_or_else(|| Error::MissingField(format!("{}/operationId", path)))?;
+    let name = op_name.split_once("_").ok_or_else(|| Error::InvalidOperation(op_name.clone(), "expected operationId to be in the format <class>_<method>".to_string()))?.0;
+    let name = name.split_at_checked(3).ok_or_else(|| Error::InvalidOperation(op_name.clone(), "expected read operationId to start with 'get'".to_string()))?.1;
+    Ok(name)
+}
+
+fn ensure_managed_object<'a>(vim_model: &'a mut VimModel, tag: &String) -> &'a mut ManagedObject {
+    let managed_object_opt = vim_model.managed_objects.get_mut(tag);
+    if managed_object_opt.is_none() {
+        let managed_object = ManagedObject {
+            name: tag.clone(),
+            description: None,
+            methods: vec![],
+        };
+        vim_model.managed_objects.insert(tag.clone(), managed_object);
+    };
+    vim_model.managed_objects.get_mut(tag).unwrap()
+}
+
+fn get_request_type(operation: &Operation, path: &String) -> Result<Option<VimType>> {
+    let Some(request_body) = operation.request_body.as_ref() else {
+        return Ok(None);
+    };
     let RefOr::Val(request_body) = request_body else {
         return Ok(None);
     };
     let content = &request_body.content;
-    let content = content.get("application/json").ok_or_else(|| Error::InvalidOperation(verb.to_string(), path.to_string(), "expected request body application/json content".to_string()))?;
-    let schema = content.schema.as_ref().ok_or_else(|| Error::InvalidOperation(verb.to_string(), path.to_string(), "expected request body schema".to_string()))?;
+    let content = content.get("application/json").ok_or_else(|| Error::InvalidOperation(operation.operation_id.as_ref().unwrap_or(path).clone(), "expected request body application/json content".to_string()))?;
+    let schema = content.schema.as_ref().ok_or_else(|| Error::InvalidOperation(operation.operation_id.as_ref().unwrap_or(path).clone(), "expected request body schema".to_string()))?;
     Ok(Some(VimType::try_from(schema)?))
 }
 
 
-fn get_success_return_type(operation: &Operation, verb: &str, path: &str) -> Result<(Option<VimType>,bool)> {
+fn get_success_return_type(operation: &Operation, path: &String) -> Result<(Option<VimType>,bool)> {
     let responses = &operation.responses;
     for (status_code, response) in &responses.responses {
         if status_code.starts_with("2") {
             let RefOr::Val(ref response) = response else {
-                return Err(Error::InvalidOperation(verb.to_string(), path.to_string(), "expected response".to_string()));
+                return Err(Error::InvalidOperation(operation.operation_id.as_ref().unwrap_or(path).clone(), "expected response".to_string()));
             };
             let Some(content) = response.content.as_ref() else {
                 return Ok((None, false)); // No content type, no return type
             };
-            let content = content.get("application/json").ok_or_else(|| Error::InvalidOperation(verb.to_string(), path.to_string(), "expected response application/json content".to_string()))?;
-            let schema = content.schema.as_ref().ok_or_else(|| Error::InvalidOperation(verb.to_string(), path.to_string(), "expected success response schema".to_string()))?;
+            let content = content.get("application/json").ok_or_else(|| Error::InvalidOperation(operation.operation_id.as_ref().unwrap_or(path).clone(), "expected response application/json content".to_string()))?;
+            let schema = content.schema.as_ref().ok_or_else(|| Error::InvalidOperation(operation.operation_id.as_ref().unwrap_or(path).clone(), "expected success response schema".to_string()))?;
             let nullable = match schema {
                 RefOr::Val(schema) => schema.nullable.unwrap_or(false),
                 _ => false,
@@ -369,7 +391,7 @@ fn get_success_return_type(operation: &Operation, verb: &str, path: &str) -> Res
             return Ok((Some(VimType::try_from(schema)?), nullable));
         }
     }
-    Err(Error::InvalidOperation("verb".to_string(), path.to_string(), "expected 2xx response".to_string()))
+    Err(Error::InvalidOperation(operation.operation_id.as_ref().unwrap_or(path).clone(), "expected 2xx response".to_string()))
 }
 
 #[cfg(test)]
