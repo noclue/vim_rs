@@ -41,6 +41,7 @@ pub fn load_vim_model(model: &OpenAPI) -> Result<VimModel> {
     let mut vim_model = VimModel {
         enums: IndexMap::new(),
         structs: IndexMap::new(),
+        request_types: IndexMap::new(),
         any_value_types: IndexMap::new(),
         managed_objects: IndexMap::new(),
     };
@@ -173,10 +174,12 @@ fn transform_schemas(
                 schema_type: Some(SchemaType::Object),
                 ..
             } => {
-                vim_model.structs.insert(
-                    schema_name.to_string(),
-                    RefCell::new(build_struct_type(schema_name, schema)?),
-                );
+                let structure = build_struct_type(schema_name, schema)?;
+                if structure.parent.is_none() && structure.name.ends_with("RequestType") {
+                    vim_model.request_types.insert(schema_name.to_string(), RefCell::new(structure));
+                } else {
+                    vim_model.structs.insert(schema_name.to_string(),RefCell::new(structure));
+                }
             }
             _ => {
                 dbg!("unhandled schema: {:?}", schema_name);
@@ -661,6 +664,10 @@ mod tests {
         let vim_model = load_vim_model(&model).unwrap();
         assert_eq!(vim_model.any_value_types.len(), 3071);
         assert_eq!(vim_model.enums.len(), 414);
-        assert_eq!(vim_model.structs.len(), 3697);
+        assert_eq!(vim_model.structs.len() + vim_model.request_types.len(), 3697);
+        assert_eq!(vim_model.managed_objects.len(), 139);
+        assert!(vim_model.structs.contains_key("VirtualE1000"));
+        assert!(vim_model.request_types.contains_key("RetrievePropertiesRequestType"));
+        assert!(vim_model.managed_objects.contains_key("VirtualMachine"));
     }
 }

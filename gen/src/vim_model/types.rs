@@ -293,6 +293,7 @@ pub enum HttpMethod {
 pub struct VimModel {
     pub enums: IndexMap<String, Enum>,
     pub structs: IndexMap<String, RefCell<Struct>>,
+    pub request_types: IndexMap<String, RefCell<Struct>>,
     pub any_value_types: IndexMap<String, BoxType>,
     pub managed_objects: IndexMap<String, ManagedObject>,
 }
