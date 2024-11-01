@@ -669,5 +669,6 @@ mod tests {
         assert!(vim_model.structs.contains_key("VirtualE1000"));
         assert!(vim_model.request_types.contains_key("RetrievePropertiesRequestType"));
         assert!(vim_model.managed_objects.contains_key("VirtualMachine"));
+        assert_eq!(vim_model.managed_objects.get("VirtualMachine").unwrap().methods.len(), 101);
     }
 }
