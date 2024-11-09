@@ -322,13 +322,41 @@ fn add_method(operation: &Operation, path: &String, vim_model: &mut VimModel, na
         input: request_type, 
         output: return_type, 
         optional_response: optional,
+        output_description: get_response_description(operation, path)?,
+        error_description: get_error_description(operation, path)?,
     });
     Ok(())
 }
 
+fn get_response_description(operation: &Operation, path: &String) -> Result<Option<String>> {
+    let responses = &operation.responses;
+    for (status_code, response) in &responses.responses {
+        if status_code.starts_with("2") {
+            let RefOr::Val(ref response) = response else {
+                return Err(Error::InvalidOperation(operation.operation_id.as_ref().unwrap_or(path).clone(), "expected response".to_string()));
+            };
+            return Ok(Some(response.description.clone()));
+        }
+    }
+    Ok(None)
+}
+
+fn get_error_description(operation: &Operation, path: &String) -> Result<Option<String>> {
+    let responses = &operation.responses;
+    for (status_code, response) in &responses.responses {
+        if status_code.starts_with("5") {
+            let RefOr::Val(ref response) = response else {
+                return Err(Error::InvalidOperation(operation.operation_id.as_ref().unwrap_or(path).clone(), "expected response".to_string()));
+            };
+            return Ok(Some(response.description.clone()));
+        }
+    }
+    Ok(None)
+}
+
 fn method_name<'a>(operation: &'a Operation, path: &String) -> Result<&'a str> {
     let name = operation.operation_id.as_ref().ok_or_else(|| Error::MissingField(format!("{}/operationId", path)))?;
-    let name = name.split_once("_").ok_or_else(|| Error::InvalidOperation(operation.operation_id.as_ref().unwrap_or(path).clone(), "expected operationId to be in the format <class>_<method>".to_string()))?.0;
+    let name = name.split_once("_").ok_or_else(|| Error::InvalidOperation(operation.operation_id.as_ref().unwrap_or(path).clone(), "expected operationId to be in the format <class>_<method>".to_string()))?.1;
     Ok(name)
 }
 
@@ -343,7 +371,7 @@ fn get_tag<'a>(operation: &'a Operation, path: &String) -> Result<&'a String> {
 
 fn property_name<'a>(operation: &'a Operation, path: &String) -> Result<&'a str> {
     let op_name = operation.operation_id.as_ref().ok_or_else(|| Error::MissingField(format!("{}/operationId", path)))?;
-    let name = op_name.split_once("_").ok_or_else(|| Error::InvalidOperation(op_name.clone(), "expected operationId to be in the format <class>_<method>".to_string()))?.0;
+    let name = op_name.split_once("_").ok_or_else(|| Error::InvalidOperation(op_name.clone(), "expected operationId to be in the format <class>_<method>".to_string()))?.1;
     let name = name.split_at_checked(3).ok_or_else(|| Error::InvalidOperation(op_name.clone(), "expected read operationId to start with 'get'".to_string()))?.1;
     Ok(name)
 }

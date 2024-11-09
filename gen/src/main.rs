@@ -4,6 +4,7 @@ mod vim_model;
 pub mod rs_emitter;
 
 use std::io::Read;
+use convert_case::{Case, Casing};
 
 fn load_openapi() -> oas30::OpenAPI {
     let mut file =
@@ -25,7 +26,8 @@ fn main() {
     emitter.emit_data_types().unwrap();
 
     for (mo_type, mo) in vim_model.managed_objects.iter() {
-        let file_name =  root_folder.join(format!("{}.rs", mo_type));
+        let file_name = mo_type.to_case(Case::Snake);
+        let file_name =  root_folder.join(format!("{}.rs", file_name));
         let file = std::fs::File::create(&file_name).expect(&format!("Could not create {} file", file_name.display()));
         let mut printer = printer::FilePrinter::new(file, None, None);
         let mut emitter = rs_emitter::ManagedObjectEmitter::new(&mo, &mut printer, &vim_model);

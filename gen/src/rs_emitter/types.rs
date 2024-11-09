@@ -6,31 +6,23 @@ use crate::vim_model::VimModel;
 
 use super::super::printer::Printer;
 
+use super::common::emit_doc;
 use super::names::*;
 use super::super::vim_model::*;
+use super::errors::{Result, Error};
 
 const ANY: &str = "Any";
-
-#[derive(Debug, thiserror::Error)]
-pub enum Error {
-    #[error("Type not found error: {0}")]
-    TypeNotFound(String),
-    #[error("Printer error: {0}")]
-    PrinterError(#[from] super::super::printer::Error),
-}
-
-// Result is a type alias for handling errors.
-pub type Result<T> = std::result::Result<T, Error>;
 
 pub struct TypesEmitter<'a> {
     vim_model: &'a VimModel,
     printer: &'a mut dyn Printer,
+    tdf: TypeDefResolver<'a>,
 }
 
 
 impl<'a> TypesEmitter<'a> {
     pub fn new(vim_model: &'a VimModel, printer: &'a mut dyn Printer) -> Self {
-        TypesEmitter { vim_model, printer }
+        TypesEmitter { vim_model, printer, tdf: TypeDefResolver::new(vim_model) }
     }
 
     pub fn emit_data_types(&mut self) -> Result<()> {
@@ -160,7 +152,11 @@ impl<T> VimObjectTrait for T where T: AsAny + std::fmt::Debug + erased_serde::Se
 
     fn emit_enums(&mut self) -> Result<()> {
         for (_, vim_enum) in &self.vim_model.enums {
-            self.emit_doc(&vim_enum.description)?;
+            {
+                let this = &mut *self;
+                let doc_string: &Option<String> = &vim_enum.description;
+                emit_doc(this.printer, doc_string)
+            }?;
     
             let enum_name = to_type_name(&vim_enum.name); 
     
@@ -204,13 +200,17 @@ impl<T> VimObjectTrait for T where T: AsAny + std::fmt::Debug + erased_serde::Se
         self.printer.println("pub enum ValueElements {")?;
         self.printer.indent();
         for (_, box_type) in &self.vim_model.any_value_types {
-            self.emit_doc(&box_type.description)?;
+            {
+                let this = &mut *self;
+                let doc_string: &Option<String> = &box_type.description;
+                emit_doc(this.printer, doc_string)
+            }?;
             let name = box_type.discriminator_value.as_ref().unwrap_or(&box_type.name);
             let type_name = to_type_name(&box_type.name);
             if &type_name != name {
                 self.printer.println(&format!("#[serde(rename = \"{}\")]", name))?;
             }
-            let rust_type = self.to_rust_type(&box_type.property_type)?;
+            let rust_type = self.tdf.to_rust_type(&box_type.property_type)?;
             self.printer.println(&format!("{type_name}({rust_type}),"))?;
         }
         self.printer.dedent();
@@ -218,16 +218,14 @@ impl<T> VimObjectTrait for T where T: AsAny + std::fmt::Debug + erased_serde::Se
         Ok(())
     }
 
-    fn emit_doc(&mut self, doc_string: &Option<String>) -> Result<()> {
-        Ok(if let Some(doc) = doc_string {
-            for line in doc.trim().split('\n') {
-                self.printer.println(&format!("/// {}", line))?;
-            }
-        })
-    }
+    
     
     fn emit_struct_type(&mut self, name: &str, vim_type: &Struct) -> Result<()> {
-        self.emit_doc(&vim_type.description)?;
+        {
+            let this = &mut *self;
+            let doc_string: &Option<String> = &vim_type.description;
+            emit_doc(this.printer, doc_string)
+        }?;
         let struct_name = to_type_name(name);
         let discriminator = vim_type.discriminator_value.clone().unwrap_or(name.to_string()); 
         self.printer.println("#[derive(Debug, serde::Deserialize, serde::Serialize)]")?;
@@ -264,9 +262,13 @@ impl<T> VimObjectTrait for T where T: AsAny + std::fmt::Debug + erased_serde::Se
     }
     
     fn emit_struct_field(&mut self, prop_name: &str, property: &Property) -> Result<()> {
-        self.emit_doc(&property.description)?;
+        {
+            let this = &mut *self;
+            let doc_string: &Option<String> = &property.description;
+            emit_doc(this.printer, doc_string)
+        }?;
         let field_name = to_field_name(&prop_name);
-        let mut field_type = self.to_rust_type(&property.vim_type)?;
+        let mut field_type = self.tdf.to_rust_type(&property.vim_type)?;
         if property.optional {
             field_type = format!("Option<{field_type}>", field_type = field_type);
             self.printer.println(&format!("#[serde(default, skip_serializing_if = \"Option::is_none\")]"))?;
@@ -285,52 +287,6 @@ impl<T> VimObjectTrait for T where T: AsAny + std::fmt::Debug + erased_serde::Se
         Ok(())
     }
     
-    fn to_rust_type(&mut self, vim_type: &VimType) -> Result<String> {
-        match &vim_type {
-            VimType::Boolean => Ok("bool".to_string()),
-            VimType::String => Ok("String".to_string()),
-            VimType::Binary => Ok("Vec<u8>".to_string()),
-            VimType::Int8 => Ok("i8".to_string()),
-            VimType::Int16 => Ok("i16".to_string()),
-            VimType::Int32 => Ok("i32".to_string()),
-            VimType::Int64 => Ok("i64".to_string()),
-            VimType::Float => Ok("f32".to_string()),
-            VimType::Double => Ok("f64".to_string()),
-            VimType::DateTime => Ok("String".to_string()),
-            VimType::Array(nested_type) => Ok(format!("Vec<{}>", self.to_rust_type(nested_type)?)),
-            VimType::Reference(ref_name) => Ok(self.get_ref_type_declaration(ref_name)?),
-        }
-    }
-    
-    /// Generate the type declaration for a reference field - enum or struct.
-    /// If enum return just the enum Pascal case name. If structure then return a Box<> 
-    /// If the structure has children then we need dynamic trait reference.
-    /// If the Struct has no children then we reference the Struct type.
-    fn get_ref_type_declaration(&mut self, ref_name: &str) -> Result<String> {
-        // If we cannot find the struct this is programatic error
-        let rust_name = to_type_name(ref_name);
-        if ref_name == "Any" {
-            return Ok("VimAny".to_string());
-        }
-        if let Some(struct_type) = self.vim_model.structs.get(ref_name) {
-            // TODO: Add Box only for structures and when there is an issue. One case is recursive types
-            // that cannot be sized and thus a struct cannot be compiled. MethodFault contains
-            // Option<MethodFault> and without Box it cannot be compiled. However for very many types
-            // there may not be need for a Box. For example when all members are primitive it is safe to
-            // not box a struct.
-            let struct_ref = struct_type.borrow();
-            if struct_ref.has_children() {
-                Ok(format!("Box<dyn {}Trait>", rust_name))
-            } else {
-                Ok(format!("Box<{}>", rust_name))
-            }
-        } else if let Some(_) = self.vim_model.enums.get(ref_name) {
-            Ok(rust_name)
-        } else {
-            Err(Error::TypeNotFound(ref_name.to_string()))
-        }
-    }
-    
     // To allow for polymorphic fields every structure type that has descendants will have a trait
     // alternative that will be passed as dynamic reference. This trait will be implemented for
     // all of the structure type descendants. The trait will provide access to the struct type fields
@@ -347,7 +303,11 @@ impl<T> VimObjectTrait for T where T: AsAny + std::fmt::Debug + erased_serde::Se
         } else {
             parent_trait
         });
-        self.emit_doc(&vim_type.description)?;
+        {
+            let this = &mut *self;
+            let doc_string: &Option<String> = &vim_type.description;
+            emit_doc(this.printer, doc_string)
+        }?;
         self.printer.println(&format!("pub trait {}Trait : {}Trait {{", struct_name, base_trait))?;
         self.printer.indent();
         for (prop_name, property) in &vim_type.properties {
@@ -362,7 +322,11 @@ impl<T> VimObjectTrait for T where T: AsAny + std::fmt::Debug + erased_serde::Se
     }
     
     fn emit_trait_field(&mut self, prop_name: &str, property: &Property) -> Result<()> {
-        self.emit_doc(&property.description)?;
+        {
+            let this = &mut *self;
+            let doc_string: &Option<String> = &property.description;
+            emit_doc(this.printer, doc_string)
+        }?;
         let field_name = getter_name(&prop_name);
         let field_type = self.getter_return_type(property)?;
         self.printer.println(&format!("fn {field_name}(&self) -> {field_type};"))?;
@@ -420,7 +384,7 @@ impl<T> VimObjectTrait for T where T: AsAny + std::fmt::Debug + erased_serde::Se
     }
     
     fn getter_return_type(&mut self, property: &Property) -> Result<String> {
-        let mut field_type = self.to_rust_type(&property.vim_type)?;
+        let mut field_type = self.tdf.to_rust_type(&property.vim_type)?;
         if property.optional {
             field_type = format!("Option<{field_type}>");
         }
@@ -527,7 +491,7 @@ impl<T> VimObjectTrait for T where T: AsAny + std::fmt::Debug + erased_serde::Se
                 continue;
             }
             let enum_name = to_type_name(&box_type.name);
-            let value_type = self.to_rust_type(&box_type.property_type)?;
+            let value_type = self.tdf.to_rust_type(&box_type.property_type)?;
             let discriminator = box_type.discriminator_value.as_ref().unwrap_or(type_name);
             self.printer.println(&format!(r#"value_deserializers.insert("{discriminator}", Box::new(|v| {{"#))?;
             self.printer.indent();

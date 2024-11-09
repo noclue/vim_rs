@@ -279,6 +279,8 @@ pub struct Method {
     pub http_method: HttpMethod,
     pub input: Option<VimType>,
     pub output: Option<VimType>,
+    pub output_description: Option<String>,
+    pub error_description: Option<String>,
     pub optional_response: bool,
 }
 
