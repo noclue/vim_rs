@@ -173,6 +173,7 @@ impl <'a> ManagedObjectEmitter <'a> {
         }
         let request_type  = get_request_type(method, self.vim_model)?;
         let method_name = to_fn_name(&method.name);
+        self.printer.print_indent()?;
         self.printer.print(&format!("pub async fn {}(&self", method_name))?;
 
         if let Some(request_type) = request_type {
