@@ -151,7 +151,7 @@ impl <'a> ManagedObjectEmitter <'a> {
 
         if let Some(output_description) = &method.output_description {
             // Some return type descrptions read "OK" and are not helpful. 
-            if output_description.len() > 5 {
+            if method.output.is_some() && output_description.len() > 5 {
                 self.printer.println("///")?;
                 self.printer.println("/// ## Returns:")?;
                 self.printer.println("///")?;
@@ -181,8 +181,16 @@ impl <'a> ManagedObjectEmitter <'a> {
                 self.printer.print(&format!(", {}: {}", param_name, self.tdf.to_rust_type_with_wrapper(&param.vim_type, ref_type_declaration)?))?;
             }
         }
-        // TODO return type
-        self.printer.println(")")?;
+        match &method.output {
+            Some(output) => {
+                self.printer.print(&format!(") -> Result<{}> {{", self.tdf.to_rust_type(output)?))?;
+            }
+            None => {
+                self.printer.print(") -> Result<()> {")?;
+            }
+            
+        }
+        self.printer.newline()?;
 
         
         // for (param_name, param) in &method.pa {
@@ -204,9 +212,9 @@ impl <'a> ManagedObjectEmitter <'a> {
         };
         self.printer.println("///")?;
         self.printer.println("/// ## Parameters:")?;
-        self.printer.println("///")?;
         for (param_name, param) in &request_type.borrow().properties {
             let param_name = to_field_name(param_name);
+            self.printer.println("///")?;
             self.printer.println(&format!("/// ### {param_name}"))?;
             match &param.description {
                 Some(desc) => {
