@@ -1,17 +1,14 @@
 use std::cell::RefCell;
 use std::collections::HashSet;
 
-use serde_json::error;
-
 use crate::vim_model::ManagedObject;
 use crate::vim_model::Method;
 use crate::vim_model::Struct;
 use crate::vim_model::VimModel;
 use crate::printer::Printer;
 use crate::vim_model::VimType;
-use super::common::emit_doc;
+use super::common::emit_description;
 use super::errors::{Result, Error};
-use super::ref_type_declaration;
 use super::to_field_name;
 use super::to_fn_name;
 use super::to_type_name;
@@ -102,7 +99,7 @@ impl <'a> ManagedObjectEmitter <'a> {
     }
 
     fn emit_struct(&mut self) -> Result<()> {
-        emit_doc(self.printer, &self.mo.description)?;
+        emit_description(self.printer, &self.mo.description)?;
         let struct_name = to_type_name(&self.mo.name);
         self.printer.println(&format!("pub struct {} {{", struct_name))?;
         self.printer.indent();
@@ -146,31 +143,8 @@ impl <'a> ManagedObjectEmitter <'a> {
     }
 
     fn emit_method(&mut self, method: &Method) -> Result<()> {
-        emit_doc(self.printer, &method.description)?;
-        self.emit_param_docs(method)?;
+        self.emit_docstring(method)?;
 
-        if let Some(output_description) = &method.output_description {
-            // Some return type descrptions read "OK" and are not helpful. 
-            if method.output.is_some() && output_description.len() > 5 {
-                self.printer.println("///")?;
-                self.printer.println("/// ## Returns:")?;
-                self.printer.println("///")?;
-                for line in output_description.trim().split('\n') {
-                    self.printer.println(&format!("/// {}", line))?;
-                }
-            }
-        }
-
-        if let Some(error_description) = &method.error_description {
-            if error_description.len() > 5 {
-                self.printer.println("///")?;
-                self.printer.println("/// ## Errors:")?;
-                self.printer.println("///")?;
-                for line in error_description.trim().split('\n') {
-                    self.printer.println(&format!("/// {}", line))?;
-                }
-            }
-        }
         let request_type  = get_request_type(method, self.vim_model)?;
         let method_name = to_fn_name(&method.name);
         self.printer.print_indent()?;
@@ -178,12 +152,12 @@ impl <'a> ManagedObjectEmitter <'a> {
 
         if let Some(request_type) = request_type {
             for (param_name, param) in &request_type.borrow().properties {
-                self.printer.print(&format!(", {}: {}", param_name, self.tdf.to_rust_type_with_wrapper(&param.vim_type, ref_type_declaration)?))?;
+                self.printer.print(&format!(", {}: {}", param_name, self.tdf.to_rust_param_type(&param.vim_type)?))?;
             }
         }
         match &method.output {
             Some(output) => {
-                self.printer.print(&format!(") -> Result<{}> {{", self.tdf.to_rust_type(output)?))?;
+                self.printer.print(&format!(") -> Result<{}> {{", self.tdf.to_rust_field_type(output)?))?;
             }
             None => {
                 self.printer.print(") -> Result<()> {")?;
@@ -205,6 +179,41 @@ impl <'a> ManagedObjectEmitter <'a> {
         Ok(())
     }
 
+    fn emit_docstring(&mut self, method: &Method) -> Result<()> {
+        emit_description(self.printer, &method.description)?;
+        self.emit_param_docs(method)?;
+        self.emit_returns_doc(method)?;
+        self.emit_error_documentation(method)?;
+        Ok(())
+    }
+    
+    fn emit_error_documentation(&mut self, method: &Method) -> Result<()> {
+        Ok(if let Some(error_description) = &method.error_description {
+            if error_description.len() > 5 {
+                self.printer.println("///")?;
+                self.printer.println("/// ## Errors:")?;
+                self.printer.println("///")?;
+                for line in error_description.trim().split('\n') {
+                    self.printer.println(&format!("/// {}", line))?;
+                }
+            }
+        })
+    }
+    
+    fn emit_returns_doc(&mut self, method: &Method) -> Result<()> {
+        Ok(if let Some(output_description) = &method.output_description {
+            // Some return type descrptions read "OK" and are not helpful. 
+            if method.output.is_some() && output_description.len() > 5 {
+                self.printer.println("///")?;
+                self.printer.println("/// ## Returns:")?;
+                self.printer.println("///")?;
+                for line in output_description.trim().split('\n') {
+                    self.printer.println(&format!("/// {}", line))?;
+                }
+            }
+        })
+    }
+    
     fn emit_param_docs(&mut self, method: &Method) -> Result<()> {
         let request_type = get_request_type(method, self.vim_model)?;
         let Some(request_type) = request_type else {

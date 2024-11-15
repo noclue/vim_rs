@@ -3,12 +3,12 @@ mod printer;
 mod vim_model;
 pub mod rs_emitter;
 
-use std::io::Read;
+use std::{io::Read, path::Path, time::Instant};
 use convert_case::{Case, Casing};
 
-fn load_openapi() -> oas30::OpenAPI {
+fn load_openapi<P: AsRef<Path>>(path: P) -> oas30::OpenAPI {
     let mut file =
-        std::fs::File::open("data/vi_json_openapi_specification_v8_0_2_0.json").unwrap();
+        std::fs::File::open(path).unwrap();
     let mut data = String::new();
     file.read_to_string(&mut data).unwrap();
     let openapi: oas30::OpenAPI = serde_json::from_str(&data).unwrap();
@@ -16,15 +16,31 @@ fn load_openapi() -> oas30::OpenAPI {
 }
 
 fn main() {
-    use crate::rs_emitter::TypesEmitter;
-    let model = load_openapi();
-    let root_folder = std::path::Path::new("../vim/src/");
+    let root_folder = Path::new("../vim/src/");
+    let vi_json_spec_path = Path::new("data/vi_json_openapi_specification_v8_0_2_0.json");
+    let start = Instant::now();
+    emit_vim_bindings(vi_json_spec_path, root_folder);
+    println!("Total time in generation: {:?}", start.elapsed());
+}
+    
+fn emit_vim_bindings(vi_json_spec_path: &Path, root_folder: &Path) {
+    let start_load = Instant::now();
+    let model = load_openapi(vi_json_spec_path);
+    println!("Time to load OpenAPI: {:?}", start_load.elapsed());
+    let start_model_transform = Instant::now();
     let vim_model = vim_model::load_vim_model(&model).unwrap();
-    let file = std::fs::File::create(root_folder.join("types.rs")).expect("Could not create types.rs file");
-    let mut printer = printer::FilePrinter::new(file, None, None);
-    let mut emitter = TypesEmitter::new(&vim_model, &mut printer);
-    emitter.emit_data_types().unwrap();
+    println!("Time to transform OpenAPI model: {:?}", start_model_transform.elapsed());
 
+    let start_emit = Instant::now();
+    emit_types(root_folder, &vim_model);
+    println!("Time to emit types: {:?}", start_emit.elapsed());
+
+    let start_emit_mo = Instant::now();
+    emit_managed_objects(root_folder, &vim_model);
+    println!("Time to emit managed objects: {:?}", start_emit_mo.elapsed());
+}
+
+fn emit_managed_objects(root_folder: &Path, vim_model: &vim_model::VimModel) {
     for (mo_type, mo) in vim_model.managed_objects.iter() {
         let file_name = mo_type.to_case(Case::Snake);
         let file_name =  root_folder.join(format!("{}.rs", file_name));
@@ -34,3 +50,11 @@ fn main() {
         emitter.emit().unwrap();
     }
 }
+
+fn emit_types(root_folder: &Path, vim_model: &vim_model::VimModel) {
+    use crate::rs_emitter::TypesEmitter;
+    let file = std::fs::File::create(root_folder.join("types.rs")).expect("Could not create types.rs file");
+    let mut printer = printer::FilePrinter::new(file, None, None);
+    let mut emitter = TypesEmitter::new(vim_model, &mut printer);
+    emitter.emit_data_types().unwrap();
+    }

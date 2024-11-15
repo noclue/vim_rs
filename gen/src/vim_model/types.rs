@@ -300,6 +300,19 @@ pub struct VimModel {
     pub managed_objects: IndexMap<String, ManagedObject>,
 }
 
+impl VimModel {
+    pub fn is_struct_type(&self, vim_type: &VimType) -> bool {
+        match vim_type {
+            VimType::Reference(ref_name) => {
+                if let Some(struct_type) = self.structs.get(ref_name) {
+                    return struct_type.borrow().name != "Any";
+                }
+            }
+            _ => {}
+        }
+        false
+    }
+}
 
 #[cfg(test)]
 mod tests {

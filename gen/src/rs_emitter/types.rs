@@ -6,7 +6,7 @@ use crate::vim_model::VimModel;
 
 use super::super::printer::Printer;
 
-use super::common::emit_doc;
+use super::common::emit_description;
 use super::names::*;
 use super::super::vim_model::*;
 use super::errors::{Result, Error};
@@ -155,7 +155,7 @@ impl<T> VimObjectTrait for T where T: AsAny + std::fmt::Debug + erased_serde::Se
             {
                 let this = &mut *self;
                 let doc_string: &Option<String> = &vim_enum.description;
-                emit_doc(this.printer, doc_string)
+                emit_description(this.printer, doc_string)
             }?;
     
             let enum_name = to_type_name(&vim_enum.name); 
@@ -203,14 +203,14 @@ impl<T> VimObjectTrait for T where T: AsAny + std::fmt::Debug + erased_serde::Se
             {
                 let this = &mut *self;
                 let doc_string: &Option<String> = &box_type.description;
-                emit_doc(this.printer, doc_string)
+                emit_description(this.printer, doc_string)
             }?;
             let name = box_type.discriminator_value.as_ref().unwrap_or(&box_type.name);
             let type_name = to_type_name(&box_type.name);
             if &type_name != name {
                 self.printer.println(&format!("#[serde(rename = \"{}\")]", name))?;
             }
-            let rust_type = self.tdf.to_rust_type(&box_type.property_type)?;
+            let rust_type = self.tdf.to_rust_field_type(&box_type.property_type)?;
             self.printer.println(&format!("{type_name}({rust_type}),"))?;
         }
         self.printer.dedent();
@@ -224,7 +224,7 @@ impl<T> VimObjectTrait for T where T: AsAny + std::fmt::Debug + erased_serde::Se
         {
             let this = &mut *self;
             let doc_string: &Option<String> = &vim_type.description;
-            emit_doc(this.printer, doc_string)
+            emit_description(this.printer, doc_string)
         }?;
         let struct_name = to_type_name(name);
         let discriminator = vim_type.discriminator_value.clone().unwrap_or(name.to_string()); 
@@ -265,10 +265,10 @@ impl<T> VimObjectTrait for T where T: AsAny + std::fmt::Debug + erased_serde::Se
         {
             let this = &mut *self;
             let doc_string: &Option<String> = &property.description;
-            emit_doc(this.printer, doc_string)
+            emit_description(this.printer, doc_string)
         }?;
         let field_name = to_field_name(&prop_name);
-        let mut field_type = self.tdf.to_rust_type(&property.vim_type)?;
+        let mut field_type = self.tdf.to_rust_field_type(&property.vim_type)?;
         if property.optional {
             field_type = format!("Option<{field_type}>", field_type = field_type);
             self.printer.println(&format!("#[serde(default, skip_serializing_if = \"Option::is_none\")]"))?;
@@ -306,7 +306,7 @@ impl<T> VimObjectTrait for T where T: AsAny + std::fmt::Debug + erased_serde::Se
         {
             let this = &mut *self;
             let doc_string: &Option<String> = &vim_type.description;
-            emit_doc(this.printer, doc_string)
+            emit_description(this.printer, doc_string)
         }?;
         self.printer.println(&format!("pub trait {}Trait : {}Trait {{", struct_name, base_trait))?;
         self.printer.indent();
@@ -325,7 +325,7 @@ impl<T> VimObjectTrait for T where T: AsAny + std::fmt::Debug + erased_serde::Se
         {
             let this = &mut *self;
             let doc_string: &Option<String> = &property.description;
-            emit_doc(this.printer, doc_string)
+            emit_description(this.printer, doc_string)
         }?;
         let field_name = getter_name(&prop_name);
         let field_type = self.getter_return_type(property)?;
@@ -384,7 +384,7 @@ impl<T> VimObjectTrait for T where T: AsAny + std::fmt::Debug + erased_serde::Se
     }
     
     fn getter_return_type(&mut self, property: &Property) -> Result<String> {
-        let mut field_type = self.tdf.to_rust_type(&property.vim_type)?;
+        let mut field_type = self.tdf.to_rust_field_type(&property.vim_type)?;
         if property.optional {
             field_type = format!("Option<{field_type}>");
         }
@@ -491,7 +491,7 @@ impl<T> VimObjectTrait for T where T: AsAny + std::fmt::Debug + erased_serde::Se
                 continue;
             }
             let enum_name = to_type_name(&box_type.name);
-            let value_type = self.tdf.to_rust_type(&box_type.property_type)?;
+            let value_type = self.tdf.to_rust_field_type(&box_type.property_type)?;
             let discriminator = box_type.discriminator_value.as_ref().unwrap_or(type_name);
             self.printer.println(&format!(r#"value_deserializers.insert("{discriminator}", Box::new(|v| {{"#))?;
             self.printer.indent();
