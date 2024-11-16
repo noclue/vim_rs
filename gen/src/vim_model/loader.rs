@@ -37,8 +37,8 @@ pub enum Error {
 // Result is a type alias for handling errors.
 pub type Result<T> = std::result::Result<T, Error>;
 
-pub fn load_vim_model(model: &OpenAPI) -> Result<VimModel> {
-    let mut vim_model = VimModel {
+pub fn load_vim_model(model: &OpenAPI) -> Result<Model> {
+    let mut vim_model = Model {
         enums: IndexMap::new(),
         structs: IndexMap::new(),
         request_types: IndexMap::new(),
@@ -61,7 +61,7 @@ pub fn load_vim_model(model: &OpenAPI) -> Result<VimModel> {
 }
 
 /// Populate the `children` of structs in the model.
-fn compute_heirarchy(vim_model: &mut VimModel) -> Result<()> {
+fn compute_heirarchy(vim_model: &mut Model) -> Result<()> {
     for (_, vim_type) in &vim_model.structs {
         let Some(parent) = &vim_type.borrow().parent else {
             continue;
@@ -79,7 +79,7 @@ fn compute_heirarchy(vim_model: &mut VimModel) -> Result<()> {
 
 fn process_discriminator_mappings(
     schemas: &indexmap::IndexMap<String, RefOr<Schema>>,
-    vim_model: &mut VimModel,
+    vim_model: &mut Model,
 ) -> Result<()> {
     let any = schemas
         .get(&"Any".to_string())
@@ -117,7 +117,7 @@ fn process_discriminator_mappings(
 
 fn transform_schemas(
     schemas: &indexmap::IndexMap<String, RefOr<Schema>>,
-    vim_model: &mut VimModel,
+    vim_model: &mut Model,
 ) -> Result<()> {
     Ok(for (schema_name, ref_or_schema) in schemas {
         let RefOr::Val(ref schema) = ref_or_schema else {
@@ -162,7 +162,7 @@ fn transform_schemas(
                     BoxType {
                         name: schema_name.to_string(),
                         description: schema.description.clone(),
-                        property_type: VimType::try_from(
+                        property_type: DataType::try_from(
                             props.get(&"_value".to_string()).unwrap(),
                         )?,
                         discriminator_value: None,
@@ -196,14 +196,14 @@ fn build_struct_type(schema_name: &str, schema: &Schema) -> Result<Struct> {
     Ok(Struct {
         name: schema_name.to_string(),
         description: schema.description.clone(),
-        properties,
+        fields: properties,
         parent: get_parent_schema(schema),
         discriminator_value: None,
         children: vec![],
     })
 }
 
-fn convert_properties(schema_name: &str, schema: &Schema) -> Result<IndexMap<String, Property>> {
+fn convert_properties(schema_name: &str, schema: &Schema) -> Result<IndexMap<String, Field>> {
     let mut result = IndexMap::new();
     let Some(ref properties) = schema.properties else {
         return Ok(result);
@@ -214,9 +214,9 @@ fn convert_properties(schema_name: &str, schema: &Schema) -> Result<IndexMap<Str
             RefOr::Val(property) => property.description.as_ref(),
             RefOr::Ref { description, .. } => description.as_ref(),
         };
-        let property = Property {
+        let property = Field {
             name: property_name.clone(),
-            vim_type: VimType::try_from(ref_or_property).or_else(|op| {
+            vim_type: DataType::try_from(ref_or_property).or_else(|op| {
                 Err(Error::FieldDecodingError(
                     schema_name.to_string(),
                     property_name.to_string(),
@@ -275,7 +275,7 @@ fn trim_schema_prefix(reference: &String) -> &str {
     reference.trim_start_matches("#/components/schemas/")
 }
 
-fn load_managed_objects(model: &OpenAPI, vim_model: &mut VimModel) -> Result<()> {
+fn load_managed_objects(model: &OpenAPI, vim_model: &mut Model) -> Result<()> {
     let Some(tags) = model.tags.as_ref() else {
         return Ok(());
     };
@@ -292,7 +292,7 @@ fn load_managed_objects(model: &OpenAPI, vim_model: &mut VimModel) -> Result<()>
     Ok(())
 }
 
-fn transform_paths(model: &OpenAPI, vim_model: &mut VimModel) -> Result<()> {
+fn transform_paths(model: &OpenAPI, vim_model: &mut Model) -> Result<()> {
     for (path, path_item) in &model.paths {
         if let Some(operation) = &path_item.get {
             add_method(operation, path, vim_model,
@@ -310,7 +310,7 @@ fn transform_paths(model: &OpenAPI, vim_model: &mut VimModel) -> Result<()> {
     Ok(())
 }
 
-fn add_method(operation: &Operation, path: &String, vim_model: &mut VimModel, name: &str, method: HttpMethod, request_type: Option<VimType>) -> Result<()> {
+fn add_method(operation: &Operation, path: &String, vim_model: &mut Model, name: &str, method: HttpMethod, request_type: Option<DataType>) -> Result<()> {
     let tag = get_tag(operation, path)?;
     let managed_object = ensure_managed_object(vim_model, tag);
     let (return_type, optional) = get_success_return_type(operation, path)?;
@@ -376,7 +376,7 @@ fn property_name<'a>(operation: &'a Operation, path: &String) -> Result<&'a str>
     Ok(name)
 }
 
-fn ensure_managed_object<'a>(vim_model: &'a mut VimModel, tag: &String) -> &'a mut ManagedObject {
+fn ensure_managed_object<'a>(vim_model: &'a mut Model, tag: &String) -> &'a mut ManagedObject {
     let managed_object_opt = vim_model.managed_objects.get_mut(tag);
     if managed_object_opt.is_none() {
         let managed_object = ManagedObject {
@@ -389,7 +389,7 @@ fn ensure_managed_object<'a>(vim_model: &'a mut VimModel, tag: &String) -> &'a m
     vim_model.managed_objects.get_mut(tag).unwrap()
 }
 
-fn get_request_type(operation: &Operation, path: &String) -> Result<Option<VimType>> {
+fn get_request_type(operation: &Operation, path: &String) -> Result<Option<DataType>> {
     let Some(request_body) = operation.request_body.as_ref() else {
         return Ok(None);
     };
@@ -399,11 +399,11 @@ fn get_request_type(operation: &Operation, path: &String) -> Result<Option<VimTy
     let content = &request_body.content;
     let content = content.get("application/json").ok_or_else(|| Error::InvalidOperation(operation.operation_id.as_ref().unwrap_or(path).clone(), "expected request body application/json content".to_string()))?;
     let schema = content.schema.as_ref().ok_or_else(|| Error::InvalidOperation(operation.operation_id.as_ref().unwrap_or(path).clone(), "expected request body schema".to_string()))?;
-    Ok(Some(VimType::try_from(schema)?))
+    Ok(Some(DataType::try_from(schema)?))
 }
 
 
-fn get_success_return_type(operation: &Operation, path: &String) -> Result<(Option<VimType>,bool)> {
+fn get_success_return_type(operation: &Operation, path: &String) -> Result<(Option<DataType>,bool)> {
     let responses = &operation.responses;
     for (status_code, response) in &responses.responses {
         if status_code.starts_with("2") {
@@ -419,7 +419,7 @@ fn get_success_return_type(operation: &Operation, path: &String) -> Result<(Opti
                 RefOr::Val(schema) => schema.nullable.unwrap_or(false),
                 _ => false,
             };
-            return Ok((Some(VimType::try_from(schema)?), nullable));
+            return Ok((Some(DataType::try_from(schema)?), nullable));
         }
     }
     Err(Error::InvalidOperation(operation.operation_id.as_ref().unwrap_or(path).clone(), "expected 2xx response".to_string()))
@@ -525,22 +525,22 @@ mod tests {
         let test_request_type = vim_model.structs.get("TestRequestType").unwrap().borrow();
         assert_eq!(test_request_type.name, "TestRequestType");
         assert_eq!(test_request_type.description, Some("test".to_string()));
-        assert_eq!(test_request_type.properties.len(), 2);
+        assert_eq!(test_request_type.fields.len(), 2);
         assert_eq!(test_request_type.parent, None);
-        let test_request_type_prop = test_request_type.properties.get("foo").unwrap();
+        let test_request_type_prop = test_request_type.fields.get("foo").unwrap();
         assert_eq!(test_request_type_prop.name, "foo");
-        assert_eq!(test_request_type_prop.vim_type, VimType::String);
+        assert_eq!(test_request_type_prop.vim_type, DataType::String);
         assert_eq!(test_request_type_prop.optional, false);
         assert_eq!(
             test_request_type_prop.description,
             Some("test description".to_string())
         );
 
-        let test_request_type_prop = test_request_type.properties.get("bar").unwrap();
+        let test_request_type_prop = test_request_type.fields.get("bar").unwrap();
         assert_eq!(test_request_type_prop.name, "bar");
         assert_eq!(
             test_request_type_prop.vim_type,
-            VimType::Reference("BaseConfigInfoDiskFileBackingInfoProvisioningType_enum".to_string())
+            DataType::Reference("BaseConfigInfoDiskFileBackingInfoProvisioningType_enum".to_string())
         );
         assert_eq!(test_request_type_prop.optional, true);
         assert_eq!(test_request_type_prop.description, None);
@@ -603,11 +603,11 @@ mod tests {
         let test_struct = vim_model.structs.get("MethodFault").unwrap().borrow();
         assert_eq!(test_struct.name, "MethodFault");
         assert_eq!(test_struct.description, Some("The base data object type for all the object model faults\nthat an application might handle.\n".to_string()));
-        assert_eq!(test_struct.properties.len(), 2);
+        assert_eq!(test_struct.fields.len(), 2);
         assert_eq!(test_struct.parent, Some("Any".to_string()));
-        let test_request_type_prop = test_struct.properties.get("faultCause").unwrap();
+        let test_request_type_prop = test_struct.fields.get("faultCause").unwrap();
         assert_eq!(test_request_type_prop.name, "faultCause");
-        assert_eq!(test_request_type_prop.vim_type, VimType::Reference("MethodFault".to_string()));
+        assert_eq!(test_request_type_prop.vim_type, DataType::Reference("MethodFault".to_string()));
         assert_eq!(test_request_type_prop.optional, true);
 
         let any = vim_model.structs.get("Any").unwrap().borrow();
@@ -673,7 +673,7 @@ mod tests {
             boxed_type.description,
             Some("A boxed Boolean primitive. To be used in *Any* placeholders.\n".to_string())
         );
-        assert_eq!(boxed_type.property_type, VimType::Boolean);
+        assert_eq!(boxed_type.property_type, DataType::Boolean);
         assert_eq!(boxed_type.discriminator_value, Some("boolean".to_string()));
     }
 

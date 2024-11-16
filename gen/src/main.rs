@@ -40,7 +40,7 @@ fn emit_vim_bindings(vi_json_spec_path: &Path, root_folder: &Path) {
     println!("Time to emit managed objects: {:?}", start_emit_mo.elapsed());
 }
 
-fn emit_managed_objects(root_folder: &Path, vim_model: &vim_model::VimModel) {
+fn emit_managed_objects(root_folder: &Path, vim_model: &vim_model::Model) {
     for (mo_type, mo) in vim_model.managed_objects.iter() {
         let file_name = mo_type.to_case(Case::Snake);
         let file_name =  root_folder.join(format!("{}.rs", file_name));
@@ -51,7 +51,7 @@ fn emit_managed_objects(root_folder: &Path, vim_model: &vim_model::VimModel) {
     }
 }
 
-fn emit_types(root_folder: &Path, vim_model: &vim_model::VimModel) {
+fn emit_types(root_folder: &Path, vim_model: &vim_model::Model) {
     use crate::rs_emitter::TypesEmitter;
     let file = std::fs::File::create(root_folder.join("types.rs")).expect("Could not create types.rs file");
     let mut printer = printer::FilePrinter::new(file, None, None);

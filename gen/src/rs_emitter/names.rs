@@ -9,7 +9,7 @@ use std::borrow::Borrow;
 use convert_case::{Case, Casing};
 use check_keyword::CheckKeyword;
 
-use crate::vim_model::{Struct, VimModel, VimType};
+use crate::vim_model::{Struct, Model, DataType};
 use crate::rs_emitter::errors::{Result, Error};
 
 pub fn to_type_name(name: &str) -> String {
@@ -39,31 +39,31 @@ pub fn to_fn_name(name: &str) -> String {
 
 /// Convert a struct reference to a Rust type declaration. This function type allows for 
 /// customizing the reference type declaration. We havve case for field and parameter declarations.
-type StructRefRenderer = fn (struct_ref: &Struct, vim_model: &VimModel) -> String;
+type StructRefRenderer = fn (struct_ref: &Struct, vim_model: &Model) -> String;
 
 
 pub struct TypeDefResolver<'a> {
-    vim_model: &'a VimModel,
+    vim_model: &'a Model,
 }
 
 impl TypeDefResolver<'_> {
-    pub fn new(vim_model: &VimModel) -> TypeDefResolver {
+    pub fn new(vim_model: &Model) -> TypeDefResolver {
         TypeDefResolver { vim_model }
     }
 
     /// Convert a VimType to a Rust field type declaration. Structure types are always boxed. To
     /// use borrow semantics instead of boxing use `to_rust_param_type`
-    pub fn to_rust_field_type(&mut self, vim_type: &VimType) -> Result<String> {
+    pub fn to_rust_field_type(&mut self, vim_type: &DataType) -> Result<String> {
         self.to_rust_type_with_wrapper(vim_type, resolve_struct_field_reference)
     }
 
     /// Convert a VimType to a Rust param type declaration. Structs and strings are borrowed.
     /// Arrays are borrowed slices.
-    pub fn to_rust_param_type(&mut self, vim_type: &VimType) -> Result<String> {
+    pub fn to_rust_param_type(&mut self, vim_type: &DataType) -> Result<String> {
         match &vim_type {
-            VimType::String => Ok("&str".to_string()),
-            VimType::DateTime => Ok("&str".to_string()),
-            VimType::Array(nested_type) => Ok(format!("&[{}]", self.to_rust_field_type(nested_type)?)),
+            DataType::String => Ok("&str".to_string()),
+            DataType::DateTime => Ok("&str".to_string()),
+            DataType::Array(nested_type) => Ok(format!("&[{}]", self.to_rust_field_type(nested_type)?)),
             _ => self.to_rust_type_with_wrapper(vim_type, resolve_struct_param_reference)
         }
     }
@@ -73,20 +73,20 @@ impl TypeDefResolver<'_> {
     /// case of method calls we want to use borrow semantics instead to avoid boxing. This change of
     /// Box to borrow is done by `ref_type_declaration`. The `type_wrapper` function is used only on
     /// the top level structure types.
-    pub fn to_rust_type_with_wrapper(&mut self, vim_type: &VimType, type_wrapper: StructRefRenderer) -> Result<String> {
+    pub fn to_rust_type_with_wrapper(&mut self, vim_type: &DataType, type_wrapper: StructRefRenderer) -> Result<String> {
         match &vim_type {
-            VimType::Boolean => Ok("bool".to_string()),
-            VimType::String => Ok("String".to_string()),
-            VimType::Binary => Ok("Vec<u8>".to_string()),
-            VimType::Int8 => Ok("i8".to_string()),
-            VimType::Int16 => Ok("i16".to_string()),
-            VimType::Int32 => Ok("i32".to_string()),
-            VimType::Int64 => Ok("i64".to_string()),
-            VimType::Float => Ok("f32".to_string()),
-            VimType::Double => Ok("f64".to_string()),
-            VimType::DateTime => Ok("String".to_string()),
-            VimType::Array(nested_type) => Ok(format!("Vec<{}>", self.to_rust_field_type(nested_type)?)),
-            VimType::Reference(ref_name) => Ok(self.get_ref_type_declaration(ref_name, type_wrapper)?),
+            DataType::Boolean => Ok("bool".to_string()),
+            DataType::String => Ok("String".to_string()),
+            DataType::Binary => Ok("Vec<u8>".to_string()),
+            DataType::Int8 => Ok("i8".to_string()),
+            DataType::Int16 => Ok("i16".to_string()),
+            DataType::Int32 => Ok("i32".to_string()),
+            DataType::Int64 => Ok("i64".to_string()),
+            DataType::Float => Ok("f32".to_string()),
+            DataType::Double => Ok("f64".to_string()),
+            DataType::DateTime => Ok("String".to_string()),
+            DataType::Array(nested_type) => Ok(format!("Vec<{}>", self.to_rust_field_type(nested_type)?)),
+            DataType::Reference(ref_name) => Ok(self.get_ref_type_declaration(ref_name, type_wrapper)?),
         }
     }
     
@@ -115,7 +115,7 @@ impl TypeDefResolver<'_> {
 
 }
 
-fn resolve_struct_field_reference(struct_ref: &Struct, vim_model: &VimModel) -> String {
+fn resolve_struct_field_reference(struct_ref: &Struct, vim_model: &Model) -> String {
     let rust_name = to_type_name(&struct_ref.name);
     if struct_ref.has_children() {
         box_type_declaration(&format!("dyn {}Trait", rust_name))
@@ -131,7 +131,7 @@ fn resolve_struct_field_reference(struct_ref: &Struct, vim_model: &VimModel) -> 
 }
 
 
-fn resolve_struct_param_reference(struct_ref: &Struct, _: &VimModel) -> String {
+fn resolve_struct_param_reference(struct_ref: &Struct, _: &Model) -> String {
     let rust_name = to_type_name(&struct_ref.name);
     if struct_ref.has_children() {
         ref_type_declaration(&format!("dyn {}Trait", rust_name))
@@ -144,13 +144,13 @@ fn resolve_struct_param_reference(struct_ref: &Struct, _: &VimModel) -> String {
 /// Check if a struct type needs boxing. If all struct fields are primitive then we do not need
 /// to box the struct. If any field is a struct type then we need to box the struct. Array
 /// fields of struct types are also to be boxed.
-fn needs_boxing(struct_ref: &Struct, vim_model: &VimModel) -> bool {
-    for (_, field) in &struct_ref.properties {
+fn needs_boxing(struct_ref: &Struct, vim_model: &Model) -> bool {
+    for (_, field) in &struct_ref.fields {
         if vim_model.is_struct_type(&field.vim_type) {
             return true;
         }            
         match &field.vim_type {
-            VimType::Array(nested_type) => {
+            DataType::Array(nested_type) => {
                 if vim_model.is_struct_type(nested_type) {
                     return true;
                 }

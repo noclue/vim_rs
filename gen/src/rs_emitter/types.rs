@@ -2,7 +2,7 @@
 
 use std::borrow::Borrow;
 
-use crate::vim_model::VimModel;
+use crate::vim_model::Model;
 
 use super::super::printer::Printer;
 
@@ -14,14 +14,14 @@ use super::errors::{Result, Error};
 const ANY: &str = "Any";
 
 pub struct TypesEmitter<'a> {
-    vim_model: &'a VimModel,
+    vim_model: &'a Model,
     printer: &'a mut dyn Printer,
     tdf: TypeDefResolver<'a>,
 }
 
 
 impl<'a> TypesEmitter<'a> {
-    pub fn new(vim_model: &'a VimModel, printer: &'a mut dyn Printer) -> Self {
+    pub fn new(vim_model: &'a Model, printer: &'a mut dyn Printer) -> Self {
         TypesEmitter { vim_model, printer, tdf: TypeDefResolver::new(vim_model) }
     }
 
@@ -253,15 +253,15 @@ impl<T> VimObjectTrait for T where T: AsAny + std::fmt::Debug + erased_serde::Se
         self.emit_struct_fields(vim_type)
     }
     fn emit_struct_fields(&mut self, vim_type: &Struct) -> Result<()> {
-        if vim_type.properties.is_empty() { return Ok(()); } // skip the comment if there are no fields
+        if vim_type.fields.is_empty() { return Ok(()); } // skip the comment if there are no fields
         self.printer.println(&format!("// Fields of {}", vim_type.name))?;
-        for (prop_name, property) in &vim_type.properties {
+        for (prop_name, property) in &vim_type.fields {
             self.emit_struct_field(prop_name, property)?;
         }
         Ok(())
     }
     
-    fn emit_struct_field(&mut self, prop_name: &str, property: &Property) -> Result<()> {
+    fn emit_struct_field(&mut self, prop_name: &str, property: &Field) -> Result<()> {
         {
             let this = &mut *self;
             let doc_string: &Option<String> = &property.description;
@@ -276,7 +276,7 @@ impl<T> VimObjectTrait for T where T: AsAny + std::fmt::Debug + erased_serde::Se
         if field_name != prop_name {
             self.printer.println(&format!(r#"#[serde(rename = "{prop_name}")]"#))?;
         }
-        if property.vim_type == VimType::Binary {
+        if property.vim_type == DataType::Binary {
             if property.optional {
                 self.printer.println(r#"#[serde(with = "super::base64::option")]"#)?;
             } else {
@@ -310,7 +310,7 @@ impl<T> VimObjectTrait for T where T: AsAny + std::fmt::Debug + erased_serde::Se
         }?;
         self.printer.println(&format!("pub trait {}Trait : {}Trait {{", struct_name, base_trait))?;
         self.printer.indent();
-        for (prop_name, property) in &vim_type.properties {
+        for (prop_name, property) in &vim_type.fields {
             self.emit_trait_field(prop_name, property)?;
         }
         self.printer.dedent();
@@ -321,7 +321,7 @@ impl<T> VimObjectTrait for T where T: AsAny + std::fmt::Debug + erased_serde::Se
         Ok(())
     }
     
-    fn emit_trait_field(&mut self, prop_name: &str, property: &Property) -> Result<()> {
+    fn emit_trait_field(&mut self, prop_name: &str, property: &Field) -> Result<()> {
         {
             let this = &mut *self;
             let doc_string: &Option<String> = &property.description;
@@ -383,7 +383,7 @@ impl<T> VimObjectTrait for T where T: AsAny + std::fmt::Debug + erased_serde::Se
         Ok(())
     }
     
-    fn getter_return_type(&mut self, property: &Property) -> Result<String> {
+    fn getter_return_type(&mut self, property: &Field) -> Result<String> {
         let mut field_type = self.tdf.to_rust_field_type(&property.vim_type)?;
         if property.optional {
             field_type = format!("Option<{field_type}>");
@@ -422,7 +422,7 @@ impl<T> VimObjectTrait for T where T: AsAny + std::fmt::Debug + erased_serde::Se
         let base_name = to_type_name(&trait_type.name);
         self.printer.println(&format!("impl {}Trait for {} {{", base_name, struct_name))?;
         self.printer.indent();
-        for (prop_name, property) in &trait_type.properties {
+        for (prop_name, property) in &trait_type.fields {
             self.emit_field_getter(prop_name, property)?;
         }
         self.printer.dedent();
@@ -430,7 +430,7 @@ impl<T> VimObjectTrait for T where T: AsAny + std::fmt::Debug + erased_serde::Se
         Ok(())
     }
     
-    fn emit_field_getter(&mut self, prop_name: &str, property: &Property) -> Result<()> {
+    fn emit_field_getter(&mut self, prop_name: &str, property: &Field) -> Result<()> {
         let getter_name = getter_name(&prop_name);
         let mut field_access = format!("self.{}",to_field_name(&prop_name));
         let field_type = self.getter_return_type(property)?;
@@ -606,13 +606,13 @@ impl<T> VimObjectTrait for T where T: AsAny + std::fmt::Debug + erased_serde::Se
 
 /// Checks if type is to be returned as value copy or reference. Integer and float types are good to
 /// copy. Structures, strings and arrays go by immutable reference
-fn get_by_ref(vim_type: &VimType) -> bool {
+fn get_by_ref(vim_type: &DataType) -> bool {
     match &vim_type {
-        VimType::Reference(_) => true,
-        VimType::Array(_) => true,
-        VimType::Binary => true,
-        VimType::String => true,
-        VimType::DateTime => true, // Uses string
+        DataType::Reference(_) => true,
+        DataType::Array(_) => true,
+        DataType::Binary => true,
+        DataType::String => true,
+        DataType::DateTime => true, // Uses string
         _ => false,
     }
 }

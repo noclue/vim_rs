@@ -4,9 +4,9 @@ use std::collections::HashSet;
 use crate::vim_model::ManagedObject;
 use crate::vim_model::Method;
 use crate::vim_model::Struct;
-use crate::vim_model::VimModel;
+use crate::vim_model::Model;
 use crate::printer::Printer;
-use crate::vim_model::VimType;
+use crate::vim_model::DataType;
 use super::common::emit_description;
 use super::errors::{Result, Error};
 use super::to_field_name;
@@ -17,13 +17,13 @@ use super::TypeDefResolver;
 
 pub struct ManagedObjectEmitter <'a>{
     mo: &'a ManagedObject,
-    vim_model: &'a VimModel,
+    vim_model: &'a Model,
     printer: &'a mut dyn Printer,
     tdf: TypeDefResolver<'a>,
 }
 
 impl <'a> ManagedObjectEmitter <'a> {
-    pub fn new(mo: &'a ManagedObject, printer: &'a mut dyn Printer, vim_model: &'a VimModel) -> ManagedObjectEmitter<'a> {
+    pub fn new(mo: &'a ManagedObject, printer: &'a mut dyn Printer, vim_model: &'a Model) -> ManagedObjectEmitter<'a> {
         ManagedObjectEmitter {
             mo,
             vim_model,
@@ -61,7 +61,7 @@ impl <'a> ManagedObjectEmitter <'a> {
             let Some(request_type) = get_request_type(method, self.vim_model)? else {
                 continue;
             };
-            for (_, param) in &request_type.borrow().properties {
+            for (_, param) in &request_type.borrow().fields {
                 self.accumulate_type_reference(&param.vim_type, &mut types)?;
             }
         }
@@ -69,13 +69,13 @@ impl <'a> ManagedObjectEmitter <'a> {
     }
 
 
-    fn accumulate_type_reference(&self, output: &VimType, types: &mut HashSet<String>) -> Result<()> {
+    fn accumulate_type_reference(&self, output: &DataType, types: &mut HashSet<String>) -> Result<()> {
         match output {
-            VimType::Reference(ref_name) => {
+            DataType::Reference(ref_name) => {
                 types.insert(self.resolve_import_type(ref_name)?);
             }
-            VimType::Array(arr_type) => {
-                if let VimType::Reference(ref_name) = arr_type.as_ref() {
+            DataType::Array(arr_type) => {
+                if let DataType::Reference(ref_name) = arr_type.as_ref() {
                     types.insert(self.resolve_import_type(ref_name)?);
                 }
             }
@@ -151,7 +151,7 @@ impl <'a> ManagedObjectEmitter <'a> {
         self.printer.print(&format!("pub async fn {}(&self", method_name))?;
 
         if let Some(request_type) = request_type {
-            for (param_name, param) in &request_type.borrow().properties {
+            for (param_name, param) in &request_type.borrow().fields {
                 self.printer.print(&format!(", {}: {}", param_name, self.tdf.to_rust_param_type(&param.vim_type)?))?;
             }
         }
@@ -221,7 +221,7 @@ impl <'a> ManagedObjectEmitter <'a> {
         };
         self.printer.println("///")?;
         self.printer.println("/// ## Parameters:")?;
-        for (param_name, param) in &request_type.borrow().properties {
+        for (param_name, param) in &request_type.borrow().fields {
             let param_name = to_field_name(param_name);
             self.printer.println("///")?;
             self.printer.println(&format!("/// ### {param_name}"))?;
@@ -242,9 +242,9 @@ impl <'a> ManagedObjectEmitter <'a> {
 
 }
 
-fn get_request_type<'a>(method: &Method, vim_model: &'a VimModel) -> Result<Option<&'a RefCell<Struct>>> {
+fn get_request_type<'a>(method: &Method, vim_model: &'a Model) -> Result<Option<&'a RefCell<Struct>>> {
     // Input type is a synthetic struct referece or none. We do not have array input type.
-    let Some(VimType::Reference(input)) = &method.input else {
+    let Some(DataType::Reference(input)) = &method.input else {
         return Ok(None);
     };
     let request_type = vim_model.request_types.get(input);

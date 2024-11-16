@@ -3,6 +3,14 @@ name = "vim-rs"
 version = "0.1.0"
 edition = "2021"
 
+[[bin]]
+name = "generate"
+path = "src/main.rs"
+
+[[bin]]
+name = "analyze"
+path = "src/analyze.rs"
+
 [dependencies]
 serde_json = "1.0.117"
 thiserror = "1.0.61"
