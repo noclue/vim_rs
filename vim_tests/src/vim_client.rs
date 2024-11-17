@@ -82,7 +82,7 @@ impl VimClient {
         Ok(content)
     }
 
-    /// Execute a request that returns a response body
+    /// Execute a request that optionally returns a response body
     pub async fn execute_option<T>(&self, mut req: reqwest::RequestBuilder) -> Result<Option<T>> 
     where T: serde::de::DeserializeOwned 
     {

@@ -13,7 +13,8 @@ pub struct ServiceInstance {
 
 impl ServiceInstance {
     pub async fn get_content(&self) -> Result<types::ServiceContent> {
-        let path = substitute("/ServiceInstance/{moId}/content", &vec![("moId", &self.mo_id)]);
+        //let path = substitute("/ServiceInstance/{moId}/content", &vec![("moId", &self.mo_id)]);
+        let path = format!("/ServiceInstance/{moId}/content", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         Ok(self.client.execute(req).await?)
     }
@@ -40,14 +41,12 @@ impl SessionManager {
         let login = LoginRequestType {user_name,password,locale,};
         let path = format!("/SessionManager/{moId}/Login", moId = &self.mo_id);
         let req = self.client.post_request(&path, &login);
-        let session: types::UserSession = self.client.execute(req).await?;
-        Ok(session)
+        Ok(self.client.execute(req).await?)
     }
     pub async fn logout(&self) -> Result<()> {
         let path = format!("/SessionManager/{moId}/Logout", moId =&self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute_void(req).await?;
-        Ok(())
+        Ok(self.client.execute_void(req).await?)
     }
 
 }
