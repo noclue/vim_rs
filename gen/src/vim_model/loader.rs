@@ -55,6 +55,7 @@ pub fn load_vim_model(model: &OpenAPI) -> Result<Model> {
     transform_schemas(schemas, &mut vim_model)?;
     process_discriminator_mappings(schemas, &mut vim_model)?;
     compute_heirarchy(&mut vim_model)?;
+    mark_cycles(&mut vim_model)?;
     load_managed_objects(&model, &mut vim_model)?;
     transform_paths(&model, &mut vim_model)?;
     Ok(vim_model)
@@ -225,6 +226,7 @@ fn convert_properties(schema_name: &str, schema: &Schema) -> Result<IndexMap<Str
             })?,
             optional: !required.contains(&property_name.to_string()),
             description: description.cloned(),
+            require_box: false,
         };
         result.insert(property_name.to_string(), property);
     }

@@ -103,6 +103,9 @@ pub struct Field {
     pub description: Option<String>,
     pub optional: bool,
     pub vim_type: DataType,
+    /// Indicator that the field needs to be rendered as pointer type to break a cyclic reference
+    /// and thus keep the struct type Sized.
+    pub require_box: bool,
 }
 
 impl Field {
@@ -360,6 +363,7 @@ mod tests {
             description: None,
             optional: false,
             vim_type: DataType::String,
+            require_box: false,
         };
         assert_eq!(prop.rust_name(), "crate_");
     }

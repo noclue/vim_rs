@@ -3,7 +3,7 @@ mod vim_model;
 
 use std::{borrow::Borrow, collections::HashSet, io::Read, path::Path};
 
-use vim_model::{DataType::{Reference, Array}, Model, Struct};
+use vim_model::{DataType::Reference, Model, Struct};
 
 fn load_openapi<P: AsRef<Path>>(path: P) -> oas30::OpenAPI {
     let mut file =
@@ -19,9 +19,31 @@ fn main() {
     let model = load_openapi(vi_json_spec_path);
     let vim_model = vim_model::load_vim_model(&model).unwrap();
     let loops = detect_loops(&vim_model);
+    let boxed_fields = select_boxed_fields(&vim_model, &loops);
     for loop_chain in loops {
         println!("Loop detected: {:?}", loop_chain);
     }
+
+    for field in boxed_fields {
+        println!("Boxed field: {:?}", field);
+    }
+}
+
+/// Select one struct and field from each loop chain to be boxed so as to break the loop. We need
+/// the results to be repeatable between runs. So we will select the first struct in alpabetical
+/// order.
+fn select_boxed_fields(_: &Model, loops: &Vec<Vec<(String, String)>>) -> Vec<(String, String)> {
+    let mut boxed_fields: Vec<(String, String)> = Vec::new();
+    for loop_chain in loops {
+        let mut selected_field = loop_chain[0].clone();
+        for field in loop_chain {
+            if field.0 < selected_field.0 {
+                selected_field = field.clone();
+            }
+        }
+        boxed_fields.push(selected_field);
+    }
+    boxed_fields
 }
 
 fn detect_loops(vim_model: &Model) -> Vec<Vec<(String, String)>> {
@@ -48,13 +70,15 @@ fn detect_loops_recursive(vim_model: &Model, struct_ref: &Struct, stack: &mut Ve
             Reference(ref_name) => {
                 ref_name
             },
-            Array(nested_type) => {
-                if let Reference(ref_name) = nested_type.as_ref() {
-                    ref_name
-                } else {
-                    continue;
-                }
-            },
+            // Skip arrays as Vec field in a struct is a pointer to the array and not the array
+            // itself hence cyclic references from Vec do not violate Sized constraint.
+            // Array(nested_type) => {
+            //     if let Reference(ref_name) = nested_type.as_ref() {
+            //         ref_name
+            //     } else {
+            //         continue;
+            //     }
+            // },
             _ => {
                 continue;
             }
@@ -68,8 +92,8 @@ fn detect_loops_recursive(vim_model: &Model, struct_ref: &Struct, stack: &mut Ve
         if visited.contains(ref_name) {
             continue;
         }
-        // Mutate the last frame to point to the current field in the current struct if we detect
-        // a loop. The loop chain will be copied in the mutated state.
+        // Mutate the last frame to point to the current field in the current struct. If we detect
+        // a loop the loop chain will be copied in the mutated state.
         stack.last_mut().unwrap().1 = field.name.clone();
         if stack.iter().any(|(name, _)| name == ref_name) {
             let loop_start = stack.iter().position(|(x, _)| x == ref_name).unwrap();

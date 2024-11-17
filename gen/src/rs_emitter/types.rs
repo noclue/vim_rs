@@ -255,29 +255,28 @@ impl<T> VimObjectTrait for T where T: AsAny + std::fmt::Debug + erased_serde::Se
     fn emit_struct_fields(&mut self, vim_type: &Struct) -> Result<()> {
         if vim_type.fields.is_empty() { return Ok(()); } // skip the comment if there are no fields
         self.printer.println(&format!("// Fields of {}", vim_type.name))?;
-        for (prop_name, property) in &vim_type.fields {
-            self.emit_struct_field(prop_name, property)?;
+        for (_, property) in &vim_type.fields {
+            self.emit_struct_field(property)?;
         }
         Ok(())
     }
     
-    fn emit_struct_field(&mut self, prop_name: &str, property: &Field) -> Result<()> {
+    fn emit_struct_field(&mut self, field: &Field) -> Result<()> {
         {
             let this = &mut *self;
-            let doc_string: &Option<String> = &property.description;
+            let doc_string: &Option<String> = &field.description;
             emit_description(this.printer, doc_string)
         }?;
-        let field_name = to_field_name(&prop_name);
-        let mut field_type = self.tdf.to_rust_field_type(&property.vim_type)?;
-        if property.optional {
-            field_type = format!("Option<{field_type}>", field_type = field_type);
+        let field_name = to_field_name(&field.name);
+        let field_type = self.tdf.field_type(field)?;
+        if field.optional {
             self.printer.println(&format!("#[serde(default, skip_serializing_if = \"Option::is_none\")]"))?;
         }
-        if field_name != prop_name {
-            self.printer.println(&format!(r#"#[serde(rename = "{prop_name}")]"#))?;
+        if field_name != field.name {
+            self.printer.println(&format!(r#"#[serde(rename = "{}")]"#, field.name))?;
         }
-        if property.vim_type == DataType::Binary {
-            if property.optional {
+        if field.vim_type == DataType::Binary {
+            if field.optional {
                 self.printer.println(r#"#[serde(with = "super::base64::option")]"#)?;
             } else {
                 self.printer.println(r#"#[serde(with = "super::base64::vec")]"#)?;
@@ -351,7 +350,7 @@ impl<T> VimObjectTrait for T where T: AsAny + std::fmt::Debug + erased_serde::Se
         TYPE_MAP.as_ref().unwrap().get(&from)
     }
 }"#)?;
-        self.printer.print(&format!(r#"impl<From: AsAny + ?Sized + 'static> CastFrom<From> for dyn {type_name}Trait {{
+        self.printer.println(&format!(r#"impl<From: AsAny + ?Sized + 'static> CastFrom<From> for dyn {type_name}Trait {{
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {{
         let into = {fn_name}(from.type_id())?;
         (into.to_ref)(from.as_any_ref())
@@ -384,10 +383,7 @@ impl<T> VimObjectTrait for T where T: AsAny + std::fmt::Debug + erased_serde::Se
     }
     
     fn getter_return_type(&mut self, property: &Field) -> Result<String> {
-        let mut field_type = self.tdf.to_rust_field_type(&property.vim_type)?;
-        if property.optional {
-            field_type = format!("Option<{field_type}>");
-        }
+        let mut field_type = self.tdf.field_type(property)?;
         if get_by_ref(&property.vim_type) {
             field_type = format!("&{field_type}");
         }

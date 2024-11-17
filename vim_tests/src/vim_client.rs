@@ -1,5 +1,5 @@
 use tokio::sync::RwLock;
-use vim::vim;
+use vim::types;
 
 const AUTHN_HEADER: &str = "vmware-api-session-id";
 const API_RELEASE: &str = "8.0.2.0";
@@ -7,7 +7,7 @@ const API_RELEASE: &str = "8.0.2.0";
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
     #[error("MethodFault: {0:?}")]
-    MethodFault(Box<dyn vim::MethodFaultTrait>),
+    MethodFault(Box<dyn types::MethodFaultTrait>),
     #[error("Reqwest error: {0}")]
     ReqwestError(#[from] reqwest::Error),
     #[error("Serde error: {0}")]
@@ -130,7 +130,7 @@ impl VimClient {
             *key_holder = Some(session_key);
         }
         if !res.status().is_success() {
-            let fault: Box<dyn vim::MethodFaultTrait> = res.json().await?;
+            let fault: Box<dyn types::MethodFaultTrait> = res.json().await?;
             return Err(Error::MethodFault(fault));
         }
         Ok(res)

@@ -9,7 +9,7 @@ use std::borrow::Borrow;
 use convert_case::{Case, Casing};
 use check_keyword::CheckKeyword;
 
-use crate::vim_model::{Struct, Model, DataType};
+use crate::vim_model::{DataType, Field, Model, Struct};
 use crate::rs_emitter::errors::{Result, Error};
 
 pub fn to_type_name(name: &str) -> String {
@@ -51,15 +51,26 @@ impl TypeDefResolver<'_> {
         TypeDefResolver { vim_model }
     }
 
+    pub fn field_type(&self, field: &Field) -> Result<String> {
+        let mut field_type = self.to_rust_field_type(&field.vim_type)?;
+        if field.require_box {
+            field_type = box_type_declaration(&field_type);
+        }
+        if field.optional {
+            field_type = format!("Option<{field_type}>");
+        }
+        Ok(field_type)
+    }
+
     /// Convert a VimType to a Rust field type declaration. Structure types are always boxed. To
     /// use borrow semantics instead of boxing use `to_rust_param_type`
-    pub fn to_rust_field_type(&mut self, vim_type: &DataType) -> Result<String> {
+    pub fn to_rust_field_type(&self, vim_type: &DataType) -> Result<String> {
         self.to_rust_type_with_wrapper(vim_type, resolve_struct_field_reference)
     }
 
     /// Convert a VimType to a Rust param type declaration. Structs and strings are borrowed.
     /// Arrays are borrowed slices.
-    pub fn to_rust_param_type(&mut self, vim_type: &DataType) -> Result<String> {
+    pub fn to_rust_param_type(&self, vim_type: &DataType) -> Result<String> {
         match &vim_type {
             DataType::String => Ok("&str".to_string()),
             DataType::DateTime => Ok("&str".to_string()),
@@ -73,7 +84,7 @@ impl TypeDefResolver<'_> {
     /// case of method calls we want to use borrow semantics instead to avoid boxing. This change of
     /// Box to borrow is done by `ref_type_declaration`. The `type_wrapper` function is used only on
     /// the top level structure types.
-    pub fn to_rust_type_with_wrapper(&mut self, vim_type: &DataType, type_wrapper: StructRefRenderer) -> Result<String> {
+    pub fn to_rust_type_with_wrapper(&self, vim_type: &DataType, type_wrapper: StructRefRenderer) -> Result<String> {
         match &vim_type {
             DataType::Boolean => Ok("bool".to_string()),
             DataType::String => Ok("String".to_string()),
@@ -97,7 +108,7 @@ impl TypeDefResolver<'_> {
     /// If the structure has children then we need dynamic trait reference.
     /// If the Struct has no children then we reference the Struct type.
     /// If we cannot match the name to a struct or enum this is programatic error
-    fn get_ref_type_declaration(&mut self, ref_name: &str, render_struct_ref: StructRefRenderer) -> Result<String> {
+    fn get_ref_type_declaration(&self, ref_name: &str, render_struct_ref: StructRefRenderer) -> Result<String> {
         if ref_name == "Any" {
             return Ok("VimAny".to_string());
         }
@@ -115,18 +126,12 @@ impl TypeDefResolver<'_> {
 
 }
 
-fn resolve_struct_field_reference(struct_ref: &Struct, vim_model: &Model) -> String {
+fn resolve_struct_field_reference(struct_ref: &Struct, _: &Model) -> String {
     let rust_name = to_type_name(&struct_ref.name);
     if struct_ref.has_children() {
         box_type_declaration(&format!("dyn {}Trait", rust_name))
     } else {
-        // TODO: Optimize further the boxing check for structs. For example structs that 
-        // have structure fields weith only simple types do not need boxing.
-        if needs_boxing(struct_ref, vim_model) {
-            box_type_declaration(&rust_name)
-        } else {
-            rust_name
-        }
+        rust_name
     }
 }
 
@@ -139,29 +144,6 @@ fn resolve_struct_param_reference(struct_ref: &Struct, _: &Model) -> String {
         ref_type_declaration(&rust_name)
     }
 }
-
-
-/// Check if a struct type needs boxing. If all struct fields are primitive then we do not need
-/// to box the struct. If any field is a struct type then we need to box the struct. Array
-/// fields of struct types are also to be boxed.
-fn needs_boxing(struct_ref: &Struct, vim_model: &Model) -> bool {
-    for (_, field) in &struct_ref.fields {
-        if vim_model.is_struct_type(&field.vim_type) {
-            return true;
-        }            
-        match &field.vim_type {
-            DataType::Array(nested_type) => {
-                if vim_model.is_struct_type(nested_type) {
-                    return true;
-                }
-            }
-            _ => {}
-        }
-    }
-    false
-}
-
-
 
 // Add a Box<> to the type declaration
 fn box_type_declaration(type_decl: &str) -> String {

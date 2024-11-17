@@ -1,2 +1,2 @@
 mod base64;
-pub mod vim;
+pub mod types;
