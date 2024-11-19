@@ -39,7 +39,7 @@ pub fn to_fn_name(name: &str) -> String {
 
 /// Convert a struct reference to a Rust type declaration. This function type allows for 
 /// customizing the reference type declaration. We havve case for field and parameter declarations.
-type StructRefRenderer = fn (struct_ref: &Struct, vim_model: &Model) -> String;
+type StructRefRenderer = Box<dyn Fn(&Struct, &Model) -> String>;
 
 
 pub struct TypeDefResolver<'a> {
@@ -65,18 +65,22 @@ impl TypeDefResolver<'_> {
     /// Convert a VimType to a Rust field type declaration. Structure types are always boxed. To
     /// use borrow semantics instead of boxing use `to_rust_param_type`
     pub fn to_rust_field_type(&self, vim_type: &DataType) -> Result<String> {
-        self.to_rust_type_with_wrapper(vim_type, resolve_struct_field_reference)
+        self.to_rust_type_with_wrapper(vim_type, field_reference())
     }
 
     /// Convert a VimType to a Rust param type declaration. Structs and strings are borrowed.
     /// Arrays are borrowed slices.
-    pub fn to_rust_param_type(&self, vim_type: &DataType) -> Result<String> {
-        match &vim_type {
-            DataType::String => Ok("&str".to_string()),
-            DataType::DateTime => Ok("&str".to_string()),
-            DataType::Array(nested_type) => Ok(format!("&[{}]", self.to_rust_field_type(nested_type)?)),
-            _ => self.to_rust_type_with_wrapper(vim_type, resolve_struct_param_reference)
+    pub fn to_rust_param_type(&self, field: &Field, lifecycle: Option<String>) -> Result<String> {
+        let mut decl = match &field.vim_type {
+            DataType::String => ref_type_declaration("str", lifecycle.clone()),
+            DataType::DateTime => ref_type_declaration("str", lifecycle.clone()),
+            DataType::Array(nested_type) => ref_type_declaration(&format!("[{}]", self.to_rust_field_type(nested_type)?), lifecycle.clone()),
+            _ => self.to_rust_type_with_wrapper(&field.vim_type, param_reference(lifecycle.clone()))?
+        };
+        if field.optional {
+            decl = format!("Option<{}>", decl);
         }
+        Ok(decl)
     }
 
     /// Convert a VimType to a Rust type declaration. Allowing to customize the wrapper of the top
@@ -84,7 +88,7 @@ impl TypeDefResolver<'_> {
     /// case of method calls we want to use borrow semantics instead to avoid boxing. This change of
     /// Box to borrow is done by `ref_type_declaration`. The `type_wrapper` function is used only on
     /// the top level structure types.
-    pub fn to_rust_type_with_wrapper(&self, vim_type: &DataType, type_wrapper: StructRefRenderer) -> Result<String> {
+    fn to_rust_type_with_wrapper(&self, vim_type: &DataType, type_wrapper: StructRefRenderer) -> Result<String> {
         match &vim_type {
             DataType::Boolean => Ok("bool".to_string()),
             DataType::String => Ok("String".to_string()),
@@ -126,23 +130,27 @@ impl TypeDefResolver<'_> {
 
 }
 
-fn resolve_struct_field_reference(struct_ref: &Struct, _: &Model) -> String {
-    let rust_name = to_type_name(&struct_ref.name);
-    if struct_ref.has_children() {
-        box_type_declaration(&format!("dyn {}Trait", rust_name))
-    } else {
-        rust_name
-    }
+fn field_reference() -> StructRefRenderer {
+    Box::new(move |struct_ref: &Struct, _: &Model| -> String {
+        let rust_name = to_type_name(&struct_ref.name);
+        if struct_ref.has_children() {
+            box_type_declaration(&format!("dyn {}Trait", rust_name))
+        } else {
+            rust_name
+        }
+    })
 }
 
 
-fn resolve_struct_param_reference(struct_ref: &Struct, _: &Model) -> String {
-    let rust_name = to_type_name(&struct_ref.name);
-    if struct_ref.has_children() {
-        ref_type_declaration(&format!("dyn {}Trait", rust_name))
-    } else {
-        ref_type_declaration(&rust_name)
-    }
+fn param_reference(lifecycle: Option<String>) ->  StructRefRenderer {
+    Box::new(move |struct_ref: &Struct, _: &Model| -> String {
+        let rust_name = to_type_name(&struct_ref.name);
+        if struct_ref.has_children() {
+            ref_type_declaration(&format!("dyn {}Trait", rust_name), lifecycle.clone())
+        } else {
+            ref_type_declaration(&rust_name, lifecycle.clone())
+        }
+    })
 }
 
 // Add a Box<> to the type declaration
@@ -151,6 +159,9 @@ fn box_type_declaration(type_decl: &str) -> String {
 }
 
 // Add reference to the type declaration
-fn ref_type_declaration(type_decl: &str) -> String {
-    format!("&{}", type_decl)
+fn ref_type_declaration(type_decl: &str, lifecycle: Option<String>) -> String {
+    match lifecycle {
+        Some(lc) => format!("&'{} {}", lc, type_decl),
+        None => format!("&{}", type_decl)
+    }
 }

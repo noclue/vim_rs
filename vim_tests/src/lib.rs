@@ -12,7 +12,7 @@ pub struct ServiceInstance {
 }
 
 impl ServiceInstance {
-    pub async fn get_content(&self) -> Result<types::ServiceContent> {
+    pub async fn content(&self) -> Result<types::ServiceContent> {
         //let path = substitute("/ServiceInstance/{moId}/content", &vec![("moId", &self.mo_id)]);
         let path = format!("/ServiceInstance/{moId}/content", moId = &self.mo_id);
         let req = self.client.get_request(&path);
@@ -38,9 +38,9 @@ impl SessionManager {
         })
     }
     pub async fn login(&self, user_name: &str, password: &str, locale: Option<&str>) -> Result<types::UserSession> {
-        let login = LoginRequestType {user_name,password,locale,};
+        let input = LoginRequestType {user_name,password,locale,};
         let path = format!("/SessionManager/{moId}/Login", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &login);
+        let req = self.client.post_request(&path, &input);
         Ok(self.client.execute(req).await?)
     }
     pub async fn logout(&self) -> Result<()> {
@@ -187,7 +187,7 @@ mod tests {
             client: client.clone(),
             mo_id: "ServiceInstance".to_string(),
         };
-        let content = service_instance.get_content().await.unwrap();
+        let content = service_instance.content().await.unwrap();
         let session_manager_mo_ref = content.session_manager.unwrap();
         let session_manager = SessionManager::new(client.clone(), &session_manager_mo_ref).unwrap();
         let session = session_manager.login(

@@ -5,6 +5,7 @@ pub mod rs_emitter;
 
 use std::{io::Read, path::Path, time::Instant};
 use convert_case::{Case, Casing};
+use rs_emitter::library::emit_library;
 
 fn load_openapi<P: AsRef<Path>>(path: P) -> oas30::OpenAPI {
     let mut file =
@@ -22,7 +23,7 @@ fn main() {
     emit_vim_bindings(vi_json_spec_path, root_folder);
     println!("Total time in generation: {:?}", start.elapsed());
 }
-    
+     
 fn emit_vim_bindings(vi_json_spec_path: &Path, root_folder: &Path) {
     let start_load = Instant::now();
     let model = load_openapi(vi_json_spec_path);
@@ -36,19 +37,27 @@ fn emit_vim_bindings(vi_json_spec_path: &Path, root_folder: &Path) {
     println!("Time to emit types: {:?}", start_emit.elapsed());
 
     let start_emit_mo = Instant::now();
-    emit_managed_objects(root_folder, &vim_model);
+    let modules = emit_managed_objects(root_folder, &vim_model);
     println!("Time to emit managed objects: {:?}", start_emit_mo.elapsed());
+
+    // Generate lib.rs
+    let file = std::fs::File::create(root_folder.join("lib.rs")).expect("Could not create lib.rs file");
+    let mut printer = printer::FilePrinter::new(file, None, None);
+    emit_library(&modules, &mut printer).unwrap();
 }
 
-fn emit_managed_objects(root_folder: &Path, vim_model: &vim_model::Model) {
+fn emit_managed_objects(root_folder: &Path, vim_model: &vim_model::Model) -> Vec<String> {
+    let mut modules = Vec::new();
     for (mo_type, mo) in vim_model.managed_objects.iter() {
         let file_name = mo_type.to_case(Case::Snake);
-        let file_name =  root_folder.join(format!("{}.rs", file_name));
-        let file = std::fs::File::create(&file_name).expect(&format!("Could not create {} file", file_name.display()));
+        modules.push(file_name.clone());
+        let file_path =  root_folder.join(format!("{}.rs", file_name));
+        let file = std::fs::File::create(&file_path).expect(&format!("Could not create {} file", file_path.display()));
         let mut printer = printer::FilePrinter::new(file, None, None);
         let mut emitter = rs_emitter::ManagedObjectEmitter::new(&mo, &mut printer, &vim_model);
         emitter.emit().unwrap();
     }
+    modules
 }
 
 fn emit_types(root_folder: &Path, vim_model: &vim_model::Model) {
@@ -57,4 +66,4 @@ fn emit_types(root_folder: &Path, vim_model: &vim_model::Model) {
     let mut printer = printer::FilePrinter::new(file, None, None);
     let mut emitter = TypesEmitter::new(vim_model, &mut printer);
     emitter.emit_data_types().unwrap();
-    }
+}

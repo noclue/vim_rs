@@ -1,6 +1,8 @@
+use std::borrow::Borrow;
 use std::cell::RefCell;
 use std::collections::HashSet;
 
+use crate::vim_model::HttpMethod;
 use crate::vim_model::ManagedObject;
 use crate::vim_model::Method;
 use crate::vim_model::Struct;
@@ -9,7 +11,6 @@ use crate::printer::Printer;
 use crate::vim_model::DataType;
 use super::common::emit_description;
 use super::errors::{Result, Error};
-use super::to_field_name;
 use super::to_fn_name;
 use super::to_type_name;
 use super::TypeDefResolver;
@@ -34,19 +35,19 @@ impl <'a> ManagedObjectEmitter <'a> {
 
     pub fn emit(&mut self) -> Result<()> {
         self.emit_imports()?;
-        self.emit_struct()?;
+        self.emit_mo_struct()?;
         self.emit_impl()?;
+        self.emit_request_types()?;
         // self.emit_footer()?;
         Ok(())
     }
 
     fn emit_imports(&mut self) -> Result<()> {
         self.printer.println("use std::sync::Arc;")?;
-        self.printer.println("use url_template::substitute;")?;
-        self.printer.println("use vim_client::{VimClient, Result};")?;
+        self.printer.println("use crate::vim_client::{VimClient, Result};")?;
         let imported_types = self.get_imported_types()?;
         for type_name in &imported_types {
-            self.printer.println(&format!("use types::{type_name};"))?;
+            self.printer.println(&format!("use crate::types::{type_name};"))?;
         }
         Ok(())
     }
@@ -61,8 +62,8 @@ impl <'a> ManagedObjectEmitter <'a> {
             let Some(request_type) = get_request_type(method, self.vim_model)? else {
                 continue;
             };
-            for (_, param) in &request_type.borrow().fields {
-                self.accumulate_type_reference(&param.vim_type, &mut types)?;
+            for (_, field) in &request_type.borrow().fields {
+                self.accumulate_type_reference(&field.vim_type, &mut types)?;
             }
         }
         Ok(Vec::from_iter(types))
@@ -89,8 +90,12 @@ impl <'a> ManagedObjectEmitter <'a> {
             return Ok("VimAny".to_string());
         }
         let rust_name = to_type_name(ref_name);
-        if let Some(_) = self.vim_model.structs.get(ref_name) {
-            Ok(rust_name)
+        if let Some(struct_ref) = self.vim_model.structs.get(ref_name) {
+            if struct_ref.borrow().has_children() {
+                Ok(format!("{}Trait", rust_name))
+            } else {
+                Ok(rust_name)
+            }
         } else if let Some(_) = self.vim_model.enums.get(ref_name) {
             Ok(rust_name)
         } else {
@@ -98,7 +103,7 @@ impl <'a> ManagedObjectEmitter <'a> {
         }
     }
 
-    fn emit_struct(&mut self) -> Result<()> {
+    fn emit_mo_struct(&mut self) -> Result<()> {
         emit_description(self.printer, &self.mo.description)?;
         let struct_name = to_type_name(&self.mo.name);
         self.printer.println(&format!("pub struct {} {{", struct_name))?;
@@ -151,30 +156,64 @@ impl <'a> ManagedObjectEmitter <'a> {
         self.printer.print(&format!("pub async fn {}(&self", method_name))?;
 
         if let Some(request_type) = request_type {
-            for (param_name, param) in &request_type.borrow().fields {
-                self.printer.print(&format!(", {}: {}", param_name, self.tdf.to_rust_param_type(&param.vim_type)?))?;
+            for (_, field) in &request_type.borrow().fields {
+                self.printer.print(&format!(", {}: {}", field.rust_name(), self.tdf.to_rust_param_type(field, None)?))?;
             }
         }
         match &method.output {
             Some(output) => {
-                self.printer.print(&format!(") -> Result<{}> {{", self.tdf.to_rust_field_type(output)?))?;
+                let res_type = self.tdf.to_rust_field_type(output)?;
+                if method.optional_response {
+                    self.printer.print(&format!(") -> Result<Option<{}>> {{", res_type))?;
+                } else {
+                    self.printer.print(&format!(") -> Result<{}> {{", res_type))?;
+                }
             }
             None => {
                 self.printer.print(") -> Result<()> {")?;
             }
             
         }
+        self.printer.indent();
         self.printer.newline()?;
-
+        if let Some(request_type) = request_type {
+            self.printer.print_indent()?;
+            self.printer.print(&format!("let input = {} {{", request_type.borrow().rust_name()))?;
+            for (_, field) in &request_type.borrow().fields {
+                self.printer.print(&format!("{}, ", field.rust_name()))?;
+            }
+            self.printer.print("};")?;
+            self.printer.newline()?;
+        }
         
-        // for (param_name, param) in &method.pa {
-        //     self.printer.print(&format!(", {}: {}", param_name, self.resolve_param_type(param.vim_type)?))?;
-        // }
+        self.printer.println(&format!(r#"let path = format!("{}", moId = &self.mo_id);"#, method.path))?;
 
+        match method.http_method {
+            HttpMethod::Get => {
+                self.printer.println("let req = self.client.get_request(&path);")?;
+            }
+            HttpMethod::Post => {
+                if request_type.is_some() {
+                    self.printer.println("let req = self.client.post_request(&path, &input);")?;
+                } else {
+                    self.printer.println("let req = self.client.post_bare(&path);")?;
+                }
+            }
+        }
 
-        // self.printer.indent();
-        // self.emit_method_args(method)?;
-        // self.printer.dedent();
+        match &method.output {
+            Some(_) => {
+                if method.optional_response {
+                    self.printer.println("Ok(self.client.execute_option(req).await?)")?;
+                } else {
+                    self.printer.println("Ok(self.client.execute(req).await?)")?;
+                }
+            }
+            None => {
+                self.printer.println("Ok(self.client.execute_void(req).await?)")?;
+            }   
+        }
+        self.printer.dedent();
         self.printer.println("}")?;
         Ok(())
     }
@@ -221,11 +260,11 @@ impl <'a> ManagedObjectEmitter <'a> {
         };
         self.printer.println("///")?;
         self.printer.println("/// ## Parameters:")?;
-        for (param_name, param) in &request_type.borrow().fields {
-            let param_name = to_field_name(param_name);
+        for (_, field) in &request_type.borrow().fields {
+            let field_name = field.rust_name();
             self.printer.println("///")?;
-            self.printer.println(&format!("/// ### {param_name}"))?;
-            match &param.description {
+            self.printer.println(&format!("/// ### {field_name}"))?;
+            match &field.description {
                 Some(desc) => {
                     for line in desc.trim().split('\n') {
                         self.printer.println(&format!("/// {}", line))?;
@@ -240,7 +279,54 @@ impl <'a> ManagedObjectEmitter <'a> {
         Ok(())
     }
 
+    fn emit_request_types(&mut self) -> Result<()> {
+        for method in self.mo.methods.iter() {
+            let request_type = get_request_type(method, self.vim_model)?;
+            let Some(request_type) = request_type else {
+                continue;
+            };
+            self.emit_request_type(request_type)?;
+        }
+        Ok(())
+    }
+
+    fn emit_request_type(&mut self, request_type: &RefCell<Struct>) -> Result<()> {
+        let struct_name = request_type.borrow().rust_name();
+        self.printer.println("#[derive(serde::Serialize)]")?;
+        self.printer.println(r#"#[serde(tag="_typeName")]"#)?;
+        if self.needs_lifetime(request_type.borrow().borrow()) {
+            self.printer.println(&format!("struct {}<'a> {{", struct_name))?;
+        } else {
+            self.printer.println(&format!("struct {} {{", struct_name))?;
+        }
+        self.printer.indent();
+        for (_, field) in &request_type.borrow().fields {
+            self.printer.println(&format!("{}: {},", field.rust_name(), self.tdf.to_rust_param_type(field, Some("a".to_string()))?))?;
+        }
+        self.printer.dedent();
+        self.printer.println("}")?;
+        Ok(())
+    }
+
+    fn needs_lifetime(&self, struct_ref: &Struct) -> bool {
+        for (_, field) in &struct_ref.fields {
+            match &field.vim_type {
+                DataType::String => return true,
+                DataType::DateTime => return true,
+                DataType::Array(_) => return true,
+                DataType::Reference(ref_name) => {
+                    if self.vim_model.structs.get(ref_name).is_some() {
+                        return true;
+                    }
+                },
+                _ => {}
+            }
+        }
+        false
+    }
+    
 }
+
 
 fn get_request_type<'a>(method: &Method, vim_model: &'a Model) -> Result<Option<&'a RefCell<Struct>>> {
     // Input type is a synthetic struct referece or none. We do not have array input type.
