@@ -1,5 +1,6 @@
 mod url_template;
 mod vim_client;
+mod test;
 
 use std::sync::Arc;
 use url_template::substitute;

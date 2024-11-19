@@ -44,7 +44,11 @@ impl <'a> ManagedObjectEmitter <'a> {
 
     fn emit_imports(&mut self) -> Result<()> {
         self.printer.println("use std::sync::Arc;")?;
-        self.printer.println("use crate::vim_client::{VimClient, Result};")?;
+        if self.mo.methods.len() > 0 {
+            self.printer.println("use crate::vim_client::{VimClient, Result};")?;
+        } else {
+            self.printer.println("use crate::vim_client::{VimClient};")?;
+        }
         let imported_types = self.get_imported_types()?;
         for type_name in &imported_types {
             self.printer.println(&format!("use crate::types::{type_name};"))?;
@@ -291,9 +295,15 @@ impl <'a> ManagedObjectEmitter <'a> {
     }
 
     fn emit_request_type(&mut self, request_type: &RefCell<Struct>) -> Result<()> {
-        let struct_name = request_type.borrow().rust_name();
         self.printer.println("#[derive(serde::Serialize)]")?;
-        self.printer.println(r#"#[serde(tag="_typeName")]"#)?;
+        let struct_ref= request_type.borrow();
+        let struct_name = struct_ref.rust_name();
+        let discriminator = struct_ref.discriminator_value.clone().unwrap_or(struct_ref.name.to_string()); 
+        if struct_name == discriminator {
+            self.printer.println(r#"#[serde(tag="_typeName")]"#)?;
+        } else {
+            self.printer.println(&format!(r#"#[serde(rename = "{discriminator}", tag = "_typeName")]"#))?;
+        }
         if self.needs_lifetime(request_type.borrow().borrow()) {
             self.printer.println(&format!("struct {}<'a> {{", struct_name))?;
         } else {
@@ -301,7 +311,14 @@ impl <'a> ManagedObjectEmitter <'a> {
         }
         self.printer.indent();
         for (_, field) in &request_type.borrow().fields {
-            self.printer.println(&format!("{}: {},", field.rust_name(), self.tdf.to_rust_param_type(field, Some("a".to_string()))?))?;
+            let field_name = field.rust_name();
+            if field.optional {
+                self.printer.println(&format!("#[serde(default, skip_serializing_if = \"Option::is_none\")]"))?;
+            }
+            if field_name != field.name {
+                self.printer.println(&format!(r#"#[serde(rename = "{}")]"#, field.name))?;
+            }    
+            self.printer.println(&format!("{}: {},", field_name, self.tdf.to_rust_param_type(field, Some("a".to_string()))?))?;
         }
         self.printer.dedent();
         self.printer.println("}")?;
