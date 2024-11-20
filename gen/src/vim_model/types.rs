@@ -57,7 +57,7 @@ pub struct Enum {
 pub struct Struct {
     pub name: String,
     pub description: Option<String>,
-    pub properties: IndexMap<String, Property>,
+    pub fields: IndexMap<String, Field>,
     pub parent: Option<String>,
     pub discriminator_value: Option<String>,
     pub children: Vec<String>,
@@ -98,14 +98,17 @@ impl Struct {
 ///   type: string
 /// ```
 #[derive(Debug, PartialEq)]
-pub struct Property {
+pub struct Field {
     pub name: String,
     pub description: Option<String>,
     pub optional: bool,
-    pub vim_type: VimType,
+    pub vim_type: DataType,
+    /// Indicator that the field needs to be rendered as pointer type to break a cyclic reference
+    /// and thus keep the struct type Sized.
+    pub require_box: bool,
 }
 
-impl Property {
+impl Field {
     pub fn rust_name(&self) -> String {
         self.name.to_case(Case::Snake).into_safe()
     }
@@ -127,7 +130,7 @@ impl Property {
 /// format: int64
 /// ```
 #[derive(Debug, PartialEq)]
-pub enum VimType {
+pub enum DataType {
     Boolean,
     String,
     Int8,
@@ -138,44 +141,44 @@ pub enum VimType {
     Double,
     DateTime,
     Binary,
-    Array(Box<VimType>),
+    Array(Box<DataType>),
     Reference(String),
 }
 
-impl TryFrom<&RefOr<Schema>> for VimType {
+impl TryFrom<&RefOr<Schema>> for DataType {
     type Error = super::Error;
     fn try_from(schema: &RefOr<Schema>) -> Result<Self> {
         match schema {
-            RefOr::Ref { reference, ..} => Ok(VimType::Reference(
+            RefOr::Ref { reference, ..} => Ok(DataType::Reference(
                 reference_to_schema_name(reference)?.to_string(),
             )),
             RefOr::Val(inline_schema) => match inline_schema.as_ref() {
                 Schema {
                     schema_type: Some(SchemaType::Boolean),
                     ..
-                } => Ok(VimType::Boolean),
+                } => Ok(DataType::Boolean),
                 Schema {
                     schema_type: Some(SchemaType::String),
                     format: Some(DataFormat::DateTime),
                     ..
-                } => Ok(VimType::DateTime),
+                } => Ok(DataType::DateTime),
                 Schema {
                     schema_type: Some(SchemaType::String),
                     format: Some(DataFormat::Byte),
                     ..
-                } => Ok(VimType::Binary),
+                } => Ok(DataType::Binary),
                 Schema {
                     schema_type: Some(SchemaType::String),
                     ..
-                } => Ok(VimType::String),
+                } => Ok(DataType::String),
                 Schema {
                     schema_type: Some(SchemaType::Number),
                     ..
                 } => match &inline_schema.format {
-                    Some(DataFormat::Int32) => Ok(VimType::Int32),
-                    Some(DataFormat::Int64) => Ok(VimType::Int64),
-                    Some(DataFormat::Float) => Ok(VimType::Float),
-                    Some(DataFormat::Double) => Ok(VimType::Double),
+                    Some(DataFormat::Int32) => Ok(DataType::Int32),
+                    Some(DataFormat::Int64) => Ok(DataType::Int64),
+                    Some(DataFormat::Float) => Ok(DataType::Float),
+                    Some(DataFormat::Double) => Ok(DataType::Double),
                     Some(format) => Err(super::Error::UnsupportedFormat(format.to_string())),
                     None => Err(super::Error::MissingFormat(SchemaType::Number.to_string())),
                 },
@@ -186,21 +189,21 @@ impl TryFrom<&RefOr<Schema>> for VimType {
                     Schema {
                         format: Some(DataFormat::Int32),
                         ..
-                    } => Ok(VimType::Int32),
+                    } => Ok(DataType::Int32),
                     Schema {
                         format: Some(DataFormat::Int64),
                         ..
-                    } => Ok(VimType::Int64),
+                    } => Ok(DataType::Int64),
                     Schema {
                         minimum: Some(-128.0),
                         maximum: Some(127.0),
                         ..
-                    } => Ok(VimType::Int8),
+                    } => Ok(DataType::Int8),
                     Schema {
                         minimum: Some(-32768.0),
                         maximum: Some(32767.0),
                         ..
-                    } => Ok(VimType::Int16),
+                    } => Ok(DataType::Int16),
                     _ => Err(super::Error::UnsupportedFormat(SchemaType::Integer.to_string())),
                 },
                 Schema {
@@ -208,8 +211,8 @@ impl TryFrom<&RefOr<Schema>> for VimType {
                     items: Some(items),
                     ..
                 } => {
-                    let array_type = VimType::try_from(items)?;
-                    Ok(VimType::Array(Box::new(array_type)))
+                    let array_type = DataType::try_from(items)?;
+                    Ok(DataType::Array(Box::new(array_type)))
                 }
                 _ => Err(super::Error::UnsupportedType(format!(
                     "{:?}",
@@ -260,18 +263,59 @@ impl TryFrom<&RefOr<Schema>> for VimType {
 pub struct BoxType {
     pub name: String,
     pub description: Option<String>,
-    pub property_type: VimType,
+    pub property_type: DataType,
     pub discriminator_value: Option<String>,
+}
+
+#[derive(Debug, PartialEq)]
+pub struct ManagedObject {
+    pub name: String,
+    pub description: Option<String>,
+    pub methods: Vec<Method>,
+}
+
+#[derive(Debug, PartialEq)]
+pub struct Method {
+    pub name: String,
+    pub description: Option<String>,
+    pub path: String,
+    pub http_method: HttpMethod,
+    pub input: Option<DataType>,
+    pub output: Option<DataType>,
+    pub output_description: Option<String>,
+    pub error_description: Option<String>,
+    pub optional_response: bool,
+}
+
+#[derive(Debug, PartialEq)]
+pub enum HttpMethod {
+    Get,
+    Post,
 }
 
 /// Represents the VIM API data model build from OpenAPI model.
 #[derive(Debug, PartialEq)]
-pub struct VimModel {
+pub struct Model {
     pub enums: IndexMap<String, Enum>,
     pub structs: IndexMap<String, RefCell<Struct>>,
+    pub request_types: IndexMap<String, RefCell<Struct>>,
     pub any_value_types: IndexMap<String, BoxType>,
+    pub managed_objects: IndexMap<String, ManagedObject>,
 }
 
+impl Model {
+    pub fn is_struct_type(&self, vim_type: &DataType) -> bool {
+        match vim_type {
+            DataType::Reference(ref_name) => {
+                if let Some(struct_type) = self.structs.get(ref_name) {
+                    return struct_type.borrow().name != "Any";
+                }
+            }
+            _ => {}
+        }
+        false
+    }
+}
 
 #[cfg(test)]
 mod tests {
@@ -283,8 +327,8 @@ mod tests {
             schema_type: Some(SchemaType::String),
             ..Default::default()
         };
-        let typ = VimType::try_from(&RefOr::Val(Box::new(schema))).unwrap();
-        assert_eq!(typ, VimType::String);
+        let typ = DataType::try_from(&RefOr::Val(Box::new(schema))).unwrap();
+        assert_eq!(typ, DataType::String);
     }
 
     #[test]
@@ -294,8 +338,8 @@ mod tests {
             format: Some(DataFormat::DateTime),
             ..Default::default()
         };
-        let typ = VimType::try_from(&RefOr::Val(Box::new(schema))).unwrap();
-        assert_eq!(typ, VimType::DateTime);
+        let typ = DataType::try_from(&RefOr::Val(Box::new(schema))).unwrap();
+        assert_eq!(typ, DataType::DateTime);
     }
 
     #[test]
@@ -308,17 +352,18 @@ mod tests {
             }))),
             ..Default::default()
         };
-        let typ = VimType::try_from(&RefOr::Val(Box::new(schema))).unwrap();
-        assert_eq!(typ, VimType::Array(Box::new(VimType::String)));
+        let typ = DataType::try_from(&RefOr::Val(Box::new(schema))).unwrap();
+        assert_eq!(typ, DataType::Array(Box::new(DataType::String)));
     }
 
     #[test]
     fn test_unsafe_property_name() {
-        let prop = Property {
+        let prop = Field {
             name: "Crate".to_string(),
             description: None,
             optional: false,
-            vim_type: VimType::String,
+            vim_type: DataType::String,
+            require_box: false,
         };
         assert_eq!(prop.rust_name(), "crate_");
     }
@@ -328,7 +373,7 @@ mod tests {
         let str = Struct {
             name: "StructCrate_Enum".to_string(),
             description: None,
-            properties: IndexMap::new(),
+            fields: IndexMap::new(),
             parent: None,
             discriminator_value: None,
             children: vec![],

@@ -1,134 +1,21 @@
 mod url_template;
+mod vim_client;
+mod test;
 
 use std::sync::Arc;
-
-use tokio::sync::RwLock;
 use url_template::substitute;
-use vim::vim;
-
-const AUTHN_HEADER: &str = "vmware-api-session-id";
-const API_RELEASE: &str = "8.0.2.0";
-
-#[derive(Debug, thiserror::Error)]
-pub enum Error {
-    #[error("MethodFault: {0:?}")]
-    MethodFault(Box<dyn vim::MethodFaultTrait>),
-    #[error("Reqwest error: {0}")]
-    ReqwestError(#[from] reqwest::Error),
-    #[error("Serde error: {0}")]
-    SerdeError(#[from] serde_json::Error),
-    #[error("Missing or Invalid session key")]
-    MissingOrInvalidSessionKey,
-    #[error("Invalid object type {0} expected: {1}")]
-    InvalidObjectType(String, String),
-}
-
-pub type Result<T> = std::result::Result<T, Error>;
-
-pub struct VimClient {
-    pub http_client: reqwest::Client,
-    pub session_key: RwLock<Option<String>>,
-    pub base_url: String,
-}
-
-/// Client for the VI JSON API that handles basic HTTP requests and authentication headers
-impl VimClient {
-
-    /// Create a new client for the VI/JSON API
-    /// 
-    /// * `http_client` - reqwest::Client instance with preset TCP, TLS and HTTP options
-    /// * `server_address` - vCenter server FQDN or IP address
-    /// * `release` - vCenter API release version e.g. "8.0.3.0". If not provided, the default is 
-    ///              API_RELEASE
-    pub fn new(http_client: reqwest::Client, server_address: &str, release: Option<&str>) -> Self {
-        let release = release.unwrap_or(API_RELEASE);
-        // From the VI/JSON OpenAPI spec https://{vcenter-host}/sdk/vim25/{release}
-        let base_url = format!("https://{}/sdk/vim25/{}", server_address, release);
-        let session_key = RwLock::new(None);
-        Self {
-            http_client,
-            session_key,
-            base_url: base_url.to_string(),
-        }
-    }
-
-    /// Prepare GET request
-    pub fn get_request(&self, path: &str) -> reqwest::RequestBuilder
-    {
-        let url = format!("{}{}", self.base_url, path);
-        self.http_client.get(&url)
-    }
-
-    /// Prepare POST request with a body
-    pub fn post_request<B>(&self, path: &str, payload: &B) -> reqwest::RequestBuilder
-    where
-        B: serde::Serialize,
-    {
-        let url = format!("{}{}", self.base_url, path);
-        let req = self.http_client.post(&url);
-        req.header("Content-Type", "application/json").json(payload)
-    }
-
-    /// Prepare POST request without a body
-    pub fn post_bare(&self, path: &str) -> reqwest::RequestBuilder
-    {
-        let url = format!("{}{}", self.base_url, path);
-        self.http_client.post(&url)
-    }
-
-    /// Execute a request that returns a response body
-    pub async fn execute<T>(&self, mut req: reqwest::RequestBuilder) -> Result<T> 
-    where T: serde::de::DeserializeOwned 
-    {
-        req = self.prepare(req).await;
-        let res = req.send().await?;
-        let res = self.process_response(res).await?;
-        let content: T = res.json().await?;
-        Ok(content)
-    }
-
-    /// Execute a request that does not return a response body
-    pub async fn execute_void(&self, mut req: reqwest::RequestBuilder) -> Result<()> 
-    {
-        req = self.prepare(req).await;
-        let res = req.send().await?;
-        let _ = self.process_response(res).await?;
-        Ok(())
-    }
-
-    /// Add authn header to request
-    async fn prepare(&self, mut req: reqwest::RequestBuilder) -> reqwest::RequestBuilder {
-        let session_key = self.session_key.read().await;
-        if let Some(value) = session_key.as_ref() {
-            req = req.header(AUTHN_HEADER, value);
-        }
-        req
-    }
-
-    /// Handle authn header update and error unmarsalling
-    async fn process_response(&self, res: reqwest::Response) -> Result<reqwest::Response> {
-        if res.status().is_success() && res.headers().contains_key(AUTHN_HEADER) {
-            let session_key = res.headers().get(AUTHN_HEADER).unwrap().to_str().map_err(|_| Error::MissingOrInvalidSessionKey)?.to_string();
-            let mut key_holder = self.session_key.write().await;
-            *key_holder = Some(session_key);
-        }
-        if !res.status().is_success() {
-            let fault: Box<dyn vim::MethodFaultTrait> = res.json().await?;
-            return Err(Error::MethodFault(fault));
-        }
-        Ok(res)
-    }
-
-}
-
+use vim::types;
+use vim::types::ManagedObjectReference;
+use vim_client::{VimClient, Result};
 pub struct ServiceInstance {
     client: Arc<VimClient>,
     mo_id: String,
 }
 
 impl ServiceInstance {
-    pub async fn get_content(&self) -> Result<vim::ServiceContent> {
-        let path = substitute("/ServiceInstance/{moId}/content", &vec![("moId", &self.mo_id)]);
+    pub async fn content(&self) -> Result<types::ServiceContent> {
+        //let path = substitute("/ServiceInstance/{moId}/content", &vec![("moId", &self.mo_id)]);
+        let path = format!("/ServiceInstance/{moId}/content", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         Ok(self.client.execute(req).await?)
     }
@@ -141,7 +28,7 @@ pub struct SessionManager {
 }
 
 impl SessionManager {
-    pub fn new(client: Arc<VimClient>, mo_ref: &vim::ManagedObjectReference) -> Result<Self> {
+    pub fn new(client: Arc<VimClient>, mo_ref: &ManagedObjectReference) -> Result<Self> {
         // TODO Add PartialEq to enums in vim.rs
         // if mo_ref.r#type != vim::MoTypesEnum::SessionManager {
         //     return Err(Error::InvalidObjectType(mo_ref.type_.clone(), "SessionManager".to_string()));
@@ -151,26 +38,74 @@ impl SessionManager {
             mo_id: mo_ref.value.clone(),
         })
     }
-    pub async fn login(&self, user_name: &str, password: &str, locale: Option<&str>) -> Result<vim::UserSession> {
-        let login = vim::LoginRequestType {
-            user_name: user_name.to_string(),
-            password: password.to_string(),
-            locale: locale.map(|s| s.to_string()),
-        };
-        let path = substitute("/SessionManager/{moId}/Login", &vec![("moId", &self.mo_id)]);
-        let req = self.client.post_request(&path, &login);
-        let session: vim::UserSession = self.client.execute(req).await?;
-        Ok(session)
+    pub async fn login(&self, user_name: &str, password: &str, locale: Option<&str>) -> Result<types::UserSession> {
+        let input = LoginRequestType {user_name,password,locale,};
+        let path = format!("/SessionManager/{moId}/Login", moId = &self.mo_id);
+        let req = self.client.post_request(&path, &input);
+        Ok(self.client.execute(req).await?)
     }
     pub async fn logout(&self) -> Result<()> {
-        let path = substitute("/SessionManager/{moId}/Logout", &vec![("moId", &self.mo_id)]);
+        let path = format!("/SessionManager/{moId}/Logout", moId =&self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute_void(req).await?;
-        Ok(())
+        Ok(self.client.execute_void(req).await?)
     }
 
 }
 
+/// The parameters of *SessionManager.Login*.
+#[derive(Debug, serde::Deserialize, serde::Serialize)]
+#[serde(tag="_typeName")]
+pub struct LoginRequestType<'a> {
+    // Fields of LoginRequestType
+    /// The *ID*
+    /// of the user who is logging on to the server.
+    #[serde(rename = "userName")]
+    pub user_name: &'a str,
+    /// The *HostAccountSpec.password*
+    /// of the user who is logging on to the server.
+    pub password: &'a str,
+    /// A two-character ISO-639 language ID (like "en")
+    /// optionally followed by an
+    /// underscore and a two-character ISO 3166 country ID (like "US").
+    /// 
+    /// Examples are "de", "fr\_CA", "zh", "zh\_CN", and "zh\_TW".
+    /// Note: The method uses the server default locale when
+    /// a locale is not provided. This default can be configured in the
+    /// server configuration file. If unspecified, it defaults to the
+    /// locale of the server environment or English ("en") if unsupported.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub locale: Option<&'a str>,
+}
+
+pub struct AlarmManager {
+    client: Arc<VimClient>,
+    mo_id: String,
+}
+
+/// The parameters of *AlarmManager.GetAlarm*.
+#[derive(Debug, serde::Serialize)]
+#[serde(tag="_typeName")]
+pub struct GetAlarmRequestType<'a> {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub entity: &'a Option<types::ManagedObjectReference>,
+}
+
+impl AlarmManager {
+    pub fn new(client: Arc<VimClient>, mo_ref: &types::ManagedObjectReference) -> Result<Self> {
+        Ok(Self {
+            client,
+            mo_id: mo_ref.value.clone(),
+        })
+    }
+    pub async fn get_alarm(&self, entity: &Option<types::ManagedObjectReference>) -> Result<Option<Vec<types::ManagedObjectReference>>> {
+        let body = GetAlarmRequestType {
+            entity: entity,
+        };
+        let path = substitute("/AlarmManager/{moId}/GetAlarm", &vec![("moId", &self.mo_id)]);
+        let req = self.client.post_request(&path, &body);
+        Ok(self.client.execute_option(req).await?)
+    }
+}
 
 
 #[cfg(test)]
@@ -179,26 +114,26 @@ mod tests {
     use super::{VimClient, ServiceInstance, SessionManager};
 
     use reqwest::ClientBuilder;
-    use vim::vim;
-    use ::vim::vim::{CastInto, VirtualDeviceTrait};
+    use vim::types;
+    use vim::types::{CastInto, VirtualDeviceTrait};
 
     #[test]
     fn it_works() {
-        let login = vim::LoginRequestType{
-            user_name: "administrator@vsphere.local".to_string(),
-            password: "secret!".to_string(),
+        let login = super::LoginRequestType{
+            user_name: "administrator@vsphere.local",
+            password: "secret!",
             locale: None,
         };
         let s = serde_json::to_string(&login).unwrap();
         println!("{}", s);
-        let login1 = serde_json::from_str::<vim::LoginRequestType>(&s).unwrap();
+        let login1 = serde_json::from_str::<super::LoginRequestType>(&s).unwrap();
         assert_eq!(login.user_name, login1.user_name);
         print!("login1: {:?}", login1);
     }
 
     #[test]
     fn test_ethernet() {
-        let e1000 = vim::VirtualE1000 {
+        let e1000 = types::VirtualE1000 {
             mac_address: Some("00:50:56:aa:bb:cc".to_string()),
             wake_on_lan_enabled: Some(true),
             address_type: Some("Generated".to_string()),
@@ -220,7 +155,7 @@ mod tests {
         println!("{}", s);
         let vd: Box<dyn VirtualDeviceTrait> = serde_json::from_str(&s).unwrap();
         assert_eq!(vd.get_key(), 1000);
-        let eth: Box<dyn vim::VirtualEthernetCardTrait> = vd.into_box().unwrap();
+        let eth: Box<dyn types::VirtualEthernetCardTrait> = vd.into_box().unwrap();
         assert_eq!(*eth.get_mac_address(), Some("00:50:56:aa:bb:cc".to_string()));
         println!("{:?}", eth);
     }
@@ -234,10 +169,10 @@ mod tests {
                                 .unwrap();
         let res = client.get("https://vc8.home/sdk/vim25/8.0.3.0/ServiceInstance/ServiceInstance/content").send().await.unwrap();
         if res.status() != 200 {
-            let fault: Box<dyn vim::MethodFaultTrait> = res.json().await.unwrap();
+            let fault: Box<dyn types::MethodFaultTrait> = res.json().await.unwrap();
             panic!("Failed to get content: {:?}", fault);
         }
-        let content: vim::ServiceContent = res.json().await.unwrap();
+        let content: types::ServiceContent = res.json().await.unwrap();
         println!("{:?}", content.about);
     }
 
@@ -253,7 +188,7 @@ mod tests {
             client: client.clone(),
             mo_id: "ServiceInstance".to_string(),
         };
-        let content = service_instance.get_content().await.unwrap();
+        let content = service_instance.content().await.unwrap();
         let session_manager_mo_ref = content.session_manager.unwrap();
         let session_manager = SessionManager::new(client.clone(), &session_manager_mo_ref).unwrap();
         let session = session_manager.login(
@@ -261,6 +196,16 @@ mod tests {
                             &env::var("VC_PASSWORD").unwrap(), 
                             None).await.unwrap();
         println!("{:?}", session);
+
+        let alarm_manager_mo_ref = content.alarm_manager.unwrap();
+        let alarm_manager = super::AlarmManager::new(client.clone(), &alarm_manager_mo_ref).unwrap();
+        let entity = Some(types::ManagedObjectReference {
+            r#type: types::MoTypesEnum::VirtualMachine,
+            value: "vm-1".to_string(),
+        });
+        let alarm = alarm_manager.get_alarm(&entity).await.unwrap();
+        println!("{:?}", alarm);
+
         session_manager.logout().await.unwrap();
         println!("Logged out");
     }
