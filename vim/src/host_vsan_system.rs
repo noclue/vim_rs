@@ -1,10 +1,10 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
-use crate::types::VsanHostClusterStatus;
-use crate::types::ManagedObjectReference;
-use crate::types::VsanHostConfigInfo;
 use crate::types::HostMaintenanceSpec;
 use crate::types::HostScsiDisk;
+use crate::types::ManagedObjectReference;
+use crate::types::VsanHostClusterStatus;
+use crate::types::VsanHostConfigInfo;
 use crate::types::VsanHostDiskMapping;
 use crate::types::VsanHostDiskResult;
 /// The VsanSystem managed object type exposes VSAN configuration

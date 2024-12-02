@@ -1,18 +1,18 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
-use crate::types::VStorageObjectSnapshotInfo;
-use crate::types::VslmVClockInfo;
-use crate::types::ManagedObjectReference;
-use crate::types::VirtualMachineProfileSpecTrait;
-use crate::types::KeyValue;
-use crate::types::VStorageObjectStateInfo;
-use crate::types::VslmInfrastructureObjectPolicy;
-use crate::types::VslmCloneSpec;
 use crate::types::CryptoSpecTrait;
 use crate::types::Id;
+use crate::types::KeyValue;
+use crate::types::ManagedObjectReference;
 use crate::types::VStorageObject;
-use crate::types::VslmRelocateSpec;
+use crate::types::VStorageObjectSnapshotInfo;
+use crate::types::VStorageObjectStateInfo;
+use crate::types::VirtualMachineProfileSpecTrait;
+use crate::types::VslmCloneSpec;
 use crate::types::VslmCreateSpec;
+use crate::types::VslmInfrastructureObjectPolicy;
+use crate::types::VslmRelocateSpec;
+use crate::types::VslmVClockInfo;
 /// Interface to manage virtual storage object on an ESXi host.
 pub struct HostVStorageObjectManager {
     client: Arc<VimClient>,

@@ -1,7 +1,7 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
-use crate::types::VchaClusterHealth;
 use crate::types::ManagedObjectReference;
+use crate::types::VchaClusterHealth;
 /// FailoverClusterManager provides operations to manage a vCenter
 /// High Availability Cluster (VCHA Cluster).
 /// 

@@ -1,20 +1,20 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
-use crate::types::DatacenterConfigInfo;
-use crate::types::Tag;
-use crate::types::DatacenterBasicConnectInfo;
-use crate::types::CustomFieldValueTrait;
-use crate::types::OptionValueTrait;
-use crate::types::ManagedObjectReference;
-use crate::types::ManagedEntityStatusEnum;
-use crate::types::Permission;
-use crate::types::HostConnectInfo;
 use crate::types::AlarmState;
-use crate::types::EventTrait;
-use crate::types::DatacenterConfigSpec;
-use crate::types::VirtualMachineConfigOptionDescriptor;
-use crate::types::HostConnectSpec;
 use crate::types::CustomFieldDef;
+use crate::types::CustomFieldValueTrait;
+use crate::types::DatacenterBasicConnectInfo;
+use crate::types::DatacenterConfigInfo;
+use crate::types::DatacenterConfigSpec;
+use crate::types::EventTrait;
+use crate::types::HostConnectInfo;
+use crate::types::HostConnectSpec;
+use crate::types::ManagedEntityStatusEnum;
+use crate::types::ManagedObjectReference;
+use crate::types::OptionValueTrait;
+use crate::types::Permission;
+use crate::types::Tag;
+use crate::types::VirtualMachineConfigOptionDescriptor;
 /// The *Datacenter* managed object provides the interface to the common container
 /// object for hosts, virtual machines, networks, and datastores.
 /// 

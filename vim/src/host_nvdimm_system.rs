@@ -1,10 +1,10 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
-use crate::types::NvdimmSystemInfo;
-use crate::types::NvdimmPMemNamespaceCreateSpec;
-use crate::types::NvdimmNamespaceCreateSpec;
 use crate::types::ManagedObjectReference;
+use crate::types::NvdimmNamespaceCreateSpec;
 use crate::types::NvdimmNamespaceDeleteSpec;
+use crate::types::NvdimmPMemNamespaceCreateSpec;
+use crate::types::NvdimmSystemInfo;
 /// Managed object responsible for reading and configuring
 /// Non-Volatile DIMMs.
 pub struct HostNvdimmSystem {

@@ -1,20 +1,20 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
-use crate::types::DvsCreateSpec;
-use crate::types::FolderNewHostSpec;
-use crate::types::VirtualMachineConfigSpec;
-use crate::types::CustomFieldValueTrait;
-use crate::types::ClusterConfigSpec;
 use crate::types::AlarmState;
-use crate::types::ManagedEntityStatusEnum;
+use crate::types::ClusterConfigSpec;
 use crate::types::ClusterConfigSpecEx;
-use crate::types::EventTrait;
-use crate::types::ManagedObjectReference;
-use crate::types::HostConnectSpec;
 use crate::types::ComputeResourceConfigSpecTrait;
-use crate::types::Tag;
 use crate::types::CustomFieldDef;
+use crate::types::CustomFieldValueTrait;
+use crate::types::DvsCreateSpec;
+use crate::types::EventTrait;
+use crate::types::FolderNewHostSpec;
+use crate::types::HostConnectSpec;
+use crate::types::ManagedEntityStatusEnum;
+use crate::types::ManagedObjectReference;
 use crate::types::Permission;
+use crate::types::Tag;
+use crate::types::VirtualMachineConfigSpec;
 /// The *Folder* managed object is a container for storing and organizing
 /// inventory objects.
 /// 

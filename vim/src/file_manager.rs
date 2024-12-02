@@ -1,7 +1,7 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
-use crate::types::ManagedObjectReference;
 use crate::types::FileLockInfoResult;
+use crate::types::ManagedObjectReference;
 /// This managed object type provides a way to manage and manipulate files and
 /// folders on datastores.
 /// 

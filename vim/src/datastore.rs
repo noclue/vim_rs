@@ -1,21 +1,21 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
-use crate::types::CustomFieldValueTrait;
-use crate::types::CustomFieldDef;
-use crate::types::Permission;
-use crate::types::Tag;
 use crate::types::AlarmState;
-use crate::types::EventTrait;
-use crate::types::StoragePlacementResult;
-use crate::types::DatastoreSummary;
+use crate::types::CustomFieldDef;
+use crate::types::CustomFieldValueTrait;
 use crate::types::DatastoreCapability;
-use crate::types::ManagedObjectReference;
-use crate::types::DatastoreInfoTrait;
-use crate::types::StorageIormInfo;
-use crate::types::DatastoreMountPathDatastorePair;
 use crate::types::DatastoreHostMount;
+use crate::types::DatastoreInfoTrait;
+use crate::types::DatastoreMountPathDatastorePair;
+use crate::types::DatastoreSummary;
 use crate::types::DatastoreVVolContainerFailoverPair;
+use crate::types::EventTrait;
 use crate::types::ManagedEntityStatusEnum;
+use crate::types::ManagedObjectReference;
+use crate::types::Permission;
+use crate::types::StorageIormInfo;
+use crate::types::StoragePlacementResult;
+use crate::types::Tag;
 /// Represents a storage location for virtual machine files.
 /// 
 /// A storage location can be a

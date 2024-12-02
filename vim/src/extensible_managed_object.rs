@@ -1,7 +1,7 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
-use crate::types::CustomFieldValueTrait;
 use crate::types::CustomFieldDef;
+use crate::types::CustomFieldValueTrait;
 /// *ExtensibleManagedObject* provides methods and properties that provide
 /// access to custom fields that may be associated with a managed object.
 /// 

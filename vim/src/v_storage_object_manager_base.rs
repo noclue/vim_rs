@@ -1,8 +1,8 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
 use crate::types::Id;
-use crate::types::VslmVClockInfo;
 use crate::types::ManagedObjectReference;
+use crate::types::VslmVClockInfo;
 /// Base interface to manage virtual storage object.
 pub struct VStorageObjectManagerBase {
     client: Arc<VimClient>,

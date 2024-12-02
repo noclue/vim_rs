@@ -1,19 +1,19 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
-use crate::types::HostIpRouteConfigTrait;
-use crate::types::HostNetworkConfig;
-use crate::types::CustomFieldValueTrait;
-use crate::types::HostIpRouteTableConfig;
-use crate::types::HostVirtualSwitchSpec;
-use crate::types::HostNetCapabilities;
-use crate::types::HostDnsConfigTrait;
 use crate::types::CustomFieldDef;
-use crate::types::PhysicalNicHintInfo;
-use crate::types::HostVirtualNicSpec;
-use crate::types::HostPortGroupSpec;
+use crate::types::CustomFieldValueTrait;
+use crate::types::HostDnsConfigTrait;
+use crate::types::HostIpRouteConfigTrait;
+use crate::types::HostIpRouteTableConfig;
+use crate::types::HostNetCapabilities;
 use crate::types::HostNetOffloadCapabilities;
-use crate::types::HostNetworkInfo;
+use crate::types::HostNetworkConfig;
 use crate::types::HostNetworkConfigResult;
+use crate::types::HostNetworkInfo;
+use crate::types::HostPortGroupSpec;
+use crate::types::HostVirtualNicSpec;
+use crate::types::HostVirtualSwitchSpec;
+use crate::types::PhysicalNicHintInfo;
 use crate::types::PhysicalNicLinkInfo;
 /// This managed object type describes networking host configuration and
 /// serves as the top level container for relevant networking

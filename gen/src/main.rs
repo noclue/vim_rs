@@ -49,6 +49,9 @@ fn emit_vim_bindings(vi_json_spec_path: &Path, root_folder: &Path) {
 fn emit_managed_objects(root_folder: &Path, vim_model: &vim_model::Model) -> Vec<String> {
     let mut modules = Vec::new();
     for (mo_type, mo) in vim_model.managed_objects.iter() {
+        if mo.methods.is_empty() {
+            continue; // Skip managed objects without methods
+        }
         let file_name = mo_type.to_case(Case::Snake);
         modules.push(file_name.clone());
         let file_path =  root_folder.join(format!("{}.rs", file_name));

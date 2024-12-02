@@ -1,10 +1,10 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
-use crate::types::HostFirewallInfo;
-use crate::types::HostFirewallDefaultPolicy;
-use crate::types::HostFirewallRulesetRulesetSpec;
 use crate::types::CustomFieldDef;
 use crate::types::CustomFieldValueTrait;
+use crate::types::HostFirewallDefaultPolicy;
+use crate::types::HostFirewallInfo;
+use crate::types::HostFirewallRulesetRulesetSpec;
 /// The FirewallSystem managed object describes the firewall configuration
 /// of the host.
 /// 

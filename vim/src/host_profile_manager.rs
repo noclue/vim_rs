@@ -1,21 +1,21 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
-use crate::types::HostProfileManagerHostToConfigSpecMap;
-use crate::types::ApplyProfileTrait;
 use crate::types::AnswerFile;
+use crate::types::AnswerFileCreateSpecTrait;
+use crate::types::AnswerFileStatusResult;
 use crate::types::ApplyHostProfileConfigurationSpec;
+use crate::types::ApplyProfileTrait;
+use crate::types::HostApplyProfile;
 use crate::types::HostConfigSpec;
 use crate::types::HostProfileManagerConfigTaskList;
+use crate::types::HostProfileManagerHostToConfigSpecMap;
 use crate::types::ManagedObjectReference;
-use crate::types::HostApplyProfile;
-use crate::types::ProfileDeferredPolicyOptionParameter;
 use crate::types::ProfileCreateSpecTrait;
-use crate::types::AnswerFileStatusResult;
+use crate::types::ProfileDeferredPolicyOptionParameter;
+use crate::types::ProfileMetadata;
+use crate::types::ProfilePolicyMetadata;
 use crate::types::ProfileProfileStructure;
 use crate::types::StructuredCustomizations;
-use crate::types::ProfileMetadata;
-use crate::types::AnswerFileCreateSpecTrait;
-use crate::types::ProfilePolicyMetadata;
 /// The *HostProfileManager* provides access to a list of
 /// *HostProfile*s and it defines methods to manipulate
 /// profiles and *AnswerFile*s.

@@ -1,12 +1,12 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
-use crate::types::ManagedObjectReference;
-use crate::types::UserPrivilegeResult;
-use crate::types::EntityPrivilege;
 use crate::types::AuthorizationDescription;
-use crate::types::Permission;
 use crate::types::AuthorizationPrivilege;
 use crate::types::AuthorizationRole;
+use crate::types::EntityPrivilege;
+use crate::types::ManagedObjectReference;
+use crate::types::Permission;
+use crate::types::UserPrivilegeResult;
 /// This managed object provides operations to query and update
 /// roles and permissions.
 /// 

@@ -1,25 +1,25 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
-use crate::types::ManagedObjectReference;
-use crate::types::VStorageObjectStateInfo;
-use crate::types::VslmInfrastructureObjectPolicySpec;
-use crate::types::VslmInfrastructureObjectPolicy;
-use crate::types::DiskCryptoSpec;
 use crate::types::CryptoSpecTrait;
-use crate::types::VslmCreateSpec;
-use crate::types::VslmVClockInfo;
-use crate::types::VslmTagEntry;
 use crate::types::DiskChangeInfo;
+use crate::types::DiskCryptoSpec;
 use crate::types::Id;
-use crate::types::VirtualMachineProfileSpecTrait;
-use crate::types::VStorageObjectSnapshotInfo;
-use crate::types::VStorageObjectAssociations;
-use crate::types::VslmCloneSpec;
 use crate::types::KeyValue;
+use crate::types::ManagedObjectReference;
 use crate::types::RetrieveVStorageObjSpec;
-use crate::types::VslmRelocateSpec;
 use crate::types::VStorageObject;
+use crate::types::VStorageObjectAssociations;
 use crate::types::VStorageObjectSnapshotDetails;
+use crate::types::VStorageObjectSnapshotInfo;
+use crate::types::VStorageObjectStateInfo;
+use crate::types::VirtualMachineProfileSpecTrait;
+use crate::types::VslmCloneSpec;
+use crate::types::VslmCreateSpec;
+use crate::types::VslmInfrastructureObjectPolicy;
+use crate::types::VslmInfrastructureObjectPolicySpec;
+use crate::types::VslmRelocateSpec;
+use crate::types::VslmTagEntry;
+use crate::types::VslmVClockInfo;
 /// Interface to manage virtual storage object on a vCenter.
 /// 
 /// VStorageObjectManager and SPBM policy support:

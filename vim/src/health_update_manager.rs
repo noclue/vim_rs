@@ -1,8 +1,8 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
-use crate::types::ManagedObjectReference;
-use crate::types::HealthUpdateInfo;
 use crate::types::HealthUpdate;
+use crate::types::HealthUpdateInfo;
+use crate::types::ManagedObjectReference;
 pub struct HealthUpdateManager {
     client: Arc<VimClient>,
     mo_id: String,

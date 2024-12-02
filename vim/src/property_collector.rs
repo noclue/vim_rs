@@ -1,12 +1,12 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
-use crate::types::RetrieveResult;
-use crate::types::RetrieveOptions;
-use crate::types::UpdateSet;
 use crate::types::ManagedObjectReference;
 use crate::types::ObjectContent;
-use crate::types::WaitOptions;
 use crate::types::PropertyFilterSpec;
+use crate::types::RetrieveOptions;
+use crate::types::RetrieveResult;
+use crate::types::UpdateSet;
+use crate::types::WaitOptions;
 /// The *PropertyCollector* managed object retrieves and detects changes
 /// to the properties of other managed objects.
 /// 

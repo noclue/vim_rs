@@ -1,9 +1,9 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
+use crate::types::HostVFlashManagerVFlashCacheConfigSpec;
+use crate::types::HostVFlashManagerVFlashConfigInfo;
 use crate::types::HostVFlashManagerVFlashResourceConfigSpec;
 use crate::types::ManagedObjectReference;
-use crate::types::HostVFlashManagerVFlashConfigInfo;
-use crate::types::HostVFlashManagerVFlashCacheConfigSpec;
 use crate::types::VirtualDiskVFlashCacheConfigInfo;
 /// The VFlash Manager object is used to configure vFlash resource
 /// and vFlash cache on the ESX host.

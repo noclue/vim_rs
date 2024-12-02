@@ -1,9 +1,9 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
-use crate::types::UserSession;
-use crate::types::SessionManagerServiceRequestSpecTrait;
 use crate::types::SessionManagerGenericServiceTicket;
 use crate::types::SessionManagerLocalTicket;
+use crate::types::SessionManagerServiceRequestSpecTrait;
+use crate::types::UserSession;
 /// This managed object type includes methods for logging on and
 /// logging off clients, determining which clients are currently
 /// logged on, and forcing clients to log off.

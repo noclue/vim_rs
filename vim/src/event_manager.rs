@@ -1,11 +1,11 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
-use crate::types::TaskInfo;
 use crate::types::EventArgDesc;
+use crate::types::EventDescription;
+use crate::types::EventFilterSpec;
 use crate::types::EventTrait;
 use crate::types::ManagedObjectReference;
-use crate::types::EventFilterSpec;
-use crate::types::EventDescription;
+use crate::types::TaskInfo;
 /// This managed object type provides properties and methods for
 /// event management support.
 /// 

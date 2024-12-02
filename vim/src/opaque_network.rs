@@ -1,16 +1,16 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
+use crate::types::AlarmState;
+use crate::types::CustomFieldDef;
+use crate::types::CustomFieldValueTrait;
+use crate::types::EventTrait;
+use crate::types::ManagedEntityStatusEnum;
+use crate::types::ManagedObjectReference;
 use crate::types::NetworkSummaryTrait;
 use crate::types::OpaqueNetworkCapability;
-use crate::types::AlarmState;
-use crate::types::CustomFieldValueTrait;
-use crate::types::ManagedEntityStatusEnum;
 use crate::types::OptionValueTrait;
-use crate::types::CustomFieldDef;
-use crate::types::ManagedObjectReference;
-use crate::types::EventTrait;
-use crate::types::Tag;
 use crate::types::Permission;
+use crate::types::Tag;
 /// This interface defines an opaque network, in the sense that the detail and configuration
 /// of the network is unknown to vSphere and is managed by a management plane outside of
 /// vSphere.

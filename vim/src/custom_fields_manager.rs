@@ -1,7 +1,7 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
-use crate::types::ManagedObjectReference;
 use crate::types::CustomFieldDef;
+use crate::types::ManagedObjectReference;
 use crate::types::PrivilegePolicyDef;
 /// The CustomFieldsManager object is used to add and remove custom fields
 /// to managed entities.

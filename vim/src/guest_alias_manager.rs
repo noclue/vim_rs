@@ -1,10 +1,10 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
 use crate::types::GuestAliases;
-use crate::types::GuestMappedAliases;
 use crate::types::GuestAuthAliasInfo;
-use crate::types::GuestAuthenticationTrait;
 use crate::types::GuestAuthSubjectTrait;
+use crate::types::GuestAuthenticationTrait;
+use crate::types::GuestMappedAliases;
 use crate::types::ManagedObjectReference;
 /// The GuestAliasManager supports single sign-on for virtual machine access
 /// to perform guest operations.

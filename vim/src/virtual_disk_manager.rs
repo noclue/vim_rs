@@ -2,8 +2,8 @@ use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
 use crate::types::HostDiskDimensionsChs;
 use crate::types::ManagedObjectReference;
-use crate::types::VirtualMachineProfileSpecTrait;
 use crate::types::VirtualDiskSpecTrait;
+use crate::types::VirtualMachineProfileSpecTrait;
 /// Most VirtualDiskManager APIs will be DEPRECATED as of vSphere 6.5.
 /// Please use VStorageObjectManager APIs to manage Virtual disks.
 /// 

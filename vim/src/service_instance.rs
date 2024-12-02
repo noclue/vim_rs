@@ -1,11 +1,11 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
-use crate::types::ServiceContent;
-use crate::types::EventTrait;
-use crate::types::ProductComponentInfo;
-use crate::types::ManagedObjectReference;
-use crate::types::HostVMotionCompatibility;
 use crate::types::Capability;
+use crate::types::EventTrait;
+use crate::types::HostVMotionCompatibility;
+use crate::types::ManagedObjectReference;
+use crate::types::ProductComponentInfo;
+use crate::types::ServiceContent;
 use crate::types::VirtualMachinePowerStateEnum;
 /// The *ServiceInstance* managed object is the singleton root object of the inventory
 /// on both vCenter servers and servers running on standalone host agents.

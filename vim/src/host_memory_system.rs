@@ -1,10 +1,10 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
 use crate::types::CustomFieldDef;
+use crate::types::CustomFieldValueTrait;
 use crate::types::ServiceConsoleReservationInfo;
 use crate::types::VirtualMachineMemoryReservationInfo;
 use crate::types::VirtualMachineMemoryReservationSpec;
-use crate::types::CustomFieldValueTrait;
 /// The MemoryManagerSystem managed object provides an interface through which
 /// the host memory management policies that affect the performance of running
 /// virtual machines can be gathered and configured.

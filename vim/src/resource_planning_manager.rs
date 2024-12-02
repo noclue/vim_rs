@@ -1,7 +1,7 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
-use crate::types::DatabaseSizeParam;
 use crate::types::DatabaseSizeEstimate;
+use crate::types::DatabaseSizeParam;
 pub struct ResourcePlanningManager {
     client: Arc<VimClient>,
     mo_id: String,

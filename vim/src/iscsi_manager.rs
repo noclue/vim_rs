@@ -1,8 +1,8 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
-use crate::types::IscsiStatus;
-use crate::types::IscsiPortInfo;
 use crate::types::IscsiMigrationDependency;
+use crate::types::IscsiPortInfo;
+use crate::types::IscsiStatus;
 /// This managed object provides interfaces for mapping VMkernel NIC to
 /// iSCSI Host Bus Adapter.
 pub struct IscsiManager {

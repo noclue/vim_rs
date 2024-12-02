@@ -1,8 +1,8 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
-use crate::types::ProfileConfigInfoTrait;
 use crate::types::ClusterProfileConfigSpecTrait;
 use crate::types::ManagedObjectReference;
+use crate::types::ProfileConfigInfoTrait;
 use crate::types::ProfileDescription;
 pub struct ClusterProfile {
     client: Arc<VimClient>,

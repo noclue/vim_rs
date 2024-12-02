@@ -1,11 +1,11 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
-use crate::types::GuestRegValueSpec;
-use crate::types::GuestRegValueNameSpec;
-use crate::types::GuestRegKeyNameSpec;
 use crate::types::GuestAuthenticationTrait;
-use crate::types::ManagedObjectReference;
+use crate::types::GuestRegKeyNameSpec;
 use crate::types::GuestRegKeyRecordSpec;
+use crate::types::GuestRegValueNameSpec;
+use crate::types::GuestRegValueSpec;
+use crate::types::ManagedObjectReference;
 /// WindowsRegistryManager is the managed object that provides APIs
 /// to manipulate the Registry in a Windows guest OS.
 pub struct GuestWindowsRegistryManager {

@@ -1,16 +1,16 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
 use crate::types::AlarmState;
-use crate::types::Permission;
-use crate::types::CustomFieldDef;
-use crate::types::EventTrait;
-use crate::types::ComputeResourceSummaryTrait;
-use crate::types::Tag;
-use crate::types::ComputeResourceConfigSpecTrait;
-use crate::types::CustomFieldValueTrait;
 use crate::types::ComputeResourceConfigInfoTrait;
+use crate::types::ComputeResourceConfigSpecTrait;
+use crate::types::ComputeResourceSummaryTrait;
+use crate::types::CustomFieldDef;
+use crate::types::CustomFieldValueTrait;
+use crate::types::EventTrait;
 use crate::types::ManagedEntityStatusEnum;
 use crate::types::ManagedObjectReference;
+use crate::types::Permission;
+use crate::types::Tag;
 /// Represents a set of physical compute resources for a set of virtual machines.
 /// 
 /// The base type *ComputeResource*, when instantiated by calling

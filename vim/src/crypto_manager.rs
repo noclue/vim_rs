@@ -1,8 +1,8 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
-use crate::types::CryptoKeyResult;
-use crate::types::CryptoKeyPlain;
 use crate::types::CryptoKeyId;
+use crate::types::CryptoKeyPlain;
+use crate::types::CryptoKeyResult;
 /// Singleton Managed Object used to manage cryptographic keys.
 pub struct CryptoManager {
     client: Arc<VimClient>,

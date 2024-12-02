@@ -1,7 +1,7 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
-use crate::types::ManagedObjectReference;
 use crate::types::GuestAuthenticationTrait;
+use crate::types::ManagedObjectReference;
 /// AuthManager is the managed object that provides APIs
 /// to manipulate the guest operating authentication.
 pub struct GuestAuthManager {

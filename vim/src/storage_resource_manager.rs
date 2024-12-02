@@ -1,13 +1,13 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
-use crate::types::StoragePerformanceSummary;
-use crate::types::StorageDrsConfigSpec;
-use crate::types::StoragePlacementResult;
-use crate::types::StorageIormConfigOption;
-use crate::types::StorageIormConfigSpec;
-use crate::types::StoragePlacementSpec;
 use crate::types::ManagedObjectReference;
 use crate::types::MethodFaultTrait;
+use crate::types::StorageDrsConfigSpec;
+use crate::types::StorageIormConfigOption;
+use crate::types::StorageIormConfigSpec;
+use crate::types::StoragePerformanceSummary;
+use crate::types::StoragePlacementResult;
+use crate::types::StoragePlacementSpec;
 /// This managed object type provides a way to configure resource usage for
 /// storage resources.
 pub struct StorageResourceManager {

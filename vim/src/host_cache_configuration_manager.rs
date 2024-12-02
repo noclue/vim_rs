@@ -1,7 +1,7 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
-use crate::types::HostCacheConfigurationSpec;
 use crate::types::HostCacheConfigurationInfo;
+use crate::types::HostCacheConfigurationSpec;
 use crate::types::ManagedObjectReference;
 /// Solid state drive Cache Configuration Manager.
 /// 

@@ -1,7 +1,7 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
-use crate::types::HostSubSpecification;
 use crate::types::HostSpecification;
+use crate::types::HostSubSpecification;
 use crate::types::ManagedObjectReference;
 /// The *HostSpecificationManager* provides the
 /// functionality to update, restrieve and delete

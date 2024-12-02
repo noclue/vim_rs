@@ -1,12 +1,12 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
-use crate::types::VsanPolicySatisfiability;
 use crate::types::HostVsanInternalSystemCmmdsQuery;
-use crate::types::VsanPolicyChangeBatch;
-use crate::types::HostVsanInternalSystemVsanPhysicalDiskDiagnosticsResult;
 use crate::types::HostVsanInternalSystemDeleteVsanObjectsResult;
 use crate::types::HostVsanInternalSystemVsanObjectOperationResult;
+use crate::types::HostVsanInternalSystemVsanPhysicalDiskDiagnosticsResult;
 use crate::types::VsanNewPolicyBatch;
+use crate::types::VsanPolicyChangeBatch;
+use crate::types::VsanPolicySatisfiability;
 /// The VsanInternalSystem exposes low level access to CMMDS, as well as draft
 /// versions of VSAN object and disk management APIs that are subject to change
 /// in future releases.

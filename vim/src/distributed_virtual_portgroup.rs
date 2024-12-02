@@ -1,17 +1,17 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
 use crate::types::AlarmState;
-use crate::types::NetworkSummaryTrait;
-use crate::types::Permission;
-use crate::types::DvPortgroupConfigSpec;
+use crate::types::CustomFieldDef;
 use crate::types::CustomFieldValueTrait;
+use crate::types::DvPortgroupConfigInfo;
+use crate::types::DvPortgroupConfigSpec;
+use crate::types::EntityBackupConfig;
 use crate::types::EventTrait;
 use crate::types::ManagedEntityStatusEnum;
-use crate::types::EntityBackupConfig;
 use crate::types::ManagedObjectReference;
-use crate::types::CustomFieldDef;
+use crate::types::NetworkSummaryTrait;
+use crate::types::Permission;
 use crate::types::Tag;
-use crate::types::DvPortgroupConfigInfo;
 /// The *DistributedVirtualPortgroup* managed object
 /// defines how hosts and virtual machines connect to a network.
 /// 

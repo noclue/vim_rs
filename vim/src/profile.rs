@@ -1,8 +1,8 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
-use crate::types::ProfileDescription;
-use crate::types::ProfileConfigInfoTrait;
 use crate::types::ManagedObjectReference;
+use crate::types::ProfileConfigInfoTrait;
+use crate::types::ProfileDescription;
 /// The <code>Profile</code> managed object is the base class for host and cluster
 /// profiles.
 pub struct Profile {

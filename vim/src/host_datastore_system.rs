@@ -1,16 +1,16 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
-use crate::types::VmfsDatastoreExtendSpec;
-use crate::types::HostUnresolvedVmfsVolume;
-use crate::types::VmfsDatastoreCreateSpec;
-use crate::types::HostDatastoreSystemVvolDatastoreSpec;
-use crate::types::ManagedObjectReference;
-use crate::types::VmfsDatastoreExpandSpec;
-use crate::types::HostScsiDisk;
-use crate::types::HostNasVolumeSpec;
-use crate::types::VmfsDatastoreOption;
-use crate::types::HostUnresolvedVmfsResignatureSpec;
 use crate::types::HostDatastoreSystemCapabilities;
+use crate::types::HostDatastoreSystemVvolDatastoreSpec;
+use crate::types::HostNasVolumeSpec;
+use crate::types::HostScsiDisk;
+use crate::types::HostUnresolvedVmfsResignatureSpec;
+use crate::types::HostUnresolvedVmfsVolume;
+use crate::types::ManagedObjectReference;
+use crate::types::VmfsDatastoreCreateSpec;
+use crate::types::VmfsDatastoreExpandSpec;
+use crate::types::VmfsDatastoreExtendSpec;
+use crate::types::VmfsDatastoreOption;
 /// This managed object creates and removes datastores from the host.
 /// 
 /// To a host, a datastore is a storage abstraction that is backed by one

@@ -1,14 +1,14 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
-use crate::types::LicenseManagerLicenseInfo;
 use crate::types::KeyValue;
-use crate::types::ManagedObjectReference;
 use crate::types::LicenseAvailabilityInfo;
+use crate::types::LicenseDiagnostics;
 use crate::types::LicenseFeatureInfo;
+use crate::types::LicenseManagerEvaluationInfo;
+use crate::types::LicenseManagerLicenseInfo;
 use crate::types::LicenseSourceTrait;
 use crate::types::LicenseUsageInfo;
-use crate::types::LicenseDiagnostics;
-use crate::types::LicenseManagerEvaluationInfo;
+use crate::types::ManagedObjectReference;
 /// This managed object type controls entitlements for a given VMware
 /// platform.
 /// 

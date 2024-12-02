@@ -1,7 +1,7 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
-use crate::types::CustomizationSpecItem;
 use crate::types::CustomizationSpecInfo;
+use crate::types::CustomizationSpecItem;
 /// The CustomizationSpecManager managed object is used to manage
 /// customization specifications stored on the VirtualCenter server.
 pub struct CustomizationSpecManager {

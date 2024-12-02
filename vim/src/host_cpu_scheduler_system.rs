@@ -1,8 +1,8 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
-use crate::types::HostHyperThreadScheduleInfo;
 use crate::types::CustomFieldDef;
 use crate::types::CustomFieldValueTrait;
+use crate::types::HostHyperThreadScheduleInfo;
 /// This managed object provides an interface
 /// through which you can gather and configure the host CPU scheduler
 /// policies that affect the performance of running virtual machines.

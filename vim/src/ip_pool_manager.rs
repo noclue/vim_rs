@@ -1,8 +1,8 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
 use crate::types::IpPool;
-use crate::types::ManagedObjectReference;
 use crate::types::IpPoolManagerIpAllocation;
+use crate::types::ManagedObjectReference;
 /// Singleton Managed Object used to manage IP Pools.
 /// 
 /// IP Pools are used to allocate IPv4 and IPv6 addresses to vApps.

@@ -1,7 +1,7 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
-use crate::types::DiagnosticManagerLogDescriptor;
 use crate::types::DiagnosticManagerAuditRecordResult;
+use crate::types::DiagnosticManagerLogDescriptor;
 use crate::types::DiagnosticManagerLogHeader;
 use crate::types::ManagedObjectReference;
 /// Provides an interface for obtaining diagnostic information on a host

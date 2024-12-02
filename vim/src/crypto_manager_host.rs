@@ -1,10 +1,10 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
-use crate::types::ManagedObjectReference;
-use crate::types::CryptoManagerHostKeyStatus;
-use crate::types::CryptoKeyResult;
-use crate::types::CryptoKeyPlain;
 use crate::types::CryptoKeyId;
+use crate::types::CryptoKeyPlain;
+use crate::types::CryptoKeyResult;
+use crate::types::CryptoManagerHostKeyStatus;
+use crate::types::ManagedObjectReference;
 pub struct CryptoManagerHost {
     client: Arc<VimClient>,
     mo_id: String,

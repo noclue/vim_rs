@@ -1,10 +1,10 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
-use crate::types::HostDiagnosticPartitionCreateSpec;
-use crate::types::HostDiagnosticPartitionCreateDescription;
-use crate::types::HostScsiDiskPartition;
 use crate::types::HostDiagnosticPartition;
+use crate::types::HostDiagnosticPartitionCreateDescription;
 use crate::types::HostDiagnosticPartitionCreateOption;
+use crate::types::HostDiagnosticPartitionCreateSpec;
+use crate::types::HostScsiDiskPartition;
 /// The DiagnosticSystem managed object is used to configure the diagnostic
 /// mechanisms specific to the host.
 /// 

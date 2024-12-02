@@ -1,8 +1,8 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
-use crate::types::HostServiceInfo;
 use crate::types::CustomFieldDef;
 use crate::types::CustomFieldValueTrait;
+use crate::types::HostServiceInfo;
 /// The *HostServiceSystem* managed object describes the configuration
 /// of host services.
 /// 

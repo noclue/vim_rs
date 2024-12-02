@@ -1,13 +1,13 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
-use crate::types::CustomFieldValueTrait;
-use crate::types::ManagedObjectReference;
 use crate::types::AlarmState;
+use crate::types::CustomFieldDef;
+use crate::types::CustomFieldValueTrait;
+use crate::types::EventTrait;
 use crate::types::ManagedEntityStatusEnum;
+use crate::types::ManagedObjectReference;
 use crate::types::Permission;
 use crate::types::Tag;
-use crate::types::EventTrait;
-use crate::types::CustomFieldDef;
 /// ManagedEntity is an abstract base type for all managed objects present in
 /// the inventory tree.
 /// 

@@ -1,14 +1,14 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
-use crate::types::HttpNfcLeaseStateEnum;
-use crate::types::MethodFaultTrait;
-use crate::types::HttpNfcLeaseManifestEntry;
-use crate::types::HttpNfcLeaseInfo;
 use crate::types::HttpNfcLeaseCapabilities;
-use crate::types::KeyValue;
-use crate::types::ManagedObjectReference;
+use crate::types::HttpNfcLeaseInfo;
+use crate::types::HttpNfcLeaseManifestEntry;
 use crate::types::HttpNfcLeaseProbeResult;
 use crate::types::HttpNfcLeaseSourceFile;
+use crate::types::HttpNfcLeaseStateEnum;
+use crate::types::KeyValue;
+use crate::types::ManagedObjectReference;
+use crate::types::MethodFaultTrait;
 /// Represents a lease on a *VirtualMachine* or
 /// a *VirtualApp*, which can be used to import or export
 /// disks for the entity.

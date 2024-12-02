@@ -1,12 +1,12 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
 use crate::types::CustomFieldDef;
-use crate::types::HostGraphicsInfo;
+use crate::types::CustomFieldValueTrait;
 use crate::types::HostGraphicsConfig;
+use crate::types::HostGraphicsInfo;
 use crate::types::HostSharedGpuCapabilities;
 use crate::types::VirtualMachineVgpuDeviceInfo;
 use crate::types::VirtualMachineVgpuProfileInfo;
-use crate::types::CustomFieldValueTrait;
 /// This managed object manages the graphics state of the host.
 pub struct HostGraphicsManager {
     client: Arc<VimClient>,

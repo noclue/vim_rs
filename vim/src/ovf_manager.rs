@@ -1,15 +1,15 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
-use crate::types::OvfCreateDescriptorParams;
-use crate::types::OvfParseDescriptorParams;
 use crate::types::ManagedObjectReference;
-use crate::types::OvfCreateImportSpecResult;
-use crate::types::OvfValidateHostResult;
-use crate::types::OvfValidateHostParams;
-use crate::types::OvfOptionInfo;
-use crate::types::OvfParseDescriptorResult;
+use crate::types::OvfCreateDescriptorParams;
 use crate::types::OvfCreateDescriptorResult;
 use crate::types::OvfCreateImportSpecParams;
+use crate::types::OvfCreateImportSpecResult;
+use crate::types::OvfOptionInfo;
+use crate::types::OvfParseDescriptorParams;
+use crate::types::OvfParseDescriptorResult;
+use crate::types::OvfValidateHostParams;
+use crate::types::OvfValidateHostResult;
 /// Service interface to parse and generate OVF descriptors.
 /// 
 /// The purpose of this interface is to make it easier for callers to import VMs and

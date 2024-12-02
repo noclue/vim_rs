@@ -1,10 +1,10 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
-use crate::types::ManagedObjectReference;
+use crate::types::FileTransferInformation;
 use crate::types::GuestAuthenticationTrait;
 use crate::types::GuestFileAttributesTrait;
-use crate::types::FileTransferInformation;
 use crate::types::GuestListFileInfo;
+use crate::types::ManagedObjectReference;
 /// FileManager is the managed object that provides APIs
 /// to manipulate the guest operating system files.
 pub struct GuestFileManager {

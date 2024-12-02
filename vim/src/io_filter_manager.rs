@@ -1,8 +1,8 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
-use crate::types::ManagedObjectReference;
 use crate::types::ClusterIoFilterInfo;
 use crate::types::IoFilterQueryIssueResult;
+use crate::types::ManagedObjectReference;
 use crate::types::VirtualDiskId;
 /// Interface to manage IO Filters installed on the ESXi hosts and
 /// IO Filter configurations on virtual disks.

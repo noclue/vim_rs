@@ -1,8 +1,8 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
-use crate::types::VirtualMachineInstantCloneSpec;
 use crate::types::ManagedObjectReference;
 use crate::types::VirtualMachineCloneSpec;
+use crate::types::VirtualMachineInstantCloneSpec;
 use crate::types::VirtualMachinePowerStateEnum;
 use crate::types::VirtualMachineRelocateSpec;
 /// A singleton managed object that can answer questions about

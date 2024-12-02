@@ -1,29 +1,29 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
-use crate::types::DvsHealthCheckConfigTrait;
-use crate::types::ManagedObjectReference;
-use crate::types::EntityBackupConfig;
 use crate::types::AlarmState;
-use crate::types::DvsCapability;
-use crate::types::VMwareDvsLacpGroupSpec;
-use crate::types::DvsConfigInfoTrait;
-use crate::types::DvsRuntimeInfo;
-use crate::types::EventTrait;
-use crate::types::DvPortConfigSpec;
-use crate::types::DvsVmVnicResourcePoolConfigSpec;
-use crate::types::DvsNetworkResourcePoolConfigSpec;
 use crate::types::CustomFieldDef;
-use crate::types::DistributedVirtualSwitchProductSpec;
-use crate::types::ManagedEntityStatusEnum;
-use crate::types::DvsNetworkResourcePool;
 use crate::types::CustomFieldValueTrait;
-use crate::types::DistributedVirtualSwitchPortCriteria;
-use crate::types::DvsSummary;
-use crate::types::Tag;
-use crate::types::DvPortgroupConfigSpec;
 use crate::types::DistributedVirtualPort;
+use crate::types::DistributedVirtualSwitchPortCriteria;
+use crate::types::DistributedVirtualSwitchProductSpec;
+use crate::types::DvPortConfigSpec;
+use crate::types::DvPortgroupConfigSpec;
+use crate::types::DvsCapability;
+use crate::types::DvsConfigInfoTrait;
 use crate::types::DvsConfigSpecTrait;
+use crate::types::DvsHealthCheckConfigTrait;
+use crate::types::DvsNetworkResourcePool;
+use crate::types::DvsNetworkResourcePoolConfigSpec;
+use crate::types::DvsRuntimeInfo;
+use crate::types::DvsSummary;
+use crate::types::DvsVmVnicResourcePoolConfigSpec;
+use crate::types::EntityBackupConfig;
+use crate::types::EventTrait;
+use crate::types::ManagedEntityStatusEnum;
+use crate::types::ManagedObjectReference;
 use crate::types::Permission;
+use crate::types::Tag;
+use crate::types::VMwareDvsLacpGroupSpec;
 /// The *VmwareDistributedVirtualSwitch* managed object
 /// is the VMware implementation of a distributed virtual switch.
 /// 

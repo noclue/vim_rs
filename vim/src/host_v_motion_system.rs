@@ -1,9 +1,9 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
-use crate::types::HostIpConfig;
 use crate::types::CustomFieldDef;
-use crate::types::HostVMotionNetConfig;
 use crate::types::CustomFieldValueTrait;
+use crate::types::HostIpConfig;
+use crate::types::HostVMotionNetConfig;
 /// Deprecated as of VI API 4.0, use *HostConfigManager.virtualNicManager*.
 /// 
 /// The VMotionSystem managed object describes the VMotion configuration

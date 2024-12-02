@@ -1,8 +1,8 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
-use crate::types::ProfileExpressionMetadata;
 use crate::types::ComplianceResult;
 use crate::types::ManagedObjectReference;
+use crate::types::ProfileExpressionMetadata;
 /// Interface handling the Compliance aspects of entities.
 pub struct ProfileComplianceManager {
     client: Arc<VimClient>,

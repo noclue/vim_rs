@@ -1,9 +1,9 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
+use crate::types::CustomFieldDef;
 use crate::types::CustomFieldValueTrait;
 use crate::types::ManagedObjectReference;
 use crate::types::VirtualMachineConfigInfo;
-use crate::types::CustomFieldDef;
 /// The Snapshot managed object type specifies the interface to individual snapshots
 /// of a virtual machine.
 /// 

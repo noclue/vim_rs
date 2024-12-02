@@ -1,20 +1,20 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
-use crate::types::ResourceConfigSpec;
-use crate::types::ManagedObjectReference;
-use crate::types::ResourcePoolRuntimeInfo;
-use crate::types::CustomFieldDef;
-use crate::types::VirtualMachineConfigSpec;
-use crate::types::EventTrait;
-use crate::types::ManagedEntityStatusEnum;
-use crate::types::ResourceConfigOption;
-use crate::types::ImportSpecTrait;
-use crate::types::Permission;
-use crate::types::VAppConfigSpec;
-use crate::types::CustomFieldValueTrait;
-use crate::types::Tag;
-use crate::types::ResourcePoolSummaryTrait;
 use crate::types::AlarmState;
+use crate::types::CustomFieldDef;
+use crate::types::CustomFieldValueTrait;
+use crate::types::EventTrait;
+use crate::types::ImportSpecTrait;
+use crate::types::ManagedEntityStatusEnum;
+use crate::types::ManagedObjectReference;
+use crate::types::Permission;
+use crate::types::ResourceConfigOption;
+use crate::types::ResourceConfigSpec;
+use crate::types::ResourcePoolRuntimeInfo;
+use crate::types::ResourcePoolSummaryTrait;
+use crate::types::Tag;
+use crate::types::VAppConfigSpec;
+use crate::types::VirtualMachineConfigSpec;
 /// Represents a set of physical resources: a single host,
 /// a subset of a host's resources, or resources spanning multiple hosts.
 /// 

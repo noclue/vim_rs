@@ -1,23 +1,23 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
-use crate::types::VAppConfigSpec;
-use crate::types::ResourceConfigOption;
-use crate::types::ImportSpecTrait;
-use crate::types::ResourcePoolRuntimeInfo;
-use crate::types::CustomFieldValueTrait;
-use crate::types::VirtualAppLinkInfo;
-use crate::types::VAppCloneSpec;
-use crate::types::ResourceConfigSpec;
-use crate::types::Tag;
-use crate::types::VAppConfigInfo;
-use crate::types::ManagedEntityStatusEnum;
-use crate::types::ResourcePoolSummaryTrait;
-use crate::types::ManagedObjectReference;
 use crate::types::AlarmState;
-use crate::types::VirtualMachineConfigSpec;
-use crate::types::EventTrait;
 use crate::types::CustomFieldDef;
+use crate::types::CustomFieldValueTrait;
+use crate::types::EventTrait;
+use crate::types::ImportSpecTrait;
+use crate::types::ManagedEntityStatusEnum;
+use crate::types::ManagedObjectReference;
 use crate::types::Permission;
+use crate::types::ResourceConfigOption;
+use crate::types::ResourceConfigSpec;
+use crate::types::ResourcePoolRuntimeInfo;
+use crate::types::ResourcePoolSummaryTrait;
+use crate::types::Tag;
+use crate::types::VAppCloneSpec;
+use crate::types::VAppConfigInfo;
+use crate::types::VAppConfigSpec;
+use crate::types::VirtualAppLinkInfo;
+use crate::types::VirtualMachineConfigSpec;
 /// Represents a multi-tiered software solution.
 /// 
 /// A vApp is a collection of

@@ -1,18 +1,18 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
-use crate::types::EntityBackupConfig;
 use crate::types::DistributedVirtualSwitchHostProductSpec;
-use crate::types::DvsFeatureCapabilityTrait;
+use crate::types::DistributedVirtualSwitchManagerCompatibilityResult;
+use crate::types::DistributedVirtualSwitchManagerDvsProductSpec;
 use crate::types::DistributedVirtualSwitchManagerHostContainer;
 use crate::types::DistributedVirtualSwitchManagerHostDvsFilterSpecTrait;
-use crate::types::DistributedVirtualSwitchManagerCompatibilityResult;
+use crate::types::DistributedVirtualSwitchNetworkOffloadSpec;
 use crate::types::DistributedVirtualSwitchProductSpec;
+use crate::types::DvsFeatureCapabilityTrait;
 use crate::types::DvsManagerDvsConfigTarget;
 use crate::types::DvsManagerPhysicalNicsList;
+use crate::types::EntityBackupConfig;
 use crate::types::ManagedObjectReference;
 use crate::types::SelectionSetTrait;
-use crate::types::DistributedVirtualSwitchManagerDvsProductSpec;
-use crate::types::DistributedVirtualSwitchNetworkOffloadSpec;
 /// The *DistributedVirtualSwitchManager* provides methods
 /// that support the following operations:
 /// - Backup and restore operations for *VmwareDistributedVirtualSwitch*

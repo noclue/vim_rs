@@ -1,8 +1,8 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
 use crate::types::ManagedObjectReference;
-use crate::types::ScheduledTaskSpecTrait;
 use crate::types::ScheduledTaskDescription;
+use crate::types::ScheduledTaskSpecTrait;
 /// Object manager for scheduled tasks.
 pub struct ScheduledTaskManager {
     client: Arc<VimClient>,

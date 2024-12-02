@@ -1,7 +1,7 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
-use crate::types::TaskDescription;
 use crate::types::ManagedObjectReference;
+use crate::types::TaskDescription;
 use crate::types::TaskFilterSpec;
 use crate::types::TaskInfo;
 /// The TaskManager managed object provides an interface for creating and managing

@@ -1,13 +1,13 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
-use crate::types::VchaClusterNetworkSpec;
-use crate::types::VchaClusterDeploymentSpec;
 use crate::types::ManagedObjectReference;
-use crate::types::VchaClusterConfigSpec;
-use crate::types::PassiveNodeDeploymentSpec;
 use crate::types::NodeDeploymentSpecTrait;
+use crate::types::PassiveNodeDeploymentSpec;
 use crate::types::SourceNodeSpec;
 use crate::types::VchaClusterConfigInfo;
+use crate::types::VchaClusterConfigSpec;
+use crate::types::VchaClusterDeploymentSpec;
+use crate::types::VchaClusterNetworkSpec;
 /// FailoverClusterConfigurator provides operations to create and configure
 /// a vCenter High Availability Cluster (VCHA Cluster).
 /// 

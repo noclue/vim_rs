@@ -1,15 +1,15 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
+use crate::types::ManagedObjectReference;
 use crate::types::PerfCompositeMetric;
+use crate::types::PerfCounterInfo;
 use crate::types::PerfEntityMetricBaseTrait;
+use crate::types::PerfInterval;
 use crate::types::PerfMetricId;
 use crate::types::PerfProviderSummary;
-use crate::types::PerfCounterInfo;
 use crate::types::PerfQuerySpec;
-use crate::types::ManagedObjectReference;
-use crate::types::PerfInterval;
-use crate::types::PerformanceManagerCounterLevelMapping;
 use crate::types::PerformanceDescription;
+use crate::types::PerformanceManagerCounterLevelMapping;
 /// This managed object type provides the service interface for obtaining
 /// statistical data about various aspects of system performance, as generated
 /// and maintained by the system's performance providers.

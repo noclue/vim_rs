@@ -1,7 +1,7 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
-use crate::types::ManagedObjectReference;
 use crate::types::HostAuthenticationManagerInfo;
+use crate::types::ManagedObjectReference;
 /// The *HostAuthenticationManager* managed object provides
 /// access to Active Directory configuration information for an
 /// ESX host.

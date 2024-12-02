@@ -1,8 +1,8 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
-use crate::types::ScheduledTaskInfo;
-use crate::types::CustomFieldValueTrait;
 use crate::types::CustomFieldDef;
+use crate::types::CustomFieldValueTrait;
+use crate::types::ScheduledTaskInfo;
 use crate::types::ScheduledTaskSpecTrait;
 /// The scheduled task object.
 pub struct ScheduledTask {

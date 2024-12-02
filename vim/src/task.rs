@@ -1,12 +1,12 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
-use crate::types::VimAny;
-use crate::types::TaskInfo;
+use crate::types::CustomFieldDef;
 use crate::types::CustomFieldValueTrait;
 use crate::types::LocalizableMessage;
-use crate::types::TaskInfoStateEnum;
 use crate::types::MethodFaultTrait;
-use crate::types::CustomFieldDef;
+use crate::types::TaskInfo;
+use crate::types::TaskInfoStateEnum;
+use crate::types::VimAny;
 /// A task is used to monitor and potentially cancel long
 /// running operations.
 pub struct Task {

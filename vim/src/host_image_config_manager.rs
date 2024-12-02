@@ -1,7 +1,7 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
-use crate::types::SoftwarePackage;
 use crate::types::HostImageProfileSummary;
+use crate::types::SoftwarePackage;
 /// This managed object is the interface for
 /// configuration of the ESX software image, including
 /// properties such as acceptance level.

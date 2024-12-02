@@ -1,7 +1,7 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
-use crate::types::HostCertificateManagerCertificateSpec;
 use crate::types::HostCertificateManagerCertificateInfo;
+use crate::types::HostCertificateManagerCertificateSpec;
 /// CertificateManager provides an interface for managing the SSL
 /// certificates used by the server.
 pub struct HostCertificateManager {

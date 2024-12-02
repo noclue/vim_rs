@@ -1,11 +1,11 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
-use crate::types::AlarmFilterSpec;
-use crate::types::ManagedObjectReference;
-use crate::types::AlarmExpressionTrait;
 use crate::types::AlarmDescription;
-use crate::types::AlarmState;
+use crate::types::AlarmExpressionTrait;
+use crate::types::AlarmFilterSpec;
 use crate::types::AlarmSpecTrait;
+use crate::types::AlarmState;
+use crate::types::ManagedObjectReference;
 /// The alarm manager is a singleton object for managing alarms
 /// within a service instance.
 pub struct AlarmManager {

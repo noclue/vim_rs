@@ -1,9 +1,9 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
-use crate::types::EnvironmentBrowserConfigOptionQuerySpec;
-use crate::types::ManagedObjectReference;
 use crate::types::ConfigTarget;
+use crate::types::EnvironmentBrowserConfigOptionQuerySpec;
 use crate::types::HostCapability;
+use crate::types::ManagedObjectReference;
 use crate::types::VirtualMachineConfigOption;
 use crate::types::VirtualMachineConfigOptionDescriptor;
 /// This managed object type provides access to the environment that a

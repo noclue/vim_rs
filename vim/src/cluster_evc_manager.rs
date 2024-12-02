@@ -1,10 +1,10 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
-use crate::types::HostConnectSpec;
 use crate::types::ClusterEvcManagerEvcState;
-use crate::types::ManagedObjectReference;
-use crate::types::CustomFieldValueTrait;
 use crate::types::CustomFieldDef;
+use crate::types::CustomFieldValueTrait;
+use crate::types::HostConnectSpec;
+use crate::types::ManagedObjectReference;
 /// Controls Enhanced vMotion Compatibility mode for a particular cluster given
 /// by *ClusterEVCManager.managedCluster*.
 /// 

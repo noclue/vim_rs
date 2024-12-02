@@ -1,10 +1,10 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
-use crate::types::HostSriovDevicePoolInfoTrait;
 use crate::types::CustomFieldDef;
-use crate::types::HostPciPassthruInfoTrait;
 use crate::types::CustomFieldValueTrait;
 use crate::types::HostPciPassthruConfigTrait;
+use crate::types::HostPciPassthruInfoTrait;
+use crate::types::HostSriovDevicePoolInfoTrait;
 /// This managed object manages the PciPassthru state of the host.
 pub struct HostPciPassthruSystem {
     client: Arc<VimClient>,

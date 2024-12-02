@@ -1,8 +1,8 @@
 use std::sync::Arc;
 use crate::vim_client::{VimClient, Result};
 use crate::types::CustomFieldDef;
-use crate::types::HostVirtualNicManagerInfo;
 use crate::types::CustomFieldValueTrait;
+use crate::types::HostVirtualNicManagerInfo;
 use crate::types::VirtualNicManagerNetConfig;
 /// The VirtualNicManager managed object describes the special Virtual NIC
 /// configuration of the host.

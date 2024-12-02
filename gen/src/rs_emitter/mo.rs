@@ -44,11 +44,7 @@ impl <'a> ManagedObjectEmitter <'a> {
 
     fn emit_imports(&mut self) -> Result<()> {
         self.printer.println("use std::sync::Arc;")?;
-        if self.mo.methods.len() > 0 {
-            self.printer.println("use crate::vim_client::{VimClient, Result};")?;
-        } else {
-            self.printer.println("use crate::vim_client::{VimClient};")?;
-        }
+        self.printer.println("use crate::vim_client::{VimClient, Result};")?;
         let imported_types = self.get_imported_types()?;
         for type_name in &imported_types {
             self.printer.println(&format!("use crate::types::{type_name};"))?;
@@ -70,7 +66,9 @@ impl <'a> ManagedObjectEmitter <'a> {
                 self.accumulate_type_reference(&field.vim_type, &mut types)?;
             }
         }
-        Ok(Vec::from_iter(types))
+        let mut types_vec = Vec::from_iter(types);
+        types_vec.sort();
+        Ok(types_vec)
     }
 
 
