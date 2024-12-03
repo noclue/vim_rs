@@ -42,6 +42,7 @@ impl<'a> TypesEmitter<'a> {
         self.printer.println("use std::{any, fmt};")?;
         self.printer.println("use serde::de;")?;
         self.printer.println("use erased_serde::serialize_trait_object;")?;
+        self.printer.println("use std::sync::OnceLock;")?;
         self.printer.newline()?;
         Ok(())
     }
@@ -336,19 +337,14 @@ impl<T> VimObjectTrait for T where T: AsAny + std::fmt::Debug + erased_serde::Se
         let fn_name = any_into_name(name);
         let type_name = to_type_name(name);
         self.printer.println(&format!(r#"pub fn {fn_name}(from: std::any::TypeId) -> Option<&'static AnyInto<dyn {type_name}Trait>> {{
-    static mut TYPE_MAP: Option<std::collections::HashMap<std::any::TypeId, AnyInto<dyn {type_name}Trait>>> = None;
-    static RUN_ONCE: std::sync::Once = std::sync::Once::new();
-    RUN_ONCE.call_once(|| {{
+    static TYPE_MAP: OnceLock<std::collections::HashMap<std::any::TypeId, AnyInto<dyn {type_name}Trait>>> = OnceLock::new();
+    
+    TYPE_MAP.get_or_init(|| {{
         let mut map: std::collections::HashMap<std::any::TypeId, AnyInto<dyn {type_name}Trait>> = std::collections::HashMap::new();"#))?;
         // TODO Populate the map with the AnyInto instances by walking the struct hierarchy and adding all child types
         self.emit_any_into_map_entries(name)?;
-        self.printer.println(r#"        unsafe {
-            TYPE_MAP = Some(map);
-        }
-    });
-    unsafe {
-        TYPE_MAP.as_ref().unwrap().get(&from)
-    }
+        self.printer.println(r#"map
+    }).get(&from)
 }"#)?;
         self.printer.println(&format!(r#"impl<From: AsAny + ?Sized + 'static> CastFrom<From> for dyn {type_name}Trait {{
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {{
@@ -474,12 +470,11 @@ impl<T> VimObjectTrait for T where T: AsAny + std::fmt::Debug + erased_serde::Se
     fn emit_value_deserializers(&mut self) -> Result<()> {
 
         self.printer.println("type _ValueDeserializer = fn(v: &serde_json::value::RawValue) -> Result<VimAny, serde_json::Error>;")?;
-        self.printer.println("static mut VALUE_DESERIALIZER_MAP: Option<std::collections::HashMap<&str, Box<_ValueDeserializer>>> = None;")?;
-        self.printer.println("static INITIALIZE_VALUE_DESERIALIZERS: std::sync::Once = std::sync::Once::new();")?;
+        self.printer.println("static VALUE_DESERIALIZER_MAP: OnceLock<std::collections::HashMap<&str, Box<_ValueDeserializer>>> = OnceLock::new();")?;
         
         self.printer.println("fn get_value_deserializer(type_name: &str) -> Option<&'static Box<_ValueDeserializer>> {")?;
         self.printer.indent();
-        self.printer.println("INITIALIZE_VALUE_DESERIALIZERS.call_once(|| {")?;
+        self.printer.println("VALUE_DESERIALIZER_MAP.get_or_init(|| {")?;
         self.printer.indent();
         self.printer.println("let mut value_deserializers: std::collections::HashMap<&str, Box<_ValueDeserializer>> = std::collections::HashMap::new();")?;
         for (type_name, box_type) in &self.vim_model.any_value_types {
@@ -500,11 +495,9 @@ impl<T> VimObjectTrait for T where T: AsAny + std::fmt::Debug + erased_serde::Se
             self.printer.println("}));")?;
     
         }
-        self.printer.println("unsafe { VALUE_DESERIALIZER_MAP = Some(value_deserializers); }")?;
+        self.printer.println("value_deserializers")?;
         self.printer.dedent();
-        self.printer.println("});")?;
-        self.printer.println("let map = unsafe { VALUE_DESERIALIZER_MAP.as_ref().unwrap() };")?;
-        self.printer.println("map.get(type_name)")?;
+        self.printer.println("}).get(type_name)")?;
         self.printer.dedent();
         self.printer.println("}")?;
         Ok(())
@@ -513,11 +506,10 @@ impl<T> VimObjectTrait for T where T: AsAny + std::fmt::Debug + erased_serde::Se
     fn emit_object_deserializers(&mut self) -> Result<()> {
         self.printer.println("type AnyDeserializer<'a> = de::value::MapDeserializer<'a, std::vec::IntoIter<(String, &'a serde_json::value::RawValue)>, serde_json::Error>;")?;
         self.printer.println("type ObjectDeserializer = fn(AnyDeserializer) -> Result<VimAny, serde_json::Error>;")?;
-        self.printer.println("static mut OBJECT_DESERIALIZER_MAP: Option<std::collections::HashMap<&str, Box<ObjectDeserializer>>> = None;")?;
-        self.printer.println("static INITIALIZE_OBJECT_DESERIALIZERS: std::sync::Once = std::sync::Once::new();")?;
+        self.printer.println("static OBJECT_DESERIALIZER_MAP: OnceLock<std::collections::HashMap<&str, Box<ObjectDeserializer>>> = OnceLock::new();")?;
         self.printer.println("fn get_object_deserializer(type_name: &str) -> Option<&'static Box<ObjectDeserializer>> {")?;
         self.printer.indent();
-        self.printer.println("INITIALIZE_OBJECT_DESERIALIZERS.call_once(|| {")?;
+        self.printer.println("OBJECT_DESERIALIZER_MAP.get_or_init(|| {")?;
         self.printer.indent();
         self.printer.println("let mut object_deserializers: std::collections::HashMap<&str, Box<ObjectDeserializer>> = std::collections::HashMap::new();")?;
     
@@ -532,11 +524,9 @@ impl<T> VimObjectTrait for T where T: AsAny + std::fmt::Debug + erased_serde::Se
             self.printer.dedent();
             self.printer.println("}));")?;
         };
-        self.printer.println("unsafe { OBJECT_DESERIALIZER_MAP = Some(object_deserializers); }")?;
+        self.printer.println("object_deserializers")?;
         self.printer.dedent();
-        self.printer.println("});")?;
-        self.printer.println("let map = unsafe { OBJECT_DESERIALIZER_MAP.as_ref().unwrap() };")?;
-        self.printer.println("map.get(type_name)")?;
+        self.printer.println("}).get(type_name)")?;
         self.printer.dedent();
         self.printer.println("}")?;
         Ok(())
