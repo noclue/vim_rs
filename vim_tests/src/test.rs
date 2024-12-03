@@ -7,7 +7,6 @@ mod tests {
     use vim::property_collector::PropertyCollector;
     use vim::service_instance::ServiceInstance;
     use vim::session_manager::SessionManager;
-    use vim::view::View;
     use vim::vim_client::VimClient;
 
     use reqwest::ClientBuilder;
