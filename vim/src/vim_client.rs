@@ -1,8 +1,17 @@
+use std::sync::Arc;
+
 use tokio::sync::RwLock;
 use super::types;
+use log::{warn,debug};
 
 const AUTHN_HEADER: &str = "vmware-api-session-id";
 const API_RELEASE: &str = "8.0.2.0";
+// const USER_AGENT: &str = concat!(
+//     env!("CARGO_PKG_NAME"),
+//     "/",
+//     env!("CARGO_PKG_VERSION"),
+// );
+// const SERVICE_INSTANCE_ID: &str = "ServiceInstance";
 
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
@@ -35,16 +44,17 @@ impl VimClient {
     /// * `server_address` - vCenter server FQDN or IP address
     /// * `release` - vCenter API release version e.g. "8.0.3.0". If not provided, the default is 
     ///              API_RELEASE
-    pub fn new(http_client: reqwest::Client, server_address: &str, release: Option<&str>) -> Self {
+    pub fn new(http_client: reqwest::Client, server_address: &str, release: Option<&str>) -> Arc<Self> {
         let release = release.unwrap_or(API_RELEASE);
         // From the VI/JSON OpenAPI spec https://{vcenter-host}/sdk/vim25/{release}
         let base_url = format!("https://{}/sdk/vim25/{}", server_address, release);
         let session_key = RwLock::new(None);
-        Self {
+        let res = Arc::new(Self {
             http_client,
             session_key,
             base_url: base_url.to_string(),
-        }
+        });
+        res
     }
 
     /// Prepare GET request
@@ -59,6 +69,7 @@ impl VimClient {
     where
         B: serde::Serialize,
     {
+        debug!("POST request: {}", path);
         let url = format!("{}{}", self.base_url, path);
         let req = self.http_client.post(&url);
         req.header("Content-Type", "application/json").json(payload)
@@ -67,6 +78,7 @@ impl VimClient {
     /// Prepare POST request without a body
     pub fn post_bare(&self, path: &str) -> reqwest::RequestBuilder
     {
+        debug!("POST request (void): {}", path);
         let url = format!("{}{}", self.base_url, path);
         self.http_client.post(&url)
     }
@@ -130,6 +142,7 @@ impl VimClient {
             *key_holder = Some(session_key);
         }
         if !res.status().is_success() {
+            warn!("HTTP error: {}", res.status());
             let fault: Box<dyn types::MethodFaultTrait> = res.json().await?;
             return Err(Error::MethodFault(fault));
         }

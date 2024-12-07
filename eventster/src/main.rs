@@ -1,8 +1,9 @@
-use std::sync::Arc;
 use std::env;
 use vim::service_instance::ServiceInstance;
 use tokio;
 use vim::session_manager::SessionManager;
+use log::info;
+use env_logger;
 
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
@@ -24,28 +25,30 @@ static APP_USER_AGENT: &str = concat!(
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    env_logger::init();
+
+
     let http_client = reqwest::ClientBuilder::new()
         .danger_accept_invalid_certs(true)
         .danger_accept_invalid_hostnames(true)
         .user_agent(APP_USER_AGENT)
         .build()?;
 
-    let vc_url = env::var("VC_SERVER")?;
+    let vc_server = env::var("VC_SERVER")?;
     let username = env::var("VC_USERNAME")?;
     let pwd = env::var("VC_PASSWORD")?;
-    let vim_client = Arc::new(vim::vim_client::VimClient::new(http_client, &vc_url, None));
+    let vim_client = vim::vim_client::VimClient::new(http_client, &vc_server, None);
 
     let service_instance = ServiceInstance::new(vim_client.clone(), "ServiceInstance");
 
     let content = service_instance.content().await?;
 
-    println!("Service content: {:?}", content);
     let session_mgr_moref = content.session_manager.ok_or(Error::Error("No session manager found".to_string()))?;
 
     let sm = SessionManager::new(vim_client.clone(), &session_mgr_moref.value);
     let us = sm.login(&username, &pwd, Some("en")).await?;
     
-    println!("Session created for: {:?}", us.user_name);
+    info!("Session created for: {:?}", us.user_name);
     sm.logout().await?;
     Ok(())
 }
