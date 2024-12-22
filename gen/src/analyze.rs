@@ -1,16 +1,16 @@
-mod oas30;
+
 mod vim_model;
 
 use std::{borrow::Borrow, collections::HashSet, io::Read, path::Path};
 
 use vim_model::{DataType::Reference, Model, Struct};
 
-fn load_openapi<P: AsRef<Path>>(path: P) -> oas30::OpenAPI {
+fn load_openapi<P: AsRef<Path>>(path: P) -> openapi30::OpenAPI {
     let mut file =
         std::fs::File::open(path).unwrap();
     let mut data = String::new();
     file.read_to_string(&mut data).unwrap();
-    let openapi: oas30::OpenAPI = serde_json::from_str(&data).unwrap();
+    let openapi: openapi30::OpenAPI = serde_json::from_str(&data).unwrap();
     openapi
 }
 

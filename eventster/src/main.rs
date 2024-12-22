@@ -37,18 +37,23 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let vc_server = env::var("VC_SERVER")?;
     let username = env::var("VC_USERNAME")?;
     let pwd = env::var("VC_PASSWORD")?;
-    let vim_client = vim::vim_client::VimClient::new(http_client, &vc_server, None);
+    {
+        let vim_client = vim::vim_client::VimClient::new(http_client, &vc_server, None);
 
-    let service_instance = ServiceInstance::new(vim_client.clone(), "ServiceInstance");
+        let service_instance = ServiceInstance::new(vim_client.clone(), "ServiceInstance");
 
-    let content = service_instance.content().await?;
+        let content = service_instance.content().await?;
 
-    let session_mgr_moref = content.session_manager.ok_or(Error::Error("No session manager found".to_string()))?;
+        let session_mgr_moref = content.session_manager.ok_or(Error::Error("No session manager found".to_string()))?;
 
-    let sm = SessionManager::new(vim_client.clone(), &session_mgr_moref.value);
-    let us = sm.login(&username, &pwd, Some("en")).await?;
-    
-    info!("Session created for: {:?}", us.user_name);
-    sm.logout().await?;
+        let sm = SessionManager::new(vim_client.clone(), &session_mgr_moref.value);
+        let us = sm.login(&username, &pwd, Some("en")).await?;
+
+        info!("Session created for: {:?}", us.user_name);
+    }
+    info!("Client Disposed!");
+    // Provide time for the session to be logged out after VimClient is dropped.
+    tokio::time::sleep(std::time::Duration::from_secs(1)).await;
+
     Ok(())
 }

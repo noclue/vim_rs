@@ -5,7 +5,7 @@ use convert_case::{Case, Casing};
 use indexmap::IndexMap;
 
 use super::*;
-use crate::oas30::*;
+use openapi30::*;
 
 /// Represents a Vim Enum model. This is a set of string values.
 /// For example:

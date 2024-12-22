@@ -19,3 +19,4 @@ quote = "1.0.37"
 indexmap = { version = "2.2.6", features = ["serde"] }
 convert_case = "0.6.0"
 check_keyword = "0.3.1"
+openapi30 = { path = "../openapi30" }

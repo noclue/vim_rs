@@ -1,5 +1,5 @@
 use super::*;
-use crate::oas30::*;
+use openapi30::*;
 use indexmap::IndexMap;
 use std::cell::RefCell;
 use std::fmt::Debug;
@@ -14,7 +14,7 @@ pub enum Error {
     #[error("Schema '{path}' validation error: {source}")]
     SchemaValidationError {
         path: String,
-        source: crate::oas30::Error,
+        source: openapi30::Error,
     },
     #[error("Array index '{index}' processing error: {source}")]
     ArrayProcessingError { index: usize, source: Box<Error> },

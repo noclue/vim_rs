@@ -2,7 +2,7 @@ use std::sync::Arc;
 
 use tokio::sync::RwLock;
 use super::types;
-use log::{warn,debug};
+use log::{warn,debug, info};
 
 const AUTHN_HEADER: &str = "vmware-api-session-id";
 const API_RELEASE: &str = "8.0.2.0";
@@ -30,12 +30,19 @@ pub enum Error {
 pub type Result<T> = std::result::Result<T, Error>;
 
 pub struct VimClient {
-    pub http_client: reqwest::Client,
-    pub session_key: RwLock<Option<String>>,
+    pub http_client: Arc<reqwest::Client>,
+    pub session_key: Arc<RwLock<Option<String>>>,
     pub base_url: String,
 }
 
-/// Client for the VI JSON API that handles basic HTTP requests and authentication headers
+/// Client for the VI JSON API that handles basic HTTP requests and authentication headers.
+/// 
+/// The client is responsible for managing the session key header and logging out the session when
+/// the client is dropped.
+/// 
+/// Logging out the session is done asynchronously in a separate task as blocking the thread running
+/// drop is not allowed in tokio. It is important to provide some time for the logout to complete
+/// after drop of the client.
 impl VimClient {
 
     /// Create a new client for the VI/JSON API
@@ -50,8 +57,8 @@ impl VimClient {
         let base_url = format!("https://{}/sdk/vim25/{}", server_address, release);
         let session_key = RwLock::new(None);
         let res = Arc::new(Self {
-            http_client,
-            session_key,
+            http_client: Arc::new(http_client),
+            session_key: Arc::new(session_key),
             base_url: base_url.to_string(),
         });
         res
@@ -60,6 +67,7 @@ impl VimClient {
     /// Prepare GET request
     pub fn get_request(&self, path: &str) -> reqwest::RequestBuilder
     {
+        debug!("GET request: {}", path);
         let url = format!("{}{}", self.base_url, path);
         self.http_client.get(&url)
     }
@@ -149,4 +157,52 @@ impl VimClient {
         Ok(res)
     }
 
+}
+
+
+/// Task called asynchronously during drop of the VimClient instance to logout the session if one
+/// was created.
+impl Drop for VimClient {
+    fn drop(&mut self) {
+        debug!("Disposing VIM client.");
+
+        let session_key = Arc::clone(&self.session_key);
+        let http_client = Arc::clone(&self.http_client);
+        let base_url = self.base_url.clone();
+
+        tokio::spawn(async move {
+            debug!("Terminating VIM session as needed.");
+            let key = {
+                let session_key = session_key.read().await;
+                session_key.clone()
+            };
+            if let Some(key) = key {
+                debug!("Session is present. Sending logout request...");
+
+                // TODO: get the session manager moId from the service instance
+                let path = format!("{base_url}/SessionManager/{moId}/Logout",
+                                    base_url = base_url,
+                                    moId = "SessionManager");
+                let req = http_client.post(&path)
+                                        .header(AUTHN_HEADER, key);
+
+                match req.send().await {
+                    Ok(resp) => {
+                        let status = resp.status();
+                        debug!("Session logout request sent. Response code is: {}", status);
+                        if status.is_success() {
+                            info!("Session logged out successfully");
+                        } else {
+                            resp.json::<types::MethodFault>().await.map(|fault| {
+                                warn!("Failed to logout session(HTTP code: {}). MethodFault: {:?}", status, fault);
+                            }).unwrap_or_else(|e| {
+                                warn!("Failed to logout session(HTTP code: {}). Cannot parse MethodFault: {}", status, e);
+                            });
+                        }
+                    },
+                    Err(e) => warn!("Failed to logout session. Cannot execute logout request: {}", e),
+                }
+            }
+        });
+    }
 }
