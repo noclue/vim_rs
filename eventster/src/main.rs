@@ -2,7 +2,7 @@ use std::env;
 use vim::service_instance::ServiceInstance;
 use tokio;
 use vim::session_manager::SessionManager;
-use log::info;
+use log::{debug, info};
 use env_logger;
 
 #[derive(Debug, thiserror::Error)]
@@ -27,7 +27,7 @@ static APP_USER_AGENT: &str = concat!(
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     env_logger::init();
 
-
+    info!("Starting up!");
     let http_client = reqwest::ClientBuilder::new()
         .danger_accept_invalid_certs(true)
         .danger_accept_invalid_hostnames(true)
@@ -43,6 +43,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         let service_instance = ServiceInstance::new(vim_client.clone(), "ServiceInstance");
 
         let content = service_instance.content().await?;
+        debug!("ServiceInstance::content obtained from vCenter {}",
+                content.about.full_name);
 
         let session_mgr_moref = content.session_manager.ok_or(Error::Error("No session manager found".to_string()))?;
 
@@ -52,8 +54,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         info!("Session created for: {:?}", us.user_name);
     }
     info!("Client Disposed!");
-    // Provide time for the session to be logged out after VimClient is dropped.
-    tokio::time::sleep(std::time::Duration::from_secs(1)).await;
 
     Ok(())
 }

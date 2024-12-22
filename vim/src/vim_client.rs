@@ -2,7 +2,7 @@ use std::sync::Arc;
 
 use tokio::sync::RwLock;
 use super::types;
-use log::{warn,debug, info};
+use log::{warn,debug};
 
 const AUTHN_HEADER: &str = "vmware-api-session-id";
 const API_RELEASE: &str = "8.0.2.0";
@@ -39,10 +39,6 @@ pub struct VimClient {
 /// 
 /// The client is responsible for managing the session key header and logging out the session when
 /// the client is dropped.
-/// 
-/// Logging out the session is done asynchronously in a separate task as blocking the thread running
-/// drop is not allowed in tokio. It is important to provide some time for the logout to complete
-/// after drop of the client.
 impl VimClient {
 
     /// Create a new client for the VI/JSON API
@@ -170,39 +166,41 @@ impl Drop for VimClient {
         let http_client = Arc::clone(&self.http_client);
         let base_url = self.base_url.clone();
 
-        tokio::spawn(async move {
-            debug!("Terminating VIM session as needed.");
-            let key = {
-                let session_key = session_key.read().await;
-                session_key.clone()
-            };
-            if let Some(key) = key {
-                debug!("Session is present. Sending logout request...");
+        tokio::task::block_in_place(|| {
+            tokio::runtime::Handle::current().block_on(async move {
+                debug!("Terminating VIM session as needed.");
+                let key = {
+                    let session_key = session_key.read().await;
+                    session_key.clone()
+                };
+                if let Some(key) = key {
+                    debug!("Session is present. Sending logout request...");
 
-                // TODO: get the session manager moId from the service instance
-                let path = format!("{base_url}/SessionManager/{moId}/Logout",
-                                    base_url = base_url,
-                                    moId = "SessionManager");
-                let req = http_client.post(&path)
-                                        .header(AUTHN_HEADER, key);
+                    // TODO: get the session manager moId from the service instance
+                    let path = format!("{base_url}/SessionManager/{moId}/Logout",
+                                        base_url = base_url,
+                                        moId = "SessionManager");
+                    let req = http_client.post(&path)
+                                            .header(AUTHN_HEADER, key);
 
-                match req.send().await {
-                    Ok(resp) => {
-                        let status = resp.status();
-                        debug!("Session logout request sent. Response code is: {}", status);
-                        if status.is_success() {
-                            info!("Session logged out successfully");
-                        } else {
-                            resp.json::<types::MethodFault>().await.map(|fault| {
-                                warn!("Failed to logout session(HTTP code: {}). MethodFault: {:?}", status, fault);
-                            }).unwrap_or_else(|e| {
-                                warn!("Failed to logout session(HTTP code: {}). Cannot parse MethodFault: {}", status, e);
-                            });
-                        }
-                    },
-                    Err(e) => warn!("Failed to logout session. Cannot execute logout request: {}", e),
+                    match req.send().await {
+                        Ok(resp) => {
+                            let status = resp.status();
+                            debug!("Session logout request sent. Response code is: {}", status);
+                            if status.is_success() {
+                                debug!("Session logged out successfully");
+                            } else {
+                                resp.json::<types::MethodFault>().await.map(|fault| {
+                                    warn!("Failed to logout session(HTTP code: {}). MethodFault: {:?}", status, fault);
+                                }).unwrap_or_else(|e| {
+                                    warn!("Failed to logout session(HTTP code: {}). Cannot parse MethodFault: {}", status, e);
+                                });
+                            }
+                        },
+                        Err(e) => warn!("Failed to logout session. Cannot execute logout request: {}", e),
+                    }
                 }
-            }
+            });
         });
     }
 }
