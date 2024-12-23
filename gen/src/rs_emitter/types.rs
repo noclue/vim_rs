@@ -12,6 +12,7 @@ use super::super::vim_model::*;
 use super::errors::{Result, Error};
 
 const ANY: &str = "Any";
+const DATA_OBJECT: &str = "DataObject";
 
 pub struct TypesEmitter<'a> {
     vim_model: &'a Model,
@@ -295,7 +296,7 @@ impl<T> VimObjectTrait for T where T: AsAny + std::fmt::Debug + erased_serde::Se
     // and will extend the VimObjectTrait as to allow up and down casts.
     fn emit_trait_type(&mut self, name: &str, vim_type: &Struct) -> Result<()> {
         if !vim_type.has_children() { return Ok(()); }
-        if ANY == vim_type.name { return Ok(()); } // Skip the Any type
+        if ANY == name { return Ok(()); } // Skip the Any type
         let struct_name = to_type_name(name);
         let Some(ref parent_trait) = vim_type.parent else {
             return Ok(()); // or error?
@@ -312,6 +313,10 @@ impl<T> VimObjectTrait for T where T: AsAny + std::fmt::Debug + erased_serde::Se
         }?;
         self.printer.println(&format!("pub trait {}Trait : {}Trait {{", struct_name, base_trait))?;
         self.printer.indent();
+        if DATA_OBJECT == name {
+            self.printer.println("/// Retrieve the serialization type name")?;
+            self.printer.println("fn type_name_(&self) -> &'static str;")?;
+        }
         for (prop_name, property) in &vim_type.fields {
             self.emit_trait_field(prop_name, property)?;
         }
@@ -392,16 +397,15 @@ impl<T> VimObjectTrait for T where T: AsAny + std::fmt::Debug + erased_serde::Se
     }
     
     fn emit_inherited_traits(&mut self, type_name: &String) -> Result<()> {
-        let struct_name = &to_type_name(&type_name);
         let mut data_type = self.vim_model.structs.get(type_name).ok_or_else(|| Error::TypeNotFound(type_name.clone()))?.borrow();
         if data_type.has_children() {
-            self.emit_trait_implementation(&data_type, struct_name)?;
+            self.emit_trait_implementation(&data_type, type_name)?;
         }
         let mut parent_opt = data_type.parent.as_ref();
         while let Some(parent_name) = parent_opt {
             if ANY == parent_name { break; }
             data_type = self.vim_model.structs.get(parent_name).ok_or_else(|| Error::TypeNotFound(parent_name.clone()))?.borrow();
-            self.emit_trait_implementation(&data_type, struct_name)?;
+            self.emit_trait_implementation(&data_type, type_name)?;
             parent_opt = data_type.parent.as_ref();
         }
 
@@ -412,10 +416,18 @@ impl<T> VimObjectTrait for T where T: AsAny + std::fmt::Debug + erased_serde::Se
     
     /// Emits implementation of a structure type trat for a given structure. The trait should belong to
     /// the same structure or an ancestor
-    fn emit_trait_implementation(&mut self, trait_type: &Struct, struct_name: &String) -> Result<()> {
+    fn emit_trait_implementation(&mut self, trait_type: &Struct, type_name: &String) -> Result<()> {
         let base_name = to_type_name(&trait_type.name);
+        let struct_name = &to_type_name(&type_name);
         self.printer.println(&format!("impl {}Trait for {} {{", base_name, struct_name))?;
         self.printer.indent();
+        if DATA_OBJECT == trait_type.name {
+            self.printer.println("fn type_name_(&self) -> &'static str {")?;
+            self.printer.indent();
+            self.printer.println(&format!("\"{}\"", type_name))?;
+            self.printer.dedent();
+            self.printer.println("}")?;
+        }
         for (prop_name, property) in &trait_type.fields {
             self.emit_field_getter(prop_name, property)?;
         }

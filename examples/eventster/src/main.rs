@@ -1,5 +1,5 @@
 use std::{env, sync::Arc};
-use vim::{event_manager::EventManager, service_instance::ServiceInstance, types::{EventFilterSpecByTime, ServiceContent}, vim_client::VimClient};
+use vim::{event_manager::EventManager, service_instance::ServiceInstance, types::{EventFilterSpecByTime, EventTrait, ServiceContent, ExtendedEvent, EventEx}, vim_client::VimClient};
 use tokio;
 use vim::session_manager::SessionManager;
 use log::{debug, info};
@@ -23,6 +23,23 @@ static APP_USER_AGENT: &str = concat!(
     "/",
     env!("CARGO_PKG_VERSION"),
 );
+
+/// Get the event type ID from an event
+/// The semantics of how eventTypeId matching is done is as follows:
+/// - If the event is of type EventEx return event_type_id member of the EventEx
+/// - If the event is of type ExtendedEvent return event_id member of the ExtendedEvent
+/// - Otherwise, return the type name of the Event itself.
+
+fn get_event_type_id(event: &dyn EventTrait) -> String {
+    let any_ref = event.as_any_ref();
+    if let Some(event_ex) = any_ref.downcast_ref::<EventEx>() {
+        return event_ex.event_type_id.clone();
+    }
+    if let Some(extended_event) = any_ref.downcast_ref::<ExtendedEvent>() {
+        return extended_event.event_type_id.clone();
+    }
+    event.type_name_().into()
+}
 
 // Dump the last 30 minutes of events in vCenter
 async fn dump_events(event_manager : &EventManager) -> Result<(), Error> {
@@ -50,7 +67,8 @@ async fn dump_events(event_manager : &EventManager) -> Result<(), Error> {
     match events {
         Some(events) => {
             for event in events {
-                debug!("Event: {ts} - {id} - {msg}",
+                debug!("{event_type}: {ts} - {id} - {msg}",
+                    event_type=get_event_type_id(event.as_ref()),
                     id=event.get_key(),
                     ts=event.get_created_time(),
                     msg=event.get_full_formatted_message().as_ref().unwrap_or(&String::from("No message")));

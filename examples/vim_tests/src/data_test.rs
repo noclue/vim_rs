@@ -2,7 +2,7 @@
 
 #[cfg(test)]
 mod tests {
-    use vim::types::{CastInto, MoTypesEnum, ValueElements, VimAny, VirtualDeviceTrait, VirtualE1000, VirtualEthernetCardTrait};
+    use vim::types::{CastInto, MoTypesEnum, ValueElements, VimAny, VirtualDeviceTrait, VirtualE1000, VirtualEthernetCardTrait, DataObjectTrait};
     use log::{debug, info};
     use std::convert::AsRef;
 
@@ -113,6 +113,13 @@ mod tests {
         init();
         let e = MoTypesEnum::Other_(String::from("Container"));
         assert_eq!(Into::<&'static str>::into(e), "__OTHER__");
+    }
+
+    #[test]
+    fn type_name() {
+        init();
+        let e1000 = create_virtual_e1000();
+        assert_eq!(e1000.type_name_(), "VirtualE1000");
     }
 
     fn create_virtual_device_array() -> VimAny {
