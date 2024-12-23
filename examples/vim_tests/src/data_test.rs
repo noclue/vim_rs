@@ -2,8 +2,9 @@
 
 #[cfg(test)]
 mod tests {
-    use vim::types::{CastInto, ValueElements, VimAny, VirtualDeviceTrait, VirtualE1000, VirtualEthernetCardTrait};
+    use vim::types::{CastInto, MoTypesEnum, ValueElements, VimAny, VirtualDeviceTrait, VirtualE1000, VirtualEthernetCardTrait};
     use log::{debug, info};
+    use std::convert::AsRef;
 
     fn init() {
         let _ = env_logger::builder().is_test(true).try_init();
@@ -96,6 +97,23 @@ mod tests {
         info!("{:?}", e1000);
     }
 
+    #[test]
+    fn enum_as_string() {
+        init();
+        let e = MoTypesEnum::VirtualMachine;
+        // Below is the declared conversion and Rust is somehow ok if no lifetime is specified
+        // I gather 'static fits all....
+        // let s: &'static str = e.as_ref(); 
+        let s: &str = e.into();
+        assert_eq!(s, "VirtualMachine");
+    }
+
+    #[test]
+    fn enum_unknown_as_string() {
+        init();
+        let e = MoTypesEnum::Other_(String::from("Container"));
+        assert_eq!(Into::<&'static str>::into(e), "__OTHER__");
+    }
 
     fn create_virtual_device_array() -> VimAny {
         VimAny::Value(ValueElements::ArrayOfVirtualDevice(vec![Box::new(create_virtual_e1000())]))

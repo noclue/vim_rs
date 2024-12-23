@@ -161,19 +161,21 @@ impl<T> VimObjectTrait for T where T: AsAny + std::fmt::Debug + erased_serde::Se
     
             let enum_name = to_type_name(&vim_enum.name); 
     
-            self.printer.println("#[derive(Debug, serde::Deserialize, serde::Serialize)]")?;
+            self.printer.println("#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]")?;
             self.printer.println(&format!("pub enum {} {{", enum_name))?;
             self.printer.indent();
             for value in &vim_enum.variants {
                 let variant = to_enum_variant(&value);
                 if value != &variant {
                     self.printer.println(&format!("#[serde(rename = \"{}\")]", value))?;
+                    self.printer.println(&format!("#[strum(serialize = \"{}\")]", value))?;
                 }                
                 self.printer.println(&format!("{},", variant))?;
             }
             // Make enums open i.e. handle unknown values possibly from future API servers
             self.printer.println("/// This variant handles values not known at compile time.")?;
             self.printer.println("#[serde(untagged)]")?;
+            self.printer.println("#[strum(serialize = \"__OTHER__\")]")?;
             self.printer.println("Other_(String),")?;
             self.printer.dedent();
             self.printer.println("}")?;
@@ -336,7 +338,7 @@ impl<T> VimObjectTrait for T where T: AsAny + std::fmt::Debug + erased_serde::Se
     fn emit_any_into_trait(&mut self, name: &str) -> Result<()> {
         let fn_name = any_into_name(name);
         let type_name = to_type_name(name);
-        self.printer.println(&format!(r#"pub fn {fn_name}(from: std::any::TypeId) -> Option<&'static AnyInto<dyn {type_name}Trait>> {{
+        self.printer.println(&format!(r#"fn {fn_name}(from: std::any::TypeId) -> Option<&'static AnyInto<dyn {type_name}Trait>> {{
     static TYPE_MAP: OnceLock<std::collections::HashMap<std::any::TypeId, AnyInto<dyn {type_name}Trait>>> = OnceLock::new();
     
     TYPE_MAP.get_or_init(|| {{

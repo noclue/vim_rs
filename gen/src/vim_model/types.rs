@@ -68,11 +68,6 @@ impl Struct {
         self.name.to_case(Case::Pascal).into_safe()
     }
 
-    pub fn field_name(&self) -> String {
-        self.name.to_case(Case::Snake).into_safe()
-    }
-
-
     pub fn discriminator(&self) -> String {
         self.name.clone()
     }

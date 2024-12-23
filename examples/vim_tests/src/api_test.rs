@@ -12,7 +12,7 @@ mod tests {
 
     use reqwest::ClientBuilder;
     use vim::{types, view_manager};
-    use vim::types::{ManagedObjectReference, ValueElements, VimAny};
+    use vim::types::{ManagedObjectReference, MoTypesEnum, ValueElements, VimAny};
     use log::{debug, info};
 
     fn init() {
@@ -73,7 +73,7 @@ mod tests {
         
         let view_moref = view_manager.create_container_view(
             &content.root_folder,
-            Some(&vec!["VirtualMachine".to_string()]),
+            Some(&vec![Into::<&str>::into(MoTypesEnum::VirtualMachine).to_string()]),
             true,
         ).await.unwrap();
 
@@ -90,7 +90,7 @@ mod tests {
                 skip: Some(false),
                 select_set: Some(vec![Box::new(types::TraversalSpec {
                     name: Some("traverseEntities".to_string()), 
-                    r#type: "ContainerView".to_string(), 
+                    r#type: Into::<&str>::into(MoTypesEnum::ContainerView).to_string(), 
                     path: "view".to_string(), 
                     skip: Some(false), 
                     select_set: None,
@@ -99,7 +99,7 @@ mod tests {
             prop_set: vec![types::PropertySpec {
                 all: Some(false),
                 path_set: Some(vec!["name".to_string()]),
-                r#type: "VirtualMachine".to_string(),
+                r#type: Into::<&str>::into(MoTypesEnum::VirtualMachine).to_string(),
             }],
             report_missing_objects_in_results: Some(true),
         }];
@@ -123,7 +123,6 @@ mod tests {
             property_collector.cancel_retrieve_properties_ex(&token).await.unwrap();
         }
         view.destroy_view().await.unwrap();
-        //session_manager.logout().await.unwrap();
         debug!("Logged out");
     }
 
