@@ -3,16 +3,18 @@
 #[cfg(test)]
 mod tests {
     use std::env;
-    use vim::alarm_manager::AlarmManager;
-    use vim::container_view::ContainerView;
-    use vim::property_collector::PropertyCollector;
-    use vim::service_instance::ServiceInstance;
-    use vim::session_manager::SessionManager;
-    use vim::vim_client::VimClient;
+    use vim::mo::alarm_manager::AlarmManager;
+    use vim::mo::container_view::ContainerView;
+    use vim::mo::property_collector::PropertyCollector;
+    use vim::mo::service_instance::ServiceInstance;
+    use vim::mo::session_manager::SessionManager;
+    use vim::mo::view_manager;
+    use vim::types::structs;
+    use vim::core::client::Client;
 
     use reqwest::ClientBuilder;
-    use vim::{types, view_manager};
-    use vim::types::{ManagedObjectReference, MoTypesEnum, ValueElements, VimAny};
+    use vim::types::structs::{ManagedObjectReference, ValueElements, VimAny};
+    use vim::types::enums::MoTypesEnum;
     use log::{debug, info};
 
     fn init() {
@@ -31,10 +33,10 @@ mod tests {
         let uri = format!("https://{vc_server}/sdk/vim25/8.0.3.0/ServiceInstance/ServiceInstance/content", vc_server=vc_server);
         let res = client.get(uri).send().await.unwrap();
         if res.status() != 200 {
-            let fault: Box<dyn types::MethodFaultTrait> = res.json().await.unwrap();
+            let fault: Box<dyn structs::MethodFaultTrait> = res.json().await.unwrap();
             panic!("Failed to get content: {:?}", fault);
         }
-        let content: types::ServiceContent = res.json().await.unwrap();
+        let content: structs::ServiceContent = res.json().await.unwrap();
         info!("{:?}", content.about);
     }
 
@@ -47,7 +49,7 @@ mod tests {
                                 .build()
                                 .unwrap();
         let vc_server = env::var("VC_SERVER").expect("VC_SERVER environment variable not set");
-        let client = VimClient::new(client, &vc_server, None);
+        let client = Client::new(client, &vc_server, None);
         let service_instance = ServiceInstance::new(client.clone(), "ServiceInstance");
         let content = service_instance.content().await.unwrap();
         let session_manager_mo_ref = content.session_manager.unwrap();
@@ -62,8 +64,8 @@ mod tests {
 
         let alarm_manager_mo_ref = content.alarm_manager.unwrap();
         let alarm_manager = AlarmManager::new(client.clone(), &alarm_manager_mo_ref.value);
-        let entity = types::ManagedObjectReference {
-            r#type: types::MoTypesEnum::VirtualMachine,
+        let entity = ManagedObjectReference {
+            r#type: MoTypesEnum::VirtualMachine,
             value: "vm-1".to_string(),
         };
         let alarm = alarm_manager.get_alarm(Some(&entity)).await.unwrap();
@@ -81,14 +83,14 @@ mod tests {
 
         let property_collector = PropertyCollector::new(client.clone(), &content.property_collector.value);
 
-        let spec_set = vec![types::PropertyFilterSpec {
-            object_set: vec![types::ObjectSpec {
+        let spec_set = vec![structs::PropertyFilterSpec {
+            object_set: vec![structs::ObjectSpec {
                 obj: ManagedObjectReference {
-                    r#type: types::MoTypesEnum::ContainerView,
+                    r#type: MoTypesEnum::ContainerView,
                     value: view_moref.value.clone(),
                 },
                 skip: Some(false),
-                select_set: Some(vec![Box::new(types::TraversalSpec {
+                select_set: Some(vec![Box::new(structs::TraversalSpec {
                     name: Some("traverseEntities".to_string()), 
                     r#type: Into::<&str>::into(MoTypesEnum::ContainerView).to_string(), 
                     path: "view".to_string(), 
@@ -96,14 +98,14 @@ mod tests {
                     select_set: None,
                  })]),
             }],
-            prop_set: vec![types::PropertySpec {
+            prop_set: vec![structs::PropertySpec {
                 all: Some(false),
                 path_set: Some(vec!["name".to_string()]),
                 r#type: Into::<&str>::into(MoTypesEnum::VirtualMachine).to_string(),
             }],
             report_missing_objects_in_results: Some(true),
         }];
-        let options = types::RetrieveOptions {
+        let options = structs::RetrieveOptions {
             max_objects: Some(100),
         };
         let retrieve_result = property_collector.retrieve_properties_ex(&spec_set, &options).await.unwrap();

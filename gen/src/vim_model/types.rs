@@ -124,7 +124,7 @@ impl Field {
 /// type: integer
 /// format: int64
 /// ```
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Eq, Hash, Clone)]
 pub enum DataType {
     Boolean,
     String,

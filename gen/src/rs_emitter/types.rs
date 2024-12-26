@@ -30,7 +30,6 @@ impl<'a> TypesEmitter<'a> {
         self.emit_use_statements()?;
         self.emit_vim_object()?;
         self.emit_vimany()?;
-        self.emit_enums()?;
         self.emit_structs()?;
         self.emit_boxed_types()?;
         self.emit_value_deserializers()?;
@@ -44,6 +43,7 @@ impl<'a> TypesEmitter<'a> {
         self.printer.println("use serde::de;")?;
         self.printer.println("use erased_serde::serialize_trait_object;")?;
         self.printer.println("use std::sync::OnceLock;")?;
+        self.printer.println("use super::enums::*;")?;
         self.printer.newline()?;
         Ok(())
     }
@@ -151,38 +151,6 @@ impl<T> VimObjectTrait for T where T: AsAny + std::fmt::Debug + erased_serde::Se
 "#)?;
         Ok(())
     }
-
-    fn emit_enums(&mut self) -> Result<()> {
-        for (_, vim_enum) in &self.vim_model.enums {
-            {
-                let this = &mut *self;
-                let doc_string: &Option<String> = &vim_enum.description;
-                emit_description(this.printer, doc_string)
-            }?;
-    
-            let enum_name = to_type_name(&vim_enum.name); 
-    
-            self.printer.println("#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]")?;
-            self.printer.println(&format!("pub enum {} {{", enum_name))?;
-            self.printer.indent();
-            for value in &vim_enum.variants {
-                let variant = to_enum_variant(&value);
-                if value != &variant {
-                    self.printer.println(&format!("#[serde(rename = \"{}\")]", value))?;
-                    self.printer.println(&format!("#[strum(serialize = \"{}\")]", value))?;
-                }                
-                self.printer.println(&format!("{},", variant))?;
-            }
-            // Make enums open i.e. handle unknown values possibly from future API servers
-            self.printer.println("/// This variant handles values not known at compile time.")?;
-            self.printer.println("#[serde(untagged)]")?;
-            self.printer.println("#[strum(serialize = \"__OTHER__\")]")?;
-            self.printer.println("Other_(String),")?;
-            self.printer.dedent();
-            self.printer.println("}")?;
-        }
-        Ok(())
-    }
     
     fn emit_structs(&mut self) -> Result<()> {
         for (name, vim_type_cell) in &self.vim_model.structs {
@@ -281,9 +249,9 @@ impl<T> VimObjectTrait for T where T: AsAny + std::fmt::Debug + erased_serde::Se
         }
         if field.vim_type == DataType::Binary {
             if field.optional {
-                self.printer.println(r#"#[serde(with = "super::base64::option")]"#)?;
+                self.printer.println(r#"#[serde(with = "crate::core::base64::option")]"#)?;
             } else {
-                self.printer.println(r#"#[serde(with = "super::base64::vec")]"#)?;
+                self.printer.println(r#"#[serde(with = "crate::core::base64::vec")]"#)?;
             }
         }
         self.printer.println(&format!("pub {field_name}: {field_type},"))?;

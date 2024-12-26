@@ -1,7 +1,9 @@
 use std::{env, sync::Arc};
-use vim::{event_manager::EventManager, service_instance::ServiceInstance, types::{EventFilterSpecByTime, EventTrait, ServiceContent, ExtendedEvent, EventEx}, vim_client::VimClient};
+use vim::mo::{event_manager::EventManager, service_instance::ServiceInstance};
+use vim::types::structs::{EventFilterSpecByTime, EventTrait, ServiceContent, ExtendedEvent, EventEx}; 
+use vim::core::client::Client;
 use tokio;
-use vim::session_manager::SessionManager;
+use vim::mo::session_manager::SessionManager;
 use log::{debug, info};
 use env_logger;
 use chrono::{Utc, Duration};
@@ -9,11 +11,11 @@ use chrono::{Utc, Duration};
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
     #[error("MethodFault: {0:?}")]
-    MethodFault(Box<dyn vim::types::MethodFaultTrait>),
+    MethodFault(Box<dyn vim::types::structs::MethodFaultTrait>),
     #[error("Reqwest error: {0}")]
     ReqwestError(#[from] reqwest::Error),
     #[error("VimClient error: {0}")]
-    VimClientError(#[from] vim::vim_client::Error),
+    VimClientError(#[from] vim::core::client::Error),
     #[error("Error: {0}")]
     Error(String),
 }
@@ -29,7 +31,6 @@ static APP_USER_AGENT: &str = concat!(
 /// - If the event is of type EventEx return event_type_id member of the EventEx
 /// - If the event is of type ExtendedEvent return event_id member of the ExtendedEvent
 /// - Otherwise, return the type name of the Event itself.
-
 fn get_event_type_id(event: &dyn EventTrait) -> String {
     let any_ref = event.as_any_ref();
     if let Some(event_ex) = any_ref.downcast_ref::<EventEx>() {
@@ -46,7 +47,7 @@ async fn dump_events(event_manager : &EventManager) -> Result<(), Error> {
     let thirty_minutes_ago = Utc::now() - Duration::minutes(30);
     
 
-    let filter = &vim::types::EventFilterSpec {
+    let filter = &vim::types::structs::EventFilterSpec {
         entity: None,
         time: Some(EventFilterSpecByTime {
             begin_time: Some(String::from(thirty_minutes_ago.to_rfc3339())),
@@ -79,14 +80,14 @@ async fn dump_events(event_manager : &EventManager) -> Result<(), Error> {
     Ok(())
 }
 
-async fn create_client(vc_server: String, username: String, pwd: String) -> Result<(Arc<VimClient>, ServiceContent), Error> {
+async fn create_client(vc_server: String, username: String, pwd: String) -> Result<(Arc<Client>, ServiceContent), Error> {
     let http_client = reqwest::ClientBuilder::new()
     .danger_accept_invalid_certs(true)
     .danger_accept_invalid_hostnames(true)
     .user_agent(APP_USER_AGENT)
     .build()?;
 
-    let vim_client = vim::vim_client::VimClient::new(http_client, &vc_server, None);
+    let vim_client = Client::new(http_client, &vc_server, None);
 
     let service_instance = ServiceInstance::new(vim_client.clone(), "ServiceInstance");
 
@@ -116,7 +117,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let pwd = env::var("VC_PASSWORD").map_err(|_| Error::Error(String::from("VC_PASSWORD env var not set")))?;
 
     let (vim_client, content) = create_client(vc_server, username, pwd).await?;
-    let event_manager = vim::event_manager::EventManager::new(vim_client.clone(), 
+    let event_manager = vim::mo::event_manager::EventManager::new(vim_client.clone(), 
     &content.event_manager.ok_or(Error::Error("No event manager found".to_string()))?.value);
 
     dump_events(&event_manager).await?;

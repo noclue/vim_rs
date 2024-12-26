@@ -44,7 +44,7 @@ impl <'a> ManagedObjectEmitter <'a> {
 
     fn emit_imports(&mut self) -> Result<()> {
         self.printer.println("use std::sync::Arc;")?;
-        self.printer.println("use crate::vim_client::{VimClient, Result};")?;
+        self.printer.println("use crate::core::client::{Client, Result};")?;
         let imported_types = self.get_imported_types()?;
         for type_name in &imported_types {
             self.printer.println(&format!("use crate::types::{type_name};"))?;
@@ -89,17 +89,17 @@ impl <'a> ManagedObjectEmitter <'a> {
     
     fn resolve_import_type(&self, ref_name: &str) -> Result<String> {
         if ref_name == "Any" {
-            return Ok("VimAny".to_string());
+            return Ok("structs::VimAny".to_string());
         }
         let rust_name = to_type_name(ref_name);
         if let Some(struct_ref) = self.vim_model.structs.get(ref_name) {
             if struct_ref.borrow().has_children() {
-                Ok(format!("{}Trait", rust_name))
+                Ok(format!("structs::{}Trait", rust_name))
             } else {
-                Ok(rust_name)
+                Ok(format!("structs::{}", rust_name))
             }
         } else if let Some(_) = self.vim_model.enums.get(ref_name) {
-            Ok(rust_name)
+            Ok(format!("enums::{}", rust_name))
         } else {
             Err(Error::TypeNotFound(ref_name.to_string()))
         }
@@ -110,7 +110,7 @@ impl <'a> ManagedObjectEmitter <'a> {
         let struct_name = to_type_name(&self.mo.name);
         self.printer.println(&format!("pub struct {} {{", struct_name))?;
         self.printer.indent();
-        self.printer.println("client: Arc<VimClient>,")?;
+        self.printer.println("client: Arc<Client>,")?;
         self.printer.println("mo_id: String,")?;
         self.printer.dedent();
         self.printer.println("}")?;
@@ -129,7 +129,7 @@ impl <'a> ManagedObjectEmitter <'a> {
     }
 
     fn emit_new(&mut self) -> Result<()> {
-        self.printer.println("pub fn new(client: Arc<VimClient>, mo_id: &str) -> Self {")?;
+        self.printer.println("pub fn new(client: Arc<Client>, mo_id: &str) -> Self {")?;
         self.printer.indent();
         self.printer.println("Self {")?;
         self.printer.indent();

@@ -1,9 +1,9 @@
 
 mod vim_model;
 
-use std::{borrow::Borrow, collections::HashSet, io::Read, path::Path};
+use std::{borrow::Borrow, collections::{HashMap, HashSet}, io::Read, os::windows::process, path::Path};
 
-use vim_model::{DataType::Reference, Model, Struct};
+use vim_model::{DataType::{self, Reference}, Model, Struct};
 
 fn load_openapi<P: AsRef<Path>>(path: P) -> openapi30::OpenAPI {
     let mut file =
@@ -20,13 +20,15 @@ fn main() {
     let vim_model = vim_model::load_vim_model(&model).unwrap();
     let loops = detect_loops(&vim_model);
     let boxed_fields = select_boxed_fields(&vim_model, &loops);
-    for loop_chain in loops {
-        println!("Loop detected: {:?}", loop_chain);
-    }
+    // for loop_chain in loops {
+    //     println!("Loop detected: {:?}", loop_chain);
+    // }
 
-    for field in boxed_fields {
-        println!("Boxed field: {:?}", field);
-    }
+    // for field in boxed_fields {
+    //     println!("Boxed field: {:?}", field);
+    // }
+
+    compute_event_stats(&vim_model);
 }
 
 /// Select one struct and field from each loop chain to be boxed so as to break the loop. We need
@@ -110,3 +112,55 @@ fn detect_loops_recursive(vim_model: &Model, struct_ref: &Struct, stack: &mut Ve
     }
     visited.insert(struct_ref.name.clone());
 }
+
+struct EventStats {
+    /// The number of event types.
+    event_count: usize,
+    /// A map from field name and type to the names of event types that define them.
+    event_fields: HashMap<(String, DataType), Vec<String>>,
+    /// The names of all event types.
+    event_types: HashSet<String>,
+    /// The names of all referenced struct and enum types that are not event types.
+    non_event_types: HashSet<String>,
+}
+
+
+// Iterate the Event hierarchy and enumerate all the events, all the unique event fields, and all
+// the non-event structure types reffred to by the event fields.
+fn compute_event_stats(vim_model: &Model) {
+    let mut stats: EventStats = EventStats {
+        event_count: 0,
+        event_fields: HashMap::new(),
+        event_types: HashSet::new(),
+        non_event_types: HashSet::new(),
+    };
+
+    let event = vim_model.structs.get("Event").unwrap().borrow();
+
+    process_event_type(vim_model, &event, &mut stats);
+
+    println!("Event count: {}", stats.event_count);
+    println!("Event fields: {:?}", stats.event_fields);
+    //println!("Event types: {:?}", stats.event_types);
+    println!("Non-event types: {:?}", stats.non_event_types);
+}
+
+fn process_event_type(vim_model: &Model, event: &Struct, stats: &mut EventStats) {
+    stats.event_count += 1;
+    stats.event_types.insert(event.name.clone());
+    for (_, field) in &event.fields {
+        // Count the unique event fields.
+        let key = (field.name.clone(), field.vim_type.clone());
+        if stats.event_fields.contains_key(&key) {
+            stats.event_fields.get_mut(&key).unwrap().push(event.name.clone());
+        } else {
+            stats.event_fields.insert(key, vec![event.name.clone()]);
+        }
+    };
+    // Iterate the children and call analyze for each
+    for child in &event.children {
+        let child_ref = vim_model.structs.get(child).unwrap().borrow();
+        process_event_type(vim_model, &child_ref, stats);
+    }
+}
+

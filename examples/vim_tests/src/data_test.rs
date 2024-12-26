@@ -2,7 +2,8 @@
 
 #[cfg(test)]
 mod tests {
-    use vim::types::{CastInto, MoTypesEnum, ValueElements, VimAny, VirtualDeviceTrait, VirtualE1000, VirtualEthernetCardTrait, DataObjectTrait};
+    use vim::types::structs::{CastInto, ValueElements, VimAny, VirtualDeviceTrait, VirtualE1000, VirtualEthernetCardTrait, DataObjectTrait};
+    use vim::types::enums::MoTypesEnum;
     use log::{debug, info};
     use std::convert::AsRef;
 
