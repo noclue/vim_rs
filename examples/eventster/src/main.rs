@@ -1,9 +1,8 @@
 use std::{env, sync::Arc};
-use vim::mo::{event_manager::EventManager, service_instance::ServiceInstance};
+use vim::mo::{EventManager, ServiceInstance, SessionManager};
 use vim::types::structs::{EventFilterSpecByTime, EventTrait, ServiceContent, ExtendedEvent, EventEx}; 
 use vim::core::client::Client;
 use tokio;
-use vim::mo::session_manager::SessionManager;
 use log::{debug, info};
 use env_logger;
 use chrono::{Utc, Duration};
@@ -117,7 +116,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let pwd = env::var("VC_PASSWORD").map_err(|_| Error::Error(String::from("VC_PASSWORD env var not set")))?;
 
     let (vim_client, content) = create_client(vc_server, username, pwd).await?;
-    let event_manager = vim::mo::event_manager::EventManager::new(vim_client.clone(), 
+    let event_manager = EventManager::new(vim_client.clone(), 
     &content.event_manager.ok_or(Error::Error("No event manager found".to_string()))?.value);
 
     dump_events(&event_manager).await?;

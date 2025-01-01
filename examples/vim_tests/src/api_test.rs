@@ -3,12 +3,7 @@
 #[cfg(test)]
 mod tests {
     use std::env;
-    use vim::mo::alarm_manager::AlarmManager;
-    use vim::mo::container_view::ContainerView;
-    use vim::mo::property_collector::PropertyCollector;
-    use vim::mo::service_instance::ServiceInstance;
-    use vim::mo::session_manager::SessionManager;
-    use vim::mo::view_manager;
+    use vim::mo::{AlarmManager, ContainerView, PropertyCollector, ServiceInstance, SessionManager, ViewManager};
     use vim::types::structs;
     use vim::core::client::Client;
 
@@ -71,7 +66,7 @@ mod tests {
         let alarm = alarm_manager.get_alarm(Some(&entity)).await.unwrap();
         debug!("{:?}", alarm);
 
-        let view_manager = view_manager::ViewManager::new(client.clone(), &content.view_manager.unwrap().value);
+        let view_manager = ViewManager::new(client.clone(), &content.view_manager.unwrap().value);
         
         let view_moref = view_manager.create_container_view(
             &content.root_folder,
