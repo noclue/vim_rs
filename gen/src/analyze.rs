@@ -1,7 +1,7 @@
 
 mod vim_model;
 
-use std::{borrow::Borrow, collections::{HashMap, HashSet}, io::Read, os::windows::process, path::Path};
+use std::{borrow::Borrow, collections::{HashMap, HashSet}, io::Read, path::Path};
 
 use vim_model::{DataType::{self, Reference}, Model, Struct};
 
@@ -18,8 +18,8 @@ fn main() {
     let vi_json_spec_path = Path::new("data/vi_json_openapi_specification_v8_0_2_0.json");
     let model = load_openapi(vi_json_spec_path);
     let vim_model = vim_model::load_vim_model(&model).unwrap();
-    let loops = detect_loops(&vim_model);
-    let boxed_fields = select_boxed_fields(&vim_model, &loops);
+    // let loops = detect_loops(&vim_model);
+    // let boxed_fields = select_boxed_fields(&vim_model, &loops);
     // for loop_chain in loops {
     //     println!("Loop detected: {:?}", loop_chain);
     // }

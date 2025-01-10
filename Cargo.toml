@@ -1,0 +1,9 @@
+[workspace]
+members = [
+    "openapi30",
+    "gen",
+    "vim",
+    "examples/vim_tests",
+    "examples/eventster"
+]
+resolver = "2"

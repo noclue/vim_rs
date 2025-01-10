@@ -25,7 +25,7 @@ mod tests {
                                 .build()
                                 .unwrap();
         let vc_server = env::var("VC_SERVER").expect("VC_SERVER environment variable not set");
-        let uri = format!("https://{vc_server}/sdk/vim25/8.0.3.0/ServiceInstance/ServiceInstance/content", vc_server=vc_server);
+        let uri = format!("https://{vc_server}/sdk/vim25/8.0.3.0/ServiceInstance/ServiceInstance/content");
         let res = client.get(uri).send().await.unwrap();
         if res.status() != 200 {
             let fault: Box<dyn structs::MethodFaultTrait> = res.json().await.unwrap();
@@ -56,15 +56,6 @@ mod tests {
                             &vc_password, 
                             None).await.unwrap();
         debug!("{:?}", session);
-
-        let alarm_manager_mo_ref = content.alarm_manager.unwrap();
-        let alarm_manager = AlarmManager::new(client.clone(), &alarm_manager_mo_ref.value);
-        let entity = ManagedObjectReference {
-            r#type: MoTypesEnum::VirtualMachine,
-            value: "vm-1".to_string(),
-        };
-        let alarm = alarm_manager.get_alarm(Some(&entity)).await.unwrap();
-        debug!("{:?}", alarm);
 
         let view_manager = ViewManager::new(client.clone(), &content.view_manager.unwrap().value);
         
@@ -104,7 +95,7 @@ mod tests {
             max_objects: Some(100),
         };
         let retrieve_result = property_collector.retrieve_properties_ex(&spec_set, &options).await.unwrap();
-
+        let first_vm_id: Option<String> = retrieve_result.objects.first().map(|obj| obj.obj.value.clone());
         for obj in retrieve_result.objects {
             let propset = &obj.prop_set.unwrap();
             let val = &propset.get(0).unwrap().val;
@@ -120,7 +111,18 @@ mod tests {
             property_collector.cancel_retrieve_properties_ex(&token).await.unwrap();
         }
         view.destroy_view().await.unwrap();
-        debug!("Logged out");
+        if let Some(vm) = first_vm_id {
+            let alarm_manager_mo_ref = content.alarm_manager.unwrap();
+            let alarm_manager = AlarmManager::new(client.clone(), &alarm_manager_mo_ref.value);
+            let entity = ManagedObjectReference {
+                r#type: MoTypesEnum::VirtualMachine,
+                value: vm,
+            };
+            let alarm = alarm_manager.get_alarm(Some(&entity)).await.unwrap();
+            debug!("Alarms for {} are: {:?}", entity.value, alarm);
+        }
+
+
     }
 
 
