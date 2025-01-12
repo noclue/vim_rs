@@ -133,11 +133,17 @@ pub struct AnyInto<To>
     pub to_box: fn(Box<dyn any::Any>) -> Result<Box<To>, Box<dyn any::Any>>,
 }
 
-pub trait VimObjectTrait: AsAny + std::fmt::Debug + erased_serde::Serialize {}
+pub trait VimObjectTrait: AsAny + std::fmt::Debug + erased_serde::Serialize {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait;
+}
 
 serialize_trait_object!(VimObjectTrait);
 
-impl<T> VimObjectTrait for T where T: AsAny + std::fmt::Debug + erased_serde::Serialize {}"#)?;
+impl<T> VimObjectTrait for T where T: AsAny + std::fmt::Debug + erased_serde::Serialize {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+}"#)?;
         Ok(())
     }
 
@@ -291,7 +297,14 @@ impl<T> VimObjectTrait for T where T: AsAny + std::fmt::Debug + erased_serde::Se
         self.printer.dedent();
         self.printer.println("}")?;
         self.emit_any_into_trait(name)?;
-        self.printer.println(&format!("serialize_trait_object!({}Trait);", struct_name))?;
+        self.printer.println(&format!(r#"impl<'s> serde::Serialize for dyn {struct_name}Trait + 's {{
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {{
+        self.as_vim_object_ref().serialize(serializer)
+    }}
+}}"#))?;
         self.emit_trait_deserialization(name)?;
         Ok(())
     }
