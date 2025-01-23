@@ -1,11 +1,12 @@
 use std::{env, sync::Arc};
+use tokio::time::sleep;
 use vim::mo::{EventManager, ServiceInstance, SessionManager};
 use vim::types::structs::{EventFilterSpecByTime, EventTrait, ServiceContent, ExtendedEvent, EventEx}; 
 use vim::core::client::Client;
 use tokio;
 use log::{debug, info};
 use env_logger;
-use chrono::{Utc, Duration};
+use chrono::{Utc, Duration as ChronoDuration};
 
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
@@ -42,8 +43,8 @@ fn get_event_type_id(event: &dyn EventTrait) -> String {
 }
 
 // Dump the last 30 minutes of events in vCenter
-async fn dump_events(event_manager : &EventManager) -> Result<(), Error> {
-    let thirty_minutes_ago = Utc::now() - Duration::minutes(30);
+async fn dump_events(client: Arc<Client>, event_manager: &EventManager) -> Result<(), Error> {
+    let thirty_minutes_ago = Utc::now() - ChronoDuration::minutes(30);
     
 
     let filter = &vim::types::structs::EventFilterSpec {
@@ -63,19 +64,28 @@ async fn dump_events(event_manager : &EventManager) -> Result<(), Error> {
         event_type_id: None,
         max_count: None,
     };
-    let events = event_manager.query_events(filter).await?;
-    match events {
-        Some(events) => {
-            for event in events {
-                debug!("{event_type}: {ts} - {id} - {msg}",
-                    event_type=get_event_type_id(event.as_ref()),
-                    id=event.get_key(),
-                    ts=event.get_created_time(),
-                    msg=event.get_full_formatted_message().as_ref().unwrap_or(&String::from("No message")));
-            }
-        },
-        None => debug!("No events found"),
+
+    let collector = event_manager.create_collector_for_events(filter).await?;
+
+    let collector = vim::mo::EventHistoryCollector::new(client.clone(), &collector.value);
+    //let events = event_manager.query_events(filter).await?;
+    for _ in 0..10 {
+        let events = collector.read_next_events(100).await?;
+        match events {
+            Some(events) => {
+                for event in events {
+                    debug!("{event_type}: {ts} - {id} - {msg}",
+                        event_type=get_event_type_id(event.as_ref()),
+                        id=event.get_key(),
+                        ts=event.get_created_time(),
+                        msg=event.get_full_formatted_message().as_ref().unwrap_or(&String::from("No message")));
+                }
+            },
+            None => debug!("No events found"),
+        }
+        sleep(std::time::Duration::from_secs(5)).await;
     }
+    collector.destroy_collector().await?;
     Ok(())
 }
 
@@ -119,7 +129,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let event_manager = EventManager::new(vim_client.clone(), 
     &content.event_manager.ok_or(Error::Error("No event manager found".to_string()))?.value);
 
-    dump_events(&event_manager).await?;
+    dump_events(vim_client.clone(), &event_manager).await?;
 
     Ok(())
 }
