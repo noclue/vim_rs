@@ -4,6 +4,6 @@ members = [
     "gen",
     "vim",
     "examples/vim_tests",
-    "examples/eventster"
-]
+    "examples/eventster",
+    "examples/mac_monitor"]
 resolver = "2"

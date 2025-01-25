@@ -1,0 +1,13 @@
+[package]
+name = "mac_monitor"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+chrono = "0.4.39"
+env_logger = "0.11.5"
+log = "0.4.22"
+reqwest = "0.12.9"
+thiserror = "2.0.3"
+tokio = "1.41.1"
+vim = { version = "0.1.0", path = "../../vim" }
