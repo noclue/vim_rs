@@ -145,10 +145,10 @@ impl HostVFlashManager {
         Ok(self.client.execute_void(req).await?)
     }
     /// Host vFlash configuration information.
-    pub async fn v_flash_config_info(&self) -> Result<HostVFlashManagerVFlashConfigInfo> {
+    pub async fn v_flash_config_info(&self) -> Result<Option<HostVFlashManagerVFlashConfigInfo>> {
         let path = format!("/HostVFlashManager/{moId}/vFlashConfigInfo", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
 }
 #[derive(serde::Serialize)]

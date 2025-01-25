@@ -163,10 +163,10 @@ impl EventManager {
     /// The latest event that happened on the VirtualCenter server.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn latest_event(&self) -> Result<Box<dyn EventTrait>> {
+    pub async fn latest_event(&self) -> Result<Option<Box<dyn EventTrait>>> {
         let path = format!("/EventManager/{moId}/latestEvent", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// For each client, the maximum number of event collectors that can exist
     /// simultaneously.

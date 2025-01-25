@@ -169,7 +169,7 @@ mod tests {
     fn test_ref_or_deserialization() {
         let ref_or = json!({"$ref": "#/components/schemas/Animal"});
         let ref_or: RefOr<Schema> = serde_json::from_value(ref_or).unwrap();
-        assert_eq!(ref_or, RefOr::Ref{reference:"#/components/schemas/Animal".to_string(), description: None});
+        assert_eq!(ref_or, RefOr::Ref{reference:"#/components/schemas/Animal".to_string(), description: None, nullable: None});
         let ref_or = json!({"type": "string"});
         let ref_or: RefOr<Schema> = serde_json::from_value(ref_or).unwrap();
         assert_eq!(ref_or, RefOr::Val(Box::new(Schema {

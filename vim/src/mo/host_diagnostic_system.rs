@@ -178,10 +178,10 @@ impl HostDiagnosticSystem {
         Ok(self.client.execute_void(req).await?)
     }
     /// The currently active diagnostic partition.
-    pub async fn active_partition(&self) -> Result<HostDiagnosticPartition> {
+    pub async fn active_partition(&self) -> Result<Option<HostDiagnosticPartition>> {
         let path = format!("/HostDiagnosticSystem/{moId}/activePartition", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
 }
 #[derive(serde::Serialize)]

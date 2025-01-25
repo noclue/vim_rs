@@ -164,10 +164,10 @@ impl OpaqueNetwork {
         Ok(self.client.execute_option(req).await?)
     }
     /// The capability of the Opaque Network.
-    pub async fn capability(&self) -> Result<OpaqueNetworkCapability> {
+    pub async fn capability(&self) -> Result<Option<OpaqueNetworkCapability>> {
         let path = format!("/OpaqueNetwork/{moId}/capability", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// Current configuration issues that have been detected for this entity.
     /// 
@@ -381,10 +381,10 @@ impl OpaqueNetwork {
     /// ## Returns:
     ///
     /// Refers instance of *ManagedEntity*.
-    pub async fn parent(&self) -> Result<ManagedObjectReference> {
+    pub async fn parent(&self) -> Result<Option<ManagedObjectReference>> {
         let path = format!("/OpaqueNetwork/{moId}/parent", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// List of permissions defined for this entity.
     pub async fn permission(&self) -> Result<Option<Vec<Permission>>> {

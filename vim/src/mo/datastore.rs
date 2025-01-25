@@ -621,10 +621,10 @@ impl Datastore {
     /// from any host, or if the datastore does not have VMFS volume.
     /// The configuration can be modified using the method
     /// *StorageResourceManager.ConfigureDatastoreIORM_Task*
-    pub async fn iorm_configuration(&self) -> Result<StorageIormInfo> {
+    pub async fn iorm_configuration(&self) -> Result<Option<StorageIormInfo>> {
         let path = format!("/Datastore/{moId}/iormConfiguration", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// Name of this entity, unique relative to its parent.
     /// 
@@ -676,10 +676,10 @@ impl Datastore {
     /// ## Returns:
     ///
     /// Refers instance of *ManagedEntity*.
-    pub async fn parent(&self) -> Result<ManagedObjectReference> {
+    pub async fn parent(&self) -> Result<Option<ManagedObjectReference>> {
         let path = format!("/Datastore/{moId}/parent", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// List of permissions defined for this entity.
     pub async fn permission(&self) -> Result<Option<Vec<Permission>>> {

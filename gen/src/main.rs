@@ -17,8 +17,8 @@ fn load_openapi<P: AsRef<Path>>(path: P) -> openapi30::OpenAPI {
 }
 
 fn main() {
-    let root_folder = Path::new("../vim/src/");
-    let vi_json_spec_path = Path::new("data/vi_json_openapi_specification_v8_0_2_0.json");
+    let root_folder = Path::new("vim/src/");
+    let vi_json_spec_path = Path::new("gen/data/vi_json_openapi_specification_v8_0_2_0.json");
     let start = Instant::now();
     emit_vim_bindings(vi_json_spec_path, root_folder);
     println!("Total time in generation: {:?}", start.elapsed());

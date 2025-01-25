@@ -174,11 +174,11 @@ impl DistributedVirtualSwitchManager {
     /// ***NotFound***: If the portgroup for the specified inputs was not found.
     /// 
     /// ***NotSupported***: If the operation is not supported.
-    pub async fn dvs_manager_lookup_dv_port_group(&self, switch_uuid: &str, portgroup_key: &str) -> Result<ManagedObjectReference> {
+    pub async fn dvs_manager_lookup_dv_port_group(&self, switch_uuid: &str, portgroup_key: &str) -> Result<Option<ManagedObjectReference>> {
         let input = DvsManagerLookupDvPortGroupRequestType {switch_uuid, portgroup_key, };
         let path = format!("/DistributedVirtualSwitchManager/{moId}/DVSManagerLookupDvPortGroup", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// This operation returns a list of hosts that are compatible with
     /// the given DistributedVirtualSwitch product specification.
@@ -331,11 +331,11 @@ impl DistributedVirtualSwitchManager {
     /// The productSpec of a *DistributedVirtualSwitch*.
     /// If not set, it is assumed to be the default one used for
     /// DistributedVirtualSwitch creation.
-    pub async fn query_dvs_feature_capability(&self, switch_product_spec: Option<&DistributedVirtualSwitchProductSpec>) -> Result<Box<dyn DvsFeatureCapabilityTrait>> {
+    pub async fn query_dvs_feature_capability(&self, switch_product_spec: Option<&DistributedVirtualSwitchProductSpec>) -> Result<Option<Box<dyn DvsFeatureCapabilityTrait>>> {
         let input = QueryDvsFeatureCapabilityRequestType {switch_product_spec, };
         let path = format!("/DistributedVirtualSwitchManager/{moId}/QueryDvsFeatureCapability", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// This operation returns a list of network offload specifications that are
     /// compatible with the given DistributedVirtualSwitch product specification.
@@ -388,11 +388,11 @@ impl DistributedVirtualSwitchManager {
     /// ## Errors:
     ///
     /// ***NotFound***: If a switch with the UUID doesn't exist.
-    pub async fn query_dvs_by_uuid(&self, uuid: &str) -> Result<ManagedObjectReference> {
+    pub async fn query_dvs_by_uuid(&self, uuid: &str) -> Result<Option<ManagedObjectReference>> {
         let input = QueryDvsByUuidRequestType {uuid, };
         let path = format!("/DistributedVirtualSwitchManager/{moId}/QueryDvsByUuid", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// Update the Distributed Switch configuration on the hosts to bring them in sync with the
     /// current configuration in vCenter Server.

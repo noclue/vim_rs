@@ -1242,10 +1242,10 @@ impl HostStorageSystem {
     ///
     /// ***HostConfigFault***: Unable to get NFS user due to host configuration
     /// problem.
-    pub async fn query_nfs_user(&self) -> Result<HostNasVolumeUserInfo> {
+    pub async fn query_nfs_user(&self) -> Result<Option<HostNasVolumeUserInfo>> {
         let path = format!("/HostStorageSystem/{moId}/QueryNFSUser", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// Queries the set of path selection policy options.
     /// 
@@ -2408,16 +2408,16 @@ impl HostStorageSystem {
     /// In systems prior to the plug-store architecture, the state of a path
     /// may be accessible on the *HostMultipathInfo* data object
     /// of the *HostStorageSystem.storageDeviceInfo* property.
-    pub async fn multipath_state_info(&self) -> Result<HostMultipathStateInfo> {
+    pub async fn multipath_state_info(&self) -> Result<Option<HostMultipathStateInfo>> {
         let path = format!("/HostStorageSystem/{moId}/multipathStateInfo", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// Host storage information up to the device level.
-    pub async fn storage_device_info(&self) -> Result<HostStorageDeviceInfo> {
+    pub async fn storage_device_info(&self) -> Result<Option<HostStorageDeviceInfo>> {
         let path = format!("/HostStorageSystem/{moId}/storageDeviceInfo", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// Datastore paths of files used by the host system on
     /// mounted volumes, for instance, the COS vmdk file of the

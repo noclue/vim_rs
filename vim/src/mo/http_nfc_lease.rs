@@ -221,19 +221,19 @@ impl HttpNfcLease {
     }
     /// If the lease is in the error state, this property contains the
     /// error that caused the lease to be aborted.
-    pub async fn error(&self) -> Result<Box<dyn MethodFaultTrait>> {
+    pub async fn error(&self) -> Result<Option<Box<dyn MethodFaultTrait>>> {
         let path = format!("/HttpNfcLease/{moId}/error", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// Provides information on the objects contained in this lease.
     /// 
     /// The
     /// info property is only valid when the lease is in the ready state.
-    pub async fn info(&self) -> Result<HttpNfcLeaseInfo> {
+    pub async fn info(&self) -> Result<Option<HttpNfcLeaseInfo>> {
         let path = format!("/HttpNfcLease/{moId}/info", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// Provides progress information (0-100 percent) for the initializing state
     /// of the lease.

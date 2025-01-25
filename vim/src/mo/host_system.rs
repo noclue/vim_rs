@@ -545,10 +545,10 @@ impl HostSystem {
     /// Basic information about TPM attestation state of the host.
     /// 
     /// ***Required privileges:*** System.Read
-    pub async fn query_tpm_attestation_report(&self) -> Result<HostTpmAttestationReport> {
+    pub async fn query_tpm_attestation_report(&self) -> Result<Option<HostTpmAttestationReport>> {
         let path = format!("/HostSystem/{moId}/QueryTpmAttestationReport", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// Reboots a host.
     /// 
@@ -948,16 +948,16 @@ impl HostSystem {
         Ok(self.client.execute_option(req).await?)
     }
     /// Host answer file validation result.
-    pub async fn answer_file_validation_result(&self) -> Result<AnswerFileStatusResult> {
+    pub async fn answer_file_validation_result(&self) -> Result<Option<AnswerFileStatusResult>> {
         let path = format!("/HostSystem/{moId}/answerFileValidationResult", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// Host answer file validation state.
-    pub async fn answer_file_validation_state(&self) -> Result<AnswerFileStatusResult> {
+    pub async fn answer_file_validation_state(&self) -> Result<Option<AnswerFileStatusResult>> {
         let path = format!("/HostSystem/{moId}/answerFileValidationState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// List of custom field definitions that are valid for the object's type.
     /// 
@@ -973,31 +973,31 @@ impl HostSystem {
     /// 
     /// This might not be available for a
     /// disconnected host.
-    pub async fn capability(&self) -> Result<HostCapability> {
+    pub async fn capability(&self) -> Result<Option<HostCapability>> {
         let path = format!("/HostSystem/{moId}/capability", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// The host profile compliance check result.
-    pub async fn compliance_check_result(&self) -> Result<ComplianceResult> {
+    pub async fn compliance_check_result(&self) -> Result<Option<ComplianceResult>> {
         let path = format!("/HostSystem/{moId}/complianceCheckResult", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// The host profile compliance check state.
-    pub async fn compliance_check_state(&self) -> Result<HostSystemComplianceCheckState> {
+    pub async fn compliance_check_state(&self) -> Result<Option<HostSystemComplianceCheckState>> {
         let path = format!("/HostSystem/{moId}/complianceCheckState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// Host configuration information.
     /// 
     /// This might not be available for a disconnected
     /// host.
-    pub async fn config(&self) -> Result<HostConfigInfo> {
+    pub async fn config(&self) -> Result<Option<HostConfigInfo>> {
         let path = format!("/HostSystem/{moId}/config", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// Current configuration issues that have been detected for this entity.
     /// 
@@ -1188,10 +1188,10 @@ impl HostSystem {
     /// 
     /// This might not be available for a
     /// disconnected host.
-    pub async fn hardware(&self) -> Result<HostHardwareInfo> {
+    pub async fn hardware(&self) -> Result<Option<HostHardwareInfo>> {
         let path = format!("/HostSystem/{moId}/hardware", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// Information about all licensable resources, currently present on this host.
     /// 
@@ -1269,10 +1269,10 @@ impl HostSystem {
     /// ## Returns:
     ///
     /// Refers instance of *ManagedEntity*.
-    pub async fn parent(&self) -> Result<ManagedObjectReference> {
+    pub async fn parent(&self) -> Result<Option<ManagedObjectReference>> {
         let path = format!("/HostSystem/{moId}/parent", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// List of permissions defined for this entity.
     pub async fn permission(&self) -> Result<Option<Vec<Permission>>> {
@@ -1281,10 +1281,10 @@ impl HostSystem {
         Ok(self.client.execute_option(req).await?)
     }
     /// The host profile precheck-remediation result.
-    pub async fn precheck_remediation_result(&self) -> Result<ApplyHostProfileConfigurationSpec> {
+    pub async fn precheck_remediation_result(&self) -> Result<Option<ApplyHostProfileConfigurationSpec>> {
         let path = format!("/HostSystem/{moId}/precheckRemediationResult", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// The set of recent tasks operating on this managed entity.
     /// 
@@ -1317,16 +1317,16 @@ impl HostSystem {
         Ok(self.client.execute_option(req).await?)
     }
     /// The host profile remediation result.
-    pub async fn remediation_result(&self) -> Result<ApplyHostProfileConfigurationResult> {
+    pub async fn remediation_result(&self) -> Result<Option<ApplyHostProfileConfigurationResult>> {
         let path = format!("/HostSystem/{moId}/remediationResult", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// The host profile remediation state.
-    pub async fn remediation_state(&self) -> Result<HostSystemRemediationState> {
+    pub async fn remediation_state(&self) -> Result<Option<HostSystemRemediationState>> {
         let path = format!("/HostSystem/{moId}/remediationState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// Runtime state information about the host such as connection state.
     pub async fn runtime(&self) -> Result<HostRuntimeInfo> {
@@ -1342,10 +1342,10 @@ impl HostSystem {
     }
     /// Reference for the system resource hierarchy, used for configuring the set of
     /// resources reserved to the system and unavailable to virtual machines.
-    pub async fn system_resources(&self) -> Result<HostSystemResourceInfo> {
+    pub async fn system_resources(&self) -> Result<Option<HostSystemResourceInfo>> {
         let path = format!("/HostSystem/{moId}/systemResources", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// The set of tags associated with this managed entity.
     /// 

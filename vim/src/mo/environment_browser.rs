@@ -75,11 +75,11 @@ impl EnvironmentBrowser {
     /// Returns the ConfigOption object. If invoked on a cluster with no hosts, or
     /// if the ConfigOption with given key is not found for the given host, null
     /// is returned.
-    pub async fn query_config_option(&self, key: Option<&str>, host: Option<&ManagedObjectReference>) -> Result<VirtualMachineConfigOption> {
+    pub async fn query_config_option(&self, key: Option<&str>, host: Option<&ManagedObjectReference>) -> Result<Option<VirtualMachineConfigOption>> {
         let input = QueryConfigOptionRequestType {key, host, };
         let path = format!("/EnvironmentBrowser/{moId}/QueryConfigOption", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// The list of ConfigOption keys available on this entity.
     /// 
@@ -124,11 +124,11 @@ impl EnvironmentBrowser {
     /// Returns the *VirtualMachineConfigOption* object. If invoked on a cluster
     /// with no hosts, or if the *VirtualMachineConfigOption* with given key is
     /// not found for the given host, null is returned.
-    pub async fn query_config_option_ex(&self, spec: Option<&EnvironmentBrowserConfigOptionQuerySpec>) -> Result<VirtualMachineConfigOption> {
+    pub async fn query_config_option_ex(&self, spec: Option<&EnvironmentBrowserConfigOptionQuerySpec>) -> Result<Option<VirtualMachineConfigOption>> {
         let input = QueryConfigOptionExRequestType {spec, };
         let path = format!("/EnvironmentBrowser/{moId}/QueryConfigOptionEx", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// Queries for information about a specific target, a "physical" device that
     /// can be used to back virtual devices.
@@ -160,11 +160,11 @@ impl EnvironmentBrowser {
     ///
     /// Returns the ConfigTarget object. If invoked on a cluster with no hosts,
     /// null is returned.
-    pub async fn query_config_target(&self, host: Option<&ManagedObjectReference>) -> Result<ConfigTarget> {
+    pub async fn query_config_target(&self, host: Option<&ManagedObjectReference>) -> Result<Option<ConfigTarget>> {
         let input = QueryConfigTargetRequestType {host, };
         let path = format!("/EnvironmentBrowser/{moId}/QueryConfigTarget", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// Queries for information on the capabilities supported by the ComputeResource
     /// associated with the EnvironmentBrowser.
@@ -194,11 +194,11 @@ impl EnvironmentBrowser {
     /// Returns the set of capabilities supported by the ComputeResource
     /// associated with the EnvironmentBrowser. If invoked on a cluster with
     /// no hosts, null is returned.
-    pub async fn query_target_capabilities(&self, host: Option<&ManagedObjectReference>) -> Result<HostCapability> {
+    pub async fn query_target_capabilities(&self, host: Option<&ManagedObjectReference>) -> Result<Option<HostCapability>> {
         let input = QueryTargetCapabilitiesRequestType {host, };
         let path = format!("/EnvironmentBrowser/{moId}/QueryTargetCapabilities", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// DatastoreBrowser to browse datastores that are available on this entity.
     /// 
@@ -207,10 +207,10 @@ impl EnvironmentBrowser {
     /// ## Returns:
     ///
     /// Refers instance of *HostDatastoreBrowser*.
-    pub async fn datastore_browser(&self) -> Result<ManagedObjectReference> {
+    pub async fn datastore_browser(&self) -> Result<Option<ManagedObjectReference>> {
         let path = format!("/EnvironmentBrowser/{moId}/datastoreBrowser", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
 }
 #[derive(serde::Serialize)]

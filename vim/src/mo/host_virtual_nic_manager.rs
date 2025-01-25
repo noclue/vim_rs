@@ -56,11 +56,11 @@ impl HostVirtualNicManager {
     /// ***InvalidArgument***: if nicType is invalid
     /// 
     /// ***HostConfigFault***: for any other failure.
-    pub async fn query_net_config(&self, nic_type: &str) -> Result<VirtualNicManagerNetConfig> {
+    pub async fn query_net_config(&self, nic_type: &str) -> Result<Option<VirtualNicManagerNetConfig>> {
         let input = QueryNetConfigRequestType {nic_type, };
         let path = format!("/HostVirtualNicManager/{moId}/QueryNetConfig", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// Select the NicType of the VirtualNic.
     /// 

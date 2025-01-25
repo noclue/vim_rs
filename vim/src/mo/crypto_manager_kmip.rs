@@ -201,11 +201,11 @@ impl CryptoManagerKmip {
     /// ## Returns:
     ///
     /// The default kms cluster of the entity, if any.
-    pub async fn get_default_kms_cluster(&self, entity: Option<&ManagedObjectReference>, defaults_to_parent: Option<bool>) -> Result<KeyProviderId> {
+    pub async fn get_default_kms_cluster(&self, entity: Option<&ManagedObjectReference>, defaults_to_parent: Option<bool>) -> Result<Option<KeyProviderId>> {
         let input = GetDefaultKmsClusterRequestType {entity, defaults_to_parent, };
         let path = format!("/CryptoManagerKmip/{moId}/GetDefaultKmsCluster", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// List keys.
     /// 

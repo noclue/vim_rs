@@ -1195,10 +1195,10 @@ impl StoragePod {
     /// ## Returns:
     ///
     /// Refers instance of *ManagedEntity*.
-    pub async fn parent(&self) -> Result<ManagedObjectReference> {
+    pub async fn parent(&self) -> Result<Option<ManagedObjectReference>> {
         let path = format!("/StoragePod/{moId}/parent", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// List of permissions defined for this entity.
     pub async fn permission(&self) -> Result<Option<Vec<Permission>>> {
@@ -1209,10 +1209,10 @@ impl StoragePod {
     /// Storage DRS related attributes of the Storage Pod.
     /// 
     /// ***Required privileges:*** System.Read
-    pub async fn pod_storage_drs_entry(&self) -> Result<PodStorageDrsEntry> {
+    pub async fn pod_storage_drs_entry(&self) -> Result<Option<PodStorageDrsEntry>> {
         let path = format!("/StoragePod/{moId}/podStorageDrsEntry", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// The set of recent tasks operating on this managed entity.
     /// 
@@ -1247,10 +1247,10 @@ impl StoragePod {
     /// Storage pod summary.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn summary(&self) -> Result<StoragePodSummary> {
+    pub async fn summary(&self) -> Result<Option<StoragePodSummary>> {
         let path = format!("/StoragePod/{moId}/summary", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// The set of tags associated with this managed entity.
     /// 

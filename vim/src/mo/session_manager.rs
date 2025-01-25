@@ -613,10 +613,10 @@ impl SessionManager {
     /// If the client is not logged on, the value is null.
     /// 
     /// ***Required privileges:*** System.Anonymous
-    pub async fn current_session(&self) -> Result<UserSession> {
+    pub async fn current_session(&self) -> Result<Option<UserSession>> {
         let path = format!("/SessionManager/{moId}/currentSession", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// This is the default server locale.
     /// 

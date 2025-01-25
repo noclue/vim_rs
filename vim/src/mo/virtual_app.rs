@@ -1330,10 +1330,10 @@ impl VirtualApp {
     /// ## Returns:
     ///
     /// Refers instance of *ManagedEntity*.
-    pub async fn parent(&self) -> Result<ManagedObjectReference> {
+    pub async fn parent(&self) -> Result<Option<ManagedObjectReference>> {
         let path = format!("/VirtualApp/{moId}/parent", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// A reference to the parent folder in the VM and Template folder hierarchy.
     /// 
@@ -1346,20 +1346,20 @@ impl VirtualApp {
     /// ## Returns:
     ///
     /// Refers instance of *Folder*.
-    pub async fn parent_folder(&self) -> Result<ManagedObjectReference> {
+    pub async fn parent_folder(&self) -> Result<Option<ManagedObjectReference>> {
         let path = format!("/VirtualApp/{moId}/parentFolder", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// Reference to the parent vApp.
     ///
     /// ## Returns:
     ///
     /// Refers instance of *ManagedEntity*.
-    pub async fn parent_v_app(&self) -> Result<ManagedObjectReference> {
+    pub async fn parent_v_app(&self) -> Result<Option<ManagedObjectReference>> {
         let path = format!("/VirtualApp/{moId}/parentVApp", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// List of permissions defined for this entity.
     pub async fn permission(&self) -> Result<Option<Vec<Permission>>> {
@@ -1473,10 +1473,10 @@ impl VirtualApp {
     /// Configuration of this package.
     /// 
     /// ***Required privileges:*** System.Read
-    pub async fn v_app_config(&self) -> Result<VAppConfigInfo> {
+    pub async fn v_app_config(&self) -> Result<Option<VAppConfigInfo>> {
         let path = format!("/VirtualApp/{moId}/vAppConfig", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// List of custom field values.
     /// 

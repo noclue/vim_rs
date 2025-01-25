@@ -2,7 +2,7 @@
 // Original work: https://github.com/vmware/pyvmomi-community-samples/blob/master/samples/monitor_mac_addresses.py
 
 use std::collections::HashMap;
-use std::time::{self, Instant};
+use std::time::Instant;
 use std::{env, sync::Arc};
 use vim::mo::{PropertyCollector, PropertyFilter, ServiceInstance, SessionManager, View, ViewManager};
 use vim::types::structs::{CastInto, ManagedObjectReference, ServiceContent, ValueElements, VimAny, VirtualEthernetCardTrait}; 
@@ -11,7 +11,7 @@ use vim::types::structs;
 
 use vim::core::client::Client;
 use tokio;
-use log::{debug, error, info, trace, warn};
+use log::{debug, error, info, trace};
 use env_logger;
 
 #[derive(Debug, thiserror::Error)]
@@ -50,18 +50,18 @@ struct VmChange {
 /// Listens for changes in VM network details
 trait VmChangeListener {
     fn update_vm(&mut self, vm_id: String, vm_details: VmChange);
-    fn remove_vm(&self, vm_id: String);
+    fn remove_vm(&mut self, vm_id: String);
 }
 
 /// Prints the changes in VM network details
 struct VmChangePrinter {}
 
 impl VmChangeListener for VmChangePrinter {
-    fn update_vm(&self, vm_id: String, vm_details: VmChange) {
+    fn update_vm(&mut self, vm_id: String, vm_details: VmChange) {
         info!("VM {} updated: {:?}", vm_id, vm_details);
     }
 
-    fn remove_vm(&self, vm_id: String) {
+    fn remove_vm(&mut self, vm_id: String) {
         info!("VM {} removed", vm_id);
     }
 }
@@ -87,13 +87,8 @@ impl VMMacCache {
 impl VmChangeListener for VMMacCache {
     fn update_vm(&mut self, vm_id: String, vm_details: VmChange) {
         let mut update = false;
-        let mut vm_change = VmChange {
-            vm_name: None,
-            vnic: None,
-            guest_net: None,
-        };
-        if let Some(mut old_vm_details) = self.vm_cache.get(&vm_id) {
-            let updated_vm_details = old_vm_details.clone();
+        let (updated_vm_details, update) = if let Some(old_vm_details) = self.vm_cache.get(&vm_id) {
+            let mut updated_vm_details = old_vm_details.clone();
             if let Some(vnic) = vm_details.vnic {
                 if updated_vm_details.vnic != vnic {
                     updated_vm_details.vnic = vnic;
@@ -112,20 +107,23 @@ impl VmChangeListener for VMMacCache {
                     update = true;
                 }
             }
-            if update {
-                self.listener.update_vm(vm_id, VmChange { 
-                    vm_name: Some(updated_vm_details.vm_name), 
-                    vnic: Some(updated_vm_details.vnic), 
-                    guest_net: Some(updated_vm_details.guest_net) });
-                self.vm_cache.insert(vm_id.clone(), updated_vm_details);
-            }
+            (updated_vm_details, update)
         } else {
-            update = true;
-        }
+            let new_vm_details = VmDetails {
+                vm_name: vm_details.vm_name.unwrap_or("".to_string()),
+                vnic: vm_details.vnic.unwrap_or(HashMap::new()),
+                guest_net: vm_details.guest_net.unwrap_or(HashMap::new()),
+            };
+            (new_vm_details.clone(), true)
+        };
 
         if update {
-            self.vm_cache.insert(vm_id.clone(), vm_details.clone());
-            self.listener.update_vm(vm_id, vm_details);
+            self.vm_cache.insert(vm_id.clone(), updated_vm_details.clone());
+            self.listener.update_vm(vm_id, VmChange {
+                vm_name: Some(updated_vm_details.vm_name),
+                vnic: Some(updated_vm_details.vnic),
+                guest_net: Some(updated_vm_details.guest_net),
+            });
         }
     }
 
@@ -136,8 +134,7 @@ impl VmChangeListener for VMMacCache {
 }
 
 struct VmChangeDetector {
-    listener: Arc<Box<dyn VmChangeListener>>,
-    content: ServiceContent,
+    listener: Box<dyn VmChangeListener>,
     client: Arc<Client>,
     property_collector: PropertyCollector,
     view: String,
@@ -146,7 +143,7 @@ struct VmChangeDetector {
 }
 
 impl VmChangeDetector {
-    async fn new(listener: Arc<Box<dyn VmChangeListener>>, content: ServiceContent, client: Arc<Client>) -> Result<Self> {
+    async fn new(listener: Box<dyn VmChangeListener>, content: ServiceContent, client: Arc<Client>) -> Result<Self> {
         let pc_id = content.property_collector.value.clone();
         // TODO : Create own property collector instance PRopertyCollector::CreatePropertyCollector
         let property_collector = PropertyCollector::new(client.clone(), &pc_id);
@@ -186,7 +183,6 @@ impl VmChangeDetector {
 
         Ok(VmChangeDetector {
             listener,
-            content,
             client: client.clone(),
             property_collector: property_collector,
             view: view.value,
@@ -206,55 +202,60 @@ impl VmChangeDetector {
         
         loop {
             let res = self.property_collector.wait_for_updates_ex(Some(&self.version), Some(&wait_opts)).await?;
-            self.version = res.version.clone();
-            let Some(ref filter_set) = res.filter_set else {
-                debug!("No filter set received");
-                continue;
-            };
-
-            for update in filter_set {
-                if self.filter != update.filter.value {
-                    trace!("Ignoring update for filter {}", update.filter.value);
-                    continue;
-                }
-                let Some(ref object_set) = update.object_set else {
-                    debug!("No object set received");
+            if let Some(res) = res {
+                self.version = res.version.clone();
+                let Some(ref filter_set) = res.filter_set else {
+                    debug!("No filter set received");
                     continue;
                 };
-                for change in object_set {
-                    match change.kind {
-                        enums::ObjectUpdateKindEnum::Enter => {
-                            let Some(ref change_set) = change.change_set else {
-                                error!("No change set received on Enter of vm: {}", change.obj.value);
-                                continue;
-                            };
-                            let vm_change = process_property_change(change_set);
-                            debug!("Enter");
+
+                for update in filter_set {
+                    if self.filter != update.filter.value {
+                        trace!("Ignoring update for filter {}", update.filter.value);
+                        continue;
+                    }
+                    let Some(ref object_set) = update.object_set else {
+                        debug!("No object set received");
+                        continue;
+                    };
+                    for change in object_set {
+                        match change.kind {
+                            enums::ObjectUpdateKindEnum::Enter => {
+                                self.process_change(change);
+                            }
+                            enums::ObjectUpdateKindEnum::Modify => {
+                                self.process_change(change);
+                            }
+                            enums::ObjectUpdateKindEnum::Leave => {
+                                self.listener.remove_vm(change.obj.value.clone());
+                            }
+                            enums::ObjectUpdateKindEnum::Other_(ref other) => {
+                                debug!("Unknown change kind {}", other);
+                            }
                         }
-                        enums::ObjectUpdateKindEnum::Modify => {
-                            debug!("Modify");
-                        }
-                        enums::ObjectUpdateKindEnum::Leave => {
-                            debug!("Leave");
-                        }
-                        enums::ObjectUpdateKindEnum::Other_(ref other) => {
-                            debug!("Unknown change kind {}", other);
-                        }
-                        
                     }
                 }
+                let elapsed = start.elapsed().as_secs();
+                if elapsed >= seconds {
+                    break;
+                }
             }
-            if start.elapsed().as_secs() >= seconds {
-                break;
-            }    
-
         }
 
         Ok(())
     }
+
+fn process_change(&mut self, change: &structs::ObjectUpdate) {
+        let Some(ref change_set) = change.change_set else {
+            error!("No change set received on Enter of vm: {}", change.obj.value);
+            return;
+        };
+        let vm_change = create_vm_change(change_set);
+        self.listener.update_vm(change.obj.value.clone(), vm_change);
+    }
 }
 
-fn process_property_change(change_set: &Vec<structs::PropertyChange>) -> VmChange {
+fn create_vm_change<'a>(change_set: &'a Vec<structs::PropertyChange>) -> VmChange {
     let mut vm_change = VmChange {
         vm_name: None,
         vnic: None,
@@ -281,31 +282,45 @@ fn process_property_change(change_set: &Vec<structs::PropertyChange>) -> VmChang
                 };
                 let devices  = match devices {
                     VimAny::Value(ValueElements::ArrayOfVirtualDevice(v)) => v,
-                    _ => &Vec::new(),
+                    _ => continue,
                 };
-                let mut vnic = HashMap::new();
+                let mut vnic: HashMap<i64, String> = HashMap::new();
                 for device in devices {
-                    let Some(eth): Option<&dyn VirtualEthernetCardTrait> = device.as_vim_object_ref().into_ref() else {
+                    let key =device.get_key();
+                    let Some(eth): Option<&dyn VirtualEthernetCardTrait> = device.as_ref().into_ref() else {
                         continue;
                     };
-                    if let Some(mac) = eth.get_mac_address().clone() {
-                        vnic.insert(device.key, mac);
+                    if let Some(ref mac) = eth.get_mac_address() {
+                        vnic.insert(key.into(), mac.clone());
                     }
                 }
                 vm_change.vnic = Some(vnic);
             }
             "guest.net" => {
-                let mut guest_net = HashMap::new();
-                for net in change.val {
-                    let net = net.as_any().downcast_ref::<structs::GuestNicInfo>().unwrap();
+                // Vec<GuestNicInfo>
+                let Some(ref nets) = change.val else {
+                    error!("No value received for guest.net change");
+                    continue;
+                };
+                let nets = match nets {
+                    VimAny::Value(ValueElements::ArrayOfGuestNicInfo(v)) => v,
+                    _ => continue,
+                };
+
+                let mut guest_net: HashMap<String, Vec<String>> = HashMap::new();
+                for net in nets {
+                    let Some(ref mac_address) = net.mac_address else {
+                        error!("No MAC received for guest.net change");
+                        continue;
+                    };
                     if let Some(ip) = net.ip_address.clone() {
-                        guest_net.insert(net.mac_address.clone().unwrap(), ip);
+                        guest_net.insert(mac_address.clone().into(), ip);
                     }
                 }
                 vm_change.guest_net = Some(guest_net);
             }
             _ => {
-                debug!("Ignoring change for property {}", change.name);
+                debug!("Ignoring change for property {}", change.name.clone());
             }
         }
     }
@@ -372,6 +387,10 @@ async fn main() -> Result<()> {
 
     let (vim_client, content) = create_client(vc_server, username, pwd).await?;
 
+    let listener = Box::new(VmChangePrinter {});
+    let listener = Box::new(VMMacCache::new(listener));
+    let mut detector = VmChangeDetector::new(listener, content, vim_client).await?;
+    detector.monitor(60).await?;
 
     Ok(())
 }

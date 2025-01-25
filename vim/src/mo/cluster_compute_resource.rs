@@ -341,10 +341,10 @@ impl ClusterComputeResource {
     /// ## Returns:
     ///
     /// Refers instance of *ClusterEVCManager*.
-    pub async fn evc_manager(&self) -> Result<ManagedObjectReference> {
+    pub async fn evc_manager(&self) -> Result<Option<ManagedObjectReference>> {
         let path = format!("/ClusterComputeResource/{moId}/EvcManager", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// Extend an existing HCI cluster.
     /// 
@@ -823,10 +823,10 @@ impl ClusterComputeResource {
     /// Retrieve DAS advanced runtime info for this cluster.
     /// 
     /// ***Required privileges:*** System.Read
-    pub async fn retrieve_das_advanced_runtime_info(&self) -> Result<Box<dyn ClusterDasAdvancedRuntimeInfoTrait>> {
+    pub async fn retrieve_das_advanced_runtime_info(&self) -> Result<Option<Box<dyn ClusterDasAdvancedRuntimeInfoTrait>>> {
         let path = format!("/ClusterComputeResource/{moId}/RetrieveDasAdvancedRuntimeInfo", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// Set the desired encryption mode and host key for the cluster.
     /// 
@@ -1213,17 +1213,17 @@ impl ClusterComputeResource {
     /// ## Returns:
     ///
     /// Refers instance of *EnvironmentBrowser*.
-    pub async fn environment_browser(&self) -> Result<ManagedObjectReference> {
+    pub async fn environment_browser(&self) -> Result<Option<ManagedObjectReference>> {
         let path = format!("/ClusterComputeResource/{moId}/environmentBrowser", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// This is applicable to clusters which are configured using the HCI
     /// workflow and contains data related to the workflow and specification.
-    pub async fn hci_config(&self) -> Result<ClusterComputeResourceHciConfigInfo> {
+    pub async fn hci_config(&self) -> Result<Option<ClusterComputeResourceHciConfigInfo>> {
         let path = format!("/ClusterComputeResource/{moId}/hciConfig", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// List of hosts that are part of this compute resource.
     /// 
@@ -1327,10 +1327,10 @@ impl ClusterComputeResource {
     /// ## Returns:
     ///
     /// Refers instance of *ManagedEntity*.
-    pub async fn parent(&self) -> Result<ManagedObjectReference> {
+    pub async fn parent(&self) -> Result<Option<ManagedObjectReference>> {
         let path = format!("/ClusterComputeResource/{moId}/parent", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// List of permissions defined for this entity.
     pub async fn permission(&self) -> Result<Option<Vec<Permission>>> {
@@ -1394,10 +1394,10 @@ impl ClusterComputeResource {
     /// ## Returns:
     ///
     /// Refers instance of *ResourcePool*.
-    pub async fn resource_pool(&self) -> Result<ManagedObjectReference> {
+    pub async fn resource_pool(&self) -> Result<Option<ManagedObjectReference>> {
         let path = format!("/ClusterComputeResource/{moId}/resourcePool", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// Basic runtime information about a compute resource.
     /// 

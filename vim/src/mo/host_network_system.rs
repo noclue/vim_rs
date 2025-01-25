@@ -746,10 +746,10 @@ impl HostNetworkSystem {
         Ok(self.client.execute_option(req).await?)
     }
     /// Capability vector indicating the available product features.
-    pub async fn capabilities(&self) -> Result<HostNetCapabilities> {
+    pub async fn capabilities(&self) -> Result<Option<HostNetCapabilities>> {
         let path = format!("/HostNetworkSystem/{moId}/capabilities", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// IP route configuration for the service console.
     /// 
@@ -757,28 +757,28 @@ impl HostNetworkSystem {
     /// configuration is global to the entire host. This property is
     /// set only if
     /// IP routing can be configured for the service console.
-    pub async fn console_ip_route_config(&self) -> Result<Box<dyn HostIpRouteConfigTrait>> {
+    pub async fn console_ip_route_config(&self) -> Result<Option<Box<dyn HostIpRouteConfigTrait>>> {
         let path = format!("/HostNetworkSystem/{moId}/consoleIpRouteConfig", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// Deprecated as of vSphere API 5.5, which is moved to
     /// each NetStackInstance. This only works on the default NetStackInstance.
     /// 
     /// Client-side DNS configuration.
-    pub async fn dns_config(&self) -> Result<Box<dyn HostDnsConfigTrait>> {
+    pub async fn dns_config(&self) -> Result<Option<Box<dyn HostDnsConfigTrait>>> {
         let path = format!("/HostNetworkSystem/{moId}/dnsConfig", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// Deprecated as of vSphere API 5.5, which is moved to
     /// each NetStackInstance. This only works on the default NetStackInstance.
     /// 
     /// The IP route configuration.
-    pub async fn ip_route_config(&self) -> Result<Box<dyn HostIpRouteConfigTrait>> {
+    pub async fn ip_route_config(&self) -> Result<Option<Box<dyn HostIpRouteConfigTrait>>> {
         let path = format!("/HostNetworkSystem/{moId}/ipRouteConfig", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// Network configuration information.
     /// 
@@ -787,24 +787,24 @@ impl HostNetworkSystem {
     /// information is a strict subset of the information available in NetworkInfo.
     /// 
     /// See also *HostNetworkInfo*.
-    pub async fn network_config(&self) -> Result<HostNetworkConfig> {
+    pub async fn network_config(&self) -> Result<Option<HostNetworkConfig>> {
         let path = format!("/HostNetworkSystem/{moId}/networkConfig", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// The network configuration and runtime information.
-    pub async fn network_info(&self) -> Result<HostNetworkInfo> {
+    pub async fn network_info(&self) -> Result<Option<HostNetworkInfo>> {
         let path = format!("/HostNetworkSystem/{moId}/networkInfo", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// Deprecated as of VI API 4.0, the system defaults will be used.
     /// 
     /// The offload capabilities available on this server.
-    pub async fn offload_capabilities(&self) -> Result<HostNetOffloadCapabilities> {
+    pub async fn offload_capabilities(&self) -> Result<Option<HostNetOffloadCapabilities>> {
         let path = format!("/HostNetworkSystem/{moId}/offloadCapabilities", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// List of custom field values.
     /// 

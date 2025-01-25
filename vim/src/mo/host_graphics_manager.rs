@@ -98,10 +98,10 @@ impl HostGraphicsManager {
     /// Graphics Configuration
     /// 
     /// ***Required privileges:*** System.Read
-    pub async fn graphics_config(&self) -> Result<HostGraphicsConfig> {
+    pub async fn graphics_config(&self) -> Result<Option<HostGraphicsConfig>> {
         let path = format!("/HostGraphicsManager/{moId}/graphicsConfig", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// Array of graphics information
     /// 

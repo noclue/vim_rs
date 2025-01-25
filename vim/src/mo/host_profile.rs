@@ -285,10 +285,10 @@ impl HostProfile {
     /// ## Returns:
     ///
     /// Profile divided into sections containing element descriptions and messages.
-    pub async fn retrieve_description(&self) -> Result<ProfileDescription> {
+    pub async fn retrieve_description(&self) -> Result<Option<ProfileDescription>> {
         let path = format!("/HostProfile/{moId}/RetrieveDescription", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// Update the <code>HostProfile</code> with the specified configuration data.
     /// 
@@ -365,10 +365,10 @@ impl HostProfile {
     /// Deprecated as of vSphere API 5.0. use *Profile.RetrieveDescription* instead.
     /// 
     /// Localizable description of the profile
-    pub async fn description(&self) -> Result<ProfileDescription> {
+    pub async fn description(&self) -> Result<Option<ProfileDescription>> {
         let path = format!("/HostProfile/{moId}/description", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// List of managed entities associated with the profile.
     ///
@@ -403,20 +403,20 @@ impl HostProfile {
     /// ## Returns:
     ///
     /// Refers instance of *HostSystem*.
-    pub async fn reference_host(&self) -> Result<ManagedObjectReference> {
+    pub async fn reference_host(&self) -> Result<Option<ManagedObjectReference>> {
         let path = format!("/HostProfile/{moId}/referenceHost", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// This object is created or updated if the *HostProfileValidationState_enum*
     /// is Failed.
     /// 
     /// This object captures the most recent validation
     /// result for the host profile object in case of failure.
-    pub async fn validation_failure_info(&self) -> Result<HostProfileValidationFailureInfo> {
+    pub async fn validation_failure_info(&self) -> Result<Option<HostProfileValidationFailureInfo>> {
         let path = format!("/HostProfile/{moId}/validationFailureInfo", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// State of the host profile validation operation.
     /// 

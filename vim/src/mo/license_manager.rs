@@ -443,10 +443,10 @@ impl LicenseManager {
     /// Deprecated as of vSphere API 4.0, this property is not used by the system.
     /// 
     /// Return current diagnostic information.
-    pub async fn diagnostics(&self) -> Result<LicenseDiagnostics> {
+    pub async fn diagnostics(&self) -> Result<Option<LicenseDiagnostics>> {
         let path = format!("/LicenseManager/{moId}/diagnostics", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// ***Required privileges:*** System.Read
     pub async fn evaluation(&self) -> Result<LicenseManagerEvaluationInfo> {
@@ -470,10 +470,10 @@ impl LicenseManager {
     /// ## Returns:
     ///
     /// Refers instance of *LicenseAssignmentManager*.
-    pub async fn license_assignment_manager(&self) -> Result<ManagedObjectReference> {
+    pub async fn license_assignment_manager(&self) -> Result<Option<ManagedObjectReference>> {
         let path = format!("/LicenseManager/{moId}/licenseAssignmentManager", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// Deprecated as of vSphere API 4.0, use
     /// *LicenseAssignmentManager.QueryAssignedLicenses* instead.

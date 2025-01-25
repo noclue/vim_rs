@@ -3041,10 +3041,10 @@ impl VirtualMachine {
     /// if the server is unable to access the virtual machine files on disk,
     /// and is often also unavailable during the initial phases of
     /// virtual machine creation.
-    pub async fn config(&self) -> Result<VirtualMachineConfigInfo> {
+    pub async fn config(&self) -> Result<Option<VirtualMachineConfigInfo>> {
         let path = format!("/VirtualMachine/{moId}/config", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// Current configuration issues that have been detected for this entity.
     /// 
@@ -3227,10 +3227,10 @@ impl VirtualMachine {
     /// operating system information reflects the last known state of the virtual machine.
     /// For powered on machines, this is current information. For powered off machines,
     /// this is the last recorded state before the virtual machine was powered off.
-    pub async fn guest(&self) -> Result<GuestInfo> {
+    pub async fn guest(&self) -> Result<Option<GuestInfo>> {
         let path = format!("/VirtualMachine/{moId}/guest", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// The guest heartbeat.
     /// 
@@ -3257,10 +3257,10 @@ impl VirtualMachine {
     /// produce any property values as no updates are generated.
     /// 
     /// Detailed information about the files that comprise this virtual machine.
-    pub async fn layout(&self) -> Result<VirtualMachineFileLayout> {
+    pub async fn layout(&self) -> Result<Option<VirtualMachineFileLayout>> {
         let path = format!("/VirtualMachine/{moId}/layout", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// Detailed information about the files that comprise this virtual machine.
     /// 
@@ -3272,10 +3272,10 @@ impl VirtualMachine {
     /// If you use the PropertyCollector.WaitForUpdatesEx method, specify
     /// an empty string for the version parameter. Any other version value will not
     /// produce any property values as no updates are generated.
-    pub async fn layout_ex(&self) -> Result<VirtualMachineFileLayoutEx> {
+    pub async fn layout_ex(&self) -> Result<Option<VirtualMachineFileLayoutEx>> {
         let path = format!("/VirtualMachine/{moId}/layoutEx", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// Name of this entity, unique relative to its parent.
     /// 
@@ -3340,20 +3340,20 @@ impl VirtualMachine {
     /// ## Returns:
     ///
     /// Refers instance of *ManagedEntity*.
-    pub async fn parent(&self) -> Result<ManagedObjectReference> {
+    pub async fn parent(&self) -> Result<Option<ManagedObjectReference>> {
         let path = format!("/VirtualMachine/{moId}/parent", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// Reference to the parent vApp.
     ///
     /// ## Returns:
     ///
     /// Refers instance of *ManagedEntity*.
-    pub async fn parent_v_app(&self) -> Result<ManagedObjectReference> {
+    pub async fn parent_v_app(&self) -> Result<Option<ManagedObjectReference>> {
         let path = format!("/VirtualMachine/{moId}/parentVApp", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// List of permissions defined for this entity.
     pub async fn permission(&self) -> Result<Option<Vec<Permission>>> {
@@ -3404,10 +3404,10 @@ impl VirtualMachine {
     /// 
     /// To change the configuration, use
     /// *ResourcePool.UpdateChildResourceConfiguration*.
-    pub async fn resource_config(&self) -> Result<ResourceConfigSpec> {
+    pub async fn resource_config(&self) -> Result<Option<ResourceConfigSpec>> {
         let path = format!("/VirtualMachine/{moId}/resourceConfig", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// The current resource pool that specifies resource allocation
     /// for this virtual machine.
@@ -3421,10 +3421,10 @@ impl VirtualMachine {
     /// ## Returns:
     ///
     /// Refers instance of *ResourcePool*.
-    pub async fn resource_pool(&self) -> Result<ManagedObjectReference> {
+    pub async fn resource_pool(&self) -> Result<Option<ManagedObjectReference>> {
         let path = format!("/VirtualMachine/{moId}/resourcePool", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// The roots of all snapshot trees for the virtual machine.
     ///
@@ -3458,10 +3458,10 @@ impl VirtualMachine {
     /// - *remove*
     /// - *revert*
     /// - *removeAllSnapshots*
-    pub async fn snapshot(&self) -> Result<VirtualMachineSnapshotInfo> {
+    pub async fn snapshot(&self) -> Result<Option<VirtualMachineSnapshotInfo>> {
         let path = format!("/VirtualMachine/{moId}/snapshot", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// Storage space used by the virtual machine, split by datastore.
     /// 
@@ -3473,10 +3473,10 @@ impl VirtualMachine {
     /// If you use the PropertyCollector.WaitForUpdatesEx method, specify
     /// an empty string for the version parameter. Any other version value will not
     /// produce any property values as no updates are generated.
-    pub async fn storage(&self) -> Result<VirtualMachineStorageInfo> {
+    pub async fn storage(&self) -> Result<Option<VirtualMachineStorageInfo>> {
         let path = format!("/VirtualMachine/{moId}/storage", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// Basic information about this virtual machine.
     /// 

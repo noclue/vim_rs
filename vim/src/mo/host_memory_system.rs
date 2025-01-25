@@ -87,10 +87,10 @@ impl HostMemorySystem {
     /// The
     /// existence of this data object indicates if the service console memory
     /// reservation must be configured for this host.
-    pub async fn console_reservation_info(&self) -> Result<ServiceConsoleReservationInfo> {
+    pub async fn console_reservation_info(&self) -> Result<Option<ServiceConsoleReservationInfo>> {
         let path = format!("/HostMemorySystem/{moId}/consoleReservationInfo", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// List of custom field values.
     /// 
@@ -109,10 +109,10 @@ impl HostMemorySystem {
     /// The
     /// existence of this data object indicates if the virtual machine memory
     /// reservation must be configured for this host.
-    pub async fn virtual_machine_reservation_info(&self) -> Result<VirtualMachineMemoryReservationInfo> {
+    pub async fn virtual_machine_reservation_info(&self) -> Result<Option<VirtualMachineMemoryReservationInfo>> {
         let path = format!("/HostMemorySystem/{moId}/virtualMachineReservationInfo", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
 }
 #[derive(serde::Serialize)]

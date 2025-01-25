@@ -419,6 +419,7 @@ fn get_success_return_type(operation: &Operation, path: &String) -> Result<(Opti
             let schema = content.schema.as_ref().ok_or_else(|| Error::InvalidOperation(operation.operation_id.as_ref().unwrap_or(path).clone(), "expected success response schema".to_string()))?;
             let nullable = match schema {
                 RefOr::Val(schema) => schema.nullable.unwrap_or(false),
+                RefOr::Ref { reference: _, description: _, nullable } => { nullable.unwrap_or(false) }
                 _ => false,
             };
             return Ok((Some(DataType::try_from(schema)?), nullable));

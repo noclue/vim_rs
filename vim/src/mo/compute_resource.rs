@@ -376,10 +376,10 @@ impl ComputeResource {
     /// ## Returns:
     ///
     /// Refers instance of *EnvironmentBrowser*.
-    pub async fn environment_browser(&self) -> Result<ManagedObjectReference> {
+    pub async fn environment_browser(&self) -> Result<Option<ManagedObjectReference>> {
         let path = format!("/ComputeResource/{moId}/environmentBrowser", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// List of hosts that are part of this compute resource.
     /// 
@@ -475,10 +475,10 @@ impl ComputeResource {
     /// ## Returns:
     ///
     /// Refers instance of *ManagedEntity*.
-    pub async fn parent(&self) -> Result<ManagedObjectReference> {
+    pub async fn parent(&self) -> Result<Option<ManagedObjectReference>> {
         let path = format!("/ComputeResource/{moId}/parent", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// List of permissions defined for this entity.
     pub async fn permission(&self) -> Result<Option<Vec<Permission>>> {
@@ -523,10 +523,10 @@ impl ComputeResource {
     /// ## Returns:
     ///
     /// Refers instance of *ResourcePool*.
-    pub async fn resource_pool(&self) -> Result<ManagedObjectReference> {
+    pub async fn resource_pool(&self) -> Result<Option<ManagedObjectReference>> {
         let path = format!("/ComputeResource/{moId}/resourcePool", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// Basic runtime information about a compute resource.
     /// 

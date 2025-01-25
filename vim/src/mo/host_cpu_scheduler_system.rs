@@ -81,10 +81,10 @@ impl HostCpuSchedulerSystem {
     /// The
     /// existence of this data object type indicates if the CPU scheduler
     /// is capable of scheduling hyperthreads as resources.
-    pub async fn hyperthread_info(&self) -> Result<HostHyperThreadScheduleInfo> {
+    pub async fn hyperthread_info(&self) -> Result<Option<HostHyperThreadScheduleInfo>> {
         let path = format!("/HostCpuSchedulerSystem/{moId}/hyperthreadInfo", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// List of custom field values.
     /// 

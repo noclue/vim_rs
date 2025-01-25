@@ -147,10 +147,10 @@ impl HostFirewallSystem {
         Ok(self.client.execute_option(req).await?)
     }
     /// Firewall configuration.
-    pub async fn firewall_info(&self) -> Result<HostFirewallInfo> {
+    pub async fn firewall_info(&self) -> Result<Option<HostFirewallInfo>> {
         let path = format!("/HostFirewallSystem/{moId}/firewallInfo", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// List of custom field values.
     /// 

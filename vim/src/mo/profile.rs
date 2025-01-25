@@ -117,10 +117,10 @@ impl Profile {
     /// ## Returns:
     ///
     /// Profile divided into sections containing element descriptions and messages.
-    pub async fn retrieve_description(&self) -> Result<ProfileDescription> {
+    pub async fn retrieve_description(&self) -> Result<Option<ProfileDescription>> {
         let path = format!("/Profile/{moId}/RetrieveDescription", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// Overall compliance of entities associated with this profile.
     /// 
@@ -151,10 +151,10 @@ impl Profile {
     /// Deprecated as of vSphere API 5.0. use *Profile.RetrieveDescription* instead.
     /// 
     /// Localizable description of the profile
-    pub async fn description(&self) -> Result<ProfileDescription> {
+    pub async fn description(&self) -> Result<Option<ProfileDescription>> {
         let path = format!("/Profile/{moId}/description", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// List of managed entities associated with the profile.
     ///

@@ -104,16 +104,16 @@ impl HostVMotionSystem {
         Ok(self.client.execute_option(req).await?)
     }
     /// IP configuration of the VMotion VirtualNic.
-    pub async fn ip_config(&self) -> Result<HostIpConfig> {
+    pub async fn ip_config(&self) -> Result<Option<HostIpConfig>> {
         let path = format!("/HostVMotionSystem/{moId}/ipConfig", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// VMotion network configuration.
-    pub async fn net_config(&self) -> Result<HostVMotionNetConfig> {
+    pub async fn net_config(&self) -> Result<Option<HostVMotionNetConfig>> {
         let path = format!("/HostVMotionSystem/{moId}/netConfig", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// List of custom field values.
     /// 

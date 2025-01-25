@@ -26,10 +26,10 @@ impl HostBootDeviceSystem {
     /// The order of devices in the list is unpredictable.
     /// The returned *HostBootDeviceInfo* data object also contains
     /// the key of the current boot device.
-    pub async fn query_boot_devices(&self) -> Result<HostBootDeviceInfo> {
+    pub async fn query_boot_devices(&self) -> Result<Option<HostBootDeviceInfo>> {
         let path = format!("/HostBootDeviceSystem/{moId}/QueryBootDevices", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// Sets the current boot device for the host system.
     /// 

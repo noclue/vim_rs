@@ -70,10 +70,10 @@ impl HostDateTimeSystem {
     ///
     /// The status of the time service on this host based on present time
     /// service configuration.
-    pub async fn test_time_service(&self) -> Result<HostDateTimeSystemServiceTestResult> {
+    pub async fn test_time_service(&self) -> Result<Option<HostDateTimeSystemServiceTestResult>> {
         let path = format!("/HostDateTimeSystem/{moId}/TestTimeService", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// Update the DateTime configuration of the host.
     /// 

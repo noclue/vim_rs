@@ -102,11 +102,11 @@ impl PropertyCollector {
     /// ***RequestCanceled***: if *PropertyCollector.CancelWaitForUpdates* has been called or the session was closed
     /// or the *PropertyCollector* was destroyed at some point after the call was
     /// received but before the update calculation was actually started
-    pub async fn check_for_updates(&self, version: Option<&str>) -> Result<UpdateSet> {
+    pub async fn check_for_updates(&self, version: Option<&str>) -> Result<Option<UpdateSet>> {
         let input = CheckForUpdatesRequestType {version, };
         let path = format!("/PropertyCollector/{moId}/CheckForUpdates", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// Retrieves additional results from a retrieval started by *PropertyCollector.RetrievePropertiesEx* on the same session on the same *PropertyCollector*.
     /// 
@@ -314,11 +314,11 @@ impl PropertyCollector {
     /// ***InvalidType***: See *PropertyCollector.CreateFilter*
     /// 
     /// ***ManagedObjectNotFound***: See *PropertyCollector.CreateFilter*
-    pub async fn retrieve_properties_ex(&self, spec_set: &[PropertyFilterSpec], options: &RetrieveOptions) -> Result<RetrieveResult> {
+    pub async fn retrieve_properties_ex(&self, spec_set: &[PropertyFilterSpec], options: &RetrieveOptions) -> Result<Option<RetrieveResult>> {
         let input = RetrievePropertiesExRequestType {spec_set, options, };
         let path = format!("/PropertyCollector/{moId}/RetrievePropertiesEx", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// Deprecated as of vSphere API 4.1, use *PropertyCollector.WaitForUpdatesEx*.
     /// 
@@ -397,11 +397,11 @@ impl PropertyCollector {
     /// ***RequestCanceled***: if *PropertyCollector.CancelWaitForUpdates* has been called or the session was closed
     /// or the *PropertyCollector* was destroyed at some point after the call was
     /// received
-    pub async fn wait_for_updates_ex(&self, version: Option<&str>, options: Option<&WaitOptions>) -> Result<UpdateSet> {
+    pub async fn wait_for_updates_ex(&self, version: Option<&str>, options: Option<&WaitOptions>) -> Result<Option<UpdateSet>> {
         let input = WaitForUpdatesExRequestType {version, options, };
         let path = format!("/PropertyCollector/{moId}/WaitForUpdatesEx", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// The filters that this *PropertyCollector* uses to determine the list of
     /// properties for which it detects incremental changes.

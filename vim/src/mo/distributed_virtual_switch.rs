@@ -401,11 +401,11 @@ impl DistributedVirtualSwitch {
     /// ***NotFound***: If the portgroup for the specified key is not found.
     /// 
     /// ***NotSupported***: If the operation is not supported.
-    pub async fn lookup_dv_port_group(&self, portgroup_key: &str) -> Result<ManagedObjectReference> {
+    pub async fn lookup_dv_port_group(&self, portgroup_key: &str) -> Result<Option<ManagedObjectReference>> {
         let input = LookupDvPortGroupRequestType {portgroup_key, };
         let path = format!("/DistributedVirtualSwitch/{moId}/LookupDvPortGroup", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// Deprecated as of vSphere API 5.5.
     /// 
@@ -1262,10 +1262,10 @@ impl DistributedVirtualSwitch {
     /// ## Returns:
     ///
     /// Refers instance of *ManagedEntity*.
-    pub async fn parent(&self) -> Result<ManagedObjectReference> {
+    pub async fn parent(&self) -> Result<Option<ManagedObjectReference>> {
         let path = format!("/DistributedVirtualSwitch/{moId}/parent", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// List of permissions defined for this entity.
     pub async fn permission(&self) -> Result<Option<Vec<Permission>>> {
@@ -1314,10 +1314,10 @@ impl DistributedVirtualSwitch {
         Ok(self.client.execute_option(req).await?)
     }
     /// Runtime information of the distributed virtual switch.
-    pub async fn runtime(&self) -> Result<DvsRuntimeInfo> {
+    pub async fn runtime(&self) -> Result<Option<DvsRuntimeInfo>> {
         let path = format!("/DistributedVirtualSwitch/{moId}/runtime", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// Summary of the switch.
     pub async fn summary(&self) -> Result<DvsSummary> {

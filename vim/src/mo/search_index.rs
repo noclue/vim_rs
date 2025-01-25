@@ -163,11 +163,11 @@ impl SearchIndex {
     ///
     /// ***InvalidDatastore***: if a datastore has not been specified in the path or if
     /// the specified datastore does not exist on the specified datacenter.
-    pub async fn find_by_datastore_path(&self, datacenter: &ManagedObjectReference, path: &str) -> Result<ManagedObjectReference> {
+    pub async fn find_by_datastore_path(&self, datacenter: &ManagedObjectReference, path: &str) -> Result<Option<ManagedObjectReference>> {
         let input = FindByDatastorePathRequestType {datacenter, path, };
         let path = format!("/SearchIndex/{moId}/FindByDatastorePath", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// Finds a virtual machine or host by DNS name.
     /// 
@@ -199,11 +199,11 @@ impl SearchIndex {
     /// there are multiple matches.
     /// 
     /// Refers instance of *ManagedEntity*.
-    pub async fn find_by_dns_name(&self, datacenter: Option<&ManagedObjectReference>, dns_name: &str, vm_search: bool) -> Result<ManagedObjectReference> {
+    pub async fn find_by_dns_name(&self, datacenter: Option<&ManagedObjectReference>, dns_name: &str, vm_search: bool) -> Result<Option<ManagedObjectReference>> {
         let input = FindByDnsNameRequestType {datacenter, dns_name, vm_search, };
         let path = format!("/SearchIndex/{moId}/FindByDnsName", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// Finds a managed entity based on its location in the inventory.
     /// 
@@ -228,11 +228,11 @@ impl SearchIndex {
     /// returned.
     /// 
     /// Refers instance of *ManagedEntity*.
-    pub async fn find_by_inventory_path(&self, inventory_path: &str) -> Result<ManagedObjectReference> {
+    pub async fn find_by_inventory_path(&self, inventory_path: &str) -> Result<Option<ManagedObjectReference>> {
         let input = FindByInventoryPathRequestType {inventory_path, };
         let path = format!("/SearchIndex/{moId}/FindByInventoryPath", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// Finds a virtual machine or host by IP address, where the IP address is in
     /// dot-decimal notation.
@@ -267,11 +267,11 @@ impl SearchIndex {
     /// matches any of the Console OS IP addresses.
     /// 
     /// Refers instance of *ManagedEntity*.
-    pub async fn find_by_ip(&self, datacenter: Option<&ManagedObjectReference>, ip: &str, vm_search: bool) -> Result<ManagedObjectReference> {
+    pub async fn find_by_ip(&self, datacenter: Option<&ManagedObjectReference>, ip: &str, vm_search: bool) -> Result<Option<ManagedObjectReference>> {
         let input = FindByIpRequestType {datacenter, ip, vm_search, };
         let path = format!("/SearchIndex/{moId}/FindByIp", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// Finds a virtual machine or host by BIOS or instance UUID.
     /// 
@@ -307,11 +307,11 @@ impl SearchIndex {
     /// returned, even if there are multiple matches.
     /// 
     /// Refers instance of *ManagedEntity*.
-    pub async fn find_by_uuid(&self, datacenter: Option<&ManagedObjectReference>, uuid: &str, vm_search: bool, instance_uuid: Option<bool>) -> Result<ManagedObjectReference> {
+    pub async fn find_by_uuid(&self, datacenter: Option<&ManagedObjectReference>, uuid: &str, vm_search: bool, instance_uuid: Option<bool>) -> Result<Option<ManagedObjectReference>> {
         let input = FindByUuidRequestType {datacenter, uuid, vm_search, instance_uuid, };
         let path = format!("/SearchIndex/{moId}/FindByUuid", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// Finds a particular child based on a managed entity
     /// name.
@@ -339,11 +339,11 @@ impl SearchIndex {
     /// The managed entity that is found, or null if no match is found.
     /// 
     /// Refers instance of *ManagedEntity*.
-    pub async fn find_child(&self, entity: &ManagedObjectReference, name: &str) -> Result<ManagedObjectReference> {
+    pub async fn find_child(&self, entity: &ManagedObjectReference, name: &str) -> Result<Option<ManagedObjectReference>> {
         let input = FindChildRequestType {entity, name, };
         let path = format!("/SearchIndex/{moId}/FindChild", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
 }
 #[derive(serde::Serialize)]

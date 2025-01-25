@@ -535,11 +535,11 @@ impl HostProfileManager {
     /// ## Returns:
     ///
     /// Answer file object will be returned if it exists.
-    pub async fn retrieve_answer_file(&self, host: &ManagedObjectReference) -> Result<AnswerFile> {
+    pub async fn retrieve_answer_file(&self, host: &ManagedObjectReference) -> Result<Option<AnswerFile>> {
         let input = RetrieveAnswerFileRequestType {host, };
         let path = format!("/HostProfileManager/{moId}/RetrieveAnswerFile", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// Returns the answer file associated with a particular host, augmented
     /// with whatever answer file values are required for the supplied host
@@ -560,11 +560,11 @@ impl HostProfileManager {
     /// ## Returns:
     ///
     /// Answer file object will be returned.
-    pub async fn retrieve_answer_file_for_profile(&self, host: &ManagedObjectReference, apply_profile: &HostApplyProfile) -> Result<AnswerFile> {
+    pub async fn retrieve_answer_file_for_profile(&self, host: &ManagedObjectReference, apply_profile: &HostApplyProfile) -> Result<Option<AnswerFile>> {
         let input = RetrieveAnswerFileForProfileRequestType {host, apply_profile, };
         let path = format!("/HostProfileManager/{moId}/RetrieveAnswerFileForProfile", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// This is the batch version of
     /// vim.profile.host.ProfileManager@retrieveAnswerFile.

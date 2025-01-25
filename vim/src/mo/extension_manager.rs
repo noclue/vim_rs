@@ -37,11 +37,11 @@ impl ExtensionManager {
     /// ## Returns:
     ///
     /// Extension that matches given key, if any.
-    pub async fn find_extension(&self, extension_key: &str) -> Result<Extension> {
+    pub async fn find_extension(&self, extension_key: &str) -> Result<Option<Extension>> {
         let input = FindExtensionRequestType {extension_key, };
         let path = format!("/ExtensionManager/{moId}/FindExtension", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        Ok(self.client.execute_option(req).await?)
     }
     /// Deprecated as of VI 4.0, use trusted certificates and
     /// *SessionManager.LoginExtensionBySubjectName* or
