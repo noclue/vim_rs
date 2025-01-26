@@ -94,7 +94,7 @@ mod tests {
         let options = structs::RetrieveOptions {
             max_objects: Some(100),
         };
-        let retrieve_result = property_collector.retrieve_properties_ex(&spec_set, &options).await.unwrap();
+        let retrieve_result = property_collector.retrieve_properties_ex(&spec_set, &options).await.unwrap().unwrap();
         let first_vm_id: Option<String> = retrieve_result.objects.first().map(|obj| obj.obj.value.clone());
         for obj in retrieve_result.objects {
             let propset = &obj.prop_set.unwrap();

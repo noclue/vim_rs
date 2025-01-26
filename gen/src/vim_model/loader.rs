@@ -420,7 +420,6 @@ fn get_success_return_type(operation: &Operation, path: &String) -> Result<(Opti
             let nullable = match schema {
                 RefOr::Val(schema) => schema.nullable.unwrap_or(false),
                 RefOr::Ref { reference: _, description: _, nullable } => { nullable.unwrap_or(false) }
-                _ => false,
             };
             return Ok((Some(DataType::try_from(schema)?), nullable));
         }
