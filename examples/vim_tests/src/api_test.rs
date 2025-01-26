@@ -71,10 +71,7 @@ mod tests {
 
         let spec_set = vec![structs::PropertyFilterSpec {
             object_set: vec![structs::ObjectSpec {
-                obj: ManagedObjectReference {
-                    r#type: MoTypesEnum::ContainerView,
-                    value: view_moref.value.clone(),
-                },
+                obj: view_moref.clone(),
                 skip: Some(false),
                 select_set: Some(vec![Box::new(structs::TraversalSpec {
                     name: Some("traverseEntities".to_string()), 

@@ -138,7 +138,7 @@
 /// - `VirtualizationManager`
 /// - `VmwareDistributedVirtualSwitch`
 /// - `VsanUpgradeSystem`
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Debug, PartialEq, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum MoTypesEnum {
     Alarm,
     AlarmManager,

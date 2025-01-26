@@ -205,8 +205,13 @@ impl<T> VimObjectTrait for T where T: AsAny + std::fmt::Debug + erased_serde::Se
             emit_description(this.printer, doc_string)
         }?;
         let struct_name = to_type_name(name);
-        let discriminator = vim_type.discriminator_value.clone().unwrap_or(name.to_string()); 
-        self.printer.println("#[derive(Debug, serde::Deserialize, serde::Serialize)]")?;
+        let discriminator = vim_type.discriminator_value.clone().unwrap_or(name.to_string());
+        if name == "ManagedObjectReference" {
+            // Add Clone, PartialEq in addtion for ManagedObjectReference
+            self.printer.println("#[derive(Clone, Debug, PartialEq, serde::Deserialize, serde::Serialize)]")?;
+        } else {
+            self.printer.println("#[derive(Debug, serde::Deserialize, serde::Serialize)]")?;
+        }
         if struct_name == discriminator {
             self.printer.println(r#"#[serde(tag="_typeName")]"#)?;
         } else {
