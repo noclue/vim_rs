@@ -1,7 +1,7 @@
 use std::sync::Arc;
 
 use tokio::sync::RwLock;
-use crate::types::structs;
+use super::super::types::structs;
 use log::{warn,debug};
 
 const AUTHN_HEADER: &str = "vmware-api-session-id";

@@ -5,7 +5,7 @@ use std::collections::HashMap;
 use std::time::Instant;
 use std::{env, sync::Arc};
 use vim::mo::{PropertyCollector, PropertyFilter, ServiceInstance, SessionManager, View, ViewManager};
-use vim::types::structs::{CastInto, ManagedObjectReference, ServiceContent, ValueElements, VimAny, VirtualEthernetCardTrait}; 
+use vim::types::structs::{CastInto, ServiceContent, ValueElements, VimAny, VirtualEthernetCardTrait}; 
 use vim::types::enums::{self, MoTypesEnum};
 use vim::types::structs;
 
@@ -152,13 +152,10 @@ impl VmChangeDetector {
         };
         let view_mgr_id = view_mgr_id.value.clone();
         let view_mgr = ViewManager::new(client.clone(), &view_mgr_id);
-        let view = view_mgr.create_container_view(&content.root_folder, Some(&vec!["VirtualMachine".to_string()]), true).await?; 
+        let view_ref = view_mgr.create_container_view(&content.root_folder, Some(&vec!["VirtualMachine".to_string()]), true).await?; 
         let spec = vim::types::structs::PropertyFilterSpec {
             object_set: vec![structs::ObjectSpec {
-                obj: ManagedObjectReference {
-                    r#type: MoTypesEnum::ContainerView,
-                    value: view.value.clone(),
-                },
+                obj: view_ref.clone(),
                 skip: Some(false),
                 select_set: Some(vec![Box::new(structs::TraversalSpec {
                     name: Some("traverseEntities".to_string()), 
@@ -185,7 +182,7 @@ impl VmChangeDetector {
             listener,
             client: client.clone(),
             property_collector: property_collector,
-            view: view.value,
+            view: view_ref.value,
             filter: filter.value,
             version: "".to_string(),
         })
@@ -390,7 +387,7 @@ async fn main() -> Result<()> {
     let listener = Box::new(VmChangePrinter {});
     let listener = Box::new(VMMacCache::new(listener));
     let mut detector = VmChangeDetector::new(listener, content, vim_client).await?;
-    detector.monitor(60).await?;
+    detector.monitor(600).await?;
 
     Ok(())
 }

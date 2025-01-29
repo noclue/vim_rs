@@ -1,9 +1,10 @@
 [workspace]
 members = [
     "openapi30",
-    "gen",
+    "vim_build",
     "vim",
     "examples/vim_tests",
     "examples/eventster",
-    "examples/mac_monitor"]
+    "examples/mac_monitor",
+    "examples/perf_metrics"]
 resolver = "2"

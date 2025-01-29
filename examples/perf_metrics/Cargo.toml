@@ -1,0 +1,9 @@
+[package]
+name = "perf_metrics"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+
+[build-dependencies]
+vim_build = { path = "../../vim_build" }
