@@ -6,6 +6,8 @@ pub enum Error {
     TypeNotFound(String),
     #[error("Printer error: {0}")]
     PrinterError(#[from] super::super::printer::Error),
+    #[error("Internal Error: {0}")]
+    InternalError(String),
 }
 
 // Result is a type alias for handling errors.

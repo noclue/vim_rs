@@ -70,7 +70,7 @@ async fn dump_events(client: Arc<Client>, event_manager: &EventManager) -> Resul
     let collector = vim::mo::EventHistoryCollector::new(client.clone(), &collector.value);
     //let events = event_manager.query_events(filter).await?;
     for _ in 0..10 {
-        let events = collector.read_next_events(100).await?;
+        let events = collector.read_next_events(10).await?;
         match events {
             Some(events) => {
                 for event in events {

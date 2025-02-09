@@ -3,6 +3,7 @@ mod types;
 mod names;
 mod mo;
 mod errors;
+mod deser;
 pub mod library;
 pub mod enums;
 

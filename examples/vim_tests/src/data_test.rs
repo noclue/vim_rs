@@ -12,6 +12,27 @@ mod tests {
     }
 
     #[test]
+    fn test_vim_any_box() {
+        init();
+        let e1000 = create_virtual_e1000();
+        let s = serde_json::to_string(&e1000).unwrap();
+        debug!("{}", s);
+        let any: VimAny = serde_json::from_str(&s).unwrap();
+        info!("{:?}", any);
+    }
+
+    
+    #[test]
+    fn test_eth_json() {
+        init();
+        let e1000 = create_virtual_e1000();
+        let s = serde_json::to_string(&e1000).unwrap();
+        debug!("{}", s);
+        let eth: VirtualE1000 = serde_json::from_str(&s).unwrap();
+        info!("{:?}", eth);
+    }
+
+    #[test]
     fn test_ethernet_box() {
         init();
         let e1000 = create_virtual_e1000();

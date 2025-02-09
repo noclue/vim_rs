@@ -139,6 +139,73 @@ impl Printer for FilePrinter {
     }
 } // impl Printer
 
+pub struct StringPrinter {
+    content: String,
+    indent: usize,
+    indent_string: String,
+}
+
+impl StringPrinter {
+    /// Create a new printer that writes to a file. By default uses 4 spaces for indentation.
+    #[allow(dead_code)]
+    pub fn new(indent_type: Option<IndentType>, indent_size: Option<usize>) -> Self {
+        let indent_string = match indent_type.unwrap_or(IndentType::Space) {
+            IndentType::Space => " ".repeat(indent_size.unwrap_or(4)),
+            IndentType::Tab => "\t".repeat(indent_size.unwrap_or(1)),
+        };
+        Self { content: "".into(), indent: 0, indent_string }
+    }
+}
+
+impl ToString for StringPrinter {
+    fn to_string(&self) -> String {
+        self.content.clone()
+    }
+}
+
+impl Printer for StringPrinter {
+    /// Print a string with a newline.
+    fn println(&mut self, s: &str) -> Result<()> {
+        self.print_indent()?;
+        self.print(s)?;
+        self.newline()?;
+        Ok(())
+    }
+
+    /// Print a newline.
+    fn newline(&mut self) -> Result<()> {
+        self.content.push_str("\n");
+        Ok(())
+    }
+
+    /// Print a string.
+    fn print(&mut self, s: &str) -> Result<()> {
+        self.content.push_str(s);
+        Ok(())
+    }
+
+    /// Print the current indentation.
+    fn print_indent(&mut self) -> Result<()> {
+        for _ in 0..self.indent {
+            self.content.push_str(&self.indent_string);
+        }
+        Ok(())
+    }
+
+    /// Increase the indentation level.
+    fn indent(&mut self) {
+        self.indent += 1;
+    }
+
+    /// Decrease the indentation level.
+    fn dedent(&mut self) {
+        self.indent -= 1;
+    }
+}
+
+
+
+
 #[cfg(test)]
 mod tests {
     use super::*;

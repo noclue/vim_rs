@@ -941,6 +941,13 @@ checksum = "e3148f5046208a5d56bcfc03053e3ca6334e51da8dfb19b6cdc8b306fae3283e"
 name = "perf_metrics"
 version = "0.1.0"
 dependencies = [
+ "chrono",
+ "env_logger",
+ "log",
+ "reqwest",
+ "thiserror 2.0.9",
+ "tokio",
+ "vim",
  "vim_build",
 ]
 

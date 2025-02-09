@@ -1,2 +1,3 @@
 **/target
 .vscode
+examples/perf_metrics/src/vim
