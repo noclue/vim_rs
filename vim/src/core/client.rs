@@ -2,16 +2,21 @@ use std::sync::Arc;
 
 use tokio::sync::RwLock;
 use super::super::types::structs;
-use log::{warn,debug};
+use log::{warn, debug, trace, log_enabled};
+use log::Level::Trace;
 
-const AUTHN_HEADER: &str = "vmware-api-session-id";
+use std::ffi::OsStr;
+
+const LIB_NAME: &str = env!("CARGO_PKG_NAME");
+const LIB_VERSION: &str = env!("CARGO_PKG_VERSION");
+const RUSTC_VERSION: &str = env!("RUSTC_VERSION");
+
+
+/// The API version found in the OpenAPI specification
 const API_RELEASE: &str = "8.0.2.0";
-// const USER_AGENT: &str = concat!(
-//     env!("CARGO_PKG_NAME"),
-//     "/",
-//     env!("CARGO_PKG_VERSION"),
-// );
-// const SERVICE_INSTANCE_ID: &str = "ServiceInstance";
+/// The header key for the session key
+const AUTHN_HEADER: &str = "vmware-api-session-id";
+
 
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
@@ -30,9 +35,10 @@ pub enum Error {
 pub type Result<T> = std::result::Result<T, Error>;
 
 pub struct Client {
-    pub http_client: Arc<reqwest::Client>,
-    pub session_key: Arc<RwLock<Option<String>>>,
-    pub base_url: String,
+    http_client: Arc<reqwest::Client>,
+    session_key: Arc<RwLock<Option<String>>>,
+    base_url: String,
+    user_agent: Arc<RwLock<String>>,
 }
 
 /// Client for the VI JSON API that handles basic HTTP requests and authentication headers.
@@ -52,12 +58,24 @@ impl Client {
         // From the VI/JSON OpenAPI spec https://{vcenter-host}/sdk/vim25/{release}
         let base_url = format!("https://{}/sdk/vim25/{}", server_address, release);
         let session_key = RwLock::new(None);
-        let res = Arc::new(Self {
+        let user_agent = user_agent(None, None);
+        let res = Self {
             http_client: Arc::new(http_client),
             session_key: Arc::new(session_key),
             base_url: base_url.to_string(),
-        });
-        res
+            user_agent: Arc::new(RwLock::new(user_agent)),
+        };
+        Arc::new(res)
+    }
+
+    pub async fn set_app_name(&self, app_name: &str) {
+        let mut key_holder = self.user_agent.write().await;
+        *key_holder = user_agent(Some(app_name), None);
+    }
+
+    pub async fn set_app_details(&self, app_name: &str, app_version: &str) {
+        let mut key_holder = self.user_agent.write().await;
+        *key_holder = user_agent(Some(app_name), Some(app_version));
     }
 
     /// Prepare GET request
@@ -106,6 +124,9 @@ impl Client {
         let res = req.send().await?;
         let res = self.process_response(res).await?;
         let bytes = res.bytes().await?;
+        if log_enabled!(Trace) {
+            trace!("Response body: {}", std::str::from_utf8(&bytes).unwrap());
+        }
         let r: serde_json::Result<T> = serde_json::from_slice(&bytes);
         let content = match r {
             Ok(c) => Some(c),
@@ -135,6 +156,9 @@ impl Client {
         if let Some(value) = session_key.as_ref() {
             req = req.header(AUTHN_HEADER, value);
         }
+        let user_agent = self.user_agent.read().await;
+        let user_agent = user_agent.clone();
+        req = req.header("User-Agent", &user_agent);
         req
     }
 
@@ -152,7 +176,6 @@ impl Client {
         }
         Ok(res)
     }
-
 }
 
 
@@ -203,4 +226,42 @@ impl Drop for Client {
             });
         });
     }
+}
+
+fn user_agent(app_name: Option<&str>, app_version: Option<&str>) -> String {
+    let app_name: String = if app_name.is_some() {
+        app_name.unwrap().into()
+    } else {
+        get_executable_name().unwrap_or_else(|| "unknown".into())
+    };
+    let Some(appv) = app_version else {
+        return format!(
+            "{} ({}/{}; {}; {}; rustc/{})",
+            app_name,
+            LIB_NAME,
+            LIB_VERSION,
+            std::env::consts::OS,
+            std::env::consts::ARCH,
+            RUSTC_VERSION
+        );
+    };
+    format!(
+        "{}/{} ({}/{}; {}; {}; rustc/{})",
+        app_name,
+        appv,
+        LIB_NAME,
+        LIB_VERSION,
+        std::env::consts::OS,
+        std::env::consts::ARCH,
+        RUSTC_VERSION
+    )
+}
+
+fn get_executable_name() -> Option<String> {
+    std::env::current_exe()
+        .ok()
+        .as_ref()
+        .and_then(|path| path.file_name())
+        .and_then(OsStr::to_str)
+        .map(|s| s.to_owned())
 }

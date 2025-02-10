@@ -20,11 +20,8 @@ pub enum Error {
     Error(String),
 }
 
-static APP_USER_AGENT: &str = concat!(
-    env!("CARGO_PKG_NAME"),
-    "/",
-    env!("CARGO_PKG_VERSION"),
-);
+const APP_NAME: &str = env!("CARGO_PKG_NAME");
+const APP_VERSION: &str = env!("CARGO_PKG_VERSION");
 
 /// Get the event type ID from an event
 /// The semantics of how eventTypeId matching is done is as follows:
@@ -69,7 +66,7 @@ async fn dump_events(client: Arc<Client>, event_manager: &EventManager) -> Resul
 
     let collector = vim::mo::EventHistoryCollector::new(client.clone(), &collector.value);
     //let events = event_manager.query_events(filter).await?;
-    for _ in 0..10 {
+    for _ in 0..50 {
         let events = collector.read_next_events(10).await?;
         match events {
             Some(events) => {
@@ -89,14 +86,16 @@ async fn dump_events(client: Arc<Client>, event_manager: &EventManager) -> Resul
     Ok(())
 }
 
+
+
 async fn create_client(vc_server: String, username: String, pwd: String) -> Result<(Arc<Client>, ServiceContent), Error> {
     let http_client = reqwest::ClientBuilder::new()
     .danger_accept_invalid_certs(true)
     .danger_accept_invalid_hostnames(true)
-    .user_agent(APP_USER_AGENT)
     .build()?;
 
     let vim_client = Client::new(http_client, &vc_server, None);
+    vim_client.set_app_details(APP_NAME, APP_VERSION).await;
 
     let service_instance = ServiceInstance::new(vim_client.clone(), "ServiceInstance");
 
