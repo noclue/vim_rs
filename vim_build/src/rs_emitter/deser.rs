@@ -53,15 +53,9 @@ impl DeserializationGenerator<'_> {
     pub fn generate_object_deserialization(&mut self) -> Result<()> {
         self.deserialize_renderer = ItemRenderer::Object;
         let names: &[&str] = &self.vim_model.structs.keys().map(|s| s.as_str()).filter(|v| *v != "Any" ).collect::<Vec<&str>>();
+
         let group_data = calculate_groupings(names);
-
-        self.printer.println("fn deserialize_object<'de, A: de::MapAccess<'de>>(type_name: &str, map: A) -> Result<VimAny, DeserializationError<A, A::Error>> {")?;
-        self.printer.indent();
-
         self.render_match_tree(group_data)?;
-
-        self.printer.dedent();
-        self.printer.println("}")?;
 
         Ok(())
 
@@ -73,14 +67,8 @@ impl DeserializationGenerator<'_> {
         let names: &[&str] = &self.any_value_types.keys().map(|s| s.as_str()).collect::<Vec<&str>>();
 
         let group_data = calculate_groupings(names);
-
-        self.printer.println("fn deserialize_value_element(type_name: &str, raw: &serde_json::value::RawValue) -> Result<VimAny, serde_json::Error> {")?;
-        self.printer.indent();
-
         self.render_match_tree(group_data)?;
 
-        self.printer.dedent();
-        self.printer.println("}")?;
         Ok(())
     }
 
@@ -164,11 +152,11 @@ impl<'de> de::Visitor<'de> for VimAnyVisitor {
                     let Some(key) = map.next_key::<String>()? else {
                         return Err(de::Error::custom("Missing key"));
                     };
-                    if key == "value" {
+                    if key == "_value" {
                         let v: &serde_json::value::RawValue = map.next_value()?;
                         return deserialize_value_element(&type_name, v).map_err(de::Error::custom);
                     }
-                    return Err(de::Error::custom(format!("Expected key 'value' and found {}", key)));
+                    return Err(de::Error::custom(format!("Expected key '_value' and found '{}'", key)));
                 }
                 Err(DeserializationError::PassThruError(e)) => {
                     return Err(de::Error::custom(e));
@@ -199,10 +187,46 @@ impl<'de> de::Visitor<'de> for VimAnyVisitor {
 
     /// Renders a hierarchical match statement that dispatches to the individual names.
     fn render_match_tree(&mut self, group_data: Vec<GroupInfo>) -> Result<()> {
+        match self.deserialize_renderer {
+            ItemRenderer::Object => self.printer.println("fn deserialize_object<'de, A: de::MapAccess<'de>>(type_name: &str, map: A) -> Result<VimAny, DeserializationError<A, A::Error>> {")?,
+            ItemRenderer::Value => self.printer.println("fn deserialize_value_element(type_name: &str, raw: &serde_json::value::RawValue) -> Result<VimAny, serde_json::Error> {")?,
+            
+        }
+        self.printer.indent();
+
         self.printer.println("match type_name.len() {")?;
         self.printer.indent();
-        for group in group_data {
+        
+        for group in &group_data {
             self.printer.println(&format!("{} => {{", group.length))?;
+            self.printer.indent();
+            if group.names.len() == 1 {
+                self.process_simple_group(&group.names)?;
+            } else {
+                match self.deserialize_renderer {
+                    ItemRenderer::Object => self.printer.println(&format!("deserialize_object_{}(type_name, map)",group.length))?,
+                    ItemRenderer::Value => self.printer.println(&format!("deserialize_value_element_{}(type_name, raw)",group.length))?,
+                };
+            }
+            self.printer.dedent();
+            self.printer.println("}")?;
+        
+        };
+        self.printer.println(&format!("_ => {}", self.error_statement()))?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+
+        for group in &group_data {
+            if group.names.len() == 1 {
+                continue;
+            };
+            match self.deserialize_renderer {
+                ItemRenderer::Object => self.printer.println(&format!("fn deserialize_object_{}<'de, A: de::MapAccess<'de>>(type_name: &str, map: A) -> Result<VimAny, DeserializationError<A, A::Error>> {{", group.length))?,
+                ItemRenderer::Value => self.printer.println(&format!("fn deserialize_value_element_{}(type_name: &str, raw: &serde_json::value::RawValue) -> Result<VimAny, serde_json::Error> {{", group.length))?,
+                
+            }
             self.printer.indent();
             if group.filter_len > 0 {
                 self.process_complex_group(group)?;
@@ -213,9 +237,7 @@ impl<'de> de::Visitor<'de> for VimAnyVisitor {
             self.printer.println("}")?;
         
         };
-        self.printer.println(&format!("_ => {}", self.error_statement()))?;
-        self.printer.dedent();
-        self.printer.println("}")?;
+
         Ok(())
     }
 
@@ -280,7 +302,7 @@ impl<'de> de::Visitor<'de> for VimAnyVisitor {
         Ok(())
     }
     
-    fn process_complex_group(&mut self, group: GroupInfo) -> Result<()> {
+    fn process_complex_group(&mut self, group: &GroupInfo) -> Result<()> {
         if group.names.is_empty() {
             return Err(Error::InternalError("No names provided to process_complex_group".into()));
         }
