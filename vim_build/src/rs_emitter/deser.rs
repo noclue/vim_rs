@@ -90,21 +90,6 @@ fn to_u32(text: &str) -> Option<u32> {
     Some(u32::from_be_bytes(*bytes))
 }
 
-/// Special error type that allows for programmatic handling of unknown variants. This is needed 
-/// because we want to fallback between object deserialization and value deserialization. In
-/// value deserialization we only need to pass to the underlying parser the value of the "value"
-/// member of the JSON object.  In the object case we want to process all members of the JSON
-/// object. 
-#[derive(thiserror::Error, Debug)]
-pub enum DeserializationError<U, E> {
-    // We want the unknown variant to be handled programmatically and return back the MapAccess
-    // ownership to the visitor.
-    #[error("Unknown variant")]
-    UnknownVariant(U),
-    #[error(transparent)]
-    PassThruError(#[from] E),
-}
-
 impl<'de> de::Deserialize<'de> for VimAny {
     fn deserialize<D: de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
         deserializer.deserialize_map(VimAnyVisitor)
@@ -142,44 +127,44 @@ impl<'de> de::Visitor<'de> for VimAnyVisitor {
         };
         if map_data.is_empty() { // Optimize the case when the first element is the discriminator
             // Attempt to deserialize object from type_name and map
-            let r= deserialize_object(&type_name, map);
-            match r {
-                Ok(res) => {
-                    return Ok(res);
+            if let Some(dsfunc) = get_object_deserializer(&type_name) {
+                let ds = de::value::MapAccessDeserializer::new(map);
+                return dsfunc(ds).map_err(de::Error::custom);
+            } else {
+                let Some(dsfunc) = get_value_deserializer(&type_name) else {
+                    return Err(de::Error::custom(format!("Unknown variant: {}", type_name)));
+                };
+                let Some(key) = map.next_key::<String>()? else {
+                    return Err(de::Error::custom("Missing key"));
+                };
+                if key == "_value" {
+                    let v: &serde_json::value::RawValue = map.next_value()?;
+                    return dsfunc(v).map_err(de::Error::custom);
                 }
-                Err(DeserializationError::UnknownVariant(mut map)) => {
-                    // If the error is an unknown variant, attempt to deserialize as value element
-                    let Some(key) = map.next_key::<String>()? else {
-                        return Err(de::Error::custom("Missing key"));
-                    };
-                    if key == "_value" {
-                        let v: &serde_json::value::RawValue = map.next_value()?;
-                        return deserialize_value_element(&type_name, v).map_err(de::Error::custom);
-                    }
-                    return Err(de::Error::custom(format!("Expected key '_value' and found '{}'", key)));
-                }
-                Err(DeserializationError::PassThruError(e)) => {
-                    return Err(de::Error::custom(e));
-                }
+                return Err(de::Error::custom(format!("Expected key '_value' and found {}", key)));
             }
         };
 
         // We have buffered all keys try to make sense of it
         // Process value elements
+        if let Some(dsfunc) = get_object_deserializer(&type_name) {
+            let map = de::value::MapDeserializer::new(map_data.into_iter());
+            let ds = de::value::MapAccessDeserializer::new(map);
+            return dsfunc(ds).map_err(de::Error::custom);
+        }
+
+        // Process value elements
+        let Some(dsfunc) = get_value_deserializer(&type_name) else {
+            return Err(de::Error::custom(format!("Unknown variant: {}", type_name)));
+        };
         if map_data.len() == 1 && map_data[0].0 == "_value" {
             let v: &serde_json::value::RawValue = map_data
                 .get(0)
                 .ok_or_else(|| de::Error::missing_field("_value"))?
                 .1;
-            return deserialize_value_element(&type_name, v).map_err(de::Error::custom);
+            return dsfunc(v).map_err(de::Error::custom);
         }
-        let ds = de::value::MapDeserializer::new(map_data.into_iter());
-        deserialize_object(&type_name, ds).map_err(|e| {
-            match e {
-                DeserializationError::UnknownVariant(_) => de::Error::custom(format!("Unknown variant: {}", type_name)),
-                DeserializationError::PassThruError(e) => de::Error::custom(e),
-            }
-        })
+        Err(de::Error::custom("Invalid format for boxed value element."))
     }
 }"#)?;
         Ok(())
@@ -188,8 +173,8 @@ impl<'de> de::Visitor<'de> for VimAnyVisitor {
     /// Renders a hierarchical match statement that dispatches to the individual names.
     fn render_match_tree(&mut self, group_data: Vec<GroupInfo>) -> Result<()> {
         match self.deserialize_renderer {
-            ItemRenderer::Object => self.printer.println("fn deserialize_object<'de, A: de::MapAccess<'de>>(type_name: &str, map: A) -> Result<VimAny, DeserializationError<A, A::Error>> {")?,
-            ItemRenderer::Value => self.printer.println("fn deserialize_value_element(type_name: &str, raw: &serde_json::value::RawValue) -> Result<VimAny, serde_json::Error> {")?,
+            ItemRenderer::Object => self.printer.println("fn get_object_deserializer<'de, A: de::MapAccess<'de>>(type_name: &str) -> Option<fn(de::value::MapAccessDeserializer<A>) -> Result<VimAny, A::Error>> {")?,
+            ItemRenderer::Value => self.printer.println("fn get_value_deserializer(type_name: &str) -> Option<fn(&serde_json::value::RawValue) -> Result<VimAny, serde_json::Error>> {")?,
             
         }
         self.printer.indent();
@@ -204,15 +189,15 @@ impl<'de> de::Visitor<'de> for VimAnyVisitor {
                 self.process_simple_group(&group.names)?;
             } else {
                 match self.deserialize_renderer {
-                    ItemRenderer::Object => self.printer.println(&format!("deserialize_object_{}(type_name, map)",group.length))?,
-                    ItemRenderer::Value => self.printer.println(&format!("deserialize_value_element_{}(type_name, raw)",group.length))?,
+                    ItemRenderer::Object => self.printer.println(&format!("get_object_deserializer_{}(type_name)",group.length))?,
+                    ItemRenderer::Value => self.printer.println(&format!("get_value_deserializer_{}(type_name)",group.length))?,
                 };
             }
             self.printer.dedent();
             self.printer.println("}")?;
         
         };
-        self.printer.println(&format!("_ => {}", self.error_statement()))?;
+        self.printer.println("_ => None,")?;
         self.printer.dedent();
         self.printer.println("}")?;
         self.printer.dedent();
@@ -223,8 +208,8 @@ impl<'de> de::Visitor<'de> for VimAnyVisitor {
                 continue;
             };
             match self.deserialize_renderer {
-                ItemRenderer::Object => self.printer.println(&format!("fn deserialize_object_{}<'de, A: de::MapAccess<'de>>(type_name: &str, map: A) -> Result<VimAny, DeserializationError<A, A::Error>> {{", group.length))?,
-                ItemRenderer::Value => self.printer.println(&format!("fn deserialize_value_element_{}(type_name: &str, raw: &serde_json::value::RawValue) -> Result<VimAny, serde_json::Error> {{", group.length))?,
+                ItemRenderer::Object => self.printer.println(&format!("fn get_object_deserializer_{}<'de, A: de::MapAccess<'de>>(type_name: &str) -> Option<fn(de::value::MapAccessDeserializer<A>) -> Result<VimAny, A::Error>> {{", group.length))?,
+                ItemRenderer::Value => self.printer.println(&format!("fn get_value_deserializer_{}(type_name: &str) -> Option<fn(&serde_json::value::RawValue) -> Result<VimAny, serde_json::Error>> {{", group.length))?,
                 
             }
             self.printer.indent();
@@ -248,25 +233,24 @@ impl<'de> de::Visitor<'de> for VimAnyVisitor {
         let enum_name = to_type_name(&box_type.name);
         let value_type = self.tdf.to_rust_field_type(&box_type.property_type)?;
 
+        self.printer.println("Some(|raw| {")?;
+        self.printer.indent();
         self.printer.println(&format!("let value: {} = serde_json::from_str(raw.get())?;", value_type))?;
         self.printer.println(&format!("Ok(VimAny::Value(ValueElements::{}(value)))", enum_name))?;
+        self.printer.dedent();
+        self.printer.println("})")?;
         Ok(())
     }
 
     fn deserialize_object_type(&mut self, name: &str) -> Result<()> {
-        self.printer.println("let ds = de::value::MapAccessDeserializer::new(map);")?;
+        self.printer.println("Some(|ds| {")?;
+        self.printer.indent();
         self.printer.println(&format!("let obj: {} = de::Deserialize::deserialize(ds)?;", to_type_name(name)))?;
         self.printer.println("Ok(VimAny::Object(Box::new(obj)))")?;
+        self.printer.dedent();
+        self.printer.println("})")?;
         Ok(())
     }
-
-    fn error_statement(&self) -> &str {
-        match self.deserialize_renderer {
-            ItemRenderer::Object => "{ Err(DeserializationError::UnknownVariant(map)) }",
-            ItemRenderer::Value => r#"{ Err(de::Error::custom(&format!("Unknown value element type: {}", type_name))) }"#  
-        }
-    }
-
 
     fn process_simple_group(&mut self, names: &[String]) -> Result<()> {
         if names.is_empty() {
@@ -280,7 +264,7 @@ impl<'de> de::Visitor<'de> for VimAnyVisitor {
                 ItemRenderer::Value => self.deserialize_value_type(&names[0])?,
             }
             self.printer.dedent();
-            self.printer.println(&format!("}} else {}", self.error_statement()))?;
+            self.printer.println("} else { None }")?;
             return Ok(());
         } 
     
@@ -296,7 +280,7 @@ impl<'de> de::Visitor<'de> for VimAnyVisitor {
             self.printer.dedent();
             self.printer.println("}")?;
         }
-        self.printer.println(&format!("_ => {}", self.error_statement()))?;
+        self.printer.println("_ => None")?;
         self.printer.dedent();
         self.printer.println("}")?;
         Ok(())
@@ -315,10 +299,7 @@ impl<'de> de::Visitor<'de> for VimAnyVisitor {
             return Err(Error::InternalError(format!("Unsupported filter length: {}", group.filter_len)));
         }
         self.printer.indent();
-        match self.deserialize_renderer {
-            ItemRenderer::Object => { self.printer.println(r#"return Err(DeserializationError::PassThruError(de::Error::custom("Internal Error: Cannot convert to unsigned int")));"#)? },
-            ItemRenderer::Value => { self.printer.println(r#"return Err(de::Error::custom("Internal Error: Cannot convert to unsigned int"));"#)? },
-        }
+        self.printer.println(r#"return None;"#)?;
         self.printer.dedent();
         self.printer.println("};")?;
         let mut names = group.names.clone();
@@ -337,7 +318,7 @@ impl<'de> de::Visitor<'de> for VimAnyVisitor {
             subgroup.push(name.clone());
         }
         self.render_subgroup(&mut subgroup, &previous)?;
-        self.printer.println(&format!("_ => {}", self.error_statement()))?;
+        self.printer.println("_ => None")?;
         self.printer.dedent();
         self.printer.println("}")?;
         Ok(())

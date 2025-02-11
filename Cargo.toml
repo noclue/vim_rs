@@ -1,7 +1,6 @@
 [workspace]
 members = [
     "openapi30",
-    "vim_build",
     "vim",
     "examples/vim_tests",
     "examples/eventster",
