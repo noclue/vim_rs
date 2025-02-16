@@ -134,7 +134,7 @@ fn field_reference() -> StructRefRenderer {
     Box::new(move |struct_ref: &Struct, _: &Model| -> String {
         let rust_name = to_type_name(&struct_ref.name);
         if struct_ref.has_children() {
-            box_type_declaration(&format!("dyn {}Trait", rust_name))
+            box_type_declaration(&format!("{}", rust_name))
         } else {
             rust_name
         }
@@ -146,7 +146,7 @@ fn param_reference(lifecycle: Option<String>) ->  StructRefRenderer {
     Box::new(move |struct_ref: &Struct, _: &Model| -> String {
         let rust_name = to_type_name(&struct_ref.name);
         if struct_ref.has_children() {
-            ref_type_declaration(&format!("dyn {}Trait", rust_name), lifecycle.clone())
+            ref_type_declaration(&format!("{}", rust_name), lifecycle.clone())
         } else {
             ref_type_declaration(&rust_name, lifecycle.clone())
         }

@@ -16,7 +16,7 @@ pub fn emit_enums(vim_model: &Model, printer: &mut dyn Printer) -> Result<()> {
             // Add clone and partial eq for MoTypes_enum
             printer.println("#[derive(Clone, Debug, PartialEq, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]")?;
         } else {
-            printer.println("#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]")?;            
+            printer.println("#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]")?;
         }
         printer.println(&format!("pub enum {} {{", enum_name))?;
         printer.indent();
@@ -25,7 +25,7 @@ pub fn emit_enums(vim_model: &Model, printer: &mut dyn Printer) -> Result<()> {
             if value != &variant {
                 printer.println(&format!("#[serde(rename = \"{}\")]", value))?;
                 printer.println(&format!("#[strum(serialize = \"{}\")]", value))?;
-            }                
+            }
             printer.println(&format!("{},", variant))?;
         }
         // Make enums open i.e. handle unknown values possibly from future API servers

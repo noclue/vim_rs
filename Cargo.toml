@@ -1,9 +1,0 @@
-[workspace]
-members = [
-    "openapi30",
-    "vim",
-    "examples/vim_tests",
-    "examples/eventster",
-    "examples/mac_monitor",
-    "examples/perf_metrics"]
-resolver = "2"
