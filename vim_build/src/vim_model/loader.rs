@@ -3,7 +3,7 @@ use openapi30::*;
 use indexmap::IndexMap;
 use std::cell::RefCell;
 use std::fmt::Debug;
-
+use crate::vim_model::struct_order::reorder_structs;
 
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
@@ -32,6 +32,8 @@ pub enum Error {
     FieldDecodingError(String, String, Box<Error>),
     #[error("Invalid operation: {0} {1}")]
     InvalidOperation(String, String),
+    #[error("Internal processing error: {0}")]
+    InternalProcessingError(String),
 }
 
 // Result is a type alias for handling errors.
@@ -58,6 +60,7 @@ pub fn load_vim_model(model: &OpenAPI) -> Result<Model> {
     mark_cycles(&mut vim_model)?;
     load_managed_objects(&model, &mut vim_model)?;
     transform_paths(&model, &mut vim_model)?;
+    vim_model.structs = reorder_structs(&mut vim_model.structs)?;
     Ok(vim_model)
 }
 
@@ -201,6 +204,7 @@ fn build_struct_type(schema_name: &str, schema: &Schema) -> Result<Struct> {
         parent: get_parent_schema(schema),
         discriminator_value: None,
         children: vec![],
+        last_child: "".to_string(),
     })
 }
 

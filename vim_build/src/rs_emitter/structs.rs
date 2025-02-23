@@ -12,8 +12,8 @@ use super::names::*;
 use super::super::vim_model::*;
 use super::errors::{Result, Error};
 
-const ANY: &str = "Any";
-const DATA_OBJECT: &str = "DataObject";
+pub(crate) const ANY: &str = "Any";
+pub(crate) const DATA_OBJECT: &str = "DataObject";
 
 pub struct TypesEmitter<'a> {
     vim_model: &'a Model,
@@ -29,21 +29,15 @@ impl<'a> TypesEmitter<'a> {
 
     pub fn emit_data_types(&mut self) -> Result<()> {
         self.emit_use_statements()?;
-        self.emit_vim_object()?;
-        self.emit_vimany()?;
+        // self.emit_vim_object()?;
+        // self.emit_vimany()?;
         self.emit_structs()?;
-        self.emit_boxed_types()?;
-        // let mut gen = DeserializationGenerator::new(self.vim_model, self.printer);
-        // gen.generate_deserialization()?;
 
         Ok(())
     }
     fn emit_use_statements(&mut self) -> Result<()> {
-        self.printer.println("use std::any;")?;
-        // self.printer.println("use serde::de;")?;
-        // self.printer.println("use erased_serde::serialize_trait_object;")?;
-        // self.printer.println("use std::sync::OnceLock;")?;
-        self.printer.println("use super::enums::*;")?;
+        //self.printer.println("use super::enums::*;")?;
+        self.printer.println("use super::vim_any::VimAny;")?;
         self.printer.newline()?;
         Ok(())
     }
@@ -171,7 +165,11 @@ impl<T> VimObjectTrait for T where T: AsAny  {
     }
 
     /// Emit boxed value types from Vim like ArrayOfInt, ArrayOfString, Boolean etc.
-    fn emit_boxed_types(&mut self) -> Result<()> {
+    pub(crate) fn emit_boxed_types(&mut self) -> Result<()> {
+        self.printer.println("use super::vim_any::VimAny;")?;
+        self.printer.println("use super::structs::*;")?;
+        //self.printer.println("use super::enums::*;")?;
+        self.printer.newline()?;
         self.printer.println("#[derive(Debug, serde::Deserialize, serde::Serialize)]")?;
         self.printer.println("#[serde(tag = \"_typeName\", content = \"_value\")]")?;
         self.printer.println("pub enum ValueElements {")?;
@@ -195,8 +193,6 @@ impl<T> VimObjectTrait for T where T: AsAny  {
         Ok(())
     }
 
-    
-    
     fn emit_struct_type(&mut self, name: &str, vim_type: &Struct) -> Result<()> {
         {
             let this = &mut *self;
@@ -314,11 +310,9 @@ impl<T> VimObjectTrait for T where T: AsAny  {
     }
     
     fn emit_trait_field(&mut self, prop_name: &str, property: &Field) -> Result<()> {
-        {
-            let this = &mut *self;
-            let doc_string: &Option<String> = &property.description;
-            emit_description(this.printer, doc_string)
-        }?;
+        let this = &mut *self;
+        let doc_string: &Option<String> = &property.description;
+        emit_description(this.printer, doc_string)?;
         let field_name = getter_name(&prop_name);
         let field_type = self.getter_return_type(property)?;
         self.printer.println(&format!("fn {field_name}(&self) -> {field_type};"))?;
@@ -399,7 +393,7 @@ impl<T> VimObjectTrait for T where T: AsAny  {
     
     
     
-    /// Emits implementation of a structure type trat for a given structure. The trait should belong to
+    /// Emits implementation of a structure type trait for a given structure. The trait should belong to
     /// the same structure or an ancestor
     fn emit_trait_implementation(&mut self, trait_type: &Struct, type_name: &String) -> Result<()> {
         let base_name = to_type_name(&trait_type.name);
@@ -473,7 +467,7 @@ impl<T> VimObjectTrait for T where T: AsAny  {
 
 /// Checks if type is to be returned as value copy or reference. Integer and float types are good to
 /// copy. Structures, strings and arrays go by immutable reference
-fn get_by_ref(vim_type: &DataType) -> bool {
+pub fn get_by_ref(vim_type: &DataType) -> bool {
     match &vim_type {
         DataType::Reference(_) => true,
         DataType::Array(_) => true,

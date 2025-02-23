@@ -37,6 +37,10 @@ pub fn to_fn_name(name: &str) -> String {
     name.to_case(Case::Snake).into_safe()
 }
 
+pub fn to_module_name(name: &str) -> String {
+    name.to_case(Case::Snake).into_safe()
+}
+
 /// Convert a struct reference to a Rust type declaration. This function type allows for 
 /// customizing the reference type declaration. We havve case for field and parameter declarations.
 type StructRefRenderer = Box<dyn Fn(&Struct, &Model) -> String>;
@@ -121,7 +125,7 @@ impl TypeDefResolver<'_> {
             let struct_ref: &Struct = struct_ref.borrow();
             Ok(render_struct_ref(struct_ref, self.vim_model))
         } else if let Some(_) = self.vim_model.enums.get(ref_name) {
-            Ok(to_type_name(ref_name))
+            Ok(format!("super::enums::{}",to_type_name(ref_name)))
         } else {
             Err(Error::TypeNotFound(ref_name.to_string()))
         }
@@ -134,7 +138,8 @@ fn field_reference() -> StructRefRenderer {
     Box::new(move |struct_ref: &Struct, _: &Model| -> String {
         let rust_name = to_type_name(&struct_ref.name);
         if struct_ref.has_children() {
-            box_type_declaration(&format!("{}", rust_name))
+            let module_name = to_module_name(&struct_ref.name);
+            box_type_declaration(&format!("dyn super::{}_trait::{}Trait", module_name, rust_name))
         } else {
             rust_name
         }

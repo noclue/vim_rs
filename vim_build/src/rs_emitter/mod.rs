@@ -1,13 +1,17 @@
 mod common;
-mod types;
+pub(crate) mod structs;
 mod names;
 mod mo;
-mod errors;
-mod deser;
+pub mod errors;
+pub mod deser;
 pub mod library;
 pub mod enums;
+pub mod ser;
+pub mod struct_enum;
+pub mod vim_object;
+pub(crate) mod trait_emitter;
 
-pub use types::*;
+pub use structs::*;
 pub use names::*;
 pub use mo::*;
 pub use errors::*;

@@ -9,6 +9,7 @@ use super::{to_type_name, TypeDefResolver};
 
 use super::errors::{Result, Error};
 
+// Number of items in a group that will stop further optimization.
 const FULL_SCAN_THRESHOLD: usize = 5;
 
 
@@ -90,13 +91,7 @@ fn to_u32(text: &str) -> Option<u32> {
     Some(u32::from_be_bytes(*bytes))
 }
 
-impl<'de> de::Deserialize<'de> for VimAny {
-    fn deserialize<D: de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        deserializer.deserialize_map(VimAnyVisitor)
-    }
-}
-
-struct VimAnyVisitor;
+pub struct VimAnyVisitor;
 
 impl<'de> de::Visitor<'de> for VimAnyVisitor {
     type Value = VimAny;

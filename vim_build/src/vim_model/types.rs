@@ -1,5 +1,5 @@
 use std::cell::RefCell;
-
+use std::ops::Deref;
 use check_keyword::CheckKeyword;
 use convert_case::{Case, Casing};
 use indexmap::IndexMap;
@@ -61,6 +61,7 @@ pub struct Struct {
     pub parent: Option<String>,
     pub discriminator_value: Option<String>,
     pub children: Vec<String>,
+    pub last_child: String,
 }
 
 impl Struct {
@@ -299,6 +300,19 @@ pub struct Model {
 }
 
 impl Model {
+
+    /// Return an iterator that starts with a parent node and iterates over all of its subtree.
+    pub fn children(&self, parent: &String) -> Result<StructChildrenIntoIterator> {
+        let parent_index = self.structs.get_index_of(parent).ok_or(super::Error::InvalidReference(parent.clone()))?;
+        let last_child = self.structs.get(parent).ok_or(super::Error::InvalidReference(parent.clone()))?.borrow().last_child.clone();
+        let last_child_index = self.structs.get_index_of(&last_child).ok_or(super::Error::InvalidReference(last_child.clone()))?;
+        Ok(StructChildrenIntoIterator {
+            index: parent_index,
+            last_index: last_child_index,
+            model: self,
+        })
+    }
+
     pub fn is_struct_type(&self, vim_type: &DataType) -> bool {
         match vim_type {
             DataType::Reference(ref_name) => {
@@ -309,6 +323,44 @@ impl Model {
             _ => {}
         }
         false
+    }
+}
+
+pub struct StructChildrenIntoIterator<'a> {
+    index: usize,
+    last_index: usize,
+    model: &'a Model,
+}
+
+impl<'a> IntoIterator for StructChildrenIntoIterator<'a> {
+    type Item = &'a RefCell<Struct>;
+    type IntoIter = StructChildrenIterator<'a>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        StructChildrenIterator {
+            index: self.index,
+            last_index: self.last_index,
+            model: self.model,
+        }
+    }
+}
+pub struct StructChildrenIterator<'a> {
+    index: usize,
+    last_index: usize,
+    model: &'a Model,
+}
+
+impl<'a> Iterator for StructChildrenIterator<'a> {
+    type Item = &'a RefCell<Struct>;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.index <= self.last_index {
+            let struct_type = self.model.structs.get_index(self.index).unwrap().1;
+            self.index += 1;
+            Some(struct_type)
+        } else {
+            None
+        }
     }
 }
 
@@ -372,6 +424,7 @@ mod tests {
             parent: None,
             discriminator_value: None,
             children: vec![],
+            last_child: "".to_string(),
         };
         assert_eq!(str.rust_name(), "StructCrateEnum");
     }

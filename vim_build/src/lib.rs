@@ -38,7 +38,7 @@ impl Generation {
         } else {
             get_default_api()?
         };
-        generate_bindings(model, Path::new(&self.root_folder))
+        Ok(generate_bindings(model, Path::new(&self.root_folder))?)
     }
 }
 

@@ -1,11 +1,32 @@
 use std::{io::Read, path::Path, time::Instant};
+use std::path::PathBuf;
 use convert_case::{Case, Casing};
-use super::printer::{self, Printer};
+use super::printer::{self, FilePrinter, Printer};
 use super::vim_model;
 use super::rs_emitter;
 use rs_emitter::library::emit_library;
+use crate::rs_emitter::deser::DeserializationGenerator;
+use crate::rs_emitter::to_module_name;
 
-pub fn load_openapi<P: AsRef<Path>>(path: P) -> Result<openapi30::OpenAPI, Box<dyn std::error::Error>> {
+#[derive(Debug, thiserror::Error)]
+pub enum Error {
+    #[error("OpenAPI parse error: {0}")]
+    ParseError(#[from] openapi30::Error),
+    #[error("Printer error: {0}")]
+    PrintError(#[from] printer::Error),
+    #[error("IO error: {0}")]
+    IoError(#[from] std::io::Error),
+    #[error("Serde error: {0}")]
+    SerdeError(#[from] serde_json::Error),
+    #[error("Emit error: {0}")]
+    EmitError(#[from] rs_emitter::errors::Error),
+    #[error("VimModelError: {0}")]
+    VimModelError(#[from] vim_model::Error),
+}
+
+type Result<T> = std::result::Result<T, Error>;
+
+pub fn load_openapi<P: AsRef<Path>>(path: P) -> Result<openapi30::OpenAPI> {
     let mut file =
         std::fs::File::open(path)?;
     let mut data = String::new();
@@ -14,14 +35,14 @@ pub fn load_openapi<P: AsRef<Path>>(path: P) -> Result<openapi30::OpenAPI, Box<d
     Ok(openapi)
 }
 
-pub fn emit_vim_bindings(vi_json_spec_path: &Path, root_folder: &Path) -> Result<(), Box<dyn std::error::Error>> {
+pub fn emit_vim_bindings(vi_json_spec_path: &Path, root_folder: &Path) -> Result<()> {
     let start_load = Instant::now();
     let model = load_openapi(vi_json_spec_path)?;
     println!("Time to load OpenAPI: {:?}", start_load.elapsed());
     return generate_bindings(model, root_folder);
 }
 
-pub fn generate_bindings(model: openapi30::OpenAPI, root_folder: &Path) -> Result<(), Box<dyn std::error::Error>> {
+pub fn generate_bindings(model: openapi30::OpenAPI, root_folder: &Path) -> Result<()> {
     let start_model_transform = Instant::now();
     let vim_model = vim_model::load_vim_model(&model)?;
     println!("Time to transform OpenAPI model: {:?}", start_model_transform.elapsed());
@@ -36,7 +57,7 @@ pub fn generate_bindings(model: openapi30::OpenAPI, root_folder: &Path) -> Resul
     Ok(())
 }
 
-fn emit_managed_objects(root_folder: &Path, vim_model: &vim_model::Model) -> Result<(), Box<dyn std::error::Error>> {
+fn emit_managed_objects(root_folder: &Path, vim_model: &vim_model::Model) -> Result<()> {
     let mo_folder = root_folder.join("mo");
     std::fs::create_dir_all(&mo_folder).expect("Could not create mo folder");
 
@@ -60,32 +81,146 @@ fn emit_managed_objects(root_folder: &Path, vim_model: &vim_model::Model) -> Res
     Ok(())
 }
 
-fn emit_types(root_folder: &Path, vim_model: &vim_model::Model) -> Result<(), Box<dyn std::error::Error>> {
+fn emit_types(root_folder: &Path, vim_model: &vim_model::Model) -> Result<()> {
     let types_folder = root_folder.join("types");
     std::fs::create_dir_all(&types_folder).expect("Could not create types folder");
+
+    emit_ser(&types_folder, &vim_model)?;
+    emit_de(&types_folder, &vim_model)?;
+    emit_struct_enum(&types_folder, &vim_model)?;
+    emit_boxed_types(&types_folder, &vim_model)?;
+
     emit_enums(&types_folder, &vim_model)?;
     emit_structs(&types_folder, &vim_model)?;
+    
+    // Emit traits
+    delete_trait_files(&types_folder)?;
+    emit_vim_object_trait(&types_folder, &vim_model)?;
+    emit_inheritable_traits(&types_folder, &vim_model)?;
 
-    // Generate mod.rs
-    let file = std::fs::File::create(types_folder.join("mod.rs")).expect("Could not create types/mod.rs file");
-    let mut p = printer::FilePrinter::new(file, None, None);
-    p.println("pub mod enums;")?;
-    p.println("pub mod structs;")?;
+    emit_mod_rs(&types_folder, &vim_model)?;
     Ok(())
 }
 
-fn emit_enums(types_folder: &Path, vim_model: &vim_model::Model) -> Result<(), Box<dyn std::error::Error>> {
+// Delete *_trait.rs files
+fn delete_trait_files(types_folder: &Path) -> Result<()> {
+    let files = std::fs::read_dir(types_folder)?;
+    for file in files {
+        let file = file?;
+        let file_name = file.file_name();
+        let file_name = file_name.to_string_lossy();
+        if file_name.ends_with("_trait.rs") {
+            std::fs::remove_file(file.path())?;
+        }
+    }
+    Ok(())
+}
+
+
+fn emit_vim_object_trait(root_folder: &Path, vim_model: &vim_model::Model) -> Result<()> {
+    let file = std::fs::File::create(root_folder.join("vim_object_trait.rs"))?;
+    let mut printer = printer::FilePrinter::new(file, None, None);
+    rs_emitter::vim_object::generate_vim_object_trait(&vim_model, &mut printer)?;
+    Ok(())
+}
+
+fn emit_inheritable_traits(root_folder: &Path, vim_model: &vim_model::Model) -> Result<()> {
+    for (struct_name, struct_ref) in &vim_model.structs {
+        let struct_ref = struct_ref.borrow();
+        if struct_name == rs_emitter::structs::ANY || struct_ref.children.is_empty() {
+            continue;
+        }
+        let file_name = format!("{}_trait.rs", struct_name.to_case(Case::Snake));
+        let mut printer = printer_for_file(root_folder.join(file_name))?;
+        
+        let mut trait_emitter = rs_emitter::trait_emitter::TraitEmitter::new(struct_name.clone(), vim_model, &mut printer);
+            
+        trait_emitter.emit_trait()?
+    } 
+    Ok(())
+}
+
+fn emit_boxed_types(types_folder: &Path, vim_model: &vim_model::Model) -> Result<()> {
+    let mut printer = printer_for_file(types_folder.join("boxed_types.rs"))?;
+    let mut types_emitter = rs_emitter::structs::TypesEmitter::new(&vim_model, & mut printer);
+    types_emitter.emit_boxed_types()?;
+
+    Ok(())
+}
+
+
+fn emit_struct_enum(types_folder: &Path, vim_model: &vim_model::Model) -> Result<()> {
+    let file = std::fs::File::create(types_folder.join("struct_enum.rs")).expect("Could not create struct_enum.rs file");
+    let mut printer = printer::FilePrinter::new(file, None, None);
+    rs_emitter::struct_enum::generate_struct_enum(&vim_model, &mut printer)?;
+    Ok(())
+}
+
+fn emit_ser(types_folder: &Path, vim_model: &vim_model::Model) -> Result<()> {
+    let file = std::fs::File::create(types_folder.join("dyn_serialize.rs")).expect("Could not create dyn_serialize.rs file");
+    let mut printer = printer::FilePrinter::new(file, None, None);
+    rs_emitter::ser::generate_serialize_polymorphic_enum(&vim_model, &mut printer)?;
+    Ok(())
+}
+
+fn emit_de(types_folder: &Path, vim_model: &vim_model::Model) -> Result<()> {
+    let mut printer = printer_for_file(types_folder.join("deserialize.rs"))?;
+    printer.println("use std::fmt;")?;
+    printer.println("use serde::de;")?;
+    //printer.println("use super::enums::*;")?;
+    printer.println("use super::boxed_types::ValueElements;")?;
+    printer.println("use super::structs::*;")?;
+    printer.println("use super::vim_any::VimAny;")?;
+    
+    let mut gen = DeserializationGenerator::new(vim_model, &mut printer);
+    gen.generate_deserialization()?;
+    Ok(())
+}
+
+
+fn emit_enums(types_folder: &Path, vim_model: &vim_model::Model) -> Result<()> {
     let file = std::fs::File::create(types_folder.join("enums.rs")).expect("Could not create enums.rs file");
     let mut printer = printer::FilePrinter::new(file, None, None);
     rs_emitter::enums::emit_enums(&vim_model, &mut printer)?;
     Ok(())
 }
 
-fn emit_structs(root_folder: &Path, vim_model: &vim_model::Model) -> Result<(), Box<dyn std::error::Error>> {
+fn emit_structs(root_folder: &Path, vim_model: &vim_model::Model) -> Result<()> {
     use crate::rs_emitter::TypesEmitter;
-    let file = std::fs::File::create(root_folder.join("structs.rs")).expect("Could not create types.rs file");
+    let file = std::fs::File::create(root_folder.join("structs.rs")).expect("Could not create structs file");
     let mut printer = printer::FilePrinter::new(file, None, None);
     let mut emitter = TypesEmitter::new(vim_model, &mut printer);
     emitter.emit_data_types()?;
     Ok(())
+}
+
+fn emit_mod_rs(types_folder: &std::path::Path, vim_model: &vim_model::Model) -> Result<()> {
+    let mut p = printer_for_file(types_folder.join("mod.rs"))?;
+    p.println("pub mod enums;")?;
+    p.println("pub mod structs;")?;
+    p.println("pub mod dyn_serialize;")?;
+    p.println("pub mod deserialize;")?;
+    p.println("pub mod struct_enum;")?;
+    p.println("pub mod boxed_types;")?;
+    p.println("pub mod vim_any;")?;
+    p.println("pub mod as_any;")?;
+    p.println("pub mod convert;")?;
+    p.println("pub mod vim_object_trait;")?;
+    p.newline()?;
+    for (struct_name, struct_ref) in &vim_model.structs {
+        if struct_name == rs_emitter::structs::ANY {
+            continue;
+        }
+        if struct_ref.borrow().children.is_empty() {
+            continue;
+        }
+        let module_name = to_module_name(struct_name);
+        p.println(&format!("pub mod {}_trait;", module_name))?;
+    }
+    Ok(())
+}
+
+fn printer_for_file(file_path: PathBuf) -> Result<FilePrinter> {
+    let file = std::fs::File::create(file_path)?;
+    Ok(printer::FilePrinter::new(file, None, None))
 }
