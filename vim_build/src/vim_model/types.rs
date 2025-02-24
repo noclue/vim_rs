@@ -1,5 +1,4 @@
 use std::cell::RefCell;
-use std::ops::Deref;
 use check_keyword::CheckKeyword;
 use convert_case::{Case, Casing};
 use indexmap::IndexMap;

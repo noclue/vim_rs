@@ -8,7 +8,10 @@ mod tests {
     use vim::core::client::Client;
 
     use reqwest::ClientBuilder;
-    use vim::types::structs::{ManagedObjectReference, ValueElements, VimAny};
+    use vim::types::structs::ManagedObjectReference;
+    use vim::types::boxed_types::ValueElements;
+    use vim::types::vim_any::VimAny;
+    use vim::types::method_fault_trait::MethodFaultTrait;
     use vim::types::enums::MoTypesEnum;
     use log::{debug, info};
 
@@ -28,7 +31,7 @@ mod tests {
         let uri = format!("https://{vc_server}/sdk/vim25/8.0.3.0/ServiceInstance/ServiceInstance/content");
         let res = client.get(uri).send().await.unwrap();
         if res.status() != 200 {
-            let fault: Box<dyn structs::MethodFaultTrait> = res.json().await.unwrap();
+            let fault: Box<dyn MethodFaultTrait> = res.json().await.unwrap();
             panic!("Failed to get content: {:?}", fault);
         }
         let content: structs::ServiceContent = res.json().await.unwrap();

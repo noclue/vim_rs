@@ -1,17 +1,19 @@
 use std::{env, sync::Arc};
 use tokio::time::sleep;
 use vim::mo::{EventManager, ServiceInstance, SessionManager};
-use vim::types::structs::{EventFilterSpecByTime, EventTrait, ServiceContent, ExtendedEvent, EventEx}; 
+use vim::types::structs::{EventFilterSpecByTime, ServiceContent, ExtendedEvent, EventEx};
+use vim::types::event_trait::EventTrait;
+use vim::types::method_fault_trait::MethodFaultTrait;
 use vim::core::client::Client;
 use tokio;
-use log::{debug, info};
+use log::info;
 use env_logger;
 use chrono::{Utc, Duration as ChronoDuration};
 
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
     #[error("MethodFault: {0:?}")]
-    MethodFault(Box<dyn vim::types::structs::MethodFaultTrait>),
+    MethodFault(Box<dyn MethodFaultTrait>),
     #[error("Reqwest error: {0}")]
     ReqwestError(#[from] reqwest::Error),
     #[error("VimClient error: {0}")]
@@ -36,7 +38,7 @@ fn get_event_type_id(event: &dyn EventTrait) -> String {
     if let Some(extended_event) = any_ref.downcast_ref::<ExtendedEvent>() {
         return extended_event.event_type_id.clone();
     }
-    event.type_name_().into()
+    <&'static str>::from(event.data_type()).to_string()
 }
 
 // Dump the last 30 minutes of events in vCenter
@@ -71,14 +73,14 @@ async fn dump_events(client: Arc<Client>, event_manager: &EventManager) -> Resul
         match events {
             Some(events) => {
                 for event in events {
-                    debug!("{event_type}: {ts} - {id} - {msg}",
+                    info!("{event_type}: {ts} - {id} - {msg}",
                         event_type=get_event_type_id(event.as_ref()),
                         id=event.get_key(),
                         ts=event.get_created_time(),
                         msg=event.get_full_formatted_message().as_ref().unwrap_or(&String::from("No message")));
                 }
             },
-            None => debug!("No events found"),
+            None => info!("No events found"),
         }
         sleep(std::time::Duration::from_secs(5)).await;
     }
@@ -100,7 +102,7 @@ async fn create_client(vc_server: String, username: String, pwd: String) -> Resu
     let service_instance = ServiceInstance::new(vim_client.clone(), "ServiceInstance");
 
     let content = service_instance.content().await?;
-    debug!("ServiceInstance::content obtained from vCenter {}",
+    info!("ServiceInstance::content obtained from vCenter {}",
             content.about.full_name);
 
     let Some(ref session_mgr_moref) = content.session_manager else {

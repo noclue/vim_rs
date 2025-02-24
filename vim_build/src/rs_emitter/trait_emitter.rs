@@ -1,8 +1,7 @@
 use std::ops::Deref;
 use crate::printer::Printer;
-use crate::rs_emitter;
 use crate::rs_emitter::common::emit_description;
-use crate::rs_emitter::{get_by_ref, getter_name, to_field_name, to_module_name, to_type_name, TypeDefResolver, DATA_OBJECT};
+use crate::rs_emitter::{get_by_ref, getter_name, to_field_name, to_module_name, to_type_name, TypeDefResolver};
 use crate::vim_model::{Field, Model, Struct};
 use crate::rs_emitter::errors::{Error, Result};
 pub struct TraitEmitter<'a> {

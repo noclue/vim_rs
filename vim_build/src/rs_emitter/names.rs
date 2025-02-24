@@ -48,11 +48,16 @@ type StructRefRenderer = Box<dyn Fn(&Struct, &Model) -> String>;
 
 pub struct TypeDefResolver<'a> {
     vim_model: &'a Model,
+    root_package: String,
 }
 
 impl TypeDefResolver<'_> {
     pub fn new(vim_model: &Model) -> TypeDefResolver {
-        TypeDefResolver { vim_model }
+        TypeDefResolver { vim_model, root_package: "super".to_string() }
+    }
+
+    pub fn new_with_root_package(vim_model: &Model, root_package: String) -> TypeDefResolver {
+        TypeDefResolver { vim_model, root_package }
     }
 
     pub fn field_type(&self, field: &Field) -> Result<String> {
@@ -69,7 +74,7 @@ impl TypeDefResolver<'_> {
     /// Convert a VimType to a Rust field type declaration. Structure types are always boxed. To
     /// use borrow semantics instead of boxing use `to_rust_param_type`
     pub fn to_rust_field_type(&self, vim_type: &DataType) -> Result<String> {
-        self.to_rust_type_with_wrapper(vim_type, field_reference())
+        self.to_rust_type_with_wrapper(vim_type, field_reference(self.root_package.clone()))
     }
 
     /// Convert a VimType to a Rust param type declaration. Structs and strings are borrowed.
@@ -79,7 +84,7 @@ impl TypeDefResolver<'_> {
             DataType::String => ref_type_declaration("str", lifecycle.clone()),
             DataType::DateTime => ref_type_declaration("str", lifecycle.clone()),
             DataType::Array(nested_type) => ref_type_declaration(&format!("[{}]", self.to_rust_field_type(nested_type)?), lifecycle.clone()),
-            _ => self.to_rust_type_with_wrapper(&field.vim_type, param_reference(lifecycle.clone()))?
+            _ => self.to_rust_type_with_wrapper(&field.vim_type, param_reference(lifecycle.clone(), self.root_package.clone()))?
         };
         if field.optional {
             decl = format!("Option<{}>", decl);
@@ -125,7 +130,7 @@ impl TypeDefResolver<'_> {
             let struct_ref: &Struct = struct_ref.borrow();
             Ok(render_struct_ref(struct_ref, self.vim_model))
         } else if let Some(_) = self.vim_model.enums.get(ref_name) {
-            Ok(format!("super::enums::{}",to_type_name(ref_name)))
+            Ok(format!("{}::enums::{}", self.root_package, to_type_name(ref_name)))
         } else {
             Err(Error::TypeNotFound(ref_name.to_string()))
         }
@@ -134,24 +139,24 @@ impl TypeDefResolver<'_> {
 
 }
 
-fn field_reference() -> StructRefRenderer {
+fn field_reference(root_package: String) -> StructRefRenderer {
     Box::new(move |struct_ref: &Struct, _: &Model| -> String {
-        let rust_name = to_type_name(&struct_ref.name);
+        let type_name = to_type_name(&struct_ref.name);
         if struct_ref.has_children() {
             let module_name = to_module_name(&struct_ref.name);
-            box_type_declaration(&format!("dyn super::{}_trait::{}Trait", module_name, rust_name))
+            box_type_declaration(&format!("dyn {root_package}::{module_name}_trait::{type_name}Trait"))
         } else {
-            rust_name
+            type_name
         }
     })
 }
 
-
-fn param_reference(lifecycle: Option<String>) ->  StructRefRenderer {
+fn param_reference(lifecycle: Option<String>, root_package: String) ->  StructRefRenderer {
     Box::new(move |struct_ref: &Struct, _: &Model| -> String {
         let rust_name = to_type_name(&struct_ref.name);
         if struct_ref.has_children() {
-            ref_type_declaration(&format!("{}", rust_name), lifecycle.clone())
+            let module_name = to_module_name(&struct_ref.name);
+            ref_type_declaration(&format!("dyn {root_package}::{module_name}_trait::{rust_name}Trait"), lifecycle.clone())
         } else {
             ref_type_declaration(&rust_name, lifecycle.clone())
         }

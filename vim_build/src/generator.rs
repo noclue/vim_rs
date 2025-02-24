@@ -51,9 +51,9 @@ pub fn generate_bindings(model: openapi30::OpenAPI, root_folder: &Path) -> Resul
     emit_types(root_folder, &vim_model)?;
     println!("Time to emit types: {:?}", start_emit.elapsed());
 
-    // let start_emit_mo = Instant::now();
-    // emit_managed_objects(root_folder, &vim_model)?;
-    // println!("Time to emit managed objects: {:?}", start_emit_mo.elapsed());
+    let start_emit_mo = Instant::now();
+    emit_managed_objects(root_folder, &vim_model)?;
+    println!("Time to emit managed objects: {:?}", start_emit_mo.elapsed());
     Ok(())
 }
 

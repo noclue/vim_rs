@@ -4,13 +4,9 @@ mod generator;
 pub mod rs_emitter;
 
 use std::{path::Path, time::Instant};
-use std::cell::RefCell;
-use std::collections::HashMap;
-use indexmap::IndexMap;
 use generator::emit_vim_bindings;
-use crate::generator::load_openapi;
-use crate::printer::Printer;
-use crate::vim_model::{Model, Struct};
+// use crate::generator::load_openapi;
+// use crate::printer::Printer;
 
 fn main() {
     let root_folder = Path::new("../vim/src/");
@@ -25,13 +21,11 @@ fn main() {
 
 
 
-fn generate_to_console(vi_json_spec_path: &Path) -> Result<(), Box<dyn std::error::Error>> {
-    let model = load_openapi(vi_json_spec_path)?;
-    let vim_model = vim_model::load_vim_model(&model)?;
-    let mut printer = printer::StdoutPrinter::new(None, None);
-    //generate_data_type_enum(&vim_model, &mut printer)?;
-    //generate_cast_from_trait("VirtualDevice".to_string(), &vim_model, &mut printer)?;
-    Ok(())
-}
+// fn generate_to_console(vi_json_spec_path: &Path) -> Result<(), Box<dyn std::error::Error>> {
+//     let model = load_openapi(vi_json_spec_path)?;
+//     let vim_model = vim_model::load_vim_model(&model)?;
+//     let mut printer = printer::StdoutPrinter::new(None, None);
+//     Ok(())
+// }
 
 

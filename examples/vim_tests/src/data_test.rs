@@ -2,10 +2,16 @@
 
 #[cfg(test)]
 mod tests {
-    use vim::types::structs::{CastInto, ValueElements, VimAny, VirtualDeviceTrait, VirtualE1000, VirtualEthernetCardTrait, DataObjectTrait};
+    use vim::types::structs::VirtualE1000;
+    use vim::types::boxed_types::ValueElements;
+    use vim::types::vim_any::VimAny;
+    use vim::types::virtual_device_trait::VirtualDeviceTrait;
+    use vim::types::virtual_ethernet_card_trait::VirtualEthernetCardTrait;
     use vim::types::enums::MoTypesEnum;
+    use vim::types::convert::CastInto;
     use log::{debug, info};
     use std::convert::AsRef;
+    use vim::types::vim_object_trait::VimObjectTrait;
 
     fn init() {
         let _ = env_logger::builder().is_test(true).try_init();
@@ -141,7 +147,8 @@ mod tests {
     fn type_name() {
         init();
         let e1000 = create_virtual_e1000();
-        assert_eq!(e1000.type_name_(), "VirtualE1000");
+        let e1000_type: &'static str = e1000.data_type().into();
+        assert_eq!(e1000_type, "VirtualE1000");
     }
 
     fn create_virtual_device_array() -> VimAny {

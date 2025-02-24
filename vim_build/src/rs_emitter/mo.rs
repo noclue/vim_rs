@@ -11,8 +11,7 @@ use crate::printer::Printer;
 use crate::vim_model::DataType;
 use super::common::emit_description;
 use super::errors::{Result, Error};
-use super::to_fn_name;
-use super::to_type_name;
+use super::{to_fn_name, to_type_name};
 use super::TypeDefResolver;
 
 
@@ -29,7 +28,7 @@ impl <'a> ManagedObjectEmitter <'a> {
             mo,
             vim_model,
             printer,
-            tdf: TypeDefResolver::new(vim_model),
+            tdf: TypeDefResolver::new_with_root_package(vim_model, "crate::types".to_string()),
         }
     }
 
@@ -75,11 +74,15 @@ impl <'a> ManagedObjectEmitter <'a> {
     fn accumulate_type_reference(&self, output: &DataType, types: &mut HashSet<String>) -> Result<()> {
         match output {
             DataType::Reference(ref_name) => {
-                types.insert(self.resolve_import_type(ref_name)?);
+                if let Some(type_name) = self.resolve_import_type(ref_name)? {
+                    types.insert(type_name);
+                }
             }
             DataType::Array(arr_type) => {
                 if let DataType::Reference(ref_name) = arr_type.as_ref() {
-                    types.insert(self.resolve_import_type(ref_name)?);
+                    if let Some(type_name) = self.resolve_import_type(ref_name)? {
+                        types.insert(type_name);
+                    }
                 }
             }
             _ => {}
@@ -87,19 +90,19 @@ impl <'a> ManagedObjectEmitter <'a> {
         Ok(())
     }
     
-    fn resolve_import_type(&self, ref_name: &str) -> Result<String> {
+    fn resolve_import_type(&self, ref_name: &str) -> Result<Option<String>> {
         if ref_name == "Any" {
-            return Ok("structs::VimAny".to_string());
+            return Ok(Some("vim_any::VimAny".to_string()));
         }
         let rust_name = to_type_name(ref_name);
         if let Some(struct_ref) = self.vim_model.structs.get(ref_name) {
             if struct_ref.borrow().has_children() {
-                Ok(format!("structs::{}Trait", rust_name))
+                Ok(None)
             } else {
-                Ok(format!("structs::{}", rust_name))
+                Ok(Some(format!("structs::{rust_name}")))
             }
         } else if let Some(_) = self.vim_model.enums.get(ref_name) {
-            Ok(format!("enums::{}", rust_name))
+            Ok(None)
         } else {
             Err(Error::TypeNotFound(ref_name.to_string()))
         }
@@ -311,7 +314,7 @@ impl <'a> ManagedObjectEmitter <'a> {
         for (_, field) in &request_type.borrow().fields {
             let field_name = field.rust_name();
             if field.optional {
-                self.printer.println(&format!("#[serde(default, skip_serializing_if = \"Option::is_none\")]"))?;
+                self.printer.println("#[serde(default, skip_serializing_if = \"Option::is_none\")]")?;
             }
             if field_name != field.name {
                 self.printer.println(&format!(r#"#[serde(rename = "{}")]"#, field.name))?;
