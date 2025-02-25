@@ -102,7 +102,7 @@ impl HostLocalAccountManager {
     /// ***AlreadyExists***: if specified local group already exists.
     /// 
     /// ***InvalidArgument***: if group name is in invalid format.
-    pub async fn create_group(&self, group: &dyn crate::types::host_account_spec_trait::HostAccountSpecTrait) -> Result<()> {
+    pub async fn create_group(&self, group: &dyn crate::types::traits::HostAccountSpecTrait) -> Result<()> {
         let input = CreateGroupRequestType {group, };
         let path = format!("/HostLocalAccountManager/{moId}/CreateGroup", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -131,7 +131,7 @@ impl HostLocalAccountManager {
     /// 
     /// ***InvalidArgument***: if the user name or password has an
     /// invalid format.
-    pub async fn create_user(&self, user: &dyn crate::types::host_account_spec_trait::HostAccountSpecTrait) -> Result<()> {
+    pub async fn create_user(&self, user: &dyn crate::types::traits::HostAccountSpecTrait) -> Result<()> {
         let input = CreateUserRequestType {user, };
         let path = format!("/HostLocalAccountManager/{moId}/CreateUser", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -236,7 +236,7 @@ impl HostLocalAccountManager {
     /// user's ID.
     /// 
     /// ***InvalidArgument***: if new password or description has an invalid format.
-    pub async fn update_user(&self, user: &dyn crate::types::host_account_spec_trait::HostAccountSpecTrait) -> Result<()> {
+    pub async fn update_user(&self, user: &dyn crate::types::traits::HostAccountSpecTrait) -> Result<()> {
         let input = UpdateUserRequestType {user, };
         let path = format!("/HostLocalAccountManager/{moId}/UpdateUser", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -261,12 +261,12 @@ struct ChangePasswordRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct CreateGroupRequestType<'a> {
-    group: &'a dyn crate::types::host_account_spec_trait::HostAccountSpecTrait,
+    group: &'a dyn crate::types::traits::HostAccountSpecTrait,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct CreateUserRequestType<'a> {
-    user: &'a dyn crate::types::host_account_spec_trait::HostAccountSpecTrait,
+    user: &'a dyn crate::types::traits::HostAccountSpecTrait,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -289,5 +289,5 @@ struct UnassignUserFromGroupRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct UpdateUserRequestType<'a> {
-    user: &'a dyn crate::types::host_account_spec_trait::HostAccountSpecTrait,
+    user: &'a dyn crate::types::traits::HostAccountSpecTrait,
 }

@@ -317,7 +317,7 @@ impl ClusterComputeResource {
     /// which consists of an array of recommendations for hosts that
     /// can be evacuated and an array of faults for hosts that cannot
     /// be evacuated.
-    pub async fn cluster_enter_maintenance_mode(&self, host: &[ManagedObjectReference], option: Option<&[Box<dyn crate::types::option_value_trait::OptionValueTrait>]>) -> Result<ClusterEnterMaintenanceResult> {
+    pub async fn cluster_enter_maintenance_mode(&self, host: &[ManagedObjectReference], option: Option<&[Box<dyn crate::types::traits::OptionValueTrait>]>) -> Result<ClusterEnterMaintenanceResult> {
         let input = ClusterEnterMaintenanceModeRequestType {host, option, };
         let path = format!("/ClusterComputeResource/{moId}/ClusterEnterMaintenanceMode", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -390,7 +390,7 @@ impl ClusterComputeResource {
     /// The vm whose rules need to be looked up.
     /// 
     /// Refers instance of *VirtualMachine*.
-    pub async fn find_rules_for_vm(&self, vm: &ManagedObjectReference) -> Result<Option<Vec<Box<dyn crate::types::cluster_rule_info_trait::ClusterRuleInfoTrait>>>> {
+    pub async fn find_rules_for_vm(&self, vm: &ManagedObjectReference) -> Result<Option<Vec<Box<dyn crate::types::traits::ClusterRuleInfoTrait>>>> {
         let input = FindRulesForVmRequestType {vm, };
         let path = format!("/ClusterComputeResource/{moId}/FindRulesForVm", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -738,7 +738,7 @@ impl ClusterComputeResource {
     /// the operation.
     /// 
     /// Refers instance of *Task*.
-    pub async fn reconfigure_compute_resource_task(&self, spec: &dyn crate::types::compute_resource_config_spec_trait::ComputeResourceConfigSpecTrait, modify: bool) -> Result<ManagedObjectReference> {
+    pub async fn reconfigure_compute_resource_task(&self, spec: &dyn crate::types::traits::ComputeResourceConfigSpecTrait, modify: bool) -> Result<ManagedObjectReference> {
         let input = ReconfigureComputeResourceRequestType {spec, modify, };
         let path = format!("/ClusterComputeResource/{moId}/ReconfigureComputeResource_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -813,7 +813,7 @@ impl ClusterComputeResource {
     /// Retrieve DAS advanced runtime info for this cluster.
     /// 
     /// ***Required privileges:*** System.Read
-    pub async fn retrieve_das_advanced_runtime_info(&self) -> Result<Option<Box<dyn crate::types::cluster_das_advanced_runtime_info_trait::ClusterDasAdvancedRuntimeInfoTrait>>> {
+    pub async fn retrieve_das_advanced_runtime_info(&self) -> Result<Option<Box<dyn crate::types::traits::ClusterDasAdvancedRuntimeInfoTrait>>> {
         let path = format!("/ClusterComputeResource/{moId}/RetrieveDasAdvancedRuntimeInfo", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         Ok(self.client.execute_option(req).await?)
@@ -934,7 +934,7 @@ impl ClusterComputeResource {
     /// ## Errors:
     ///
     /// Failure
-    pub async fn validate_hci_configuration(&self, hci_config_spec: Option<&ClusterComputeResourceHciConfigSpec>, hosts: Option<&[ManagedObjectReference]>) -> Result<Option<Vec<Box<dyn crate::types::cluster_compute_resource_validation_result_base_trait::ClusterComputeResourceValidationResultBaseTrait>>>> {
+    pub async fn validate_hci_configuration(&self, hci_config_spec: Option<&ClusterComputeResourceHciConfigSpec>, hosts: Option<&[ManagedObjectReference]>) -> Result<Option<Vec<Box<dyn crate::types::traits::ClusterComputeResourceValidationResultBaseTrait>>>> {
         let input = ValidateHciConfigurationRequestType {hci_config_spec, hosts, };
         let path = format!("/ClusterComputeResource/{moId}/ValidateHCIConfiguration", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -973,7 +973,7 @@ impl ClusterComputeResource {
     /// events as long as they are still current. The
     /// *configStatus* property provides an overall status
     /// based on these events.
-    pub async fn config_issue(&self) -> Result<Option<Vec<Box<dyn crate::types::event_trait::EventTrait>>>> {
+    pub async fn config_issue(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::EventTrait>>>> {
         let path = format!("/ClusterComputeResource/{moId}/configIssue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         Ok(self.client.execute_option(req).await?)
@@ -1035,7 +1035,7 @@ impl ClusterComputeResource {
     /// 
     /// For a cluster this property will return a
     /// *ClusterConfigInfoEx* object.
-    pub async fn configuration_ex(&self) -> Result<Box<dyn crate::types::compute_resource_config_info_trait::ComputeResourceConfigInfoTrait>> {
+    pub async fn configuration_ex(&self) -> Result<Box<dyn crate::types::traits::ComputeResourceConfigInfoTrait>> {
         let path = format!("/ClusterComputeResource/{moId}/configurationEx", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         Ok(self.client.execute(req).await?)
@@ -1043,7 +1043,7 @@ impl ClusterComputeResource {
     /// Custom field values.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn custom_value(&self) -> Result<Option<Vec<Box<dyn crate::types::custom_field_value_trait::CustomFieldValueTrait>>>> {
+    pub async fn custom_value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/ClusterComputeResource/{moId}/customValue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         Ok(self.client.execute_option(req).await?)
@@ -1393,7 +1393,7 @@ impl ClusterComputeResource {
     /// 
     /// This information is used on
     /// summary screens and in list views.
-    pub async fn summary(&self) -> Result<Box<dyn crate::types::compute_resource_summary_trait::ComputeResourceSummaryTrait>> {
+    pub async fn summary(&self) -> Result<Box<dyn crate::types::traits::ComputeResourceSummaryTrait>> {
         let path = format!("/ClusterComputeResource/{moId}/summary", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         Ok(self.client.execute(req).await?)
@@ -1446,7 +1446,7 @@ impl ClusterComputeResource {
     /// a custom field definition.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::custom_field_value_trait::CustomFieldValueTrait>>>> {
+    pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/ClusterComputeResource/{moId}/value", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         Ok(self.client.execute_option(req).await?)
@@ -1488,7 +1488,7 @@ struct ConfigureHciRequestType<'a> {
 struct ClusterEnterMaintenanceModeRequestType<'a> {
     host: &'a [ManagedObjectReference],
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    option: Option<&'a [Box<dyn crate::types::option_value_trait::OptionValueTrait>]>,
+    option: Option<&'a [Box<dyn crate::types::traits::OptionValueTrait>]>,
 }
 #[derive(serde::Serialize)]
 #[serde(rename = "ExtendHCIRequestType", tag = "_typeName")]
@@ -1540,7 +1540,7 @@ struct ReconfigureClusterRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct ReconfigureComputeResourceRequestType<'a> {
-    spec: &'a dyn crate::types::compute_resource_config_spec_trait::ComputeResourceConfigSpecTrait,
+    spec: &'a dyn crate::types::traits::ComputeResourceConfigSpecTrait,
     modify: bool,
 }
 #[derive(serde::Serialize)]

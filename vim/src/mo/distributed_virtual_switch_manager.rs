@@ -66,7 +66,7 @@ impl DistributedVirtualSwitchManager {
     /// filterSpec and users can use this to specify all hosts in a
     /// container (datacenter, folder, or computeResource), an array
     /// of hosts, or hosts that might or might not be a DVS member.
-    pub async fn query_dvs_check_compatibility(&self, host_container: &DistributedVirtualSwitchManagerHostContainer, dvs_product_spec: Option<&DistributedVirtualSwitchManagerDvsProductSpec>, host_filter_spec: Option<&[Box<dyn crate::types::distributed_virtual_switch_manager_host_dvs_filter_spec_trait::DistributedVirtualSwitchManagerHostDvsFilterSpecTrait>]>) -> Result<Option<Vec<DistributedVirtualSwitchManagerCompatibilityResult>>> {
+    pub async fn query_dvs_check_compatibility(&self, host_container: &DistributedVirtualSwitchManagerHostContainer, dvs_product_spec: Option<&DistributedVirtualSwitchManagerDvsProductSpec>, host_filter_spec: Option<&[Box<dyn crate::types::traits::DistributedVirtualSwitchManagerHostDvsFilterSpecTrait>]>) -> Result<Option<Vec<DistributedVirtualSwitchManagerCompatibilityResult>>> {
         let input = QueryDvsCheckCompatibilityRequestType {host_container, dvs_product_spec, host_filter_spec, };
         let path = format!("/DistributedVirtualSwitchManager/{moId}/QueryDvsCheckCompatibility", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -104,7 +104,7 @@ impl DistributedVirtualSwitchManager {
     /// ***NotFound***: If entity in selectionSet doesn't exist.
     /// 
     /// ***BackupBlobWriteFailure***: if failed to create backup config blob.
-    pub async fn dvs_manager_export_entity_task(&self, selection_set: &[Box<dyn crate::types::selection_set_trait::SelectionSetTrait>]) -> Result<ManagedObjectReference> {
+    pub async fn dvs_manager_export_entity_task(&self, selection_set: &[Box<dyn crate::types::traits::SelectionSetTrait>]) -> Result<ManagedObjectReference> {
         let input = DvsManagerExportEntityRequestType {selection_set, };
         let path = format!("/DistributedVirtualSwitchManager/{moId}/DVSManagerExportEntity_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -328,7 +328,7 @@ impl DistributedVirtualSwitchManager {
     /// The productSpec of a *DistributedVirtualSwitch*.
     /// If not set, it is assumed to be the default one used for
     /// DistributedVirtualSwitch creation.
-    pub async fn query_dvs_feature_capability(&self, switch_product_spec: Option<&DistributedVirtualSwitchProductSpec>) -> Result<Option<Box<dyn crate::types::dvs_feature_capability_trait::DvsFeatureCapabilityTrait>>> {
+    pub async fn query_dvs_feature_capability(&self, switch_product_spec: Option<&DistributedVirtualSwitchProductSpec>) -> Result<Option<Box<dyn crate::types::traits::DvsFeatureCapabilityTrait>>> {
         let input = QueryDvsFeatureCapabilityRequestType {switch_product_spec, };
         let path = format!("/DistributedVirtualSwitchManager/{moId}/QueryDvsFeatureCapability", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -429,13 +429,13 @@ struct QueryDvsCheckCompatibilityRequestType<'a> {
     dvs_product_spec: Option<&'a DistributedVirtualSwitchManagerDvsProductSpec>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "hostFilterSpec")]
-    host_filter_spec: Option<&'a [Box<dyn crate::types::distributed_virtual_switch_manager_host_dvs_filter_spec_trait::DistributedVirtualSwitchManagerHostDvsFilterSpecTrait>]>,
+    host_filter_spec: Option<&'a [Box<dyn crate::types::traits::DistributedVirtualSwitchManagerHostDvsFilterSpecTrait>]>,
 }
 #[derive(serde::Serialize)]
 #[serde(rename = "DVSManagerExportEntityRequestType", tag = "_typeName")]
 struct DvsManagerExportEntityRequestType<'a> {
     #[serde(rename = "selectionSet")]
-    selection_set: &'a [Box<dyn crate::types::selection_set_trait::SelectionSetTrait>],
+    selection_set: &'a [Box<dyn crate::types::traits::SelectionSetTrait>],
 }
 #[derive(serde::Serialize)]
 #[serde(rename = "DVSManagerImportEntityRequestType", tag = "_typeName")]

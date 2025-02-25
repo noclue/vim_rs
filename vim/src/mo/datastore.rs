@@ -457,7 +457,7 @@ impl Datastore {
     /// events as long as they are still current. The
     /// *configStatus* property provides an overall status
     /// based on these events.
-    pub async fn config_issue(&self) -> Result<Option<Vec<Box<dyn crate::types::event_trait::EventTrait>>>> {
+    pub async fn config_issue(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::EventTrait>>>> {
         let path = format!("/Datastore/{moId}/configIssue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         Ok(self.client.execute_option(req).await?)
@@ -494,7 +494,7 @@ impl Datastore {
     /// Custom field values.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn custom_value(&self) -> Result<Option<Vec<Box<dyn crate::types::custom_field_value_trait::CustomFieldValueTrait>>>> {
+    pub async fn custom_value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/Datastore/{moId}/customValue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         Ok(self.client.execute_option(req).await?)
@@ -603,7 +603,7 @@ impl Datastore {
         Ok(self.client.execute_option(req).await?)
     }
     /// Specific information about the datastore.
-    pub async fn info(&self) -> Result<Box<dyn crate::types::datastore_info_trait::DatastoreInfoTrait>> {
+    pub async fn info(&self) -> Result<Box<dyn crate::types::traits::DatastoreInfoTrait>> {
         let path = format!("/Datastore/{moId}/info", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         Ok(self.client.execute(req).await?)
@@ -755,7 +755,7 @@ impl Datastore {
     /// a custom field definition.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::custom_field_value_trait::CustomFieldValueTrait>>>> {
+    pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/Datastore/{moId}/value", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         Ok(self.client.execute_option(req).await?)

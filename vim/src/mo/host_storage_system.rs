@@ -434,7 +434,7 @@ impl HostStorageSystem {
     /// is not supported.
     /// 
     /// ***HostConfigFault***: if the host is unable to create the adapter.
-    pub async fn create_software_adapter(&self, spec: &dyn crate::types::host_hba_create_spec_trait::HostHbaCreateSpecTrait) -> Result<()> {
+    pub async fn create_software_adapter(&self, spec: &dyn crate::types::traits::HostHbaCreateSpecTrait) -> Result<()> {
         let input = CreateSoftwareAdapterRequestType {spec, };
         let path = format!("/HostStorageSystem/{moId}/CreateSoftwareAdapter", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -1716,7 +1716,7 @@ impl HostStorageSystem {
     /// ***InvalidArgument***: if the policy is invalid.
     /// 
     /// ***HostConfigFault***: for all other configuration failures.
-    pub async fn set_multipath_lun_policy(&self, lun_id: &str, policy: &dyn crate::types::host_multipath_info_logical_unit_policy_trait::HostMultipathInfoLogicalUnitPolicyTrait) -> Result<()> {
+    pub async fn set_multipath_lun_policy(&self, lun_id: &str, policy: &dyn crate::types::traits::HostMultipathInfoLogicalUnitPolicyTrait) -> Result<()> {
         let input = SetMultipathLunPolicyRequestType {lun_id, policy, };
         let path = format!("/HostStorageSystem/{moId}/SetMultipathLunPolicy", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -2433,7 +2433,7 @@ impl HostStorageSystem {
     /// a custom field definition.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::custom_field_value_trait::CustomFieldValueTrait>>>> {
+    pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/HostStorageSystem/{moId}/value", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         Ok(self.client.execute_option(req).await?)
@@ -2519,7 +2519,7 @@ struct CreateNvmeOverRdmaAdapterRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct CreateSoftwareAdapterRequestType<'a> {
-    spec: &'a dyn crate::types::host_hba_create_spec_trait::HostHbaCreateSpecTrait,
+    spec: &'a dyn crate::types::traits::HostHbaCreateSpecTrait,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -2757,7 +2757,7 @@ struct SetCustomValueRequestType<'a> {
 struct SetMultipathLunPolicyRequestType<'a> {
     #[serde(rename = "lunId")]
     lun_id: &'a str,
-    policy: &'a dyn crate::types::host_multipath_info_logical_unit_policy_trait::HostMultipathInfoLogicalUnitPolicyTrait,
+    policy: &'a dyn crate::types::traits::HostMultipathInfoLogicalUnitPolicyTrait,
 }
 #[derive(serde::Serialize)]
 #[serde(rename = "SetNFSUserRequestType", tag = "_typeName")]

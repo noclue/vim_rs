@@ -212,7 +212,7 @@ impl HostDatastoreBrowser {
     /// This property is used by clients to determine what kinds of file types are
     /// supported. Clients should consult this list to avoid querying for types of virtual
     /// machine components that are not supported.
-    pub async fn supported_type(&self) -> Result<Option<Vec<Box<dyn crate::types::file_query_trait::FileQueryTrait>>>> {
+    pub async fn supported_type(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::FileQueryTrait>>>> {
         let path = format!("/HostDatastoreBrowser/{moId}/supportedType", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         Ok(self.client.execute_option(req).await?)

@@ -157,7 +157,7 @@ impl LicenseManager {
     /// license file is not valid.
     /// 
     /// ***NotEnoughLicenses***: if the new license source does not have enough licenses.
-    pub async fn configure_license_source(&self, host: Option<&ManagedObjectReference>, license_source: &dyn crate::types::license_source_trait::LicenseSourceTrait) -> Result<()> {
+    pub async fn configure_license_source(&self, host: Option<&ManagedObjectReference>, license_source: &dyn crate::types::traits::LicenseSourceTrait) -> Result<()> {
         let input = ConfigureLicenseSourceRequestType {host, license_source, };
         let path = format!("/LicenseManager/{moId}/ConfigureLicenseSource", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -499,7 +499,7 @@ impl LicenseManager {
     /// *LicenseAssignmentManager.QueryAssignedLicenses* to get evaluation information.
     /// 
     /// Set or return a data object type of LocalLicense or LicenseServer.
-    pub async fn source(&self) -> Result<Box<dyn crate::types::license_source_trait::LicenseSourceTrait>> {
+    pub async fn source(&self) -> Result<Box<dyn crate::types::traits::LicenseSourceTrait>> {
         let path = format!("/LicenseManager/{moId}/source", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         Ok(self.client.execute(req).await?)
@@ -538,7 +538,7 @@ struct ConfigureLicenseSourceRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     host: Option<&'a ManagedObjectReference>,
     #[serde(rename = "licenseSource")]
-    license_source: &'a dyn crate::types::license_source_trait::LicenseSourceTrait,
+    license_source: &'a dyn crate::types::traits::LicenseSourceTrait,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]

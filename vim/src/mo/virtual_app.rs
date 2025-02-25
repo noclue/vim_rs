@@ -470,7 +470,7 @@ impl VirtualApp {
     /// 
     /// ***VmWwnConflict***: if the WWN of the virtual machine has been used by
     /// other virtual machines.
-    pub async fn import_v_app(&self, spec: &dyn crate::types::import_spec_trait::ImportSpecTrait, folder: Option<&ManagedObjectReference>, host: Option<&ManagedObjectReference>) -> Result<ManagedObjectReference> {
+    pub async fn import_v_app(&self, spec: &dyn crate::types::traits::ImportSpecTrait, folder: Option<&ManagedObjectReference>, host: Option<&ManagedObjectReference>) -> Result<ManagedObjectReference> {
         let input = ImportVAppRequestType {spec, folder, host, };
         let path = format!("/VirtualApp/{moId}/ImportVApp", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -1084,7 +1084,7 @@ impl VirtualApp {
     /// events as long as they are still current. The
     /// *configStatus* property provides an overall status
     /// based on these events.
-    pub async fn config_issue(&self) -> Result<Option<Vec<Box<dyn crate::types::event_trait::EventTrait>>>> {
+    pub async fn config_issue(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::EventTrait>>>> {
         let path = format!("/VirtualApp/{moId}/configIssue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         Ok(self.client.execute_option(req).await?)
@@ -1121,7 +1121,7 @@ impl VirtualApp {
     /// Custom field values.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn custom_value(&self) -> Result<Option<Vec<Box<dyn crate::types::custom_field_value_trait::CustomFieldValueTrait>>>> {
+    pub async fn custom_value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/VirtualApp/{moId}/customValue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         Ok(self.client.execute_option(req).await?)
@@ -1431,7 +1431,7 @@ impl VirtualApp {
     /// If you use the PropertyCollector.WaitForUpdatesEx method, specify
     /// an empty string for the version parameter. Any other version value will not
     /// produce any property values as no updates are generated.
-    pub async fn summary(&self) -> Result<Box<dyn crate::types::resource_pool_summary_trait::ResourcePoolSummaryTrait>> {
+    pub async fn summary(&self) -> Result<Box<dyn crate::types::traits::ResourcePoolSummaryTrait>> {
         let path = format!("/VirtualApp/{moId}/summary", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         Ok(self.client.execute(req).await?)
@@ -1480,7 +1480,7 @@ impl VirtualApp {
     /// a custom field definition.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::custom_field_value_trait::CustomFieldValueTrait>>>> {
+    pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/VirtualApp/{moId}/value", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         Ok(self.client.execute_option(req).await?)
@@ -1533,7 +1533,7 @@ struct CreateChildVmRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct ImportVAppRequestType<'a> {
-    spec: &'a dyn crate::types::import_spec_trait::ImportSpecTrait,
+    spec: &'a dyn crate::types::traits::ImportSpecTrait,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     folder: Option<&'a ManagedObjectReference>,
     #[serde(default, skip_serializing_if = "Option::is_none")]

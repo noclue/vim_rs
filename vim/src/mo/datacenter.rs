@@ -128,7 +128,7 @@ impl Datacenter {
     /// the operation, and also a *ClusterPowerOnVmResult* object.
     /// 
     /// Refers instance of *Task*.
-    pub async fn power_on_multi_vm_task(&self, vm: &[ManagedObjectReference], option: Option<&[Box<dyn crate::types::option_value_trait::OptionValueTrait>]>) -> Result<ManagedObjectReference> {
+    pub async fn power_on_multi_vm_task(&self, vm: &[ManagedObjectReference], option: Option<&[Box<dyn crate::types::traits::OptionValueTrait>]>) -> Result<ManagedObjectReference> {
         let input = PowerOnMultiVmRequestType {vm, option, };
         let path = format!("/Datacenter/{moId}/PowerOnMultiVM_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -362,7 +362,7 @@ impl Datacenter {
     /// events as long as they are still current. The
     /// *configStatus* property provides an overall status
     /// based on these events.
-    pub async fn config_issue(&self) -> Result<Option<Vec<Box<dyn crate::types::event_trait::EventTrait>>>> {
+    pub async fn config_issue(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::EventTrait>>>> {
         let path = format!("/Datacenter/{moId}/configIssue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         Ok(self.client.execute_option(req).await?)
@@ -407,7 +407,7 @@ impl Datacenter {
     /// Custom field values.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn custom_value(&self) -> Result<Option<Vec<Box<dyn crate::types::custom_field_value_trait::CustomFieldValueTrait>>>> {
+    pub async fn custom_value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/Datacenter/{moId}/customValue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         Ok(self.client.execute_option(req).await?)
@@ -707,7 +707,7 @@ impl Datacenter {
     /// a custom field definition.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::custom_field_value_trait::CustomFieldValueTrait>>>> {
+    pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/Datacenter/{moId}/value", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         Ok(self.client.execute_option(req).await?)
@@ -745,7 +745,7 @@ struct BatchQueryConnectInfoRequestType<'a> {
 struct PowerOnMultiVmRequestType<'a> {
     vm: &'a [ManagedObjectReference],
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    option: Option<&'a [Box<dyn crate::types::option_value_trait::OptionValueTrait>]>,
+    option: Option<&'a [Box<dyn crate::types::traits::OptionValueTrait>]>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]

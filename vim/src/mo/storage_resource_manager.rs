@@ -378,7 +378,7 @@ impl StorageResourceManager {
     /// ### spec
     /// A set of storage Drs configuration changes to apply to
     /// the storage pod.
-    pub async fn validate_storage_pod_config(&self, pod: &ManagedObjectReference, spec: &StorageDrsConfigSpec) -> Result<Option<Box<dyn crate::types::method_fault_trait::MethodFaultTrait>>> {
+    pub async fn validate_storage_pod_config(&self, pod: &ManagedObjectReference, spec: &StorageDrsConfigSpec) -> Result<Option<Box<dyn crate::types::traits::MethodFaultTrait>>> {
         let input = ValidateStoragePodConfigRequestType {pod, spec, };
         let path = format!("/StorageResourceManager/{moId}/ValidateStoragePodConfig", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);

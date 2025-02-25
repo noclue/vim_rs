@@ -24494,7 +24494,7 @@ fn get_value_deserializer_12(type_name: &str) -> Option<fn(&serde_json::value::R
         0x794f6645 => { // yOfE
             if type_name == "ArrayOfEvent" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::event_trait::EventTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::EventTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfEvent(value)))
                 })
             } else { None }
@@ -24527,7 +24527,7 @@ fn get_value_deserializer_13(type_name: &str) -> Option<fn(&serde_json::value::R
         0x4f664163 => { // OfAc
             if type_name == "ArrayOfAction" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::action_trait::ActionTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::ActionTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfAction(value)))
                 })
             } else { None }
@@ -24664,7 +24664,7 @@ fn get_value_deserializer_14(type_name: &str) -> Option<fn(&serde_json::value::R
         0x4f665363 => { // OfSc
             if type_name == "ArrayOfScsiLun" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::scsi_lun_trait::ScsiLunTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::ScsiLunTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfScsiLun(value)))
                 })
             } else { None }
@@ -24672,7 +24672,7 @@ fn get_value_deserializer_14(type_name: &str) -> Option<fn(&serde_json::value::R
         0x4f66566d => { // OfVm
             if type_name == "ArrayOfVmEvent" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::vm_event_trait::VmEventTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VmEventTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVmEvent(value)))
                 })
             } else { None }
@@ -24705,7 +24705,7 @@ fn get_value_deserializer_15(type_name: &str) -> Option<fn(&serde_json::value::R
         0x44767345 => { // DvsE
             if type_name == "ArrayOfDvsEvent" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::dvs_event_trait::DvsEventTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::DvsEventTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfDvsEvent(value)))
                 })
             } else { None }
@@ -24713,7 +24713,7 @@ fn get_value_deserializer_15(type_name: &str) -> Option<fn(&serde_json::value::R
         0x44767346 => { // DvsF
             if type_name == "ArrayOfDvsFault" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::dvs_fault_trait::DvsFaultTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::DvsFaultTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfDvsFault(value)))
                 })
             } else { None }
@@ -24721,7 +24721,7 @@ fn get_value_deserializer_15(type_name: &str) -> Option<fn(&serde_json::value::R
         0x46696c65 => { // File
             if type_name == "ArrayOfFileInfo" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::file_info_trait::FileInfoTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::FileInfoTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfFileInfo(value)))
                 })
             } else { None }
@@ -24769,7 +24769,7 @@ fn get_value_deserializer_15(type_name: &str) -> Option<fn(&serde_json::value::R
         0x4f766646 => { // OvfF
             if type_name == "ArrayOfOvfFault" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::ovf_fault_trait::OvfFaultTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::OvfFaultTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfOvfFault(value)))
                 })
             } else { None }
@@ -24817,7 +24817,7 @@ fn get_value_deserializer_15(type_name: &str) -> Option<fn(&serde_json::value::R
         0x54696d65 => { // Time
             if type_name == "ArrayOfTimedout" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::timedout_trait::TimedoutTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::TimedoutTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfTimedout(value)))
                 })
             } else { None }
@@ -24833,7 +24833,7 @@ fn get_value_deserializer_15(type_name: &str) -> Option<fn(&serde_json::value::R
         0x56696d46 => { // VimF
             if type_name == "ArrayOfVimFault" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::vim_fault_trait::VimFaultTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VimFaultTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVimFault(value)))
                 })
             } else { None }
@@ -24858,7 +24858,7 @@ fn get_value_deserializer_16(type_name: &str) -> Option<fn(&serde_json::value::R
         0x41646472 => { // Addr
             if type_name == "ArrayOfIpAddress" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::ip_address_trait::IpAddressTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::IpAddressTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfIpAddress(value)))
                 })
             } else { None }
@@ -24882,7 +24882,7 @@ fn get_value_deserializer_16(type_name: &str) -> Option<fn(&serde_json::value::R
         0x616e4661 => { // anFa
             if type_name == "ArrayOfVsanFault" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::vsan_fault_trait::VsanFaultTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VsanFaultTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVsanFault(value)))
                 })
             } else { None }
@@ -24898,7 +24898,7 @@ fn get_value_deserializer_16(type_name: &str) -> Option<fn(&serde_json::value::R
         0x61726d53 => { // armS
             if type_name == "ArrayOfAlarmSpec" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::alarm_spec_trait::AlarmSpecTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::AlarmSpecTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfAlarmSpec(value)))
                 })
             } else { None }
@@ -24930,7 +24930,7 @@ fn get_value_deserializer_16(type_name: &str) -> Option<fn(&serde_json::value::R
         0x66457870 => { // fExp
             if type_name == "ArrayOfOvfExport" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::ovf_export_trait::OvfExportTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::OvfExportTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfOvfExport(value)))
                 })
             } else { None }
@@ -24938,7 +24938,7 @@ fn get_value_deserializer_16(type_name: &str) -> Option<fn(&serde_json::value::R
         0x66496d70 => { // fImp
             if type_name == "ArrayOfOvfImport" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::ovf_import_trait::OvfImportTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::OvfImportTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfOvfImport(value)))
                 })
             } else { None }
@@ -24954,7 +24954,7 @@ fn get_value_deserializer_16(type_name: &str) -> Option<fn(&serde_json::value::R
         0x6c654576 => { // leEv
             if type_name == "ArrayOfRoleEvent" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::role_event_trait::RoleEventTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::RoleEventTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfRoleEvent(value)))
                 })
             } else { None }
@@ -24962,7 +24962,7 @@ fn get_value_deserializer_16(type_name: &str) -> Option<fn(&serde_json::value::R
         0x6c654661 => { // leFa
             if type_name == "ArrayOfFileFault" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::file_fault_trait::FileFaultTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::FileFaultTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfFileFault(value)))
                 })
             } else { None }
@@ -24970,7 +24970,7 @@ fn get_value_deserializer_16(type_name: &str) -> Option<fn(&serde_json::value::R
         0x6c655175 => { // leQu
             if type_name == "ArrayOfFileQuery" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::file_query_trait::FileQueryTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::FileQueryTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfFileQuery(value)))
                 })
             } else { None }
@@ -24994,7 +24994,7 @@ fn get_value_deserializer_16(type_name: &str) -> Option<fn(&serde_json::value::R
         0x6f654661 => { // oeFa
             if type_name == "ArrayOfFcoeFault" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::fcoe_fault_trait::FcoeFaultTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::FcoeFaultTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfFcoeFault(value)))
                 })
             } else { None }
@@ -25018,7 +25018,7 @@ fn get_value_deserializer_16(type_name: &str) -> Option<fn(&serde_json::value::R
         0x73497050 => { // sIpP
             if type_name == "ArrayOfDvsIpPort" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::dvs_ip_port_trait::DvsIpPortTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::DvsIpPortTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfDvsIpPort(value)))
                 })
             } else { None }
@@ -25026,7 +25026,7 @@ fn get_value_deserializer_16(type_name: &str) -> Option<fn(&serde_json::value::R
         0x736b4576 => { // skEv
             if type_name == "ArrayOfTaskEvent" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::task_event_trait::TaskEventTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::TaskEventTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfTaskEvent(value)))
                 })
             } else { None }
@@ -25042,7 +25042,7 @@ fn get_value_deserializer_16(type_name: &str) -> Option<fn(&serde_json::value::R
         0x73744576 => { // stEv
             if type_name == "ArrayOfHostEvent" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::host_event_trait::HostEventTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::HostEventTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfHostEvent(value)))
                 })
             } else { None }
@@ -25107,7 +25107,7 @@ fn get_value_deserializer_17(type_name: &str) -> Option<fn(&serde_json::value::R
         0x416c61726d457665 => { // AlarmEve
             if type_name == "ArrayOfAlarmEvent" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::alarm_event_trait::AlarmEventTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::AlarmEventTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfAlarmEvent(value)))
                 })
             } else { None }
@@ -25155,7 +25155,7 @@ fn get_value_deserializer_17(type_name: &str) -> Option<fn(&serde_json::value::R
         0x43727970746f5370 => { // CryptoSp
             if type_name == "ArrayOfCryptoSpec" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::crypto_spec_trait::CryptoSpecTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::CryptoSpecTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfCryptoSpec(value)))
                 })
             } else { None }
@@ -25171,7 +25171,7 @@ fn get_value_deserializer_17(type_name: &str) -> Option<fn(&serde_json::value::R
         0x446174614f626a65 => { // DataObje
             if type_name == "ArrayOfDataObject" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::data_object_trait::DataObjectTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::DataObjectTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfDataObject(value)))
                 })
             } else { None }
@@ -25211,7 +25211,7 @@ fn get_value_deserializer_17(type_name: &str) -> Option<fn(&serde_json::value::R
         0x486f737444657669 => { // HostDevi
             if type_name == "ArrayOfHostDevice" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::host_device_trait::HostDeviceTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::HostDeviceTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfHostDevice(value)))
                 })
             } else { None }
@@ -25227,7 +25227,7 @@ fn get_value_deserializer_17(type_name: &str) -> Option<fn(&serde_json::value::R
         0x496d706f72745370 => { // ImportSp
             if type_name == "ArrayOfImportSpec" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::import_spec_trait::ImportSpecTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::ImportSpecTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfImportSpec(value)))
                 })
             } else { None }
@@ -25235,7 +25235,7 @@ fn get_value_deserializer_17(type_name: &str) -> Option<fn(&serde_json::value::R
         0x4973637369466175 => { // IscsiFau
             if type_name == "ArrayOfIscsiFault" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::iscsi_fault_trait::IscsiFaultTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::IscsiFaultTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfIscsiFault(value)))
                 })
             } else { None }
@@ -25267,7 +25267,7 @@ fn get_value_deserializer_17(type_name: &str) -> Option<fn(&serde_json::value::R
         0x4d61634164647265 => { // MacAddre
             if type_name == "ArrayOfMacAddress" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::mac_address_trait::MacAddressTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::MacAddressTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfMacAddress(value)))
                 })
             } else { None }
@@ -25315,7 +25315,7 @@ fn get_value_deserializer_17(type_name: &str) -> Option<fn(&serde_json::value::R
         0x4f7074696f6e5479 => { // OptionTy
             if type_name == "ArrayOfOptionType" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::option_type_trait::OptionTypeTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::OptionTypeTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfOptionType(value)))
                 })
             } else { None }
@@ -25323,7 +25323,7 @@ fn get_value_deserializer_17(type_name: &str) -> Option<fn(&serde_json::value::R
         0x4f7666456c656d65 => { // OvfEleme
             if type_name == "ArrayOfOvfElement" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::ovf_element_trait::OvfElementTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::OvfElementTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfOvfElement(value)))
                 })
             } else { None }
@@ -25347,7 +25347,7 @@ fn get_value_deserializer_17(type_name: &str) -> Option<fn(&serde_json::value::R
         0x5461736b52656173 => { // TaskReas
             if type_name == "ArrayOfTaskReason" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::task_reason_trait::TaskReasonTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::TaskReasonTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfTaskReason(value)))
                 })
             } else { None }
@@ -25404,7 +25404,7 @@ fn get_value_deserializer_18(type_name: &str) -> Option<fn(&serde_json::value::R
         0x416c61726d416374 => { // AlarmAct
             if type_name == "ArrayOfAlarmAction" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::alarm_action_trait::AlarmActionTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::AlarmActionTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfAlarmAction(value)))
                 })
             } else { None }
@@ -25444,7 +25444,7 @@ fn get_value_deserializer_18(type_name: &str) -> Option<fn(&serde_json::value::R
         0x4465736372697074 => { // Descript
             if type_name == "ArrayOfDescription" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::description_trait::DescriptionTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::DescriptionTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfDescription(value)))
                 })
             } else { None }
@@ -25588,7 +25588,7 @@ fn get_value_deserializer_18(type_name: &str) -> Option<fn(&serde_json::value::R
         0x4d6574686f644661 => { // MethodFa
             if type_name == "ArrayOfMethodFault" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::method_fault_trait::MethodFaultTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::MethodFaultTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfMethodFault(value)))
                 })
             } else { None }
@@ -25612,7 +25612,7 @@ fn get_value_deserializer_18(type_name: &str) -> Option<fn(&serde_json::value::R
         0x4f7074696f6e5661 => { // OptionVa
             if type_name == "ArrayOfOptionValue" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::option_value_trait::OptionValueTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::OptionValueTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfOptionValue(value)))
                 })
             } else { None }
@@ -25636,7 +25636,7 @@ fn get_value_deserializer_18(type_name: &str) -> Option<fn(&serde_json::value::R
         0x4f766650726f7065 => { // OvfPrope
             if type_name == "ArrayOfOvfProperty" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::ovf_property_trait::OvfPropertyTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::OvfPropertyTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfOvfProperty(value)))
                 })
             } else { None }
@@ -25821,7 +25821,7 @@ fn get_value_deserializer_19(type_name: &str) -> Option<fn(&serde_json::value::R
         0x656c656374696f6e => { // election
             if type_name == "ArrayOfSelectionSet" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::selection_set_trait::SelectionSetTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::SelectionSetTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfSelectionSet(value)))
                 })
             } else { None }
@@ -25837,7 +25837,7 @@ fn get_value_deserializer_19(type_name: &str) -> Option<fn(&serde_json::value::R
         0x656e6572616c4576 => { // eneralEv
             if type_name == "ArrayOfGeneralEvent" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::general_event_trait::GeneralEventTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::GeneralEventTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfGeneralEvent(value)))
                 })
             } else { None }
@@ -25861,7 +25861,7 @@ fn get_value_deserializer_19(type_name: &str) -> Option<fn(&serde_json::value::R
         0x657373696f6e4576 => { // essionEv
             if type_name == "ArrayOfSessionEvent" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::session_event_trait::SessionEventTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::SessionEventTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfSessionEvent(value)))
                 })
             } else { None }
@@ -25893,7 +25893,7 @@ fn get_value_deserializer_19(type_name: &str) -> Option<fn(&serde_json::value::R
         0x6963656e73654576 => { // icenseEv
             if type_name == "ArrayOfLicenseEvent" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::license_event_trait::LicenseEventTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::LicenseEventTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfLicenseEvent(value)))
                 })
             } else { None }
@@ -25957,7 +25957,7 @@ fn get_value_deserializer_19(type_name: &str) -> Option<fn(&serde_json::value::R
         0x6c75737465724576 => { // lusterEv
             if type_name == "ArrayOfClusterEvent" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::cluster_event_trait::ClusterEventTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::ClusterEventTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfClusterEvent(value)))
                 })
             } else { None }
@@ -25965,7 +25965,7 @@ fn get_value_deserializer_19(type_name: &str) -> Option<fn(&serde_json::value::R
         0x6d436c6f6e654576 => { // mCloneEv
             if type_name == "ArrayOfVmCloneEvent" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::vm_clone_event_trait::VmCloneEventTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VmCloneEventTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVmCloneEvent(value)))
                 })
             } else { None }
@@ -25973,7 +25973,7 @@ fn get_value_deserializer_19(type_name: &str) -> Option<fn(&serde_json::value::R
         0x6d436f6e66696749 => { // mConfigI
             if type_name == "ArrayOfVmConfigInfo" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::vm_config_info_trait::VmConfigInfoTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VmConfigInfoTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVmConfigInfo(value)))
                 })
             } else { None }
@@ -25981,7 +25981,7 @@ fn get_value_deserializer_19(type_name: &str) -> Option<fn(&serde_json::value::R
         0x6d436f6e66696753 => { // mConfigS
             if type_name == "ArrayOfVmConfigSpec" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::vm_config_spec_trait::VmConfigSpecTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VmConfigSpecTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVmConfigSpec(value)))
                 })
             } else { None }
@@ -26013,7 +26013,7 @@ fn get_value_deserializer_19(type_name: &str) -> Option<fn(&serde_json::value::R
         0x6e76616c69644c6f => { // nvalidLo
             if type_name == "ArrayOfInvalidLogin" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::invalid_login_trait::InvalidLoginTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::InvalidLoginTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfInvalidLogin(value)))
                 })
             } else { None }
@@ -26021,7 +26021,7 @@ fn get_value_deserializer_19(type_name: &str) -> Option<fn(&serde_json::value::R
         0x6e76616c69645374 => { // nvalidSt
             if type_name == "ArrayOfInvalidState" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::invalid_state_trait::InvalidStateTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::InvalidStateTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfInvalidState(value)))
                 })
             } else { None }
@@ -26029,7 +26029,7 @@ fn get_value_deserializer_19(type_name: &str) -> Option<fn(&serde_json::value::R
         0x6f46696c74657249 => { // oFilterI
             if type_name == "ArrayOfIoFilterInfo" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::io_filter_info_trait::IoFilterInfoTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::IoFilterInfoTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfIoFilterInfo(value)))
                 })
             } else { None }
@@ -26037,7 +26037,7 @@ fn get_value_deserializer_19(type_name: &str) -> Option<fn(&serde_json::value::R
         0x6f5065726d697373 => { // oPermiss
             if type_name == "ArrayOfNoPermission" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::no_permission_trait::NoPermissionTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::NoPermissionTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfNoPermission(value)))
                 })
             } else { None }
@@ -26053,7 +26053,7 @@ fn get_value_deserializer_19(type_name: &str) -> Option<fn(&serde_json::value::R
         0x6f6c6963794f7074 => { // olicyOpt
             if type_name == "ArrayOfPolicyOption" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::policy_option_trait::PolicyOptionTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::PolicyOptionTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfPolicyOption(value)))
                 })
             } else { None }
@@ -26101,7 +26101,7 @@ fn get_value_deserializer_19(type_name: &str) -> Option<fn(&serde_json::value::R
         0x6f73744461734576 => { // ostDasEv
             if type_name == "ArrayOfHostDasEvent" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::host_das_event_trait::HostDasEventTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::HostDasEventTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfHostDasEvent(value)))
                 })
             } else { None }
@@ -26165,7 +26165,7 @@ fn get_value_deserializer_19(type_name: &str) -> Option<fn(&serde_json::value::R
         0x6f73744e766d6553 => { // ostNvmeS
             if type_name == "ArrayOfHostNvmeSpec" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::host_nvme_spec_trait::HostNvmeSpecTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::HostNvmeSpecTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfHostNvmeSpec(value)))
                 })
             } else { None }
@@ -26197,7 +26197,7 @@ fn get_value_deserializer_19(type_name: &str) -> Option<fn(&serde_json::value::R
         0x6f74537570706f72 => { // otSuppor
             if type_name == "ArrayOfNotSupported" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::not_supported_trait::NotSupportedTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::NotSupportedTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfNotSupported(value)))
                 })
             } else { None }
@@ -26205,7 +26205,7 @@ fn get_value_deserializer_19(type_name: &str) -> Option<fn(&serde_json::value::R
         0x7067726164654576 => { // pgradeEv
             if type_name == "ArrayOfUpgradeEvent" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::upgrade_event_trait::UpgradeEventTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::UpgradeEventTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfUpgradeEvent(value)))
                 })
             } else { None }
@@ -26221,7 +26221,7 @@ fn get_value_deserializer_19(type_name: &str) -> Option<fn(&serde_json::value::R
         0x70706c7950726f66 => { // pplyProf
             if type_name == "ArrayOfApplyProfile" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::apply_profile_trait::ApplyProfileTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::ApplyProfileTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfApplyProfile(value)))
                 })
             } else { None }
@@ -26229,7 +26229,7 @@ fn get_value_deserializer_19(type_name: &str) -> Option<fn(&serde_json::value::R
         0x726f66696c654576 => { // rofileEv
             if type_name == "ArrayOfProfileEvent" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::profile_event_trait::ProfileEventTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::ProfileEventTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfProfileEvent(value)))
                 })
             } else { None }
@@ -26309,7 +26309,7 @@ fn get_value_deserializer_19(type_name: &str) -> Option<fn(&serde_json::value::R
         0x756e74696d654661 => { // untimeFa
             if type_name == "ArrayOfRuntimeFault" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::runtime_fault_trait::RuntimeFaultTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::RuntimeFaultTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfRuntimeFault(value)))
                 })
             } else { None }
@@ -26325,7 +26325,7 @@ fn get_value_deserializer_19(type_name: &str) -> Option<fn(&serde_json::value::R
         0x7666417474726962 => { // vfAttrib
             if type_name == "ArrayOfOvfAttribute" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::ovf_attribute_trait::OvfAttributeTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::OvfAttributeTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfOvfAttribute(value)))
                 })
             } else { None }
@@ -26382,7 +26382,7 @@ fn get_value_deserializer_20(type_name: &str) -> Option<fn(&serde_json::value::R
         0x436f6e6669674661 => { // ConfigFa
             if type_name == "ArrayOfVmConfigFault" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::vm_config_fault_trait::VmConfigFaultTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VmConfigFaultTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVmConfigFault(value)))
                 })
             } else { None }
@@ -26406,7 +26406,7 @@ fn get_value_deserializer_20(type_name: &str) -> Option<fn(&serde_json::value::R
         0x506f727453657474 => { // PortSett
             if type_name == "ArrayOfDVPortSetting" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::dv_port_setting_trait::DvPortSettingTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::DvPortSettingTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfDvPortSetting(value)))
                 })
             } else { None }
@@ -26422,7 +26422,7 @@ fn get_value_deserializer_20(type_name: &str) -> Option<fn(&serde_json::value::R
         0x53436f6e66696749 => { // SConfigI
             if type_name == "ArrayOfDVSConfigInfo" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::dvs_config_info_trait::DvsConfigInfoTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::DvsConfigInfoTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfDvsConfigInfo(value)))
                 })
             } else { None }
@@ -26430,7 +26430,7 @@ fn get_value_deserializer_20(type_name: &str) -> Option<fn(&serde_json::value::R
         0x53436f6e66696753 => { // SConfigS
             if type_name == "ArrayOfDVSConfigSpec" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::dvs_config_spec_trait::DvsConfigSpecTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::DvsConfigSpecTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfDvsConfigSpec(value)))
                 })
             } else { None }
@@ -26470,7 +26470,7 @@ fn get_value_deserializer_20(type_name: &str) -> Option<fn(&serde_json::value::R
         0x616e4469736b4661 => { // anDiskFa
             if type_name == "ArrayOfVsanDiskFault" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::vsan_disk_fault_trait::VsanDiskFaultTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VsanDiskFaultTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVsanDiskFault(value)))
                 })
             } else { None }
@@ -26478,7 +26478,7 @@ fn get_value_deserializer_20(type_name: &str) -> Option<fn(&serde_json::value::R
         0x617073686f744661 => { // apshotFa
             if type_name == "ArrayOfSnapshotFault" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::snapshot_fault_trait::SnapshotFaultTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::SnapshotFaultTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfSnapshotFault(value)))
                 })
             } else { None }
@@ -26494,7 +26494,7 @@ fn get_value_deserializer_20(type_name: &str) -> Option<fn(&serde_json::value::R
         0x63656e7365536f75 => { // censeSou
             if type_name == "ArrayOfLicenseSource" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::license_source_trait::LicenseSourceTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::LicenseSourceTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfLicenseSource(value)))
                 })
             } else { None }
@@ -26518,7 +26518,7 @@ fn get_value_deserializer_20(type_name: &str) -> Option<fn(&serde_json::value::R
         0x6375726974794572 => { // curityEr
             if type_name == "ArrayOfSecurityError" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::security_error_trait::SecurityErrorTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::SecurityErrorTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfSecurityError(value)))
                 })
             } else { None }
@@ -26534,7 +26534,7 @@ fn get_value_deserializer_20(type_name: &str) -> Option<fn(&serde_json::value::R
         0x656e74417267756d => { // entArgum
             if type_name == "ArrayOfEventArgument" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::event_argument_trait::EventArgumentTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::EventArgumentTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfEventArgument(value)))
                 })
             } else { None }
@@ -26558,7 +26558,7 @@ fn get_value_deserializer_20(type_name: &str) -> Option<fn(&serde_json::value::R
         0x66436f6e73747261 => { // fConstra
             if type_name == "ArrayOfOvfConstraint" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::ovf_constraint_trait::OvfConstraintTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::OvfConstraintTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfOvfConstraint(value)))
                 })
             } else { None }
@@ -26606,7 +26606,7 @@ fn get_value_deserializer_20(type_name: &str) -> Option<fn(&serde_json::value::R
         0x6c656374696f6e53 => { // lectionS
             if type_name == "ArrayOfSelectionSpec" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::selection_spec_trait::SelectionSpecTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::SelectionSpecTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfSelectionSpec(value)))
                 })
             } else { None }
@@ -26734,7 +26734,7 @@ fn get_value_deserializer_20(type_name: &str) -> Option<fn(&serde_json::value::R
         0x727475616c446576 => { // rtualDev
             if type_name == "ArrayOfVirtualDevice" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::virtual_device_trait::VirtualDeviceTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VirtualDeviceTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVirtualDevice(value)))
                 })
             } else { None }
@@ -26774,7 +26774,7 @@ fn get_value_deserializer_20(type_name: &str) -> Option<fn(&serde_json::value::R
         0x727475616c566d78 => { // rtualVmx
             if type_name == "ArrayOfVirtualVmxnet" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::virtual_vmxnet_trait::VirtualVmxnetTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VirtualVmxnetTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVirtualVmxnet(value)))
                 })
             } else { None }
@@ -26798,7 +26798,7 @@ fn get_value_deserializer_20(type_name: &str) -> Option<fn(&serde_json::value::R
         0x736b536368656475 => { // skSchedu
             if type_name == "ArrayOfTaskScheduler" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::task_scheduler_trait::TaskSchedulerTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::TaskSchedulerTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfTaskScheduler(value)))
                 })
             } else { None }
@@ -26806,7 +26806,7 @@ fn get_value_deserializer_20(type_name: &str) -> Option<fn(&serde_json::value::R
         0x736f75726365496e => { // sourceIn
             if type_name == "ArrayOfResourceInUse" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::resource_in_use_trait::ResourceInUseTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::ResourceInUseTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfResourceInUse(value)))
                 })
             } else { None }
@@ -26846,7 +26846,7 @@ fn get_value_deserializer_20(type_name: &str) -> Option<fn(&serde_json::value::R
         0x7374446e73436f6e => { // stDnsCon
             if type_name == "ArrayOfHostDnsConfig" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::host_dns_config_trait::HostDnsConfigTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::HostDnsConfigTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfHostDnsConfig(value)))
                 })
             } else { None }
@@ -26926,7 +26926,7 @@ fn get_value_deserializer_20(type_name: &str) -> Option<fn(&serde_json::value::R
         0x74456e6f75676843 => { // tEnoughC
             if type_name == "ArrayOfNotEnoughCpus" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::not_enough_cpus_trait::NotEnoughCpusTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::NotEnoughCpusTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfNotEnoughCpus(value)))
                 })
             } else { None }
@@ -26950,7 +26950,7 @@ fn get_value_deserializer_20(type_name: &str) -> Option<fn(&serde_json::value::R
         0x746173746f726549 => { // tastoreI
             if type_name == "ArrayOfDatastoreInfo" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::datastore_info_trait::DatastoreInfoTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::DatastoreInfoTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfDatastoreInfo(value)))
                 })
             } else { None }
@@ -27014,7 +27014,7 @@ fn get_value_deserializer_20(type_name: &str) -> Option<fn(&serde_json::value::R
         0x7573746572416374 => { // usterAct
             if type_name == "ArrayOfClusterAction" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::cluster_action_trait::ClusterActionTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::ClusterActionTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfClusterAction(value)))
                 })
             } else { None }
@@ -27030,7 +27030,7 @@ fn get_value_deserializer_20(type_name: &str) -> Option<fn(&serde_json::value::R
         0x76616c6964466f6c => { // validFol
             if type_name == "ArrayOfInvalidFolder" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::invalid_folder_trait::InvalidFolderTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::InvalidFolderTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfInvalidFolder(value)))
                 })
             } else { None }
@@ -27038,7 +27038,7 @@ fn get_value_deserializer_20(type_name: &str) -> Option<fn(&serde_json::value::R
         0x76616c6964466f72 => { // validFor
             if type_name == "ArrayOfInvalidFormat" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::invalid_format_trait::InvalidFormatTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::InvalidFormatTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfInvalidFormat(value)))
                 })
             } else { None }
@@ -27079,7 +27079,7 @@ fn get_value_deserializer_21(type_name: &str) -> Option<fn(&serde_json::value::R
         0x42617365436f6e66 => { // BaseConf
             if type_name == "ArrayOfBaseConfigInfo" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::base_config_info_trait::BaseConfigInfoTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::BaseConfigInfoTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfBaseConfigInfo(value)))
                 })
             } else { None }
@@ -27087,7 +27087,7 @@ fn get_value_deserializer_21(type_name: &str) -> Option<fn(&serde_json::value::R
         0x436c757374657244 => { // ClusterD
             if type_name == "ArrayOfClusterDasData" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::cluster_das_data_trait::ClusterDasDataTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::ClusterDasDataTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfClusterDasData(value)))
                 })
             } else { None }
@@ -27111,7 +27111,7 @@ fn get_value_deserializer_21(type_name: &str) -> Option<fn(&serde_json::value::R
         0x43727970746f5370 => { // CryptoSp
             if type_name == "ArrayOfCryptoSpecNoOp" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::crypto_spec_no_op_trait::CryptoSpecNoOpTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::CryptoSpecNoOpTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfCryptoSpecNoOp(value)))
                 })
             } else { None }
@@ -27151,7 +27151,7 @@ fn get_value_deserializer_21(type_name: &str) -> Option<fn(&serde_json::value::R
         0x4461746173746f72 => { // Datastor
             if type_name == "ArrayOfDatastoreEvent" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::datastore_event_trait::DatastoreEventTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::DatastoreEventTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfDatastoreEvent(value)))
                 })
             } else { None }
@@ -27239,7 +27239,7 @@ fn get_value_deserializer_21(type_name: &str) -> Option<fn(&serde_json::value::R
         0x447673564e696350 => { // DvsVNicP
             if type_name == "ArrayOfDvsVNicProfile" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::dvs_v_nic_profile_trait::DvsVNicProfileTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::DvsVNicProfileTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfDvsVNicProfile(value)))
                 })
             } else { None }
@@ -27247,7 +27247,7 @@ fn get_value_deserializer_21(type_name: &str) -> Option<fn(&serde_json::value::R
         0x455643436f6e6669 => { // EVCConfi
             if type_name == "ArrayOfEVCConfigFault" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::evc_config_fault_trait::EvcConfigFaultTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::EvcConfigFaultTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfEvcConfigFault(value)))
                 })
             } else { None }
@@ -27368,7 +27368,7 @@ fn get_value_deserializer_21(type_name: &str) -> Option<fn(&serde_json::value::R
         0x486f737444696765 => { // HostDige
             if type_name == "ArrayOfHostDigestInfo" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::host_digest_info_trait::HostDigestInfoTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::HostDigestInfoTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfHostDigestInfo(value)))
                 })
             } else { None }
@@ -27480,7 +27480,7 @@ fn get_value_deserializer_21(type_name: &str) -> Option<fn(&serde_json::value::R
         0x496e76616c696452 => { // InvalidR
             if type_name == "ArrayOfInvalidRequest" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::invalid_request_trait::InvalidRequestTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::InvalidRequestTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfInvalidRequest(value)))
                 })
             } else { None }
@@ -27546,13 +27546,13 @@ fn get_value_deserializer_21(type_name: &str) -> Option<fn(&serde_json::value::R
             match type_name {
                 "ArrayOfMigrationEvent" => {
                     Some(|raw| {
-                        let value: Vec<Box<dyn super::migration_event_trait::MigrationEventTrait>> = serde_json::from_str(raw.get())?;
+                        let value: Vec<Box<dyn super::traits::MigrationEventTrait>> = serde_json::from_str(raw.get())?;
                         Ok(VimAny::Value(ValueElements::ArrayOfMigrationEvent(value)))
                     })
                 }
                 "ArrayOfMigrationFault" => {
                     Some(|raw| {
-                        let value: Vec<Box<dyn super::migration_fault_trait::MigrationFaultTrait>> = serde_json::from_str(raw.get())?;
+                        let value: Vec<Box<dyn super::traits::MigrationFaultTrait>> = serde_json::from_str(raw.get())?;
                         Ok(VimAny::Value(ValueElements::ArrayOfMigrationFault(value)))
                     })
                 }
@@ -27562,7 +27562,7 @@ fn get_value_deserializer_21(type_name: &str) -> Option<fn(&serde_json::value::R
         0x4e6173436f6e6669 => { // NasConfi
             if type_name == "ArrayOfNasConfigFault" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::nas_config_fault_trait::NasConfigFaultTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::NasConfigFaultTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfNasConfigFault(value)))
                 })
             } else { None }
@@ -27586,7 +27586,7 @@ fn get_value_deserializer_21(type_name: &str) -> Option<fn(&serde_json::value::R
         0x4e6574776f726b53 => { // NetworkS
             if type_name == "ArrayOfNetworkSummary" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::network_summary_trait::NetworkSummaryTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::NetworkSummaryTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfNetworkSummary(value)))
                 })
             } else { None }
@@ -27634,7 +27634,7 @@ fn get_value_deserializer_21(type_name: &str) -> Option<fn(&serde_json::value::R
         0x4f76665379737465 => { // OvfSyste
             if type_name == "ArrayOfOvfSystemFault" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::ovf_system_fault_trait::OvfSystemFaultTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::OvfSystemFaultTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfOvfSystemFault(value)))
                 })
             } else { None }
@@ -27762,7 +27762,7 @@ fn get_value_deserializer_21(type_name: &str) -> Option<fn(&serde_json::value::R
         0x5461736b496e5072 => { // TaskInPr
             if type_name == "ArrayOfTaskInProgress" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::task_in_progress_trait::TaskInProgressTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::TaskInProgressTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfTaskInProgress(value)))
                 })
             } else { None }
@@ -27834,7 +27834,7 @@ fn get_value_deserializer_21(type_name: &str) -> Option<fn(&serde_json::value::R
                 }
                 "ArrayOfVirtualVmxnet3" => {
                     Some(|raw| {
-                        let value: Vec<Box<dyn super::virtual_vmxnet_3_trait::VirtualVmxnet3Trait>> = serde_json::from_str(raw.get())?;
+                        let value: Vec<Box<dyn super::traits::VirtualVmxnet3Trait>> = serde_json::from_str(raw.get())?;
                         Ok(VimAny::Value(ValueElements::ArrayOfVirtualVmxnet3(value)))
                     })
                 }
@@ -27900,7 +27900,7 @@ fn get_value_deserializer_21(type_name: &str) -> Option<fn(&serde_json::value::R
         0x566d66734d6f756e => { // VmfsMoun
             if type_name == "ArrayOfVmfsMountFault" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::vmfs_mount_fault_trait::VmfsMountFaultTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VmfsMountFaultTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVmfsMountFault(value)))
                 })
             } else { None }
@@ -27949,7 +27949,7 @@ fn get_value_deserializer_22(type_name: &str) -> Option<fn(&serde_json::value::R
         0x416c61726d457870 => { // AlarmExp
             if type_name == "ArrayOfAlarmExpression" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::alarm_expression_trait::AlarmExpressionTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::AlarmExpressionTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfAlarmExpression(value)))
                 })
             } else { None }
@@ -27973,7 +27973,7 @@ fn get_value_deserializer_22(type_name: &str) -> Option<fn(&serde_json::value::R
         0x4172726179557064 => { // ArrayUpd
             if type_name == "ArrayOfArrayUpdateSpec" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::array_update_spec_trait::ArrayUpdateSpecTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::ArrayUpdateSpecTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfArrayUpdateSpec(value)))
                 })
             } else { None }
@@ -27982,7 +27982,7 @@ fn get_value_deserializer_22(type_name: &str) -> Option<fn(&serde_json::value::R
             match type_name {
                 "ArrayOfClusterRuleInfo" => {
                     Some(|raw| {
-                        let value: Vec<Box<dyn super::cluster_rule_info_trait::ClusterRuleInfoTrait>> = serde_json::from_str(raw.get())?;
+                        let value: Vec<Box<dyn super::traits::ClusterRuleInfoTrait>> = serde_json::from_str(raw.get())?;
                         Ok(VimAny::Value(ValueElements::ArrayOfClusterRuleInfo(value)))
                     })
                 }
@@ -27998,7 +27998,7 @@ fn get_value_deserializer_22(type_name: &str) -> Option<fn(&serde_json::value::R
         0x437075496e636f6d => { // CpuIncom
             if type_name == "ArrayOfCpuIncompatible" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::cpu_incompatible_trait::CpuIncompatibleTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::CpuIncompatibleTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfCpuIncompatible(value)))
                 })
             } else { None }
@@ -28022,7 +28022,7 @@ fn get_value_deserializer_22(type_name: &str) -> Option<fn(&serde_json::value::R
         0x4461746163656e74 => { // Datacent
             if type_name == "ArrayOfDatacenterEvent" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::datacenter_event_trait::DatacenterEventTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::DatacenterEventTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfDatacenterEvent(value)))
                 })
             } else { None }
@@ -28079,7 +28079,7 @@ fn get_value_deserializer_22(type_name: &str) -> Option<fn(&serde_json::value::R
             match type_name {
                 "ArrayOfDvsFilterConfig" => {
                     Some(|raw| {
-                        let value: Vec<Box<dyn super::dvs_filter_config_trait::DvsFilterConfigTrait>> = serde_json::from_str(raw.get())?;
+                        let value: Vec<Box<dyn super::traits::DvsFilterConfigTrait>> = serde_json::from_str(raw.get())?;
                         Ok(VimAny::Value(ValueElements::ArrayOfDvsFilterConfig(value)))
                     })
                 }
@@ -28215,7 +28215,7 @@ fn get_value_deserializer_22(type_name: &str) -> Option<fn(&serde_json::value::R
         0x486f73744163636f => { // HostAcco
             if type_name == "ArrayOfHostAccountSpec" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::host_account_spec_trait::HostAccountSpecTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::HostAccountSpecTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfHostAccountSpec(value)))
                 })
             } else { None }
@@ -28223,7 +28223,7 @@ fn get_value_deserializer_22(type_name: &str) -> Option<fn(&serde_json::value::R
         0x486f7374436f6e66 => { // HostConf
             if type_name == "ArrayOfHostConfigFault" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::host_config_fault_trait::HostConfigFaultTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::HostConfigFaultTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfHostConfigFault(value)))
                 })
             } else { None }
@@ -28344,7 +28344,7 @@ fn get_value_deserializer_22(type_name: &str) -> Option<fn(&serde_json::value::R
         0x496e76616c696441 => { // InvalidA
             if type_name == "ArrayOfInvalidArgument" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::invalid_argument_trait::InvalidArgumentTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::InvalidArgumentTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfInvalidArgument(value)))
                 })
             } else { None }
@@ -28368,7 +28368,7 @@ fn get_value_deserializer_22(type_name: &str) -> Option<fn(&serde_json::value::R
         0x496e76616c696456 => { // InvalidV
             if type_name == "ArrayOfInvalidVmConfig" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::invalid_vm_config_trait::InvalidVmConfigTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::InvalidVmConfigTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfInvalidVmConfig(value)))
                 })
             } else { None }
@@ -28417,7 +28417,7 @@ fn get_value_deserializer_22(type_name: &str) -> Option<fn(&serde_json::value::R
         0x4e6f64654e657477 => { // NodeNetw
             if type_name == "ArrayOfNodeNetworkSpec" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::node_network_spec_trait::NodeNetworkSpecTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::NodeNetworkSpecTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfNodeNetworkSpec(value)))
                 })
             } else { None }
@@ -28449,7 +28449,7 @@ fn get_value_deserializer_22(type_name: &str) -> Option<fn(&serde_json::value::R
         0x4f7666496e76616c => { // OvfInval
             if type_name == "ArrayOfOvfInvalidValue" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::ovf_invalid_value_trait::OvfInvalidValueTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::OvfInvalidValueTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfOvfInvalidValue(value)))
                 })
             } else { None }
@@ -28505,7 +28505,7 @@ fn get_value_deserializer_22(type_name: &str) -> Option<fn(&serde_json::value::R
         0x5065726d69737369 => { // Permissi
             if type_name == "ArrayOfPermissionEvent" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::permission_event_trait::PermissionEventTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::PermissionEventTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfPermissionEvent(value)))
                 })
             } else { None }
@@ -28514,7 +28514,7 @@ fn get_value_deserializer_22(type_name: &str) -> Option<fn(&serde_json::value::R
             match type_name {
                 "ArrayOfPhysicalNicHint" => {
                     Some(|raw| {
-                        let value: Vec<Box<dyn super::physical_nic_hint_trait::PhysicalNicHintTrait>> = serde_json::from_str(raw.get())?;
+                        let value: Vec<Box<dyn super::traits::PhysicalNicHintTrait>> = serde_json::from_str(raw.get())?;
                         Ok(VimAny::Value(ValueElements::ArrayOfPhysicalNicHint(value)))
                     })
                 }
@@ -28579,7 +28579,7 @@ fn get_value_deserializer_22(type_name: &str) -> Option<fn(&serde_json::value::R
         0x52444d4e6f745375 => { // RDMNotSu
             if type_name == "ArrayOfRDMNotSupported" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::rdm_not_supported_trait::RdmNotSupportedTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::RdmNotSupportedTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfRdmNotSupported(value)))
                 })
             } else { None }
@@ -28699,7 +28699,7 @@ fn get_value_deserializer_22(type_name: &str) -> Option<fn(&serde_json::value::R
         0x5479706544657363 => { // TypeDesc
             if type_name == "ArrayOfTypeDescription" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::type_description_trait::TypeDescriptionTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::TypeDescriptionTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfTypeDescription(value)))
                 })
             } else { None }
@@ -28723,7 +28723,7 @@ fn get_value_deserializer_22(type_name: &str) -> Option<fn(&serde_json::value::R
         0x56417070436f6e66 => { // VAppConf
             if type_name == "ArrayOfVAppConfigFault" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::v_app_config_fault_trait::VAppConfigFaultTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VAppConfigFaultTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVAppConfigFault(value)))
                 })
             } else { None }
@@ -28780,7 +28780,7 @@ fn get_value_deserializer_22(type_name: &str) -> Option<fn(&serde_json::value::R
         0x5669727475616c44 => { // VirtualD
             if type_name == "ArrayOfVirtualDiskSpec" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::virtual_disk_spec_trait::VirtualDiskSpecTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VirtualDiskSpecTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVirtualDiskSpec(value)))
                 })
             } else { None }
@@ -28828,7 +28828,7 @@ fn get_value_deserializer_22(type_name: &str) -> Option<fn(&serde_json::value::R
         0x566d4d6967726174 => { // VmMigrat
             if type_name == "ArrayOfVmMigratedEvent" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::vm_migrated_event_trait::VmMigratedEventTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VmMigratedEventTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVmMigratedEvent(value)))
                 })
             } else { None }
@@ -28860,7 +28860,7 @@ fn get_value_deserializer_22(type_name: &str) -> Option<fn(&serde_json::value::R
         0x566d537461727469 => { // VmStarti
             if type_name == "ArrayOfVmStartingEvent" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::vm_starting_event_trait::VmStartingEventTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VmStartingEventTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVmStartingEvent(value)))
                 })
             } else { None }
@@ -28876,7 +28876,7 @@ fn get_value_deserializer_22(type_name: &str) -> Option<fn(&serde_json::value::R
         0x56736c6d4d696772 => { // VslmMigr
             if type_name == "ArrayOfVslmMigrateSpec" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::vslm_migrate_spec_trait::VslmMigrateSpecTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VslmMigrateSpecTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVslmMigrateSpec(value)))
                 })
             } else { None }
@@ -28974,7 +28974,7 @@ fn get_value_deserializer_23(type_name: &str) -> Option<fn(&serde_json::value::R
             match type_name {
                 "ArrayOfClusterGroupInfo" => {
                     Some(|raw| {
-                        let value: Vec<Box<dyn super::cluster_group_info_trait::ClusterGroupInfoTrait>> = serde_json::from_str(raw.get())?;
+                        let value: Vec<Box<dyn super::traits::ClusterGroupInfoTrait>> = serde_json::from_str(raw.get())?;
                         Ok(VimAny::Value(ValueElements::ArrayOfClusterGroupInfo(value)))
                     })
                 }
@@ -29023,13 +29023,13 @@ fn get_value_deserializer_23(type_name: &str) -> Option<fn(&serde_json::value::R
             match type_name {
                 "ArrayOfCustomFieldEvent" => {
                     Some(|raw| {
-                        let value: Vec<Box<dyn super::custom_field_event_trait::CustomFieldEventTrait>> = serde_json::from_str(raw.get())?;
+                        let value: Vec<Box<dyn super::traits::CustomFieldEventTrait>> = serde_json::from_str(raw.get())?;
                         Ok(VimAny::Value(ValueElements::ArrayOfCustomFieldEvent(value)))
                     })
                 }
                 "ArrayOfCustomFieldValue" => {
                     Some(|raw| {
-                        let value: Vec<Box<dyn super::custom_field_value_trait::CustomFieldValueTrait>> = serde_json::from_str(raw.get())?;
+                        let value: Vec<Box<dyn super::traits::CustomFieldValueTrait>> = serde_json::from_str(raw.get())?;
                         Ok(VimAny::Value(ValueElements::ArrayOfCustomFieldValue(value)))
                     })
                 }
@@ -29056,7 +29056,7 @@ fn get_value_deserializer_23(type_name: &str) -> Option<fn(&serde_json::value::R
         0x4456506f72746772 => { // DVPortgr
             if type_name == "ArrayOfDVPortgroupEvent" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::dv_portgroup_event_trait::DvPortgroupEventTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::DvPortgroupEventTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfDvPortgroupEvent(value)))
                 })
             } else { None }
@@ -29088,7 +29088,7 @@ fn get_value_deserializer_23(type_name: &str) -> Option<fn(&serde_json::value::R
         0x4469736b4e6f7453 => { // DiskNotS
             if type_name == "ArrayOfDiskNotSupported" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::disk_not_supported_trait::DiskNotSupportedTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::DiskNotSupportedTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfDiskNotSupported(value)))
                 })
             } else { None }
@@ -29200,7 +29200,7 @@ fn get_value_deserializer_23(type_name: &str) -> Option<fn(&serde_json::value::R
         0x4775657374417574 => { // GuestAut
             if type_name == "ArrayOfGuestAuthSubject" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::guest_auth_subject_trait::GuestAuthSubjectTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::GuestAuthSubjectTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfGuestAuthSubject(value)))
                 })
             } else { None }
@@ -29215,7 +29215,7 @@ fn get_value_deserializer_23(type_name: &str) -> Option<fn(&serde_json::value::R
                 }
                 "ArrayOfGuestProgramSpec" => {
                     Some(|raw| {
-                        let value: Vec<Box<dyn super::guest_program_spec_trait::GuestProgramSpecTrait>> = serde_json::from_str(raw.get())?;
+                        let value: Vec<Box<dyn super::traits::GuestProgramSpecTrait>> = serde_json::from_str(raw.get())?;
                         Ok(VimAny::Value(ValueElements::ArrayOfGuestProgramSpec(value)))
                     })
                 }
@@ -29258,7 +29258,7 @@ fn get_value_deserializer_23(type_name: &str) -> Option<fn(&serde_json::value::R
         0x486f7374436f6e6e => { // HostConn
             if type_name == "ArrayOfHostConnectFault" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::host_connect_fault_trait::HostConnectFaultTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::HostConnectFaultTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfHostConnectFault(value)))
                 })
             } else { None }
@@ -29403,7 +29403,7 @@ fn get_value_deserializer_23(type_name: &str) -> Option<fn(&serde_json::value::R
         0x496e76616c696443 => { // InvalidC
             if type_name == "ArrayOfInvalidCAMServer" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::invalid_cam_server_trait::InvalidCamServerTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::InvalidCamServerTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfInvalidCamServer(value)))
                 })
             } else { None }
@@ -29411,7 +29411,7 @@ fn get_value_deserializer_23(type_name: &str) -> Option<fn(&serde_json::value::R
         0x496e76616c696444 => { // InvalidD
             if type_name == "ArrayOfInvalidDatastore" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::invalid_datastore_trait::InvalidDatastoreTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::InvalidDatastoreTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfInvalidDatastore(value)))
                 })
             } else { None }
@@ -29419,7 +29419,7 @@ fn get_value_deserializer_23(type_name: &str) -> Option<fn(&serde_json::value::R
         0x496e76616c696448 => { // InvalidH
             if type_name == "ArrayOfInvalidHostState" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::invalid_host_state_trait::InvalidHostStateTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::InvalidHostStateTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfInvalidHostState(value)))
                 })
             } else { None }
@@ -29524,7 +29524,7 @@ fn get_value_deserializer_23(type_name: &str) -> Option<fn(&serde_json::value::R
         0x4e6f436f6d706174 => { // NoCompat
             if type_name == "ArrayOfNoCompatibleHost" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::no_compatible_host_trait::NoCompatibleHostTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::NoCompatibleHostTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfNoCompatibleHost(value)))
                 })
             } else { None }
@@ -29556,7 +29556,7 @@ fn get_value_deserializer_23(type_name: &str) -> Option<fn(&serde_json::value::R
         0x4e6f74537570706f => { // NotSuppo
             if type_name == "ArrayOfNotSupportedHost" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::not_supported_host_trait::NotSupportedHostTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::NotSupportedHostTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfNotSupportedHost(value)))
                 })
             } else { None }
@@ -29669,7 +29669,7 @@ fn get_value_deserializer_23(type_name: &str) -> Option<fn(&serde_json::value::R
         0x506572664d657472 => { // PerfMetr
             if type_name == "ArrayOfPerfMetricSeries" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::perf_metric_series_trait::PerfMetricSeriesTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::PerfMetricSeriesTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfPerfMetricSeries(value)))
                 })
             } else { None }
@@ -29677,7 +29677,7 @@ fn get_value_deserializer_23(type_name: &str) -> Option<fn(&serde_json::value::R
         0x506f727447726f75 => { // PortGrou
             if type_name == "ArrayOfPortGroupProfile" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::port_group_profile_trait::PortGroupProfileTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::PortGroupProfileTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfPortGroupProfile(value)))
                 })
             } else { None }
@@ -29693,7 +29693,7 @@ fn get_value_deserializer_23(type_name: &str) -> Option<fn(&serde_json::value::R
         0x5265706c69636174 => { // Replicat
             if type_name == "ArrayOfReplicationFault" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::replication_fault_trait::ReplicationFaultTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::ReplicationFaultTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfReplicationFault(value)))
                 })
             } else { None }
@@ -29798,7 +29798,7 @@ fn get_value_deserializer_23(type_name: &str) -> Option<fn(&serde_json::value::R
         0x5573657253656172 => { // UserSear
             if type_name == "ArrayOfUserSearchResult" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::user_search_result_trait::UserSearchResultTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::UserSearchResultTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfUserSearchResult(value)))
                 })
             } else { None }
@@ -29839,7 +29839,7 @@ fn get_value_deserializer_23(type_name: &str) -> Option<fn(&serde_json::value::R
         0x5669727475616c53 => { // VirtualS
             if type_name == "ArrayOfVirtualSoundCard" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::virtual_sound_card_trait::VirtualSoundCardTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VirtualSoundCardTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVirtualSoundCard(value)))
                 })
             } else { None }
@@ -29871,7 +29871,7 @@ fn get_value_deserializer_23(type_name: &str) -> Option<fn(&serde_json::value::R
         0x566d436f6e666967 => { // VmConfig
             if type_name == "ArrayOfVmConfigFileInfo" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::vm_config_file_info_trait::VmConfigFileInfoTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VmConfigFileInfoTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVmConfigFileInfo(value)))
                 })
             } else { None }
@@ -29903,7 +29903,7 @@ fn get_value_deserializer_23(type_name: &str) -> Option<fn(&serde_json::value::R
         0x566d506f77657265 => { // VmPowere
             if type_name == "ArrayOfVmPoweredOnEvent" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::vm_powered_on_event_trait::VmPoweredOnEventTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VmPoweredOnEventTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVmPoweredOnEvent(value)))
                 })
             } else { None }
@@ -30016,7 +30016,7 @@ fn get_value_deserializer_24(type_name: &str) -> Option<fn(&serde_json::value::R
         0x42494f53436f6e66 => { // BIOSConf
             if type_name == "ArrayOfNetBIOSConfigInfo" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::net_bios_config_info_trait::NetBiosConfigInfoTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::NetBiosConfigInfoTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfNetBiosConfigInfo(value)))
                 })
             } else { None }
@@ -30057,7 +30057,7 @@ fn get_value_deserializer_24(type_name: &str) -> Option<fn(&serde_json::value::R
         0x456e6f7567684c69 => { // EnoughLi
             if type_name == "ArrayOfNotEnoughLicenses" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::not_enough_licenses_trait::NotEnoughLicensesTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::NotEnoughLicensesTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfNotEnoughLicenses(value)))
                 })
             } else { None }
@@ -30065,7 +30065,7 @@ fn get_value_deserializer_24(type_name: &str) -> Option<fn(&serde_json::value::R
         0x4861726477617265 => { // Hardware
             if type_name == "ArrayOfOvfHardwareExport" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::ovf_hardware_export_trait::OvfHardwareExportTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::OvfHardwareExportTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfOvfHardwareExport(value)))
                 })
             } else { None }
@@ -30081,7 +30081,7 @@ fn get_value_deserializer_24(type_name: &str) -> Option<fn(&serde_json::value::R
         0x496e76616c696450 => { // InvalidP
             if type_name == "ArrayOfOvfInvalidPackage" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::ovf_invalid_package_trait::OvfInvalidPackageTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::OvfInvalidPackageTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfOvfInvalidPackage(value)))
                 })
             } else { None }
@@ -30089,7 +30089,7 @@ fn get_value_deserializer_24(type_name: &str) -> Option<fn(&serde_json::value::R
         0x4d697373696e6745 => { // MissingE
             if type_name == "ArrayOfOvfMissingElement" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::ovf_missing_element_trait::OvfMissingElementTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::OvfMissingElementTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfOvfMissingElement(value)))
                 })
             } else { None }
@@ -30185,7 +30185,7 @@ fn get_value_deserializer_24(type_name: &str) -> Option<fn(&serde_json::value::R
         0x616c696444657669 => { // alidDevi
             if type_name == "ArrayOfInvalidDeviceSpec" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::invalid_device_spec_trait::InvalidDeviceSpecTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::InvalidDeviceSpecTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfInvalidDeviceSpec(value)))
                 })
             } else { None }
@@ -30312,7 +30312,7 @@ fn get_value_deserializer_24(type_name: &str) -> Option<fn(&serde_json::value::R
                 }
                 "ArrayOfScheduledTaskSpec" => {
                     Some(|raw| {
-                        let value: Vec<Box<dyn super::scheduled_task_spec_trait::ScheduledTaskSpecTrait>> = serde_json::from_str(raw.get())?;
+                        let value: Vec<Box<dyn super::traits::ScheduledTaskSpecTrait>> = serde_json::from_str(raw.get())?;
                         Ok(VimAny::Value(ValueElements::ArrayOfScheduledTaskSpec(value)))
                     })
                 }
@@ -30354,7 +30354,7 @@ fn get_value_deserializer_24(type_name: &str) -> Option<fn(&serde_json::value::R
         0x6572697461626c65 => { // eritable
             if type_name == "ArrayOfInheritablePolicy" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::inheritable_policy_trait::InheritablePolicyTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::InheritablePolicyTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfInheritablePolicy(value)))
                 })
             } else { None }
@@ -30362,7 +30362,7 @@ fn get_value_deserializer_24(type_name: &str) -> Option<fn(&serde_json::value::R
         0x66696c65436f6e66 => { // fileConf
             if type_name == "ArrayOfProfileConfigInfo" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::profile_config_info_trait::ProfileConfigInfoTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::ProfileConfigInfoTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfProfileConfigInfo(value)))
                 })
             } else { None }
@@ -30370,7 +30370,7 @@ fn get_value_deserializer_24(type_name: &str) -> Option<fn(&serde_json::value::R
         0x66696c6543726561 => { // fileCrea
             if type_name == "ArrayOfProfileCreateSpec" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::profile_create_spec_trait::ProfileCreateSpecTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::ProfileCreateSpecTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfProfileCreateSpec(value)))
                 })
             } else { None }
@@ -30378,7 +30378,7 @@ fn get_value_deserializer_24(type_name: &str) -> Option<fn(&serde_json::value::R
         0x66696c6545787072 => { // fileExpr
             if type_name == "ArrayOfProfileExpression" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::profile_expression_trait::ProfileExpressionTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::ProfileExpressionTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfProfileExpression(value)))
                 })
             } else { None }
@@ -30538,7 +30538,7 @@ fn get_value_deserializer_24(type_name: &str) -> Option<fn(&serde_json::value::R
         0x6f6e66696746696c => { // onfigFil
             if type_name == "ArrayOfVmConfigFileQuery" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::vm_config_file_query_trait::VmConfigFileQueryTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VmConfigFileQueryTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVmConfigFileQuery(value)))
                 })
             } else { None }
@@ -30570,7 +30570,7 @@ fn get_value_deserializer_24(type_name: &str) -> Option<fn(&serde_json::value::R
         0x6f727467726f7570 => { // ortgroup
             if type_name == "ArrayOfDVPortgroupPolicy" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::dv_portgroup_policy_trait::DvPortgroupPolicyTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::DvPortgroupPolicyTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfDvPortgroupPolicy(value)))
                 })
             } else { None }
@@ -30578,7 +30578,7 @@ fn get_value_deserializer_24(type_name: &str) -> Option<fn(&serde_json::value::R
         0x6f75726365506f6f => { // ourcePoo
             if type_name == "ArrayOfResourcePoolEvent" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::resource_pool_event_trait::ResourcePoolEventTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::ResourcePoolEventTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfResourcePoolEvent(value)))
                 })
             } else { None }
@@ -30594,7 +30594,7 @@ fn get_value_deserializer_24(type_name: &str) -> Option<fn(&serde_json::value::R
         0x6f77657265644f66 => { // oweredOf
             if type_name == "ArrayOfVmPoweredOffEvent" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::vm_powered_off_event_trait::VmPoweredOffEventTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VmPoweredOffEventTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVmPoweredOffEvent(value)))
                 })
             } else { None }
@@ -30610,7 +30610,7 @@ fn get_value_deserializer_24(type_name: &str) -> Option<fn(&serde_json::value::R
         0x7050726f70657274 => { // pPropert
             if type_name == "ArrayOfVAppPropertyFault" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::v_app_property_fault_trait::VAppPropertyFaultTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VAppPropertyFaultTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVAppPropertyFault(value)))
                 })
             } else { None }
@@ -30713,7 +30713,7 @@ fn get_value_deserializer_24(type_name: &str) -> Option<fn(&serde_json::value::R
                 }
                 "ArrayOfVmfsDatastoreSpec" => {
                     Some(|raw| {
-                        let value: Vec<Box<dyn super::vmfs_datastore_spec_trait::VmfsDatastoreSpecTrait>> = serde_json::from_str(raw.get())?;
+                        let value: Vec<Box<dyn super::traits::VmfsDatastoreSpecTrait>> = serde_json::from_str(raw.get())?;
                         Ok(VimAny::Value(ValueElements::ArrayOfVmfsDatastoreSpec(value)))
                     })
                 }
@@ -30797,7 +30797,7 @@ fn get_value_deserializer_24(type_name: &str) -> Option<fn(&serde_json::value::R
         0x73746572536c6f74 => { // sterSlot
             if type_name == "ArrayOfClusterSlotPolicy" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::cluster_slot_policy_trait::ClusterSlotPolicyTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::ClusterSlotPolicyTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfClusterSlotPolicy(value)))
                 })
             } else { None }
@@ -30805,7 +30805,7 @@ fn get_value_deserializer_24(type_name: &str) -> Option<fn(&serde_json::value::R
         0x74436f6d6d756e69 => { // tCommuni
             if type_name == "ArrayOfHostCommunication" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::host_communication_trait::HostCommunicationTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::HostCommunicationTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfHostCommunication(value)))
                 })
             } else { None }
@@ -30853,7 +30853,7 @@ fn get_value_deserializer_24(type_name: &str) -> Option<fn(&serde_json::value::R
         0x7448626143726561 => { // tHbaCrea
             if type_name == "ArrayOfHostHbaCreateSpec" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::host_hba_create_spec_trait::HostHbaCreateSpecTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::HostHbaCreateSpecTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfHostHbaCreateSpec(value)))
                 })
             } else { None }
@@ -30869,7 +30869,7 @@ fn get_value_deserializer_24(type_name: &str) -> Option<fn(&serde_json::value::R
         0x744970526f757465 => { // tIpRoute
             if type_name == "ArrayOfHostIpRouteConfig" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::host_ip_route_config_trait::HostIpRouteConfigTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::HostIpRouteConfigTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfHostIpRouteConfig(value)))
                 })
             } else { None }
@@ -30943,7 +30943,7 @@ fn get_value_deserializer_24(type_name: &str) -> Option<fn(&serde_json::value::R
         0x74506f7765724f70 => { // tPowerOp
             if type_name == "ArrayOfHostPowerOpFailed" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::host_power_op_failed_trait::HostPowerOpFailedTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::HostPowerOpFailedTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfHostPowerOpFailed(value)))
                 })
             } else { None }
@@ -31017,7 +31017,7 @@ fn get_value_deserializer_24(type_name: &str) -> Option<fn(&serde_json::value::R
             match type_name {
                 "ArrayOfCustomizationName" => {
                     Some(|raw| {
-                        let value: Vec<Box<dyn super::customization_name_trait::CustomizationNameTrait>> = serde_json::from_str(raw.get())?;
+                        let value: Vec<Box<dyn super::traits::CustomizationNameTrait>> = serde_json::from_str(raw.get())?;
                         Ok(VimAny::Value(ValueElements::ArrayOfCustomizationName(value)))
                     })
                 }
@@ -31049,7 +31049,7 @@ fn get_value_deserializer_24(type_name: &str) -> Option<fn(&serde_json::value::R
         0x7475616c436f6e74 => { // tualCont
             if type_name == "ArrayOfVirtualController" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::virtual_controller_trait::VirtualControllerTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VirtualControllerTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVirtualController(value)))
                 })
             } else { None }
@@ -31229,7 +31229,7 @@ fn get_value_deserializer_25(type_name: &str) -> Option<fn(&serde_json::value::R
         0x4e6f7441 => { // NotA
             if type_name == "ArrayOfPatchNotApplicable" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::patch_not_applicable_trait::PatchNotApplicableTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::PatchNotApplicableTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfPatchNotApplicable(value)))
                 })
             } else { None }
@@ -31245,7 +31245,7 @@ fn get_value_deserializer_25(type_name: &str) -> Option<fn(&serde_json::value::R
         0x52656769 => { // Regi
             if type_name == "ArrayOfGuestRegistryFault" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::guest_registry_fault_trait::GuestRegistryFaultTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::GuestRegistryFaultTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfGuestRegistryFault(value)))
                 })
             } else { None }
@@ -31261,7 +31261,7 @@ fn get_value_deserializer_25(type_name: &str) -> Option<fn(&serde_json::value::R
         0x5461736b => { // Task
             if type_name == "ArrayOfDailyTaskScheduler" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::daily_task_scheduler_trait::DailyTaskSchedulerTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::DailyTaskSchedulerTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfDailyTaskScheduler(value)))
                 })
             } else { None }
@@ -31405,7 +31405,7 @@ fn get_value_deserializer_25(type_name: &str) -> Option<fn(&serde_json::value::R
                 }
                 "ArrayOfReplicationVmFault" => {
                     Some(|raw| {
-                        let value: Vec<Box<dyn super::replication_vm_fault_trait::ReplicationVmFaultTrait>> = serde_json::from_str(raw.get())?;
+                        let value: Vec<Box<dyn super::traits::ReplicationVmFaultTrait>> = serde_json::from_str(raw.get())?;
                         Ok(VimAny::Value(ValueElements::ArrayOfReplicationVmFault(value)))
                     })
                 }
@@ -31439,7 +31439,7 @@ fn get_value_deserializer_25(type_name: &str) -> Option<fn(&serde_json::value::R
         0x654e6f74 => { // eNot
             if type_name == "ArrayOfDeviceNotSupported" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::device_not_supported_trait::DeviceNotSupportedTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::DeviceNotSupportedTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfDeviceNotSupported(value)))
                 })
             } else { None }
@@ -31494,7 +31494,7 @@ fn get_value_deserializer_25(type_name: &str) -> Option<fn(&serde_json::value::R
                 }
                 "ArrayOfNodeDeploymentSpec" => {
                     Some(|raw| {
-                        let value: Vec<Box<dyn super::node_deployment_spec_trait::NodeDeploymentSpecTrait>> = serde_json::from_str(raw.get())?;
+                        let value: Vec<Box<dyn super::traits::NodeDeploymentSpecTrait>> = serde_json::from_str(raw.get())?;
                         Ok(VimAny::Value(ValueElements::ArrayOfNodeDeploymentSpec(value)))
                     })
                 }
@@ -31504,7 +31504,7 @@ fn get_value_deserializer_25(type_name: &str) -> Option<fn(&serde_json::value::R
         0x65724461 => { // erDa
             if type_name == "ArrayOfClusterDasHostInfo" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::cluster_das_host_info_trait::ClusterDasHostInfoTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::ClusterDasHostInfoTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfClusterDasHostInfo(value)))
                 })
             } else { None }
@@ -31657,7 +31657,7 @@ fn get_value_deserializer_25(type_name: &str) -> Option<fn(&serde_json::value::R
             match type_name {
                 "ArrayOfEVCAdmissionFailed" => {
                     Some(|raw| {
-                        let value: Vec<Box<dyn super::evc_admission_failed_trait::EvcAdmissionFailedTrait>> = serde_json::from_str(raw.get())?;
+                        let value: Vec<Box<dyn super::traits::EvcAdmissionFailedTrait>> = serde_json::from_str(raw.get())?;
                         Ok(VimAny::Value(ValueElements::ArrayOfEvcAdmissionFailed(value)))
                     })
                 }
@@ -31674,13 +31674,13 @@ fn get_value_deserializer_25(type_name: &str) -> Option<fn(&serde_json::value::R
             match type_name {
                 "ArrayOfCustomizationEvent" => {
                     Some(|raw| {
-                        let value: Vec<Box<dyn super::customization_event_trait::CustomizationEventTrait>> = serde_json::from_str(raw.get())?;
+                        let value: Vec<Box<dyn super::traits::CustomizationEventTrait>> = serde_json::from_str(raw.get())?;
                         Ok(VimAny::Value(ValueElements::ArrayOfCustomizationEvent(value)))
                     })
                 }
                 "ArrayOfCustomizationFault" => {
                     Some(|raw| {
-                        let value: Vec<Box<dyn super::customization_fault_trait::CustomizationFaultTrait>> = serde_json::from_str(raw.get())?;
+                        let value: Vec<Box<dyn super::traits::CustomizationFaultTrait>> = serde_json::from_str(raw.get())?;
                         Ok(VimAny::Value(ValueElements::ArrayOfCustomizationFault(value)))
                     })
                 }
@@ -31723,7 +31723,7 @@ fn get_value_deserializer_25(type_name: &str) -> Option<fn(&serde_json::value::R
             match type_name {
                 "ArrayOfOvfConnectedDevice" => {
                     Some(|raw| {
-                        let value: Vec<Box<dyn super::ovf_connected_device_trait::OvfConnectedDeviceTrait>> = serde_json::from_str(raw.get())?;
+                        let value: Vec<Box<dyn super::traits::OvfConnectedDeviceTrait>> = serde_json::from_str(raw.get())?;
                         Ok(VimAny::Value(ValueElements::ArrayOfOvfConnectedDevice(value)))
                     })
                 }
@@ -31747,7 +31747,7 @@ fn get_value_deserializer_25(type_name: &str) -> Option<fn(&serde_json::value::R
         0x6e744465 => { // ntDe
             if type_name == "ArrayOfElementDescription" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::element_description_trait::ElementDescriptionTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::ElementDescriptionTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfElementDescription(value)))
                 })
             } else { None }
@@ -31843,7 +31843,7 @@ fn get_value_deserializer_25(type_name: &str) -> Option<fn(&serde_json::value::R
         0x6f737442 => { // ostB
             if type_name == "ArrayOfHostHostBusAdapter" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::host_host_bus_adapter_trait::HostHostBusAdapterTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::HostHostBusAdapterTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfHostHostBusAdapter(value)))
                 })
             } else { None }
@@ -31899,7 +31899,7 @@ fn get_value_deserializer_25(type_name: &str) -> Option<fn(&serde_json::value::R
         0x72697a61 => { // riza
             if type_name == "ArrayOfAuthorizationEvent" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::authorization_event_trait::AuthorizationEventTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::AuthorizationEventTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfAuthorizationEvent(value)))
                 })
             } else { None }
@@ -31996,7 +31996,7 @@ fn get_value_deserializer_25(type_name: &str) -> Option<fn(&serde_json::value::R
         0x74416363 => { // tAcc
             if type_name == "ArrayOfCannotAccessVmDisk" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::cannot_access_vm_disk_trait::CannotAccessVmDiskTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::CannotAccessVmDiskTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfCannotAccessVmDisk(value)))
                 })
             } else { None }
@@ -32038,7 +32038,7 @@ fn get_value_deserializer_25(type_name: &str) -> Option<fn(&serde_json::value::R
             match type_name {
                 "ArrayOfDatastoreFileEvent" => {
                     Some(|raw| {
-                        let value: Vec<Box<dyn super::datastore_file_event_trait::DatastoreFileEventTrait>> = serde_json::from_str(raw.get())?;
+                        let value: Vec<Box<dyn super::traits::DatastoreFileEventTrait>> = serde_json::from_str(raw.get())?;
                         Ok(VimAny::Value(ValueElements::ArrayOfDatastoreFileEvent(value)))
                     })
                 }
@@ -32062,7 +32062,7 @@ fn get_value_deserializer_25(type_name: &str) -> Option<fn(&serde_json::value::R
         0x756c6564 => { // uled
             if type_name == "ArrayOfScheduledTaskEvent" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::scheduled_task_event_trait::ScheduledTaskEventTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::ScheduledTaskEventTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfScheduledTaskEvent(value)))
                 })
             } else { None }
@@ -32200,7 +32200,7 @@ fn get_value_deserializer_26(type_name: &str) -> Option<fn(&serde_json::value::R
         0x4669627265436861 => { // FibreCha
             if type_name == "ArrayOfHostFibreChannelHba" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::host_fibre_channel_hba_trait::HostFibreChannelHbaTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::HostFibreChannelHbaTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfHostFibreChannelHba(value)))
                 })
             } else { None }
@@ -32345,7 +32345,7 @@ fn get_value_deserializer_26(type_name: &str) -> Option<fn(&serde_json::value::R
         0x5063695061737374 => { // PciPasst
             if type_name == "ArrayOfHostPciPassthruInfo" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::host_pci_passthru_info_trait::HostPciPassthruInfoTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::HostPciPassthruInfoTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfHostPciPassthruInfo(value)))
                 })
             } else { None }
@@ -32409,7 +32409,7 @@ fn get_value_deserializer_26(type_name: &str) -> Option<fn(&serde_json::value::R
         0x5461726765745472 => { // TargetTr
             if type_name == "ArrayOfHostTargetTransport" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::host_target_transport_trait::HostTargetTransportTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::HostTargetTransportTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfHostTargetTransport(value)))
                 })
             } else { None }
@@ -32417,7 +32417,7 @@ fn get_value_deserializer_26(type_name: &str) -> Option<fn(&serde_json::value::R
         0x54706d4576656e74 => { // TpmEvent
             if type_name == "ArrayOfHostTpmEventDetails" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::host_tpm_event_details_trait::HostTpmEventDetailsTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::HostTpmEventDetailsTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfHostTpmEventDetails(value)))
                 })
             } else { None }
@@ -32545,7 +32545,7 @@ fn get_value_deserializer_26(type_name: &str) -> Option<fn(&serde_json::value::R
         0x666f726d436f6e66 => { // formConf
             if type_name == "ArrayOfPlatformConfigFault" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::platform_config_fault_trait::PlatformConfigFaultTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::PlatformConfigFaultTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfPlatformConfigFault(value)))
                 })
             } else { None }
@@ -32786,7 +32786,7 @@ fn get_value_deserializer_26(type_name: &str) -> Option<fn(&serde_json::value::R
         0x6c6f636174655370 => { // locateSp
             if type_name == "ArrayOfVmRelocateSpecEvent" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::vm_relocate_spec_event_trait::VmRelocateSpecEventTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VmRelocateSpecEventTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVmRelocateSpecEvent(value)))
                 })
             } else { None }
@@ -32795,7 +32795,7 @@ fn get_value_deserializer_26(type_name: &str) -> Option<fn(&serde_json::value::R
             match type_name {
                 "ArrayOfHourlyTaskScheduler" => {
                     Some(|raw| {
-                        let value: Vec<Box<dyn super::hourly_task_scheduler_trait::HourlyTaskSchedulerTrait>> = serde_json::from_str(raw.get())?;
+                        let value: Vec<Box<dyn super::traits::HourlyTaskSchedulerTrait>> = serde_json::from_str(raw.get())?;
                         Ok(VimAny::Value(ValueElements::ArrayOfHourlyTaskScheduler(value)))
                     })
                 }
@@ -32899,7 +32899,7 @@ fn get_value_deserializer_26(type_name: &str) -> Option<fn(&serde_json::value::R
         0x6f6c735570677261 => { // olsUpgra
             if type_name == "ArrayOfVmToolsUpgradeFault" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::vm_tools_upgrade_fault_trait::VmToolsUpgradeFaultTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VmToolsUpgradeFaultTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVmToolsUpgradeFault(value)))
                 })
             } else { None }
@@ -32915,7 +32915,7 @@ fn get_value_deserializer_26(type_name: &str) -> Option<fn(&serde_json::value::R
         0x6f6d4669656c6444 => { // omFieldD
             if type_name == "ArrayOfCustomFieldDefEvent" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::custom_field_def_event_trait::CustomFieldDefEventTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::CustomFieldDefEventTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfCustomFieldDefEvent(value)))
                 })
             } else { None }
@@ -32923,7 +32923,7 @@ fn get_value_deserializer_26(type_name: &str) -> Option<fn(&serde_json::value::R
         0x6f6d697a6174696f => { // omizatio
             if type_name == "ArrayOfCustomizationFailed" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::customization_failed_trait::CustomizationFailedTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::CustomizationFailedTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfCustomizationFailed(value)))
                 })
             } else { None }
@@ -32963,7 +32963,7 @@ fn get_value_deserializer_26(type_name: &str) -> Option<fn(&serde_json::value::R
         0x6f74416363657373 => { // otAccess
             if type_name == "ArrayOfCannotAccessNetwork" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::cannot_access_network_trait::CannotAccessNetworkTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::CannotAccessNetworkTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfCannotAccessNetwork(value)))
                 })
             } else { None }
@@ -32971,7 +32971,7 @@ fn get_value_deserializer_26(type_name: &str) -> Option<fn(&serde_json::value::R
         0x706c696e6b506f72 => { // plinkPor
             if type_name == "ArrayOfDVSUplinkPortPolicy" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::dvs_uplink_port_policy_trait::DvsUplinkPortPolicyTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::DvsUplinkPortPolicyTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfDvsUplinkPortPolicy(value)))
                 })
             } else { None }
@@ -33100,7 +33100,7 @@ fn get_value_deserializer_26(type_name: &str) -> Option<fn(&serde_json::value::R
         0x7441757468656e74 => { // tAuthent
             if type_name == "ArrayOfGuestAuthentication" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::guest_authentication_trait::GuestAuthenticationTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::GuestAuthenticationTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfGuestAuthentication(value)))
                 })
             } else { None }
@@ -33108,7 +33108,7 @@ fn get_value_deserializer_26(type_name: &str) -> Option<fn(&serde_json::value::R
         0x7446696c65417474 => { // tFileAtt
             if type_name == "ArrayOfGuestFileAttributes" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::guest_file_attributes_trait::GuestFileAttributesTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::GuestFileAttributesTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfGuestFileAttributes(value)))
                 })
             } else { None }
@@ -33124,7 +33124,7 @@ fn get_value_deserializer_26(type_name: &str) -> Option<fn(&serde_json::value::R
         0x7461626c65457870 => { // tableExp
             if type_name == "ArrayOfNegatableExpression" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::negatable_expression_trait::NegatableExpressionTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::NegatableExpressionTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfNegatableExpression(value)))
                 })
             } else { None }
@@ -33189,7 +33189,7 @@ fn get_value_deserializer_26(type_name: &str) -> Option<fn(&serde_json::value::R
         0x74794576656e7441 => { // tyEventA
             if type_name == "ArrayOfEntityEventArgument" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::entity_event_argument_trait::EntityEventArgumentTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::EntityEventArgumentTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfEntityEventArgument(value)))
                 })
             } else { None }
@@ -33205,7 +33205,7 @@ fn get_value_deserializer_26(type_name: &str) -> Option<fn(&serde_json::value::R
         0x75616c4465766963 => { // ualDevic
             if type_name == "ArrayOfVirtualDeviceOption" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::virtual_device_option_trait::VirtualDeviceOptionTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VirtualDeviceOptionTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVirtualDeviceOption(value)))
                 })
             } else { None }
@@ -33229,7 +33229,7 @@ fn get_value_deserializer_26(type_name: &str) -> Option<fn(&serde_json::value::R
         0x75616c4574686572 => { // ualEther
             if type_name == "ArrayOfVirtualEthernetCard" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::virtual_ethernet_card_trait::VirtualEthernetCardTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VirtualEthernetCardTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVirtualEthernetCard(value)))
                 })
             } else { None }
@@ -33276,7 +33276,7 @@ fn get_value_deserializer_26(type_name: &str) -> Option<fn(&serde_json::value::R
                 }
                 "ArrayOfVirtualVmxnetOption" => {
                     Some(|raw| {
-                        let value: Vec<Box<dyn super::virtual_vmxnet_option_trait::VirtualVmxnetOptionTrait>> = serde_json::from_str(raw.get())?;
+                        let value: Vec<Box<dyn super::traits::VirtualVmxnetOptionTrait>> = serde_json::from_str(raw.get())?;
                         Ok(VimAny::Value(ValueElements::ArrayOfVirtualVmxnetOption(value)))
                     })
                 }
@@ -33326,7 +33326,7 @@ fn get_value_deserializer_26(type_name: &str) -> Option<fn(&serde_json::value::R
         0x75726365506f6f6c => { // urcePool
             if type_name == "ArrayOfResourcePoolSummary" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::resource_pool_summary_trait::ResourcePoolSummaryTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::ResourcePoolSummaryTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfResourcePoolSummary(value)))
                 })
             } else { None }
@@ -33334,7 +33334,7 @@ fn get_value_deserializer_26(type_name: &str) -> Option<fn(&serde_json::value::R
         0x776179436f6e6e65 => { // wayConne
             if type_name == "ArrayOfGatewayConnectFault" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::gateway_connect_fault_trait::GatewayConnectFaultTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::GatewayConnectFaultTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfGatewayConnectFault(value)))
                 })
             } else { None }
@@ -33374,7 +33374,7 @@ fn get_value_deserializer_27(type_name: &str) -> Option<fn(&serde_json::value::R
                 }
                 "ArrayOfCannotAccessVmDevice" => {
                     Some(|raw| {
-                        let value: Vec<Box<dyn super::cannot_access_vm_device_trait::CannotAccessVmDeviceTrait>> = serde_json::from_str(raw.get())?;
+                        let value: Vec<Box<dyn super::traits::CannotAccessVmDeviceTrait>> = serde_json::from_str(raw.get())?;
                         Ok(VimAny::Value(ValueElements::ArrayOfCannotAccessVmDevice(value)))
                     })
                 }
@@ -33424,7 +33424,7 @@ fn get_value_deserializer_27(type_name: &str) -> Option<fn(&serde_json::value::R
         0x4469726563746f72 => { // Director
             if type_name == "ArrayOfActiveDirectoryFault" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::active_directory_fault_trait::ActiveDirectoryFaultTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::ActiveDirectoryFaultTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfActiveDirectoryFault(value)))
                 })
             } else { None }
@@ -33432,7 +33432,7 @@ fn get_value_deserializer_27(type_name: &str) -> Option<fn(&serde_json::value::R
         0x46696c6543726561 => { // FileCrea
             if type_name == "ArrayOfAnswerFileCreateSpec" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::answer_file_create_spec_trait::AnswerFileCreateSpecTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::AnswerFileCreateSpecTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfAnswerFileCreateSpec(value)))
                 })
             } else { None }
@@ -33632,7 +33632,7 @@ fn get_value_deserializer_27(type_name: &str) -> Option<fn(&serde_json::value::R
         0x6450726f70657274 => { // dPropert
             if type_name == "ArrayOfInvalidPropertyValue" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::invalid_property_value_trait::InvalidPropertyValueTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::InvalidPropertyValueTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfInvalidPropertyValue(value)))
                 })
             } else { None }
@@ -33681,7 +33681,7 @@ fn get_value_deserializer_27(type_name: &str) -> Option<fn(&serde_json::value::R
         0x6545786563757465 => { // eExecute
             if type_name == "ArrayOfProfileExecuteResult" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::profile_execute_result_trait::ProfileExecuteResultTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::ProfileExecuteResultTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfProfileExecuteResult(value)))
                 })
             } else { None }
@@ -33721,7 +33721,7 @@ fn get_value_deserializer_27(type_name: &str) -> Option<fn(&serde_json::value::R
         0x65696e6752657365 => { // eingRese
             if type_name == "ArrayOfVmDasBeingResetEvent" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::vm_das_being_reset_event_trait::VmDasBeingResetEventTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VmDasBeingResetEventTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVmDasBeingResetEvent(value)))
                 })
             } else { None }
@@ -33729,7 +33729,7 @@ fn get_value_deserializer_27(type_name: &str) -> Option<fn(&serde_json::value::R
         0x6574616461746149 => { // etadataI
             if type_name == "ArrayOfPatchMetadataInvalid" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::patch_metadata_invalid_trait::PatchMetadataInvalidTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::PatchMetadataInvalidTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfPatchMetadataInvalid(value)))
                 })
             } else { None }
@@ -33801,7 +33801,7 @@ fn get_value_deserializer_27(type_name: &str) -> Option<fn(&serde_json::value::R
         0x697a6174696f6e4f => { // izationO
             if type_name == "ArrayOfCustomizationOptions" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::customization_options_trait::CustomizationOptionsTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::CustomizationOptionsTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfCustomizationOptions(value)))
                 })
             } else { None }
@@ -33946,7 +33946,7 @@ fn get_value_deserializer_27(type_name: &str) -> Option<fn(&serde_json::value::R
         0x6c566d786e657433 => { // lVmxnet3
             if type_name == "ArrayOfVirtualVmxnet3Option" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::virtual_vmxnet_3_option_trait::VirtualVmxnet3OptionTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VirtualVmxnet3OptionTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVirtualVmxnet3Option(value)))
                 })
             } else { None }
@@ -33971,7 +33971,7 @@ fn get_value_deserializer_27(type_name: &str) -> Option<fn(&serde_json::value::R
         0x6c6553797374656d => { // leSystem
             if type_name == "ArrayOfHostFileSystemVolume" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::host_file_system_volume_trait::HostFileSystemVolumeTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::HostFileSystemVolumeTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfHostFileSystemVolume(value)))
                 })
             } else { None }
@@ -33995,7 +33995,7 @@ fn get_value_deserializer_27(type_name: &str) -> Option<fn(&serde_json::value::R
         0x6c7468436865636b => { // lthCheck
             if type_name == "ArrayOfDVSHealthCheckConfig" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::dvs_health_check_config_trait::DvsHealthCheckConfigTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::DvsHealthCheckConfigTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfDvsHealthCheckConfig(value)))
                 })
             } else { None }
@@ -34109,7 +34109,7 @@ fn get_value_deserializer_27(type_name: &str) -> Option<fn(&serde_json::value::R
         0x6f72746564446174 => { // ortedDat
             if type_name == "ArrayOfUnsupportedDatastore" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::unsupported_datastore_trait::UnsupportedDatastoreTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::UnsupportedDatastoreTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfUnsupportedDatastore(value)))
                 })
             } else { None }
@@ -34182,7 +34182,7 @@ fn get_value_deserializer_27(type_name: &str) -> Option<fn(&serde_json::value::R
         0x7065726174696f6e => { // peration
             if type_name == "ArrayOfGuestOperationsFault" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::guest_operations_fault_trait::GuestOperationsFaultTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::GuestOperationsFaultTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfGuestOperationsFault(value)))
                 })
             } else { None }
@@ -34414,7 +34414,7 @@ fn get_value_deserializer_27(type_name: &str) -> Option<fn(&serde_json::value::R
         0x7465557067726164 => { // teUpgrad
             if type_name == "ArrayOfTemplateUpgradeEvent" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::template_upgrade_event_trait::TemplateUpgradeEventTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::TemplateUpgradeEventTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfTemplateUpgradeEvent(value)))
                 })
             } else { None }
@@ -34430,7 +34430,7 @@ fn get_value_deserializer_27(type_name: &str) -> Option<fn(&serde_json::value::R
         0x746974794d657472 => { // tityMetr
             if type_name == "ArrayOfPerfEntityMetricBase" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::perf_entity_metric_base_trait::PerfEntityMetricBaseTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::PerfEntityMetricBaseTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfPerfEntityMetricBase(value)))
                 })
             } else { None }
@@ -34438,7 +34438,7 @@ fn get_value_deserializer_27(type_name: &str) -> Option<fn(&serde_json::value::R
         0x7475726543617061 => { // tureCapa
             if type_name == "ArrayOfDVSFeatureCapability" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::dvs_feature_capability_trait::DvsFeatureCapabilityTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::DvsFeatureCapabilityTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfDvsFeatureCapability(value)))
                 })
             } else { None }
@@ -34462,7 +34462,7 @@ fn get_value_deserializer_27(type_name: &str) -> Option<fn(&serde_json::value::R
         0x776f726b52756c65 => { // workRule
             if type_name == "ArrayOfDvsNetworkRuleAction" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::dvs_network_rule_action_trait::DvsNetworkRuleActionTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::DvsNetworkRuleActionTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfDvsNetworkRuleAction(value)))
                 })
             } else { None }
@@ -34478,7 +34478,7 @@ fn get_value_deserializer_27(type_name: &str) -> Option<fn(&serde_json::value::R
         0x795461736b536368 => { // yTaskSch
             if type_name == "ArrayOfMonthlyTaskScheduler" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::monthly_task_scheduler_trait::MonthlyTaskSchedulerTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::MonthlyTaskSchedulerTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfMonthlyTaskScheduler(value)))
                 })
             } else { None }
@@ -34616,7 +34616,7 @@ fn get_value_deserializer_28(type_name: &str) -> Option<fn(&serde_json::value::R
         0x466561747572654c => { // FeatureL
             if type_name == "ArrayOfExpiredFeatureLicense" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::expired_feature_license_trait::ExpiredFeatureLicenseTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::ExpiredFeatureLicenseTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfExpiredFeatureLicense(value)))
                 })
             } else { None }
@@ -34656,7 +34656,7 @@ fn get_value_deserializer_28(type_name: &str) -> Option<fn(&serde_json::value::R
         0x496e746572666163 => { // Interfac
             if type_name == "ArrayOfVMotionInterfaceIssue" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::v_motion_interface_issue_trait::VMotionInterfaceIssueTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VMotionInterfaceIssueTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVMotionInterfaceIssue(value)))
                 })
             } else { None }
@@ -34761,7 +34761,7 @@ fn get_value_deserializer_28(type_name: &str) -> Option<fn(&serde_json::value::R
         0x5061737374687275 => { // Passthru
             if type_name == "ArrayOfHostPciPassthruConfig" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::host_pci_passthru_config_trait::HostPciPassthruConfigTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::HostPciPassthruConfigTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfHostPciPassthruConfig(value)))
                 })
             } else { None }
@@ -34825,7 +34825,7 @@ fn get_value_deserializer_28(type_name: &str) -> Option<fn(&serde_json::value::R
         0x53415441436f6e74 => { // SATACont
             if type_name == "ArrayOfVirtualSATAController" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::virtual_sata_controller_trait::VirtualSataControllerTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VirtualSataControllerTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVirtualSataController(value)))
                 })
             } else { None }
@@ -34833,7 +34833,7 @@ fn get_value_deserializer_28(type_name: &str) -> Option<fn(&serde_json::value::R
         0x53435349436f6e74 => { // SCSICont
             if type_name == "ArrayOfVirtualSCSIController" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::virtual_scsi_controller_trait::VirtualScsiControllerTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VirtualScsiControllerTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVirtualScsiController(value)))
                 })
             } else { None }
@@ -34882,7 +34882,7 @@ fn get_value_deserializer_28(type_name: &str) -> Option<fn(&serde_json::value::R
         0x546f6c6572616e63 => { // Toleranc
             if type_name == "ArrayOfVmFaultToleranceIssue" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::vm_fault_tolerance_issue_trait::VmFaultToleranceIssueTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VmFaultToleranceIssueTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVmFaultToleranceIssue(value)))
                 })
             } else { None }
@@ -34938,7 +34938,7 @@ fn get_value_deserializer_28(type_name: &str) -> Option<fn(&serde_json::value::R
         0x6144657669636542 => { // aDeviceB
             if type_name == "ArrayOfHostRdmaDeviceBacking" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::host_rdma_device_backing_trait::HostRdmaDeviceBackingTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::HostRdmaDeviceBackingTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfHostRdmaDeviceBacking(value)))
                 })
             } else { None }
@@ -35114,7 +35114,7 @@ fn get_value_deserializer_28(type_name: &str) -> Option<fn(&serde_json::value::R
                 }
                 "ArrayOfHostProfileConfigSpec" => {
                     Some(|raw| {
-                        let value: Vec<Box<dyn super::host_profile_config_spec_trait::HostProfileConfigSpecTrait>> = serde_json::from_str(raw.get())?;
+                        let value: Vec<Box<dyn super::traits::HostProfileConfigSpecTrait>> = serde_json::from_str(raw.get())?;
                         Ok(VimAny::Value(ValueElements::ArrayOfHostProfileConfigSpec(value)))
                     })
                 }
@@ -35140,7 +35140,7 @@ fn get_value_deserializer_28(type_name: &str) -> Option<fn(&serde_json::value::R
         0x6756616c75654461 => { // gValueDa
             if type_name == "ArrayOfGuestRegValueDataSpec" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::guest_reg_value_data_spec_trait::GuestRegValueDataSpecTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::GuestRegValueDataSpecTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfGuestRegValueDataSpec(value)))
                 })
             } else { None }
@@ -35172,7 +35172,7 @@ fn get_value_deserializer_28(type_name: &str) -> Option<fn(&serde_json::value::R
         0x6769737472794b65 => { // gistryKe
             if type_name == "ArrayOfGuestRegistryKeyFault" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::guest_registry_key_fault_trait::GuestRegistryKeyFaultTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::GuestRegistryKeyFaultTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfGuestRegistryKeyFault(value)))
                 })
             } else { None }
@@ -35478,7 +35478,7 @@ fn get_value_deserializer_28(type_name: &str) -> Option<fn(&serde_json::value::R
         0x70706f7274656445 => { // pportedE
             if type_name == "ArrayOfOvfUnsupportedElement" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::ovf_unsupported_element_trait::OvfUnsupportedElementTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::OvfUnsupportedElementTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfOvfUnsupportedElement(value)))
                 })
             } else { None }
@@ -35486,7 +35486,7 @@ fn get_value_deserializer_28(type_name: &str) -> Option<fn(&serde_json::value::R
         0x70706f7274656450 => { // pportedP
             if type_name == "ArrayOfOvfUnsupportedPackage" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::ovf_unsupported_package_trait::OvfUnsupportedPackageTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::OvfUnsupportedPackageTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfOvfUnsupportedPackage(value)))
                 })
             } else { None }
@@ -35592,7 +35592,7 @@ fn get_value_deserializer_28(type_name: &str) -> Option<fn(&serde_json::value::R
         0x7369626c65446174 => { // sibleDat
             if type_name == "ArrayOfInaccessibleDatastore" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::inaccessible_datastore_trait::InaccessibleDatastoreTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::InaccessibleDatastoreTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfInaccessibleDatastore(value)))
                 })
             } else { None }
@@ -35953,7 +35953,7 @@ fn get_value_deserializer_29(type_name: &str) -> Option<fn(&serde_json::value::R
         0x5374616e6462794d => { // StandbyM
             if type_name == "ArrayOfExitedStandbyModeEvent" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::exited_standby_mode_event_trait::ExitedStandbyModeEventTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::ExitedStandbyModeEventTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfExitedStandbyModeEvent(value)))
                 })
             } else { None }
@@ -35977,7 +35977,7 @@ fn get_value_deserializer_29(type_name: &str) -> Option<fn(&serde_json::value::R
         0x61676572436f6d6d => { // agerComm
             if type_name == "ArrayOfOvfManagerCommonParams" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::ovf_manager_common_params_trait::OvfManagerCommonParamsTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::OvfManagerCommonParamsTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfOvfManagerCommonParams(value)))
                 })
             } else { None }
@@ -35993,7 +35993,7 @@ fn get_value_deserializer_29(type_name: &str) -> Option<fn(&serde_json::value::R
         0x6174696f6e436f6e => { // ationCon
             if type_name == "ArrayOfReplicationConfigFault" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::replication_config_fault_trait::ReplicationConfigFaultTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::ReplicationConfigFaultTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfReplicationConfigFault(value)))
                 })
             } else { None }
@@ -36252,7 +36252,7 @@ fn get_value_deserializer_29(type_name: &str) -> Option<fn(&serde_json::value::R
         0x655265736f757263 => { // eResourc
             if type_name == "ArrayOfComputeResourceSummary" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::compute_resource_summary_trait::ComputeResourceSummaryTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::ComputeResourceSummaryTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfComputeResourceSummary(value)))
                 })
             } else { None }
@@ -36316,7 +36316,7 @@ fn get_value_deserializer_29(type_name: &str) -> Option<fn(&serde_json::value::R
         0x656e745461736b53 => { // entTaskS
             if type_name == "ArrayOfRecurrentTaskScheduler" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::recurrent_task_scheduler_trait::RecurrentTaskSchedulerTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::RecurrentTaskSchedulerTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfRecurrentTaskScheduler(value)))
                 })
             } else { None }
@@ -36340,7 +36340,7 @@ fn get_value_deserializer_29(type_name: &str) -> Option<fn(&serde_json::value::R
         0x6666696346696c74 => { // fficFilt
             if type_name == "ArrayOfDvsTrafficFilterConfig" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::dvs_traffic_filter_config_trait::DvsTrafficFilterConfigTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::DvsTrafficFilterConfigTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfDvsTrafficFilterConfig(value)))
                 })
             } else { None }
@@ -36502,7 +36502,7 @@ fn get_value_deserializer_29(type_name: &str) -> Option<fn(&serde_json::value::R
         0x6c536f756e644361 => { // lSoundCa
             if type_name == "ArrayOfVirtualSoundCardOption" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::virtual_sound_card_option_trait::VirtualSoundCardOptionTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VirtualSoundCardOptionTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVirtualSoundCardOption(value)))
                 })
             } else { None }
@@ -36809,7 +36809,7 @@ fn get_value_deserializer_29(type_name: &str) -> Option<fn(&serde_json::value::R
         0x726563746f727953 => { // rectoryS
             if type_name == "ArrayOfHostDirectoryStoreInfo" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::host_directory_store_info_trait::HostDirectoryStoreInfoTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::HostDirectoryStoreInfoTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfHostDirectoryStoreInfo(value)))
                 })
             } else { None }
@@ -37150,7 +37150,7 @@ fn get_value_deserializer_30(type_name: &str) -> Option<fn(&serde_json::value::R
             match type_name {
                 "ArrayOfHostVirtualSwitchBridge" => {
                     Some(|raw| {
-                        let value: Vec<Box<dyn super::host_virtual_switch_bridge_trait::HostVirtualSwitchBridgeTrait>> = serde_json::from_str(raw.get())?;
+                        let value: Vec<Box<dyn super::traits::HostVirtualSwitchBridgeTrait>> = serde_json::from_str(raw.get())?;
                         Ok(VimAny::Value(ValueElements::ArrayOfHostVirtualSwitchBridge(value)))
                     })
                 }
@@ -37214,7 +37214,7 @@ fn get_value_deserializer_30(type_name: &str) -> Option<fn(&serde_json::value::R
         0x6365436f => { // ceCo
             if type_name == "ArrayOfVirtualDeviceConfigSpec" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::virtual_device_config_spec_trait::VirtualDeviceConfigSpecTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VirtualDeviceConfigSpecTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVirtualDeviceConfigSpec(value)))
                 })
             } else { None }
@@ -37256,13 +37256,13 @@ fn get_value_deserializer_30(type_name: &str) -> Option<fn(&serde_json::value::R
             match type_name {
                 "ArrayOfEnteredStandbyModeEvent" => {
                     Some(|raw| {
-                        let value: Vec<Box<dyn super::entered_standby_mode_event_trait::EnteredStandbyModeEventTrait>> = serde_json::from_str(raw.get())?;
+                        let value: Vec<Box<dyn super::traits::EnteredStandbyModeEventTrait>> = serde_json::from_str(raw.get())?;
                         Ok(VimAny::Value(ValueElements::ArrayOfEnteredStandbyModeEvent(value)))
                     })
                 }
                 "ArrayOfExitingStandbyModeEvent" => {
                     Some(|raw| {
-                        let value: Vec<Box<dyn super::exiting_standby_mode_event_trait::ExitingStandbyModeEventTrait>> = serde_json::from_str(raw.get())?;
+                        let value: Vec<Box<dyn super::traits::ExitingStandbyModeEventTrait>> = serde_json::from_str(raw.get())?;
                         Ok(VimAny::Value(ValueElements::ArrayOfExitingStandbyModeEvent(value)))
                     })
                 }
@@ -37272,7 +37272,7 @@ fn get_value_deserializer_30(type_name: &str) -> Option<fn(&serde_json::value::R
         0x65456c65 => { // eEle
             if type_name == "ArrayOfHostHardwareElementInfo" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::host_hardware_element_info_trait::HostHardwareElementInfoTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::HostHardwareElementInfoTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfHostHardwareElementInfo(value)))
                 })
             } else { None }
@@ -37773,7 +37773,7 @@ fn get_value_deserializer_30(type_name: &str) -> Option<fn(&serde_json::value::R
         0x72654261 => { // reBa
             if type_name == "ArrayOfVmfsDatastoreBaseOption" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::vmfs_datastore_base_option_trait::VmfsDatastoreBaseOptionTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VmfsDatastoreBaseOptionTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVmfsDatastoreBaseOption(value)))
                 })
             } else { None }
@@ -37830,7 +37830,7 @@ fn get_value_deserializer_30(type_name: &str) -> Option<fn(&serde_json::value::R
         0x726f6c6c => { // roll
             if type_name == "ArrayOfVirtualControllerOption" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::virtual_controller_option_trait::VirtualControllerOptionTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VirtualControllerOptionTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVirtualControllerOption(value)))
                 })
             } else { None }
@@ -37846,7 +37846,7 @@ fn get_value_deserializer_30(type_name: &str) -> Option<fn(&serde_json::value::R
         0x72795661 => { // ryVa
             if type_name == "ArrayOfGuestRegistryValueFault" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::guest_registry_value_fault_trait::GuestRegistryValueFaultTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::GuestRegistryValueFaultTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfGuestRegistryValueFault(value)))
                 })
             } else { None }
@@ -37870,7 +37870,7 @@ fn get_value_deserializer_30(type_name: &str) -> Option<fn(&serde_json::value::R
         0x73566d43 => { // sVmC
             if type_name == "ArrayOfCannotAccessVmComponent" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::cannot_access_vm_component_trait::CannotAccessVmComponentTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::CannotAccessVmComponentTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfCannotAccessVmComponent(value)))
                 })
             } else { None }
@@ -37942,7 +37942,7 @@ fn get_value_deserializer_30(type_name: &str) -> Option<fn(&serde_json::value::R
         0x74656441 => { // tedA
             if type_name == "ArrayOfOvfUnsupportedAttribute" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::ovf_unsupported_attribute_trait::OvfUnsupportedAttributeTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::OvfUnsupportedAttributeTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfOvfUnsupportedAttribute(value)))
                 })
             } else { None }
@@ -38014,7 +38014,7 @@ fn get_value_deserializer_30(type_name: &str) -> Option<fn(&serde_json::value::R
         0x756c6551 => { // uleQ
             if type_name == "ArrayOfDvsNetworkRuleQualifier" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::dvs_network_rule_qualifier_trait::DvsNetworkRuleQualifierTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::DvsNetworkRuleQualifierTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfDvsNetworkRuleQualifier(value)))
                 })
             } else { None }
@@ -38046,7 +38046,7 @@ fn get_value_deserializer_30(type_name: &str) -> Option<fn(&serde_json::value::R
         0x76696365 => { // vice
             if type_name == "ArrayOfHostSriovDevicePoolInfo" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::host_sriov_device_pool_info_trait::HostSriovDevicePoolInfoTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::HostSriovDevicePoolInfoTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfHostSriovDevicePoolInfo(value)))
                 })
             } else { None }
@@ -38071,7 +38071,7 @@ fn get_value_deserializer_31(type_name: &str) -> Option<fn(&serde_json::value::R
         0x436f70794e6f7453 => { // CopyNotS
             if type_name == "ArrayOfSnapshotCopyNotSupported" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::snapshot_copy_not_supported_trait::SnapshotCopyNotSupportedTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::SnapshotCopyNotSupportedTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfSnapshotCopyNotSupported(value)))
                 })
             } else { None }
@@ -38200,7 +38200,7 @@ fn get_value_deserializer_31(type_name: &str) -> Option<fn(&serde_json::value::R
         0x5374616e6462794d => { // StandbyM
             if type_name == "ArrayOfEnteringStandbyModeEvent" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::entering_standby_mode_event_trait::EnteringStandbyModeEventTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::EnteringStandbyModeEventTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfEnteringStandbyModeEvent(value)))
                 })
             } else { None }
@@ -38269,7 +38269,7 @@ fn get_value_deserializer_31(type_name: &str) -> Option<fn(&serde_json::value::R
                 }
                 "ArrayOfVirtualMachineConnection" => {
                     Some(|raw| {
-                        let value: Vec<Box<dyn super::virtual_machine_connection_trait::VirtualMachineConnectionTrait>> = serde_json::from_str(raw.get())?;
+                        let value: Vec<Box<dyn super::traits::VirtualMachineConnectionTrait>> = serde_json::from_str(raw.get())?;
                         Ok(VimAny::Value(ValueElements::ArrayOfVirtualMachineConnection(value)))
                     })
                 }
@@ -38327,7 +38327,7 @@ fn get_value_deserializer_31(type_name: &str) -> Option<fn(&serde_json::value::R
         0x616368696e655461 => { // achineTa
             if type_name == "ArrayOfVirtualMachineTargetInfo" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::virtual_machine_target_info_trait::VirtualMachineTargetInfoTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VirtualMachineTargetInfoTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVirtualMachineTargetInfo(value)))
                 })
             } else { None }
@@ -38407,7 +38407,7 @@ fn get_value_deserializer_31(type_name: &str) -> Option<fn(&serde_json::value::R
         0x6174696f6e497047 => { // ationIpG
             if type_name == "ArrayOfCustomizationIpGenerator" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::customization_ip_generator_trait::CustomizationIpGeneratorTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::CustomizationIpGeneratorTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfCustomizationIpGenerator(value)))
                 })
             } else { None }
@@ -38665,7 +38665,7 @@ fn get_value_deserializer_31(type_name: &str) -> Option<fn(&serde_json::value::R
             match type_name {
                 "ArrayOfFaultToleranceConfigInfo" => {
                     Some(|raw| {
-                        let value: Vec<Box<dyn super::fault_tolerance_config_info_trait::FaultToleranceConfigInfoTrait>> = serde_json::from_str(raw.get())?;
+                        let value: Vec<Box<dyn super::traits::FaultToleranceConfigInfoTrait>> = serde_json::from_str(raw.get())?;
                         Ok(VimAny::Value(ValueElements::ArrayOfFaultToleranceConfigInfo(value)))
                     })
                 }
@@ -38728,7 +38728,7 @@ fn get_value_deserializer_31(type_name: &str) -> Option<fn(&serde_json::value::R
         0x6576696365426163 => { // eviceBac
             if type_name == "ArrayOfVirtualDeviceBackingInfo" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::virtual_device_backing_info_trait::VirtualDeviceBackingInfoTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VirtualDeviceBackingInfoTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVirtualDeviceBackingInfo(value)))
                 })
             } else { None }
@@ -38736,7 +38736,7 @@ fn get_value_deserializer_31(type_name: &str) -> Option<fn(&serde_json::value::R
         0x6576696365427573 => { // eviceBus
             if type_name == "ArrayOfVirtualDeviceBusSlotInfo" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::virtual_device_bus_slot_info_trait::VirtualDeviceBusSlotInfoTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VirtualDeviceBusSlotInfoTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVirtualDeviceBusSlotInfo(value)))
                 })
             } else { None }
@@ -38768,7 +38768,7 @@ fn get_value_deserializer_31(type_name: &str) -> Option<fn(&serde_json::value::R
         0x68436865636b4361 => { // hCheckCa
             if type_name == "ArrayOfDVSHealthCheckCapability" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::dvs_health_check_capability_trait::DvsHealthCheckCapabilityTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::DvsHealthCheckCapabilityTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfDvsHealthCheckCapability(value)))
                 })
             } else { None }
@@ -38928,7 +38928,7 @@ fn get_value_deserializer_31(type_name: &str) -> Option<fn(&serde_json::value::R
         0x6d657243616c6c62 => { // merCallb
             if type_name == "ArrayOfOvfConsumerCallbackFault" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::ovf_consumer_callback_fault_trait::OvfConsumerCallbackFaultTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::OvfConsumerCallbackFaultTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfOvfConsumerCallbackFault(value)))
                 })
             } else { None }
@@ -38976,7 +38976,7 @@ fn get_value_deserializer_31(type_name: &str) -> Option<fn(&serde_json::value::R
         0x6f6361746f724372 => { // ocatorCr
             if type_name == "ArrayOfServiceLocatorCredential" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::service_locator_credential_trait::ServiceLocatorCredentialTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::ServiceLocatorCredentialTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfServiceLocatorCredential(value)))
                 })
             } else { None }
@@ -39056,7 +39056,7 @@ fn get_value_deserializer_31(type_name: &str) -> Option<fn(&serde_json::value::R
                 }
                 "ArrayOfClusterProfileConfigSpec" => {
                     Some(|raw| {
-                        let value: Vec<Box<dyn super::cluster_profile_config_spec_trait::ClusterProfileConfigSpecTrait>> = serde_json::from_str(raw.get())?;
+                        let value: Vec<Box<dyn super::traits::ClusterProfileConfigSpecTrait>> = serde_json::from_str(raw.get())?;
                         Ok(VimAny::Value(ValueElements::ArrayOfClusterProfileConfigSpec(value)))
                     })
                 }
@@ -39066,7 +39066,7 @@ fn get_value_deserializer_31(type_name: &str) -> Option<fn(&serde_json::value::R
         0x726f66696c654372 => { // rofileCr
             if type_name == "ArrayOfClusterProfileCreateSpec" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::cluster_profile_create_spec_trait::ClusterProfileCreateSpecTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::ClusterProfileCreateSpecTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfClusterProfileCreateSpec(value)))
                 })
             } else { None }
@@ -39155,7 +39155,7 @@ fn get_value_deserializer_31(type_name: &str) -> Option<fn(&serde_json::value::R
         0x73746f7265436f6e => { // storeCon
             if type_name == "ArrayOfHostDatastoreConnectInfo" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::host_datastore_connect_info_trait::HostDatastoreConnectInfoTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::HostDatastoreConnectInfoTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfHostDatastoreConnectInfo(value)))
                 })
             } else { None }
@@ -39477,7 +39477,7 @@ fn get_value_deserializer_32(type_name: &str) -> Option<fn(&serde_json::value::R
         0x636f6d6d69747465 => { // committe
             if type_name == "ArrayOfClusterOvercommittedEvent" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::cluster_overcommitted_event_trait::ClusterOvercommittedEventTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::ClusterOvercommittedEventTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfClusterOvercommittedEvent(value)))
                 })
             } else { None }
@@ -39501,7 +39501,7 @@ fn get_value_deserializer_32(type_name: &str) -> Option<fn(&serde_json::value::R
         0x64486f7374496e43 => { // dHostInC
             if type_name == "ArrayOfNotSupportedHostInCluster" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::not_supported_host_in_cluster_trait::NotSupportedHostInClusterTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::NotSupportedHostInClusterTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfNotSupportedHostInCluster(value)))
                 })
             } else { None }
@@ -39701,7 +39701,7 @@ fn get_value_deserializer_32(type_name: &str) -> Option<fn(&serde_json::value::R
         0x696e6550726f6669 => { // ineProfi
             if type_name == "ArrayOfVirtualMachineProfileSpec" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::virtual_machine_profile_spec_trait::VirtualMachineProfileSpecTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VirtualMachineProfileSpecTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVirtualMachineProfileSpec(value)))
                 })
             } else { None }
@@ -39758,7 +39758,7 @@ fn get_value_deserializer_32(type_name: &str) -> Option<fn(&serde_json::value::R
         0x69727475616c4469 => { // irtualDi
             if type_name == "ArrayOfFileBackedVirtualDiskSpec" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::file_backed_virtual_disk_spec_trait::FileBackedVirtualDiskSpecTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::FileBackedVirtualDiskSpecTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfFileBackedVirtualDiskSpec(value)))
                 })
             } else { None }
@@ -39902,7 +39902,7 @@ fn get_value_deserializer_32(type_name: &str) -> Option<fn(&serde_json::value::R
         0x6e666f4261636b69 => { // nfoBacki
             if type_name == "ArrayOfBaseConfigInfoBackingInfo" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::base_config_info_backing_info_trait::BaseConfigInfoBackingInfoTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::BaseConfigInfoBackingInfoTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfBaseConfigInfoBackingInfo(value)))
                 })
             } else { None }
@@ -39910,7 +39910,7 @@ fn get_value_deserializer_32(type_name: &str) -> Option<fn(&serde_json::value::R
         0x6e674e6f74537570 => { // ngNotSup
             if type_name == "ArrayOfDeviceBackingNotSupported" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::device_backing_not_supported_trait::DeviceBackingNotSupportedTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::DeviceBackingNotSupportedTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfDeviceBackingNotSupported(value)))
                 })
             } else { None }
@@ -40057,7 +40057,7 @@ fn get_value_deserializer_32(type_name: &str) -> Option<fn(&serde_json::value::R
         0x7065634261636b69 => { // pecBacki
             if type_name == "ArrayOfVslmCreateSpecBackingSpec" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::vslm_create_spec_backing_spec_trait::VslmCreateSpecBackingSpecTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VslmCreateSpecBackingSpecTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVslmCreateSpecBackingSpec(value)))
                 })
             } else { None }
@@ -40138,7 +40138,7 @@ fn get_value_deserializer_32(type_name: &str) -> Option<fn(&serde_json::value::R
         0x726e657443617264 => { // rnetCard
             if type_name == "ArrayOfVirtualEthernetCardOption" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::virtual_ethernet_card_option_trait::VirtualEthernetCardOptionTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VirtualEthernetCardOptionTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVirtualEthernetCardOption(value)))
                 })
             } else { None }
@@ -40170,7 +40170,7 @@ fn get_value_deserializer_32(type_name: &str) -> Option<fn(&serde_json::value::R
         0x73616e456e61626c => { // sanEnabl
             if type_name == "ArrayOfCannotMoveVsanEnabledHost" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::cannot_move_vsan_enabled_host_trait::CannotMoveVsanEnabledHostTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::CannotMoveVsanEnabledHostTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfCannotMoveVsanEnabledHost(value)))
                 })
             } else { None }
@@ -40227,7 +40227,7 @@ fn get_value_deserializer_32(type_name: &str) -> Option<fn(&serde_json::value::R
         0x7374436f6e6e6563 => { // stConnec
             if type_name == "ArrayOfGatewayToHostConnectFault" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::gateway_to_host_connect_fault_trait::GatewayToHostConnectFaultTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::GatewayToHostConnectFaultTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfGatewayToHostConnectFault(value)))
                 })
             } else { None }
@@ -40317,13 +40317,13 @@ fn get_value_deserializer_32(type_name: &str) -> Option<fn(&serde_json::value::R
             match type_name {
                 "ArrayOfComputeResourceConfigInfo" => {
                     Some(|raw| {
-                        let value: Vec<Box<dyn super::compute_resource_config_info_trait::ComputeResourceConfigInfoTrait>> = serde_json::from_str(raw.get())?;
+                        let value: Vec<Box<dyn super::traits::ComputeResourceConfigInfoTrait>> = serde_json::from_str(raw.get())?;
                         Ok(VimAny::Value(ValueElements::ArrayOfComputeResourceConfigInfo(value)))
                     })
                 }
                 "ArrayOfComputeResourceConfigSpec" => {
                     Some(|raw| {
-                        let value: Vec<Box<dyn super::compute_resource_config_spec_trait::ComputeResourceConfigSpecTrait>> = serde_json::from_str(raw.get())?;
+                        let value: Vec<Box<dyn super::traits::ComputeResourceConfigSpecTrait>> = serde_json::from_str(raw.get())?;
                         Ok(VimAny::Value(ValueElements::ArrayOfComputeResourceConfigSpec(value)))
                     })
                 }
@@ -40341,7 +40341,7 @@ fn get_value_deserializer_32(type_name: &str) -> Option<fn(&serde_json::value::R
         0x75734368616e6765 => { // usChange
             if type_name == "ArrayOfClusterStatusChangedEvent" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::cluster_status_changed_event_trait::ClusterStatusChangedEventTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::ClusterStatusChangedEventTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfClusterStatusChangedEvent(value)))
                 })
             } else { None }
@@ -40446,7 +40446,7 @@ fn get_value_deserializer_33(type_name: &str) -> Option<fn(&serde_json::value::R
         0x4465766963654261 => { // DeviceBa
             if type_name == "ArrayOfVirtualDeviceBackingOption" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::virtual_device_backing_option_trait::VirtualDeviceBackingOptionTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VirtualDeviceBackingOptionTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVirtualDeviceBackingOption(value)))
                 })
             } else { None }
@@ -40486,7 +40486,7 @@ fn get_value_deserializer_33(type_name: &str) -> Option<fn(&serde_json::value::R
         0x4472734661756c74 => { // DrsFault
             if type_name == "ArrayOfClusterDrsFaultsFaultsByVm" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::cluster_drs_faults_faults_by_vm_trait::ClusterDrsFaultsFaultsByVmTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::ClusterDrsFaultsFaultsByVmTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfClusterDrsFaultsFaultsByVm(value)))
                 })
             } else { None }
@@ -40817,7 +40817,7 @@ fn get_value_deserializer_33(type_name: &str) -> Option<fn(&serde_json::value::R
         0x56534865616c7468 => { // VSHealth
             if type_name == "ArrayOfVMwareDVSHealthCheckConfig" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::v_mware_dvs_health_check_config_trait::VMwareDvsHealthCheckConfigTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VMwareDvsHealthCheckConfigTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVMwareDvsHealthCheckConfig(value)))
                 })
             } else { None }
@@ -40899,7 +40899,7 @@ fn get_value_deserializer_33(type_name: &str) -> Option<fn(&serde_json::value::R
         0x6369656e74526573 => { // cientRes
             if type_name == "ArrayOfInsufficientResourcesFault" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::insufficient_resources_fault_trait::InsufficientResourcesFaultTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::InsufficientResourcesFaultTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfInsufficientResourcesFault(value)))
                 })
             } else { None }
@@ -41205,7 +41205,7 @@ fn get_value_deserializer_33(type_name: &str) -> Option<fn(&serde_json::value::R
         0x6e6462794d6f6465 => { // ndbyMode
             if type_name == "ArrayOfExitStandbyModeFailedEvent" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::exit_standby_mode_failed_event_trait::ExitStandbyModeFailedEventTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::ExitStandbyModeFailedEventTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfExitStandbyModeFailedEvent(value)))
                 })
             } else { None }
@@ -41221,7 +41221,7 @@ fn get_value_deserializer_33(type_name: &str) -> Option<fn(&serde_json::value::R
         0x6e656374496e666f => { // nectInfo
             if type_name == "ArrayOfHostConnectInfoNetworkInfo" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::host_connect_info_network_info_trait::HostConnectInfoNetworkInfoTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::HostConnectInfoNetworkInfoTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfHostConnectInfoNetworkInfo(value)))
                 })
             } else { None }
@@ -41317,7 +41317,7 @@ fn get_value_deserializer_33(type_name: &str) -> Option<fn(&serde_json::value::R
         0x72654e6f74577269 => { // reNotWri
             if type_name == "ArrayOfDatastoreNotWritableOnHost" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::datastore_not_writable_on_host_trait::DatastoreNotWritableOnHostTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::DatastoreNotWritableOnHostTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfDatastoreNotWritableOnHost(value)))
                 })
             } else { None }
@@ -41414,7 +41414,7 @@ fn get_value_deserializer_33(type_name: &str) -> Option<fn(&serde_json::value::R
         0x7468537461747573 => { // thStatus
             if type_name == "ArrayOfDvsHealthStatusChangeEvent" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::dvs_health_status_change_event_trait::DvsHealthStatusChangeEventTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::DvsHealthStatusChangeEventTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfDvsHealthStatusChangeEvent(value)))
                 })
             } else { None }
@@ -41542,7 +41542,7 @@ fn get_value_deserializer_33(type_name: &str) -> Option<fn(&serde_json::value::R
         0x7a6174696f6e4970 => { // zationIp
             if type_name == "ArrayOfCustomizationIpV6Generator" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::customization_ip_v_6_generator_trait::CustomizationIpV6GeneratorTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::CustomizationIpV6GeneratorTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfCustomizationIpV6Generator(value)))
                 })
             } else { None }
@@ -41623,7 +41623,7 @@ fn get_value_deserializer_34(type_name: &str) -> Option<fn(&serde_json::value::R
         0x4465766963655063 => { // DevicePc
             if type_name == "ArrayOfVirtualDevicePciBusSlotInfo" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::virtual_device_pci_bus_slot_info_trait::VirtualDevicePciBusSlotInfoTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VirtualDevicePciBusSlotInfoTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVirtualDevicePciBusSlotInfo(value)))
                 })
             } else { None }
@@ -41631,7 +41631,7 @@ fn get_value_deserializer_34(type_name: &str) -> Option<fn(&serde_json::value::R
         0x4465766963655552 => { // DeviceUR
             if type_name == "ArrayOfVirtualDeviceURIBackingInfo" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::virtual_device_uri_backing_info_trait::VirtualDeviceUriBackingInfoTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VirtualDeviceUriBackingInfoTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVirtualDeviceUriBackingInfo(value)))
                 })
             } else { None }
@@ -41760,7 +41760,7 @@ fn get_value_deserializer_34(type_name: &str) -> Option<fn(&serde_json::value::R
         0x506f6c6963794f70 => { // PolicyOp
             if type_name == "ArrayOfProfilePolicyOptionMetadata" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::profile_policy_option_metadata_trait::ProfilePolicyOptionMetadataTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::ProfilePolicyOptionMetadataTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfProfilePolicyOptionMetadata(value)))
                 })
             } else { None }
@@ -41816,7 +41816,7 @@ fn get_value_deserializer_34(type_name: &str) -> Option<fn(&serde_json::value::R
         0x53415441436f6e74 => { // SATACont
             if type_name == "ArrayOfVirtualSATAControllerOption" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::virtual_sata_controller_option_trait::VirtualSataControllerOptionTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VirtualSataControllerOptionTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVirtualSataControllerOption(value)))
                 })
             } else { None }
@@ -41824,7 +41824,7 @@ fn get_value_deserializer_34(type_name: &str) -> Option<fn(&serde_json::value::R
         0x53435349436f6e74 => { // SCSICont
             if type_name == "ArrayOfVirtualSCSIControllerOption" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::virtual_scsi_controller_option_trait::VirtualScsiControllerOptionTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VirtualScsiControllerOptionTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVirtualScsiControllerOption(value)))
                 })
             } else { None }
@@ -41832,7 +41832,7 @@ fn get_value_deserializer_34(type_name: &str) -> Option<fn(&serde_json::value::R
         0x53657269616c697a => { // Serializ
             if type_name == "ArrayOfProfileSerializedCreateSpec" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::profile_serialized_create_spec_trait::ProfileSerializedCreateSpecTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::ProfileSerializedCreateSpecTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfProfileSerializedCreateSpec(value)))
                 })
             } else { None }
@@ -41912,7 +41912,7 @@ fn get_value_deserializer_34(type_name: &str) -> Option<fn(&serde_json::value::R
         0x6265724865616c74 => { // berHealt
             if type_name == "ArrayOfHostMemberHealthCheckResult" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::host_member_health_check_result_trait::HostMemberHealthCheckResultTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::HostMemberHealthCheckResultTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfHostMemberHealthCheckResult(value)))
                 })
             } else { None }
@@ -41936,7 +41936,7 @@ fn get_value_deserializer_34(type_name: &str) -> Option<fn(&serde_json::value::R
         0x6369656e74537461 => { // cientSta
             if type_name == "ArrayOfInsufficientStandbyResource" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::insufficient_standby_resource_trait::InsufficientStandbyResourceTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::InsufficientStandbyResourceTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfInsufficientStandbyResource(value)))
                 })
             } else { None }
@@ -41976,7 +41976,7 @@ fn get_value_deserializer_34(type_name: &str) -> Option<fn(&serde_json::value::R
         0x655472616e73706f => { // eTranspo
             if type_name == "ArrayOfHostNvmeTransportParameters" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::host_nvme_transport_parameters_trait::HostNvmeTransportParametersTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::HostNvmeTransportParametersTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfHostNvmeTransportParameters(value)))
                 })
             } else { None }
@@ -42087,7 +42087,7 @@ fn get_value_deserializer_34(type_name: &str) -> Option<fn(&serde_json::value::R
         0x68656e7469636174 => { // henticat
             if type_name == "ArrayOfHostAuthenticationStoreInfo" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::host_authentication_store_info_trait::HostAuthenticationStoreInfoTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::HostAuthenticationStoreInfoTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfHostAuthenticationStoreInfo(value)))
                 })
             } else { None }
@@ -42546,7 +42546,7 @@ fn get_value_deserializer_35(type_name: &str) -> Option<fn(&serde_json::value::R
         0x61747572 => { // atur
             if type_name == "ArrayOfMigrationFeatureNotSupported" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::migration_feature_not_supported_trait::MigrationFeatureNotSupportedTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::MigrationFeatureNotSupportedTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfMigrationFeatureNotSupported(value)))
                 })
             } else { None }
@@ -42586,7 +42586,7 @@ fn get_value_deserializer_35(type_name: &str) -> Option<fn(&serde_json::value::R
         0x63654669 => { // ceFi
             if type_name == "ArrayOfVirtualDeviceFileBackingInfo" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::virtual_device_file_backing_info_trait::VirtualDeviceFileBackingInfoTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VirtualDeviceFileBackingInfoTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVirtualDeviceFileBackingInfo(value)))
                 })
             } else { None }
@@ -42594,7 +42594,7 @@ fn get_value_deserializer_35(type_name: &str) -> Option<fn(&serde_json::value::R
         0x63655069 => { // cePi
             if type_name == "ArrayOfVirtualDevicePipeBackingInfo" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::virtual_device_pipe_backing_info_trait::VirtualDevicePipeBackingInfoTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VirtualDevicePipeBackingInfoTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVirtualDevicePipeBackingInfo(value)))
                 })
             } else { None }
@@ -42764,7 +42764,7 @@ fn get_value_deserializer_35(type_name: &str) -> Option<fn(&serde_json::value::R
         0x696e6544 => { // ineD
             if type_name == "ArrayOfVirtualMachineDiskDeviceInfo" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::virtual_machine_disk_device_info_trait::VirtualMachineDiskDeviceInfoTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VirtualMachineDiskDeviceInfoTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVirtualMachineDiskDeviceInfo(value)))
                 })
             } else { None }
@@ -43249,7 +43249,7 @@ fn get_value_deserializer_36(type_name: &str) -> Option<fn(&serde_json::value::R
         0x49426163 => { // IBac
             if type_name == "ArrayOfVirtualDeviceURIBackingOption" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::virtual_device_uri_backing_option_trait::VirtualDeviceUriBackingOptionTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VirtualDeviceUriBackingOptionTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVirtualDeviceUriBackingOption(value)))
                 })
             } else { None }
@@ -43353,7 +43353,7 @@ fn get_value_deserializer_36(type_name: &str) -> Option<fn(&serde_json::value::R
         0x63656452 => { // cedR
             if type_name == "ArrayOfClusterDasAdvancedRuntimeInfo" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::cluster_das_advanced_runtime_info_trait::ClusterDasAdvancedRuntimeInfoTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::ClusterDasAdvancedRuntimeInfoTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfClusterDasAdvancedRuntimeInfo(value)))
                 })
             } else { None }
@@ -43425,7 +43425,7 @@ fn get_value_deserializer_36(type_name: &str) -> Option<fn(&serde_json::value::R
         0x656e7469 => { // enti
             if type_name == "ArrayOfCustomizationIdentitySettings" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::customization_identity_settings_trait::CustomizationIdentitySettingsTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::CustomizationIdentitySettingsTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfCustomizationIdentitySettings(value)))
                 })
             } else { None }
@@ -43506,7 +43506,7 @@ fn get_value_deserializer_36(type_name: &str) -> Option<fn(&serde_json::value::R
         0x696c6542 => { // ileB
             if type_name == "ArrayOfBaseConfigInfoFileBackingInfo" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::base_config_info_file_backing_info_trait::BaseConfigInfoFileBackingInfoTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::BaseConfigInfoFileBackingInfoTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfBaseConfigInfoFileBackingInfo(value)))
                 })
             } else { None }
@@ -43811,7 +43811,7 @@ fn get_value_deserializer_36(type_name: &str) -> Option<fn(&serde_json::value::R
         0x74436170 => { // tCap
             if type_name == "ArrayOfInsufficientHostCapacityFault" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::insufficient_host_capacity_fault_trait::InsufficientHostCapacityFaultTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::InsufficientHostCapacityFaultTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfInsufficientHostCapacityFault(value)))
                 })
             } else { None }
@@ -44085,7 +44085,7 @@ fn get_value_deserializer_37(type_name: &str) -> Option<fn(&serde_json::value::R
         0x6365446576696365 => { // ceDevice
             if type_name == "ArrayOfVirtualDeviceDeviceBackingInfo" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::virtual_device_device_backing_info_trait::VirtualDeviceDeviceBackingInfoTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VirtualDeviceDeviceBackingInfoTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVirtualDeviceDeviceBackingInfo(value)))
                 })
             } else { None }
@@ -44093,7 +44093,7 @@ fn get_value_deserializer_37(type_name: &str) -> Option<fn(&serde_json::value::R
         0x636546696c654261 => { // ceFileBa
             if type_name == "ArrayOfVirtualDeviceFileBackingOption" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::virtual_device_file_backing_option_trait::VirtualDeviceFileBackingOptionTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VirtualDeviceFileBackingOptionTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVirtualDeviceFileBackingOption(value)))
                 })
             } else { None }
@@ -44101,7 +44101,7 @@ fn get_value_deserializer_37(type_name: &str) -> Option<fn(&serde_json::value::R
         0x6365506970654261 => { // cePipeBa
             if type_name == "ArrayOfVirtualDevicePipeBackingOption" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::virtual_device_pipe_backing_option_trait::VirtualDevicePipeBackingOptionTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VirtualDevicePipeBackingOptionTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVirtualDevicePipeBackingOption(value)))
                 })
             } else { None }
@@ -44117,7 +44117,7 @@ fn get_value_deserializer_37(type_name: &str) -> Option<fn(&serde_json::value::R
         0x646d697373696f6e => { // dmission
             if type_name == "ArrayOfClusterDasAdmissionControlInfo" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::cluster_das_admission_control_info_trait::ClusterDasAdmissionControlInfoTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::ClusterDasAdmissionControlInfoTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfClusterDasAdmissionControlInfo(value)))
                 })
             } else { None }
@@ -44197,7 +44197,7 @@ fn get_value_deserializer_37(type_name: &str) -> Option<fn(&serde_json::value::R
         0x696e654775657374 => { // ineGuest
             if type_name == "ArrayOfVirtualMachineGuestQuiesceSpec" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::virtual_machine_guest_quiesce_spec_trait::VirtualMachineGuestQuiesceSpecTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VirtualMachineGuestQuiesceSpecTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVirtualMachineGuestQuiesceSpec(value)))
                 })
             } else { None }
@@ -44631,7 +44631,7 @@ fn get_value_deserializer_38(type_name: &str) -> Option<fn(&serde_json::value::R
         0x53696e67 => { // Sing
             if type_name == "ArrayOfVmfsDatastoreSingleExtentOption" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::vmfs_datastore_single_extent_option_trait::VmfsDatastoreSingleExtentOptionTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VmfsDatastoreSingleExtentOptionTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVmfsDatastoreSingleExtentOption(value)))
                 })
             } else { None }
@@ -45004,7 +45004,7 @@ fn get_value_deserializer_38(type_name: &str) -> Option<fn(&serde_json::value::R
         0x6e656c54 => { // nelT
             if type_name == "ArrayOfHostFibreChannelTargetTransport" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::host_fibre_channel_target_transport_trait::HostFibreChannelTargetTransportTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::HostFibreChannelTargetTransportTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfHostFibreChannelTargetTransport(value)))
                 })
             } else { None }
@@ -45053,7 +45053,7 @@ fn get_value_deserializer_38(type_name: &str) -> Option<fn(&serde_json::value::R
         0x706f7274 => { // port
             if type_name == "ArrayOfHostDataTransportConnectionInfo" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::host_data_transport_connection_info_trait::HostDataTransportConnectionInfoTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::HostDataTransportConnectionInfoTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfHostDataTransportConnectionInfo(value)))
                 })
             } else { None }
@@ -45327,7 +45327,7 @@ fn get_value_deserializer_39(type_name: &str) -> Option<fn(&serde_json::value::R
         0x63695061 => { // ciPa
             if type_name == "ArrayOfVirtualMachinePciPassthroughInfo" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::virtual_machine_pci_passthrough_info_trait::VirtualMachinePciPassthroughInfoTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VirtualMachinePciPassthroughInfoTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVirtualMachinePciPassthroughInfo(value)))
                 })
             } else { None }
@@ -45408,7 +45408,7 @@ fn get_value_deserializer_39(type_name: &str) -> Option<fn(&serde_json::value::R
         0x65727669 => { // ervi
             if type_name == "ArrayOfSessionManagerServiceRequestSpec" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::session_manager_service_request_spec_trait::SessionManagerServiceRequestSpecTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::SessionManagerServiceRequestSpecTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfSessionManagerServiceRequestSpec(value)))
                 })
             } else { None }
@@ -45514,7 +45514,7 @@ fn get_value_deserializer_39(type_name: &str) -> Option<fn(&serde_json::value::R
         0x69747943 => { // ityC
             if type_name == "ArrayOfHostProfilesEntityCustomizations" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::host_profiles_entity_customizations_trait::HostProfilesEntityCustomizationsTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::HostProfilesEntityCustomizationsTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfHostProfilesEntityCustomizations(value)))
                 })
             } else { None }
@@ -45707,7 +45707,7 @@ fn get_value_deserializer_39(type_name: &str) -> Option<fn(&serde_json::value::R
         0x73696f6e => { // sion
             if type_name == "ArrayOfClusterDasAdmissionControlPolicy" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::cluster_das_admission_control_policy_trait::ClusterDasAdmissionControlPolicyTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::ClusterDasAdmissionControlPolicyTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfClusterDasAdmissionControlPolicy(value)))
                 })
             } else { None }
@@ -45772,7 +45772,7 @@ fn get_value_deserializer_39(type_name: &str) -> Option<fn(&serde_json::value::R
             match type_name {
                 "ArrayOfVirtualDeviceDeviceBackingOption" => {
                     Some(|raw| {
-                        let value: Vec<Box<dyn super::virtual_device_device_backing_option_trait::VirtualDeviceDeviceBackingOptionTrait>> = serde_json::from_str(raw.get())?;
+                        let value: Vec<Box<dyn super::traits::VirtualDeviceDeviceBackingOptionTrait>> = serde_json::from_str(raw.get())?;
                         Ok(VimAny::Value(ValueElements::ArrayOfVirtualDeviceDeviceBackingOption(value)))
                     })
                 }
@@ -45837,7 +45837,7 @@ fn get_value_deserializer_40(type_name: &str) -> Option<fn(&serde_json::value::R
         0x52617744 => { // RawD
             if type_name == "ArrayOfVirtualDiskRawDiskVer2BackingInfo" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::virtual_disk_raw_disk_ver_2_backing_info_trait::VirtualDiskRawDiskVer2BackingInfoTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VirtualDiskRawDiskVer2BackingInfoTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVirtualDiskRawDiskVer2BackingInfo(value)))
                 })
             } else { None }
@@ -45958,7 +45958,7 @@ fn get_value_deserializer_40(type_name: &str) -> Option<fn(&serde_json::value::R
                 }
                 "ArrayOfVirtualMachineSriovDevicePoolInfo" => {
                     Some(|raw| {
-                        let value: Vec<Box<dyn super::virtual_machine_sriov_device_pool_info_trait::VirtualMachineSriovDevicePoolInfoTrait>> = serde_json::from_str(raw.get())?;
+                        let value: Vec<Box<dyn super::traits::VirtualMachineSriovDevicePoolInfoTrait>> = serde_json::from_str(raw.get())?;
                         Ok(VimAny::Value(ValueElements::ArrayOfVirtualMachineSriovDevicePoolInfo(value)))
                     })
                 }
@@ -46089,7 +46089,7 @@ fn get_value_deserializer_40(type_name: &str) -> Option<fn(&serde_json::value::R
         0x706c696e => { // plin
             if type_name == "ArrayOfHostMemberUplinkHealthCheckResult" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::host_member_uplink_health_check_result_trait::HostMemberUplinkHealthCheckResultTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::HostMemberUplinkHealthCheckResultTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfHostMemberUplinkHealthCheckResult(value)))
                 })
             } else { None }
@@ -46243,7 +46243,7 @@ fn get_value_deserializer_40(type_name: &str) -> Option<fn(&serde_json::value::R
         0x77617265 => { // ware
             if type_name == "ArrayOfVirtualHardwareCompatibilityIssue" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::virtual_hardware_compatibility_issue_trait::VirtualHardwareCompatibilityIssueTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VirtualHardwareCompatibilityIssueTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVirtualHardwareCompatibilityIssue(value)))
                 })
             } else { None }
@@ -46333,7 +46333,7 @@ fn get_value_deserializer_41(type_name: &str) -> Option<fn(&serde_json::value::R
         0x4c6f676963616c55 => { // LogicalU
             if type_name == "ArrayOfHostMultipathInfoLogicalUnitPolicy" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::host_multipath_info_logical_unit_policy_trait::HostMultipathInfoLogicalUnitPolicyTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::HostMultipathInfoLogicalUnitPolicyTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfHostMultipathInfoLogicalUnitPolicy(value)))
                 })
             } else { None }
@@ -46744,7 +46744,7 @@ fn get_value_deserializer_42(type_name: &str) -> Option<fn(&serde_json::value::R
         0x52617744 => { // RawD
             if type_name == "ArrayOfVirtualDiskRawDiskVer2BackingOption" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::virtual_disk_raw_disk_ver_2_backing_option_trait::VirtualDiskRawDiskVer2BackingOptionTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VirtualDiskRawDiskVer2BackingOptionTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVirtualDiskRawDiskVer2BackingOption(value)))
                 })
             } else { None }
@@ -46752,7 +46752,7 @@ fn get_value_deserializer_42(type_name: &str) -> Option<fn(&serde_json::value::R
         0x53797374 => { // Syst
             if type_name == "ArrayOfVsanUpgradeSystemUpgradeHistoryItem" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::vsan_upgrade_system_upgrade_history_item_trait::VsanUpgradeSystemUpgradeHistoryItemTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VsanUpgradeSystemUpgradeHistoryItemTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVsanUpgradeSystemUpgradeHistoryItem(value)))
                 })
             } else { None }
@@ -47191,7 +47191,7 @@ fn get_value_deserializer_43(type_name: &str) -> Option<fn(&serde_json::value::R
             match type_name {
                 "ArrayOfVirtualDeviceRemoteDeviceBackingInfo" => {
                     Some(|raw| {
-                        let value: Vec<Box<dyn super::virtual_device_remote_device_backing_info_trait::VirtualDeviceRemoteDeviceBackingInfoTrait>> = serde_json::from_str(raw.get())?;
+                        let value: Vec<Box<dyn super::traits::VirtualDeviceRemoteDeviceBackingInfoTrait>> = serde_json::from_str(raw.get())?;
                         Ok(VimAny::Value(ValueElements::ArrayOfVirtualDeviceRemoteDeviceBackingInfo(value)))
                     })
                 }
@@ -47352,7 +47352,7 @@ fn get_value_deserializer_43(type_name: &str) -> Option<fn(&serde_json::value::R
         0x74656d50 => { // temP
             if type_name == "ArrayOfVsanUpgradeSystemPreflightCheckIssue" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::vsan_upgrade_system_preflight_check_issue_trait::VsanUpgradeSystemPreflightCheckIssueTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VsanUpgradeSystemPreflightCheckIssueTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVsanUpgradeSystemPreflightCheckIssue(value)))
                 })
             } else { None }
@@ -47661,7 +47661,7 @@ fn get_value_deserializer_44(type_name: &str) -> Option<fn(&serde_json::value::R
         0x75726974 => { // urit
             if type_name == "ArrayOfHostTpmBootSecurityOptionEventDetails" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::host_tpm_boot_security_option_event_details_trait::HostTpmBootSecurityOptionEventDetailsTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::HostTpmBootSecurityOptionEventDetailsTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfHostTpmBootSecurityOptionEventDetails(value)))
                 })
             } else { None }
@@ -47703,7 +47703,7 @@ fn get_value_deserializer_45(type_name: &str) -> Option<fn(&serde_json::value::R
         0x616c4465 => { // alDe
             if type_name == "ArrayOfVirtualDeviceRemoteDeviceBackingOption" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::virtual_device_remote_device_backing_option_trait::VirtualDeviceRemoteDeviceBackingOptionTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VirtualDeviceRemoteDeviceBackingOptionTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVirtualDeviceRemoteDeviceBackingOption(value)))
                 })
             } else { None }
@@ -47742,7 +47742,7 @@ fn get_value_deserializer_45(type_name: &str) -> Option<fn(&serde_json::value::R
                 }
                 "ArrayOfVirtualPCIPassthroughPluginBackingInfo" => {
                     Some(|raw| {
-                        let value: Vec<Box<dyn super::virtual_pci_passthrough_plugin_backing_info_trait::VirtualPciPassthroughPluginBackingInfoTrait>> = serde_json::from_str(raw.get())?;
+                        let value: Vec<Box<dyn super::traits::VirtualPciPassthroughPluginBackingInfoTrait>> = serde_json::from_str(raw.get())?;
                         Ok(VimAny::Value(ValueElements::ArrayOfVirtualPciPassthroughPluginBackingInfo(value)))
                     })
                 }
@@ -47776,7 +47776,7 @@ fn get_value_deserializer_45(type_name: &str) -> Option<fn(&serde_json::value::R
         0x65446973 => { // eDis
             if type_name == "ArrayOfVmwareDistributedVirtualSwitchVlanSpec" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::vmware_distributed_virtual_switch_vlan_spec_trait::VmwareDistributedVirtualSwitchVlanSpecTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VmwareDistributedVirtualSwitchVlanSpecTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVmwareDistributedVirtualSwitchVlanSpec(value)))
                 })
             } else { None }
@@ -47998,13 +47998,13 @@ fn get_value_deserializer_46(type_name: &str) -> Option<fn(&serde_json::value::R
             match type_name {
                 "ArrayOfVirtualMachineBaseIndependentFilterSpec" => {
                     Some(|raw| {
-                        let value: Vec<Box<dyn super::virtual_machine_base_independent_filter_spec_trait::VirtualMachineBaseIndependentFilterSpecTrait>> = serde_json::from_str(raw.get())?;
+                        let value: Vec<Box<dyn super::traits::VirtualMachineBaseIndependentFilterSpecTrait>> = serde_json::from_str(raw.get())?;
                         Ok(VimAny::Value(ValueElements::ArrayOfVirtualMachineBaseIndependentFilterSpec(value)))
                     })
                 }
                 "ArrayOfVirtualMachineBootOptionsBootableDevice" => {
                     Some(|raw| {
-                        let value: Vec<Box<dyn super::virtual_machine_boot_options_bootable_device_trait::VirtualMachineBootOptionsBootableDeviceTrait>> = serde_json::from_str(raw.get())?;
+                        let value: Vec<Box<dyn super::traits::VirtualMachineBootOptionsBootableDeviceTrait>> = serde_json::from_str(raw.get())?;
                         Ok(VimAny::Value(ValueElements::ArrayOfVirtualMachineBootOptionsBootableDevice(value)))
                     })
                 }
@@ -48271,7 +48271,7 @@ fn get_value_deserializer_47(type_name: &str) -> Option<fn(&serde_json::value::R
         0x7567696e4261636b => { // uginBack
             if type_name == "ArrayOfVirtualPCIPassthroughPluginBackingOption" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::virtual_pci_passthrough_plugin_backing_option_trait::VirtualPciPassthroughPluginBackingOptionTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VirtualPciPassthroughPluginBackingOptionTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVirtualPciPassthroughPluginBackingOption(value)))
                 })
             } else { None }
@@ -48328,7 +48328,7 @@ fn get_value_deserializer_48(type_name: &str) -> Option<fn(&serde_json::value::R
         0x56697274 => { // Virt
             if type_name == "ArrayOfDistributedVirtualSwitchHostMemberBacking" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::distributed_virtual_switch_host_member_backing_trait::DistributedVirtualSwitchHostMemberBackingTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::DistributedVirtualSwitchHostMemberBackingTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfDistributedVirtualSwitchHostMemberBacking(value)))
                 })
             } else { None }
@@ -48539,7 +48539,7 @@ fn get_value_deserializer_49(type_name: &str) -> Option<fn(&serde_json::value::R
         0x6c696461 => { // lida
             if type_name == "ArrayOfClusterComputeResourceValidationResultBase" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::cluster_compute_resource_validation_result_base_trait::ClusterComputeResourceValidationResultBaseTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::ClusterComputeResourceValidationResultBaseTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfClusterComputeResourceValidationResultBase(value)))
                 })
             } else { None }
@@ -48652,7 +48652,7 @@ fn get_value_deserializer_50(type_name: &str) -> Option<fn(&serde_json::value::R
         0x6e666967 => { // nfig
             if type_name == "ArrayOfHostSystemSwapConfigurationSystemSwapOption" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::host_system_swap_configuration_system_swap_option_trait::HostSystemSwapConfigurationSystemSwapOptionTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::HostSystemSwapConfigurationSystemSwapOptionTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfHostSystemSwapConfigurationSystemSwapOption(value)))
                 })
             } else { None }
@@ -48685,7 +48685,7 @@ fn get_value_deserializer_51(type_name: &str) -> Option<fn(&serde_json::value::R
         0x63654772 => { // ceGr
             if type_name == "ArrayOfVirtualMachineVirtualDeviceGroupsDeviceGroup" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::virtual_machine_virtual_device_groups_device_group_trait::VirtualMachineVirtualDeviceGroupsDeviceGroupTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VirtualMachineVirtualDeviceGroupsDeviceGroupTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVirtualMachineVirtualDeviceGroupsDeviceGroup(value)))
                 })
             } else { None }
@@ -49147,7 +49147,7 @@ fn get_value_deserializer_55(type_name: &str) -> Option<fn(&serde_json::value::R
         0x67657248 => { // gerH
             if type_name == "ArrayOfDistributedVirtualSwitchManagerHostDvsFilterSpec" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::distributed_virtual_switch_manager_host_dvs_filter_spec_trait::DistributedVirtualSwitchManagerHostDvsFilterSpecTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::DistributedVirtualSwitchManagerHostDvsFilterSpecTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfDistributedVirtualSwitchManagerHostDvsFilterSpec(value)))
                 })
             } else { None }
@@ -49236,7 +49236,7 @@ fn get_value_deserializer_56(type_name: &str) -> Option<fn(&serde_json::value::R
         0x75616c4d => { // ualM
             if type_name == "ArrayOfVirtualMachineDeviceRuntimeInfoDeviceRuntimeState" {
                 Some(|raw| {
-                    let value: Vec<Box<dyn super::virtual_machine_device_runtime_info_device_runtime_state_trait::VirtualMachineDeviceRuntimeInfoDeviceRuntimeStateTrait>> = serde_json::from_str(raw.get())?;
+                    let value: Vec<Box<dyn super::traits::VirtualMachineDeviceRuntimeInfoDeviceRuntimeStateTrait>> = serde_json::from_str(raw.get())?;
                     Ok(VimAny::Value(ValueElements::ArrayOfVirtualMachineDeviceRuntimeInfoDeviceRuntimeState(value)))
                 })
             } else { None }

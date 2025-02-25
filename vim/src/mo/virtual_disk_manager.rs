@@ -108,7 +108,7 @@ impl VirtualDiskManager {
     /// or destination datastore.
     /// 
     /// ***InvalidDiskFormat***: if the destination's format is not supported.
-    pub async fn copy_virtual_disk_task(&self, source_name: &str, source_datacenter: Option<&ManagedObjectReference>, dest_name: &str, dest_datacenter: Option<&ManagedObjectReference>, dest_spec: Option<&dyn crate::types::virtual_disk_spec_trait::VirtualDiskSpecTrait>, force: Option<bool>) -> Result<ManagedObjectReference> {
+    pub async fn copy_virtual_disk_task(&self, source_name: &str, source_datacenter: Option<&ManagedObjectReference>, dest_name: &str, dest_datacenter: Option<&ManagedObjectReference>, dest_spec: Option<&dyn crate::types::traits::VirtualDiskSpecTrait>, force: Option<bool>) -> Result<ManagedObjectReference> {
         let input = CopyVirtualDiskRequestType {source_name, source_datacenter, dest_name, dest_datacenter, dest_spec, force, };
         let path = format!("/VirtualDiskManager/{moId}/CopyVirtualDisk_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -155,7 +155,7 @@ impl VirtualDiskManager {
     /// ***FileFault***: if an error occurs creating the virtual disk.
     /// 
     /// ***InvalidDatastore***: if the operation cannot be performed on the datastore.
-    pub async fn create_virtual_disk_task(&self, name: &str, datacenter: Option<&ManagedObjectReference>, spec: &dyn crate::types::virtual_disk_spec_trait::VirtualDiskSpecTrait) -> Result<ManagedObjectReference> {
+    pub async fn create_virtual_disk_task(&self, name: &str, datacenter: Option<&ManagedObjectReference>, spec: &dyn crate::types::traits::VirtualDiskSpecTrait) -> Result<ManagedObjectReference> {
         let input = CreateVirtualDiskRequestType {name, datacenter, spec, };
         let path = format!("/VirtualDiskManager/{moId}/CreateVirtualDisk_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -517,7 +517,7 @@ impl VirtualDiskManager {
     /// 
     /// ***InvalidDatastore***: if the operation cannot be performed on the source
     /// or destination datastore.
-    pub async fn move_virtual_disk_task(&self, source_name: &str, source_datacenter: Option<&ManagedObjectReference>, dest_name: &str, dest_datacenter: Option<&ManagedObjectReference>, force: Option<bool>, profile: Option<&[Box<dyn crate::types::virtual_machine_profile_spec_trait::VirtualMachineProfileSpecTrait>]>) -> Result<ManagedObjectReference> {
+    pub async fn move_virtual_disk_task(&self, source_name: &str, source_datacenter: Option<&ManagedObjectReference>, dest_name: &str, dest_datacenter: Option<&ManagedObjectReference>, force: Option<bool>, profile: Option<&[Box<dyn crate::types::traits::VirtualMachineProfileSpecTrait>]>) -> Result<ManagedObjectReference> {
         let input = MoveVirtualDiskRequestType {source_name, source_datacenter, dest_name, dest_datacenter, force, profile, };
         let path = format!("/VirtualDiskManager/{moId}/MoveVirtualDisk_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -835,7 +835,7 @@ struct CopyVirtualDiskRequestType<'a> {
     dest_datacenter: Option<&'a ManagedObjectReference>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "destSpec")]
-    dest_spec: Option<&'a dyn crate::types::virtual_disk_spec_trait::VirtualDiskSpecTrait>,
+    dest_spec: Option<&'a dyn crate::types::traits::VirtualDiskSpecTrait>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     force: Option<bool>,
 }
@@ -845,7 +845,7 @@ struct CreateVirtualDiskRequestType<'a> {
     name: &'a str,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     datacenter: Option<&'a ManagedObjectReference>,
-    spec: &'a dyn crate::types::virtual_disk_spec_trait::VirtualDiskSpecTrait,
+    spec: &'a dyn crate::types::traits::VirtualDiskSpecTrait,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -912,7 +912,7 @@ struct MoveVirtualDiskRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     force: Option<bool>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    profile: Option<&'a [Box<dyn crate::types::virtual_machine_profile_spec_trait::VirtualMachineProfileSpecTrait>]>,
+    profile: Option<&'a [Box<dyn crate::types::traits::VirtualMachineProfileSpecTrait>]>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]

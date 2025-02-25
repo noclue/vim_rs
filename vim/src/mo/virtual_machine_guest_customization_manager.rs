@@ -65,7 +65,7 @@ impl VirtualMachineGuestCustomizationManager {
     /// is not sufficient to perform the guest customization.
     /// 
     /// ***CustomizationFault***: if a customization error occurs.
-    pub async fn abort_customization_task(&self, vm: &ManagedObjectReference, auth: &dyn crate::types::guest_authentication_trait::GuestAuthenticationTrait) -> Result<ManagedObjectReference> {
+    pub async fn abort_customization_task(&self, vm: &ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait) -> Result<ManagedObjectReference> {
         let input = AbortCustomizationRequestType {vm, auth, };
         let path = format!("/VirtualMachineGuestCustomizationManager/{moId}/AbortCustomization_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -123,7 +123,7 @@ impl VirtualMachineGuestCustomizationManager {
     /// is not sufficient to perform the guest customization.
     /// 
     /// ***CustomizationFault***: if a customization error occurs.
-    pub async fn customize_guest_task(&self, vm: &ManagedObjectReference, auth: &dyn crate::types::guest_authentication_trait::GuestAuthenticationTrait, spec: &CustomizationSpec, config_params: Option<&[Box<dyn crate::types::option_value_trait::OptionValueTrait>]>) -> Result<ManagedObjectReference> {
+    pub async fn customize_guest_task(&self, vm: &ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait, spec: &CustomizationSpec, config_params: Option<&[Box<dyn crate::types::traits::OptionValueTrait>]>) -> Result<ManagedObjectReference> {
         let input = CustomizeGuestRequestType {vm, auth, spec, config_params, };
         let path = format!("/VirtualMachineGuestCustomizationManager/{moId}/CustomizeGuest_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -174,7 +174,7 @@ impl VirtualMachineGuestCustomizationManager {
     /// is not sufficient to perform the guest customization.
     /// 
     /// ***CustomizationFault***: if a customization error occurs.
-    pub async fn start_guest_network_task(&self, vm: &ManagedObjectReference, auth: &dyn crate::types::guest_authentication_trait::GuestAuthenticationTrait) -> Result<ManagedObjectReference> {
+    pub async fn start_guest_network_task(&self, vm: &ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait) -> Result<ManagedObjectReference> {
         let input = StartGuestNetworkRequestType {vm, auth, };
         let path = format!("/VirtualMachineGuestCustomizationManager/{moId}/StartGuestNetwork_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -185,21 +185,21 @@ impl VirtualMachineGuestCustomizationManager {
 #[serde(tag="_typeName")]
 struct AbortCustomizationRequestType<'a> {
     vm: &'a ManagedObjectReference,
-    auth: &'a dyn crate::types::guest_authentication_trait::GuestAuthenticationTrait,
+    auth: &'a dyn crate::types::traits::GuestAuthenticationTrait,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct CustomizeGuestRequestType<'a> {
     vm: &'a ManagedObjectReference,
-    auth: &'a dyn crate::types::guest_authentication_trait::GuestAuthenticationTrait,
+    auth: &'a dyn crate::types::traits::GuestAuthenticationTrait,
     spec: &'a CustomizationSpec,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "configParams")]
-    config_params: Option<&'a [Box<dyn crate::types::option_value_trait::OptionValueTrait>]>,
+    config_params: Option<&'a [Box<dyn crate::types::traits::OptionValueTrait>]>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct StartGuestNetworkRequestType<'a> {
     vm: &'a ManagedObjectReference,
-    auth: &'a dyn crate::types::guest_authentication_trait::GuestAuthenticationTrait,
+    auth: &'a dyn crate::types::traits::GuestAuthenticationTrait,
 }

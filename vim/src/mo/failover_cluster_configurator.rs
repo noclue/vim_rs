@@ -117,7 +117,7 @@ impl FailoverClusterConfigurator {
     /// monitor the progress of the operation.
     /// 
     /// Refers instance of *Task*.
-    pub async fn create_witness_node_task(&self, witness_deployment_spec: &dyn crate::types::node_deployment_spec_trait::NodeDeploymentSpecTrait, source_vc_spec: &SourceNodeSpec) -> Result<ManagedObjectReference> {
+    pub async fn create_witness_node_task(&self, witness_deployment_spec: &dyn crate::types::traits::NodeDeploymentSpecTrait, source_vc_spec: &SourceNodeSpec) -> Result<ManagedObjectReference> {
         let input = CreateWitnessNodeRequestType {witness_deployment_spec, source_vc_spec, };
         let path = format!("/FailoverClusterConfigurator/{moId}/createWitnessNode_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -259,7 +259,7 @@ struct CreatePassiveNodeRequestType<'a> {
 #[serde(rename = "createWitnessNodeRequestType", tag = "_typeName")]
 struct CreateWitnessNodeRequestType<'a> {
     #[serde(rename = "witnessDeploymentSpec")]
-    witness_deployment_spec: &'a dyn crate::types::node_deployment_spec_trait::NodeDeploymentSpecTrait,
+    witness_deployment_spec: &'a dyn crate::types::traits::NodeDeploymentSpecTrait,
     #[serde(rename = "sourceVcSpec")]
     source_vc_spec: &'a SourceNodeSpec,
 }

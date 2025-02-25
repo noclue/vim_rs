@@ -785,7 +785,7 @@ impl VirtualMachine {
     /// ***InvalidState***: if the operation cannot be performed because of the
     /// virtual machine's current state. For example, the virtual machine
     /// configuration information is not available.
-    pub async fn create_snapshot_ex_task(&self, name: &str, description: Option<&str>, memory: bool, quiesce_spec: Option<&dyn crate::types::virtual_machine_guest_quiesce_spec_trait::VirtualMachineGuestQuiesceSpecTrait>) -> Result<ManagedObjectReference> {
+    pub async fn create_snapshot_ex_task(&self, name: &str, description: Option<&str>, memory: bool, quiesce_spec: Option<&dyn crate::types::traits::VirtualMachineGuestQuiesceSpecTrait>) -> Result<ManagedObjectReference> {
         let input = CreateSnapshotExRequestType {name, description, memory, quiesce_spec, };
         let path = format!("/VirtualMachine/{moId}/CreateSnapshotEx_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -979,7 +979,7 @@ impl VirtualMachine {
     /// ***InvalidPowerState***: If the virtual machine is not powered on.
     /// No connection drop actions will have been
     /// attempted if this is thrown.
-    pub async fn drop_connections(&self, list_of_connections: Option<&[Box<dyn crate::types::virtual_machine_connection_trait::VirtualMachineConnectionTrait>]>) -> Result<bool> {
+    pub async fn drop_connections(&self, list_of_connections: Option<&[Box<dyn crate::types::traits::VirtualMachineConnectionTrait>]>) -> Result<bool> {
         let input = DropConnectionsRequestType {list_of_connections, };
         let path = format!("/VirtualMachine/{moId}/DropConnections", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -1699,7 +1699,7 @@ impl VirtualMachine {
     /// to the request in a timely manner.
     /// 
     /// ***VmConfigFault***: If an error occurred.
-    pub async fn query_connections(&self) -> Result<Option<Vec<Box<dyn crate::types::virtual_machine_connection_trait::VirtualMachineConnectionTrait>>>> {
+    pub async fn query_connections(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::VirtualMachineConnectionTrait>>>> {
         let path = format!("/VirtualMachine/{moId}/QueryConnections", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         Ok(self.client.execute_option(req).await?)
@@ -1730,7 +1730,7 @@ impl VirtualMachine {
     /// 
     /// ***NotSupported***: if the virtual machine is a template or this operation
     /// is not supported.
-    pub async fn query_fault_tolerance_compatibility(&self) -> Result<Option<Vec<Box<dyn crate::types::method_fault_trait::MethodFaultTrait>>>> {
+    pub async fn query_fault_tolerance_compatibility(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::MethodFaultTrait>>>> {
         let path = format!("/VirtualMachine/{moId}/QueryFaultToleranceCompatibility", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         Ok(self.client.execute_option(req).await?)
@@ -1764,7 +1764,7 @@ impl VirtualMachine {
     /// 
     /// ***NotSupported***: if the virtual machine is a template or this operation
     /// is not supported.
-    pub async fn query_fault_tolerance_compatibility_ex(&self, for_legacy_ft: Option<bool>) -> Result<Option<Vec<Box<dyn crate::types::method_fault_trait::MethodFaultTrait>>>> {
+    pub async fn query_fault_tolerance_compatibility_ex(&self, for_legacy_ft: Option<bool>) -> Result<Option<Vec<Box<dyn crate::types::traits::MethodFaultTrait>>>> {
         let input = QueryFaultToleranceCompatibilityExRequestType {for_legacy_ft, };
         let path = format!("/VirtualMachine/{moId}/QueryFaultToleranceCompatibilityEx", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -3045,7 +3045,7 @@ impl VirtualMachine {
     /// events as long as they are still current. The
     /// *configStatus* property provides an overall status
     /// based on these events.
-    pub async fn config_issue(&self) -> Result<Option<Vec<Box<dyn crate::types::event_trait::EventTrait>>>> {
+    pub async fn config_issue(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::EventTrait>>>> {
         let path = format!("/VirtualMachine/{moId}/configIssue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         Ok(self.client.execute_option(req).await?)
@@ -3082,7 +3082,7 @@ impl VirtualMachine {
     /// Custom field values.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn custom_value(&self) -> Result<Option<Vec<Box<dyn crate::types::custom_field_value_trait::CustomFieldValueTrait>>>> {
+    pub async fn custom_value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/VirtualMachine/{moId}/customValue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         Ok(self.client.execute_option(req).await?)
@@ -3519,7 +3519,7 @@ impl VirtualMachine {
     /// a custom field definition.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::custom_field_value_trait::CustomFieldValueTrait>>>> {
+    pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/VirtualMachine/{moId}/value", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         Ok(self.client.execute_option(req).await?)
@@ -3605,7 +3605,7 @@ struct CreateSnapshotExRequestType<'a> {
     memory: bool,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "quiesceSpec")]
-    quiesce_spec: Option<&'a dyn crate::types::virtual_machine_guest_quiesce_spec_trait::VirtualMachineGuestQuiesceSpecTrait>,
+    quiesce_spec: Option<&'a dyn crate::types::traits::VirtualMachineGuestQuiesceSpecTrait>,
 }
 #[derive(serde::Serialize)]
 #[serde(rename = "CustomizeVMRequestType", tag = "_typeName")]
@@ -3628,7 +3628,7 @@ struct DisableSecondaryVmRequestType<'a> {
 struct DropConnectionsRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "listOfConnections")]
-    list_of_connections: Option<&'a [Box<dyn crate::types::virtual_machine_connection_trait::VirtualMachineConnectionTrait>]>,
+    list_of_connections: Option<&'a [Box<dyn crate::types::traits::VirtualMachineConnectionTrait>]>,
 }
 #[derive(serde::Serialize)]
 #[serde(rename = "EnableSecondaryVMRequestType", tag = "_typeName")]

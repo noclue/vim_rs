@@ -5,8 +5,8 @@ mod tests {
     use vim::types::structs::VirtualE1000;
     use vim::types::boxed_types::ValueElements;
     use vim::types::vim_any::VimAny;
-    use vim::types::virtual_device_trait::VirtualDeviceTrait;
-    use vim::types::virtual_ethernet_card_trait::VirtualEthernetCardTrait;
+    use vim::types::traits::VirtualDeviceTrait;
+    use vim::types::traits::VirtualEthernetCardTrait;
     use vim::types::enums::MoTypesEnum;
     use vim::types::convert::CastInto;
     use log::{debug, info};

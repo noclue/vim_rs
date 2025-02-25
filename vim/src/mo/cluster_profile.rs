@@ -131,7 +131,7 @@ impl ClusterProfile {
     /// ## Errors:
     ///
     /// ***DuplicateName***: If the profile with the new name already exists.
-    pub async fn update_cluster_profile(&self, config: &dyn crate::types::cluster_profile_config_spec_trait::ClusterProfileConfigSpecTrait) -> Result<()> {
+    pub async fn update_cluster_profile(&self, config: &dyn crate::types::traits::ClusterProfileConfigSpecTrait) -> Result<()> {
         let input = UpdateClusterProfileRequestType {config, };
         let path = format!("/ClusterProfile/{moId}/UpdateClusterProfile", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -152,7 +152,7 @@ impl ClusterProfile {
     /// Configuration data for the profile.
     /// 
     /// ***Required privileges:*** Profile.Edit
-    pub async fn config(&self) -> Result<Box<dyn crate::types::profile_config_info_trait::ProfileConfigInfoTrait>> {
+    pub async fn config(&self) -> Result<Box<dyn crate::types::traits::ProfileConfigInfoTrait>> {
         let path = format!("/ClusterProfile/{moId}/config", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         Ok(self.client.execute(req).await?)
@@ -214,5 +214,5 @@ struct DissociateProfileRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct UpdateClusterProfileRequestType<'a> {
-    config: &'a dyn crate::types::cluster_profile_config_spec_trait::ClusterProfileConfigSpecTrait,
+    config: &'a dyn crate::types::traits::ClusterProfileConfigSpecTrait,
 }

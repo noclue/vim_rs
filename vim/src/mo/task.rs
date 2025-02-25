@@ -125,7 +125,7 @@ impl Task {
     /// ***InvalidState***: If attempting to change states after
     /// task is completed or in error, or attempting to set the
     /// result or fault incorrectly
-    pub async fn set_task_state(&self, state: crate::types::enums::TaskInfoStateEnum, result: Option<VimAny>, fault: Option<&dyn crate::types::method_fault_trait::MethodFaultTrait>) -> Result<()> {
+    pub async fn set_task_state(&self, state: crate::types::enums::TaskInfoStateEnum, result: Option<VimAny>, fault: Option<&dyn crate::types::traits::MethodFaultTrait>) -> Result<()> {
         let input = SetTaskStateRequestType {state, result, fault, };
         let path = format!("/Task/{moId}/SetTaskState", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -154,7 +154,7 @@ impl Task {
     /// a custom field definition.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::custom_field_value_trait::CustomFieldValueTrait>>>> {
+    pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/Task/{moId}/value", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         Ok(self.client.execute_option(req).await?)
@@ -184,5 +184,5 @@ struct SetTaskStateRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     result: Option<VimAny>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    fault: Option<&'a dyn crate::types::method_fault_trait::MethodFaultTrait>,
+    fault: Option<&'a dyn crate::types::traits::MethodFaultTrait>,
 }

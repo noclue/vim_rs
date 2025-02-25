@@ -162,7 +162,7 @@ impl GuestAliasManager {
     /// mapCert is set and the certificate already
     /// exists in the mapping file for a
     /// different user.
-    pub async fn add_guest_alias(&self, vm: &ManagedObjectReference, auth: &dyn crate::types::guest_authentication_trait::GuestAuthenticationTrait, username: &str, map_cert: bool, base_64_cert: &str, alias_info: &GuestAuthAliasInfo) -> Result<()> {
+    pub async fn add_guest_alias(&self, vm: &ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait, username: &str, map_cert: bool, base_64_cert: &str, alias_info: &GuestAuthAliasInfo) -> Result<()> {
         let input = AddGuestAliasRequestType {vm, auth, username, map_cert, base_64_cert, alias_info, };
         let path = format!("/GuestAliasManager/{moId}/AddGuestAlias", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -220,7 +220,7 @@ impl GuestAliasManager {
     /// 
     /// ***OperationDisabledByGuest***: if the operation is not enabled due to
     /// guest agent configuration.
-    pub async fn list_guest_aliases(&self, vm: &ManagedObjectReference, auth: &dyn crate::types::guest_authentication_trait::GuestAuthenticationTrait, username: &str) -> Result<Option<Vec<GuestAliases>>> {
+    pub async fn list_guest_aliases(&self, vm: &ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait, username: &str) -> Result<Option<Vec<GuestAliases>>> {
         let input = ListGuestAliasesRequestType {vm, auth, username, };
         let path = format!("/GuestAliasManager/{moId}/ListGuestAliases", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -275,7 +275,7 @@ impl GuestAliasManager {
     /// 
     /// ***OperationDisabledByGuest***: if the operation is not enabled due to
     /// guest agent configuration.
-    pub async fn list_guest_mapped_aliases(&self, vm: &ManagedObjectReference, auth: &dyn crate::types::guest_authentication_trait::GuestAuthenticationTrait) -> Result<Option<Vec<GuestMappedAliases>>> {
+    pub async fn list_guest_mapped_aliases(&self, vm: &ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait) -> Result<Option<Vec<GuestMappedAliases>>> {
         let input = ListGuestMappedAliasesRequestType {vm, auth, };
         let path = format!("/GuestAliasManager/{moId}/ListGuestMappedAliases", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -345,7 +345,7 @@ impl GuestAliasManager {
     /// 
     /// ***OperationDisabledByGuest***: if the operation is not enabled due to
     /// guest agent configuration.
-    pub async fn remove_guest_alias(&self, vm: &ManagedObjectReference, auth: &dyn crate::types::guest_authentication_trait::GuestAuthenticationTrait, username: &str, base_64_cert: &str, subject: &dyn crate::types::guest_auth_subject_trait::GuestAuthSubjectTrait) -> Result<()> {
+    pub async fn remove_guest_alias(&self, vm: &ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait, username: &str, base_64_cert: &str, subject: &dyn crate::types::traits::GuestAuthSubjectTrait) -> Result<()> {
         let input = RemoveGuestAliasRequestType {vm, auth, username, base_64_cert, subject, };
         let path = format!("/GuestAliasManager/{moId}/RemoveGuestAlias", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -413,7 +413,7 @@ impl GuestAliasManager {
     /// 
     /// ***OperationDisabledByGuest***: if the operation is not enabled due to
     /// guest agent configuration.
-    pub async fn remove_guest_alias_by_cert(&self, vm: &ManagedObjectReference, auth: &dyn crate::types::guest_authentication_trait::GuestAuthenticationTrait, username: &str, base_64_cert: &str) -> Result<()> {
+    pub async fn remove_guest_alias_by_cert(&self, vm: &ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait, username: &str, base_64_cert: &str) -> Result<()> {
         let input = RemoveGuestAliasByCertRequestType {vm, auth, username, base_64_cert, };
         let path = format!("/GuestAliasManager/{moId}/RemoveGuestAliasByCert", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -424,7 +424,7 @@ impl GuestAliasManager {
 #[serde(tag="_typeName")]
 struct AddGuestAliasRequestType<'a> {
     vm: &'a ManagedObjectReference,
-    auth: &'a dyn crate::types::guest_authentication_trait::GuestAuthenticationTrait,
+    auth: &'a dyn crate::types::traits::GuestAuthenticationTrait,
     username: &'a str,
     #[serde(rename = "mapCert")]
     map_cert: bool,
@@ -437,30 +437,30 @@ struct AddGuestAliasRequestType<'a> {
 #[serde(tag="_typeName")]
 struct ListGuestAliasesRequestType<'a> {
     vm: &'a ManagedObjectReference,
-    auth: &'a dyn crate::types::guest_authentication_trait::GuestAuthenticationTrait,
+    auth: &'a dyn crate::types::traits::GuestAuthenticationTrait,
     username: &'a str,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct ListGuestMappedAliasesRequestType<'a> {
     vm: &'a ManagedObjectReference,
-    auth: &'a dyn crate::types::guest_authentication_trait::GuestAuthenticationTrait,
+    auth: &'a dyn crate::types::traits::GuestAuthenticationTrait,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct RemoveGuestAliasRequestType<'a> {
     vm: &'a ManagedObjectReference,
-    auth: &'a dyn crate::types::guest_authentication_trait::GuestAuthenticationTrait,
+    auth: &'a dyn crate::types::traits::GuestAuthenticationTrait,
     username: &'a str,
     #[serde(rename = "base64Cert")]
     base_64_cert: &'a str,
-    subject: &'a dyn crate::types::guest_auth_subject_trait::GuestAuthSubjectTrait,
+    subject: &'a dyn crate::types::traits::GuestAuthSubjectTrait,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct RemoveGuestAliasByCertRequestType<'a> {
     vm: &'a ManagedObjectReference,
-    auth: &'a dyn crate::types::guest_authentication_trait::GuestAuthenticationTrait,
+    auth: &'a dyn crate::types::traits::GuestAuthenticationTrait,
     username: &'a str,
     #[serde(rename = "base64Cert")]
     base_64_cert: &'a str,

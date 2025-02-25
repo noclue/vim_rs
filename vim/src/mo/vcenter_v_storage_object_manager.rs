@@ -304,7 +304,7 @@ impl VcenterVStorageObjectManager {
     /// ***InvalidState***: If the operation cannot be performed on the disk.
     /// 
     /// ***NotFound***: If specified virtual storage object cannot be found.
-    pub async fn create_disk_from_snapshot_task(&self, id: &Id, datastore: &ManagedObjectReference, snapshot_id: &Id, name: &str, profile: Option<&[Box<dyn crate::types::virtual_machine_profile_spec_trait::VirtualMachineProfileSpecTrait>]>, crypto: Option<&dyn crate::types::crypto_spec_trait::CryptoSpecTrait>, path: Option<&str>) -> Result<ManagedObjectReference> {
+    pub async fn create_disk_from_snapshot_task(&self, id: &Id, datastore: &ManagedObjectReference, snapshot_id: &Id, name: &str, profile: Option<&[Box<dyn crate::types::traits::VirtualMachineProfileSpecTrait>]>, crypto: Option<&dyn crate::types::traits::CryptoSpecTrait>, path: Option<&str>) -> Result<ManagedObjectReference> {
         let input = CreateDiskFromSnapshotRequestType {id, datastore, snapshot_id, name, profile, crypto, path, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/CreateDiskFromSnapshot_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -1528,7 +1528,7 @@ impl VcenterVStorageObjectManager {
     /// datastore.
     /// 
     /// ***TaskInProgress***: If the virtual storage object is busy.
-    pub async fn update_v_storage_object_crypto_task(&self, id: &Id, datastore: &ManagedObjectReference, profile: Option<&[Box<dyn crate::types::virtual_machine_profile_spec_trait::VirtualMachineProfileSpecTrait>]>, disks_crypto: Option<&DiskCryptoSpec>) -> Result<ManagedObjectReference> {
+    pub async fn update_v_storage_object_crypto_task(&self, id: &Id, datastore: &ManagedObjectReference, profile: Option<&[Box<dyn crate::types::traits::VirtualMachineProfileSpecTrait>]>, disks_crypto: Option<&DiskCryptoSpec>) -> Result<ManagedObjectReference> {
         let input = UpdateVStorageObjectCryptoRequestType {id, datastore, profile, disks_crypto, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/UpdateVStorageObjectCrypto_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -1617,7 +1617,7 @@ impl VcenterVStorageObjectManager {
     /// datastore.
     /// 
     /// ***TaskInProgress***: If the virtual storage object is busy.
-    pub async fn update_v_storage_object_policy_task(&self, id: &Id, datastore: &ManagedObjectReference, profile: Option<&[Box<dyn crate::types::virtual_machine_profile_spec_trait::VirtualMachineProfileSpecTrait>]>) -> Result<ManagedObjectReference> {
+    pub async fn update_v_storage_object_policy_task(&self, id: &Id, datastore: &ManagedObjectReference, profile: Option<&[Box<dyn crate::types::traits::VirtualMachineProfileSpecTrait>]>) -> Result<ManagedObjectReference> {
         let input = UpdateVStorageObjectPolicyRequestType {id, datastore, profile, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/UpdateVStorageObjectPolicy_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -1669,9 +1669,9 @@ struct CreateDiskFromSnapshotRequestType<'a> {
     snapshot_id: &'a Id,
     name: &'a str,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    profile: Option<&'a [Box<dyn crate::types::virtual_machine_profile_spec_trait::VirtualMachineProfileSpecTrait>]>,
+    profile: Option<&'a [Box<dyn crate::types::traits::VirtualMachineProfileSpecTrait>]>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    crypto: Option<&'a dyn crate::types::crypto_spec_trait::CryptoSpecTrait>,
+    crypto: Option<&'a dyn crate::types::traits::CryptoSpecTrait>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     path: Option<&'a str>,
 }
@@ -1880,7 +1880,7 @@ struct UpdateVStorageObjectCryptoRequestType<'a> {
     id: &'a Id,
     datastore: &'a ManagedObjectReference,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    profile: Option<&'a [Box<dyn crate::types::virtual_machine_profile_spec_trait::VirtualMachineProfileSpecTrait>]>,
+    profile: Option<&'a [Box<dyn crate::types::traits::VirtualMachineProfileSpecTrait>]>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "disksCrypto")]
     disks_crypto: Option<&'a DiskCryptoSpec>,
@@ -1902,5 +1902,5 @@ struct UpdateVStorageObjectPolicyRequestType<'a> {
     id: &'a Id,
     datastore: &'a ManagedObjectReference,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    profile: Option<&'a [Box<dyn crate::types::virtual_machine_profile_spec_trait::VirtualMachineProfileSpecTrait>]>,
+    profile: Option<&'a [Box<dyn crate::types::traits::VirtualMachineProfileSpecTrait>]>,
 }

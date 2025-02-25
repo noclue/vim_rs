@@ -229,7 +229,7 @@ impl HostProfileManager {
     /// ## Returns:
     ///
     /// Derived subprofile of type <code>profileType</code>.
-    pub async fn create_default_profile(&self, profile_type: &str, profile_type_name: Option<&str>, profile: Option<&ManagedObjectReference>) -> Result<Box<dyn crate::types::apply_profile_trait::ApplyProfileTrait>> {
+    pub async fn create_default_profile(&self, profile_type: &str, profile_type_name: Option<&str>, profile: Option<&ManagedObjectReference>) -> Result<Box<dyn crate::types::traits::ApplyProfileTrait>> {
         let input = CreateDefaultProfileRequestType {profile_type, profile_type_name, profile, };
         let path = format!("/HostProfileManager/{moId}/CreateDefaultProfile", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -258,7 +258,7 @@ impl HostProfileManager {
     /// 
     /// ***InvalidProfileReferenceHost***: if the specified reference host is
     /// incompatible or no reference host has been specified.
-    pub async fn create_profile(&self, create_spec: &dyn crate::types::profile_create_spec_trait::ProfileCreateSpecTrait) -> Result<ManagedObjectReference> {
+    pub async fn create_profile(&self, create_spec: &dyn crate::types::traits::ProfileCreateSpecTrait) -> Result<ManagedObjectReference> {
         let input = CreateProfileRequestType {create_spec, };
         let path = format!("/HostProfileManager/{moId}/CreateProfile", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -647,7 +647,7 @@ impl HostProfileManager {
     /// ***AnswerFileUpdateFailed***: If the answer file could not be updated.
     /// 
     /// ***InvalidArgument***: If the input parameters are incorrect.
-    pub async fn update_answer_file_task(&self, host: &ManagedObjectReference, config_spec: &dyn crate::types::answer_file_create_spec_trait::AnswerFileCreateSpecTrait) -> Result<ManagedObjectReference> {
+    pub async fn update_answer_file_task(&self, host: &ManagedObjectReference, config_spec: &dyn crate::types::traits::AnswerFileCreateSpecTrait) -> Result<ManagedObjectReference> {
         let input = UpdateAnswerFileRequestType {host, config_spec, };
         let path = format!("/HostProfileManager/{moId}/UpdateAnswerFile_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -834,7 +834,7 @@ struct CreateDefaultProfileRequestType<'a> {
 #[serde(tag="_typeName")]
 struct CreateProfileRequestType<'a> {
     #[serde(rename = "createSpec")]
-    create_spec: &'a dyn crate::types::profile_create_spec_trait::ProfileCreateSpecTrait,
+    create_spec: &'a dyn crate::types::traits::ProfileCreateSpecTrait,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -927,7 +927,7 @@ struct RetrieveHostCustomizationsForProfileRequestType<'a> {
 struct UpdateAnswerFileRequestType<'a> {
     host: &'a ManagedObjectReference,
     #[serde(rename = "configSpec")]
-    config_spec: &'a dyn crate::types::answer_file_create_spec_trait::AnswerFileCreateSpecTrait,
+    config_spec: &'a dyn crate::types::traits::AnswerFileCreateSpecTrait,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]

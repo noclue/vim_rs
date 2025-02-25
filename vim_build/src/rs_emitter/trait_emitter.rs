@@ -1,7 +1,7 @@
 use std::ops::Deref;
 use crate::printer::Printer;
 use crate::rs_emitter::common::emit_description;
-use crate::rs_emitter::{get_by_ref, getter_name, to_field_name, to_module_name, to_type_name, TypeDefResolver};
+use crate::rs_emitter::{get_by_ref, getter_name, to_field_name, to_type_name, TypeDefResolver};
 use crate::vim_model::{Field, Model, Struct};
 use crate::rs_emitter::errors::{Error, Result};
 pub struct TraitEmitter<'a> {
@@ -30,7 +30,6 @@ impl<'a> TraitEmitter<'a> {
         };
         
         
-        self.emit_imports()?;
         self.emit_trait_type(type_ref)?;
         self.emit_serialize()?;
         self.emit_trait_deserialization()?;
@@ -40,17 +39,16 @@ impl<'a> TraitEmitter<'a> {
         Ok(())
     }
     
-    fn emit_imports(&mut self) -> super::Result<()> {
-        self.printer.println("use super::vim_object_trait::VimObjectTrait;")?;
-        self.printer.println("use super::dyn_serialize;")?;
-        self.printer.println("use super::convert::CastFrom;")?;
-        self.printer.println("use super::struct_enum::StructType;")?;
-        self.printer.println("use super::structs::*;")?;
-        //self.printer.println("use super::enums::*;")?;
-        self.printer.println("use serde::de;")?;
-        self.printer.println("use super::vim_any::VimAny;")?;
+    pub fn emit_imports(printer: &mut dyn Printer) -> super::Result<()> {
+        printer.println("use super::vim_object_trait::VimObjectTrait;")?;
+        printer.println("use super::dyn_serialize;")?;
+        printer.println("use super::convert::CastFrom;")?;
+        printer.println("use super::struct_enum::StructType;")?;
+        printer.println("use super::structs::*;")?;
+        printer.println("use serde::de;")?;
+        printer.println("use super::vim_any::VimAny;")?;
 
-        self.printer.println("")?;
+        printer.println("")?;
         Ok(())
     }
 
@@ -64,11 +62,6 @@ impl<'a> TraitEmitter<'a> {
         let Some(ref parent_trait) = vim_type.parent else {
             return Ok(()); // or error?
         };
-        let base_module = if crate::rs_emitter::structs::ANY == parent_trait {
-            "vim_object"
-        } else {
-            &to_module_name(parent_trait)
-        };
         let base_trait = to_type_name(if crate::rs_emitter::structs::ANY == parent_trait {
             "VimObject"
         } else {
@@ -79,7 +72,7 @@ impl<'a> TraitEmitter<'a> {
             let doc_string: &Option<String> = &vim_type.description;
             emit_description(this.printer, doc_string)
         }?;
-        self.printer.println(&format!("pub trait {}Trait : super::{}_trait::{}Trait {{", struct_name, base_module, base_trait))?;
+        self.printer.println(&format!("pub trait {}Trait : super::traits::{}Trait {{", struct_name, base_trait))?;
         self.printer.indent();
         for (prop_name, property) in &vim_type.fields {
             self.emit_trait_field(prop_name, property)?;

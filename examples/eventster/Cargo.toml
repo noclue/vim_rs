@@ -12,3 +12,11 @@ thiserror = "2.0.3"
 tokio = "1.41.1"
 vim = { version = "0.1.0", path = "../../vim" }
 
+
+[profile.release]
+lto = "fat"
+strip = true
+opt-level = "z"
+codegen-units = 1
+panic = "abort"
+debug = false

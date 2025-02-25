@@ -39,7 +39,7 @@ impl Alarm {
     /// ***DuplicateName***: if an alarm with the name already exists.
     /// 
     /// ***InvalidArgument***: if the specification is invalid.
-    pub async fn reconfigure_alarm(&self, spec: &dyn crate::types::alarm_spec_trait::AlarmSpecTrait) -> Result<()> {
+    pub async fn reconfigure_alarm(&self, spec: &dyn crate::types::traits::AlarmSpecTrait) -> Result<()> {
         let input = ReconfigureAlarmRequestType {spec, };
         let path = format!("/Alarm/{moId}/ReconfigureAlarm", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -98,7 +98,7 @@ impl Alarm {
     /// a custom field definition.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::custom_field_value_trait::CustomFieldValueTrait>>>> {
+    pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/Alarm/{moId}/value", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         Ok(self.client.execute_option(req).await?)
@@ -107,7 +107,7 @@ impl Alarm {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct ReconfigureAlarmRequestType<'a> {
-    spec: &'a dyn crate::types::alarm_spec_trait::AlarmSpecTrait,
+    spec: &'a dyn crate::types::traits::AlarmSpecTrait,
 }
 #[derive(serde::Serialize)]
 #[serde(rename = "setCustomValueRequestType", tag = "_typeName")]

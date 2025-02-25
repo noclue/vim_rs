@@ -79,7 +79,7 @@ impl GuestAuthManager {
     /// 
     /// ***InvalidGuestLogin***: if the the guest authentication information
     /// was not accepted.
-    pub async fn acquire_credentials_in_guest(&self, vm: &ManagedObjectReference, requested_auth: &dyn crate::types::guest_authentication_trait::GuestAuthenticationTrait, session_id: Option<i64>) -> Result<Box<dyn crate::types::guest_authentication_trait::GuestAuthenticationTrait>> {
+    pub async fn acquire_credentials_in_guest(&self, vm: &ManagedObjectReference, requested_auth: &dyn crate::types::traits::GuestAuthenticationTrait, session_id: Option<i64>) -> Result<Box<dyn crate::types::traits::GuestAuthenticationTrait>> {
         let input = AcquireCredentialsInGuestRequestType {vm, requested_auth, session_id, };
         let path = format!("/GuestAuthManager/{moId}/AcquireCredentialsInGuest", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -133,7 +133,7 @@ impl GuestAuthManager {
     /// 
     /// ***InvalidGuestLogin***: if the the guest authentication information
     /// was not accepted.
-    pub async fn release_credentials_in_guest(&self, vm: &ManagedObjectReference, auth: &dyn crate::types::guest_authentication_trait::GuestAuthenticationTrait) -> Result<()> {
+    pub async fn release_credentials_in_guest(&self, vm: &ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait) -> Result<()> {
         let input = ReleaseCredentialsInGuestRequestType {vm, auth, };
         let path = format!("/GuestAuthManager/{moId}/ReleaseCredentialsInGuest", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -185,7 +185,7 @@ impl GuestAuthManager {
     /// 
     /// ***InvalidGuestLogin***: if the the guest authentication information
     /// was not accepted.
-    pub async fn validate_credentials_in_guest(&self, vm: &ManagedObjectReference, auth: &dyn crate::types::guest_authentication_trait::GuestAuthenticationTrait) -> Result<()> {
+    pub async fn validate_credentials_in_guest(&self, vm: &ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait) -> Result<()> {
         let input = ValidateCredentialsInGuestRequestType {vm, auth, };
         let path = format!("/GuestAuthManager/{moId}/ValidateCredentialsInGuest", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -197,7 +197,7 @@ impl GuestAuthManager {
 struct AcquireCredentialsInGuestRequestType<'a> {
     vm: &'a ManagedObjectReference,
     #[serde(rename = "requestedAuth")]
-    requested_auth: &'a dyn crate::types::guest_authentication_trait::GuestAuthenticationTrait,
+    requested_auth: &'a dyn crate::types::traits::GuestAuthenticationTrait,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "sessionID")]
     session_id: Option<i64>,
@@ -206,11 +206,11 @@ struct AcquireCredentialsInGuestRequestType<'a> {
 #[serde(tag="_typeName")]
 struct ReleaseCredentialsInGuestRequestType<'a> {
     vm: &'a ManagedObjectReference,
-    auth: &'a dyn crate::types::guest_authentication_trait::GuestAuthenticationTrait,
+    auth: &'a dyn crate::types::traits::GuestAuthenticationTrait,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct ValidateCredentialsInGuestRequestType<'a> {
     vm: &'a ManagedObjectReference,
-    auth: &'a dyn crate::types::guest_authentication_trait::GuestAuthenticationTrait,
+    auth: &'a dyn crate::types::traits::GuestAuthenticationTrait,
 }

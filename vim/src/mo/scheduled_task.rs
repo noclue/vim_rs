@@ -32,7 +32,7 @@ impl ScheduledTask {
     /// ***DuplicateName***: if a scheduled task with the name already exists.
     /// 
     /// ***InvalidArgument***: if the specification is invalid.
-    pub async fn reconfigure_scheduled_task(&self, spec: &dyn crate::types::scheduled_task_spec_trait::ScheduledTaskSpecTrait) -> Result<()> {
+    pub async fn reconfigure_scheduled_task(&self, spec: &dyn crate::types::traits::ScheduledTaskSpecTrait) -> Result<()> {
         let input = ReconfigureScheduledTaskRequestType {spec, };
         let path = format!("/ScheduledTask/{moId}/ReconfigureScheduledTask", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -107,7 +107,7 @@ impl ScheduledTask {
     /// a custom field definition.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::custom_field_value_trait::CustomFieldValueTrait>>>> {
+    pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/ScheduledTask/{moId}/value", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         Ok(self.client.execute_option(req).await?)
@@ -116,7 +116,7 @@ impl ScheduledTask {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct ReconfigureScheduledTaskRequestType<'a> {
-    spec: &'a dyn crate::types::scheduled_task_spec_trait::ScheduledTaskSpecTrait,
+    spec: &'a dyn crate::types::traits::ScheduledTaskSpecTrait,
 }
 #[derive(serde::Serialize)]
 #[serde(rename = "setCustomValueRequestType", tag = "_typeName")]

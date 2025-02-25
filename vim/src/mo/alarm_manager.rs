@@ -94,7 +94,7 @@ impl AlarmManager {
     /// ***DuplicateName***: if an alarm with the name already exists.
     /// 
     /// ***InvalidArgument***: if the specification is invalid.
-    pub async fn create_alarm(&self, entity: &ManagedObjectReference, spec: &dyn crate::types::alarm_spec_trait::AlarmSpecTrait) -> Result<ManagedObjectReference> {
+    pub async fn create_alarm(&self, entity: &ManagedObjectReference, spec: &dyn crate::types::traits::AlarmSpecTrait) -> Result<ManagedObjectReference> {
         let input = CreateAlarmRequestType {entity, spec, };
         let path = format!("/AlarmManager/{moId}/CreateAlarm", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -232,7 +232,7 @@ impl AlarmManager {
     /// initial client wizard screen.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn default_expression(&self) -> Result<Option<Vec<Box<dyn crate::types::alarm_expression_trait::AlarmExpressionTrait>>>> {
+    pub async fn default_expression(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::AlarmExpressionTrait>>>> {
         let path = format!("/AlarmManager/{moId}/defaultExpression", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         Ok(self.client.execute_option(req).await?)
@@ -261,7 +261,7 @@ struct ClearTriggeredAlarmsRequestType<'a> {
 #[serde(tag="_typeName")]
 struct CreateAlarmRequestType<'a> {
     entity: &'a ManagedObjectReference,
-    spec: &'a dyn crate::types::alarm_spec_trait::AlarmSpecTrait,
+    spec: &'a dyn crate::types::traits::AlarmSpecTrait,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]

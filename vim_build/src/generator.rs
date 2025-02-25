@@ -6,7 +6,7 @@ use super::vim_model;
 use super::rs_emitter;
 use rs_emitter::library::emit_library;
 use crate::rs_emitter::deser::DeserializationGenerator;
-use crate::rs_emitter::to_module_name;
+use crate::rs_emitter::trait_emitter::TraitEmitter;
 
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
@@ -98,7 +98,7 @@ fn emit_types(root_folder: &Path, vim_model: &vim_model::Model) -> Result<()> {
     emit_vim_object_trait(&types_folder, &vim_model)?;
     emit_inheritable_traits(&types_folder, &vim_model)?;
 
-    emit_mod_rs(&types_folder, &vim_model)?;
+    emit_mod_rs(&types_folder)?;
     Ok(())
 }
 
@@ -125,15 +125,16 @@ fn emit_vim_object_trait(root_folder: &Path, vim_model: &vim_model::Model) -> Re
 }
 
 fn emit_inheritable_traits(root_folder: &Path, vim_model: &vim_model::Model) -> Result<()> {
+    let file_name = "traits.rs";
+    let mut printer = printer_for_file(root_folder.join(file_name))?;
+    TraitEmitter::emit_imports(&mut printer)?;
     for (struct_name, struct_ref) in &vim_model.structs {
         let struct_ref = struct_ref.borrow();
         if struct_name == rs_emitter::structs::ANY || struct_ref.children.is_empty() {
             continue;
         }
-        let file_name = format!("{}_trait.rs", struct_name.to_case(Case::Snake));
-        let mut printer = printer_for_file(root_folder.join(file_name))?;
         
-        let mut trait_emitter = rs_emitter::trait_emitter::TraitEmitter::new(struct_name.clone(), vim_model, &mut printer);
+        let mut trait_emitter = TraitEmitter::new(struct_name.clone(), vim_model, &mut printer);
             
         trait_emitter.emit_trait()?
     } 
@@ -194,10 +195,11 @@ fn emit_structs(root_folder: &Path, vim_model: &vim_model::Model) -> Result<()> 
     Ok(())
 }
 
-fn emit_mod_rs(types_folder: &std::path::Path, vim_model: &vim_model::Model) -> Result<()> {
+fn emit_mod_rs(types_folder: &std::path::Path) -> Result<()> {
     let mut p = printer_for_file(types_folder.join("mod.rs"))?;
     p.println("pub mod enums;")?;
     p.println("pub mod structs;")?;
+    p.println("pub mod traits;")?;
     p.println("pub mod dyn_serialize;")?;
     p.println("pub mod deserialize;")?;
     p.println("pub mod struct_enum;")?;
@@ -207,16 +209,6 @@ fn emit_mod_rs(types_folder: &std::path::Path, vim_model: &vim_model::Model) -> 
     p.println("pub mod convert;")?;
     p.println("pub mod vim_object_trait;")?;
     p.newline()?;
-    for (struct_name, struct_ref) in &vim_model.structs {
-        if struct_name == rs_emitter::structs::ANY {
-            continue;
-        }
-        if struct_ref.borrow().children.is_empty() {
-            continue;
-        }
-        let module_name = to_module_name(struct_name);
-        p.println(&format!("pub mod {}_trait;", module_name))?;
-    }
     Ok(())
 }
 

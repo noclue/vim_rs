@@ -252,7 +252,7 @@ impl HostProfile {
     /// to finish input verification. After successful profile execution, you can pass
     /// the verified required input list to the *HostProfileManager.ApplyHostConfig_Task*
     /// method.
-    pub async fn execute_host_profile(&self, host: &ManagedObjectReference, deferred_param: Option<&[ProfileDeferredPolicyOptionParameter]>) -> Result<Box<dyn crate::types::profile_execute_result_trait::ProfileExecuteResultTrait>> {
+    pub async fn execute_host_profile(&self, host: &ManagedObjectReference, deferred_param: Option<&[ProfileDeferredPolicyOptionParameter]>) -> Result<Box<dyn crate::types::traits::ProfileExecuteResultTrait>> {
         let input = ExecuteHostProfileRequestType {host, deferred_param, };
         let path = format!("/HostProfile/{moId}/ExecuteHostProfile", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -302,7 +302,7 @@ impl HostProfile {
     /// 
     /// ***ProfileUpdateFailed***: if errors were encountered when updating
     /// the profile.
-    pub async fn update_host_profile(&self, config: &dyn crate::types::host_profile_config_spec_trait::HostProfileConfigSpecTrait) -> Result<()> {
+    pub async fn update_host_profile(&self, config: &dyn crate::types::traits::HostProfileConfigSpecTrait) -> Result<()> {
         let input = UpdateHostProfileRequestType {config, };
         let path = format!("/HostProfile/{moId}/UpdateHostProfile", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -348,7 +348,7 @@ impl HostProfile {
     /// Configuration data for the profile.
     /// 
     /// ***Required privileges:*** Profile.Edit
-    pub async fn config(&self) -> Result<Box<dyn crate::types::profile_config_info_trait::ProfileConfigInfoTrait>> {
+    pub async fn config(&self) -> Result<Box<dyn crate::types::traits::ProfileConfigInfoTrait>> {
         let path = format!("/HostProfile/{moId}/config", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         Ok(self.client.execute(req).await?)
@@ -459,7 +459,7 @@ struct ExecuteHostProfileRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct UpdateHostProfileRequestType<'a> {
-    config: &'a dyn crate::types::host_profile_config_spec_trait::HostProfileConfigSpecTrait,
+    config: &'a dyn crate::types::traits::HostProfileConfigSpecTrait,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]

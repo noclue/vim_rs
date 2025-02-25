@@ -143,8 +143,7 @@ fn field_reference(root_package: String) -> StructRefRenderer {
     Box::new(move |struct_ref: &Struct, _: &Model| -> String {
         let type_name = to_type_name(&struct_ref.name);
         if struct_ref.has_children() {
-            let module_name = to_module_name(&struct_ref.name);
-            box_type_declaration(&format!("dyn {root_package}::{module_name}_trait::{type_name}Trait"))
+            box_type_declaration(&format!("dyn {root_package}::traits::{type_name}Trait"))
         } else {
             type_name
         }
@@ -155,8 +154,7 @@ fn param_reference(lifecycle: Option<String>, root_package: String) ->  StructRe
     Box::new(move |struct_ref: &Struct, _: &Model| -> String {
         let rust_name = to_type_name(&struct_ref.name);
         if struct_ref.has_children() {
-            let module_name = to_module_name(&struct_ref.name);
-            ref_type_declaration(&format!("dyn {root_package}::{module_name}_trait::{rust_name}Trait"), lifecycle.clone())
+            ref_type_declaration(&format!("dyn {root_package}::traits::{rust_name}Trait"), lifecycle.clone())
         } else {
             ref_type_declaration(&rust_name, lifecycle.clone())
         }

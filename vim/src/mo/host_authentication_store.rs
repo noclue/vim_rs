@@ -19,7 +19,7 @@ impl HostAuthenticationStore {
         }
     }
     /// Information about the authentication store.
-    pub async fn info(&self) -> Result<Box<dyn crate::types::host_authentication_store_info_trait::HostAuthenticationStoreInfoTrait>> {
+    pub async fn info(&self) -> Result<Box<dyn crate::types::traits::HostAuthenticationStoreInfoTrait>> {
         let path = format!("/HostAuthenticationStore/{moId}/info", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         Ok(self.client.execute(req).await?)

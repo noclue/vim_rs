@@ -35,7 +35,7 @@ impl EventManager {
     /// ## Returns:
     ///
     /// The events matching the filter.
-    pub async fn query_events(&self, filter: &EventFilterSpec) -> Result<Option<Vec<Box<dyn crate::types::event_trait::EventTrait>>>> {
+    pub async fn query_events(&self, filter: &EventFilterSpec) -> Result<Option<Vec<Box<dyn crate::types::traits::EventTrait>>>> {
         let input = QueryEventsRequestType {filter, };
         let path = format!("/EventManager/{moId}/QueryEvents", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -131,7 +131,7 @@ impl EventManager {
     /// - an invalid severity value is passed in an *EventEx*.
     ///   
     /// ***InvalidEvent***: no longer thrown by this API
-    pub async fn post_event(&self, event_to_post: &dyn crate::types::event_trait::EventTrait, task_info: Option<&TaskInfo>) -> Result<()> {
+    pub async fn post_event(&self, event_to_post: &dyn crate::types::traits::EventTrait, task_info: Option<&TaskInfo>) -> Result<()> {
         let input = PostEventRequestType {event_to_post, task_info, };
         let path = format!("/EventManager/{moId}/PostEvent", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -162,7 +162,7 @@ impl EventManager {
     /// The latest event that happened on the VirtualCenter server.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn latest_event(&self) -> Result<Option<Box<dyn crate::types::event_trait::EventTrait>>> {
+    pub async fn latest_event(&self) -> Result<Option<Box<dyn crate::types::traits::EventTrait>>> {
         let path = format!("/EventManager/{moId}/latestEvent", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         Ok(self.client.execute_option(req).await?)
@@ -197,7 +197,7 @@ struct LogUserEventRequestType<'a> {
 #[serde(tag="_typeName")]
 struct PostEventRequestType<'a> {
     #[serde(rename = "eventToPost")]
-    event_to_post: &'a dyn crate::types::event_trait::EventTrait,
+    event_to_post: &'a dyn crate::types::traits::EventTrait,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "taskInfo")]
     task_info: Option<&'a TaskInfo>,

@@ -79,7 +79,7 @@ impl ComputeResource {
     /// the operation.
     /// 
     /// Refers instance of *Task*.
-    pub async fn reconfigure_compute_resource_task(&self, spec: &dyn crate::types::compute_resource_config_spec_trait::ComputeResourceConfigSpecTrait, modify: bool) -> Result<ManagedObjectReference> {
+    pub async fn reconfigure_compute_resource_task(&self, spec: &dyn crate::types::traits::ComputeResourceConfigSpecTrait, modify: bool) -> Result<ManagedObjectReference> {
         let input = ReconfigureComputeResourceRequestType {spec, modify, };
         let path = format!("/ComputeResource/{moId}/ReconfigureComputeResource_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -183,7 +183,7 @@ impl ComputeResource {
     /// events as long as they are still current. The
     /// *configStatus* property provides an overall status
     /// based on these events.
-    pub async fn config_issue(&self) -> Result<Option<Vec<Box<dyn crate::types::event_trait::EventTrait>>>> {
+    pub async fn config_issue(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::EventTrait>>>> {
         let path = format!("/ComputeResource/{moId}/configIssue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         Ok(self.client.execute_option(req).await?)
@@ -236,7 +236,7 @@ impl ComputeResource {
     /// 
     /// For a cluster this property will return a
     /// *ClusterConfigInfoEx* object.
-    pub async fn configuration_ex(&self) -> Result<Box<dyn crate::types::compute_resource_config_info_trait::ComputeResourceConfigInfoTrait>> {
+    pub async fn configuration_ex(&self) -> Result<Box<dyn crate::types::traits::ComputeResourceConfigInfoTrait>> {
         let path = format!("/ComputeResource/{moId}/configurationEx", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         Ok(self.client.execute(req).await?)
@@ -244,7 +244,7 @@ impl ComputeResource {
     /// Custom field values.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn custom_value(&self) -> Result<Option<Vec<Box<dyn crate::types::custom_field_value_trait::CustomFieldValueTrait>>>> {
+    pub async fn custom_value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/ComputeResource/{moId}/customValue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         Ok(self.client.execute_option(req).await?)
@@ -526,7 +526,7 @@ impl ComputeResource {
     /// 
     /// This information is used on
     /// summary screens and in list views.
-    pub async fn summary(&self) -> Result<Box<dyn crate::types::compute_resource_summary_trait::ComputeResourceSummaryTrait>> {
+    pub async fn summary(&self) -> Result<Box<dyn crate::types::traits::ComputeResourceSummaryTrait>> {
         let path = format!("/ComputeResource/{moId}/summary", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         Ok(self.client.execute(req).await?)
@@ -567,7 +567,7 @@ impl ComputeResource {
     /// a custom field definition.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::custom_field_value_trait::CustomFieldValueTrait>>>> {
+    pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/ComputeResource/{moId}/value", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         Ok(self.client.execute_option(req).await?)
@@ -576,7 +576,7 @@ impl ComputeResource {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct ReconfigureComputeResourceRequestType<'a> {
-    spec: &'a dyn crate::types::compute_resource_config_spec_trait::ComputeResourceConfigSpecTrait,
+    spec: &'a dyn crate::types::traits::ComputeResourceConfigSpecTrait,
     modify: bool,
 }
 #[derive(serde::Serialize)]

@@ -7,7 +7,7 @@ use std::{env, sync::Arc};
 use vim::mo::{PropertyCollector, PropertyFilter, ServiceInstance, SessionManager, View, ViewManager};
 use vim::types::structs::ServiceContent;
 use vim::types::vim_any::VimAny;
-use vim::types::virtual_ethernet_card_trait::VirtualEthernetCardTrait;
+use vim::types::traits::VirtualEthernetCardTrait;
 use vim::types::boxed_types::ValueElements;
 use vim::types::convert::CastInto;
 use vim::types::enums::{self, MoTypesEnum};
@@ -21,7 +21,7 @@ use env_logger;
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
     #[error("MethodFault: {0:?}")]
-    MethodFault(Box<dyn vim::types::method_fault_trait::MethodFaultTrait>),
+    MethodFault(Box<dyn vim::types::traits::MethodFaultTrait>),
     #[error("Reqwest error: {0}")]
     ReqwestError(#[from] reqwest::Error),
     #[error("VimClient error: {0}")]

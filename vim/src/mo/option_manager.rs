@@ -52,7 +52,7 @@ impl OptionManager {
     ///
     /// ***InvalidName***: if no option or subtree exists with the
     /// given name.
-    pub async fn query_options(&self, name: Option<&str>) -> Result<Option<Vec<Box<dyn crate::types::option_value_trait::OptionValueTrait>>>> {
+    pub async fn query_options(&self, name: Option<&str>) -> Result<Option<Vec<Box<dyn crate::types::traits::OptionValueTrait>>>> {
         let input = QueryOptionsRequestType {name, };
         let path = format!("/OptionManager/{moId}/QueryOptions", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -85,14 +85,14 @@ impl OptionManager {
     /// 
     /// ***InvalidArgument***: if one or more OptionValue contains an
     /// invalid value.
-    pub async fn update_options(&self, changed_value: &[Box<dyn crate::types::option_value_trait::OptionValueTrait>]) -> Result<()> {
+    pub async fn update_options(&self, changed_value: &[Box<dyn crate::types::traits::OptionValueTrait>]) -> Result<()> {
         let input = UpdateOptionsRequestType {changed_value, };
         let path = format!("/OptionManager/{moId}/UpdateOptions", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
         Ok(self.client.execute_void(req).await?)
     }
     /// A list of the current settings for the key/value pair options.
-    pub async fn setting(&self) -> Result<Option<Vec<Box<dyn crate::types::option_value_trait::OptionValueTrait>>>> {
+    pub async fn setting(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::OptionValueTrait>>>> {
         let path = format!("/OptionManager/{moId}/setting", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         Ok(self.client.execute_option(req).await?)
@@ -115,5 +115,5 @@ struct QueryOptionsRequestType<'a> {
 #[serde(tag="_typeName")]
 struct UpdateOptionsRequestType<'a> {
     #[serde(rename = "changedValue")]
-    changed_value: &'a [Box<dyn crate::types::option_value_trait::OptionValueTrait>],
+    changed_value: &'a [Box<dyn crate::types::traits::OptionValueTrait>],
 }

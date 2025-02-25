@@ -481,7 +481,7 @@ impl VmwareDistributedVirtualSwitch {
     /// ***VspanSameSessionPortConflict***: if a dvPort is used as both the source and destination in the same Distributed Port Mirroring session.
     /// 
     /// ***VspanDestPortConflict***: if a dvPort is used as desination ports in multiple Distributed Port Mirroring sessions.
-    pub async fn reconfigure_dvs_task(&self, spec: &dyn crate::types::dvs_config_spec_trait::DvsConfigSpecTrait) -> Result<ManagedObjectReference> {
+    pub async fn reconfigure_dvs_task(&self, spec: &dyn crate::types::traits::DvsConfigSpecTrait) -> Result<ManagedObjectReference> {
         let input = ReconfigureDvsRequestType {spec, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/ReconfigureDvs_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -816,7 +816,7 @@ impl VmwareDistributedVirtualSwitch {
     /// ***DvsFault***: if operation fails on any host or if there are other update failures.
     /// 
     /// ***NotSupported***: if health check is not supported on the switch.
-    pub async fn update_dvs_health_check_config_task(&self, health_check_config: &[Box<dyn crate::types::dvs_health_check_config_trait::DvsHealthCheckConfigTrait>]) -> Result<ManagedObjectReference> {
+    pub async fn update_dvs_health_check_config_task(&self, health_check_config: &[Box<dyn crate::types::traits::DvsHealthCheckConfigTrait>]) -> Result<ManagedObjectReference> {
         let input = UpdateDvsHealthCheckConfigRequestType {health_check_config, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/UpdateDVSHealthCheckConfig_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -921,7 +921,7 @@ impl VmwareDistributedVirtualSwitch {
         Ok(self.client.execute(req).await?)
     }
     /// Switch configuration data.
-    pub async fn config(&self) -> Result<Box<dyn crate::types::dvs_config_info_trait::DvsConfigInfoTrait>> {
+    pub async fn config(&self) -> Result<Box<dyn crate::types::traits::DvsConfigInfoTrait>> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/config", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         Ok(self.client.execute(req).await?)
@@ -933,7 +933,7 @@ impl VmwareDistributedVirtualSwitch {
     /// events as long as they are still current. The
     /// *configStatus* property provides an overall status
     /// based on these events.
-    pub async fn config_issue(&self) -> Result<Option<Vec<Box<dyn crate::types::event_trait::EventTrait>>>> {
+    pub async fn config_issue(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::EventTrait>>>> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/configIssue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         Ok(self.client.execute_option(req).await?)
@@ -970,7 +970,7 @@ impl VmwareDistributedVirtualSwitch {
     /// Custom field values.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn custom_value(&self) -> Result<Option<Vec<Box<dyn crate::types::custom_field_value_trait::CustomFieldValueTrait>>>> {
+    pub async fn custom_value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/customValue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         Ok(self.client.execute_option(req).await?)
@@ -1242,7 +1242,7 @@ impl VmwareDistributedVirtualSwitch {
     /// a custom field definition.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::custom_field_value_trait::CustomFieldValueTrait>>>> {
+    pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/value", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         Ok(self.client.execute_option(req).await?)
@@ -1312,7 +1312,7 @@ struct PerformDvsProductSpecOperationRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct ReconfigureDvsRequestType<'a> {
-    spec: &'a dyn crate::types::dvs_config_spec_trait::DvsConfigSpecTrait,
+    spec: &'a dyn crate::types::traits::DvsConfigSpecTrait,
 }
 #[derive(serde::Serialize)]
 #[serde(rename = "ReconfigureDVPortRequestType", tag = "_typeName")]
@@ -1371,7 +1371,7 @@ struct UpdateDvsCapabilityRequestType<'a> {
 #[serde(rename = "UpdateDVSHealthCheckConfigRequestType", tag = "_typeName")]
 struct UpdateDvsHealthCheckConfigRequestType<'a> {
     #[serde(rename = "healthCheckConfig")]
-    health_check_config: &'a [Box<dyn crate::types::dvs_health_check_config_trait::DvsHealthCheckConfigTrait>],
+    health_check_config: &'a [Box<dyn crate::types::traits::DvsHealthCheckConfigTrait>],
 }
 #[derive(serde::Serialize)]
 #[serde(rename = "UpdateDVSLacpGroupConfigRequestType", tag = "_typeName")]

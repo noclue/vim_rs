@@ -370,7 +370,7 @@ impl HostNetworkSystem {
     /// ***NotSupported***: if the host is not an ESX Server system.
     /// 
     /// ***HostConfigFault***: for all other configuration failures.
-    pub async fn update_console_ip_route_config(&self, config: &dyn crate::types::host_ip_route_config_trait::HostIpRouteConfigTrait) -> Result<()> {
+    pub async fn update_console_ip_route_config(&self, config: &dyn crate::types::traits::HostIpRouteConfigTrait) -> Result<()> {
         let input = UpdateConsoleIpRouteConfigRequestType {config, };
         let path = format!("/HostNetworkSystem/{moId}/UpdateConsoleIpRouteConfig", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -403,7 +403,7 @@ impl HostNetworkSystem {
     /// while the host is part of a Windows domain.
     /// 
     /// ***HostConfigFault***: for all other configuration failures.
-    pub async fn update_dns_config(&self, config: &dyn crate::types::host_dns_config_trait::HostDnsConfigTrait) -> Result<()> {
+    pub async fn update_dns_config(&self, config: &dyn crate::types::traits::HostDnsConfigTrait) -> Result<()> {
         let input = UpdateDnsConfigRequestType {config, };
         let path = format!("/HostNetworkSystem/{moId}/UpdateDnsConfig", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -431,7 +431,7 @@ impl HostNetworkSystem {
     /// ***NotSupported***: if the host is not an ESX Server system.
     /// 
     /// ***HostConfigFault***: for all other configuration failures.
-    pub async fn update_ip_route_config(&self, config: &dyn crate::types::host_ip_route_config_trait::HostIpRouteConfigTrait) -> Result<()> {
+    pub async fn update_ip_route_config(&self, config: &dyn crate::types::traits::HostIpRouteConfigTrait) -> Result<()> {
         let input = UpdateIpRouteConfigRequestType {config, };
         let path = format!("/HostNetworkSystem/{moId}/UpdateIpRouteConfig", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -754,7 +754,7 @@ impl HostNetworkSystem {
     /// configuration is global to the entire host. This property is
     /// set only if
     /// IP routing can be configured for the service console.
-    pub async fn console_ip_route_config(&self) -> Result<Option<Box<dyn crate::types::host_ip_route_config_trait::HostIpRouteConfigTrait>>> {
+    pub async fn console_ip_route_config(&self) -> Result<Option<Box<dyn crate::types::traits::HostIpRouteConfigTrait>>> {
         let path = format!("/HostNetworkSystem/{moId}/consoleIpRouteConfig", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         Ok(self.client.execute_option(req).await?)
@@ -763,7 +763,7 @@ impl HostNetworkSystem {
     /// each NetStackInstance. This only works on the default NetStackInstance.
     /// 
     /// Client-side DNS configuration.
-    pub async fn dns_config(&self) -> Result<Option<Box<dyn crate::types::host_dns_config_trait::HostDnsConfigTrait>>> {
+    pub async fn dns_config(&self) -> Result<Option<Box<dyn crate::types::traits::HostDnsConfigTrait>>> {
         let path = format!("/HostNetworkSystem/{moId}/dnsConfig", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         Ok(self.client.execute_option(req).await?)
@@ -772,7 +772,7 @@ impl HostNetworkSystem {
     /// each NetStackInstance. This only works on the default NetStackInstance.
     /// 
     /// The IP route configuration.
-    pub async fn ip_route_config(&self) -> Result<Option<Box<dyn crate::types::host_ip_route_config_trait::HostIpRouteConfigTrait>>> {
+    pub async fn ip_route_config(&self) -> Result<Option<Box<dyn crate::types::traits::HostIpRouteConfigTrait>>> {
         let path = format!("/HostNetworkSystem/{moId}/ipRouteConfig", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         Ok(self.client.execute_option(req).await?)
@@ -810,7 +810,7 @@ impl HostNetworkSystem {
     /// a custom field definition.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::custom_field_value_trait::CustomFieldValueTrait>>>> {
+    pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/HostNetworkSystem/{moId}/value", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         Ok(self.client.execute_option(req).await?)
@@ -883,17 +883,17 @@ struct SetCustomValueRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct UpdateConsoleIpRouteConfigRequestType<'a> {
-    config: &'a dyn crate::types::host_ip_route_config_trait::HostIpRouteConfigTrait,
+    config: &'a dyn crate::types::traits::HostIpRouteConfigTrait,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct UpdateDnsConfigRequestType<'a> {
-    config: &'a dyn crate::types::host_dns_config_trait::HostDnsConfigTrait,
+    config: &'a dyn crate::types::traits::HostDnsConfigTrait,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct UpdateIpRouteConfigRequestType<'a> {
-    config: &'a dyn crate::types::host_ip_route_config_trait::HostIpRouteConfigTrait,
+    config: &'a dyn crate::types::traits::HostIpRouteConfigTrait,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]

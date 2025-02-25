@@ -36,7 +36,7 @@ impl ClusterProfileManager {
     /// 
     /// ***InvalidProfileReferenceHost***: if the specified reference host is
     /// incompatible or no reference host has been specified.
-    pub async fn create_profile(&self, create_spec: &dyn crate::types::profile_create_spec_trait::ProfileCreateSpecTrait) -> Result<ManagedObjectReference> {
+    pub async fn create_profile(&self, create_spec: &dyn crate::types::traits::ProfileCreateSpecTrait) -> Result<ManagedObjectReference> {
         let input = CreateProfileRequestType {create_spec, };
         let path = format!("/ClusterProfileManager/{moId}/CreateProfile", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -109,7 +109,7 @@ impl ClusterProfileManager {
 #[serde(tag="_typeName")]
 struct CreateProfileRequestType<'a> {
     #[serde(rename = "createSpec")]
-    create_spec: &'a dyn crate::types::profile_create_spec_trait::ProfileCreateSpecTrait,
+    create_spec: &'a dyn crate::types::traits::ProfileCreateSpecTrait,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]

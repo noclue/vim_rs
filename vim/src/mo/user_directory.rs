@@ -97,7 +97,7 @@ impl UserDirectory {
     /// 
     /// ***NotFound***: If any of the domain, belongsToGroup, or belongsToUser
     /// arguments refer to entities that do not exist.
-    pub async fn retrieve_user_groups(&self, domain: Option<&str>, search_str: &str, belongs_to_group: Option<&str>, belongs_to_user: Option<&str>, exact_match: bool, find_users: bool, find_groups: bool) -> Result<Option<Vec<Box<dyn crate::types::user_search_result_trait::UserSearchResultTrait>>>> {
+    pub async fn retrieve_user_groups(&self, domain: Option<&str>, search_str: &str, belongs_to_group: Option<&str>, belongs_to_user: Option<&str>, exact_match: bool, find_users: bool, find_groups: bool) -> Result<Option<Vec<Box<dyn crate::types::traits::UserSearchResultTrait>>>> {
         let input = RetrieveUserGroupsRequestType {domain, search_str, belongs_to_group, belongs_to_user, exact_match, find_users, find_groups, };
         let path = format!("/UserDirectory/{moId}/RetrieveUserGroups", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);

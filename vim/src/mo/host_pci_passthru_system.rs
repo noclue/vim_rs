@@ -55,7 +55,7 @@ impl HostPciPassthruSystem {
     /// ## Errors:
     ///
     /// ***HostConfigFault***: if an error occurs.
-    pub async fn update_passthru_config(&self, config: &[Box<dyn crate::types::host_pci_passthru_config_trait::HostPciPassthruConfigTrait>]) -> Result<()> {
+    pub async fn update_passthru_config(&self, config: &[Box<dyn crate::types::traits::HostPciPassthruConfigTrait>]) -> Result<()> {
         let input = UpdatePassthruConfigRequestType {config, };
         let path = format!("/HostPciPassthruSystem/{moId}/UpdatePassthruConfig", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -74,7 +74,7 @@ impl HostPciPassthruSystem {
     /// Array of PciPassthru information
     /// 
     /// ***Required privileges:*** System.Read
-    pub async fn pci_passthru_info(&self) -> Result<Vec<Box<dyn crate::types::host_pci_passthru_info_trait::HostPciPassthruInfoTrait>>> {
+    pub async fn pci_passthru_info(&self) -> Result<Vec<Box<dyn crate::types::traits::HostPciPassthruInfoTrait>>> {
         let path = format!("/HostPciPassthruSystem/{moId}/pciPassthruInfo", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         Ok(self.client.execute(req).await?)
@@ -82,7 +82,7 @@ impl HostPciPassthruSystem {
     /// Array of Sriov Device Pool information
     /// 
     /// ***Required privileges:*** System.Read
-    pub async fn sriov_device_pool_info(&self) -> Result<Option<Vec<Box<dyn crate::types::host_sriov_device_pool_info_trait::HostSriovDevicePoolInfoTrait>>>> {
+    pub async fn sriov_device_pool_info(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::HostSriovDevicePoolInfoTrait>>>> {
         let path = format!("/HostPciPassthruSystem/{moId}/sriovDevicePoolInfo", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         Ok(self.client.execute_option(req).await?)
@@ -94,7 +94,7 @@ impl HostPciPassthruSystem {
     /// a custom field definition.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::custom_field_value_trait::CustomFieldValueTrait>>>> {
+    pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/HostPciPassthruSystem/{moId}/value", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         Ok(self.client.execute_option(req).await?)
@@ -109,5 +109,5 @@ struct SetCustomValueRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct UpdatePassthruConfigRequestType<'a> {
-    config: &'a [Box<dyn crate::types::host_pci_passthru_config_trait::HostPciPassthruConfigTrait>],
+    config: &'a [Box<dyn crate::types::traits::HostPciPassthruConfigTrait>],
 }

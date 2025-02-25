@@ -11,7 +11,7 @@ mod tests {
     use vim::types::structs::ManagedObjectReference;
     use vim::types::boxed_types::ValueElements;
     use vim::types::vim_any::VimAny;
-    use vim::types::method_fault_trait::MethodFaultTrait;
+    use vim::types::traits::MethodFaultTrait;
     use vim::types::enums::MoTypesEnum;
     use log::{debug, info};
 

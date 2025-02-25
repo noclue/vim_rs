@@ -25,7 +25,7 @@ impl EventHistoryCollector {
     ///
     /// ### max_count
     /// The maximum number of items in the page.
-    pub async fn read_next_events(&self, max_count: i32) -> Result<Option<Vec<Box<dyn crate::types::event_trait::EventTrait>>>> {
+    pub async fn read_next_events(&self, max_count: i32) -> Result<Option<Vec<Box<dyn crate::types::traits::EventTrait>>>> {
         let input = ReadNextEventsRequestType {max_count, };
         let path = format!("/EventHistoryCollector/{moId}/ReadNextEvents", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -41,7 +41,7 @@ impl EventHistoryCollector {
     ///
     /// ### max_count
     /// The maximum number of items in the page.
-    pub async fn read_previous_events(&self, max_count: i32) -> Result<Option<Vec<Box<dyn crate::types::event_trait::EventTrait>>>> {
+    pub async fn read_previous_events(&self, max_count: i32) -> Result<Option<Vec<Box<dyn crate::types::traits::EventTrait>>>> {
         let input = ReadPreviousEventsRequestType {max_count, };
         let path = format!("/EventHistoryCollector/{moId}/ReadPreviousEvents", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -112,7 +112,7 @@ impl EventHistoryCollector {
     /// events in the returned page are unordered.
     /// While `initialized` is `false` this property will remain empty and once the Collector is initialized it will be populated.
     /// While `initialized` is `true` this property is populated immediately.
-    pub async fn latest_page(&self) -> Result<Option<Vec<Box<dyn crate::types::event_trait::EventTrait>>>> {
+    pub async fn latest_page(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::EventTrait>>>> {
         let path = format!("/EventHistoryCollector/{moId}/latestPage", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         Ok(self.client.execute_option(req).await?)

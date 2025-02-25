@@ -251,7 +251,7 @@ impl HostVStorageObjectManager {
     /// ***InvalidState***: If the operation cannot be performed on the disk.
     /// 
     /// ***NotFound***: If specified virtual storage object cannot be found.
-    pub async fn host_v_storage_object_create_disk_from_snapshot_task(&self, id: &Id, datastore: &ManagedObjectReference, snapshot_id: &Id, name: &str, profile: Option<&[Box<dyn crate::types::virtual_machine_profile_spec_trait::VirtualMachineProfileSpecTrait>]>, crypto: Option<&dyn crate::types::crypto_spec_trait::CryptoSpecTrait>, path: Option<&str>, provisioning_type: Option<&str>) -> Result<ManagedObjectReference> {
+    pub async fn host_v_storage_object_create_disk_from_snapshot_task(&self, id: &Id, datastore: &ManagedObjectReference, snapshot_id: &Id, name: &str, profile: Option<&[Box<dyn crate::types::traits::VirtualMachineProfileSpecTrait>]>, crypto: Option<&dyn crate::types::traits::CryptoSpecTrait>, path: Option<&str>, provisioning_type: Option<&str>) -> Result<ManagedObjectReference> {
         let input = HostVStorageObjectCreateDiskFromSnapshotRequestType {id, datastore, snapshot_id, name, profile, crypto, path, provisioning_type, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostVStorageObjectCreateDiskFromSnapshot_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -1403,9 +1403,9 @@ struct HostVStorageObjectCreateDiskFromSnapshotRequestType<'a> {
     snapshot_id: &'a Id,
     name: &'a str,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    profile: Option<&'a [Box<dyn crate::types::virtual_machine_profile_spec_trait::VirtualMachineProfileSpecTrait>]>,
+    profile: Option<&'a [Box<dyn crate::types::traits::VirtualMachineProfileSpecTrait>]>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    crypto: Option<&'a dyn crate::types::crypto_spec_trait::CryptoSpecTrait>,
+    crypto: Option<&'a dyn crate::types::traits::CryptoSpecTrait>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     path: Option<&'a str>,
     #[serde(default, skip_serializing_if = "Option::is_none")]

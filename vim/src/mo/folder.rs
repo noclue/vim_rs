@@ -157,7 +157,7 @@ impl Folder {
     /// ***NoPermission***: if there are crypto keys to be sent to the host,
     /// but the user does not have Cryptographer.RegisterHost privilege
     /// on the Folder.
-    pub async fn add_standalone_host_task(&self, spec: &HostConnectSpec, comp_res_spec: Option<&dyn crate::types::compute_resource_config_spec_trait::ComputeResourceConfigSpecTrait>, add_connected: bool, license: Option<&str>) -> Result<ManagedObjectReference> {
+    pub async fn add_standalone_host_task(&self, spec: &HostConnectSpec, comp_res_spec: Option<&dyn crate::types::traits::ComputeResourceConfigSpecTrait>, add_connected: bool, license: Option<&str>) -> Result<ManagedObjectReference> {
         let input = AddStandaloneHostRequestType {spec, comp_res_spec, add_connected, license, };
         let path = format!("/Folder/{moId}/AddStandaloneHost_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -215,7 +215,7 @@ impl Folder {
     /// the operation.
     /// 
     /// Refers instance of *Task*.
-    pub async fn batch_add_hosts_to_cluster_task(&self, cluster: &ManagedObjectReference, new_hosts: Option<&[FolderNewHostSpec]>, existing_hosts: Option<&[ManagedObjectReference]>, comp_res_spec: Option<&dyn crate::types::compute_resource_config_spec_trait::ComputeResourceConfigSpecTrait>, desired_state: Option<&str>) -> Result<ManagedObjectReference> {
+    pub async fn batch_add_hosts_to_cluster_task(&self, cluster: &ManagedObjectReference, new_hosts: Option<&[FolderNewHostSpec]>, existing_hosts: Option<&[ManagedObjectReference]>, comp_res_spec: Option<&dyn crate::types::traits::ComputeResourceConfigSpecTrait>, desired_state: Option<&str>) -> Result<ManagedObjectReference> {
         let input = BatchAddHostsToClusterRequestType {cluster, new_hosts, existing_hosts, comp_res_spec, desired_state, };
         let path = format!("/Folder/{moId}/BatchAddHostsToCluster_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -254,7 +254,7 @@ impl Folder {
     /// the operation.
     /// 
     /// Refers instance of *Task*.
-    pub async fn batch_add_standalone_hosts_task(&self, new_hosts: Option<&[FolderNewHostSpec]>, comp_res_spec: Option<&dyn crate::types::compute_resource_config_spec_trait::ComputeResourceConfigSpecTrait>, add_connected: bool) -> Result<ManagedObjectReference> {
+    pub async fn batch_add_standalone_hosts_task(&self, new_hosts: Option<&[FolderNewHostSpec]>, comp_res_spec: Option<&dyn crate::types::traits::ComputeResourceConfigSpecTrait>, add_connected: bool) -> Result<ManagedObjectReference> {
         let input = BatchAddStandaloneHostsRequestType {new_hosts, comp_res_spec, add_connected, };
         let path = format!("/Folder/{moId}/BatchAddStandaloneHosts_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -1031,7 +1031,7 @@ impl Folder {
     /// events as long as they are still current. The
     /// *configStatus* property provides an overall status
     /// based on these events.
-    pub async fn config_issue(&self) -> Result<Option<Vec<Box<dyn crate::types::event_trait::EventTrait>>>> {
+    pub async fn config_issue(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::EventTrait>>>> {
         let path = format!("/Folder/{moId}/configIssue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         Ok(self.client.execute_option(req).await?)
@@ -1068,7 +1068,7 @@ impl Folder {
     /// Custom field values.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn custom_value(&self) -> Result<Option<Vec<Box<dyn crate::types::custom_field_value_trait::CustomFieldValueTrait>>>> {
+    pub async fn custom_value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/Folder/{moId}/customValue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         Ok(self.client.execute_option(req).await?)
@@ -1310,7 +1310,7 @@ impl Folder {
     /// a custom field definition.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::custom_field_value_trait::CustomFieldValueTrait>>>> {
+    pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/Folder/{moId}/value", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         Ok(self.client.execute_option(req).await?)
@@ -1322,7 +1322,7 @@ struct AddStandaloneHostRequestType<'a> {
     spec: &'a HostConnectSpec,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "compResSpec")]
-    comp_res_spec: Option<&'a dyn crate::types::compute_resource_config_spec_trait::ComputeResourceConfigSpecTrait>,
+    comp_res_spec: Option<&'a dyn crate::types::traits::ComputeResourceConfigSpecTrait>,
     #[serde(rename = "addConnected")]
     add_connected: bool,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -1340,7 +1340,7 @@ struct BatchAddHostsToClusterRequestType<'a> {
     existing_hosts: Option<&'a [ManagedObjectReference]>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "compResSpec")]
-    comp_res_spec: Option<&'a dyn crate::types::compute_resource_config_spec_trait::ComputeResourceConfigSpecTrait>,
+    comp_res_spec: Option<&'a dyn crate::types::traits::ComputeResourceConfigSpecTrait>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "desiredState")]
     desired_state: Option<&'a str>,
@@ -1353,7 +1353,7 @@ struct BatchAddStandaloneHostsRequestType<'a> {
     new_hosts: Option<&'a [FolderNewHostSpec]>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "compResSpec")]
-    comp_res_spec: Option<&'a dyn crate::types::compute_resource_config_spec_trait::ComputeResourceConfigSpecTrait>,
+    comp_res_spec: Option<&'a dyn crate::types::traits::ComputeResourceConfigSpecTrait>,
     #[serde(rename = "addConnected")]
     add_connected: bool,
 }

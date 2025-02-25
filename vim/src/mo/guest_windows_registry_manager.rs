@@ -82,7 +82,7 @@ impl GuestWindowsRegistryManager {
     /// 
     /// ***OperationDisabledByGuest***: if the operation is not enabled due to
     /// guest agent configuration.
-    pub async fn create_registry_key_in_guest(&self, vm: &ManagedObjectReference, auth: &dyn crate::types::guest_authentication_trait::GuestAuthenticationTrait, key_name: &GuestRegKeyNameSpec, is_volatile: bool, class_type: Option<&str>) -> Result<()> {
+    pub async fn create_registry_key_in_guest(&self, vm: &ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait, key_name: &GuestRegKeyNameSpec, is_volatile: bool, class_type: Option<&str>) -> Result<()> {
         let input = CreateRegistryKeyInGuestRequestType {vm, auth, key_name, is_volatile, class_type, };
         let path = format!("/GuestWindowsRegistryManager/{moId}/CreateRegistryKeyInGuest", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -146,7 +146,7 @@ impl GuestWindowsRegistryManager {
     /// 
     /// ***OperationDisabledByGuest***: if the operation is not enabled due to
     /// guest agent configuration.
-    pub async fn delete_registry_key_in_guest(&self, vm: &ManagedObjectReference, auth: &dyn crate::types::guest_authentication_trait::GuestAuthenticationTrait, key_name: &GuestRegKeyNameSpec, recursive: bool) -> Result<()> {
+    pub async fn delete_registry_key_in_guest(&self, vm: &ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait, key_name: &GuestRegKeyNameSpec, recursive: bool) -> Result<()> {
         let input = DeleteRegistryKeyInGuestRequestType {vm, auth, key_name, recursive, };
         let path = format!("/GuestWindowsRegistryManager/{moId}/DeleteRegistryKeyInGuest", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -208,7 +208,7 @@ impl GuestWindowsRegistryManager {
     /// 
     /// ***OperationDisabledByGuest***: if the operation is not enabled due to
     /// guest agent configuration.
-    pub async fn delete_registry_value_in_guest(&self, vm: &ManagedObjectReference, auth: &dyn crate::types::guest_authentication_trait::GuestAuthenticationTrait, value_name: &GuestRegValueNameSpec) -> Result<()> {
+    pub async fn delete_registry_value_in_guest(&self, vm: &ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait, value_name: &GuestRegValueNameSpec) -> Result<()> {
         let input = DeleteRegistryValueInGuestRequestType {vm, auth, value_name, };
         let path = format!("/GuestWindowsRegistryManager/{moId}/DeleteRegistryValueInGuest", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -280,7 +280,7 @@ impl GuestWindowsRegistryManager {
     /// 
     /// ***OperationDisabledByGuest***: if the operation is not enabled due to
     /// guest agent configuration.
-    pub async fn list_registry_keys_in_guest(&self, vm: &ManagedObjectReference, auth: &dyn crate::types::guest_authentication_trait::GuestAuthenticationTrait, key_name: &GuestRegKeyNameSpec, recursive: bool, match_pattern: Option<&str>) -> Result<Option<Vec<GuestRegKeyRecordSpec>>> {
+    pub async fn list_registry_keys_in_guest(&self, vm: &ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait, key_name: &GuestRegKeyNameSpec, recursive: bool, match_pattern: Option<&str>) -> Result<Option<Vec<GuestRegKeyRecordSpec>>> {
         let input = ListRegistryKeysInGuestRequestType {vm, auth, key_name, recursive, match_pattern, };
         let path = format!("/GuestWindowsRegistryManager/{moId}/ListRegistryKeysInGuest", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -354,7 +354,7 @@ impl GuestWindowsRegistryManager {
     /// 
     /// ***OperationDisabledByGuest***: if the operation is not enabled due to
     /// guest agent configuration.
-    pub async fn list_registry_values_in_guest(&self, vm: &ManagedObjectReference, auth: &dyn crate::types::guest_authentication_trait::GuestAuthenticationTrait, key_name: &GuestRegKeyNameSpec, expand_strings: bool, match_pattern: Option<&str>) -> Result<Option<Vec<GuestRegValueSpec>>> {
+    pub async fn list_registry_values_in_guest(&self, vm: &ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait, key_name: &GuestRegKeyNameSpec, expand_strings: bool, match_pattern: Option<&str>) -> Result<Option<Vec<GuestRegValueSpec>>> {
         let input = ListRegistryValuesInGuestRequestType {vm, auth, key_name, expand_strings, match_pattern, };
         let path = format!("/GuestWindowsRegistryManager/{moId}/ListRegistryValuesInGuest", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -416,7 +416,7 @@ impl GuestWindowsRegistryManager {
     /// 
     /// ***OperationDisabledByGuest***: if the operation is not enabled due to
     /// guest agent configuration.
-    pub async fn set_registry_value_in_guest(&self, vm: &ManagedObjectReference, auth: &dyn crate::types::guest_authentication_trait::GuestAuthenticationTrait, value: &GuestRegValueSpec) -> Result<()> {
+    pub async fn set_registry_value_in_guest(&self, vm: &ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait, value: &GuestRegValueSpec) -> Result<()> {
         let input = SetRegistryValueInGuestRequestType {vm, auth, value, };
         let path = format!("/GuestWindowsRegistryManager/{moId}/SetRegistryValueInGuest", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -427,7 +427,7 @@ impl GuestWindowsRegistryManager {
 #[serde(tag="_typeName")]
 struct CreateRegistryKeyInGuestRequestType<'a> {
     vm: &'a ManagedObjectReference,
-    auth: &'a dyn crate::types::guest_authentication_trait::GuestAuthenticationTrait,
+    auth: &'a dyn crate::types::traits::GuestAuthenticationTrait,
     #[serde(rename = "keyName")]
     key_name: &'a GuestRegKeyNameSpec,
     #[serde(rename = "isVolatile")]
@@ -440,7 +440,7 @@ struct CreateRegistryKeyInGuestRequestType<'a> {
 #[serde(tag="_typeName")]
 struct DeleteRegistryKeyInGuestRequestType<'a> {
     vm: &'a ManagedObjectReference,
-    auth: &'a dyn crate::types::guest_authentication_trait::GuestAuthenticationTrait,
+    auth: &'a dyn crate::types::traits::GuestAuthenticationTrait,
     #[serde(rename = "keyName")]
     key_name: &'a GuestRegKeyNameSpec,
     recursive: bool,
@@ -449,7 +449,7 @@ struct DeleteRegistryKeyInGuestRequestType<'a> {
 #[serde(tag="_typeName")]
 struct DeleteRegistryValueInGuestRequestType<'a> {
     vm: &'a ManagedObjectReference,
-    auth: &'a dyn crate::types::guest_authentication_trait::GuestAuthenticationTrait,
+    auth: &'a dyn crate::types::traits::GuestAuthenticationTrait,
     #[serde(rename = "valueName")]
     value_name: &'a GuestRegValueNameSpec,
 }
@@ -457,7 +457,7 @@ struct DeleteRegistryValueInGuestRequestType<'a> {
 #[serde(tag="_typeName")]
 struct ListRegistryKeysInGuestRequestType<'a> {
     vm: &'a ManagedObjectReference,
-    auth: &'a dyn crate::types::guest_authentication_trait::GuestAuthenticationTrait,
+    auth: &'a dyn crate::types::traits::GuestAuthenticationTrait,
     #[serde(rename = "keyName")]
     key_name: &'a GuestRegKeyNameSpec,
     recursive: bool,
@@ -469,7 +469,7 @@ struct ListRegistryKeysInGuestRequestType<'a> {
 #[serde(tag="_typeName")]
 struct ListRegistryValuesInGuestRequestType<'a> {
     vm: &'a ManagedObjectReference,
-    auth: &'a dyn crate::types::guest_authentication_trait::GuestAuthenticationTrait,
+    auth: &'a dyn crate::types::traits::GuestAuthenticationTrait,
     #[serde(rename = "keyName")]
     key_name: &'a GuestRegKeyNameSpec,
     #[serde(rename = "expandStrings")]
@@ -482,6 +482,6 @@ struct ListRegistryValuesInGuestRequestType<'a> {
 #[serde(tag="_typeName")]
 struct SetRegistryValueInGuestRequestType<'a> {
     vm: &'a ManagedObjectReference,
-    auth: &'a dyn crate::types::guest_authentication_trait::GuestAuthenticationTrait,
+    auth: &'a dyn crate::types::traits::GuestAuthenticationTrait,
     value: &'a GuestRegValueSpec,
 }

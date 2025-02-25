@@ -139,26 +139,26 @@ pub enum ValueElements {
     #[serde(rename = "ArrayOfClusterComputeResourceVCProfile")]
     ArrayOfClusterComputeResourceVcProfile(Vec<ClusterComputeResourceVcProfile>),
     /// A boxed array of *ClusterComputeResourceValidationResultBase*. To be used in *Any* placeholders.
-    ArrayOfClusterComputeResourceValidationResultBase(Vec<Box<dyn super::cluster_compute_resource_validation_result_base_trait::ClusterComputeResourceValidationResultBaseTrait>>),
+    ArrayOfClusterComputeResourceValidationResultBase(Vec<Box<dyn super::traits::ClusterComputeResourceValidationResultBaseTrait>>),
     /// A boxed array of *ClusterComputeResourceVcsSlots*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 7.0.1.1
     ArrayOfClusterComputeResourceVcsSlots(Vec<ClusterComputeResourceVcsSlots>),
     /// A boxed array of *ComputeResourceConfigInfo*. To be used in *Any* placeholders.
-    ArrayOfComputeResourceConfigInfo(Vec<Box<dyn super::compute_resource_config_info_trait::ComputeResourceConfigInfoTrait>>),
+    ArrayOfComputeResourceConfigInfo(Vec<Box<dyn super::traits::ComputeResourceConfigInfoTrait>>),
     /// A boxed array of *ComputeResourceConfigSpec*. To be used in *Any* placeholders.
-    ArrayOfComputeResourceConfigSpec(Vec<Box<dyn super::compute_resource_config_spec_trait::ComputeResourceConfigSpecTrait>>),
+    ArrayOfComputeResourceConfigSpec(Vec<Box<dyn super::traits::ComputeResourceConfigSpecTrait>>),
     /// A boxed array of *ComputeResourceHostSPBMLicenseInfo*. To be used in *Any* placeholders.
     #[serde(rename = "ArrayOfComputeResourceHostSPBMLicenseInfo")]
     ArrayOfComputeResourceHostSpbmLicenseInfo(Vec<ComputeResourceHostSpbmLicenseInfo>),
     /// A boxed array of *ComputeResourceSummary*. To be used in *Any* placeholders.
-    ArrayOfComputeResourceSummary(Vec<Box<dyn super::compute_resource_summary_trait::ComputeResourceSummaryTrait>>),
+    ArrayOfComputeResourceSummary(Vec<Box<dyn super::traits::ComputeResourceSummaryTrait>>),
     /// A boxed array of *CustomFieldDef*. To be used in *Any* placeholders.
     ArrayOfCustomFieldDef(Vec<CustomFieldDef>),
     /// A boxed array of *CustomFieldStringValue*. To be used in *Any* placeholders.
     ArrayOfCustomFieldStringValue(Vec<CustomFieldStringValue>),
     /// A boxed array of *CustomFieldValue*. To be used in *Any* placeholders.
-    ArrayOfCustomFieldValue(Vec<Box<dyn super::custom_field_value_trait::CustomFieldValueTrait>>),
+    ArrayOfCustomFieldValue(Vec<Box<dyn super::traits::CustomFieldValueTrait>>),
     /// A boxed array of *CustomizationSpecInfo*. To be used in *Any* placeholders.
     ArrayOfCustomizationSpecInfo(Vec<CustomizationSpecInfo>),
     /// A boxed array of *CustomizationSpecItem*. To be used in *Any* placeholders.
@@ -174,7 +174,7 @@ pub enum ValueElements {
     /// A boxed array of *DatastoreHostMount*. To be used in *Any* placeholders.
     ArrayOfDatastoreHostMount(Vec<DatastoreHostMount>),
     /// A boxed array of *DatastoreInfo*. To be used in *Any* placeholders.
-    ArrayOfDatastoreInfo(Vec<Box<dyn super::datastore_info_trait::DatastoreInfoTrait>>),
+    ArrayOfDatastoreInfo(Vec<Box<dyn super::traits::DatastoreInfoTrait>>),
     /// A boxed array of *DatastoreMountPathDatastorePair*. To be used in *Any* placeholders.
     ArrayOfDatastoreMountPathDatastorePair(Vec<DatastoreMountPathDatastorePair>),
     /// A boxed array of *DatastoreSummary*. To be used in *Any* placeholders.
@@ -186,7 +186,7 @@ pub enum ValueElements {
     /// ***Since:*** vSphere API Release 8.0.1.0
     ArrayOfDatastoreNamespaceManagerDirectoryInfo(Vec<DatastoreNamespaceManagerDirectoryInfo>),
     /// A boxed array of *Description*. To be used in *Any* placeholders.
-    ArrayOfDescription(Vec<Box<dyn super::description_trait::DescriptionTrait>>),
+    ArrayOfDescription(Vec<Box<dyn super::traits::DescriptionTrait>>),
     /// A boxed array of *DesiredSoftwareSpec*. To be used in *Any* placeholders.
     ArrayOfDesiredSoftwareSpec(Vec<DesiredSoftwareSpec>),
     /// A boxed array of *DesiredSoftwareSpecBaseImageSpec*. To be used in *Any* placeholders.
@@ -215,10 +215,10 @@ pub enum ValueElements {
     ArrayOfDvsCapability(Vec<DvsCapability>),
     /// A boxed array of *DVSConfigInfo*. To be used in *Any* placeholders.
     #[serde(rename = "ArrayOfDVSConfigInfo")]
-    ArrayOfDvsConfigInfo(Vec<Box<dyn super::dvs_config_info_trait::DvsConfigInfoTrait>>),
+    ArrayOfDvsConfigInfo(Vec<Box<dyn super::traits::DvsConfigInfoTrait>>),
     /// A boxed array of *DVSConfigSpec*. To be used in *Any* placeholders.
     #[serde(rename = "ArrayOfDVSConfigSpec")]
-    ArrayOfDvsConfigSpec(Vec<Box<dyn super::dvs_config_spec_trait::DvsConfigSpecTrait>>),
+    ArrayOfDvsConfigSpec(Vec<Box<dyn super::traits::DvsConfigSpecTrait>>),
     /// A boxed array of *DVSContactInfo*. To be used in *Any* placeholders.
     #[serde(rename = "ArrayOfDVSContactInfo")]
     ArrayOfDvsContactInfo(Vec<DvsContactInfo>),
@@ -227,13 +227,13 @@ pub enum ValueElements {
     ArrayOfDvsCreateSpec(Vec<DvsCreateSpec>),
     /// A boxed array of *DVSFeatureCapability*. To be used in *Any* placeholders.
     #[serde(rename = "ArrayOfDVSFeatureCapability")]
-    ArrayOfDvsFeatureCapability(Vec<Box<dyn super::dvs_feature_capability_trait::DvsFeatureCapabilityTrait>>),
+    ArrayOfDvsFeatureCapability(Vec<Box<dyn super::traits::DvsFeatureCapabilityTrait>>),
     /// A boxed array of *DVSHealthCheckConfig*. To be used in *Any* placeholders.
     #[serde(rename = "ArrayOfDVSHealthCheckConfig")]
-    ArrayOfDvsHealthCheckConfig(Vec<Box<dyn super::dvs_health_check_config_trait::DvsHealthCheckConfigTrait>>),
+    ArrayOfDvsHealthCheckConfig(Vec<Box<dyn super::traits::DvsHealthCheckConfigTrait>>),
     /// A boxed array of *DVSHealthCheckCapability*. To be used in *Any* placeholders.
     #[serde(rename = "ArrayOfDVSHealthCheckCapability")]
-    ArrayOfDvsHealthCheckCapability(Vec<Box<dyn super::dvs_health_check_capability_trait::DvsHealthCheckCapabilityTrait>>),
+    ArrayOfDvsHealthCheckCapability(Vec<Box<dyn super::traits::DvsHealthCheckCapabilityTrait>>),
     /// A boxed array of *DvsHostInfrastructureTrafficResource*. To be used in *Any* placeholders.
     ArrayOfDvsHostInfrastructureTrafficResource(Vec<DvsHostInfrastructureTrafficResource>),
     /// A boxed array of *DvsHostInfrastructureTrafficResourceAllocation*. To be used in *Any* placeholders.
@@ -260,12 +260,12 @@ pub enum ValueElements {
     ArrayOfDvsPolicy(Vec<DvsPolicy>),
     /// A boxed array of *DVSUplinkPortPolicy*. To be used in *Any* placeholders.
     #[serde(rename = "ArrayOfDVSUplinkPortPolicy")]
-    ArrayOfDvsUplinkPortPolicy(Vec<Box<dyn super::dvs_uplink_port_policy_trait::DvsUplinkPortPolicyTrait>>),
+    ArrayOfDvsUplinkPortPolicy(Vec<Box<dyn super::traits::DvsUplinkPortPolicyTrait>>),
     /// A boxed array of *EVCMode*. To be used in *Any* placeholders.
     #[serde(rename = "ArrayOfEVCMode")]
     ArrayOfEvcMode(Vec<EvcMode>),
     /// A boxed array of *ElementDescription*. To be used in *Any* placeholders.
-    ArrayOfElementDescription(Vec<Box<dyn super::element_description_trait::ElementDescriptionTrait>>),
+    ArrayOfElementDescription(Vec<Box<dyn super::traits::ElementDescriptionTrait>>),
     /// A boxed array of *EnumDescription*. To be used in *Any* placeholders.
     ArrayOfEnumDescription(Vec<EnumDescription>),
     /// A boxed array of *EnvironmentBrowserConfigOptionQuerySpec*. To be used in *Any* placeholders.
@@ -361,9 +361,9 @@ pub enum ValueElements {
     /// A boxed array of *HttpNfcLeaseSourceFile*. To be used in *Any* placeholders.
     ArrayOfHttpNfcLeaseSourceFile(Vec<HttpNfcLeaseSourceFile>),
     /// A boxed array of *ImportSpec*. To be used in *Any* placeholders.
-    ArrayOfImportSpec(Vec<Box<dyn super::import_spec_trait::ImportSpecTrait>>),
+    ArrayOfImportSpec(Vec<Box<dyn super::traits::ImportSpecTrait>>),
     /// A boxed array of *InheritablePolicy*. To be used in *Any* placeholders.
-    ArrayOfInheritablePolicy(Vec<Box<dyn super::inheritable_policy_trait::InheritablePolicyTrait>>),
+    ArrayOfInheritablePolicy(Vec<Box<dyn super::traits::InheritablePolicyTrait>>),
     /// A boxed array of *IntExpression*. To be used in *Any* placeholders.
     ArrayOfIntExpression(Vec<IntExpression>),
     /// A boxed array of *IntPolicy*. To be used in *Any* placeholders.
@@ -373,13 +373,13 @@ pub enum ValueElements {
     /// A boxed array of *HostIoFilterInfo*. To be used in *Any* placeholders.
     ArrayOfHostIoFilterInfo(Vec<HostIoFilterInfo>),
     /// A boxed array of *IoFilterInfo*. To be used in *Any* placeholders.
-    ArrayOfIoFilterInfo(Vec<Box<dyn super::io_filter_info_trait::IoFilterInfoTrait>>),
+    ArrayOfIoFilterInfo(Vec<Box<dyn super::traits::IoFilterInfoTrait>>),
     /// A boxed array of *IoFilterQueryIssueResult*. To be used in *Any* placeholders.
     ArrayOfIoFilterQueryIssueResult(Vec<IoFilterQueryIssueResult>),
     /// A boxed array of *IoFilterHostIssue*. To be used in *Any* placeholders.
     ArrayOfIoFilterHostIssue(Vec<IoFilterHostIssue>),
     /// A boxed array of *IpAddress*. To be used in *Any* placeholders.
-    ArrayOfIpAddress(Vec<Box<dyn super::ip_address_trait::IpAddressTrait>>),
+    ArrayOfIpAddress(Vec<Box<dyn super::traits::IpAddressTrait>>),
     /// A boxed array of *IpPoolManagerIpAllocation*. To be used in *Any* placeholders.
     ArrayOfIpPoolManagerIpAllocation(Vec<IpPoolManagerIpAllocation>),
     /// A boxed array of *IpRange*. To be used in *Any* placeholders.
@@ -407,7 +407,7 @@ pub enum ValueElements {
     /// A boxed array of *LicenseServerSource*. To be used in *Any* placeholders.
     ArrayOfLicenseServerSource(Vec<LicenseServerSource>),
     /// A boxed array of *LicenseSource*. To be used in *Any* placeholders.
-    ArrayOfLicenseSource(Vec<Box<dyn super::license_source_trait::LicenseSourceTrait>>),
+    ArrayOfLicenseSource(Vec<Box<dyn super::traits::LicenseSourceTrait>>),
     /// A boxed array of *LicenseUsageInfo*. To be used in *Any* placeholders.
     ArrayOfLicenseUsageInfo(Vec<LicenseUsageInfo>),
     /// A boxed array of *LocalLicenseSource*. To be used in *Any* placeholders.
@@ -419,15 +419,15 @@ pub enum ValueElements {
     /// A boxed array of *LongPolicy*. To be used in *Any* placeholders.
     ArrayOfLongPolicy(Vec<LongPolicy>),
     /// A boxed array of *MacAddress*. To be used in *Any* placeholders.
-    ArrayOfMacAddress(Vec<Box<dyn super::mac_address_trait::MacAddressTrait>>),
+    ArrayOfMacAddress(Vec<Box<dyn super::traits::MacAddressTrait>>),
     /// A boxed array of *MacRange*. To be used in *Any* placeholders.
     ArrayOfMacRange(Vec<MacRange>),
     /// A boxed array of *MethodDescription*. To be used in *Any* placeholders.
     ArrayOfMethodDescription(Vec<MethodDescription>),
     /// A boxed array of *NegatableExpression*. To be used in *Any* placeholders.
-    ArrayOfNegatableExpression(Vec<Box<dyn super::negatable_expression_trait::NegatableExpressionTrait>>),
+    ArrayOfNegatableExpression(Vec<Box<dyn super::traits::NegatableExpressionTrait>>),
     /// A boxed array of *NetworkSummary*. To be used in *Any* placeholders.
-    ArrayOfNetworkSummary(Vec<Box<dyn super::network_summary_trait::NetworkSummaryTrait>>),
+    ArrayOfNetworkSummary(Vec<Box<dyn super::traits::NetworkSummaryTrait>>),
     /// A boxed array of *NumericRange*. To be used in *Any* placeholders.
     ArrayOfNumericRange(Vec<NumericRange>),
     /// A boxed array of *OpaqueNetworkCapability*. To be used in *Any* placeholders.
@@ -439,7 +439,7 @@ pub enum ValueElements {
     /// A boxed array of *OvfConsumerOvfSection*. To be used in *Any* placeholders.
     ArrayOfOvfConsumerOvfSection(Vec<OvfConsumerOvfSection>),
     /// A boxed array of *OvfManagerCommonParams*. To be used in *Any* placeholders.
-    ArrayOfOvfManagerCommonParams(Vec<Box<dyn super::ovf_manager_common_params_trait::OvfManagerCommonParamsTrait>>),
+    ArrayOfOvfManagerCommonParams(Vec<Box<dyn super::traits::OvfManagerCommonParamsTrait>>),
     /// A boxed array of *OvfCreateDescriptorParams*. To be used in *Any* placeholders.
     ArrayOfOvfCreateDescriptorParams(Vec<OvfCreateDescriptorParams>),
     /// A boxed array of *OvfCreateDescriptorResult*. To be used in *Any* placeholders.
@@ -483,7 +483,7 @@ pub enum ValueElements {
     /// A boxed array of *PerfEntityMetric*. To be used in *Any* placeholders.
     ArrayOfPerfEntityMetric(Vec<PerfEntityMetric>),
     /// A boxed array of *PerfEntityMetricBase*. To be used in *Any* placeholders.
-    ArrayOfPerfEntityMetricBase(Vec<Box<dyn super::perf_entity_metric_base_trait::PerfEntityMetricBaseTrait>>),
+    ArrayOfPerfEntityMetricBase(Vec<Box<dyn super::traits::PerfEntityMetricBaseTrait>>),
     /// A boxed array of *PerfEntityMetricCSV*. To be used in *Any* placeholders.
     #[serde(rename = "ArrayOfPerfEntityMetricCSV")]
     ArrayOfPerfEntityMetricCsv(Vec<PerfEntityMetricCsv>),
@@ -492,7 +492,7 @@ pub enum ValueElements {
     /// A boxed array of *PerfMetricId*. To be used in *Any* placeholders.
     ArrayOfPerfMetricId(Vec<PerfMetricId>),
     /// A boxed array of *PerfMetricSeries*. To be used in *Any* placeholders.
-    ArrayOfPerfMetricSeries(Vec<Box<dyn super::perf_metric_series_trait::PerfMetricSeriesTrait>>),
+    ArrayOfPerfMetricSeries(Vec<Box<dyn super::traits::PerfMetricSeriesTrait>>),
     /// A boxed array of *PerfMetricSeriesCSV*. To be used in *Any* placeholders.
     #[serde(rename = "ArrayOfPerfMetricSeriesCSV")]
     ArrayOfPerfMetricSeriesCsv(Vec<PerfMetricSeriesCsv>),
@@ -527,14 +527,14 @@ pub enum ValueElements {
     /// A boxed array of *ResourcePoolRuntimeInfo*. To be used in *Any* placeholders.
     ArrayOfResourcePoolRuntimeInfo(Vec<ResourcePoolRuntimeInfo>),
     /// A boxed array of *ResourcePoolSummary*. To be used in *Any* placeholders.
-    ArrayOfResourcePoolSummary(Vec<Box<dyn super::resource_pool_summary_trait::ResourcePoolSummaryTrait>>),
+    ArrayOfResourcePoolSummary(Vec<Box<dyn super::traits::ResourcePoolSummaryTrait>>),
     /// A boxed array of *ResourcePoolQuickStats*. To be used in *Any* placeholders.
     ArrayOfResourcePoolQuickStats(Vec<ResourcePoolQuickStats>),
     /// A boxed array of *SDDCBase*. To be used in *Any* placeholders.
     #[serde(rename = "ArrayOfSDDCBase")]
     ArrayOfSddcBase(Vec<SddcBase>),
     /// A boxed array of *SelectionSet*. To be used in *Any* placeholders.
-    ArrayOfSelectionSet(Vec<Box<dyn super::selection_set_trait::SelectionSetTrait>>),
+    ArrayOfSelectionSet(Vec<Box<dyn super::traits::SelectionSetTrait>>),
     /// A boxed array of *HostVMotionCompatibility*. To be used in *Any* placeholders.
     ArrayOfHostVMotionCompatibility(Vec<HostVMotionCompatibility>),
     /// A boxed array of *ProductComponentInfo*. To be used in *Any* placeholders.
@@ -544,7 +544,7 @@ pub enum ValueElements {
     /// A boxed array of *ServiceLocator*. To be used in *Any* placeholders.
     ArrayOfServiceLocator(Vec<ServiceLocator>),
     /// A boxed array of *ServiceLocatorCredential*. To be used in *Any* placeholders.
-    ArrayOfServiceLocatorCredential(Vec<Box<dyn super::service_locator_credential_trait::ServiceLocatorCredentialTrait>>),
+    ArrayOfServiceLocatorCredential(Vec<Box<dyn super::traits::ServiceLocatorCredentialTrait>>),
     /// A boxed array of *ServiceLocatorNamePassword*. To be used in *Any* placeholders.
     ArrayOfServiceLocatorNamePassword(Vec<ServiceLocatorNamePassword>),
     /// A boxed array of *ServiceLocatorSAMLCredential*. To be used in *Any* placeholders.
@@ -559,7 +559,7 @@ pub enum ValueElements {
     /// A boxed array of *SessionManagerLocalTicket*. To be used in *Any* placeholders.
     ArrayOfSessionManagerLocalTicket(Vec<SessionManagerLocalTicket>),
     /// A boxed array of *SessionManagerServiceRequestSpec*. To be used in *Any* placeholders.
-    ArrayOfSessionManagerServiceRequestSpec(Vec<Box<dyn super::session_manager_service_request_spec_trait::SessionManagerServiceRequestSpecTrait>>),
+    ArrayOfSessionManagerServiceRequestSpec(Vec<Box<dyn super::traits::SessionManagerServiceRequestSpecTrait>>),
     /// A boxed array of *SessionManagerVmomiServiceRequestSpec*. To be used in *Any* placeholders.
     ArrayOfSessionManagerVmomiServiceRequestSpec(Vec<SessionManagerVmomiServiceRequestSpec>),
     /// A boxed array of *SharesInfo*. To be used in *Any* placeholders.
@@ -614,7 +614,7 @@ pub enum ValueElements {
     /// A boxed array of *TaskInfo*. To be used in *Any* placeholders.
     ArrayOfTaskInfo(Vec<TaskInfo>),
     /// A boxed array of *TaskReason*. To be used in *Any* placeholders.
-    ArrayOfTaskReason(Vec<Box<dyn super::task_reason_trait::TaskReasonTrait>>),
+    ArrayOfTaskReason(Vec<Box<dyn super::traits::TaskReasonTrait>>),
     /// A boxed array of *TaskReasonAlarm*. To be used in *Any* placeholders.
     ArrayOfTaskReasonAlarm(Vec<TaskReasonAlarm>),
     /// A boxed array of *TaskReasonSchedule*. To be used in *Any* placeholders.
@@ -624,13 +624,13 @@ pub enum ValueElements {
     /// A boxed array of *TaskReasonUser*. To be used in *Any* placeholders.
     ArrayOfTaskReasonUser(Vec<TaskReasonUser>),
     /// A boxed array of *TypeDescription*. To be used in *Any* placeholders.
-    ArrayOfTypeDescription(Vec<Box<dyn super::type_description_trait::TypeDescriptionTrait>>),
+    ArrayOfTypeDescription(Vec<Box<dyn super::traits::TypeDescriptionTrait>>),
     /// A boxed array of *UpdateVirtualMachineFilesResult*. To be used in *Any* placeholders.
     ArrayOfUpdateVirtualMachineFilesResult(Vec<UpdateVirtualMachineFilesResult>),
     /// A boxed array of *UpdateVirtualMachineFilesResultFailedVmFileInfo*. To be used in *Any* placeholders.
     ArrayOfUpdateVirtualMachineFilesResultFailedVmFileInfo(Vec<UpdateVirtualMachineFilesResultFailedVmFileInfo>),
     /// A boxed array of *UserSearchResult*. To be used in *Any* placeholders.
-    ArrayOfUserSearchResult(Vec<Box<dyn super::user_search_result_trait::UserSearchResultTrait>>),
+    ArrayOfUserSearchResult(Vec<Box<dyn super::traits::UserSearchResultTrait>>),
     /// A boxed array of *UserSession*. To be used in *Any* placeholders.
     ArrayOfUserSession(Vec<UserSession>),
     /// A boxed array of *VVolVmConfigFileUpdateResult*. To be used in *Any* placeholders.
@@ -674,15 +674,15 @@ pub enum ValueElements {
     /// A boxed array of *DeviceBackedVirtualDiskSpec*. To be used in *Any* placeholders.
     ArrayOfDeviceBackedVirtualDiskSpec(Vec<DeviceBackedVirtualDiskSpec>),
     /// A boxed array of *FileBackedVirtualDiskSpec*. To be used in *Any* placeholders.
-    ArrayOfFileBackedVirtualDiskSpec(Vec<Box<dyn super::file_backed_virtual_disk_spec_trait::FileBackedVirtualDiskSpecTrait>>),
+    ArrayOfFileBackedVirtualDiskSpec(Vec<Box<dyn super::traits::FileBackedVirtualDiskSpecTrait>>),
     /// A boxed array of *SeSparseVirtualDiskSpec*. To be used in *Any* placeholders.
     ArrayOfSeSparseVirtualDiskSpec(Vec<SeSparseVirtualDiskSpec>),
     /// A boxed array of *VirtualDiskSpec*. To be used in *Any* placeholders.
-    ArrayOfVirtualDiskSpec(Vec<Box<dyn super::virtual_disk_spec_trait::VirtualDiskSpecTrait>>),
+    ArrayOfVirtualDiskSpec(Vec<Box<dyn super::traits::VirtualDiskSpecTrait>>),
     /// A boxed array of *VirtualMachineConnection*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 7.0.1.0
-    ArrayOfVirtualMachineConnection(Vec<Box<dyn super::virtual_machine_connection_trait::VirtualMachineConnectionTrait>>),
+    ArrayOfVirtualMachineConnection(Vec<Box<dyn super::traits::VirtualMachineConnectionTrait>>),
     /// A boxed array of *DiskChangeInfo*. To be used in *Any* placeholders.
     ArrayOfDiskChangeInfo(Vec<DiskChangeInfo>),
     /// A boxed array of *DiskChangeExtent*. To be used in *Any* placeholders.
@@ -717,7 +717,7 @@ pub enum ValueElements {
     /// A boxed array of *VsanUpgradeSystemNotEnoughFreeCapacityIssue*. To be used in *Any* placeholders.
     ArrayOfVsanUpgradeSystemNotEnoughFreeCapacityIssue(Vec<VsanUpgradeSystemNotEnoughFreeCapacityIssue>),
     /// A boxed array of *VsanUpgradeSystemPreflightCheckIssue*. To be used in *Any* placeholders.
-    ArrayOfVsanUpgradeSystemPreflightCheckIssue(Vec<Box<dyn super::vsan_upgrade_system_preflight_check_issue_trait::VsanUpgradeSystemPreflightCheckIssueTrait>>),
+    ArrayOfVsanUpgradeSystemPreflightCheckIssue(Vec<Box<dyn super::traits::VsanUpgradeSystemPreflightCheckIssueTrait>>),
     /// A boxed array of *VsanUpgradeSystemPreflightCheckResult*. To be used in *Any* placeholders.
     ArrayOfVsanUpgradeSystemPreflightCheckResult(Vec<VsanUpgradeSystemPreflightCheckResult>),
     /// A boxed array of *VsanUpgradeSystemRogueHostsInClusterIssue*. To be used in *Any* placeholders.
@@ -725,7 +725,7 @@ pub enum ValueElements {
     /// A boxed array of *VsanUpgradeSystemUpgradeHistoryDiskGroupOp*. To be used in *Any* placeholders.
     ArrayOfVsanUpgradeSystemUpgradeHistoryDiskGroupOp(Vec<VsanUpgradeSystemUpgradeHistoryDiskGroupOp>),
     /// A boxed array of *VsanUpgradeSystemUpgradeHistoryItem*. To be used in *Any* placeholders.
-    ArrayOfVsanUpgradeSystemUpgradeHistoryItem(Vec<Box<dyn super::vsan_upgrade_system_upgrade_history_item_trait::VsanUpgradeSystemUpgradeHistoryItemTrait>>),
+    ArrayOfVsanUpgradeSystemUpgradeHistoryItem(Vec<Box<dyn super::traits::VsanUpgradeSystemUpgradeHistoryItemTrait>>),
     /// A boxed array of *VsanUpgradeSystemUpgradeHistoryPreflightFail*. To be used in *Any* placeholders.
     ArrayOfVsanUpgradeSystemUpgradeHistoryPreflightFail(Vec<VsanUpgradeSystemUpgradeHistoryPreflightFail>),
     /// A boxed array of *VsanUpgradeSystemUpgradeStatus*. To be used in *Any* placeholders.
@@ -735,7 +735,7 @@ pub enum ValueElements {
     /// A boxed array of *VsanUpgradeSystemWrongEsxVersionIssue*. To be used in *Any* placeholders.
     ArrayOfVsanUpgradeSystemWrongEsxVersionIssue(Vec<VsanUpgradeSystemWrongEsxVersionIssue>),
     /// A boxed array of *Action*. To be used in *Any* placeholders.
-    ArrayOfAction(Vec<Box<dyn super::action_trait::ActionTrait>>),
+    ArrayOfAction(Vec<Box<dyn super::traits::ActionTrait>>),
     /// A boxed array of *CreateTaskAction*. To be used in *Any* placeholders.
     ArrayOfCreateTaskAction(Vec<CreateTaskAction>),
     /// A boxed array of *MethodAction*. To be used in *Any* placeholders.
@@ -750,11 +750,11 @@ pub enum ValueElements {
     #[serde(rename = "ArrayOfSendSNMPAction")]
     ArrayOfSendSnmpAction(Vec<SendSnmpAction>),
     /// A boxed array of *AlarmAction*. To be used in *Any* placeholders.
-    ArrayOfAlarmAction(Vec<Box<dyn super::alarm_action_trait::AlarmActionTrait>>),
+    ArrayOfAlarmAction(Vec<Box<dyn super::traits::AlarmActionTrait>>),
     /// A boxed array of *AlarmDescription*. To be used in *Any* placeholders.
     ArrayOfAlarmDescription(Vec<AlarmDescription>),
     /// A boxed array of *AlarmExpression*. To be used in *Any* placeholders.
-    ArrayOfAlarmExpression(Vec<Box<dyn super::alarm_expression_trait::AlarmExpressionTrait>>),
+    ArrayOfAlarmExpression(Vec<Box<dyn super::traits::AlarmExpressionTrait>>),
     /// A boxed array of *AlarmFilterSpec*. To be used in *Any* placeholders.
     ArrayOfAlarmFilterSpec(Vec<AlarmFilterSpec>),
     /// A boxed array of *AlarmInfo*. To be used in *Any* placeholders.
@@ -762,7 +762,7 @@ pub enum ValueElements {
     /// A boxed array of *AlarmSetting*. To be used in *Any* placeholders.
     ArrayOfAlarmSetting(Vec<AlarmSetting>),
     /// A boxed array of *AlarmSpec*. To be used in *Any* placeholders.
-    ArrayOfAlarmSpec(Vec<Box<dyn super::alarm_spec_trait::AlarmSpecTrait>>),
+    ArrayOfAlarmSpec(Vec<Box<dyn super::traits::AlarmSpecTrait>>),
     /// A boxed array of *AlarmState*. To be used in *Any* placeholders.
     ArrayOfAlarmState(Vec<AlarmState>),
     /// A boxed array of *AlarmTriggeringAction*. To be used in *Any* placeholders.
@@ -784,7 +784,7 @@ pub enum ValueElements {
     /// A boxed array of *StateAlarmExpression*. To be used in *Any* placeholders.
     ArrayOfStateAlarmExpression(Vec<StateAlarmExpression>),
     /// A boxed array of *ClusterAction*. To be used in *Any* placeholders.
-    ArrayOfClusterAction(Vec<Box<dyn super::cluster_action_trait::ClusterActionTrait>>),
+    ArrayOfClusterAction(Vec<Box<dyn super::traits::ClusterActionTrait>>),
     /// A boxed array of *ClusterActionHistory*. To be used in *Any* placeholders.
     ArrayOfClusterActionHistory(Vec<ClusterActionHistory>),
     /// A boxed array of *ClusterAffinityRuleSpec*. To be used in *Any* placeholders.
@@ -812,11 +812,11 @@ pub enum ValueElements {
     /// A boxed array of *ClusterDasAamNodeState*. To be used in *Any* placeholders.
     ArrayOfClusterDasAamNodeState(Vec<ClusterDasAamNodeState>),
     /// A boxed array of *ClusterDasAdmissionControlInfo*. To be used in *Any* placeholders.
-    ArrayOfClusterDasAdmissionControlInfo(Vec<Box<dyn super::cluster_das_admission_control_info_trait::ClusterDasAdmissionControlInfoTrait>>),
+    ArrayOfClusterDasAdmissionControlInfo(Vec<Box<dyn super::traits::ClusterDasAdmissionControlInfoTrait>>),
     /// A boxed array of *ClusterDasAdmissionControlPolicy*. To be used in *Any* placeholders.
-    ArrayOfClusterDasAdmissionControlPolicy(Vec<Box<dyn super::cluster_das_admission_control_policy_trait::ClusterDasAdmissionControlPolicyTrait>>),
+    ArrayOfClusterDasAdmissionControlPolicy(Vec<Box<dyn super::traits::ClusterDasAdmissionControlPolicyTrait>>),
     /// A boxed array of *ClusterDasAdvancedRuntimeInfo*. To be used in *Any* placeholders.
-    ArrayOfClusterDasAdvancedRuntimeInfo(Vec<Box<dyn super::cluster_das_advanced_runtime_info_trait::ClusterDasAdvancedRuntimeInfoTrait>>),
+    ArrayOfClusterDasAdvancedRuntimeInfo(Vec<Box<dyn super::traits::ClusterDasAdvancedRuntimeInfoTrait>>),
     /// A boxed array of *DasHeartbeatDatastoreInfo*. To be used in *Any* placeholders.
     ArrayOfDasHeartbeatDatastoreInfo(Vec<DasHeartbeatDatastoreInfo>),
     /// A boxed array of *ClusterDasAdvancedRuntimeInfoVmcpCapabilityInfo*. To be used in *Any* placeholders.
@@ -824,7 +824,7 @@ pub enum ValueElements {
     /// A boxed array of *ClusterDasConfigInfo*. To be used in *Any* placeholders.
     ArrayOfClusterDasConfigInfo(Vec<ClusterDasConfigInfo>),
     /// A boxed array of *ClusterDasData*. To be used in *Any* placeholders.
-    ArrayOfClusterDasData(Vec<Box<dyn super::cluster_das_data_trait::ClusterDasDataTrait>>),
+    ArrayOfClusterDasData(Vec<Box<dyn super::traits::ClusterDasDataTrait>>),
     /// A boxed array of *ClusterDasDataSummary*. To be used in *Any* placeholders.
     ArrayOfClusterDasDataSummary(Vec<ClusterDasDataSummary>),
     /// A boxed array of *ClusterDasFailoverLevelAdvancedRuntimeInfo*. To be used in *Any* placeholders.
@@ -838,7 +838,7 @@ pub enum ValueElements {
     /// A boxed array of *ClusterDasFdmHostState*. To be used in *Any* placeholders.
     ArrayOfClusterDasFdmHostState(Vec<ClusterDasFdmHostState>),
     /// A boxed array of *ClusterDasHostInfo*. To be used in *Any* placeholders.
-    ArrayOfClusterDasHostInfo(Vec<Box<dyn super::cluster_das_host_info_trait::ClusterDasHostInfoTrait>>),
+    ArrayOfClusterDasHostInfo(Vec<Box<dyn super::traits::ClusterDasHostInfoTrait>>),
     /// A boxed array of *ClusterDasHostRecommendation*. To be used in *Any* placeholders.
     ArrayOfClusterDasHostRecommendation(Vec<ClusterDasHostRecommendation>),
     /// A boxed array of *ClusterDasVmConfigInfo*. To be used in *Any* placeholders.
@@ -866,7 +866,7 @@ pub enum ValueElements {
     /// A boxed array of *ClusterDrsFaultsFaultsByVirtualDisk*. To be used in *Any* placeholders.
     ArrayOfClusterDrsFaultsFaultsByVirtualDisk(Vec<ClusterDrsFaultsFaultsByVirtualDisk>),
     /// A boxed array of *ClusterDrsFaultsFaultsByVm*. To be used in *Any* placeholders.
-    ArrayOfClusterDrsFaultsFaultsByVm(Vec<Box<dyn super::cluster_drs_faults_faults_by_vm_trait::ClusterDrsFaultsFaultsByVmTrait>>),
+    ArrayOfClusterDrsFaultsFaultsByVm(Vec<Box<dyn super::traits::ClusterDrsFaultsFaultsByVmTrait>>),
     /// A boxed array of *ClusterDrsMigration*. To be used in *Any* placeholders.
     ArrayOfClusterDrsMigration(Vec<ClusterDrsMigration>),
     /// A boxed array of *ClusterDrsRecommendation*. To be used in *Any* placeholders.
@@ -900,7 +900,7 @@ pub enum ValueElements {
     /// A boxed array of *ClusterFixedSizeSlotPolicy*. To be used in *Any* placeholders.
     ArrayOfClusterFixedSizeSlotPolicy(Vec<ClusterFixedSizeSlotPolicy>),
     /// A boxed array of *ClusterGroupInfo*. To be used in *Any* placeholders.
-    ArrayOfClusterGroupInfo(Vec<Box<dyn super::cluster_group_info_trait::ClusterGroupInfoTrait>>),
+    ArrayOfClusterGroupInfo(Vec<Box<dyn super::traits::ClusterGroupInfoTrait>>),
     /// A boxed array of *ClusterGroupSpec*. To be used in *Any* placeholders.
     ArrayOfClusterGroupSpec(Vec<ClusterGroupSpec>),
     /// A boxed array of *ClusterHostGroup*. To be used in *Any* placeholders.
@@ -944,11 +944,11 @@ pub enum ValueElements {
     /// A boxed array of *ClusterResourceUsageSummary*. To be used in *Any* placeholders.
     ArrayOfClusterResourceUsageSummary(Vec<ClusterResourceUsageSummary>),
     /// A boxed array of *ClusterRuleInfo*. To be used in *Any* placeholders.
-    ArrayOfClusterRuleInfo(Vec<Box<dyn super::cluster_rule_info_trait::ClusterRuleInfoTrait>>),
+    ArrayOfClusterRuleInfo(Vec<Box<dyn super::traits::ClusterRuleInfoTrait>>),
     /// A boxed array of *ClusterRuleSpec*. To be used in *Any* placeholders.
     ArrayOfClusterRuleSpec(Vec<ClusterRuleSpec>),
     /// A boxed array of *ClusterSlotPolicy*. To be used in *Any* placeholders.
-    ArrayOfClusterSlotPolicy(Vec<Box<dyn super::cluster_slot_policy_trait::ClusterSlotPolicyTrait>>),
+    ArrayOfClusterSlotPolicy(Vec<Box<dyn super::traits::ClusterSlotPolicyTrait>>),
     /// A boxed array of *ClusterSystemVMsConfigInfo*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 7.0.3.0
@@ -986,7 +986,7 @@ pub enum ValueElements {
     #[serde(rename = "ArrayOfDVPortConfigSpec")]
     ArrayOfDvPortConfigSpec(Vec<DvPortConfigSpec>),
     /// A boxed array of *DvsFilterConfig*. To be used in *Any* placeholders.
-    ArrayOfDvsFilterConfig(Vec<Box<dyn super::dvs_filter_config_trait::DvsFilterConfigTrait>>),
+    ArrayOfDvsFilterConfig(Vec<Box<dyn super::traits::DvsFilterConfigTrait>>),
     /// A boxed array of *DvsFilterConfigSpec*. To be used in *Any* placeholders.
     ArrayOfDvsFilterConfigSpec(Vec<DvsFilterConfigSpec>),
     /// A boxed array of *DvsFilterParameter*. To be used in *Any* placeholders.
@@ -1001,12 +1001,12 @@ pub enum ValueElements {
     ArrayOfDvPortStatus(Vec<DvPortStatus>),
     /// A boxed array of *DVPortSetting*. To be used in *Any* placeholders.
     #[serde(rename = "ArrayOfDVPortSetting")]
-    ArrayOfDvPortSetting(Vec<Box<dyn super::dv_port_setting_trait::DvPortSettingTrait>>),
+    ArrayOfDvPortSetting(Vec<Box<dyn super::traits::DvPortSettingTrait>>),
     /// A boxed array of *DVPortState*. To be used in *Any* placeholders.
     #[serde(rename = "ArrayOfDVPortState")]
     ArrayOfDvPortState(Vec<DvPortState>),
     /// A boxed array of *DvsTrafficFilterConfig*. To be used in *Any* placeholders.
-    ArrayOfDvsTrafficFilterConfig(Vec<Box<dyn super::dvs_traffic_filter_config_trait::DvsTrafficFilterConfigTrait>>),
+    ArrayOfDvsTrafficFilterConfig(Vec<Box<dyn super::traits::DvsTrafficFilterConfigTrait>>),
     /// A boxed array of *DvsTrafficFilterConfigSpec*. To be used in *Any* placeholders.
     ArrayOfDvsTrafficFilterConfigSpec(Vec<DvsTrafficFilterConfigSpec>),
     /// A boxed array of *DVSTrafficShapingPolicy*. To be used in *Any* placeholders.
@@ -1025,7 +1025,7 @@ pub enum ValueElements {
     ArrayOfDistributedVirtualPortgroupNsxPortgroupOperationResult(Vec<DistributedVirtualPortgroupNsxPortgroupOperationResult>),
     /// A boxed array of *DVPortgroupPolicy*. To be used in *Any* placeholders.
     #[serde(rename = "ArrayOfDVPortgroupPolicy")]
-    ArrayOfDvPortgroupPolicy(Vec<Box<dyn super::dv_portgroup_policy_trait::DvPortgroupPolicyTrait>>),
+    ArrayOfDvPortgroupPolicy(Vec<Box<dyn super::traits::DvPortgroupPolicyTrait>>),
     /// A boxed array of *DistributedVirtualPortgroupProblem*. To be used in *Any* placeholders.
     ArrayOfDistributedVirtualPortgroupProblem(Vec<DistributedVirtualPortgroupProblem>),
     /// A boxed array of *DistributedVirtualPortgroupInfo*. To be used in *Any* placeholders.
@@ -1049,7 +1049,7 @@ pub enum ValueElements {
     /// A boxed array of *DistributedVirtualSwitchManagerHostContainerFilter*. To be used in *Any* placeholders.
     ArrayOfDistributedVirtualSwitchManagerHostContainerFilter(Vec<DistributedVirtualSwitchManagerHostContainerFilter>),
     /// A boxed array of *DistributedVirtualSwitchManagerHostDvsFilterSpec*. To be used in *Any* placeholders.
-    ArrayOfDistributedVirtualSwitchManagerHostDvsFilterSpec(Vec<Box<dyn super::distributed_virtual_switch_manager_host_dvs_filter_spec_trait::DistributedVirtualSwitchManagerHostDvsFilterSpecTrait>>),
+    ArrayOfDistributedVirtualSwitchManagerHostDvsFilterSpec(Vec<Box<dyn super::traits::DistributedVirtualSwitchManagerHostDvsFilterSpecTrait>>),
     /// A boxed array of *DistributedVirtualSwitchManagerHostDvsMembershipFilter*. To be used in *Any* placeholders.
     ArrayOfDistributedVirtualSwitchManagerHostDvsMembershipFilter(Vec<DistributedVirtualSwitchManagerHostDvsMembershipFilter>),
     /// A boxed array of *DistributedVirtualSwitchManagerImportResult*. To be used in *Any* placeholders.
@@ -1069,13 +1069,13 @@ pub enum ValueElements {
     /// A boxed array of *DistributedVirtualSwitchHostMember*. To be used in *Any* placeholders.
     ArrayOfDistributedVirtualSwitchHostMember(Vec<DistributedVirtualSwitchHostMember>),
     /// A boxed array of *DistributedVirtualSwitchHostMemberBacking*. To be used in *Any* placeholders.
-    ArrayOfDistributedVirtualSwitchHostMemberBacking(Vec<Box<dyn super::distributed_virtual_switch_host_member_backing_trait::DistributedVirtualSwitchHostMemberBackingTrait>>),
+    ArrayOfDistributedVirtualSwitchHostMemberBacking(Vec<Box<dyn super::traits::DistributedVirtualSwitchHostMemberBackingTrait>>),
     /// A boxed array of *DistributedVirtualSwitchHostMemberConfigInfo*. To be used in *Any* placeholders.
     ArrayOfDistributedVirtualSwitchHostMemberConfigInfo(Vec<DistributedVirtualSwitchHostMemberConfigInfo>),
     /// A boxed array of *DistributedVirtualSwitchHostMemberConfigSpec*. To be used in *Any* placeholders.
     ArrayOfDistributedVirtualSwitchHostMemberConfigSpec(Vec<DistributedVirtualSwitchHostMemberConfigSpec>),
     /// A boxed array of *HostMemberHealthCheckResult*. To be used in *Any* placeholders.
-    ArrayOfHostMemberHealthCheckResult(Vec<Box<dyn super::host_member_health_check_result_trait::HostMemberHealthCheckResultTrait>>),
+    ArrayOfHostMemberHealthCheckResult(Vec<Box<dyn super::traits::HostMemberHealthCheckResultTrait>>),
     /// A boxed array of *DistributedVirtualSwitchHostMemberPnicBacking*. To be used in *Any* placeholders.
     ArrayOfDistributedVirtualSwitchHostMemberPnicBacking(Vec<DistributedVirtualSwitchHostMemberPnicBacking>),
     /// A boxed array of *DistributedVirtualSwitchHostMemberPnicSpec*. To be used in *Any* placeholders.
@@ -1087,7 +1087,7 @@ pub enum ValueElements {
     /// A boxed array of *DistributedVirtualSwitchHostMemberTransportZoneInfo*. To be used in *Any* placeholders.
     ArrayOfDistributedVirtualSwitchHostMemberTransportZoneInfo(Vec<DistributedVirtualSwitchHostMemberTransportZoneInfo>),
     /// A boxed array of *HostMemberUplinkHealthCheckResult*. To be used in *Any* placeholders.
-    ArrayOfHostMemberUplinkHealthCheckResult(Vec<Box<dyn super::host_member_uplink_health_check_result_trait::HostMemberUplinkHealthCheckResultTrait>>),
+    ArrayOfHostMemberUplinkHealthCheckResult(Vec<Box<dyn super::traits::HostMemberUplinkHealthCheckResultTrait>>),
     /// A boxed array of *DistributedVirtualSwitchHostProductSpec*. To be used in *Any* placeholders.
     ArrayOfDistributedVirtualSwitchHostProductSpec(Vec<DistributedVirtualSwitchHostProductSpec>),
     /// A boxed array of *DistributedVirtualSwitchKeyedOpaqueBlob*. To be used in *Any* placeholders.
@@ -1120,7 +1120,7 @@ pub enum ValueElements {
     /// A boxed array of *DvsAcceptNetworkRuleAction*. To be used in *Any* placeholders.
     ArrayOfDvsAcceptNetworkRuleAction(Vec<DvsAcceptNetworkRuleAction>),
     /// A boxed array of *DvsNetworkRuleAction*. To be used in *Any* placeholders.
-    ArrayOfDvsNetworkRuleAction(Vec<Box<dyn super::dvs_network_rule_action_trait::DvsNetworkRuleActionTrait>>),
+    ArrayOfDvsNetworkRuleAction(Vec<Box<dyn super::traits::DvsNetworkRuleActionTrait>>),
     /// A boxed array of *DvsCopyNetworkRuleAction*. To be used in *Any* placeholders.
     ArrayOfDvsCopyNetworkRuleAction(Vec<DvsCopyNetworkRuleAction>),
     /// A boxed array of *DvsDropNetworkRuleAction*. To be used in *Any* placeholders.
@@ -1128,7 +1128,7 @@ pub enum ValueElements {
     /// A boxed array of *DvsGreEncapNetworkRuleAction*. To be used in *Any* placeholders.
     ArrayOfDvsGreEncapNetworkRuleAction(Vec<DvsGreEncapNetworkRuleAction>),
     /// A boxed array of *DvsIpPort*. To be used in *Any* placeholders.
-    ArrayOfDvsIpPort(Vec<Box<dyn super::dvs_ip_port_trait::DvsIpPortTrait>>),
+    ArrayOfDvsIpPort(Vec<Box<dyn super::traits::DvsIpPortTrait>>),
     /// A boxed array of *DvsIpPortRange*. To be used in *Any* placeholders.
     ArrayOfDvsIpPortRange(Vec<DvsIpPortRange>),
     /// A boxed array of *DvsIpNetworkRuleQualifier*. To be used in *Any* placeholders.
@@ -1142,7 +1142,7 @@ pub enum ValueElements {
     /// A boxed array of *DvsPuntNetworkRuleAction*. To be used in *Any* placeholders.
     ArrayOfDvsPuntNetworkRuleAction(Vec<DvsPuntNetworkRuleAction>),
     /// A boxed array of *DvsNetworkRuleQualifier*. To be used in *Any* placeholders.
-    ArrayOfDvsNetworkRuleQualifier(Vec<Box<dyn super::dvs_network_rule_qualifier_trait::DvsNetworkRuleQualifierTrait>>),
+    ArrayOfDvsNetworkRuleQualifier(Vec<Box<dyn super::traits::DvsNetworkRuleQualifierTrait>>),
     /// A boxed array of *DvsRateLimitNetworkRuleAction*. To be used in *Any* placeholders.
     ArrayOfDvsRateLimitNetworkRuleAction(Vec<DvsRateLimitNetworkRuleAction>),
     /// A boxed array of *DvsSingleIpPort*. To be used in *Any* placeholders.
@@ -1244,10 +1244,10 @@ pub enum ValueElements {
     #[serde(rename = "ArrayOfVMwareDVSVlanMtuHealthCheckConfig")]
     ArrayOfVMwareDvsVlanMtuHealthCheckConfig(Vec<VMwareDvsVlanMtuHealthCheckConfig>),
     /// A boxed array of *VmwareDistributedVirtualSwitchVlanSpec*. To be used in *Any* placeholders.
-    ArrayOfVmwareDistributedVirtualSwitchVlanSpec(Vec<Box<dyn super::vmware_distributed_virtual_switch_vlan_spec_trait::VmwareDistributedVirtualSwitchVlanSpecTrait>>),
+    ArrayOfVmwareDistributedVirtualSwitchVlanSpec(Vec<Box<dyn super::traits::VmwareDistributedVirtualSwitchVlanSpecTrait>>),
     /// A boxed array of *VMwareDVSHealthCheckConfig*. To be used in *Any* placeholders.
     #[serde(rename = "ArrayOfVMwareDVSHealthCheckConfig")]
-    ArrayOfVMwareDvsHealthCheckConfig(Vec<Box<dyn super::v_mware_dvs_health_check_config_trait::VMwareDvsHealthCheckConfigTrait>>),
+    ArrayOfVMwareDvsHealthCheckConfig(Vec<Box<dyn super::traits::VMwareDvsHealthCheckConfigTrait>>),
     /// A boxed array of *VMwareDVSHealthCheckCapability*. To be used in *Any* placeholders.
     #[serde(rename = "ArrayOfVMwareDVSHealthCheckCapability")]
     ArrayOfVMwareDvsHealthCheckCapability(Vec<VMwareDvsHealthCheckCapability>),
@@ -1293,7 +1293,7 @@ pub enum ValueElements {
     /// A boxed array of *CryptoManagerKmipServerStatus*. To be used in *Any* placeholders.
     ArrayOfCryptoManagerKmipServerStatus(Vec<CryptoManagerKmipServerStatus>),
     /// A boxed array of *CryptoSpec*. To be used in *Any* placeholders.
-    ArrayOfCryptoSpec(Vec<Box<dyn super::crypto_spec_trait::CryptoSpecTrait>>),
+    ArrayOfCryptoSpec(Vec<Box<dyn super::traits::CryptoSpecTrait>>),
     /// A boxed array of *CryptoSpecDecrypt*. To be used in *Any* placeholders.
     ArrayOfCryptoSpecDecrypt(Vec<CryptoSpecDecrypt>),
     /// A boxed array of *CryptoSpecDeepRecrypt*. To be used in *Any* placeholders.
@@ -1301,7 +1301,7 @@ pub enum ValueElements {
     /// A boxed array of *CryptoSpecEncrypt*. To be used in *Any* placeholders.
     ArrayOfCryptoSpecEncrypt(Vec<CryptoSpecEncrypt>),
     /// A boxed array of *CryptoSpecNoOp*. To be used in *Any* placeholders.
-    ArrayOfCryptoSpecNoOp(Vec<Box<dyn super::crypto_spec_no_op_trait::CryptoSpecNoOpTrait>>),
+    ArrayOfCryptoSpecNoOp(Vec<Box<dyn super::traits::CryptoSpecNoOpTrait>>),
     /// A boxed array of *CryptoSpecRegister*. To be used in *Any* placeholders.
     ArrayOfCryptoSpecRegister(Vec<CryptoSpecRegister>),
     /// A boxed array of *CryptoSpecShallowRecrypt*. To be used in *Any* placeholders.
@@ -1337,7 +1337,7 @@ pub enum ValueElements {
     /// A boxed array of *AlarmEmailFailedEvent*. To be used in *Any* placeholders.
     ArrayOfAlarmEmailFailedEvent(Vec<AlarmEmailFailedEvent>),
     /// A boxed array of *AlarmEvent*. To be used in *Any* placeholders.
-    ArrayOfAlarmEvent(Vec<Box<dyn super::alarm_event_trait::AlarmEventTrait>>),
+    ArrayOfAlarmEvent(Vec<Box<dyn super::traits::AlarmEventTrait>>),
     /// A boxed array of *AlarmEventArgument*. To be used in *Any* placeholders.
     ArrayOfAlarmEventArgument(Vec<AlarmEventArgument>),
     /// A boxed array of *AlarmReconfiguredEvent*. To be used in *Any* placeholders.
@@ -1359,7 +1359,7 @@ pub enum ValueElements {
     /// A boxed array of *AlreadyAuthenticatedSessionEvent*. To be used in *Any* placeholders.
     ArrayOfAlreadyAuthenticatedSessionEvent(Vec<AlreadyAuthenticatedSessionEvent>),
     /// A boxed array of *AuthorizationEvent*. To be used in *Any* placeholders.
-    ArrayOfAuthorizationEvent(Vec<Box<dyn super::authorization_event_trait::AuthorizationEventTrait>>),
+    ArrayOfAuthorizationEvent(Vec<Box<dyn super::traits::AuthorizationEventTrait>>),
     /// A boxed array of *BadUsernameSessionEvent*. To be used in *Any* placeholders.
     ArrayOfBadUsernameSessionEvent(Vec<BadUsernameSessionEvent>),
     /// A boxed array of *CanceledHostOperationEvent*. To be used in *Any* placeholders.
@@ -1373,31 +1373,31 @@ pub enum ValueElements {
     /// A boxed array of *ClusterDestroyedEvent*. To be used in *Any* placeholders.
     ArrayOfClusterDestroyedEvent(Vec<ClusterDestroyedEvent>),
     /// A boxed array of *ClusterEvent*. To be used in *Any* placeholders.
-    ArrayOfClusterEvent(Vec<Box<dyn super::cluster_event_trait::ClusterEventTrait>>),
+    ArrayOfClusterEvent(Vec<Box<dyn super::traits::ClusterEventTrait>>),
     /// A boxed array of *ClusterOvercommittedEvent*. To be used in *Any* placeholders.
-    ArrayOfClusterOvercommittedEvent(Vec<Box<dyn super::cluster_overcommitted_event_trait::ClusterOvercommittedEventTrait>>),
+    ArrayOfClusterOvercommittedEvent(Vec<Box<dyn super::traits::ClusterOvercommittedEventTrait>>),
     /// A boxed array of *ClusterReconfiguredEvent*. To be used in *Any* placeholders.
     ArrayOfClusterReconfiguredEvent(Vec<ClusterReconfiguredEvent>),
     /// A boxed array of *ClusterStatusChangedEvent*. To be used in *Any* placeholders.
-    ArrayOfClusterStatusChangedEvent(Vec<Box<dyn super::cluster_status_changed_event_trait::ClusterStatusChangedEventTrait>>),
+    ArrayOfClusterStatusChangedEvent(Vec<Box<dyn super::traits::ClusterStatusChangedEventTrait>>),
     /// A boxed array of *ComputeResourceEventArgument*. To be used in *Any* placeholders.
     ArrayOfComputeResourceEventArgument(Vec<ComputeResourceEventArgument>),
     /// A boxed array of *CustomFieldDefAddedEvent*. To be used in *Any* placeholders.
     ArrayOfCustomFieldDefAddedEvent(Vec<CustomFieldDefAddedEvent>),
     /// A boxed array of *CustomFieldDefEvent*. To be used in *Any* placeholders.
-    ArrayOfCustomFieldDefEvent(Vec<Box<dyn super::custom_field_def_event_trait::CustomFieldDefEventTrait>>),
+    ArrayOfCustomFieldDefEvent(Vec<Box<dyn super::traits::CustomFieldDefEventTrait>>),
     /// A boxed array of *CustomFieldDefRemovedEvent*. To be used in *Any* placeholders.
     ArrayOfCustomFieldDefRemovedEvent(Vec<CustomFieldDefRemovedEvent>),
     /// A boxed array of *CustomFieldDefRenamedEvent*. To be used in *Any* placeholders.
     ArrayOfCustomFieldDefRenamedEvent(Vec<CustomFieldDefRenamedEvent>),
     /// A boxed array of *CustomFieldEvent*. To be used in *Any* placeholders.
-    ArrayOfCustomFieldEvent(Vec<Box<dyn super::custom_field_event_trait::CustomFieldEventTrait>>),
+    ArrayOfCustomFieldEvent(Vec<Box<dyn super::traits::CustomFieldEventTrait>>),
     /// A boxed array of *CustomFieldValueChangedEvent*. To be used in *Any* placeholders.
     ArrayOfCustomFieldValueChangedEvent(Vec<CustomFieldValueChangedEvent>),
     /// A boxed array of *CustomizationEvent*. To be used in *Any* placeholders.
-    ArrayOfCustomizationEvent(Vec<Box<dyn super::customization_event_trait::CustomizationEventTrait>>),
+    ArrayOfCustomizationEvent(Vec<Box<dyn super::traits::CustomizationEventTrait>>),
     /// A boxed array of *CustomizationFailed*. To be used in *Any* placeholders.
-    ArrayOfCustomizationFailed(Vec<Box<dyn super::customization_failed_trait::CustomizationFailedTrait>>),
+    ArrayOfCustomizationFailed(Vec<Box<dyn super::traits::CustomizationFailedTrait>>),
     /// A boxed array of *CustomizationLinuxIdentityFailed*. To be used in *Any* placeholders.
     ArrayOfCustomizationLinuxIdentityFailed(Vec<CustomizationLinuxIdentityFailed>),
     /// A boxed array of *CustomizationNetworkSetupFailed*. To be used in *Any* placeholders.
@@ -1418,7 +1418,7 @@ pub enum ValueElements {
     ArrayOfDvPortgroupDestroyedEvent(Vec<DvPortgroupDestroyedEvent>),
     /// A boxed array of *DVPortgroupEvent*. To be used in *Any* placeholders.
     #[serde(rename = "ArrayOfDVPortgroupEvent")]
-    ArrayOfDvPortgroupEvent(Vec<Box<dyn super::dv_portgroup_event_trait::DvPortgroupEventTrait>>),
+    ArrayOfDvPortgroupEvent(Vec<Box<dyn super::traits::DvPortgroupEventTrait>>),
     /// A boxed array of *DVPortgroupReconfiguredEvent*. To be used in *Any* placeholders.
     #[serde(rename = "ArrayOfDVPortgroupReconfiguredEvent")]
     ArrayOfDvPortgroupReconfiguredEvent(Vec<DvPortgroupReconfiguredEvent>),
@@ -1446,7 +1446,7 @@ pub enum ValueElements {
     /// A boxed array of *DatacenterCreatedEvent*. To be used in *Any* placeholders.
     ArrayOfDatacenterCreatedEvent(Vec<DatacenterCreatedEvent>),
     /// A boxed array of *DatacenterEvent*. To be used in *Any* placeholders.
-    ArrayOfDatacenterEvent(Vec<Box<dyn super::datacenter_event_trait::DatacenterEventTrait>>),
+    ArrayOfDatacenterEvent(Vec<Box<dyn super::traits::DatacenterEventTrait>>),
     /// A boxed array of *DatacenterEventArgument*. To be used in *Any* placeholders.
     ArrayOfDatacenterEventArgument(Vec<DatacenterEventArgument>),
     /// A boxed array of *DatacenterRenamedEvent*. To be used in *Any* placeholders.
@@ -1460,7 +1460,7 @@ pub enum ValueElements {
     /// A boxed array of *DatastoreDuplicatedEvent*. To be used in *Any* placeholders.
     ArrayOfDatastoreDuplicatedEvent(Vec<DatastoreDuplicatedEvent>),
     /// A boxed array of *DatastoreEvent*. To be used in *Any* placeholders.
-    ArrayOfDatastoreEvent(Vec<Box<dyn super::datastore_event_trait::DatastoreEventTrait>>),
+    ArrayOfDatastoreEvent(Vec<Box<dyn super::traits::DatastoreEventTrait>>),
     /// A boxed array of *DatastoreEventArgument*. To be used in *Any* placeholders.
     ArrayOfDatastoreEventArgument(Vec<DatastoreEventArgument>),
     /// A boxed array of *DatastoreFileCopiedEvent*. To be used in *Any* placeholders.
@@ -1468,7 +1468,7 @@ pub enum ValueElements {
     /// A boxed array of *DatastoreFileDeletedEvent*. To be used in *Any* placeholders.
     ArrayOfDatastoreFileDeletedEvent(Vec<DatastoreFileDeletedEvent>),
     /// A boxed array of *DatastoreFileEvent*. To be used in *Any* placeholders.
-    ArrayOfDatastoreFileEvent(Vec<Box<dyn super::datastore_file_event_trait::DatastoreFileEventTrait>>),
+    ArrayOfDatastoreFileEvent(Vec<Box<dyn super::traits::DatastoreFileEventTrait>>),
     /// A boxed array of *DatastoreFileMovedEvent*. To be used in *Any* placeholders.
     ArrayOfDatastoreFileMovedEvent(Vec<DatastoreFileMovedEvent>),
     /// A boxed array of *DatastoreIORMReconfiguredEvent*. To be used in *Any* placeholders.
@@ -1525,11 +1525,11 @@ pub enum ValueElements {
     /// A boxed array of *DvsDestroyedEvent*. To be used in *Any* placeholders.
     ArrayOfDvsDestroyedEvent(Vec<DvsDestroyedEvent>),
     /// A boxed array of *DvsEvent*. To be used in *Any* placeholders.
-    ArrayOfDvsEvent(Vec<Box<dyn super::dvs_event_trait::DvsEventTrait>>),
+    ArrayOfDvsEvent(Vec<Box<dyn super::traits::DvsEventTrait>>),
     /// A boxed array of *DvsEventArgument*. To be used in *Any* placeholders.
     ArrayOfDvsEventArgument(Vec<DvsEventArgument>),
     /// A boxed array of *DvsHealthStatusChangeEvent*. To be used in *Any* placeholders.
-    ArrayOfDvsHealthStatusChangeEvent(Vec<Box<dyn super::dvs_health_status_change_event_trait::DvsHealthStatusChangeEventTrait>>),
+    ArrayOfDvsHealthStatusChangeEvent(Vec<Box<dyn super::traits::DvsHealthStatusChangeEventTrait>>),
     /// A boxed array of *DvsHostBackInSyncEvent*. To be used in *Any* placeholders.
     ArrayOfDvsHostBackInSyncEvent(Vec<DvsHostBackInSyncEvent>),
     /// A boxed array of *DvsHostJoinedEvent*. To be used in *Any* placeholders.
@@ -1593,19 +1593,19 @@ pub enum ValueElements {
     /// A boxed array of *EnteredMaintenanceModeEvent*. To be used in *Any* placeholders.
     ArrayOfEnteredMaintenanceModeEvent(Vec<EnteredMaintenanceModeEvent>),
     /// A boxed array of *EnteredStandbyModeEvent*. To be used in *Any* placeholders.
-    ArrayOfEnteredStandbyModeEvent(Vec<Box<dyn super::entered_standby_mode_event_trait::EnteredStandbyModeEventTrait>>),
+    ArrayOfEnteredStandbyModeEvent(Vec<Box<dyn super::traits::EnteredStandbyModeEventTrait>>),
     /// A boxed array of *EnteringMaintenanceModeEvent*. To be used in *Any* placeholders.
     ArrayOfEnteringMaintenanceModeEvent(Vec<EnteringMaintenanceModeEvent>),
     /// A boxed array of *EnteringStandbyModeEvent*. To be used in *Any* placeholders.
-    ArrayOfEnteringStandbyModeEvent(Vec<Box<dyn super::entering_standby_mode_event_trait::EnteringStandbyModeEventTrait>>),
+    ArrayOfEnteringStandbyModeEvent(Vec<Box<dyn super::traits::EnteringStandbyModeEventTrait>>),
     /// A boxed array of *EntityEventArgument*. To be used in *Any* placeholders.
-    ArrayOfEntityEventArgument(Vec<Box<dyn super::entity_event_argument_trait::EntityEventArgumentTrait>>),
+    ArrayOfEntityEventArgument(Vec<Box<dyn super::traits::EntityEventArgumentTrait>>),
     /// A boxed array of *ErrorUpgradeEvent*. To be used in *Any* placeholders.
     ArrayOfErrorUpgradeEvent(Vec<ErrorUpgradeEvent>),
     /// A boxed array of *Event*. To be used in *Any* placeholders.
-    ArrayOfEvent(Vec<Box<dyn super::event_trait::EventTrait>>),
+    ArrayOfEvent(Vec<Box<dyn super::traits::EventTrait>>),
     /// A boxed array of *EventArgument*. To be used in *Any* placeholders.
-    ArrayOfEventArgument(Vec<Box<dyn super::event_argument_trait::EventArgumentTrait>>),
+    ArrayOfEventArgument(Vec<Box<dyn super::traits::EventArgumentTrait>>),
     /// A boxed array of *EventDescription*. To be used in *Any* placeholders.
     ArrayOfEventDescription(Vec<EventDescription>),
     /// A boxed array of *EventArgDesc*. To be used in *Any* placeholders.
@@ -1625,11 +1625,11 @@ pub enum ValueElements {
     /// A boxed array of *ExitMaintenanceModeEvent*. To be used in *Any* placeholders.
     ArrayOfExitMaintenanceModeEvent(Vec<ExitMaintenanceModeEvent>),
     /// A boxed array of *ExitStandbyModeFailedEvent*. To be used in *Any* placeholders.
-    ArrayOfExitStandbyModeFailedEvent(Vec<Box<dyn super::exit_standby_mode_failed_event_trait::ExitStandbyModeFailedEventTrait>>),
+    ArrayOfExitStandbyModeFailedEvent(Vec<Box<dyn super::traits::ExitStandbyModeFailedEventTrait>>),
     /// A boxed array of *ExitedStandbyModeEvent*. To be used in *Any* placeholders.
-    ArrayOfExitedStandbyModeEvent(Vec<Box<dyn super::exited_standby_mode_event_trait::ExitedStandbyModeEventTrait>>),
+    ArrayOfExitedStandbyModeEvent(Vec<Box<dyn super::traits::ExitedStandbyModeEventTrait>>),
     /// A boxed array of *ExitingStandbyModeEvent*. To be used in *Any* placeholders.
-    ArrayOfExitingStandbyModeEvent(Vec<Box<dyn super::exiting_standby_mode_event_trait::ExitingStandbyModeEventTrait>>),
+    ArrayOfExitingStandbyModeEvent(Vec<Box<dyn super::traits::ExitingStandbyModeEventTrait>>),
     /// A boxed array of *ExtendedEvent*. To be used in *Any* placeholders.
     ArrayOfExtendedEvent(Vec<ExtendedEvent>),
     /// A boxed array of *ExtendedEventPair*. To be used in *Any* placeholders.
@@ -1639,7 +1639,7 @@ pub enum ValueElements {
     /// A boxed array of *FolderEventArgument*. To be used in *Any* placeholders.
     ArrayOfFolderEventArgument(Vec<FolderEventArgument>),
     /// A boxed array of *GeneralEvent*. To be used in *Any* placeholders.
-    ArrayOfGeneralEvent(Vec<Box<dyn super::general_event_trait::GeneralEventTrait>>),
+    ArrayOfGeneralEvent(Vec<Box<dyn super::traits::GeneralEventTrait>>),
     /// A boxed array of *GeneralHostErrorEvent*. To be used in *Any* placeholders.
     ArrayOfGeneralHostErrorEvent(Vec<GeneralHostErrorEvent>),
     /// A boxed array of *GeneralHostInfoEvent*. To be used in *Any* placeholders.
@@ -1717,7 +1717,7 @@ pub enum ValueElements {
     /// A boxed array of *HostDasErrorEvent*. To be used in *Any* placeholders.
     ArrayOfHostDasErrorEvent(Vec<HostDasErrorEvent>),
     /// A boxed array of *HostDasEvent*. To be used in *Any* placeholders.
-    ArrayOfHostDasEvent(Vec<Box<dyn super::host_das_event_trait::HostDasEventTrait>>),
+    ArrayOfHostDasEvent(Vec<Box<dyn super::traits::HostDasEventTrait>>),
     /// A boxed array of *HostDasOkEvent*. To be used in *Any* placeholders.
     ArrayOfHostDasOkEvent(Vec<HostDasOkEvent>),
     /// A boxed array of *HostDisconnectedEvent*. To be used in *Any* placeholders.
@@ -1725,7 +1725,7 @@ pub enum ValueElements {
     /// A boxed array of *HostEnableAdminFailedEvent*. To be used in *Any* placeholders.
     ArrayOfHostEnableAdminFailedEvent(Vec<HostEnableAdminFailedEvent>),
     /// A boxed array of *HostEvent*. To be used in *Any* placeholders.
-    ArrayOfHostEvent(Vec<Box<dyn super::host_event_trait::HostEventTrait>>),
+    ArrayOfHostEvent(Vec<Box<dyn super::traits::HostEventTrait>>),
     /// A boxed array of *HostEventArgument*. To be used in *Any* placeholders.
     ArrayOfHostEventArgument(Vec<HostEventArgument>),
     /// A boxed array of *HostExtraNetworksEvent*. To be used in *Any* placeholders.
@@ -1815,7 +1815,7 @@ pub enum ValueElements {
     /// A boxed array of *InvalidEditionEvent*. To be used in *Any* placeholders.
     ArrayOfInvalidEditionEvent(Vec<InvalidEditionEvent>),
     /// A boxed array of *LicenseEvent*. To be used in *Any* placeholders.
-    ArrayOfLicenseEvent(Vec<Box<dyn super::license_event_trait::LicenseEventTrait>>),
+    ArrayOfLicenseEvent(Vec<Box<dyn super::traits::LicenseEventTrait>>),
     /// A boxed array of *LicenseExpiredEvent*. To be used in *Any* placeholders.
     ArrayOfLicenseExpiredEvent(Vec<LicenseExpiredEvent>),
     /// A boxed array of *LicenseNonComplianceEvent*. To be used in *Any* placeholders.
@@ -1840,7 +1840,7 @@ pub enum ValueElements {
     /// A boxed array of *MigrationErrorEvent*. To be used in *Any* placeholders.
     ArrayOfMigrationErrorEvent(Vec<MigrationErrorEvent>),
     /// A boxed array of *MigrationEvent*. To be used in *Any* placeholders.
-    ArrayOfMigrationEvent(Vec<Box<dyn super::migration_event_trait::MigrationEventTrait>>),
+    ArrayOfMigrationEvent(Vec<Box<dyn super::traits::MigrationEventTrait>>),
     /// A boxed array of *MigrationHostErrorEvent*. To be used in *Any* placeholders.
     ArrayOfMigrationHostErrorEvent(Vec<MigrationHostErrorEvent>),
     /// A boxed array of *MigrationHostWarningEvent*. To be used in *Any* placeholders.
@@ -1881,7 +1881,7 @@ pub enum ValueElements {
     /// A boxed array of *PermissionAddedEvent*. To be used in *Any* placeholders.
     ArrayOfPermissionAddedEvent(Vec<PermissionAddedEvent>),
     /// A boxed array of *PermissionEvent*. To be used in *Any* placeholders.
-    ArrayOfPermissionEvent(Vec<Box<dyn super::permission_event_trait::PermissionEventTrait>>),
+    ArrayOfPermissionEvent(Vec<Box<dyn super::traits::PermissionEventTrait>>),
     /// A boxed array of *PermissionRemovedEvent*. To be used in *Any* placeholders.
     ArrayOfPermissionRemovedEvent(Vec<PermissionRemovedEvent>),
     /// A boxed array of *PermissionUpdatedEvent*. To be used in *Any* placeholders.
@@ -1895,7 +1895,7 @@ pub enum ValueElements {
     /// A boxed array of *ProfileDissociatedEvent*. To be used in *Any* placeholders.
     ArrayOfProfileDissociatedEvent(Vec<ProfileDissociatedEvent>),
     /// A boxed array of *ProfileEvent*. To be used in *Any* placeholders.
-    ArrayOfProfileEvent(Vec<Box<dyn super::profile_event_trait::ProfileEventTrait>>),
+    ArrayOfProfileEvent(Vec<Box<dyn super::traits::ProfileEventTrait>>),
     /// A boxed array of *ProfileEventArgument*. To be used in *Any* placeholders.
     ArrayOfProfileEventArgument(Vec<ProfileEventArgument>),
     /// A boxed array of *ProfileReferenceHostChangedEvent*. To be used in *Any* placeholders.
@@ -1912,7 +1912,7 @@ pub enum ValueElements {
     /// A boxed array of *ResourcePoolDestroyedEvent*. To be used in *Any* placeholders.
     ArrayOfResourcePoolDestroyedEvent(Vec<ResourcePoolDestroyedEvent>),
     /// A boxed array of *ResourcePoolEvent*. To be used in *Any* placeholders.
-    ArrayOfResourcePoolEvent(Vec<Box<dyn super::resource_pool_event_trait::ResourcePoolEventTrait>>),
+    ArrayOfResourcePoolEvent(Vec<Box<dyn super::traits::ResourcePoolEventTrait>>),
     /// A boxed array of *ResourcePoolEventArgument*. To be used in *Any* placeholders.
     ArrayOfResourcePoolEventArgument(Vec<ResourcePoolEventArgument>),
     /// A boxed array of *ResourcePoolMovedEvent*. To be used in *Any* placeholders.
@@ -1924,7 +1924,7 @@ pub enum ValueElements {
     /// A boxed array of *RoleAddedEvent*. To be used in *Any* placeholders.
     ArrayOfRoleAddedEvent(Vec<RoleAddedEvent>),
     /// A boxed array of *RoleEvent*. To be used in *Any* placeholders.
-    ArrayOfRoleEvent(Vec<Box<dyn super::role_event_trait::RoleEventTrait>>),
+    ArrayOfRoleEvent(Vec<Box<dyn super::traits::RoleEventTrait>>),
     /// A boxed array of *RoleEventArgument*. To be used in *Any* placeholders.
     ArrayOfRoleEventArgument(Vec<RoleEventArgument>),
     /// A boxed array of *RoleRemovedEvent*. To be used in *Any* placeholders.
@@ -1942,7 +1942,7 @@ pub enum ValueElements {
     /// A boxed array of *ScheduledTaskEmailFailedEvent*. To be used in *Any* placeholders.
     ArrayOfScheduledTaskEmailFailedEvent(Vec<ScheduledTaskEmailFailedEvent>),
     /// A boxed array of *ScheduledTaskEvent*. To be used in *Any* placeholders.
-    ArrayOfScheduledTaskEvent(Vec<Box<dyn super::scheduled_task_event_trait::ScheduledTaskEventTrait>>),
+    ArrayOfScheduledTaskEvent(Vec<Box<dyn super::traits::ScheduledTaskEventTrait>>),
     /// A boxed array of *ScheduledTaskEventArgument*. To be used in *Any* placeholders.
     ArrayOfScheduledTaskEventArgument(Vec<ScheduledTaskEventArgument>),
     /// A boxed array of *ScheduledTaskFailedEvent*. To be used in *Any* placeholders.
@@ -1958,11 +1958,11 @@ pub enum ValueElements {
     /// A boxed array of *ServerStartedSessionEvent*. To be used in *Any* placeholders.
     ArrayOfServerStartedSessionEvent(Vec<ServerStartedSessionEvent>),
     /// A boxed array of *SessionEvent*. To be used in *Any* placeholders.
-    ArrayOfSessionEvent(Vec<Box<dyn super::session_event_trait::SessionEventTrait>>),
+    ArrayOfSessionEvent(Vec<Box<dyn super::traits::SessionEventTrait>>),
     /// A boxed array of *SessionTerminatedEvent*. To be used in *Any* placeholders.
     ArrayOfSessionTerminatedEvent(Vec<SessionTerminatedEvent>),
     /// A boxed array of *TaskEvent*. To be used in *Any* placeholders.
-    ArrayOfTaskEvent(Vec<Box<dyn super::task_event_trait::TaskEventTrait>>),
+    ArrayOfTaskEvent(Vec<Box<dyn super::traits::TaskEventTrait>>),
     /// A boxed array of *TaskTimeoutEvent*. To be used in *Any* placeholders.
     ArrayOfTaskTimeoutEvent(Vec<TaskTimeoutEvent>),
     /// A boxed array of *TeamingMatchEvent*. To be used in *Any* placeholders.
@@ -1972,7 +1972,7 @@ pub enum ValueElements {
     /// A boxed array of *TemplateBeingUpgradedEvent*. To be used in *Any* placeholders.
     ArrayOfTemplateBeingUpgradedEvent(Vec<TemplateBeingUpgradedEvent>),
     /// A boxed array of *TemplateUpgradeEvent*. To be used in *Any* placeholders.
-    ArrayOfTemplateUpgradeEvent(Vec<Box<dyn super::template_upgrade_event_trait::TemplateUpgradeEventTrait>>),
+    ArrayOfTemplateUpgradeEvent(Vec<Box<dyn super::traits::TemplateUpgradeEventTrait>>),
     /// A boxed array of *TemplateUpgradeFailedEvent*. To be used in *Any* placeholders.
     ArrayOfTemplateUpgradeFailedEvent(Vec<TemplateUpgradeFailedEvent>),
     /// A boxed array of *TemplateUpgradedEvent*. To be used in *Any* placeholders.
@@ -1986,7 +1986,7 @@ pub enum ValueElements {
     /// A boxed array of *UpdatedAgentBeingRestartedEvent*. To be used in *Any* placeholders.
     ArrayOfUpdatedAgentBeingRestartedEvent(Vec<UpdatedAgentBeingRestartedEvent>),
     /// A boxed array of *UpgradeEvent*. To be used in *Any* placeholders.
-    ArrayOfUpgradeEvent(Vec<Box<dyn super::upgrade_event_trait::UpgradeEventTrait>>),
+    ArrayOfUpgradeEvent(Vec<Box<dyn super::traits::UpgradeEventTrait>>),
     /// A boxed array of *UplinkPortMtuNotSupportEvent*. To be used in *Any* placeholders.
     ArrayOfUplinkPortMtuNotSupportEvent(Vec<UplinkPortMtuNotSupportEvent>),
     /// A boxed array of *UplinkPortMtuSupportEvent*. To be used in *Any* placeholders.
@@ -2049,7 +2049,7 @@ pub enum ValueElements {
     /// A boxed array of *VmBeingRelocatedEvent*. To be used in *Any* placeholders.
     ArrayOfVmBeingRelocatedEvent(Vec<VmBeingRelocatedEvent>),
     /// A boxed array of *VmCloneEvent*. To be used in *Any* placeholders.
-    ArrayOfVmCloneEvent(Vec<Box<dyn super::vm_clone_event_trait::VmCloneEventTrait>>),
+    ArrayOfVmCloneEvent(Vec<Box<dyn super::traits::VmCloneEventTrait>>),
     /// A boxed array of *VmCloneFailedEvent*. To be used in *Any* placeholders.
     ArrayOfVmCloneFailedEvent(Vec<VmCloneFailedEvent>),
     /// A boxed array of *VmClonedEvent*. To be used in *Any* placeholders.
@@ -2061,7 +2061,7 @@ pub enum ValueElements {
     /// A boxed array of *VmCreatedEvent*. To be used in *Any* placeholders.
     ArrayOfVmCreatedEvent(Vec<VmCreatedEvent>),
     /// A boxed array of *VmDasBeingResetEvent*. To be used in *Any* placeholders.
-    ArrayOfVmDasBeingResetEvent(Vec<Box<dyn super::vm_das_being_reset_event_trait::VmDasBeingResetEventTrait>>),
+    ArrayOfVmDasBeingResetEvent(Vec<Box<dyn super::traits::VmDasBeingResetEventTrait>>),
     /// A boxed array of *VmDasBeingResetWithScreenshotEvent*. To be used in *Any* placeholders.
     ArrayOfVmDasBeingResetWithScreenshotEvent(Vec<VmDasBeingResetWithScreenshotEvent>),
     /// A boxed array of *VmDasResetFailedEvent*. To be used in *Any* placeholders.
@@ -2089,7 +2089,7 @@ pub enum ValueElements {
     /// A boxed array of *VmEndReplayingEvent*. To be used in *Any* placeholders.
     ArrayOfVmEndReplayingEvent(Vec<VmEndReplayingEvent>),
     /// A boxed array of *VmEvent*. To be used in *Any* placeholders.
-    ArrayOfVmEvent(Vec<Box<dyn super::vm_event_trait::VmEventTrait>>),
+    ArrayOfVmEvent(Vec<Box<dyn super::traits::VmEventTrait>>),
     /// A boxed array of *VmEventArgument*. To be used in *Any* placeholders.
     ArrayOfVmEventArgument(Vec<VmEventArgument>),
     /// A boxed array of *VmFailedMigrateEvent*. To be used in *Any* placeholders.
@@ -2159,7 +2159,7 @@ pub enum ValueElements {
     /// A boxed array of *VmMessageWarningEvent*. To be used in *Any* placeholders.
     ArrayOfVmMessageWarningEvent(Vec<VmMessageWarningEvent>),
     /// A boxed array of *VmMigratedEvent*. To be used in *Any* placeholders.
-    ArrayOfVmMigratedEvent(Vec<Box<dyn super::vm_migrated_event_trait::VmMigratedEventTrait>>),
+    ArrayOfVmMigratedEvent(Vec<Box<dyn super::traits::VmMigratedEventTrait>>),
     /// A boxed array of *VmNoCompatibleHostForSecondaryEvent*. To be used in *Any* placeholders.
     ArrayOfVmNoCompatibleHostForSecondaryEvent(Vec<VmNoCompatibleHostForSecondaryEvent>),
     /// A boxed array of *VmNoNetworkAccessEvent*. To be used in *Any* placeholders.
@@ -2169,9 +2169,9 @@ pub enum ValueElements {
     /// A boxed array of *VmPowerOffOnIsolationEvent*. To be used in *Any* placeholders.
     ArrayOfVmPowerOffOnIsolationEvent(Vec<VmPowerOffOnIsolationEvent>),
     /// A boxed array of *VmPoweredOffEvent*. To be used in *Any* placeholders.
-    ArrayOfVmPoweredOffEvent(Vec<Box<dyn super::vm_powered_off_event_trait::VmPoweredOffEventTrait>>),
+    ArrayOfVmPoweredOffEvent(Vec<Box<dyn super::traits::VmPoweredOffEventTrait>>),
     /// A boxed array of *VmPoweredOnEvent*. To be used in *Any* placeholders.
-    ArrayOfVmPoweredOnEvent(Vec<Box<dyn super::vm_powered_on_event_trait::VmPoweredOnEventTrait>>),
+    ArrayOfVmPoweredOnEvent(Vec<Box<dyn super::traits::VmPoweredOnEventTrait>>),
     /// A boxed array of *VmPoweringOnWithCustomizedDVPortEvent*. To be used in *Any* placeholders.
     #[serde(rename = "ArrayOfVmPoweringOnWithCustomizedDVPortEvent")]
     ArrayOfVmPoweringOnWithCustomizedDvPortEvent(Vec<VmPoweringOnWithCustomizedDvPortEvent>),
@@ -2192,7 +2192,7 @@ pub enum ValueElements {
     /// A boxed array of *VmRelocateFailedEvent*. To be used in *Any* placeholders.
     ArrayOfVmRelocateFailedEvent(Vec<VmRelocateFailedEvent>),
     /// A boxed array of *VmRelocateSpecEvent*. To be used in *Any* placeholders.
-    ArrayOfVmRelocateSpecEvent(Vec<Box<dyn super::vm_relocate_spec_event_trait::VmRelocateSpecEventTrait>>),
+    ArrayOfVmRelocateSpecEvent(Vec<Box<dyn super::traits::VmRelocateSpecEventTrait>>),
     /// A boxed array of *VmRelocatedEvent*. To be used in *Any* placeholders.
     ArrayOfVmRelocatedEvent(Vec<VmRelocatedEvent>),
     /// A boxed array of *VmRemoteConsoleConnectedEvent*. To be used in *Any* placeholders.
@@ -2233,7 +2233,7 @@ pub enum ValueElements {
     /// A boxed array of *VmStartReplayingEvent*. To be used in *Any* placeholders.
     ArrayOfVmStartReplayingEvent(Vec<VmStartReplayingEvent>),
     /// A boxed array of *VmStartingEvent*. To be used in *Any* placeholders.
-    ArrayOfVmStartingEvent(Vec<Box<dyn super::vm_starting_event_trait::VmStartingEventTrait>>),
+    ArrayOfVmStartingEvent(Vec<Box<dyn super::traits::VmStartingEventTrait>>),
     /// A boxed array of *VmStartingSecondaryEvent*. To be used in *Any* placeholders.
     ArrayOfVmStartingSecondaryEvent(Vec<VmStartingSecondaryEvent>),
     /// A boxed array of *VmStaticMacConflictEvent*. To be used in *Any* placeholders.
@@ -2287,7 +2287,7 @@ pub enum ValueElements {
     /// A boxed array of *ExtSolutionManagerInfoTabInfo*. To be used in *Any* placeholders.
     ArrayOfExtSolutionManagerInfoTabInfo(Vec<ExtSolutionManagerInfoTabInfo>),
     /// A boxed array of *ActiveDirectoryFault*. To be used in *Any* placeholders.
-    ArrayOfActiveDirectoryFault(Vec<Box<dyn super::active_directory_fault_trait::ActiveDirectoryFaultTrait>>),
+    ArrayOfActiveDirectoryFault(Vec<Box<dyn super::traits::ActiveDirectoryFaultTrait>>),
     /// A boxed array of *ActiveVMsBlockingEVC*. To be used in *Any* placeholders.
     #[serde(rename = "ArrayOfActiveVMsBlockingEVC")]
     ArrayOfActiveVMsBlockingEvc(Vec<ActiveVMsBlockingEvc>),
@@ -2329,15 +2329,15 @@ pub enum ValueElements {
     /// A boxed array of *CannotAccessLocalSource*. To be used in *Any* placeholders.
     ArrayOfCannotAccessLocalSource(Vec<CannotAccessLocalSource>),
     /// A boxed array of *CannotAccessNetwork*. To be used in *Any* placeholders.
-    ArrayOfCannotAccessNetwork(Vec<Box<dyn super::cannot_access_network_trait::CannotAccessNetworkTrait>>),
+    ArrayOfCannotAccessNetwork(Vec<Box<dyn super::traits::CannotAccessNetworkTrait>>),
     /// A boxed array of *CannotAccessVmComponent*. To be used in *Any* placeholders.
-    ArrayOfCannotAccessVmComponent(Vec<Box<dyn super::cannot_access_vm_component_trait::CannotAccessVmComponentTrait>>),
+    ArrayOfCannotAccessVmComponent(Vec<Box<dyn super::traits::CannotAccessVmComponentTrait>>),
     /// A boxed array of *CannotAccessVmConfig*. To be used in *Any* placeholders.
     ArrayOfCannotAccessVmConfig(Vec<CannotAccessVmConfig>),
     /// A boxed array of *CannotAccessVmDevice*. To be used in *Any* placeholders.
-    ArrayOfCannotAccessVmDevice(Vec<Box<dyn super::cannot_access_vm_device_trait::CannotAccessVmDeviceTrait>>),
+    ArrayOfCannotAccessVmDevice(Vec<Box<dyn super::traits::CannotAccessVmDeviceTrait>>),
     /// A boxed array of *CannotAccessVmDisk*. To be used in *Any* placeholders.
-    ArrayOfCannotAccessVmDisk(Vec<Box<dyn super::cannot_access_vm_disk_trait::CannotAccessVmDiskTrait>>),
+    ArrayOfCannotAccessVmDisk(Vec<Box<dyn super::traits::CannotAccessVmDiskTrait>>),
     /// A boxed array of *CannotAddHostWithFTVmAsStandalone*. To be used in *Any* placeholders.
     #[serde(rename = "ArrayOfCannotAddHostWithFTVmAsStandalone")]
     ArrayOfCannotAddHostWithFtVmAsStandalone(Vec<CannotAddHostWithFtVmAsStandalone>),
@@ -2383,7 +2383,7 @@ pub enum ValueElements {
     /// A boxed array of *CannotMoveVmWithNativeDeltaDisk*. To be used in *Any* placeholders.
     ArrayOfCannotMoveVmWithNativeDeltaDisk(Vec<CannotMoveVmWithNativeDeltaDisk>),
     /// A boxed array of *CannotMoveVsanEnabledHost*. To be used in *Any* placeholders.
-    ArrayOfCannotMoveVsanEnabledHost(Vec<Box<dyn super::cannot_move_vsan_enabled_host_trait::CannotMoveVsanEnabledHostTrait>>),
+    ArrayOfCannotMoveVsanEnabledHost(Vec<Box<dyn super::traits::CannotMoveVsanEnabledHostTrait>>),
     /// A boxed array of *CannotPlaceWithoutPrerequisiteMoves*. To be used in *Any* placeholders.
     ArrayOfCannotPlaceWithoutPrerequisiteMoves(Vec<CannotPlaceWithoutPrerequisiteMoves>),
     /// A boxed array of *CannotPowerOffVmInCluster*. To be used in *Any* placeholders.
@@ -2413,7 +2413,7 @@ pub enum ValueElements {
     /// A boxed array of *CpuHotPlugNotSupported*. To be used in *Any* placeholders.
     ArrayOfCpuHotPlugNotSupported(Vec<CpuHotPlugNotSupported>),
     /// A boxed array of *CpuIncompatible*. To be used in *Any* placeholders.
-    ArrayOfCpuIncompatible(Vec<Box<dyn super::cpu_incompatible_trait::CpuIncompatibleTrait>>),
+    ArrayOfCpuIncompatible(Vec<Box<dyn super::traits::CpuIncompatibleTrait>>),
     /// A boxed array of *CpuIncompatible1ECX*. To be used in *Any* placeholders.
     #[serde(rename = "ArrayOfCpuIncompatible1ECX")]
     ArrayOfCpuIncompatible1Ecx(Vec<CpuIncompatible1Ecx>),
@@ -2421,7 +2421,7 @@ pub enum ValueElements {
     #[serde(rename = "ArrayOfCpuIncompatible81EDX")]
     ArrayOfCpuIncompatible81Edx(Vec<CpuIncompatible81Edx>),
     /// A boxed array of *CustomizationFault*. To be used in *Any* placeholders.
-    ArrayOfCustomizationFault(Vec<Box<dyn super::customization_fault_trait::CustomizationFaultTrait>>),
+    ArrayOfCustomizationFault(Vec<Box<dyn super::traits::CustomizationFaultTrait>>),
     /// A boxed array of *CustomizationPending*. To be used in *Any* placeholders.
     ArrayOfCustomizationPending(Vec<CustomizationPending>),
     /// A boxed array of *DVPortNotSupported*. To be used in *Any* placeholders.
@@ -2436,7 +2436,7 @@ pub enum ValueElements {
     /// A boxed array of *DatacenterMismatchArgument*. To be used in *Any* placeholders.
     ArrayOfDatacenterMismatchArgument(Vec<DatacenterMismatchArgument>),
     /// A boxed array of *DatastoreNotWritableOnHost*. To be used in *Any* placeholders.
-    ArrayOfDatastoreNotWritableOnHost(Vec<Box<dyn super::datastore_not_writable_on_host_trait::DatastoreNotWritableOnHostTrait>>),
+    ArrayOfDatastoreNotWritableOnHost(Vec<Box<dyn super::traits::DatastoreNotWritableOnHostTrait>>),
     /// A boxed array of *DeltaDiskFormatNotSupported*. To be used in *Any* placeholders.
     ArrayOfDeltaDiskFormatNotSupported(Vec<DeltaDiskFormatNotSupported>),
     /// A boxed array of *DestinationSwitchFull*. To be used in *Any* placeholders.
@@ -2444,7 +2444,7 @@ pub enum ValueElements {
     /// A boxed array of *DestinationVsanDisabled*. To be used in *Any* placeholders.
     ArrayOfDestinationVsanDisabled(Vec<DestinationVsanDisabled>),
     /// A boxed array of *DeviceBackingNotSupported*. To be used in *Any* placeholders.
-    ArrayOfDeviceBackingNotSupported(Vec<Box<dyn super::device_backing_not_supported_trait::DeviceBackingNotSupportedTrait>>),
+    ArrayOfDeviceBackingNotSupported(Vec<Box<dyn super::traits::DeviceBackingNotSupportedTrait>>),
     /// A boxed array of *DeviceControllerNotSupported*. To be used in *Any* placeholders.
     ArrayOfDeviceControllerNotSupported(Vec<DeviceControllerNotSupported>),
     /// A boxed array of *DeviceHotPlugNotSupported*. To be used in *Any* placeholders.
@@ -2452,7 +2452,7 @@ pub enum ValueElements {
     /// A boxed array of *DeviceNotFound*. To be used in *Any* placeholders.
     ArrayOfDeviceNotFound(Vec<DeviceNotFound>),
     /// A boxed array of *DeviceNotSupported*. To be used in *Any* placeholders.
-    ArrayOfDeviceNotSupported(Vec<Box<dyn super::device_not_supported_trait::DeviceNotSupportedTrait>>),
+    ArrayOfDeviceNotSupported(Vec<Box<dyn super::traits::DeviceNotSupportedTrait>>),
     /// A boxed array of *DeviceUnsupportedForVmPlatform*. To be used in *Any* placeholders.
     ArrayOfDeviceUnsupportedForVmPlatform(Vec<DeviceUnsupportedForVmPlatform>),
     /// A boxed array of *DeviceUnsupportedForVmVersion*. To be used in *Any* placeholders.
@@ -2487,7 +2487,7 @@ pub enum ValueElements {
     /// A boxed array of *DiskMoveTypeNotSupported*. To be used in *Any* placeholders.
     ArrayOfDiskMoveTypeNotSupported(Vec<DiskMoveTypeNotSupported>),
     /// A boxed array of *DiskNotSupported*. To be used in *Any* placeholders.
-    ArrayOfDiskNotSupported(Vec<Box<dyn super::disk_not_supported_trait::DiskNotSupportedTrait>>),
+    ArrayOfDiskNotSupported(Vec<Box<dyn super::traits::DiskNotSupportedTrait>>),
     /// A boxed array of *DiskTooSmall*. To be used in *Any* placeholders.
     ArrayOfDiskTooSmall(Vec<DiskTooSmall>),
     /// A boxed array of *DomainNotFound*. To be used in *Any* placeholders.
@@ -2507,7 +2507,7 @@ pub enum ValueElements {
     /// A boxed array of *DvsApplyOperationFaultFaultOnObject*. To be used in *Any* placeholders.
     ArrayOfDvsApplyOperationFaultFaultOnObject(Vec<DvsApplyOperationFaultFaultOnObject>),
     /// A boxed array of *DvsFault*. To be used in *Any* placeholders.
-    ArrayOfDvsFault(Vec<Box<dyn super::dvs_fault_trait::DvsFaultTrait>>),
+    ArrayOfDvsFault(Vec<Box<dyn super::traits::DvsFaultTrait>>),
     /// A boxed array of *DvsNotAuthorized*. To be used in *Any* placeholders.
     ArrayOfDvsNotAuthorized(Vec<DvsNotAuthorized>),
     /// A boxed array of *DvsOperationBulkFault*. To be used in *Any* placeholders.
@@ -2518,7 +2518,7 @@ pub enum ValueElements {
     ArrayOfDvsScopeViolated(Vec<DvsScopeViolated>),
     /// A boxed array of *EVCAdmissionFailed*. To be used in *Any* placeholders.
     #[serde(rename = "ArrayOfEVCAdmissionFailed")]
-    ArrayOfEvcAdmissionFailed(Vec<Box<dyn super::evc_admission_failed_trait::EvcAdmissionFailedTrait>>),
+    ArrayOfEvcAdmissionFailed(Vec<Box<dyn super::traits::EvcAdmissionFailedTrait>>),
     /// A boxed array of *EVCAdmissionFailedCPUFeaturesForMode*. To be used in *Any* placeholders.
     #[serde(rename = "ArrayOfEVCAdmissionFailedCPUFeaturesForMode")]
     ArrayOfEvcAdmissionFailedCpuFeaturesForMode(Vec<EvcAdmissionFailedCpuFeaturesForMode>),
@@ -2548,7 +2548,7 @@ pub enum ValueElements {
     ArrayOfEvcAdmissionFailedVmActive(Vec<EvcAdmissionFailedVmActive>),
     /// A boxed array of *EVCConfigFault*. To be used in *Any* placeholders.
     #[serde(rename = "ArrayOfEVCConfigFault")]
-    ArrayOfEvcConfigFault(Vec<Box<dyn super::evc_config_fault_trait::EvcConfigFaultTrait>>),
+    ArrayOfEvcConfigFault(Vec<Box<dyn super::traits::EvcConfigFaultTrait>>),
     /// A boxed array of *EVCModeIllegalByVendor*. To be used in *Any* placeholders.
     #[serde(rename = "ArrayOfEVCModeIllegalByVendor")]
     ArrayOfEvcModeIllegalByVendor(Vec<EvcModeIllegalByVendor>),
@@ -2570,7 +2570,7 @@ pub enum ValueElements {
     /// A boxed array of *ExpiredEditionLicense*. To be used in *Any* placeholders.
     ArrayOfExpiredEditionLicense(Vec<ExpiredEditionLicense>),
     /// A boxed array of *ExpiredFeatureLicense*. To be used in *Any* placeholders.
-    ArrayOfExpiredFeatureLicense(Vec<Box<dyn super::expired_feature_license_trait::ExpiredFeatureLicenseTrait>>),
+    ArrayOfExpiredFeatureLicense(Vec<Box<dyn super::traits::ExpiredFeatureLicenseTrait>>),
     /// A boxed array of *ExtendedFault*. To be used in *Any* placeholders.
     ArrayOfExtendedFault(Vec<ExtendedFault>),
     /// A boxed array of *FailToEnableSPBM*. To be used in *Any* placeholders.
@@ -2595,7 +2595,7 @@ pub enum ValueElements {
     /// A boxed array of *FaultToleranceVmNotDasProtected*. To be used in *Any* placeholders.
     ArrayOfFaultToleranceVmNotDasProtected(Vec<FaultToleranceVmNotDasProtected>),
     /// A boxed array of *FcoeFault*. To be used in *Any* placeholders.
-    ArrayOfFcoeFault(Vec<Box<dyn super::fcoe_fault_trait::FcoeFaultTrait>>),
+    ArrayOfFcoeFault(Vec<Box<dyn super::traits::FcoeFaultTrait>>),
     /// A boxed array of *FcoeFaultPnicHasNoPortSet*. To be used in *Any* placeholders.
     ArrayOfFcoeFaultPnicHasNoPortSet(Vec<FcoeFaultPnicHasNoPortSet>),
     /// A boxed array of *FeatureRequirementsNotMet*. To be used in *Any* placeholders.
@@ -2605,7 +2605,7 @@ pub enum ValueElements {
     /// A boxed array of *FileBackedPortNotSupported*. To be used in *Any* placeholders.
     ArrayOfFileBackedPortNotSupported(Vec<FileBackedPortNotSupported>),
     /// A boxed array of *FileFault*. To be used in *Any* placeholders.
-    ArrayOfFileFault(Vec<Box<dyn super::file_fault_trait::FileFaultTrait>>),
+    ArrayOfFileFault(Vec<Box<dyn super::traits::FileFaultTrait>>),
     /// A boxed array of *FileLocked*. To be used in *Any* placeholders.
     ArrayOfFileLocked(Vec<FileLocked>),
     /// A boxed array of *FileNameTooLong*. To be used in *Any* placeholders.
@@ -2625,7 +2625,7 @@ pub enum ValueElements {
     /// A boxed array of *FullStorageVMotionNotSupported*. To be used in *Any* placeholders.
     ArrayOfFullStorageVMotionNotSupported(Vec<FullStorageVMotionNotSupported>),
     /// A boxed array of *GatewayConnectFault*. To be used in *Any* placeholders.
-    ArrayOfGatewayConnectFault(Vec<Box<dyn super::gateway_connect_fault_trait::GatewayConnectFaultTrait>>),
+    ArrayOfGatewayConnectFault(Vec<Box<dyn super::traits::GatewayConnectFaultTrait>>),
     /// A boxed array of *GatewayHostNotReachable*. To be used in *Any* placeholders.
     ArrayOfGatewayHostNotReachable(Vec<GatewayHostNotReachable>),
     /// A boxed array of *GatewayNotFound*. To be used in *Any* placeholders.
@@ -2637,7 +2637,7 @@ pub enum ValueElements {
     /// A boxed array of *GatewayToHostAuthFault*. To be used in *Any* placeholders.
     ArrayOfGatewayToHostAuthFault(Vec<GatewayToHostAuthFault>),
     /// A boxed array of *GatewayToHostConnectFault*. To be used in *Any* placeholders.
-    ArrayOfGatewayToHostConnectFault(Vec<Box<dyn super::gateway_to_host_connect_fault_trait::GatewayToHostConnectFaultTrait>>),
+    ArrayOfGatewayToHostConnectFault(Vec<Box<dyn super::traits::GatewayToHostConnectFaultTrait>>),
     /// A boxed array of *GatewayToHostTrustVerifyFault*. To be used in *Any* placeholders.
     ArrayOfGatewayToHostTrustVerifyFault(Vec<GatewayToHostTrustVerifyFault>),
     /// A boxed array of *GenericDrsFault*. To be used in *Any* placeholders.
@@ -2651,7 +2651,7 @@ pub enum ValueElements {
     /// A boxed array of *GuestMultipleMappings*. To be used in *Any* placeholders.
     ArrayOfGuestMultipleMappings(Vec<GuestMultipleMappings>),
     /// A boxed array of *GuestOperationsFault*. To be used in *Any* placeholders.
-    ArrayOfGuestOperationsFault(Vec<Box<dyn super::guest_operations_fault_trait::GuestOperationsFaultTrait>>),
+    ArrayOfGuestOperationsFault(Vec<Box<dyn super::traits::GuestOperationsFaultTrait>>),
     /// A boxed array of *GuestOperationsUnavailable*. To be used in *Any* placeholders.
     ArrayOfGuestOperationsUnavailable(Vec<GuestOperationsUnavailable>),
     /// A boxed array of *GuestPermissionDenied*. To be used in *Any* placeholders.
@@ -2659,11 +2659,11 @@ pub enum ValueElements {
     /// A boxed array of *GuestProcessNotFound*. To be used in *Any* placeholders.
     ArrayOfGuestProcessNotFound(Vec<GuestProcessNotFound>),
     /// A boxed array of *GuestRegistryFault*. To be used in *Any* placeholders.
-    ArrayOfGuestRegistryFault(Vec<Box<dyn super::guest_registry_fault_trait::GuestRegistryFaultTrait>>),
+    ArrayOfGuestRegistryFault(Vec<Box<dyn super::traits::GuestRegistryFaultTrait>>),
     /// A boxed array of *GuestRegistryKeyAlreadyExists*. To be used in *Any* placeholders.
     ArrayOfGuestRegistryKeyAlreadyExists(Vec<GuestRegistryKeyAlreadyExists>),
     /// A boxed array of *GuestRegistryKeyFault*. To be used in *Any* placeholders.
-    ArrayOfGuestRegistryKeyFault(Vec<Box<dyn super::guest_registry_key_fault_trait::GuestRegistryKeyFaultTrait>>),
+    ArrayOfGuestRegistryKeyFault(Vec<Box<dyn super::traits::GuestRegistryKeyFaultTrait>>),
     /// A boxed array of *GuestRegistryKeyHasSubkeys*. To be used in *Any* placeholders.
     ArrayOfGuestRegistryKeyHasSubkeys(Vec<GuestRegistryKeyHasSubkeys>),
     /// A boxed array of *GuestRegistryKeyInvalid*. To be used in *Any* placeholders.
@@ -2671,7 +2671,7 @@ pub enum ValueElements {
     /// A boxed array of *GuestRegistryKeyParentVolatile*. To be used in *Any* placeholders.
     ArrayOfGuestRegistryKeyParentVolatile(Vec<GuestRegistryKeyParentVolatile>),
     /// A boxed array of *GuestRegistryValueFault*. To be used in *Any* placeholders.
-    ArrayOfGuestRegistryValueFault(Vec<Box<dyn super::guest_registry_value_fault_trait::GuestRegistryValueFaultTrait>>),
+    ArrayOfGuestRegistryValueFault(Vec<Box<dyn super::traits::GuestRegistryValueFaultTrait>>),
     /// A boxed array of *GuestRegistryValueNotFound*. To be used in *Any* placeholders.
     ArrayOfGuestRegistryValueNotFound(Vec<GuestRegistryValueNotFound>),
     /// A boxed array of *HAErrorsAtDest*. To be used in *Any* placeholders.
@@ -2685,9 +2685,9 @@ pub enum ValueElements {
     /// A boxed array of *HostConfigFailed*. To be used in *Any* placeholders.
     ArrayOfHostConfigFailed(Vec<HostConfigFailed>),
     /// A boxed array of *HostConfigFault*. To be used in *Any* placeholders.
-    ArrayOfHostConfigFault(Vec<Box<dyn super::host_config_fault_trait::HostConfigFaultTrait>>),
+    ArrayOfHostConfigFault(Vec<Box<dyn super::traits::HostConfigFaultTrait>>),
     /// A boxed array of *HostConnectFault*. To be used in *Any* placeholders.
-    ArrayOfHostConnectFault(Vec<Box<dyn super::host_connect_fault_trait::HostConnectFaultTrait>>),
+    ArrayOfHostConnectFault(Vec<Box<dyn super::traits::HostConnectFaultTrait>>),
     /// A boxed array of *HostHasComponentFailure*. To be used in *Any* placeholders.
     ArrayOfHostHasComponentFailure(Vec<HostHasComponentFailure>),
     /// A boxed array of *HostInDomain*. To be used in *Any* placeholders.
@@ -2699,7 +2699,7 @@ pub enum ValueElements {
     /// A boxed array of *HostInventoryFull*. To be used in *Any* placeholders.
     ArrayOfHostInventoryFull(Vec<HostInventoryFull>),
     /// A boxed array of *HostPowerOpFailed*. To be used in *Any* placeholders.
-    ArrayOfHostPowerOpFailed(Vec<Box<dyn super::host_power_op_failed_trait::HostPowerOpFailedTrait>>),
+    ArrayOfHostPowerOpFailed(Vec<Box<dyn super::traits::HostPowerOpFailedTrait>>),
     /// A boxed array of *HostSpecificationOperationFailed*. To be used in *Any* placeholders.
     ArrayOfHostSpecificationOperationFailed(Vec<HostSpecificationOperationFailed>),
     /// A boxed array of *HotSnapshotMoveNotSupported*. To be used in *Any* placeholders.
@@ -2721,7 +2721,7 @@ pub enum ValueElements {
     /// A boxed array of *InUseFeatureManipulationDisallowed*. To be used in *Any* placeholders.
     ArrayOfInUseFeatureManipulationDisallowed(Vec<InUseFeatureManipulationDisallowed>),
     /// A boxed array of *InaccessibleDatastore*. To be used in *Any* placeholders.
-    ArrayOfInaccessibleDatastore(Vec<Box<dyn super::inaccessible_datastore_trait::InaccessibleDatastoreTrait>>),
+    ArrayOfInaccessibleDatastore(Vec<Box<dyn super::traits::InaccessibleDatastoreTrait>>),
     /// A boxed array of *InaccessibleFTMetadataDatastore*. To be used in *Any* placeholders.
     #[serde(rename = "ArrayOfInaccessibleFTMetadataDatastore")]
     ArrayOfInaccessibleFtMetadataDatastore(Vec<InaccessibleFtMetadataDatastore>),
@@ -2752,7 +2752,7 @@ pub enum ValueElements {
     /// A boxed array of *InsufficientGraphicsResourcesFault*. To be used in *Any* placeholders.
     ArrayOfInsufficientGraphicsResourcesFault(Vec<InsufficientGraphicsResourcesFault>),
     /// A boxed array of *InsufficientHostCapacityFault*. To be used in *Any* placeholders.
-    ArrayOfInsufficientHostCapacityFault(Vec<Box<dyn super::insufficient_host_capacity_fault_trait::InsufficientHostCapacityFaultTrait>>),
+    ArrayOfInsufficientHostCapacityFault(Vec<Box<dyn super::traits::InsufficientHostCapacityFaultTrait>>),
     /// A boxed array of *InsufficientHostCpuCapacityFault*. To be used in *Any* placeholders.
     ArrayOfInsufficientHostCpuCapacityFault(Vec<InsufficientHostCpuCapacityFault>),
     /// A boxed array of *InsufficientHostMemoryCapacityFault*. To be used in *Any* placeholders.
@@ -2766,13 +2766,13 @@ pub enum ValueElements {
     /// A boxed array of *InsufficientPerCpuCapacity*. To be used in *Any* placeholders.
     ArrayOfInsufficientPerCpuCapacity(Vec<InsufficientPerCpuCapacity>),
     /// A boxed array of *InsufficientResourcesFault*. To be used in *Any* placeholders.
-    ArrayOfInsufficientResourcesFault(Vec<Box<dyn super::insufficient_resources_fault_trait::InsufficientResourcesFaultTrait>>),
+    ArrayOfInsufficientResourcesFault(Vec<Box<dyn super::traits::InsufficientResourcesFaultTrait>>),
     /// A boxed array of *InsufficientStandbyCpuResource*. To be used in *Any* placeholders.
     ArrayOfInsufficientStandbyCpuResource(Vec<InsufficientStandbyCpuResource>),
     /// A boxed array of *InsufficientStandbyMemoryResource*. To be used in *Any* placeholders.
     ArrayOfInsufficientStandbyMemoryResource(Vec<InsufficientStandbyMemoryResource>),
     /// A boxed array of *InsufficientStandbyResource*. To be used in *Any* placeholders.
-    ArrayOfInsufficientStandbyResource(Vec<Box<dyn super::insufficient_standby_resource_trait::InsufficientStandbyResourceTrait>>),
+    ArrayOfInsufficientStandbyResource(Vec<Box<dyn super::traits::InsufficientStandbyResourceTrait>>),
     /// A boxed array of *InsufficientStorageIops*. To be used in *Any* placeholders.
     ArrayOfInsufficientStorageIops(Vec<InsufficientStorageIops>),
     /// A boxed array of *InsufficientStorageSpace*. To be used in *Any* placeholders.
@@ -2790,7 +2790,7 @@ pub enum ValueElements {
     ArrayOfInvalidCamCertificate(Vec<InvalidCamCertificate>),
     /// A boxed array of *InvalidCAMServer*. To be used in *Any* placeholders.
     #[serde(rename = "ArrayOfInvalidCAMServer")]
-    ArrayOfInvalidCamServer(Vec<Box<dyn super::invalid_cam_server_trait::InvalidCamServerTrait>>),
+    ArrayOfInvalidCamServer(Vec<Box<dyn super::traits::InvalidCamServerTrait>>),
     /// A boxed array of *InvalidClientCertificate*. To be used in *Any* placeholders.
     ArrayOfInvalidClientCertificate(Vec<InvalidClientCertificate>),
     /// A boxed array of *InvalidController*. To be used in *Any* placeholders.
@@ -2800,7 +2800,7 @@ pub enum ValueElements {
     /// A boxed array of *InvalidDasRestartPriorityForFtVm*. To be used in *Any* placeholders.
     ArrayOfInvalidDasRestartPriorityForFtVm(Vec<InvalidDasRestartPriorityForFtVm>),
     /// A boxed array of *InvalidDatastore*. To be used in *Any* placeholders.
-    ArrayOfInvalidDatastore(Vec<Box<dyn super::invalid_datastore_trait::InvalidDatastoreTrait>>),
+    ArrayOfInvalidDatastore(Vec<Box<dyn super::traits::InvalidDatastoreTrait>>),
     /// A boxed array of *InvalidDatastorePath*. To be used in *Any* placeholders.
     ArrayOfInvalidDatastorePath(Vec<InvalidDatastorePath>),
     /// A boxed array of *InvalidDatastoreState*. To be used in *Any* placeholders.
@@ -2810,7 +2810,7 @@ pub enum ValueElements {
     /// A boxed array of *InvalidDeviceOperation*. To be used in *Any* placeholders.
     ArrayOfInvalidDeviceOperation(Vec<InvalidDeviceOperation>),
     /// A boxed array of *InvalidDeviceSpec*. To be used in *Any* placeholders.
-    ArrayOfInvalidDeviceSpec(Vec<Box<dyn super::invalid_device_spec_trait::InvalidDeviceSpecTrait>>),
+    ArrayOfInvalidDeviceSpec(Vec<Box<dyn super::traits::InvalidDeviceSpecTrait>>),
     /// A boxed array of *InvalidDiskFormat*. To be used in *Any* placeholders.
     ArrayOfInvalidDiskFormat(Vec<InvalidDiskFormat>),
     /// A boxed array of *InvalidDrsBehaviorForFtVm*. To be used in *Any* placeholders.
@@ -2820,9 +2820,9 @@ pub enum ValueElements {
     /// A boxed array of *InvalidEvent*. To be used in *Any* placeholders.
     ArrayOfInvalidEvent(Vec<InvalidEvent>),
     /// A boxed array of *InvalidFolder*. To be used in *Any* placeholders.
-    ArrayOfInvalidFolder(Vec<Box<dyn super::invalid_folder_trait::InvalidFolderTrait>>),
+    ArrayOfInvalidFolder(Vec<Box<dyn super::traits::InvalidFolderTrait>>),
     /// A boxed array of *InvalidFormat*. To be used in *Any* placeholders.
-    ArrayOfInvalidFormat(Vec<Box<dyn super::invalid_format_trait::InvalidFormatTrait>>),
+    ArrayOfInvalidFormat(Vec<Box<dyn super::traits::InvalidFormatTrait>>),
     /// A boxed array of *InvalidGuestLogin*. To be used in *Any* placeholders.
     ArrayOfInvalidGuestLogin(Vec<InvalidGuestLogin>),
     /// A boxed array of *InvalidHostConnectionState*. To be used in *Any* placeholders.
@@ -2830,7 +2830,7 @@ pub enum ValueElements {
     /// A boxed array of *InvalidHostName*. To be used in *Any* placeholders.
     ArrayOfInvalidHostName(Vec<InvalidHostName>),
     /// A boxed array of *InvalidHostState*. To be used in *Any* placeholders.
-    ArrayOfInvalidHostState(Vec<Box<dyn super::invalid_host_state_trait::InvalidHostStateTrait>>),
+    ArrayOfInvalidHostState(Vec<Box<dyn super::traits::InvalidHostStateTrait>>),
     /// A boxed array of *InvalidIndexArgument*. To be used in *Any* placeholders.
     ArrayOfInvalidIndexArgument(Vec<InvalidIndexArgument>),
     /// A boxed array of *InvalidIpfixConfig*. To be used in *Any* placeholders.
@@ -2844,7 +2844,7 @@ pub enum ValueElements {
     /// A boxed array of *InvalidLocale*. To be used in *Any* placeholders.
     ArrayOfInvalidLocale(Vec<InvalidLocale>),
     /// A boxed array of *InvalidLogin*. To be used in *Any* placeholders.
-    ArrayOfInvalidLogin(Vec<Box<dyn super::invalid_login_trait::InvalidLoginTrait>>),
+    ArrayOfInvalidLogin(Vec<Box<dyn super::traits::InvalidLoginTrait>>),
     /// A boxed array of *InvalidName*. To be used in *Any* placeholders.
     ArrayOfInvalidName(Vec<InvalidName>),
     /// A boxed array of *InvalidNasCredentials*. To be used in *Any* placeholders.
@@ -2864,7 +2864,7 @@ pub enum ValueElements {
     /// A boxed array of *InvalidPropertyType*. To be used in *Any* placeholders.
     ArrayOfInvalidPropertyType(Vec<InvalidPropertyType>),
     /// A boxed array of *InvalidPropertyValue*. To be used in *Any* placeholders.
-    ArrayOfInvalidPropertyValue(Vec<Box<dyn super::invalid_property_value_trait::InvalidPropertyValueTrait>>),
+    ArrayOfInvalidPropertyValue(Vec<Box<dyn super::traits::InvalidPropertyValueTrait>>),
     /// A boxed array of *InvalidResourcePoolStructureFault*. To be used in *Any* placeholders.
     ArrayOfInvalidResourcePoolStructureFault(Vec<InvalidResourcePoolStructureFault>),
     /// A boxed array of *InvalidScheduledTask*. To be used in *Any* placeholders.
@@ -2874,9 +2874,9 @@ pub enum ValueElements {
     /// A boxed array of *InvalidSnapshotFormat*. To be used in *Any* placeholders.
     ArrayOfInvalidSnapshotFormat(Vec<InvalidSnapshotFormat>),
     /// A boxed array of *InvalidState*. To be used in *Any* placeholders.
-    ArrayOfInvalidState(Vec<Box<dyn super::invalid_state_trait::InvalidStateTrait>>),
+    ArrayOfInvalidState(Vec<Box<dyn super::traits::InvalidStateTrait>>),
     /// A boxed array of *InvalidVmConfig*. To be used in *Any* placeholders.
-    ArrayOfInvalidVmConfig(Vec<Box<dyn super::invalid_vm_config_trait::InvalidVmConfigTrait>>),
+    ArrayOfInvalidVmConfig(Vec<Box<dyn super::traits::InvalidVmConfigTrait>>),
     /// A boxed array of *InvalidVmState*. To be used in *Any* placeholders.
     ArrayOfInvalidVmState(Vec<InvalidVmState>),
     /// A boxed array of *InventoryHasStandardAloneHosts*. To be used in *Any* placeholders.
@@ -2884,7 +2884,7 @@ pub enum ValueElements {
     /// A boxed array of *IpHostnameGeneratorError*. To be used in *Any* placeholders.
     ArrayOfIpHostnameGeneratorError(Vec<IpHostnameGeneratorError>),
     /// A boxed array of *IscsiFault*. To be used in *Any* placeholders.
-    ArrayOfIscsiFault(Vec<Box<dyn super::iscsi_fault_trait::IscsiFaultTrait>>),
+    ArrayOfIscsiFault(Vec<Box<dyn super::traits::IscsiFaultTrait>>),
     /// A boxed array of *IscsiFaultInvalidVnic*. To be used in *Any* placeholders.
     ArrayOfIscsiFaultInvalidVnic(Vec<IscsiFaultInvalidVnic>),
     /// A boxed array of *IscsiFaultPnicInUse*. To be used in *Any* placeholders.
@@ -2960,9 +2960,9 @@ pub enum ValueElements {
     /// A boxed array of *MigrationDisabled*. To be used in *Any* placeholders.
     ArrayOfMigrationDisabled(Vec<MigrationDisabled>),
     /// A boxed array of *MigrationFault*. To be used in *Any* placeholders.
-    ArrayOfMigrationFault(Vec<Box<dyn super::migration_fault_trait::MigrationFaultTrait>>),
+    ArrayOfMigrationFault(Vec<Box<dyn super::traits::MigrationFaultTrait>>),
     /// A boxed array of *MigrationFeatureNotSupported*. To be used in *Any* placeholders.
-    ArrayOfMigrationFeatureNotSupported(Vec<Box<dyn super::migration_feature_not_supported_trait::MigrationFeatureNotSupportedTrait>>),
+    ArrayOfMigrationFeatureNotSupported(Vec<Box<dyn super::traits::MigrationFeatureNotSupportedTrait>>),
     /// A boxed array of *MigrationNotReady*. To be used in *Any* placeholders.
     ArrayOfMigrationNotReady(Vec<MigrationNotReady>),
     /// A boxed array of *MismatchedBundle*. To be used in *Any* placeholders.
@@ -3006,7 +3006,7 @@ pub enum ValueElements {
     /// A boxed array of *NamespaceWriteProtected*. To be used in *Any* placeholders.
     ArrayOfNamespaceWriteProtected(Vec<NamespaceWriteProtected>),
     /// A boxed array of *NasConfigFault*. To be used in *Any* placeholders.
-    ArrayOfNasConfigFault(Vec<Box<dyn super::nas_config_fault_trait::NasConfigFaultTrait>>),
+    ArrayOfNasConfigFault(Vec<Box<dyn super::traits::NasConfigFaultTrait>>),
     /// A boxed array of *NasConnectionLimitReached*. To be used in *Any* placeholders.
     ArrayOfNasConnectionLimitReached(Vec<NasConnectionLimitReached>),
     /// A boxed array of *NasSessionCredentialConflict*. To be used in *Any* placeholders.
@@ -3034,7 +3034,7 @@ pub enum ValueElements {
     /// A boxed array of *NoCompatibleHardAffinityHost*. To be used in *Any* placeholders.
     ArrayOfNoCompatibleHardAffinityHost(Vec<NoCompatibleHardAffinityHost>),
     /// A boxed array of *NoCompatibleHost*. To be used in *Any* placeholders.
-    ArrayOfNoCompatibleHost(Vec<Box<dyn super::no_compatible_host_trait::NoCompatibleHostTrait>>),
+    ArrayOfNoCompatibleHost(Vec<Box<dyn super::traits::NoCompatibleHostTrait>>),
     /// A boxed array of *NoCompatibleHostWithAccessToDevice*. To be used in *Any* placeholders.
     ArrayOfNoCompatibleHostWithAccessToDevice(Vec<NoCompatibleHostWithAccessToDevice>),
     /// A boxed array of *NoCompatibleSoftAffinityHost*. To be used in *Any* placeholders.
@@ -3060,7 +3060,7 @@ pub enum ValueElements {
     /// A boxed array of *NoPeerHostFound*. To be used in *Any* placeholders.
     ArrayOfNoPeerHostFound(Vec<NoPeerHostFound>),
     /// A boxed array of *NoPermission*. To be used in *Any* placeholders.
-    ArrayOfNoPermission(Vec<Box<dyn super::no_permission_trait::NoPermissionTrait>>),
+    ArrayOfNoPermission(Vec<Box<dyn super::traits::NoPermissionTrait>>),
     /// A boxed array of *NoPermissionEntityPrivileges*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 7.0.3.2
@@ -3097,7 +3097,7 @@ pub enum ValueElements {
     /// A boxed array of *NotAuthenticated*. To be used in *Any* placeholders.
     ArrayOfNotAuthenticated(Vec<NotAuthenticated>),
     /// A boxed array of *NotEnoughCpus*. To be used in *Any* placeholders.
-    ArrayOfNotEnoughCpus(Vec<Box<dyn super::not_enough_cpus_trait::NotEnoughCpusTrait>>),
+    ArrayOfNotEnoughCpus(Vec<Box<dyn super::traits::NotEnoughCpusTrait>>),
     /// A boxed array of *NotEnoughLogicalCpus*. To be used in *Any* placeholders.
     ArrayOfNotEnoughLogicalCpus(Vec<NotEnoughLogicalCpus>),
     /// A boxed array of *NotFound*. To be used in *Any* placeholders.
@@ -3106,7 +3106,7 @@ pub enum ValueElements {
     #[serde(rename = "ArrayOfNotSupportedDeviceForFT")]
     ArrayOfNotSupportedDeviceForFt(Vec<NotSupportedDeviceForFt>),
     /// A boxed array of *NotSupportedHost*. To be used in *Any* placeholders.
-    ArrayOfNotSupportedHost(Vec<Box<dyn super::not_supported_host_trait::NotSupportedHostTrait>>),
+    ArrayOfNotSupportedHost(Vec<Box<dyn super::traits::NotSupportedHostTrait>>),
     /// A boxed array of *NotSupportedHostForChecksum*. To be used in *Any* placeholders.
     ArrayOfNotSupportedHostForChecksum(Vec<NotSupportedHostForChecksum>),
     /// A boxed array of *NotSupportedHostForVFlash*. To be used in *Any* placeholders.
@@ -3118,7 +3118,7 @@ pub enum ValueElements {
     /// A boxed array of *NotSupportedHostForVsan*. To be used in *Any* placeholders.
     ArrayOfNotSupportedHostForVsan(Vec<NotSupportedHostForVsan>),
     /// A boxed array of *NotSupportedHostInCluster*. To be used in *Any* placeholders.
-    ArrayOfNotSupportedHostInCluster(Vec<Box<dyn super::not_supported_host_in_cluster_trait::NotSupportedHostInClusterTrait>>),
+    ArrayOfNotSupportedHostInCluster(Vec<Box<dyn super::traits::NotSupportedHostInClusterTrait>>),
     /// A boxed array of *NotSupportedHostInDvs*. To be used in *Any* placeholders.
     ArrayOfNotSupportedHostInDvs(Vec<NotSupportedHostInDvs>),
     /// A boxed array of *NotSupportedHostInHACluster*. To be used in *Any* placeholders.
@@ -3143,17 +3143,17 @@ pub enum ValueElements {
     /// A boxed array of *OutOfBounds*. To be used in *Any* placeholders.
     ArrayOfOutOfBounds(Vec<OutOfBounds>),
     /// A boxed array of *OvfAttribute*. To be used in *Any* placeholders.
-    ArrayOfOvfAttribute(Vec<Box<dyn super::ovf_attribute_trait::OvfAttributeTrait>>),
+    ArrayOfOvfAttribute(Vec<Box<dyn super::traits::OvfAttributeTrait>>),
     /// A boxed array of *OvfConnectedDevice*. To be used in *Any* placeholders.
-    ArrayOfOvfConnectedDevice(Vec<Box<dyn super::ovf_connected_device_trait::OvfConnectedDeviceTrait>>),
+    ArrayOfOvfConnectedDevice(Vec<Box<dyn super::traits::OvfConnectedDeviceTrait>>),
     /// A boxed array of *OvfConnectedDeviceFloppy*. To be used in *Any* placeholders.
     ArrayOfOvfConnectedDeviceFloppy(Vec<OvfConnectedDeviceFloppy>),
     /// A boxed array of *OvfConnectedDeviceIso*. To be used in *Any* placeholders.
     ArrayOfOvfConnectedDeviceIso(Vec<OvfConnectedDeviceIso>),
     /// A boxed array of *OvfConstraint*. To be used in *Any* placeholders.
-    ArrayOfOvfConstraint(Vec<Box<dyn super::ovf_constraint_trait::OvfConstraintTrait>>),
+    ArrayOfOvfConstraint(Vec<Box<dyn super::traits::OvfConstraintTrait>>),
     /// A boxed array of *OvfConsumerCallbackFault*. To be used in *Any* placeholders.
-    ArrayOfOvfConsumerCallbackFault(Vec<Box<dyn super::ovf_consumer_callback_fault_trait::OvfConsumerCallbackFaultTrait>>),
+    ArrayOfOvfConsumerCallbackFault(Vec<Box<dyn super::traits::OvfConsumerCallbackFaultTrait>>),
     /// A boxed array of *OvfConsumerCommunicationError*. To be used in *Any* placeholders.
     ArrayOfOvfConsumerCommunicationError(Vec<OvfConsumerCommunicationError>),
     /// A boxed array of *OvfConsumerFault*. To be used in *Any* placeholders.
@@ -3185,33 +3185,33 @@ pub enum ValueElements {
     /// A boxed array of *OvfDuplicatedPropertyIdImport*. To be used in *Any* placeholders.
     ArrayOfOvfDuplicatedPropertyIdImport(Vec<OvfDuplicatedPropertyIdImport>),
     /// A boxed array of *OvfElement*. To be used in *Any* placeholders.
-    ArrayOfOvfElement(Vec<Box<dyn super::ovf_element_trait::OvfElementTrait>>),
+    ArrayOfOvfElement(Vec<Box<dyn super::traits::OvfElementTrait>>),
     /// A boxed array of *OvfElementInvalidValue*. To be used in *Any* placeholders.
     ArrayOfOvfElementInvalidValue(Vec<OvfElementInvalidValue>),
     /// A boxed array of *OvfExport*. To be used in *Any* placeholders.
-    ArrayOfOvfExport(Vec<Box<dyn super::ovf_export_trait::OvfExportTrait>>),
+    ArrayOfOvfExport(Vec<Box<dyn super::traits::OvfExportTrait>>),
     /// A boxed array of *OvfExportFailed*. To be used in *Any* placeholders.
     ArrayOfOvfExportFailed(Vec<OvfExportFailed>),
     /// A boxed array of *OvfFault*. To be used in *Any* placeholders.
-    ArrayOfOvfFault(Vec<Box<dyn super::ovf_fault_trait::OvfFaultTrait>>),
+    ArrayOfOvfFault(Vec<Box<dyn super::traits::OvfFaultTrait>>),
     /// A boxed array of *OvfHardwareCheck*. To be used in *Any* placeholders.
     ArrayOfOvfHardwareCheck(Vec<OvfHardwareCheck>),
     /// A boxed array of *OvfHardwareExport*. To be used in *Any* placeholders.
-    ArrayOfOvfHardwareExport(Vec<Box<dyn super::ovf_hardware_export_trait::OvfHardwareExportTrait>>),
+    ArrayOfOvfHardwareExport(Vec<Box<dyn super::traits::OvfHardwareExportTrait>>),
     /// A boxed array of *OvfHostResourceConstraint*. To be used in *Any* placeholders.
     ArrayOfOvfHostResourceConstraint(Vec<OvfHostResourceConstraint>),
     /// A boxed array of *OvfHostValueNotParsed*. To be used in *Any* placeholders.
     ArrayOfOvfHostValueNotParsed(Vec<OvfHostValueNotParsed>),
     /// A boxed array of *OvfImport*. To be used in *Any* placeholders.
-    ArrayOfOvfImport(Vec<Box<dyn super::ovf_import_trait::OvfImportTrait>>),
+    ArrayOfOvfImport(Vec<Box<dyn super::traits::OvfImportTrait>>),
     /// A boxed array of *OvfImportFailed*. To be used in *Any* placeholders.
     ArrayOfOvfImportFailed(Vec<OvfImportFailed>),
     /// A boxed array of *OvfInternalError*. To be used in *Any* placeholders.
     ArrayOfOvfInternalError(Vec<OvfInternalError>),
     /// A boxed array of *OvfInvalidPackage*. To be used in *Any* placeholders.
-    ArrayOfOvfInvalidPackage(Vec<Box<dyn super::ovf_invalid_package_trait::OvfInvalidPackageTrait>>),
+    ArrayOfOvfInvalidPackage(Vec<Box<dyn super::traits::OvfInvalidPackageTrait>>),
     /// A boxed array of *OvfInvalidValue*. To be used in *Any* placeholders.
-    ArrayOfOvfInvalidValue(Vec<Box<dyn super::ovf_invalid_value_trait::OvfInvalidValueTrait>>),
+    ArrayOfOvfInvalidValue(Vec<Box<dyn super::traits::OvfInvalidValueTrait>>),
     /// A boxed array of *OvfInvalidValueConfiguration*. To be used in *Any* placeholders.
     ArrayOfOvfInvalidValueConfiguration(Vec<OvfInvalidValueConfiguration>),
     /// A boxed array of *OvfInvalidValueEmpty*. To be used in *Any* placeholders.
@@ -3227,7 +3227,7 @@ pub enum ValueElements {
     /// A boxed array of *OvfMissingAttribute*. To be used in *Any* placeholders.
     ArrayOfOvfMissingAttribute(Vec<OvfMissingAttribute>),
     /// A boxed array of *OvfMissingElement*. To be used in *Any* placeholders.
-    ArrayOfOvfMissingElement(Vec<Box<dyn super::ovf_missing_element_trait::OvfMissingElementTrait>>),
+    ArrayOfOvfMissingElement(Vec<Box<dyn super::traits::OvfMissingElementTrait>>),
     /// A boxed array of *OvfMissingElementNormalBoundary*. To be used in *Any* placeholders.
     ArrayOfOvfMissingElementNormalBoundary(Vec<OvfMissingElementNormalBoundary>),
     /// A boxed array of *OvfMissingHardware*. To be used in *Any* placeholders.
@@ -3241,7 +3241,7 @@ pub enum ValueElements {
     /// A boxed array of *OvfNoSupportedHardwareFamily*. To be used in *Any* placeholders.
     ArrayOfOvfNoSupportedHardwareFamily(Vec<OvfNoSupportedHardwareFamily>),
     /// A boxed array of *OvfProperty*. To be used in *Any* placeholders.
-    ArrayOfOvfProperty(Vec<Box<dyn super::ovf_property_trait::OvfPropertyTrait>>),
+    ArrayOfOvfProperty(Vec<Box<dyn super::traits::OvfPropertyTrait>>),
     /// A boxed array of *OvfPropertyExport*. To be used in *Any* placeholders.
     ArrayOfOvfPropertyExport(Vec<OvfPropertyExport>),
     /// A boxed array of *OvfPropertyNetwork*. To be used in *Any* placeholders.
@@ -3259,7 +3259,7 @@ pub enum ValueElements {
     /// A boxed array of *OvfPropertyValue*. To be used in *Any* placeholders.
     ArrayOfOvfPropertyValue(Vec<OvfPropertyValue>),
     /// A boxed array of *OvfSystemFault*. To be used in *Any* placeholders.
-    ArrayOfOvfSystemFault(Vec<Box<dyn super::ovf_system_fault_trait::OvfSystemFaultTrait>>),
+    ArrayOfOvfSystemFault(Vec<Box<dyn super::traits::OvfSystemFaultTrait>>),
     /// A boxed array of *OvfToXmlUnsupportedElement*. To be used in *Any* placeholders.
     ArrayOfOvfToXmlUnsupportedElement(Vec<OvfToXmlUnsupportedElement>),
     /// A boxed array of *OvfUnableToExportDisk*. To be used in *Any* placeholders.
@@ -3273,7 +3273,7 @@ pub enum ValueElements {
     /// A boxed array of *OvfUnknownEntity*. To be used in *Any* placeholders.
     ArrayOfOvfUnknownEntity(Vec<OvfUnknownEntity>),
     /// A boxed array of *OvfUnsupportedAttribute*. To be used in *Any* placeholders.
-    ArrayOfOvfUnsupportedAttribute(Vec<Box<dyn super::ovf_unsupported_attribute_trait::OvfUnsupportedAttributeTrait>>),
+    ArrayOfOvfUnsupportedAttribute(Vec<Box<dyn super::traits::OvfUnsupportedAttributeTrait>>),
     /// A boxed array of *OvfUnsupportedAttributeValue*. To be used in *Any* placeholders.
     ArrayOfOvfUnsupportedAttributeValue(Vec<OvfUnsupportedAttributeValue>),
     /// A boxed array of *OvfUnsupportedDeviceBackingInfo*. To be used in *Any* placeholders.
@@ -3285,11 +3285,11 @@ pub enum ValueElements {
     /// A boxed array of *OvfUnsupportedDiskProvisioning*. To be used in *Any* placeholders.
     ArrayOfOvfUnsupportedDiskProvisioning(Vec<OvfUnsupportedDiskProvisioning>),
     /// A boxed array of *OvfUnsupportedElement*. To be used in *Any* placeholders.
-    ArrayOfOvfUnsupportedElement(Vec<Box<dyn super::ovf_unsupported_element_trait::OvfUnsupportedElementTrait>>),
+    ArrayOfOvfUnsupportedElement(Vec<Box<dyn super::traits::OvfUnsupportedElementTrait>>),
     /// A boxed array of *OvfUnsupportedElementValue*. To be used in *Any* placeholders.
     ArrayOfOvfUnsupportedElementValue(Vec<OvfUnsupportedElementValue>),
     /// A boxed array of *OvfUnsupportedPackage*. To be used in *Any* placeholders.
-    ArrayOfOvfUnsupportedPackage(Vec<Box<dyn super::ovf_unsupported_package_trait::OvfUnsupportedPackageTrait>>),
+    ArrayOfOvfUnsupportedPackage(Vec<Box<dyn super::traits::OvfUnsupportedPackageTrait>>),
     /// A boxed array of *OvfUnsupportedSection*. To be used in *Any* placeholders.
     ArrayOfOvfUnsupportedSection(Vec<OvfUnsupportedSection>),
     /// A boxed array of *OvfUnsupportedSubType*. To be used in *Any* placeholders.
@@ -3315,20 +3315,20 @@ pub enum ValueElements {
     /// A boxed array of *PatchMetadataCorrupted*. To be used in *Any* placeholders.
     ArrayOfPatchMetadataCorrupted(Vec<PatchMetadataCorrupted>),
     /// A boxed array of *PatchMetadataInvalid*. To be used in *Any* placeholders.
-    ArrayOfPatchMetadataInvalid(Vec<Box<dyn super::patch_metadata_invalid_trait::PatchMetadataInvalidTrait>>),
+    ArrayOfPatchMetadataInvalid(Vec<Box<dyn super::traits::PatchMetadataInvalidTrait>>),
     /// A boxed array of *PatchMetadataNotFound*. To be used in *Any* placeholders.
     ArrayOfPatchMetadataNotFound(Vec<PatchMetadataNotFound>),
     /// A boxed array of *PatchMissingDependencies*. To be used in *Any* placeholders.
     ArrayOfPatchMissingDependencies(Vec<PatchMissingDependencies>),
     /// A boxed array of *PatchNotApplicable*. To be used in *Any* placeholders.
-    ArrayOfPatchNotApplicable(Vec<Box<dyn super::patch_not_applicable_trait::PatchNotApplicableTrait>>),
+    ArrayOfPatchNotApplicable(Vec<Box<dyn super::traits::PatchNotApplicableTrait>>),
     /// A boxed array of *PatchSuperseded*. To be used in *Any* placeholders.
     ArrayOfPatchSuperseded(Vec<PatchSuperseded>),
     /// A boxed array of *PhysCompatRDMNotSupported*. To be used in *Any* placeholders.
     #[serde(rename = "ArrayOfPhysCompatRDMNotSupported")]
     ArrayOfPhysCompatRdmNotSupported(Vec<PhysCompatRdmNotSupported>),
     /// A boxed array of *PlatformConfigFault*. To be used in *Any* placeholders.
-    ArrayOfPlatformConfigFault(Vec<Box<dyn super::platform_config_fault_trait::PlatformConfigFaultTrait>>),
+    ArrayOfPlatformConfigFault(Vec<Box<dyn super::traits::PlatformConfigFaultTrait>>),
     /// A boxed array of *PowerOnFtSecondaryFailed*. To be used in *Any* placeholders.
     ArrayOfPowerOnFtSecondaryFailed(Vec<PowerOnFtSecondaryFailed>),
     /// A boxed array of *PowerOnFtSecondaryTimedout*. To be used in *Any* placeholders.
@@ -3352,7 +3352,7 @@ pub enum ValueElements {
     ArrayOfRdmNotPreserved(Vec<RdmNotPreserved>),
     /// A boxed array of *RDMNotSupported*. To be used in *Any* placeholders.
     #[serde(rename = "ArrayOfRDMNotSupported")]
-    ArrayOfRdmNotSupported(Vec<Box<dyn super::rdm_not_supported_trait::RdmNotSupportedTrait>>),
+    ArrayOfRdmNotSupported(Vec<Box<dyn super::traits::RdmNotSupportedTrait>>),
     /// A boxed array of *RDMNotSupportedOnDatastore*. To be used in *Any* placeholders.
     #[serde(rename = "ArrayOfRDMNotSupportedOnDatastore")]
     ArrayOfRdmNotSupportedOnDatastore(Vec<RdmNotSupportedOnDatastore>),
@@ -3374,11 +3374,11 @@ pub enum ValueElements {
     /// A boxed array of *RemoveFailed*. To be used in *Any* placeholders.
     ArrayOfRemoveFailed(Vec<RemoveFailed>),
     /// A boxed array of *ReplicationConfigFault*. To be used in *Any* placeholders.
-    ArrayOfReplicationConfigFault(Vec<Box<dyn super::replication_config_fault_trait::ReplicationConfigFaultTrait>>),
+    ArrayOfReplicationConfigFault(Vec<Box<dyn super::traits::ReplicationConfigFaultTrait>>),
     /// A boxed array of *ReplicationDiskConfigFault*. To be used in *Any* placeholders.
     ArrayOfReplicationDiskConfigFault(Vec<ReplicationDiskConfigFault>),
     /// A boxed array of *ReplicationFault*. To be used in *Any* placeholders.
-    ArrayOfReplicationFault(Vec<Box<dyn super::replication_fault_trait::ReplicationFaultTrait>>),
+    ArrayOfReplicationFault(Vec<Box<dyn super::traits::ReplicationFaultTrait>>),
     /// A boxed array of *ReplicationIncompatibleWithFT*. To be used in *Any* placeholders.
     #[serde(rename = "ArrayOfReplicationIncompatibleWithFT")]
     ArrayOfReplicationIncompatibleWithFt(Vec<ReplicationIncompatibleWithFt>),
@@ -3389,11 +3389,11 @@ pub enum ValueElements {
     /// A boxed array of *ReplicationVmConfigFault*. To be used in *Any* placeholders.
     ArrayOfReplicationVmConfigFault(Vec<ReplicationVmConfigFault>),
     /// A boxed array of *ReplicationVmFault*. To be used in *Any* placeholders.
-    ArrayOfReplicationVmFault(Vec<Box<dyn super::replication_vm_fault_trait::ReplicationVmFaultTrait>>),
+    ArrayOfReplicationVmFault(Vec<Box<dyn super::traits::ReplicationVmFaultTrait>>),
     /// A boxed array of *ReplicationVmInProgressFault*. To be used in *Any* placeholders.
     ArrayOfReplicationVmInProgressFault(Vec<ReplicationVmInProgressFault>),
     /// A boxed array of *ResourceInUse*. To be used in *Any* placeholders.
-    ArrayOfResourceInUse(Vec<Box<dyn super::resource_in_use_trait::ResourceInUseTrait>>),
+    ArrayOfResourceInUse(Vec<Box<dyn super::traits::ResourceInUseTrait>>),
     /// A boxed array of *ResourceNotAvailable*. To be used in *Any* placeholders.
     ArrayOfResourceNotAvailable(Vec<ResourceNotAvailable>),
     /// A boxed array of *RestrictedByAdministrator*. To be used in *Any* placeholders.
@@ -3428,11 +3428,11 @@ pub enum ValueElements {
     /// A boxed array of *SnapshotCloneNotSupported*. To be used in *Any* placeholders.
     ArrayOfSnapshotCloneNotSupported(Vec<SnapshotCloneNotSupported>),
     /// A boxed array of *SnapshotCopyNotSupported*. To be used in *Any* placeholders.
-    ArrayOfSnapshotCopyNotSupported(Vec<Box<dyn super::snapshot_copy_not_supported_trait::SnapshotCopyNotSupportedTrait>>),
+    ArrayOfSnapshotCopyNotSupported(Vec<Box<dyn super::traits::SnapshotCopyNotSupportedTrait>>),
     /// A boxed array of *SnapshotDisabled*. To be used in *Any* placeholders.
     ArrayOfSnapshotDisabled(Vec<SnapshotDisabled>),
     /// A boxed array of *SnapshotFault*. To be used in *Any* placeholders.
-    ArrayOfSnapshotFault(Vec<Box<dyn super::snapshot_fault_trait::SnapshotFaultTrait>>),
+    ArrayOfSnapshotFault(Vec<Box<dyn super::traits::SnapshotFaultTrait>>),
     /// A boxed array of *SnapshotIncompatibleDeviceInVm*. To be used in *Any* placeholders.
     ArrayOfSnapshotIncompatibleDeviceInVm(Vec<SnapshotIncompatibleDeviceInVm>),
     /// A boxed array of *SnapshotLocked*. To be used in *Any* placeholders.
@@ -3512,11 +3512,11 @@ pub enum ValueElements {
     /// A boxed array of *SwitchNotInUpgradeMode*. To be used in *Any* placeholders.
     ArrayOfSwitchNotInUpgradeMode(Vec<SwitchNotInUpgradeMode>),
     /// A boxed array of *TaskInProgress*. To be used in *Any* placeholders.
-    ArrayOfTaskInProgress(Vec<Box<dyn super::task_in_progress_trait::TaskInProgressTrait>>),
+    ArrayOfTaskInProgress(Vec<Box<dyn super::traits::TaskInProgressTrait>>),
     /// A boxed array of *ThirdPartyLicenseAssignmentFailed*. To be used in *Any* placeholders.
     ArrayOfThirdPartyLicenseAssignmentFailed(Vec<ThirdPartyLicenseAssignmentFailed>),
     /// A boxed array of *Timedout*. To be used in *Any* placeholders.
-    ArrayOfTimedout(Vec<Box<dyn super::timedout_trait::TimedoutTrait>>),
+    ArrayOfTimedout(Vec<Box<dyn super::traits::TimedoutTrait>>),
     /// A boxed array of *TooManyConcurrentNativeClones*. To be used in *Any* placeholders.
     ArrayOfTooManyConcurrentNativeClones(Vec<TooManyConcurrentNativeClones>),
     /// A boxed array of *TooManyConsecutiveOverrides*. To be used in *Any* placeholders.
@@ -3566,7 +3566,7 @@ pub enum ValueElements {
     /// A boxed array of *UnsharedSwapVMotionNotSupported*. To be used in *Any* placeholders.
     ArrayOfUnsharedSwapVMotionNotSupported(Vec<UnsharedSwapVMotionNotSupported>),
     /// A boxed array of *UnsupportedDatastore*. To be used in *Any* placeholders.
-    ArrayOfUnsupportedDatastore(Vec<Box<dyn super::unsupported_datastore_trait::UnsupportedDatastoreTrait>>),
+    ArrayOfUnsupportedDatastore(Vec<Box<dyn super::traits::UnsupportedDatastoreTrait>>),
     /// A boxed array of *UnsupportedGuest*. To be used in *Any* placeholders.
     ArrayOfUnsupportedGuest(Vec<UnsupportedGuest>),
     /// A boxed array of *UnsupportedVimApiVersion*. To be used in *Any* placeholders.
@@ -3578,13 +3578,13 @@ pub enum ValueElements {
     /// A boxed array of *UserNotFound*. To be used in *Any* placeholders.
     ArrayOfUserNotFound(Vec<UserNotFound>),
     /// A boxed array of *VAppConfigFault*. To be used in *Any* placeholders.
-    ArrayOfVAppConfigFault(Vec<Box<dyn super::v_app_config_fault_trait::VAppConfigFaultTrait>>),
+    ArrayOfVAppConfigFault(Vec<Box<dyn super::traits::VAppConfigFaultTrait>>),
     /// A boxed array of *VAppNotRunning*. To be used in *Any* placeholders.
     ArrayOfVAppNotRunning(Vec<VAppNotRunning>),
     /// A boxed array of *VAppOperationInProgress*. To be used in *Any* placeholders.
     ArrayOfVAppOperationInProgress(Vec<VAppOperationInProgress>),
     /// A boxed array of *VAppPropertyFault*. To be used in *Any* placeholders.
-    ArrayOfVAppPropertyFault(Vec<Box<dyn super::v_app_property_fault_trait::VAppPropertyFaultTrait>>),
+    ArrayOfVAppPropertyFault(Vec<Box<dyn super::traits::VAppPropertyFaultTrait>>),
     /// A boxed array of *VAppTaskInProgress*. To be used in *Any* placeholders.
     ArrayOfVAppTaskInProgress(Vec<VAppTaskInProgress>),
     /// A boxed array of *VFlashCacheHotConfigNotSupported*. To be used in *Any* placeholders.
@@ -3605,7 +3605,7 @@ pub enum ValueElements {
     /// A boxed array of *VMotionAcrossNetworkNotSupported*. To be used in *Any* placeholders.
     ArrayOfVMotionAcrossNetworkNotSupported(Vec<VMotionAcrossNetworkNotSupported>),
     /// A boxed array of *VMotionInterfaceIssue*. To be used in *Any* placeholders.
-    ArrayOfVMotionInterfaceIssue(Vec<Box<dyn super::v_motion_interface_issue_trait::VMotionInterfaceIssueTrait>>),
+    ArrayOfVMotionInterfaceIssue(Vec<Box<dyn super::traits::VMotionInterfaceIssueTrait>>),
     /// A boxed array of *VMotionLinkCapacityLow*. To be used in *Any* placeholders.
     ArrayOfVMotionLinkCapacityLow(Vec<VMotionLinkCapacityLow>),
     /// A boxed array of *VMotionLinkDown*. To be used in *Any* placeholders.
@@ -3619,7 +3619,7 @@ pub enum ValueElements {
     /// A boxed array of *VMotionProtocolIncompatible*. To be used in *Any* placeholders.
     ArrayOfVMotionProtocolIncompatible(Vec<VMotionProtocolIncompatible>),
     /// A boxed array of *VimFault*. To be used in *Any* placeholders.
-    ArrayOfVimFault(Vec<Box<dyn super::vim_fault_trait::VimFaultTrait>>),
+    ArrayOfVimFault(Vec<Box<dyn super::traits::VimFaultTrait>>),
     /// A boxed array of *VirtualDiskBlocksNotFullyProvisioned*. To be used in *Any* placeholders.
     ArrayOfVirtualDiskBlocksNotFullyProvisioned(Vec<VirtualDiskBlocksNotFullyProvisioned>),
     /// A boxed array of *VirtualDiskModeNotSupported*. To be used in *Any* placeholders.
@@ -3627,13 +3627,13 @@ pub enum ValueElements {
     /// A boxed array of *VirtualEthernetCardNotSupported*. To be used in *Any* placeholders.
     ArrayOfVirtualEthernetCardNotSupported(Vec<VirtualEthernetCardNotSupported>),
     /// A boxed array of *VirtualHardwareCompatibilityIssue*. To be used in *Any* placeholders.
-    ArrayOfVirtualHardwareCompatibilityIssue(Vec<Box<dyn super::virtual_hardware_compatibility_issue_trait::VirtualHardwareCompatibilityIssueTrait>>),
+    ArrayOfVirtualHardwareCompatibilityIssue(Vec<Box<dyn super::traits::VirtualHardwareCompatibilityIssueTrait>>),
     /// A boxed array of *VirtualHardwareVersionNotSupported*. To be used in *Any* placeholders.
     ArrayOfVirtualHardwareVersionNotSupported(Vec<VirtualHardwareVersionNotSupported>),
     /// A boxed array of *VmAlreadyExistsInDatacenter*. To be used in *Any* placeholders.
     ArrayOfVmAlreadyExistsInDatacenter(Vec<VmAlreadyExistsInDatacenter>),
     /// A boxed array of *VmConfigFault*. To be used in *Any* placeholders.
-    ArrayOfVmConfigFault(Vec<Box<dyn super::vm_config_fault_trait::VmConfigFaultTrait>>),
+    ArrayOfVmConfigFault(Vec<Box<dyn super::traits::VmConfigFaultTrait>>),
     /// A boxed array of *VmConfigIncompatibleForFaultTolerance*. To be used in *Any* placeholders.
     ArrayOfVmConfigIncompatibleForFaultTolerance(Vec<VmConfigIncompatibleForFaultTolerance>),
     /// A boxed array of *VmConfigIncompatibleForRecordReplay*. To be used in *Any* placeholders.
@@ -3645,7 +3645,7 @@ pub enum ValueElements {
     /// A boxed array of *VmFaultToleranceInvalidFileBacking*. To be used in *Any* placeholders.
     ArrayOfVmFaultToleranceInvalidFileBacking(Vec<VmFaultToleranceInvalidFileBacking>),
     /// A boxed array of *VmFaultToleranceIssue*. To be used in *Any* placeholders.
-    ArrayOfVmFaultToleranceIssue(Vec<Box<dyn super::vm_fault_tolerance_issue_trait::VmFaultToleranceIssueTrait>>),
+    ArrayOfVmFaultToleranceIssue(Vec<Box<dyn super::traits::VmFaultToleranceIssueTrait>>),
     /// A boxed array of *VmFaultToleranceOpIssuesList*. To be used in *Any* placeholders.
     ArrayOfVmFaultToleranceOpIssuesList(Vec<VmFaultToleranceOpIssuesList>),
     /// A boxed array of *VmFaultToleranceTooManyFtVcpusOnHost*. To be used in *Any* placeholders.
@@ -3665,7 +3665,7 @@ pub enum ValueElements {
     /// A boxed array of *VmSmpFaultToleranceTooManyVMsOnHost*. To be used in *Any* placeholders.
     ArrayOfVmSmpFaultToleranceTooManyVMsOnHost(Vec<VmSmpFaultToleranceTooManyVMsOnHost>),
     /// A boxed array of *VmToolsUpgradeFault*. To be used in *Any* placeholders.
-    ArrayOfVmToolsUpgradeFault(Vec<Box<dyn super::vm_tools_upgrade_fault_trait::VmToolsUpgradeFaultTrait>>),
+    ArrayOfVmToolsUpgradeFault(Vec<Box<dyn super::traits::VmToolsUpgradeFaultTrait>>),
     /// A boxed array of *VmValidateMaxDevice*. To be used in *Any* placeholders.
     ArrayOfVmValidateMaxDevice(Vec<VmValidateMaxDevice>),
     /// A boxed array of *VmWwnConflict*. To be used in *Any* placeholders.
@@ -3675,7 +3675,7 @@ pub enum ValueElements {
     /// A boxed array of *VmfsAmbiguousMount*. To be used in *Any* placeholders.
     ArrayOfVmfsAmbiguousMount(Vec<VmfsAmbiguousMount>),
     /// A boxed array of *VmfsMountFault*. To be used in *Any* placeholders.
-    ArrayOfVmfsMountFault(Vec<Box<dyn super::vmfs_mount_fault_trait::VmfsMountFaultTrait>>),
+    ArrayOfVmfsMountFault(Vec<Box<dyn super::traits::VmfsMountFaultTrait>>),
     /// A boxed array of *VmotionInterfaceNotEnabled*. To be used in *Any* placeholders.
     ArrayOfVmotionInterfaceNotEnabled(Vec<VmotionInterfaceNotEnabled>),
     /// A boxed array of *VolumeEditorError*. To be used in *Any* placeholders.
@@ -3685,9 +3685,9 @@ pub enum ValueElements {
     /// A boxed array of *VsanClusterUuidMismatch*. To be used in *Any* placeholders.
     ArrayOfVsanClusterUuidMismatch(Vec<VsanClusterUuidMismatch>),
     /// A boxed array of *VsanDiskFault*. To be used in *Any* placeholders.
-    ArrayOfVsanDiskFault(Vec<Box<dyn super::vsan_disk_fault_trait::VsanDiskFaultTrait>>),
+    ArrayOfVsanDiskFault(Vec<Box<dyn super::traits::VsanDiskFaultTrait>>),
     /// A boxed array of *VsanFault*. To be used in *Any* placeholders.
-    ArrayOfVsanFault(Vec<Box<dyn super::vsan_fault_trait::VsanFaultTrait>>),
+    ArrayOfVsanFault(Vec<Box<dyn super::traits::VsanFaultTrait>>),
     /// A boxed array of *VsanIncompatibleDiskMapping*. To be used in *Any* placeholders.
     ArrayOfVsanIncompatibleDiskMapping(Vec<VsanIncompatibleDiskMapping>),
     /// A boxed array of *VspanDestPortConflict*. To be used in *Any* placeholders.
@@ -3735,7 +3735,7 @@ pub enum ValueElements {
     /// A boxed array of *HostAuthenticationManagerInfo*. To be used in *Any* placeholders.
     ArrayOfHostAuthenticationManagerInfo(Vec<HostAuthenticationManagerInfo>),
     /// A boxed array of *HostAuthenticationStoreInfo*. To be used in *Any* placeholders.
-    ArrayOfHostAuthenticationStoreInfo(Vec<Box<dyn super::host_authentication_store_info_trait::HostAuthenticationStoreInfoTrait>>),
+    ArrayOfHostAuthenticationStoreInfo(Vec<Box<dyn super::traits::HostAuthenticationStoreInfoTrait>>),
     /// A boxed array of *AutoStartPowerInfo*. To be used in *Any* placeholders.
     ArrayOfAutoStartPowerInfo(Vec<AutoStartPowerInfo>),
     /// A boxed array of *HostAutoStartManagerConfig*. To be used in *Any* placeholders.
@@ -3778,13 +3778,13 @@ pub enum ValueElements {
     /// A boxed array of *HostDatastoreExistsConnectInfo*. To be used in *Any* placeholders.
     ArrayOfHostDatastoreExistsConnectInfo(Vec<HostDatastoreExistsConnectInfo>),
     /// A boxed array of *HostDatastoreConnectInfo*. To be used in *Any* placeholders.
-    ArrayOfHostDatastoreConnectInfo(Vec<Box<dyn super::host_datastore_connect_info_trait::HostDatastoreConnectInfoTrait>>),
+    ArrayOfHostDatastoreConnectInfo(Vec<Box<dyn super::traits::HostDatastoreConnectInfoTrait>>),
     /// A boxed array of *HostDatastoreNameConflictConnectInfo*. To be used in *Any* placeholders.
     ArrayOfHostDatastoreNameConflictConnectInfo(Vec<HostDatastoreNameConflictConnectInfo>),
     /// A boxed array of *HostLicenseConnectInfo*. To be used in *Any* placeholders.
     ArrayOfHostLicenseConnectInfo(Vec<HostLicenseConnectInfo>),
     /// A boxed array of *HostConnectInfoNetworkInfo*. To be used in *Any* placeholders.
-    ArrayOfHostConnectInfoNetworkInfo(Vec<Box<dyn super::host_connect_info_network_info_trait::HostConnectInfoNetworkInfoTrait>>),
+    ArrayOfHostConnectInfoNetworkInfo(Vec<Box<dyn super::traits::HostConnectInfoNetworkInfoTrait>>),
     /// A boxed array of *HostNewNetworkConnectInfo*. To be used in *Any* placeholders.
     ArrayOfHostNewNetworkConnectInfo(Vec<HostNewNetworkConnectInfo>),
     /// A boxed array of *HostConnectSpec*. To be used in *Any* placeholders.
@@ -3802,9 +3802,9 @@ pub enum ValueElements {
     /// A boxed array of *HostDataTransportConnectionInfo*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 7.0.3.0
-    ArrayOfHostDataTransportConnectionInfo(Vec<Box<dyn super::host_data_transport_connection_info_trait::HostDataTransportConnectionInfoTrait>>),
+    ArrayOfHostDataTransportConnectionInfo(Vec<Box<dyn super::traits::HostDataTransportConnectionInfoTrait>>),
     /// A boxed array of *FileInfo*. To be used in *Any* placeholders.
-    ArrayOfFileInfo(Vec<Box<dyn super::file_info_trait::FileInfoTrait>>),
+    ArrayOfFileInfo(Vec<Box<dyn super::traits::FileInfoTrait>>),
     /// A boxed array of *FileQueryFlags*. To be used in *Any* placeholders.
     ArrayOfFileQueryFlags(Vec<FileQueryFlags>),
     /// A boxed array of *FloppyImageFileInfo*. To be used in *Any* placeholders.
@@ -3820,7 +3820,7 @@ pub enum ValueElements {
     /// A boxed array of *IsoImageFileQuery*. To be used in *Any* placeholders.
     ArrayOfIsoImageFileQuery(Vec<IsoImageFileQuery>),
     /// A boxed array of *FileQuery*. To be used in *Any* placeholders.
-    ArrayOfFileQuery(Vec<Box<dyn super::file_query_trait::FileQueryTrait>>),
+    ArrayOfFileQuery(Vec<Box<dyn super::traits::FileQueryTrait>>),
     /// A boxed array of *HostDatastoreBrowserSearchResults*. To be used in *Any* placeholders.
     ArrayOfHostDatastoreBrowserSearchResults(Vec<HostDatastoreBrowserSearchResults>),
     /// A boxed array of *HostDatastoreBrowserSearchSpec*. To be used in *Any* placeholders.
@@ -3830,11 +3830,11 @@ pub enum ValueElements {
     /// A boxed array of *TemplateConfigFileQuery*. To be used in *Any* placeholders.
     ArrayOfTemplateConfigFileQuery(Vec<TemplateConfigFileQuery>),
     /// A boxed array of *VmConfigFileInfo*. To be used in *Any* placeholders.
-    ArrayOfVmConfigFileInfo(Vec<Box<dyn super::vm_config_file_info_trait::VmConfigFileInfoTrait>>),
+    ArrayOfVmConfigFileInfo(Vec<Box<dyn super::traits::VmConfigFileInfoTrait>>),
     /// A boxed array of *VmConfigFileEncryptionInfo*. To be used in *Any* placeholders.
     ArrayOfVmConfigFileEncryptionInfo(Vec<VmConfigFileEncryptionInfo>),
     /// A boxed array of *VmConfigFileQuery*. To be used in *Any* placeholders.
-    ArrayOfVmConfigFileQuery(Vec<Box<dyn super::vm_config_file_query_trait::VmConfigFileQueryTrait>>),
+    ArrayOfVmConfigFileQuery(Vec<Box<dyn super::traits::VmConfigFileQueryTrait>>),
     /// A boxed array of *VmConfigFileQueryFlags*. To be used in *Any* placeholders.
     ArrayOfVmConfigFileQueryFlags(Vec<VmConfigFileQueryFlags>),
     /// A boxed array of *VmConfigFileQueryFilter*. To be used in *Any* placeholders.
@@ -3880,7 +3880,7 @@ pub enum ValueElements {
     /// A boxed array of *HostDeploymentInfo*. To be used in *Any* placeholders.
     ArrayOfHostDeploymentInfo(Vec<HostDeploymentInfo>),
     /// A boxed array of *HostDevice*. To be used in *Any* placeholders.
-    ArrayOfHostDevice(Vec<Box<dyn super::host_device_trait::HostDeviceTrait>>),
+    ArrayOfHostDevice(Vec<Box<dyn super::traits::HostDeviceTrait>>),
     /// A boxed array of *HostDhcpService*. To be used in *Any* placeholders.
     ArrayOfHostDhcpService(Vec<HostDhcpService>),
     /// A boxed array of *HostDhcpServiceConfig*. To be used in *Any* placeholders.
@@ -3896,9 +3896,9 @@ pub enum ValueElements {
     /// A boxed array of *HostDiagnosticPartitionCreateSpec*. To be used in *Any* placeholders.
     ArrayOfHostDiagnosticPartitionCreateSpec(Vec<HostDiagnosticPartitionCreateSpec>),
     /// A boxed array of *HostDigestInfo*. To be used in *Any* placeholders.
-    ArrayOfHostDigestInfo(Vec<Box<dyn super::host_digest_info_trait::HostDigestInfoTrait>>),
+    ArrayOfHostDigestInfo(Vec<Box<dyn super::traits::HostDigestInfoTrait>>),
     /// A boxed array of *HostDirectoryStoreInfo*. To be used in *Any* placeholders.
-    ArrayOfHostDirectoryStoreInfo(Vec<Box<dyn super::host_directory_store_info_trait::HostDirectoryStoreInfoTrait>>),
+    ArrayOfHostDirectoryStoreInfo(Vec<Box<dyn super::traits::HostDirectoryStoreInfoTrait>>),
     /// A boxed array of *HostDiskConfigurationResult*. To be used in *Any* placeholders.
     ArrayOfHostDiskConfigurationResult(Vec<HostDiskConfigurationResult>),
     /// A boxed array of *HostDiskDimensions*. To be used in *Any* placeholders.
@@ -3918,7 +3918,7 @@ pub enum ValueElements {
     /// A boxed array of *HostDiskPartitionSpec*. To be used in *Any* placeholders.
     ArrayOfHostDiskPartitionSpec(Vec<HostDiskPartitionSpec>),
     /// A boxed array of *HostDnsConfig*. To be used in *Any* placeholders.
-    ArrayOfHostDnsConfig(Vec<Box<dyn super::host_dns_config_trait::HostDnsConfigTrait>>),
+    ArrayOfHostDnsConfig(Vec<Box<dyn super::traits::HostDnsConfigTrait>>),
     /// A boxed array of *HostDnsConfigSpec*. To be used in *Any* placeholders.
     ArrayOfHostDnsConfigSpec(Vec<HostDnsConfigSpec>),
     /// A boxed array of *HostDvxClass*. To be used in *Any* placeholders.
@@ -3946,7 +3946,7 @@ pub enum ValueElements {
     /// A boxed array of *HostFeatureVersionInfo*. To be used in *Any* placeholders.
     ArrayOfHostFeatureVersionInfo(Vec<HostFeatureVersionInfo>),
     /// A boxed array of *HostFibreChannelHba*. To be used in *Any* placeholders.
-    ArrayOfHostFibreChannelHba(Vec<Box<dyn super::host_fibre_channel_hba_trait::HostFibreChannelHbaTrait>>),
+    ArrayOfHostFibreChannelHba(Vec<Box<dyn super::traits::HostFibreChannelHbaTrait>>),
     /// A boxed array of *HostFibreChannelOverEthernetHba*. To be used in *Any* placeholders.
     ArrayOfHostFibreChannelOverEthernetHba(Vec<HostFibreChannelOverEthernetHba>),
     /// A boxed array of *HostFibreChannelOverEthernetHbaLinkInfo*. To be used in *Any* placeholders.
@@ -3954,7 +3954,7 @@ pub enum ValueElements {
     /// A boxed array of *HostFibreChannelOverEthernetTargetTransport*. To be used in *Any* placeholders.
     ArrayOfHostFibreChannelOverEthernetTargetTransport(Vec<HostFibreChannelOverEthernetTargetTransport>),
     /// A boxed array of *HostFibreChannelTargetTransport*. To be used in *Any* placeholders.
-    ArrayOfHostFibreChannelTargetTransport(Vec<Box<dyn super::host_fibre_channel_target_transport_trait::HostFibreChannelTargetTransportTrait>>),
+    ArrayOfHostFibreChannelTargetTransport(Vec<Box<dyn super::traits::HostFibreChannelTargetTransportTrait>>),
     /// A boxed array of *HostFileAccess*. To be used in *Any* placeholders.
     ArrayOfHostFileAccess(Vec<HostFileAccess>),
     /// A boxed array of *ModeInfo*. To be used in *Any* placeholders.
@@ -3962,7 +3962,7 @@ pub enum ValueElements {
     /// A boxed array of *HostFileSystemMountInfo*. To be used in *Any* placeholders.
     ArrayOfHostFileSystemMountInfo(Vec<HostFileSystemMountInfo>),
     /// A boxed array of *HostFileSystemVolume*. To be used in *Any* placeholders.
-    ArrayOfHostFileSystemVolume(Vec<Box<dyn super::host_file_system_volume_trait::HostFileSystemVolumeTrait>>),
+    ArrayOfHostFileSystemVolume(Vec<Box<dyn super::traits::HostFileSystemVolumeTrait>>),
     /// A boxed array of *HostFileSystemVolumeInfo*. To be used in *Any* placeholders.
     ArrayOfHostFileSystemVolumeInfo(Vec<HostFileSystemVolumeInfo>),
     /// A boxed array of *HostFirewallConfig*. To be used in *Any* placeholders.
@@ -4002,7 +4002,7 @@ pub enum ValueElements {
     /// ***Since:*** vSphere API Release 8.0.0.1
     ArrayOfDpuStatusInfoOperationalInfo(Vec<DpuStatusInfoOperationalInfo>),
     /// A boxed array of *HostHardwareElementInfo*. To be used in *Any* placeholders.
-    ArrayOfHostHardwareElementInfo(Vec<Box<dyn super::host_hardware_element_info_trait::HostHardwareElementInfoTrait>>),
+    ArrayOfHostHardwareElementInfo(Vec<Box<dyn super::traits::HostHardwareElementInfoTrait>>),
     /// A boxed array of *HostStorageElementInfo*. To be used in *Any* placeholders.
     ArrayOfHostStorageElementInfo(Vec<HostStorageElementInfo>),
     /// A boxed array of *HostStorageOperationalInfo*. To be used in *Any* placeholders.
@@ -4010,13 +4010,13 @@ pub enum ValueElements {
     /// A boxed array of *HostHbaCreateSpec*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 7.0.3.0
-    ArrayOfHostHbaCreateSpec(Vec<Box<dyn super::host_hba_create_spec_trait::HostHbaCreateSpecTrait>>),
+    ArrayOfHostHbaCreateSpec(Vec<Box<dyn super::traits::HostHbaCreateSpecTrait>>),
     /// A boxed array of *HealthSystemRuntime*. To be used in *Any* placeholders.
     ArrayOfHealthSystemRuntime(Vec<HealthSystemRuntime>),
     /// A boxed array of *HostAccessControlEntry*. To be used in *Any* placeholders.
     ArrayOfHostAccessControlEntry(Vec<HostAccessControlEntry>),
     /// A boxed array of *HostHostBusAdapter*. To be used in *Any* placeholders.
-    ArrayOfHostHostBusAdapter(Vec<Box<dyn super::host_host_bus_adapter_trait::HostHostBusAdapterTrait>>),
+    ArrayOfHostHostBusAdapter(Vec<Box<dyn super::traits::HostHostBusAdapterTrait>>),
     /// A boxed array of *HostProxySwitch*. To be used in *Any* placeholders.
     ArrayOfHostProxySwitch(Vec<HostProxySwitch>),
     /// A boxed array of *HostProxySwitchConfig*. To be used in *Any* placeholders.
@@ -4072,7 +4072,7 @@ pub enum ValueElements {
     /// A boxed array of *HostIpConfigIpV6AddressConfiguration*. To be used in *Any* placeholders.
     ArrayOfHostIpConfigIpV6AddressConfiguration(Vec<HostIpConfigIpV6AddressConfiguration>),
     /// A boxed array of *HostIpRouteConfig*. To be used in *Any* placeholders.
-    ArrayOfHostIpRouteConfig(Vec<Box<dyn super::host_ip_route_config_trait::HostIpRouteConfigTrait>>),
+    ArrayOfHostIpRouteConfig(Vec<Box<dyn super::traits::HostIpRouteConfigTrait>>),
     /// A boxed array of *HostIpRouteConfigSpec*. To be used in *Any* placeholders.
     ArrayOfHostIpRouteConfigSpec(Vec<HostIpRouteConfigSpec>),
     /// A boxed array of *HostIpRouteEntry*. To be used in *Any* placeholders.
@@ -4102,7 +4102,7 @@ pub enum ValueElements {
     /// A boxed array of *LinkDiscoveryProtocolConfig*. To be used in *Any* placeholders.
     ArrayOfLinkDiscoveryProtocolConfig(Vec<LinkDiscoveryProtocolConfig>),
     /// A boxed array of *HostAccountSpec*. To be used in *Any* placeholders.
-    ArrayOfHostAccountSpec(Vec<Box<dyn super::host_account_spec_trait::HostAccountSpecTrait>>),
+    ArrayOfHostAccountSpec(Vec<Box<dyn super::traits::HostAccountSpecTrait>>),
     /// A boxed array of *HostPosixAccountSpec*. To be used in *Any* placeholders.
     ArrayOfHostPosixAccountSpec(Vec<HostPosixAccountSpec>),
     /// A boxed array of *HostLocalAuthenticationInfo*. To be used in *Any* placeholders.
@@ -4154,7 +4154,7 @@ pub enum ValueElements {
     /// A boxed array of *HostMultipathInfoLogicalUnit*. To be used in *Any* placeholders.
     ArrayOfHostMultipathInfoLogicalUnit(Vec<HostMultipathInfoLogicalUnit>),
     /// A boxed array of *HostMultipathInfoLogicalUnitPolicy*. To be used in *Any* placeholders.
-    ArrayOfHostMultipathInfoLogicalUnitPolicy(Vec<Box<dyn super::host_multipath_info_logical_unit_policy_trait::HostMultipathInfoLogicalUnitPolicyTrait>>),
+    ArrayOfHostMultipathInfoLogicalUnitPolicy(Vec<Box<dyn super::traits::HostMultipathInfoLogicalUnitPolicyTrait>>),
     /// A boxed array of *HostMultipathInfoLogicalUnitStorageArrayTypePolicy*. To be used in *Any* placeholders.
     ArrayOfHostMultipathInfoLogicalUnitStorageArrayTypePolicy(Vec<HostMultipathInfoLogicalUnitStorageArrayTypePolicy>),
     /// A boxed array of *HostMultipathInfoPath*. To be used in *Any* placeholders.
@@ -4270,13 +4270,13 @@ pub enum ValueElements {
     /// ***Since:*** vSphere API Release 7.0.3.0
     ArrayOfHostNvmeOverTcpParameters(Vec<HostNvmeOverTcpParameters>),
     /// A boxed array of *HostNvmeSpec*. To be used in *Any* placeholders.
-    ArrayOfHostNvmeSpec(Vec<Box<dyn super::host_nvme_spec_trait::HostNvmeSpecTrait>>),
+    ArrayOfHostNvmeSpec(Vec<Box<dyn super::traits::HostNvmeSpecTrait>>),
     /// A boxed array of *HostNvmeTopology*. To be used in *Any* placeholders.
     ArrayOfHostNvmeTopology(Vec<HostNvmeTopology>),
     /// A boxed array of *HostNvmeTopologyInterface*. To be used in *Any* placeholders.
     ArrayOfHostNvmeTopologyInterface(Vec<HostNvmeTopologyInterface>),
     /// A boxed array of *HostNvmeTransportParameters*. To be used in *Any* placeholders.
-    ArrayOfHostNvmeTransportParameters(Vec<Box<dyn super::host_nvme_transport_parameters_trait::HostNvmeTransportParametersTrait>>),
+    ArrayOfHostNvmeTransportParameters(Vec<Box<dyn super::traits::HostNvmeTransportParametersTrait>>),
     /// A boxed array of *HostOpaqueNetworkInfo*. To be used in *Any* placeholders.
     ArrayOfHostOpaqueNetworkInfo(Vec<HostOpaqueNetworkInfo>),
     /// A boxed array of *HostOpaqueSwitch*. To be used in *Any* placeholders.
@@ -4306,9 +4306,9 @@ pub enum ValueElements {
     /// A boxed array of *HostPciDevice*. To be used in *Any* placeholders.
     ArrayOfHostPciDevice(Vec<HostPciDevice>),
     /// A boxed array of *HostPciPassthruConfig*. To be used in *Any* placeholders.
-    ArrayOfHostPciPassthruConfig(Vec<Box<dyn super::host_pci_passthru_config_trait::HostPciPassthruConfigTrait>>),
+    ArrayOfHostPciPassthruConfig(Vec<Box<dyn super::traits::HostPciPassthruConfigTrait>>),
     /// A boxed array of *HostPciPassthruInfo*. To be used in *Any* placeholders.
-    ArrayOfHostPciPassthruInfo(Vec<Box<dyn super::host_pci_passthru_info_trait::HostPciPassthruInfoTrait>>),
+    ArrayOfHostPciPassthruInfo(Vec<Box<dyn super::traits::HostPciPassthruInfoTrait>>),
     /// A boxed array of *HostPcieHba*. To be used in *Any* placeholders.
     ArrayOfHostPcieHba(Vec<HostPcieHba>),
     /// A boxed array of *HostPcieTargetTransport*. To be used in *Any* placeholders.
@@ -4330,7 +4330,7 @@ pub enum ValueElements {
     /// A boxed array of *PhysicalNicHintInfo*. To be used in *Any* placeholders.
     ArrayOfPhysicalNicHintInfo(Vec<PhysicalNicHintInfo>),
     /// A boxed array of *PhysicalNicHint*. To be used in *Any* placeholders.
-    ArrayOfPhysicalNicHint(Vec<Box<dyn super::physical_nic_hint_trait::PhysicalNicHintTrait>>),
+    ArrayOfPhysicalNicHint(Vec<Box<dyn super::traits::PhysicalNicHintTrait>>),
     /// A boxed array of *PhysicalNicIpHint*. To be used in *Any* placeholders.
     ArrayOfPhysicalNicIpHint(Vec<PhysicalNicIpHint>),
     /// A boxed array of *PhysicalNicNameHint*. To be used in *Any* placeholders.
@@ -4380,7 +4380,7 @@ pub enum ValueElements {
     /// A boxed array of *HostRdmaDevice*. To be used in *Any* placeholders.
     ArrayOfHostRdmaDevice(Vec<HostRdmaDevice>),
     /// A boxed array of *HostRdmaDeviceBacking*. To be used in *Any* placeholders.
-    ArrayOfHostRdmaDeviceBacking(Vec<Box<dyn super::host_rdma_device_backing_trait::HostRdmaDeviceBackingTrait>>),
+    ArrayOfHostRdmaDeviceBacking(Vec<Box<dyn super::traits::HostRdmaDeviceBackingTrait>>),
     /// A boxed array of *HostRdmaDeviceCapability*. To be used in *Any* placeholders.
     ArrayOfHostRdmaDeviceCapability(Vec<HostRdmaDeviceCapability>),
     /// A boxed array of *HostRdmaDeviceConnectionInfo*. To be used in *Any* placeholders.
@@ -4426,7 +4426,7 @@ pub enum ValueElements {
     /// A boxed array of *HostScsiDiskPartition*. To be used in *Any* placeholders.
     ArrayOfHostScsiDiskPartition(Vec<HostScsiDiskPartition>),
     /// A boxed array of *ScsiLun*. To be used in *Any* placeholders.
-    ArrayOfScsiLun(Vec<Box<dyn super::scsi_lun_trait::ScsiLunTrait>>),
+    ArrayOfScsiLun(Vec<Box<dyn super::traits::ScsiLunTrait>>),
     /// A boxed array of *ScsiLunCapabilities*. To be used in *Any* placeholders.
     ArrayOfScsiLunCapabilities(Vec<ScsiLunCapabilities>),
     /// A boxed array of *ScsiLunDescriptor*. To be used in *Any* placeholders.
@@ -4482,7 +4482,7 @@ pub enum ValueElements {
     /// A boxed array of *HostSriovConfig*. To be used in *Any* placeholders.
     ArrayOfHostSriovConfig(Vec<HostSriovConfig>),
     /// A boxed array of *HostSriovDevicePoolInfo*. To be used in *Any* placeholders.
-    ArrayOfHostSriovDevicePoolInfo(Vec<Box<dyn super::host_sriov_device_pool_info_trait::HostSriovDevicePoolInfoTrait>>),
+    ArrayOfHostSriovDevicePoolInfo(Vec<Box<dyn super::traits::HostSriovDevicePoolInfoTrait>>),
     /// A boxed array of *HostSriovInfo*. To be used in *Any* placeholders.
     ArrayOfHostSriovInfo(Vec<HostSriovInfo>),
     /// A boxed array of *HostSriovNetworkDevicePoolInfo*. To be used in *Any* placeholders.
@@ -4530,9 +4530,9 @@ pub enum ValueElements {
     /// A boxed array of *HostSystemSwapConfigurationHostLocalSwapOption*. To be used in *Any* placeholders.
     ArrayOfHostSystemSwapConfigurationHostLocalSwapOption(Vec<HostSystemSwapConfigurationHostLocalSwapOption>),
     /// A boxed array of *HostSystemSwapConfigurationSystemSwapOption*. To be used in *Any* placeholders.
-    ArrayOfHostSystemSwapConfigurationSystemSwapOption(Vec<Box<dyn super::host_system_swap_configuration_system_swap_option_trait::HostSystemSwapConfigurationSystemSwapOptionTrait>>),
+    ArrayOfHostSystemSwapConfigurationSystemSwapOption(Vec<Box<dyn super::traits::HostSystemSwapConfigurationSystemSwapOptionTrait>>),
     /// A boxed array of *HostTargetTransport*. To be used in *Any* placeholders.
-    ArrayOfHostTargetTransport(Vec<Box<dyn super::host_target_transport_trait::HostTargetTransportTrait>>),
+    ArrayOfHostTargetTransport(Vec<Box<dyn super::traits::HostTargetTransportTrait>>),
     /// A boxed array of *HostTcpHba*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 7.0.3.0
@@ -4554,13 +4554,13 @@ pub enum ValueElements {
     /// ***Since:*** vSphere API Release 8.0.1.0
     ArrayOfHostTpmBootCompleteEventDetails(Vec<HostTpmBootCompleteEventDetails>),
     /// A boxed array of *HostTpmBootSecurityOptionEventDetails*. To be used in *Any* placeholders.
-    ArrayOfHostTpmBootSecurityOptionEventDetails(Vec<Box<dyn super::host_tpm_boot_security_option_event_details_trait::HostTpmBootSecurityOptionEventDetailsTrait>>),
+    ArrayOfHostTpmBootSecurityOptionEventDetails(Vec<Box<dyn super::traits::HostTpmBootSecurityOptionEventDetailsTrait>>),
     /// A boxed array of *HostTpmCommandEventDetails*. To be used in *Any* placeholders.
     ArrayOfHostTpmCommandEventDetails(Vec<HostTpmCommandEventDetails>),
     /// A boxed array of *HostTpmDigestInfo*. To be used in *Any* placeholders.
     ArrayOfHostTpmDigestInfo(Vec<HostTpmDigestInfo>),
     /// A boxed array of *HostTpmEventDetails*. To be used in *Any* placeholders.
-    ArrayOfHostTpmEventDetails(Vec<Box<dyn super::host_tpm_event_details_trait::HostTpmEventDetailsTrait>>),
+    ArrayOfHostTpmEventDetails(Vec<Box<dyn super::traits::HostTpmEventDetailsTrait>>),
     /// A boxed array of *HostTpmEventLogEntry*. To be used in *Any* placeholders.
     ArrayOfHostTpmEventLogEntry(Vec<HostTpmEventLogEntry>),
     /// A boxed array of *HostTpmNvTagEventDetails*. To be used in *Any* placeholders.
@@ -4654,7 +4654,7 @@ pub enum ValueElements {
     /// A boxed array of *HostVirtualSwitchBondBridge*. To be used in *Any* placeholders.
     ArrayOfHostVirtualSwitchBondBridge(Vec<HostVirtualSwitchBondBridge>),
     /// A boxed array of *HostVirtualSwitchBridge*. To be used in *Any* placeholders.
-    ArrayOfHostVirtualSwitchBridge(Vec<Box<dyn super::host_virtual_switch_bridge_trait::HostVirtualSwitchBridgeTrait>>),
+    ArrayOfHostVirtualSwitchBridge(Vec<Box<dyn super::traits::HostVirtualSwitchBridgeTrait>>),
     /// A boxed array of *HostVirtualSwitchConfig*. To be used in *Any* placeholders.
     ArrayOfHostVirtualSwitchConfig(Vec<HostVirtualSwitchConfig>),
     /// A boxed array of *HostVirtualSwitchSimpleBridge*. To be used in *Any* placeholders.
@@ -4676,13 +4676,13 @@ pub enum ValueElements {
     /// A boxed array of *VmfsDatastoreAllExtentOption*. To be used in *Any* placeholders.
     ArrayOfVmfsDatastoreAllExtentOption(Vec<VmfsDatastoreAllExtentOption>),
     /// A boxed array of *VmfsDatastoreBaseOption*. To be used in *Any* placeholders.
-    ArrayOfVmfsDatastoreBaseOption(Vec<Box<dyn super::vmfs_datastore_base_option_trait::VmfsDatastoreBaseOptionTrait>>),
+    ArrayOfVmfsDatastoreBaseOption(Vec<Box<dyn super::traits::VmfsDatastoreBaseOptionTrait>>),
     /// A boxed array of *VmfsDatastoreMultipleExtentOption*. To be used in *Any* placeholders.
     ArrayOfVmfsDatastoreMultipleExtentOption(Vec<VmfsDatastoreMultipleExtentOption>),
     /// A boxed array of *VmfsDatastoreSingleExtentOption*. To be used in *Any* placeholders.
-    ArrayOfVmfsDatastoreSingleExtentOption(Vec<Box<dyn super::vmfs_datastore_single_extent_option_trait::VmfsDatastoreSingleExtentOptionTrait>>),
+    ArrayOfVmfsDatastoreSingleExtentOption(Vec<Box<dyn super::traits::VmfsDatastoreSingleExtentOptionTrait>>),
     /// A boxed array of *VmfsDatastoreSpec*. To be used in *Any* placeholders.
-    ArrayOfVmfsDatastoreSpec(Vec<Box<dyn super::vmfs_datastore_spec_trait::VmfsDatastoreSpecTrait>>),
+    ArrayOfVmfsDatastoreSpec(Vec<Box<dyn super::traits::VmfsDatastoreSpecTrait>>),
     /// A boxed array of *HostVmfsRescanResult*. To be used in *Any* placeholders.
     ArrayOfHostVmfsRescanResult(Vec<HostVmfsRescanResult>),
     /// A boxed array of *HostVmfsVolume*. To be used in *Any* placeholders.
@@ -4772,12 +4772,12 @@ pub enum ValueElements {
     ArrayOfNetIpStackInfoNetToMedia(Vec<NetIpStackInfoNetToMedia>),
     /// A boxed array of *NetBIOSConfigInfo*. To be used in *Any* placeholders.
     #[serde(rename = "ArrayOfNetBIOSConfigInfo")]
-    ArrayOfNetBiosConfigInfo(Vec<Box<dyn super::net_bios_config_info_trait::NetBiosConfigInfoTrait>>),
+    ArrayOfNetBiosConfigInfo(Vec<Box<dyn super::traits::NetBiosConfigInfoTrait>>),
     /// A boxed array of *WinNetBIOSConfigInfo*. To be used in *Any* placeholders.
     #[serde(rename = "ArrayOfWinNetBIOSConfigInfo")]
     ArrayOfWinNetBiosConfigInfo(Vec<WinNetBiosConfigInfo>),
     /// A boxed array of *ArrayUpdateSpec*. To be used in *Any* placeholders.
-    ArrayOfArrayUpdateSpec(Vec<Box<dyn super::array_update_spec_trait::ArrayUpdateSpecTrait>>),
+    ArrayOfArrayUpdateSpec(Vec<Box<dyn super::traits::ArrayUpdateSpecTrait>>),
     /// A boxed array of *BoolOption*. To be used in *Any* placeholders.
     ArrayOfBoolOption(Vec<BoolOption>),
     /// A boxed array of *ChoiceOption*. To be used in *Any* placeholders.
@@ -4791,13 +4791,13 @@ pub enum ValueElements {
     /// A boxed array of *OptionDef*. To be used in *Any* placeholders.
     ArrayOfOptionDef(Vec<OptionDef>),
     /// A boxed array of *OptionType*. To be used in *Any* placeholders.
-    ArrayOfOptionType(Vec<Box<dyn super::option_type_trait::OptionTypeTrait>>),
+    ArrayOfOptionType(Vec<Box<dyn super::traits::OptionTypeTrait>>),
     /// A boxed array of *OptionValue*. To be used in *Any* placeholders.
-    ArrayOfOptionValue(Vec<Box<dyn super::option_value_trait::OptionValueTrait>>),
+    ArrayOfOptionValue(Vec<Box<dyn super::traits::OptionValueTrait>>),
     /// A boxed array of *StringOption*. To be used in *Any* placeholders.
     ArrayOfStringOption(Vec<StringOption>),
     /// A boxed array of *ApplyProfile*. To be used in *Any* placeholders.
-    ArrayOfApplyProfile(Vec<Box<dyn super::apply_profile_trait::ApplyProfileTrait>>),
+    ArrayOfApplyProfile(Vec<Box<dyn super::traits::ApplyProfileTrait>>),
     /// A boxed array of *ProfileApplyProfileElement*. To be used in *Any* placeholders.
     ArrayOfProfileApplyProfileElement(Vec<ProfileApplyProfileElement>),
     /// A boxed array of *ProfileApplyProfileProperty*. To be used in *Any* placeholders.
@@ -4821,7 +4821,7 @@ pub enum ValueElements {
     /// A boxed array of *ProfileDeferredPolicyOptionParameter*. To be used in *Any* placeholders.
     ArrayOfProfileDeferredPolicyOptionParameter(Vec<ProfileDeferredPolicyOptionParameter>),
     /// A boxed array of *ProfileExpression*. To be used in *Any* placeholders.
-    ArrayOfProfileExpression(Vec<Box<dyn super::profile_expression_trait::ProfileExpressionTrait>>),
+    ArrayOfProfileExpression(Vec<Box<dyn super::traits::ProfileExpressionTrait>>),
     /// A boxed array of *ProfileExpressionMetadata*. To be used in *Any* placeholders.
     ArrayOfProfileExpressionMetadata(Vec<ProfileExpressionMetadata>),
     /// A boxed array of *ProfileParameterMetadata*. To be used in *Any* placeholders.
@@ -4833,19 +4833,19 @@ pub enum ValueElements {
     /// A boxed array of *ProfilePolicyMetadata*. To be used in *Any* placeholders.
     ArrayOfProfilePolicyMetadata(Vec<ProfilePolicyMetadata>),
     /// A boxed array of *PolicyOption*. To be used in *Any* placeholders.
-    ArrayOfPolicyOption(Vec<Box<dyn super::policy_option_trait::PolicyOptionTrait>>),
+    ArrayOfPolicyOption(Vec<Box<dyn super::traits::PolicyOptionTrait>>),
     /// A boxed array of *ProfilePolicyOptionMetadata*. To be used in *Any* placeholders.
-    ArrayOfProfilePolicyOptionMetadata(Vec<Box<dyn super::profile_policy_option_metadata_trait::ProfilePolicyOptionMetadataTrait>>),
+    ArrayOfProfilePolicyOptionMetadata(Vec<Box<dyn super::traits::ProfilePolicyOptionMetadataTrait>>),
     /// A boxed array of *ProfileConfigInfo*. To be used in *Any* placeholders.
-    ArrayOfProfileConfigInfo(Vec<Box<dyn super::profile_config_info_trait::ProfileConfigInfoTrait>>),
+    ArrayOfProfileConfigInfo(Vec<Box<dyn super::traits::ProfileConfigInfoTrait>>),
     /// A boxed array of *ProfileCreateSpec*. To be used in *Any* placeholders.
-    ArrayOfProfileCreateSpec(Vec<Box<dyn super::profile_create_spec_trait::ProfileCreateSpecTrait>>),
+    ArrayOfProfileCreateSpec(Vec<Box<dyn super::traits::ProfileCreateSpecTrait>>),
     /// A boxed array of *ProfileDescription*. To be used in *Any* placeholders.
     ArrayOfProfileDescription(Vec<ProfileDescription>),
     /// A boxed array of *ProfileDescriptionSection*. To be used in *Any* placeholders.
     ArrayOfProfileDescriptionSection(Vec<ProfileDescriptionSection>),
     /// A boxed array of *ProfileSerializedCreateSpec*. To be used in *Any* placeholders.
-    ArrayOfProfileSerializedCreateSpec(Vec<Box<dyn super::profile_serialized_create_spec_trait::ProfileSerializedCreateSpecTrait>>),
+    ArrayOfProfileSerializedCreateSpec(Vec<Box<dyn super::traits::ProfileSerializedCreateSpecTrait>>),
     /// A boxed array of *ProfileMetadata*. To be used in *Any* placeholders.
     ArrayOfProfileMetadata(Vec<ProfileMetadata>),
     /// A boxed array of *ProfileMetadataProfileOperationMessage*. To be used in *Any* placeholders.
@@ -4869,9 +4869,9 @@ pub enum ValueElements {
     /// A boxed array of *ClusterProfileConfigServiceCreateSpec*. To be used in *Any* placeholders.
     ArrayOfClusterProfileConfigServiceCreateSpec(Vec<ClusterProfileConfigServiceCreateSpec>),
     /// A boxed array of *ClusterProfileConfigSpec*. To be used in *Any* placeholders.
-    ArrayOfClusterProfileConfigSpec(Vec<Box<dyn super::cluster_profile_config_spec_trait::ClusterProfileConfigSpecTrait>>),
+    ArrayOfClusterProfileConfigSpec(Vec<Box<dyn super::traits::ClusterProfileConfigSpecTrait>>),
     /// A boxed array of *ClusterProfileCreateSpec*. To be used in *Any* placeholders.
-    ArrayOfClusterProfileCreateSpec(Vec<Box<dyn super::cluster_profile_create_spec_trait::ClusterProfileCreateSpecTrait>>),
+    ArrayOfClusterProfileCreateSpec(Vec<Box<dyn super::traits::ClusterProfileCreateSpecTrait>>),
     /// A boxed array of *ActiveDirectoryProfile*. To be used in *Any* placeholders.
     ArrayOfActiveDirectoryProfile(Vec<ActiveDirectoryProfile>),
     /// A boxed array of *AnswerFile*. To be used in *Any* placeholders.
@@ -4891,9 +4891,9 @@ pub enum ValueElements {
     /// A boxed array of *DvsServiceConsoleVNicProfile*. To be used in *Any* placeholders.
     ArrayOfDvsServiceConsoleVNicProfile(Vec<DvsServiceConsoleVNicProfile>),
     /// A boxed array of *DvsVNicProfile*. To be used in *Any* placeholders.
-    ArrayOfDvsVNicProfile(Vec<Box<dyn super::dvs_v_nic_profile_trait::DvsVNicProfileTrait>>),
+    ArrayOfDvsVNicProfile(Vec<Box<dyn super::traits::DvsVNicProfileTrait>>),
     /// A boxed array of *ProfileExecuteResult*. To be used in *Any* placeholders.
-    ArrayOfProfileExecuteResult(Vec<Box<dyn super::profile_execute_result_trait::ProfileExecuteResultTrait>>),
+    ArrayOfProfileExecuteResult(Vec<Box<dyn super::traits::ProfileExecuteResultTrait>>),
     /// A boxed array of *ProfileExecuteError*. To be used in *Any* placeholders.
     ArrayOfProfileExecuteError(Vec<ProfileExecuteError>),
     /// A boxed array of *FirewallProfile*. To be used in *Any* placeholders.
@@ -4911,7 +4911,7 @@ pub enum ValueElements {
     /// A boxed array of *HostProfileConfigInfo*. To be used in *Any* placeholders.
     ArrayOfHostProfileConfigInfo(Vec<HostProfileConfigInfo>),
     /// A boxed array of *HostProfileConfigSpec*. To be used in *Any* placeholders.
-    ArrayOfHostProfileConfigSpec(Vec<Box<dyn super::host_profile_config_spec_trait::HostProfileConfigSpecTrait>>),
+    ArrayOfHostProfileConfigSpec(Vec<Box<dyn super::traits::HostProfileConfigSpecTrait>>),
     /// A boxed array of *HostProfileHostBasedConfigSpec*. To be used in *Any* placeholders.
     ArrayOfHostProfileHostBasedConfigSpec(Vec<HostProfileHostBasedConfigSpec>),
     /// A boxed array of *HostProfileSerializedHostProfileSpec*. To be used in *Any* placeholders.
@@ -4949,13 +4949,13 @@ pub enum ValueElements {
     /// A boxed array of *PnicUplinkProfile*. To be used in *Any* placeholders.
     ArrayOfPnicUplinkProfile(Vec<PnicUplinkProfile>),
     /// A boxed array of *PortGroupProfile*. To be used in *Any* placeholders.
-    ArrayOfPortGroupProfile(Vec<Box<dyn super::port_group_profile_trait::PortGroupProfileTrait>>),
+    ArrayOfPortGroupProfile(Vec<Box<dyn super::traits::PortGroupProfileTrait>>),
     /// A boxed array of *VirtualSwitchSelectionProfile*. To be used in *Any* placeholders.
     ArrayOfVirtualSwitchSelectionProfile(Vec<VirtualSwitchSelectionProfile>),
     /// A boxed array of *VlanProfile*. To be used in *Any* placeholders.
     ArrayOfVlanProfile(Vec<VlanProfile>),
     /// A boxed array of *AnswerFileCreateSpec*. To be used in *Any* placeholders.
-    ArrayOfAnswerFileCreateSpec(Vec<Box<dyn super::answer_file_create_spec_trait::AnswerFileCreateSpecTrait>>),
+    ArrayOfAnswerFileCreateSpec(Vec<Box<dyn super::traits::AnswerFileCreateSpecTrait>>),
     /// A boxed array of *AnswerFileOptionsCreateSpec*. To be used in *Any* placeholders.
     ArrayOfAnswerFileOptionsCreateSpec(Vec<AnswerFileOptionsCreateSpec>),
     /// A boxed array of *AnswerFileSerializedCreateSpec*. To be used in *Any* placeholders.
@@ -4975,7 +4975,7 @@ pub enum ValueElements {
     /// A boxed array of *HostProfileManagerConfigTaskList*. To be used in *Any* placeholders.
     ArrayOfHostProfileManagerConfigTaskList(Vec<HostProfileManagerConfigTaskList>),
     /// A boxed array of *HostProfilesEntityCustomizations*. To be used in *Any* placeholders.
-    ArrayOfHostProfilesEntityCustomizations(Vec<Box<dyn super::host_profiles_entity_customizations_trait::HostProfilesEntityCustomizationsTrait>>),
+    ArrayOfHostProfilesEntityCustomizations(Vec<Box<dyn super::traits::HostProfilesEntityCustomizationsTrait>>),
     /// A boxed array of *HostProfileManagerHostToConfigSpecMap*. To be used in *Any* placeholders.
     ArrayOfHostProfileManagerHostToConfigSpecMap(Vec<HostProfileManagerHostToConfigSpecMap>),
     /// A boxed array of *StructuredCustomizations*. To be used in *Any* placeholders.
@@ -5005,19 +5005,19 @@ pub enum ValueElements {
     /// A boxed array of *AfterStartupTaskScheduler*. To be used in *Any* placeholders.
     ArrayOfAfterStartupTaskScheduler(Vec<AfterStartupTaskScheduler>),
     /// A boxed array of *DailyTaskScheduler*. To be used in *Any* placeholders.
-    ArrayOfDailyTaskScheduler(Vec<Box<dyn super::daily_task_scheduler_trait::DailyTaskSchedulerTrait>>),
+    ArrayOfDailyTaskScheduler(Vec<Box<dyn super::traits::DailyTaskSchedulerTrait>>),
     /// A boxed array of *HourlyTaskScheduler*. To be used in *Any* placeholders.
-    ArrayOfHourlyTaskScheduler(Vec<Box<dyn super::hourly_task_scheduler_trait::HourlyTaskSchedulerTrait>>),
+    ArrayOfHourlyTaskScheduler(Vec<Box<dyn super::traits::HourlyTaskSchedulerTrait>>),
     /// A boxed array of *MonthlyByDayTaskScheduler*. To be used in *Any* placeholders.
     ArrayOfMonthlyByDayTaskScheduler(Vec<MonthlyByDayTaskScheduler>),
     /// A boxed array of *MonthlyByWeekdayTaskScheduler*. To be used in *Any* placeholders.
     ArrayOfMonthlyByWeekdayTaskScheduler(Vec<MonthlyByWeekdayTaskScheduler>),
     /// A boxed array of *MonthlyTaskScheduler*. To be used in *Any* placeholders.
-    ArrayOfMonthlyTaskScheduler(Vec<Box<dyn super::monthly_task_scheduler_trait::MonthlyTaskSchedulerTrait>>),
+    ArrayOfMonthlyTaskScheduler(Vec<Box<dyn super::traits::MonthlyTaskSchedulerTrait>>),
     /// A boxed array of *OnceTaskScheduler*. To be used in *Any* placeholders.
     ArrayOfOnceTaskScheduler(Vec<OnceTaskScheduler>),
     /// A boxed array of *RecurrentTaskScheduler*. To be used in *Any* placeholders.
-    ArrayOfRecurrentTaskScheduler(Vec<Box<dyn super::recurrent_task_scheduler_trait::RecurrentTaskSchedulerTrait>>),
+    ArrayOfRecurrentTaskScheduler(Vec<Box<dyn super::traits::RecurrentTaskSchedulerTrait>>),
     /// A boxed array of *ScheduledTaskDescription*. To be used in *Any* placeholders.
     ArrayOfScheduledTaskDescription(Vec<ScheduledTaskDescription>),
     /// A boxed array of *ScheduledTaskDetail*. To be used in *Any* placeholders.
@@ -5025,9 +5025,9 @@ pub enum ValueElements {
     /// A boxed array of *ScheduledTaskInfo*. To be used in *Any* placeholders.
     ArrayOfScheduledTaskInfo(Vec<ScheduledTaskInfo>),
     /// A boxed array of *ScheduledTaskSpec*. To be used in *Any* placeholders.
-    ArrayOfScheduledTaskSpec(Vec<Box<dyn super::scheduled_task_spec_trait::ScheduledTaskSpecTrait>>),
+    ArrayOfScheduledTaskSpec(Vec<Box<dyn super::traits::ScheduledTaskSpecTrait>>),
     /// A boxed array of *TaskScheduler*. To be used in *Any* placeholders.
-    ArrayOfTaskScheduler(Vec<Box<dyn super::task_scheduler_trait::TaskSchedulerTrait>>),
+    ArrayOfTaskScheduler(Vec<Box<dyn super::traits::TaskSchedulerTrait>>),
     /// A boxed array of *WeeklyTaskScheduler*. To be used in *Any* placeholders.
     ArrayOfWeeklyTaskScheduler(Vec<WeeklyTaskScheduler>),
     /// A boxed array of *ApplyStorageRecommendationResult*. To be used in *Any* placeholders.
@@ -5116,17 +5116,17 @@ pub enum ValueElements {
     /// A boxed array of *VirtualAppImportSpec*. To be used in *Any* placeholders.
     ArrayOfVirtualAppImportSpec(Vec<VirtualAppImportSpec>),
     /// A boxed array of *VmConfigInfo*. To be used in *Any* placeholders.
-    ArrayOfVmConfigInfo(Vec<Box<dyn super::vm_config_info_trait::VmConfigInfoTrait>>),
+    ArrayOfVmConfigInfo(Vec<Box<dyn super::traits::VmConfigInfoTrait>>),
     /// A boxed array of *VmConfigSpec*. To be used in *Any* placeholders.
-    ArrayOfVmConfigSpec(Vec<Box<dyn super::vm_config_spec_trait::VmConfigSpecTrait>>),
+    ArrayOfVmConfigSpec(Vec<Box<dyn super::traits::VmConfigSpecTrait>>),
     /// A boxed array of *ClusterNetworkConfigSpec*. To be used in *Any* placeholders.
     ArrayOfClusterNetworkConfigSpec(Vec<ClusterNetworkConfigSpec>),
     /// A boxed array of *FailoverNodeInfo*. To be used in *Any* placeholders.
     ArrayOfFailoverNodeInfo(Vec<FailoverNodeInfo>),
     /// A boxed array of *NodeDeploymentSpec*. To be used in *Any* placeholders.
-    ArrayOfNodeDeploymentSpec(Vec<Box<dyn super::node_deployment_spec_trait::NodeDeploymentSpecTrait>>),
+    ArrayOfNodeDeploymentSpec(Vec<Box<dyn super::traits::NodeDeploymentSpecTrait>>),
     /// A boxed array of *NodeNetworkSpec*. To be used in *Any* placeholders.
-    ArrayOfNodeNetworkSpec(Vec<Box<dyn super::node_network_spec_trait::NodeNetworkSpecTrait>>),
+    ArrayOfNodeNetworkSpec(Vec<Box<dyn super::traits::NodeNetworkSpecTrait>>),
     /// A boxed array of *PassiveNodeDeploymentSpec*. To be used in *Any* placeholders.
     ArrayOfPassiveNodeDeploymentSpec(Vec<PassiveNodeDeploymentSpec>),
     /// A boxed array of *PassiveNodeNetworkSpec*. To be used in *Any* placeholders.
@@ -5154,13 +5154,13 @@ pub enum ValueElements {
     /// A boxed array of *VirtualMachineBaseIndependentFilterSpec*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 7.0.2.1
-    ArrayOfVirtualMachineBaseIndependentFilterSpec(Vec<Box<dyn super::virtual_machine_base_independent_filter_spec_trait::VirtualMachineBaseIndependentFilterSpecTrait>>),
+    ArrayOfVirtualMachineBaseIndependentFilterSpec(Vec<Box<dyn super::traits::VirtualMachineBaseIndependentFilterSpecTrait>>),
     /// A boxed array of *VirtualMachineBootOptions*. To be used in *Any* placeholders.
     ArrayOfVirtualMachineBootOptions(Vec<VirtualMachineBootOptions>),
     /// A boxed array of *VirtualMachineBootOptionsBootableCdromDevice*. To be used in *Any* placeholders.
     ArrayOfVirtualMachineBootOptionsBootableCdromDevice(Vec<VirtualMachineBootOptionsBootableCdromDevice>),
     /// A boxed array of *VirtualMachineBootOptionsBootableDevice*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineBootOptionsBootableDevice(Vec<Box<dyn super::virtual_machine_boot_options_bootable_device_trait::VirtualMachineBootOptionsBootableDeviceTrait>>),
+    ArrayOfVirtualMachineBootOptionsBootableDevice(Vec<Box<dyn super::traits::VirtualMachineBootOptionsBootableDeviceTrait>>),
     /// A boxed array of *VirtualMachineBootOptionsBootableDiskDevice*. To be used in *Any* placeholders.
     ArrayOfVirtualMachineBootOptionsBootableDiskDevice(Vec<VirtualMachineBootOptionsBootableDiskDevice>),
     /// A boxed array of *VirtualMachineBootOptionsBootableEthernetDevice*. To be used in *Any* placeholders.
@@ -5212,11 +5212,11 @@ pub enum ValueElements {
     /// A boxed array of *VirtualMachineDeviceRuntimeInfo*. To be used in *Any* placeholders.
     ArrayOfVirtualMachineDeviceRuntimeInfo(Vec<VirtualMachineDeviceRuntimeInfo>),
     /// A boxed array of *VirtualMachineDeviceRuntimeInfoDeviceRuntimeState*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineDeviceRuntimeInfoDeviceRuntimeState(Vec<Box<dyn super::virtual_machine_device_runtime_info_device_runtime_state_trait::VirtualMachineDeviceRuntimeInfoDeviceRuntimeStateTrait>>),
+    ArrayOfVirtualMachineDeviceRuntimeInfoDeviceRuntimeState(Vec<Box<dyn super::traits::VirtualMachineDeviceRuntimeInfoDeviceRuntimeStateTrait>>),
     /// A boxed array of *VirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeState*. To be used in *Any* placeholders.
     ArrayOfVirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeState(Vec<VirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeState>),
     /// A boxed array of *VirtualMachineDiskDeviceInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineDiskDeviceInfo(Vec<Box<dyn super::virtual_machine_disk_device_info_trait::VirtualMachineDiskDeviceInfoTrait>>),
+    ArrayOfVirtualMachineDiskDeviceInfo(Vec<Box<dyn super::traits::VirtualMachineDiskDeviceInfoTrait>>),
     /// A boxed array of *VirtualMachineDvxClassInfo*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 8.0.0.1
@@ -5230,7 +5230,7 @@ pub enum ValueElements {
     /// A boxed array of *VirtualMachineEmptyProfileSpec*. To be used in *Any* placeholders.
     ArrayOfVirtualMachineEmptyProfileSpec(Vec<VirtualMachineEmptyProfileSpec>),
     /// A boxed array of *FaultToleranceConfigInfo*. To be used in *Any* placeholders.
-    ArrayOfFaultToleranceConfigInfo(Vec<Box<dyn super::fault_tolerance_config_info_trait::FaultToleranceConfigInfoTrait>>),
+    ArrayOfFaultToleranceConfigInfo(Vec<Box<dyn super::traits::FaultToleranceConfigInfoTrait>>),
     /// A boxed array of *FaultToleranceConfigSpec*. To be used in *Any* placeholders.
     ArrayOfFaultToleranceConfigSpec(Vec<FaultToleranceConfigSpec>),
     /// A boxed array of *FaultToleranceMetaSpec*. To be used in *Any* placeholders.
@@ -5297,7 +5297,7 @@ pub enum ValueElements {
     /// A boxed array of *GuestOsDescriptor*. To be used in *Any* placeholders.
     ArrayOfGuestOsDescriptor(Vec<GuestOsDescriptor>),
     /// A boxed array of *VirtualMachineGuestQuiesceSpec*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineGuestQuiesceSpec(Vec<Box<dyn super::virtual_machine_guest_quiesce_spec_trait::VirtualMachineGuestQuiesceSpecTrait>>),
+    ArrayOfVirtualMachineGuestQuiesceSpec(Vec<Box<dyn super::traits::VirtualMachineGuestQuiesceSpecTrait>>),
     /// A boxed array of *VirtualMachineIdeDiskDeviceInfo*. To be used in *Any* placeholders.
     ArrayOfVirtualMachineIdeDiskDeviceInfo(Vec<VirtualMachineIdeDiskDeviceInfo>),
     /// A boxed array of *VirtualMachineIdeDiskDevicePartitionInfo*. To be used in *Any* placeholders.
@@ -5329,7 +5329,7 @@ pub enum ValueElements {
     /// A boxed array of *VirtualMachineParallelInfo*. To be used in *Any* placeholders.
     ArrayOfVirtualMachineParallelInfo(Vec<VirtualMachineParallelInfo>),
     /// A boxed array of *VirtualMachinePciPassthroughInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachinePciPassthroughInfo(Vec<Box<dyn super::virtual_machine_pci_passthrough_info_trait::VirtualMachinePciPassthroughInfoTrait>>),
+    ArrayOfVirtualMachinePciPassthroughInfo(Vec<Box<dyn super::traits::VirtualMachinePciPassthroughInfoTrait>>),
     /// A boxed array of *VirtualMachinePciSharedGpuPassthroughInfo*. To be used in *Any* placeholders.
     ArrayOfVirtualMachinePciSharedGpuPassthroughInfo(Vec<VirtualMachinePciSharedGpuPassthroughInfo>),
     /// A boxed array of *VirtualMachinePrecisionClockInfo*. To be used in *Any* placeholders.
@@ -5341,7 +5341,7 @@ pub enum ValueElements {
     /// A boxed array of *VirtualMachineProfileRawData*. To be used in *Any* placeholders.
     ArrayOfVirtualMachineProfileRawData(Vec<VirtualMachineProfileRawData>),
     /// A boxed array of *VirtualMachineProfileSpec*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineProfileSpec(Vec<Box<dyn super::virtual_machine_profile_spec_trait::VirtualMachineProfileSpecTrait>>),
+    ArrayOfVirtualMachineProfileSpec(Vec<Box<dyn super::traits::VirtualMachineProfileSpecTrait>>),
     /// A boxed array of *VirtualMachinePropertyRelation*. To be used in *Any* placeholders.
     ArrayOfVirtualMachinePropertyRelation(Vec<VirtualMachinePropertyRelation>),
     /// A boxed array of *VirtualMachineQuestionInfo*. To be used in *Any* placeholders.
@@ -5379,7 +5379,7 @@ pub enum ValueElements {
     /// A boxed array of *VirtualMachineSoundInfo*. To be used in *Any* placeholders.
     ArrayOfVirtualMachineSoundInfo(Vec<VirtualMachineSoundInfo>),
     /// A boxed array of *VirtualMachineSriovDevicePoolInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineSriovDevicePoolInfo(Vec<Box<dyn super::virtual_machine_sriov_device_pool_info_trait::VirtualMachineSriovDevicePoolInfoTrait>>),
+    ArrayOfVirtualMachineSriovDevicePoolInfo(Vec<Box<dyn super::traits::VirtualMachineSriovDevicePoolInfoTrait>>),
     /// A boxed array of *VirtualMachineSriovInfo*. To be used in *Any* placeholders.
     ArrayOfVirtualMachineSriovInfo(Vec<VirtualMachineSriovInfo>),
     /// A boxed array of *VirtualMachineSriovNetworkDevicePoolInfo*. To be used in *Any* placeholders.
@@ -5403,7 +5403,7 @@ pub enum ValueElements {
     /// A boxed array of *VirtualMachineStorageSummary*. To be used in *Any* placeholders.
     ArrayOfVirtualMachineStorageSummary(Vec<VirtualMachineStorageSummary>),
     /// A boxed array of *VirtualMachineTargetInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineTargetInfo(Vec<Box<dyn super::virtual_machine_target_info_trait::VirtualMachineTargetInfoTrait>>),
+    ArrayOfVirtualMachineTargetInfo(Vec<Box<dyn super::traits::VirtualMachineTargetInfoTrait>>),
     /// A boxed array of *ToolsConfigInfo*. To be used in *Any* placeholders.
     ArrayOfToolsConfigInfo(Vec<ToolsConfigInfo>),
     /// A boxed array of *ToolsConfigInfoToolsLastInstallInfo*. To be used in *Any* placeholders.
@@ -5445,7 +5445,7 @@ pub enum ValueElements {
     /// ***Since:*** vSphere API Release 8.0.0.1
     ArrayOfVirtualMachineVirtualDeviceGroups(Vec<VirtualMachineVirtualDeviceGroups>),
     /// A boxed array of *VirtualMachineVirtualDeviceGroupsDeviceGroup*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineVirtualDeviceGroupsDeviceGroup(Vec<Box<dyn super::virtual_machine_virtual_device_groups_device_group_trait::VirtualMachineVirtualDeviceGroupsDeviceGroupTrait>>),
+    ArrayOfVirtualMachineVirtualDeviceGroupsDeviceGroup(Vec<Box<dyn super::traits::VirtualMachineVirtualDeviceGroupsDeviceGroupTrait>>),
     /// A boxed array of *VirtualMachineVirtualDeviceGroupsVendorDeviceGroup*. To be used in *Any* placeholders.
     ArrayOfVirtualMachineVirtualDeviceGroupsVendorDeviceGroup(Vec<VirtualMachineVirtualDeviceGroupsVendorDeviceGroup>),
     /// A boxed array of *VirtualMachineVirtualDeviceSwap*. To be used in *Any* placeholders.
@@ -5518,11 +5518,11 @@ pub enum ValueElements {
     /// A boxed array of *CustomizationIdentification*. To be used in *Any* placeholders.
     ArrayOfCustomizationIdentification(Vec<CustomizationIdentification>),
     /// A boxed array of *CustomizationIdentitySettings*. To be used in *Any* placeholders.
-    ArrayOfCustomizationIdentitySettings(Vec<Box<dyn super::customization_identity_settings_trait::CustomizationIdentitySettingsTrait>>),
+    ArrayOfCustomizationIdentitySettings(Vec<Box<dyn super::traits::CustomizationIdentitySettingsTrait>>),
     /// A boxed array of *CustomizationIpGenerator*. To be used in *Any* placeholders.
-    ArrayOfCustomizationIpGenerator(Vec<Box<dyn super::customization_ip_generator_trait::CustomizationIpGeneratorTrait>>),
+    ArrayOfCustomizationIpGenerator(Vec<Box<dyn super::traits::CustomizationIpGeneratorTrait>>),
     /// A boxed array of *CustomizationIpV6Generator*. To be used in *Any* placeholders.
-    ArrayOfCustomizationIpV6Generator(Vec<Box<dyn super::customization_ip_v_6_generator_trait::CustomizationIpV6GeneratorTrait>>),
+    ArrayOfCustomizationIpV6Generator(Vec<Box<dyn super::traits::CustomizationIpV6GeneratorTrait>>),
     /// A boxed array of *CustomizationLicenseFilePrintData*. To be used in *Any* placeholders.
     ArrayOfCustomizationLicenseFilePrintData(Vec<CustomizationLicenseFilePrintData>),
     /// A boxed array of *CustomizationLinuxOptions*. To be used in *Any* placeholders.
@@ -5530,9 +5530,9 @@ pub enum ValueElements {
     /// A boxed array of *CustomizationLinuxPrep*. To be used in *Any* placeholders.
     ArrayOfCustomizationLinuxPrep(Vec<CustomizationLinuxPrep>),
     /// A boxed array of *CustomizationName*. To be used in *Any* placeholders.
-    ArrayOfCustomizationName(Vec<Box<dyn super::customization_name_trait::CustomizationNameTrait>>),
+    ArrayOfCustomizationName(Vec<Box<dyn super::traits::CustomizationNameTrait>>),
     /// A boxed array of *CustomizationOptions*. To be used in *Any* placeholders.
-    ArrayOfCustomizationOptions(Vec<Box<dyn super::customization_options_trait::CustomizationOptionsTrait>>),
+    ArrayOfCustomizationOptions(Vec<Box<dyn super::traits::CustomizationOptionsTrait>>),
     /// A boxed array of *CustomizationPassword*. To be used in *Any* placeholders.
     ArrayOfCustomizationPassword(Vec<CustomizationPassword>),
     /// A boxed array of *CustomizationPrefixName*. To be used in *Any* placeholders.
@@ -5606,55 +5606,55 @@ pub enum ValueElements {
     /// A boxed array of *VirtualCdromRemotePassthroughBackingOption*. To be used in *Any* placeholders.
     ArrayOfVirtualCdromRemotePassthroughBackingOption(Vec<VirtualCdromRemotePassthroughBackingOption>),
     /// A boxed array of *VirtualController*. To be used in *Any* placeholders.
-    ArrayOfVirtualController(Vec<Box<dyn super::virtual_controller_trait::VirtualControllerTrait>>),
+    ArrayOfVirtualController(Vec<Box<dyn super::traits::VirtualControllerTrait>>),
     /// A boxed array of *VirtualControllerOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualControllerOption(Vec<Box<dyn super::virtual_controller_option_trait::VirtualControllerOptionTrait>>),
+    ArrayOfVirtualControllerOption(Vec<Box<dyn super::traits::VirtualControllerOptionTrait>>),
     /// A boxed array of *VirtualDevice*. To be used in *Any* placeholders.
-    ArrayOfVirtualDevice(Vec<Box<dyn super::virtual_device_trait::VirtualDeviceTrait>>),
+    ArrayOfVirtualDevice(Vec<Box<dyn super::traits::VirtualDeviceTrait>>),
     /// A boxed array of *VirtualDeviceBackingInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualDeviceBackingInfo(Vec<Box<dyn super::virtual_device_backing_info_trait::VirtualDeviceBackingInfoTrait>>),
+    ArrayOfVirtualDeviceBackingInfo(Vec<Box<dyn super::traits::VirtualDeviceBackingInfoTrait>>),
     /// A boxed array of *VirtualDeviceBusSlotInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualDeviceBusSlotInfo(Vec<Box<dyn super::virtual_device_bus_slot_info_trait::VirtualDeviceBusSlotInfoTrait>>),
+    ArrayOfVirtualDeviceBusSlotInfo(Vec<Box<dyn super::traits::VirtualDeviceBusSlotInfoTrait>>),
     /// A boxed array of *VirtualDeviceConnectInfo*. To be used in *Any* placeholders.
     ArrayOfVirtualDeviceConnectInfo(Vec<VirtualDeviceConnectInfo>),
     /// A boxed array of *VirtualDeviceDeviceBackingInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualDeviceDeviceBackingInfo(Vec<Box<dyn super::virtual_device_device_backing_info_trait::VirtualDeviceDeviceBackingInfoTrait>>),
+    ArrayOfVirtualDeviceDeviceBackingInfo(Vec<Box<dyn super::traits::VirtualDeviceDeviceBackingInfoTrait>>),
     /// A boxed array of *VirtualDeviceDeviceGroupInfo*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 8.0.0.1
     ArrayOfVirtualDeviceDeviceGroupInfo(Vec<VirtualDeviceDeviceGroupInfo>),
     /// A boxed array of *VirtualDeviceFileBackingInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualDeviceFileBackingInfo(Vec<Box<dyn super::virtual_device_file_backing_info_trait::VirtualDeviceFileBackingInfoTrait>>),
+    ArrayOfVirtualDeviceFileBackingInfo(Vec<Box<dyn super::traits::VirtualDeviceFileBackingInfoTrait>>),
     /// A boxed array of *VirtualDevicePciBusSlotInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualDevicePciBusSlotInfo(Vec<Box<dyn super::virtual_device_pci_bus_slot_info_trait::VirtualDevicePciBusSlotInfoTrait>>),
+    ArrayOfVirtualDevicePciBusSlotInfo(Vec<Box<dyn super::traits::VirtualDevicePciBusSlotInfoTrait>>),
     /// A boxed array of *VirtualDevicePipeBackingInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualDevicePipeBackingInfo(Vec<Box<dyn super::virtual_device_pipe_backing_info_trait::VirtualDevicePipeBackingInfoTrait>>),
+    ArrayOfVirtualDevicePipeBackingInfo(Vec<Box<dyn super::traits::VirtualDevicePipeBackingInfoTrait>>),
     /// A boxed array of *VirtualDeviceRemoteDeviceBackingInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualDeviceRemoteDeviceBackingInfo(Vec<Box<dyn super::virtual_device_remote_device_backing_info_trait::VirtualDeviceRemoteDeviceBackingInfoTrait>>),
+    ArrayOfVirtualDeviceRemoteDeviceBackingInfo(Vec<Box<dyn super::traits::VirtualDeviceRemoteDeviceBackingInfoTrait>>),
     /// A boxed array of *VirtualDeviceURIBackingInfo*. To be used in *Any* placeholders.
     #[serde(rename = "ArrayOfVirtualDeviceURIBackingInfo")]
-    ArrayOfVirtualDeviceUriBackingInfo(Vec<Box<dyn super::virtual_device_uri_backing_info_trait::VirtualDeviceUriBackingInfoTrait>>),
+    ArrayOfVirtualDeviceUriBackingInfo(Vec<Box<dyn super::traits::VirtualDeviceUriBackingInfoTrait>>),
     /// A boxed array of *VirtualDeviceOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualDeviceOption(Vec<Box<dyn super::virtual_device_option_trait::VirtualDeviceOptionTrait>>),
+    ArrayOfVirtualDeviceOption(Vec<Box<dyn super::traits::VirtualDeviceOptionTrait>>),
     /// A boxed array of *VirtualDeviceBackingOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualDeviceBackingOption(Vec<Box<dyn super::virtual_device_backing_option_trait::VirtualDeviceBackingOptionTrait>>),
+    ArrayOfVirtualDeviceBackingOption(Vec<Box<dyn super::traits::VirtualDeviceBackingOptionTrait>>),
     /// A boxed array of *VirtualDeviceBusSlotOption*. To be used in *Any* placeholders.
     ArrayOfVirtualDeviceBusSlotOption(Vec<VirtualDeviceBusSlotOption>),
     /// A boxed array of *VirtualDeviceConnectOption*. To be used in *Any* placeholders.
     ArrayOfVirtualDeviceConnectOption(Vec<VirtualDeviceConnectOption>),
     /// A boxed array of *VirtualDeviceDeviceBackingOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualDeviceDeviceBackingOption(Vec<Box<dyn super::virtual_device_device_backing_option_trait::VirtualDeviceDeviceBackingOptionTrait>>),
+    ArrayOfVirtualDeviceDeviceBackingOption(Vec<Box<dyn super::traits::VirtualDeviceDeviceBackingOptionTrait>>),
     /// A boxed array of *VirtualDeviceFileBackingOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualDeviceFileBackingOption(Vec<Box<dyn super::virtual_device_file_backing_option_trait::VirtualDeviceFileBackingOptionTrait>>),
+    ArrayOfVirtualDeviceFileBackingOption(Vec<Box<dyn super::traits::VirtualDeviceFileBackingOptionTrait>>),
     /// A boxed array of *VirtualDevicePipeBackingOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualDevicePipeBackingOption(Vec<Box<dyn super::virtual_device_pipe_backing_option_trait::VirtualDevicePipeBackingOptionTrait>>),
+    ArrayOfVirtualDevicePipeBackingOption(Vec<Box<dyn super::traits::VirtualDevicePipeBackingOptionTrait>>),
     /// A boxed array of *VirtualDeviceRemoteDeviceBackingOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualDeviceRemoteDeviceBackingOption(Vec<Box<dyn super::virtual_device_remote_device_backing_option_trait::VirtualDeviceRemoteDeviceBackingOptionTrait>>),
+    ArrayOfVirtualDeviceRemoteDeviceBackingOption(Vec<Box<dyn super::traits::VirtualDeviceRemoteDeviceBackingOptionTrait>>),
     /// A boxed array of *VirtualDeviceURIBackingOption*. To be used in *Any* placeholders.
     #[serde(rename = "ArrayOfVirtualDeviceURIBackingOption")]
-    ArrayOfVirtualDeviceUriBackingOption(Vec<Box<dyn super::virtual_device_uri_backing_option_trait::VirtualDeviceUriBackingOptionTrait>>),
+    ArrayOfVirtualDeviceUriBackingOption(Vec<Box<dyn super::traits::VirtualDeviceUriBackingOptionTrait>>),
     /// A boxed array of *VirtualDeviceConfigSpec*. To be used in *Any* placeholders.
-    ArrayOfVirtualDeviceConfigSpec(Vec<Box<dyn super::virtual_device_config_spec_trait::VirtualDeviceConfigSpecTrait>>),
+    ArrayOfVirtualDeviceConfigSpec(Vec<Box<dyn super::traits::VirtualDeviceConfigSpecTrait>>),
     /// A boxed array of *VirtualDeviceConfigSpecBackingSpec*. To be used in *Any* placeholders.
     ArrayOfVirtualDeviceConfigSpecBackingSpec(Vec<VirtualDeviceConfigSpecBackingSpec>),
     /// A boxed array of *VirtualDisk*. To be used in *Any* placeholders.
@@ -5670,7 +5670,7 @@ pub enum ValueElements {
     /// A boxed array of *VirtualDiskRawDiskMappingVer1BackingInfo*. To be used in *Any* placeholders.
     ArrayOfVirtualDiskRawDiskMappingVer1BackingInfo(Vec<VirtualDiskRawDiskMappingVer1BackingInfo>),
     /// A boxed array of *VirtualDiskRawDiskVer2BackingInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualDiskRawDiskVer2BackingInfo(Vec<Box<dyn super::virtual_disk_raw_disk_ver_2_backing_info_trait::VirtualDiskRawDiskVer2BackingInfoTrait>>),
+    ArrayOfVirtualDiskRawDiskVer2BackingInfo(Vec<Box<dyn super::traits::VirtualDiskRawDiskVer2BackingInfoTrait>>),
     /// A boxed array of *VirtualDiskSeSparseBackingInfo*. To be used in *Any* placeholders.
     ArrayOfVirtualDiskSeSparseBackingInfo(Vec<VirtualDiskSeSparseBackingInfo>),
     /// A boxed array of *VirtualDiskSparseVer1BackingInfo*. To be used in *Any* placeholders.
@@ -5696,7 +5696,7 @@ pub enum ValueElements {
     /// A boxed array of *VirtualDiskRawDiskMappingVer1BackingOption*. To be used in *Any* placeholders.
     ArrayOfVirtualDiskRawDiskMappingVer1BackingOption(Vec<VirtualDiskRawDiskMappingVer1BackingOption>),
     /// A boxed array of *VirtualDiskRawDiskVer2BackingOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualDiskRawDiskVer2BackingOption(Vec<Box<dyn super::virtual_disk_raw_disk_ver_2_backing_option_trait::VirtualDiskRawDiskVer2BackingOptionTrait>>),
+    ArrayOfVirtualDiskRawDiskVer2BackingOption(Vec<Box<dyn super::traits::VirtualDiskRawDiskVer2BackingOptionTrait>>),
     /// A boxed array of *VirtualDiskSeSparseBackingOption*. To be used in *Any* placeholders.
     ArrayOfVirtualDiskSeSparseBackingOption(Vec<VirtualDiskSeSparseBackingOption>),
     /// A boxed array of *VirtualDiskSparseVer1BackingOption*. To be used in *Any* placeholders.
@@ -5722,7 +5722,7 @@ pub enum ValueElements {
     /// A boxed array of *VirtualEnsoniq1371Option*. To be used in *Any* placeholders.
     ArrayOfVirtualEnsoniq1371Option(Vec<VirtualEnsoniq1371Option>),
     /// A boxed array of *VirtualEthernetCard*. To be used in *Any* placeholders.
-    ArrayOfVirtualEthernetCard(Vec<Box<dyn super::virtual_ethernet_card_trait::VirtualEthernetCardTrait>>),
+    ArrayOfVirtualEthernetCard(Vec<Box<dyn super::traits::VirtualEthernetCardTrait>>),
     /// A boxed array of *VirtualEthernetCardDistributedVirtualPortBackingInfo*. To be used in *Any* placeholders.
     ArrayOfVirtualEthernetCardDistributedVirtualPortBackingInfo(Vec<VirtualEthernetCardDistributedVirtualPortBackingInfo>),
     /// A boxed array of *VirtualEthernetCardLegacyNetworkBackingInfo*. To be used in *Any* placeholders.
@@ -5734,7 +5734,7 @@ pub enum ValueElements {
     /// A boxed array of *VirtualEthernetCardResourceAllocation*. To be used in *Any* placeholders.
     ArrayOfVirtualEthernetCardResourceAllocation(Vec<VirtualEthernetCardResourceAllocation>),
     /// A boxed array of *VirtualEthernetCardOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualEthernetCardOption(Vec<Box<dyn super::virtual_ethernet_card_option_trait::VirtualEthernetCardOptionTrait>>),
+    ArrayOfVirtualEthernetCardOption(Vec<Box<dyn super::traits::VirtualEthernetCardOptionTrait>>),
     /// A boxed array of *VirtualEthernetCardDVPortBackingOption*. To be used in *Any* placeholders.
     #[serde(rename = "ArrayOfVirtualEthernetCardDVPortBackingOption")]
     ArrayOfVirtualEthernetCardDvPortBackingOption(Vec<VirtualEthernetCardDvPortBackingOption>),
@@ -5830,7 +5830,7 @@ pub enum ValueElements {
     ArrayOfVirtualPciPassthroughDynamicBackingInfo(Vec<VirtualPciPassthroughDynamicBackingInfo>),
     /// A boxed array of *VirtualPCIPassthroughPluginBackingInfo*. To be used in *Any* placeholders.
     #[serde(rename = "ArrayOfVirtualPCIPassthroughPluginBackingInfo")]
-    ArrayOfVirtualPciPassthroughPluginBackingInfo(Vec<Box<dyn super::virtual_pci_passthrough_plugin_backing_info_trait::VirtualPciPassthroughPluginBackingInfoTrait>>),
+    ArrayOfVirtualPciPassthroughPluginBackingInfo(Vec<Box<dyn super::traits::VirtualPciPassthroughPluginBackingInfoTrait>>),
     /// A boxed array of *VirtualPCIPassthroughVmiopBackingInfo*. To be used in *Any* placeholders.
     #[serde(rename = "ArrayOfVirtualPCIPassthroughVmiopBackingInfo")]
     ArrayOfVirtualPciPassthroughVmiopBackingInfo(Vec<VirtualPciPassthroughVmiopBackingInfo>),
@@ -5850,7 +5850,7 @@ pub enum ValueElements {
     ArrayOfVirtualPciPassthroughDynamicBackingOption(Vec<VirtualPciPassthroughDynamicBackingOption>),
     /// A boxed array of *VirtualPCIPassthroughPluginBackingOption*. To be used in *Any* placeholders.
     #[serde(rename = "ArrayOfVirtualPCIPassthroughPluginBackingOption")]
-    ArrayOfVirtualPciPassthroughPluginBackingOption(Vec<Box<dyn super::virtual_pci_passthrough_plugin_backing_option_trait::VirtualPciPassthroughPluginBackingOptionTrait>>),
+    ArrayOfVirtualPciPassthroughPluginBackingOption(Vec<Box<dyn super::traits::VirtualPciPassthroughPluginBackingOptionTrait>>),
     /// A boxed array of *VirtualPCIPassthroughVmiopBackingOption*. To be used in *Any* placeholders.
     #[serde(rename = "ArrayOfVirtualPCIPassthroughVmiopBackingOption")]
     ArrayOfVirtualPciPassthroughVmiopBackingOption(Vec<VirtualPciPassthroughVmiopBackingOption>),
@@ -5896,16 +5896,16 @@ pub enum ValueElements {
     ArrayOfVirtualPrecisionClockSystemClockBackingOption(Vec<VirtualPrecisionClockSystemClockBackingOption>),
     /// A boxed array of *VirtualSATAController*. To be used in *Any* placeholders.
     #[serde(rename = "ArrayOfVirtualSATAController")]
-    ArrayOfVirtualSataController(Vec<Box<dyn super::virtual_sata_controller_trait::VirtualSataControllerTrait>>),
+    ArrayOfVirtualSataController(Vec<Box<dyn super::traits::VirtualSataControllerTrait>>),
     /// A boxed array of *VirtualSATAControllerOption*. To be used in *Any* placeholders.
     #[serde(rename = "ArrayOfVirtualSATAControllerOption")]
-    ArrayOfVirtualSataControllerOption(Vec<Box<dyn super::virtual_sata_controller_option_trait::VirtualSataControllerOptionTrait>>),
+    ArrayOfVirtualSataControllerOption(Vec<Box<dyn super::traits::VirtualSataControllerOptionTrait>>),
     /// A boxed array of *VirtualSCSIController*. To be used in *Any* placeholders.
     #[serde(rename = "ArrayOfVirtualSCSIController")]
-    ArrayOfVirtualScsiController(Vec<Box<dyn super::virtual_scsi_controller_trait::VirtualScsiControllerTrait>>),
+    ArrayOfVirtualScsiController(Vec<Box<dyn super::traits::VirtualScsiControllerTrait>>),
     /// A boxed array of *VirtualSCSIControllerOption*. To be used in *Any* placeholders.
     #[serde(rename = "ArrayOfVirtualSCSIControllerOption")]
-    ArrayOfVirtualScsiControllerOption(Vec<Box<dyn super::virtual_scsi_controller_option_trait::VirtualScsiControllerOptionTrait>>),
+    ArrayOfVirtualScsiControllerOption(Vec<Box<dyn super::traits::VirtualScsiControllerOptionTrait>>),
     /// A boxed array of *VirtualSCSIPassthrough*. To be used in *Any* placeholders.
     #[serde(rename = "ArrayOfVirtualSCSIPassthrough")]
     ArrayOfVirtualScsiPassthrough(Vec<VirtualScsiPassthrough>),
@@ -5955,11 +5955,11 @@ pub enum ValueElements {
     /// A boxed array of *VirtualSoundBlaster16Option*. To be used in *Any* placeholders.
     ArrayOfVirtualSoundBlaster16Option(Vec<VirtualSoundBlaster16Option>),
     /// A boxed array of *VirtualSoundCard*. To be used in *Any* placeholders.
-    ArrayOfVirtualSoundCard(Vec<Box<dyn super::virtual_sound_card_trait::VirtualSoundCardTrait>>),
+    ArrayOfVirtualSoundCard(Vec<Box<dyn super::traits::VirtualSoundCardTrait>>),
     /// A boxed array of *VirtualSoundCardDeviceBackingInfo*. To be used in *Any* placeholders.
     ArrayOfVirtualSoundCardDeviceBackingInfo(Vec<VirtualSoundCardDeviceBackingInfo>),
     /// A boxed array of *VirtualSoundCardOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualSoundCardOption(Vec<Box<dyn super::virtual_sound_card_option_trait::VirtualSoundCardOptionTrait>>),
+    ArrayOfVirtualSoundCardOption(Vec<Box<dyn super::traits::VirtualSoundCardOptionTrait>>),
     /// A boxed array of *VirtualSoundCardDeviceBackingOption*. To be used in *Any* placeholders.
     ArrayOfVirtualSoundCardDeviceBackingOption(Vec<VirtualSoundCardDeviceBackingOption>),
     /// A boxed array of *VirtualSriovEthernetCard*. To be used in *Any* placeholders.
@@ -6041,21 +6041,21 @@ pub enum ValueElements {
     /// A boxed array of *VirtualVideoCardOption*. To be used in *Any* placeholders.
     ArrayOfVirtualVideoCardOption(Vec<VirtualVideoCardOption>),
     /// A boxed array of *VirtualVmxnet*. To be used in *Any* placeholders.
-    ArrayOfVirtualVmxnet(Vec<Box<dyn super::virtual_vmxnet_trait::VirtualVmxnetTrait>>),
+    ArrayOfVirtualVmxnet(Vec<Box<dyn super::traits::VirtualVmxnetTrait>>),
     /// A boxed array of *VirtualVmxnet2*. To be used in *Any* placeholders.
     ArrayOfVirtualVmxnet2(Vec<VirtualVmxnet2>),
     /// A boxed array of *VirtualVmxnet2Option*. To be used in *Any* placeholders.
     ArrayOfVirtualVmxnet2Option(Vec<VirtualVmxnet2Option>),
     /// A boxed array of *VirtualVmxnet3*. To be used in *Any* placeholders.
-    ArrayOfVirtualVmxnet3(Vec<Box<dyn super::virtual_vmxnet_3_trait::VirtualVmxnet3Trait>>),
+    ArrayOfVirtualVmxnet3(Vec<Box<dyn super::traits::VirtualVmxnet3Trait>>),
     /// A boxed array of *VirtualVmxnet3Option*. To be used in *Any* placeholders.
-    ArrayOfVirtualVmxnet3Option(Vec<Box<dyn super::virtual_vmxnet_3_option_trait::VirtualVmxnet3OptionTrait>>),
+    ArrayOfVirtualVmxnet3Option(Vec<Box<dyn super::traits::VirtualVmxnet3OptionTrait>>),
     /// A boxed array of *VirtualVmxnet3Vrdma*. To be used in *Any* placeholders.
     ArrayOfVirtualVmxnet3Vrdma(Vec<VirtualVmxnet3Vrdma>),
     /// A boxed array of *VirtualVmxnet3VrdmaOption*. To be used in *Any* placeholders.
     ArrayOfVirtualVmxnet3VrdmaOption(Vec<VirtualVmxnet3VrdmaOption>),
     /// A boxed array of *VirtualVmxnetOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualVmxnetOption(Vec<Box<dyn super::virtual_vmxnet_option_trait::VirtualVmxnetOptionTrait>>),
+    ArrayOfVirtualVmxnetOption(Vec<Box<dyn super::traits::VirtualVmxnetOptionTrait>>),
     /// A boxed array of *VirtualWDT*. To be used in *Any* placeholders.
     #[serde(rename = "ArrayOfVirtualWDT")]
     ArrayOfVirtualWdt(Vec<VirtualWdt>),
@@ -6071,11 +6071,11 @@ pub enum ValueElements {
     /// A boxed array of *GuestAuthNamedSubject*. To be used in *Any* placeholders.
     ArrayOfGuestAuthNamedSubject(Vec<GuestAuthNamedSubject>),
     /// A boxed array of *GuestAuthSubject*. To be used in *Any* placeholders.
-    ArrayOfGuestAuthSubject(Vec<Box<dyn super::guest_auth_subject_trait::GuestAuthSubjectTrait>>),
+    ArrayOfGuestAuthSubject(Vec<Box<dyn super::traits::GuestAuthSubjectTrait>>),
     /// A boxed array of *GuestMappedAliases*. To be used in *Any* placeholders.
     ArrayOfGuestMappedAliases(Vec<GuestMappedAliases>),
     /// A boxed array of *GuestFileAttributes*. To be used in *Any* placeholders.
-    ArrayOfGuestFileAttributes(Vec<Box<dyn super::guest_file_attributes_trait::GuestFileAttributesTrait>>),
+    ArrayOfGuestFileAttributes(Vec<Box<dyn super::traits::GuestFileAttributesTrait>>),
     /// A boxed array of *GuestFileInfo*. To be used in *Any* placeholders.
     ArrayOfGuestFileInfo(Vec<GuestFileInfo>),
     /// A boxed array of *FileTransferInformation*. To be used in *Any* placeholders.
@@ -6087,13 +6087,13 @@ pub enum ValueElements {
     /// A boxed array of *GuestWindowsFileAttributes*. To be used in *Any* placeholders.
     ArrayOfGuestWindowsFileAttributes(Vec<GuestWindowsFileAttributes>),
     /// A boxed array of *GuestAuthentication*. To be used in *Any* placeholders.
-    ArrayOfGuestAuthentication(Vec<Box<dyn super::guest_authentication_trait::GuestAuthenticationTrait>>),
+    ArrayOfGuestAuthentication(Vec<Box<dyn super::traits::GuestAuthenticationTrait>>),
     /// A boxed array of *NamePasswordAuthentication*. To be used in *Any* placeholders.
     ArrayOfNamePasswordAuthentication(Vec<NamePasswordAuthentication>),
     /// A boxed array of *GuestProcessInfo*. To be used in *Any* placeholders.
     ArrayOfGuestProcessInfo(Vec<GuestProcessInfo>),
     /// A boxed array of *GuestProgramSpec*. To be used in *Any* placeholders.
-    ArrayOfGuestProgramSpec(Vec<Box<dyn super::guest_program_spec_trait::GuestProgramSpecTrait>>),
+    ArrayOfGuestProgramSpec(Vec<Box<dyn super::traits::GuestProgramSpecTrait>>),
     /// A boxed array of *GuestWindowsProgramSpec*. To be used in *Any* placeholders.
     ArrayOfGuestWindowsProgramSpec(Vec<GuestWindowsProgramSpec>),
     /// A boxed array of *SAMLTokenAuthentication*. To be used in *Any* placeholders.
@@ -6115,7 +6115,7 @@ pub enum ValueElements {
     /// A boxed array of *GuestRegValueBinarySpec*. To be used in *Any* placeholders.
     ArrayOfGuestRegValueBinarySpec(Vec<GuestRegValueBinarySpec>),
     /// A boxed array of *GuestRegValueDataSpec*. To be used in *Any* placeholders.
-    ArrayOfGuestRegValueDataSpec(Vec<Box<dyn super::guest_reg_value_data_spec_trait::GuestRegValueDataSpecTrait>>),
+    ArrayOfGuestRegValueDataSpec(Vec<Box<dyn super::traits::GuestRegValueDataSpecTrait>>),
     /// A boxed array of *GuestRegValueDwordSpec*. To be used in *Any* placeholders.
     ArrayOfGuestRegValueDwordSpec(Vec<GuestRegValueDwordSpec>),
     /// A boxed array of *GuestRegValueExpandStringSpec*. To be used in *Any* placeholders.
@@ -6179,13 +6179,13 @@ pub enum ValueElements {
     /// A boxed array of *VsanHostRuntimeInfoDiskIssue*. To be used in *Any* placeholders.
     ArrayOfVsanHostRuntimeInfoDiskIssue(Vec<VsanHostRuntimeInfoDiskIssue>),
     /// A boxed array of *BaseConfigInfo*. To be used in *Any* placeholders.
-    ArrayOfBaseConfigInfo(Vec<Box<dyn super::base_config_info_trait::BaseConfigInfoTrait>>),
+    ArrayOfBaseConfigInfo(Vec<Box<dyn super::traits::BaseConfigInfoTrait>>),
     /// A boxed array of *BaseConfigInfoBackingInfo*. To be used in *Any* placeholders.
-    ArrayOfBaseConfigInfoBackingInfo(Vec<Box<dyn super::base_config_info_backing_info_trait::BaseConfigInfoBackingInfoTrait>>),
+    ArrayOfBaseConfigInfoBackingInfo(Vec<Box<dyn super::traits::BaseConfigInfoBackingInfoTrait>>),
     /// A boxed array of *BaseConfigInfoDiskFileBackingInfo*. To be used in *Any* placeholders.
     ArrayOfBaseConfigInfoDiskFileBackingInfo(Vec<BaseConfigInfoDiskFileBackingInfo>),
     /// A boxed array of *BaseConfigInfoFileBackingInfo*. To be used in *Any* placeholders.
-    ArrayOfBaseConfigInfoFileBackingInfo(Vec<Box<dyn super::base_config_info_file_backing_info_trait::BaseConfigInfoFileBackingInfoTrait>>),
+    ArrayOfBaseConfigInfoFileBackingInfo(Vec<Box<dyn super::traits::BaseConfigInfoFileBackingInfoTrait>>),
     /// A boxed array of *BaseConfigInfoRawDiskMappingBackingInfo*. To be used in *Any* placeholders.
     ArrayOfBaseConfigInfoRawDiskMappingBackingInfo(Vec<BaseConfigInfoRawDiskMappingBackingInfo>),
     /// A boxed array of *VslmCloneSpec*. To be used in *Any* placeholders.
@@ -6193,7 +6193,7 @@ pub enum ValueElements {
     /// A boxed array of *VslmCreateSpec*. To be used in *Any* placeholders.
     ArrayOfVslmCreateSpec(Vec<VslmCreateSpec>),
     /// A boxed array of *VslmCreateSpecBackingSpec*. To be used in *Any* placeholders.
-    ArrayOfVslmCreateSpecBackingSpec(Vec<Box<dyn super::vslm_create_spec_backing_spec_trait::VslmCreateSpecBackingSpecTrait>>),
+    ArrayOfVslmCreateSpecBackingSpec(Vec<Box<dyn super::traits::VslmCreateSpecBackingSpecTrait>>),
     /// A boxed array of *VslmCreateSpecDiskFileBackingSpec*. To be used in *Any* placeholders.
     ArrayOfVslmCreateSpecDiskFileBackingSpec(Vec<VslmCreateSpecDiskFileBackingSpec>),
     /// A boxed array of *VslmCreateSpecRawDiskMappingBackingSpec*. To be used in *Any* placeholders.
@@ -6208,7 +6208,7 @@ pub enum ValueElements {
     /// A boxed array of *vslmInfrastructureObjectPolicySpec*. To be used in *Any* placeholders.
     ArrayOfvslmInfrastructureObjectPolicySpec(Vec<VslmInfrastructureObjectPolicySpec>),
     /// A boxed array of *VslmMigrateSpec*. To be used in *Any* placeholders.
-    ArrayOfVslmMigrateSpec(Vec<Box<dyn super::vslm_migrate_spec_trait::VslmMigrateSpecTrait>>),
+    ArrayOfVslmMigrateSpec(Vec<Box<dyn super::traits::VslmMigrateSpecTrait>>),
     /// A boxed array of *VslmRelocateSpec*. To be used in *Any* placeholders.
     ArrayOfVslmRelocateSpec(Vec<VslmRelocateSpec>),
     /// A boxed array of *VStorageObjectStateInfo*. To be used in *Any* placeholders.
@@ -6238,7 +6238,7 @@ pub enum ValueElements {
     /// A boxed array of *VStorageObjectAssociationsVmDiskAssociations*. To be used in *Any* placeholders.
     ArrayOfVStorageObjectAssociationsVmDiskAssociations(Vec<VStorageObjectAssociationsVmDiskAssociations>),
     /// A boxed array of *DataObject*. To be used in *Any* placeholders.
-    ArrayOfDataObject(Vec<Box<dyn super::data_object_trait::DataObjectTrait>>),
+    ArrayOfDataObject(Vec<Box<dyn super::traits::DataObjectTrait>>),
     /// A boxed array of *DynamicArray*. To be used in *Any* placeholders.
     ArrayOfDynamicArray(Vec<DynamicArray>),
     /// A boxed array of *DynamicProperty*. To be used in *Any* placeholders.
@@ -6250,19 +6250,19 @@ pub enum ValueElements {
     /// A boxed array of *LocalizedMethodFault*. To be used in *Any* placeholders.
     ArrayOfLocalizedMethodFault(Vec<LocalizedMethodFault>),
     /// A boxed array of *MethodFault*. To be used in *Any* placeholders.
-    ArrayOfMethodFault(Vec<Box<dyn super::method_fault_trait::MethodFaultTrait>>),
+    ArrayOfMethodFault(Vec<Box<dyn super::traits::MethodFaultTrait>>),
     /// A boxed array of *RuntimeFault*. To be used in *Any* placeholders.
-    ArrayOfRuntimeFault(Vec<Box<dyn super::runtime_fault_trait::RuntimeFaultTrait>>),
+    ArrayOfRuntimeFault(Vec<Box<dyn super::traits::RuntimeFaultTrait>>),
     /// A boxed array of *HostCommunication*. To be used in *Any* placeholders.
-    ArrayOfHostCommunication(Vec<Box<dyn super::host_communication_trait::HostCommunicationTrait>>),
+    ArrayOfHostCommunication(Vec<Box<dyn super::traits::HostCommunicationTrait>>),
     /// A boxed array of *HostNotConnected*. To be used in *Any* placeholders.
     ArrayOfHostNotConnected(Vec<HostNotConnected>),
     /// A boxed array of *HostNotReachable*. To be used in *Any* placeholders.
     ArrayOfHostNotReachable(Vec<HostNotReachable>),
     /// A boxed array of *InvalidArgument*. To be used in *Any* placeholders.
-    ArrayOfInvalidArgument(Vec<Box<dyn super::invalid_argument_trait::InvalidArgumentTrait>>),
+    ArrayOfInvalidArgument(Vec<Box<dyn super::traits::InvalidArgumentTrait>>),
     /// A boxed array of *InvalidRequest*. To be used in *Any* placeholders.
-    ArrayOfInvalidRequest(Vec<Box<dyn super::invalid_request_trait::InvalidRequestTrait>>),
+    ArrayOfInvalidRequest(Vec<Box<dyn super::traits::InvalidRequestTrait>>),
     /// A boxed array of *InvalidType*. To be used in *Any* placeholders.
     ArrayOfInvalidType(Vec<InvalidType>),
     /// A boxed array of *ManagedObjectNotFound*. To be used in *Any* placeholders.
@@ -6270,15 +6270,15 @@ pub enum ValueElements {
     /// A boxed array of *MethodNotFound*. To be used in *Any* placeholders.
     ArrayOfMethodNotFound(Vec<MethodNotFound>),
     /// A boxed array of *NotEnoughLicenses*. To be used in *Any* placeholders.
-    ArrayOfNotEnoughLicenses(Vec<Box<dyn super::not_enough_licenses_trait::NotEnoughLicensesTrait>>),
+    ArrayOfNotEnoughLicenses(Vec<Box<dyn super::traits::NotEnoughLicensesTrait>>),
     /// A boxed array of *NotImplemented*. To be used in *Any* placeholders.
     ArrayOfNotImplemented(Vec<NotImplemented>),
     /// A boxed array of *NotSupported*. To be used in *Any* placeholders.
-    ArrayOfNotSupported(Vec<Box<dyn super::not_supported_trait::NotSupportedTrait>>),
+    ArrayOfNotSupported(Vec<Box<dyn super::traits::NotSupportedTrait>>),
     /// A boxed array of *RequestCanceled*. To be used in *Any* placeholders.
     ArrayOfRequestCanceled(Vec<RequestCanceled>),
     /// A boxed array of *SecurityError*. To be used in *Any* placeholders.
-    ArrayOfSecurityError(Vec<Box<dyn super::security_error_trait::SecurityErrorTrait>>),
+    ArrayOfSecurityError(Vec<Box<dyn super::traits::SecurityErrorTrait>>),
     /// A boxed array of *SystemError*. To be used in *Any* placeholders.
     ArrayOfSystemError(Vec<SystemError>),
     /// A boxed array of *UnexpectedFault*. To be used in *Any* placeholders.
@@ -6310,7 +6310,7 @@ pub enum ValueElements {
     /// A boxed array of *RetrieveResult*. To be used in *Any* placeholders.
     ArrayOfRetrieveResult(Vec<RetrieveResult>),
     /// A boxed array of *SelectionSpec*. To be used in *Any* placeholders.
-    ArrayOfSelectionSpec(Vec<Box<dyn super::selection_spec_trait::SelectionSpecTrait>>),
+    ArrayOfSelectionSpec(Vec<Box<dyn super::traits::SelectionSpecTrait>>),
     /// A boxed array of *TraversalSpec*. To be used in *Any* placeholders.
     ArrayOfTraversalSpec(Vec<TraversalSpec>),
     /// A boxed array of *UpdateSet*. To be used in *Any* placeholders.

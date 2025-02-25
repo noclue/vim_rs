@@ -74,7 +74,7 @@ impl SessionManager {
     /// of *SessionManagerGenericServiceTicket.sslThumbprint* or
     /// *SessionManagerGenericServiceTicket.certThumbprintList*, only the CA
     /// certificates will be used to authenticate the host.
-    pub async fn acquire_generic_service_ticket(&self, spec: &dyn crate::types::session_manager_service_request_spec_trait::SessionManagerServiceRequestSpecTrait) -> Result<SessionManagerGenericServiceTicket> {
+    pub async fn acquire_generic_service_ticket(&self, spec: &dyn crate::types::traits::SessionManagerServiceRequestSpecTrait) -> Result<SessionManagerGenericServiceTicket> {
         let input = AcquireGenericServiceTicketRequestType {spec, };
         let path = format!("/SessionManager/{moId}/AcquireGenericServiceTicket", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -666,7 +666,7 @@ impl SessionManager {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct AcquireGenericServiceTicketRequestType<'a> {
-    spec: &'a dyn crate::types::session_manager_service_request_spec_trait::SessionManagerServiceRequestSpecTrait,
+    spec: &'a dyn crate::types::traits::SessionManagerServiceRequestSpecTrait,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]

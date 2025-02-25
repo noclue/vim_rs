@@ -283,7 +283,7 @@ impl DistributedVirtualPortgroup {
     /// events as long as they are still current. The
     /// *configStatus* property provides an overall status
     /// based on these events.
-    pub async fn config_issue(&self) -> Result<Option<Vec<Box<dyn crate::types::event_trait::EventTrait>>>> {
+    pub async fn config_issue(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::EventTrait>>>> {
         let path = format!("/DistributedVirtualPortgroup/{moId}/configIssue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         Ok(self.client.execute_option(req).await?)
@@ -320,7 +320,7 @@ impl DistributedVirtualPortgroup {
     /// Custom field values.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn custom_value(&self) -> Result<Option<Vec<Box<dyn crate::types::custom_field_value_trait::CustomFieldValueTrait>>>> {
+    pub async fn custom_value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/DistributedVirtualPortgroup/{moId}/customValue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         Ok(self.client.execute_option(req).await?)
@@ -536,7 +536,7 @@ impl DistributedVirtualPortgroup {
         Ok(self.client.execute_option(req).await?)
     }
     /// Properties of a network.
-    pub async fn summary(&self) -> Result<Box<dyn crate::types::network_summary_trait::NetworkSummaryTrait>> {
+    pub async fn summary(&self) -> Result<Box<dyn crate::types::traits::NetworkSummaryTrait>> {
         let path = format!("/DistributedVirtualPortgroup/{moId}/summary", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         Ok(self.client.execute(req).await?)
@@ -577,7 +577,7 @@ impl DistributedVirtualPortgroup {
     /// a custom field definition.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::custom_field_value_trait::CustomFieldValueTrait>>>> {
+    pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/DistributedVirtualPortgroup/{moId}/value", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         Ok(self.client.execute_option(req).await?)

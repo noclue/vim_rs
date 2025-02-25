@@ -2,7 +2,7 @@ use std::sync::Arc;
 
 use tokio::sync::RwLock;
 use super::super::types::structs;
-use super::super::types::method_fault_trait::MethodFaultTrait;
+use super::super::types::traits::MethodFaultTrait;
 use log::{warn, debug, trace, log_enabled};
 use log::Level::Trace;
 

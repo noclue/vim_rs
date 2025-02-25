@@ -136,7 +136,7 @@ impl Profile {
     /// Configuration data for the profile.
     /// 
     /// ***Required privileges:*** Profile.Edit
-    pub async fn config(&self) -> Result<Box<dyn crate::types::profile_config_info_trait::ProfileConfigInfoTrait>> {
+    pub async fn config(&self) -> Result<Box<dyn crate::types::traits::ProfileConfigInfoTrait>> {
         let path = format!("/Profile/{moId}/config", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         Ok(self.client.execute(req).await?)

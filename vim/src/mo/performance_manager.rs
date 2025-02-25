@@ -316,7 +316,7 @@ impl PerformanceManager {
     /// ## Returns:
     ///
     /// The metric values for the specified entity or entities.
-    pub async fn query_perf(&self, query_spec: &[PerfQuerySpec]) -> Result<Option<Vec<Box<dyn crate::types::perf_entity_metric_base_trait::PerfEntityMetricBaseTrait>>>> {
+    pub async fn query_perf(&self, query_spec: &[PerfQuerySpec]) -> Result<Option<Vec<Box<dyn crate::types::traits::PerfEntityMetricBaseTrait>>>> {
         let input = QueryPerfRequestType {query_spec, };
         let path = format!("/PerformanceManager/{moId}/QueryPerf", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);

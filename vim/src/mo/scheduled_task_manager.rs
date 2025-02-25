@@ -49,7 +49,7 @@ impl ScheduledTaskManager {
     /// ***DuplicateName***: if a scheduled task with the name already exists.
     /// 
     /// ***InvalidArgument***: if the specification is invalid.
-    pub async fn create_scheduled_task(&self, entity: &ManagedObjectReference, spec: &dyn crate::types::scheduled_task_spec_trait::ScheduledTaskSpecTrait) -> Result<ManagedObjectReference> {
+    pub async fn create_scheduled_task(&self, entity: &ManagedObjectReference, spec: &dyn crate::types::traits::ScheduledTaskSpecTrait) -> Result<ManagedObjectReference> {
         let input = CreateScheduledTaskRequestType {entity, spec, };
         let path = format!("/ScheduledTaskManager/{moId}/CreateScheduledTask", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -82,7 +82,7 @@ impl ScheduledTaskManager {
     /// ***DuplicateName***: if a scheduled task with the name already exists.
     /// 
     /// ***InvalidArgument***: if the specification is invalid.
-    pub async fn create_object_scheduled_task(&self, obj: &ManagedObjectReference, spec: &dyn crate::types::scheduled_task_spec_trait::ScheduledTaskSpecTrait) -> Result<ManagedObjectReference> {
+    pub async fn create_object_scheduled_task(&self, obj: &ManagedObjectReference, spec: &dyn crate::types::traits::ScheduledTaskSpecTrait) -> Result<ManagedObjectReference> {
         let input = CreateObjectScheduledTaskRequestType {obj, spec, };
         let path = format!("/ScheduledTaskManager/{moId}/CreateObjectScheduledTask", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -157,13 +157,13 @@ impl ScheduledTaskManager {
 #[serde(tag="_typeName")]
 struct CreateScheduledTaskRequestType<'a> {
     entity: &'a ManagedObjectReference,
-    spec: &'a dyn crate::types::scheduled_task_spec_trait::ScheduledTaskSpecTrait,
+    spec: &'a dyn crate::types::traits::ScheduledTaskSpecTrait,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct CreateObjectScheduledTaskRequestType<'a> {
     obj: &'a ManagedObjectReference,
-    spec: &'a dyn crate::types::scheduled_task_spec_trait::ScheduledTaskSpecTrait,
+    spec: &'a dyn crate::types::traits::ScheduledTaskSpecTrait,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
