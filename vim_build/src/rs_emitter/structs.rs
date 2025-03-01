@@ -7,13 +7,11 @@ use crate::vim_model::Model;
 use super::super::printer::Printer;
 
 use super::common::emit_description;
-//use super::deser::DeserializationGenerator;
 use super::names::*;
 use super::super::vim_model::*;
 use super::errors::{Result, Error};
 
 pub(crate) const ANY: &str = "Any";
-//pub(crate) const DATA_OBJECT: &str = "DataObject";
 
 pub struct TypesEmitter<'a> {
     vim_model: &'a Model,
@@ -29,15 +27,15 @@ impl<'a> TypesEmitter<'a> {
 
     pub fn emit_data_types(&mut self) -> Result<()> {
         self.emit_use_statements()?;
-        // self.emit_vim_object()?;
-        // self.emit_vimany()?;
         self.emit_structs()?;
 
         Ok(())
     }
     fn emit_use_statements(&mut self) -> Result<()> {
-        //self.printer.println("use super::enums::*;")?;
         self.printer.println("use super::vim_any::VimAny;")?;
+        self.printer.println("use serde::ser::SerializeStruct;")?;
+        self.printer.println("use serde::de;")?;
+        self.printer.println("use std::fmt::Formatter;")?;
         self.printer.newline()?;
         Ok(())
     }
@@ -49,8 +47,8 @@ impl<'a> TypesEmitter<'a> {
                 continue;
             }
             self.emit_struct_type(name, &struct_type)?;
-            // self.emit_trait_type(name, &struct_type)?;
-            // self.emit_inherited_traits(name)?;
+            self.emit_serialize(&struct_type)?;
+            self.emit_deserialize(&struct_type)?;
         }
         Ok(())
     }
@@ -59,7 +57,6 @@ impl<'a> TypesEmitter<'a> {
     pub(crate) fn emit_boxed_types(&mut self) -> Result<()> {
         self.printer.println("use super::vim_any::VimAny;")?;
         self.printer.println("use super::structs::*;")?;
-        //self.printer.println("use super::enums::*;")?;
         self.printer.newline()?;
         self.printer.println("#[derive(Debug, serde::Deserialize, serde::Serialize)]")?;
         self.printer.println("#[serde(tag = \"_typeName\", content = \"_value\")]")?;
@@ -91,18 +88,18 @@ impl<'a> TypesEmitter<'a> {
             emit_description(this.printer, doc_string)
         }?;
         let struct_name = to_type_name(name);
-        let discriminator = vim_type.discriminator_value.clone().unwrap_or(name.to_string());
+        //let discriminator = vim_type.discriminator_value.clone().unwrap_or(name.to_string());
         if name == "ManagedObjectReference" {
-            // Add Clone, PartialEq in addtion for ManagedObjectReference
-            self.printer.println("#[derive(Clone, Debug, PartialEq, serde::Deserialize, serde::Serialize)]")?;
+            // Add Clone, PartialEq in addition for ManagedObjectReference
+            self.printer.println("#[derive(Debug, Clone, PartialEq)]")?;
         } else {
-            self.printer.println("#[derive(Debug, serde::Deserialize, serde::Serialize)]")?;
+            self.printer.println("#[derive(Debug)]")?;
         }
-        if struct_name == discriminator {
-            self.printer.println(r#"#[serde(tag="_typeName")]"#)?;
-        } else {
-            self.printer.println(&format!(r#"#[serde(rename = "{discriminator}", tag = "_typeName")]"#))?;
-        }
+        // if struct_name == discriminator {
+        //     self.printer.println(r#"#[serde(tag="_typeName")]"#)?;
+        // } else {
+        //     self.printer.println(&format!(r#"#[serde(rename = "{discriminator}", tag = "_typeName")]"#))?;
+        // }
         self.printer.println(&format!("pub struct {struct_name} {{"))?;
         self.printer.indent();
         self.emit_struct_all_fields(vim_type)?;
@@ -110,13 +107,13 @@ impl<'a> TypesEmitter<'a> {
         self.printer.println("}")?;
         Ok(())
     }
-    
+
     fn emit_struct_all_fields(&mut self, vim_type: &Struct) -> Result<()> {
         if let Some(parent) = vim_type.parent.as_ref() {
             if parent != "Any" { // WE do not need to emit fields for the Any type
                 let parent_model_ref = self.vim_model.structs.get(parent).ok_or_else(|| Error::TypeNotFound(parent.clone()))?.borrow();
                 let parent_model: &Struct = parent_model_ref.borrow();
-                self.emit_struct_all_fields( parent_model)?;
+                self.emit_struct_all_fields(parent_model)?;
             }
         }
         self.emit_struct_fields(vim_type)
@@ -129,7 +126,7 @@ impl<'a> TypesEmitter<'a> {
         }
         Ok(())
     }
-    
+
     fn emit_struct_field(&mut self, field: &Field) -> Result<()> {
         {
             let this = &mut *self;
@@ -138,138 +135,277 @@ impl<'a> TypesEmitter<'a> {
         }?;
         let field_name = to_field_name(&field.name);
         let field_type = self.tdf.field_type(field)?;
-        if field.optional {
-            self.printer.println(&format!("#[serde(default, skip_serializing_if = \"Option::is_none\")]"))?;
-        }
-        if field_name != field.name {
-            self.printer.println(&format!(r#"#[serde(rename = "{}")]"#, field.name))?;
-        }
-        if field.vim_type == DataType::Binary {
-            if field.optional {
-                self.printer.println(r#"#[serde(with = "crate::core::base64::option")]"#)?;
-            } else {
-                self.printer.println(r#"#[serde(with = "crate::core::base64::vec")]"#)?;
-            }
-        }
+        // if field.optional {
+        //     self.printer.println(&format!("#[serde(default, skip_serializing_if = \"Option::is_none\")]"))?;
+        // }
+        // if field_name != field.name {
+        //     self.printer.println(&format!(r#"#[serde(rename = "{}")]"#, field.name))?;
+        // }
+        // if field.vim_type == DataType::Binary {
+        //     if field.optional {
+        //         self.printer.println(r#"#[serde(with = "crate::core::base64::option")]"#)?;
+        //     } else {
+        //         self.printer.println(r#"#[serde(with = "crate::core::base64::vec")]"#)?;
+        //     }
+        // }
         self.printer.println(&format!("pub {field_name}: {field_type},"))?;
         Ok(())
     }
-    
-    // To allow for polymorphic fields every structure type that has descendants will have a trait
-    // alternative that will be passed as dynamic reference. This trait will be implemented for
-    // all of the structure type descendants. The trait will provide access to the struct type fields
-    // and will extend the VimObjectTrait as to allow up and down casts.
-//     fn emit_trait_type(&mut self, name: &str, vim_type: &Struct) -> Result<()> {
-//         if !vim_type.has_children() { return Ok(()); }
-//         if ANY == name { return Ok(()); } // Skip the Any type
-//         let struct_name = to_type_name(name);
-//         let Some(ref parent_trait) = vim_type.parent else {
-//             return Ok(()); // or error?
-//         };
-//         let base_trait = to_type_name(if ANY == parent_trait {
-//             "VimObject"
-//         } else {
-//             parent_trait
-//         });
-//         {
-//             let this = &mut *self;
-//             let doc_string: &Option<String> = &vim_type.description;
-//             emit_description(this.printer, doc_string)
-//         }?;
-//         self.printer.println(&format!("pub trait {}Trait : {}Trait {{", struct_name, base_trait))?;
-//         self.printer.indent();
-//         if DATA_OBJECT == name {
-//             self.printer.println("/// Retrieve the serialization type name")?;
-//             self.printer.println("fn type_name_(&self) -> &'static str;")?;
-//         }
-//         for (prop_name, property) in &vim_type.fields {
-//             self.emit_trait_field(prop_name, property)?;
-//         }
-//         self.printer.dedent();
-//         self.printer.println("}")?;
-//         // self.emit_any_into_trait(name)?;
-// //         self.printer.println(&format!(r#"impl<'s> serde::Serialize for dyn {struct_name}Trait + 's {{
-// //     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-// //     where
-// //         S: serde::Serializer,
-// //     {{
-// //         self.as_vim_object_ref().serialize(serializer)
-// //     }}
-// // }}"#))?;
-// //         self.emit_trait_deserialization(name)?;
-//         Ok(())
-//     }
-//     
-//     fn emit_trait_field(&mut self, prop_name: &str, property: &Field) -> Result<()> {
-//         let this = &mut *self;
-//         let doc_string: &Option<String> = &property.description;
-//         emit_description(this.printer, doc_string)?;
-//         let field_name = getter_name(&prop_name);
-//         let field_type = self.getter_return_type(property)?;
-//         self.printer.println(&format!("fn {field_name}(&self) -> {field_type};"))?;
-//         Ok(())
-//     }
-// 
-//     fn emit_any_into_trait(&mut self, name: &str) -> Result<()> {
-//         let fn_name = any_into_name(name);
-//         let type_name = to_type_name(name);
-//         self.printer.println(&format!(r#"fn {fn_name}(from: std::any::TypeId) -> Option<&'static AnyInto<dyn {type_name}Trait>> {{
-//     static TYPE_MAP: OnceLock<std::collections::HashMap<std::any::TypeId, AnyInto<dyn {type_name}Trait>>> = OnceLock::new();
-//     
-//     TYPE_MAP.get_or_init(|| {{
-//         let mut map: std::collections::HashMap<std::any::TypeId, AnyInto<dyn {type_name}Trait>> = std::collections::HashMap::new();"#))?;
-//         // TODO Populate the map with the AnyInto instances by walking the struct hierarchy and adding all child types
-//         self.emit_any_into_map_entries(name)?;
-//         self.printer.println(r#"map
-//     }).get(&from)
-// }"#)?;
-//         self.printer.println(&format!(r#"impl<From: AsAny + ?Sized + 'static> CastFrom<From> for dyn {type_name}Trait {{
-//     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {{
-//         let into = {fn_name}(from.type_id())?;
-//         (into.to_ref)(from.as_any_ref())
-//     }}
-// 
-//     fn from_box(from: Box<From>) -> Result<Box<Self>, Box<dyn any::Any + 'static>> {{
-//         let Some(into) = {fn_name}(from.as_ref().type_id()) else {{
-//             return Err(from.as_any_box());
-//         }};
-//         (into.to_box)(from.as_any_box())
-//     }}
-// }}"#))?;
-//         Ok(())
-//     }
-// 
-//     fn emit_any_into_map_entries(&mut self, name: &str) -> Result<()> {
-//         let type_name = to_type_name(name);
-//         self.printer.println(&format!(r#"        map.insert(std::any::TypeId::of::<{type_name}>(), AnyInto {{
-//             to_ref: |value| {{ Some(value.downcast_ref::<{type_name}>()?) }},
-//             to_box: |value| {{ Ok(value.downcast::<{type_name}>()?) }},
-//         }});"#))?;
-// 
-//         let Some(struct_type) = self.vim_model.structs.get(name) else {
-//             return Err(Error::TypeNotFound(name.to_string()));
-//         };
-//         for child_name in &struct_type.borrow().children {
-//             self.emit_any_into_map_entries(child_name)?;
-//         };
-//         Ok(())
-//     }
-    
-    // fn getter_return_type(&mut self, property: &Field) -> Result<String> {
-    //     let mut field_type = self.tdf.field_type(property)?;
-    //     if get_by_ref(&property.vim_type) {
-    //         field_type = format!("&{field_type}");
+
+    // Emit serde::Serialize for the struct. It should look roughly as follows. In essence iterate
+    // over the fields and serialize each field. If the field is optional then skip serializing if
+    // the field is None.
+    // impl serde::Serialize for Cat {
+    //     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    //     where
+    //         S: serde::Serializer,
+    //     {
+    //         let mut state = serializer.serialize_struct("Cat", 4)?;
+    //         state.serialize_field("_typeName", "Cat")?;
+    //         state.serialize_field("name", &self.name)?;
+    //         state.serialize_field("tricolor", &self.tricolor)?;
+    //         if let Some(friend) = &self.friend {
+    //             state.serialize_field("friend", friend)?;
+    //         } else {
+    //             state.skip_field("friend")?;
+    //         };
+    //         state.end()
     //     }
-    //     if "&String" == field_type {
-    //         field_type = "&str".to_string();
-    //     }
-    //     Ok(field_type)
     // }
-    
+    fn emit_serialize(&mut self, vim_type: &Struct) -> Result<()> {
+        let struct_name = to_type_name(&vim_type.name);
+        let mut field_count = 1;
+        let inheritance_chain = self.vim_model.inheritance_chain(&vim_type.name)?;
+        for struct_type in &inheritance_chain {
+            field_count = field_count + (*struct_type).borrow().fields.len();
+        }
+        self.printer.println(&format!("impl serde::Serialize for {struct_name} {{"))?;
+        self.printer.indent();
+        self.printer.println("fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>")?;
+        self.printer.println("where")?;
+        self.printer.indent();
+        self.printer.println("S: serde::Serializer,")?;
+        self.printer.dedent();
+        self.printer.println("{")?;
+        self.printer.indent();
+        self.printer.println(&format!("let mut state = serializer.serialize_struct(\"{struct_name}\", {field_count})?;"))?;
+        self.printer.println(&format!("state.serialize_field(\"_typeName\", \"{struct_name}\")?;"))?;
+        for struct_type in inheritance_chain {
+            for (_, field) in &struct_type.borrow().fields {
+                let field_name = to_field_name(&field.name);
+                let serialization_name = &field.name;
+                if !field.optional {
+                    let field_value = if field.vim_type == DataType::Binary {
+                        format!("&crate::core::helpers::SerializeBinary {{ value: &self.{field_name} }}")
+                    } else {
+                        format!("&self.{field_name}")
+                    };
+                    self.printer.println(&format!("state.serialize_field(\"{serialization_name}\", {field_value})?;"))?;
+                } else {
+                    let field_value = if field.vim_type == DataType::Binary {
+                        "&crate::core::helpers::SerializeBinary { value: field_value }"
+                    } else {
+                        "field_value"
+                    };
+                    self.printer.println(&format!("if let Some(field_value) = &self.{field_name} {{"))?;
+                    self.printer.indent();
+                    self.printer.println(&format!("state.serialize_field(\"{serialization_name}\", {field_value})?;"))?;
+                    self.printer.dedent();
+                    self.printer.println("} else {")?;
+                    self.printer.indent();
+                    self.printer.println(&format!("state.skip_field(\"{serialization_name}\")?;"))?;
+                    self.printer.dedent();
+                    self.printer.println("}")?;
+                }
+            }
+        }
+        self.printer.println("state.end()")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        Ok(())
+    }
 
+    // Emit serde::Deserialize for the struct. In essence:
+    // - Provide Deserialize for the struct e.g `impl<'de> de::Deserialize<'de> for Cat`
+    // - Provide Visitor for the struct like `__CatVisitor` with visit_map method
+    // - Declare Option placeholder for each field using sequential names like `field0`, `field1`
+    // - Deserialize the fields of the struct using a match statement in a loop
+    // - Move the deserialized fields into new struct instance while checking for missing required fields
+    // - Return the new struct instance
+    // Use the DeserializeBinary helper for binary fields
+    // Example:
+    // impl<'de> de::Deserialize<'de> for Cat {
+    //     fn deserialize<D: de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+    //         deserializer.deserialize_map(__CatVisitor)
+    //     }
+    // }
+    // 
+    // struct __CatVisitor;
+    // 
+    // impl<'de> de::Visitor<'de> for __CatVisitor {
+    //     type Value = Cat;
+    // 
+    //     fn expecting(&self, formatter: &mut Formatter) -> std::fmt::Result {
+    //         formatter.write_str("A Cat!")
+    //     }
+    // 
+    //     fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
+    //     where
+    //         A: MapAccess<'de>,
+    //     {
+    //         let mut field1: Option<String> = None;
+    //         let mut field2: Option<bool> = None;
+    //         let mut field3: Option<Box<dyn AnimalTrait>> = None;
+    //         let mut field4: Option<Vec<u8>> = None;
+    //         while let Some(key) = map.next_key::<String>()? {
+    //             match key.as_str() {
+    //                 "_typeName" => {
+    //                     let discriminator: String = map.next_value()?;
+    //                     if discriminator != "Cat" {
+    //                         return Err(de::Error::custom(format!(
+    //                             "Expected Cat, got {}",
+    //                             discriminator
+    //                         )));
+    //                     }
+    //                 }
+    //                 "name" => {
+    //                     field1 = Some(map.next_value()?);
+    //                 }
+    //                 "tricolor" => {
+    //                     field2 = Some(map.next_value()?);
+    //                 }
+    //                 "friend" => {
+    //                     field3 = Some(map.next_value()?);
+    //                 }
+    //                 "data" => {
+    //                     field4 = Some(map.next_value::<DeserializeBinary>()?.value);
+    //                 }
+    //                 _ => {
+    //                     let _: serde_json::Value = map.next_value()?;
+    //                 }
+    //             }
+    //         }
+    //         Ok(Cat {
+    //             name: field1.ok_or(de::Error::missing_field("name"))?,
+    //             tricolor: field2.ok_or(de::Error::missing_field("tricolor"))?,
+    //             friend: field3,
+    //             data: field4,
+    //         })
+    //     }
+    // }
+    fn emit_deserialize(&mut self, vim_type: &Struct) -> Result<()> {
+        let struct_name = to_type_name(&vim_type.name);
+        let type_name = vim_type.discriminator_value.clone().unwrap_or(vim_type.name.clone());
+        let inheritance_chain = self.vim_model.inheritance_chain(&vim_type.name)?;
+
+        self.printer.println(&format!("impl<'de> de::Deserialize<'de> for {struct_name} {{"))?;
+        self.printer.indent();
+        self.printer.println(&format!("fn deserialize<D: de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {{"))?;
+        self.printer.indent();
+        self.printer.println(&format!("deserializer.deserialize_map(__{struct_name}Visitor)"))?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.newline()?;
+        self.printer.println(&format!("struct __{struct_name}Visitor;"))?;
+        self.printer.newline()?;
+        self.printer.println(&format!("impl<'de> de::Visitor<'de> for __{struct_name}Visitor {{"))?;
+        self.printer.indent();
+        self.printer.println(&format!("type Value = {struct_name};", struct_name = struct_name))?;
+        self.printer.newline()?;
+        self.printer.println("fn expecting(&self, formatter: &mut Formatter) -> std::fmt::Result {")?;
+        self.printer.indent();
+        self.printer.println(&format!(r#"formatter.write_str("A {type_name} JSON.")"#))?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.newline()?;
+        self.printer.println("fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>")?;
+        self.printer.println("where")?;
+        self.printer.indent();
+        self.printer.println("A: de::MapAccess<'de>,")?;
+        self.printer.dedent();
+        self.printer.println("{")?;
+        self.printer.indent();
+        let mut field_count = 1;
+        for struct_type in &inheritance_chain {
+            for (_, field) in &(*struct_type).borrow().fields {
+                let field_name = to_field_name(&field.name);
+                let field_type = self.tdf.field_type(field)?;
+                let field_type = if !field.optional {
+                    format!("Option<{}>", field_type)
+                } else {
+                    field_type
+                };
+                self.printer.println(&format!("let mut field{field_count}: {field_type} = None; // {field_name}"))?;
+                field_count += 1;
+            }
+        }
+        self.printer.newline()?;
+        self.printer.println("while let Some(key) = map.next_key::<String>()? {")?;
+        self.printer.indent();
+        self.printer.println("match key.as_str() {")?;
+        self.printer.indent();
+        self.printer.println(r#""_typeName" => {"#)?;
+        self.printer.indent();
+        self.printer.println("let discriminator: String = map.next_value()?;")?;
+        self.printer.println(&format!(r#"if discriminator != "{type_name}" {{"#))?;
+        self.printer.indent();
+        self.printer.println(&format!(r#"return Err(de::Error::custom(format!("Expected {type_name}, got {{discriminator}}")));"#))?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.dedent();
+        self.printer.println("},")?;
+        field_count = 1;
+        for struct_type in &inheritance_chain {
+            for (_, field) in &(*struct_type).borrow().fields {
+                let ser_name = &field.name;
+                self.printer.println(&format!(r#""{ser_name}" => {{"#))?;
+                self.printer.indent();
+                if field.vim_type == DataType::Binary {
+                    self.printer.println(&format!("field{field_count} = Some(map.next_value::<crate::core::helpers::DeserializeBinary>()?.value);"))?;
+                } else {
+                    self.printer.println(&format!("field{field_count} = Some(map.next_value()?);"))?;
+                }
+                self.printer.dedent();
+                self.printer.println("},")?;
+                field_count += 1;
+            }
+        }
+        self.printer.println(r#"_ => { let _: serde_json::Value = map.next_value()?; }"#)?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.newline()?;
+        self.printer.println(&format!("Ok({struct_name} {{"))?;
+        self.printer.indent();
+        field_count = 1;
+        for struct_type in &inheritance_chain {
+            for (_, field) in &(*struct_type).borrow().fields {
+                let field_name = to_field_name(&field.name);
+                let field_value = if !field.optional {
+                    format!("field{field_count}.ok_or(de::Error::missing_field(\"{field_name}\"))?")
+                } else {
+                    format!("field{field_count}")
+                };
+                self.printer.println(&format!("{field_name}: {field_value},"))?;
+                field_count += 1;
+            }
+        }
+        self.printer.dedent();
+        self.printer.println("})")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.newline()?;
+
+        Ok(())
+    }
 }
-
-
 
 
 /// Checks if type is to be returned as value copy or reference. Integer and float types are good to

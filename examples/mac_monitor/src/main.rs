@@ -185,7 +185,7 @@ impl VmChangeDetector {
         Ok(VmChangeDetector {
             listener,
             client: client.clone(),
-            property_collector: property_collector,
+            property_collector,
             view: view_ref.value,
             filter: filter.value,
             version: "".to_string(),
@@ -256,7 +256,7 @@ fn process_change(&mut self, change: &structs::ObjectUpdate) {
     }
 }
 
-fn create_vm_change<'a>(change_set: &'a Vec<structs::PropertyChange>) -> VmChange {
+fn create_vm_change(change_set: &Vec<structs::PropertyChange>) -> VmChange {
     let mut vm_change = VmChange {
         vm_name: None,
         vnic: None,
@@ -391,7 +391,7 @@ async fn main() -> Result<()> {
     let listener = Box::new(VmChangePrinter {});
     let listener = Box::new(VMMacCache::new(listener));
     let mut detector = VmChangeDetector::new(listener, content, vim_client).await?;
-    detector.monitor(600).await?;
+    detector.monitor(30).await?;
 
     Ok(())
 }

@@ -1,0 +1,3 @@
+[workspace]
+members = ["eventster", "mac_monitor", "vim_tests"]
+resolver = "2"

@@ -300,7 +300,7 @@ pub struct Model {
 
 impl Model {
 
-    /// Return an iterator that starts with a parent node and iterates over all of its subtree.
+    /// Return an iterator that starts with a parent structure node and iterates over all of its subtree.
     pub fn children(&self, parent: &String) -> Result<StructChildrenIntoIterator> {
         let parent_index = self.structs.get_index_of(parent).ok_or(super::Error::InvalidReference(parent.clone()))?;
         let last_child = self.structs.get(parent).ok_or(super::Error::InvalidReference(parent.clone()))?.borrow().last_child.clone();
@@ -310,6 +310,24 @@ impl Model {
             last_index: last_child_index,
             model: self,
         })
+    }
+    
+
+    pub fn inheritance_chain(&self, struct_name: &String) -> Result<Vec<&RefCell<Struct>>> {
+        let mut inheritance_chain = vec![];
+        let struct_type = self.structs.get(struct_name).ok_or(super::Error::InvalidReference(struct_name.clone()))?;
+        inheritance_chain.push(struct_type);
+        let mut parent = struct_type.borrow().parent.clone();
+        while let Some(parent_name) = parent {
+            if parent_name == "Any" {
+                break;
+            }
+            let parent_type = self.structs.get(&parent_name).ok_or(super::Error::InvalidReference(parent_name.clone()))?;
+            inheritance_chain.push(parent_type);
+            parent = parent_type.borrow().parent.clone();
+        }
+        inheritance_chain.reverse();
+        Ok(inheritance_chain)
     }
 
     pub fn is_struct_type(&self, vim_type: &DataType) -> bool {

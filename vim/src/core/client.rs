@@ -10,6 +10,7 @@ use std::ffi::OsStr;
 
 const LIB_NAME: &str = env!("CARGO_PKG_NAME");
 const LIB_VERSION: &str = env!("CARGO_PKG_VERSION");
+// See build.rs for the RUSTC_VERSION
 const RUSTC_VERSION: &str = env!("RUSTC_VERSION");
 
 

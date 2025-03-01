@@ -1,4 +1,3 @@
-pub(crate) mod base64;
-
 pub mod client;
+pub(crate) mod helpers;
 
