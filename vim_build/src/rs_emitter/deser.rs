@@ -134,7 +134,7 @@ impl<'de> de::Visitor<'de> for VimAnyVisitor {
                 };
                 if key == "_value" {
                     let v: &serde_json::value::RawValue = map.next_value()?;
-                    return dsfunc(v).map_err(de::Error::custom);
+                    return dsfunc(v).map_err(de::Error::custom).map(|x| VimAny::Value(x));
                 }
                 return Err(de::Error::custom(format!("Expected key '_value' and found {}", key)));
             }
@@ -157,7 +157,7 @@ impl<'de> de::Visitor<'de> for VimAnyVisitor {
                 .get(0)
                 .ok_or_else(|| de::Error::missing_field("_value"))?
                 .1;
-            return dsfunc(v).map_err(de::Error::custom);
+            return dsfunc(v).map_err(de::Error::custom).map(|x| VimAny::Value(x));
         }
         Err(de::Error::custom("Invalid format for boxed value element."))
     }
@@ -169,7 +169,7 @@ impl<'de> de::Visitor<'de> for VimAnyVisitor {
     fn render_match_tree(&mut self, group_data: Vec<GroupInfo>) -> Result<()> {
         match self.deserialize_renderer {
             ItemRenderer::Object => self.printer.println("fn get_object_deserializer<'de, A: de::MapAccess<'de>>(type_name: &str) -> Option<fn(de::value::MapAccessDeserializer<A>) -> Result<VimAny, A::Error>> {")?,
-            ItemRenderer::Value => self.printer.println("fn get_value_deserializer(type_name: &str) -> Option<fn(&serde_json::value::RawValue) -> Result<VimAny, serde_json::Error>> {")?,
+            ItemRenderer::Value => self.printer.println("pub(crate) fn get_value_deserializer(type_name: &str) -> Option<fn(&serde_json::value::RawValue) -> Result<ValueElements, serde_json::Error>> {")?,
             
         }
         self.printer.indent();
@@ -204,7 +204,7 @@ impl<'de> de::Visitor<'de> for VimAnyVisitor {
             };
             match self.deserialize_renderer {
                 ItemRenderer::Object => self.printer.println(&format!("fn get_object_deserializer_{}<'de, A: de::MapAccess<'de>>(type_name: &str) -> Option<fn(de::value::MapAccessDeserializer<A>) -> Result<VimAny, A::Error>> {{", group.length))?,
-                ItemRenderer::Value => self.printer.println(&format!("fn get_value_deserializer_{}(type_name: &str) -> Option<fn(&serde_json::value::RawValue) -> Result<VimAny, serde_json::Error>> {{", group.length))?,
+                ItemRenderer::Value => self.printer.println(&format!("fn get_value_deserializer_{}(type_name: &str) -> Option<fn(&serde_json::value::RawValue) -> Result<ValueElements, serde_json::Error>> {{", group.length))?,
                 
             }
             self.printer.indent();
@@ -231,7 +231,7 @@ impl<'de> de::Visitor<'de> for VimAnyVisitor {
         self.printer.println("Some(|raw| {")?;
         self.printer.indent();
         self.printer.println(&format!("let value: {} = serde_json::from_str(raw.get())?;", value_type))?;
-        self.printer.println(&format!("Ok(VimAny::Value(ValueElements::{}(value)))", enum_name))?;
+        self.printer.println(&format!("Ok(ValueElements::{}(value))", enum_name))?;
         self.printer.dedent();
         self.printer.println("})")?;
         Ok(())
