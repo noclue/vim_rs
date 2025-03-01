@@ -34,7 +34,6 @@ impl<'a> BoxedTypesEmitter<'a> {
         self.printer.println("use super::structs::*;")?;
         self.printer.newline()?;
         self.printer.println("#[derive(Debug)]")?;
-        //self.printer.println("#[serde(tag = \"_typeName\", content = \"_value\")]")?;
         self.printer.println("pub enum ValueElements {")?;
         self.printer.indent();
         for (_, box_type) in &self.vim_model.any_value_types {
@@ -43,11 +42,7 @@ impl<'a> BoxedTypesEmitter<'a> {
                 let doc_string: &Option<String> = &box_type.description;
                 emit_description(this.printer, doc_string)
             }?;
-            //let name = box_type.discriminator_value.as_ref().unwrap_or(&box_type.name);
             let type_name = to_type_name(&box_type.name);
-            // if &type_name != name {
-            //     self.printer.println(&format!("#[serde(rename = \"{}\")]", name))?;
-            // }
             let rust_type = self.tdf.to_rust_field_type(&box_type.property_type)?;
             self.printer.println(&format!("{type_name}({rust_type}),"))?;
         }
