@@ -53,34 +53,6 @@ impl<'a> TypesEmitter<'a> {
         Ok(())
     }
 
-    /// Emit boxed value types from Vim like ArrayOfInt, ArrayOfString, Boolean etc.
-    pub(crate) fn emit_boxed_types(&mut self) -> Result<()> {
-        self.printer.println("use super::vim_any::VimAny;")?;
-        self.printer.println("use super::structs::*;")?;
-        self.printer.newline()?;
-        self.printer.println("#[derive(Debug, serde::Deserialize, serde::Serialize)]")?;
-        self.printer.println("#[serde(tag = \"_typeName\", content = \"_value\")]")?;
-        self.printer.println("pub enum ValueElements {")?;
-        self.printer.indent();
-        for (_, box_type) in &self.vim_model.any_value_types {
-            {
-                let this = &mut *self;
-                let doc_string: &Option<String> = &box_type.description;
-                emit_description(this.printer, doc_string)
-            }?;
-            let name = box_type.discriminator_value.as_ref().unwrap_or(&box_type.name);
-            let type_name = to_type_name(&box_type.name);
-            if &type_name != name {
-                self.printer.println(&format!("#[serde(rename = \"{}\")]", name))?;
-            }
-            let rust_type = self.tdf.to_rust_field_type(&box_type.property_type)?;
-            self.printer.println(&format!("{type_name}({rust_type}),"))?;
-        }
-        self.printer.dedent();
-        self.printer.println("}")?;
-        Ok(())
-    }
-
     fn emit_struct_type(&mut self, name: &str, vim_type: &Struct) -> Result<()> {
         {
             let this = &mut *self;

@@ -10,6 +10,7 @@ pub mod ser;
 pub mod struct_enum;
 pub mod vim_object;
 pub(crate) mod trait_emitter;
+pub(crate) mod boxed_types;
 
 pub use structs::*;
 pub use names::*;

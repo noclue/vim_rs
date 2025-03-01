@@ -1,7 +1,8 @@
+use serde::ser::SerializeStruct;
 use super::vim_any::VimAny;
 use super::structs::*;
 
-#[derive(Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Debug, serde::Deserialize)]
 #[serde(tag = "_typeName", content = "_value")]
 pub enum ValueElements {
     /// A boxed array of *Any*. To be used in *Any* placeholders.
@@ -6591,4 +6592,12299 @@ pub enum ValueElements {
     ObjectUpdateKind(super::enums::ObjectUpdateKindEnum),
     /// A boxed array of *ObjectUpdateKind_enum*. To be used in *Any* placeholders.
     ArrayOfObjectUpdateKind(Vec<super::enums::ObjectUpdateKindEnum>),
+}
+impl serde::Serialize for ValueElements {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+    S: serde::Serializer,
+    {
+        let mut state = serializer.serialize_struct("ValueElements", 2)?;
+        match self {
+            ValueElements::ArrayOfAnyType(value) => {
+                state.serialize_field("_typeName", "ArrayOfAnyType")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfManagedObjectReference(value) => {
+                state.serialize_field("_typeName", "ArrayOfManagedObjectReference")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::PrimitiveBoolean(value) => {
+                state.serialize_field("_typeName", "boolean")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfBoolean(value) => {
+                state.serialize_field("_typeName", "ArrayOfBoolean")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::PrimitiveByte(value) => {
+                state.serialize_field("_typeName", "byte")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfByte(value) => {
+                state.serialize_field("_typeName", "ArrayOfByte")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::PrimitiveShort(value) => {
+                state.serialize_field("_typeName", "short")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfShort(value) => {
+                state.serialize_field("_typeName", "ArrayOfShort")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::PrimitiveInt(value) => {
+                state.serialize_field("_typeName", "int")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInt(value) => {
+                state.serialize_field("_typeName", "ArrayOfInt")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::PrimitiveLong(value) => {
+                state.serialize_field("_typeName", "long")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfLong(value) => {
+                state.serialize_field("_typeName", "ArrayOfLong")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::PrimitiveFloat(value) => {
+                state.serialize_field("_typeName", "float")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFloat(value) => {
+                state.serialize_field("_typeName", "ArrayOfFloat")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::PrimitiveDouble(value) => {
+                state.serialize_field("_typeName", "double")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDouble(value) => {
+                state.serialize_field("_typeName", "ArrayOfDouble")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::PrimitiveString(value) => {
+                state.serialize_field("_typeName", "string")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfString(value) => {
+                state.serialize_field("_typeName", "ArrayOfString")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::PrimitiveDateTime(value) => {
+                state.serialize_field("_typeName", "dateTime")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDateTime(value) => {
+                state.serialize_field("_typeName", "ArrayOfDateTime")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::PrimitiveUri(value) => {
+                state.serialize_field("_typeName", "anyURI")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfUri(value) => {
+                state.serialize_field("_typeName", "ArrayOfAnyURI")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::PrimitiveBinary(value) => {
+                state.serialize_field("_typeName", "base64Binary")?;
+                state.serialize_field("_value", &crate::core::helpers::SerializeBinary { value: value })?;
+            },
+            ValueElements::ArrayOfBinary(value) => {
+                state.serialize_field("_typeName", "ArrayOfBase64Binary")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::PrimitiveTypeName(value) => {
+                state.serialize_field("_typeName", "TypeName")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfTypeName(value) => {
+                state.serialize_field("_typeName", "ArrayOfTypeName")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::PrimitivePropPath(value) => {
+                state.serialize_field("_typeName", "PropertyPath")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPropPath(value) => {
+                state.serialize_field("_typeName", "ArrayOfPropertyPath")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::PrimitiveMethodName(value) => {
+                state.serialize_field("_typeName", "MethodName")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfMethodName(value) => {
+                state.serialize_field("_typeName", "ArrayOfMethodName")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAboutInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfAboutInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAuthorizationDescription(value) => {
+                state.serialize_field("_typeName", "ArrayOfAuthorizationDescription")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfEntityPrivilege(value) => {
+                state.serialize_field("_typeName", "ArrayOfEntityPrivilege")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPermission(value) => {
+                state.serialize_field("_typeName", "ArrayOfPermission")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAuthorizationPrivilege(value) => {
+                state.serialize_field("_typeName", "ArrayOfAuthorizationPrivilege")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPrivilegeAvailability(value) => {
+                state.serialize_field("_typeName", "ArrayOfPrivilegeAvailability")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAuthorizationRole(value) => {
+                state.serialize_field("_typeName", "ArrayOfAuthorizationRole")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfUserPrivilegeResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfUserPrivilegeResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfBatchResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfBatchResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfBoolPolicy(value) => {
+                state.serialize_field("_typeName", "ArrayOfBoolPolicy")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCapability(value) => {
+                state.serialize_field("_typeName", "ArrayOfCapability")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterComputeResourceClusterConfigResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterComputeResourceClusterConfigResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterComputeResourceDvsConfigurationValidation(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterComputeResourceDVSConfigurationValidation")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterComputeResourceDvsSetting(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterComputeResourceDVSSetting")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterComputeResourceDvsSettingDvPortgroupToServiceMapping(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterComputeResourceDVSSettingDVPortgroupToServiceMapping")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterComputeResourceDvsProfile(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterComputeResourceDvsProfile")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterComputeResourceDvsProfileDvPortgroupSpecToServiceMapping(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterComputeResourceDvsProfileDVPortgroupSpecToServiceMapping")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterComputeResourceHciConfigInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterComputeResourceHCIConfigInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterComputeResourceHciConfigSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterComputeResourceHCIConfigSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterComputeResourceHostConfigurationInput(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterComputeResourceHostConfigurationInput")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterComputeResourceHostConfigurationProfile(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterComputeResourceHostConfigurationProfile")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterComputeResourceHostConfigurationValidation(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterComputeResourceHostConfigurationValidation")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterComputeResourceHostVmkNicInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterComputeResourceHostVmkNicInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterComputeResourceSummary(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterComputeResourceSummary")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterComputeResourceVcProfile(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterComputeResourceVCProfile")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterComputeResourceValidationResultBase(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterComputeResourceValidationResultBase")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterComputeResourceVcsSlots(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterComputeResourceVcsSlots")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfComputeResourceConfigInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfComputeResourceConfigInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfComputeResourceConfigSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfComputeResourceConfigSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfComputeResourceHostSpbmLicenseInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfComputeResourceHostSPBMLicenseInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfComputeResourceSummary(value) => {
+                state.serialize_field("_typeName", "ArrayOfComputeResourceSummary")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCustomFieldDef(value) => {
+                state.serialize_field("_typeName", "ArrayOfCustomFieldDef")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCustomFieldStringValue(value) => {
+                state.serialize_field("_typeName", "ArrayOfCustomFieldStringValue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCustomFieldValue(value) => {
+                state.serialize_field("_typeName", "ArrayOfCustomFieldValue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCustomizationSpecInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfCustomizationSpecInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCustomizationSpecItem(value) => {
+                state.serialize_field("_typeName", "ArrayOfCustomizationSpecItem")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDatacenterBasicConnectInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfDatacenterBasicConnectInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDatacenterConfigInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfDatacenterConfigInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDatacenterConfigSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfDatacenterConfigSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDatastoreCapability(value) => {
+                state.serialize_field("_typeName", "ArrayOfDatastoreCapability")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDatastoreHostMount(value) => {
+                state.serialize_field("_typeName", "ArrayOfDatastoreHostMount")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDatastoreInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfDatastoreInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDatastoreMountPathDatastorePair(value) => {
+                state.serialize_field("_typeName", "ArrayOfDatastoreMountPathDatastorePair")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDatastoreSummary(value) => {
+                state.serialize_field("_typeName", "ArrayOfDatastoreSummary")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDatastoreVVolContainerFailoverPair(value) => {
+                state.serialize_field("_typeName", "ArrayOfDatastoreVVolContainerFailoverPair")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDatastoreNamespaceManagerDirectoryInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfDatastoreNamespaceManagerDirectoryInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDescription(value) => {
+                state.serialize_field("_typeName", "ArrayOfDescription")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDesiredSoftwareSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfDesiredSoftwareSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDesiredSoftwareSpecBaseImageSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfDesiredSoftwareSpecBaseImageSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDesiredSoftwareSpecComponentSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfDesiredSoftwareSpecComponentSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDesiredSoftwareSpecVendorAddOnSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfDesiredSoftwareSpecVendorAddOnSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDiagnosticManagerAuditRecordResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfDiagnosticManagerAuditRecordResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDiagnosticManagerBundleInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfDiagnosticManagerBundleInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDiagnosticManagerLogDescriptor(value) => {
+                state.serialize_field("_typeName", "ArrayOfDiagnosticManagerLogDescriptor")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDiagnosticManagerLogHeader(value) => {
+                state.serialize_field("_typeName", "ArrayOfDiagnosticManagerLogHeader")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsBackupRestoreCapability(value) => {
+                state.serialize_field("_typeName", "ArrayOfDVSBackupRestoreCapability")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsCapability(value) => {
+                state.serialize_field("_typeName", "ArrayOfDVSCapability")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsConfigInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfDVSConfigInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsConfigSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfDVSConfigSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsContactInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfDVSContactInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsCreateSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfDVSCreateSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsFeatureCapability(value) => {
+                state.serialize_field("_typeName", "ArrayOfDVSFeatureCapability")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsHealthCheckConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfDVSHealthCheckConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsHealthCheckCapability(value) => {
+                state.serialize_field("_typeName", "ArrayOfDVSHealthCheckCapability")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsHostInfrastructureTrafficResource(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsHostInfrastructureTrafficResource")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsHostInfrastructureTrafficResourceAllocation(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsHostInfrastructureTrafficResourceAllocation")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsNameArrayUplinkPortPolicy(value) => {
+                state.serialize_field("_typeName", "ArrayOfDVSNameArrayUplinkPortPolicy")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsNetworkResourceManagementCapability(value) => {
+                state.serialize_field("_typeName", "ArrayOfDVSNetworkResourceManagementCapability")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsResourceRuntimeInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsResourceRuntimeInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsRollbackCapability(value) => {
+                state.serialize_field("_typeName", "ArrayOfDVSRollbackCapability")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsRuntimeInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfDVSRuntimeInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsSummary(value) => {
+                state.serialize_field("_typeName", "ArrayOfDVSSummary")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsPolicy(value) => {
+                state.serialize_field("_typeName", "ArrayOfDVSPolicy")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsUplinkPortPolicy(value) => {
+                state.serialize_field("_typeName", "ArrayOfDVSUplinkPortPolicy")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfEvcMode(value) => {
+                state.serialize_field("_typeName", "ArrayOfEVCMode")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfElementDescription(value) => {
+                state.serialize_field("_typeName", "ArrayOfElementDescription")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfEnumDescription(value) => {
+                state.serialize_field("_typeName", "ArrayOfEnumDescription")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfEnvironmentBrowserConfigOptionQuerySpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfEnvironmentBrowserConfigOptionQuerySpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfExtendedDescription(value) => {
+                state.serialize_field("_typeName", "ArrayOfExtendedDescription")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfExtendedElementDescription(value) => {
+                state.serialize_field("_typeName", "ArrayOfExtendedElementDescription")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfExtension(value) => {
+                state.serialize_field("_typeName", "ArrayOfExtension")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfExtensionClientInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfExtensionClientInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfExtensionEventTypeInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfExtensionEventTypeInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfExtensionFaultTypeInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfExtensionFaultTypeInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfExtensionHealthInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfExtensionHealthInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfExtensionOvfConsumerInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfExtensionOvfConsumerInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfExtensionPrivilegeInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfExtensionPrivilegeInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfExtensionResourceInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfExtensionResourceInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfExtensionServerInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfExtensionServerInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfExtensionTaskTypeInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfExtensionTaskTypeInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfExtensionManagerIpAllocationUsage(value) => {
+                state.serialize_field("_typeName", "ArrayOfExtensionManagerIpAllocationUsage")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFaultsByHost(value) => {
+                state.serialize_field("_typeName", "ArrayOfFaultsByHost")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFaultsByVm(value) => {
+                state.serialize_field("_typeName", "ArrayOfFaultsByVM")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFeatureEvcMode(value) => {
+                state.serialize_field("_typeName", "ArrayOfFeatureEVCMode")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFileLockInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfFileLockInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFileLockInfoResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfFileLockInfoResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFolderBatchAddHostsToClusterResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfFolderBatchAddHostsToClusterResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFolderBatchAddStandaloneHostsResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfFolderBatchAddStandaloneHostsResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFolderFailedHostResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfFolderFailedHostResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFolderNewHostSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfFolderNewHostSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHbrManagerReplicationVmInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHbrManagerReplicationVmInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfReplicationVmProgressInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfReplicationVmProgressInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHbrManagerVmReplicationCapability(value) => {
+                state.serialize_field("_typeName", "ArrayOfHbrManagerVmReplicationCapability")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHealthUpdate(value) => {
+                state.serialize_field("_typeName", "ArrayOfHealthUpdate")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHealthUpdateInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHealthUpdateInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPerfInterval(value) => {
+                state.serialize_field("_typeName", "ArrayOfPerfInterval")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostServiceTicket(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostServiceTicket")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostSystemComplianceCheckState(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostSystemComplianceCheckState")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostSystemReconnectSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostSystemReconnectSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostSystemRemediationState(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostSystemRemediationState")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHttpNfcLeaseCapabilities(value) => {
+                state.serialize_field("_typeName", "ArrayOfHttpNfcLeaseCapabilities")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHttpNfcLeaseDatastoreLeaseInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHttpNfcLeaseDatastoreLeaseInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHttpNfcLeaseDeviceUrl(value) => {
+                state.serialize_field("_typeName", "ArrayOfHttpNfcLeaseDeviceUrl")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHttpNfcLeaseHostInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHttpNfcLeaseHostInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHttpNfcLeaseInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHttpNfcLeaseInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHttpNfcLeaseManifestEntry(value) => {
+                state.serialize_field("_typeName", "ArrayOfHttpNfcLeaseManifestEntry")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHttpNfcLeaseProbeResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfHttpNfcLeaseProbeResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHttpNfcLeaseSourceFile(value) => {
+                state.serialize_field("_typeName", "ArrayOfHttpNfcLeaseSourceFile")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfImportSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfImportSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInheritablePolicy(value) => {
+                state.serialize_field("_typeName", "ArrayOfInheritablePolicy")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfIntExpression(value) => {
+                state.serialize_field("_typeName", "ArrayOfIntExpression")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfIntPolicy(value) => {
+                state.serialize_field("_typeName", "ArrayOfIntPolicy")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterIoFilterInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterIoFilterInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostIoFilterInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostIoFilterInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfIoFilterInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfIoFilterInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfIoFilterQueryIssueResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfIoFilterQueryIssueResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfIoFilterHostIssue(value) => {
+                state.serialize_field("_typeName", "ArrayOfIoFilterHostIssue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfIpAddress(value) => {
+                state.serialize_field("_typeName", "ArrayOfIpAddress")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfIpPoolManagerIpAllocation(value) => {
+                state.serialize_field("_typeName", "ArrayOfIpPoolManagerIpAllocation")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfIpRange(value) => {
+                state.serialize_field("_typeName", "ArrayOfIpRange")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfKeyValue(value) => {
+                state.serialize_field("_typeName", "ArrayOfKeyValue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfLatencySensitivity(value) => {
+                state.serialize_field("_typeName", "ArrayOfLatencySensitivity")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfLicenseAssignmentManagerLicenseAssignment(value) => {
+                state.serialize_field("_typeName", "ArrayOfLicenseAssignmentManagerLicenseAssignment")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfLicenseAvailabilityInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfLicenseAvailabilityInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfLicenseDiagnostics(value) => {
+                state.serialize_field("_typeName", "ArrayOfLicenseDiagnostics")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfLicenseManagerEvaluationInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfLicenseManagerEvaluationInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfEvaluationLicenseSource(value) => {
+                state.serialize_field("_typeName", "ArrayOfEvaluationLicenseSource")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfLicenseFeatureInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfLicenseFeatureInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostLicensableResourceInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostLicensableResourceInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfLicenseManagerLicenseInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfLicenseManagerLicenseInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfLicenseServerSource(value) => {
+                state.serialize_field("_typeName", "ArrayOfLicenseServerSource")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfLicenseSource(value) => {
+                state.serialize_field("_typeName", "ArrayOfLicenseSource")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfLicenseUsageInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfLicenseUsageInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfLocalLicenseSource(value) => {
+                state.serialize_field("_typeName", "ArrayOfLocalLicenseSource")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfLicenseReservationInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfLicenseReservationInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfLocalizationManagerMessageCatalog(value) => {
+                state.serialize_field("_typeName", "ArrayOfLocalizationManagerMessageCatalog")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfLongPolicy(value) => {
+                state.serialize_field("_typeName", "ArrayOfLongPolicy")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfMacAddress(value) => {
+                state.serialize_field("_typeName", "ArrayOfMacAddress")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfMacRange(value) => {
+                state.serialize_field("_typeName", "ArrayOfMacRange")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfMethodDescription(value) => {
+                state.serialize_field("_typeName", "ArrayOfMethodDescription")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNegatableExpression(value) => {
+                state.serialize_field("_typeName", "ArrayOfNegatableExpression")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNetworkSummary(value) => {
+                state.serialize_field("_typeName", "ArrayOfNetworkSummary")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNumericRange(value) => {
+                state.serialize_field("_typeName", "ArrayOfNumericRange")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOpaqueNetworkCapability(value) => {
+                state.serialize_field("_typeName", "ArrayOfOpaqueNetworkCapability")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOpaqueNetworkSummary(value) => {
+                state.serialize_field("_typeName", "ArrayOfOpaqueNetworkSummary")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfConsumerOstNode(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfConsumerOstNode")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfConsumerOvfSection(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfConsumerOvfSection")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfManagerCommonParams(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfManagerCommonParams")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfCreateDescriptorParams(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfCreateDescriptorParams")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfCreateDescriptorResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfCreateDescriptorResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfCreateImportSpecParams(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfCreateImportSpecParams")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfCreateImportSpecResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfCreateImportSpecResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfDeploymentOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfDeploymentOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfFileItem(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfFileItem")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfNetworkInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfNetworkInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfNetworkMapping(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfNetworkMapping")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfFile(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfFile")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfOptionInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfOptionInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfParseDescriptorParams(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfParseDescriptorParams")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfParseDescriptorResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfParseDescriptorResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfResourceMap(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfResourceMap")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfValidateHostParams(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfValidateHostParams")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfValidateHostResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfValidateHostResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPasswordField(value) => {
+                state.serialize_field("_typeName", "ArrayOfPasswordField")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPerformanceDescription(value) => {
+                state.serialize_field("_typeName", "ArrayOfPerformanceDescription")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPerfCompositeMetric(value) => {
+                state.serialize_field("_typeName", "ArrayOfPerfCompositeMetric")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPerfCounterInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfPerfCounterInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPerformanceManagerCounterLevelMapping(value) => {
+                state.serialize_field("_typeName", "ArrayOfPerformanceManagerCounterLevelMapping")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPerfEntityMetric(value) => {
+                state.serialize_field("_typeName", "ArrayOfPerfEntityMetric")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPerfEntityMetricBase(value) => {
+                state.serialize_field("_typeName", "ArrayOfPerfEntityMetricBase")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPerfEntityMetricCsv(value) => {
+                state.serialize_field("_typeName", "ArrayOfPerfEntityMetricCSV")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPerfMetricIntSeries(value) => {
+                state.serialize_field("_typeName", "ArrayOfPerfMetricIntSeries")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPerfMetricId(value) => {
+                state.serialize_field("_typeName", "ArrayOfPerfMetricId")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPerfMetricSeries(value) => {
+                state.serialize_field("_typeName", "ArrayOfPerfMetricSeries")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPerfMetricSeriesCsv(value) => {
+                state.serialize_field("_typeName", "ArrayOfPerfMetricSeriesCSV")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPerfProviderSummary(value) => {
+                state.serialize_field("_typeName", "ArrayOfPerfProviderSummary")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPerfQuerySpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfPerfQuerySpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPerfSampleInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfPerfSampleInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPosixUserSearchResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfPosixUserSearchResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPrivilegePolicyDef(value) => {
+                state.serialize_field("_typeName", "ArrayOfPrivilegePolicyDef")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfResourceAllocationInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfResourceAllocationInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfResourceAllocationOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfResourceAllocationOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfResourceConfigOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfResourceConfigOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfResourceConfigSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfResourceConfigSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDatabaseSizeEstimate(value) => {
+                state.serialize_field("_typeName", "ArrayOfDatabaseSizeEstimate")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDatabaseSizeParam(value) => {
+                state.serialize_field("_typeName", "ArrayOfDatabaseSizeParam")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInventoryDescription(value) => {
+                state.serialize_field("_typeName", "ArrayOfInventoryDescription")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPerformanceStatisticsDescription(value) => {
+                state.serialize_field("_typeName", "ArrayOfPerformanceStatisticsDescription")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfResourcePoolResourceUsage(value) => {
+                state.serialize_field("_typeName", "ArrayOfResourcePoolResourceUsage")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfResourcePoolRuntimeInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfResourcePoolRuntimeInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfResourcePoolSummary(value) => {
+                state.serialize_field("_typeName", "ArrayOfResourcePoolSummary")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfResourcePoolQuickStats(value) => {
+                state.serialize_field("_typeName", "ArrayOfResourcePoolQuickStats")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSddcBase(value) => {
+                state.serialize_field("_typeName", "ArrayOfSDDCBase")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSelectionSet(value) => {
+                state.serialize_field("_typeName", "ArrayOfSelectionSet")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostVMotionCompatibility(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostVMotionCompatibility")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfProductComponentInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfProductComponentInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfServiceContent(value) => {
+                state.serialize_field("_typeName", "ArrayOfServiceContent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfServiceLocator(value) => {
+                state.serialize_field("_typeName", "ArrayOfServiceLocator")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfServiceLocatorCredential(value) => {
+                state.serialize_field("_typeName", "ArrayOfServiceLocatorCredential")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfServiceLocatorNamePassword(value) => {
+                state.serialize_field("_typeName", "ArrayOfServiceLocatorNamePassword")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfServiceLocatorSamlCredential(value) => {
+                state.serialize_field("_typeName", "ArrayOfServiceLocatorSAMLCredential")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfServiceManagerServiceInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfServiceManagerServiceInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSessionManagerGenericServiceTicket(value) => {
+                state.serialize_field("_typeName", "ArrayOfSessionManagerGenericServiceTicket")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSessionManagerHttpServiceRequestSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfSessionManagerHttpServiceRequestSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSessionManagerLocalTicket(value) => {
+                state.serialize_field("_typeName", "ArrayOfSessionManagerLocalTicket")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSessionManagerServiceRequestSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfSessionManagerServiceRequestSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSessionManagerVmomiServiceRequestSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfSessionManagerVmomiServiceRequestSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSharesInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfSharesInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSharesOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfSharesOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSingleIp(value) => {
+                state.serialize_field("_typeName", "ArrayOfSingleIp")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSingleMac(value) => {
+                state.serialize_field("_typeName", "ArrayOfSingleMac")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSiteInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfSiteInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStoragePodSummary(value) => {
+                state.serialize_field("_typeName", "ArrayOfStoragePodSummary")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStorageIoAllocationInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfStorageIOAllocationInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStorageIoAllocationOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfStorageIOAllocationOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStorageIormInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfStorageIORMInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStorageIormConfigOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfStorageIORMConfigOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStorageIormConfigSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfStorageIORMConfigSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPodStorageDrsEntry(value) => {
+                state.serialize_field("_typeName", "ArrayOfPodStorageDrsEntry")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStoragePerformanceSummary(value) => {
+                state.serialize_field("_typeName", "ArrayOfStoragePerformanceSummary")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStorageResourceManagerStorageProfileStatistics(value) => {
+                state.serialize_field("_typeName", "ArrayOfStorageResourceManagerStorageProfileStatistics")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStringExpression(value) => {
+                state.serialize_field("_typeName", "ArrayOfStringExpression")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStringPolicy(value) => {
+                state.serialize_field("_typeName", "ArrayOfStringPolicy")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfTag(value) => {
+                state.serialize_field("_typeName", "ArrayOfTag")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfTaskDescription(value) => {
+                state.serialize_field("_typeName", "ArrayOfTaskDescription")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfTaskFilterSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfTaskFilterSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfTaskFilterSpecByEntity(value) => {
+                state.serialize_field("_typeName", "ArrayOfTaskFilterSpecByEntity")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfTaskFilterSpecByTime(value) => {
+                state.serialize_field("_typeName", "ArrayOfTaskFilterSpecByTime")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfTaskFilterSpecByUsername(value) => {
+                state.serialize_field("_typeName", "ArrayOfTaskFilterSpecByUsername")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfTaskInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfTaskInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfTaskReason(value) => {
+                state.serialize_field("_typeName", "ArrayOfTaskReason")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfTaskReasonAlarm(value) => {
+                state.serialize_field("_typeName", "ArrayOfTaskReasonAlarm")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfTaskReasonSchedule(value) => {
+                state.serialize_field("_typeName", "ArrayOfTaskReasonSchedule")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfTaskReasonSystem(value) => {
+                state.serialize_field("_typeName", "ArrayOfTaskReasonSystem")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfTaskReasonUser(value) => {
+                state.serialize_field("_typeName", "ArrayOfTaskReasonUser")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfTypeDescription(value) => {
+                state.serialize_field("_typeName", "ArrayOfTypeDescription")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfUpdateVirtualMachineFilesResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfUpdateVirtualMachineFilesResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfUpdateVirtualMachineFilesResultFailedVmFileInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfUpdateVirtualMachineFilesResultFailedVmFileInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfUserSearchResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfUserSearchResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfUserSession(value) => {
+                state.serialize_field("_typeName", "ArrayOfUserSession")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVVolVmConfigFileUpdateResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVVolVmConfigFileUpdateResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVVolVmConfigFileUpdateResultFailedVmConfigFileInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVVolVmConfigFileUpdateResultFailedVmConfigFileInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVasaStorageArray(value) => {
+                state.serialize_field("_typeName", "ArrayOfVASAStorageArray")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVasaStorageArrayDiscoveryFcTransport(value) => {
+                state.serialize_field("_typeName", "ArrayOfVASAStorageArrayDiscoveryFcTransport")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVasaStorageArrayDiscoveryIpTransport(value) => {
+                state.serialize_field("_typeName", "ArrayOfVASAStorageArrayDiscoveryIpTransport")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVasaStorageArrayDiscoverySvcInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVASAStorageArrayDiscoverySvcInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVasaProviderContainerSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVasaProviderContainerSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVimVasaProvider(value) => {
+                state.serialize_field("_typeName", "ArrayOfVimVasaProvider")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVimVasaProviderStatePerArray(value) => {
+                state.serialize_field("_typeName", "ArrayOfVimVasaProviderStatePerArray")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVimVasaProviderVirtualHostConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfVimVasaProviderVirtualHostConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVimVasaProviderInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVimVasaProviderInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualAppLinkInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualAppLinkInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualAppSummary(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualAppSummary")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDeviceBackedVirtualDiskSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfDeviceBackedVirtualDiskSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFileBackedVirtualDiskSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfFileBackedVirtualDiskSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSeSparseVirtualDiskSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfSeSparseVirtualDiskSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualDiskSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualDiskSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineConnection(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineConnection")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDiskChangeInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfDiskChangeInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDiskChangeExtent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDiskChangeExtent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineDisplayTopology(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineDisplayTopology")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineMksConnection(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineMksConnection")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineMksTicket(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineMksTicket")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStorageRequirement(value) => {
+                state.serialize_field("_typeName", "ArrayOfStorageRequirement")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineTicket(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineTicket")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineWipeResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineWipeResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanUpgradeSystemApiBrokenIssue(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanUpgradeSystemAPIBrokenIssue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanUpgradeSystemAutoClaimEnabledOnHostsIssue(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanUpgradeSystemAutoClaimEnabledOnHostsIssue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanUpgradeSystemHostsDisconnectedIssue(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanUpgradeSystemHostsDisconnectedIssue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanUpgradeSystemMissingHostsInClusterIssue(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanUpgradeSystemMissingHostsInClusterIssue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanUpgradeSystemNetworkPartitionInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanUpgradeSystemNetworkPartitionInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanUpgradeSystemNetworkPartitionIssue(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanUpgradeSystemNetworkPartitionIssue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanUpgradeSystemNotEnoughFreeCapacityIssue(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanUpgradeSystemNotEnoughFreeCapacityIssue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanUpgradeSystemPreflightCheckIssue(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanUpgradeSystemPreflightCheckIssue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanUpgradeSystemPreflightCheckResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanUpgradeSystemPreflightCheckResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanUpgradeSystemRogueHostsInClusterIssue(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanUpgradeSystemRogueHostsInClusterIssue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanUpgradeSystemUpgradeHistoryDiskGroupOp(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanUpgradeSystemUpgradeHistoryDiskGroupOp")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanUpgradeSystemUpgradeHistoryItem(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanUpgradeSystemUpgradeHistoryItem")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanUpgradeSystemUpgradeHistoryPreflightFail(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanUpgradeSystemUpgradeHistoryPreflightFail")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanUpgradeSystemUpgradeStatus(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanUpgradeSystemUpgradeStatus")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanUpgradeSystemV2ObjectsPresentDuringDowngradeIssue(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanUpgradeSystemV2ObjectsPresentDuringDowngradeIssue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanUpgradeSystemWrongEsxVersionIssue(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanUpgradeSystemWrongEsxVersionIssue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAction(value) => {
+                state.serialize_field("_typeName", "ArrayOfAction")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCreateTaskAction(value) => {
+                state.serialize_field("_typeName", "ArrayOfCreateTaskAction")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfMethodAction(value) => {
+                state.serialize_field("_typeName", "ArrayOfMethodAction")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfMethodActionArgument(value) => {
+                state.serialize_field("_typeName", "ArrayOfMethodActionArgument")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfRunScriptAction(value) => {
+                state.serialize_field("_typeName", "ArrayOfRunScriptAction")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSendEmailAction(value) => {
+                state.serialize_field("_typeName", "ArrayOfSendEmailAction")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSendSnmpAction(value) => {
+                state.serialize_field("_typeName", "ArrayOfSendSNMPAction")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAlarmAction(value) => {
+                state.serialize_field("_typeName", "ArrayOfAlarmAction")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAlarmDescription(value) => {
+                state.serialize_field("_typeName", "ArrayOfAlarmDescription")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAlarmExpression(value) => {
+                state.serialize_field("_typeName", "ArrayOfAlarmExpression")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAlarmFilterSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfAlarmFilterSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAlarmInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfAlarmInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAlarmSetting(value) => {
+                state.serialize_field("_typeName", "ArrayOfAlarmSetting")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAlarmSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfAlarmSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAlarmState(value) => {
+                state.serialize_field("_typeName", "ArrayOfAlarmState")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAlarmTriggeringAction(value) => {
+                state.serialize_field("_typeName", "ArrayOfAlarmTriggeringAction")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAlarmTriggeringActionTransitionSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfAlarmTriggeringActionTransitionSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAndAlarmExpression(value) => {
+                state.serialize_field("_typeName", "ArrayOfAndAlarmExpression")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfEventAlarmExpression(value) => {
+                state.serialize_field("_typeName", "ArrayOfEventAlarmExpression")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfEventAlarmExpressionComparison(value) => {
+                state.serialize_field("_typeName", "ArrayOfEventAlarmExpressionComparison")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGroupAlarmAction(value) => {
+                state.serialize_field("_typeName", "ArrayOfGroupAlarmAction")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfMetricAlarmExpression(value) => {
+                state.serialize_field("_typeName", "ArrayOfMetricAlarmExpression")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOrAlarmExpression(value) => {
+                state.serialize_field("_typeName", "ArrayOfOrAlarmExpression")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStateAlarmExpression(value) => {
+                state.serialize_field("_typeName", "ArrayOfStateAlarmExpression")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterAction(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterAction")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterActionHistory(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterActionHistory")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterAffinityRuleSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterAffinityRuleSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterAntiAffinityRuleSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterAntiAffinityRuleSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterAttemptedVmInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterAttemptedVmInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterClusterInitialPlacementAction(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterClusterInitialPlacementAction")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterConfigInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterConfigInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterConfigInfoEx(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterConfigInfoEx")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterConfigSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterConfigSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterConfigSpecEx(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterConfigSpecEx")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterCryptoConfigInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterCryptoConfigInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterDasAamHostInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterDasAamHostInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterDasAamNodeState(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterDasAamNodeState")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterDasAdmissionControlInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterDasAdmissionControlInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterDasAdmissionControlPolicy(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterDasAdmissionControlPolicy")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterDasAdvancedRuntimeInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterDasAdvancedRuntimeInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDasHeartbeatDatastoreInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfDasHeartbeatDatastoreInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterDasAdvancedRuntimeInfoVmcpCapabilityInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterDasAdvancedRuntimeInfoVmcpCapabilityInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterDasConfigInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterDasConfigInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterDasData(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterDasData")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterDasDataSummary(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterDasDataSummary")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterDasFailoverLevelAdvancedRuntimeInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterDasFailoverLevelAdvancedRuntimeInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterDasFailoverLevelAdvancedRuntimeInfoHostSlots(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterDasFailoverLevelAdvancedRuntimeInfoHostSlots")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterDasFailoverLevelAdvancedRuntimeInfoSlotInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterDasFailoverLevelAdvancedRuntimeInfoSlotInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterDasFailoverLevelAdvancedRuntimeInfoVmSlots(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterDasFailoverLevelAdvancedRuntimeInfoVmSlots")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterDasFdmHostState(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterDasFdmHostState")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterDasHostInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterDasHostInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterDasHostRecommendation(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterDasHostRecommendation")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterDasVmConfigInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterDasVmConfigInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterDasVmConfigSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterDasVmConfigSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterDasVmSettings(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterDasVmSettings")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterDatastoreUpdateSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterDatastoreUpdateSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterDependencyRuleInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterDependencyRuleInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterDpmConfigInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterDpmConfigInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterDpmHostConfigInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterDpmHostConfigInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterDpmHostConfigSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterDpmHostConfigSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterDrsConfigInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterDrsConfigInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterDrsFaults(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterDrsFaults")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterDrsFaultsFaultsByVirtualDisk(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterDrsFaultsFaultsByVirtualDisk")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterDrsFaultsFaultsByVm(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterDrsFaultsFaultsByVm")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterDrsMigration(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterDrsMigration")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterDrsRecommendation(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterDrsRecommendation")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterDrsVmConfigInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterDrsVmConfigInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterDrsVmConfigSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterDrsVmConfigSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterEvcManagerCheckResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterEVCManagerCheckResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterEvcManagerEvcState(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterEVCManagerEVCState")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterEnterMaintenanceResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterEnterMaintenanceResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterFailoverHostAdmissionControlInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterFailoverHostAdmissionControlInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterFailoverHostAdmissionControlInfoHostStatus(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterFailoverHostAdmissionControlInfoHostStatus")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterFailoverHostAdmissionControlPolicy(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterFailoverHostAdmissionControlPolicy")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterFailoverLevelAdmissionControlInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterFailoverLevelAdmissionControlInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterFailoverLevelAdmissionControlPolicy(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterFailoverLevelAdmissionControlPolicy")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterFailoverResourcesAdmissionControlInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterFailoverResourcesAdmissionControlInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterFailoverResourcesAdmissionControlPolicy(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterFailoverResourcesAdmissionControlPolicy")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterFixedSizeSlotPolicy(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterFixedSizeSlotPolicy")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterGroupInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterGroupInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterGroupSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterGroupSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterHostGroup(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterHostGroup")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterHostInfraUpdateHaModeAction(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterHostInfraUpdateHaModeAction")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterHostPowerAction(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterHostPowerAction")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterHostRecommendation(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterHostRecommendation")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterInfraUpdateHaConfigInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterInfraUpdateHaConfigInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterInitialPlacementAction(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterInitialPlacementAction")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterMigrationAction(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterMigrationAction")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterNotAttemptedVmInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterNotAttemptedVmInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterOrchestrationInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterOrchestrationInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPlacementAction(value) => {
+                state.serialize_field("_typeName", "ArrayOfPlacementAction")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPlacementResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfPlacementResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPlacementSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfPlacementSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterPowerOnVmResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterPowerOnVmResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterPreemptibleVmPairInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterPreemptibleVmPairInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterPreemptibleVmPairSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterPreemptibleVmPairSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterProactiveDrsConfigInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterProactiveDrsConfigInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterRecommendation(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterRecommendation")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterResourceUsageSummary(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterResourceUsageSummary")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterRuleInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterRuleInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterRuleSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterRuleSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterSlotPolicy(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterSlotPolicy")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterSystemVMsConfigInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterSystemVMsConfigInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterSystemVMsConfigSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterSystemVMsConfigSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterTagCategoryUpdateSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterTagCategoryUpdateSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterUsageSummary(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterUsageSummary")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterVmComponentProtectionSettings(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterVmComponentProtectionSettings")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterVmGroup(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterVmGroup")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterVmHostRuleInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterVmHostRuleInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterVmOrchestrationInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterVmOrchestrationInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterVmOrchestrationSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterVmOrchestrationSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterVmReadiness(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterVmReadiness")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterVmToolsMonitoringSettings(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterVmToolsMonitoringSettings")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDistributedVirtualPort(value) => {
+                state.serialize_field("_typeName", "ArrayOfDistributedVirtualPort")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvPortConfigInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfDVPortConfigInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvPortConfigSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfDVPortConfigSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsFilterConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsFilterConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsFilterConfigSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsFilterConfigSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsFilterParameter(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsFilterParameter")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsFilterPolicy(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsFilterPolicy")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsHostLocalPortInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfDVSHostLocalPortInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvPortStatus(value) => {
+                state.serialize_field("_typeName", "ArrayOfDVPortStatus")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvPortSetting(value) => {
+                state.serialize_field("_typeName", "ArrayOfDVPortSetting")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvPortState(value) => {
+                state.serialize_field("_typeName", "ArrayOfDVPortState")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsTrafficFilterConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsTrafficFilterConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsTrafficFilterConfigSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsTrafficFilterConfigSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsTrafficShapingPolicy(value) => {
+                state.serialize_field("_typeName", "ArrayOfDVSTrafficShapingPolicy")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsVendorSpecificConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfDVSVendorSpecificConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvPortgroupConfigInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfDVPortgroupConfigInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvPortgroupConfigSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfDVPortgroupConfigSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDistributedVirtualPortgroupNsxPortgroupOperationResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfDistributedVirtualPortgroupNsxPortgroupOperationResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvPortgroupPolicy(value) => {
+                state.serialize_field("_typeName", "ArrayOfDVPortgroupPolicy")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDistributedVirtualPortgroupProblem(value) => {
+                state.serialize_field("_typeName", "ArrayOfDistributedVirtualPortgroupProblem")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDistributedVirtualPortgroupInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfDistributedVirtualPortgroupInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvPortgroupSelection(value) => {
+                state.serialize_field("_typeName", "ArrayOfDVPortgroupSelection")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDistributedVirtualSwitchInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfDistributedVirtualSwitchInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDistributedVirtualSwitchManagerCompatibilityResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfDistributedVirtualSwitchManagerCompatibilityResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsManagerDvsConfigTarget(value) => {
+                state.serialize_field("_typeName", "ArrayOfDVSManagerDvsConfigTarget")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDistributedVirtualSwitchManagerDvsProductSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfDistributedVirtualSwitchManagerDvsProductSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDistributedVirtualSwitchManagerHostArrayFilter(value) => {
+                state.serialize_field("_typeName", "ArrayOfDistributedVirtualSwitchManagerHostArrayFilter")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDistributedVirtualSwitchManagerHostContainer(value) => {
+                state.serialize_field("_typeName", "ArrayOfDistributedVirtualSwitchManagerHostContainer")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDistributedVirtualSwitchManagerHostContainerFilter(value) => {
+                state.serialize_field("_typeName", "ArrayOfDistributedVirtualSwitchManagerHostContainerFilter")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDistributedVirtualSwitchManagerHostDvsFilterSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfDistributedVirtualSwitchManagerHostDvsFilterSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDistributedVirtualSwitchManagerHostDvsMembershipFilter(value) => {
+                state.serialize_field("_typeName", "ArrayOfDistributedVirtualSwitchManagerHostDvsMembershipFilter")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDistributedVirtualSwitchManagerImportResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfDistributedVirtualSwitchManagerImportResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsManagerPhysicalNicsList(value) => {
+                state.serialize_field("_typeName", "ArrayOfDVSManagerPhysicalNicsList")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsSelection(value) => {
+                state.serialize_field("_typeName", "ArrayOfDVSSelection")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfEntityBackup(value) => {
+                state.serialize_field("_typeName", "ArrayOfEntityBackup")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfEntityBackupConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfEntityBackupConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDistributedVirtualSwitchHostMember(value) => {
+                state.serialize_field("_typeName", "ArrayOfDistributedVirtualSwitchHostMember")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDistributedVirtualSwitchHostMemberBacking(value) => {
+                state.serialize_field("_typeName", "ArrayOfDistributedVirtualSwitchHostMemberBacking")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDistributedVirtualSwitchHostMemberConfigInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfDistributedVirtualSwitchHostMemberConfigInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDistributedVirtualSwitchHostMemberConfigSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfDistributedVirtualSwitchHostMemberConfigSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostMemberHealthCheckResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostMemberHealthCheckResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDistributedVirtualSwitchHostMemberPnicBacking(value) => {
+                state.serialize_field("_typeName", "ArrayOfDistributedVirtualSwitchHostMemberPnicBacking")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDistributedVirtualSwitchHostMemberPnicSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfDistributedVirtualSwitchHostMemberPnicSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostMemberRuntimeInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostMemberRuntimeInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDistributedVirtualSwitchHostMemberRuntimeState(value) => {
+                state.serialize_field("_typeName", "ArrayOfDistributedVirtualSwitchHostMemberRuntimeState")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDistributedVirtualSwitchHostMemberTransportZoneInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfDistributedVirtualSwitchHostMemberTransportZoneInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostMemberUplinkHealthCheckResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostMemberUplinkHealthCheckResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDistributedVirtualSwitchHostProductSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfDistributedVirtualSwitchHostProductSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDistributedVirtualSwitchKeyedOpaqueBlob(value) => {
+                state.serialize_field("_typeName", "ArrayOfDistributedVirtualSwitchKeyedOpaqueBlob")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDistributedVirtualSwitchNetworkOffloadSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfDistributedVirtualSwitchNetworkOffloadSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsNetworkResourcePool(value) => {
+                state.serialize_field("_typeName", "ArrayOfDVSNetworkResourcePool")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsNetworkResourcePoolAllocationInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfDVSNetworkResourcePoolAllocationInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsNetworkResourcePoolConfigSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfDVSNetworkResourcePoolConfigSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDistributedVirtualSwitchPortConnectee(value) => {
+                state.serialize_field("_typeName", "ArrayOfDistributedVirtualSwitchPortConnectee")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDistributedVirtualSwitchPortConnection(value) => {
+                state.serialize_field("_typeName", "ArrayOfDistributedVirtualSwitchPortConnection")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDistributedVirtualSwitchPortCriteria(value) => {
+                state.serialize_field("_typeName", "ArrayOfDistributedVirtualSwitchPortCriteria")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDistributedVirtualSwitchPortStatistics(value) => {
+                state.serialize_field("_typeName", "ArrayOfDistributedVirtualSwitchPortStatistics")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDistributedVirtualSwitchProductSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfDistributedVirtualSwitchProductSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsTrafficRule(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsTrafficRule")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsAcceptNetworkRuleAction(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsAcceptNetworkRuleAction")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsNetworkRuleAction(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsNetworkRuleAction")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsCopyNetworkRuleAction(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsCopyNetworkRuleAction")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsDropNetworkRuleAction(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsDropNetworkRuleAction")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsGreEncapNetworkRuleAction(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsGreEncapNetworkRuleAction")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsIpPort(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsIpPort")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsIpPortRange(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsIpPortRange")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsIpNetworkRuleQualifier(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsIpNetworkRuleQualifier")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsLogNetworkRuleAction(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsLogNetworkRuleAction")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsMacNetworkRuleQualifier(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsMacNetworkRuleQualifier")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsMacRewriteNetworkRuleAction(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsMacRewriteNetworkRuleAction")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsPuntNetworkRuleAction(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsPuntNetworkRuleAction")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsNetworkRuleQualifier(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsNetworkRuleQualifier")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsRateLimitNetworkRuleAction(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsRateLimitNetworkRuleAction")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsSingleIpPort(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsSingleIpPort")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsSystemTrafficNetworkRuleQualifier(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsSystemTrafficNetworkRuleQualifier")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsUpdateTagNetworkRuleAction(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsUpdateTagNetworkRuleAction")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsTrafficRuleset(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsTrafficRuleset")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsVmVnicNetworkResourcePool(value) => {
+                state.serialize_field("_typeName", "ArrayOfDVSVmVnicNetworkResourcePool")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsVmVnicResourcePoolConfigSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsVmVnicResourcePoolConfigSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsVmVnicResourceAllocation(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsVmVnicResourceAllocation")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsVmVnicNetworkResourcePoolRuntimeInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsVmVnicNetworkResourcePoolRuntimeInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsVnicAllocatedResource(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsVnicAllocatedResource")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVMwareDvsConfigInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVMwareDVSConfigInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVMwareDvsConfigSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVMwareDVSConfigSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVMwareDvsDpuCapability(value) => {
+                state.serialize_field("_typeName", "ArrayOfVMwareDvsDpuCapability")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsFailureCriteria(value) => {
+                state.serialize_field("_typeName", "ArrayOfDVSFailureCriteria")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVMwareDvsFeatureCapability(value) => {
+                state.serialize_field("_typeName", "ArrayOfVMwareDVSFeatureCapability")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVMwareIpfixConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfVMwareIpfixConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVMwareDvsIpfixCapability(value) => {
+                state.serialize_field("_typeName", "ArrayOfVMwareDvsIpfixCapability")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVMwareDvsLacpCapability(value) => {
+                state.serialize_field("_typeName", "ArrayOfVMwareDvsLacpCapability")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVMwareDvsLacpGroupConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfVMwareDvsLacpGroupConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVMwareDvsLacpGroupSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVMwareDvsLacpGroupSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVMwareDvsLagIpfixConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfVMwareDvsLagIpfixConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVMwareDvsLagVlanConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfVMwareDvsLagVlanConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsMacLearningPolicy(value) => {
+                state.serialize_field("_typeName", "ArrayOfDVSMacLearningPolicy")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsMacManagementPolicy(value) => {
+                state.serialize_field("_typeName", "ArrayOfDVSMacManagementPolicy")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVMwareDvsMtuCapability(value) => {
+                state.serialize_field("_typeName", "ArrayOfVMwareDvsMtuCapability")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVMwareDvsMtuHealthCheckResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVMwareDVSMtuHealthCheckResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVMwareDvsPvlanConfigSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVMwareDVSPvlanConfigSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVMwareDvsPvlanMapEntry(value) => {
+                state.serialize_field("_typeName", "ArrayOfVMwareDVSPvlanMapEntry")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmwareDistributedVirtualSwitchPvlanSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmwareDistributedVirtualSwitchPvlanSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsSecurityPolicy(value) => {
+                state.serialize_field("_typeName", "ArrayOfDVSSecurityPolicy")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVMwareDvsTeamingHealthCheckConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfVMwareDVSTeamingHealthCheckConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVMwareDvsTeamingHealthCheckResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVMwareDVSTeamingHealthCheckResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmwareDistributedVirtualSwitchTrunkVlanSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmwareDistributedVirtualSwitchTrunkVlanSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVMwareUplinkLacpPolicy(value) => {
+                state.serialize_field("_typeName", "ArrayOfVMwareUplinkLacpPolicy")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVMwareUplinkPortOrderPolicy(value) => {
+                state.serialize_field("_typeName", "ArrayOfVMwareUplinkPortOrderPolicy")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmwareUplinkPortTeamingPolicy(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmwareUplinkPortTeamingPolicy")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVMwareDvsPortgroupPolicy(value) => {
+                state.serialize_field("_typeName", "ArrayOfVMwareDVSPortgroupPolicy")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVMwareDvsVlanHealthCheckResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVMwareDVSVlanHealthCheckResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmwareDistributedVirtualSwitchVlanIdSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmwareDistributedVirtualSwitchVlanIdSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVMwareDvsVlanMtuHealthCheckConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfVMwareDVSVlanMtuHealthCheckConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmwareDistributedVirtualSwitchVlanSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmwareDistributedVirtualSwitchVlanSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVMwareDvsHealthCheckConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfVMwareDVSHealthCheckConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVMwareDvsHealthCheckCapability(value) => {
+                state.serialize_field("_typeName", "ArrayOfVMwareDVSHealthCheckCapability")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVMwareDvsPortSetting(value) => {
+                state.serialize_field("_typeName", "ArrayOfVMwareDVSPortSetting")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVMwareDvsVspanConfigSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVMwareDVSVspanConfigSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVMwareDvsVspanCapability(value) => {
+                state.serialize_field("_typeName", "ArrayOfVMwareDVSVspanCapability")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVMwareVspanPort(value) => {
+                state.serialize_field("_typeName", "ArrayOfVMwareVspanPort")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVMwareVspanSession(value) => {
+                state.serialize_field("_typeName", "ArrayOfVMwareVspanSession")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCryptoKeyId(value) => {
+                state.serialize_field("_typeName", "ArrayOfCryptoKeyId")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCryptoKeyPlain(value) => {
+                state.serialize_field("_typeName", "ArrayOfCryptoKeyPlain")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCryptoKeyResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfCryptoKeyResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCryptoManagerHostKeyStatus(value) => {
+                state.serialize_field("_typeName", "ArrayOfCryptoManagerHostKeyStatus")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCryptoManagerKmipCertSignRequest(value) => {
+                state.serialize_field("_typeName", "ArrayOfCryptoManagerKmipCertSignRequest")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCryptoManagerKmipCertificateInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfCryptoManagerKmipCertificateInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCryptoManagerKmipClusterStatus(value) => {
+                state.serialize_field("_typeName", "ArrayOfCryptoManagerKmipClusterStatus")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCryptoManagerKmipCryptoKeyStatus(value) => {
+                state.serialize_field("_typeName", "ArrayOfCryptoManagerKmipCryptoKeyStatus")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCryptoManagerKmipCustomAttributeSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfCryptoManagerKmipCustomAttributeSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCryptoManagerKmipServerCertInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfCryptoManagerKmipServerCertInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCryptoManagerKmipServerStatus(value) => {
+                state.serialize_field("_typeName", "ArrayOfCryptoManagerKmipServerStatus")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCryptoSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfCryptoSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCryptoSpecDecrypt(value) => {
+                state.serialize_field("_typeName", "ArrayOfCryptoSpecDecrypt")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCryptoSpecDeepRecrypt(value) => {
+                state.serialize_field("_typeName", "ArrayOfCryptoSpecDeepRecrypt")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCryptoSpecEncrypt(value) => {
+                state.serialize_field("_typeName", "ArrayOfCryptoSpecEncrypt")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCryptoSpecNoOp(value) => {
+                state.serialize_field("_typeName", "ArrayOfCryptoSpecNoOp")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCryptoSpecRegister(value) => {
+                state.serialize_field("_typeName", "ArrayOfCryptoSpecRegister")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCryptoSpecShallowRecrypt(value) => {
+                state.serialize_field("_typeName", "ArrayOfCryptoSpecShallowRecrypt")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfKeyProviderId(value) => {
+                state.serialize_field("_typeName", "ArrayOfKeyProviderId")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfKmipClusterInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfKmipClusterInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfKmipServerInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfKmipServerInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfKmipServerSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfKmipServerSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfKmipServerStatus(value) => {
+                state.serialize_field("_typeName", "ArrayOfKmipServerStatus")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAccountCreatedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfAccountCreatedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAccountRemovedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfAccountRemovedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAccountUpdatedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfAccountUpdatedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAdminPasswordNotChangedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfAdminPasswordNotChangedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAlarmAcknowledgedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfAlarmAcknowledgedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAlarmActionTriggeredEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfAlarmActionTriggeredEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAlarmClearedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfAlarmClearedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAlarmCreatedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfAlarmCreatedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAlarmEmailCompletedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfAlarmEmailCompletedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAlarmEmailFailedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfAlarmEmailFailedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAlarmEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfAlarmEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAlarmEventArgument(value) => {
+                state.serialize_field("_typeName", "ArrayOfAlarmEventArgument")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAlarmReconfiguredEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfAlarmReconfiguredEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAlarmRemovedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfAlarmRemovedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAlarmScriptCompleteEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfAlarmScriptCompleteEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAlarmScriptFailedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfAlarmScriptFailedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAlarmSnmpCompletedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfAlarmSnmpCompletedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAlarmSnmpFailedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfAlarmSnmpFailedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAlarmStatusChangedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfAlarmStatusChangedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAllVirtualMachinesLicensedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfAllVirtualMachinesLicensedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAlreadyAuthenticatedSessionEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfAlreadyAuthenticatedSessionEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAuthorizationEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfAuthorizationEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfBadUsernameSessionEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfBadUsernameSessionEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCanceledHostOperationEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfCanceledHostOperationEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfChangesInfoEventArgument(value) => {
+                state.serialize_field("_typeName", "ArrayOfChangesInfoEventArgument")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterComplianceCheckedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterComplianceCheckedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterCreatedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterCreatedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterDestroyedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterDestroyedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterOvercommittedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterOvercommittedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterReconfiguredEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterReconfiguredEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterStatusChangedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterStatusChangedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfComputeResourceEventArgument(value) => {
+                state.serialize_field("_typeName", "ArrayOfComputeResourceEventArgument")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCustomFieldDefAddedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfCustomFieldDefAddedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCustomFieldDefEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfCustomFieldDefEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCustomFieldDefRemovedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfCustomFieldDefRemovedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCustomFieldDefRenamedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfCustomFieldDefRenamedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCustomFieldEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfCustomFieldEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCustomFieldValueChangedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfCustomFieldValueChangedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCustomizationEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfCustomizationEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCustomizationFailed(value) => {
+                state.serialize_field("_typeName", "ArrayOfCustomizationFailed")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCustomizationLinuxIdentityFailed(value) => {
+                state.serialize_field("_typeName", "ArrayOfCustomizationLinuxIdentityFailed")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCustomizationNetworkSetupFailed(value) => {
+                state.serialize_field("_typeName", "ArrayOfCustomizationNetworkSetupFailed")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCustomizationStartedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfCustomizationStartedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCustomizationSucceeded(value) => {
+                state.serialize_field("_typeName", "ArrayOfCustomizationSucceeded")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCustomizationSysprepFailed(value) => {
+                state.serialize_field("_typeName", "ArrayOfCustomizationSysprepFailed")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCustomizationUnknownFailure(value) => {
+                state.serialize_field("_typeName", "ArrayOfCustomizationUnknownFailure")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvPortgroupCreatedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDVPortgroupCreatedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvPortgroupDestroyedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDVPortgroupDestroyedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvPortgroupEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDVPortgroupEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvPortgroupReconfiguredEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDVPortgroupReconfiguredEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvPortgroupRenamedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDVPortgroupRenamedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDasAdmissionControlDisabledEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDasAdmissionControlDisabledEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDasAdmissionControlEnabledEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDasAdmissionControlEnabledEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDasAgentFoundEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDasAgentFoundEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDasAgentUnavailableEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDasAgentUnavailableEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDasClusterIsolatedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDasClusterIsolatedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDasDisabledEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDasDisabledEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDasEnabledEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDasEnabledEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDasHostFailedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDasHostFailedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDasHostIsolatedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDasHostIsolatedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDatacenterCreatedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDatacenterCreatedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDatacenterEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDatacenterEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDatacenterEventArgument(value) => {
+                state.serialize_field("_typeName", "ArrayOfDatacenterEventArgument")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDatacenterRenamedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDatacenterRenamedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDatastoreCapacityIncreasedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDatastoreCapacityIncreasedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDatastoreDestroyedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDatastoreDestroyedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDatastoreDiscoveredEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDatastoreDiscoveredEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDatastoreDuplicatedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDatastoreDuplicatedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDatastoreEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDatastoreEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDatastoreEventArgument(value) => {
+                state.serialize_field("_typeName", "ArrayOfDatastoreEventArgument")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDatastoreFileCopiedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDatastoreFileCopiedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDatastoreFileDeletedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDatastoreFileDeletedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDatastoreFileEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDatastoreFileEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDatastoreFileMovedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDatastoreFileMovedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDatastoreIormReconfiguredEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDatastoreIORMReconfiguredEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDatastorePrincipalConfigured(value) => {
+                state.serialize_field("_typeName", "ArrayOfDatastorePrincipalConfigured")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDatastoreRemovedOnHostEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDatastoreRemovedOnHostEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDatastoreRenamedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDatastoreRenamedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDatastoreRenamedOnHostEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDatastoreRenamedOnHostEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDrsDisabledEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDrsDisabledEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDrsEnabledEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDrsEnabledEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDrsEnteredStandbyModeEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDrsEnteredStandbyModeEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDrsEnteringStandbyModeEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDrsEnteringStandbyModeEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDrsExitStandbyModeFailedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDrsExitStandbyModeFailedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDrsExitedStandbyModeEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDrsExitedStandbyModeEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDrsExitingStandbyModeEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDrsExitingStandbyModeEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDrsInvocationFailedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDrsInvocationFailedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDrsRecoveredFromFailureEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDrsRecoveredFromFailureEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDrsResourceConfigureFailedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDrsResourceConfigureFailedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDrsResourceConfigureSyncedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDrsResourceConfigureSyncedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDrsRuleComplianceEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDrsRuleComplianceEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDrsRuleViolationEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDrsRuleViolationEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDrsSoftRuleViolationEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDrsSoftRuleViolationEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDrsVmMigratedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDrsVmMigratedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDrsVmPoweredOnEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDrsVmPoweredOnEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDuplicateIpDetectedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDuplicateIpDetectedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvpgImportEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvpgImportEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvpgRestoreEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvpgRestoreEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsCreatedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsCreatedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsDestroyedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsDestroyedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsEventArgument(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsEventArgument")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsHealthStatusChangeEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsHealthStatusChangeEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsHostBackInSyncEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsHostBackInSyncEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsHostJoinedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsHostJoinedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsHostLeftEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsHostLeftEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsHostStatusUpdated(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsHostStatusUpdated")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsHostWentOutOfSyncEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsHostWentOutOfSyncEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsImportEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsImportEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsMergedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsMergedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsOutOfSyncHostArgument(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsOutOfSyncHostArgument")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsPortBlockedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsPortBlockedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsPortConnectedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsPortConnectedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsPortCreatedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsPortCreatedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsPortDeletedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsPortDeletedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsPortDisconnectedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsPortDisconnectedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsPortEnteredPassthruEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsPortEnteredPassthruEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsPortExitedPassthruEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsPortExitedPassthruEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsPortJoinPortgroupEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsPortJoinPortgroupEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsPortLeavePortgroupEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsPortLeavePortgroupEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsPortLinkDownEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsPortLinkDownEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsPortLinkUpEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsPortLinkUpEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsPortReconfiguredEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsPortReconfiguredEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsPortRuntimeChangeEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsPortRuntimeChangeEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsPortUnblockedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsPortUnblockedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsPortVendorSpecificStateChangeEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsPortVendorSpecificStateChangeEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsReconfiguredEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsReconfiguredEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsRenamedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsRenamedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsRestoreEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsRestoreEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsUpgradeAvailableEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsUpgradeAvailableEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsUpgradeInProgressEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsUpgradeInProgressEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsUpgradeRejectedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsUpgradeRejectedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsUpgradedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsUpgradedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfEnteredMaintenanceModeEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfEnteredMaintenanceModeEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfEnteredStandbyModeEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfEnteredStandbyModeEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfEnteringMaintenanceModeEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfEnteringMaintenanceModeEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfEnteringStandbyModeEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfEnteringStandbyModeEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfEntityEventArgument(value) => {
+                state.serialize_field("_typeName", "ArrayOfEntityEventArgument")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfErrorUpgradeEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfErrorUpgradeEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfEventArgument(value) => {
+                state.serialize_field("_typeName", "ArrayOfEventArgument")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfEventDescription(value) => {
+                state.serialize_field("_typeName", "ArrayOfEventDescription")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfEventArgDesc(value) => {
+                state.serialize_field("_typeName", "ArrayOfEventArgDesc")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfEventDescriptionEventDetail(value) => {
+                state.serialize_field("_typeName", "ArrayOfEventDescriptionEventDetail")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfEventEx(value) => {
+                state.serialize_field("_typeName", "ArrayOfEventEx")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfEventFilterSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfEventFilterSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfEventFilterSpecByEntity(value) => {
+                state.serialize_field("_typeName", "ArrayOfEventFilterSpecByEntity")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfEventFilterSpecByTime(value) => {
+                state.serialize_field("_typeName", "ArrayOfEventFilterSpecByTime")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfEventFilterSpecByUsername(value) => {
+                state.serialize_field("_typeName", "ArrayOfEventFilterSpecByUsername")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfExitMaintenanceModeEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfExitMaintenanceModeEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfExitStandbyModeFailedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfExitStandbyModeFailedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfExitedStandbyModeEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfExitedStandbyModeEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfExitingStandbyModeEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfExitingStandbyModeEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfExtendedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfExtendedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfExtendedEventPair(value) => {
+                state.serialize_field("_typeName", "ArrayOfExtendedEventPair")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFailoverLevelRestored(value) => {
+                state.serialize_field("_typeName", "ArrayOfFailoverLevelRestored")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFolderEventArgument(value) => {
+                state.serialize_field("_typeName", "ArrayOfFolderEventArgument")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGeneralEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfGeneralEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGeneralHostErrorEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfGeneralHostErrorEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGeneralHostInfoEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfGeneralHostInfoEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGeneralHostWarningEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfGeneralHostWarningEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGeneralUserEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfGeneralUserEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGeneralVmErrorEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfGeneralVmErrorEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGeneralVmInfoEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfGeneralVmInfoEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGeneralVmWarningEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfGeneralVmWarningEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGhostDvsProxySwitchDetectedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfGhostDvsProxySwitchDetectedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGhostDvsProxySwitchRemovedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfGhostDvsProxySwitchRemovedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGlobalMessageChangedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfGlobalMessageChangedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHealthStatusChangedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHealthStatusChangedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostAddFailedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostAddFailedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostAddedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostAddedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostAdminDisableEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostAdminDisableEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostAdminEnableEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostAdminEnableEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostCnxFailedAccountFailedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostCnxFailedAccountFailedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostCnxFailedAlreadyManagedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostCnxFailedAlreadyManagedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostCnxFailedBadCcagentEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostCnxFailedBadCcagentEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostCnxFailedBadUsernameEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostCnxFailedBadUsernameEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostCnxFailedBadVersionEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostCnxFailedBadVersionEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostCnxFailedCcagentUpgradeEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostCnxFailedCcagentUpgradeEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostCnxFailedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostCnxFailedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostCnxFailedNetworkErrorEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostCnxFailedNetworkErrorEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostCnxFailedNoAccessEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostCnxFailedNoAccessEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostCnxFailedNoConnectionEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostCnxFailedNoConnectionEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostCnxFailedNoLicenseEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostCnxFailedNoLicenseEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostCnxFailedNotFoundEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostCnxFailedNotFoundEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostCnxFailedTimeoutEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostCnxFailedTimeoutEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostComplianceCheckedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostComplianceCheckedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostCompliantEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostCompliantEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostConfigAppliedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostConfigAppliedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostConnectedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostConnectedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostConnectionLostEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostConnectionLostEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostDasDisabledEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostDasDisabledEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostDasDisablingEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostDasDisablingEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostDasEnabledEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostDasEnabledEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostDasEnablingEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostDasEnablingEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostDasErrorEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostDasErrorEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostDasEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostDasEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostDasOkEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostDasOkEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostDisconnectedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostDisconnectedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostEnableAdminFailedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostEnableAdminFailedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostEventArgument(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostEventArgument")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostExtraNetworksEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostExtraNetworksEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostGetShortNameFailedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostGetShortNameFailedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostInAuditModeEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostInAuditModeEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostInventoryFullEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostInventoryFullEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostInventoryUnreadableEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostInventoryUnreadableEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostIpChangedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostIpChangedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostIpInconsistentEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostIpInconsistentEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostIpToShortNameFailedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostIpToShortNameFailedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostIsolationIpPingFailedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostIsolationIpPingFailedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostLicenseExpiredEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostLicenseExpiredEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostLocalPortCreatedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostLocalPortCreatedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostMissingNetworksEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostMissingNetworksEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostMonitoringStateChangedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostMonitoringStateChangedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostNoAvailableNetworksEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostNoAvailableNetworksEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostNoHaEnabledPortGroupsEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostNoHAEnabledPortGroupsEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostNoRedundantManagementNetworkEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostNoRedundantManagementNetworkEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostNonCompliantEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostNonCompliantEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostNotInClusterEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostNotInClusterEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostOvercommittedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostOvercommittedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostPrimaryAgentNotShortNameEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostPrimaryAgentNotShortNameEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostProfileAppliedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostProfileAppliedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostReconnectionFailedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostReconnectionFailedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostRemovedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostRemovedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostShortNameInconsistentEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostShortNameInconsistentEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostShortNameToIpFailedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostShortNameToIpFailedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostShutdownEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostShutdownEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostSpecificationChangedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostSpecificationChangedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostSpecificationRequireEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostSpecificationRequireEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostSpecificationUpdateEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostSpecificationUpdateEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostStatusChangedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostStatusChangedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostSubSpecificationDeleteEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostSubSpecificationDeleteEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostSubSpecificationUpdateEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostSubSpecificationUpdateEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostSyncFailedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostSyncFailedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostUpgradeFailedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostUpgradeFailedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostUserWorldSwapNotEnabledEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostUserWorldSwapNotEnabledEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostVnicConnectedToCustomizedDvPortEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostVnicConnectedToCustomizedDVPortEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostWwnChangedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostWwnChangedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostWwnConflictEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostWwnConflictEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfIncorrectHostInformationEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfIncorrectHostInformationEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInfoUpgradeEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfInfoUpgradeEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInsufficientFailoverResourcesEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfInsufficientFailoverResourcesEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInvalidEditionEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfInvalidEditionEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfLicenseEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfLicenseEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfLicenseExpiredEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfLicenseExpiredEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfLicenseNonComplianceEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfLicenseNonComplianceEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfLicenseRestrictedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfLicenseRestrictedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfLicenseServerAvailableEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfLicenseServerAvailableEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfLicenseServerUnavailableEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfLicenseServerUnavailableEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfLocalDatastoreCreatedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfLocalDatastoreCreatedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfLocalTsmEnabledEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfLocalTSMEnabledEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfLockerMisconfiguredEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfLockerMisconfiguredEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfLockerReconfiguredEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfLockerReconfiguredEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfManagedEntityEventArgument(value) => {
+                state.serialize_field("_typeName", "ArrayOfManagedEntityEventArgument")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfMigrationErrorEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfMigrationErrorEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfMigrationEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfMigrationEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfMigrationHostErrorEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfMigrationHostErrorEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfMigrationHostWarningEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfMigrationHostWarningEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfMigrationResourceErrorEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfMigrationResourceErrorEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfMigrationResourceWarningEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfMigrationResourceWarningEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfMigrationWarningEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfMigrationWarningEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfMtuMatchEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfMtuMatchEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfMtuMismatchEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfMtuMismatchEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNasDatastoreCreatedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfNASDatastoreCreatedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNetworkEventArgument(value) => {
+                state.serialize_field("_typeName", "ArrayOfNetworkEventArgument")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNetworkRollbackEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfNetworkRollbackEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNoAccessUserEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfNoAccessUserEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNoDatastoresConfiguredEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfNoDatastoresConfiguredEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNoLicenseEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfNoLicenseEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNoMaintenanceModeDrsRecommendationForVm(value) => {
+                state.serialize_field("_typeName", "ArrayOfNoMaintenanceModeDrsRecommendationForVM")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNonViWorkloadDetectedOnDatastoreEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfNonVIWorkloadDetectedOnDatastoreEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNotEnoughResourcesToStartVmEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfNotEnoughResourcesToStartVmEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOutOfSyncDvsHost(value) => {
+                state.serialize_field("_typeName", "ArrayOfOutOfSyncDvsHost")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPermissionAddedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfPermissionAddedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPermissionEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfPermissionEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPermissionRemovedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfPermissionRemovedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPermissionUpdatedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfPermissionUpdatedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfProfileAssociatedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfProfileAssociatedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfProfileChangedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfProfileChangedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfProfileCreatedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfProfileCreatedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfProfileDissociatedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfProfileDissociatedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfProfileEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfProfileEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfProfileEventArgument(value) => {
+                state.serialize_field("_typeName", "ArrayOfProfileEventArgument")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfProfileReferenceHostChangedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfProfileReferenceHostChangedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfProfileRemovedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfProfileRemovedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfRecoveryEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfRecoveryEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfRemoteTsmEnabledEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfRemoteTSMEnabledEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfResourcePoolCreatedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfResourcePoolCreatedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfResourcePoolDestroyedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfResourcePoolDestroyedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfResourcePoolEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfResourcePoolEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfResourcePoolEventArgument(value) => {
+                state.serialize_field("_typeName", "ArrayOfResourcePoolEventArgument")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfResourcePoolMovedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfResourcePoolMovedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfResourcePoolReconfiguredEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfResourcePoolReconfiguredEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfResourceViolatedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfResourceViolatedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfRoleAddedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfRoleAddedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfRoleEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfRoleEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfRoleEventArgument(value) => {
+                state.serialize_field("_typeName", "ArrayOfRoleEventArgument")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfRoleRemovedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfRoleRemovedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfRoleUpdatedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfRoleUpdatedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfRollbackEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfRollbackEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfScheduledTaskCompletedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfScheduledTaskCompletedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfScheduledTaskCreatedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfScheduledTaskCreatedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfScheduledTaskEmailCompletedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfScheduledTaskEmailCompletedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfScheduledTaskEmailFailedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfScheduledTaskEmailFailedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfScheduledTaskEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfScheduledTaskEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfScheduledTaskEventArgument(value) => {
+                state.serialize_field("_typeName", "ArrayOfScheduledTaskEventArgument")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfScheduledTaskFailedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfScheduledTaskFailedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfScheduledTaskReconfiguredEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfScheduledTaskReconfiguredEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfScheduledTaskRemovedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfScheduledTaskRemovedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfScheduledTaskStartedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfScheduledTaskStartedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfServerLicenseExpiredEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfServerLicenseExpiredEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfServerStartedSessionEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfServerStartedSessionEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSessionEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfSessionEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSessionTerminatedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfSessionTerminatedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfTaskEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfTaskEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfTaskTimeoutEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfTaskTimeoutEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfTeamingMatchEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfTeamingMatchEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfTeamingMisMatchEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfTeamingMisMatchEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfTemplateBeingUpgradedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfTemplateBeingUpgradedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfTemplateUpgradeEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfTemplateUpgradeEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfTemplateUpgradeFailedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfTemplateUpgradeFailedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfTemplateUpgradedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfTemplateUpgradedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfTimedOutHostOperationEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfTimedOutHostOperationEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfUnlicensedVirtualMachinesEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfUnlicensedVirtualMachinesEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfUnlicensedVirtualMachinesFoundEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfUnlicensedVirtualMachinesFoundEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfUpdatedAgentBeingRestartedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfUpdatedAgentBeingRestartedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfUpgradeEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfUpgradeEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfUplinkPortMtuNotSupportEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfUplinkPortMtuNotSupportEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfUplinkPortMtuSupportEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfUplinkPortMtuSupportEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfUplinkPortVlanTrunkedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfUplinkPortVlanTrunkedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfUplinkPortVlanUntrunkedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfUplinkPortVlanUntrunkedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfUserAssignedToGroup(value) => {
+                state.serialize_field("_typeName", "ArrayOfUserAssignedToGroup")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfUserLoginSessionEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfUserLoginSessionEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfUserLogoutSessionEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfUserLogoutSessionEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfUserPasswordChanged(value) => {
+                state.serialize_field("_typeName", "ArrayOfUserPasswordChanged")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfUserUnassignedFromGroup(value) => {
+                state.serialize_field("_typeName", "ArrayOfUserUnassignedFromGroup")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfUserUpgradeEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfUserUpgradeEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmfsDatastoreCreatedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVMFSDatastoreCreatedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmfsDatastoreExpandedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVMFSDatastoreExpandedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmfsDatastoreExtendedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVMFSDatastoreExtendedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVMotionLicenseExpiredEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVMotionLicenseExpiredEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVcAgentUninstallFailedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVcAgentUninstallFailedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVcAgentUninstalledEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVcAgentUninstalledEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVcAgentUpgradeFailedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVcAgentUpgradeFailedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVcAgentUpgradedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVcAgentUpgradedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVimAccountPasswordChangedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVimAccountPasswordChangedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmAcquiredMksTicketEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmAcquiredMksTicketEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmAcquiredTicketEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmAcquiredTicketEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmAutoRenameEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmAutoRenameEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmBeingClonedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmBeingClonedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmBeingClonedNoFolderEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmBeingClonedNoFolderEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmBeingCreatedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmBeingCreatedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmBeingDeployedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmBeingDeployedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmBeingHotMigratedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmBeingHotMigratedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmBeingMigratedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmBeingMigratedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmBeingRelocatedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmBeingRelocatedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmCloneEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmCloneEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmCloneFailedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmCloneFailedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmClonedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmClonedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmConfigMissingEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmConfigMissingEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmConnectedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmConnectedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmCreatedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmCreatedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmDasBeingResetEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmDasBeingResetEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmDasBeingResetWithScreenshotEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmDasBeingResetWithScreenshotEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmDasResetFailedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmDasResetFailedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmDasUpdateErrorEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmDasUpdateErrorEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmDasUpdateOkEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmDasUpdateOkEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmDateRolledBackEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmDateRolledBackEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmDeployFailedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmDeployFailedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmDeployedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmDeployedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmDisconnectedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmDisconnectedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmDiscoveredEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmDiscoveredEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmDiskFailedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmDiskFailedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmEmigratingEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmEmigratingEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmEndRecordingEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmEndRecordingEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmEndReplayingEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmEndReplayingEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmEventArgument(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmEventArgument")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmFailedMigrateEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmFailedMigrateEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmFailedRelayoutEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmFailedRelayoutEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmFailedRelayoutOnVmfs2DatastoreEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmFailedRelayoutOnVmfs2DatastoreEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmFailedStartingSecondaryEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmFailedStartingSecondaryEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmFailedToPowerOffEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmFailedToPowerOffEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmFailedToPowerOnEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmFailedToPowerOnEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmFailedToRebootGuestEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmFailedToRebootGuestEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmFailedToResetEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmFailedToResetEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmFailedToShutdownGuestEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmFailedToShutdownGuestEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmFailedToStandbyGuestEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmFailedToStandbyGuestEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmFailedToSuspendEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmFailedToSuspendEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmFailedUpdatingSecondaryConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmFailedUpdatingSecondaryConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmFailoverFailed(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmFailoverFailed")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmFaultToleranceStateChangedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmFaultToleranceStateChangedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmFaultToleranceTurnedOffEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmFaultToleranceTurnedOffEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmFaultToleranceVmTerminatedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmFaultToleranceVmTerminatedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmGuestOsCrashedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmGuestOSCrashedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmGuestRebootEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmGuestRebootEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmGuestShutdownEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmGuestShutdownEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmGuestStandbyEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmGuestStandbyEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmHealthMonitoringStateChangedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmHealthMonitoringStateChangedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmInstanceUuidAssignedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmInstanceUuidAssignedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmInstanceUuidChangedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmInstanceUuidChangedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmInstanceUuidConflictEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmInstanceUuidConflictEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmMacAssignedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmMacAssignedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmMacChangedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmMacChangedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmMacConflictEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmMacConflictEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmMaxFtRestartCountReached(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmMaxFTRestartCountReached")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmMaxRestartCountReached(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmMaxRestartCountReached")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmMessageErrorEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmMessageErrorEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmMessageEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmMessageEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmMessageWarningEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmMessageWarningEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmMigratedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmMigratedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmNoCompatibleHostForSecondaryEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmNoCompatibleHostForSecondaryEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmNoNetworkAccessEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmNoNetworkAccessEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmOrphanedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmOrphanedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmPowerOffOnIsolationEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmPowerOffOnIsolationEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmPoweredOffEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmPoweredOffEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmPoweredOnEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmPoweredOnEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmPoweringOnWithCustomizedDvPortEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmPoweringOnWithCustomizedDVPortEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmPrimaryFailoverEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmPrimaryFailoverEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmReconfiguredEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmReconfiguredEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmRegisteredEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmRegisteredEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmRelayoutSuccessfulEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmRelayoutSuccessfulEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmRelayoutUpToDateEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmRelayoutUpToDateEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmReloadFromPathEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmReloadFromPathEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmReloadFromPathFailedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmReloadFromPathFailedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmRelocateFailedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmRelocateFailedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmRelocateSpecEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmRelocateSpecEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmRelocatedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmRelocatedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmRemoteConsoleConnectedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmRemoteConsoleConnectedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmRemoteConsoleDisconnectedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmRemoteConsoleDisconnectedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmRemovedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmRemovedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmRenamedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmRenamedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmRequirementsExceedCurrentEvcModeEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmRequirementsExceedCurrentEVCModeEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmResettingEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmResettingEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmResourcePoolMovedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmResourcePoolMovedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmResourceReallocatedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmResourceReallocatedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmRestartedOnAlternateHostEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmRestartedOnAlternateHostEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmResumingEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmResumingEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmSecondaryAddedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmSecondaryAddedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmSecondaryDisabledBySystemEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmSecondaryDisabledBySystemEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmSecondaryDisabledEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmSecondaryDisabledEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmSecondaryEnabledEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmSecondaryEnabledEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmSecondaryStartedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmSecondaryStartedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmShutdownOnIsolationEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmShutdownOnIsolationEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmStartRecordingEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmStartRecordingEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmStartReplayingEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmStartReplayingEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmStartingEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmStartingEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmStartingSecondaryEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmStartingSecondaryEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmStaticMacConflictEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmStaticMacConflictEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmStoppingEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmStoppingEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmSuspendedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmSuspendedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmSuspendingEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmSuspendingEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmTimedoutStartingSecondaryEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmTimedoutStartingSecondaryEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmUnsupportedStartingEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmUnsupportedStartingEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmUpgradeCompleteEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmUpgradeCompleteEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmUpgradeFailedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmUpgradeFailedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmUpgradingEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmUpgradingEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmUuidAssignedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmUuidAssignedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmUuidChangedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmUuidChangedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmUuidConflictEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmUuidConflictEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmVnicPoolReservationViolationClearEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmVnicPoolReservationViolationClearEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmVnicPoolReservationViolationRaiseEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmVnicPoolReservationViolationRaiseEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmWwnAssignedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmWwnAssignedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmWwnChangedEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmWwnChangedEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmWwnConflictEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmWwnConflictEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVnicPortArgument(value) => {
+                state.serialize_field("_typeName", "ArrayOfVnicPortArgument")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfWarningUpgradeEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfWarningUpgradeEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfIScsiBootFailureEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfIScsiBootFailureEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfExtExtendedProductInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfExtExtendedProductInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfManagedByInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfManagedByInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfExtManagedEntityInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfExtManagedEntityInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfExtSolutionManagerInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfExtSolutionManagerInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfExtSolutionManagerInfoTabInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfExtSolutionManagerInfoTabInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfActiveDirectoryFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfActiveDirectoryFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfActiveVMsBlockingEvc(value) => {
+                state.serialize_field("_typeName", "ArrayOfActiveVMsBlockingEVC")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAdminDisabled(value) => {
+                state.serialize_field("_typeName", "ArrayOfAdminDisabled")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAdminNotDisabled(value) => {
+                state.serialize_field("_typeName", "ArrayOfAdminNotDisabled")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAffinityConfigured(value) => {
+                state.serialize_field("_typeName", "ArrayOfAffinityConfigured")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAgentInstallFailed(value) => {
+                state.serialize_field("_typeName", "ArrayOfAgentInstallFailed")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAlreadyBeingManaged(value) => {
+                state.serialize_field("_typeName", "ArrayOfAlreadyBeingManaged")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAlreadyConnected(value) => {
+                state.serialize_field("_typeName", "ArrayOfAlreadyConnected")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAlreadyExists(value) => {
+                state.serialize_field("_typeName", "ArrayOfAlreadyExists")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAlreadyUpgraded(value) => {
+                state.serialize_field("_typeName", "ArrayOfAlreadyUpgraded")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAnswerFileUpdateFailed(value) => {
+                state.serialize_field("_typeName", "ArrayOfAnswerFileUpdateFailed")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAnswerFileUpdateFailure(value) => {
+                state.serialize_field("_typeName", "ArrayOfAnswerFileUpdateFailure")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfApplicationQuiesceFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfApplicationQuiesceFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAuthMinimumAdminPermission(value) => {
+                state.serialize_field("_typeName", "ArrayOfAuthMinimumAdminPermission")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfBackupBlobReadFailure(value) => {
+                state.serialize_field("_typeName", "ArrayOfBackupBlobReadFailure")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfBackupBlobWriteFailure(value) => {
+                state.serialize_field("_typeName", "ArrayOfBackupBlobWriteFailure")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfBlockedByFirewall(value) => {
+                state.serialize_field("_typeName", "ArrayOfBlockedByFirewall")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCamServerRefusedConnection(value) => {
+                state.serialize_field("_typeName", "ArrayOfCAMServerRefusedConnection")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCannotAccessFile(value) => {
+                state.serialize_field("_typeName", "ArrayOfCannotAccessFile")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCannotAccessLocalSource(value) => {
+                state.serialize_field("_typeName", "ArrayOfCannotAccessLocalSource")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCannotAccessNetwork(value) => {
+                state.serialize_field("_typeName", "ArrayOfCannotAccessNetwork")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCannotAccessVmComponent(value) => {
+                state.serialize_field("_typeName", "ArrayOfCannotAccessVmComponent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCannotAccessVmConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfCannotAccessVmConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCannotAccessVmDevice(value) => {
+                state.serialize_field("_typeName", "ArrayOfCannotAccessVmDevice")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCannotAccessVmDisk(value) => {
+                state.serialize_field("_typeName", "ArrayOfCannotAccessVmDisk")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCannotAddHostWithFtVmAsStandalone(value) => {
+                state.serialize_field("_typeName", "ArrayOfCannotAddHostWithFTVmAsStandalone")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCannotAddHostWithFtVmToDifferentCluster(value) => {
+                state.serialize_field("_typeName", "ArrayOfCannotAddHostWithFTVmToDifferentCluster")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCannotAddHostWithFtVmToNonHaCluster(value) => {
+                state.serialize_field("_typeName", "ArrayOfCannotAddHostWithFTVmToNonHACluster")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCannotChangeDrsBehaviorForFtSecondary(value) => {
+                state.serialize_field("_typeName", "ArrayOfCannotChangeDrsBehaviorForFtSecondary")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCannotChangeHaSettingsForFtSecondary(value) => {
+                state.serialize_field("_typeName", "ArrayOfCannotChangeHaSettingsForFtSecondary")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCannotChangeVsanClusterUuid(value) => {
+                state.serialize_field("_typeName", "ArrayOfCannotChangeVsanClusterUuid")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCannotChangeVsanNodeUuid(value) => {
+                state.serialize_field("_typeName", "ArrayOfCannotChangeVsanNodeUuid")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCannotComputeFtCompatibleHosts(value) => {
+                state.serialize_field("_typeName", "ArrayOfCannotComputeFTCompatibleHosts")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCannotCreateFile(value) => {
+                state.serialize_field("_typeName", "ArrayOfCannotCreateFile")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCannotDecryptPasswords(value) => {
+                state.serialize_field("_typeName", "ArrayOfCannotDecryptPasswords")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCannotDeleteFile(value) => {
+                state.serialize_field("_typeName", "ArrayOfCannotDeleteFile")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCannotDisableDrsOnClustersWithVApps(value) => {
+                state.serialize_field("_typeName", "ArrayOfCannotDisableDrsOnClustersWithVApps")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCannotDisableSnapshot(value) => {
+                state.serialize_field("_typeName", "ArrayOfCannotDisableSnapshot")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCannotDisconnectHostWithFaultToleranceVm(value) => {
+                state.serialize_field("_typeName", "ArrayOfCannotDisconnectHostWithFaultToleranceVm")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCannotEnableVmcpForCluster(value) => {
+                state.serialize_field("_typeName", "ArrayOfCannotEnableVmcpForCluster")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCannotModifyConfigCpuRequirements(value) => {
+                state.serialize_field("_typeName", "ArrayOfCannotModifyConfigCpuRequirements")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCannotMoveFaultToleranceVm(value) => {
+                state.serialize_field("_typeName", "ArrayOfCannotMoveFaultToleranceVm")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCannotMoveHostWithFaultToleranceVm(value) => {
+                state.serialize_field("_typeName", "ArrayOfCannotMoveHostWithFaultToleranceVm")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCannotMoveVmWithDeltaDisk(value) => {
+                state.serialize_field("_typeName", "ArrayOfCannotMoveVmWithDeltaDisk")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCannotMoveVmWithNativeDeltaDisk(value) => {
+                state.serialize_field("_typeName", "ArrayOfCannotMoveVmWithNativeDeltaDisk")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCannotMoveVsanEnabledHost(value) => {
+                state.serialize_field("_typeName", "ArrayOfCannotMoveVsanEnabledHost")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCannotPlaceWithoutPrerequisiteMoves(value) => {
+                state.serialize_field("_typeName", "ArrayOfCannotPlaceWithoutPrerequisiteMoves")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCannotPowerOffVmInCluster(value) => {
+                state.serialize_field("_typeName", "ArrayOfCannotPowerOffVmInCluster")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCannotReconfigureVsanWhenHaEnabled(value) => {
+                state.serialize_field("_typeName", "ArrayOfCannotReconfigureVsanWhenHaEnabled")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCannotUseNetwork(value) => {
+                state.serialize_field("_typeName", "ArrayOfCannotUseNetwork")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClockSkew(value) => {
+                state.serialize_field("_typeName", "ArrayOfClockSkew")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCloneFromSnapshotNotSupported(value) => {
+                state.serialize_field("_typeName", "ArrayOfCloneFromSnapshotNotSupported")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCollectorAddressUnset(value) => {
+                state.serialize_field("_typeName", "ArrayOfCollectorAddressUnset")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfConcurrentAccess(value) => {
+                state.serialize_field("_typeName", "ArrayOfConcurrentAccess")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfConflictingConfiguration(value) => {
+                state.serialize_field("_typeName", "ArrayOfConflictingConfiguration")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfConflictingConfigurationConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfConflictingConfigurationConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfConflictingDatastoreFound(value) => {
+                state.serialize_field("_typeName", "ArrayOfConflictingDatastoreFound")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfConnectedIso(value) => {
+                state.serialize_field("_typeName", "ArrayOfConnectedIso")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCpuCompatibilityUnknown(value) => {
+                state.serialize_field("_typeName", "ArrayOfCpuCompatibilityUnknown")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCpuHotPlugNotSupported(value) => {
+                state.serialize_field("_typeName", "ArrayOfCpuHotPlugNotSupported")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCpuIncompatible(value) => {
+                state.serialize_field("_typeName", "ArrayOfCpuIncompatible")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCpuIncompatible1Ecx(value) => {
+                state.serialize_field("_typeName", "ArrayOfCpuIncompatible1ECX")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCpuIncompatible81Edx(value) => {
+                state.serialize_field("_typeName", "ArrayOfCpuIncompatible81EDX")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCustomizationFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfCustomizationFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCustomizationPending(value) => {
+                state.serialize_field("_typeName", "ArrayOfCustomizationPending")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvPortNotSupported(value) => {
+                state.serialize_field("_typeName", "ArrayOfDVPortNotSupported")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDasConfigFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfDasConfigFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDatabaseError(value) => {
+                state.serialize_field("_typeName", "ArrayOfDatabaseError")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDatacenterMismatch(value) => {
+                state.serialize_field("_typeName", "ArrayOfDatacenterMismatch")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDatacenterMismatchArgument(value) => {
+                state.serialize_field("_typeName", "ArrayOfDatacenterMismatchArgument")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDatastoreNotWritableOnHost(value) => {
+                state.serialize_field("_typeName", "ArrayOfDatastoreNotWritableOnHost")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDeltaDiskFormatNotSupported(value) => {
+                state.serialize_field("_typeName", "ArrayOfDeltaDiskFormatNotSupported")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDestinationSwitchFull(value) => {
+                state.serialize_field("_typeName", "ArrayOfDestinationSwitchFull")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDestinationVsanDisabled(value) => {
+                state.serialize_field("_typeName", "ArrayOfDestinationVsanDisabled")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDeviceBackingNotSupported(value) => {
+                state.serialize_field("_typeName", "ArrayOfDeviceBackingNotSupported")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDeviceControllerNotSupported(value) => {
+                state.serialize_field("_typeName", "ArrayOfDeviceControllerNotSupported")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDeviceHotPlugNotSupported(value) => {
+                state.serialize_field("_typeName", "ArrayOfDeviceHotPlugNotSupported")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDeviceNotFound(value) => {
+                state.serialize_field("_typeName", "ArrayOfDeviceNotFound")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDeviceNotSupported(value) => {
+                state.serialize_field("_typeName", "ArrayOfDeviceNotSupported")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDeviceUnsupportedForVmPlatform(value) => {
+                state.serialize_field("_typeName", "ArrayOfDeviceUnsupportedForVmPlatform")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDeviceUnsupportedForVmVersion(value) => {
+                state.serialize_field("_typeName", "ArrayOfDeviceUnsupportedForVmVersion")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDigestNotSupported(value) => {
+                state.serialize_field("_typeName", "ArrayOfDigestNotSupported")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDirectoryNotEmpty(value) => {
+                state.serialize_field("_typeName", "ArrayOfDirectoryNotEmpty")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDisableAdminNotSupported(value) => {
+                state.serialize_field("_typeName", "ArrayOfDisableAdminNotSupported")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDisallowedChangeByService(value) => {
+                state.serialize_field("_typeName", "ArrayOfDisallowedChangeByService")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDisallowedDiskModeChange(value) => {
+                state.serialize_field("_typeName", "ArrayOfDisallowedDiskModeChange")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDisallowedMigrationDeviceAttached(value) => {
+                state.serialize_field("_typeName", "ArrayOfDisallowedMigrationDeviceAttached")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDisallowedOperationOnFailoverHost(value) => {
+                state.serialize_field("_typeName", "ArrayOfDisallowedOperationOnFailoverHost")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDisconnectedHostsBlockingEvc(value) => {
+                state.serialize_field("_typeName", "ArrayOfDisconnectedHostsBlockingEVC")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDiskHasPartitions(value) => {
+                state.serialize_field("_typeName", "ArrayOfDiskHasPartitions")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDiskIsLastRemainingNonSsd(value) => {
+                state.serialize_field("_typeName", "ArrayOfDiskIsLastRemainingNonSSD")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDiskIsNonLocal(value) => {
+                state.serialize_field("_typeName", "ArrayOfDiskIsNonLocal")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDiskIsUsb(value) => {
+                state.serialize_field("_typeName", "ArrayOfDiskIsUSB")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDiskMoveTypeNotSupported(value) => {
+                state.serialize_field("_typeName", "ArrayOfDiskMoveTypeNotSupported")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDiskNotSupported(value) => {
+                state.serialize_field("_typeName", "ArrayOfDiskNotSupported")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDiskTooSmall(value) => {
+                state.serialize_field("_typeName", "ArrayOfDiskTooSmall")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDomainNotFound(value) => {
+                state.serialize_field("_typeName", "ArrayOfDomainNotFound")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDrsDisabledOnVm(value) => {
+                state.serialize_field("_typeName", "ArrayOfDrsDisabledOnVm")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDrsVmotionIncompatibleFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfDrsVmotionIncompatibleFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDuplicateDisks(value) => {
+                state.serialize_field("_typeName", "ArrayOfDuplicateDisks")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDuplicateName(value) => {
+                state.serialize_field("_typeName", "ArrayOfDuplicateName")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDuplicateVsanNetworkInterface(value) => {
+                state.serialize_field("_typeName", "ArrayOfDuplicateVsanNetworkInterface")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsApplyOperationFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsApplyOperationFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsApplyOperationFaultFaultOnObject(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsApplyOperationFaultFaultOnObject")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsNotAuthorized(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsNotAuthorized")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsOperationBulkFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsOperationBulkFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsOperationBulkFaultFaultOnHost(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsOperationBulkFaultFaultOnHost")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsScopeViolated(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsScopeViolated")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfEvcAdmissionFailed(value) => {
+                state.serialize_field("_typeName", "ArrayOfEVCAdmissionFailed")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfEvcAdmissionFailedCpuFeaturesForMode(value) => {
+                state.serialize_field("_typeName", "ArrayOfEVCAdmissionFailedCPUFeaturesForMode")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfEvcAdmissionFailedCpuModel(value) => {
+                state.serialize_field("_typeName", "ArrayOfEVCAdmissionFailedCPUModel")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfEvcAdmissionFailedCpuModelForMode(value) => {
+                state.serialize_field("_typeName", "ArrayOfEVCAdmissionFailedCPUModelForMode")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfEvcAdmissionFailedCpuVendor(value) => {
+                state.serialize_field("_typeName", "ArrayOfEVCAdmissionFailedCPUVendor")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfEvcAdmissionFailedCpuVendorUnknown(value) => {
+                state.serialize_field("_typeName", "ArrayOfEVCAdmissionFailedCPUVendorUnknown")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfEvcAdmissionFailedHostDisconnected(value) => {
+                state.serialize_field("_typeName", "ArrayOfEVCAdmissionFailedHostDisconnected")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfEvcAdmissionFailedHostSoftware(value) => {
+                state.serialize_field("_typeName", "ArrayOfEVCAdmissionFailedHostSoftware")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfEvcAdmissionFailedHostSoftwareForMode(value) => {
+                state.serialize_field("_typeName", "ArrayOfEVCAdmissionFailedHostSoftwareForMode")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfEvcAdmissionFailedVmActive(value) => {
+                state.serialize_field("_typeName", "ArrayOfEVCAdmissionFailedVmActive")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfEvcConfigFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfEVCConfigFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfEvcModeIllegalByVendor(value) => {
+                state.serialize_field("_typeName", "ArrayOfEVCModeIllegalByVendor")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfEvcModeUnsupportedByHosts(value) => {
+                state.serialize_field("_typeName", "ArrayOfEVCModeUnsupportedByHosts")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfEvcUnsupportedByHostHardware(value) => {
+                state.serialize_field("_typeName", "ArrayOfEVCUnsupportedByHostHardware")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfEvcUnsupportedByHostSoftware(value) => {
+                state.serialize_field("_typeName", "ArrayOfEVCUnsupportedByHostSoftware")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfEightHostLimitViolated(value) => {
+                state.serialize_field("_typeName", "ArrayOfEightHostLimitViolated")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfEncryptionKeyRequired(value) => {
+                state.serialize_field("_typeName", "ArrayOfEncryptionKeyRequired")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfExpiredAddonLicense(value) => {
+                state.serialize_field("_typeName", "ArrayOfExpiredAddonLicense")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfExpiredEditionLicense(value) => {
+                state.serialize_field("_typeName", "ArrayOfExpiredEditionLicense")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfExpiredFeatureLicense(value) => {
+                state.serialize_field("_typeName", "ArrayOfExpiredFeatureLicense")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfExtendedFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfExtendedFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFailToEnableSpbm(value) => {
+                state.serialize_field("_typeName", "ArrayOfFailToEnableSPBM")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFailToLockFaultToleranceVMs(value) => {
+                state.serialize_field("_typeName", "ArrayOfFailToLockFaultToleranceVMs")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFaultToleranceAntiAffinityViolated(value) => {
+                state.serialize_field("_typeName", "ArrayOfFaultToleranceAntiAffinityViolated")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFaultToleranceCannotEditMem(value) => {
+                state.serialize_field("_typeName", "ArrayOfFaultToleranceCannotEditMem")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFaultToleranceCpuIncompatible(value) => {
+                state.serialize_field("_typeName", "ArrayOfFaultToleranceCpuIncompatible")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFaultToleranceNeedsThickDisk(value) => {
+                state.serialize_field("_typeName", "ArrayOfFaultToleranceNeedsThickDisk")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFaultToleranceNotLicensed(value) => {
+                state.serialize_field("_typeName", "ArrayOfFaultToleranceNotLicensed")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFaultToleranceNotSameBuild(value) => {
+                state.serialize_field("_typeName", "ArrayOfFaultToleranceNotSameBuild")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFaultTolerancePrimaryPowerOnNotAttempted(value) => {
+                state.serialize_field("_typeName", "ArrayOfFaultTolerancePrimaryPowerOnNotAttempted")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFaultToleranceVmNotDasProtected(value) => {
+                state.serialize_field("_typeName", "ArrayOfFaultToleranceVmNotDasProtected")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFcoeFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfFcoeFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFcoeFaultPnicHasNoPortSet(value) => {
+                state.serialize_field("_typeName", "ArrayOfFcoeFaultPnicHasNoPortSet")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFeatureRequirementsNotMet(value) => {
+                state.serialize_field("_typeName", "ArrayOfFeatureRequirementsNotMet")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFileAlreadyExists(value) => {
+                state.serialize_field("_typeName", "ArrayOfFileAlreadyExists")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFileBackedPortNotSupported(value) => {
+                state.serialize_field("_typeName", "ArrayOfFileBackedPortNotSupported")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFileFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfFileFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFileLocked(value) => {
+                state.serialize_field("_typeName", "ArrayOfFileLocked")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFileNameTooLong(value) => {
+                state.serialize_field("_typeName", "ArrayOfFileNameTooLong")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFileNotFound(value) => {
+                state.serialize_field("_typeName", "ArrayOfFileNotFound")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFileNotWritable(value) => {
+                state.serialize_field("_typeName", "ArrayOfFileNotWritable")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFileTooLarge(value) => {
+                state.serialize_field("_typeName", "ArrayOfFileTooLarge")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFilesystemQuiesceFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfFilesystemQuiesceFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFilterInUse(value) => {
+                state.serialize_field("_typeName", "ArrayOfFilterInUse")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFtIssuesOnHost(value) => {
+                state.serialize_field("_typeName", "ArrayOfFtIssuesOnHost")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFullStorageVMotionNotSupported(value) => {
+                state.serialize_field("_typeName", "ArrayOfFullStorageVMotionNotSupported")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGatewayConnectFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfGatewayConnectFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGatewayHostNotReachable(value) => {
+                state.serialize_field("_typeName", "ArrayOfGatewayHostNotReachable")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGatewayNotFound(value) => {
+                state.serialize_field("_typeName", "ArrayOfGatewayNotFound")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGatewayNotReachable(value) => {
+                state.serialize_field("_typeName", "ArrayOfGatewayNotReachable")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGatewayOperationRefused(value) => {
+                state.serialize_field("_typeName", "ArrayOfGatewayOperationRefused")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGatewayToHostAuthFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfGatewayToHostAuthFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGatewayToHostConnectFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfGatewayToHostConnectFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGatewayToHostTrustVerifyFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfGatewayToHostTrustVerifyFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGenericDrsFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfGenericDrsFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGenericVmConfigFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfGenericVmConfigFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGuestAuthenticationChallenge(value) => {
+                state.serialize_field("_typeName", "ArrayOfGuestAuthenticationChallenge")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGuestComponentsOutOfDate(value) => {
+                state.serialize_field("_typeName", "ArrayOfGuestComponentsOutOfDate")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGuestMultipleMappings(value) => {
+                state.serialize_field("_typeName", "ArrayOfGuestMultipleMappings")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGuestOperationsFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfGuestOperationsFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGuestOperationsUnavailable(value) => {
+                state.serialize_field("_typeName", "ArrayOfGuestOperationsUnavailable")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGuestPermissionDenied(value) => {
+                state.serialize_field("_typeName", "ArrayOfGuestPermissionDenied")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGuestProcessNotFound(value) => {
+                state.serialize_field("_typeName", "ArrayOfGuestProcessNotFound")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGuestRegistryFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfGuestRegistryFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGuestRegistryKeyAlreadyExists(value) => {
+                state.serialize_field("_typeName", "ArrayOfGuestRegistryKeyAlreadyExists")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGuestRegistryKeyFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfGuestRegistryKeyFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGuestRegistryKeyHasSubkeys(value) => {
+                state.serialize_field("_typeName", "ArrayOfGuestRegistryKeyHasSubkeys")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGuestRegistryKeyInvalid(value) => {
+                state.serialize_field("_typeName", "ArrayOfGuestRegistryKeyInvalid")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGuestRegistryKeyParentVolatile(value) => {
+                state.serialize_field("_typeName", "ArrayOfGuestRegistryKeyParentVolatile")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGuestRegistryValueFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfGuestRegistryValueFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGuestRegistryValueNotFound(value) => {
+                state.serialize_field("_typeName", "ArrayOfGuestRegistryValueNotFound")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHaErrorsAtDest(value) => {
+                state.serialize_field("_typeName", "ArrayOfHAErrorsAtDest")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHeterogenousHostsBlockingEvc(value) => {
+                state.serialize_field("_typeName", "ArrayOfHeterogenousHostsBlockingEVC")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostAccessRestrictedToManagementServer(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostAccessRestrictedToManagementServer")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostConfigFailed(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostConfigFailed")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostConfigFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostConfigFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostConnectFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostConnectFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostHasComponentFailure(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostHasComponentFailure")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostInDomain(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostInDomain")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostIncompatibleForFaultTolerance(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostIncompatibleForFaultTolerance")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostIncompatibleForRecordReplay(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostIncompatibleForRecordReplay")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostInventoryFull(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostInventoryFull")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostPowerOpFailed(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostPowerOpFailed")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostSpecificationOperationFailed(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostSpecificationOperationFailed")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHotSnapshotMoveNotSupported(value) => {
+                state.serialize_field("_typeName", "ArrayOfHotSnapshotMoveNotSupported")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHttpFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfHttpFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfIdeDiskNotSupported(value) => {
+                state.serialize_field("_typeName", "ArrayOfIDEDiskNotSupported")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfIormNotSupportedHostOnDatastore(value) => {
+                state.serialize_field("_typeName", "ArrayOfIORMNotSupportedHostOnDatastore")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfImportHostAddFailure(value) => {
+                state.serialize_field("_typeName", "ArrayOfImportHostAddFailure")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfImportOperationBulkFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfImportOperationBulkFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfImportOperationBulkFaultFaultOnImport(value) => {
+                state.serialize_field("_typeName", "ArrayOfImportOperationBulkFaultFaultOnImport")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInUseFeatureManipulationDisallowed(value) => {
+                state.serialize_field("_typeName", "ArrayOfInUseFeatureManipulationDisallowed")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInaccessibleDatastore(value) => {
+                state.serialize_field("_typeName", "ArrayOfInaccessibleDatastore")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInaccessibleFtMetadataDatastore(value) => {
+                state.serialize_field("_typeName", "ArrayOfInaccessibleFTMetadataDatastore")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInaccessibleVFlashSource(value) => {
+                state.serialize_field("_typeName", "ArrayOfInaccessibleVFlashSource")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfIncompatibleDefaultDevice(value) => {
+                state.serialize_field("_typeName", "ArrayOfIncompatibleDefaultDevice")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfIncompatibleHostForFtSecondary(value) => {
+                state.serialize_field("_typeName", "ArrayOfIncompatibleHostForFtSecondary")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfIncompatibleHostForVmReplication(value) => {
+                state.serialize_field("_typeName", "ArrayOfIncompatibleHostForVmReplication")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfIncompatibleSetting(value) => {
+                state.serialize_field("_typeName", "ArrayOfIncompatibleSetting")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfIncorrectFileType(value) => {
+                state.serialize_field("_typeName", "ArrayOfIncorrectFileType")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfIncorrectHostInformation(value) => {
+                state.serialize_field("_typeName", "ArrayOfIncorrectHostInformation")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfIndependentDiskVMotionNotSupported(value) => {
+                state.serialize_field("_typeName", "ArrayOfIndependentDiskVMotionNotSupported")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInsufficientAgentVmsDeployed(value) => {
+                state.serialize_field("_typeName", "ArrayOfInsufficientAgentVmsDeployed")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInsufficientCpuResourcesFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfInsufficientCpuResourcesFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInsufficientDisks(value) => {
+                state.serialize_field("_typeName", "ArrayOfInsufficientDisks")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInsufficientFailoverResourcesFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfInsufficientFailoverResourcesFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInsufficientGraphicsResourcesFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfInsufficientGraphicsResourcesFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInsufficientHostCapacityFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfInsufficientHostCapacityFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInsufficientHostCpuCapacityFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfInsufficientHostCpuCapacityFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInsufficientHostMemoryCapacityFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfInsufficientHostMemoryCapacityFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInsufficientMemoryResourcesFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfInsufficientMemoryResourcesFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInsufficientNetworkCapacity(value) => {
+                state.serialize_field("_typeName", "ArrayOfInsufficientNetworkCapacity")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInsufficientNetworkResourcePoolCapacity(value) => {
+                state.serialize_field("_typeName", "ArrayOfInsufficientNetworkResourcePoolCapacity")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInsufficientPerCpuCapacity(value) => {
+                state.serialize_field("_typeName", "ArrayOfInsufficientPerCpuCapacity")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInsufficientResourcesFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfInsufficientResourcesFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInsufficientStandbyCpuResource(value) => {
+                state.serialize_field("_typeName", "ArrayOfInsufficientStandbyCpuResource")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInsufficientStandbyMemoryResource(value) => {
+                state.serialize_field("_typeName", "ArrayOfInsufficientStandbyMemoryResource")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInsufficientStandbyResource(value) => {
+                state.serialize_field("_typeName", "ArrayOfInsufficientStandbyResource")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInsufficientStorageIops(value) => {
+                state.serialize_field("_typeName", "ArrayOfInsufficientStorageIops")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInsufficientStorageSpace(value) => {
+                state.serialize_field("_typeName", "ArrayOfInsufficientStorageSpace")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInsufficientVFlashResourcesFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfInsufficientVFlashResourcesFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInvalidAffinitySettingFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfInvalidAffinitySettingFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInvalidBmcRole(value) => {
+                state.serialize_field("_typeName", "ArrayOfInvalidBmcRole")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInvalidBundle(value) => {
+                state.serialize_field("_typeName", "ArrayOfInvalidBundle")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInvalidCamCertificate(value) => {
+                state.serialize_field("_typeName", "ArrayOfInvalidCAMCertificate")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInvalidCamServer(value) => {
+                state.serialize_field("_typeName", "ArrayOfInvalidCAMServer")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInvalidClientCertificate(value) => {
+                state.serialize_field("_typeName", "ArrayOfInvalidClientCertificate")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInvalidController(value) => {
+                state.serialize_field("_typeName", "ArrayOfInvalidController")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInvalidDasConfigArgument(value) => {
+                state.serialize_field("_typeName", "ArrayOfInvalidDasConfigArgument")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInvalidDasRestartPriorityForFtVm(value) => {
+                state.serialize_field("_typeName", "ArrayOfInvalidDasRestartPriorityForFtVm")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInvalidDatastore(value) => {
+                state.serialize_field("_typeName", "ArrayOfInvalidDatastore")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInvalidDatastorePath(value) => {
+                state.serialize_field("_typeName", "ArrayOfInvalidDatastorePath")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInvalidDatastoreState(value) => {
+                state.serialize_field("_typeName", "ArrayOfInvalidDatastoreState")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInvalidDeviceBacking(value) => {
+                state.serialize_field("_typeName", "ArrayOfInvalidDeviceBacking")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInvalidDeviceOperation(value) => {
+                state.serialize_field("_typeName", "ArrayOfInvalidDeviceOperation")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInvalidDeviceSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfInvalidDeviceSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInvalidDiskFormat(value) => {
+                state.serialize_field("_typeName", "ArrayOfInvalidDiskFormat")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInvalidDrsBehaviorForFtVm(value) => {
+                state.serialize_field("_typeName", "ArrayOfInvalidDrsBehaviorForFtVm")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInvalidEditionLicense(value) => {
+                state.serialize_field("_typeName", "ArrayOfInvalidEditionLicense")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInvalidEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfInvalidEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInvalidFolder(value) => {
+                state.serialize_field("_typeName", "ArrayOfInvalidFolder")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInvalidFormat(value) => {
+                state.serialize_field("_typeName", "ArrayOfInvalidFormat")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInvalidGuestLogin(value) => {
+                state.serialize_field("_typeName", "ArrayOfInvalidGuestLogin")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInvalidHostConnectionState(value) => {
+                state.serialize_field("_typeName", "ArrayOfInvalidHostConnectionState")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInvalidHostName(value) => {
+                state.serialize_field("_typeName", "ArrayOfInvalidHostName")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInvalidHostState(value) => {
+                state.serialize_field("_typeName", "ArrayOfInvalidHostState")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInvalidIndexArgument(value) => {
+                state.serialize_field("_typeName", "ArrayOfInvalidIndexArgument")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInvalidIpfixConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfInvalidIpfixConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInvalidIpmiLoginInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfInvalidIpmiLoginInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInvalidIpmiMacAddress(value) => {
+                state.serialize_field("_typeName", "ArrayOfInvalidIpmiMacAddress")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInvalidLicense(value) => {
+                state.serialize_field("_typeName", "ArrayOfInvalidLicense")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInvalidLocale(value) => {
+                state.serialize_field("_typeName", "ArrayOfInvalidLocale")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInvalidLogin(value) => {
+                state.serialize_field("_typeName", "ArrayOfInvalidLogin")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInvalidName(value) => {
+                state.serialize_field("_typeName", "ArrayOfInvalidName")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInvalidNasCredentials(value) => {
+                state.serialize_field("_typeName", "ArrayOfInvalidNasCredentials")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInvalidNetworkInType(value) => {
+                state.serialize_field("_typeName", "ArrayOfInvalidNetworkInType")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInvalidNetworkResource(value) => {
+                state.serialize_field("_typeName", "ArrayOfInvalidNetworkResource")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInvalidOperationOnSecondaryVm(value) => {
+                state.serialize_field("_typeName", "ArrayOfInvalidOperationOnSecondaryVm")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInvalidPowerState(value) => {
+                state.serialize_field("_typeName", "ArrayOfInvalidPowerState")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInvalidPrivilege(value) => {
+                state.serialize_field("_typeName", "ArrayOfInvalidPrivilege")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInvalidProfileReferenceHost(value) => {
+                state.serialize_field("_typeName", "ArrayOfInvalidProfileReferenceHost")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInvalidPropertyType(value) => {
+                state.serialize_field("_typeName", "ArrayOfInvalidPropertyType")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInvalidPropertyValue(value) => {
+                state.serialize_field("_typeName", "ArrayOfInvalidPropertyValue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInvalidResourcePoolStructureFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfInvalidResourcePoolStructureFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInvalidScheduledTask(value) => {
+                state.serialize_field("_typeName", "ArrayOfInvalidScheduledTask")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInvalidSnapshotFormat(value) => {
+                state.serialize_field("_typeName", "ArrayOfInvalidSnapshotFormat")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInvalidState(value) => {
+                state.serialize_field("_typeName", "ArrayOfInvalidState")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInvalidVmConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfInvalidVmConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInvalidVmState(value) => {
+                state.serialize_field("_typeName", "ArrayOfInvalidVmState")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInventoryHasStandardAloneHosts(value) => {
+                state.serialize_field("_typeName", "ArrayOfInventoryHasStandardAloneHosts")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfIpHostnameGeneratorError(value) => {
+                state.serialize_field("_typeName", "ArrayOfIpHostnameGeneratorError")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfIscsiFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfIscsiFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfIscsiFaultInvalidVnic(value) => {
+                state.serialize_field("_typeName", "ArrayOfIscsiFaultInvalidVnic")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfIscsiFaultPnicInUse(value) => {
+                state.serialize_field("_typeName", "ArrayOfIscsiFaultPnicInUse")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfIscsiFaultVnicAlreadyBound(value) => {
+                state.serialize_field("_typeName", "ArrayOfIscsiFaultVnicAlreadyBound")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfIscsiFaultVnicHasActivePaths(value) => {
+                state.serialize_field("_typeName", "ArrayOfIscsiFaultVnicHasActivePaths")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfIscsiFaultVnicHasMultipleUplinks(value) => {
+                state.serialize_field("_typeName", "ArrayOfIscsiFaultVnicHasMultipleUplinks")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfIscsiFaultVnicHasNoUplinks(value) => {
+                state.serialize_field("_typeName", "ArrayOfIscsiFaultVnicHasNoUplinks")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfIscsiFaultVnicHasWrongUplink(value) => {
+                state.serialize_field("_typeName", "ArrayOfIscsiFaultVnicHasWrongUplink")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfIscsiFaultVnicInUse(value) => {
+                state.serialize_field("_typeName", "ArrayOfIscsiFaultVnicInUse")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfIscsiFaultVnicIsLastPath(value) => {
+                state.serialize_field("_typeName", "ArrayOfIscsiFaultVnicIsLastPath")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfIscsiFaultVnicNotBound(value) => {
+                state.serialize_field("_typeName", "ArrayOfIscsiFaultVnicNotBound")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfIscsiFaultVnicNotFound(value) => {
+                state.serialize_field("_typeName", "ArrayOfIscsiFaultVnicNotFound")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfKeyNotFound(value) => {
+                state.serialize_field("_typeName", "ArrayOfKeyNotFound")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfLargeRdmConversionNotSupported(value) => {
+                state.serialize_field("_typeName", "ArrayOfLargeRDMConversionNotSupported")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfLargeRdmNotSupportedOnDatastore(value) => {
+                state.serialize_field("_typeName", "ArrayOfLargeRDMNotSupportedOnDatastore")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfLegacyNetworkInterfaceInUse(value) => {
+                state.serialize_field("_typeName", "ArrayOfLegacyNetworkInterfaceInUse")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfLicenseAssignmentFailed(value) => {
+                state.serialize_field("_typeName", "ArrayOfLicenseAssignmentFailed")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfLicenseDowngradeDisallowed(value) => {
+                state.serialize_field("_typeName", "ArrayOfLicenseDowngradeDisallowed")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfLicenseEntityNotFound(value) => {
+                state.serialize_field("_typeName", "ArrayOfLicenseEntityNotFound")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfLicenseExpired(value) => {
+                state.serialize_field("_typeName", "ArrayOfLicenseExpired")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfLicenseKeyEntityMismatch(value) => {
+                state.serialize_field("_typeName", "ArrayOfLicenseKeyEntityMismatch")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfLicenseRestricted(value) => {
+                state.serialize_field("_typeName", "ArrayOfLicenseRestricted")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfLicenseServerUnavailable(value) => {
+                state.serialize_field("_typeName", "ArrayOfLicenseServerUnavailable")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfLicenseSourceUnavailable(value) => {
+                state.serialize_field("_typeName", "ArrayOfLicenseSourceUnavailable")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfLimitExceeded(value) => {
+                state.serialize_field("_typeName", "ArrayOfLimitExceeded")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfLinuxVolumeNotClean(value) => {
+                state.serialize_field("_typeName", "ArrayOfLinuxVolumeNotClean")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfLogBundlingFailed(value) => {
+                state.serialize_field("_typeName", "ArrayOfLogBundlingFailed")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfMaintenanceModeFileMove(value) => {
+                state.serialize_field("_typeName", "ArrayOfMaintenanceModeFileMove")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfMemoryFileFormatNotSupportedByDatastore(value) => {
+                state.serialize_field("_typeName", "ArrayOfMemoryFileFormatNotSupportedByDatastore")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfMemoryHotPlugNotSupported(value) => {
+                state.serialize_field("_typeName", "ArrayOfMemoryHotPlugNotSupported")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfMemorySizeNotRecommended(value) => {
+                state.serialize_field("_typeName", "ArrayOfMemorySizeNotRecommended")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfMemorySizeNotSupported(value) => {
+                state.serialize_field("_typeName", "ArrayOfMemorySizeNotSupported")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfMemorySizeNotSupportedByDatastore(value) => {
+                state.serialize_field("_typeName", "ArrayOfMemorySizeNotSupportedByDatastore")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfMemorySnapshotOnIndependentDisk(value) => {
+                state.serialize_field("_typeName", "ArrayOfMemorySnapshotOnIndependentDisk")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfMethodAlreadyDisabledFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfMethodAlreadyDisabledFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfMethodDisabled(value) => {
+                state.serialize_field("_typeName", "ArrayOfMethodDisabled")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfMigrationDisabled(value) => {
+                state.serialize_field("_typeName", "ArrayOfMigrationDisabled")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfMigrationFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfMigrationFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfMigrationFeatureNotSupported(value) => {
+                state.serialize_field("_typeName", "ArrayOfMigrationFeatureNotSupported")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfMigrationNotReady(value) => {
+                state.serialize_field("_typeName", "ArrayOfMigrationNotReady")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfMismatchedBundle(value) => {
+                state.serialize_field("_typeName", "ArrayOfMismatchedBundle")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfMismatchedNetworkPolicies(value) => {
+                state.serialize_field("_typeName", "ArrayOfMismatchedNetworkPolicies")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfMismatchedVMotionNetworkNames(value) => {
+                state.serialize_field("_typeName", "ArrayOfMismatchedVMotionNetworkNames")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfMissingBmcSupport(value) => {
+                state.serialize_field("_typeName", "ArrayOfMissingBmcSupport")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfMissingController(value) => {
+                state.serialize_field("_typeName", "ArrayOfMissingController")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfMissingIpPool(value) => {
+                state.serialize_field("_typeName", "ArrayOfMissingIpPool")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfMissingLinuxCustResources(value) => {
+                state.serialize_field("_typeName", "ArrayOfMissingLinuxCustResources")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfMissingNetworkIpConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfMissingNetworkIpConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfMissingPowerOffConfiguration(value) => {
+                state.serialize_field("_typeName", "ArrayOfMissingPowerOffConfiguration")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfMissingPowerOnConfiguration(value) => {
+                state.serialize_field("_typeName", "ArrayOfMissingPowerOnConfiguration")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfMissingWindowsCustResources(value) => {
+                state.serialize_field("_typeName", "ArrayOfMissingWindowsCustResources")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfMksConnectionLimitReached(value) => {
+                state.serialize_field("_typeName", "ArrayOfMksConnectionLimitReached")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfMountError(value) => {
+                state.serialize_field("_typeName", "ArrayOfMountError")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfMultiWriterNotSupported(value) => {
+                state.serialize_field("_typeName", "ArrayOfMultiWriterNotSupported")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfMultipleCertificatesVerifyFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfMultipleCertificatesVerifyFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfMultipleCertificatesVerifyFaultThumbprintData(value) => {
+                state.serialize_field("_typeName", "ArrayOfMultipleCertificatesVerifyFaultThumbprintData")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfMultipleSnapshotsNotSupported(value) => {
+                state.serialize_field("_typeName", "ArrayOfMultipleSnapshotsNotSupported")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNamespaceFull(value) => {
+                state.serialize_field("_typeName", "ArrayOfNamespaceFull")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNamespaceLimitReached(value) => {
+                state.serialize_field("_typeName", "ArrayOfNamespaceLimitReached")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNamespaceWriteProtected(value) => {
+                state.serialize_field("_typeName", "ArrayOfNamespaceWriteProtected")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNasConfigFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfNasConfigFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNasConnectionLimitReached(value) => {
+                state.serialize_field("_typeName", "ArrayOfNasConnectionLimitReached")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNasSessionCredentialConflict(value) => {
+                state.serialize_field("_typeName", "ArrayOfNasSessionCredentialConflict")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNasVolumeNotMounted(value) => {
+                state.serialize_field("_typeName", "ArrayOfNasVolumeNotMounted")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNetworkCopyFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfNetworkCopyFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNetworkDisruptedAndConfigRolledBack(value) => {
+                state.serialize_field("_typeName", "ArrayOfNetworkDisruptedAndConfigRolledBack")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNetworkInaccessible(value) => {
+                state.serialize_field("_typeName", "ArrayOfNetworkInaccessible")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNetworksMayNotBeTheSame(value) => {
+                state.serialize_field("_typeName", "ArrayOfNetworksMayNotBeTheSame")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNicSettingMismatch(value) => {
+                state.serialize_field("_typeName", "ArrayOfNicSettingMismatch")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNoActiveHostInCluster(value) => {
+                state.serialize_field("_typeName", "ArrayOfNoActiveHostInCluster")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNoAvailableIp(value) => {
+                state.serialize_field("_typeName", "ArrayOfNoAvailableIp")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNoClientCertificate(value) => {
+                state.serialize_field("_typeName", "ArrayOfNoClientCertificate")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNoCompatibleDatastore(value) => {
+                state.serialize_field("_typeName", "ArrayOfNoCompatibleDatastore")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNoCompatibleHardAffinityHost(value) => {
+                state.serialize_field("_typeName", "ArrayOfNoCompatibleHardAffinityHost")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNoCompatibleHost(value) => {
+                state.serialize_field("_typeName", "ArrayOfNoCompatibleHost")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNoCompatibleHostWithAccessToDevice(value) => {
+                state.serialize_field("_typeName", "ArrayOfNoCompatibleHostWithAccessToDevice")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNoCompatibleSoftAffinityHost(value) => {
+                state.serialize_field("_typeName", "ArrayOfNoCompatibleSoftAffinityHost")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNoConnectedDatastore(value) => {
+                state.serialize_field("_typeName", "ArrayOfNoConnectedDatastore")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNoDiskFound(value) => {
+                state.serialize_field("_typeName", "ArrayOfNoDiskFound")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNoDiskSpace(value) => {
+                state.serialize_field("_typeName", "ArrayOfNoDiskSpace")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNoDisksToCustomize(value) => {
+                state.serialize_field("_typeName", "ArrayOfNoDisksToCustomize")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNoGateway(value) => {
+                state.serialize_field("_typeName", "ArrayOfNoGateway")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNoGuestHeartbeat(value) => {
+                state.serialize_field("_typeName", "ArrayOfNoGuestHeartbeat")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNoHost(value) => {
+                state.serialize_field("_typeName", "ArrayOfNoHost")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNoHostSuitableForFtSecondary(value) => {
+                state.serialize_field("_typeName", "ArrayOfNoHostSuitableForFtSecondary")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNoLicenseServerConfigured(value) => {
+                state.serialize_field("_typeName", "ArrayOfNoLicenseServerConfigured")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNoPeerHostFound(value) => {
+                state.serialize_field("_typeName", "ArrayOfNoPeerHostFound")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNoPermission(value) => {
+                state.serialize_field("_typeName", "ArrayOfNoPermission")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNoPermissionEntityPrivileges(value) => {
+                state.serialize_field("_typeName", "ArrayOfNoPermissionEntityPrivileges")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNoPermissionOnAd(value) => {
+                state.serialize_field("_typeName", "ArrayOfNoPermissionOnAD")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNoPermissionOnHost(value) => {
+                state.serialize_field("_typeName", "ArrayOfNoPermissionOnHost")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNoPermissionOnNasVolume(value) => {
+                state.serialize_field("_typeName", "ArrayOfNoPermissionOnNasVolume")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNoSubjectName(value) => {
+                state.serialize_field("_typeName", "ArrayOfNoSubjectName")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNoVcManagedIpConfigured(value) => {
+                state.serialize_field("_typeName", "ArrayOfNoVcManagedIpConfigured")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNoVirtualNic(value) => {
+                state.serialize_field("_typeName", "ArrayOfNoVirtualNic")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNoVmInVApp(value) => {
+                state.serialize_field("_typeName", "ArrayOfNoVmInVApp")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNonAdUserRequired(value) => {
+                state.serialize_field("_typeName", "ArrayOfNonADUserRequired")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNonHomeRdmvMotionNotSupported(value) => {
+                state.serialize_field("_typeName", "ArrayOfNonHomeRDMVMotionNotSupported")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNonPersistentDisksNotSupported(value) => {
+                state.serialize_field("_typeName", "ArrayOfNonPersistentDisksNotSupported")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNonVmwareOuiMacNotSupportedHost(value) => {
+                state.serialize_field("_typeName", "ArrayOfNonVmwareOuiMacNotSupportedHost")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNotADirectory(value) => {
+                state.serialize_field("_typeName", "ArrayOfNotADirectory")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNotAFile(value) => {
+                state.serialize_field("_typeName", "ArrayOfNotAFile")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNotAuthenticated(value) => {
+                state.serialize_field("_typeName", "ArrayOfNotAuthenticated")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNotEnoughCpus(value) => {
+                state.serialize_field("_typeName", "ArrayOfNotEnoughCpus")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNotEnoughLogicalCpus(value) => {
+                state.serialize_field("_typeName", "ArrayOfNotEnoughLogicalCpus")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNotFound(value) => {
+                state.serialize_field("_typeName", "ArrayOfNotFound")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNotSupportedDeviceForFt(value) => {
+                state.serialize_field("_typeName", "ArrayOfNotSupportedDeviceForFT")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNotSupportedHost(value) => {
+                state.serialize_field("_typeName", "ArrayOfNotSupportedHost")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNotSupportedHostForChecksum(value) => {
+                state.serialize_field("_typeName", "ArrayOfNotSupportedHostForChecksum")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNotSupportedHostForVFlash(value) => {
+                state.serialize_field("_typeName", "ArrayOfNotSupportedHostForVFlash")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNotSupportedHostForVmcp(value) => {
+                state.serialize_field("_typeName", "ArrayOfNotSupportedHostForVmcp")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNotSupportedHostForVmemFile(value) => {
+                state.serialize_field("_typeName", "ArrayOfNotSupportedHostForVmemFile")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNotSupportedHostForVsan(value) => {
+                state.serialize_field("_typeName", "ArrayOfNotSupportedHostForVsan")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNotSupportedHostInCluster(value) => {
+                state.serialize_field("_typeName", "ArrayOfNotSupportedHostInCluster")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNotSupportedHostInDvs(value) => {
+                state.serialize_field("_typeName", "ArrayOfNotSupportedHostInDvs")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNotSupportedHostInHaCluster(value) => {
+                state.serialize_field("_typeName", "ArrayOfNotSupportedHostInHACluster")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNotUserConfigurableProperty(value) => {
+                state.serialize_field("_typeName", "ArrayOfNotUserConfigurableProperty")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNumVirtualCoresPerSocketNotSupported(value) => {
+                state.serialize_field("_typeName", "ArrayOfNumVirtualCoresPerSocketNotSupported")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNumVirtualCpusExceedsLimit(value) => {
+                state.serialize_field("_typeName", "ArrayOfNumVirtualCpusExceedsLimit")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNumVirtualCpusIncompatible(value) => {
+                state.serialize_field("_typeName", "ArrayOfNumVirtualCpusIncompatible")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNumVirtualCpusNotSupported(value) => {
+                state.serialize_field("_typeName", "ArrayOfNumVirtualCpusNotSupported")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOperationDisabledByGuest(value) => {
+                state.serialize_field("_typeName", "ArrayOfOperationDisabledByGuest")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOperationDisallowedOnHost(value) => {
+                state.serialize_field("_typeName", "ArrayOfOperationDisallowedOnHost")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOperationNotSupportedByGuest(value) => {
+                state.serialize_field("_typeName", "ArrayOfOperationNotSupportedByGuest")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOutOfBounds(value) => {
+                state.serialize_field("_typeName", "ArrayOfOutOfBounds")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfAttribute(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfAttribute")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfConnectedDevice(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfConnectedDevice")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfConnectedDeviceFloppy(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfConnectedDeviceFloppy")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfConnectedDeviceIso(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfConnectedDeviceIso")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfConstraint(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfConstraint")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfConsumerCallbackFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfConsumerCallbackFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfConsumerCommunicationError(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfConsumerCommunicationError")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfConsumerFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfConsumerFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfConsumerInvalidSection(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfConsumerInvalidSection")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfConsumerPowerOnFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfConsumerPowerOnFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfConsumerUndeclaredSection(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfConsumerUndeclaredSection")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfConsumerUndefinedPrefix(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfConsumerUndefinedPrefix")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfConsumerValidationFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfConsumerValidationFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfCpuCompatibility(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfCpuCompatibility")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfCpuCompatibilityCheckNotSupported(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfCpuCompatibilityCheckNotSupported")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfDiskMappingNotFound(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfDiskMappingNotFound")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfDiskOrderConstraint(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfDiskOrderConstraint")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfDuplicateElement(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfDuplicateElement")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfDuplicatedElementBoundary(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfDuplicatedElementBoundary")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfDuplicatedPropertyIdExport(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfDuplicatedPropertyIdExport")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfDuplicatedPropertyIdImport(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfDuplicatedPropertyIdImport")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfElement(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfElement")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfElementInvalidValue(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfElementInvalidValue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfExport(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfExport")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfExportFailed(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfExportFailed")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfHardwareCheck(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfHardwareCheck")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfHardwareExport(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfHardwareExport")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfHostResourceConstraint(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfHostResourceConstraint")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfHostValueNotParsed(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfHostValueNotParsed")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfImport(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfImport")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfImportFailed(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfImportFailed")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfInternalError(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfInternalError")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfInvalidPackage(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfInvalidPackage")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfInvalidValue(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfInvalidValue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfInvalidValueConfiguration(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfInvalidValueConfiguration")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfInvalidValueEmpty(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfInvalidValueEmpty")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfInvalidValueFormatMalformed(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfInvalidValueFormatMalformed")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfInvalidValueReference(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfInvalidValueReference")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfInvalidVmName(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfInvalidVmName")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfMappedOsId(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfMappedOsId")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfMissingAttribute(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfMissingAttribute")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfMissingElement(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfMissingElement")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfMissingElementNormalBoundary(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfMissingElementNormalBoundary")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfMissingHardware(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfMissingHardware")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfNetworkMappingNotSupported(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfNetworkMappingNotSupported")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfNoHostNic(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfNoHostNic")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfNoSpaceOnController(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfNoSpaceOnController")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfNoSupportedHardwareFamily(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfNoSupportedHardwareFamily")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfProperty(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfProperty")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfPropertyExport(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfPropertyExport")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfPropertyNetwork(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfPropertyNetwork")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfPropertyNetworkExport(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfPropertyNetworkExport")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfPropertyQualifier(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfPropertyQualifier")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfPropertyQualifierDuplicate(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfPropertyQualifierDuplicate")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfPropertyQualifierIgnored(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfPropertyQualifierIgnored")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfPropertyType(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfPropertyType")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfPropertyValue(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfPropertyValue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfSystemFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfSystemFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfToXmlUnsupportedElement(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfToXmlUnsupportedElement")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfUnableToExportDisk(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfUnableToExportDisk")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfUnexpectedElement(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfUnexpectedElement")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfUnknownDevice(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfUnknownDevice")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfUnknownDeviceBacking(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfUnknownDeviceBacking")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfUnknownEntity(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfUnknownEntity")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfUnsupportedAttribute(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfUnsupportedAttribute")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfUnsupportedAttributeValue(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfUnsupportedAttributeValue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfUnsupportedDeviceBackingInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfUnsupportedDeviceBackingInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfUnsupportedDeviceBackingOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfUnsupportedDeviceBackingOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfUnsupportedDeviceExport(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfUnsupportedDeviceExport")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfUnsupportedDiskProvisioning(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfUnsupportedDiskProvisioning")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfUnsupportedElement(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfUnsupportedElement")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfUnsupportedElementValue(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfUnsupportedElementValue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfUnsupportedPackage(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfUnsupportedPackage")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfUnsupportedSection(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfUnsupportedSection")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfUnsupportedSubType(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfUnsupportedSubType")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfUnsupportedType(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfUnsupportedType")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfWrongElement(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfWrongElement")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfWrongNamespace(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfWrongNamespace")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfXmlFormat(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfXmlFormat")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPasswordExpired(value) => {
+                state.serialize_field("_typeName", "ArrayOfPasswordExpired")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPatchAlreadyInstalled(value) => {
+                state.serialize_field("_typeName", "ArrayOfPatchAlreadyInstalled")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPatchBinariesNotFound(value) => {
+                state.serialize_field("_typeName", "ArrayOfPatchBinariesNotFound")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPatchInstallFailed(value) => {
+                state.serialize_field("_typeName", "ArrayOfPatchInstallFailed")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPatchIntegrityError(value) => {
+                state.serialize_field("_typeName", "ArrayOfPatchIntegrityError")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPatchMetadataCorrupted(value) => {
+                state.serialize_field("_typeName", "ArrayOfPatchMetadataCorrupted")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPatchMetadataInvalid(value) => {
+                state.serialize_field("_typeName", "ArrayOfPatchMetadataInvalid")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPatchMetadataNotFound(value) => {
+                state.serialize_field("_typeName", "ArrayOfPatchMetadataNotFound")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPatchMissingDependencies(value) => {
+                state.serialize_field("_typeName", "ArrayOfPatchMissingDependencies")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPatchNotApplicable(value) => {
+                state.serialize_field("_typeName", "ArrayOfPatchNotApplicable")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPatchSuperseded(value) => {
+                state.serialize_field("_typeName", "ArrayOfPatchSuperseded")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPhysCompatRdmNotSupported(value) => {
+                state.serialize_field("_typeName", "ArrayOfPhysCompatRDMNotSupported")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPlatformConfigFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfPlatformConfigFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPowerOnFtSecondaryFailed(value) => {
+                state.serialize_field("_typeName", "ArrayOfPowerOnFtSecondaryFailed")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPowerOnFtSecondaryTimedout(value) => {
+                state.serialize_field("_typeName", "ArrayOfPowerOnFtSecondaryTimedout")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfProfileUpdateFailed(value) => {
+                state.serialize_field("_typeName", "ArrayOfProfileUpdateFailed")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfProfileUpdateFailedUpdateFailure(value) => {
+                state.serialize_field("_typeName", "ArrayOfProfileUpdateFailedUpdateFailure")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfQuarantineModeFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfQuarantineModeFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfQuestionPending(value) => {
+                state.serialize_field("_typeName", "ArrayOfQuestionPending")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfQuiesceDatastoreIoForHaFailed(value) => {
+                state.serialize_field("_typeName", "ArrayOfQuiesceDatastoreIOForHAFailed")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfRdmConversionNotSupported(value) => {
+                state.serialize_field("_typeName", "ArrayOfRDMConversionNotSupported")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfRdmNotPreserved(value) => {
+                state.serialize_field("_typeName", "ArrayOfRDMNotPreserved")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfRdmNotSupported(value) => {
+                state.serialize_field("_typeName", "ArrayOfRDMNotSupported")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfRdmNotSupportedOnDatastore(value) => {
+                state.serialize_field("_typeName", "ArrayOfRDMNotSupportedOnDatastore")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfRdmPointsToInaccessibleDisk(value) => {
+                state.serialize_field("_typeName", "ArrayOfRDMPointsToInaccessibleDisk")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfRawDiskNotSupported(value) => {
+                state.serialize_field("_typeName", "ArrayOfRawDiskNotSupported")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfReadHostResourcePoolTreeFailed(value) => {
+                state.serialize_field("_typeName", "ArrayOfReadHostResourcePoolTreeFailed")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfReadOnlyDisksWithLegacyDestination(value) => {
+                state.serialize_field("_typeName", "ArrayOfReadOnlyDisksWithLegacyDestination")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfRebootRequired(value) => {
+                state.serialize_field("_typeName", "ArrayOfRebootRequired")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfRecordReplayDisabled(value) => {
+                state.serialize_field("_typeName", "ArrayOfRecordReplayDisabled")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfRemoteDeviceNotSupported(value) => {
+                state.serialize_field("_typeName", "ArrayOfRemoteDeviceNotSupported")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfRemoveFailed(value) => {
+                state.serialize_field("_typeName", "ArrayOfRemoveFailed")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfReplicationConfigFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfReplicationConfigFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfReplicationDiskConfigFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfReplicationDiskConfigFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfReplicationFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfReplicationFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfReplicationIncompatibleWithFt(value) => {
+                state.serialize_field("_typeName", "ArrayOfReplicationIncompatibleWithFT")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfReplicationInvalidOptions(value) => {
+                state.serialize_field("_typeName", "ArrayOfReplicationInvalidOptions")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfReplicationNotSupportedOnHost(value) => {
+                state.serialize_field("_typeName", "ArrayOfReplicationNotSupportedOnHost")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfReplicationVmConfigFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfReplicationVmConfigFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfReplicationVmFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfReplicationVmFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfReplicationVmInProgressFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfReplicationVmInProgressFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfResourceInUse(value) => {
+                state.serialize_field("_typeName", "ArrayOfResourceInUse")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfResourceNotAvailable(value) => {
+                state.serialize_field("_typeName", "ArrayOfResourceNotAvailable")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfRestrictedByAdministrator(value) => {
+                state.serialize_field("_typeName", "ArrayOfRestrictedByAdministrator")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfRestrictedVersion(value) => {
+                state.serialize_field("_typeName", "ArrayOfRestrictedVersion")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfRollbackFailure(value) => {
+                state.serialize_field("_typeName", "ArrayOfRollbackFailure")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfRuleViolation(value) => {
+                state.serialize_field("_typeName", "ArrayOfRuleViolation")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSslDisabledFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfSSLDisabledFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSslVerifyFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfSSLVerifyFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSspiChallenge(value) => {
+                state.serialize_field("_typeName", "ArrayOfSSPIChallenge")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSecondaryVmAlreadyDisabled(value) => {
+                state.serialize_field("_typeName", "ArrayOfSecondaryVmAlreadyDisabled")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSecondaryVmAlreadyEnabled(value) => {
+                state.serialize_field("_typeName", "ArrayOfSecondaryVmAlreadyEnabled")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSecondaryVmAlreadyRegistered(value) => {
+                state.serialize_field("_typeName", "ArrayOfSecondaryVmAlreadyRegistered")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSecondaryVmNotRegistered(value) => {
+                state.serialize_field("_typeName", "ArrayOfSecondaryVmNotRegistered")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSharedBusControllerNotSupported(value) => {
+                state.serialize_field("_typeName", "ArrayOfSharedBusControllerNotSupported")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfShrinkDiskFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfShrinkDiskFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSnapshotCloneNotSupported(value) => {
+                state.serialize_field("_typeName", "ArrayOfSnapshotCloneNotSupported")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSnapshotCopyNotSupported(value) => {
+                state.serialize_field("_typeName", "ArrayOfSnapshotCopyNotSupported")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSnapshotDisabled(value) => {
+                state.serialize_field("_typeName", "ArrayOfSnapshotDisabled")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSnapshotFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfSnapshotFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSnapshotIncompatibleDeviceInVm(value) => {
+                state.serialize_field("_typeName", "ArrayOfSnapshotIncompatibleDeviceInVm")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSnapshotLocked(value) => {
+                state.serialize_field("_typeName", "ArrayOfSnapshotLocked")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSnapshotMoveFromNonHomeNotSupported(value) => {
+                state.serialize_field("_typeName", "ArrayOfSnapshotMoveFromNonHomeNotSupported")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSnapshotMoveNotSupported(value) => {
+                state.serialize_field("_typeName", "ArrayOfSnapshotMoveNotSupported")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSnapshotMoveToNonHomeNotSupported(value) => {
+                state.serialize_field("_typeName", "ArrayOfSnapshotMoveToNonHomeNotSupported")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSnapshotNoChange(value) => {
+                state.serialize_field("_typeName", "ArrayOfSnapshotNoChange")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSnapshotRevertIssue(value) => {
+                state.serialize_field("_typeName", "ArrayOfSnapshotRevertIssue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSoftRuleVioCorrectionDisallowed(value) => {
+                state.serialize_field("_typeName", "ArrayOfSoftRuleVioCorrectionDisallowed")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSoftRuleVioCorrectionImpact(value) => {
+                state.serialize_field("_typeName", "ArrayOfSoftRuleVioCorrectionImpact")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSolutionUserRequired(value) => {
+                state.serialize_field("_typeName", "ArrayOfSolutionUserRequired")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSsdDiskNotAvailable(value) => {
+                state.serialize_field("_typeName", "ArrayOfSsdDiskNotAvailable")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStorageDrsCannotMoveDiskInMultiWriterMode(value) => {
+                state.serialize_field("_typeName", "ArrayOfStorageDrsCannotMoveDiskInMultiWriterMode")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStorageDrsCannotMoveFtVm(value) => {
+                state.serialize_field("_typeName", "ArrayOfStorageDrsCannotMoveFTVm")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStorageDrsCannotMoveIndependentDisk(value) => {
+                state.serialize_field("_typeName", "ArrayOfStorageDrsCannotMoveIndependentDisk")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStorageDrsCannotMoveManuallyPlacedSwapFile(value) => {
+                state.serialize_field("_typeName", "ArrayOfStorageDrsCannotMoveManuallyPlacedSwapFile")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStorageDrsCannotMoveManuallyPlacedVm(value) => {
+                state.serialize_field("_typeName", "ArrayOfStorageDrsCannotMoveManuallyPlacedVm")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStorageDrsCannotMoveSharedDisk(value) => {
+                state.serialize_field("_typeName", "ArrayOfStorageDrsCannotMoveSharedDisk")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStorageDrsCannotMoveTemplate(value) => {
+                state.serialize_field("_typeName", "ArrayOfStorageDrsCannotMoveTemplate")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStorageDrsCannotMoveVmInUserFolder(value) => {
+                state.serialize_field("_typeName", "ArrayOfStorageDrsCannotMoveVmInUserFolder")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStorageDrsCannotMoveVmWithMountedCdrom(value) => {
+                state.serialize_field("_typeName", "ArrayOfStorageDrsCannotMoveVmWithMountedCDROM")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStorageDrsCannotMoveVmWithNoFilesInLayout(value) => {
+                state.serialize_field("_typeName", "ArrayOfStorageDrsCannotMoveVmWithNoFilesInLayout")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStorageDrsDatacentersCannotShareDatastore(value) => {
+                state.serialize_field("_typeName", "ArrayOfStorageDrsDatacentersCannotShareDatastore")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStorageDrsDisabledOnVm(value) => {
+                state.serialize_field("_typeName", "ArrayOfStorageDrsDisabledOnVm")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStorageDrsHbrDiskNotMovable(value) => {
+                state.serialize_field("_typeName", "ArrayOfStorageDrsHbrDiskNotMovable")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStorageDrsHmsMoveInProgress(value) => {
+                state.serialize_field("_typeName", "ArrayOfStorageDrsHmsMoveInProgress")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStorageDrsHmsUnreachable(value) => {
+                state.serialize_field("_typeName", "ArrayOfStorageDrsHmsUnreachable")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStorageDrsIolbDisabledInternally(value) => {
+                state.serialize_field("_typeName", "ArrayOfStorageDrsIolbDisabledInternally")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStorageDrsRelocateDisabled(value) => {
+                state.serialize_field("_typeName", "ArrayOfStorageDrsRelocateDisabled")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStorageDrsStaleHmsCollection(value) => {
+                state.serialize_field("_typeName", "ArrayOfStorageDrsStaleHmsCollection")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStorageDrsUnableToMoveFiles(value) => {
+                state.serialize_field("_typeName", "ArrayOfStorageDrsUnableToMoveFiles")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStorageVMotionNotSupported(value) => {
+                state.serialize_field("_typeName", "ArrayOfStorageVMotionNotSupported")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStorageVmotionIncompatible(value) => {
+                state.serialize_field("_typeName", "ArrayOfStorageVmotionIncompatible")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSuspendedRelocateNotSupported(value) => {
+                state.serialize_field("_typeName", "ArrayOfSuspendedRelocateNotSupported")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSwapDatastoreNotWritableOnHost(value) => {
+                state.serialize_field("_typeName", "ArrayOfSwapDatastoreNotWritableOnHost")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSwapDatastoreUnset(value) => {
+                state.serialize_field("_typeName", "ArrayOfSwapDatastoreUnset")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSwapPlacementOverrideNotSupported(value) => {
+                state.serialize_field("_typeName", "ArrayOfSwapPlacementOverrideNotSupported")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSwitchIpUnset(value) => {
+                state.serialize_field("_typeName", "ArrayOfSwitchIpUnset")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSwitchNotInUpgradeMode(value) => {
+                state.serialize_field("_typeName", "ArrayOfSwitchNotInUpgradeMode")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfTaskInProgress(value) => {
+                state.serialize_field("_typeName", "ArrayOfTaskInProgress")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfThirdPartyLicenseAssignmentFailed(value) => {
+                state.serialize_field("_typeName", "ArrayOfThirdPartyLicenseAssignmentFailed")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfTimedout(value) => {
+                state.serialize_field("_typeName", "ArrayOfTimedout")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfTooManyConcurrentNativeClones(value) => {
+                state.serialize_field("_typeName", "ArrayOfTooManyConcurrentNativeClones")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfTooManyConsecutiveOverrides(value) => {
+                state.serialize_field("_typeName", "ArrayOfTooManyConsecutiveOverrides")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfTooManyDevices(value) => {
+                state.serialize_field("_typeName", "ArrayOfTooManyDevices")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfTooManyDisksOnLegacyHost(value) => {
+                state.serialize_field("_typeName", "ArrayOfTooManyDisksOnLegacyHost")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfTooManyGuestLogons(value) => {
+                state.serialize_field("_typeName", "ArrayOfTooManyGuestLogons")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfTooManyHosts(value) => {
+                state.serialize_field("_typeName", "ArrayOfTooManyHosts")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfTooManyNativeCloneLevels(value) => {
+                state.serialize_field("_typeName", "ArrayOfTooManyNativeCloneLevels")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfTooManyNativeClonesOnFile(value) => {
+                state.serialize_field("_typeName", "ArrayOfTooManyNativeClonesOnFile")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfTooManySnapshotLevels(value) => {
+                state.serialize_field("_typeName", "ArrayOfTooManySnapshotLevels")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfToolsAlreadyUpgraded(value) => {
+                state.serialize_field("_typeName", "ArrayOfToolsAlreadyUpgraded")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfToolsAutoUpgradeNotSupported(value) => {
+                state.serialize_field("_typeName", "ArrayOfToolsAutoUpgradeNotSupported")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfToolsImageCopyFailed(value) => {
+                state.serialize_field("_typeName", "ArrayOfToolsImageCopyFailed")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfToolsImageNotAvailable(value) => {
+                state.serialize_field("_typeName", "ArrayOfToolsImageNotAvailable")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfToolsImageSignatureCheckFailed(value) => {
+                state.serialize_field("_typeName", "ArrayOfToolsImageSignatureCheckFailed")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfToolsInstallationInProgress(value) => {
+                state.serialize_field("_typeName", "ArrayOfToolsInstallationInProgress")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfToolsUnavailable(value) => {
+                state.serialize_field("_typeName", "ArrayOfToolsUnavailable")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfToolsUpgradeCancelled(value) => {
+                state.serialize_field("_typeName", "ArrayOfToolsUpgradeCancelled")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfUnSupportedDatastoreForVFlash(value) => {
+                state.serialize_field("_typeName", "ArrayOfUnSupportedDatastoreForVFlash")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfUncommittedUndoableDisk(value) => {
+                state.serialize_field("_typeName", "ArrayOfUncommittedUndoableDisk")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfUnconfiguredPropertyValue(value) => {
+                state.serialize_field("_typeName", "ArrayOfUnconfiguredPropertyValue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfUncustomizableGuest(value) => {
+                state.serialize_field("_typeName", "ArrayOfUncustomizableGuest")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfUnexpectedCustomizationFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfUnexpectedCustomizationFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfUnrecognizedHost(value) => {
+                state.serialize_field("_typeName", "ArrayOfUnrecognizedHost")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfUnsharedSwapVMotionNotSupported(value) => {
+                state.serialize_field("_typeName", "ArrayOfUnsharedSwapVMotionNotSupported")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfUnsupportedDatastore(value) => {
+                state.serialize_field("_typeName", "ArrayOfUnsupportedDatastore")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfUnsupportedGuest(value) => {
+                state.serialize_field("_typeName", "ArrayOfUnsupportedGuest")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfUnsupportedVimApiVersion(value) => {
+                state.serialize_field("_typeName", "ArrayOfUnsupportedVimApiVersion")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfUnsupportedVmxLocation(value) => {
+                state.serialize_field("_typeName", "ArrayOfUnsupportedVmxLocation")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfUnusedVirtualDiskBlocksNotScrubbed(value) => {
+                state.serialize_field("_typeName", "ArrayOfUnusedVirtualDiskBlocksNotScrubbed")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfUserNotFound(value) => {
+                state.serialize_field("_typeName", "ArrayOfUserNotFound")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVAppConfigFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfVAppConfigFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVAppNotRunning(value) => {
+                state.serialize_field("_typeName", "ArrayOfVAppNotRunning")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVAppOperationInProgress(value) => {
+                state.serialize_field("_typeName", "ArrayOfVAppOperationInProgress")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVAppPropertyFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfVAppPropertyFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVAppTaskInProgress(value) => {
+                state.serialize_field("_typeName", "ArrayOfVAppTaskInProgress")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVFlashCacheHotConfigNotSupported(value) => {
+                state.serialize_field("_typeName", "ArrayOfVFlashCacheHotConfigNotSupported")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVFlashModuleNotSupported(value) => {
+                state.serialize_field("_typeName", "ArrayOfVFlashModuleNotSupported")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVFlashModuleVersionIncompatible(value) => {
+                state.serialize_field("_typeName", "ArrayOfVFlashModuleVersionIncompatible")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmiNotSupported(value) => {
+                state.serialize_field("_typeName", "ArrayOfVMINotSupported")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmOnConflictDvPort(value) => {
+                state.serialize_field("_typeName", "ArrayOfVMOnConflictDVPort")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmOnVirtualIntranet(value) => {
+                state.serialize_field("_typeName", "ArrayOfVMOnVirtualIntranet")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVMotionAcrossNetworkNotSupported(value) => {
+                state.serialize_field("_typeName", "ArrayOfVMotionAcrossNetworkNotSupported")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVMotionInterfaceIssue(value) => {
+                state.serialize_field("_typeName", "ArrayOfVMotionInterfaceIssue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVMotionLinkCapacityLow(value) => {
+                state.serialize_field("_typeName", "ArrayOfVMotionLinkCapacityLow")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVMotionLinkDown(value) => {
+                state.serialize_field("_typeName", "ArrayOfVMotionLinkDown")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVMotionNotConfigured(value) => {
+                state.serialize_field("_typeName", "ArrayOfVMotionNotConfigured")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVMotionNotLicensed(value) => {
+                state.serialize_field("_typeName", "ArrayOfVMotionNotLicensed")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVMotionNotSupported(value) => {
+                state.serialize_field("_typeName", "ArrayOfVMotionNotSupported")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVMotionProtocolIncompatible(value) => {
+                state.serialize_field("_typeName", "ArrayOfVMotionProtocolIncompatible")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVimFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfVimFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualDiskBlocksNotFullyProvisioned(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualDiskBlocksNotFullyProvisioned")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualDiskModeNotSupported(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualDiskModeNotSupported")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualEthernetCardNotSupported(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualEthernetCardNotSupported")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualHardwareCompatibilityIssue(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualHardwareCompatibilityIssue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualHardwareVersionNotSupported(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualHardwareVersionNotSupported")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmAlreadyExistsInDatacenter(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmAlreadyExistsInDatacenter")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmConfigFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmConfigFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmConfigIncompatibleForFaultTolerance(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmConfigIncompatibleForFaultTolerance")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmConfigIncompatibleForRecordReplay(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmConfigIncompatibleForRecordReplay")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmFaultToleranceConfigIssue(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmFaultToleranceConfigIssue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmFaultToleranceConfigIssueWrapper(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmFaultToleranceConfigIssueWrapper")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmFaultToleranceInvalidFileBacking(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmFaultToleranceInvalidFileBacking")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmFaultToleranceIssue(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmFaultToleranceIssue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmFaultToleranceOpIssuesList(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmFaultToleranceOpIssuesList")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmFaultToleranceTooManyFtVcpusOnHost(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmFaultToleranceTooManyFtVcpusOnHost")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmFaultToleranceTooManyVMsOnHost(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmFaultToleranceTooManyVMsOnHost")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmHostAffinityRuleViolation(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmHostAffinityRuleViolation")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmLimitLicense(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmLimitLicense")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmMetadataManagerFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmMetadataManagerFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmMonitorIncompatibleForFaultTolerance(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmMonitorIncompatibleForFaultTolerance")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmPowerOnDisabled(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmPowerOnDisabled")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmSmpFaultToleranceTooManyVMsOnHost(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmSmpFaultToleranceTooManyVMsOnHost")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmToolsUpgradeFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmToolsUpgradeFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmValidateMaxDevice(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmValidateMaxDevice")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmWwnConflict(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmWwnConflict")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmfsAlreadyMounted(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmfsAlreadyMounted")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmfsAmbiguousMount(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmfsAmbiguousMount")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmfsMountFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmfsMountFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmotionInterfaceNotEnabled(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmotionInterfaceNotEnabled")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVolumeEditorError(value) => {
+                state.serialize_field("_typeName", "ArrayOfVolumeEditorError")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVramLimitLicense(value) => {
+                state.serialize_field("_typeName", "ArrayOfVramLimitLicense")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanClusterUuidMismatch(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanClusterUuidMismatch")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanDiskFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanDiskFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanIncompatibleDiskMapping(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanIncompatibleDiskMapping")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVspanDestPortConflict(value) => {
+                state.serialize_field("_typeName", "ArrayOfVspanDestPortConflict")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVspanPortConflict(value) => {
+                state.serialize_field("_typeName", "ArrayOfVspanPortConflict")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVspanPortMoveFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfVspanPortMoveFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVspanPortPromiscChangeFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfVspanPortPromiscChangeFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVspanPortgroupPromiscChangeFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfVspanPortgroupPromiscChangeFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVspanPortgroupTypeChangeFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfVspanPortgroupTypeChangeFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVspanPromiscuousPortNotSupported(value) => {
+                state.serialize_field("_typeName", "ArrayOfVspanPromiscuousPortNotSupported")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVspanSameSessionPortConflict(value) => {
+                state.serialize_field("_typeName", "ArrayOfVspanSameSessionPortConflict")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfWakeOnLanNotSupported(value) => {
+                state.serialize_field("_typeName", "ArrayOfWakeOnLanNotSupported")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfWakeOnLanNotSupportedByVmotionNic(value) => {
+                state.serialize_field("_typeName", "ArrayOfWakeOnLanNotSupportedByVmotionNIC")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfWillLoseHaProtection(value) => {
+                state.serialize_field("_typeName", "ArrayOfWillLoseHAProtection")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfWillModifyConfigCpuRequirements(value) => {
+                state.serialize_field("_typeName", "ArrayOfWillModifyConfigCpuRequirements")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfWillResetSnapshotDirectory(value) => {
+                state.serialize_field("_typeName", "ArrayOfWillResetSnapshotDirectory")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfWipeDiskFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfWipeDiskFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostActiveDirectoryInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostActiveDirectoryInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostActiveDirectory(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostActiveDirectory")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostActiveDirectorySpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostActiveDirectorySpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostAssignableHardwareBinding(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostAssignableHardwareBinding")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostAssignableHardwareConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostAssignableHardwareConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostAssignableHardwareConfigAttributeOverride(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostAssignableHardwareConfigAttributeOverride")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostAuthenticationManagerInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostAuthenticationManagerInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostAuthenticationStoreInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostAuthenticationStoreInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAutoStartPowerInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfAutoStartPowerInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostAutoStartManagerConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostAutoStartManagerConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAutoStartDefaults(value) => {
+                state.serialize_field("_typeName", "ArrayOfAutoStartDefaults")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostBiosInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostBIOSInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostBlockAdapterTargetTransport(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostBlockAdapterTargetTransport")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostBlockHba(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostBlockHba")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostBootDeviceInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostBootDeviceInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostBootDevice(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostBootDevice")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostCacheConfigurationInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostCacheConfigurationInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostCacheConfigurationSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostCacheConfigurationSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostCapability(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostCapability")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostCertificateManagerCertificateInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostCertificateManagerCertificateInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostCertificateManagerCertificateSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostCertificateManagerCertificateSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostConfigChange(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostConfigChange")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostConfigInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostConfigInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostConfigManager(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostConfigManager")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostConfigSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostConfigSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostConnectInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostConnectInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostDatastoreExistsConnectInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostDatastoreExistsConnectInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostDatastoreConnectInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostDatastoreConnectInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostDatastoreNameConflictConnectInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostDatastoreNameConflictConnectInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostLicenseConnectInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostLicenseConnectInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostConnectInfoNetworkInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostConnectInfoNetworkInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostNewNetworkConnectInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostNewNetworkConnectInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostConnectSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostConnectSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostCpuIdInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostCpuIdInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostCpuInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostCpuInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostCpuPackage(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostCpuPackage")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostCpuPowerManagementInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostCpuPowerManagementInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostHyperThreadScheduleInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostHyperThreadScheduleInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostDataTransportConnectionInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostDataTransportConnectionInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFileInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfFileInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFileQueryFlags(value) => {
+                state.serialize_field("_typeName", "ArrayOfFileQueryFlags")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFloppyImageFileInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfFloppyImageFileInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFloppyImageFileQuery(value) => {
+                state.serialize_field("_typeName", "ArrayOfFloppyImageFileQuery")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFolderFileInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfFolderFileInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFolderFileQuery(value) => {
+                state.serialize_field("_typeName", "ArrayOfFolderFileQuery")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfIsoImageFileInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfIsoImageFileInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfIsoImageFileQuery(value) => {
+                state.serialize_field("_typeName", "ArrayOfIsoImageFileQuery")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFileQuery(value) => {
+                state.serialize_field("_typeName", "ArrayOfFileQuery")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostDatastoreBrowserSearchResults(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostDatastoreBrowserSearchResults")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostDatastoreBrowserSearchSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostDatastoreBrowserSearchSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfTemplateConfigFileInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfTemplateConfigFileInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfTemplateConfigFileQuery(value) => {
+                state.serialize_field("_typeName", "ArrayOfTemplateConfigFileQuery")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmConfigFileInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmConfigFileInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmConfigFileEncryptionInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmConfigFileEncryptionInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmConfigFileQuery(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmConfigFileQuery")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmConfigFileQueryFlags(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmConfigFileQueryFlags")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmConfigFileQueryFilter(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmConfigFileQueryFilter")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmDiskFileInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmDiskFileInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmDiskFileEncryptionInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmDiskFileEncryptionInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmDiskFileQuery(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmDiskFileQuery")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmDiskFileQueryFlags(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmDiskFileQueryFlags")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmDiskFileQueryFilter(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmDiskFileQueryFilter")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmLogFileInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmLogFileInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmLogFileQuery(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmLogFileQuery")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmNvramFileInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmNvramFileInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmNvramFileQuery(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmNvramFileQuery")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmSnapshotFileInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmSnapshotFileInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmSnapshotFileQuery(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmSnapshotFileQuery")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostDatastoreSystemCapabilities(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostDatastoreSystemCapabilities")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostDatastoreSystemDatastoreResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostDatastoreSystemDatastoreResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostDatastoreSystemVvolDatastoreSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostDatastoreSystemVvolDatastoreSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostDateTimeConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostDateTimeConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostDateTimeInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostDateTimeInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostDateTimeSystemServiceTestResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostDateTimeSystemServiceTestResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostDateTimeSystemTimeZone(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostDateTimeSystemTimeZone")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostDeploymentInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostDeploymentInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostDevice(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostDevice")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostDhcpService(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostDhcpService")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostDhcpServiceConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostDhcpServiceConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostDhcpServiceSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostDhcpServiceSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostDiagnosticPartition(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostDiagnosticPartition")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostDiagnosticPartitionCreateDescription(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostDiagnosticPartitionCreateDescription")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostDiagnosticPartitionCreateOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostDiagnosticPartitionCreateOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostDiagnosticPartitionCreateSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostDiagnosticPartitionCreateSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostDigestInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostDigestInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostDirectoryStoreInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostDirectoryStoreInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostDiskConfigurationResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostDiskConfigurationResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostDiskDimensions(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostDiskDimensions")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostDiskDimensionsChs(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostDiskDimensionsChs")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostDiskDimensionsLba(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostDiskDimensionsLba")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostDiskPartitionInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostDiskPartitionInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostDiskPartitionBlockRange(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostDiskPartitionBlockRange")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostDiskPartitionLayout(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostDiskPartitionLayout")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostDiskPartitionAttributes(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostDiskPartitionAttributes")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostDiskPartitionSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostDiskPartitionSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostDnsConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostDnsConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostDnsConfigSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostDnsConfigSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostDvxClass(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostDvxClass")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostEnterMaintenanceResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostEnterMaintenanceResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostEsxAgentHostManagerConfigInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostEsxAgentHostManagerConfigInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostFaultToleranceManagerComponentHealthInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostFaultToleranceManagerComponentHealthInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFcoeConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfFcoeConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFcoeConfigFcoeCapabilities(value) => {
+                state.serialize_field("_typeName", "ArrayOfFcoeConfigFcoeCapabilities")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFcoeConfigFcoeSpecification(value) => {
+                state.serialize_field("_typeName", "ArrayOfFcoeConfigFcoeSpecification")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFcoeConfigVlanRange(value) => {
+                state.serialize_field("_typeName", "ArrayOfFcoeConfigVlanRange")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostFeatureCapability(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostFeatureCapability")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostFeatureMask(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostFeatureMask")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostFeatureVersionInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostFeatureVersionInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostFibreChannelHba(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostFibreChannelHba")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostFibreChannelOverEthernetHba(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostFibreChannelOverEthernetHba")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostFibreChannelOverEthernetHbaLinkInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostFibreChannelOverEthernetHbaLinkInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostFibreChannelOverEthernetTargetTransport(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostFibreChannelOverEthernetTargetTransport")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostFibreChannelTargetTransport(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostFibreChannelTargetTransport")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostFileAccess(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostFileAccess")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfModeInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfModeInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostFileSystemMountInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostFileSystemMountInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostFileSystemVolume(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostFileSystemVolume")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostFileSystemVolumeInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostFileSystemVolumeInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostFirewallConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostFirewallConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostFirewallConfigRuleSetConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostFirewallConfigRuleSetConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostFirewallInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostFirewallInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostFirewallDefaultPolicy(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostFirewallDefaultPolicy")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostFlagInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostFlagInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostForceMountedInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostForceMountedInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostFru(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostFru")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostGatewaySpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostGatewaySpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostGraphicsConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostGraphicsConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostGraphicsConfigDeviceType(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostGraphicsConfigDeviceType")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostGraphicsInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostGraphicsInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostHardwareInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostHardwareInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostHardwareStatusInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostHardwareStatusInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDpuStatusInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfDpuStatusInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDpuStatusInfoOperationalInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfDpuStatusInfoOperationalInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostHardwareElementInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostHardwareElementInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostStorageElementInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostStorageElementInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostStorageOperationalInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostStorageOperationalInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostHbaCreateSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostHbaCreateSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHealthSystemRuntime(value) => {
+                state.serialize_field("_typeName", "ArrayOfHealthSystemRuntime")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostAccessControlEntry(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostAccessControlEntry")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostHostBusAdapter(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostHostBusAdapter")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostProxySwitch(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostProxySwitch")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostProxySwitchConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostProxySwitchConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostProxySwitchEnsInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostProxySwitchEnsInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostProxySwitchHostLagConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostProxySwitchHostLagConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostProxySwitchSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostProxySwitchSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostImageProfileSummary(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostImageProfileSummary")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostInternetScsiHba(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostInternetScsiHba")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostInternetScsiHbaAuthenticationCapabilities(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostInternetScsiHbaAuthenticationCapabilities")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostInternetScsiHbaAuthenticationProperties(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostInternetScsiHbaAuthenticationProperties")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostInternetScsiHbaDigestCapabilities(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostInternetScsiHbaDigestCapabilities")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostInternetScsiHbaDigestProperties(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostInternetScsiHbaDigestProperties")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostInternetScsiHbaDiscoveryCapabilities(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostInternetScsiHbaDiscoveryCapabilities")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostInternetScsiHbaDiscoveryProperties(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostInternetScsiHbaDiscoveryProperties")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostInternetScsiHbaIpCapabilities(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostInternetScsiHbaIPCapabilities")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostInternetScsiHbaIpProperties(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostInternetScsiHbaIPProperties")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostInternetScsiHbaIPv6Properties(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostInternetScsiHbaIPv6Properties")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostInternetScsiHbaIscsiIpv6Address(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostInternetScsiHbaIscsiIpv6Address")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostInternetScsiHbaParamValue(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostInternetScsiHbaParamValue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostInternetScsiHbaSendTarget(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostInternetScsiHbaSendTarget")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostInternetScsiHbaStaticTarget(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostInternetScsiHbaStaticTarget")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostInternetScsiHbaTargetSet(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostInternetScsiHbaTargetSet")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostInternetScsiTargetTransport(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostInternetScsiTargetTransport")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostIpConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostIpConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostIpConfigIpV6Address(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostIpConfigIpV6Address")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostIpConfigIpV6AddressConfiguration(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostIpConfigIpV6AddressConfiguration")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostIpRouteConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostIpRouteConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostIpRouteConfigSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostIpRouteConfigSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostIpRouteEntry(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostIpRouteEntry")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostIpRouteOp(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostIpRouteOp")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostIpRouteTableConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostIpRouteTableConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostIpRouteTableInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostIpRouteTableInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostIpmiInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostIpmiInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfIscsiDependencyEntity(value) => {
+                state.serialize_field("_typeName", "ArrayOfIscsiDependencyEntity")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfIscsiMigrationDependency(value) => {
+                state.serialize_field("_typeName", "ArrayOfIscsiMigrationDependency")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfIscsiPortInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfIscsiPortInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfIscsiStatus(value) => {
+                state.serialize_field("_typeName", "ArrayOfIscsiStatus")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfKernelModuleInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfKernelModuleInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfKernelModuleSectionInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfKernelModuleSectionInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostLicenseSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostLicenseSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfLinkDiscoveryProtocolConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfLinkDiscoveryProtocolConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostAccountSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostAccountSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostPosixAccountSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostPosixAccountSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostLocalAuthenticationInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostLocalAuthenticationInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfLocalDatastoreInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfLocalDatastoreInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostLocalFileSystemVolume(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostLocalFileSystemVolume")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostLocalFileSystemVolumeSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostLocalFileSystemVolumeSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostLowLevelProvisioningManagerDiskLayoutSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostLowLevelProvisioningManagerDiskLayoutSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostLowLevelProvisioningManagerFileDeleteResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostLowLevelProvisioningManagerFileDeleteResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostLowLevelProvisioningManagerFileDeleteSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostLowLevelProvisioningManagerFileDeleteSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostLowLevelProvisioningManagerFileReserveResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostLowLevelProvisioningManagerFileReserveResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostLowLevelProvisioningManagerFileReserveSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostLowLevelProvisioningManagerFileReserveSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostLowLevelProvisioningManagerSnapshotLayoutSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostLowLevelProvisioningManagerSnapshotLayoutSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostLowLevelProvisioningManagerVmMigrationStatus(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostLowLevelProvisioningManagerVmMigrationStatus")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostLowLevelProvisioningManagerVmRecoveryInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostLowLevelProvisioningManagerVmRecoveryInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostMaintenanceSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostMaintenanceSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfServiceConsoleReservationInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfServiceConsoleReservationInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineMemoryReservationInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineMemoryReservationInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineMemoryReservationSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineMemoryReservationSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostMemorySpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostMemorySpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostMemoryTierInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostMemoryTierInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostMountInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostMountInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostMultipathInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostMultipathInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostMultipathInfoFixedLogicalUnitPolicy(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostMultipathInfoFixedLogicalUnitPolicy")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostMultipathInfoHppLogicalUnitPolicy(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostMultipathInfoHppLogicalUnitPolicy")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostMultipathInfoLogicalUnit(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostMultipathInfoLogicalUnit")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostMultipathInfoLogicalUnitPolicy(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostMultipathInfoLogicalUnitPolicy")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostMultipathInfoLogicalUnitStorageArrayTypePolicy(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostMultipathInfoLogicalUnitStorageArrayTypePolicy")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostMultipathInfoPath(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostMultipathInfoPath")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostMultipathStateInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostMultipathStateInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostMultipathStateInfoPath(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostMultipathStateInfoPath")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNasDatastoreInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfNasDatastoreInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostNasVolume(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostNasVolume")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostNasVolumeConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostNasVolumeConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostNasVolumeSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostNasVolumeSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostNasVolumeUserInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostNasVolumeUserInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostNatService(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostNatService")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostNatServiceConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostNatServiceConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostNatServiceNameServiceSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostNatServiceNameServiceSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostNatServicePortForwardSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostNatServicePortForwardSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostNatServiceSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostNatServiceSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostNetCapabilities(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostNetCapabilities")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostNetOffloadCapabilities(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostNetOffloadCapabilities")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostNetStackInstance(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostNetStackInstance")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostNetworkConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostNetworkConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostNetworkConfigNetStackSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostNetworkConfigNetStackSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostNetworkConfigResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostNetworkConfigResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostNetworkInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostNetworkInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostNetworkPolicy(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostNetworkPolicy")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostNicFailureCriteria(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostNicFailureCriteria")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostNicOrderPolicy(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostNicOrderPolicy")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostNicTeamingPolicy(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostNicTeamingPolicy")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostNetworkSecurityPolicy(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostNetworkSecurityPolicy")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostNetworkTrafficShapingPolicy(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostNetworkTrafficShapingPolicy")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostNfcConnectionInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostNfcConnectionInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostNtpConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostNtpConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostNumaInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostNumaInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostNumaNode(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostNumaNode")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostNumericSensorInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostNumericSensorInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNvdimmDimmInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfNvdimmDimmInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNvdimmGuid(value) => {
+                state.serialize_field("_typeName", "ArrayOfNvdimmGuid")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNvdimmHealthInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfNvdimmHealthInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNvdimmInterleaveSetInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfNvdimmInterleaveSetInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNvdimmNamespaceCreateSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfNvdimmNamespaceCreateSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNvdimmNamespaceDeleteSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfNvdimmNamespaceDeleteSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNvdimmNamespaceDetails(value) => {
+                state.serialize_field("_typeName", "ArrayOfNvdimmNamespaceDetails")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNvdimmNamespaceInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfNvdimmNamespaceInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNvdimmSystemInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfNvdimmSystemInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNvdimmPMemNamespaceCreateSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfNvdimmPMemNamespaceCreateSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNvdimmRegionInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfNvdimmRegionInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNvdimmSummary(value) => {
+                state.serialize_field("_typeName", "ArrayOfNvdimmSummary")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostNvmeConnectSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostNvmeConnectSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostNvmeController(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostNvmeController")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostNvmeDisconnectSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostNvmeDisconnectSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostNvmeDiscoverSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostNvmeDiscoverSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostNvmeDiscoveryLog(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostNvmeDiscoveryLog")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostNvmeDiscoveryLogEntry(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostNvmeDiscoveryLogEntry")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostNvmeNamespace(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostNvmeNamespace")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostNvmeOpaqueTransportParameters(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostNvmeOpaqueTransportParameters")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostNvmeOverFibreChannelParameters(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostNvmeOverFibreChannelParameters")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostNvmeOverRdmaParameters(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostNvmeOverRdmaParameters")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostNvmeOverTcpParameters(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostNvmeOverTcpParameters")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostNvmeSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostNvmeSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostNvmeTopology(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostNvmeTopology")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostNvmeTopologyInterface(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostNvmeTopologyInterface")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostNvmeTransportParameters(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostNvmeTransportParameters")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostOpaqueNetworkInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostOpaqueNetworkInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostOpaqueSwitch(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostOpaqueSwitch")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostOpaqueSwitchPhysicalNicZone(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostOpaqueSwitchPhysicalNicZone")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPMemDatastoreInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfPMemDatastoreInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostPMemVolume(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostPMemVolume")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostParallelScsiHba(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostParallelScsiHba")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostParallelScsiTargetTransport(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostParallelScsiTargetTransport")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostPatchManagerLocator(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostPatchManagerLocator")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostPatchManagerPatchManagerOperationSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostPatchManagerPatchManagerOperationSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostPatchManagerResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostPatchManagerResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostPatchManagerStatus(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostPatchManagerStatus")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostPatchManagerStatusPrerequisitePatch(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostPatchManagerStatusPrerequisitePatch")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostPathSelectionPolicyOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostPathSelectionPolicyOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostPciDevice(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostPciDevice")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostPciPassthruConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostPciPassthruConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostPciPassthruInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostPciPassthruInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostPcieHba(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostPcieHba")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostPcieTargetTransport(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostPcieTargetTransport")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostPersistentMemoryInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostPersistentMemoryInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPhysicalNic(value) => {
+                state.serialize_field("_typeName", "ArrayOfPhysicalNic")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPhysicalNicCdpDeviceCapability(value) => {
+                state.serialize_field("_typeName", "ArrayOfPhysicalNicCdpDeviceCapability")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPhysicalNicCdpInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfPhysicalNicCdpInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPhysicalNicConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfPhysicalNicConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPhysicalNicLinkInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfPhysicalNicLinkInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfLinkLayerDiscoveryProtocolInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfLinkLayerDiscoveryProtocolInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPhysicalNicHintInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfPhysicalNicHintInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPhysicalNicHint(value) => {
+                state.serialize_field("_typeName", "ArrayOfPhysicalNicHint")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPhysicalNicIpHint(value) => {
+                state.serialize_field("_typeName", "ArrayOfPhysicalNicIpHint")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPhysicalNicNameHint(value) => {
+                state.serialize_field("_typeName", "ArrayOfPhysicalNicNameHint")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPhysicalNicSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfPhysicalNicSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostPlugStoreTopology(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostPlugStoreTopology")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostPlugStoreTopologyAdapter(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostPlugStoreTopologyAdapter")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostPlugStoreTopologyDevice(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostPlugStoreTopologyDevice")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostPlugStoreTopologyPath(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostPlugStoreTopologyPath")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostPlugStoreTopologyPlugin(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostPlugStoreTopologyPlugin")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostPlugStoreTopologyTarget(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostPlugStoreTopologyTarget")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostPortGroup(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostPortGroup")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostPortGroupConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostPortGroupConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostPortGroupPort(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostPortGroupPort")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostPortGroupSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostPortGroupSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPowerSystemCapability(value) => {
+                state.serialize_field("_typeName", "ArrayOfPowerSystemCapability")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPowerSystemInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfPowerSystemInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostPowerPolicy(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostPowerPolicy")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostProtocolEndpoint(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostProtocolEndpoint")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostPtpConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostPtpConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostPtpConfigPtpPort(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostPtpConfigPtpPort")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostQualifiedName(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostQualifiedName")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostRdmaDevice(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostRdmaDevice")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostRdmaDeviceBacking(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostRdmaDeviceBacking")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostRdmaDeviceCapability(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostRdmaDeviceCapability")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostRdmaDeviceConnectionInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostRdmaDeviceConnectionInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostRdmaDevicePnicBacking(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostRdmaDevicePnicBacking")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostRdmaHba(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostRdmaHba")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostRdmaTargetTransport(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostRdmaTargetTransport")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostReliableMemoryInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostReliableMemoryInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostResignatureRescanResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostResignatureRescanResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostFirewallRuleset(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostFirewallRuleset")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostFirewallRulesetIpList(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostFirewallRulesetIpList")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostFirewallRulesetIpNetwork(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostFirewallRulesetIpNetwork")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostFirewallRule(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostFirewallRule")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostFirewallRulesetRulesetSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostFirewallRulesetRulesetSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostRuntimeInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostRuntimeInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostRuntimeInfoNetStackInstanceRuntimeInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostRuntimeInfoNetStackInstanceRuntimeInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostNetworkResourceRuntime(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostNetworkResourceRuntime")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostRuntimeInfoNetworkRuntimeInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostRuntimeInfoNetworkRuntimeInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostPlacedVirtualNicIdentifier(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostPlacedVirtualNicIdentifier")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostPnicNetworkResourceInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostPnicNetworkResourceInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostRuntimeInfoStateEncryptionInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostRuntimeInfoStateEncryptionInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostScsiDisk(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostScsiDisk")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostScsiDiskPartition(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostScsiDiskPartition")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfScsiLun(value) => {
+                state.serialize_field("_typeName", "ArrayOfScsiLun")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfScsiLunCapabilities(value) => {
+                state.serialize_field("_typeName", "ArrayOfScsiLunCapabilities")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfScsiLunDescriptor(value) => {
+                state.serialize_field("_typeName", "ArrayOfScsiLunDescriptor")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfScsiLunDurableName(value) => {
+                state.serialize_field("_typeName", "ArrayOfScsiLunDurableName")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostScsiTopology(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostScsiTopology")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostScsiTopologyInterface(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostScsiTopologyInterface")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostScsiTopologyLun(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostScsiTopologyLun")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostScsiTopologyTarget(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostScsiTopologyTarget")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostSecuritySpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostSecuritySpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostSerialAttachedHba(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostSerialAttachedHba")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostSerialAttachedTargetTransport(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostSerialAttachedTargetTransport")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostService(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostService")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostServiceSourcePackage(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostServiceSourcePackage")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostServiceConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostServiceConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostServiceInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostServiceInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostSevInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostSevInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostSgxInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostSgxInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostSgxRegistrationInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostSgxRegistrationInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostSharedGpuCapabilities(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostSharedGpuCapabilities")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostSnmpSystemAgentLimits(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostSnmpSystemAgentLimits")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostSnmpConfigSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostSnmpConfigSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostSnmpDestination(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostSnmpDestination")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSoftwarePackage(value) => {
+                state.serialize_field("_typeName", "ArrayOfSoftwarePackage")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSoftwarePackageCapability(value) => {
+                state.serialize_field("_typeName", "ArrayOfSoftwarePackageCapability")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfRelation(value) => {
+                state.serialize_field("_typeName", "ArrayOfRelation")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostSriovConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostSriovConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostSriovDevicePoolInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostSriovDevicePoolInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostSriovInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostSriovInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostSriovNetworkDevicePoolInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostSriovNetworkDevicePoolInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostSslThumbprintInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostSslThumbprintInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostStorageArrayTypePolicyOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostStorageArrayTypePolicyOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostStorageDeviceInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostStorageDeviceInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostStorageSystemDiskLocatorLedResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostStorageSystemDiskLocatorLedResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostStorageSystemScsiLunResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostStorageSystemScsiLunResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostStorageSystemVmfsVolumeResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostStorageSystemVmfsVolumeResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostListSummary(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostListSummary")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostConfigSummary(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostConfigSummary")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostListSummaryGatewaySummary(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostListSummaryGatewaySummary")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostHardwareSummary(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostHardwareSummary")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostListSummaryQuickStats(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostListSummaryQuickStats")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSystemEventInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfSystemEventInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostSystemHealthInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostSystemHealthInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostSystemIdentificationInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostSystemIdentificationInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostSystemInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostSystemInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostSystemResourceInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostSystemResourceInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostSystemSwapConfiguration(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostSystemSwapConfiguration")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostSystemSwapConfigurationDatastoreOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostSystemSwapConfigurationDatastoreOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostSystemSwapConfigurationDisabledOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostSystemSwapConfigurationDisabledOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostSystemSwapConfigurationHostCacheOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostSystemSwapConfigurationHostCacheOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostSystemSwapConfigurationHostLocalSwapOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostSystemSwapConfigurationHostLocalSwapOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostSystemSwapConfigurationSystemSwapOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostSystemSwapConfigurationSystemSwapOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostTargetTransport(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostTargetTransport")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostTcpHba(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostTcpHba")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostTcpHbaCreateSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostTcpHbaCreateSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostTcpTargetTransport(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostTcpTargetTransport")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostTpmAttestationInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostTpmAttestationInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostTpmAttestationReport(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostTpmAttestationReport")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostTpmBootCompleteEventDetails(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostTpmBootCompleteEventDetails")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostTpmBootSecurityOptionEventDetails(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostTpmBootSecurityOptionEventDetails")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostTpmCommandEventDetails(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostTpmCommandEventDetails")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostTpmDigestInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostTpmDigestInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostTpmEventDetails(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostTpmEventDetails")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostTpmEventLogEntry(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostTpmEventLogEntry")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostTpmNvTagEventDetails(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostTpmNvTagEventDetails")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostTpmOptionEventDetails(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostTpmOptionEventDetails")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostTpmSignerEventDetails(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostTpmSignerEventDetails")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostTpmSoftwareComponentEventDetails(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostTpmSoftwareComponentEventDetails")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostTpmVersionEventDetails(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostTpmVersionEventDetails")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostTrustAuthorityAttestationInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostTrustAuthorityAttestationInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostUnresolvedVmfsExtent(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostUnresolvedVmfsExtent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostUnresolvedVmfsResignatureSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostUnresolvedVmfsResignatureSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostUnresolvedVmfsResolutionResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostUnresolvedVmfsResolutionResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostUnresolvedVmfsResolutionSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostUnresolvedVmfsResolutionSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostUnresolvedVmfsVolume(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostUnresolvedVmfsVolume")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostUnresolvedVmfsVolumeResolveStatus(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostUnresolvedVmfsVolumeResolveStatus")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostVFlashManagerVFlashCacheConfigInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostVFlashManagerVFlashCacheConfigInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostVFlashManagerVFlashCacheConfigInfoVFlashModuleConfigOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostVFlashManagerVFlashCacheConfigInfoVFlashModuleConfigOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostVFlashManagerVFlashCacheConfigSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostVFlashManagerVFlashCacheConfigSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostVFlashManagerVFlashConfigInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostVFlashManagerVFlashConfigInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostVFlashManagerVFlashResourceConfigInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostVFlashManagerVFlashResourceConfigInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostVFlashManagerVFlashResourceConfigSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostVFlashManagerVFlashResourceConfigSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostVFlashManagerVFlashResourceRunTimeInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostVFlashManagerVFlashResourceRunTimeInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostVFlashResourceConfigurationResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostVFlashResourceConfigurationResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostVMotionConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostVMotionConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostVMotionInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostVMotionInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostVMotionManagerDstInstantCloneResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostVMotionManagerDstInstantCloneResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostVMotionManagerSrcInstantCloneResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostVMotionManagerSrcInstantCloneResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostVMotionNetConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostVMotionNetConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostVfatVolume(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostVfatVolume")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostVffsVolume(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostVffsVolume")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostVffsSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostVffsSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostVirtualNic(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostVirtualNic")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostVirtualNicConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostVirtualNicConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostVirtualNicIpRouteSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostVirtualNicIpRouteSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostVirtualNicOpaqueNetworkSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostVirtualNicOpaqueNetworkSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostVirtualNicSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostVirtualNicSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostVirtualNicConnection(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostVirtualNicConnection")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualNicManagerNetConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualNicManagerNetConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostVirtualNicManagerNicTypeSelection(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostVirtualNicManagerNicTypeSelection")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostVirtualNicManagerInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostVirtualNicManagerInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostVirtualSwitch(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostVirtualSwitch")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostVirtualSwitchAutoBridge(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostVirtualSwitchAutoBridge")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostVirtualSwitchBeaconConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostVirtualSwitchBeaconConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostVirtualSwitchBondBridge(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostVirtualSwitchBondBridge")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostVirtualSwitchBridge(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostVirtualSwitchBridge")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostVirtualSwitchConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostVirtualSwitchConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostVirtualSwitchSimpleBridge(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostVirtualSwitchSimpleBridge")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostVirtualSwitchSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostVirtualSwitchSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostVmciAccessManagerAccessSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostVmciAccessManagerAccessSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmfsDatastoreCreateSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmfsDatastoreCreateSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmfsDatastoreExpandSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmfsDatastoreExpandSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmfsDatastoreExtendSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmfsDatastoreExtendSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmfsDatastoreInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmfsDatastoreInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmfsDatastoreOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmfsDatastoreOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmfsDatastoreAllExtentOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmfsDatastoreAllExtentOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmfsDatastoreBaseOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmfsDatastoreBaseOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmfsDatastoreMultipleExtentOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmfsDatastoreMultipleExtentOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmfsDatastoreSingleExtentOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmfsDatastoreSingleExtentOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmfsDatastoreSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmfsDatastoreSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostVmfsRescanResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostVmfsRescanResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostVmfsVolume(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostVmfsVolume")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmfsConfigOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmfsConfigOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostVmfsSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostVmfsSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmfsUnmapBandwidthSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmfsUnmapBandwidthSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanDatastoreInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanDatastoreInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostVsanInternalSystemCmmdsQuery(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostVsanInternalSystemCmmdsQuery")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostVsanInternalSystemDeleteVsanObjectsResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostVsanInternalSystemDeleteVsanObjectsResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanNewPolicyBatch(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanNewPolicyBatch")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanPolicyChangeBatch(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanPolicyChangeBatch")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanPolicyCost(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanPolicyCost")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanPolicySatisfiability(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanPolicySatisfiability")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostVsanInternalSystemVsanObjectOperationResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostVsanInternalSystemVsanObjectOperationResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostVsanInternalSystemVsanPhysicalDiskDiagnosticsResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostVsanInternalSystemVsanPhysicalDiskDiagnosticsResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVvolDatastoreInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVvolDatastoreInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostVvolNqn(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostVvolNQN")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostVvolVolume(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostVvolVolume")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVVolHostPe(value) => {
+                state.serialize_field("_typeName", "ArrayOfVVolHostPE")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostVvolVolumeHostVvolNqn(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostVvolVolumeHostVvolNQN")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostVvolVolumeSpecification(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostVvolVolumeSpecification")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNetDhcpConfigInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfNetDhcpConfigInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNetDhcpConfigInfoDhcpOptions(value) => {
+                state.serialize_field("_typeName", "ArrayOfNetDhcpConfigInfoDhcpOptions")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNetDhcpConfigSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfNetDhcpConfigSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNetDhcpConfigSpecDhcpOptionsSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfNetDhcpConfigSpecDhcpOptionsSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNetDnsConfigInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfNetDnsConfigInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNetDnsConfigSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfNetDnsConfigSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNetIpConfigInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfNetIpConfigInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNetIpConfigInfoIpAddress(value) => {
+                state.serialize_field("_typeName", "ArrayOfNetIpConfigInfoIpAddress")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNetIpConfigSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfNetIpConfigSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNetIpConfigSpecIpAddressSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfNetIpConfigSpecIpAddressSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNetIpRouteConfigInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfNetIpRouteConfigInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNetIpRouteConfigInfoGateway(value) => {
+                state.serialize_field("_typeName", "ArrayOfNetIpRouteConfigInfoGateway")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNetIpRouteConfigInfoIpRoute(value) => {
+                state.serialize_field("_typeName", "ArrayOfNetIpRouteConfigInfoIpRoute")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNetIpRouteConfigSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfNetIpRouteConfigSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNetIpRouteConfigSpecGatewaySpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfNetIpRouteConfigSpecGatewaySpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNetIpRouteConfigSpecIpRouteSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfNetIpRouteConfigSpecIpRouteSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNetIpStackInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfNetIpStackInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNetIpStackInfoDefaultRouter(value) => {
+                state.serialize_field("_typeName", "ArrayOfNetIpStackInfoDefaultRouter")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNetIpStackInfoNetToMedia(value) => {
+                state.serialize_field("_typeName", "ArrayOfNetIpStackInfoNetToMedia")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNetBiosConfigInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfNetBIOSConfigInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfWinNetBiosConfigInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfWinNetBIOSConfigInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfArrayUpdateSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfArrayUpdateSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfBoolOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfBoolOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfChoiceOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfChoiceOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFloatOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfFloatOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfIntOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfIntOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfLongOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfLongOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOptionDef(value) => {
+                state.serialize_field("_typeName", "ArrayOfOptionDef")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOptionType(value) => {
+                state.serialize_field("_typeName", "ArrayOfOptionType")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOptionValue(value) => {
+                state.serialize_field("_typeName", "ArrayOfOptionValue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStringOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfStringOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfApplyProfile(value) => {
+                state.serialize_field("_typeName", "ArrayOfApplyProfile")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfProfileApplyProfileElement(value) => {
+                state.serialize_field("_typeName", "ArrayOfProfileApplyProfileElement")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfProfileApplyProfileProperty(value) => {
+                state.serialize_field("_typeName", "ArrayOfProfileApplyProfileProperty")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfComplianceLocator(value) => {
+                state.serialize_field("_typeName", "ArrayOfComplianceLocator")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfComplianceProfile(value) => {
+                state.serialize_field("_typeName", "ArrayOfComplianceProfile")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfComplianceResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfComplianceResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfComplianceFailure(value) => {
+                state.serialize_field("_typeName", "ArrayOfComplianceFailure")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfComplianceFailureComplianceFailureValues(value) => {
+                state.serialize_field("_typeName", "ArrayOfComplianceFailureComplianceFailureValues")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfProfileCompositeExpression(value) => {
+                state.serialize_field("_typeName", "ArrayOfProfileCompositeExpression")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCompositePolicyOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfCompositePolicyOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfProfileCompositePolicyOptionMetadata(value) => {
+                state.serialize_field("_typeName", "ArrayOfProfileCompositePolicyOptionMetadata")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfProfileDeferredPolicyOptionParameter(value) => {
+                state.serialize_field("_typeName", "ArrayOfProfileDeferredPolicyOptionParameter")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfProfileExpression(value) => {
+                state.serialize_field("_typeName", "ArrayOfProfileExpression")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfProfileExpressionMetadata(value) => {
+                state.serialize_field("_typeName", "ArrayOfProfileExpressionMetadata")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfProfileParameterMetadata(value) => {
+                state.serialize_field("_typeName", "ArrayOfProfileParameterMetadata")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfProfileParameterMetadataParameterRelationMetadata(value) => {
+                state.serialize_field("_typeName", "ArrayOfProfileParameterMetadataParameterRelationMetadata")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfProfilePolicy(value) => {
+                state.serialize_field("_typeName", "ArrayOfProfilePolicy")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfProfilePolicyMetadata(value) => {
+                state.serialize_field("_typeName", "ArrayOfProfilePolicyMetadata")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPolicyOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfPolicyOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfProfilePolicyOptionMetadata(value) => {
+                state.serialize_field("_typeName", "ArrayOfProfilePolicyOptionMetadata")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfProfileConfigInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfProfileConfigInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfProfileCreateSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfProfileCreateSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfProfileDescription(value) => {
+                state.serialize_field("_typeName", "ArrayOfProfileDescription")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfProfileDescriptionSection(value) => {
+                state.serialize_field("_typeName", "ArrayOfProfileDescriptionSection")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfProfileSerializedCreateSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfProfileSerializedCreateSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfProfileMetadata(value) => {
+                state.serialize_field("_typeName", "ArrayOfProfileMetadata")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfProfileMetadataProfileOperationMessage(value) => {
+                state.serialize_field("_typeName", "ArrayOfProfileMetadataProfileOperationMessage")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfProfileMetadataProfileSortSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfProfileMetadataProfileSortSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfProfilePropertyPath(value) => {
+                state.serialize_field("_typeName", "ArrayOfProfilePropertyPath")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfProfileProfileStructure(value) => {
+                state.serialize_field("_typeName", "ArrayOfProfileProfileStructure")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfProfileProfileStructureProperty(value) => {
+                state.serialize_field("_typeName", "ArrayOfProfileProfileStructureProperty")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfProfileSimpleExpression(value) => {
+                state.serialize_field("_typeName", "ArrayOfProfileSimpleExpression")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfUserInputRequiredParameterMetadata(value) => {
+                state.serialize_field("_typeName", "ArrayOfUserInputRequiredParameterMetadata")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterProfileCompleteConfigSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterProfileCompleteConfigSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterProfileConfigInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterProfileConfigInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterProfileConfigServiceCreateSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterProfileConfigServiceCreateSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterProfileConfigSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterProfileConfigSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterProfileCreateSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterProfileCreateSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfActiveDirectoryProfile(value) => {
+                state.serialize_field("_typeName", "ArrayOfActiveDirectoryProfile")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAnswerFile(value) => {
+                state.serialize_field("_typeName", "ArrayOfAnswerFile")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAnswerFileStatusResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfAnswerFileStatusResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAnswerFileStatusError(value) => {
+                state.serialize_field("_typeName", "ArrayOfAnswerFileStatusError")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAuthenticationProfile(value) => {
+                state.serialize_field("_typeName", "ArrayOfAuthenticationProfile")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDateTimeProfile(value) => {
+                state.serialize_field("_typeName", "ArrayOfDateTimeProfile")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsHostVNicProfile(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsHostVNicProfile")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsProfile(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsProfile")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsServiceConsoleVNicProfile(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsServiceConsoleVNicProfile")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsVNicProfile(value) => {
+                state.serialize_field("_typeName", "ArrayOfDvsVNicProfile")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfProfileExecuteResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfProfileExecuteResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfProfileExecuteError(value) => {
+                state.serialize_field("_typeName", "ArrayOfProfileExecuteError")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFirewallProfile(value) => {
+                state.serialize_field("_typeName", "ArrayOfFirewallProfile")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFirewallProfileRulesetProfile(value) => {
+                state.serialize_field("_typeName", "ArrayOfFirewallProfileRulesetProfile")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostApplyProfile(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostApplyProfile")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostMemoryProfile(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostMemoryProfile")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostPortGroupProfile(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostPortGroupProfile")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostProfileCompleteConfigSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostProfileCompleteConfigSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostProfileConfigInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostProfileConfigInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostProfileConfigSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostProfileConfigSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostProfileHostBasedConfigSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostProfileHostBasedConfigSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostProfileSerializedHostProfileSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostProfileSerializedHostProfileSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostProfileValidationFailureInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostProfileValidationFailureInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostSpecification(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostSpecification")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostSubSpecification(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostSubSpecification")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfIpAddressProfile(value) => {
+                state.serialize_field("_typeName", "ArrayOfIpAddressProfile")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfIpRouteProfile(value) => {
+                state.serialize_field("_typeName", "ArrayOfIpRouteProfile")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNasStorageProfile(value) => {
+                state.serialize_field("_typeName", "ArrayOfNasStorageProfile")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNetStackInstanceProfile(value) => {
+                state.serialize_field("_typeName", "ArrayOfNetStackInstanceProfile")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNetworkPolicyProfile(value) => {
+                state.serialize_field("_typeName", "ArrayOfNetworkPolicyProfile")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNetworkProfile(value) => {
+                state.serialize_field("_typeName", "ArrayOfNetworkProfile")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNetworkProfileDnsConfigProfile(value) => {
+                state.serialize_field("_typeName", "ArrayOfNetworkProfileDnsConfigProfile")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNsxHostVNicProfile(value) => {
+                state.serialize_field("_typeName", "ArrayOfNsxHostVNicProfile")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOpaqueSwitchProfile(value) => {
+                state.serialize_field("_typeName", "ArrayOfOpaqueSwitchProfile")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOptionProfile(value) => {
+                state.serialize_field("_typeName", "ArrayOfOptionProfile")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPermissionProfile(value) => {
+                state.serialize_field("_typeName", "ArrayOfPermissionProfile")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPhysicalNicProfile(value) => {
+                state.serialize_field("_typeName", "ArrayOfPhysicalNicProfile")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPnicUplinkProfile(value) => {
+                state.serialize_field("_typeName", "ArrayOfPnicUplinkProfile")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPortGroupProfile(value) => {
+                state.serialize_field("_typeName", "ArrayOfPortGroupProfile")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualSwitchSelectionProfile(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualSwitchSelectionProfile")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVlanProfile(value) => {
+                state.serialize_field("_typeName", "ArrayOfVlanProfile")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAnswerFileCreateSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfAnswerFileCreateSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAnswerFileOptionsCreateSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfAnswerFileOptionsCreateSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAnswerFileSerializedCreateSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfAnswerFileSerializedCreateSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfApplyHostProfileConfigurationResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfApplyHostProfileConfigurationResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfApplyHostProfileConfigurationSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfApplyHostProfileConfigurationSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostProfileManagerCompositionResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostProfileManagerCompositionResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostProfileManagerCompositionResultResultElement(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostProfileManagerCompositionResultResultElement")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostProfileManagerCompositionValidationResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostProfileManagerCompositionValidationResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostProfileManagerCompositionValidationResultResultElement(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostProfileManagerCompositionValidationResultResultElement")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostProfileManagerConfigTaskList(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostProfileManagerConfigTaskList")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostProfilesEntityCustomizations(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostProfilesEntityCustomizations")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostProfileManagerHostToConfigSpecMap(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostProfileManagerHostToConfigSpecMap")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStructuredCustomizations(value) => {
+                state.serialize_field("_typeName", "ArrayOfStructuredCustomizations")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSecurityProfile(value) => {
+                state.serialize_field("_typeName", "ArrayOfSecurityProfile")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfServiceConsolePortGroupProfile(value) => {
+                state.serialize_field("_typeName", "ArrayOfServiceConsolePortGroupProfile")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfServiceProfile(value) => {
+                state.serialize_field("_typeName", "ArrayOfServiceProfile")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStaticRouteProfile(value) => {
+                state.serialize_field("_typeName", "ArrayOfStaticRouteProfile")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStorageProfile(value) => {
+                state.serialize_field("_typeName", "ArrayOfStorageProfile")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfUserGroupProfile(value) => {
+                state.serialize_field("_typeName", "ArrayOfUserGroupProfile")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfUserProfile(value) => {
+                state.serialize_field("_typeName", "ArrayOfUserProfile")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualSwitchProfile(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualSwitchProfile")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfLinkProfile(value) => {
+                state.serialize_field("_typeName", "ArrayOfLinkProfile")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNumPortsProfile(value) => {
+                state.serialize_field("_typeName", "ArrayOfNumPortsProfile")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmPortGroupProfile(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmPortGroupProfile")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAfterStartupTaskScheduler(value) => {
+                state.serialize_field("_typeName", "ArrayOfAfterStartupTaskScheduler")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDailyTaskScheduler(value) => {
+                state.serialize_field("_typeName", "ArrayOfDailyTaskScheduler")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHourlyTaskScheduler(value) => {
+                state.serialize_field("_typeName", "ArrayOfHourlyTaskScheduler")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfMonthlyByDayTaskScheduler(value) => {
+                state.serialize_field("_typeName", "ArrayOfMonthlyByDayTaskScheduler")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfMonthlyByWeekdayTaskScheduler(value) => {
+                state.serialize_field("_typeName", "ArrayOfMonthlyByWeekdayTaskScheduler")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfMonthlyTaskScheduler(value) => {
+                state.serialize_field("_typeName", "ArrayOfMonthlyTaskScheduler")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOnceTaskScheduler(value) => {
+                state.serialize_field("_typeName", "ArrayOfOnceTaskScheduler")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfRecurrentTaskScheduler(value) => {
+                state.serialize_field("_typeName", "ArrayOfRecurrentTaskScheduler")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfScheduledTaskDescription(value) => {
+                state.serialize_field("_typeName", "ArrayOfScheduledTaskDescription")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfScheduledTaskDetail(value) => {
+                state.serialize_field("_typeName", "ArrayOfScheduledTaskDetail")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfScheduledTaskInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfScheduledTaskInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfScheduledTaskSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfScheduledTaskSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfTaskScheduler(value) => {
+                state.serialize_field("_typeName", "ArrayOfTaskScheduler")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfWeeklyTaskScheduler(value) => {
+                state.serialize_field("_typeName", "ArrayOfWeeklyTaskScheduler")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfApplyStorageRecommendationResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfApplyStorageRecommendationResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStorageDrsAutomationConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfStorageDrsAutomationConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStorageDrsConfigInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfStorageDrsConfigInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStorageDrsConfigSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfStorageDrsConfigSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHbrDiskMigrationAction(value) => {
+                state.serialize_field("_typeName", "ArrayOfHbrDiskMigrationAction")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStorageDrsIoLoadBalanceConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfStorageDrsIoLoadBalanceConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStorageDrsOptionSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfStorageDrsOptionSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPlacementAffinityRule(value) => {
+                state.serialize_field("_typeName", "ArrayOfPlacementAffinityRule")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPlacementRankResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfPlacementRankResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPlacementRankSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfPlacementRankSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStorageDrsPlacementRankVmSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfStorageDrsPlacementRankVmSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStorageDrsPodConfigInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfStorageDrsPodConfigInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStorageDrsPodConfigSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfStorageDrsPodConfigSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStorageDrsPodSelectionSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfStorageDrsPodSelectionSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPodDiskLocator(value) => {
+                state.serialize_field("_typeName", "ArrayOfPodDiskLocator")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmPodConfigForPlacement(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmPodConfigForPlacement")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStorageDrsSpaceLoadBalanceConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfStorageDrsSpaceLoadBalanceConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStorageMigrationAction(value) => {
+                state.serialize_field("_typeName", "ArrayOfStorageMigrationAction")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStoragePlacementAction(value) => {
+                state.serialize_field("_typeName", "ArrayOfStoragePlacementAction")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStoragePlacementResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfStoragePlacementResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStoragePlacementSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfStoragePlacementSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualDiskAntiAffinityRuleSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualDiskAntiAffinityRuleSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualDiskRuleSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualDiskRuleSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStorageDrsVmConfigInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfStorageDrsVmConfigInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStorageDrsVmConfigSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfStorageDrsVmConfigSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVAppCloneSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVAppCloneSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVAppCloneSpecNetworkMappingPair(value) => {
+                state.serialize_field("_typeName", "ArrayOfVAppCloneSpecNetworkMappingPair")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVAppCloneSpecResourceMap(value) => {
+                state.serialize_field("_typeName", "ArrayOfVAppCloneSpecResourceMap")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVAppEntityConfigInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVAppEntityConfigInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVAppIpAssignmentInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVAppIPAssignmentInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfIpPool(value) => {
+                state.serialize_field("_typeName", "ArrayOfIpPool")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfIpPoolAssociation(value) => {
+                state.serialize_field("_typeName", "ArrayOfIpPoolAssociation")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfIpPoolIpPoolConfigInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfIpPoolIpPoolConfigInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVAppOvfSectionInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVAppOvfSectionInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVAppOvfSectionSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVAppOvfSectionSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVAppProductInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVAppProductInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVAppProductSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVAppProductSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVAppPropertyInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVAppPropertyInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVAppPropertySpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVAppPropertySpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVAppConfigInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVAppConfigInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVAppConfigSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVAppConfigSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualAppImportSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualAppImportSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmConfigInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmConfigInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmConfigSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmConfigSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterNetworkConfigSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterNetworkConfigSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFailoverNodeInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfFailoverNodeInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNodeDeploymentSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfNodeDeploymentSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNodeNetworkSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfNodeNetworkSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPassiveNodeDeploymentSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfPassiveNodeDeploymentSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPassiveNodeNetworkSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfPassiveNodeNetworkSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSourceNodeSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfSourceNodeSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVchaClusterConfigInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVchaClusterConfigInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVchaClusterConfigSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVchaClusterConfigSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVchaClusterDeploymentSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVchaClusterDeploymentSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVchaClusterNetworkSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVchaClusterNetworkSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfWitnessNodeInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfWitnessNodeInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVchaClusterHealth(value) => {
+                state.serialize_field("_typeName", "ArrayOfVchaClusterHealth")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVchaClusterRuntimeInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVchaClusterRuntimeInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVchaNodeRuntimeInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVchaNodeRuntimeInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineAffinityInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineAffinityInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineBaseIndependentFilterSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineBaseIndependentFilterSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineBootOptions(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineBootOptions")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineBootOptionsBootableCdromDevice(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineBootOptionsBootableCdromDevice")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineBootOptionsBootableDevice(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineBootOptionsBootableDevice")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineBootOptionsBootableDiskDevice(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineBootOptionsBootableDiskDevice")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineBootOptionsBootableEthernetDevice(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineBootOptionsBootableEthernetDevice")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineBootOptionsBootableFloppyDevice(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineBootOptionsBootableFloppyDevice")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineCapability(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineCapability")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineCdromInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineCdromInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineCertThumbprint(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineCertThumbprint")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineCloneSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineCloneSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineConfigInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineConfigInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineConfigInfoDatastoreUrlPair(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineConfigInfoDatastoreUrlPair")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineConfigInfoOverheadInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineConfigInfoOverheadInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineConfigOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineConfigOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineConfigOptionDescriptor(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineConfigOptionDescriptor")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineConfigSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineConfigSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineCpuIdInfoSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineCpuIdInfoSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfConfigTarget(value) => {
+                state.serialize_field("_typeName", "ArrayOfConfigTarget")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineConsolePreferences(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineConsolePreferences")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineContentLibraryItemInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineContentLibraryItemInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineDatastoreInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineDatastoreInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDatastoreOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfDatastoreOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineDatastoreVolumeOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineDatastoreVolumeOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineDefaultPowerOpInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineDefaultPowerOpInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineDefaultProfileSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineDefaultProfileSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineDefinedProfileSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineDefinedProfileSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineDeviceRuntimeInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineDeviceRuntimeInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineDeviceRuntimeInfoDeviceRuntimeState(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineDeviceRuntimeInfoDeviceRuntimeState")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeState(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeState")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineDiskDeviceInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineDiskDeviceInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineDvxClassInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineDvxClassInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineDynamicPassthroughInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineDynamicPassthroughInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineEmptyIndependentFilterSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineEmptyIndependentFilterSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineEmptyProfileSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineEmptyProfileSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFaultToleranceConfigInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfFaultToleranceConfigInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFaultToleranceConfigSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfFaultToleranceConfigSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFaultToleranceMetaSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfFaultToleranceMetaSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFaultTolerancePrimaryConfigInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfFaultTolerancePrimaryConfigInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFaultToleranceSecondaryConfigInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfFaultToleranceSecondaryConfigInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFaultToleranceSecondaryOpResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfFaultToleranceSecondaryOpResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFaultToleranceVmConfigSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfFaultToleranceVMConfigSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFaultToleranceDiskSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfFaultToleranceDiskSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineFeatureRequirement(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineFeatureRequirement")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineFileInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineFileInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineFileLayout(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineFileLayout")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineFileLayoutDiskLayout(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineFileLayoutDiskLayout")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineFileLayoutSnapshotLayout(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineFileLayoutSnapshotLayout")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineFileLayoutEx(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineFileLayoutEx")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineFileLayoutExDiskLayout(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineFileLayoutExDiskLayout")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineFileLayoutExDiskUnit(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineFileLayoutExDiskUnit")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineFileLayoutExFileInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineFileLayoutExFileInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineFileLayoutExSnapshotLayout(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineFileLayoutExSnapshotLayout")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineFlagInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineFlagInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineFloppyInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineFloppyInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineForkConfigInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineForkConfigInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGuestInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfGuestInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGuestInfoCustomizationInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfGuestInfoCustomizationInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGuestDiskInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfGuestDiskInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGuestInfoNamespaceGenerationInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfGuestInfoNamespaceGenerationInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGuestNicInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfGuestNicInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGuestScreenInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfGuestScreenInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGuestStackInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfGuestStackInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGuestInfoVirtualDiskMapping(value) => {
+                state.serialize_field("_typeName", "ArrayOfGuestInfoVirtualDiskMapping")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineGuestIntegrityInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineGuestIntegrityInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineGuestMonitoringModeInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineGuestMonitoringModeInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGuestOsDescriptor(value) => {
+                state.serialize_field("_typeName", "ArrayOfGuestOsDescriptor")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineGuestQuiesceSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineGuestQuiesceSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineIdeDiskDeviceInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineIdeDiskDeviceInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineIdeDiskDevicePartitionInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineIdeDiskDevicePartitionInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineIndependentFilterSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineIndependentFilterSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineInstantCloneSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineInstantCloneSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineLegacyNetworkSwitchInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineLegacyNetworkSwitchInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineMessage(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineMessage")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineMetadataManagerVmMetadata(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineMetadataManagerVmMetadata")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineMetadataManagerVmMetadataInput(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineMetadataManagerVmMetadataInput")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineMetadataManagerVmMetadataOwner(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineMetadataManagerVmMetadataOwner")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineMetadataManagerVmMetadataResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineMetadataManagerVmMetadataResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineNetworkInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineNetworkInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineNetworkShaperInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineNetworkShaperInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOpaqueNetworkTargetInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfOpaqueNetworkTargetInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineParallelInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineParallelInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachinePciPassthroughInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachinePciPassthroughInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachinePciSharedGpuPassthroughInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachinePciSharedGpuPassthroughInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachinePrecisionClockInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachinePrecisionClockInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineProfileDetails(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineProfileDetails")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineProfileDetailsDiskProfileDetails(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineProfileDetailsDiskProfileDetails")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineProfileRawData(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineProfileRawData")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineProfileSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineProfileSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachinePropertyRelation(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachinePropertyRelation")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineQuestionInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineQuestionInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineRelocateSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineRelocateSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineRelocateSpecDiskLocator(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineRelocateSpecDiskLocator")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineRelocateSpecDiskLocatorBackingSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineRelocateSpecDiskLocatorBackingSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfReplicationConfigSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfReplicationConfigSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfReplicationInfoDiskSettings(value) => {
+                state.serialize_field("_typeName", "ArrayOfReplicationInfoDiskSettings")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineRuntimeInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineRuntimeInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineRuntimeInfoDasProtectionState(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineRuntimeInfoDasProtectionState")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfScheduledHardwareUpgradeInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfScheduledHardwareUpgradeInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineScsiDiskDeviceInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineScsiDiskDeviceInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineScsiPassthroughInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineScsiPassthroughInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineSerialInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineSerialInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineSgxInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineSgxInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineSgxTargetInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineSgxTargetInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineSnapshotInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineSnapshotInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineSnapshotTree(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineSnapshotTree")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineSoundInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineSoundInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineSriovDevicePoolInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineSriovDevicePoolInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineSriovInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineSriovInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineSriovNetworkDevicePoolInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineSriovNetworkDevicePoolInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineStorageInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineStorageInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineUsageOnDatastore(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineUsageOnDatastore")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineSummary(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineSummary")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineConfigSummary(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineConfigSummary")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineGuestSummary(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineGuestSummary")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineQuickStats(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineQuickStats")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineQuickStatsMemoryTierStats(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineQuickStatsMemoryTierStats")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineStorageSummary(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineStorageSummary")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineTargetInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineTargetInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfToolsConfigInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfToolsConfigInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfToolsConfigInfoToolsLastInstallInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfToolsConfigInfoToolsLastInstallInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineUsbInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineUsbInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfUsbScanCodeSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfUsbScanCodeSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfUsbScanCodeSpecKeyEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfUsbScanCodeSpecKeyEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfUsbScanCodeSpecModifierType(value) => {
+                state.serialize_field("_typeName", "ArrayOfUsbScanCodeSpecModifierType")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineVFlashModuleInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineVFlashModuleInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineVMotionStunTimeInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineVMotionStunTimeInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineVcpuConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineVcpuConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineVendorDeviceGroupInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineVendorDeviceGroupInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineVendorDeviceGroupInfoComponentDeviceInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineVendorDeviceGroupInfoComponentDeviceInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineVgpuDeviceInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineVgpuDeviceInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineVgpuProfileInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineVgpuProfileInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineVirtualDeviceGroups(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineVirtualDeviceGroups")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineVirtualDeviceGroupsDeviceGroup(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineVirtualDeviceGroupsDeviceGroup")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineVirtualDeviceGroupsVendorDeviceGroup(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineVirtualDeviceGroupsVendorDeviceGroup")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineVirtualDeviceSwap(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineVirtualDeviceSwap")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineVirtualDeviceSwapDeviceSwapInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineVirtualDeviceSwapDeviceSwapInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualHardware(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualHardware")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualHardwareOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualHardwareOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineVirtualNuma(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineVirtualNuma")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineVirtualNumaInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineVirtualNumaInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineVirtualPMem(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineVirtualPMem")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineImportSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineImportSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineWindowsQuiesceSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineWindowsQuiesceSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCheckResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfCheckResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCustomizationAdapterMapping(value) => {
+                state.serialize_field("_typeName", "ArrayOfCustomizationAdapterMapping")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCustomizationAutoIpV6Generator(value) => {
+                state.serialize_field("_typeName", "ArrayOfCustomizationAutoIpV6Generator")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCustomizationCloudinitPrep(value) => {
+                state.serialize_field("_typeName", "ArrayOfCustomizationCloudinitPrep")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCustomizationCustomIpGenerator(value) => {
+                state.serialize_field("_typeName", "ArrayOfCustomizationCustomIpGenerator")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCustomizationCustomIpV6Generator(value) => {
+                state.serialize_field("_typeName", "ArrayOfCustomizationCustomIpV6Generator")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCustomizationCustomName(value) => {
+                state.serialize_field("_typeName", "ArrayOfCustomizationCustomName")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCustomizationDhcpIpGenerator(value) => {
+                state.serialize_field("_typeName", "ArrayOfCustomizationDhcpIpGenerator")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCustomizationDhcpIpV6Generator(value) => {
+                state.serialize_field("_typeName", "ArrayOfCustomizationDhcpIpV6Generator")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCustomizationFixedIp(value) => {
+                state.serialize_field("_typeName", "ArrayOfCustomizationFixedIp")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCustomizationFixedIpV6(value) => {
+                state.serialize_field("_typeName", "ArrayOfCustomizationFixedIpV6")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCustomizationFixedName(value) => {
+                state.serialize_field("_typeName", "ArrayOfCustomizationFixedName")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCustomizationGlobalIpSettings(value) => {
+                state.serialize_field("_typeName", "ArrayOfCustomizationGlobalIPSettings")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCustomizationGuiRunOnce(value) => {
+                state.serialize_field("_typeName", "ArrayOfCustomizationGuiRunOnce")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCustomizationGuiUnattended(value) => {
+                state.serialize_field("_typeName", "ArrayOfCustomizationGuiUnattended")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCustomizationIpSettings(value) => {
+                state.serialize_field("_typeName", "ArrayOfCustomizationIPSettings")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCustomizationIpSettingsIpV6AddressSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfCustomizationIPSettingsIpV6AddressSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCustomizationIdentification(value) => {
+                state.serialize_field("_typeName", "ArrayOfCustomizationIdentification")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCustomizationIdentitySettings(value) => {
+                state.serialize_field("_typeName", "ArrayOfCustomizationIdentitySettings")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCustomizationIpGenerator(value) => {
+                state.serialize_field("_typeName", "ArrayOfCustomizationIpGenerator")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCustomizationIpV6Generator(value) => {
+                state.serialize_field("_typeName", "ArrayOfCustomizationIpV6Generator")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCustomizationLicenseFilePrintData(value) => {
+                state.serialize_field("_typeName", "ArrayOfCustomizationLicenseFilePrintData")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCustomizationLinuxOptions(value) => {
+                state.serialize_field("_typeName", "ArrayOfCustomizationLinuxOptions")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCustomizationLinuxPrep(value) => {
+                state.serialize_field("_typeName", "ArrayOfCustomizationLinuxPrep")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCustomizationName(value) => {
+                state.serialize_field("_typeName", "ArrayOfCustomizationName")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCustomizationOptions(value) => {
+                state.serialize_field("_typeName", "ArrayOfCustomizationOptions")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCustomizationPassword(value) => {
+                state.serialize_field("_typeName", "ArrayOfCustomizationPassword")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCustomizationPrefixName(value) => {
+                state.serialize_field("_typeName", "ArrayOfCustomizationPrefixName")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCustomizationSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfCustomizationSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCustomizationStatelessIpV6Generator(value) => {
+                state.serialize_field("_typeName", "ArrayOfCustomizationStatelessIpV6Generator")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCustomizationSysprep(value) => {
+                state.serialize_field("_typeName", "ArrayOfCustomizationSysprep")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCustomizationSysprepText(value) => {
+                state.serialize_field("_typeName", "ArrayOfCustomizationSysprepText")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCustomizationUnknownIpGenerator(value) => {
+                state.serialize_field("_typeName", "ArrayOfCustomizationUnknownIpGenerator")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCustomizationUnknownIpV6Generator(value) => {
+                state.serialize_field("_typeName", "ArrayOfCustomizationUnknownIpV6Generator")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCustomizationUnknownName(value) => {
+                state.serialize_field("_typeName", "ArrayOfCustomizationUnknownName")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCustomizationUserData(value) => {
+                state.serialize_field("_typeName", "ArrayOfCustomizationUserData")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCustomizationVirtualMachineName(value) => {
+                state.serialize_field("_typeName", "ArrayOfCustomizationVirtualMachineName")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCustomizationWinOptions(value) => {
+                state.serialize_field("_typeName", "ArrayOfCustomizationWinOptions")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostDiskMappingInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostDiskMappingInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostDiskMappingPartitionInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostDiskMappingPartitionInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostDiskMappingOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostDiskMappingOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostDiskMappingPartitionOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostDiskMappingPartitionOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfParaVirtualScsiController(value) => {
+                state.serialize_field("_typeName", "ArrayOfParaVirtualSCSIController")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfParaVirtualScsiControllerOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfParaVirtualSCSIControllerOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualAhciController(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualAHCIController")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualAhciControllerOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualAHCIControllerOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualBusLogicController(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualBusLogicController")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualBusLogicControllerOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualBusLogicControllerOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualCdrom(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualCdrom")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualCdromAtapiBackingInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualCdromAtapiBackingInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualCdromIsoBackingInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualCdromIsoBackingInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualCdromPassthroughBackingInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualCdromPassthroughBackingInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualCdromRemoteAtapiBackingInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualCdromRemoteAtapiBackingInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualCdromRemotePassthroughBackingInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualCdromRemotePassthroughBackingInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualCdromOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualCdromOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualCdromAtapiBackingOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualCdromAtapiBackingOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualCdromIsoBackingOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualCdromIsoBackingOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualCdromPassthroughBackingOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualCdromPassthroughBackingOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualCdromRemoteAtapiBackingOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualCdromRemoteAtapiBackingOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualCdromRemotePassthroughBackingOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualCdromRemotePassthroughBackingOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualController(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualController")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualControllerOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualControllerOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualDevice(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualDevice")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualDeviceBackingInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualDeviceBackingInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualDeviceBusSlotInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualDeviceBusSlotInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualDeviceConnectInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualDeviceConnectInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualDeviceDeviceBackingInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualDeviceDeviceBackingInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualDeviceDeviceGroupInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualDeviceDeviceGroupInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualDeviceFileBackingInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualDeviceFileBackingInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualDevicePciBusSlotInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualDevicePciBusSlotInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualDevicePipeBackingInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualDevicePipeBackingInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualDeviceRemoteDeviceBackingInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualDeviceRemoteDeviceBackingInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualDeviceUriBackingInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualDeviceURIBackingInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualDeviceOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualDeviceOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualDeviceBackingOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualDeviceBackingOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualDeviceBusSlotOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualDeviceBusSlotOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualDeviceConnectOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualDeviceConnectOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualDeviceDeviceBackingOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualDeviceDeviceBackingOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualDeviceFileBackingOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualDeviceFileBackingOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualDevicePipeBackingOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualDevicePipeBackingOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualDeviceRemoteDeviceBackingOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualDeviceRemoteDeviceBackingOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualDeviceUriBackingOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualDeviceURIBackingOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualDeviceConfigSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualDeviceConfigSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualDeviceConfigSpecBackingSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualDeviceConfigSpecBackingSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualDisk(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualDisk")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualDiskFlatVer1BackingInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualDiskFlatVer1BackingInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualDiskFlatVer2BackingInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualDiskFlatVer2BackingInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualDiskLocalPMemBackingInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualDiskLocalPMemBackingInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualDiskPartitionedRawDiskVer2BackingInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualDiskPartitionedRawDiskVer2BackingInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualDiskRawDiskMappingVer1BackingInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualDiskRawDiskMappingVer1BackingInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualDiskRawDiskVer2BackingInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualDiskRawDiskVer2BackingInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualDiskSeSparseBackingInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualDiskSeSparseBackingInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualDiskSparseVer1BackingInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualDiskSparseVer1BackingInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualDiskSparseVer2BackingInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualDiskSparseVer2BackingInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualDiskVFlashCacheConfigInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualDiskVFlashCacheConfigInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualDiskId(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualDiskId")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualDiskOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualDiskOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualDiskDeltaDiskFormatsSupported(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualDiskDeltaDiskFormatsSupported")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualDiskFlatVer1BackingOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualDiskFlatVer1BackingOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualDiskFlatVer2BackingOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualDiskFlatVer2BackingOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualDiskLocalPMemBackingOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualDiskLocalPMemBackingOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualDiskPartitionedRawDiskVer2BackingOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualDiskPartitionedRawDiskVer2BackingOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualDiskRawDiskMappingVer1BackingOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualDiskRawDiskMappingVer1BackingOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualDiskRawDiskVer2BackingOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualDiskRawDiskVer2BackingOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualDiskSeSparseBackingOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualDiskSeSparseBackingOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualDiskSparseVer1BackingOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualDiskSparseVer1BackingOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualDiskSparseVer2BackingOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualDiskSparseVer2BackingOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualDiskOptionVFlashCacheConfigOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualDiskOptionVFlashCacheConfigOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualDiskConfigSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualDiskConfigSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualE1000(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualE1000")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualE1000Option(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualE1000Option")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualE1000E(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualE1000e")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualE1000EOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualE1000eOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualEnsoniq1371(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualEnsoniq1371")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualEnsoniq1371Option(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualEnsoniq1371Option")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualEthernetCard(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualEthernetCard")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualEthernetCardDistributedVirtualPortBackingInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualEthernetCardDistributedVirtualPortBackingInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualEthernetCardLegacyNetworkBackingInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualEthernetCardLegacyNetworkBackingInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualEthernetCardNetworkBackingInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualEthernetCardNetworkBackingInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualEthernetCardOpaqueNetworkBackingInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualEthernetCardOpaqueNetworkBackingInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualEthernetCardResourceAllocation(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualEthernetCardResourceAllocation")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualEthernetCardOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualEthernetCardOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualEthernetCardDvPortBackingOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualEthernetCardDVPortBackingOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualEthernetCardLegacyNetworkBackingOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualEthernetCardLegacyNetworkBackingOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualEthernetCardNetworkBackingOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualEthernetCardNetworkBackingOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualEthernetCardOpaqueNetworkBackingOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualEthernetCardOpaqueNetworkBackingOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualFloppy(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualFloppy")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualFloppyDeviceBackingInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualFloppyDeviceBackingInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualFloppyImageBackingInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualFloppyImageBackingInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualFloppyRemoteDeviceBackingInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualFloppyRemoteDeviceBackingInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualFloppyOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualFloppyOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualFloppyDeviceBackingOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualFloppyDeviceBackingOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualFloppyImageBackingOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualFloppyImageBackingOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualFloppyRemoteDeviceBackingOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualFloppyRemoteDeviceBackingOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualHdAudioCard(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualHdAudioCard")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualHdAudioCardOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualHdAudioCardOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualIdeController(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualIDEController")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualIdeControllerOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualIDEControllerOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualKeyboard(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualKeyboard")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualKeyboardOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualKeyboardOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualLsiLogicController(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualLsiLogicController")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualLsiLogicControllerOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualLsiLogicControllerOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualLsiLogicSasController(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualLsiLogicSASController")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualLsiLogicSasControllerOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualLsiLogicSASControllerOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualNvdimm(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualNVDIMM")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualNvdimmBackingInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualNVDIMMBackingInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualNvdimmController(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualNVDIMMController")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualNvdimmControllerOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualNVDIMMControllerOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualNvdimmOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualNVDIMMOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualNvmeController(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualNVMEController")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualNvmeControllerOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualNVMEControllerOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualPciController(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualPCIController")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualPciControllerOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualPCIControllerOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualPciPassthrough(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualPCIPassthrough")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualPciPassthroughAllowedDevice(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualPCIPassthroughAllowedDevice")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualPciPassthroughDeviceBackingInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualPCIPassthroughDeviceBackingInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualPciPassthroughDvxBackingInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualPCIPassthroughDvxBackingInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualPciPassthroughDynamicBackingInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualPCIPassthroughDynamicBackingInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualPciPassthroughPluginBackingInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualPCIPassthroughPluginBackingInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualPciPassthroughVmiopBackingInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualPCIPassthroughVmiopBackingInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualPciPassthroughOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualPCIPassthroughOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualPciPassthroughDeviceBackingOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualPCIPassthroughDeviceBackingOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualPciPassthroughDvxBackingOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualPCIPassthroughDvxBackingOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualPciPassthroughDynamicBackingOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualPCIPassthroughDynamicBackingOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualPciPassthroughPluginBackingOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualPCIPassthroughPluginBackingOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualPciPassthroughVmiopBackingOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualPCIPassthroughVmiopBackingOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualPcNet32(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualPCNet32")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualPcNet32Option(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualPCNet32Option")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualPs2Controller(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualPS2Controller")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualPs2ControllerOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualPS2ControllerOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualParallelPort(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualParallelPort")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualParallelPortDeviceBackingInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualParallelPortDeviceBackingInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualParallelPortFileBackingInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualParallelPortFileBackingInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualParallelPortOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualParallelPortOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualParallelPortDeviceBackingOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualParallelPortDeviceBackingOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualParallelPortFileBackingOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualParallelPortFileBackingOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualPointingDevice(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualPointingDevice")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualPointingDeviceDeviceBackingInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualPointingDeviceDeviceBackingInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualPointingDeviceOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualPointingDeviceOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualPointingDeviceBackingOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualPointingDeviceBackingOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualPrecisionClock(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualPrecisionClock")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualPrecisionClockSystemClockBackingInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualPrecisionClockSystemClockBackingInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualPrecisionClockOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualPrecisionClockOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualPrecisionClockSystemClockBackingOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualPrecisionClockSystemClockBackingOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualSataController(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualSATAController")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualSataControllerOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualSATAControllerOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualScsiController(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualSCSIController")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualScsiControllerOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualSCSIControllerOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualScsiPassthrough(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualSCSIPassthrough")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualScsiPassthroughDeviceBackingInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualSCSIPassthroughDeviceBackingInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualScsiPassthroughOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualSCSIPassthroughOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualScsiPassthroughDeviceBackingOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualSCSIPassthroughDeviceBackingOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualSioController(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualSIOController")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualSioControllerOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualSIOControllerOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualSerialPort(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualSerialPort")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualSerialPortDeviceBackingInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualSerialPortDeviceBackingInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualSerialPortFileBackingInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualSerialPortFileBackingInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualSerialPortPipeBackingInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualSerialPortPipeBackingInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualSerialPortThinPrintBackingInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualSerialPortThinPrintBackingInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualSerialPortUriBackingInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualSerialPortURIBackingInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualSerialPortOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualSerialPortOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualSerialPortDeviceBackingOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualSerialPortDeviceBackingOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualSerialPortFileBackingOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualSerialPortFileBackingOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualSerialPortPipeBackingOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualSerialPortPipeBackingOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualSerialPortThinPrintBackingOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualSerialPortThinPrintBackingOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualSerialPortUriBackingOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualSerialPortURIBackingOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualSoundBlaster16(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualSoundBlaster16")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualSoundBlaster16Option(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualSoundBlaster16Option")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualSoundCard(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualSoundCard")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualSoundCardDeviceBackingInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualSoundCardDeviceBackingInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualSoundCardOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualSoundCardOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualSoundCardDeviceBackingOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualSoundCardDeviceBackingOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualSriovEthernetCard(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualSriovEthernetCard")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualSriovEthernetCardSriovBackingInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualSriovEthernetCardSriovBackingInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualSriovEthernetCardOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualSriovEthernetCardOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualSriovEthernetCardSriovBackingOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualSriovEthernetCardSriovBackingOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualTpm(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualTPM")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualTpmOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualTPMOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualUsb(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualUSB")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualUsbRemoteClientBackingInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualUSBRemoteClientBackingInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualUsbRemoteHostBackingInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualUSBRemoteHostBackingInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualUsbusbBackingInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualUSBUSBBackingInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualUsbController(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualUSBController")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualUsbControllerPciBusSlotInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualUSBControllerPciBusSlotInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualUsbControllerOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualUSBControllerOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualUsbOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualUSBOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualUsbRemoteClientBackingOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualUSBRemoteClientBackingOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualUsbRemoteHostBackingOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualUSBRemoteHostBackingOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualUsbusbBackingOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualUSBUSBBackingOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualUsbxhciController(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualUSBXHCIController")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualUsbxhciControllerOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualUSBXHCIControllerOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineVmciDevice(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineVMCIDevice")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineVmciDeviceFilterInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineVMCIDeviceFilterInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineVmciDeviceFilterSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineVMCIDeviceFilterSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineVmciDeviceOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineVMCIDeviceOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineVmciDeviceOptionFilterSpecOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineVMCIDeviceOptionFilterSpecOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineVmirom(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineVMIROM")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualVmiromOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualVMIROMOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineVideoCard(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineVideoCard")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualVideoCardOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualVideoCardOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualVmxnet(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualVmxnet")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualVmxnet2(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualVmxnet2")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualVmxnet2Option(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualVmxnet2Option")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualVmxnet3(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualVmxnet3")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualVmxnet3Option(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualVmxnet3Option")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualVmxnet3Vrdma(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualVmxnet3Vrdma")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualVmxnet3VrdmaOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualVmxnet3VrdmaOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualVmxnetOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualVmxnetOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualWdt(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualWDT")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualWdtOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualWDTOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGuestAliases(value) => {
+                state.serialize_field("_typeName", "ArrayOfGuestAliases")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGuestAuthAliasInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfGuestAuthAliasInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGuestAuthAnySubject(value) => {
+                state.serialize_field("_typeName", "ArrayOfGuestAuthAnySubject")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGuestAuthNamedSubject(value) => {
+                state.serialize_field("_typeName", "ArrayOfGuestAuthNamedSubject")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGuestAuthSubject(value) => {
+                state.serialize_field("_typeName", "ArrayOfGuestAuthSubject")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGuestMappedAliases(value) => {
+                state.serialize_field("_typeName", "ArrayOfGuestMappedAliases")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGuestFileAttributes(value) => {
+                state.serialize_field("_typeName", "ArrayOfGuestFileAttributes")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGuestFileInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfGuestFileInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFileTransferInformation(value) => {
+                state.serialize_field("_typeName", "ArrayOfFileTransferInformation")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGuestListFileInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfGuestListFileInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGuestPosixFileAttributes(value) => {
+                state.serialize_field("_typeName", "ArrayOfGuestPosixFileAttributes")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGuestWindowsFileAttributes(value) => {
+                state.serialize_field("_typeName", "ArrayOfGuestWindowsFileAttributes")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGuestAuthentication(value) => {
+                state.serialize_field("_typeName", "ArrayOfGuestAuthentication")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNamePasswordAuthentication(value) => {
+                state.serialize_field("_typeName", "ArrayOfNamePasswordAuthentication")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGuestProcessInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfGuestProcessInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGuestProgramSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfGuestProgramSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGuestWindowsProgramSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfGuestWindowsProgramSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSamlTokenAuthentication(value) => {
+                state.serialize_field("_typeName", "ArrayOfSAMLTokenAuthentication")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSspiAuthentication(value) => {
+                state.serialize_field("_typeName", "ArrayOfSSPIAuthentication")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfTicketedSessionAuthentication(value) => {
+                state.serialize_field("_typeName", "ArrayOfTicketedSessionAuthentication")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGuestRegKeySpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfGuestRegKeySpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGuestRegKeyNameSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfGuestRegKeyNameSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGuestRegKeyRecordSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfGuestRegKeyRecordSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGuestRegValueSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfGuestRegValueSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGuestRegValueBinarySpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfGuestRegValueBinarySpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGuestRegValueDataSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfGuestRegValueDataSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGuestRegValueDwordSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfGuestRegValueDwordSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGuestRegValueExpandStringSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfGuestRegValueExpandStringSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGuestRegValueMultiStringSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfGuestRegValueMultiStringSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGuestRegValueNameSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfGuestRegValueNameSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGuestRegValueQwordSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfGuestRegValueQwordSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGuestRegValueStringSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfGuestRegValueStringSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDeviceGroupId(value) => {
+                state.serialize_field("_typeName", "ArrayOfDeviceGroupId")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFaultDomainId(value) => {
+                state.serialize_field("_typeName", "ArrayOfFaultDomainId")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfReplicationGroupId(value) => {
+                state.serialize_field("_typeName", "ArrayOfReplicationGroupId")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfReplicationSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfReplicationSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanClusterConfigInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanClusterConfigInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanClusterConfigInfoHostDefaultInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanClusterConfigInfoHostDefaultInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHostClusterStatus(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHostClusterStatus")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHostClusterStatusState(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHostClusterStatusState")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHostClusterStatusStateCompletionEstimate(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHostClusterStatusStateCompletionEstimate")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHostConfigInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHostConfigInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHostConfigInfoClusterInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHostConfigInfoClusterInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHostFaultDomainInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHostFaultDomainInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHostConfigInfoNetworkInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHostConfigInfoNetworkInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHostConfigInfoNetworkInfoPortConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHostConfigInfoNetworkInfoPortConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHostConfigInfoStorageInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHostConfigInfoStorageInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHostDecommissionMode(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHostDecommissionMode")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHostDiskMapInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHostDiskMapInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHostDiskMapResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHostDiskMapResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHostDiskMapping(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHostDiskMapping")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHostDiskResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHostDiskResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHostIpConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHostIpConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHostMembershipInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHostMembershipInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHostVsanDiskInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHostVsanDiskInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHostRuntimeInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHostRuntimeInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHostRuntimeInfoDiskIssue(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHostRuntimeInfoDiskIssue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfBaseConfigInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfBaseConfigInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfBaseConfigInfoBackingInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfBaseConfigInfoBackingInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfBaseConfigInfoDiskFileBackingInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfBaseConfigInfoDiskFileBackingInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfBaseConfigInfoFileBackingInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfBaseConfigInfoFileBackingInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfBaseConfigInfoRawDiskMappingBackingInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfBaseConfigInfoRawDiskMappingBackingInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVslmCloneSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVslmCloneSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVslmCreateSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVslmCreateSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVslmCreateSpecBackingSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVslmCreateSpecBackingSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVslmCreateSpecDiskFileBackingSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVslmCreateSpecDiskFileBackingSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVslmCreateSpecRawDiskMappingBackingSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVslmCreateSpecRawDiskMappingBackingSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDiskCryptoSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfDiskCryptoSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfId(value) => {
+                state.serialize_field("_typeName", "ArrayOfID")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfvslmInfrastructureObjectPolicy(value) => {
+                state.serialize_field("_typeName", "ArrayOfvslmInfrastructureObjectPolicy")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfvslmInfrastructureObjectPolicySpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfvslmInfrastructureObjectPolicySpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVslmMigrateSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVslmMigrateSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVslmRelocateSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVslmRelocateSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVStorageObjectStateInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVStorageObjectStateInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVslmTagEntry(value) => {
+                state.serialize_field("_typeName", "ArrayOfVslmTagEntry")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfvslmVClockInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfvslmVClockInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVStorageObject(value) => {
+                state.serialize_field("_typeName", "ArrayOfVStorageObject")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVStorageObjectConfigInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVStorageObjectConfigInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVStorageObjectSnapshot(value) => {
+                state.serialize_field("_typeName", "ArrayOfVStorageObjectSnapshot")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVStorageObjectSnapshotDetails(value) => {
+                state.serialize_field("_typeName", "ArrayOfVStorageObjectSnapshotDetails")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVStorageObjectSnapshotInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVStorageObjectSnapshotInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVStorageObjectSnapshotInfoVStorageObjectSnapshot(value) => {
+                state.serialize_field("_typeName", "ArrayOfVStorageObjectSnapshotInfoVStorageObjectSnapshot")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfRetrieveVStorageObjSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfRetrieveVStorageObjSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVStorageObjectAssociations(value) => {
+                state.serialize_field("_typeName", "ArrayOfVStorageObjectAssociations")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVStorageObjectAssociationsVmDiskAssociations(value) => {
+                state.serialize_field("_typeName", "ArrayOfVStorageObjectAssociationsVmDiskAssociations")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDataObject(value) => {
+                state.serialize_field("_typeName", "ArrayOfDataObject")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDynamicArray(value) => {
+                state.serialize_field("_typeName", "ArrayOfDynamicArray")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDynamicProperty(value) => {
+                state.serialize_field("_typeName", "ArrayOfDynamicProperty")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfKeyAnyValue(value) => {
+                state.serialize_field("_typeName", "ArrayOfKeyAnyValue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfLocalizableMessage(value) => {
+                state.serialize_field("_typeName", "ArrayOfLocalizableMessage")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfLocalizedMethodFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfLocalizedMethodFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfMethodFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfMethodFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfRuntimeFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfRuntimeFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostCommunication(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostCommunication")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostNotConnected(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostNotConnected")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostNotReachable(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostNotReachable")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInvalidArgument(value) => {
+                state.serialize_field("_typeName", "ArrayOfInvalidArgument")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInvalidRequest(value) => {
+                state.serialize_field("_typeName", "ArrayOfInvalidRequest")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInvalidType(value) => {
+                state.serialize_field("_typeName", "ArrayOfInvalidType")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfManagedObjectNotFound(value) => {
+                state.serialize_field("_typeName", "ArrayOfManagedObjectNotFound")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfMethodNotFound(value) => {
+                state.serialize_field("_typeName", "ArrayOfMethodNotFound")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNotEnoughLicenses(value) => {
+                state.serialize_field("_typeName", "ArrayOfNotEnoughLicenses")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNotImplemented(value) => {
+                state.serialize_field("_typeName", "ArrayOfNotImplemented")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNotSupported(value) => {
+                state.serialize_field("_typeName", "ArrayOfNotSupported")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfRequestCanceled(value) => {
+                state.serialize_field("_typeName", "ArrayOfRequestCanceled")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSecurityError(value) => {
+                state.serialize_field("_typeName", "ArrayOfSecurityError")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSystemError(value) => {
+                state.serialize_field("_typeName", "ArrayOfSystemError")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfUnexpectedFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfUnexpectedFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInvalidCollectorVersion(value) => {
+                state.serialize_field("_typeName", "ArrayOfInvalidCollectorVersion")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInvalidProperty(value) => {
+                state.serialize_field("_typeName", "ArrayOfInvalidProperty")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPropertyChange(value) => {
+                state.serialize_field("_typeName", "ArrayOfPropertyChange")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPropertyFilterSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfPropertyFilterSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPropertyFilterUpdate(value) => {
+                state.serialize_field("_typeName", "ArrayOfPropertyFilterUpdate")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfMissingObject(value) => {
+                state.serialize_field("_typeName", "ArrayOfMissingObject")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfMissingProperty(value) => {
+                state.serialize_field("_typeName", "ArrayOfMissingProperty")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfObjectContent(value) => {
+                state.serialize_field("_typeName", "ArrayOfObjectContent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfObjectSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfObjectSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfObjectUpdate(value) => {
+                state.serialize_field("_typeName", "ArrayOfObjectUpdate")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPropertySpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfPropertySpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfRetrieveOptions(value) => {
+                state.serialize_field("_typeName", "ArrayOfRetrieveOptions")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfRetrieveResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfRetrieveResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSelectionSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfSelectionSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfTraversalSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfTraversalSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfUpdateSet(value) => {
+                state.serialize_field("_typeName", "ArrayOfUpdateSet")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfWaitOptions(value) => {
+                state.serialize_field("_typeName", "ArrayOfWaitOptions")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ComputeResourceHostSpbmLicenseInfoHostSpbmLicenseState(value) => {
+                state.serialize_field("_typeName", "ComputeResourceHostSPBMLicenseInfoHostSPBMLicenseState")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfComputeResourceHostSpbmLicenseInfoHostSpbmLicenseState(value) => {
+                state.serialize_field("_typeName", "ArrayOfComputeResourceHostSPBMLicenseInfoHostSPBMLicenseState")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::DatastoreAccessible(value) => {
+                state.serialize_field("_typeName", "DatastoreAccessible")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDatastoreAccessible(value) => {
+                state.serialize_field("_typeName", "ArrayOfDatastoreAccessible")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::DrsInjectorWorkloadCorrelationState(value) => {
+                state.serialize_field("_typeName", "DrsInjectorWorkloadCorrelationState")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDrsInjectorWorkloadCorrelationState(value) => {
+                state.serialize_field("_typeName", "ArrayOfDrsInjectorWorkloadCorrelationState")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::HostSystemConnectionState(value) => {
+                state.serialize_field("_typeName", "HostSystemConnectionState")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostSystemConnectionState(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostSystemConnectionState")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::HostSystemPowerState(value) => {
+                state.serialize_field("_typeName", "HostSystemPowerState")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostSystemPowerState(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostSystemPowerState")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::HttpNfcLeaseState(value) => {
+                state.serialize_field("_typeName", "HttpNfcLeaseState")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHttpNfcLeaseState(value) => {
+                state.serialize_field("_typeName", "ArrayOfHttpNfcLeaseState")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::LatencySensitivitySensitivityLevel(value) => {
+                state.serialize_field("_typeName", "LatencySensitivitySensitivityLevel")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfLatencySensitivitySensitivityLevel(value) => {
+                state.serialize_field("_typeName", "ArrayOfLatencySensitivitySensitivityLevel")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::LicenseFeatureInfoState(value) => {
+                state.serialize_field("_typeName", "LicenseFeatureInfoState")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfLicenseFeatureInfoState(value) => {
+                state.serialize_field("_typeName", "ArrayOfLicenseFeatureInfoState")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::HostLicensableResourceKey(value) => {
+                state.serialize_field("_typeName", "HostLicensableResourceKey")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostLicensableResourceKey(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostLicensableResourceKey")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::LicenseManagerState(value) => {
+                state.serialize_field("_typeName", "LicenseManagerState")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfLicenseManagerState(value) => {
+                state.serialize_field("_typeName", "ArrayOfLicenseManagerState")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::LicenseReservationInfoState(value) => {
+                state.serialize_field("_typeName", "LicenseReservationInfoState")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfLicenseReservationInfoState(value) => {
+                state.serialize_field("_typeName", "ArrayOfLicenseReservationInfoState")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ManagedEntityStatus(value) => {
+                state.serialize_field("_typeName", "ManagedEntityStatus")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfManagedEntityStatus(value) => {
+                state.serialize_field("_typeName", "ArrayOfManagedEntityStatus")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::PerfSummaryType(value) => {
+                state.serialize_field("_typeName", "PerfSummaryType")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPerfSummaryType(value) => {
+                state.serialize_field("_typeName", "ArrayOfPerfSummaryType")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::PerfStatsType(value) => {
+                state.serialize_field("_typeName", "PerfStatsType")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPerfStatsType(value) => {
+                state.serialize_field("_typeName", "ArrayOfPerfStatsType")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::SharesLevel(value) => {
+                state.serialize_field("_typeName", "SharesLevel")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSharesLevel(value) => {
+                state.serialize_field("_typeName", "ArrayOfSharesLevel")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::SimpleCommandEncoding(value) => {
+                state.serialize_field("_typeName", "SimpleCommandEncoding")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSimpleCommandEncoding(value) => {
+                state.serialize_field("_typeName", "ArrayOfSimpleCommandEncoding")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::TaskFilterSpecRecursionOption(value) => {
+                state.serialize_field("_typeName", "TaskFilterSpecRecursionOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfTaskFilterSpecRecursionOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfTaskFilterSpecRecursionOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::TaskFilterSpecTimeOption(value) => {
+                state.serialize_field("_typeName", "TaskFilterSpecTimeOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfTaskFilterSpecTimeOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfTaskFilterSpecTimeOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::TaskInfoState(value) => {
+                state.serialize_field("_typeName", "TaskInfoState")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfTaskInfoState(value) => {
+                state.serialize_field("_typeName", "ArrayOfTaskInfoState")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::VirtualAppVAppState(value) => {
+                state.serialize_field("_typeName", "VirtualAppVAppState")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualAppVAppState(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualAppVAppState")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::VirtualMachineConnectionState(value) => {
+                state.serialize_field("_typeName", "VirtualMachineConnectionState")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineConnectionState(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineConnectionState")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::VirtualMachineFaultToleranceState(value) => {
+                state.serialize_field("_typeName", "VirtualMachineFaultToleranceState")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineFaultToleranceState(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineFaultToleranceState")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::VirtualMachineMovePriority(value) => {
+                state.serialize_field("_typeName", "VirtualMachineMovePriority")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineMovePriority(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineMovePriority")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::VirtualMachinePowerState(value) => {
+                state.serialize_field("_typeName", "VirtualMachinePowerState")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachinePowerState(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachinePowerState")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::VirtualMachineRecordReplayState(value) => {
+                state.serialize_field("_typeName", "VirtualMachineRecordReplayState")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineRecordReplayState(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineRecordReplayState")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::VsanUpgradeSystemUpgradeHistoryDiskGroupOpType(value) => {
+                state.serialize_field("_typeName", "VsanUpgradeSystemUpgradeHistoryDiskGroupOpType")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanUpgradeSystemUpgradeHistoryDiskGroupOpType(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanUpgradeSystemUpgradeHistoryDiskGroupOpType")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::MetricAlarmOperator(value) => {
+                state.serialize_field("_typeName", "MetricAlarmOperator")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfMetricAlarmOperator(value) => {
+                state.serialize_field("_typeName", "ArrayOfMetricAlarmOperator")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::StateAlarmOperator(value) => {
+                state.serialize_field("_typeName", "StateAlarmOperator")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStateAlarmOperator(value) => {
+                state.serialize_field("_typeName", "ArrayOfStateAlarmOperator")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::DasVmPriority(value) => {
+                state.serialize_field("_typeName", "DasVmPriority")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDasVmPriority(value) => {
+                state.serialize_field("_typeName", "ArrayOfDasVmPriority")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::DpmBehavior(value) => {
+                state.serialize_field("_typeName", "DpmBehavior")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDpmBehavior(value) => {
+                state.serialize_field("_typeName", "ArrayOfDpmBehavior")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::DrsBehavior(value) => {
+                state.serialize_field("_typeName", "DrsBehavior")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDrsBehavior(value) => {
+                state.serialize_field("_typeName", "ArrayOfDrsBehavior")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::HostPowerOperationType(value) => {
+                state.serialize_field("_typeName", "HostPowerOperationType")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostPowerOperationType(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostPowerOperationType")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::EventFilterSpecRecursionOption(value) => {
+                state.serialize_field("_typeName", "EventFilterSpecRecursionOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfEventFilterSpecRecursionOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfEventFilterSpecRecursionOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::FtIssuesOnHostHostSelectionType(value) => {
+                state.serialize_field("_typeName", "FtIssuesOnHostHostSelectionType")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFtIssuesOnHostHostSelectionType(value) => {
+                state.serialize_field("_typeName", "ArrayOfFtIssuesOnHostHostSelectionType")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::AutoStartWaitHeartbeatSetting(value) => {
+                state.serialize_field("_typeName", "AutoStartWaitHeartbeatSetting")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAutoStartWaitHeartbeatSetting(value) => {
+                state.serialize_field("_typeName", "ArrayOfAutoStartWaitHeartbeatSetting")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::FibreChannelPortType(value) => {
+                state.serialize_field("_typeName", "FibreChannelPortType")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFibreChannelPortType(value) => {
+                state.serialize_field("_typeName", "ArrayOfFibreChannelPortType")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::HostAccessMode(value) => {
+                state.serialize_field("_typeName", "HostAccessMode")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostAccessMode(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostAccessMode")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::HostLockdownMode(value) => {
+                state.serialize_field("_typeName", "HostLockdownMode")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostLockdownMode(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostLockdownMode")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::HostInternetScsiHbaIscsiIpv6AddressAddressConfigurationType(value) => {
+                state.serialize_field("_typeName", "HostInternetScsiHbaIscsiIpv6AddressAddressConfigurationType")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostInternetScsiHbaIscsiIpv6AddressAddressConfigurationType(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostInternetScsiHbaIscsiIpv6AddressAddressConfigurationType")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::HostInternetScsiHbaIscsiIpv6AddressIPv6AddressOperation(value) => {
+                state.serialize_field("_typeName", "HostInternetScsiHbaIscsiIpv6AddressIPv6AddressOperation")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostInternetScsiHbaIscsiIpv6AddressIPv6AddressOperation(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostInternetScsiHbaIscsiIpv6AddressIPv6AddressOperation")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::HostInternetScsiHbaNetworkBindingSupportType(value) => {
+                state.serialize_field("_typeName", "HostInternetScsiHbaNetworkBindingSupportType")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostInternetScsiHbaNetworkBindingSupportType(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostInternetScsiHbaNetworkBindingSupportType")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::HostFirewallRuleDirection(value) => {
+                state.serialize_field("_typeName", "HostFirewallRuleDirection")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostFirewallRuleDirection(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostFirewallRuleDirection")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::HostFirewallRulePortType(value) => {
+                state.serialize_field("_typeName", "HostFirewallRulePortType")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostFirewallRulePortType(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostFirewallRulePortType")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::HostSnmpAgentCapability(value) => {
+                state.serialize_field("_typeName", "HostSnmpAgentCapability")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostSnmpAgentCapability(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostSnmpAgentCapability")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::HostTpmAttestationInfoAcceptanceStatus(value) => {
+                state.serialize_field("_typeName", "HostTpmAttestationInfoAcceptanceStatus")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostTpmAttestationInfoAcceptanceStatus(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostTpmAttestationInfoAcceptanceStatus")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayUpdateOperation(value) => {
+                state.serialize_field("_typeName", "ArrayUpdateOperation")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfArrayUpdateOperation(value) => {
+                state.serialize_field("_typeName", "ArrayOfArrayUpdateOperation")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ProfileNumericComparator(value) => {
+                state.serialize_field("_typeName", "ProfileNumericComparator")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfProfileNumericComparator(value) => {
+                state.serialize_field("_typeName", "ArrayOfProfileNumericComparator")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::DayOfWeek(value) => {
+                state.serialize_field("_typeName", "DayOfWeek")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDayOfWeek(value) => {
+                state.serialize_field("_typeName", "ArrayOfDayOfWeek")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::WeekOfMonth(value) => {
+                state.serialize_field("_typeName", "WeekOfMonth")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfWeekOfMonth(value) => {
+                state.serialize_field("_typeName", "ArrayOfWeekOfMonth")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::VirtualMachineCloneSpecTpmProvisionPolicy(value) => {
+                state.serialize_field("_typeName", "VirtualMachineCloneSpecTpmProvisionPolicy")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineCloneSpecTpmProvisionPolicy(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineCloneSpecTpmProvisionPolicy")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::VirtualMachineConfigInfoNpivWwnType(value) => {
+                state.serialize_field("_typeName", "VirtualMachineConfigInfoNpivWwnType")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineConfigInfoNpivWwnType(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineConfigInfoNpivWwnType")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::VirtualMachineToolsStatus(value) => {
+                state.serialize_field("_typeName", "VirtualMachineToolsStatus")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineToolsStatus(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineToolsStatus")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::GuestQuiesceEndGuestQuiesceError(value) => {
+                state.serialize_field("_typeName", "GuestQuiesceEndGuestQuiesceError")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGuestQuiesceEndGuestQuiesceError(value) => {
+                state.serialize_field("_typeName", "ArrayOfGuestQuiesceEndGuestQuiesceError")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::VirtualMachineMetadataManagerVmMetadataOp(value) => {
+                state.serialize_field("_typeName", "VirtualMachineMetadataManagerVmMetadataOp")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineMetadataManagerVmMetadataOp(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineMetadataManagerVmMetadataOp")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::VirtualMachineRelocateTransformation(value) => {
+                state.serialize_field("_typeName", "VirtualMachineRelocateTransformation")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineRelocateTransformation(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineRelocateTransformation")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::CustomizationNetBiosMode(value) => {
+                state.serialize_field("_typeName", "CustomizationNetBIOSMode")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCustomizationNetBiosMode(value) => {
+                state.serialize_field("_typeName", "ArrayOfCustomizationNetBIOSMode")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::CustomizationLicenseDataMode(value) => {
+                state.serialize_field("_typeName", "CustomizationLicenseDataMode")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCustomizationLicenseDataMode(value) => {
+                state.serialize_field("_typeName", "ArrayOfCustomizationLicenseDataMode")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::CustomizationSysprepRebootOption(value) => {
+                state.serialize_field("_typeName", "CustomizationSysprepRebootOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCustomizationSysprepRebootOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfCustomizationSysprepRebootOption")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::VirtualDeviceConfigSpecFileOperation(value) => {
+                state.serialize_field("_typeName", "VirtualDeviceConfigSpecFileOperation")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualDeviceConfigSpecFileOperation(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualDeviceConfigSpecFileOperation")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::VirtualDeviceConfigSpecOperation(value) => {
+                state.serialize_field("_typeName", "VirtualDeviceConfigSpecOperation")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualDeviceConfigSpecOperation(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualDeviceConfigSpecOperation")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::VirtualScsiSharing(value) => {
+                state.serialize_field("_typeName", "VirtualSCSISharing")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualScsiSharing(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualSCSISharing")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::VsanHostDiskResultState(value) => {
+                state.serialize_field("_typeName", "VsanHostDiskResultState")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHostDiskResultState(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHostDiskResultState")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::VsanHostHealthState(value) => {
+                state.serialize_field("_typeName", "VsanHostHealthState")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHostHealthState(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHostHealthState")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::VsanHostNodeState(value) => {
+                state.serialize_field("_typeName", "VsanHostNodeState")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHostNodeState(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHostNodeState")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::PropertyChangeOp(value) => {
+                state.serialize_field("_typeName", "PropertyChangeOp")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPropertyChangeOp(value) => {
+                state.serialize_field("_typeName", "ArrayOfPropertyChangeOp")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ObjectUpdateKind(value) => {
+                state.serialize_field("_typeName", "ObjectUpdateKind")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfObjectUpdateKind(value) => {
+                state.serialize_field("_typeName", "ArrayOfObjectUpdateKind")?;
+                state.serialize_field("_value", value)?;
+            },
+        }
+        state.end()
+    }
 }

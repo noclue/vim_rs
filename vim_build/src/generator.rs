@@ -143,7 +143,7 @@ fn emit_inheritable_traits(root_folder: &Path, vim_model: &vim_model::Model) -> 
 
 fn emit_boxed_types(types_folder: &Path, vim_model: &vim_model::Model) -> Result<()> {
     let mut printer = printer_for_file(types_folder.join("boxed_types.rs"))?;
-    let mut types_emitter = rs_emitter::structs::TypesEmitter::new(&vim_model, & mut printer);
+    let mut types_emitter = rs_emitter::boxed_types::BoxedTypesEmitter::new(&vim_model, & mut printer);
     types_emitter.emit_boxed_types()?;
 
     Ok(())
