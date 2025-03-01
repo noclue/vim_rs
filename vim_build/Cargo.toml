@@ -8,11 +8,10 @@ name = "generate"
 path = "src/main.rs"
 
 [dependencies]
-serde_json = "1.0.117"
-thiserror = "1.0.61"
-serde = { version = "1.0.203", features = ["derive"] }
-quote = "1.0.37"
-indexmap = { version = "2.2.6", features = ["serde"] }
-convert_case = "0.6.0"
+serde_json = "1.0.139"
+thiserror = "2.0.11"
+serde = { version = "1.0.218", features = ["derive"] }
+indexmap = { version = "2.7.1", features = ["serde"] }
+convert_case = "0.8.0"
 check_keyword = "0.3.1"
 openapi30 = { path = "../openapi30" }
