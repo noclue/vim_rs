@@ -1,18 +1,18 @@
+pub(crate) mod boxed_types;
 mod common;
-pub(crate) mod structs;
-mod names;
-mod mo;
-pub mod errors;
 pub mod deser;
-pub mod library;
 pub mod enums;
+pub mod errors;
+pub mod library;
+mod mo;
+mod names;
 pub mod ser;
 pub mod struct_enum;
-pub mod vim_object;
+pub(crate) mod structs;
 pub(crate) mod trait_emitter;
-pub(crate) mod boxed_types;
+pub mod vim_object;
 
-pub use structs::*;
-pub use names::*;
-pub use mo::*;
 pub use errors::*;
+pub use mo::*;
+pub use names::*;
+pub use structs::*;

@@ -1,5 +1,3 @@
-
-
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
     #[error("Type not found error: {0}")]

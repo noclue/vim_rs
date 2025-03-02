@@ -1,3 +1,4 @@
+use std::fmt::{Display, Formatter};
 use std::io::Write;
 
 #[derive(Debug, thiserror::Error)]
@@ -37,11 +38,14 @@ impl StdoutPrinter {
             IndentType::Space => " ".repeat(indent_size.unwrap_or(4)),
             IndentType::Tab => "\t".repeat(indent_size.unwrap_or(1)),
         };
-        Self { indent: 0, indent_string }
+        Self {
+            indent: 0,
+            indent_string,
+        }
     }
 }
 
-impl Printer for StdoutPrinter{
+impl Printer for StdoutPrinter {
     /// Print a string with a newline.
     fn println(&mut self, s: &str) -> Result<()> {
         self.print_indent()?;
@@ -90,12 +94,20 @@ pub struct FilePrinter {
 
 impl FilePrinter {
     /// Create a new printer that writes to a file. By default uses 4 spaces for indentation.
-    pub fn new(file: std::fs::File, indent_type: Option<IndentType>, indent_size: Option<usize>) -> Self {
+    pub fn new(
+        file: std::fs::File,
+        indent_type: Option<IndentType>,
+        indent_size: Option<usize>,
+    ) -> Self {
         let indent_string = match indent_type.unwrap_or(IndentType::Space) {
             IndentType::Space => " ".repeat(indent_size.unwrap_or(4)),
             IndentType::Tab => "\t".repeat(indent_size.unwrap_or(1)),
         };
-        Self { indent: 0, indent_string, file }
+        Self {
+            indent: 0,
+            indent_string,
+            file,
+        }
     }
 }
 
@@ -153,13 +165,18 @@ impl StringPrinter {
             IndentType::Space => " ".repeat(indent_size.unwrap_or(4)),
             IndentType::Tab => "\t".repeat(indent_size.unwrap_or(1)),
         };
-        Self { content: "".into(), indent: 0, indent_string }
+        Self {
+            content: "".into(),
+            indent: 0,
+            indent_string,
+        }
     }
 }
 
-impl ToString for StringPrinter {
-    fn to_string(&self) -> String {
-        self.content.clone()
+impl Display for StringPrinter {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.content)?;
+        Ok(())
     }
 }
 
@@ -174,7 +191,7 @@ impl Printer for StringPrinter {
 
     /// Print a newline.
     fn newline(&mut self) -> Result<()> {
-        self.content.push_str("\n");
+        self.content.push('\n');
         Ok(())
     }
 
@@ -202,9 +219,6 @@ impl Printer for StringPrinter {
         self.indent -= 1;
     }
 }
-
-
-
 
 #[cfg(test)]
 mod tests {

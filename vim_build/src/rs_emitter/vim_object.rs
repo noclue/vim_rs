@@ -2,7 +2,10 @@ use crate::printer::Printer;
 use crate::rs_emitter;
 use crate::vim_model::Model;
 
-pub fn generate_vim_object_trait(vim_model: & Model, printer: & mut dyn Printer) -> rs_emitter::errors::Result<()> {
+pub fn generate_vim_object_trait(
+    vim_model: &Model,
+    printer: &mut dyn Printer,
+) -> rs_emitter::errors::Result<()> {
     printer.println("use super::as_any::AsAny;")?;
     printer.println("use super::dyn_serialize;")?;
     printer.println("use super::struct_enum::StructType;")?;
@@ -36,7 +39,7 @@ pub fn generate_vim_object_trait(vim_model: & Model, printer: & mut dyn Printer)
     printer.println("}")?;
     printer.println("")?;
     for (_, data_type) in &vim_model.structs {
-        let struct_name =  data_type.borrow().rust_name();
+        let struct_name = data_type.borrow().rust_name();
         if struct_name == "Any" {
             continue;
         }

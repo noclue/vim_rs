@@ -1,6 +1,5 @@
-use crate::printer::Printer;
 use super::errors::Result;
-
+use crate::printer::Printer;
 
 pub fn emit_library(modules: &Vec<String>, printer: &mut dyn Printer) -> Result<()> {
     for module in modules {

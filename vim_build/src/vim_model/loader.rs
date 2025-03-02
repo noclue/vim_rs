@@ -1,9 +1,9 @@
 use super::*;
-use openapi30::*;
+use crate::vim_model::struct_order::reorder_structs;
 use indexmap::IndexMap;
+use openapi30::*;
 use std::cell::RefCell;
 use std::fmt::Debug;
-use crate::vim_model::struct_order::reorder_structs;
 
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
@@ -12,12 +12,12 @@ pub enum Error {
     #[error("Unsupported schema reference type: {0}")]
     UnsupportedSchemaReferenceType(String),
     #[error("Schema '{path}' validation error: {source}")]
-    SchemaValidationError {
+    SchemaValidation {
         path: String,
         source: openapi30::Error,
     },
     #[error("Array index '{index}' processing error: {source}")]
-    ArrayProcessingError { index: usize, source: Box<Error> },
+    ArrayProcessing { index: usize, source: Box<Error> },
     #[error("Invalid type: expected '{expected}', got '{actual:?}'")]
     InvalidType { expected: String, actual: String },
     #[error("Invalid reference: {0}")]
@@ -29,11 +29,11 @@ pub enum Error {
     #[error("Missing data format for type: {0}")]
     MissingFormat(String),
     #[error("{0}::{1} field decoding error: {2}")]
-    FieldDecodingError(String, String, Box<Error>),
+    FieldDecoding(String, String, Box<Error>),
     #[error("Invalid operation: {0} {1}")]
     InvalidOperation(String, String),
     #[error("Internal processing error: {0}")]
-    InternalProcessingError(String),
+    InternalProcessing(String),
 }
 
 // Result is a type alias for handling errors.
@@ -47,7 +47,7 @@ pub fn load_vim_model(model: &OpenAPI) -> Result<Model> {
         any_value_types: IndexMap::new(),
         managed_objects: IndexMap::new(),
     };
-    let Some(ref components) = model.components.as_ref() else {
+    let Some(components) = model.components.as_ref() else {
         return Err(Error::MissingField("#/components".to_string()));
     };
     let Some(schemas) = components.schemas.as_ref() else {
@@ -56,16 +56,16 @@ pub fn load_vim_model(model: &OpenAPI) -> Result<Model> {
 
     transform_schemas(schemas, &mut vim_model)?;
     process_discriminator_mappings(schemas, &mut vim_model)?;
-    compute_heirarchy(&mut vim_model)?;
+    compute_hierarchy(&mut vim_model)?;
     mark_cycles(&mut vim_model)?;
-    load_managed_objects(&model, &mut vim_model)?;
-    transform_paths(&model, &mut vim_model)?;
+    load_managed_objects(model, &mut vim_model)?;
+    transform_paths(model, &mut vim_model)?;
     vim_model.structs = reorder_structs(&mut vim_model.structs)?;
     Ok(vim_model)
 }
 
 /// Populate the `children` of structs in the model.
-fn compute_heirarchy(vim_model: &mut Model) -> Result<()> {
+fn compute_hierarchy(vim_model: &mut Model) -> Result<()> {
     for (_, vim_type) in &vim_model.structs {
         let Some(parent) = &vim_type.borrow().parent else {
             continue;
@@ -82,7 +82,7 @@ fn compute_heirarchy(vim_model: &mut Model) -> Result<()> {
 }
 
 fn process_discriminator_mappings(
-    schemas: &indexmap::IndexMap<String, RefOr<Schema>>,
+    schemas: &IndexMap<String, RefOr<Schema>>,
     vim_model: &mut Model,
 ) -> Result<()> {
     let any = schemas
@@ -120,22 +120,20 @@ fn process_discriminator_mappings(
 }
 
 fn transform_schemas(
-    schemas: &indexmap::IndexMap<String, RefOr<Schema>>,
+    schemas: &IndexMap<String, RefOr<Schema>>,
     vim_model: &mut Model,
 ) -> Result<()> {
-    Ok(for (schema_name, ref_or_schema) in schemas {
+    for (schema_name, ref_or_schema) in schemas {
         let RefOr::Val(ref schema) = ref_or_schema else {
             return Err(Error::UnsupportedSchemaReferenceType(
                 schema_name.to_string(),
             ));
         };
         let schema = &schema.as_ref();
-        schema
-            .validate()
-            .map_err(|e| Error::SchemaValidationError {
-                path: schema_name.to_string(),
-                source: e,
-            })?;
+        schema.validate().map_err(|e| Error::SchemaValidation {
+            path: schema_name.to_string(),
+            source: e,
+        })?;
 
         match schema {
             Schema {
@@ -180,9 +178,13 @@ fn transform_schemas(
             } => {
                 let structure = build_struct_type(schema_name, schema)?;
                 if structure.parent.is_none() && structure.name.ends_with("RequestType") {
-                    vim_model.request_types.insert(schema_name.to_string(), RefCell::new(structure));
+                    vim_model
+                        .request_types
+                        .insert(schema_name.to_string(), RefCell::new(structure));
                 } else {
-                    vim_model.structs.insert(schema_name.to_string(),RefCell::new(structure));
+                    vim_model
+                        .structs
+                        .insert(schema_name.to_string(), RefCell::new(structure));
                 }
             }
             _ => {
@@ -190,7 +192,8 @@ fn transform_schemas(
                 return Err(Error::UnsupportedType(schema_name.to_string()));
             }
         }
-    })
+    }
+    Ok(())
 }
 
 static EMPTY_VEC: Vec<String> = Vec::new();
@@ -221,12 +224,12 @@ fn convert_properties(schema_name: &str, schema: &Schema) -> Result<IndexMap<Str
         };
         let property = Field {
             name: property_name.clone(),
-            vim_type: DataType::try_from(ref_or_property).or_else(|op| {
-                Err(Error::FieldDecodingError(
+            vim_type: DataType::try_from(ref_or_property).map_err(|op| {
+                Error::FieldDecoding(
                     schema_name.to_string(),
                     property_name.to_string(),
                     Box::new(op),
-                ))
+                )
             })?,
             optional: !required.contains(&property_name.to_string()),
             description: description.cloned(),
@@ -237,14 +240,12 @@ fn convert_properties(schema_name: &str, schema: &Schema) -> Result<IndexMap<Str
     Ok(result)
 }
 
-fn as_string_values(values: &Vec<serde_json::Value>) -> Result<Vec<String>> {
+fn as_string_values(values: &[serde_json::Value]) -> Result<Vec<String>> {
     let mut result: Vec<String> = Vec::new();
     for (i, value) in values.iter().enumerate() {
-        let value = as_string(value).or_else(|e| {
-            Err(Error::ArrayProcessingError {
-                index: i,
-                source: Box::new(e),
-            })
+        let value = as_string(value).map_err(|e| Error::ArrayProcessing {
+            index: i,
+            source: Box::new(e),
         })?;
         result.push(value);
     }
@@ -262,7 +263,7 @@ fn as_string(value: &serde_json::Value) -> Result<String> {
 fn get_parent_schema(schema: &Schema) -> Option<String> {
     let all_of = schema.all_of.as_ref()?;
     if all_of.len() == 1 {
-        if let RefOr::Ref { ref reference, ..} = &all_of[0] {
+        if let RefOr::Ref { ref reference, .. } = &all_of[0] {
             return Some(trim_schema_prefix(reference).to_string());
         }
     }
@@ -277,7 +278,7 @@ pub fn reference_to_schema_name(reference: &String) -> Result<&str> {
     Ok(schema_name)
 }
 
-fn trim_schema_prefix(reference: &String) -> &str {
+fn trim_schema_prefix(reference: &str) -> &str {
     reference.trim_start_matches("#/components/schemas/")
 }
 
@@ -293,7 +294,9 @@ fn load_managed_objects(model: &OpenAPI, vim_model: &mut Model) -> Result<()> {
             description: tag_description.clone(),
             methods: vec![],
         };
-        vim_model.managed_objects.insert(tag_name.clone(), managed_object);
+        vim_model
+            .managed_objects
+            .insert(tag_name.clone(), managed_object);
     }
     Ok(())
 }
@@ -301,32 +304,47 @@ fn load_managed_objects(model: &OpenAPI, vim_model: &mut Model) -> Result<()> {
 fn transform_paths(model: &OpenAPI, vim_model: &mut Model) -> Result<()> {
     for (path, path_item) in &model.paths {
         if let Some(operation) = &path_item.get {
-            add_method(operation, path, vim_model,
+            add_method(
+                operation,
+                path,
+                vim_model,
                 property_name(operation, path)?,
                 HttpMethod::Get,
-                None)?;
+                None,
+            )?;
         }
         if let Some(operation) = &path_item.post {
-            add_method(operation, path, vim_model,
-                 method_name(operation, path)?,
-                 HttpMethod::Post,
-                 get_request_type(operation, path)?)?;
+            add_method(
+                operation,
+                path,
+                vim_model,
+                method_name(operation, path)?,
+                HttpMethod::Post,
+                get_request_type(operation, path)?,
+            )?;
         }
     }
     Ok(())
 }
 
-fn add_method(operation: &Operation, path: &String, vim_model: &mut Model, name: &str, method: HttpMethod, request_type: Option<DataType>) -> Result<()> {
+fn add_method(
+    operation: &Operation,
+    path: &String,
+    vim_model: &mut Model,
+    name: &str,
+    method: HttpMethod,
+    request_type: Option<DataType>,
+) -> Result<()> {
     let tag = get_tag(operation, path)?;
     let managed_object = ensure_managed_object(vim_model, tag);
     let (return_type, optional) = get_success_return_type(operation, path)?;
-    managed_object.methods.push(Method { 
-        name: name.to_string(), 
-        description: operation.description.clone(), 
-        path: path.to_string(), 
-        http_method: method, 
-        input: request_type, 
-        output: return_type, 
+    managed_object.methods.push(Method {
+        name: name.to_string(),
+        description: operation.description.clone(),
+        path: path.to_string(),
+        http_method: method,
+        input: request_type,
+        output: return_type,
         optional_response: optional,
         output_description: get_response_description(operation, path)?,
         error_description: get_error_description(operation, path)?,
@@ -339,7 +357,10 @@ fn get_response_description(operation: &Operation, path: &String) -> Result<Opti
     for (status_code, response) in &responses.responses {
         if status_code.starts_with("2") {
             let RefOr::Val(ref response) = response else {
-                return Err(Error::InvalidOperation(operation.operation_id.as_ref().unwrap_or(path).clone(), "expected response".to_string()));
+                return Err(Error::InvalidOperation(
+                    operation.operation_id.as_ref().unwrap_or(path).clone(),
+                    "expected response".to_string(),
+                ));
             };
             return Ok(Some(response.description.clone()));
         }
@@ -352,7 +373,10 @@ fn get_error_description(operation: &Operation, path: &String) -> Result<Option<
     for (status_code, response) in &responses.responses {
         if status_code.starts_with("5") {
             let RefOr::Val(ref response) = response else {
-                return Err(Error::InvalidOperation(operation.operation_id.as_ref().unwrap_or(path).clone(), "expected response".to_string()));
+                return Err(Error::InvalidOperation(
+                    operation.operation_id.as_ref().unwrap_or(path).clone(),
+                    "expected response".to_string(),
+                ));
             };
             return Ok(Some(response.description.clone()));
         }
@@ -361,24 +385,57 @@ fn get_error_description(operation: &Operation, path: &String) -> Result<Option<
 }
 
 fn method_name<'a>(operation: &'a Operation, path: &String) -> Result<&'a str> {
-    let name = operation.operation_id.as_ref().ok_or_else(|| Error::MissingField(format!("{}/operationId", path)))?;
-    let name = name.split_once("_").ok_or_else(|| Error::InvalidOperation(operation.operation_id.as_ref().unwrap_or(path).clone(), "expected operationId to be in the format <class>_<method>".to_string()))?.1;
+    let name = operation
+        .operation_id
+        .as_ref()
+        .ok_or_else(|| Error::MissingField(format!("{}/operationId", path)))?;
+    let name = name
+        .split_once("_")
+        .ok_or_else(|| {
+            Error::InvalidOperation(
+                operation.operation_id.as_ref().unwrap_or(path).clone(),
+                "expected operationId to be in the format <class>_<method>".to_string(),
+            )
+        })?
+        .1;
     Ok(name)
 }
 
 fn get_tag<'a>(operation: &'a Operation, path: &String) -> Result<&'a String> {
     let tags = operation.tags.as_ref().unwrap_or(&EMPTY_VEC);
     if tags.is_empty() || tags.len() > 1 {
-        return Err(Error::InvalidOperation(operation.operation_id.as_ref().unwrap_or(path).clone(), "expected single tag".to_string()));
+        return Err(Error::InvalidOperation(
+            operation.operation_id.as_ref().unwrap_or(path).clone(),
+            "expected single tag".to_string(),
+        ));
     }
     let tag = &tags[0];
     Ok(tag)
 }
 
 fn property_name<'a>(operation: &'a Operation, path: &String) -> Result<&'a str> {
-    let op_name = operation.operation_id.as_ref().ok_or_else(|| Error::MissingField(format!("{}/operationId", path)))?;
-    let name = op_name.split_once("_").ok_or_else(|| Error::InvalidOperation(op_name.clone(), "expected operationId to be in the format <class>_<method>".to_string()))?.1;
-    let name = name.split_at_checked(3).ok_or_else(|| Error::InvalidOperation(op_name.clone(), "expected read operationId to start with 'get'".to_string()))?.1;
+    let op_name = operation
+        .operation_id
+        .as_ref()
+        .ok_or_else(|| Error::MissingField(format!("{}/operationId", path)))?;
+    let name = op_name
+        .split_once("_")
+        .ok_or_else(|| {
+            Error::InvalidOperation(
+                op_name.clone(),
+                "expected operationId to be in the format <class>_<method>".to_string(),
+            )
+        })?
+        .1;
+    let name = name
+        .split_at_checked(3)
+        .ok_or_else(|| {
+            Error::InvalidOperation(
+                op_name.clone(),
+                "expected read operationId to start with 'get'".to_string(),
+            )
+        })?
+        .1;
     Ok(name)
 }
 
@@ -390,7 +447,9 @@ fn ensure_managed_object<'a>(vim_model: &'a mut Model, tag: &String) -> &'a mut 
             description: None,
             methods: vec![],
         };
-        vim_model.managed_objects.insert(tag.clone(), managed_object);
+        vim_model
+            .managed_objects
+            .insert(tag.clone(), managed_object);
     };
     vim_model.managed_objects.get_mut(tag).unwrap()
 }
@@ -403,32 +462,64 @@ fn get_request_type(operation: &Operation, path: &String) -> Result<Option<DataT
         return Ok(None);
     };
     let content = &request_body.content;
-    let content = content.get("application/json").ok_or_else(|| Error::InvalidOperation(operation.operation_id.as_ref().unwrap_or(path).clone(), "expected request body application/json content".to_string()))?;
-    let schema = content.schema.as_ref().ok_or_else(|| Error::InvalidOperation(operation.operation_id.as_ref().unwrap_or(path).clone(), "expected request body schema".to_string()))?;
+    let content = content.get("application/json").ok_or_else(|| {
+        Error::InvalidOperation(
+            operation.operation_id.as_ref().unwrap_or(path).clone(),
+            "expected request body application/json content".to_string(),
+        )
+    })?;
+    let schema = content.schema.as_ref().ok_or_else(|| {
+        Error::InvalidOperation(
+            operation.operation_id.as_ref().unwrap_or(path).clone(),
+            "expected request body schema".to_string(),
+        )
+    })?;
     Ok(Some(DataType::try_from(schema)?))
 }
 
-
-fn get_success_return_type(operation: &Operation, path: &String) -> Result<(Option<DataType>,bool)> {
+fn get_success_return_type(
+    operation: &Operation,
+    path: &String,
+) -> Result<(Option<DataType>, bool)> {
     let responses = &operation.responses;
     for (status_code, response) in &responses.responses {
         if status_code.starts_with("2") {
             let RefOr::Val(ref response) = response else {
-                return Err(Error::InvalidOperation(operation.operation_id.as_ref().unwrap_or(path).clone(), "expected response".to_string()));
+                return Err(Error::InvalidOperation(
+                    operation.operation_id.as_ref().unwrap_or(path).clone(),
+                    "expected response".to_string(),
+                ));
             };
             let Some(content) = response.content.as_ref() else {
                 return Ok((None, false)); // No content type, no return type
             };
-            let content = content.get("application/json").ok_or_else(|| Error::InvalidOperation(operation.operation_id.as_ref().unwrap_or(path).clone(), "expected response application/json content".to_string()))?;
-            let schema = content.schema.as_ref().ok_or_else(|| Error::InvalidOperation(operation.operation_id.as_ref().unwrap_or(path).clone(), "expected success response schema".to_string()))?;
+            let content = content.get("application/json").ok_or_else(|| {
+                Error::InvalidOperation(
+                    operation.operation_id.as_ref().unwrap_or(path).clone(),
+                    "expected response application/json content".to_string(),
+                )
+            })?;
+            let schema = content.schema.as_ref().ok_or_else(|| {
+                Error::InvalidOperation(
+                    operation.operation_id.as_ref().unwrap_or(path).clone(),
+                    "expected success response schema".to_string(),
+                )
+            })?;
             let nullable = match schema {
                 RefOr::Val(schema) => schema.nullable.unwrap_or(false),
-                RefOr::Ref { reference: _, description: _, nullable } => { nullable.unwrap_or(false) }
+                RefOr::Ref {
+                    reference: _,
+                    description: _,
+                    nullable,
+                } => nullable.unwrap_or(false),
             };
             return Ok((Some(DataType::try_from(schema)?), nullable));
         }
     }
-    Err(Error::InvalidOperation(operation.operation_id.as_ref().unwrap_or(path).clone(), "expected 2xx response".to_string()))
+    Err(Error::InvalidOperation(
+        operation.operation_id.as_ref().unwrap_or(path).clone(),
+        "expected 2xx response".to_string(),
+    ))
 }
 
 #[cfg(test)]
@@ -536,7 +627,7 @@ mod tests {
         let test_request_type_prop = test_request_type.fields.get("foo").unwrap();
         assert_eq!(test_request_type_prop.name, "foo");
         assert_eq!(test_request_type_prop.vim_type, DataType::String);
-        assert_eq!(test_request_type_prop.optional, false);
+        assert!(!test_request_type_prop.optional);
         assert_eq!(
             test_request_type_prop.description,
             Some("test description".to_string())
@@ -546,9 +637,11 @@ mod tests {
         assert_eq!(test_request_type_prop.name, "bar");
         assert_eq!(
             test_request_type_prop.vim_type,
-            DataType::Reference("BaseConfigInfoDiskFileBackingInfoProvisioningType_enum".to_string())
+            DataType::Reference(
+                "BaseConfigInfoDiskFileBackingInfoProvisioningType_enum".to_string()
+            )
         );
-        assert_eq!(test_request_type_prop.optional, true);
+        assert!(test_request_type_prop.optional);
         assert_eq!(test_request_type_prop.description, None);
     }
 
@@ -613,8 +706,11 @@ mod tests {
         assert_eq!(test_struct.parent, Some("Any".to_string()));
         let test_request_type_prop = test_struct.fields.get("faultCause").unwrap();
         assert_eq!(test_request_type_prop.name, "faultCause");
-        assert_eq!(test_request_type_prop.vim_type, DataType::Reference("MethodFault".to_string()));
-        assert_eq!(test_request_type_prop.optional, true);
+        assert_eq!(
+            test_request_type_prop.vim_type,
+            DataType::Reference("MethodFault".to_string())
+        );
+        assert!(test_request_type_prop.optional);
 
         let any = vim_model.structs.get("Any").unwrap().borrow();
         assert_eq!(any.children, vec!["MethodFault".to_string()]);
@@ -698,11 +794,24 @@ mod tests {
         let vim_model = load_vim_model(&model).unwrap();
         assert_eq!(vim_model.any_value_types.len(), 3071);
         assert_eq!(vim_model.enums.len(), 414);
-        assert_eq!(vim_model.structs.len() + vim_model.request_types.len(), 3697);
+        assert_eq!(
+            vim_model.structs.len() + vim_model.request_types.len(),
+            3697
+        );
         assert_eq!(vim_model.managed_objects.len(), 139);
         assert!(vim_model.structs.contains_key("VirtualE1000"));
-        assert!(vim_model.request_types.contains_key("RetrievePropertiesRequestType"));
+        assert!(vim_model
+            .request_types
+            .contains_key("RetrievePropertiesRequestType"));
         assert!(vim_model.managed_objects.contains_key("VirtualMachine"));
-        assert_eq!(vim_model.managed_objects.get("VirtualMachine").unwrap().methods.len(), 101);
+        assert_eq!(
+            vim_model
+                .managed_objects
+                .get("VirtualMachine")
+                .unwrap()
+                .methods
+                .len(),
+            101
+        );
     }
 }

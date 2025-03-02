@@ -3,8 +3,8 @@ pub mod printer;
 pub mod rs_emitter;
 pub mod vim_model;
 
-use std::path::Path;
 use generator::{generate_bindings, load_openapi};
+use std::path::Path;
 
 pub struct Generation {
     vim_spec: Option<String>,
@@ -14,7 +14,7 @@ pub struct Generation {
 pub fn configurator(root_folder: String) -> Generation {
     Generation {
         vim_spec: None,
-        root_folder: root_folder,
+        root_folder,
     }
 }
 
@@ -30,8 +30,6 @@ impl Generation {
         self
     }
 
-
-
     pub fn generate(&self) -> Result<(), Box<dyn std::error::Error>> {
         let model = if let Some(vim_spec) = self.vim_spec.as_ref() {
             load_openapi(vim_spec)?
@@ -41,4 +39,3 @@ impl Generation {
         Ok(generate_bindings(model, Path::new(&self.root_folder))?)
     }
 }
-

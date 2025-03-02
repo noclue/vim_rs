@@ -1,7 +1,7 @@
-use std::cell::RefCell;
 use check_keyword::CheckKeyword;
 use convert_case::{Case, Casing};
 use indexmap::IndexMap;
+use std::cell::RefCell;
 
 use super::*;
 use openapi30::*;
@@ -144,7 +144,7 @@ impl TryFrom<&RefOr<Schema>> for DataType {
     type Error = super::Error;
     fn try_from(schema: &RefOr<Schema>) -> Result<Self> {
         match schema {
-            RefOr::Ref { reference, ..} => Ok(DataType::Reference(
+            RefOr::Ref { reference, .. } => Ok(DataType::Reference(
                 reference_to_schema_name(reference)?.to_string(),
             )),
             RefOr::Val(inline_schema) => match inline_schema.as_ref() {
@@ -199,7 +199,9 @@ impl TryFrom<&RefOr<Schema>> for DataType {
                         maximum: Some(32767.0),
                         ..
                     } => Ok(DataType::Int16),
-                    _ => Err(super::Error::UnsupportedFormat(SchemaType::Integer.to_string())),
+                    _ => Err(super::Error::UnsupportedFormat(
+                        SchemaType::Integer.to_string(),
+                    )),
                 },
                 Schema {
                     schema_type: Some(SchemaType::Array),
@@ -220,7 +222,7 @@ impl TryFrom<&RefOr<Schema>> for DataType {
 
 /// Represents a Vim BoxType. This is a type that has single required property. No inherited
 /// properties from all of except discriminator. Boxes have parent classes. No descendants.
-/// 
+///
 /// Box types are grouped by their parent and their name. Thus we can emit a Rust enum that can be
 /// processed by serde. For example:
 /// ```test
@@ -299,30 +301,46 @@ pub struct Model {
 }
 
 impl Model {
-
     /// Return an iterator that starts with a parent structure node and iterates over all of its subtree.
     pub fn children(&self, parent: &String) -> Result<StructChildrenIntoIterator> {
-        let parent_index = self.structs.get_index_of(parent).ok_or(super::Error::InvalidReference(parent.clone()))?;
-        let last_child = self.structs.get(parent).ok_or(super::Error::InvalidReference(parent.clone()))?.borrow().last_child.clone();
-        let last_child_index = self.structs.get_index_of(&last_child).ok_or(super::Error::InvalidReference(last_child.clone()))?;
+        let parent_index = self
+            .structs
+            .get_index_of(parent)
+            .ok_or(super::Error::InvalidReference(parent.clone()))?;
+        let last_child = self
+            .structs
+            .get(parent)
+            .ok_or(super::Error::InvalidReference(parent.clone()))?
+            .borrow()
+            .last_child
+            .clone();
+        let last_child_index = self
+            .structs
+            .get_index_of(&last_child)
+            .ok_or(super::Error::InvalidReference(last_child.clone()))?;
         Ok(StructChildrenIntoIterator {
             index: parent_index,
             last_index: last_child_index,
             model: self,
         })
     }
-    
 
     pub fn inheritance_chain(&self, struct_name: &String) -> Result<Vec<&RefCell<Struct>>> {
         let mut inheritance_chain = vec![];
-        let struct_type = self.structs.get(struct_name).ok_or(super::Error::InvalidReference(struct_name.clone()))?;
+        let struct_type = self
+            .structs
+            .get(struct_name)
+            .ok_or(super::Error::InvalidReference(struct_name.clone()))?;
         inheritance_chain.push(struct_type);
         let mut parent = struct_type.borrow().parent.clone();
         while let Some(parent_name) = parent {
             if parent_name == "Any" {
                 break;
             }
-            let parent_type = self.structs.get(&parent_name).ok_or(super::Error::InvalidReference(parent_name.clone()))?;
+            let parent_type = self
+                .structs
+                .get(&parent_name)
+                .ok_or(super::Error::InvalidReference(parent_name.clone()))?;
             inheritance_chain.push(parent_type);
             parent = parent_type.borrow().parent.clone();
         }
@@ -331,13 +349,10 @@ impl Model {
     }
 
     pub fn is_struct_type(&self, vim_type: &DataType) -> bool {
-        match vim_type {
-            DataType::Reference(ref_name) => {
-                if let Some(struct_type) = self.structs.get(ref_name) {
-                    return struct_type.borrow().name != "Any";
-                }
+        if let DataType::Reference(ref_name) = vim_type {
+            if let Some(struct_type) = self.structs.get(ref_name) {
+                return struct_type.borrow().name != "Any";
             }
-            _ => {}
         }
         false
     }

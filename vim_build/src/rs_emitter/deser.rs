@@ -7,11 +7,10 @@ use crate::{printer::Printer, vim_model::Model};
 
 use super::{to_type_name, TypeDefResolver};
 
-use super::errors::{Result, Error};
+use super::errors::{Error, Result};
 
 // Number of items in a group that will stop further optimization.
 const FULL_SCAN_THRESHOLD: usize = 5;
-
 
 enum ItemRenderer {
     Object,
@@ -27,14 +26,21 @@ pub struct DeserializationGenerator<'a> {
 }
 
 impl DeserializationGenerator<'_> {
-    pub fn new<'a>(vim_model: &'a Model, printer: &'a mut dyn Printer) -> DeserializationGenerator<'a> {
+    pub fn new<'a>(
+        vim_model: &'a Model,
+        printer: &'a mut dyn Printer,
+    ) -> DeserializationGenerator<'a> {
         let mut value_types: IndexMap<String, &BoxType> = IndexMap::new();
         for (name, box_type) in &vim_model.any_value_types {
             if name == "Any" {
                 continue;
             }
-            let key = box_type.discriminator_value.as_ref().unwrap_or(&name).clone();
-            value_types.insert(key, &box_type);
+            let key = box_type
+                .discriminator_value
+                .as_ref()
+                .unwrap_or(name)
+                .clone();
+            value_types.insert(key, box_type);
         }
         DeserializationGenerator {
             vim_model,
@@ -53,19 +59,28 @@ impl DeserializationGenerator<'_> {
     }
     pub fn generate_object_deserialization(&mut self) -> Result<()> {
         self.deserialize_renderer = ItemRenderer::Object;
-        let names: &[&str] = &self.vim_model.structs.keys().map(|s| s.as_str()).filter(|v| *v != "Any" ).collect::<Vec<&str>>();
+        let names: &[&str] = &self
+            .vim_model
+            .structs
+            .keys()
+            .map(|s| s.as_str())
+            .filter(|v| *v != "Any")
+            .collect::<Vec<&str>>();
 
         let group_data = calculate_groupings(names);
         self.render_match_tree(group_data)?;
 
         Ok(())
-
     }
 
     pub fn generate_value_deserialization(&mut self) -> Result<()> {
         self.deserialize_renderer = ItemRenderer::Value;
 
-        let names: &[&str] = &self.any_value_types.keys().map(|s| s.as_str()).collect::<Vec<&str>>();
+        let names: &[&str] = &self
+            .any_value_types
+            .keys()
+            .map(|s| s.as_str())
+            .collect::<Vec<&str>>();
 
         let group_data = calculate_groupings(names);
         self.render_match_tree(group_data)?;
@@ -74,7 +89,8 @@ impl DeserializationGenerator<'_> {
     }
 
     pub fn generate_vim_any_deserialization(&mut self) -> Result<()> {
-        self.printer.println(r#"
+        self.printer.println(
+            r#"
 fn to_u64(text: &str) -> Option<u64> {
     if text.len() != 8 {
         return None;
@@ -161,7 +177,8 @@ impl<'de> de::Visitor<'de> for VimAnyVisitor {
         }
         Err(de::Error::custom("Invalid format for boxed value element."))
     }
-}"#)?;
+}"#,
+        )?;
         Ok(())
     }
 
@@ -170,13 +187,12 @@ impl<'de> de::Visitor<'de> for VimAnyVisitor {
         match self.deserialize_renderer {
             ItemRenderer::Object => self.printer.println("fn get_object_deserializer<'de, A: de::MapAccess<'de>>(type_name: &str) -> Option<fn(de::value::MapAccessDeserializer<A>) -> Result<VimAny, A::Error>> {")?,
             ItemRenderer::Value => self.printer.println("pub(crate) fn get_value_deserializer(type_name: &str) -> Option<fn(&serde_json::value::RawValue) -> Result<ValueElements, serde_json::Error>> {")?,
-            
         }
         self.printer.indent();
 
         self.printer.println("match type_name.len() {")?;
         self.printer.indent();
-        
+
         for group in &group_data {
             self.printer.println(&format!("{} => {{", group.length))?;
             self.printer.indent();
@@ -184,14 +200,19 @@ impl<'de> de::Visitor<'de> for VimAnyVisitor {
                 self.process_simple_group(&group.names)?;
             } else {
                 match self.deserialize_renderer {
-                    ItemRenderer::Object => self.printer.println(&format!("get_object_deserializer_{}(type_name)",group.length))?,
-                    ItemRenderer::Value => self.printer.println(&format!("get_value_deserializer_{}(type_name)",group.length))?,
+                    ItemRenderer::Object => self.printer.println(&format!(
+                        "get_object_deserializer_{}(type_name)",
+                        group.length
+                    ))?,
+                    ItemRenderer::Value => self.printer.println(&format!(
+                        "get_value_deserializer_{}(type_name)",
+                        group.length
+                    ))?,
                 };
             }
             self.printer.dedent();
             self.printer.println("}")?;
-        
-        };
+        }
         self.printer.println("_ => None,")?;
         self.printer.dedent();
         self.printer.println("}")?;
@@ -205,7 +226,6 @@ impl<'de> de::Visitor<'de> for VimAnyVisitor {
             match self.deserialize_renderer {
                 ItemRenderer::Object => self.printer.println(&format!("fn get_object_deserializer_{}<'de, A: de::MapAccess<'de>>(type_name: &str) -> Option<fn(de::value::MapAccessDeserializer<A>) -> Result<VimAny, A::Error>> {{", group.length))?,
                 ItemRenderer::Value => self.printer.println(&format!("fn get_value_deserializer_{}(type_name: &str) -> Option<fn(&serde_json::value::RawValue) -> Result<ValueElements, serde_json::Error>> {{", group.length))?,
-                
             }
             self.printer.indent();
             if group.filter_len > 0 {
@@ -215,23 +235,29 @@ impl<'de> de::Visitor<'de> for VimAnyVisitor {
             }
             self.printer.dedent();
             self.printer.println("}")?;
-        
-        };
+        }
 
         Ok(())
     }
 
     fn deserialize_value_type(&mut self, name: &str) -> Result<()> {
         let Some(box_type) = self.any_value_types.get(name) else {
-            return Err(Error::InternalError(format!("Cannot find value type record for {}", name)));
+            return Err(Error::InternalError(format!(
+                "Cannot find value type record for {}",
+                name
+            )));
         };
         let enum_name = to_type_name(&box_type.name);
         let value_type = self.tdf.to_rust_field_type(&box_type.property_type)?;
 
         self.printer.println("Some(|raw| {")?;
         self.printer.indent();
-        self.printer.println(&format!("let value: {} = serde_json::from_str(raw.get())?;", value_type))?;
-        self.printer.println(&format!("Ok(ValueElements::{}(value))", enum_name))?;
+        self.printer.println(&format!(
+            "let value: {} = serde_json::from_str(raw.get())?;",
+            value_type
+        ))?;
+        self.printer
+            .println(&format!("Ok(ValueElements::{}(value))", enum_name))?;
         self.printer.dedent();
         self.printer.println("})")?;
         Ok(())
@@ -240,7 +266,10 @@ impl<'de> de::Visitor<'de> for VimAnyVisitor {
     fn deserialize_object_type(&mut self, name: &str) -> Result<()> {
         self.printer.println("Some(|ds| {")?;
         self.printer.indent();
-        self.printer.println(&format!("let obj: {} = de::Deserialize::deserialize(ds)?;", to_type_name(name)))?;
+        self.printer.println(&format!(
+            "let obj: {} = de::Deserialize::deserialize(ds)?;",
+            to_type_name(name)
+        ))?;
         self.printer.println("Ok(VimAny::Object(Box::new(obj)))")?;
         self.printer.dedent();
         self.printer.println("})")?;
@@ -249,10 +278,13 @@ impl<'de> de::Visitor<'de> for VimAnyVisitor {
 
     fn process_simple_group(&mut self, names: &[String]) -> Result<()> {
         if names.is_empty() {
-            return Err(Error::InternalError("No names provided to process_simple_group".into()));
+            return Err(Error::InternalError(
+                "No names provided to process_simple_group".into(),
+            ));
         }
         if names.len() == 1 {
-            self.printer.println(&format!("if type_name == \"{}\" {{", names[0]))?;
+            self.printer
+                .println(&format!("if type_name == \"{}\" {{", names[0]))?;
             self.printer.indent();
             match self.deserialize_renderer {
                 ItemRenderer::Object => self.deserialize_object_type(&names[0])?,
@@ -261,8 +293,8 @@ impl<'de> de::Visitor<'de> for VimAnyVisitor {
             self.printer.dedent();
             self.printer.println("} else { None }")?;
             return Ok(());
-        } 
-    
+        }
+
         self.printer.println("match type_name {")?;
         self.printer.indent();
         for name in names {
@@ -280,18 +312,29 @@ impl<'de> de::Visitor<'de> for VimAnyVisitor {
         self.printer.println("}")?;
         Ok(())
     }
-    
+
     fn process_complex_group(&mut self, group: &GroupInfo) -> Result<()> {
         if group.names.is_empty() {
-            return Err(Error::InternalError("No names provided to process_complex_group".into()));
+            return Err(Error::InternalError(
+                "No names provided to process_complex_group".into(),
+            ));
         }
-        self.printer.println(&format!("let s = &type_name[{}..{}];", group.position, group.position + group.filter_len))?;
+        self.printer.println(&format!(
+            "let s = &type_name[{}..{}];",
+            group.position,
+            group.position + group.filter_len
+        ))?;
         if group.filter_len == 4 {
-            self.printer.println(r#"let Some(type_ord) = to_u32(s) else {"#)?;
+            self.printer
+                .println(r#"let Some(type_ord) = to_u32(s) else {"#)?;
         } else if group.filter_len == 8 {
-            self.printer.println(r#"let Some(type_ord) = to_u64(s) else {"#)?;
+            self.printer
+                .println(r#"let Some(type_ord) = to_u64(s) else {"#)?;
         } else {
-            return Err(Error::InternalError(format!("Unsupported filter length: {}", group.filter_len)));
+            return Err(Error::InternalError(format!(
+                "Unsupported filter length: {}",
+                group.filter_len
+            )));
         }
         self.printer.indent();
         self.printer.println(r#"return None;"#)?;
@@ -301,7 +344,7 @@ impl<'de> de::Visitor<'de> for VimAnyVisitor {
         names.sort_by(|a, b| a[group.position..].cmp(&b[group.position..]));
         self.printer.println("match type_ord {")?;
         self.printer.indent();
-        let mut subgroup= Vec::new();
+        let mut subgroup = Vec::new();
         let mut previous = "".to_string();
         for name in &names {
             let value = name[group.position..(group.position + group.filter_len)].to_string();
@@ -318,47 +361,52 @@ impl<'de> de::Visitor<'de> for VimAnyVisitor {
         self.printer.println("}")?;
         Ok(())
     }
-    
+
     fn render_subgroup(&mut self, subgroup: &mut Vec<String>, pattern: &String) -> Result<()> {
-        Ok(if subgroup.len() >= 1 {
+        if !subgroup.is_empty() {
             let Some(numeric) = to_numeric_value(pattern) else {
-                return Err(Error::InternalError(format!("Cannot convert pattern into numeric: {}", pattern)));
+                return Err(Error::InternalError(format!(
+                    "Cannot convert pattern into numeric: {}",
+                    pattern
+                )));
             };
-            self.printer.println(&format!("{} => {{ // {}", numeric, pattern))?;
-            self.printer.indent();    
+            self.printer
+                .println(&format!("{} => {{ // {}", numeric, pattern))?;
+            self.printer.indent();
             self.process_simple_group(subgroup.as_slice())?;
             self.printer.dedent();
             self.printer.println("},")?;
             subgroup.clear();
-        })
+        }
+        Ok(())
     }
-
-
-
 }
 
-/// Groups names by length and for each group find the best way to dispatch. 
+/// Groups names by length and for each group find the best way to dispatch.
 /// If a group is less then FULL_SCAN_THRESHOLD we use simple match statement by the full name.
 /// If a group is larger we try to find index of a 4 or 8 letter long substring that will allows to
 /// split the group into subgroups with minimal number of elements.
 fn calculate_groupings(names: &[&str]) -> Vec<GroupInfo> {
     let groups = split_by_length(names);
-    
+
     let mut sorted_groups: Vec<_> = groups.into_iter().collect();
     sorted_groups.sort_by_key(|(len, _)| *len);
 
     let mut group_data = Vec::new();
-    const DEFAULT_PARAMS: Params = Params{ position: 0, len: 0 };
+    const DEFAULT_PARAMS: Params = Params {
+        position: 0,
+        len: 0,
+    };
 
     for (length, names) in sorted_groups {
         let params = optimize_group(&names);
         //println!("{} (cnt: {})\t->\t{:?}", length, names.len(), params);
-        group_data.push(GroupInfo{
-            length: length,
-            names: names,
+        group_data.push(GroupInfo {
+            length,
+            names,
             position: params.as_ref().unwrap_or(&DEFAULT_PARAMS).position,
             filter_len: params.as_ref().unwrap_or(&DEFAULT_PARAMS).len,
-        }); 
+        });
     }
     group_data
 }
@@ -394,7 +442,10 @@ fn split_by_length(names: &[&str]) -> HashMap<usize, Vec<String>> {
 
 // Removes characters up to position and sorts the remaining characters
 fn cut_and_sort_names(position: usize, names: &[String]) -> Vec<String> {
-    let mut filtered: Vec<String> = names.iter().map(|name| name[position..].to_string()).collect();
+    let mut filtered: Vec<String> = names
+        .iter()
+        .map(|name| name[position..].to_string())
+        .collect();
     filtered.sort();
     filtered
 }
@@ -406,7 +457,7 @@ fn eval_filter_len(filter_len: usize, names: &[String]) -> EvalResult {
     let mut minimal_max_subgroup_len = usize::MAX;
 
     let mut position = 0;
-    while position <= (pattern_len-filter_len) {
+    while position <= (pattern_len - filter_len) {
         let mut prior = &empty;
         let mut subgroup_len = 1;
         let mut max_subgroup_len = 1;
@@ -424,33 +475,40 @@ fn eval_filter_len(filter_len: usize, names: &[String]) -> EvalResult {
             minimal_max_subgroup_len = max_subgroup_len;
             optimal_position = position;
         }
-        if max_subgroup_len == 1 { break; };
+        if max_subgroup_len == 1 {
+            break;
+        };
         position += 1;
     }
-    EvalResult { position: optimal_position, max_subgroup_len: minimal_max_subgroup_len }
+    EvalResult {
+        position: optimal_position,
+        max_subgroup_len: minimal_max_subgroup_len,
+    }
 }
 
 fn optimize_group(names: &[String]) -> Option<Params> {
-    if names.len()  < FULL_SCAN_THRESHOLD {
+    if names.len() < FULL_SCAN_THRESHOLD {
         return None;
     }
 
-    let mut best_param= None;
+    let mut best_param = None;
     let mut min_subgroup_len = names.len();
 
-    for filter_len in (vec![4,8]).into_iter() {
+    for filter_len in (vec![4, 8]).into_iter() {
         let res = eval_filter_len(filter_len, names);
         if res.max_subgroup_len < min_subgroup_len {
-            best_param = Some(Params { position: res.position, len: filter_len });
+            best_param = Some(Params {
+                position: res.position,
+                len: filter_len,
+            });
             min_subgroup_len = res.max_subgroup_len;
         }
         if min_subgroup_len == 1 {
             break;
         }
-    };
+    }
     best_param
 }
-
 
 fn to_u64(text: &str) -> Option<u64> {
     if text.len() != 8 {

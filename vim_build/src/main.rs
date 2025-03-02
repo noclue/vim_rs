@@ -1,10 +1,10 @@
-mod printer;
-mod vim_model;
 mod generator;
+mod printer;
 pub mod rs_emitter;
+mod vim_model;
 
-use std::{path::Path, time::Instant};
 use generator::emit_vim_bindings;
+use std::{path::Path, time::Instant};
 // use crate::generator::load_openapi;
 // use crate::printer::Printer;
 
@@ -18,14 +18,9 @@ fn main() {
     println!("Total time in generation: {:?}", start.elapsed());
 }
 
-
-
-
 // fn generate_to_console(vi_json_spec_path: &Path) -> Result<(), Box<dyn std::error::Error>> {
 //     let model = load_openapi(vi_json_spec_path)?;
 //     let vim_model = vim_model::load_vim_model(&model)?;
 //     let mut printer = printer::StdoutPrinter::new(None, None);
 //     Ok(())
 // }
-
-

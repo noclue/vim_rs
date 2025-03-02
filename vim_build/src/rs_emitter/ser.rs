@@ -2,8 +2,10 @@ use crate::printer::Printer;
 use crate::rs_emitter;
 use crate::vim_model::Model;
 
-
-pub fn generate_serialize_polymorphic_enum(vim_model: & Model, printer: & mut dyn Printer) -> rs_emitter::errors::Result<()> {
+pub fn generate_serialize_polymorphic_enum(
+    vim_model: &Model,
+    printer: &mut dyn Printer,
+) -> rs_emitter::errors::Result<()> {
     printer.println("use serde::Serialize;")?;
     printer.println("use super::struct_enum::StructType;")?;
     printer.println("use super::vim_object_trait::VimObjectTrait;")?;
@@ -21,13 +23,17 @@ pub fn generate_serialize_polymorphic_enum(vim_model: & Model, printer: & mut dy
     printer.println("match data_type {")?;
     printer.indent();
     for (_, data_type) in &vim_model.structs {
-        let struct_name =  data_type.borrow().rust_name();
+        let struct_name = data_type.borrow().rust_name();
         if struct_name == "Any" {
             continue;
         }
-        printer.println(&format!("StructType::{struct_name} => {struct_name}::serialize("))?;
+        printer.println(&format!(
+            "StructType::{struct_name} => {struct_name}::serialize("
+        ))?;
         printer.indent();
-        printer.println(&format!("p.as_any_ref().downcast_ref::<{struct_name}>().unwrap(),"))?;
+        printer.println(&format!(
+            "p.as_any_ref().downcast_ref::<{struct_name}>().unwrap(),"
+        ))?;
         printer.println("serializer,")?;
         printer.dedent();
         printer.println("),")?;
