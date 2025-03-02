@@ -4,9 +4,7 @@ use vim::mo::EventManager;
 use vim::types::structs::{EventFilterSpecByTime, ExtendedEvent, EventEx};
 use vim::types::traits::EventTrait;
 use vim::core::client::{Client, ClientBuilder};
-use tokio;
 use log::info;
-use env_logger;
 use chrono::{Utc, Duration as ChronoDuration};
 use utils::{Result, Error};
 
@@ -37,7 +35,7 @@ async fn dump_events(client: Arc<Client>, event_manager: &EventManager) -> Resul
     let filter = &vim::types::structs::EventFilterSpec {
         entity: None,
         time: Some(EventFilterSpecByTime {
-            begin_time: Some(String::from(thirty_minutes_ago.to_rfc3339())),
+            begin_time: Some(thirty_minutes_ago.to_rfc3339()),
             end_time: None,
         }),
         user_name: None,
@@ -93,10 +91,9 @@ async fn main() -> Result<()> {
         .build().await?;
 
     let Some(event_manager_moref) = vim_client.service_content().event_manager.clone() else {
-        return Err(Error::Error(String::from("No event manager found")).into());
+        return Err(Error::Error(String::from("No event manager found")));
     };
-    let event_manager = EventManager::new(vim_client.clone(),
-    &event_manager_moref.value);
+    let event_manager = EventManager::new(vim_client.clone(), &event_manager_moref.value);
 
     dump_events(vim_client.clone(), &event_manager).await?;
 

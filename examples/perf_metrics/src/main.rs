@@ -2,9 +2,7 @@ use std::env;
 use vim::mo::PerformanceManager;
 
 use vim::core::client::ClientBuilder;
-use tokio;
 use log::{debug, info};
-use env_logger;
 use utils::{Result, Error};
 
 #[tokio::main]

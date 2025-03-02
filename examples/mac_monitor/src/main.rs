@@ -13,9 +13,7 @@ use vim::types::enums::{self, MoTypesEnum};
 use vim::types::structs;
 
 use vim::core::client::{Client, ClientBuilder};
-use tokio;
 use log::{debug, error, info, trace};
-use env_logger;
 use utils::{Result, Error};
 
 const APP_NAME: &str = env!("CARGO_PKG_NAME");
@@ -104,8 +102,8 @@ impl VmChangeListener for VMMacCache {
         } else {
             let new_vm_details = VmDetails {
                 vm_name: vm_details.vm_name.unwrap_or("".to_string()),
-                vnic: vm_details.vnic.unwrap_or(HashMap::new()),
-                guest_net: vm_details.guest_net.unwrap_or(HashMap::new()),
+                vnic: vm_details.vnic.unwrap_or_default(),
+                guest_net: vm_details.guest_net.unwrap_or_default(),
             };
             (new_vm_details.clone(), true)
         };
@@ -145,7 +143,7 @@ impl VmChangeDetector {
         };
         let view_mgr_id = view_mgr_id.value.clone();
         let view_mgr = ViewManager::new(client.clone(), &view_mgr_id);
-        let view_ref = view_mgr.create_container_view(&client.service_content().root_folder, Some(&vec!["VirtualMachine".to_string()]), true).await?;
+        let view_ref = view_mgr.create_container_view(&client.service_content().root_folder, Some(&["VirtualMachine".to_string()]), true).await?;
         let spec = vim::types::structs::PropertyFilterSpec {
             object_set: vec![structs::ObjectSpec {
                 obj: view_ref.clone(),
@@ -259,7 +257,7 @@ fn create_vm_change(change_set: &Vec<structs::PropertyChange>) -> VmChange {
                     continue;
                 };
                 let name: &str = match val {
-                    VimAny::Value(ValueElements::PrimitiveString(s)) => &s,
+                    VimAny::Value(ValueElements::PrimitiveString(s)) => s,
                     _ => "Unexpected name type",
                 };
                 vm_change.vm_name = Some(name.to_string());
@@ -304,7 +302,7 @@ fn create_vm_change(change_set: &Vec<structs::PropertyChange>) -> VmChange {
                         continue;
                     };
                     if let Some(ip) = net.ip_address.clone() {
-                        guest_net.insert(mac_address.clone().into(), ip);
+                        guest_net.insert(mac_address.clone(), ip);
                     }
                 }
                 vm_change.guest_net = Some(guest_net);

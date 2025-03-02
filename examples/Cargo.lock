@@ -259,8 +259,6 @@ dependencies = [
  "chrono",
  "env_logger",
  "log",
- "reqwest",
- "thiserror",
  "tokio",
  "utils",
  "vim",
@@ -757,11 +755,8 @@ checksum = "30bde2b3dc3671ae49d8e2e9f044c7c005836e7a023ee57cffa25ab82764bb9e"
 name = "mac_monitor"
 version = "0.1.0"
 dependencies = [
- "chrono",
  "env_logger",
  "log",
- "reqwest",
- "thiserror",
  "tokio",
  "utils",
  "vim",
