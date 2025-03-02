@@ -4,8 +4,7 @@
 use std::collections::HashMap;
 use std::time::Instant;
 use std::{env, sync::Arc};
-use vim::mo::{PropertyCollector, PropertyFilter, ServiceInstance, SessionManager, View, ViewManager};
-use vim::types::structs::ServiceContent;
+use vim::mo::{PropertyCollector, PropertyFilter, View, ViewManager};
 use vim::types::vim_any::VimAny;
 use vim::types::traits::VirtualEthernetCardTrait;
 use vim::types::boxed_types::ValueElements;
@@ -13,24 +12,14 @@ use vim::types::convert::CastInto;
 use vim::types::enums::{self, MoTypesEnum};
 use vim::types::structs;
 
-use vim::core::client::Client;
+use vim::core::client::{Client, ClientBuilder};
 use tokio;
 use log::{debug, error, info, trace};
 use env_logger;
+use utils::{Result, Error};
 
-#[derive(Debug, thiserror::Error)]
-pub enum Error {
-    #[error("MethodFault: {0:?}")]
-    MethodFault(Box<dyn vim::types::traits::MethodFaultTrait>),
-    #[error("Reqwest error: {0}")]
-    ReqwestError(#[from] reqwest::Error),
-    #[error("VimClient error: {0}")]
-    VimClientError(#[from] vim::core::client::Error),
-    #[error("Error: {0}")]
-    Error(String),
-}
-
-type Result<T> = std::result::Result<T, Error>;
+const APP_NAME: &str = env!("CARGO_PKG_NAME");
+const APP_VERSION: &str = env!("CARGO_PKG_VERSION");
 
 /// Physical Networks Address details of a VM. Contains vm name and a map
 /// of device key to MAC address.
@@ -147,16 +136,16 @@ struct VmChangeDetector {
 }
 
 impl VmChangeDetector {
-    async fn new(listener: Box<dyn VmChangeListener>, content: ServiceContent, client: Arc<Client>) -> Result<Self> {
-        let pc_id = content.property_collector.value.clone();
-        // TODO : Create own property collector instance PRopertyCollector::CreatePropertyCollector
+    async fn new(listener: Box<dyn VmChangeListener>, client: Arc<Client>) -> Result<Self> {
+        let pc_id = client.service_content().property_collector.value.clone();
+        // TODO : Create own property collector instance PropertyCollector::CreatePropertyCollector
         let property_collector = PropertyCollector::new(client.clone(), &pc_id);
-        let Some(ref view_mgr_id) = content.view_manager else {
+        let Some(ref view_mgr_id) = client.service_content().view_manager else {
             return Err(Error::Error("No view manager found".to_string()));
         };
         let view_mgr_id = view_mgr_id.value.clone();
         let view_mgr = ViewManager::new(client.clone(), &view_mgr_id);
-        let view_ref = view_mgr.create_container_view(&content.root_folder, Some(&vec!["VirtualMachine".to_string()]), true).await?; 
+        let view_ref = view_mgr.create_container_view(&client.service_content().root_folder, Some(&vec!["VirtualMachine".to_string()]), true).await?;
         let spec = vim::types::structs::PropertyFilterSpec {
             object_set: vec![structs::ObjectSpec {
                 obj: view_ref.clone(),
@@ -349,33 +338,6 @@ impl Drop for VmChangeDetector {
     }
 }
 
-
-async fn create_client(vc_server: String, username: String, pwd: String) -> Result<(Arc<Client>, ServiceContent)> {
-    let http_client = reqwest::ClientBuilder::new()
-    .danger_accept_invalid_certs(true)
-    .danger_accept_invalid_hostnames(true)
-    .build()?;
-
-    let vim_client = Client::new(http_client, &vc_server, None);
-
-    let service_instance = ServiceInstance::new(vim_client.clone(), "ServiceInstance");
-
-    let content = service_instance.content().await?;
-    debug!("ServiceInstance::content obtained from vCenter {}",
-            content.about.full_name);
-
-    let Some(ref session_mgr_moref) = content.session_manager else {
-        return Err(Error::Error("No session manager found".to_string()));
-    };
-
-    let sm = SessionManager::new(vim_client.clone(), &session_mgr_moref.value.clone());
-    let us = sm.login(&username, &pwd, Some("en")).await?;
-
-    info!("Session created for: {:?}", us.user_name);
-    Ok((vim_client, content))
-}
-
-
 #[tokio::main]
 async fn main() -> Result<()> {
     env_logger::init();
@@ -386,11 +348,15 @@ async fn main() -> Result<()> {
     let username = env::var("VC_USERNAME").map_err(|_| Error::Error(String::from("VC_USERNAME env var not set")))?;
     let pwd = env::var("VC_PASSWORD").map_err(|_| Error::Error(String::from("VC_PASSWORD env var not set")))?;
 
-    let (vim_client, content) = create_client(vc_server, username, pwd).await?;
+    let vim_client = ClientBuilder::new(&vc_server)
+        .insecure(true)
+        .basic_authn(&username, &pwd)
+        .app_details(APP_NAME, APP_VERSION)
+        .build().await?;
 
     let listener = Box::new(VmChangePrinter {});
     let listener = Box::new(VMMacCache::new(listener));
-    let mut detector = VmChangeDetector::new(listener, content, vim_client).await?;
+    let mut detector = VmChangeDetector::new(listener, vim_client).await?;
     detector.monitor(30).await?;
 
     Ok(())
