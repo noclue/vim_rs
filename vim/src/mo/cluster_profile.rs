@@ -33,7 +33,7 @@ impl ClusterProfile {
         let input = AssociateProfileRequestType {entity, };
         let path = format!("/ClusterProfile/{moId}/AssociateProfile", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Check compliance of an entity against a Profile.
     /// 
@@ -59,7 +59,7 @@ impl ClusterProfile {
         let input = CheckProfileComplianceRequestType {entity, };
         let path = format!("/ClusterProfile/{moId}/CheckProfileCompliance_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Destroy the profile.
     /// 
@@ -67,7 +67,7 @@ impl ClusterProfile {
     pub async fn destroy_profile(&self) -> Result<()> {
         let path = format!("/ClusterProfile/{moId}/DestroyProfile", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Remove the association between a profile and a managed entity.
     /// 
@@ -88,7 +88,7 @@ impl ClusterProfile {
         let input = DissociateProfileRequestType {entity, };
         let path = format!("/ClusterProfile/{moId}/DissociateProfile", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Export the profile in a serialized form.
     /// 
@@ -105,7 +105,7 @@ impl ClusterProfile {
     pub async fn export_profile(&self) -> Result<String> {
         let path = format!("/ClusterProfile/{moId}/ExportProfile", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Returns the localizable description for the profile.
     /// 
@@ -117,7 +117,7 @@ impl ClusterProfile {
     pub async fn retrieve_description(&self) -> Result<Option<ProfileDescription>> {
         let path = format!("/ClusterProfile/{moId}/RetrieveDescription", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Update the ClusterProfile with the specified config.
     /// 
@@ -135,7 +135,7 @@ impl ClusterProfile {
         let input = UpdateClusterProfileRequestType {config, };
         let path = format!("/ClusterProfile/{moId}/UpdateClusterProfile", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Overall compliance of entities associated with this profile.
     /// 
@@ -147,7 +147,7 @@ impl ClusterProfile {
     pub async fn compliance_status(&self) -> Result<String> {
         let path = format!("/ClusterProfile/{moId}/complianceStatus", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Configuration data for the profile.
     /// 
@@ -155,13 +155,13 @@ impl ClusterProfile {
     pub async fn config(&self) -> Result<Box<dyn crate::types::traits::ProfileConfigInfoTrait>> {
         let path = format!("/ClusterProfile/{moId}/config", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Time at which the profile was created.
     pub async fn created_time(&self) -> Result<String> {
         let path = format!("/ClusterProfile/{moId}/createdTime", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Deprecated as of vSphere API 5.0. use *Profile.RetrieveDescription* instead.
     /// 
@@ -169,7 +169,7 @@ impl ClusterProfile {
     pub async fn description(&self) -> Result<Option<ProfileDescription>> {
         let path = format!("/ClusterProfile/{moId}/description", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// List of managed entities associated with the profile.
     ///
@@ -179,19 +179,19 @@ impl ClusterProfile {
     pub async fn entity(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
         let path = format!("/ClusterProfile/{moId}/entity", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Time at which the profile was last modified.
     pub async fn modified_time(&self) -> Result<String> {
         let path = format!("/ClusterProfile/{moId}/modifiedTime", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Name of the profile.
     pub async fn name(&self) -> Result<String> {
         let path = format!("/ClusterProfile/{moId}/name", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
 }
 #[derive(serde::Serialize)]

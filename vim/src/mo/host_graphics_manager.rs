@@ -24,7 +24,7 @@ impl HostGraphicsManager {
     pub async fn is_shared_graphics_active(&self) -> Result<bool> {
         let path = format!("/HostGraphicsManager/{moId}/IsSharedGraphicsActive", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Refresh the available graphics information.
     /// 
@@ -32,7 +32,7 @@ impl HostGraphicsManager {
     pub async fn refresh_graphics_manager(&self) -> Result<()> {
         let path = format!("/HostGraphicsManager/{moId}/RefreshGraphicsManager", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// ***Since:*** vSphere API Release 7.0.3.0
     /// 
@@ -40,7 +40,7 @@ impl HostGraphicsManager {
     pub async fn retrieve_vgpu_device_info(&self) -> Result<Option<Vec<VirtualMachineVgpuDeviceInfo>>> {
         let path = format!("/HostGraphicsManager/{moId}/RetrieveVgpuDeviceInfo", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// ***Since:*** vSphere API Release 7.0.3.0
     /// 
@@ -48,7 +48,7 @@ impl HostGraphicsManager {
     pub async fn retrieve_vgpu_profile_info(&self) -> Result<Option<Vec<VirtualMachineVgpuProfileInfo>>> {
         let path = format!("/HostGraphicsManager/{moId}/RetrieveVgpuProfileInfo", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Assigns a value to a custom field.
     /// 
@@ -68,7 +68,7 @@ impl HostGraphicsManager {
         let input = SetCustomValueRequestType {key, value, };
         let path = format!("/HostGraphicsManager/{moId}/setCustomValue", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Update graphics configuration
     /// 
@@ -82,7 +82,7 @@ impl HostGraphicsManager {
         let input = UpdateGraphicsConfigRequestType {config, };
         let path = format!("/HostGraphicsManager/{moId}/UpdateGraphicsConfig", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// List of custom field definitions that are valid for the object's type.
     /// 
@@ -92,7 +92,7 @@ impl HostGraphicsManager {
     pub async fn available_field(&self) -> Result<Option<Vec<CustomFieldDef>>> {
         let path = format!("/HostGraphicsManager/{moId}/availableField", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Graphics Configuration
     /// 
@@ -100,7 +100,7 @@ impl HostGraphicsManager {
     pub async fn graphics_config(&self) -> Result<Option<HostGraphicsConfig>> {
         let path = format!("/HostGraphicsManager/{moId}/graphicsConfig", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Array of graphics information
     /// 
@@ -108,7 +108,7 @@ impl HostGraphicsManager {
     pub async fn graphics_info(&self) -> Result<Option<Vec<HostGraphicsInfo>>> {
         let path = format!("/HostGraphicsManager/{moId}/graphicsInfo", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Array of shared passthru GPU capablities.
     /// 
@@ -118,7 +118,7 @@ impl HostGraphicsManager {
     pub async fn shared_gpu_capabilities(&self) -> Result<Option<Vec<HostSharedGpuCapabilities>>> {
         let path = format!("/HostGraphicsManager/{moId}/sharedGpuCapabilities", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Array of shared passthru GPU types.
     /// 
@@ -130,7 +130,7 @@ impl HostGraphicsManager {
     pub async fn shared_passthru_gpu_types(&self) -> Result<Option<Vec<String>>> {
         let path = format!("/HostGraphicsManager/{moId}/sharedPassthruGpuTypes", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// List of custom field values.
     /// 
@@ -142,7 +142,7 @@ impl HostGraphicsManager {
     pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/HostGraphicsManager/{moId}/value", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
 }
 #[derive(serde::Serialize)]

@@ -54,7 +54,7 @@ impl TaskManager {
         let input = CreateCollectorForTasksRequestType {filter, };
         let path = format!("/TaskManager/{moId}/CreateCollectorForTasks", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Creates a new *Task*, specifying the object with which
     /// the *Task* is associated, the type of task,
@@ -97,7 +97,7 @@ impl TaskManager {
         let input = CreateTaskRequestType {obj, task_type_id, initiated_by, cancelable, parent_task_key, activation_id, };
         let path = format!("/TaskManager/{moId}/CreateTask", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Locale-specific, static strings that describe *Task*
     /// information to users.
@@ -106,7 +106,7 @@ impl TaskManager {
     pub async fn description(&self) -> Result<TaskDescription> {
         let path = format!("/TaskManager/{moId}/description", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Maximum number of *TaskHistoryCollector*
     /// data objects that can exist concurrently, per client.
@@ -115,7 +115,7 @@ impl TaskManager {
     pub async fn max_collector(&self) -> Result<i32> {
         let path = format!("/TaskManager/{moId}/maxCollector", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// A list of *Task* managed objects that completed recently,
     /// that are currently running, or that are queued to run.
@@ -149,7 +149,7 @@ impl TaskManager {
     pub async fn recent_task(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
         let path = format!("/TaskManager/{moId}/recentTask", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
 }
 #[derive(serde::Serialize)]

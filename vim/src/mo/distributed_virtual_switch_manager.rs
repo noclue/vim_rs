@@ -70,7 +70,7 @@ impl DistributedVirtualSwitchManager {
         let input = QueryDvsCheckCompatibilityRequestType {host_container, dvs_product_spec, host_filter_spec, };
         let path = format!("/DistributedVirtualSwitchManager/{moId}/QueryDvsCheckCompatibility", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Export the configuration for entities specified in the
     /// <code>selectionSet</code> parameter.
@@ -108,7 +108,7 @@ impl DistributedVirtualSwitchManager {
         let input = DvsManagerExportEntityRequestType {selection_set, };
         let path = format!("/DistributedVirtualSwitchManager/{moId}/DVSManagerExportEntity_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Import the configuration of entities specified in
     /// *EntityBackupConfig*.
@@ -146,7 +146,7 @@ impl DistributedVirtualSwitchManager {
         let input = DvsManagerImportEntityRequestType {entity_backup, import_type, };
         let path = format!("/DistributedVirtualSwitchManager/{moId}/DVSManagerImportEntity_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Returns the portgroup identified by the key within the specified VDS
     /// identified by its UUID.
@@ -175,7 +175,7 @@ impl DistributedVirtualSwitchManager {
         let input = DvsManagerLookupDvPortGroupRequestType {switch_uuid, portgroup_key, };
         let path = format!("/DistributedVirtualSwitchManager/{moId}/DVSManagerLookupDvPortGroup", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// This operation returns a list of hosts that are compatible with
     /// the given DistributedVirtualSwitch product specification.
@@ -213,7 +213,7 @@ impl DistributedVirtualSwitchManager {
         let input = QueryCompatibleHostForExistingDvsRequestType {container, recursive, dvs, };
         let path = format!("/DistributedVirtualSwitchManager/{moId}/QueryCompatibleHostForExistingDvs", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// This operation returns a list of hosts that are compatible with
     /// the given DistributedVirtualSwitch product specification.
@@ -246,7 +246,7 @@ impl DistributedVirtualSwitchManager {
         let input = QueryCompatibleHostForNewDvsRequestType {container, recursive, switch_product_spec, };
         let path = format!("/DistributedVirtualSwitchManager/{moId}/QueryCompatibleHostForNewDvs", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// This operation returns a list of host product specifications that
     /// are compatible with the given DistributedVirtualSwitch product
@@ -264,7 +264,7 @@ impl DistributedVirtualSwitchManager {
         let input = QueryDvsCompatibleHostSpecRequestType {switch_product_spec, };
         let path = format!("/DistributedVirtualSwitchManager/{moId}/QueryDvsCompatibleHostSpec", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// This operation returns a list of vmnics which are compatible
     /// with the given DistributedVirtualSwitch product specification.
@@ -290,7 +290,7 @@ impl DistributedVirtualSwitchManager {
         let input = QueryCompatibleVmnicsFromHostsRequestType {hosts, dvs, };
         let path = format!("/DistributedVirtualSwitchManager/{moId}/QueryCompatibleVmnicsFromHosts", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// This operation returns the DistributedVirtualSwitch or
     /// DistributedVirtualPortgroup configuration target on a host.
@@ -315,7 +315,7 @@ impl DistributedVirtualSwitchManager {
         let input = QueryDvsConfigTargetRequestType {host, dvs, };
         let path = format!("/DistributedVirtualSwitchManager/{moId}/QueryDvsConfigTarget", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// This operation indicates which version-specific DVS features are
     /// available for the given DistributedVirtualSwitch product specification.
@@ -332,7 +332,7 @@ impl DistributedVirtualSwitchManager {
         let input = QueryDvsFeatureCapabilityRequestType {switch_product_spec, };
         let path = format!("/DistributedVirtualSwitchManager/{moId}/QueryDvsFeatureCapability", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// This operation returns a list of network offload specifications that are
     /// compatible with the given DistributedVirtualSwitch product specification.
@@ -350,7 +350,7 @@ impl DistributedVirtualSwitchManager {
         let input = QuerySupportedNetworkOffloadSpecRequestType {switch_product_spec, };
         let path = format!("/DistributedVirtualSwitchManager/{moId}/QuerySupportedNetworkOffloadSpec", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// This operation returns a list of switch product specifications that
     /// are supported by the vCenter Server.
@@ -367,7 +367,7 @@ impl DistributedVirtualSwitchManager {
         let input = QueryAvailableDvsSpecRequestType {recommended, };
         let path = format!("/DistributedVirtualSwitchManager/{moId}/QueryAvailableDvsSpec", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// This operation returns a DistributedVirtualSwitch given a UUID.
     /// 
@@ -389,7 +389,7 @@ impl DistributedVirtualSwitchManager {
         let input = QueryDvsByUuidRequestType {uuid, };
         let path = format!("/DistributedVirtualSwitchManager/{moId}/QueryDvsByUuid", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Update the Distributed Switch configuration on the hosts to bring them in sync with the
     /// current configuration in vCenter Server.
@@ -416,7 +416,7 @@ impl DistributedVirtualSwitchManager {
         let input = RectifyDvsOnHostRequestType {hosts, };
         let path = format!("/DistributedVirtualSwitchManager/{moId}/RectifyDvsOnHost_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
 }
 #[derive(serde::Serialize)]

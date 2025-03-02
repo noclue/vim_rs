@@ -38,7 +38,7 @@ impl HostSpecificationManager {
         let input = DeleteHostSpecificationRequestType {host, };
         let path = format!("/HostSpecificationManager/{moId}/DeleteHostSpecification", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Delete the host sub specification specified by the provided <code>
     /// subSpecname</code> of the specified host.
@@ -64,7 +64,7 @@ impl HostSpecificationManager {
         let input = DeleteHostSubSpecificationRequestType {host, sub_spec_name, };
         let path = format!("/HostSpecificationManager/{moId}/DeleteHostSubSpecification", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Query the hosts whose specification was updated in the specified
     /// time period.
@@ -96,7 +96,7 @@ impl HostSpecificationManager {
         let input = HostSpecGetUpdatedHostsRequestType {start_change_id, end_change_id, };
         let path = format!("/HostSpecificationManager/{moId}/HostSpecGetUpdatedHosts", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Retrieve the host specification.
     /// 
@@ -131,7 +131,7 @@ impl HostSpecificationManager {
         let input = RetrieveHostSpecificationRequestType {host, from_host, };
         let path = format!("/HostSpecificationManager/{moId}/RetrieveHostSpecification", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Update the host specification with the provided copy.
     /// 
@@ -160,7 +160,7 @@ impl HostSpecificationManager {
         let input = UpdateHostSpecificationRequestType {host, host_spec, };
         let path = format!("/HostSpecificationManager/{moId}/UpdateHostSpecification", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Update the host specification with the provided host sub specification.
     /// 
@@ -190,7 +190,7 @@ impl HostSpecificationManager {
         let input = UpdateHostSubSpecificationRequestType {host, host_sub_spec, };
         let path = format!("/HostSpecificationManager/{moId}/UpdateHostSubSpecification", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
 }
 #[derive(serde::Serialize)]

@@ -112,7 +112,7 @@ impl VirtualDiskManager {
         let input = CopyVirtualDiskRequestType {source_name, source_datacenter, dest_name, dest_datacenter, dest_spec, force, };
         let path = format!("/VirtualDiskManager/{moId}/CopyVirtualDisk_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Deprecated as of vSphere 6.5, use
     /// *HostVStorageObjectManager.HostCreateDisk_Task* instead.
@@ -159,7 +159,7 @@ impl VirtualDiskManager {
         let input = CreateVirtualDiskRequestType {name, datacenter, spec, };
         let path = format!("/VirtualDiskManager/{moId}/CreateVirtualDisk_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Deprecated as of vSphere 6.5, use
     /// *VirtualMachine.DefragmentAllDisks* instead.
@@ -207,7 +207,7 @@ impl VirtualDiskManager {
         let input = DefragmentVirtualDiskRequestType {name, datacenter, };
         let path = format!("/VirtualDiskManager/{moId}/DefragmentVirtualDisk_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Deprecated as of vSphere 6.5, use
     /// *HostVStorageObjectManager.HostDeleteVStorageObject_Task* instead.
@@ -256,7 +256,7 @@ impl VirtualDiskManager {
         let input = DeleteVirtualDiskRequestType {name, datacenter, };
         let path = format!("/VirtualDiskManager/{moId}/DeleteVirtualDisk_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Explicitly zero out unaccessed parts zeroedthick disk.
     /// 
@@ -301,7 +301,7 @@ impl VirtualDiskManager {
         let input = EagerZeroVirtualDiskRequestType {name, datacenter, };
         let path = format!("/VirtualDiskManager/{moId}/EagerZeroVirtualDisk_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Deprecated as of vSphere 6.5, use
     /// *HostVStorageObjectManager.HostExtendDisk_Task* instead.
@@ -362,7 +362,7 @@ impl VirtualDiskManager {
         let input = ExtendVirtualDiskRequestType {name, datacenter, new_capacity_kb, eager_zero, };
         let path = format!("/VirtualDiskManager/{moId}/ExtendVirtualDisk_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Import an unmanaged-snapshot from Virtual-Volume(VVol) enabled
     /// Storage Array.
@@ -408,7 +408,7 @@ impl VirtualDiskManager {
         let input = ImportUnmanagedSnapshotRequestType {vdisk, datacenter, vvol_id, };
         let path = format!("/VirtualDiskManager/{moId}/ImportUnmanagedSnapshot", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Deprecated as of vSphere 6.5, use
     /// *HostVStorageObjectManager.HostInflateDisk_Task* instead.
@@ -455,7 +455,7 @@ impl VirtualDiskManager {
         let input = InflateVirtualDiskRequestType {name, datacenter, };
         let path = format!("/VirtualDiskManager/{moId}/InflateVirtualDisk_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Move a virtual disk and all related files from the source location specified
     /// by <code>sourceName</code> and <code>sourceDatacenter</code> to the destination
@@ -521,7 +521,7 @@ impl VirtualDiskManager {
         let input = MoveVirtualDiskRequestType {source_name, source_datacenter, dest_name, dest_datacenter, force, profile, };
         let path = format!("/VirtualDiskManager/{moId}/MoveVirtualDisk_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Return the percentage of fragmentation of the sparse virtual disk.
     /// 
@@ -565,7 +565,7 @@ impl VirtualDiskManager {
         let input = QueryVirtualDiskFragmentationRequestType {name, datacenter, };
         let path = format!("/VirtualDiskManager/{moId}/QueryVirtualDiskFragmentation", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Get the disk geometry information for the virtual disk.
     /// 
@@ -603,7 +603,7 @@ impl VirtualDiskManager {
         let input = QueryVirtualDiskGeometryRequestType {name, datacenter, };
         let path = format!("/VirtualDiskManager/{moId}/QueryVirtualDiskGeometry", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Deprecated as of vSphere 6.5, use
     /// *HostVStorageObjectManager.HostRetrieveVStorageObject*
@@ -646,7 +646,7 @@ impl VirtualDiskManager {
         let input = QueryVirtualDiskUuidRequestType {name, datacenter, };
         let path = format!("/VirtualDiskManager/{moId}/QueryVirtualDiskUuid", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Release a snapshot previously imported with importUnmanagedSnapshot
     /// 
@@ -676,7 +676,7 @@ impl VirtualDiskManager {
         let input = ReleaseManagedSnapshotRequestType {vdisk, datacenter, };
         let path = format!("/VirtualDiskManager/{moId}/ReleaseManagedSnapshot", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Deprecated as of vSphere 6.5, use
     /// *HostVStorageObjectManager.HostRegisterDisk* to register
@@ -718,7 +718,7 @@ impl VirtualDiskManager {
         let input = SetVirtualDiskUuidRequestType {name, datacenter, uuid, };
         let path = format!("/VirtualDiskManager/{moId}/SetVirtualDiskUuid", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Deprecated as of vSphere 6.5, use
     /// *VirtualMachine.ShrinkDisk_Task* instead.
@@ -773,7 +773,7 @@ impl VirtualDiskManager {
         let input = ShrinkVirtualDiskRequestType {name, datacenter, copy, };
         let path = format!("/VirtualDiskManager/{moId}/ShrinkVirtualDisk_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Overwrite all blocks of the virtual disk with zeros.
     /// 
@@ -817,7 +817,7 @@ impl VirtualDiskManager {
         let input = ZeroFillVirtualDiskRequestType {name, datacenter, };
         let path = format!("/VirtualDiskManager/{moId}/ZeroFillVirtualDisk_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
 }
 #[derive(serde::Serialize)]

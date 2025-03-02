@@ -105,7 +105,7 @@ impl AuthorizationManager {
         let input = AddAuthorizationRoleRequestType {name, priv_ids, };
         let path = format!("/AuthorizationManager/{moId}/AddAuthorizationRole", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Get the list of effective privileges for a user,
     /// either granted explicitly, or through group membership.
@@ -131,7 +131,7 @@ impl AuthorizationManager {
         let input = FetchUserPrivilegeOnEntitiesRequestType {entities, user_name, };
         let path = format!("/AuthorizationManager/{moId}/FetchUserPrivilegeOnEntities", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Check whether a session holds a set of privileges on a set of managed entities.
     /// 
@@ -165,7 +165,7 @@ impl AuthorizationManager {
         let input = HasPrivilegeOnEntitiesRequestType {entity, session_id, priv_id, };
         let path = format!("/AuthorizationManager/{moId}/HasPrivilegeOnEntities", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Check whether a session holds a set of privileges on a managed entity.
     /// 
@@ -199,7 +199,7 @@ impl AuthorizationManager {
         let input = HasPrivilegeOnEntityRequestType {entity, session_id, priv_id, };
         let path = format!("/AuthorizationManager/{moId}/HasPrivilegeOnEntity", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Checks if a user holds a certain set of privileges on a number of
     /// managed entities.
@@ -234,7 +234,7 @@ impl AuthorizationManager {
         let input = HasUserPrivilegeOnEntitiesRequestType {entities, user_name, priv_id, };
         let path = format!("/AuthorizationManager/{moId}/HasUserPrivilegeOnEntities", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Reassigns all permissions of a role to another role.
     /// 
@@ -269,7 +269,7 @@ impl AuthorizationManager {
         let input = MergePermissionsRequestType {src_role_id, dst_role_id, };
         let path = format!("/AuthorizationManager/{moId}/MergePermissions", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Removes a permission rule from an entity.
     /// 
@@ -318,7 +318,7 @@ impl AuthorizationManager {
         let input = RemoveEntityPermissionRequestType {entity, user, is_group, };
         let path = format!("/AuthorizationManager/{moId}/RemoveEntityPermission", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Removes a role.
     /// 
@@ -345,7 +345,7 @@ impl AuthorizationManager {
         let input = RemoveAuthorizationRoleRequestType {role_id, fail_if_used, };
         let path = format!("/AuthorizationManager/{moId}/RemoveAuthorizationRole", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Update the entire set of permissions defined on an entity.
     /// 
@@ -418,7 +418,7 @@ impl AuthorizationManager {
         let input = ResetEntityPermissionsRequestType {entity, permission, };
         let path = format!("/AuthorizationManager/{moId}/ResetEntityPermissions", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Finds all permissions defined in the system.
     /// 
@@ -429,7 +429,7 @@ impl AuthorizationManager {
     pub async fn retrieve_all_permissions(&self) -> Result<Option<Vec<Permission>>> {
         let path = format!("/AuthorizationManager/{moId}/RetrieveAllPermissions", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Gets permissions defined on or effective on a managed entity.
     /// 
@@ -459,7 +459,7 @@ impl AuthorizationManager {
         let input = RetrieveEntityPermissionsRequestType {entity, inherited, };
         let path = format!("/AuthorizationManager/{moId}/RetrieveEntityPermissions", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Finds all the permissions that use a particular role.
     /// 
@@ -480,7 +480,7 @@ impl AuthorizationManager {
         let input = RetrieveRolePermissionsRequestType {role_id, };
         let path = format!("/AuthorizationManager/{moId}/RetrieveRolePermissions", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Defines one or more permission rules on an entity or updates rules if already
     /// present for the given user or group on the entity.
@@ -541,7 +541,7 @@ impl AuthorizationManager {
         let input = SetEntityPermissionsRequestType {entity, permission, };
         let path = format!("/AuthorizationManager/{moId}/SetEntityPermissions", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Updates a role's name or privileges.
     /// 
@@ -585,7 +585,7 @@ impl AuthorizationManager {
         let input = UpdateAuthorizationRoleRequestType {role_id, new_name, priv_ids, };
         let path = format!("/AuthorizationManager/{moId}/UpdateAuthorizationRole", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Static, descriptive strings for system roles and privileges.
     /// 
@@ -593,7 +593,7 @@ impl AuthorizationManager {
     pub async fn description(&self) -> Result<AuthorizationDescription> {
         let path = format!("/AuthorizationManager/{moId}/description", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// The list of system-defined privileges.
     /// 
@@ -601,7 +601,7 @@ impl AuthorizationManager {
     pub async fn privilege_list(&self) -> Result<Option<Vec<AuthorizationPrivilege>>> {
         let path = format!("/AuthorizationManager/{moId}/privilegeList", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// The currently defined roles in the system, including
     /// static system-defined roles.
@@ -610,7 +610,7 @@ impl AuthorizationManager {
     pub async fn role_list(&self) -> Result<Option<Vec<AuthorizationRole>>> {
         let path = format!("/AuthorizationManager/{moId}/roleList", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
 }
 #[derive(serde::Serialize)]

@@ -43,7 +43,7 @@ impl HostFirewallSystem {
         let input = DisableRulesetRequestType {id, };
         let path = format!("/HostFirewallSystem/{moId}/DisableRuleset", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Opens the firewall ports belonging to the specified ruleset.
     /// 
@@ -67,7 +67,7 @@ impl HostFirewallSystem {
         let input = EnableRulesetRequestType {id, };
         let path = format!("/HostFirewallSystem/{moId}/EnableRuleset", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Refresh the firewall information and settings to pick up any changes
     /// made directly on the host.
@@ -76,7 +76,7 @@ impl HostFirewallSystem {
     pub async fn refresh_firewall(&self) -> Result<()> {
         let path = format!("/HostFirewallSystem/{moId}/RefreshFirewall", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Assigns a value to a custom field.
     /// 
@@ -96,7 +96,7 @@ impl HostFirewallSystem {
         let input = SetCustomValueRequestType {key, value, };
         let path = format!("/HostFirewallSystem/{moId}/setCustomValue", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Updates the default firewall policy; unset fields are left unchanged.
     /// 
@@ -110,7 +110,7 @@ impl HostFirewallSystem {
         let input = UpdateDefaultPolicyRequestType {default_policy, };
         let path = format!("/HostFirewallSystem/{moId}/UpdateDefaultPolicy", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Update the firewall ruleset specification.
     /// 
@@ -133,7 +133,7 @@ impl HostFirewallSystem {
         let input = UpdateRulesetRequestType {id, spec, };
         let path = format!("/HostFirewallSystem/{moId}/UpdateRuleset", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// List of custom field definitions that are valid for the object's type.
     /// 
@@ -143,13 +143,13 @@ impl HostFirewallSystem {
     pub async fn available_field(&self) -> Result<Option<Vec<CustomFieldDef>>> {
         let path = format!("/HostFirewallSystem/{moId}/availableField", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Firewall configuration.
     pub async fn firewall_info(&self) -> Result<Option<HostFirewallInfo>> {
         let path = format!("/HostFirewallSystem/{moId}/firewallInfo", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// List of custom field values.
     /// 
@@ -161,7 +161,7 @@ impl HostFirewallSystem {
     pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/HostFirewallSystem/{moId}/value", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
 }
 #[derive(serde::Serialize)]

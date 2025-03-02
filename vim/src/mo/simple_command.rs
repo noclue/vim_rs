@@ -33,19 +33,19 @@ impl SimpleCommand {
         let input = ExecuteSimpleCommandRequestType {arguments, };
         let path = format!("/SimpleCommand/{moId}/ExecuteSimpleCommand", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// The encoding type used in the result.
     pub async fn encoding_type(&self) -> Result<crate::types::enums::SimpleCommandEncodingEnum> {
         let path = format!("/SimpleCommand/{moId}/encodingType", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// A description of the service.
     pub async fn entity(&self) -> Result<ServiceManagerServiceInfo> {
         let path = format!("/SimpleCommand/{moId}/entity", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
 }
 #[derive(serde::Serialize)]

@@ -85,7 +85,7 @@ impl Datastore {
     pub async fn destroy_task(&self) -> Result<ManagedObjectReference> {
         let path = format!("/Datastore/{moId}/Destroy_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Deprecated as of VI API 2.5 do not use this method. This method throws
     /// *ResourceInUse*. Datastores are automatically
@@ -105,7 +105,7 @@ impl Datastore {
     pub async fn destroy_datastore(&self) -> Result<()> {
         let path = format!("/Datastore/{moId}/DestroyDatastore", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Puts the datastore in maintenance mode.
     /// 
@@ -137,7 +137,7 @@ impl Datastore {
     pub async fn datastore_enter_maintenance_mode(&self) -> Result<StoragePlacementResult> {
         let path = format!("/Datastore/{moId}/DatastoreEnterMaintenanceMode", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Takes the datastore out of maintenance mode.
     /// 
@@ -158,7 +158,7 @@ impl Datastore {
     pub async fn datastore_exit_maintenance_mode_task(&self) -> Result<ManagedObjectReference> {
         let path = format!("/Datastore/{moId}/DatastoreExitMaintenanceMode_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Check whether clustered VMDK feature is enabled on this datastore.
     /// 
@@ -174,7 +174,7 @@ impl Datastore {
     pub async fn is_clustered_vmdk_enabled(&self) -> Result<bool> {
         let path = format!("/Datastore/{moId}/IsClusteredVmdkEnabled", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Explicitly refreshes free-space and capacity values in *Datastore.summary*
     /// and *Datastore.info*.
@@ -190,7 +190,7 @@ impl Datastore {
     pub async fn refresh_datastore(&self) -> Result<()> {
         let path = format!("/Datastore/{moId}/RefreshDatastore", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Refreshes all storage related information including free-space, capacity,
     /// and detailed usage of virtual machines.
@@ -202,7 +202,7 @@ impl Datastore {
     pub async fn refresh_datastore_storage_info(&self) -> Result<()> {
         let path = format!("/Datastore/{moId}/RefreshDatastoreStorageInfo", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Reload the entity state.
     /// 
@@ -221,7 +221,7 @@ impl Datastore {
     pub async fn reload(&self) -> Result<()> {
         let path = format!("/Datastore/{moId}/Reload", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Renames this managed entity.
     /// 
@@ -255,7 +255,7 @@ impl Datastore {
         let input = RenameRequestType {new_name, };
         let path = format!("/Datastore/{moId}/Rename_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Deprecated as of vSphere API 4.0, use *ManagedEntity.Rename_Task*.
     /// 
@@ -278,7 +278,7 @@ impl Datastore {
         let input = RenameDatastoreRequestType {new_name, };
         let path = format!("/Datastore/{moId}/RenameDatastore", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Assigns a value to a custom field.
     /// 
@@ -298,7 +298,7 @@ impl Datastore {
         let input = SetCustomValueRequestType {key, value, };
         let path = format!("/Datastore/{moId}/setCustomValue", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Scan a VVol storage container to update file paths and objectID pointers
     /// embedded in virtual machine files on a given storage container.
@@ -342,7 +342,7 @@ impl Datastore {
         let input = UpdateVVolVirtualMachineFilesRequestType {failover_pair, };
         let path = format!("/Datastore/{moId}/UpdateVVolVirtualMachineFiles_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Update file paths embedded in virtual machine files on the datastore.
     /// 
@@ -412,7 +412,7 @@ impl Datastore {
         let input = UpdateVirtualMachineFilesRequestType {mount_path_datastore_mapping, };
         let path = format!("/Datastore/{moId}/UpdateVirtualMachineFiles_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Whether alarm actions are enabled for this entity.
     /// 
@@ -422,7 +422,7 @@ impl Datastore {
     pub async fn alarm_actions_enabled(&self) -> Result<Option<bool>> {
         let path = format!("/Datastore/{moId}/alarmActionsEnabled", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// List of custom field definitions that are valid for the object's type.
     /// 
@@ -432,7 +432,7 @@ impl Datastore {
     pub async fn available_field(&self) -> Result<Option<Vec<CustomFieldDef>>> {
         let path = format!("/Datastore/{moId}/availableField", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// DatastoreBrowser used to browse this datastore.
     ///
@@ -442,13 +442,13 @@ impl Datastore {
     pub async fn browser(&self) -> Result<ManagedObjectReference> {
         let path = format!("/Datastore/{moId}/browser", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Capabilities of this datastore.
     pub async fn capability(&self) -> Result<DatastoreCapability> {
         let path = format!("/Datastore/{moId}/capability", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Current configuration issues that have been detected for this entity.
     /// 
@@ -460,7 +460,7 @@ impl Datastore {
     pub async fn config_issue(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::EventTrait>>>> {
         let path = format!("/Datastore/{moId}/configIssue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// The configStatus indicates whether or not the system has detected a configuration
     /// issue involving this entity.
@@ -489,7 +489,7 @@ impl Datastore {
     pub async fn config_status(&self) -> Result<crate::types::enums::ManagedEntityStatusEnum> {
         let path = format!("/Datastore/{moId}/configStatus", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Custom field values.
     /// 
@@ -497,7 +497,7 @@ impl Datastore {
     pub async fn custom_value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/Datastore/{moId}/customValue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// A set of alarm states for alarms that apply to this managed entity.
     /// 
@@ -512,7 +512,7 @@ impl Datastore {
     pub async fn declared_alarm_state(&self) -> Result<Option<Vec<AlarmState>>> {
         let path = format!("/Datastore/{moId}/declaredAlarmState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// List of operations that are disabled, given the current runtime
     /// state of the entity.
@@ -586,7 +586,7 @@ impl Datastore {
     pub async fn disabled_method(&self) -> Result<Option<Vec<String>>> {
         let path = format!("/Datastore/{moId}/disabledMethod", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Access rights the current session has to this entity.
     /// 
@@ -594,19 +594,19 @@ impl Datastore {
     pub async fn effective_role(&self) -> Result<Option<Vec<i32>>> {
         let path = format!("/Datastore/{moId}/effectiveRole", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Hosts attached to this datastore.
     pub async fn host(&self) -> Result<Option<Vec<DatastoreHostMount>>> {
         let path = format!("/Datastore/{moId}/host", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Specific information about the datastore.
     pub async fn info(&self) -> Result<Box<dyn crate::types::traits::DatastoreInfoTrait>> {
         let path = format!("/Datastore/{moId}/info", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Configuration of storage I/O resource management for the datastore.
     /// 
@@ -620,7 +620,7 @@ impl Datastore {
     pub async fn iorm_configuration(&self) -> Result<Option<StorageIormInfo>> {
         let path = format!("/Datastore/{moId}/iormConfiguration", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Name of this entity, unique relative to its parent.
     /// 
@@ -634,7 +634,7 @@ impl Datastore {
     pub async fn name(&self) -> Result<String> {
         let path = format!("/Datastore/{moId}/name", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// General health of this managed entity.
     /// 
@@ -659,7 +659,7 @@ impl Datastore {
     pub async fn overall_status(&self) -> Result<crate::types::enums::ManagedEntityStatusEnum> {
         let path = format!("/Datastore/{moId}/overallStatus", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Parent of this entity.
     /// 
@@ -675,13 +675,13 @@ impl Datastore {
     pub async fn parent(&self) -> Result<Option<ManagedObjectReference>> {
         let path = format!("/Datastore/{moId}/parent", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// List of permissions defined for this entity.
     pub async fn permission(&self) -> Result<Option<Vec<Permission>>> {
         let path = format!("/Datastore/{moId}/permission", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// The set of recent tasks operating on this managed entity.
     /// 
@@ -711,13 +711,13 @@ impl Datastore {
     pub async fn recent_task(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
         let path = format!("/Datastore/{moId}/recentTask", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Global properties of the datastore.
     pub async fn summary(&self) -> Result<DatastoreSummary> {
         let path = format!("/Datastore/{moId}/summary", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// The set of tags associated with this managed entity.
     /// 
@@ -727,7 +727,7 @@ impl Datastore {
     pub async fn tag(&self) -> Result<Option<Vec<Tag>>> {
         let path = format!("/Datastore/{moId}/tag", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// A set of alarm states for alarms triggered by this entity
     /// or by its descendants.
@@ -746,7 +746,7 @@ impl Datastore {
     pub async fn triggered_alarm_state(&self) -> Result<Option<Vec<AlarmState>>> {
         let path = format!("/Datastore/{moId}/triggeredAlarmState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// List of custom field values.
     /// 
@@ -758,7 +758,7 @@ impl Datastore {
     pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/Datastore/{moId}/value", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Virtual machines stored on this datastore.
     ///
@@ -768,7 +768,7 @@ impl Datastore {
     pub async fn vm(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
         let path = format!("/Datastore/{moId}/vm", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
 }
 #[derive(serde::Serialize)]

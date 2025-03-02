@@ -136,7 +136,7 @@ impl OvfManager {
         let input = CreateDescriptorRequestType {obj, cdp, };
         let path = format!("/OvfManager/{moId}/CreateDescriptor", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Validate the OVF descriptor against the hardware supported by the
     /// host system.
@@ -190,7 +190,7 @@ impl OvfManager {
         let input = CreateImportSpecRequestType {ovf_descriptor, resource_pool, datastore, cisp, };
         let path = format!("/OvfManager/{moId}/CreateImportSpec", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Parse the OVF descriptor and return as much information about it as possible
     /// without knowing the host on which it will be imported.
@@ -232,7 +232,7 @@ impl OvfManager {
         let input = ParseDescriptorRequestType {ovf_descriptor, pdp, };
         let path = format!("/OvfManager/{moId}/ParseDescriptor", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Validate that the given OVF can be imported on the host.
     /// 
@@ -274,7 +274,7 @@ impl OvfManager {
         let input = ValidateHostRequestType {ovf_descriptor, host, vhp, };
         let path = format!("/OvfManager/{moId}/ValidateHost", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Returns an array of *OvfOptionInfo* object that specifies what options the server
     /// support for exporting an OVF descriptor.
@@ -287,7 +287,7 @@ impl OvfManager {
     pub async fn ovf_export_option(&self) -> Result<Option<Vec<OvfOptionInfo>>> {
         let path = format!("/OvfManager/{moId}/ovfExportOption", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Returns an array of *OvfOptionInfo* object that specifies what options the server
     /// support for modifing/relaxing the OVF import process.
@@ -300,7 +300,7 @@ impl OvfManager {
     pub async fn ovf_import_option(&self) -> Result<Option<Vec<OvfOptionInfo>>> {
         let path = format!("/OvfManager/{moId}/ovfImportOption", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
 }
 #[derive(serde::Serialize)]

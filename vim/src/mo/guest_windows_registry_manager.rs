@@ -86,7 +86,7 @@ impl GuestWindowsRegistryManager {
         let input = CreateRegistryKeyInGuestRequestType {vm, auth, key_name, is_volatile, class_type, };
         let path = format!("/GuestWindowsRegistryManager/{moId}/CreateRegistryKeyInGuest", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Delete a registry key.
     ///
@@ -150,7 +150,7 @@ impl GuestWindowsRegistryManager {
         let input = DeleteRegistryKeyInGuestRequestType {vm, auth, key_name, recursive, };
         let path = format!("/GuestWindowsRegistryManager/{moId}/DeleteRegistryKeyInGuest", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Delete a registry value.
     ///
@@ -212,7 +212,7 @@ impl GuestWindowsRegistryManager {
         let input = DeleteRegistryValueInGuestRequestType {vm, auth, value_name, };
         let path = format!("/GuestWindowsRegistryManager/{moId}/DeleteRegistryValueInGuest", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// List all registry subkeys for a given registry key.
     ///
@@ -284,7 +284,7 @@ impl GuestWindowsRegistryManager {
         let input = ListRegistryKeysInGuestRequestType {vm, auth, key_name, recursive, match_pattern, };
         let path = format!("/GuestWindowsRegistryManager/{moId}/ListRegistryKeysInGuest", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// List all registry values for a given registry key.
     ///
@@ -358,7 +358,7 @@ impl GuestWindowsRegistryManager {
         let input = ListRegistryValuesInGuestRequestType {vm, auth, key_name, expand_strings, match_pattern, };
         let path = format!("/GuestWindowsRegistryManager/{moId}/ListRegistryValuesInGuest", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Set/Create a registry value.
     ///
@@ -420,7 +420,7 @@ impl GuestWindowsRegistryManager {
         let input = SetRegistryValueInGuestRequestType {vm, auth, value, };
         let path = format!("/GuestWindowsRegistryManager/{moId}/SetRegistryValueInGuest", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
 }
 #[derive(serde::Serialize)]

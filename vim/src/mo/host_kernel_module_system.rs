@@ -37,7 +37,7 @@ impl HostKernelModuleSystem {
         let input = QueryConfiguredModuleOptionStringRequestType {name, };
         let path = format!("/HostKernelModuleSystem/{moId}/QueryConfiguredModuleOptionString", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Query the set of modules on the host.
     /// 
@@ -45,7 +45,7 @@ impl HostKernelModuleSystem {
     pub async fn query_modules(&self) -> Result<Option<Vec<KernelModuleInfo>>> {
         let path = format!("/HostKernelModuleSystem/{moId}/QueryModules", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Specifies the options to be passed to the kernel module when loaded.
     /// 
@@ -67,7 +67,7 @@ impl HostKernelModuleSystem {
         let input = UpdateModuleOptionStringRequestType {name, options, };
         let path = format!("/HostKernelModuleSystem/{moId}/UpdateModuleOptionString", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
 }
 #[derive(serde::Serialize)]

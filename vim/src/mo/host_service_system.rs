@@ -26,7 +26,7 @@ impl HostServiceSystem {
     pub async fn refresh_services(&self) -> Result<()> {
         let path = format!("/HostServiceSystem/{moId}/RefreshServices", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Restarts the service.
     /// 
@@ -51,7 +51,7 @@ impl HostServiceSystem {
         let input = RestartServiceRequestType {id, };
         let path = format!("/HostServiceSystem/{moId}/RestartService", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Assigns a value to a custom field.
     /// 
@@ -71,7 +71,7 @@ impl HostServiceSystem {
         let input = SetCustomValueRequestType {key, value, };
         let path = format!("/HostServiceSystem/{moId}/setCustomValue", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Starts the service.
     /// 
@@ -96,7 +96,7 @@ impl HostServiceSystem {
         let input = StartServiceRequestType {id, };
         let path = format!("/HostServiceSystem/{moId}/StartService", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Stops the service.
     /// 
@@ -121,7 +121,7 @@ impl HostServiceSystem {
         let input = StopServiceRequestType {id, };
         let path = format!("/HostServiceSystem/{moId}/StopService", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Uninstalls the service.
     /// 
@@ -149,7 +149,7 @@ impl HostServiceSystem {
         let input = UninstallServiceRequestType {id, };
         let path = format!("/HostServiceSystem/{moId}/UninstallService", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Updates the activation policy of the service.
     /// 
@@ -177,7 +177,7 @@ impl HostServiceSystem {
         let input = UpdateServicePolicyRequestType {id, policy, };
         let path = format!("/HostServiceSystem/{moId}/UpdateServicePolicy", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// List of custom field definitions that are valid for the object's type.
     /// 
@@ -187,13 +187,13 @@ impl HostServiceSystem {
     pub async fn available_field(&self) -> Result<Option<Vec<CustomFieldDef>>> {
         let path = format!("/HostServiceSystem/{moId}/availableField", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Service configuration.
     pub async fn service_info(&self) -> Result<HostServiceInfo> {
         let path = format!("/HostServiceSystem/{moId}/serviceInfo", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// List of custom field values.
     /// 
@@ -205,7 +205,7 @@ impl HostServiceSystem {
     pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/HostServiceSystem/{moId}/value", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
 }
 #[derive(serde::Serialize)]

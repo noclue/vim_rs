@@ -161,7 +161,7 @@ impl Folder {
         let input = AddStandaloneHostRequestType {spec, comp_res_spec, add_connected, license, };
         let path = format!("/Folder/{moId}/AddStandaloneHost_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Adds a set of new and existing hosts to the cluster.
     /// 
@@ -219,7 +219,7 @@ impl Folder {
         let input = BatchAddHostsToClusterRequestType {cluster, new_hosts, existing_hosts, comp_res_spec, desired_state, };
         let path = format!("/Folder/{moId}/BatchAddHostsToCluster_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Adds a list of hosts to inventory, as standalone hosts,
     /// in a single invocation.
@@ -258,7 +258,7 @@ impl Folder {
         let input = BatchAddStandaloneHostsRequestType {new_hosts, comp_res_spec, add_connected, };
         let path = format!("/Folder/{moId}/BatchAddStandaloneHosts_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Deprecated as of VI API 2.5, use *Folder.CreateClusterEx*.
     /// 
@@ -300,7 +300,7 @@ impl Folder {
         let input = CreateClusterRequestType {name, spec, };
         let path = format!("/Folder/{moId}/CreateCluster", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Creates a new cluster compute resource in this folder.
     /// 
@@ -340,7 +340,7 @@ impl Folder {
         let input = CreateClusterExRequestType {name, spec, };
         let path = format!("/Folder/{moId}/CreateClusterEx", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Creates a new datacenter with the given name.
     /// 
@@ -377,7 +377,7 @@ impl Folder {
         let input = CreateDatacenterRequestType {name, };
         let path = format!("/Folder/{moId}/CreateDatacenter", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Create a *DistributedVirtualSwitch* in the folder according to the
     /// specified *DVSCreateSpec*.
@@ -412,7 +412,7 @@ impl Folder {
         let input = CreateDvsRequestType {spec, };
         let path = format!("/Folder/{moId}/CreateDVS_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Creates a new sub-folder with the specified name.
     /// 
@@ -448,7 +448,7 @@ impl Folder {
         let input = CreateFolderRequestType {name, };
         let path = format!("/Folder/{moId}/CreateFolder", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Creates a new storage pod in this folder.
     /// 
@@ -482,7 +482,7 @@ impl Folder {
         let input = CreateStoragePodRequestType {name, };
         let path = format!("/Folder/{moId}/CreateStoragePod", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Creates a new virtual machine in the current folder and attaches it to the
     /// specified resource pool.
@@ -607,7 +607,7 @@ impl Folder {
         let input = CreateVmRequestType {config, pool, host, };
         let path = format!("/Folder/{moId}/CreateVM_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Destroys this object, deleting its contents and removing it from its parent
     /// folder (if any).
@@ -633,7 +633,7 @@ impl Folder {
     pub async fn destroy_task(&self) -> Result<ManagedObjectReference> {
         let path = format!("/Folder/{moId}/Destroy_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Moves a set of managed entities into this folder.
     /// 
@@ -733,7 +733,7 @@ impl Folder {
         let input = MoveIntoFolderRequestType {list, };
         let path = format!("/Folder/{moId}/MoveIntoFolder_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Adds an existing virtual machine to the folder.
     /// 
@@ -834,7 +834,7 @@ impl Folder {
         let input = RegisterVmRequestType {path, name, as_template, pool, host, };
         let path = format!("/Folder/{moId}/RegisterVM_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Reload the entity state.
     /// 
@@ -853,7 +853,7 @@ impl Folder {
     pub async fn reload(&self) -> Result<()> {
         let path = format!("/Folder/{moId}/Reload", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Renames this managed entity.
     /// 
@@ -887,7 +887,7 @@ impl Folder {
         let input = RenameRequestType {new_name, };
         let path = format!("/Folder/{moId}/Rename_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Assigns a value to a custom field.
     /// 
@@ -907,7 +907,7 @@ impl Folder {
         let input = SetCustomValueRequestType {key, value, };
         let path = format!("/Folder/{moId}/setCustomValue", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Recursively unregisters all virtual machines and vApps, and destroys
     /// all child virtual machine folders.
@@ -955,7 +955,7 @@ impl Folder {
     pub async fn unregister_and_destroy_task(&self) -> Result<ManagedObjectReference> {
         let path = format!("/Folder/{moId}/UnregisterAndDestroy_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Whether alarm actions are enabled for this entity.
     /// 
@@ -965,7 +965,7 @@ impl Folder {
     pub async fn alarm_actions_enabled(&self) -> Result<Option<bool>> {
         let path = format!("/Folder/{moId}/alarmActionsEnabled", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// List of custom field definitions that are valid for the object's type.
     /// 
@@ -975,7 +975,7 @@ impl Folder {
     pub async fn available_field(&self) -> Result<Option<Vec<CustomFieldDef>>> {
         let path = format!("/Folder/{moId}/availableField", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// An array of managed object references.
     /// 
@@ -989,7 +989,7 @@ impl Folder {
     pub async fn child_entity(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
         let path = format!("/Folder/{moId}/childEntity", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Specifies the object types a folder may contain.
     /// 
@@ -1022,7 +1022,7 @@ impl Folder {
     pub async fn child_type(&self) -> Result<Option<Vec<String>>> {
         let path = format!("/Folder/{moId}/childType", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Current configuration issues that have been detected for this entity.
     /// 
@@ -1034,7 +1034,7 @@ impl Folder {
     pub async fn config_issue(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::EventTrait>>>> {
         let path = format!("/Folder/{moId}/configIssue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// The configStatus indicates whether or not the system has detected a configuration
     /// issue involving this entity.
@@ -1063,7 +1063,7 @@ impl Folder {
     pub async fn config_status(&self) -> Result<crate::types::enums::ManagedEntityStatusEnum> {
         let path = format!("/Folder/{moId}/configStatus", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Custom field values.
     /// 
@@ -1071,7 +1071,7 @@ impl Folder {
     pub async fn custom_value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/Folder/{moId}/customValue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// A set of alarm states for alarms that apply to this managed entity.
     /// 
@@ -1086,7 +1086,7 @@ impl Folder {
     pub async fn declared_alarm_state(&self) -> Result<Option<Vec<AlarmState>>> {
         let path = format!("/Folder/{moId}/declaredAlarmState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// List of operations that are disabled, given the current runtime
     /// state of the entity.
@@ -1160,7 +1160,7 @@ impl Folder {
     pub async fn disabled_method(&self) -> Result<Option<Vec<String>>> {
         let path = format!("/Folder/{moId}/disabledMethod", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Access rights the current session has to this entity.
     /// 
@@ -1168,7 +1168,7 @@ impl Folder {
     pub async fn effective_role(&self) -> Result<Option<Vec<i32>>> {
         let path = format!("/Folder/{moId}/effectiveRole", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Name of this entity, unique relative to its parent.
     /// 
@@ -1182,7 +1182,7 @@ impl Folder {
     pub async fn name(&self) -> Result<String> {
         let path = format!("/Folder/{moId}/name", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// The namespace with which the Folder is associated.
     /// 
@@ -1195,7 +1195,7 @@ impl Folder {
     pub async fn namespace(&self) -> Result<Option<String>> {
         let path = format!("/Folder/{moId}/namespace", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// General health of this managed entity.
     /// 
@@ -1220,7 +1220,7 @@ impl Folder {
     pub async fn overall_status(&self) -> Result<crate::types::enums::ManagedEntityStatusEnum> {
         let path = format!("/Folder/{moId}/overallStatus", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Parent of this entity.
     /// 
@@ -1236,13 +1236,13 @@ impl Folder {
     pub async fn parent(&self) -> Result<Option<ManagedObjectReference>> {
         let path = format!("/Folder/{moId}/parent", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// List of permissions defined for this entity.
     pub async fn permission(&self) -> Result<Option<Vec<Permission>>> {
         let path = format!("/Folder/{moId}/permission", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// The set of recent tasks operating on this managed entity.
     /// 
@@ -1272,7 +1272,7 @@ impl Folder {
     pub async fn recent_task(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
         let path = format!("/Folder/{moId}/recentTask", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// The set of tags associated with this managed entity.
     /// 
@@ -1282,7 +1282,7 @@ impl Folder {
     pub async fn tag(&self) -> Result<Option<Vec<Tag>>> {
         let path = format!("/Folder/{moId}/tag", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// A set of alarm states for alarms triggered by this entity
     /// or by its descendants.
@@ -1301,7 +1301,7 @@ impl Folder {
     pub async fn triggered_alarm_state(&self) -> Result<Option<Vec<AlarmState>>> {
         let path = format!("/Folder/{moId}/triggeredAlarmState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// List of custom field values.
     /// 
@@ -1313,7 +1313,7 @@ impl Folder {
     pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/Folder/{moId}/value", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
 }
 #[derive(serde::Serialize)]

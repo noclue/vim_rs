@@ -28,7 +28,7 @@ impl HostVMotionSystem {
     pub async fn deselect_vnic(&self) -> Result<()> {
         let path = format!("/HostVMotionSystem/{moId}/DeselectVnic", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Select the VirtualNic to be used for VMotion.
     /// 
@@ -48,7 +48,7 @@ impl HostVMotionSystem {
         let input = SelectVnicRequestType {device, };
         let path = format!("/HostVMotionSystem/{moId}/SelectVnic", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Assigns a value to a custom field.
     /// 
@@ -68,7 +68,7 @@ impl HostVMotionSystem {
         let input = SetCustomValueRequestType {key, value, };
         let path = format!("/HostVMotionSystem/{moId}/setCustomValue", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Update the IP configuration of VMotion VirtualNic.
     /// 
@@ -90,7 +90,7 @@ impl HostVMotionSystem {
         let input = UpdateIpConfigRequestType {ip_config, };
         let path = format!("/HostVMotionSystem/{moId}/UpdateIpConfig", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// List of custom field definitions that are valid for the object's type.
     /// 
@@ -100,19 +100,19 @@ impl HostVMotionSystem {
     pub async fn available_field(&self) -> Result<Option<Vec<CustomFieldDef>>> {
         let path = format!("/HostVMotionSystem/{moId}/availableField", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// IP configuration of the VMotion VirtualNic.
     pub async fn ip_config(&self) -> Result<Option<HostIpConfig>> {
         let path = format!("/HostVMotionSystem/{moId}/ipConfig", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// VMotion network configuration.
     pub async fn net_config(&self) -> Result<Option<HostVMotionNetConfig>> {
         let path = format!("/HostVMotionSystem/{moId}/netConfig", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// List of custom field values.
     /// 
@@ -124,7 +124,7 @@ impl HostVMotionSystem {
     pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/HostVMotionSystem/{moId}/value", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
 }
 #[derive(serde::Serialize)]

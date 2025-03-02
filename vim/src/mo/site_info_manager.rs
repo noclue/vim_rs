@@ -20,6 +20,6 @@ impl SiteInfoManager {
     pub async fn get_site_info(&self) -> Result<SiteInfo> {
         let path = format!("/SiteInfoManager/{moId}/GetSiteInfo", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
 }

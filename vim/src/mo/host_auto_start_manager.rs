@@ -28,7 +28,7 @@ impl HostAutoStartManager {
     pub async fn auto_start_power_off(&self) -> Result<()> {
         let path = format!("/HostAutoStartManager/{moId}/AutoStartPowerOff", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Powers-on virtual machines according to the current AutoStart configuration.
     /// 
@@ -39,7 +39,7 @@ impl HostAutoStartManager {
     pub async fn auto_start_power_on(&self) -> Result<()> {
         let path = format!("/HostAutoStartManager/{moId}/AutoStartPowerOn", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Changes the power-on or power-off sequence and system defaults.
     /// 
@@ -69,12 +69,12 @@ impl HostAutoStartManager {
         let input = ReconfigureAutostartRequestType {spec, };
         let path = format!("/HostAutoStartManager/{moId}/ReconfigureAutostart", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     pub async fn config(&self) -> Result<HostAutoStartManagerConfig> {
         let path = format!("/HostAutoStartManager/{moId}/config", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
 }
 #[derive(serde::Serialize)]

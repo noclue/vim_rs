@@ -49,7 +49,7 @@ impl HostCertificateManager {
         let input = GenerateCertificateSigningRequestRequestType {use_ip_address_as_common_name, spec, };
         let path = format!("/HostCertificateManager/{moId}/GenerateCertificateSigningRequest", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Requests the server to generate a certificate-signing
     /// request (CSR) for itself.
@@ -80,7 +80,7 @@ impl HostCertificateManager {
         let input = GenerateCertificateSigningRequestByDnRequestType {distinguished_name, spec, };
         let path = format!("/HostCertificateManager/{moId}/GenerateCertificateSigningRequestByDn", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Installs a given SSL certificate on the server.
     /// 
@@ -98,7 +98,7 @@ impl HostCertificateManager {
         let input = InstallServerCertificateRequestType {cert, };
         let path = format!("/HostCertificateManager/{moId}/InstallServerCertificate", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Fetches the SSL CRLs of Certificate Authorities that are trusted.
     /// 
@@ -114,7 +114,7 @@ impl HostCertificateManager {
     pub async fn list_ca_certificate_revocation_lists(&self) -> Result<Option<Vec<String>>> {
         let path = format!("/HostCertificateManager/{moId}/ListCACertificateRevocationLists", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Fetches the SSL certificates of Certificate Authorities
     /// that are trusted.
@@ -131,7 +131,7 @@ impl HostCertificateManager {
     pub async fn list_ca_certificates(&self) -> Result<Option<Vec<String>>> {
         let path = format!("/HostCertificateManager/{moId}/ListCACertificates", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Replaces the trusted Certificate Authority (CA)
     /// certificates and Certification Revocation List (CRL)
@@ -160,7 +160,7 @@ impl HostCertificateManager {
         let input = ReplaceCaCertificatesAndCrLsRequestType {ca_cert, ca_crl, };
         let path = format!("/HostCertificateManager/{moId}/ReplaceCACertificatesAndCRLs", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// the CertificateInfos of all known Certificates on
     /// the host
@@ -171,7 +171,7 @@ impl HostCertificateManager {
     pub async fn retrieve_certificate_info_list(&self) -> Result<Option<Vec<HostCertificateManagerCertificateInfo>>> {
         let path = format!("/HostCertificateManager/{moId}/RetrieveCertificateInfoList", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// the CertificateInfo of the Host Certificate.
     /// 
@@ -179,7 +179,7 @@ impl HostCertificateManager {
     pub async fn certificate_info(&self) -> Result<HostCertificateManagerCertificateInfo> {
         let path = format!("/HostCertificateManager/{moId}/certificateInfo", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
 }
 #[derive(serde::Serialize)]

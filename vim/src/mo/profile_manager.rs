@@ -41,7 +41,7 @@ impl ProfileManager {
         let input = CreateProfileRequestType {create_spec, };
         let path = format!("/ProfileManager/{moId}/CreateProfile", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Get the profile(s) to which this entity is associated.
     /// 
@@ -64,7 +64,7 @@ impl ProfileManager {
         let input = FindAssociatedProfileRequestType {entity, };
         let path = format!("/ProfileManager/{moId}/FindAssociatedProfile", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Get the Metadata information for the policyNames.
     /// 
@@ -91,7 +91,7 @@ impl ProfileManager {
         let input = QueryPolicyMetadataRequestType {policy_name, profile, };
         let path = format!("/ProfileManager/{moId}/QueryPolicyMetadata", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// A list of profiles known to this ProfileManager.
     /// 
@@ -103,7 +103,7 @@ impl ProfileManager {
     pub async fn profile(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
         let path = format!("/ProfileManager/{moId}/profile", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
 }
 #[derive(serde::Serialize)]

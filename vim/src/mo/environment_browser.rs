@@ -79,7 +79,7 @@ impl EnvironmentBrowser {
         let input = QueryConfigOptionRequestType {key, host, };
         let path = format!("/EnvironmentBrowser/{moId}/QueryConfigOption", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// The list of ConfigOption keys available on this entity.
     /// 
@@ -87,7 +87,7 @@ impl EnvironmentBrowser {
     pub async fn query_config_option_descriptor(&self) -> Result<Option<Vec<VirtualMachineConfigOptionDescriptor>>> {
         let path = format!("/EnvironmentBrowser/{moId}/QueryConfigOptionDescriptor", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Query for a virtual machine configuration *option*
     /// matching the key or host or both given in the
@@ -128,7 +128,7 @@ impl EnvironmentBrowser {
         let input = QueryConfigOptionExRequestType {spec, };
         let path = format!("/EnvironmentBrowser/{moId}/QueryConfigOptionEx", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Queries for information about a specific target, a "physical" device that
     /// can be used to back virtual devices.
@@ -164,7 +164,7 @@ impl EnvironmentBrowser {
         let input = QueryConfigTargetRequestType {host, };
         let path = format!("/EnvironmentBrowser/{moId}/QueryConfigTarget", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Queries for information on the capabilities supported by the ComputeResource
     /// associated with the EnvironmentBrowser.
@@ -198,7 +198,7 @@ impl EnvironmentBrowser {
         let input = QueryTargetCapabilitiesRequestType {host, };
         let path = format!("/EnvironmentBrowser/{moId}/QueryTargetCapabilities", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// DatastoreBrowser to browse datastores that are available on this entity.
     /// 
@@ -210,7 +210,7 @@ impl EnvironmentBrowser {
     pub async fn datastore_browser(&self) -> Result<Option<ManagedObjectReference>> {
         let path = format!("/EnvironmentBrowser/{moId}/datastoreBrowser", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
 }
 #[derive(serde::Serialize)]

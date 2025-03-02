@@ -25,7 +25,7 @@ impl LicenseAssignmentManager {
         let input = QueryAssignedLicensesRequestType {entity_id, };
         let path = format!("/LicenseAssignmentManager/{moId}/QueryAssignedLicenses", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Remove licenses associated with an entity
     /// 
@@ -43,7 +43,7 @@ impl LicenseAssignmentManager {
         let input = RemoveAssignedLicenseRequestType {entity_id, };
         let path = format!("/LicenseAssignmentManager/{moId}/RemoveAssignedLicense", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Update the license associated with an entity
     /// 
@@ -71,7 +71,7 @@ impl LicenseAssignmentManager {
         let input = UpdateAssignedLicenseRequestType {entity, license_key, entity_display_name, };
         let path = format!("/LicenseAssignmentManager/{moId}/UpdateAssignedLicense", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
 }
 #[derive(serde::Serialize)]

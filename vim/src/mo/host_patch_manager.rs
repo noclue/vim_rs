@@ -65,7 +65,7 @@ impl HostPatchManager {
         let input = CheckHostPatchRequestType {meta_urls, bundle_urls, spec, };
         let path = format!("/HostPatchManager/{moId}/CheckHostPatch_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Deprecated method is deprecated, use *HostPatchManager.InstallHostPatchV2_Task* instead.
     /// 
@@ -141,7 +141,7 @@ impl HostPatchManager {
         let input = InstallHostPatchRequestType {repository, update_id, force, };
         let path = format!("/HostPatchManager/{moId}/InstallHostPatch_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Patch the host.
     /// 
@@ -189,7 +189,7 @@ impl HostPatchManager {
         let input = InstallHostPatchV2RequestType {meta_urls, bundle_urls, vib_urls, spec, };
         let path = format!("/HostPatchManager/{moId}/InstallHostPatchV2_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Query the host for installed bulletins.
     /// 
@@ -222,7 +222,7 @@ impl HostPatchManager {
         let input = QueryHostPatchRequestType {spec, };
         let path = format!("/HostPatchManager/{moId}/QueryHostPatch_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Deprecated as of VI API 4.0, use *HostPatchManager.ScanHostPatchV2_Task*.
     /// 
@@ -278,7 +278,7 @@ impl HostPatchManager {
         let input = ScanHostPatchRequestType {repository, update_id, };
         let path = format!("/HostPatchManager/{moId}/ScanHostPatch_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Scan the host for the patch status.
     /// 
@@ -326,7 +326,7 @@ impl HostPatchManager {
         let input = ScanHostPatchV2RequestType {meta_urls, bundle_urls, spec, };
         let path = format!("/HostPatchManager/{moId}/ScanHostPatchV2_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Stage the vib files to esx local location and possibly do some run time check.
     /// 
@@ -372,7 +372,7 @@ impl HostPatchManager {
         let input = StageHostPatchRequestType {meta_urls, bundle_urls, vib_urls, spec, };
         let path = format!("/HostPatchManager/{moId}/StageHostPatch_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Uninstall patch from the host.
     /// 
@@ -409,7 +409,7 @@ impl HostPatchManager {
         let input = UninstallHostPatchRequestType {bulletin_ids, spec, };
         let path = format!("/HostPatchManager/{moId}/UninstallHostPatch_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
 }
 #[derive(serde::Serialize)]

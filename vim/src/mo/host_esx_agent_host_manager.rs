@@ -34,7 +34,7 @@ impl HostEsxAgentHostManager {
         let input = EsxAgentHostManagerUpdateConfigRequestType {config_info, };
         let path = format!("/HostEsxAgentHostManager/{moId}/EsxAgentHostManagerUpdateConfig", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Configuration of agent virtual machine resources
     /// 
@@ -42,7 +42,7 @@ impl HostEsxAgentHostManager {
     pub async fn config_info(&self) -> Result<HostEsxAgentHostManagerConfigInfo> {
         let path = format!("/HostEsxAgentHostManager/{moId}/configInfo", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
 }
 #[derive(serde::Serialize)]

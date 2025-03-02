@@ -34,7 +34,7 @@ impl HostPowerSystem {
         let input = ConfigurePowerPolicyRequestType {key, };
         let path = format!("/HostPowerSystem/{moId}/ConfigurePowerPolicy", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Power system capabilities object.
     /// 
@@ -42,7 +42,7 @@ impl HostPowerSystem {
     pub async fn capability(&self) -> Result<PowerSystemCapability> {
         let path = format!("/HostPowerSystem/{moId}/capability", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Power system state info object.
     /// 
@@ -50,7 +50,7 @@ impl HostPowerSystem {
     pub async fn info(&self) -> Result<PowerSystemInfo> {
         let path = format!("/HostPowerSystem/{moId}/info", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
 }
 #[derive(serde::Serialize)]

@@ -69,7 +69,7 @@ impl VirtualMachineGuestCustomizationManager {
         let input = AbortCustomizationRequestType {vm, auth, };
         let path = format!("/VirtualMachineGuestCustomizationManager/{moId}/AbortCustomization_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Customize a running virtual machine.
     /// 
@@ -127,7 +127,7 @@ impl VirtualMachineGuestCustomizationManager {
         let input = CustomizeGuestRequestType {vm, auth, spec, config_params, };
         let path = format!("/VirtualMachineGuestCustomizationManager/{moId}/CustomizeGuest_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Start the network service in the guest, e.g.
     /// 
@@ -178,7 +178,7 @@ impl VirtualMachineGuestCustomizationManager {
         let input = StartGuestNetworkRequestType {vm, auth, };
         let path = format!("/VirtualMachineGuestCustomizationManager/{moId}/StartGuestNetwork_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
 }
 #[derive(serde::Serialize)]

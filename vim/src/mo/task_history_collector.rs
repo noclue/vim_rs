@@ -30,7 +30,7 @@ impl TaskHistoryCollector {
         let input = ReadNextTasksRequestType {max_count, };
         let path = format!("/TaskHistoryCollector/{moId}/ReadNextTasks", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Reads the 'scrollable view' from the current position.
     /// 
@@ -46,13 +46,13 @@ impl TaskHistoryCollector {
         let input = ReadPreviousTasksRequestType {max_count, };
         let path = format!("/TaskHistoryCollector/{moId}/ReadPreviousTasks", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Destroys this collector.
     pub async fn destroy_collector(&self) -> Result<()> {
         let path = format!("/TaskHistoryCollector/{moId}/DestroyCollector", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Moves the "scrollable view" to the item immediately preceding the
     /// "viewable latest page".
@@ -65,7 +65,7 @@ impl TaskHistoryCollector {
     pub async fn reset_collector(&self) -> Result<()> {
         let path = format!("/TaskHistoryCollector/{moId}/ResetCollector", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Moves the "scrollable view" to the oldest item.
     /// 
@@ -77,7 +77,7 @@ impl TaskHistoryCollector {
     pub async fn rewind_collector(&self) -> Result<()> {
         let path = format!("/TaskHistoryCollector/{moId}/RewindCollector", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Sets the "viewable latest page" size to contain at most the
     /// number of items specified by the maxCount parameter).
@@ -90,7 +90,7 @@ impl TaskHistoryCollector {
         let input = SetCollectorPageSizeRequestType {max_count, };
         let path = format!("/TaskHistoryCollector/{moId}/SetCollectorPageSize", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// The filter used to create this collector.
     /// 
@@ -99,7 +99,7 @@ impl TaskHistoryCollector {
     pub async fn filter(&self) -> Result<VimAny> {
         let path = format!("/TaskHistoryCollector/{moId}/filter", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// The items in the 'viewable latest page'.
     /// 
@@ -114,7 +114,7 @@ impl TaskHistoryCollector {
     pub async fn latest_page(&self) -> Result<Option<Vec<TaskInfo>>> {
         let path = format!("/TaskHistoryCollector/{moId}/latestPage", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
 }
 #[derive(serde::Serialize)]

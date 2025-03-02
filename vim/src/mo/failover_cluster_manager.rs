@@ -53,7 +53,7 @@ impl FailoverClusterManager {
     pub async fn get_vcha_cluster_health(&self) -> Result<VchaClusterHealth> {
         let path = format!("/FailoverClusterManager/{moId}/GetVchaClusterHealth", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Returns current mode of a VCHA Cluster.
     /// 
@@ -61,7 +61,7 @@ impl FailoverClusterManager {
     pub async fn get_cluster_mode(&self) -> Result<String> {
         let path = format!("/FailoverClusterManager/{moId}/getClusterMode", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Allows a caller to initiate a failover from Active vCenter Server node
     /// to the Passive node.
@@ -95,7 +95,7 @@ impl FailoverClusterManager {
         let input = InitiateFailoverRequestType {planned, };
         let path = format!("/FailoverClusterManager/{moId}/initiateFailover_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// setClusterMode method allows caller to manipulate the mode of a
     /// VCHA Cluster
@@ -128,7 +128,7 @@ impl FailoverClusterManager {
         let input = SetClusterModeRequestType {mode, };
         let path = format!("/FailoverClusterManager/{moId}/setClusterMode_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// A list of method names that must not be called and will throw
     /// a fault due to some other method running that the disabled method
@@ -148,7 +148,7 @@ impl FailoverClusterManager {
     pub async fn disabled_cluster_method(&self) -> Result<Option<Vec<String>>> {
         let path = format!("/FailoverClusterManager/{moId}/disabledClusterMethod", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
 }
 #[derive(serde::Serialize)]

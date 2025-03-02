@@ -34,7 +34,7 @@ impl CertificateManager {
         let input = CertMgrRefreshCaCertificatesAndCrLsRequestType {host, };
         let path = format!("/CertificateManager/{moId}/CertMgrRefreshCACertificatesAndCRLs_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Gets CSRs from the hosts and then gets these certificates signed by the
     /// VMware Certificate Service and pushes them down to the hosts.
@@ -55,7 +55,7 @@ impl CertificateManager {
         let input = CertMgrRefreshCertificatesRequestType {host, };
         let path = format!("/CertificateManager/{moId}/CertMgrRefreshCertificates_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Revokes the certificates of some hosts.
     /// 
@@ -75,7 +75,7 @@ impl CertificateManager {
         let input = CertMgrRevokeCertificatesRequestType {host, };
         let path = format!("/CertificateManager/{moId}/CertMgrRevokeCertificates_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
 }
 #[derive(serde::Serialize)]

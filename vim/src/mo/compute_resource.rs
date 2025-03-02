@@ -50,7 +50,7 @@ impl ComputeResource {
     pub async fn destroy_task(&self) -> Result<ManagedObjectReference> {
         let path = format!("/ComputeResource/{moId}/Destroy_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Change the compute resource configuration.
     /// 
@@ -83,7 +83,7 @@ impl ComputeResource {
         let input = ReconfigureComputeResourceRequestType {spec, modify, };
         let path = format!("/ComputeResource/{moId}/ReconfigureComputeResource_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Reload the entity state.
     /// 
@@ -102,7 +102,7 @@ impl ComputeResource {
     pub async fn reload(&self) -> Result<()> {
         let path = format!("/ComputeResource/{moId}/Reload", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Renames this managed entity.
     /// 
@@ -134,7 +134,7 @@ impl ComputeResource {
         let input = RenameRequestType {new_name, };
         let path = format!("/ComputeResource/{moId}/Rename_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Assigns a value to a custom field.
     /// 
@@ -154,7 +154,7 @@ impl ComputeResource {
         let input = SetCustomValueRequestType {key, value, };
         let path = format!("/ComputeResource/{moId}/setCustomValue", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Whether alarm actions are enabled for this entity.
     /// 
@@ -164,7 +164,7 @@ impl ComputeResource {
     pub async fn alarm_actions_enabled(&self) -> Result<Option<bool>> {
         let path = format!("/ComputeResource/{moId}/alarmActionsEnabled", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// List of custom field definitions that are valid for the object's type.
     /// 
@@ -174,7 +174,7 @@ impl ComputeResource {
     pub async fn available_field(&self) -> Result<Option<Vec<CustomFieldDef>>> {
         let path = format!("/ComputeResource/{moId}/availableField", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Current configuration issues that have been detected for this entity.
     /// 
@@ -186,7 +186,7 @@ impl ComputeResource {
     pub async fn config_issue(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::EventTrait>>>> {
         let path = format!("/ComputeResource/{moId}/configIssue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Flag indicating whether or not desired configuration
     /// management platform is enabled on the compute resource.
@@ -200,7 +200,7 @@ impl ComputeResource {
     pub async fn config_manager_enabled(&self) -> Result<Option<bool>> {
         let path = format!("/ComputeResource/{moId}/configManagerEnabled", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// The configStatus indicates whether or not the system has detected a configuration
     /// issue involving this entity.
@@ -229,7 +229,7 @@ impl ComputeResource {
     pub async fn config_status(&self) -> Result<crate::types::enums::ManagedEntityStatusEnum> {
         let path = format!("/ComputeResource/{moId}/configStatus", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Configuration of the compute resource; applies to both standalone hosts
     /// and clusters.
@@ -239,7 +239,7 @@ impl ComputeResource {
     pub async fn configuration_ex(&self) -> Result<Box<dyn crate::types::traits::ComputeResourceConfigInfoTrait>> {
         let path = format!("/ComputeResource/{moId}/configurationEx", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Custom field values.
     /// 
@@ -247,7 +247,7 @@ impl ComputeResource {
     pub async fn custom_value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/ComputeResource/{moId}/customValue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// The datastore property is the subset of datastore objects in the datacenter
     /// available in this ComputeResource.
@@ -263,7 +263,7 @@ impl ComputeResource {
     pub async fn datastore(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
         let path = format!("/ComputeResource/{moId}/datastore", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// A set of alarm states for alarms that apply to this managed entity.
     /// 
@@ -278,7 +278,7 @@ impl ComputeResource {
     pub async fn declared_alarm_state(&self) -> Result<Option<Vec<AlarmState>>> {
         let path = format!("/ComputeResource/{moId}/declaredAlarmState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// List of operations that are disabled, given the current runtime
     /// state of the entity.
@@ -352,7 +352,7 @@ impl ComputeResource {
     pub async fn disabled_method(&self) -> Result<Option<Vec<String>>> {
         let path = format!("/ComputeResource/{moId}/disabledMethod", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Access rights the current session has to this entity.
     /// 
@@ -360,7 +360,7 @@ impl ComputeResource {
     pub async fn effective_role(&self) -> Result<Option<Vec<i32>>> {
         let path = format!("/ComputeResource/{moId}/effectiveRole", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// The environment browser object that identifies the environments that are supported
     /// on this compute resource.
@@ -373,7 +373,7 @@ impl ComputeResource {
     pub async fn environment_browser(&self) -> Result<Option<ManagedObjectReference>> {
         let path = format!("/ComputeResource/{moId}/environmentBrowser", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// List of hosts that are part of this compute resource.
     /// 
@@ -388,7 +388,7 @@ impl ComputeResource {
     pub async fn host(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
         let path = format!("/ComputeResource/{moId}/host", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Flag indicating whether or not the lifecycle of the compute resource is
     /// managed.
@@ -401,7 +401,7 @@ impl ComputeResource {
     pub async fn lifecycle_managed(&self) -> Result<Option<bool>> {
         let path = format!("/ComputeResource/{moId}/lifecycleManaged", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Name of this entity, unique relative to its parent.
     /// 
@@ -415,7 +415,7 @@ impl ComputeResource {
     pub async fn name(&self) -> Result<String> {
         let path = format!("/ComputeResource/{moId}/name", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// The subset of network objects available in the datacenter that is available in
     /// this ComputeResource.
@@ -431,7 +431,7 @@ impl ComputeResource {
     pub async fn network(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
         let path = format!("/ComputeResource/{moId}/network", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// General health of this managed entity.
     /// 
@@ -456,7 +456,7 @@ impl ComputeResource {
     pub async fn overall_status(&self) -> Result<crate::types::enums::ManagedEntityStatusEnum> {
         let path = format!("/ComputeResource/{moId}/overallStatus", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Parent of this entity.
     /// 
@@ -472,13 +472,13 @@ impl ComputeResource {
     pub async fn parent(&self) -> Result<Option<ManagedObjectReference>> {
         let path = format!("/ComputeResource/{moId}/parent", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// List of permissions defined for this entity.
     pub async fn permission(&self) -> Result<Option<Vec<Permission>>> {
         let path = format!("/ComputeResource/{moId}/permission", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// The set of recent tasks operating on this managed entity.
     /// 
@@ -508,7 +508,7 @@ impl ComputeResource {
     pub async fn recent_task(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
         let path = format!("/ComputeResource/{moId}/recentTask", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Reference to root resource pool.
     /// 
@@ -520,7 +520,7 @@ impl ComputeResource {
     pub async fn resource_pool(&self) -> Result<Option<ManagedObjectReference>> {
         let path = format!("/ComputeResource/{moId}/resourcePool", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Basic runtime information about a compute resource.
     /// 
@@ -529,7 +529,7 @@ impl ComputeResource {
     pub async fn summary(&self) -> Result<Box<dyn crate::types::traits::ComputeResourceSummaryTrait>> {
         let path = format!("/ComputeResource/{moId}/summary", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// The set of tags associated with this managed entity.
     /// 
@@ -539,7 +539,7 @@ impl ComputeResource {
     pub async fn tag(&self) -> Result<Option<Vec<Tag>>> {
         let path = format!("/ComputeResource/{moId}/tag", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// A set of alarm states for alarms triggered by this entity
     /// or by its descendants.
@@ -558,7 +558,7 @@ impl ComputeResource {
     pub async fn triggered_alarm_state(&self) -> Result<Option<Vec<AlarmState>>> {
         let path = format!("/ComputeResource/{moId}/triggeredAlarmState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// List of custom field values.
     /// 
@@ -570,7 +570,7 @@ impl ComputeResource {
     pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/ComputeResource/{moId}/value", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
 }
 #[derive(serde::Serialize)]

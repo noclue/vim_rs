@@ -80,7 +80,7 @@ impl LicenseManager {
         let input = AddLicenseRequestType {license_key, labels, };
         let path = format!("/LicenseManager/{moId}/AddLicense", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Deprecated as of vSphere API 4.0, use
     /// *LicenseAssignmentManager.QueryAssignedLicenses* instead.
@@ -113,7 +113,7 @@ impl LicenseManager {
         let input = CheckLicenseFeatureRequestType {host, feature_key, };
         let path = format!("/LicenseManager/{moId}/CheckLicenseFeature", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Deprecated as of vSphere API 4.0, use *LicenseManager.UpdateLicense*
     /// instead.
@@ -161,7 +161,7 @@ impl LicenseManager {
         let input = ConfigureLicenseSourceRequestType {host, license_source, };
         let path = format!("/LicenseManager/{moId}/ConfigureLicenseSource", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Decodes licensing information on the license specified.
     /// 
@@ -179,7 +179,7 @@ impl LicenseManager {
         let input = DecodeLicenseRequestType {license_key, };
         let path = format!("/LicenseManager/{moId}/DecodeLicense", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Deprecated as of vSphere API 4.0, use
     /// *LicenseAssignmentManager.RemoveAssignedLicense* instead.
@@ -213,7 +213,7 @@ impl LicenseManager {
         let input = DisableFeatureRequestType {host, feature_key, };
         let path = format!("/LicenseManager/{moId}/DisableFeature", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Deprecated as of vSphere API 4.0, use
     /// *LicenseAssignmentManager.UpdateAssignedLicense* instead.
@@ -248,7 +248,7 @@ impl LicenseManager {
         let input = EnableFeatureRequestType {host, feature_key, };
         let path = format!("/LicenseManager/{moId}/EnableFeature", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Deprecated as of vSphere API 4.0, use
     /// *LicenseAssignmentManager.QueryAssignedLicenses* instead.
@@ -268,7 +268,7 @@ impl LicenseManager {
         let input = QueryLicenseSourceAvailabilityRequestType {host, };
         let path = format!("/LicenseManager/{moId}/QueryLicenseSourceAvailability", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Deprecated as of vSphere API 4.0, use
     /// *LicenseAssignmentManager.QueryAssignedLicenses* instead.
@@ -288,7 +288,7 @@ impl LicenseManager {
         let input = QuerySupportedFeaturesRequestType {host, };
         let path = format!("/LicenseManager/{moId}/QuerySupportedFeatures", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Deprecated as of vSphere API 4.0, use
     /// *LicenseAssignmentManager.QueryAssignedLicenses* instead.
@@ -316,7 +316,7 @@ impl LicenseManager {
         let input = QueryLicenseUsageRequestType {host, };
         let path = format!("/LicenseManager/{moId}/QueryLicenseUsage", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Removed a license's label.
     /// 
@@ -333,7 +333,7 @@ impl LicenseManager {
         let input = RemoveLicenseLabelRequestType {license_key, label_key, };
         let path = format!("/LicenseManager/{moId}/RemoveLicenseLabel", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Remove license from the available set.
     /// 
@@ -347,7 +347,7 @@ impl LicenseManager {
         let input = RemoveLicenseRequestType {license_key, };
         let path = format!("/LicenseManager/{moId}/RemoveLicense", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Deprecated as of vSphere API 4.0, use
     /// *LicenseAssignmentManager.QueryAssignedLicenses* instead.
@@ -387,7 +387,7 @@ impl LicenseManager {
         let input = SetLicenseEditionRequestType {host, feature_key, };
         let path = format!("/LicenseManager/{moId}/SetLicenseEdition", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Update a license's label.
     /// 
@@ -409,7 +409,7 @@ impl LicenseManager {
         let input = UpdateLicenseLabelRequestType {license_key, label_key, label_value, };
         let path = format!("/LicenseManager/{moId}/UpdateLicenseLabel", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Updates the available licenses to the one provided in licenseKey.
     /// 
@@ -437,7 +437,7 @@ impl LicenseManager {
         let input = UpdateLicenseRequestType {license_key, labels, };
         let path = format!("/LicenseManager/{moId}/UpdateLicense", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Deprecated as of vSphere API 4.0, this property is not used by the system.
     /// 
@@ -445,13 +445,13 @@ impl LicenseManager {
     pub async fn diagnostics(&self) -> Result<Option<LicenseDiagnostics>> {
         let path = format!("/LicenseManager/{moId}/diagnostics", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// ***Required privileges:*** System.Read
     pub async fn evaluation(&self) -> Result<LicenseManagerEvaluationInfo> {
         let path = format!("/LicenseManager/{moId}/evaluation", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Deprecated as of VI API 2.5, use *LicenseManager.QuerySupportedFeatures*
     /// instead.
@@ -460,7 +460,7 @@ impl LicenseManager {
     pub async fn feature_info(&self) -> Result<Option<Vec<LicenseFeatureInfo>>> {
         let path = format!("/LicenseManager/{moId}/featureInfo", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// License Assignment Manager
     /// 
@@ -472,7 +472,7 @@ impl LicenseManager {
     pub async fn license_assignment_manager(&self) -> Result<Option<ManagedObjectReference>> {
         let path = format!("/LicenseManager/{moId}/licenseAssignmentManager", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Deprecated as of vSphere API 4.0, use
     /// *LicenseAssignmentManager.QueryAssignedLicenses* instead.
@@ -487,13 +487,13 @@ impl LicenseManager {
     pub async fn licensed_edition(&self) -> Result<String> {
         let path = format!("/LicenseManager/{moId}/licensedEdition", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Get information about all the licenses available.
     pub async fn licenses(&self) -> Result<Vec<LicenseManagerLicenseInfo>> {
         let path = format!("/LicenseManager/{moId}/licenses", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Deprecated as of vSphere API 4.0, use
     /// *LicenseAssignmentManager.QueryAssignedLicenses* to get evaluation information.
@@ -502,7 +502,7 @@ impl LicenseManager {
     pub async fn source(&self) -> Result<Box<dyn crate::types::traits::LicenseSourceTrait>> {
         let path = format!("/LicenseManager/{moId}/source", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Deprecated as of vSphere API 4.0, this property is not used.
     /// 
@@ -513,7 +513,7 @@ impl LicenseManager {
     pub async fn source_available(&self) -> Result<bool> {
         let path = format!("/LicenseManager/{moId}/sourceAvailable", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
 }
 #[derive(serde::Serialize)]

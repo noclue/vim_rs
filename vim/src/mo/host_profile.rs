@@ -124,7 +124,7 @@ impl HostProfile {
     pub async fn host_profile_reset_validation_state(&self) -> Result<()> {
         let path = format!("/HostProfile/{moId}/HostProfileResetValidationState", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Associate a profile with a managed entity.
     /// 
@@ -146,7 +146,7 @@ impl HostProfile {
         let input = AssociateProfileRequestType {entity, };
         let path = format!("/HostProfile/{moId}/AssociateProfile", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Check compliance of an entity against a Profile.
     /// 
@@ -172,7 +172,7 @@ impl HostProfile {
         let input = CheckProfileComplianceRequestType {entity, };
         let path = format!("/HostProfile/{moId}/CheckProfileCompliance_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Destroy the profile.
     /// 
@@ -180,7 +180,7 @@ impl HostProfile {
     pub async fn destroy_profile(&self) -> Result<()> {
         let path = format!("/HostProfile/{moId}/DestroyProfile", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Remove the association between a profile and a managed entity.
     /// 
@@ -201,7 +201,7 @@ impl HostProfile {
         let input = DissociateProfileRequestType {entity, };
         let path = format!("/HostProfile/{moId}/DissociateProfile", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Run the Profile Engine to determine the list of configuration changes
     /// needed for the specified host.
@@ -256,7 +256,7 @@ impl HostProfile {
         let input = ExecuteHostProfileRequestType {host, deferred_param, };
         let path = format!("/HostProfile/{moId}/ExecuteHostProfile", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Export the profile in a serialized form.
     /// 
@@ -273,7 +273,7 @@ impl HostProfile {
     pub async fn export_profile(&self) -> Result<String> {
         let path = format!("/HostProfile/{moId}/ExportProfile", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Returns the localizable description for the profile.
     /// 
@@ -285,7 +285,7 @@ impl HostProfile {
     pub async fn retrieve_description(&self) -> Result<Option<ProfileDescription>> {
         let path = format!("/HostProfile/{moId}/RetrieveDescription", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Update the <code>HostProfile</code> with the specified configuration data.
     /// 
@@ -306,7 +306,7 @@ impl HostProfile {
         let input = UpdateHostProfileRequestType {config, };
         let path = format!("/HostProfile/{moId}/UpdateHostProfile", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Sets the *HostProfile*.*HostProfile.referenceHost* property.
     /// 
@@ -323,7 +323,7 @@ impl HostProfile {
         let input = UpdateReferenceHostRequestType {host, };
         let path = format!("/HostProfile/{moId}/UpdateReferenceHost", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// The latest compliance check time.
     /// 
@@ -331,7 +331,7 @@ impl HostProfile {
     pub async fn compliance_check_time(&self) -> Result<Option<String>> {
         let path = format!("/HostProfile/{moId}/complianceCheckTime", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Overall compliance of entities associated with this profile.
     /// 
@@ -343,7 +343,7 @@ impl HostProfile {
     pub async fn compliance_status(&self) -> Result<String> {
         let path = format!("/HostProfile/{moId}/complianceStatus", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Configuration data for the profile.
     /// 
@@ -351,13 +351,13 @@ impl HostProfile {
     pub async fn config(&self) -> Result<Box<dyn crate::types::traits::ProfileConfigInfoTrait>> {
         let path = format!("/HostProfile/{moId}/config", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Time at which the profile was created.
     pub async fn created_time(&self) -> Result<String> {
         let path = format!("/HostProfile/{moId}/createdTime", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Deprecated as of vSphere API 5.0. use *Profile.RetrieveDescription* instead.
     /// 
@@ -365,7 +365,7 @@ impl HostProfile {
     pub async fn description(&self) -> Result<Option<ProfileDescription>> {
         let path = format!("/HostProfile/{moId}/description", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// List of managed entities associated with the profile.
     ///
@@ -375,19 +375,19 @@ impl HostProfile {
     pub async fn entity(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
         let path = format!("/HostProfile/{moId}/entity", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Time at which the profile was last modified.
     pub async fn modified_time(&self) -> Result<String> {
         let path = format!("/HostProfile/{moId}/modifiedTime", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Name of the profile.
     pub async fn name(&self) -> Result<String> {
         let path = format!("/HostProfile/{moId}/name", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Reference host in use for this host profile.
     /// 
@@ -403,7 +403,7 @@ impl HostProfile {
     pub async fn reference_host(&self) -> Result<Option<ManagedObjectReference>> {
         let path = format!("/HostProfile/{moId}/referenceHost", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// This object is created or updated if the *HostProfileValidationState_enum*
     /// is Failed.
@@ -413,7 +413,7 @@ impl HostProfile {
     pub async fn validation_failure_info(&self) -> Result<Option<HostProfileValidationFailureInfo>> {
         let path = format!("/HostProfile/{moId}/validationFailureInfo", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// State of the host profile validation operation.
     /// 
@@ -422,13 +422,13 @@ impl HostProfile {
     pub async fn validation_state(&self) -> Result<Option<String>> {
         let path = format!("/HostProfile/{moId}/validationState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Update time of the validation operation.
     pub async fn validation_state_update_time(&self) -> Result<Option<String>> {
         let path = format!("/HostProfile/{moId}/validationStateUpdateTime", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
 }
 #[derive(serde::Serialize)]

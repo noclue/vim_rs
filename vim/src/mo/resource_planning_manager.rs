@@ -38,7 +38,7 @@ impl ResourcePlanningManager {
         let input = EstimateDatabaseSizeRequestType {db_size_param, };
         let path = format!("/ResourcePlanningManager/{moId}/EstimateDatabaseSize", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
 }
 #[derive(serde::Serialize)]

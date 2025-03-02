@@ -29,7 +29,7 @@ impl HostBootDeviceSystem {
     pub async fn query_boot_devices(&self) -> Result<Option<HostBootDeviceInfo>> {
         let path = format!("/HostBootDeviceSystem/{moId}/QueryBootDevices", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Sets the current boot device for the host system.
     /// 
@@ -44,7 +44,7 @@ impl HostBootDeviceSystem {
         let input = UpdateBootDeviceRequestType {key, };
         let path = format!("/HostBootDeviceSystem/{moId}/UpdateBootDevice", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
 }
 #[derive(serde::Serialize)]

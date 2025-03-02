@@ -17,14 +17,14 @@ pub trait CastFrom<From: ?Sized> {
 pub trait CastInto<To: ?Sized> {
     /// Casts a reference to a trait object. If the cast fails, [`std::option::Option::None`] is
     /// returned.
-    fn into_ref<'a>(self: &'a Self) -> Option<&'a To>;
+    fn into_ref<'a>(&'a self) -> Option<&'a To>;
     /// Casts a boxed trait object to another trait object. If the cast fails, the original boxed
     /// trait object is returned in [`std::result::Result::Err`].
     fn into_box(self: Box<Self>) -> Result<Box<To>, Box<dyn any::Any>>;
 }
 
 impl<To: CastFrom<T> + ?Sized, T: ?Sized + 'static> CastInto<To> for T {
-    fn into_ref<'a>(self: &'a Self) -> Option<&'a To> {
+    fn into_ref<'a>(&'a self) -> Option<&'a To> {
         CastFrom::from_ref(self)
     }
 

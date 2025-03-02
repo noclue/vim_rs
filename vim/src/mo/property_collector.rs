@@ -54,7 +54,7 @@ impl PropertyCollector {
         let input = CancelRetrievePropertiesExRequestType {token, };
         let path = format!("/PropertyCollector/{moId}/CancelRetrievePropertiesEx", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Attempts to cancel outstanding calls to *PropertyCollector.WaitForUpdates* or *PropertyCollector.WaitForUpdatesEx* in the current session.
     /// 
@@ -66,7 +66,7 @@ impl PropertyCollector {
     pub async fn cancel_wait_for_updates(&self) -> Result<()> {
         let path = format!("/PropertyCollector/{moId}/CancelWaitForUpdates", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Deprecated as of vSphere API 4.1, use
     /// *PropertyCollector.WaitForUpdatesEx* with a
@@ -106,7 +106,7 @@ impl PropertyCollector {
         let input = CheckForUpdatesRequestType {version, };
         let path = format!("/PropertyCollector/{moId}/CheckForUpdates", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Retrieves additional results from a retrieval started by *PropertyCollector.RetrievePropertiesEx* on the same session on the same *PropertyCollector*.
     /// 
@@ -131,7 +131,7 @@ impl PropertyCollector {
         let input = ContinueRetrievePropertiesExRequestType {token, };
         let path = format!("/PropertyCollector/{moId}/ContinueRetrievePropertiesEx", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Creates a new filter for the given set of managed objects.
     /// 
@@ -172,7 +172,7 @@ impl PropertyCollector {
         let input = CreateFilterRequestType {spec, partial_updates, };
         let path = format!("/PropertyCollector/{moId}/CreateFilter", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Creates a new session-specific *PropertyCollector* that can
     /// be used to retrieve property updates independent of any other
@@ -225,7 +225,7 @@ impl PropertyCollector {
     pub async fn create_property_collector(&self) -> Result<ManagedObjectReference> {
         let path = format!("/PropertyCollector/{moId}/CreatePropertyCollector", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Destroys this *PropertyCollector*.
     /// 
@@ -241,7 +241,7 @@ impl PropertyCollector {
     pub async fn destroy_property_collector(&self) -> Result<()> {
         let path = format!("/PropertyCollector/{moId}/DestroyPropertyCollector", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Deprecated as of vSphere API 4.1, use *PropertyCollector.RetrievePropertiesEx*.
     /// 
@@ -278,7 +278,7 @@ impl PropertyCollector {
         let input = RetrievePropertiesRequestType {spec_set, };
         let path = format!("/PropertyCollector/{moId}/RetrieveProperties", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Retrieves the specified properties of the specified managed objects.
     /// 
@@ -318,7 +318,7 @@ impl PropertyCollector {
         let input = RetrievePropertiesExRequestType {spec_set, options, };
         let path = format!("/PropertyCollector/{moId}/RetrievePropertiesEx", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Deprecated as of vSphere API 4.1, use *PropertyCollector.WaitForUpdatesEx*.
     /// 
@@ -353,7 +353,7 @@ impl PropertyCollector {
         let input = WaitForUpdatesRequestType {version, };
         let path = format!("/PropertyCollector/{moId}/WaitForUpdates", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Calculate the set of updates for each existing filter in the session.
     /// 
@@ -401,7 +401,7 @@ impl PropertyCollector {
         let input = WaitForUpdatesExRequestType {version, options, };
         let path = format!("/PropertyCollector/{moId}/WaitForUpdatesEx", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// The filters that this *PropertyCollector* uses to determine the list of
     /// properties for which it detects incremental changes.
@@ -414,7 +414,7 @@ impl PropertyCollector {
     pub async fn filter(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
         let path = format!("/PropertyCollector/{moId}/filter", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
 }
 #[derive(serde::Serialize)]

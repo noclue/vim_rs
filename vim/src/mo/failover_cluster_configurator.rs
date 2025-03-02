@@ -65,7 +65,7 @@ impl FailoverClusterConfigurator {
         let input = ConfigureVchaRequestType {config_spec, };
         let path = format!("/FailoverClusterConfigurator/{moId}/configureVcha_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Creates a Passive node in a degraded VCHA Cluster with node location
     /// information and pre-existing VCHA Cluster configuration from the
@@ -93,7 +93,7 @@ impl FailoverClusterConfigurator {
         let input = CreatePassiveNodeRequestType {passive_deployment_spec, source_vc_spec, };
         let path = format!("/FailoverClusterConfigurator/{moId}/createPassiveNode_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Creates a Witness node in a degraded VCHA Cluster with node location
     /// information and pre-existing VCHA Cluster configuration from the
@@ -121,7 +121,7 @@ impl FailoverClusterConfigurator {
         let input = CreateWitnessNodeRequestType {witness_deployment_spec, source_vc_spec, };
         let path = format!("/FailoverClusterConfigurator/{moId}/createWitnessNode_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Deploys and Configures VCHA on the local vCenter as a single API.
     /// 
@@ -155,7 +155,7 @@ impl FailoverClusterConfigurator {
         let input = DeployVchaRequestType {deployment_spec, };
         let path = format!("/FailoverClusterConfigurator/{moId}/deployVcha_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Destroys the VCHA cluster setup and removes all VCHA specific
     /// configuration from the VCVA appliance.
@@ -176,7 +176,7 @@ impl FailoverClusterConfigurator {
     pub async fn destroy_vcha_task(&self) -> Result<ManagedObjectReference> {
         let path = format!("/FailoverClusterConfigurator/{moId}/destroyVcha_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Returns the configuration information for each node that is part of
     /// the VCHA Cluster.
@@ -190,7 +190,7 @@ impl FailoverClusterConfigurator {
     pub async fn get_vcha_config(&self) -> Result<VchaClusterConfigInfo> {
         let path = format!("/FailoverClusterConfigurator/{moId}/getVchaConfig", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Prepares the vCenter appliance for a VCHA cluster deployment.
     /// 
@@ -220,7 +220,7 @@ impl FailoverClusterConfigurator {
         let input = PrepareVchaRequestType {network_spec, };
         let path = format!("/FailoverClusterConfigurator/{moId}/prepareVcha_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// A list of method names that must not be called and will throw
     /// a fault due to some other method running that the disabled method
@@ -238,7 +238,7 @@ impl FailoverClusterConfigurator {
     pub async fn disabled_configure_method(&self) -> Result<Option<Vec<String>>> {
         let path = format!("/FailoverClusterConfigurator/{moId}/disabledConfigureMethod", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
 }
 #[derive(serde::Serialize)]

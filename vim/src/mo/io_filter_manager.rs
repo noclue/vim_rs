@@ -62,7 +62,7 @@ impl IoFilterManager {
         let input = InstallIoFilterRequestType {vib_url, comp_res, };
         let path = format!("/IoFilterManager/{moId}/InstallIoFilter_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Return the list of virtual disks that use an IO Filter installed on
     /// a compute resource.
@@ -93,7 +93,7 @@ impl IoFilterManager {
         let input = QueryDisksUsingFilterRequestType {filter_id, comp_res, };
         let path = format!("/IoFilterManager/{moId}/QueryDisksUsingFilter", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Return the information for the IO Filters that are installed on the cluster.
     /// 
@@ -116,7 +116,7 @@ impl IoFilterManager {
         let input = QueryIoFilterInfoRequestType {comp_res, };
         let path = format!("/IoFilterManager/{moId}/QueryIoFilterInfo", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Return the issues that occurred during the last installation/uninstallation/upgrade
     /// operation of an IO Filter on a compute resource.
@@ -146,7 +146,7 @@ impl IoFilterManager {
         let input = QueryIoFilterIssuesRequestType {filter_id, comp_res, };
         let path = format!("/IoFilterManager/{moId}/QueryIoFilterIssues", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Resolve the errors occurred during an installation/uninstallation/upgrade
     /// operation of an IO Filter on a cluster.
@@ -189,7 +189,7 @@ impl IoFilterManager {
         let input = ResolveInstallationErrorsOnClusterRequestType {filter_id, cluster, };
         let path = format!("/IoFilterManager/{moId}/ResolveInstallationErrorsOnCluster_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Resolve the errors occurred during an installation/uninstallation/upgrade
     /// operation of an IO Filter on a host.
@@ -232,7 +232,7 @@ impl IoFilterManager {
         let input = ResolveInstallationErrorsOnHostRequestType {filter_id, host, };
         let path = format!("/IoFilterManager/{moId}/ResolveInstallationErrorsOnHost_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Uninstall an IO Filter from a compute resource.
     ///
@@ -277,7 +277,7 @@ impl IoFilterManager {
         let input = UninstallIoFilterRequestType {filter_id, comp_res, };
         let path = format!("/IoFilterManager/{moId}/UninstallIoFilter_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Upgrade an IO Filter on a compute resource.
     ///
@@ -325,7 +325,7 @@ impl IoFilterManager {
         let input = UpgradeIoFilterRequestType {filter_id, comp_res, vib_url, };
         let path = format!("/IoFilterManager/{moId}/UpgradeIoFilter_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
 }
 #[derive(serde::Serialize)]

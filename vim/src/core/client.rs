@@ -168,7 +168,7 @@ impl ClientBuilder {
 
 
         if let (Some(ref sm_id), Some(ref user_name), Some(ref password)) = (sm_id, self.user_name, self.password) {
-            let sm = mo::SessionManager::new(client.clone(), &sm_id);
+            let sm = mo::SessionManager::new(client.clone(), sm_id);
             let session = sm.login(user_name, password, self.locale.as_deref()).await?;
             debug!("Session created for: {:?}", session.user_name);
         }
@@ -353,11 +353,9 @@ impl Drop for Client {
 }
 
 fn user_agent(app_name: Option<&str>, app_version: Option<&str>) -> String {
-    let app_name: String = if app_name.is_some() {
-        app_name.unwrap().into()
-    } else {
-        get_executable_name().unwrap_or_else(|| "unknown".into())
-    };
+    let app_name: String = app_name
+            .unwrap_or_else(|| get_executable_name().as_deref()
+                .unwrap_or_else(|| "unknown")).into();
     let Some(appv) = app_version else {
         return format!(
             "{} ({}/{}; {}; {}; rustc/{})",

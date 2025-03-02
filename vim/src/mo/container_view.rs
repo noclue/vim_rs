@@ -37,7 +37,7 @@ impl ContainerView {
     pub async fn destroy_view(&self) -> Result<()> {
         let path = format!("/ContainerView/{moId}/DestroyView", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// The Folder, Datacenter, ComputeResource, ResourcePool, or HostSystem instance
     /// that provides the objects that the view presents.
@@ -48,7 +48,7 @@ impl ContainerView {
     pub async fn container(&self) -> Result<ManagedObjectReference> {
         let path = format!("/ContainerView/{moId}/container", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Whether to include only the immediate children of the container instance,
     /// or to include additional objects by following the paths beyond the
@@ -59,7 +59,7 @@ impl ContainerView {
     pub async fn recursive(&self) -> Result<bool> {
         let path = format!("/ContainerView/{moId}/recursive", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// An optional list of types to be applied to the set of objects in the view.
     /// 
@@ -68,12 +68,12 @@ impl ContainerView {
     pub async fn r#type(&self) -> Result<Option<Vec<String>>> {
         let path = format!("/ContainerView/{moId}/type", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// The list of references to objects mapped by this view.
     pub async fn view(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
         let path = format!("/ContainerView/{moId}/view", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
 }

@@ -53,7 +53,7 @@ impl HistoryCollector {
     pub async fn destroy_collector(&self) -> Result<()> {
         let path = format!("/HistoryCollector/{moId}/DestroyCollector", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Moves the "scrollable view" to the item immediately preceding the
     /// "viewable latest page".
@@ -66,7 +66,7 @@ impl HistoryCollector {
     pub async fn reset_collector(&self) -> Result<()> {
         let path = format!("/HistoryCollector/{moId}/ResetCollector", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Moves the "scrollable view" to the oldest item.
     /// 
@@ -78,7 +78,7 @@ impl HistoryCollector {
     pub async fn rewind_collector(&self) -> Result<()> {
         let path = format!("/HistoryCollector/{moId}/RewindCollector", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Sets the "viewable latest page" size to contain at most the
     /// number of items specified by the maxCount parameter).
@@ -91,7 +91,7 @@ impl HistoryCollector {
         let input = SetCollectorPageSizeRequestType {max_count, };
         let path = format!("/HistoryCollector/{moId}/SetCollectorPageSize", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// The filter used to create this collector.
     /// 
@@ -100,7 +100,7 @@ impl HistoryCollector {
     pub async fn filter(&self) -> Result<VimAny> {
         let path = format!("/HistoryCollector/{moId}/filter", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
 }
 #[derive(serde::Serialize)]

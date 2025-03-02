@@ -39,7 +39,7 @@ impl EventManager {
         let input = QueryEventsRequestType {filter, };
         let path = format!("/EventManager/{moId}/QueryEvents", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Creates an event history collector, which is a specialized history collector
     /// that provides Event objects.
@@ -72,7 +72,7 @@ impl EventManager {
         let input = CreateCollectorForEventsRequestType {filter, };
         let path = format!("/EventManager/{moId}/CreateCollectorForEvents", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Logs a user defined event against a particular managed entity.
     ///
@@ -93,7 +93,7 @@ impl EventManager {
         let input = LogUserEventRequestType {entity, msg, };
         let path = format!("/EventManager/{moId}/LogUserEvent", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Posts the specified event, optionally associating it with
     /// a task.
@@ -135,7 +135,7 @@ impl EventManager {
         let input = PostEventRequestType {event_to_post, task_info, };
         let path = format!("/EventManager/{moId}/PostEvent", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Retrieves the argument meta-data for a given Event type
     /// 
@@ -149,7 +149,7 @@ impl EventManager {
         let input = RetrieveArgumentDescriptionRequestType {event_type_id, };
         let path = format!("/EventManager/{moId}/RetrieveArgumentDescription", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Static descriptive strings used in events.
     /// 
@@ -157,7 +157,7 @@ impl EventManager {
     pub async fn description(&self) -> Result<EventDescription> {
         let path = format!("/EventManager/{moId}/description", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// The latest event that happened on the VirtualCenter server.
     /// 
@@ -165,7 +165,7 @@ impl EventManager {
     pub async fn latest_event(&self) -> Result<Option<Box<dyn crate::types::traits::EventTrait>>> {
         let path = format!("/EventManager/{moId}/latestEvent", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// For each client, the maximum number of event collectors that can exist
     /// simultaneously.
@@ -174,7 +174,7 @@ impl EventManager {
     pub async fn max_collector(&self) -> Result<i32> {
         let path = format!("/EventManager/{moId}/maxCollector", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
 }
 #[derive(serde::Serialize)]

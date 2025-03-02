@@ -63,7 +63,7 @@ impl ClusterComputeResource {
     pub async fn abandon_hci_workflow(&self) -> Result<()> {
         let path = format!("/ClusterComputeResource/{moId}/AbandonHciWorkflow", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Adds a host to the cluster.
     /// 
@@ -154,7 +154,7 @@ impl ClusterComputeResource {
         let input = AddHostRequestType {spec, as_connected, resource_pool, license, };
         let path = format!("/ClusterComputeResource/{moId}/AddHost_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Applies a recommendation from the drsRecommendation or the
     /// recommendation list.
@@ -173,7 +173,7 @@ impl ClusterComputeResource {
         let input = ApplyRecommendationRequestType {key, };
         let path = format!("/ClusterComputeResource/{moId}/ApplyRecommendation", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Cancels a recommendation.
     /// 
@@ -187,7 +187,7 @@ impl ClusterComputeResource {
         let input = CancelRecommendationRequestType {key, };
         let path = format!("/ClusterComputeResource/{moId}/CancelRecommendation", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Configures the cluster.
     /// 
@@ -238,7 +238,7 @@ impl ClusterComputeResource {
         let input = ConfigureHciRequestType {cluster_spec, host_inputs, };
         let path = format!("/ClusterComputeResource/{moId}/ConfigureHCI_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Destroys this object, deleting its contents and removing it from its parent
     /// folder (if any).
@@ -264,7 +264,7 @@ impl ClusterComputeResource {
     pub async fn destroy_task(&self) -> Result<ManagedObjectReference> {
         let path = format!("/ClusterComputeResource/{moId}/Destroy_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// The API takes a list of hosts in the cluster as input, and
     /// returns a list of hosts in "ClusterMaintenanceResult" that the
@@ -321,7 +321,7 @@ impl ClusterComputeResource {
         let input = ClusterEnterMaintenanceModeRequestType {host, option, };
         let path = format!("/ClusterComputeResource/{moId}/ClusterEnterMaintenanceMode", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// A managed object that controls Enhanced vMotion Compatibility mode for
     /// this cluster.
@@ -334,7 +334,7 @@ impl ClusterComputeResource {
     pub async fn evc_manager(&self) -> Result<Option<ManagedObjectReference>> {
         let path = format!("/ClusterComputeResource/{moId}/EvcManager", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Extend an existing HCI cluster.
     /// 
@@ -377,7 +377,7 @@ impl ClusterComputeResource {
         let input = ExtendHciRequestType {host_inputs, v_san_config_spec, };
         let path = format!("/ClusterComputeResource/{moId}/ExtendHCI_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Finds all enabled and disabled VM-VM Affinity and Anti-Affinity rules,
     /// involving the given Virtual Machine.
@@ -394,7 +394,7 @@ impl ClusterComputeResource {
         let input = FindRulesForVmRequestType {vm, };
         let path = format!("/ClusterComputeResource/{moId}/FindRulesForVm", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// This API can be invoked to get the current CPU, memory and storage usage
     /// in the cluster.
@@ -419,7 +419,7 @@ impl ClusterComputeResource {
     pub async fn get_resource_usage(&self) -> Result<ClusterResourceUsageSummary> {
         let path = format!("/ClusterComputeResource/{moId}/GetResourceUsage", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Retrieve all the datastores that are either listed in
     /// *ClusterSystemVMsConfigInfo.notAllowedDatastores* or are
@@ -438,7 +438,7 @@ impl ClusterComputeResource {
     pub async fn get_system_v_ms_restricted_datastores(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
         let path = format!("/ClusterComputeResource/{moId}/GetSystemVMsRestrictedDatastores", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Moves an existing host into a cluster.
     /// 
@@ -503,7 +503,7 @@ impl ClusterComputeResource {
         let input = MoveHostIntoRequestType {host, resource_pool, };
         let path = format!("/ClusterComputeResource/{moId}/MoveHostInto_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Moves an existing host into a cluster.
     /// 
@@ -570,7 +570,7 @@ impl ClusterComputeResource {
         let input = MoveIntoRequestType {host, };
         let path = format!("/ClusterComputeResource/{moId}/MoveInto_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// This method returns a *PlacementResult* object.
     /// 
@@ -628,7 +628,7 @@ impl ClusterComputeResource {
         let input = PlaceVmRequestType {placement_spec, };
         let path = format!("/ClusterComputeResource/{moId}/PlaceVm", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Deprecated as of VI API 2.5, use *Datacenter.PowerOnMultiVM_Task*.
     /// *ClusterComputeResource.RecommendHostsForVm* cannot make any recommendations if DRS cannot
@@ -676,7 +676,7 @@ impl ClusterComputeResource {
         let input = RecommendHostsForVmRequestType {vm, pool, };
         let path = format!("/ClusterComputeResource/{moId}/RecommendHostsForVm", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Deprecated as of VI API 2.5, use *ComputeResource.ReconfigureComputeResource_Task*.
     /// 
@@ -709,7 +709,7 @@ impl ClusterComputeResource {
         let input = ReconfigureClusterRequestType {spec, modify, };
         let path = format!("/ClusterComputeResource/{moId}/ReconfigureCluster_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Change the compute resource configuration.
     /// 
@@ -742,7 +742,7 @@ impl ClusterComputeResource {
         let input = ReconfigureComputeResourceRequestType {spec, modify, };
         let path = format!("/ClusterComputeResource/{moId}/ReconfigureComputeResource_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Make DRS invoke again and return a new list of recommendations.
     /// 
@@ -755,7 +755,7 @@ impl ClusterComputeResource {
     pub async fn refresh_recommendation(&self) -> Result<()> {
         let path = format!("/ClusterComputeResource/{moId}/RefreshRecommendation", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Reload the entity state.
     /// 
@@ -774,7 +774,7 @@ impl ClusterComputeResource {
     pub async fn reload(&self) -> Result<()> {
         let path = format!("/ClusterComputeResource/{moId}/Reload", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Renames this managed entity.
     /// 
@@ -808,7 +808,7 @@ impl ClusterComputeResource {
         let input = RenameRequestType {new_name, };
         let path = format!("/ClusterComputeResource/{moId}/Rename_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Retrieve DAS advanced runtime info for this cluster.
     /// 
@@ -816,7 +816,7 @@ impl ClusterComputeResource {
     pub async fn retrieve_das_advanced_runtime_info(&self) -> Result<Option<Box<dyn crate::types::traits::ClusterDasAdvancedRuntimeInfoTrait>>> {
         let path = format!("/ClusterComputeResource/{moId}/RetrieveDasAdvancedRuntimeInfo", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Set the desired encryption mode and host key for the cluster.
     /// 
@@ -846,7 +846,7 @@ impl ClusterComputeResource {
         let input = SetCryptoModeRequestType {crypto_mode, };
         let path = format!("/ClusterComputeResource/{moId}/SetCryptoMode", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Assigns a value to a custom field.
     /// 
@@ -866,7 +866,7 @@ impl ClusterComputeResource {
         let input = SetCustomValueRequestType {key, value, };
         let path = format!("/ClusterComputeResource/{moId}/setCustomValue", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Stamp all rules in the cluster with ruleUuid.
     /// 
@@ -881,7 +881,7 @@ impl ClusterComputeResource {
     pub async fn stamp_all_rules_with_uuid_task(&self) -> Result<ManagedObjectReference> {
         let path = format!("/ClusterComputeResource/{moId}/StampAllRulesWithUuid_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Validate HCI configuration in pre-configure and post-configure use-cases.
     /// 1. pre-configure use-case: Validates the HCI configuration to be applied on
@@ -938,13 +938,13 @@ impl ClusterComputeResource {
         let input = ValidateHciConfigurationRequestType {hci_config_spec, hosts, };
         let path = format!("/ClusterComputeResource/{moId}/ValidateHCIConfiguration", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// The set of actions that have been performed recently.
     pub async fn action_history(&self) -> Result<Option<Vec<ClusterActionHistory>>> {
         let path = format!("/ClusterComputeResource/{moId}/actionHistory", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Whether alarm actions are enabled for this entity.
     /// 
@@ -954,7 +954,7 @@ impl ClusterComputeResource {
     pub async fn alarm_actions_enabled(&self) -> Result<Option<bool>> {
         let path = format!("/ClusterComputeResource/{moId}/alarmActionsEnabled", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// List of custom field definitions that are valid for the object's type.
     /// 
@@ -964,7 +964,7 @@ impl ClusterComputeResource {
     pub async fn available_field(&self) -> Result<Option<Vec<CustomFieldDef>>> {
         let path = format!("/ClusterComputeResource/{moId}/availableField", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Current configuration issues that have been detected for this entity.
     /// 
@@ -976,7 +976,7 @@ impl ClusterComputeResource {
     pub async fn config_issue(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::EventTrait>>>> {
         let path = format!("/ClusterComputeResource/{moId}/configIssue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Flag indicating whether or not desired configuration
     /// management platform is enabled on the compute resource.
@@ -990,7 +990,7 @@ impl ClusterComputeResource {
     pub async fn config_manager_enabled(&self) -> Result<Option<bool>> {
         let path = format!("/ClusterComputeResource/{moId}/configManagerEnabled", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// The configStatus indicates whether or not the system has detected a configuration
     /// issue involving this entity.
@@ -1019,7 +1019,7 @@ impl ClusterComputeResource {
     pub async fn config_status(&self) -> Result<crate::types::enums::ManagedEntityStatusEnum> {
         let path = format!("/ClusterComputeResource/{moId}/configStatus", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Deprecated as of VI API 2.5, use *ComputeResource.configurationEx*,
     /// which is a *ClusterConfigInfoEx* data object..
@@ -1028,7 +1028,7 @@ impl ClusterComputeResource {
     pub async fn configuration(&self) -> Result<ClusterConfigInfo> {
         let path = format!("/ClusterComputeResource/{moId}/configuration", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Configuration of the compute resource; applies to both standalone hosts
     /// and clusters.
@@ -1038,7 +1038,7 @@ impl ClusterComputeResource {
     pub async fn configuration_ex(&self) -> Result<Box<dyn crate::types::traits::ComputeResourceConfigInfoTrait>> {
         let path = format!("/ClusterComputeResource/{moId}/configurationEx", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Custom field values.
     /// 
@@ -1046,7 +1046,7 @@ impl ClusterComputeResource {
     pub async fn custom_value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/ClusterComputeResource/{moId}/customValue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// The datastore property is the subset of datastore objects in the datacenter
     /// available in this ComputeResource.
@@ -1062,7 +1062,7 @@ impl ClusterComputeResource {
     pub async fn datastore(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
         let path = format!("/ClusterComputeResource/{moId}/datastore", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// A set of alarm states for alarms that apply to this managed entity.
     /// 
@@ -1077,7 +1077,7 @@ impl ClusterComputeResource {
     pub async fn declared_alarm_state(&self) -> Result<Option<Vec<AlarmState>>> {
         let path = format!("/ClusterComputeResource/{moId}/declaredAlarmState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// List of operations that are disabled, given the current runtime
     /// state of the entity.
@@ -1151,7 +1151,7 @@ impl ClusterComputeResource {
     pub async fn disabled_method(&self) -> Result<Option<Vec<String>>> {
         let path = format!("/ClusterComputeResource/{moId}/disabledMethod", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// A collection of the DRS faults generated in the last DRS invocation.
     /// 
@@ -1173,7 +1173,7 @@ impl ClusterComputeResource {
     pub async fn drs_fault(&self) -> Result<Option<Vec<ClusterDrsFaults>>> {
         let path = format!("/ClusterComputeResource/{moId}/drsFault", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Deprecated as of VI API 2.5, use
     /// *ClusterComputeResource.recommendation*.
@@ -1185,7 +1185,7 @@ impl ClusterComputeResource {
     pub async fn drs_recommendation(&self) -> Result<Option<Vec<ClusterDrsRecommendation>>> {
         let path = format!("/ClusterComputeResource/{moId}/drsRecommendation", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Access rights the current session has to this entity.
     /// 
@@ -1193,7 +1193,7 @@ impl ClusterComputeResource {
     pub async fn effective_role(&self) -> Result<Option<Vec<i32>>> {
         let path = format!("/ClusterComputeResource/{moId}/effectiveRole", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// The environment browser object that identifies the environments that are supported
     /// on this compute resource.
@@ -1206,14 +1206,14 @@ impl ClusterComputeResource {
     pub async fn environment_browser(&self) -> Result<Option<ManagedObjectReference>> {
         let path = format!("/ClusterComputeResource/{moId}/environmentBrowser", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// This is applicable to clusters which are configured using the HCI
     /// workflow and contains data related to the workflow and specification.
     pub async fn hci_config(&self) -> Result<Option<ClusterComputeResourceHciConfigInfo>> {
         let path = format!("/ClusterComputeResource/{moId}/hciConfig", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// List of hosts that are part of this compute resource.
     /// 
@@ -1228,7 +1228,7 @@ impl ClusterComputeResource {
     pub async fn host(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
         let path = format!("/ClusterComputeResource/{moId}/host", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Flag indicating whether or not the lifecycle of the compute resource is
     /// managed.
@@ -1241,7 +1241,7 @@ impl ClusterComputeResource {
     pub async fn lifecycle_managed(&self) -> Result<Option<bool>> {
         let path = format!("/ClusterComputeResource/{moId}/lifecycleManaged", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// The set of migration decisions that have recently been performed.
     /// 
@@ -1249,7 +1249,7 @@ impl ClusterComputeResource {
     pub async fn migration_history(&self) -> Result<Option<Vec<ClusterDrsMigration>>> {
         let path = format!("/ClusterComputeResource/{moId}/migrationHistory", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Name of this entity, unique relative to its parent.
     /// 
@@ -1263,7 +1263,7 @@ impl ClusterComputeResource {
     pub async fn name(&self) -> Result<String> {
         let path = format!("/ClusterComputeResource/{moId}/name", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// The subset of network objects available in the datacenter that is available in
     /// this ComputeResource.
@@ -1279,7 +1279,7 @@ impl ClusterComputeResource {
     pub async fn network(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
         let path = format!("/ClusterComputeResource/{moId}/network", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// General health of this managed entity.
     /// 
@@ -1304,7 +1304,7 @@ impl ClusterComputeResource {
     pub async fn overall_status(&self) -> Result<crate::types::enums::ManagedEntityStatusEnum> {
         let path = format!("/ClusterComputeResource/{moId}/overallStatus", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Parent of this entity.
     /// 
@@ -1320,13 +1320,13 @@ impl ClusterComputeResource {
     pub async fn parent(&self) -> Result<Option<ManagedObjectReference>> {
         let path = format!("/ClusterComputeResource/{moId}/parent", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// List of permissions defined for this entity.
     pub async fn permission(&self) -> Result<Option<Vec<Permission>>> {
         let path = format!("/ClusterComputeResource/{moId}/permission", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// The set of recent tasks operating on this managed entity.
     /// 
@@ -1356,7 +1356,7 @@ impl ClusterComputeResource {
     pub async fn recent_task(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
         let path = format!("/ClusterComputeResource/{moId}/recentTask", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// List of recommended actions for the cluster.
     /// 
@@ -1375,7 +1375,7 @@ impl ClusterComputeResource {
     pub async fn recommendation(&self) -> Result<Option<Vec<ClusterRecommendation>>> {
         let path = format!("/ClusterComputeResource/{moId}/recommendation", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Reference to root resource pool.
     /// 
@@ -1387,7 +1387,7 @@ impl ClusterComputeResource {
     pub async fn resource_pool(&self) -> Result<Option<ManagedObjectReference>> {
         let path = format!("/ClusterComputeResource/{moId}/resourcePool", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Basic runtime information about a compute resource.
     /// 
@@ -1396,7 +1396,7 @@ impl ClusterComputeResource {
     pub async fn summary(&self) -> Result<Box<dyn crate::types::traits::ComputeResourceSummaryTrait>> {
         let path = format!("/ClusterComputeResource/{moId}/summary", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Deprecated do not use this property.
     /// The same information could be obtained via
@@ -1408,7 +1408,7 @@ impl ClusterComputeResource {
     pub async fn summary_ex(&self) -> Result<ClusterComputeResourceSummary> {
         let path = format!("/ClusterComputeResource/{moId}/summaryEx", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// The set of tags associated with this managed entity.
     /// 
@@ -1418,7 +1418,7 @@ impl ClusterComputeResource {
     pub async fn tag(&self) -> Result<Option<Vec<Tag>>> {
         let path = format!("/ClusterComputeResource/{moId}/tag", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// A set of alarm states for alarms triggered by this entity
     /// or by its descendants.
@@ -1437,7 +1437,7 @@ impl ClusterComputeResource {
     pub async fn triggered_alarm_state(&self) -> Result<Option<Vec<AlarmState>>> {
         let path = format!("/ClusterComputeResource/{moId}/triggeredAlarmState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// List of custom field values.
     /// 
@@ -1449,7 +1449,7 @@ impl ClusterComputeResource {
     pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/ClusterComputeResource/{moId}/value", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
 }
 #[derive(serde::Serialize)]

@@ -44,7 +44,7 @@ impl AlarmManager {
         let input = AcknowledgeAlarmRequestType {alarm, entity, };
         let path = format!("/AlarmManager/{moId}/AcknowledgeAlarm", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Resets all triggered alarms to green.
     /// 
@@ -60,7 +60,7 @@ impl AlarmManager {
         let input = ClearTriggeredAlarmsRequestType {filter, };
         let path = format!("/AlarmManager/{moId}/ClearTriggeredAlarms", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Creates an alarm.
     /// 
@@ -98,7 +98,7 @@ impl AlarmManager {
         let input = CreateAlarmRequestType {entity, spec, };
         let path = format!("/AlarmManager/{moId}/CreateAlarm", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Disables alarm for a specific entity.
     ///
@@ -121,7 +121,7 @@ impl AlarmManager {
         let input = DisableAlarmRequestType {alarm, entity, };
         let path = format!("/AlarmManager/{moId}/DisableAlarm", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Enables alarm for a specific entity.
     ///
@@ -144,7 +144,7 @@ impl AlarmManager {
         let input = EnableAlarmRequestType {alarm, entity, };
         let path = format!("/AlarmManager/{moId}/EnableAlarm", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Available alarms defined on the entity.
     /// 
@@ -171,7 +171,7 @@ impl AlarmManager {
         let input = GetAlarmRequestType {entity, };
         let path = format!("/AlarmManager/{moId}/GetAlarm", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Returns true if alarm actions are enabled on the specified managed entity.
     ///
@@ -187,7 +187,7 @@ impl AlarmManager {
         let input = AreAlarmActionsEnabledRequestType {entity, };
         let path = format!("/AlarmManager/{moId}/AreAlarmActionsEnabled", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// The state of instantiated alarms on the entity.
     ///
@@ -207,7 +207,7 @@ impl AlarmManager {
         let input = GetAlarmStateRequestType {entity, };
         let path = format!("/AlarmManager/{moId}/GetAlarmState", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Enables or disables alarms on the specified managed entity.
     ///
@@ -226,7 +226,7 @@ impl AlarmManager {
         let input = EnableAlarmActionsRequestType {entity, enabled, };
         let path = format!("/AlarmManager/{moId}/EnableAlarmActions", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// The default setting for each alarm expression, used to populate the
     /// initial client wizard screen.
@@ -235,7 +235,7 @@ impl AlarmManager {
     pub async fn default_expression(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::AlarmExpressionTrait>>>> {
         let path = format!("/AlarmManager/{moId}/defaultExpression", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// The static descriptive strings used in alarms.
     /// 
@@ -243,7 +243,7 @@ impl AlarmManager {
     pub async fn description(&self) -> Result<AlarmDescription> {
         let path = format!("/AlarmManager/{moId}/description", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
 }
 #[derive(serde::Serialize)]

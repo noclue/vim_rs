@@ -29,7 +29,7 @@ impl HostFirmwareSystem {
     pub async fn backup_firmware_configuration(&self) -> Result<String> {
         let path = format!("/HostFirmwareSystem/{moId}/BackupFirmwareConfiguration", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Return the URL on the host to which the configuration bundle must be
     /// uploaded for a restore operation.
@@ -44,7 +44,7 @@ impl HostFirmwareSystem {
     pub async fn query_firmware_config_upload_url(&self) -> Result<String> {
         let path = format!("/HostFirmwareSystem/{moId}/QueryFirmwareConfigUploadURL", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Reset the configuration to factory defaults.
     /// 
@@ -61,7 +61,7 @@ impl HostFirmwareSystem {
     pub async fn reset_firmware_to_factory_defaults(&self) -> Result<()> {
         let path = format!("/HostFirmwareSystem/{moId}/ResetFirmwareToFactoryDefaults", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Restore the configuration of the host to that specified in the bundle.
     /// 
@@ -97,7 +97,7 @@ impl HostFirmwareSystem {
         let input = RestoreFirmwareConfigurationRequestType {force, };
         let path = format!("/HostFirmwareSystem/{moId}/RestoreFirmwareConfiguration", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
 }
 #[derive(serde::Serialize)]

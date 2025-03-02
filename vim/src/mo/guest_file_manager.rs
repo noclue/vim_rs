@@ -78,7 +78,7 @@ impl GuestFileManager {
         let input = ChangeFileAttributesInGuestRequestType {vm, auth, guest_file_path, file_attributes, };
         let path = format!("/GuestFileManager/{moId}/ChangeFileAttributesInGuest", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Creates a temporary directory.
     /// 
@@ -148,7 +148,7 @@ impl GuestFileManager {
         let input = CreateTemporaryDirectoryInGuestRequestType {vm, auth, prefix, suffix, directory_path, };
         let path = format!("/GuestFileManager/{moId}/CreateTemporaryDirectoryInGuest", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Creates a temporary file.
     /// 
@@ -218,7 +218,7 @@ impl GuestFileManager {
         let input = CreateTemporaryFileInGuestRequestType {vm, auth, prefix, suffix, directory_path, };
         let path = format!("/GuestFileManager/{moId}/CreateTemporaryFileInGuest", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Deletes a directory in the guest OS.
     ///
@@ -279,7 +279,7 @@ impl GuestFileManager {
         let input = DeleteDirectoryInGuestRequestType {vm, auth, directory_path, recursive, };
         let path = format!("/GuestFileManager/{moId}/DeleteDirectoryInGuest", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Deletes a file in the guest OS
     ///
@@ -336,7 +336,7 @@ impl GuestFileManager {
         let input = DeleteFileInGuestRequestType {vm, auth, file_path, };
         let path = format!("/GuestFileManager/{moId}/DeleteFileInGuest", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Initiates an operation to transfer a file from the guest.
     /// 
@@ -417,7 +417,7 @@ impl GuestFileManager {
         let input = InitiateFileTransferFromGuestRequestType {vm, auth, guest_file_path, };
         let path = format!("/GuestFileManager/{moId}/InitiateFileTransferFromGuest", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Initiates an operation to transfer a file to the guest.
     /// 
@@ -522,7 +522,7 @@ impl GuestFileManager {
         let input = InitiateFileTransferToGuestRequestType {vm, auth, guest_file_path, file_attributes, file_size, overwrite, };
         let path = format!("/GuestFileManager/{moId}/InitiateFileTransferToGuest", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Returns information about files or directories in the guest.
     /// 
@@ -603,7 +603,7 @@ impl GuestFileManager {
         let input = ListFilesInGuestRequestType {vm, auth, file_path, index, max_results, match_pattern, };
         let path = format!("/GuestFileManager/{moId}/ListFilesInGuest", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Creates a directory in the guest OS
     ///
@@ -664,7 +664,7 @@ impl GuestFileManager {
         let input = MakeDirectoryInGuestRequestType {vm, auth, directory_path, create_parent_directories, };
         let path = format!("/GuestFileManager/{moId}/MakeDirectoryInGuest", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Moves or renames a directory in the guest.
     ///
@@ -724,7 +724,7 @@ impl GuestFileManager {
         let input = MoveDirectoryInGuestRequestType {vm, auth, src_directory_path, dst_directory_path, };
         let path = format!("/GuestFileManager/{moId}/MoveDirectoryInGuest", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Renames a file in the guest.
     ///
@@ -787,7 +787,7 @@ impl GuestFileManager {
         let input = MoveFileInGuestRequestType {vm, auth, src_file_path, dst_file_path, overwrite, };
         let path = format!("/GuestFileManager/{moId}/MoveFileInGuest", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
 }
 #[derive(serde::Serialize)]

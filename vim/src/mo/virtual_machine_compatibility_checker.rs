@@ -72,7 +72,7 @@ impl VirtualMachineCompatibilityChecker {
         let input = CheckCompatibilityRequestType {vm, host, pool, test_type, };
         let path = format!("/VirtualMachineCompatibilityChecker/{moId}/CheckCompatibility_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Tests whether the provided virtual machine can be powered on
     /// on the given host and/or resource pool.
@@ -125,7 +125,7 @@ impl VirtualMachineCompatibilityChecker {
         let input = CheckPowerOnRequestType {vm, host, pool, test_type, };
         let path = format!("/VirtualMachineCompatibilityChecker/{moId}/CheckPowerOn_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Tests whether the provided virtual machine specification can be applied
     /// on the given host and resource pool.
@@ -184,7 +184,7 @@ impl VirtualMachineCompatibilityChecker {
         let input = CheckVmConfigRequestType {spec, vm, host, pool, test_type, };
         let path = format!("/VirtualMachineCompatibilityChecker/{moId}/CheckVmConfig_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
 }
 #[derive(serde::Serialize)]

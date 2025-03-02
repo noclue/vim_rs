@@ -36,7 +36,7 @@ impl CryptoManager {
         let input = AddKeyRequestType {key, };
         let path = format!("/CryptoManager/{moId}/AddKey", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Add multiple existing keys.
     /// 
@@ -58,7 +58,7 @@ impl CryptoManager {
         let input = AddKeysRequestType {keys, };
         let path = format!("/CryptoManager/{moId}/AddKeys", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// List keys.
     /// 
@@ -81,7 +81,7 @@ impl CryptoManager {
         let input = ListKeysRequestType {limit, };
         let path = format!("/CryptoManager/{moId}/ListKeys", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Remove a key (only the UUID is needed to remove).
     /// 
@@ -108,7 +108,7 @@ impl CryptoManager {
         let input = RemoveKeyRequestType {key, force, };
         let path = format!("/CryptoManager/{moId}/RemoveKey", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Remove multiple keys (only the UUID is needed to remove).
     /// 
@@ -127,13 +127,13 @@ impl CryptoManager {
         let input = RemoveKeysRequestType {keys, force, };
         let path = format!("/CryptoManager/{moId}/RemoveKeys", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Indicate if the encryption feature is enabled.
     pub async fn enabled(&self) -> Result<bool> {
         let path = format!("/CryptoManager/{moId}/enabled", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
 }
 #[derive(serde::Serialize)]

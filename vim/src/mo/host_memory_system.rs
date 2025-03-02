@@ -35,7 +35,7 @@ impl HostMemorySystem {
         let input = ReconfigureServiceConsoleReservationRequestType {cfg_bytes, };
         let path = format!("/HostMemorySystem/{moId}/ReconfigureServiceConsoleReservation", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Updates the virtual machine reservation information.
     /// 
@@ -49,7 +49,7 @@ impl HostMemorySystem {
         let input = ReconfigureVirtualMachineReservationRequestType {spec, };
         let path = format!("/HostMemorySystem/{moId}/ReconfigureVirtualMachineReservation", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Assigns a value to a custom field.
     /// 
@@ -69,7 +69,7 @@ impl HostMemorySystem {
         let input = SetCustomValueRequestType {key, value, };
         let path = format!("/HostMemorySystem/{moId}/setCustomValue", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// List of custom field definitions that are valid for the object's type.
     /// 
@@ -79,7 +79,7 @@ impl HostMemorySystem {
     pub async fn available_field(&self) -> Result<Option<Vec<CustomFieldDef>>> {
         let path = format!("/HostMemorySystem/{moId}/availableField", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Service console reservation information for the memory manager.
     /// 
@@ -89,7 +89,7 @@ impl HostMemorySystem {
     pub async fn console_reservation_info(&self) -> Result<Option<ServiceConsoleReservationInfo>> {
         let path = format!("/HostMemorySystem/{moId}/consoleReservationInfo", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// List of custom field values.
     /// 
@@ -101,7 +101,7 @@ impl HostMemorySystem {
     pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/HostMemorySystem/{moId}/value", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Virtual machine reservation information for the memory manager.
     /// 
@@ -111,7 +111,7 @@ impl HostMemorySystem {
     pub async fn virtual_machine_reservation_info(&self) -> Result<Option<VirtualMachineMemoryReservationInfo>> {
         let path = format!("/HostMemorySystem/{moId}/virtualMachineReservationInfo", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
 }
 #[derive(serde::Serialize)]

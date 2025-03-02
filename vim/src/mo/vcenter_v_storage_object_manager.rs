@@ -90,7 +90,7 @@ impl VcenterVStorageObjectManager {
         let input = RevertVStorageObjectRequestType {id, datastore, snapshot_id, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/RevertVStorageObject_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Attach a tag to a virtual storage object.
     /// 
@@ -117,7 +117,7 @@ impl VcenterVStorageObjectManager {
         let input = AttachTagToVStorageObjectRequestType {id, category, tag, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/AttachTagToVStorageObject", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Clear control flags on VStorageObject.
     /// 
@@ -158,7 +158,7 @@ impl VcenterVStorageObjectManager {
         let input = ClearVStorageObjectControlFlagsRequestType {id, datastore, control_flags, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/ClearVStorageObjectControlFlags", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Clone a virtual storage object.
     /// 
@@ -200,7 +200,7 @@ impl VcenterVStorageObjectManager {
         let input = CloneVStorageObjectRequestType {id, datastore, spec, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/CloneVStorageObject_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Create a virtual disk, which is a storage object with
     /// *disk*
@@ -236,7 +236,7 @@ impl VcenterVStorageObjectManager {
         let input = CreateDiskRequestType {spec, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/CreateDisk_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Creates a new Disk from given snapshot of a VStorageObject.
     /// 
@@ -308,7 +308,7 @@ impl VcenterVStorageObjectManager {
         let input = CreateDiskFromSnapshotRequestType {id, datastore, snapshot_id, name, profile, crypto, path, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/CreateDiskFromSnapshot_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Creates a snapshot of a given VStorageObject.
     /// 
@@ -349,7 +349,7 @@ impl VcenterVStorageObjectManager {
         let input = VStorageObjectCreateSnapshotRequestType {id, datastore, description, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/VStorageObjectCreateSnapshot_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Creates a snapshot of a given VStorageObject.
     /// 
@@ -392,7 +392,7 @@ impl VcenterVStorageObjectManager {
         let input = VStorageObjectCreateSnapshotExRequestType {id, datastore, description, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/VStorageObjectCreateSnapshotEx_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Deletes a given snapshot of a VStorageObject.
     /// 
@@ -433,7 +433,7 @@ impl VcenterVStorageObjectManager {
         let input = DeleteSnapshotRequestType {id, datastore, snapshot_id, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/DeleteSnapshot_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Deletes a given snapshot of a VStorageObject.
     /// 
@@ -476,7 +476,7 @@ impl VcenterVStorageObjectManager {
         let input = VStorageObjectDeleteSnapshotExRequestType {id, datastore, snapshot_id, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/VStorageObjectDeleteSnapshotEx_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Delete a virtual storage object and its associated backings.
     /// 
@@ -522,7 +522,7 @@ impl VcenterVStorageObjectManager {
         let input = DeleteVStorageObjectRequestType {id, datastore, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/DeleteVStorageObject_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Delete a virtual storage object and its associated backings.
     /// 
@@ -570,7 +570,7 @@ impl VcenterVStorageObjectManager {
         let input = DeleteVStorageObjectExRequestType {id, datastore, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/DeleteVStorageObjectEx_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Detach a tag from a virtual storage object.
     /// 
@@ -597,7 +597,7 @@ impl VcenterVStorageObjectManager {
         let input = DetachTagFromVStorageObjectRequestType {id, category, tag, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/DetachTagFromVStorageObject", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Expand the capacity of a virtual disk, which is a storage object with
     /// *disk*, to the new
@@ -655,7 +655,7 @@ impl VcenterVStorageObjectManager {
         let input = ExtendDiskRequestType {id, datastore, new_capacity_in_mb, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/ExtendDisk_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Expand the capacity of a virtual disk, which is a storage object with
     /// *disk*, to the new
@@ -715,7 +715,7 @@ impl VcenterVStorageObjectManager {
         let input = VStorageObjectExtendDiskExRequestType {id, datastore, new_capacity_in_mb, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/VStorageObjectExtendDiskEx_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Inflate a sparse or thin-provisioned virtual disk up to the full size.
     /// 
@@ -767,7 +767,7 @@ impl VcenterVStorageObjectManager {
         let input = InflateDiskRequestType {id, datastore, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/InflateDisk_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Lists all tags attached to virtual storage object.
     /// 
@@ -790,7 +790,7 @@ impl VcenterVStorageObjectManager {
         let input = ListTagsAttachedToVStorageObjectRequestType {id, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/ListTagsAttachedToVStorageObject", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// List all virtual storage objects located on a datastore.
     /// 
@@ -820,7 +820,7 @@ impl VcenterVStorageObjectManager {
         let input = ListVStorageObjectRequestType {datastore, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/ListVStorageObject", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Lists all virtual storage objects attached to the tag.
     /// 
@@ -845,7 +845,7 @@ impl VcenterVStorageObjectManager {
         let input = ListVStorageObjectsAttachedToTagRequestType {category, tag, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/ListVStorageObjectsAttachedToTag", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Get a list of areas of a virtual disk that have been modified since a
     /// well-defined point in the past.
@@ -920,7 +920,7 @@ impl VcenterVStorageObjectManager {
         let input = VstorageObjectVCenterQueryChangedDiskAreasRequestType {id, datastore, snapshot_id, start_offset, change_id, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/VstorageObjectVCenterQueryChangedDiskAreas", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Reconcile the datastore inventory info of virtual storage objects.
     /// 
@@ -947,7 +947,7 @@ impl VcenterVStorageObjectManager {
         let input = ReconcileDatastoreInventoryRequestType {datastore, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/ReconcileDatastoreInventory_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Promote a virtual disk to a First Class Disk.
     /// 
@@ -983,7 +983,7 @@ impl VcenterVStorageObjectManager {
         let input = RegisterDiskRequestType {path, name, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/RegisterDisk", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Relocate a virtual storage object.
     /// 
@@ -1031,7 +1031,7 @@ impl VcenterVStorageObjectManager {
         let input = RelocateVStorageObjectRequestType {id, datastore, spec, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/RelocateVStorageObject_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Rename a virtual storage object.
     /// 
@@ -1065,7 +1065,7 @@ impl VcenterVStorageObjectManager {
         let input = RenameVStorageObjectRequestType {id, datastore, name, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/RenameVStorageObject", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Rename a virtual storage object.
     /// 
@@ -1105,7 +1105,7 @@ impl VcenterVStorageObjectManager {
         let input = RenameVStorageObjectExRequestType {id, datastore, name, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/RenameVStorageObjectEx", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Retrieves snapshot disk details of a given snapshot.
     /// 
@@ -1140,7 +1140,7 @@ impl VcenterVStorageObjectManager {
         let input = RetrieveSnapshotDetailsRequestType {id, datastore, snapshot_id, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/RetrieveSnapshotDetails", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Retrieves snapshot information of a given VStorageObject.
     /// 
@@ -1174,7 +1174,7 @@ impl VcenterVStorageObjectManager {
         let input = RetrieveSnapshotInfoRequestType {id, datastore, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/RetrieveSnapshotInfo", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Retrieve virtual storage infrastructure object SBPM policy on given
     /// datastore.
@@ -1209,7 +1209,7 @@ impl VcenterVStorageObjectManager {
         let input = RetrieveVStorageInfrastructureObjectPolicyRequestType {datastore, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/RetrieveVStorageInfrastructureObjectPolicy", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Retrieve a virtual storage object.
     /// 
@@ -1254,7 +1254,7 @@ impl VcenterVStorageObjectManager {
         let input = RetrieveVStorageObjectRequestType {id, datastore, disk_info_flags, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/RetrieveVStorageObject", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Retrieve vm associations for each virtual storage object in the query.
     /// 
@@ -1273,7 +1273,7 @@ impl VcenterVStorageObjectManager {
         let input = RetrieveVStorageObjectAssociationsRequestType {ids, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/RetrieveVStorageObjectAssociations", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Retrieve a virtual storage object state.
     /// 
@@ -1310,7 +1310,7 @@ impl VcenterVStorageObjectManager {
         let input = RetrieveVStorageObjectStateRequestType {id, datastore, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/RetrieveVStorageObjectState", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Reverts to a given snapshot of a VStorageObject.
     /// 
@@ -1366,7 +1366,7 @@ impl VcenterVStorageObjectManager {
         let input = RevertVStorageObjectExRequestType {id, datastore, snapshot_id, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/RevertVStorageObjectEx_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Schedules reconcile of the inventory info of virtual storage objects on
     /// one of the hosts that is connected with the datastore.
@@ -1396,7 +1396,7 @@ impl VcenterVStorageObjectManager {
         let input = ScheduleReconcileDatastoreInventoryRequestType {datastore, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/ScheduleReconcileDatastoreInventory", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Set control flags on VStorageObject.
     /// 
@@ -1437,7 +1437,7 @@ impl VcenterVStorageObjectManager {
         let input = SetVStorageObjectControlFlagsRequestType {id, datastore, control_flags, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/SetVStorageObjectControlFlags", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Assigns specified SBPM policy to the given virtual storage
     /// infrastructure object.
@@ -1471,7 +1471,7 @@ impl VcenterVStorageObjectManager {
         let input = UpdateVStorageInfrastructureObjectPolicyRequestType {spec, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/UpdateVStorageInfrastructureObjectPolicy_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Update the crypto on a virtual storage object.
     /// 
@@ -1532,7 +1532,7 @@ impl VcenterVStorageObjectManager {
         let input = UpdateVStorageObjectCryptoRequestType {id, datastore, profile, disks_crypto, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/UpdateVStorageObjectCrypto_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Update metadata KV pairs to a virtual storage object and
     /// returns the corresponding vclock upon success.
@@ -1575,7 +1575,7 @@ impl VcenterVStorageObjectManager {
         let input = VCenterUpdateVStorageObjectMetadataExRequestType {id, datastore, metadata, delete_keys, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/VCenterUpdateVStorageObjectMetadataEx_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Update the storage policy on a virtual storage object.
     /// 
@@ -1621,7 +1621,7 @@ impl VcenterVStorageObjectManager {
         let input = UpdateVStorageObjectPolicyRequestType {id, datastore, profile, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/UpdateVStorageObjectPolicy_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
 }
 #[derive(serde::Serialize)]

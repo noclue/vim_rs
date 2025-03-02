@@ -53,7 +53,7 @@ impl ScheduledTaskManager {
         let input = CreateScheduledTaskRequestType {entity, spec, };
         let path = format!("/ScheduledTaskManager/{moId}/CreateScheduledTask", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Creates a scheduled task.
     ///
@@ -86,7 +86,7 @@ impl ScheduledTaskManager {
         let input = CreateObjectScheduledTaskRequestType {obj, spec, };
         let path = format!("/ScheduledTaskManager/{moId}/CreateObjectScheduledTask", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Available scheduled tasks defined on the entity.
     /// 
@@ -109,7 +109,7 @@ impl ScheduledTaskManager {
         let input = RetrieveEntityScheduledTaskRequestType {entity, };
         let path = format!("/ScheduledTaskManager/{moId}/RetrieveEntityScheduledTask", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Available scheduled tasks defined on the object.
     /// 
@@ -130,7 +130,7 @@ impl ScheduledTaskManager {
         let input = RetrieveObjectScheduledTaskRequestType {obj, };
         let path = format!("/ScheduledTaskManager/{moId}/RetrieveObjectScheduledTask", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Static descriptive strings used in scheduled tasks.
     /// 
@@ -138,7 +138,7 @@ impl ScheduledTaskManager {
     pub async fn description(&self) -> Result<ScheduledTaskDescription> {
         let path = format!("/ScheduledTaskManager/{moId}/description", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// All available scheduled tasks.
     /// 
@@ -150,7 +150,7 @@ impl ScheduledTaskManager {
     pub async fn scheduled_task(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
         let path = format!("/ScheduledTaskManager/{moId}/scheduledTask", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
 }
 #[derive(serde::Serialize)]

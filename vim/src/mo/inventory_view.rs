@@ -76,7 +76,7 @@ impl InventoryView {
         let input = CloseInventoryViewFolderRequestType {entity, };
         let path = format!("/InventoryView/{moId}/CloseInventoryViewFolder", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Destroy this view.
     /// 
@@ -84,7 +84,7 @@ impl InventoryView {
     pub async fn destroy_view(&self) -> Result<()> {
         let path = format!("/InventoryView/{moId}/DestroyView", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Adds the child objects of a given managed entity to the view.
     /// 
@@ -117,13 +117,13 @@ impl InventoryView {
         let input = OpenInventoryViewFolderRequestType {entity, };
         let path = format!("/InventoryView/{moId}/OpenInventoryViewFolder", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// The list of references to objects mapped by this view.
     pub async fn view(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
         let path = format!("/InventoryView/{moId}/view", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
 }
 #[derive(serde::Serialize)]

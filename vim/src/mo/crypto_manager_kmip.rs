@@ -45,7 +45,7 @@ impl CryptoManagerKmip {
         let input = IsKmsClusterActiveRequestType {cluster, };
         let path = format!("/CryptoManagerKmip/{moId}/IsKmsClusterActive", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Add an existing key.
     /// 
@@ -68,7 +68,7 @@ impl CryptoManagerKmip {
         let input = AddKeyRequestType {key, };
         let path = format!("/CryptoManagerKmip/{moId}/AddKey", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Add multiple existing keys.
     /// 
@@ -90,7 +90,7 @@ impl CryptoManagerKmip {
         let input = AddKeysRequestType {keys, };
         let path = format!("/CryptoManagerKmip/{moId}/AddKeys", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Generate a certificate signing request with its private key.
     /// 
@@ -121,7 +121,7 @@ impl CryptoManagerKmip {
         let input = GenerateClientCsrRequestType {cluster, request, };
         let path = format!("/CryptoManagerKmip/{moId}/GenerateClientCsr", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Generate new encryption key.
     /// 
@@ -145,7 +145,7 @@ impl CryptoManagerKmip {
         let input = GenerateKeyRequestType {key_provider, spec, };
         let path = format!("/CryptoManagerKmip/{moId}/GenerateKey", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Generate a self-signed client certificate with its private key.
     /// 
@@ -177,7 +177,7 @@ impl CryptoManagerKmip {
         let input = GenerateSelfSignedClientCertRequestType {cluster, request, };
         let path = format!("/CryptoManagerKmip/{moId}/GenerateSelfSignedClientCert", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Get the default KMS cluster of the specified managed entity.
     /// 
@@ -205,7 +205,7 @@ impl CryptoManagerKmip {
         let input = GetDefaultKmsClusterRequestType {entity, defaults_to_parent, };
         let path = format!("/CryptoManagerKmip/{moId}/GetDefaultKmsCluster", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// List keys.
     /// 
@@ -228,7 +228,7 @@ impl CryptoManagerKmip {
         let input = ListKeysRequestType {limit, };
         let path = format!("/CryptoManagerKmip/{moId}/ListKeys", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// List the registered KMIP servers.
     /// 
@@ -246,7 +246,7 @@ impl CryptoManagerKmip {
         let input = ListKmipServersRequestType {limit, };
         let path = format!("/CryptoManagerKmip/{moId}/ListKmipServers", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// List the KMS clusters information.
     /// 
@@ -290,7 +290,7 @@ impl CryptoManagerKmip {
         let input = ListKmsClustersRequestType {include_kms_servers, management_type_filter, status_filter, };
         let path = format!("/CryptoManagerKmip/{moId}/ListKmsClusters", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Set the default KMIP cluster.
     /// 
@@ -304,7 +304,7 @@ impl CryptoManagerKmip {
         let input = MarkDefaultRequestType {cluster_id, };
         let path = format!("/CryptoManagerKmip/{moId}/MarkDefault", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Check CryptoKey status, such as if VC can access the key, if the key is
     /// used by some VMs or as host key.
@@ -333,7 +333,7 @@ impl CryptoManagerKmip {
         let input = QueryCryptoKeyStatusRequestType {key_ids, check_key_bit_map, };
         let path = format!("/CryptoManagerKmip/{moId}/QueryCryptoKeyStatus", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Register a KMIP server.
     /// 
@@ -347,7 +347,7 @@ impl CryptoManagerKmip {
         let input = RegisterKmipServerRequestType {server, };
         let path = format!("/CryptoManagerKmip/{moId}/RegisterKmipServer", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Register the specified KMS cluster to the CryptoManager.
     /// 
@@ -367,7 +367,7 @@ impl CryptoManagerKmip {
         let input = RegisterKmsClusterRequestType {cluster_id, management_type, };
         let path = format!("/CryptoManagerKmip/{moId}/RegisterKmsCluster", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Remove a key (only the UUID is needed to remove).
     /// 
@@ -394,7 +394,7 @@ impl CryptoManagerKmip {
         let input = RemoveKeyRequestType {key, force, };
         let path = format!("/CryptoManagerKmip/{moId}/RemoveKey", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Remove multiple keys (only the UUID is needed to remove).
     /// 
@@ -413,7 +413,7 @@ impl CryptoManagerKmip {
         let input = RemoveKeysRequestType {keys, force, };
         let path = format!("/CryptoManagerKmip/{moId}/RemoveKeys", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Remove a KMIP server, even if in use.
     /// 
@@ -430,7 +430,7 @@ impl CryptoManagerKmip {
         let input = RemoveKmipServerRequestType {cluster_id, server_name, };
         let path = format!("/CryptoManagerKmip/{moId}/RemoveKmipServer", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Get the client certificate of the KMIP cluster.
     /// 
@@ -448,7 +448,7 @@ impl CryptoManagerKmip {
         let input = RetrieveClientCertRequestType {cluster, };
         let path = format!("/CryptoManagerKmip/{moId}/RetrieveClientCert", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Get the generated client certificate signing request.
     /// 
@@ -469,7 +469,7 @@ impl CryptoManagerKmip {
         let input = RetrieveClientCsrRequestType {cluster, };
         let path = format!("/CryptoManagerKmip/{moId}/RetrieveClientCsr", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Get the server certficate.
     /// 
@@ -494,7 +494,7 @@ impl CryptoManagerKmip {
         let input = RetrieveKmipServerCertRequestType {key_provider, server, };
         let path = format!("/CryptoManagerKmip/{moId}/RetrieveKmipServerCert", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Get the status of the KMIP servers.
     /// 
@@ -512,7 +512,7 @@ impl CryptoManagerKmip {
         let input = RetrieveKmipServersStatusRequestType {clusters, };
         let path = format!("/CryptoManagerKmip/{moId}/RetrieveKmipServersStatus_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Get the generated self signed client certificate.
     /// 
@@ -533,7 +533,7 @@ impl CryptoManagerKmip {
         let input = RetrieveSelfSignedClientCertRequestType {cluster, };
         let path = format!("/CryptoManagerKmip/{moId}/RetrieveSelfSignedClientCert", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Set the default KMS cluster for the specified managed entity.
     /// 
@@ -557,7 +557,7 @@ impl CryptoManagerKmip {
         let input = SetDefaultKmsClusterRequestType {entity, cluster_id, };
         let path = format!("/CryptoManagerKmip/{moId}/SetDefaultKmsCluster", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Set crypto key's custom attributes.
     /// 
@@ -580,7 +580,7 @@ impl CryptoManagerKmip {
         let input = SetKeyCustomAttributesRequestType {key_id, spec, };
         let path = format!("/CryptoManagerKmip/{moId}/SetKeyCustomAttributes", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Unregister the specified KMS cluster from the CryptoManager.
     /// 
@@ -594,7 +594,7 @@ impl CryptoManagerKmip {
         let input = UnregisterKmsClusterRequestType {cluster_id, };
         let path = format!("/CryptoManagerKmip/{moId}/UnregisterKmsCluster", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Update a KMIP server.
     /// 
@@ -608,7 +608,7 @@ impl CryptoManagerKmip {
         let input = UpdateKmipServerRequestType {server, };
         let path = format!("/CryptoManagerKmip/{moId}/UpdateKmipServer", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Set KMS server signed certificate as KMIP client certificate for the KMS
     /// cluster.
@@ -633,7 +633,7 @@ impl CryptoManagerKmip {
         let input = UpdateKmsSignedCsrClientCertRequestType {cluster, certificate, };
         let path = format!("/CryptoManagerKmip/{moId}/UpdateKmsSignedCsrClientCert", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Set a self-signed certificate as KMIP client certificate for the KMS
     /// cluster.
@@ -658,7 +658,7 @@ impl CryptoManagerKmip {
         let input = UpdateSelfSignedClientCertRequestType {cluster, certificate, };
         let path = format!("/CryptoManagerKmip/{moId}/UpdateSelfSignedClientCert", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Set a client certificate with private key for the KMIP cluster.
     /// 
@@ -681,7 +681,7 @@ impl CryptoManagerKmip {
         let input = UploadClientCertRequestType {cluster, certificate, private_key, };
         let path = format!("/CryptoManagerKmip/{moId}/UploadClientCert", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Upload a server certficate.
     /// 
@@ -698,19 +698,19 @@ impl CryptoManagerKmip {
         let input = UploadKmipServerCertRequestType {cluster, certificate, };
         let path = format!("/CryptoManagerKmip/{moId}/UploadKmipServerCert", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Indicate if the encryption feature is enabled.
     pub async fn enabled(&self) -> Result<bool> {
         let path = format!("/CryptoManagerKmip/{moId}/enabled", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// A list of registered KMIP servers, grouped by clusters.
     pub async fn kmip_servers(&self) -> Result<Option<Vec<KmipClusterInfo>>> {
         let path = format!("/CryptoManagerKmip/{moId}/kmipServers", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
 }
 #[derive(serde::Serialize)]

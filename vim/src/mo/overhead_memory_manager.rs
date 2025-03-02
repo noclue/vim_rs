@@ -49,7 +49,7 @@ impl OverheadMemoryManager {
         let input = LookupVmOverheadMemoryRequestType {vm, host, };
         let path = format!("/OverheadMemoryManager/{moId}/LookupVmOverheadMemory", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
 }
 #[derive(serde::Serialize)]

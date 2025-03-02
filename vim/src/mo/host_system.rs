@@ -64,7 +64,7 @@ impl HostSystem {
     pub async fn acquire_cim_services_ticket(&self) -> Result<HostServiceTicket> {
         let path = format!("/HostSystem/{moId}/AcquireCimServicesTicket", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Sets/changes the key to be used for coredump encryption
     /// and puts the host in *safe* state.
@@ -92,7 +92,7 @@ impl HostSystem {
         let input = ConfigureCryptoKeyRequestType {key_id, };
         let path = format!("/HostSystem/{moId}/ConfigureCryptoKey", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Destroys this object, deleting its contents and removing it from its parent
     /// folder (if any).
@@ -118,7 +118,7 @@ impl HostSystem {
     pub async fn destroy_task(&self) -> Result<ManagedObjectReference> {
         let path = format!("/HostSystem/{moId}/Destroy_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Disconnects from a host and instructs the server to stop sending heartbeats.
     /// 
@@ -133,7 +133,7 @@ impl HostSystem {
     pub async fn disconnect_host_task(&self) -> Result<ManagedObjectReference> {
         let path = format!("/HostSystem/{moId}/DisconnectHost_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Sets/changes the key to be used for coredump encryption
     /// and puts the host in *safe* state
@@ -154,7 +154,7 @@ impl HostSystem {
         let input = EnableCryptoRequestType {key_plain, };
         let path = format!("/HostSystem/{moId}/EnableCrypto", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Deprecated as of vSphere API 6.0, use
     /// *HostAccessManager.ChangeLockdownMode*.
@@ -185,7 +185,7 @@ impl HostSystem {
     pub async fn enter_lockdown_mode(&self) -> Result<()> {
         let path = format!("/HostSystem/{moId}/EnterLockdownMode", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Puts the host in maintenance mode.
     /// 
@@ -254,7 +254,7 @@ impl HostSystem {
         let input = EnterMaintenanceModeRequestType {timeout, evacuate_powered_off_vms, maintenance_spec, };
         let path = format!("/HostSystem/{moId}/EnterMaintenanceMode_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Puts the host in standby mode, a mode in which the host is in a
     /// standby state from which it can be powered up remotely.
@@ -326,7 +326,7 @@ impl HostSystem {
         let input = PowerDownHostToStandByRequestType {timeout_sec, evacuate_powered_off_vms, };
         let path = format!("/HostSystem/{moId}/PowerDownHostToStandBy_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Deprecated as of vSphere API 6.0, use
     /// *HostAccessManager.ChangeLockdownMode*.
@@ -353,7 +353,7 @@ impl HostSystem {
     pub async fn exit_lockdown_mode(&self) -> Result<()> {
         let path = format!("/HostSystem/{moId}/ExitLockdownMode", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Takes the host out of maintenance mode.
     /// 
@@ -386,7 +386,7 @@ impl HostSystem {
         let input = ExitMaintenanceModeRequestType {timeout, };
         let path = format!("/HostSystem/{moId}/ExitMaintenanceMode_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Takes the host out of standby mode.
     /// 
@@ -436,7 +436,7 @@ impl HostSystem {
         let input = PowerUpHostFromStandByRequestType {timeout_sec, };
         let path = format!("/HostSystem/{moId}/PowerUpHostFromStandBy_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Prepare the host for receiving sensitive information
     /// and puts the host in *prepared* mode
@@ -451,7 +451,7 @@ impl HostSystem {
     pub async fn prepare_crypto(&self) -> Result<()> {
         let path = format!("/HostSystem/{moId}/PrepareCrypto", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Connection-oriented information about a host.
     /// 
@@ -459,7 +459,7 @@ impl HostSystem {
     pub async fn query_host_connection_info(&self) -> Result<HostConnectInfo> {
         let path = format!("/HostSystem/{moId}/QueryHostConnectionInfo", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Deprecated as of VI API 2.5, use *HostSystem.QueryMemoryOverheadEx*.
     /// 
@@ -495,7 +495,7 @@ impl HostSystem {
         let input = QueryMemoryOverheadRequestType {memory_size, video_ram_size, num_vcpus, };
         let path = format!("/HostSystem/{moId}/QueryMemoryOverhead", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Deprecated as of VI API 6.0, use
     /// *VirtualMachineConfigInfo.initialOverhead*.
@@ -518,7 +518,7 @@ impl HostSystem {
         let input = QueryMemoryOverheadExRequestType {vm_config_info, };
         let path = format!("/HostSystem/{moId}/QueryMemoryOverheadEx", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Query the path to VMware Tools repository configured on the host.
     /// 
@@ -537,7 +537,7 @@ impl HostSystem {
     pub async fn query_product_locker_location(&self) -> Result<String> {
         let path = format!("/HostSystem/{moId}/QueryProductLockerLocation", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Basic information about TPM attestation state of the host.
     /// 
@@ -545,7 +545,7 @@ impl HostSystem {
     pub async fn query_tpm_attestation_report(&self) -> Result<Option<HostTpmAttestationReport>> {
         let path = format!("/HostSystem/{moId}/QueryTpmAttestationReport", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Reboots a host.
     /// 
@@ -583,7 +583,7 @@ impl HostSystem {
         let input = RebootHostRequestType {force, };
         let path = format!("/HostSystem/{moId}/RebootHost_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Reconfigures the host for vSphere HA.
     /// 
@@ -610,7 +610,7 @@ impl HostSystem {
     pub async fn reconfigure_host_for_das_task(&self) -> Result<ManagedObjectReference> {
         let path = format!("/HostSystem/{moId}/ReconfigureHostForDAS_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Reconnects to a host.
     /// 
@@ -687,7 +687,7 @@ impl HostSystem {
         let input = ReconnectHostRequestType {cnx_spec, reconnect_spec, };
         let path = format!("/HostSystem/{moId}/ReconnectHost_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Reload the entity state.
     /// 
@@ -706,7 +706,7 @@ impl HostSystem {
     pub async fn reload(&self) -> Result<()> {
         let path = format!("/HostSystem/{moId}/Reload", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Renames this managed entity.
     /// 
@@ -738,7 +738,7 @@ impl HostSystem {
         let input = RenameRequestType {new_name, };
         let path = format!("/HostSystem/{moId}/Rename_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Return the amount of free EPC memory on the host in bytes.
     /// 
@@ -746,7 +746,7 @@ impl HostSystem {
     pub async fn retrieve_free_epc_memory(&self) -> Result<i64> {
         let path = format!("/HostSystem/{moId}/RetrieveFreeEpcMemory", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Return the hardware uptime of the host in seconds.
     /// 
@@ -758,7 +758,7 @@ impl HostSystem {
     pub async fn retrieve_hardware_uptime(&self) -> Result<i64> {
         let path = format!("/HostSystem/{moId}/RetrieveHardwareUptime", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Assigns a value to a custom field.
     /// 
@@ -778,7 +778,7 @@ impl HostSystem {
         let input = SetCustomValueRequestType {key, value, };
         let path = format!("/HostSystem/{moId}/setCustomValue", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Shuts down a host.
     /// 
@@ -816,7 +816,7 @@ impl HostSystem {
         let input = ShutdownHostRequestType {force, };
         let path = format!("/HostSystem/{moId}/ShutdownHost_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Update flags that are part of the *HostFlagInfo* object.
     /// 
@@ -830,7 +830,7 @@ impl HostSystem {
         let input = UpdateFlagsRequestType {flag_info, };
         let path = format!("/HostSystem/{moId}/UpdateFlags", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Update fields that are part of the *HostIpmiInfo* object.
     /// 
@@ -850,7 +850,7 @@ impl HostSystem {
         let input = UpdateIpmiRequestType {ipmi_info, };
         let path = format!("/HostSystem/{moId}/UpdateIpmi", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Change and reconfigure the VMware Tools repository on the host.
     /// 
@@ -898,7 +898,7 @@ impl HostSystem {
         let input = UpdateProductLockerLocationRequestType {path, };
         let path = format!("/HostSystem/{moId}/UpdateProductLockerLocation_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Deprecated as of Vsphere API 6.0. Please, contact VMware Support to get
     /// instructions on how to configure system ESX resource pools.
@@ -915,7 +915,7 @@ impl HostSystem {
         let input = UpdateSystemResourcesRequestType {resource_info, };
         let path = format!("/HostSystem/{moId}/UpdateSystemResources", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Update the System Swap Configuration.
     /// 
@@ -932,7 +932,7 @@ impl HostSystem {
         let input = UpdateSystemSwapConfigurationRequestType {sys_swap_config, };
         let path = format!("/HostSystem/{moId}/UpdateSystemSwapConfiguration", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Whether alarm actions are enabled for this entity.
     /// 
@@ -942,19 +942,19 @@ impl HostSystem {
     pub async fn alarm_actions_enabled(&self) -> Result<Option<bool>> {
         let path = format!("/HostSystem/{moId}/alarmActionsEnabled", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Host answer file validation result.
     pub async fn answer_file_validation_result(&self) -> Result<Option<AnswerFileStatusResult>> {
         let path = format!("/HostSystem/{moId}/answerFileValidationResult", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Host answer file validation state.
     pub async fn answer_file_validation_state(&self) -> Result<Option<AnswerFileStatusResult>> {
         let path = format!("/HostSystem/{moId}/answerFileValidationState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// List of custom field definitions that are valid for the object's type.
     /// 
@@ -964,7 +964,7 @@ impl HostSystem {
     pub async fn available_field(&self) -> Result<Option<Vec<CustomFieldDef>>> {
         let path = format!("/HostSystem/{moId}/availableField", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Host capabilities.
     /// 
@@ -973,19 +973,19 @@ impl HostSystem {
     pub async fn capability(&self) -> Result<Option<HostCapability>> {
         let path = format!("/HostSystem/{moId}/capability", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// The host profile compliance check result.
     pub async fn compliance_check_result(&self) -> Result<Option<ComplianceResult>> {
         let path = format!("/HostSystem/{moId}/complianceCheckResult", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// The host profile compliance check state.
     pub async fn compliance_check_state(&self) -> Result<Option<HostSystemComplianceCheckState>> {
         let path = format!("/HostSystem/{moId}/complianceCheckState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Host configuration information.
     /// 
@@ -994,7 +994,7 @@ impl HostSystem {
     pub async fn config(&self) -> Result<Option<HostConfigInfo>> {
         let path = format!("/HostSystem/{moId}/config", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Current configuration issues that have been detected for this entity.
     /// 
@@ -1006,7 +1006,7 @@ impl HostSystem {
     pub async fn config_issue(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::EventTrait>>>> {
         let path = format!("/HostSystem/{moId}/configIssue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Host configuration systems.
     /// 
@@ -1020,7 +1020,7 @@ impl HostSystem {
     pub async fn config_manager(&self) -> Result<HostConfigManager> {
         let path = format!("/HostSystem/{moId}/configManager", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// The configStatus indicates whether or not the system has detected a configuration
     /// issue involving this entity.
@@ -1049,7 +1049,7 @@ impl HostSystem {
     pub async fn config_status(&self) -> Result<crate::types::enums::ManagedEntityStatusEnum> {
         let path = format!("/HostSystem/{moId}/configStatus", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Custom field values.
     /// 
@@ -1057,7 +1057,7 @@ impl HostSystem {
     pub async fn custom_value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/HostSystem/{moId}/customValue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// A collection of references to the subset of datastore objects in the datacenter
     /// that are available in this HostSystem.
@@ -1070,7 +1070,7 @@ impl HostSystem {
     pub async fn datastore(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
         let path = format!("/HostSystem/{moId}/datastore", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// DatastoreBrowser to browse datastores for this host.
     /// 
@@ -1082,7 +1082,7 @@ impl HostSystem {
     pub async fn datastore_browser(&self) -> Result<ManagedObjectReference> {
         let path = format!("/HostSystem/{moId}/datastoreBrowser", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// A set of alarm states for alarms that apply to this managed entity.
     /// 
@@ -1097,7 +1097,7 @@ impl HostSystem {
     pub async fn declared_alarm_state(&self) -> Result<Option<Vec<AlarmState>>> {
         let path = format!("/HostSystem/{moId}/declaredAlarmState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// List of operations that are disabled, given the current runtime
     /// state of the entity.
@@ -1171,7 +1171,7 @@ impl HostSystem {
     pub async fn disabled_method(&self) -> Result<Option<Vec<String>>> {
         let path = format!("/HostSystem/{moId}/disabledMethod", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Access rights the current session has to this entity.
     /// 
@@ -1179,7 +1179,7 @@ impl HostSystem {
     pub async fn effective_role(&self) -> Result<Option<Vec<i32>>> {
         let path = format!("/HostSystem/{moId}/effectiveRole", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Hardware configuration of the host.
     /// 
@@ -1188,7 +1188,7 @@ impl HostSystem {
     pub async fn hardware(&self) -> Result<Option<HostHardwareInfo>> {
         let path = format!("/HostSystem/{moId}/hardware", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Information about all licensable resources, currently present on this host.
     /// 
@@ -1201,7 +1201,7 @@ impl HostSystem {
     pub async fn licensable_resource(&self) -> Result<HostLicensableResourceInfo> {
         let path = format!("/HostSystem/{moId}/licensableResource", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Name of this entity, unique relative to its parent.
     /// 
@@ -1215,7 +1215,7 @@ impl HostSystem {
     pub async fn name(&self) -> Result<String> {
         let path = format!("/HostSystem/{moId}/name", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// A collection of references to the subset of network objects in the datacenter that
     /// are available in this HostSystem.
@@ -1228,7 +1228,7 @@ impl HostSystem {
     pub async fn network(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
         let path = format!("/HostSystem/{moId}/network", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// General health of this managed entity.
     /// 
@@ -1253,7 +1253,7 @@ impl HostSystem {
     pub async fn overall_status(&self) -> Result<crate::types::enums::ManagedEntityStatusEnum> {
         let path = format!("/HostSystem/{moId}/overallStatus", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Parent of this entity.
     /// 
@@ -1269,19 +1269,19 @@ impl HostSystem {
     pub async fn parent(&self) -> Result<Option<ManagedObjectReference>> {
         let path = format!("/HostSystem/{moId}/parent", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// List of permissions defined for this entity.
     pub async fn permission(&self) -> Result<Option<Vec<Permission>>> {
         let path = format!("/HostSystem/{moId}/permission", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// The host profile precheck-remediation result.
     pub async fn precheck_remediation_result(&self) -> Result<Option<ApplyHostProfileConfigurationSpec>> {
         let path = format!("/HostSystem/{moId}/precheckRemediationResult", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// The set of recent tasks operating on this managed entity.
     /// 
@@ -1311,38 +1311,38 @@ impl HostSystem {
     pub async fn recent_task(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
         let path = format!("/HostSystem/{moId}/recentTask", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// The host profile remediation result.
     pub async fn remediation_result(&self) -> Result<Option<ApplyHostProfileConfigurationResult>> {
         let path = format!("/HostSystem/{moId}/remediationResult", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// The host profile remediation state.
     pub async fn remediation_state(&self) -> Result<Option<HostSystemRemediationState>> {
         let path = format!("/HostSystem/{moId}/remediationState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Runtime state information about the host such as connection state.
     pub async fn runtime(&self) -> Result<HostRuntimeInfo> {
         let path = format!("/HostSystem/{moId}/runtime", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Basic information about the host, including connection state.
     pub async fn summary(&self) -> Result<HostListSummary> {
         let path = format!("/HostSystem/{moId}/summary", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Reference for the system resource hierarchy, used for configuring the set of
     /// resources reserved to the system and unavailable to virtual machines.
     pub async fn system_resources(&self) -> Result<Option<HostSystemResourceInfo>> {
         let path = format!("/HostSystem/{moId}/systemResources", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// The set of tags associated with this managed entity.
     /// 
@@ -1352,7 +1352,7 @@ impl HostSystem {
     pub async fn tag(&self) -> Result<Option<Vec<Tag>>> {
         let path = format!("/HostSystem/{moId}/tag", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// A set of alarm states for alarms triggered by this entity
     /// or by its descendants.
@@ -1371,7 +1371,7 @@ impl HostSystem {
     pub async fn triggered_alarm_state(&self) -> Result<Option<Vec<AlarmState>>> {
         let path = format!("/HostSystem/{moId}/triggeredAlarmState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// List of custom field values.
     /// 
@@ -1383,7 +1383,7 @@ impl HostSystem {
     pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/HostSystem/{moId}/value", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// List of virtual machines associated with this host.
     ///
@@ -1393,7 +1393,7 @@ impl HostSystem {
     pub async fn vm(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
         let path = format!("/HostSystem/{moId}/vm", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
 }
 #[derive(serde::Serialize)]

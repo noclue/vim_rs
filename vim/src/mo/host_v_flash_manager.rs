@@ -38,7 +38,7 @@ impl HostVFlashManager {
         let input = HostConfigVFlashCacheRequestType {spec, };
         let path = format!("/HostVFlashManager/{moId}/HostConfigVFlashCache", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Configure vFlash resource on the host by attaching to a backend VFFS volume.
     /// 
@@ -58,7 +58,7 @@ impl HostVFlashManager {
         let input = HostConfigureVFlashResourceRequestType {spec, };
         let path = format!("/HostVFlashManager/{moId}/HostConfigureVFlashResource", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Configure vFlash resource on a list of SSD disks.
     /// 
@@ -98,7 +98,7 @@ impl HostVFlashManager {
         let input = ConfigureVFlashResourceExRequestType {device_path, };
         let path = format!("/HostVFlashManager/{moId}/ConfigureVFlashResourceEx_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Retrieve the default supported configuration for a given vFlash module
     /// 
@@ -124,7 +124,7 @@ impl HostVFlashManager {
         let input = HostGetVFlashModuleDefaultConfigRequestType {v_flash_module, };
         let path = format!("/HostVFlashManager/{moId}/HostGetVFlashModuleDefaultConfig", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Remove vFlash resource on the host by destroying the contained VFFS volume.
     /// 
@@ -142,13 +142,13 @@ impl HostVFlashManager {
     pub async fn host_remove_v_flash_resource(&self) -> Result<()> {
         let path = format!("/HostVFlashManager/{moId}/HostRemoveVFlashResource", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Host vFlash configuration information.
     pub async fn v_flash_config_info(&self) -> Result<Option<HostVFlashManagerVFlashConfigInfo>> {
         let path = format!("/HostVFlashManager/{moId}/vFlashConfigInfo", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
 }
 #[derive(serde::Serialize)]

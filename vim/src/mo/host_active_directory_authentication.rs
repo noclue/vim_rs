@@ -29,7 +29,7 @@ impl HostActiveDirectoryAuthentication {
     pub async fn disable_smart_card_authentication(&self) -> Result<()> {
         let path = format!("/HostActiveDirectoryAuthentication/{moId}/DisableSmartCardAuthentication", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Enables console authentication using a local smart card and reader.
     /// 
@@ -48,7 +48,7 @@ impl HostActiveDirectoryAuthentication {
     pub async fn enable_smart_card_authentication(&self) -> Result<()> {
         let path = format!("/HostActiveDirectoryAuthentication/{moId}/EnableSmartCardAuthentication", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Import the CAM server's certificate to the local store of vmwauth.
     /// 
@@ -79,7 +79,7 @@ impl HostActiveDirectoryAuthentication {
         let input = ImportCertificateForCamRequestType {cert_path, cam_server, };
         let path = format!("/HostActiveDirectoryAuthentication/{moId}/ImportCertificateForCAM_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Install a trust anchor certificate for smart card authentication.
     /// 
@@ -98,7 +98,7 @@ impl HostActiveDirectoryAuthentication {
         let input = InstallSmartCardTrustAnchorRequestType {cert, };
         let path = format!("/HostActiveDirectoryAuthentication/{moId}/InstallSmartCardTrustAnchor", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Adds the host to an Active Directory domain.
     /// 
@@ -157,7 +157,7 @@ impl HostActiveDirectoryAuthentication {
         let input = JoinDomainRequestType {domain_name, user_name, password, };
         let path = format!("/HostActiveDirectoryAuthentication/{moId}/JoinDomain_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Adds the host to an Active Directory domain through CAM service.
     /// 
@@ -217,7 +217,7 @@ impl HostActiveDirectoryAuthentication {
         let input = JoinDomainWithCamRequestType {domain_name, cam_server, };
         let path = format!("/HostActiveDirectoryAuthentication/{moId}/JoinDomainWithCAM_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Removes the host from the Active Directory domain to which it belongs.
     /// 
@@ -252,7 +252,7 @@ impl HostActiveDirectoryAuthentication {
         let input = LeaveCurrentDomainRequestType {force, };
         let path = format!("/HostActiveDirectoryAuthentication/{moId}/LeaveCurrentDomain_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Lists installed trust anchor certificates for smart card authentication.
     /// 
@@ -269,7 +269,7 @@ impl HostActiveDirectoryAuthentication {
     pub async fn list_smart_card_trust_anchors(&self) -> Result<Option<Vec<String>>> {
         let path = format!("/HostActiveDirectoryAuthentication/{moId}/ListSmartCardTrustAnchors", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Deprecated please remove by fingerprint/digest instead.
     /// 
@@ -293,7 +293,7 @@ impl HostActiveDirectoryAuthentication {
         let input = RemoveSmartCardTrustAnchorRequestType {issuer, serial, };
         let path = format!("/HostActiveDirectoryAuthentication/{moId}/RemoveSmartCardTrustAnchor", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Remove a smart card trust anchor certificate from the system by
     /// fingerprint.
@@ -317,7 +317,7 @@ impl HostActiveDirectoryAuthentication {
         let input = RemoveSmartCardTrustAnchorByFingerprintRequestType {fingerprint, digest, };
         let path = format!("/HostActiveDirectoryAuthentication/{moId}/RemoveSmartCardTrustAnchorByFingerprint", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Replace the trust anchor certificates for smart card authentication.
     /// 
@@ -332,13 +332,13 @@ impl HostActiveDirectoryAuthentication {
         let input = ReplaceSmartCardTrustAnchorsRequestType {certs, };
         let path = format!("/HostActiveDirectoryAuthentication/{moId}/ReplaceSmartCardTrustAnchors", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Information about the authentication store.
     pub async fn info(&self) -> Result<Box<dyn crate::types::traits::HostAuthenticationStoreInfoTrait>> {
         let path = format!("/HostActiveDirectoryAuthentication/{moId}/info", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
 }
 #[derive(serde::Serialize)]

@@ -50,7 +50,7 @@ impl HostLocalAccountManager {
         let input = AssignUserToGroupRequestType {user, group, };
         let path = format!("/HostLocalAccountManager/{moId}/AssignUserToGroup", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Updates the password of a local user account.
     /// 
@@ -76,7 +76,7 @@ impl HostLocalAccountManager {
         let input = ChangePasswordRequestType {user, old_password, new_password, };
         let path = format!("/HostLocalAccountManager/{moId}/ChangePassword", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Deprecated as of vSphere API 5.1, local user groups are not supported
     /// and group specific methods will throw NotSupported.
@@ -106,7 +106,7 @@ impl HostLocalAccountManager {
         let input = CreateGroupRequestType {group, };
         let path = format!("/HostLocalAccountManager/{moId}/CreateGroup", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Creates a local user account using the parameters defined in the
     /// *HostLocalAccountManagerAccountSpecification*
@@ -135,7 +135,7 @@ impl HostLocalAccountManager {
         let input = CreateUserRequestType {user, };
         let path = format!("/HostLocalAccountManager/{moId}/CreateUser", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Deprecated as of vSphere API 5.1, local user groups are not supported
     /// and group specific methods will throw NotSupported.
@@ -156,7 +156,7 @@ impl HostLocalAccountManager {
         let input = RemoveGroupRequestType {group_name, };
         let path = format!("/HostLocalAccountManager/{moId}/RemoveGroup", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Removes a local user account.
     /// 
@@ -188,7 +188,7 @@ impl HostLocalAccountManager {
         let input = RemoveUserRequestType {user_name, };
         let path = format!("/HostLocalAccountManager/{moId}/RemoveUser", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Deprecated as of vSphere API 5.1, local user groups are not supported
     /// and group specific methods will throw NotSupported.
@@ -215,7 +215,7 @@ impl HostLocalAccountManager {
         let input = UnassignUserFromGroupRequestType {user, group, };
         let path = format!("/HostLocalAccountManager/{moId}/UnassignUserFromGroup", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Updates a local user account using the parameters defined in the
     /// *HostLocalAccountManagerAccountSpecification*
@@ -240,7 +240,7 @@ impl HostLocalAccountManager {
         let input = UpdateUserRequestType {user, };
         let path = format!("/HostLocalAccountManager/{moId}/UpdateUser", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
 }
 #[derive(serde::Serialize)]

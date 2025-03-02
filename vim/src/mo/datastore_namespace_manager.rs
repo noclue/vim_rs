@@ -53,7 +53,7 @@ impl DatastoreNamespaceManager {
         let input = ConvertNamespacePathToUuidPathRequestType {datacenter, namespace_url, };
         let path = format!("/DatastoreNamespaceManager/{moId}/ConvertNamespacePathToUuidPath", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Creates a top-level directory on the given datastore, using the given
     /// user display name hint and opaque storage policy.
@@ -109,7 +109,7 @@ impl DatastoreNamespaceManager {
         let input = CreateDirectoryRequestType {datastore, display_name, policy, size, };
         let path = format!("/DatastoreNamespaceManager/{moId}/CreateDirectory", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Deletes the given top-level directory from a datastore.
     /// 
@@ -152,7 +152,7 @@ impl DatastoreNamespaceManager {
         let input = DeleteDirectoryRequestType {datacenter, datastore_path, };
         let path = format!("/DatastoreNamespaceManager/{moId}/DeleteDirectory", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Increase size of the given top-level directory to the given size on
     /// vSAN backed object storage.
@@ -204,7 +204,7 @@ impl DatastoreNamespaceManager {
         let input = IncreaseDirectorySizeRequestType {datacenter, stable_name, size, };
         let path = format!("/DatastoreNamespaceManager/{moId}/IncreaseDirectorySize", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Query directory information of the given top-level directory on vSAN
     /// backed object storage.
@@ -252,7 +252,7 @@ impl DatastoreNamespaceManager {
         let input = QueryDirectoryInfoRequestType {datacenter, stable_name, };
         let path = format!("/DatastoreNamespaceManager/{moId}/QueryDirectoryInfo", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
 }
 #[derive(serde::Serialize)]

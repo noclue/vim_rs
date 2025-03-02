@@ -37,6 +37,6 @@ impl View {
     pub async fn destroy_view(&self) -> Result<()> {
         let path = format!("/View/{moId}/DestroyView", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
 }

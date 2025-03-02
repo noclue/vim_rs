@@ -28,6 +28,6 @@ impl<'de> serde::Deserialize<'de> for DeserializeBinary {
         let field = String::deserialize(deserializer)?;
         base64::engine::general_purpose::STANDARD.decode(field.as_bytes())
             .map(|d| DeserializeBinary { value: d })
-            .map_err(|e| serde::de::Error::custom(e))
+            .map_err(serde::de::Error::custom)
     }
 }

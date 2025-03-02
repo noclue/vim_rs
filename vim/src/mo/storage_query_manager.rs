@@ -37,7 +37,7 @@ impl StorageQueryManager {
         let input = QueryHostsWithAttachedLunRequestType {lun_uuid, };
         let path = format!("/StorageQueryManager/{moId}/QueryHostsWithAttachedLun", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
 }
 #[derive(serde::Serialize)]

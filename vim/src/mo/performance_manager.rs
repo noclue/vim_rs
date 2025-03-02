@@ -125,7 +125,7 @@ impl PerformanceManager {
         let input = CreatePerfIntervalRequestType {interval_id, };
         let path = format!("/PerformanceManager/{moId}/CreatePerfInterval", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Retrieves all performance counters for the specified *managed object* generated during a specified
     /// period of time.
@@ -171,7 +171,7 @@ impl PerformanceManager {
         let input = QueryAvailablePerfMetricRequestType {entity, begin_time, end_time, interval_id, };
         let path = format!("/PerformanceManager/{moId}/QueryAvailablePerfMetric", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Retrieves a *PerfCompositeMetric* data object
     /// that comprises statistics for the specified entity and its children
@@ -210,7 +210,7 @@ impl PerformanceManager {
         let input = QueryPerfCompositeRequestType {query_spec, };
         let path = format!("/PerformanceManager/{moId}/QueryPerfComposite", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Retrieves counter information for the specified list of counter IDs.
     /// 
@@ -230,7 +230,7 @@ impl PerformanceManager {
         let input = QueryPerfCounterRequestType {counter_id, };
         let path = format!("/PerformanceManager/{moId}/QueryPerfCounter", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Retrieves the set of counters that are available at a specified
     /// collection *PerfInterval.level*.
@@ -255,7 +255,7 @@ impl PerformanceManager {
         let input = QueryPerfCounterByLevelRequestType {level, };
         let path = format!("/PerformanceManager/{moId}/QueryPerfCounterByLevel", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Retrieves the *PerfProviderSummary* data object that
     /// defines the capabilities of the specified managed object with respect to
@@ -280,7 +280,7 @@ impl PerformanceManager {
         let input = QueryPerfProviderSummaryRequestType {entity, };
         let path = format!("/PerformanceManager/{moId}/QueryPerfProviderSummary", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Retrieves the performance metrics for the specified entity (or entities)
     /// based on the properties specified in the *PerfQuerySpec* data object.
@@ -320,7 +320,7 @@ impl PerformanceManager {
         let input = QueryPerfRequestType {query_spec, };
         let path = format!("/PerformanceManager/{moId}/QueryPerf", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Deprecated as of API 2.5, use *PerformanceManager.UpdatePerfInterval*.
     /// Historical intervals cannot be removed.
@@ -338,7 +338,7 @@ impl PerformanceManager {
         let input = RemovePerfIntervalRequestType {sample_period, };
         let path = format!("/PerformanceManager/{moId}/RemovePerfInterval", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Restores a set of performance counters to the default level of data
     /// collection.
@@ -356,7 +356,7 @@ impl PerformanceManager {
         let input = ResetCounterLevelMappingRequestType {counters, };
         let path = format!("/PerformanceManager/{moId}/ResetCounterLevelMapping", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Changes the level of data collection for a set of performance counters.
     /// 
@@ -446,7 +446,7 @@ impl PerformanceManager {
         let input = UpdateCounterLevelMappingRequestType {counter_level_map, };
         let path = format!("/PerformanceManager/{moId}/UpdateCounterLevelMapping", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Modifies VirtualCenter Server's built-in *historical intervals*, within certain limits.
     /// 
@@ -523,7 +523,7 @@ impl PerformanceManager {
         let input = UpdatePerfIntervalRequestType {interval, };
         let path = format!("/PerformanceManager/{moId}/UpdatePerfInterval", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// The static description strings.
     /// 
@@ -531,7 +531,7 @@ impl PerformanceManager {
     pub async fn description(&self) -> Result<PerformanceDescription> {
         let path = format!("/PerformanceManager/{moId}/description", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// A list of *intervals* configured on the
     /// system.
@@ -540,7 +540,7 @@ impl PerformanceManager {
     pub async fn historical_interval(&self) -> Result<Option<Vec<PerfInterval>>> {
         let path = format!("/PerformanceManager/{moId}/historicalInterval", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// A list of all supported performance counters in the system.
     /// 
@@ -548,7 +548,7 @@ impl PerformanceManager {
     pub async fn perf_counter(&self) -> Result<Option<Vec<PerfCounterInfo>>> {
         let path = format!("/PerformanceManager/{moId}/perfCounter", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
 }
 #[derive(serde::Serialize)]

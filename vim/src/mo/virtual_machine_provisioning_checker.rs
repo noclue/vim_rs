@@ -75,7 +75,7 @@ impl VirtualMachineProvisioningChecker {
         let input = CheckCloneRequestType {vm, folder, name, spec, test_type, };
         let path = format!("/VirtualMachineProvisioningChecker/{moId}/CheckClone_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Tests the feasibility of a proposed
     /// *VirtualMachine.InstantClone_Task* operation.
@@ -120,7 +120,7 @@ impl VirtualMachineProvisioningChecker {
         let input = CheckInstantCloneRequestType {vm, spec, test_type, };
         let path = format!("/VirtualMachineProvisioningChecker/{moId}/CheckInstantClone_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Tests the feasibility of a proposed
     /// *VirtualMachine.MigrateVM_Task* operation.
@@ -183,7 +183,7 @@ impl VirtualMachineProvisioningChecker {
         let input = CheckMigrateRequestType {vm, host, pool, state, test_type, };
         let path = format!("/VirtualMachineProvisioningChecker/{moId}/CheckMigrate_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Tests the feasibility of a proposed
     /// *VirtualMachine.RelocateVM_Task* operation.
@@ -245,7 +245,7 @@ impl VirtualMachineProvisioningChecker {
         let input = CheckRelocateRequestType {vm, spec, test_type, };
         let path = format!("/VirtualMachineProvisioningChecker/{moId}/CheckRelocate_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Investigates the general VMotion compatibility of a set of virtual machines
     /// with a set of hosts.
@@ -278,7 +278,7 @@ impl VirtualMachineProvisioningChecker {
         let input = QueryVMotionCompatibilityExRequestType {vm, host, };
         let path = format!("/VirtualMachineProvisioningChecker/{moId}/QueryVMotionCompatibilityEx_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
 }
 #[derive(serde::Serialize)]

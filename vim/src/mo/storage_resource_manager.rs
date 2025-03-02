@@ -71,7 +71,7 @@ impl StorageResourceManager {
         let input = ConfigureDatastoreIormRequestType {datastore, spec, };
         let path = format!("/StorageResourceManager/{moId}/ConfigureDatastoreIORM_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Query configuration options for storage I/O resource management.
     /// 
@@ -93,7 +93,7 @@ impl StorageResourceManager {
         let input = QueryIormConfigOptionRequestType {host, };
         let path = format!("/StorageResourceManager/{moId}/QueryIORMConfigOption", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Applies a recommendation from the recommendation list that is generated
     /// by SDRS initial placement invoked by RecommendDatastore method.
@@ -123,7 +123,7 @@ impl StorageResourceManager {
         let input = ApplyStorageDrsRecommendationRequestType {key, };
         let path = format!("/StorageResourceManager/{moId}/ApplyStorageDrsRecommendation_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Applies a recommendation from the recommendation list that is generated
     /// by SDRS load balancing activity.
@@ -157,7 +157,7 @@ impl StorageResourceManager {
         let input = ApplyStorageDrsRecommendationToPodRequestType {pod, key, };
         let path = format!("/StorageResourceManager/{moId}/ApplyStorageDrsRecommendationToPod_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Cancels a recommendation.
     /// 
@@ -174,7 +174,7 @@ impl StorageResourceManager {
         let input = CancelStorageDrsRecommendationRequestType {key, };
         let path = format!("/StorageResourceManager/{moId}/CancelStorageDrsRecommendation", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Change the storage DRS configuration for a pod *StoragePod*.
     ///
@@ -210,7 +210,7 @@ impl StorageResourceManager {
         let input = ConfigureStorageDrsForPodRequestType {pod, spec, modify, };
         let path = format!("/StorageResourceManager/{moId}/ConfigureStorageDrsForPod_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Returns datastore summary performance statistics.
     /// 
@@ -238,7 +238,7 @@ impl StorageResourceManager {
         let input = QueryDatastorePerformanceSummaryRequestType {datastore, };
         let path = format!("/StorageResourceManager/{moId}/QueryDatastorePerformanceSummary", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// This method returns a *StoragePlacementResult* object.
     /// This API is intended to replace the following existing APIs for
@@ -310,7 +310,7 @@ impl StorageResourceManager {
         let input = RecommendDatastoresRequestType {storage_spec, };
         let path = format!("/StorageResourceManager/{moId}/RecommendDatastores", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Make Storage DRS invoke again on the specified pod *StoragePod*
     /// and return a new list of recommendations.
@@ -332,7 +332,7 @@ impl StorageResourceManager {
         let input = RefreshStorageDrsRecommendationRequestType {pod, };
         let path = format!("/StorageResourceManager/{moId}/RefreshStorageDrsRecommendation", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Invoke Storage DRS on a specific pod *StoragePod*
     /// and return a new list of recommendations.
@@ -359,7 +359,7 @@ impl StorageResourceManager {
         let input = RefreshStorageDrsRecommendationsForPodRequestType {pod, };
         let path = format!("/StorageResourceManager/{moId}/RefreshStorageDrsRecommendationsForPod_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Validate the new storage DRS configuration for a pod
     /// *StoragePod*.
@@ -382,7 +382,7 @@ impl StorageResourceManager {
         let input = ValidateStoragePodConfigRequestType {pod, spec, };
         let path = format!("/StorageResourceManager/{moId}/ValidateStoragePodConfig", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
 }
 #[derive(serde::Serialize)]

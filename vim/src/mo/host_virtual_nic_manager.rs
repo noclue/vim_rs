@@ -39,7 +39,7 @@ impl HostVirtualNicManager {
         let input = DeselectVnicForNicTypeRequestType {nic_type, device, };
         let path = format!("/HostVirtualNicManager/{moId}/DeselectVnicForNicType", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Get the NetConfig for the specified nicType
     /// 
@@ -59,7 +59,7 @@ impl HostVirtualNicManager {
         let input = QueryNetConfigRequestType {nic_type, };
         let path = format!("/HostVirtualNicManager/{moId}/QueryNetConfig", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Select the NicType of the VirtualNic.
     /// 
@@ -88,7 +88,7 @@ impl HostVirtualNicManager {
         let input = SelectVnicForNicTypeRequestType {nic_type, device, };
         let path = format!("/HostVirtualNicManager/{moId}/SelectVnicForNicType", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Assigns a value to a custom field.
     /// 
@@ -108,7 +108,7 @@ impl HostVirtualNicManager {
         let input = SetCustomValueRequestType {key, value, };
         let path = format!("/HostVirtualNicManager/{moId}/setCustomValue", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// List of custom field definitions that are valid for the object's type.
     /// 
@@ -118,13 +118,13 @@ impl HostVirtualNicManager {
     pub async fn available_field(&self) -> Result<Option<Vec<CustomFieldDef>>> {
         let path = format!("/HostVirtualNicManager/{moId}/availableField", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Network configuration.
     pub async fn info(&self) -> Result<HostVirtualNicManagerInfo> {
         let path = format!("/HostVirtualNicManager/{moId}/info", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// List of custom field values.
     /// 
@@ -136,7 +136,7 @@ impl HostVirtualNicManager {
     pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/HostVirtualNicManager/{moId}/value", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
 }
 #[derive(serde::Serialize)]

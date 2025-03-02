@@ -54,6 +54,6 @@ impl LocalizationManager {
     pub async fn catalog(&self) -> Result<Option<Vec<LocalizationManagerMessageCatalog>>> {
         let path = format!("/LocalizationManager/{moId}/catalog", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
 }

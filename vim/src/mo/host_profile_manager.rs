@@ -66,7 +66,7 @@ impl HostProfileManager {
         let input = ApplyEntitiesConfigRequestType {apply_config_specs, };
         let path = format!("/HostProfileManager/{moId}/ApplyEntitiesConfig_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Apply the configuration to the host.
     /// 
@@ -115,7 +115,7 @@ impl HostProfileManager {
         let input = ApplyHostConfigRequestType {host, config_spec, user_input, };
         let path = format!("/HostProfileManager/{moId}/ApplyHostConfig_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Check the validity of the answer files for the specified hosts.
     /// 
@@ -143,7 +143,7 @@ impl HostProfileManager {
         let input = CheckAnswerFileStatusRequestType {host, };
         let path = format!("/HostProfileManager/{moId}/CheckAnswerFileStatus_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Composes (merge, replace, delete, disable)
     /// the selected configurations into the target host profiles.
@@ -187,7 +187,7 @@ impl HostProfileManager {
         let input = CompositeHostProfileRequestType {source, targets, to_be_merged, to_be_replaced_with, to_be_deleted, enable_status_to_be_copied, };
         let path = format!("/HostProfileManager/{moId}/CompositeHostProfile_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Create a default subprofile of a given type (for example, a
     /// *VirtualSwitchProfile*).
@@ -233,7 +233,7 @@ impl HostProfileManager {
         let input = CreateDefaultProfileRequestType {profile_type, profile_type_name, profile, };
         let path = format!("/HostProfileManager/{moId}/CreateDefaultProfile", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Create a profile from the specified CreateSpec.
     /// 
@@ -262,7 +262,7 @@ impl HostProfileManager {
         let input = CreateProfileRequestType {create_spec, };
         let path = format!("/HostProfileManager/{moId}/CreateProfile", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Export a host's answer file into a serialized form.
     /// 
@@ -291,7 +291,7 @@ impl HostProfileManager {
         let input = ExportAnswerFileRequestType {host, };
         let path = format!("/HostProfileManager/{moId}/ExportAnswerFile_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Get the profile(s) to which this entity is associated.
     /// 
@@ -314,7 +314,7 @@ impl HostProfileManager {
         let input = FindAssociatedProfileRequestType {entity, };
         let path = format!("/HostProfileManager/{moId}/FindAssociatedProfile", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Deprecated as of vSphere API 6.0 use
     /// *HostProfileManager.GenerateHostProfileTaskList_Task*.
@@ -343,7 +343,7 @@ impl HostProfileManager {
         let input = GenerateConfigTaskListRequestType {config_spec, host, };
         let path = format!("/HostProfileManager/{moId}/GenerateConfigTaskList", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// This method generates *ApplyHostProfileConfigurationSpec* data object
     /// for each host which can be passed as input to
@@ -385,7 +385,7 @@ impl HostProfileManager {
         let input = GenerateHostConfigTaskSpecRequestType {hosts_info, };
         let path = format!("/HostProfileManager/{moId}/GenerateHostConfigTaskSpec_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Generate a list of configuration tasks that will be performed on the
     /// host during HostProfile application.
@@ -421,7 +421,7 @@ impl HostProfileManager {
         let input = GenerateHostProfileTaskListRequestType {config_spec, host, };
         let path = format!("/HostProfileManager/{moId}/GenerateHostProfileTaskList_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Returns the status of the answer files associated with specified hosts.
     /// 
@@ -445,7 +445,7 @@ impl HostProfileManager {
         let input = QueryAnswerFileStatusRequestType {host, };
         let path = format!("/HostProfileManager/{moId}/QueryAnswerFileStatus", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Get the Metadata information for the policyNames.
     /// 
@@ -472,7 +472,7 @@ impl HostProfileManager {
         let input = QueryPolicyMetadataRequestType {policy_name, profile, };
         let path = format!("/HostProfileManager/{moId}/QueryPolicyMetadata", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Retrieve the metadata for a set of profiles.
     /// 
@@ -496,7 +496,7 @@ impl HostProfileManager {
         let input = QueryHostProfileMetadataRequestType {profile_name, profile, };
         let path = format!("/HostProfileManager/{moId}/QueryHostProfileMetadata", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Get information about the structure of the profile.
     /// 
@@ -516,7 +516,7 @@ impl HostProfileManager {
         let input = QueryProfileStructureRequestType {profile, };
         let path = format!("/HostProfileManager/{moId}/QueryProfileStructure", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Returns the answer file associated with a particular host.
     ///
@@ -536,7 +536,7 @@ impl HostProfileManager {
         let input = RetrieveAnswerFileRequestType {host, };
         let path = format!("/HostProfileManager/{moId}/RetrieveAnswerFile", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Returns the answer file associated with a particular host, augmented
     /// with whatever answer file values are required for the supplied host
@@ -561,7 +561,7 @@ impl HostProfileManager {
         let input = RetrieveAnswerFileForProfileRequestType {host, apply_profile, };
         let path = format!("/HostProfileManager/{moId}/RetrieveAnswerFileForProfile", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// This is the batch version of
     /// vim.profile.host.ProfileManager@retrieveAnswerFile.
@@ -585,7 +585,7 @@ impl HostProfileManager {
         let input = RetrieveHostCustomizationsRequestType {hosts, };
         let path = format!("/HostProfileManager/{moId}/RetrieveHostCustomizations", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// This is the batch version of
     /// vim.profile.host.ProfileManager@retrieveAnswerFileForProfile.
@@ -613,7 +613,7 @@ impl HostProfileManager {
         let input = RetrieveHostCustomizationsForProfileRequestType {hosts, apply_profile, };
         let path = format!("/HostProfileManager/{moId}/RetrieveHostCustomizationsForProfile", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Update the *AnswerFile* for the specified host.
     /// 
@@ -651,7 +651,7 @@ impl HostProfileManager {
         let input = UpdateAnswerFileRequestType {host, config_spec, };
         let path = format!("/HostProfileManager/{moId}/UpdateAnswerFile_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// This is the batch version of
     /// vim.profile.host.ProfileManager@updateAnswerFile.
@@ -678,7 +678,7 @@ impl HostProfileManager {
         let input = UpdateHostCustomizationsRequestType {host_to_config_spec_map, };
         let path = format!("/HostProfileManager/{moId}/UpdateHostCustomizations_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Validates the proposed host profile composition.
     /// 
@@ -763,7 +763,7 @@ impl HostProfileManager {
         let input = ValidateHostProfileCompositionRequestType {source, targets, to_be_merged, to_replace_with, to_be_deleted, enable_status_to_be_copied, error_only, };
         let path = format!("/HostProfileManager/{moId}/ValidateHostProfileComposition_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// A list of profiles known to this ProfileManager.
     /// 
@@ -775,7 +775,7 @@ impl HostProfileManager {
     pub async fn profile(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
         let path = format!("/HostProfileManager/{moId}/profile", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
 }
 #[derive(serde::Serialize)]

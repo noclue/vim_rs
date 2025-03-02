@@ -41,7 +41,7 @@ impl ServiceManager {
         let input = QueryServiceListRequestType {service_name, location, };
         let path = format!("/ServiceManager/{moId}/QueryServiceList", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// The full list of services available in this directory.
     /// 
@@ -49,7 +49,7 @@ impl ServiceManager {
     pub async fn service(&self) -> Result<Option<Vec<ServiceManagerServiceInfo>>> {
         let path = format!("/ServiceManager/{moId}/service", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
 }
 #[derive(serde::Serialize)]

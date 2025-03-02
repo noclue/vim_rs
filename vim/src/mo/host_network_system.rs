@@ -50,7 +50,7 @@ impl HostNetworkSystem {
         let input = AddPortGroupRequestType {portgrp, };
         let path = format!("/HostNetworkSystem/{moId}/AddPortGroup", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Adds a virtual service console network adapter.
     /// 
@@ -87,7 +87,7 @@ impl HostNetworkSystem {
         let input = AddServiceConsoleVirtualNicRequestType {portgroup, nic, };
         let path = format!("/HostNetworkSystem/{moId}/AddServiceConsoleVirtualNic", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Adds a virtual host/VMkernel network adapter.
     /// 
@@ -130,7 +130,7 @@ impl HostNetworkSystem {
         let input = AddVirtualNicRequestType {portgroup, nic, };
         let path = format!("/HostNetworkSystem/{moId}/AddVirtualNic", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Adds a new virtual switch to the system with the given name.
     /// 
@@ -166,7 +166,7 @@ impl HostNetworkSystem {
         let input = AddVirtualSwitchRequestType {vswitch_name, spec, };
         let path = format!("/HostNetworkSystem/{moId}/AddVirtualSwitch", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Requests network hint information for a physical network adapter.
     /// 
@@ -201,7 +201,7 @@ impl HostNetworkSystem {
         let input = QueryNetworkHintRequestType {device, };
         let path = format!("/HostNetworkSystem/{moId}/QueryNetworkHint", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Refresh the network information and settings to pick up any changes
     /// that might have occurred.
@@ -210,7 +210,7 @@ impl HostNetworkSystem {
     pub async fn refresh_network_system(&self) -> Result<()> {
         let path = format!("/HostNetworkSystem/{moId}/RefreshNetworkSystem", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Removes port group from the virtual switch.
     /// 
@@ -233,7 +233,7 @@ impl HostNetworkSystem {
         let input = RemovePortGroupRequestType {pg_name, };
         let path = format!("/HostNetworkSystem/{moId}/RemovePortGroup", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Removes a virtual service console network adapter.
     /// 
@@ -260,7 +260,7 @@ impl HostNetworkSystem {
         let input = RemoveServiceConsoleVirtualNicRequestType {device, };
         let path = format!("/HostNetworkSystem/{moId}/RemoveServiceConsoleVirtualNic", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Removes a virtual host/VMkernel network adapter.
     /// 
@@ -280,7 +280,7 @@ impl HostNetworkSystem {
         let input = RemoveVirtualNicRequestType {device, };
         let path = format!("/HostNetworkSystem/{moId}/RemoveVirtualNic", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Removes an existing virtual switch from the system.
     /// 
@@ -303,7 +303,7 @@ impl HostNetworkSystem {
         let input = RemoveVirtualSwitchRequestType {vswitch_name, };
         let path = format!("/HostNetworkSystem/{moId}/RemoveVirtualSwitch", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Restart the service console virtual network adapter interface.
     /// 
@@ -332,7 +332,7 @@ impl HostNetworkSystem {
         let input = RestartServiceConsoleVirtualNicRequestType {device, };
         let path = format!("/HostNetworkSystem/{moId}/RestartServiceConsoleVirtualNic", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Assigns a value to a custom field.
     /// 
@@ -352,7 +352,7 @@ impl HostNetworkSystem {
         let input = SetCustomValueRequestType {key, value, };
         let path = format!("/HostNetworkSystem/{moId}/setCustomValue", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Applies the IP route configuration for the service console.
     /// 
@@ -374,7 +374,7 @@ impl HostNetworkSystem {
         let input = UpdateConsoleIpRouteConfigRequestType {config, };
         let path = format!("/HostNetworkSystem/{moId}/UpdateConsoleIpRouteConfig", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Deprecated as of vSphere API 5.5, which is moved to
     /// each NetStackInstance. This API only works on the default NetStackInstance.
@@ -407,7 +407,7 @@ impl HostNetworkSystem {
         let input = UpdateDnsConfigRequestType {config, };
         let path = format!("/HostNetworkSystem/{moId}/UpdateDnsConfig", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Deprecated as of vSphere API 5.5, which is moved to
     /// each NetStackInstance. This API only works on the default NetStackInstance.
@@ -435,7 +435,7 @@ impl HostNetworkSystem {
         let input = UpdateIpRouteConfigRequestType {config, };
         let path = format!("/HostNetworkSystem/{moId}/UpdateIpRouteConfig", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Deprecated as of vSphere API 5.5, which is moved to
     /// each NetStackInstance. This API only works on the default NetStackInstance.
@@ -460,7 +460,7 @@ impl HostNetworkSystem {
         let input = UpdateIpRouteTableConfigRequestType {config, };
         let path = format!("/HostNetworkSystem/{moId}/UpdateIpRouteTableConfig", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Applies the network configuration.
     /// 
@@ -542,7 +542,7 @@ impl HostNetworkSystem {
         let input = UpdateNetworkConfigRequestType {config, change_mode, };
         let path = format!("/HostNetworkSystem/{moId}/UpdateNetworkConfig", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Configures link speed and duplexity.
     /// 
@@ -575,7 +575,7 @@ impl HostNetworkSystem {
         let input = UpdatePhysicalNicLinkSpeedRequestType {device, link_speed, };
         let path = format!("/HostNetworkSystem/{moId}/UpdatePhysicalNicLinkSpeed", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Reconfigures a port group on the virtual switch.
     /// 
@@ -605,7 +605,7 @@ impl HostNetworkSystem {
         let input = UpdatePortGroupRequestType {pg_name, portgrp, };
         let path = format!("/HostNetworkSystem/{moId}/UpdatePortGroup", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Configures the IP configuration for a virtual service console network
     /// adapter.
@@ -643,7 +643,7 @@ impl HostNetworkSystem {
         let input = UpdateServiceConsoleVirtualNicRequestType {device, nic, };
         let path = format!("/HostNetworkSystem/{moId}/UpdateServiceConsoleVirtualNic", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Configures virtual host/VMkernel network adapter.
     /// 
@@ -682,7 +682,7 @@ impl HostNetworkSystem {
         let input = UpdateVirtualNicRequestType {device, nic, };
         let path = format!("/HostNetworkSystem/{moId}/UpdateVirtualNic", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Updates the properties of the virtual switch.
     /// 
@@ -730,7 +730,7 @@ impl HostNetworkSystem {
         let input = UpdateVirtualSwitchRequestType {vswitch_name, spec, };
         let path = format!("/HostNetworkSystem/{moId}/UpdateVirtualSwitch", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// List of custom field definitions that are valid for the object's type.
     /// 
@@ -740,13 +740,13 @@ impl HostNetworkSystem {
     pub async fn available_field(&self) -> Result<Option<Vec<CustomFieldDef>>> {
         let path = format!("/HostNetworkSystem/{moId}/availableField", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Capability vector indicating the available product features.
     pub async fn capabilities(&self) -> Result<Option<HostNetCapabilities>> {
         let path = format!("/HostNetworkSystem/{moId}/capabilities", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// IP route configuration for the service console.
     /// 
@@ -757,7 +757,7 @@ impl HostNetworkSystem {
     pub async fn console_ip_route_config(&self) -> Result<Option<Box<dyn crate::types::traits::HostIpRouteConfigTrait>>> {
         let path = format!("/HostNetworkSystem/{moId}/consoleIpRouteConfig", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Deprecated as of vSphere API 5.5, which is moved to
     /// each NetStackInstance. This only works on the default NetStackInstance.
@@ -766,7 +766,7 @@ impl HostNetworkSystem {
     pub async fn dns_config(&self) -> Result<Option<Box<dyn crate::types::traits::HostDnsConfigTrait>>> {
         let path = format!("/HostNetworkSystem/{moId}/dnsConfig", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Deprecated as of vSphere API 5.5, which is moved to
     /// each NetStackInstance. This only works on the default NetStackInstance.
@@ -775,7 +775,7 @@ impl HostNetworkSystem {
     pub async fn ip_route_config(&self) -> Result<Option<Box<dyn crate::types::traits::HostIpRouteConfigTrait>>> {
         let path = format!("/HostNetworkSystem/{moId}/ipRouteConfig", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Network configuration information.
     /// 
@@ -787,13 +787,13 @@ impl HostNetworkSystem {
     pub async fn network_config(&self) -> Result<Option<HostNetworkConfig>> {
         let path = format!("/HostNetworkSystem/{moId}/networkConfig", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// The network configuration and runtime information.
     pub async fn network_info(&self) -> Result<Option<HostNetworkInfo>> {
         let path = format!("/HostNetworkSystem/{moId}/networkInfo", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Deprecated as of VI API 4.0, the system defaults will be used.
     /// 
@@ -801,7 +801,7 @@ impl HostNetworkSystem {
     pub async fn offload_capabilities(&self) -> Result<Option<HostNetOffloadCapabilities>> {
         let path = format!("/HostNetworkSystem/{moId}/offloadCapabilities", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// List of custom field values.
     /// 
@@ -813,7 +813,7 @@ impl HostNetworkSystem {
     pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/HostNetworkSystem/{moId}/value", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
 }
 #[derive(serde::Serialize)]

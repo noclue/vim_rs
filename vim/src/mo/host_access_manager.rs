@@ -58,7 +58,7 @@ impl HostAccessManager {
         let input = ChangeAccessModeRequestType {principal, is_group, access_mode, };
         let path = format!("/HostAccessManager/{moId}/ChangeAccessMode", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Changes the lockdown state of the ESXi host.
     /// 
@@ -128,7 +128,7 @@ impl HostAccessManager {
         let input = ChangeLockdownModeRequestType {mode, };
         let path = format!("/HostAccessManager/{moId}/ChangeLockdownMode", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Get the list of users which are exceptions for lockdown mode.
     /// 
@@ -143,7 +143,7 @@ impl HostAccessManager {
     pub async fn query_lockdown_exceptions(&self) -> Result<Option<Vec<String>>> {
         let path = format!("/HostAccessManager/{moId}/QueryLockdownExceptions", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Get the list of local system users.
     /// 
@@ -163,7 +163,7 @@ impl HostAccessManager {
     pub async fn query_system_users(&self) -> Result<Option<Vec<String>>> {
         let path = format!("/HostAccessManager/{moId}/QuerySystemUsers", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Retrieve access entries.
     /// 
@@ -179,7 +179,7 @@ impl HostAccessManager {
     pub async fn retrieve_host_access_control_entries(&self) -> Result<Option<Vec<HostAccessControlEntry>>> {
         let path = format!("/HostAccessManager/{moId}/RetrieveHostAccessControlEntries", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Update the list of users which are exceptions for lockdown mode.
     /// 
@@ -215,7 +215,7 @@ impl HostAccessManager {
         let input = UpdateLockdownExceptionsRequestType {users, };
         let path = format!("/HostAccessManager/{moId}/UpdateLockdownExceptions", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Update the list of local system users.
     /// 
@@ -239,7 +239,7 @@ impl HostAccessManager {
         let input = UpdateSystemUsersRequestType {users, };
         let path = format!("/HostAccessManager/{moId}/UpdateSystemUsers", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Current lockdown state of the host.
     /// 
@@ -247,7 +247,7 @@ impl HostAccessManager {
     pub async fn lockdown_mode(&self) -> Result<crate::types::enums::HostLockdownModeEnum> {
         let path = format!("/HostAccessManager/{moId}/lockdownMode", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
 }
 #[derive(serde::Serialize)]

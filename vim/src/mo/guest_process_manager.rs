@@ -76,7 +76,7 @@ impl GuestProcessManager {
         let input = ListProcessesInGuestRequestType {vm, auth, pids, };
         let path = format!("/GuestProcessManager/{moId}/ListProcessesInGuest", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Reads an environment variable from the guest OS
     /// 
@@ -143,7 +143,7 @@ impl GuestProcessManager {
         let input = ReadEnvironmentVariableInGuestRequestType {vm, auth, names, };
         let path = format!("/GuestProcessManager/{moId}/ReadEnvironmentVariableInGuest", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Starts a program in the guest operating system.
     /// 
@@ -214,7 +214,7 @@ impl GuestProcessManager {
         let input = StartProgramInGuestRequestType {vm, auth, spec, };
         let path = format!("/GuestProcessManager/{moId}/StartProgramInGuest", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Terminates a process in the guest OS.
     ///
@@ -269,7 +269,7 @@ impl GuestProcessManager {
         let input = TerminateProcessInGuestRequestType {vm, auth, pid, };
         let path = format!("/GuestProcessManager/{moId}/TerminateProcessInGuest", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
 }
 #[derive(serde::Serialize)]

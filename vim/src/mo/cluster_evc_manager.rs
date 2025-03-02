@@ -55,7 +55,7 @@ impl ClusterEvcManager {
         let input = CheckAddHostEvcRequestType {cnx_spec, };
         let path = format!("/ClusterEVCManager/{moId}/CheckAddHostEvc_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Test the validity of configuring an EVC mode on the managed cluster.
     /// 
@@ -82,7 +82,7 @@ impl ClusterEvcManager {
         let input = CheckConfigureEvcModeRequestType {evc_mode_key, evc_graphics_mode_key, };
         let path = format!("/ClusterEVCManager/{moId}/CheckConfigureEvcMode_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Set the EVC mode.
     /// 
@@ -118,7 +118,7 @@ impl ClusterEvcManager {
         let input = ConfigureEvcModeRequestType {evc_mode_key, evc_graphics_mode_key, };
         let path = format!("/ClusterEVCManager/{moId}/ConfigureEvcMode_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Disable EVC.
     /// 
@@ -132,7 +132,7 @@ impl ClusterEvcManager {
     pub async fn disable_evc_mode_task(&self) -> Result<ManagedObjectReference> {
         let path = format!("/ClusterEVCManager/{moId}/DisableEvcMode_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Assigns a value to a custom field.
     /// 
@@ -152,7 +152,7 @@ impl ClusterEvcManager {
         let input = SetCustomValueRequestType {key, value, };
         let path = format!("/ClusterEVCManager/{moId}/setCustomValue", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// List of custom field definitions that are valid for the object's type.
     /// 
@@ -162,13 +162,13 @@ impl ClusterEvcManager {
     pub async fn available_field(&self) -> Result<Option<Vec<CustomFieldDef>>> {
         let path = format!("/ClusterEVCManager/{moId}/availableField", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// EVC-related state of the managed cluster.
     pub async fn evc_state(&self) -> Result<ClusterEvcManagerEvcState> {
         let path = format!("/ClusterEVCManager/{moId}/evcState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Cluster associated with this manager object.
     ///
@@ -178,7 +178,7 @@ impl ClusterEvcManager {
     pub async fn managed_cluster(&self) -> Result<ManagedObjectReference> {
         let path = format!("/ClusterEVCManager/{moId}/managedCluster", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// List of custom field values.
     /// 
@@ -190,7 +190,7 @@ impl ClusterEvcManager {
     pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/ClusterEVCManager/{moId}/value", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
 }
 #[derive(serde::Serialize)]

@@ -27,7 +27,7 @@ impl PropertyFilter {
     pub async fn destroy_property_filter(&self) -> Result<()> {
         let path = format!("/PropertyFilter/{moId}/DestroyPropertyFilter", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Flag to indicate if a change to a nested property reports only the
     /// nested change or the entire specified property value.
@@ -38,12 +38,12 @@ impl PropertyFilter {
     pub async fn partial_updates(&self) -> Result<bool> {
         let path = format!("/PropertyFilter/{moId}/partialUpdates", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Specifications for this filter.
     pub async fn spec(&self) -> Result<PropertyFilterSpec> {
         let path = format!("/PropertyFilter/{moId}/spec", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
 }

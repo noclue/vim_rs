@@ -41,7 +41,7 @@ impl ExtensionManager {
         let input = FindExtensionRequestType {extension_key, };
         let path = format!("/ExtensionManager/{moId}/FindExtension", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Deprecated as of VI 4.0, use trusted certificates and
     /// *SessionManager.LoginExtensionBySubjectName* or
@@ -59,7 +59,7 @@ impl ExtensionManager {
     pub async fn get_public_key(&self) -> Result<String> {
         let path = format!("/ExtensionManager/{moId}/GetPublicKey", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Query statistics about IP allocation usage, either system wide or for
     /// specified extensions.
@@ -82,7 +82,7 @@ impl ExtensionManager {
         let input = QueryExtensionIpAllocationUsageRequestType {extension_keys, };
         let path = format!("/ExtensionManager/{moId}/QueryExtensionIpAllocationUsage", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Find entities managed by an extension.
     /// 
@@ -105,7 +105,7 @@ impl ExtensionManager {
         let input = QueryManagedByRequestType {extension_key, };
         let path = format!("/ExtensionManager/{moId}/QueryManagedBy", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Registers extension.
     /// 
@@ -119,7 +119,7 @@ impl ExtensionManager {
         let input = RegisterExtensionRequestType {extension, };
         let path = format!("/ExtensionManager/{moId}/RegisterExtension", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Update the stored authentication certificate for a specified extension.
     /// 
@@ -161,7 +161,7 @@ impl ExtensionManager {
         let input = SetExtensionCertificateRequestType {extension_key, certificate_pem, };
         let path = format!("/ExtensionManager/{moId}/SetExtensionCertificate", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Deprecated as of VI 4.0, use trusted certificates and
     /// *SessionManager.LoginExtensionBySubjectName* or
@@ -187,7 +187,7 @@ impl ExtensionManager {
         let input = SetPublicKeyRequestType {extension_key, public_key, };
         let path = format!("/ExtensionManager/{moId}/SetPublicKey", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Update the stored authentication service account for the specified extension.
     /// 
@@ -232,7 +232,7 @@ impl ExtensionManager {
         let input = SetServiceAccountRequestType {extension_key, service_account, };
         let path = format!("/ExtensionManager/{moId}/SetServiceAccount", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Unregisters the specified extension if it exists.
     /// 
@@ -251,7 +251,7 @@ impl ExtensionManager {
         let input = UnregisterExtensionRequestType {extension_key, };
         let path = format!("/ExtensionManager/{moId}/UnregisterExtension", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// If the key specified in the extension exists,
     /// the existing record is updated.
@@ -279,7 +279,7 @@ impl ExtensionManager {
         let input = UpdateExtensionRequestType {extension, };
         let path = format!("/ExtensionManager/{moId}/UpdateExtension", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// The list of currently registered extensions.
     /// 
@@ -287,7 +287,7 @@ impl ExtensionManager {
     pub async fn extension_list(&self) -> Result<Option<Vec<Extension>>> {
         let path = format!("/ExtensionManager/{moId}/extensionList", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
 }
 #[derive(serde::Serialize)]

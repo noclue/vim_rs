@@ -49,7 +49,7 @@ impl VirtualMachineSnapshot {
     pub async fn export_snapshot(&self) -> Result<ManagedObjectReference> {
         let path = format!("/VirtualMachineSnapshot/{moId}/ExportSnapshot", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Removes this snapshot and deletes any associated storage.
     /// 
@@ -78,7 +78,7 @@ impl VirtualMachineSnapshot {
         let input = RemoveSnapshotRequestType {remove_children, consolidate, };
         let path = format!("/VirtualMachineSnapshot/{moId}/RemoveSnapshot_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Rename this snapshot with either a new name or a new description or both.
     /// 
@@ -112,7 +112,7 @@ impl VirtualMachineSnapshot {
         let input = RenameSnapshotRequestType {name, description, };
         let path = format!("/VirtualMachineSnapshot/{moId}/RenameSnapshot", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Change the execution state of the virtual machine to the state of this snapshot.
     /// 
@@ -172,7 +172,7 @@ impl VirtualMachineSnapshot {
         let input = RevertToSnapshotRequestType {host, suppress_power_on, };
         let path = format!("/VirtualMachineSnapshot/{moId}/RevertToSnapshot_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Assigns a value to a custom field.
     /// 
@@ -192,7 +192,7 @@ impl VirtualMachineSnapshot {
         let input = SetCustomValueRequestType {key, value, };
         let path = format!("/VirtualMachineSnapshot/{moId}/setCustomValue", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// List of custom field definitions that are valid for the object's type.
     /// 
@@ -202,7 +202,7 @@ impl VirtualMachineSnapshot {
     pub async fn available_field(&self) -> Result<Option<Vec<CustomFieldDef>>> {
         let path = format!("/VirtualMachineSnapshot/{moId}/availableField", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// All snapshots for which this snapshot is the parent.
     ///
@@ -212,7 +212,7 @@ impl VirtualMachineSnapshot {
     pub async fn child_snapshot(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
         let path = format!("/VirtualMachineSnapshot/{moId}/childSnapshot", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Information about the configuration of this virtual machine when this snapshot was
     /// taken.
@@ -223,7 +223,7 @@ impl VirtualMachineSnapshot {
     pub async fn config(&self) -> Result<VirtualMachineConfigInfo> {
         let path = format!("/VirtualMachineSnapshot/{moId}/config", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// List of custom field values.
     /// 
@@ -235,7 +235,7 @@ impl VirtualMachineSnapshot {
     pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/VirtualMachineSnapshot/{moId}/value", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// The virtual machine for which the snapshot was taken.
     ///
@@ -245,7 +245,7 @@ impl VirtualMachineSnapshot {
     pub async fn vm(&self) -> Result<ManagedObjectReference> {
         let path = format!("/VirtualMachineSnapshot/{moId}/vm", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
 }
 #[derive(serde::Serialize)]

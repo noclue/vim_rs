@@ -56,7 +56,7 @@ impl VStorageObjectManagerBase {
         let input = VStorageObjectCreateSnapshotExRequestType {id, datastore, description, };
         let path = format!("/VStorageObjectManagerBase/{moId}/VStorageObjectCreateSnapshotEx_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Deletes a given snapshot of a VStorageObject.
     /// 
@@ -99,7 +99,7 @@ impl VStorageObjectManagerBase {
         let input = VStorageObjectDeleteSnapshotExRequestType {id, datastore, snapshot_id, };
         let path = format!("/VStorageObjectManagerBase/{moId}/VStorageObjectDeleteSnapshotEx_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Expand the capacity of a virtual disk, which is a storage object with
     /// *disk*, to the new
@@ -159,7 +159,7 @@ impl VStorageObjectManagerBase {
         let input = VStorageObjectExtendDiskExRequestType {id, datastore, new_capacity_in_mb, };
         let path = format!("/VStorageObjectManagerBase/{moId}/VStorageObjectExtendDiskEx_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Rename a virtual storage object.
     /// 
@@ -199,7 +199,7 @@ impl VStorageObjectManagerBase {
         let input = RenameVStorageObjectExRequestType {id, datastore, name, };
         let path = format!("/VStorageObjectManagerBase/{moId}/RenameVStorageObjectEx", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Reverts to a given snapshot of a VStorageObject.
     /// 
@@ -255,7 +255,7 @@ impl VStorageObjectManagerBase {
         let input = RevertVStorageObjectExRequestType {id, datastore, snapshot_id, };
         let path = format!("/VStorageObjectManagerBase/{moId}/RevertVStorageObjectEx_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
 }
 #[derive(serde::Serialize)]

@@ -58,7 +58,7 @@ impl HostVsanSystem {
         let input = AddDisksRequestType {disk, };
         let path = format!("/HostVsanSystem/{moId}/AddDisks_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Evacuate this host from VSAN cluster.
     /// 
@@ -99,7 +99,7 @@ impl HostVsanSystem {
         let input = EvacuateVsanNodeRequestType {maintenance_spec, timeout, };
         let path = format!("/HostVsanSystem/{moId}/EvacuateVsanNode_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Initialize and use the sets of disks in the given *VsanHostDiskMapping*
     /// list for the VSAN service on this host.
@@ -138,7 +138,7 @@ impl HostVsanSystem {
         let input = InitializeDisksRequestType {mapping, };
         let path = format!("/HostVsanSystem/{moId}/InitializeDisks_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Queries disks on this host for suitability to use with the VSAN service,
     /// and returns the result.
@@ -161,7 +161,7 @@ impl HostVsanSystem {
         let input = QueryDisksForVsanRequestType {canonical_name, };
         let path = format!("/HostVsanSystem/{moId}/QueryDisksForVsan", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Queries this host's current runtime status for the VSAN service.
     /// 
@@ -173,7 +173,7 @@ impl HostVsanSystem {
     pub async fn query_host_status(&self) -> Result<VsanHostClusterStatus> {
         let path = format!("/HostVsanSystem/{moId}/QueryHostStatus", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Recommission this host to VSAN cluster.
     /// 
@@ -199,7 +199,7 @@ impl HostVsanSystem {
     pub async fn recommission_vsan_node_task(&self) -> Result<ManagedObjectReference> {
         let path = format!("/HostVsanSystem/{moId}/RecommissionVsanNode_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Remove the set of given disks from use by the VSAN service on this host.
     /// 
@@ -254,7 +254,7 @@ impl HostVsanSystem {
         let input = RemoveDiskRequestType {disk, maintenance_spec, timeout, };
         let path = format!("/HostVsanSystem/{moId}/RemoveDisk_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Delete given set of disk mappings from use by the VSAN service on this host.
     /// 
@@ -301,7 +301,7 @@ impl HostVsanSystem {
         let input = RemoveDiskMappingRequestType {mapping, maintenance_spec, timeout, };
         let path = format!("/HostVsanSystem/{moId}/RemoveDiskMapping_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Unmount the mounted *VsanHostDiskMapping*.
     /// 
@@ -344,7 +344,7 @@ impl HostVsanSystem {
         let input = UnmountDiskMappingRequestType {mapping, };
         let path = format!("/HostVsanSystem/{moId}/UnmountDiskMapping_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Update the VSAN service on this host according to the given host
     /// configuration specification.
@@ -380,7 +380,7 @@ impl HostVsanSystem {
         let input = UpdateVsanRequestType {config, };
         let path = format!("/HostVsanSystem/{moId}/UpdateVsan_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// The current VSAN service configuration information for this host.
     /// 
@@ -388,7 +388,7 @@ impl HostVsanSystem {
     pub async fn config(&self) -> Result<VsanHostConfigInfo> {
         let path = format!("/HostVsanSystem/{moId}/config", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
 }
 #[derive(serde::Serialize)]

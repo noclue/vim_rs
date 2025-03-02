@@ -99,7 +99,7 @@ impl HostDatastoreBrowser {
         let input = DeleteFileRequestType {datastore_path, };
         let path = format!("/HostDatastoreBrowser/{moId}/DeleteFile", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Returns the information for the files that match the given search criteria as a
     /// SearchResults object.
@@ -140,7 +140,7 @@ impl HostDatastoreBrowser {
         let input = SearchDatastoreRequestType {datastore_path, search_spec, };
         let path = format!("/HostDatastoreBrowser/{moId}/SearchDatastore_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Returns the information for the files that match the given search criteria as a
     /// SearchResults\[\] object.
@@ -179,7 +179,7 @@ impl HostDatastoreBrowser {
         let input = SearchDatastoreSubFoldersRequestType {datastore_path, search_spec, };
         let path = format!("/HostDatastoreBrowser/{moId}/SearchDatastoreSubFolders_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Set of datastores that can be searched on this DatastoreBrowser.
     /// 
@@ -196,7 +196,7 @@ impl HostDatastoreBrowser {
     pub async fn datastore(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
         let path = format!("/HostDatastoreBrowser/{moId}/datastore", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// The list of supported file types.
     /// 
@@ -215,7 +215,7 @@ impl HostDatastoreBrowser {
     pub async fn supported_type(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::FileQueryTrait>>>> {
         let path = format!("/HostDatastoreBrowser/{moId}/supportedType", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
 }
 #[derive(serde::Serialize)]

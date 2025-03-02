@@ -51,7 +51,7 @@ impl HealthUpdateManager {
         let input = AddFilterRequestType {provider_id, filter_name, info_ids, };
         let path = format!("/HealthUpdateManager/{moId}/AddFilter", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Add entities on which this filter is configured.
     /// 
@@ -84,7 +84,7 @@ impl HealthUpdateManager {
         let input = AddFilterEntitiesRequestType {filter_id, entities, };
         let path = format!("/HealthUpdateManager/{moId}/AddFilterEntities", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// The provider monitors additional managed entities.
     /// 
@@ -122,7 +122,7 @@ impl HealthUpdateManager {
         let input = AddMonitoredEntitiesRequestType {provider_id, entities, };
         let path = format!("/HealthUpdateManager/{moId}/AddMonitoredEntities", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Check if the managed entity is monitored by the provider.
     /// 
@@ -153,7 +153,7 @@ impl HealthUpdateManager {
         let input = HasMonitoredEntityRequestType {provider_id, entity, };
         let path = format!("/HealthUpdateManager/{moId}/HasMonitoredEntity", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Verifies if the given provider is registered.
     /// 
@@ -171,7 +171,7 @@ impl HealthUpdateManager {
         let input = HasProviderRequestType {id, };
         let path = format!("/HealthUpdateManager/{moId}/HasProvider", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Report a change in health status.
     /// 
@@ -208,7 +208,7 @@ impl HealthUpdateManager {
         let input = PostHealthUpdatesRequestType {provider_id, updates, };
         let path = format!("/HealthUpdateManager/{moId}/PostHealthUpdates", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Returns the list of entities on which this filter is configured.
     /// 
@@ -232,7 +232,7 @@ impl HealthUpdateManager {
         let input = QueryFilterEntitiesRequestType {filter_id, };
         let path = format!("/HealthUpdateManager/{moId}/QueryFilterEntities", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Returns the list of HealthUpdateInfos configured for this filter.
     /// 
@@ -255,7 +255,7 @@ impl HealthUpdateManager {
         let input = QueryFilterInfoIdsRequestType {filter_id, };
         let path = format!("/HealthUpdateManager/{moId}/QueryFilterInfoIds", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Returns the list of filters.
     /// 
@@ -277,7 +277,7 @@ impl HealthUpdateManager {
         let input = QueryFilterListRequestType {provider_id, };
         let path = format!("/HealthUpdateManager/{moId}/QueryFilterList", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Returns the filter name.
     /// 
@@ -299,7 +299,7 @@ impl HealthUpdateManager {
         let input = QueryFilterNameRequestType {filter_id, };
         let path = format!("/HealthUpdateManager/{moId}/QueryFilterName", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Returns the list of HealthUpdateInfo configured for the given provider.
     /// 
@@ -321,7 +321,7 @@ impl HealthUpdateManager {
         let input = QueryHealthUpdateInfosRequestType {provider_id, };
         let path = format!("/HealthUpdateManager/{moId}/QueryHealthUpdateInfos", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Returns the list of health updates reported by the given provider.
     /// 
@@ -343,7 +343,7 @@ impl HealthUpdateManager {
         let input = QueryHealthUpdatesRequestType {provider_id, };
         let path = format!("/HealthUpdateManager/{moId}/QueryHealthUpdates", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Returns the list of managed entities monitored by the given provider.
     /// 
@@ -367,7 +367,7 @@ impl HealthUpdateManager {
         let input = QueryMonitoredEntitiesRequestType {provider_id, };
         let path = format!("/HealthUpdateManager/{moId}/QueryMonitoredEntities", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// The providers.
     /// 
@@ -379,7 +379,7 @@ impl HealthUpdateManager {
     pub async fn query_provider_list(&self) -> Result<Option<Vec<String>>> {
         let path = format!("/HealthUpdateManager/{moId}/QueryProviderList", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Query the name of the provider.
     /// 
@@ -401,7 +401,7 @@ impl HealthUpdateManager {
         let input = QueryProviderNameRequestType {id, };
         let path = format!("/HealthUpdateManager/{moId}/QueryProviderName", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// The set of hosts that are in the cluster, but not monitored by
     /// the provider.
@@ -432,7 +432,7 @@ impl HealthUpdateManager {
         let input = QueryUnmonitoredHostsRequestType {provider_id, cluster, };
         let path = format!("/HealthUpdateManager/{moId}/QueryUnmonitoredHosts", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Registers provider.
     /// 
@@ -457,7 +457,7 @@ impl HealthUpdateManager {
         let input = RegisterHealthUpdateProviderRequestType {name, health_update_info, };
         let path = format!("/HealthUpdateManager/{moId}/RegisterHealthUpdateProvider", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Removes the specified filter.
     /// 
@@ -475,7 +475,7 @@ impl HealthUpdateManager {
         let input = RemoveFilterRequestType {filter_id, };
         let path = format!("/HealthUpdateManager/{moId}/RemoveFilter", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Remove entities on which this filter is configured.
     /// 
@@ -505,7 +505,7 @@ impl HealthUpdateManager {
         let input = RemoveFilterEntitiesRequestType {filter_id, entities, };
         let path = format!("/HealthUpdateManager/{moId}/RemoveFilterEntities", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// The provider monitors fewer managed entities.
     /// 
@@ -544,7 +544,7 @@ impl HealthUpdateManager {
         let input = RemoveMonitoredEntitiesRequestType {provider_id, entities, };
         let path = format!("/HealthUpdateManager/{moId}/RemoveMonitoredEntities", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Unregisters the specified provider, if it exists.
     /// 
@@ -568,7 +568,7 @@ impl HealthUpdateManager {
         let input = UnregisterHealthUpdateProviderRequestType {provider_id, };
         let path = format!("/HealthUpdateManager/{moId}/UnregisterHealthUpdateProvider", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
 }
 #[derive(serde::Serialize)]

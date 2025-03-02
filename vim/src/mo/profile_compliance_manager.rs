@@ -66,7 +66,7 @@ impl ProfileComplianceManager {
         let input = CheckComplianceRequestType {profile, entity, };
         let path = format!("/ProfileComplianceManager/{moId}/CheckCompliance_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Clear the saved ComplianceResult based on profile and entity filtering criteria.
     /// 
@@ -88,7 +88,7 @@ impl ProfileComplianceManager {
         let input = ClearComplianceStatusRequestType {profile, entity, };
         let path = format!("/ProfileComplianceManager/{moId}/ClearComplianceStatus", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Query the compliance status based on Profile and Entity filter.
     /// 
@@ -118,7 +118,7 @@ impl ProfileComplianceManager {
         let input = QueryComplianceStatusRequestType {profile, entity, };
         let path = format!("/ProfileComplianceManager/{moId}/QueryComplianceStatus", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Query the metadata for the expressions.
     /// 
@@ -138,7 +138,7 @@ impl ProfileComplianceManager {
         let input = QueryExpressionMetadataRequestType {expression_name, profile, };
         let path = format!("/ProfileComplianceManager/{moId}/QueryExpressionMetadata", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
 }
 #[derive(serde::Serialize)]

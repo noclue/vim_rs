@@ -101,7 +101,7 @@ impl UserDirectory {
         let input = RetrieveUserGroupsRequestType {domain, search_str, belongs_to_group, belongs_to_user, exact_match, find_users, find_groups, };
         let path = format!("/UserDirectory/{moId}/RetrieveUserGroups", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// List of Windows domains available for user searches, if the underlying
     /// system supports windows domain membership.
@@ -110,7 +110,7 @@ impl UserDirectory {
     pub async fn domain_list(&self) -> Result<Option<Vec<String>>> {
         let path = format!("/UserDirectory/{moId}/domainList", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
 }
 #[derive(serde::Serialize)]

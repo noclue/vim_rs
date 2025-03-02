@@ -73,7 +73,7 @@ impl HostVStorageObjectManager {
         let input = HostVStorageObjectRevertRequestType {id, datastore, snapshot_id, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostVStorageObjectRevert_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Clear control flags on VStorageObject.
     /// 
@@ -114,7 +114,7 @@ impl HostVStorageObjectManager {
         let input = HostClearVStorageObjectControlFlagsRequestType {id, datastore, control_flags, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostClearVStorageObjectControlFlags", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Clone a virtual storage object.
     /// 
@@ -156,7 +156,7 @@ impl HostVStorageObjectManager {
         let input = HostCloneVStorageObjectRequestType {id, datastore, spec, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostCloneVStorageObject_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Create a virtual disk, which is a storage object with
     /// *disk*
@@ -193,7 +193,7 @@ impl HostVStorageObjectManager {
         let input = HostCreateDiskRequestType {spec, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostCreateDisk_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Creates a new Disk from given snapshot of a VStorageObject.
     /// 
@@ -255,7 +255,7 @@ impl HostVStorageObjectManager {
         let input = HostVStorageObjectCreateDiskFromSnapshotRequestType {id, datastore, snapshot_id, name, profile, crypto, path, provisioning_type, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostVStorageObjectCreateDiskFromSnapshot_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Creates a snapshot of a given VStorageObject.
     /// 
@@ -294,7 +294,7 @@ impl HostVStorageObjectManager {
         let input = HostVStorageObjectCreateSnapshotRequestType {id, datastore, description, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostVStorageObjectCreateSnapshot_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Creates a snapshot of a given VStorageObject.
     /// 
@@ -337,7 +337,7 @@ impl HostVStorageObjectManager {
         let input = VStorageObjectCreateSnapshotExRequestType {id, datastore, description, };
         let path = format!("/HostVStorageObjectManager/{moId}/VStorageObjectCreateSnapshotEx_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Deletes a given snapshot of a VStorageObject.
     /// 
@@ -376,7 +376,7 @@ impl HostVStorageObjectManager {
         let input = HostVStorageObjectDeleteSnapshotRequestType {id, datastore, snapshot_id, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostVStorageObjectDeleteSnapshot_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Deletes a given snapshot of a VStorageObject.
     /// 
@@ -419,7 +419,7 @@ impl HostVStorageObjectManager {
         let input = VStorageObjectDeleteSnapshotExRequestType {id, datastore, snapshot_id, };
         let path = format!("/HostVStorageObjectManager/{moId}/VStorageObjectDeleteSnapshotEx_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Delete a virtual storage object and its assoicated backings.
     /// 
@@ -465,7 +465,7 @@ impl HostVStorageObjectManager {
         let input = HostDeleteVStorageObjectRequestType {id, datastore, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostDeleteVStorageObject_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Delete a virtual storage object and its assoicated backings.
     /// 
@@ -510,7 +510,7 @@ impl HostVStorageObjectManager {
         let input = HostDeleteVStorageObjectExRequestType {id, datastore, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostDeleteVStorageObjectEx_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Expand the capacity of a virtual disk, which is a storage object with
     /// *disk*, to the new
@@ -571,7 +571,7 @@ impl HostVStorageObjectManager {
         let input = HostExtendDiskRequestType {id, datastore, new_capacity_in_mb, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostExtendDisk_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Expand the capacity of a virtual disk, which is a storage object with
     /// *disk*, to the new
@@ -631,7 +631,7 @@ impl HostVStorageObjectManager {
         let input = VStorageObjectExtendDiskExRequestType {id, datastore, new_capacity_in_mb, };
         let path = format!("/HostVStorageObjectManager/{moId}/VStorageObjectExtendDiskEx_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Inflate a sparse or thin-provisioned virtual disk up to the full size.
     /// 
@@ -683,7 +683,7 @@ impl HostVStorageObjectManager {
         let input = HostInflateDiskRequestType {id, datastore, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostInflateDisk_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// List all virtual storage objects located on a datastore.
     /// 
@@ -713,7 +713,7 @@ impl HostVStorageObjectManager {
         let input = HostListVStorageObjectRequestType {datastore, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostListVStorageObject", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Reconcile the datastore inventory info of virtual storage objects.
     /// 
@@ -740,7 +740,7 @@ impl HostVStorageObjectManager {
         let input = HostReconcileDatastoreInventoryRequestType {datastore, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostReconcileDatastoreInventory_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Promote a virtual disk to a First Class Disk.
     /// 
@@ -781,7 +781,7 @@ impl HostVStorageObjectManager {
         let input = HostRegisterDiskRequestType {path, name, modify_control_flags, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostRegisterDisk", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Relocate a virtual storage object.
     /// 
@@ -826,7 +826,7 @@ impl HostVStorageObjectManager {
         let input = HostRelocateVStorageObjectRequestType {id, datastore, spec, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostRelocateVStorageObject_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Rename a virtual storage object.
     /// 
@@ -863,7 +863,7 @@ impl HostVStorageObjectManager {
         let input = HostRenameVStorageObjectRequestType {id, datastore, name, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostRenameVStorageObject", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Rename a virtual storage object.
     /// 
@@ -903,7 +903,7 @@ impl HostVStorageObjectManager {
         let input = RenameVStorageObjectExRequestType {id, datastore, name, };
         let path = format!("/HostVStorageObjectManager/{moId}/RenameVStorageObjectEx", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Retrieves snapshot information of a given VStorageObject.
     /// 
@@ -935,7 +935,7 @@ impl HostVStorageObjectManager {
         let input = HostVStorageObjectRetrieveSnapshotInfoRequestType {id, datastore, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostVStorageObjectRetrieveSnapshotInfo", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Retrieve virtual storage infrastructure object SBPM policy on given
     /// datastore.
@@ -969,7 +969,7 @@ impl HostVStorageObjectManager {
         let input = HostRetrieveVStorageInfrastructureObjectPolicyRequestType {datastore, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostRetrieveVStorageInfrastructureObjectPolicy", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Retrieve a virtual storage object.
     /// 
@@ -1014,7 +1014,7 @@ impl HostVStorageObjectManager {
         let input = HostRetrieveVStorageObjectRequestType {id, datastore, disk_info_flags, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostRetrieveVStorageObject", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Retrieve metadata KV pairs from a virtual storage object.
     /// 
@@ -1056,7 +1056,7 @@ impl HostVStorageObjectManager {
         let input = HostRetrieveVStorageObjectMetadataRequestType {id, datastore, snapshot_id, prefix, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostRetrieveVStorageObjectMetadata", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Retrieve the metadata value by key from a virtual storage object.
     /// 
@@ -1100,7 +1100,7 @@ impl HostVStorageObjectManager {
         let input = HostRetrieveVStorageObjectMetadataValueRequestType {id, datastore, snapshot_id, key, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostRetrieveVStorageObjectMetadataValue", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Retrieve a virtual storage object state.
     /// 
@@ -1137,7 +1137,7 @@ impl HostVStorageObjectManager {
         let input = HostRetrieveVStorageObjectStateRequestType {id, datastore, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostRetrieveVStorageObjectState", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Reverts to a given snapshot of a VStorageObject.
     /// 
@@ -1193,7 +1193,7 @@ impl HostVStorageObjectManager {
         let input = RevertVStorageObjectExRequestType {id, datastore, snapshot_id, };
         let path = format!("/HostVStorageObjectManager/{moId}/RevertVStorageObjectEx_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Schedules reconcile of the datastore inventory info of virtual storage
     /// objects.
@@ -1222,7 +1222,7 @@ impl HostVStorageObjectManager {
         let input = HostScheduleReconcileDatastoreInventoryRequestType {datastore, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostScheduleReconcileDatastoreInventory", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Set control flags on VStorageObject.
     /// 
@@ -1263,7 +1263,7 @@ impl HostVStorageObjectManager {
         let input = HostSetVStorageObjectControlFlagsRequestType {id, datastore, control_flags, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostSetVStorageObjectControlFlags", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Update metadata KV pairs to a virtual storage object.
     /// 
@@ -1313,7 +1313,7 @@ impl HostVStorageObjectManager {
         let input = HostUpdateVStorageObjectMetadataRequestType {id, datastore, metadata, delete_keys, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostUpdateVStorageObjectMetadata_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Update metadata KV pairs to a virtual storage object.
     /// 
@@ -1362,7 +1362,7 @@ impl HostVStorageObjectManager {
         let input = HostUpdateVStorageObjectMetadataExRequestType {id, datastore, metadata, delete_keys, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostUpdateVStorageObjectMetadataEx_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
 }
 #[derive(serde::Serialize)]

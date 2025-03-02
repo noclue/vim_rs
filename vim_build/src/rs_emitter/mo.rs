@@ -235,15 +235,15 @@ impl<'a> ManagedObjectEmitter<'a> {
             Some(_) => {
                 if method.optional_response {
                     self.printer
-                        .println("Ok(self.client.execute_option(req).await?)")?;
+                        .println("self.client.execute_option(req).await")?;
                 } else {
                     self.printer
-                        .println("Ok(self.client.execute(req).await?)")?;
+                        .println("self.client.execute(req).await")?;
                 }
             }
             None => {
                 self.printer
-                    .println("Ok(self.client.execute_void(req).await?)")?;
+                    .println("self.client.execute_void(req).await")?;
             }
         }
         self.printer.dedent();

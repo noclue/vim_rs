@@ -37,7 +37,7 @@ impl HostCacheConfigurationManager {
         let input = ConfigureHostCacheRequestType {spec, };
         let path = format!("/HostCacheConfigurationManager/{moId}/ConfigureHostCache_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// The swap performance configuration for the ESX host.
     /// 
@@ -48,7 +48,7 @@ impl HostCacheConfigurationManager {
     pub async fn cache_configuration_info(&self) -> Result<Option<Vec<HostCacheConfigurationInfo>>> {
         let path = format!("/HostCacheConfigurationManager/{moId}/cacheConfigurationInfo", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
 }
 #[derive(serde::Serialize)]

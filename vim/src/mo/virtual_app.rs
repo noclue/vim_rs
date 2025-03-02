@@ -116,7 +116,7 @@ impl VirtualApp {
         let input = CloneVAppRequestType {name, target, spec, };
         let path = format!("/VirtualApp/{moId}/CloneVApp_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Creates a new resource pool.
     /// 
@@ -160,7 +160,7 @@ impl VirtualApp {
         let input = CreateResourcePoolRequestType {name, spec, };
         let path = format!("/VirtualApp/{moId}/CreateResourcePool", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Creates a new vApp container.
     /// 
@@ -220,7 +220,7 @@ impl VirtualApp {
         let input = CreateVAppRequestType {name, res_spec, config_spec, vm_folder, };
         let path = format!("/VirtualApp/{moId}/CreateVApp", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Creates a new virtual machine in a vApp container.
     /// 
@@ -293,7 +293,7 @@ impl VirtualApp {
         let input = CreateChildVmRequestType {config, host, };
         let path = format!("/VirtualApp/{moId}/CreateChildVM_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Destroys this object, deleting its contents and removing it from its parent
     /// folder (if any).
@@ -319,7 +319,7 @@ impl VirtualApp {
     pub async fn destroy_task(&self) -> Result<ManagedObjectReference> {
         let path = format!("/VirtualApp/{moId}/Destroy_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Removes all child resource pools recursively.
     /// 
@@ -339,7 +339,7 @@ impl VirtualApp {
     pub async fn destroy_children(&self) -> Result<()> {
         let path = format!("/VirtualApp/{moId}/DestroyChildren", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Obtains an export lease on this vApp.
     /// 
@@ -373,7 +373,7 @@ impl VirtualApp {
     pub async fn export_v_app(&self) -> Result<ManagedObjectReference> {
         let path = format!("/VirtualApp/{moId}/ExportVApp", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Creates a new entity in this resource pool.
     /// 
@@ -474,7 +474,7 @@ impl VirtualApp {
         let input = ImportVAppRequestType {spec, folder, host, };
         let path = format!("/VirtualApp/{moId}/ImportVApp", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Moves a set of resource pools, vApps or virtual machines into this pool.
     /// 
@@ -529,7 +529,7 @@ impl VirtualApp {
         let input = MoveIntoResourcePoolRequestType {list, };
         let path = format!("/VirtualApp/{moId}/MoveIntoResourcePool", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Stops this vApp.
     /// 
@@ -570,7 +570,7 @@ impl VirtualApp {
         let input = PowerOffVAppRequestType {force, };
         let path = format!("/VirtualApp/{moId}/PowerOffVApp_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Starts this vApp.
     /// 
@@ -626,7 +626,7 @@ impl VirtualApp {
     pub async fn power_on_v_app_task(&self) -> Result<ManagedObjectReference> {
         let path = format!("/VirtualApp/{moId}/PowerOnVApp_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Deprecated as of vSphere API 6.5.
     /// 
@@ -642,7 +642,7 @@ impl VirtualApp {
     pub async fn query_resource_config_option(&self) -> Result<ResourceConfigOption> {
         let path = format!("/VirtualApp/{moId}/QueryResourceConfigOption", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Refreshes the resource usage data that is available in
     /// *ResourcePoolRuntimeInfo*.
@@ -657,7 +657,7 @@ impl VirtualApp {
     pub async fn refresh_runtime(&self) -> Result<()> {
         let path = format!("/VirtualApp/{moId}/RefreshRuntime", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Adds an existing virtual machine to this resource pool or vApp.
     /// 
@@ -736,7 +736,7 @@ impl VirtualApp {
         let input = RegisterChildVmRequestType {path, name, host, };
         let path = format!("/VirtualApp/{moId}/RegisterChildVM_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Reload the entity state.
     /// 
@@ -755,7 +755,7 @@ impl VirtualApp {
     pub async fn reload(&self) -> Result<()> {
         let path = format!("/VirtualApp/{moId}/Reload", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Renames this managed entity.
     /// 
@@ -789,7 +789,7 @@ impl VirtualApp {
         let input = RenameRequestType {new_name, };
         let path = format!("/VirtualApp/{moId}/Rename_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Assigns a value to a custom field.
     /// 
@@ -809,7 +809,7 @@ impl VirtualApp {
         let input = SetCustomValueRequestType {key, value, };
         let path = format!("/VirtualApp/{moId}/setCustomValue", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Suspends this vApp.
     /// 
@@ -838,7 +838,7 @@ impl VirtualApp {
     pub async fn suspend_v_app_task(&self) -> Result<ManagedObjectReference> {
         let path = format!("/VirtualApp/{moId}/SuspendVApp_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Removes this vApp from the inventory without removing
     /// any of the virtual machine's files on disk.
@@ -860,7 +860,7 @@ impl VirtualApp {
     pub async fn unregister_v_app_task(&self) -> Result<ManagedObjectReference> {
         let path = format!("/VirtualApp/{moId}/unregisterVApp_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Changes resource configuration of a set of children of this resource pool.
     /// 
@@ -899,7 +899,7 @@ impl VirtualApp {
         let input = UpdateChildResourceConfigurationRequestType {spec, };
         let path = format!("/VirtualApp/{moId}/UpdateChildResourceConfiguration", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Updates the configuration of the resource pool.
     /// 
@@ -940,7 +940,7 @@ impl VirtualApp {
         let input = UpdateConfigRequestType {name, config, };
         let path = format!("/VirtualApp/{moId}/UpdateConfig", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Deprecated as of vSphere API 5.1.
     /// 
@@ -996,7 +996,7 @@ impl VirtualApp {
         let input = UpdateLinkedChildrenRequestType {add_change_set, remove_set, };
         let path = format!("/VirtualApp/{moId}/UpdateLinkedChildren", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Updates the vApp configuration.
     /// 
@@ -1030,7 +1030,7 @@ impl VirtualApp {
         let input = UpdateVAppConfigRequestType {spec, };
         let path = format!("/VirtualApp/{moId}/UpdateVAppConfig", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Whether alarm actions are enabled for this entity.
     /// 
@@ -1040,7 +1040,7 @@ impl VirtualApp {
     pub async fn alarm_actions_enabled(&self) -> Result<Option<bool>> {
         let path = format!("/VirtualApp/{moId}/alarmActionsEnabled", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// List of custom field definitions that are valid for the object's type.
     /// 
@@ -1050,7 +1050,7 @@ impl VirtualApp {
     pub async fn available_field(&self) -> Result<Option<Vec<CustomFieldDef>>> {
         let path = format!("/VirtualApp/{moId}/availableField", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// The resource configuration of all direct children (VirtualMachine and
     /// ResourcePool) of this resource group.
@@ -1061,7 +1061,7 @@ impl VirtualApp {
     pub async fn child_configuration(&self) -> Result<Option<Vec<ResourceConfigSpec>>> {
         let path = format!("/VirtualApp/{moId}/childConfiguration", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Deprecated as of vSphere API 5.1.
     /// 
@@ -1069,13 +1069,13 @@ impl VirtualApp {
     pub async fn child_link(&self) -> Result<Option<Vec<VirtualAppLinkInfo>>> {
         let path = format!("/VirtualApp/{moId}/childLink", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Configuration of this resource pool.
     pub async fn config(&self) -> Result<ResourceConfigSpec> {
         let path = format!("/VirtualApp/{moId}/config", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Current configuration issues that have been detected for this entity.
     /// 
@@ -1087,7 +1087,7 @@ impl VirtualApp {
     pub async fn config_issue(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::EventTrait>>>> {
         let path = format!("/VirtualApp/{moId}/configIssue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// The configStatus indicates whether or not the system has detected a configuration
     /// issue involving this entity.
@@ -1116,7 +1116,7 @@ impl VirtualApp {
     pub async fn config_status(&self) -> Result<crate::types::enums::ManagedEntityStatusEnum> {
         let path = format!("/VirtualApp/{moId}/configStatus", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Custom field values.
     /// 
@@ -1124,7 +1124,7 @@ impl VirtualApp {
     pub async fn custom_value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/VirtualApp/{moId}/customValue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// A collection of references to the subset of datastore objects used by this
     /// vApp.
@@ -1137,7 +1137,7 @@ impl VirtualApp {
     pub async fn datastore(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
         let path = format!("/VirtualApp/{moId}/datastore", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// A set of alarm states for alarms that apply to this managed entity.
     /// 
@@ -1152,7 +1152,7 @@ impl VirtualApp {
     pub async fn declared_alarm_state(&self) -> Result<Option<Vec<AlarmState>>> {
         let path = format!("/VirtualApp/{moId}/declaredAlarmState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// List of operations that are disabled, given the current runtime
     /// state of the entity.
@@ -1226,7 +1226,7 @@ impl VirtualApp {
     pub async fn disabled_method(&self) -> Result<Option<Vec<String>>> {
         let path = format!("/VirtualApp/{moId}/disabledMethod", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Access rights the current session has to this entity.
     /// 
@@ -1234,7 +1234,7 @@ impl VirtualApp {
     pub async fn effective_role(&self) -> Result<Option<Vec<i32>>> {
         let path = format!("/VirtualApp/{moId}/effectiveRole", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Name of this entity, unique relative to its parent.
     /// 
@@ -1248,7 +1248,7 @@ impl VirtualApp {
     pub async fn name(&self) -> Result<String> {
         let path = format!("/VirtualApp/{moId}/name", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// The namespace with which the ResourcePool is associated.
     /// 
@@ -1261,7 +1261,7 @@ impl VirtualApp {
     pub async fn namespace(&self) -> Result<Option<String>> {
         let path = format!("/VirtualApp/{moId}/namespace", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// A collection of references to the subset of network objects that
     /// is used by this virtual machine.
@@ -1274,7 +1274,7 @@ impl VirtualApp {
     pub async fn network(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
         let path = format!("/VirtualApp/{moId}/network", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// General health of this managed entity.
     /// 
@@ -1299,7 +1299,7 @@ impl VirtualApp {
     pub async fn overall_status(&self) -> Result<crate::types::enums::ManagedEntityStatusEnum> {
         let path = format!("/VirtualApp/{moId}/overallStatus", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// The ComputeResource to which this set of one or more nested resource pools
     /// belong.
@@ -1312,7 +1312,7 @@ impl VirtualApp {
     pub async fn owner(&self) -> Result<ManagedObjectReference> {
         let path = format!("/VirtualApp/{moId}/owner", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Parent of this entity.
     /// 
@@ -1328,7 +1328,7 @@ impl VirtualApp {
     pub async fn parent(&self) -> Result<Option<ManagedObjectReference>> {
         let path = format!("/VirtualApp/{moId}/parent", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// A reference to the parent folder in the VM and Template folder hierarchy.
     /// 
@@ -1344,7 +1344,7 @@ impl VirtualApp {
     pub async fn parent_folder(&self) -> Result<Option<ManagedObjectReference>> {
         let path = format!("/VirtualApp/{moId}/parentFolder", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Reference to the parent vApp.
     ///
@@ -1354,13 +1354,13 @@ impl VirtualApp {
     pub async fn parent_v_app(&self) -> Result<Option<ManagedObjectReference>> {
         let path = format!("/VirtualApp/{moId}/parentVApp", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// List of permissions defined for this entity.
     pub async fn permission(&self) -> Result<Option<Vec<Permission>>> {
         let path = format!("/VirtualApp/{moId}/permission", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// The set of recent tasks operating on this managed entity.
     /// 
@@ -1390,7 +1390,7 @@ impl VirtualApp {
     pub async fn recent_task(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
         let path = format!("/VirtualApp/{moId}/recentTask", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// The set of child resource pools.
     /// 
@@ -1402,7 +1402,7 @@ impl VirtualApp {
     pub async fn resource_pool(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
         let path = format!("/VirtualApp/{moId}/resourcePool", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Runtime information about a resource pool.
     /// 
@@ -1420,7 +1420,7 @@ impl VirtualApp {
     pub async fn runtime(&self) -> Result<ResourcePoolRuntimeInfo> {
         let path = format!("/VirtualApp/{moId}/runtime", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Basic information about a resource pool.
     /// 
@@ -1434,7 +1434,7 @@ impl VirtualApp {
     pub async fn summary(&self) -> Result<Box<dyn crate::types::traits::ResourcePoolSummaryTrait>> {
         let path = format!("/VirtualApp/{moId}/summary", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// The set of tags associated with this managed entity.
     /// 
@@ -1444,7 +1444,7 @@ impl VirtualApp {
     pub async fn tag(&self) -> Result<Option<Vec<Tag>>> {
         let path = format!("/VirtualApp/{moId}/tag", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// A set of alarm states for alarms triggered by this entity
     /// or by its descendants.
@@ -1463,7 +1463,7 @@ impl VirtualApp {
     pub async fn triggered_alarm_state(&self) -> Result<Option<Vec<AlarmState>>> {
         let path = format!("/VirtualApp/{moId}/triggeredAlarmState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Configuration of this package.
     /// 
@@ -1471,7 +1471,7 @@ impl VirtualApp {
     pub async fn v_app_config(&self) -> Result<Option<VAppConfigInfo>> {
         let path = format!("/VirtualApp/{moId}/vAppConfig", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// List of custom field values.
     /// 
@@ -1483,7 +1483,7 @@ impl VirtualApp {
     pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/VirtualApp/{moId}/value", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// The set of virtual machines associated with this resource pool.
     /// 
@@ -1495,7 +1495,7 @@ impl VirtualApp {
     pub async fn vm(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
         let path = format!("/VirtualApp/{moId}/vm", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
 }
 #[derive(serde::Serialize)]

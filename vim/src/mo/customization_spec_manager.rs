@@ -40,7 +40,7 @@ impl CustomizationSpecManager {
         let input = CheckCustomizationResourcesRequestType {guest_os, };
         let path = format!("/CustomizationSpecManager/{moId}/CheckCustomizationResources", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Creates a new specification.
     /// 
@@ -60,7 +60,7 @@ impl CustomizationSpecManager {
         let input = CreateCustomizationSpecRequestType {item, };
         let path = format!("/CustomizationSpecManager/{moId}/CreateCustomizationSpec", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Deletes a specification.
     /// 
@@ -78,7 +78,7 @@ impl CustomizationSpecManager {
         let input = DeleteCustomizationSpecRequestType {name, };
         let path = format!("/CustomizationSpecManager/{moId}/DeleteCustomizationSpec", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Duplicates a specification.
     /// 
@@ -101,7 +101,7 @@ impl CustomizationSpecManager {
         let input = DuplicateCustomizationSpecRequestType {name, new_name, };
         let path = format!("/CustomizationSpecManager/{moId}/DuplicateCustomizationSpec", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Whether or not a specification exists.
     /// 
@@ -115,7 +115,7 @@ impl CustomizationSpecManager {
         let input = DoesCustomizationSpecExistRequestType {name, };
         let path = format!("/CustomizationSpecManager/{moId}/DoesCustomizationSpecExist", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Obtains a specification for the given name.
     /// 
@@ -133,7 +133,7 @@ impl CustomizationSpecManager {
         let input = GetCustomizationSpecRequestType {name, };
         let path = format!("/CustomizationSpecManager/{moId}/GetCustomizationSpec", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Overwrites an existing specification, possibly after retrieving
     /// (by using 'get') and editing it.
@@ -161,7 +161,7 @@ impl CustomizationSpecManager {
         let input = OverwriteCustomizationSpecRequestType {item, };
         let path = format!("/CustomizationSpecManager/{moId}/OverwriteCustomizationSpec", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Renames a specification.
     /// 
@@ -184,7 +184,7 @@ impl CustomizationSpecManager {
         let input = RenameCustomizationSpecRequestType {name, new_name, };
         let path = format!("/CustomizationSpecManager/{moId}/RenameCustomizationSpec", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Converts a specification item to XML text
     /// 
@@ -198,7 +198,7 @@ impl CustomizationSpecManager {
         let input = CustomizationSpecItemToXmlRequestType {item, };
         let path = format!("/CustomizationSpecManager/{moId}/CustomizationSpecItemToXml", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Converts an XML string to a specification item
     /// 
@@ -216,7 +216,7 @@ impl CustomizationSpecManager {
         let input = XmlToCustomizationSpecItemRequestType {spec_item_xml, };
         let path = format!("/CustomizationSpecManager/{moId}/XmlToCustomizationSpecItem", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Gets a binary public encryption key that can be used to encrypt
     /// passwords in stored specifications.
@@ -225,7 +225,7 @@ impl CustomizationSpecManager {
     pub async fn encryption_key(&self) -> Result<Option<Vec<i8>>> {
         let path = format!("/CustomizationSpecManager/{moId}/encryptionKey", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Gets a list of information on available specifications.
     /// 
@@ -233,7 +233,7 @@ impl CustomizationSpecManager {
     pub async fn info(&self) -> Result<Option<Vec<CustomizationSpecInfo>>> {
         let path = format!("/CustomizationSpecManager/{moId}/info", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
 }
 #[derive(serde::Serialize)]

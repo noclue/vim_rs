@@ -70,7 +70,7 @@ impl VmwareDistributedVirtualSwitch {
         let input = AddNetworkResourcePoolRequestType {config_spec, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/AddNetworkResourcePool", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Creates a single *DistributedVirtualPortgroup* and adds it
     /// to the distributed virtual switch.
@@ -103,7 +103,7 @@ impl VmwareDistributedVirtualSwitch {
         let input = CreateDvPortgroupRequestType {spec, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/CreateDVPortgroup_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Creates one or more *DistributedVirtualPortgroup*s and adds them to
     /// the distributed virtual switch.
@@ -138,7 +138,7 @@ impl VmwareDistributedVirtualSwitch {
         let input = AddDvPortgroupRequestType {spec, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/AddDVPortgroup_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Destroys this object, deleting its contents and removing it from its parent
     /// folder (if any).
@@ -164,7 +164,7 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn destroy_task(&self) -> Result<ManagedObjectReference> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/Destroy_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Enable/Disable network I/O control on the vSphere Distributed Switch.
     /// 
@@ -190,7 +190,7 @@ impl VmwareDistributedVirtualSwitch {
         let input = EnableNetworkResourceManagementRequestType {enable, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/EnableNetworkResourceManagement", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Return the keys of ports that meet the criteria.
     /// 
@@ -208,7 +208,7 @@ impl VmwareDistributedVirtualSwitch {
         let input = FetchDvPortKeysRequestType {criteria, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/FetchDVPortKeys", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Return the ports that meet the criteria.
     /// 
@@ -223,7 +223,7 @@ impl VmwareDistributedVirtualSwitch {
         let input = FetchDvPortsRequestType {criteria, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/FetchDVPorts", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Returns the portgroup identified by the key within this VDS.
     /// 
@@ -247,7 +247,7 @@ impl VmwareDistributedVirtualSwitch {
         let input = LookupDvPortGroupRequestType {portgroup_key, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/LookupDvPortGroup", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Deprecated as of vSphere API 5.5.
     /// 
@@ -326,7 +326,7 @@ impl VmwareDistributedVirtualSwitch {
         let input = MergeDvsRequestType {dvs, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/MergeDvs_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Deprecated as of vSphere API 6.0.
     /// 
@@ -366,7 +366,7 @@ impl VmwareDistributedVirtualSwitch {
         let input = MoveDvPortRequestType {port_key, destination_portgroup_key, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/MoveDVPort_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// This method updates the *DistributedVirtualSwitch* product specifications.
     /// 
@@ -403,7 +403,7 @@ impl VmwareDistributedVirtualSwitch {
         let input = PerformDvsProductSpecOperationRequestType {operation, product_spec, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/PerformDvsProductSpecOperation_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Return the used VLAN ID (PVLAN excluded) in the switch.
     /// 
@@ -411,7 +411,7 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn query_used_vlan_id_in_dvs(&self) -> Result<Option<Vec<i32>>> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/QueryUsedVlanIdInDvs", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Reconfigures a distributed virtual switch.
     /// 
@@ -485,7 +485,7 @@ impl VmwareDistributedVirtualSwitch {
         let input = ReconfigureDvsRequestType {spec, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/ReconfigureDvs_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Reconfigure individual ports.
     /// 
@@ -521,7 +521,7 @@ impl VmwareDistributedVirtualSwitch {
         let input = ReconfigureDvPortRequestType {port, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/ReconfigureDVPort_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// reconfigure the Virtual NIC network resource pool configuration.
     /// 
@@ -564,7 +564,7 @@ impl VmwareDistributedVirtualSwitch {
         let input = DvsReconfigureVmVnicNetworkResourcePoolRequestType {config_spec, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/DvsReconfigureVmVnicNetworkResourcePool_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Deprecated as of vSphere API 5.0.
     /// Use
@@ -593,7 +593,7 @@ impl VmwareDistributedVirtualSwitch {
         let input = RectifyDvsHostRequestType {hosts, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/RectifyDvsHost_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Refresh port states.
     /// 
@@ -612,7 +612,7 @@ impl VmwareDistributedVirtualSwitch {
         let input = RefreshDvPortStateRequestType {port_keys, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/RefreshDVPortState", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Reload the entity state.
     /// 
@@ -631,7 +631,7 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn reload(&self) -> Result<()> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/Reload", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Deprecated as of vSphere API 6.0
     /// Use *DistributedVirtualSwitch.DvsReconfigureVmVnicNetworkResourcePool_Task* instead
@@ -666,7 +666,7 @@ impl VmwareDistributedVirtualSwitch {
         let input = RemoveNetworkResourcePoolRequestType {key, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/RemoveNetworkResourcePool", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Renames this managed entity.
     /// 
@@ -700,7 +700,7 @@ impl VmwareDistributedVirtualSwitch {
         let input = RenameRequestType {new_name, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/Rename_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// This method determines if the distributed virtual switch configuration
     /// has changed.
@@ -749,7 +749,7 @@ impl VmwareDistributedVirtualSwitch {
         let input = DvsRollbackRequestType {entity_backup, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/DVSRollback_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Assigns a value to a custom field.
     /// 
@@ -769,7 +769,7 @@ impl VmwareDistributedVirtualSwitch {
         let input = SetCustomValueRequestType {key, value, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/setCustomValue", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Set the capability of the switch.
     /// 
@@ -794,7 +794,7 @@ impl VmwareDistributedVirtualSwitch {
         let input = UpdateDvsCapabilityRequestType {capability, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/UpdateDvsCapability", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Update health check configuration.
     /// 
@@ -820,7 +820,7 @@ impl VmwareDistributedVirtualSwitch {
         let input = UpdateDvsHealthCheckConfigRequestType {health_check_config, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/UpdateDVSHealthCheckConfig_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Update Link Aggregation Control Protocol groups.
     /// 
@@ -850,7 +850,7 @@ impl VmwareDistributedVirtualSwitch {
         let input = UpdateDvsLacpGroupConfigRequestType {lacp_group_spec, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/UpdateDVSLacpGroupConfig_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Deprecated as of vSphere API 6.0
     /// Use *DistributedVirtualSwitch.DvsReconfigureVmVnicNetworkResourcePool_Task* instead
@@ -886,7 +886,7 @@ impl VmwareDistributedVirtualSwitch {
         let input = UpdateNetworkResourcePoolRequestType {config_spec, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/UpdateNetworkResourcePool", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Whether alarm actions are enabled for this entity.
     /// 
@@ -896,7 +896,7 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn alarm_actions_enabled(&self) -> Result<Option<bool>> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/alarmActionsEnabled", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// List of custom field definitions that are valid for the object's type.
     /// 
@@ -906,7 +906,7 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn available_field(&self) -> Result<Option<Vec<CustomFieldDef>>> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/availableField", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Capability of the switch.
     /// 
@@ -918,13 +918,13 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn capability(&self) -> Result<DvsCapability> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/capability", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Switch configuration data.
     pub async fn config(&self) -> Result<Box<dyn crate::types::traits::DvsConfigInfoTrait>> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/config", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Current configuration issues that have been detected for this entity.
     /// 
@@ -936,7 +936,7 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn config_issue(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::EventTrait>>>> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/configIssue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// The configStatus indicates whether or not the system has detected a configuration
     /// issue involving this entity.
@@ -965,7 +965,7 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn config_status(&self) -> Result<crate::types::enums::ManagedEntityStatusEnum> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/configStatus", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Custom field values.
     /// 
@@ -973,7 +973,7 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn custom_value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/customValue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// A set of alarm states for alarms that apply to this managed entity.
     /// 
@@ -988,7 +988,7 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn declared_alarm_state(&self) -> Result<Option<Vec<AlarmState>>> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/declaredAlarmState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// List of operations that are disabled, given the current runtime
     /// state of the entity.
@@ -1062,7 +1062,7 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn disabled_method(&self) -> Result<Option<Vec<String>>> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/disabledMethod", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Access rights the current session has to this entity.
     /// 
@@ -1070,7 +1070,7 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn effective_role(&self) -> Result<Option<Vec<i32>>> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/effectiveRole", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Name of this entity, unique relative to its parent.
     /// 
@@ -1084,7 +1084,7 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn name(&self) -> Result<String> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/name", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Deprecated as of vSphere API 6.0
     /// Use *DVSConfigInfo.vmVnicNetworkResourcePool*
@@ -1096,7 +1096,7 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn network_resource_pool(&self) -> Result<Option<Vec<DvsNetworkResourcePool>>> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/networkResourcePool", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// General health of this managed entity.
     /// 
@@ -1121,7 +1121,7 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn overall_status(&self) -> Result<crate::types::enums::ManagedEntityStatusEnum> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/overallStatus", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Parent of this entity.
     /// 
@@ -1137,13 +1137,13 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn parent(&self) -> Result<Option<ManagedObjectReference>> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/parent", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// List of permissions defined for this entity.
     pub async fn permission(&self) -> Result<Option<Vec<Permission>>> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/permission", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Portgroups that are defined on the switch.
     ///
@@ -1153,7 +1153,7 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn portgroup(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/portgroup", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// The set of recent tasks operating on this managed entity.
     /// 
@@ -1183,19 +1183,19 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn recent_task(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/recentTask", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Runtime information of the distributed virtual switch.
     pub async fn runtime(&self) -> Result<Option<DvsRuntimeInfo>> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/runtime", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Summary of the switch.
     pub async fn summary(&self) -> Result<DvsSummary> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/summary", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// The set of tags associated with this managed entity.
     /// 
@@ -1205,7 +1205,7 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn tag(&self) -> Result<Option<Vec<Tag>>> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/tag", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// A set of alarm states for alarms triggered by this entity
     /// or by its descendants.
@@ -1224,7 +1224,7 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn triggered_alarm_state(&self) -> Result<Option<Vec<AlarmState>>> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/triggeredAlarmState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Generated UUID of the switch.
     /// 
@@ -1233,7 +1233,7 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn uuid(&self) -> Result<String> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/uuid", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// List of custom field values.
     /// 
@@ -1245,7 +1245,7 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/value", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
 }
 #[derive(serde::Serialize)]

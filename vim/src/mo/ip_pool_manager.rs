@@ -52,7 +52,7 @@ impl IpPoolManager {
         let input = AllocateIpv4AddressRequestType {dc, pool_id, allocation_id, };
         let path = format!("/IpPoolManager/{moId}/AllocateIpv4Address", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Allocates an IPv6 address from an IP pool.
     /// 
@@ -89,7 +89,7 @@ impl IpPoolManager {
         let input = AllocateIpv6AddressRequestType {dc, pool_id, allocation_id, };
         let path = format!("/IpPoolManager/{moId}/AllocateIpv6Address", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Create a new IP pool.
     /// 
@@ -118,7 +118,7 @@ impl IpPoolManager {
         let input = CreateIpPoolRequestType {dc, pool, };
         let path = format!("/IpPoolManager/{moId}/CreateIpPool", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Destroys an IP pool on the given datacenter.
     /// 
@@ -147,7 +147,7 @@ impl IpPoolManager {
         let input = DestroyIpPoolRequestType {dc, id, force, };
         let path = format!("/IpPoolManager/{moId}/DestroyIpPool", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Query IP allocations by IP pool and extension key.
     ///
@@ -173,7 +173,7 @@ impl IpPoolManager {
         let input = QueryIpAllocationsRequestType {dc, pool_id, extension_key, };
         let path = format!("/IpPoolManager/{moId}/QueryIPAllocations", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Return the list of IP pools for a datacenter.
     ///
@@ -193,7 +193,7 @@ impl IpPoolManager {
         let input = QueryIpPoolsRequestType {dc, };
         let path = format!("/IpPoolManager/{moId}/QueryIpPools", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Releases an IP allocation back to it's IP pool.
     /// 
@@ -222,7 +222,7 @@ impl IpPoolManager {
         let input = ReleaseIpAllocationRequestType {dc, pool_id, allocation_id, };
         let path = format!("/IpPoolManager/{moId}/ReleaseIpAllocation", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Update an IP pool on a datacenter.
     /// 
@@ -246,7 +246,7 @@ impl IpPoolManager {
         let input = UpdateIpPoolRequestType {dc, pool, };
         let path = format!("/IpPoolManager/{moId}/UpdateIpPool", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
 }
 #[derive(serde::Serialize)]

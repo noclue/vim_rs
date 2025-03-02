@@ -37,7 +37,7 @@ impl CryptoManagerHost {
         let input = AddKeyRequestType {key, };
         let path = format!("/CryptoManagerHost/{moId}/AddKey", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Add multiple existing keys.
     /// 
@@ -59,7 +59,7 @@ impl CryptoManagerHost {
         let input = AddKeysRequestType {keys, };
         let path = format!("/CryptoManagerHost/{moId}/AddKeys", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Change the key used for core dump encryption
     /// Note: *CryptoManagerHost.CryptoManagerHostEnable* must be called first
@@ -85,7 +85,7 @@ impl CryptoManagerHost {
         let input = ChangeKeyRequestType {new_key, };
         let path = format!("/CryptoManagerHost/{moId}/ChangeKey_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Disable encryption on host, if host was in crypto safe mode, put it in
     /// pendingIncapable state and host will be crypto incapable after a reboot
@@ -100,7 +100,7 @@ impl CryptoManagerHost {
     pub async fn crypto_manager_host_disable(&self) -> Result<()> {
         let path = format!("/CryptoManagerHost/{moId}/CryptoManagerHostDisable", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Begin core dump encryption by specifying the encryption key and put
     /// the host in *safe* state
@@ -126,7 +126,7 @@ impl CryptoManagerHost {
         let input = CryptoManagerHostEnableRequestType {initial_key, };
         let path = format!("/CryptoManagerHost/{moId}/CryptoManagerHostEnable", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Get the key status on the host.
     /// 
@@ -146,7 +146,7 @@ impl CryptoManagerHost {
         let input = GetCryptoKeyStatusRequestType {keys, };
         let path = format!("/CryptoManagerHost/{moId}/GetCryptoKeyStatus", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// List keys.
     /// 
@@ -169,7 +169,7 @@ impl CryptoManagerHost {
         let input = ListKeysRequestType {limit, };
         let path = format!("/CryptoManagerHost/{moId}/ListKeys", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Prime the host to receive sensitive information and put the host
     /// in *prepared* state
@@ -183,7 +183,7 @@ impl CryptoManagerHost {
     pub async fn crypto_manager_host_prepare(&self) -> Result<()> {
         let path = format!("/CryptoManagerHost/{moId}/CryptoManagerHostPrepare", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Remove a key (only the UUID is needed to remove).
     /// 
@@ -210,7 +210,7 @@ impl CryptoManagerHost {
         let input = RemoveKeyRequestType {key, force, };
         let path = format!("/CryptoManagerHost/{moId}/RemoveKey", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Remove multiple keys (only the UUID is needed to remove).
     /// 
@@ -229,13 +229,13 @@ impl CryptoManagerHost {
         let input = RemoveKeysRequestType {keys, force, };
         let path = format!("/CryptoManagerHost/{moId}/RemoveKeys", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Indicate if the encryption feature is enabled.
     pub async fn enabled(&self) -> Result<bool> {
         let path = format!("/CryptoManagerHost/{moId}/enabled", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
 }
 #[derive(serde::Serialize)]

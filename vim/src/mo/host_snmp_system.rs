@@ -31,7 +31,7 @@ impl HostSnmpSystem {
         let input = ReconfigureSnmpAgentRequestType {spec, };
         let path = format!("/HostSnmpSystem/{moId}/ReconfigureSnmpAgent", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// ***Required privileges:*** Global.Settings
     ///
@@ -41,19 +41,19 @@ impl HostSnmpSystem {
     pub async fn send_test_notification(&self) -> Result<()> {
         let path = format!("/HostSnmpSystem/{moId}/SendTestNotification", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// ***Required privileges:*** Global.Settings
     pub async fn configuration(&self) -> Result<HostSnmpConfigSpec> {
         let path = format!("/HostSnmpSystem/{moId}/configuration", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// ***Required privileges:*** Global.Settings
     pub async fn limits(&self) -> Result<HostSnmpSystemAgentLimits> {
         let path = format!("/HostSnmpSystem/{moId}/limits", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
 }
 #[derive(serde::Serialize)]

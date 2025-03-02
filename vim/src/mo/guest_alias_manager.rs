@@ -166,7 +166,7 @@ impl GuestAliasManager {
         let input = AddGuestAliasRequestType {vm, auth, username, map_cert, base_64_cert, alias_info, };
         let path = format!("/GuestAliasManager/{moId}/AddGuestAlias", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Lists the
     /// *GuestAliases*
@@ -224,7 +224,7 @@ impl GuestAliasManager {
         let input = ListGuestAliasesRequestType {vm, auth, username, };
         let path = format!("/GuestAliasManager/{moId}/ListGuestAliases", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Lists the
     /// *GuestMappedAliases*
@@ -279,7 +279,7 @@ impl GuestAliasManager {
         let input = ListGuestMappedAliasesRequestType {vm, auth, };
         let path = format!("/GuestAliasManager/{moId}/ListGuestMappedAliases", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Removes an alias from the guest so it can no longer be
     /// used for
@@ -349,7 +349,7 @@ impl GuestAliasManager {
         let input = RemoveGuestAliasRequestType {vm, auth, username, base_64_cert, subject, };
         let path = format!("/GuestAliasManager/{moId}/RemoveGuestAlias", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Removes a VMware SSO Server's certificate and all
     /// associated aliases from the guest so it
@@ -417,7 +417,7 @@ impl GuestAliasManager {
         let input = RemoveGuestAliasByCertRequestType {vm, auth, username, base_64_cert, };
         let path = format!("/GuestAliasManager/{moId}/RemoveGuestAliasByCert", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
 }
 #[derive(serde::Serialize)]

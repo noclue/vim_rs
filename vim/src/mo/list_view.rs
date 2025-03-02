@@ -28,7 +28,7 @@ impl ListView {
     pub async fn destroy_view(&self) -> Result<()> {
         let path = format!("/ListView/{moId}/DestroyView", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Modify the list by giving a delta of entities to add and
     /// entities to remove.
@@ -56,7 +56,7 @@ impl ListView {
         let input = ModifyListViewRequestType {add, remove, };
         let path = format!("/ListView/{moId}/ModifyListView", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Replaces the list with an entirely new set of objects.
     /// 
@@ -81,7 +81,7 @@ impl ListView {
         let input = ResetListViewRequestType {obj, };
         let path = format!("/ListView/{moId}/ResetListView", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Replaces the list with the set of objects in a given view.
     ///
@@ -95,13 +95,13 @@ impl ListView {
         let input = ResetListViewFromViewRequestType {view, };
         let path = format!("/ListView/{moId}/ResetListViewFromView", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// The list of references to objects mapped by this view.
     pub async fn view(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
         let path = format!("/ListView/{moId}/view", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
 }
 #[derive(serde::Serialize)]

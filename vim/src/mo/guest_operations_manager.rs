@@ -28,7 +28,7 @@ impl GuestOperationsManager {
     pub async fn alias_manager(&self) -> Result<Option<ManagedObjectReference>> {
         let path = format!("/GuestOperationsManager/{moId}/aliasManager", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// A singleton managed object that provides methods for guest authentication
     /// operations.
@@ -41,7 +41,7 @@ impl GuestOperationsManager {
     pub async fn auth_manager(&self) -> Result<Option<ManagedObjectReference>> {
         let path = format!("/GuestOperationsManager/{moId}/authManager", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// A singleton managed object that provides methods for guest file
     /// operations.
@@ -54,7 +54,7 @@ impl GuestOperationsManager {
     pub async fn file_manager(&self) -> Result<Option<ManagedObjectReference>> {
         let path = format!("/GuestOperationsManager/{moId}/fileManager", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// A singleton managed object that provides methods for guest windows registry
     /// operations.
@@ -67,7 +67,7 @@ impl GuestOperationsManager {
     pub async fn guest_windows_registry_manager(&self) -> Result<Option<ManagedObjectReference>> {
         let path = format!("/GuestOperationsManager/{moId}/guestWindowsRegistryManager", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// A singleton managed object that provides methods for guest process
     /// operations.
@@ -80,6 +80,6 @@ impl GuestOperationsManager {
     pub async fn process_manager(&self) -> Result<Option<ManagedObjectReference>> {
         let path = format!("/GuestOperationsManager/{moId}/processManager", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
 }

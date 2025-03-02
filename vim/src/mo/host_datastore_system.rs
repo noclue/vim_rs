@@ -108,7 +108,7 @@ impl HostDatastoreSystem {
         let input = ConfigureDatastorePrincipalRequestType {user_name, password, };
         let path = format!("/HostDatastoreSystem/{moId}/ConfigureDatastorePrincipal", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Creates a new local datastore.
     /// 
@@ -140,7 +140,7 @@ impl HostDatastoreSystem {
         let input = CreateLocalDatastoreRequestType {name, path, };
         let path = format!("/HostDatastoreSystem/{moId}/CreateLocalDatastore", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Creates a new network-attached storage datastore.
     /// 
@@ -176,7 +176,7 @@ impl HostDatastoreSystem {
         let input = CreateNasDatastoreRequestType {spec, };
         let path = format!("/HostDatastoreSystem/{moId}/CreateNasDatastore", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Creates a new VMFS datastore.
     /// 
@@ -208,7 +208,7 @@ impl HostDatastoreSystem {
         let input = CreateVmfsDatastoreRequestType {spec, };
         let path = format!("/HostDatastoreSystem/{moId}/CreateVmfsDatastore", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Create a Virtual-Volume based datastore
     /// 
@@ -238,7 +238,7 @@ impl HostDatastoreSystem {
         let input = CreateVvolDatastoreRequestType {spec, };
         let path = format!("/HostDatastoreSystem/{moId}/CreateVvolDatastore", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Disable the clustered vmdk support on specified datastore.
     /// 
@@ -264,7 +264,7 @@ impl HostDatastoreSystem {
         let input = DisableClusteredVmdkSupportRequestType {datastore, };
         let path = format!("/HostDatastoreSystem/{moId}/DisableClusteredVmdkSupport", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Enable the clustered vmdk support on specified datastore.
     /// 
@@ -287,7 +287,7 @@ impl HostDatastoreSystem {
         let input = EnableClusteredVmdkSupportRequestType {datastore, };
         let path = format!("/HostDatastoreSystem/{moId}/EnableClusteredVmdkSupport", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Increases the capacity of an existing VMFS datastore by expanding
     /// (increasing the size of) an existing extent of the datastore.
@@ -322,7 +322,7 @@ impl HostDatastoreSystem {
         let input = ExpandVmfsDatastoreRequestType {datastore, spec, };
         let path = format!("/HostDatastoreSystem/{moId}/ExpandVmfsDatastore", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Increases the capacity of an existing VMFS datastore by adding new
     /// extents to the datastore.
@@ -357,7 +357,7 @@ impl HostDatastoreSystem {
         let input = ExtendVmfsDatastoreRequestType {datastore, spec, };
         let path = format!("/HostDatastoreSystem/{moId}/ExtendVmfsDatastore", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Query to list disks that can be used to contain VMFS datastore extents.
     /// 
@@ -403,7 +403,7 @@ impl HostDatastoreSystem {
         let input = QueryAvailableDisksForVmfsRequestType {datastore, };
         let path = format!("/HostDatastoreSystem/{moId}/QueryAvailableDisksForVmfs", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Query max queue depth for a specified NFS datastore.
     /// 
@@ -425,7 +425,7 @@ impl HostDatastoreSystem {
         let input = QueryMaxQueueDepthRequestType {datastore, };
         let path = format!("/HostDatastoreSystem/{moId}/QueryMaxQueueDepth", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Get the list of unbound VMFS volumes.
     /// 
@@ -442,7 +442,7 @@ impl HostDatastoreSystem {
     pub async fn query_unresolved_vmfs_volumes(&self) -> Result<Option<Vec<HostUnresolvedVmfsVolume>>> {
         let path = format!("/HostDatastoreSystem/{moId}/QueryUnresolvedVmfsVolumes", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Queries options for creating a new VMFS datastore for a disk.
     /// 
@@ -480,7 +480,7 @@ impl HostDatastoreSystem {
         let input = QueryVmfsDatastoreCreateOptionsRequestType {device_path, vmfs_major_version, };
         let path = format!("/HostDatastoreSystem/{moId}/QueryVmfsDatastoreCreateOptions", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Queries for options for increasing the capacity of an existing VMFS
     /// datastore by expanding (increasing the size of) an existing extent of
@@ -511,7 +511,7 @@ impl HostDatastoreSystem {
         let input = QueryVmfsDatastoreExpandOptionsRequestType {datastore, };
         let path = format!("/HostDatastoreSystem/{moId}/QueryVmfsDatastoreExpandOptions", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Queries for options for increasing the capacity of an existing VMFS
     /// datastore by adding new extents using space from the specified disk.
@@ -556,7 +556,7 @@ impl HostDatastoreSystem {
         let input = QueryVmfsDatastoreExtendOptionsRequestType {datastore, device_path, suppress_expand_candidates, };
         let path = format!("/HostDatastoreSystem/{moId}/QueryVmfsDatastoreExtendOptions", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Removes a datastore from a host.
     /// 
@@ -585,7 +585,7 @@ impl HostDatastoreSystem {
         let input = RemoveDatastoreRequestType {datastore, };
         let path = format!("/HostDatastoreSystem/{moId}/RemoveDatastore", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Remove one or more datastores.
     /// 
@@ -614,7 +614,7 @@ impl HostDatastoreSystem {
         let input = RemoveDatastoreExRequestType {datastore, };
         let path = format!("/HostDatastoreSystem/{moId}/RemoveDatastoreEx_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Resignature an unbound VMFS volume.
     /// 
@@ -670,7 +670,7 @@ impl HostDatastoreSystem {
         let input = ResignatureUnresolvedVmfsVolumeRequestType {resolution_spec, };
         let path = format!("/HostDatastoreSystem/{moId}/ResignatureUnresolvedVmfsVolume_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Set max queue depth for a specified NFS datastore.
     /// 
@@ -697,7 +697,7 @@ impl HostDatastoreSystem {
         let input = SetMaxQueueDepthRequestType {datastore, max_qdepth, };
         let path = format!("/HostDatastoreSystem/{moId}/SetMaxQueueDepth", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Choose the
     /// *localSwapDatastore*
@@ -735,13 +735,13 @@ impl HostDatastoreSystem {
         let input = UpdateLocalSwapDatastoreRequestType {datastore, };
         let path = format!("/HostDatastoreSystem/{moId}/UpdateLocalSwapDatastore", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Capability vector indicating the available product features.
     pub async fn capabilities(&self) -> Result<HostDatastoreSystemCapabilities> {
         let path = format!("/HostDatastoreSystem/{moId}/capabilities", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// List of datastores on this host.
     /// 
@@ -753,7 +753,7 @@ impl HostDatastoreSystem {
     pub async fn datastore(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
         let path = format!("/HostDatastoreSystem/{moId}/datastore", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
 }
 #[derive(serde::Serialize)]

@@ -40,7 +40,7 @@ impl DiagnosticManager {
         let input = EmitSyslogMarkRequestType {message, };
         let path = format!("/DiagnosticManager/{moId}/EmitSyslogMark", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Retrieve audit records from their storage on the specified host.
     /// 
@@ -75,7 +75,7 @@ impl DiagnosticManager {
         let input = FetchAuditRecordsRequestType {token, };
         let path = format!("/DiagnosticManager/{moId}/FetchAuditRecords", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Returns part of a log file.
     /// 
@@ -129,7 +129,7 @@ impl DiagnosticManager {
         let input = BrowseDiagnosticLogRequestType {host, key, start, lines, };
         let path = format!("/DiagnosticManager/{moId}/BrowseDiagnosticLog", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Deprecated since version 5.0 M/N it is recommended to use the CGI
     /// interface for the host bundles, use the address instead:
@@ -189,7 +189,7 @@ impl DiagnosticManager {
         let input = GenerateLogBundlesRequestType {include_default, host, };
         let path = format!("/DiagnosticManager/{moId}/GenerateLogBundles_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Returns a list of diagnostic files for a given system.
     /// 
@@ -209,7 +209,7 @@ impl DiagnosticManager {
         let input = QueryDescriptionsRequestType {host, };
         let path = format!("/DiagnosticManager/{moId}/QueryDescriptions", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
 }
 #[derive(serde::Serialize)]

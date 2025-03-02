@@ -67,7 +67,7 @@ impl FileManager {
         let input = ChangeOwnerRequestType {name, datacenter, owner, };
         let path = format!("/FileManager/{moId}/ChangeOwner", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Copies the source file or folder to the destination.
     /// 
@@ -173,7 +173,7 @@ impl FileManager {
         let input = CopyDatastoreFileRequestType {source_name, source_datacenter, destination_name, destination_datacenter, force, };
         let path = format!("/FileManager/{moId}/CopyDatastoreFile_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Deletes the specified file or folder from the datastore.
     /// 
@@ -234,7 +234,7 @@ impl FileManager {
         let input = DeleteDatastoreFileRequestType {name, datacenter, };
         let path = format!("/FileManager/{moId}/DeleteDatastoreFile_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Create a folder using the specified name.
     /// 
@@ -287,7 +287,7 @@ impl FileManager {
         let input = MakeDirectoryRequestType {name, datacenter, create_parent_directories, };
         let path = format!("/FileManager/{moId}/MakeDirectory", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Moves the source file or folder to the destination.
     /// 
@@ -394,7 +394,7 @@ impl FileManager {
         let input = MoveDatastoreFileRequestType {source_name, source_datacenter, destination_name, destination_datacenter, force, };
         let path = format!("/FileManager/{moId}/MoveDatastoreFile_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Fetches as much information as possible for the file path passed in.
     /// 
@@ -435,7 +435,7 @@ impl FileManager {
         let input = QueryFileLockInfoRequestType {path, host, };
         let path = format!("/FileManager/{moId}/QueryFileLockInfo", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
 }
 #[derive(serde::Serialize)]

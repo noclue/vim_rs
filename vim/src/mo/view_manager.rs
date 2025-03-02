@@ -148,7 +148,7 @@ impl ViewManager {
         let input = CreateContainerViewRequestType {container, r#type, recursive, };
         let path = format!("/ViewManager/{moId}/CreateContainerView", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Create a new *InventoryView* managed object for this session.
     /// 
@@ -160,7 +160,7 @@ impl ViewManager {
     pub async fn create_inventory_view(&self) -> Result<ManagedObjectReference> {
         let path = format!("/ViewManager/{moId}/CreateInventoryView", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Create a *ListView* object for this session.
     /// 
@@ -185,7 +185,7 @@ impl ViewManager {
         let input = CreateListViewRequestType {obj, };
         let path = format!("/ViewManager/{moId}/CreateListView", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Create a *ListView* object for this session.
     /// 
@@ -209,7 +209,7 @@ impl ViewManager {
         let input = CreateListViewFromViewRequestType {view, };
         let path = format!("/ViewManager/{moId}/CreateListViewFromView", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// An array of view references.
     /// 
@@ -224,7 +224,7 @@ impl ViewManager {
     pub async fn view_list(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
         let path = format!("/ViewManager/{moId}/viewList", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
 }
 #[derive(serde::Serialize)]

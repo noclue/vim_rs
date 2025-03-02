@@ -53,7 +53,7 @@ impl IscsiManager {
         let input = BindVnicRequestType {i_scsi_hba_name, vnic_device, };
         let path = format!("/IscsiManager/{moId}/BindVnic", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Query the list of Virtual NICs that are bound to a given iSCSI HBA.
     /// 
@@ -79,7 +79,7 @@ impl IscsiManager {
         let input = QueryBoundVnicsRequestType {i_scsi_hba_name, };
         let path = format!("/IscsiManager/{moId}/QueryBoundVnics", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Query the candidate Virtual NICs and Physical NICs that can be used
     /// for Port-Binding.
@@ -112,7 +112,7 @@ impl IscsiManager {
         let input = QueryCandidateNicsRequestType {i_scsi_hba_name, };
         let path = format!("/IscsiManager/{moId}/QueryCandidateNics", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Query the dependency table for a migration operation of a given Physical
     /// NIC.
@@ -133,7 +133,7 @@ impl IscsiManager {
         let input = QueryMigrationDependenciesRequestType {pnic_device, };
         let path = format!("/IscsiManager/{moId}/QueryMigrationDependencies", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Query if Physical NIC device is used for iSCSI.
     /// 
@@ -160,7 +160,7 @@ impl IscsiManager {
         let input = QueryPnicStatusRequestType {pnic_device, };
         let path = format!("/IscsiManager/{moId}/QueryPnicStatus", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Query the status of Virtual NIC association with the iSCSI.
     /// 
@@ -193,7 +193,7 @@ impl IscsiManager {
         let input = QueryVnicStatusRequestType {vnic_device, };
         let path = format!("/IscsiManager/{moId}/QueryVnicStatus", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Unbind Virtual NIC binding from an iSCSI adapter.
     /// 
@@ -230,7 +230,7 @@ impl IscsiManager {
         let input = UnbindVnicRequestType {i_scsi_hba_name, vnic_device, force, };
         let path = format!("/IscsiManager/{moId}/UnbindVnic", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
 }
 #[derive(serde::Serialize)]

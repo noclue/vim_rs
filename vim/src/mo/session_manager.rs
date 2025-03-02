@@ -44,7 +44,7 @@ impl SessionManager {
     pub async fn acquire_clone_ticket(&self) -> Result<String> {
         let path = format!("/SessionManager/{moId}/AcquireCloneTicket", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Creates and returns a one-time credential that may be used to make the
     /// specified request.
@@ -78,7 +78,7 @@ impl SessionManager {
         let input = AcquireGenericServiceTicketRequestType {spec, };
         let path = format!("/SessionManager/{moId}/AcquireGenericServiceTicket", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Acquires a one-time ticket for mutual authentication between a server and client.
     /// 
@@ -123,7 +123,7 @@ impl SessionManager {
         let input = AcquireLocalTicketRequestType {user_name, };
         let path = format!("/SessionManager/{moId}/AcquireLocalTicket", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Clone the session specified by the clone ticket and associate it with
     /// the current connection.
@@ -154,7 +154,7 @@ impl SessionManager {
         let input = CloneSessionRequestType {clone_ticket, };
         let path = format!("/SessionManager/{moId}/CloneSession", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Converts current session to impersonate the specified user.
     /// 
@@ -190,7 +190,7 @@ impl SessionManager {
         let input = ImpersonateUserRequestType {user_name, locale, };
         let path = format!("/SessionManager/{moId}/ImpersonateUser", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Log on to the server.
     /// 
@@ -238,7 +238,7 @@ impl SessionManager {
         let input = LoginRequestType {user_name, password, locale, };
         let path = format!("/SessionManager/{moId}/Login", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Log on to the server using SSPI pass-through authentication.
     /// 
@@ -303,7 +303,7 @@ impl SessionManager {
         let input = LoginBySspiRequestType {base_64_token, locale, };
         let path = format!("/SessionManager/{moId}/LoginBySSPI", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Log on to the server through token representing principal identity.
     /// 
@@ -359,7 +359,7 @@ impl SessionManager {
         let input = LoginByTokenRequestType {locale, };
         let path = format!("/SessionManager/{moId}/LoginByToken", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Deprecated as of vSphere API 4.0, use SSO style of login instead
     /// *SessionManager.LoginByToken*.
@@ -406,7 +406,7 @@ impl SessionManager {
         let input = LoginExtensionRequestType {extension_key, base_64_signed_credentials, locale, };
         let path = format!("/SessionManager/{moId}/LoginExtension", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Deprecated as of vSphere API 6.0, use SSO style of login instead
     /// *SessionManager.LoginByToken*.
@@ -454,7 +454,7 @@ impl SessionManager {
         let input = LoginExtensionByCertificateRequestType {extension_key, locale, };
         let path = format!("/SessionManager/{moId}/LoginExtensionByCertificate", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Deprecated as of vSphere API 6.0, use SSO style of login instead
     /// *SessionManager.LoginByToken*.
@@ -505,7 +505,7 @@ impl SessionManager {
         let input = LoginExtensionBySubjectNameRequestType {extension_key, locale, };
         let path = format!("/SessionManager/{moId}/LoginExtensionBySubjectName", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Log out and terminate the current session.
     /// 
@@ -513,7 +513,7 @@ impl SessionManager {
     pub async fn logout(&self) -> Result<()> {
         let path = format!("/SessionManager/{moId}/Logout", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Validates that a currently-active session exists with the specified
     /// sessionID and userName associated with it.
@@ -534,7 +534,7 @@ impl SessionManager {
         let input = SessionIsActiveRequestType {session_id, user_name, };
         let path = format!("/SessionManager/{moId}/SessionIsActive", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Sets the session locale.
     /// 
@@ -560,7 +560,7 @@ impl SessionManager {
         let input = SetLocaleRequestType {locale, };
         let path = format!("/SessionManager/{moId}/SetLocale", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Log off and terminate the provided list of sessions.
     /// 
@@ -587,7 +587,7 @@ impl SessionManager {
         let input = TerminateSessionRequestType {session_id, };
         let path = format!("/SessionManager/{moId}/TerminateSession", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Updates the system global message.
     /// 
@@ -605,7 +605,7 @@ impl SessionManager {
         let input = UpdateServiceMessageRequestType {message, };
         let path = format!("/SessionManager/{moId}/UpdateServiceMessage", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// This property contains information about the client's current session.
     /// 
@@ -615,7 +615,7 @@ impl SessionManager {
     pub async fn current_session(&self) -> Result<Option<UserSession>> {
         let path = format!("/SessionManager/{moId}/currentSession", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// This is the default server locale.
     /// 
@@ -623,7 +623,7 @@ impl SessionManager {
     pub async fn default_locale(&self) -> Result<String> {
         let path = format!("/SessionManager/{moId}/defaultLocale", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// The system global message from the server.
     /// 
@@ -631,7 +631,7 @@ impl SessionManager {
     pub async fn message(&self) -> Result<Option<String>> {
         let path = format!("/SessionManager/{moId}/message", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Provides the list of locales for which the server has localized messages.
     /// 
@@ -639,7 +639,7 @@ impl SessionManager {
     pub async fn message_locale_list(&self) -> Result<Option<Vec<String>>> {
         let path = format!("/SessionManager/{moId}/messageLocaleList", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// The list of currently active sessions.
     /// 
@@ -647,7 +647,7 @@ impl SessionManager {
     pub async fn session_list(&self) -> Result<Option<Vec<UserSession>>> {
         let path = format!("/SessionManager/{moId}/sessionList", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Provides the list of locales that the server supports.
     /// 
@@ -660,7 +660,7 @@ impl SessionManager {
     pub async fn supported_locale_list(&self) -> Result<Option<Vec<String>>> {
         let path = format!("/SessionManager/{moId}/supportedLocaleList", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
 }
 #[derive(serde::Serialize)]

@@ -52,7 +52,7 @@ impl HostVsanInternalSystem {
         let input = AbdicateDomOwnershipRequestType {uuids, };
         let path = format!("/HostVsanInternalSystem/{moId}/AbdicateDomOwnership", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Determine if given objects can be provisioned.
     /// 
@@ -90,7 +90,7 @@ impl HostVsanInternalSystem {
         let input = CanProvisionObjectsRequestType {npbs, ignore_satisfiability, };
         let path = format!("/HostVsanInternalSystem/{moId}/CanProvisionObjects", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Delete VSAN objects.
     /// 
@@ -123,7 +123,7 @@ impl HostVsanInternalSystem {
         let input = DeleteVsanObjectsRequestType {uuids, force, };
         let path = format!("/HostVsanInternalSystem/{moId}/DeleteVsanObjects", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Get VSAN object extended attributes.
     /// 
@@ -152,7 +152,7 @@ impl HostVsanInternalSystem {
         let input = GetVsanObjExtAttrsRequestType {uuids, };
         let path = format!("/HostVsanInternalSystem/{moId}/GetVsanObjExtAttrs", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Query CMMDS directly.
     /// 
@@ -174,7 +174,7 @@ impl HostVsanInternalSystem {
         let input = QueryCmmdsRequestType {queries, };
         let path = format!("/HostVsanInternalSystem/{moId}/QueryCmmds", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Query DOM objects on a given set of physical disks.
     /// 
@@ -197,7 +197,7 @@ impl HostVsanInternalSystem {
         let input = QueryObjectsOnPhysicalVsanDiskRequestType {disks, };
         let path = format!("/HostVsanInternalSystem/{moId}/QueryObjectsOnPhysicalVsanDisk", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Query statistics about physical VSAN disks.
     /// 
@@ -221,7 +221,7 @@ impl HostVsanInternalSystem {
         let input = QueryPhysicalVsanDisksRequestType {props, };
         let path = format!("/HostVsanInternalSystem/{moId}/QueryPhysicalVsanDisks", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Query information about VSAN DOM objects that are currently syncing data.
     /// 
@@ -247,7 +247,7 @@ impl HostVsanInternalSystem {
         let input = QuerySyncingVsanObjectsRequestType {uuids, };
         let path = format!("/HostVsanInternalSystem/{moId}/QuerySyncingVsanObjects", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Query VSAN object UUIDs by filtering conditions.
     /// 
@@ -285,7 +285,7 @@ impl HostVsanInternalSystem {
         let input = QueryVsanObjectUuidsByFilterRequestType {uuids, limit, version, };
         let path = format!("/HostVsanInternalSystem/{moId}/QueryVsanObjectUuidsByFilter", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Query information about VSAN DOM objects.
     /// 
@@ -308,7 +308,7 @@ impl HostVsanInternalSystem {
         let input = QueryVsanObjectsRequestType {uuids, };
         let path = format!("/HostVsanInternalSystem/{moId}/QueryVsanObjects", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Query VSAN system statistics.
     /// 
@@ -336,7 +336,7 @@ impl HostVsanInternalSystem {
         let input = QueryVsanStatisticsRequestType {labels, };
         let path = format!("/HostVsanInternalSystem/{moId}/QueryVsanStatistics", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Determine if the given objects can be reconfigured with the given
     /// policies.
@@ -376,7 +376,7 @@ impl HostVsanInternalSystem {
         let input = ReconfigurationSatisfiableRequestType {pcbs, ignore_satisfiability, };
         let path = format!("/HostVsanInternalSystem/{moId}/ReconfigurationSatisfiable", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Reconfigure DOM object.
     /// 
@@ -400,7 +400,7 @@ impl HostVsanInternalSystem {
         let input = ReconfigureDomObjectRequestType {uuid, policy, };
         let path = format!("/HostVsanInternalSystem/{moId}/ReconfigureDomObject", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Runs diagnostics on VSAN physical disks.
     /// 
@@ -426,7 +426,7 @@ impl HostVsanInternalSystem {
         let input = RunVsanPhysicalDiskDiagnosticsRequestType {disks, };
         let path = format!("/HostVsanInternalSystem/{moId}/RunVsanPhysicalDiskDiagnostics", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Upgrade VSAN objects version.
     /// 
@@ -458,7 +458,7 @@ impl HostVsanInternalSystem {
         let input = UpgradeVsanObjectsRequestType {uuids, new_version, };
         let path = format!("/HostVsanInternalSystem/{moId}/UpgradeVsanObjects", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
 }
 #[derive(serde::Serialize)]

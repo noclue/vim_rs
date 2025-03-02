@@ -63,7 +63,7 @@ impl HostAuthenticationManager {
     pub async fn info(&self) -> Result<HostAuthenticationManagerInfo> {
         let path = format!("/HostAuthenticationManager/{moId}/info", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// An array that can contain managed object references to local and
     /// Active Directory authentication managed objects.
@@ -93,6 +93,6 @@ impl HostAuthenticationManager {
     pub async fn supported_store(&self) -> Result<Vec<ManagedObjectReference>> {
         let path = format!("/HostAuthenticationManager/{moId}/supportedStore", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
 }

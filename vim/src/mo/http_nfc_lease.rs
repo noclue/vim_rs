@@ -83,7 +83,7 @@ impl HttpNfcLease {
         let input = HttpNfcLeaseAbortRequestType {fault, };
         let path = format!("/HttpNfcLease/{moId}/HttpNfcLeaseAbort", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Completes the import/export and releases this lease.
     /// 
@@ -104,7 +104,7 @@ impl HttpNfcLease {
     pub async fn http_nfc_lease_complete(&self) -> Result<()> {
         let path = format!("/HttpNfcLease/{moId}/HttpNfcLeaseComplete", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Gets the download manifest for this lease.
     ///
@@ -114,7 +114,7 @@ impl HttpNfcLease {
     pub async fn http_nfc_lease_get_manifest(&self) -> Result<Option<Vec<HttpNfcLeaseManifestEntry>>> {
         let path = format!("/HttpNfcLease/{moId}/HttpNfcLeaseGetManifest", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Perform a series of validations on the target host to see if
     /// it can succesfully perform PullFromUrls.
@@ -141,7 +141,7 @@ impl HttpNfcLease {
         let input = HttpNfcLeaseProbeUrlsRequestType {files, timeout, };
         let path = format!("/HttpNfcLease/{moId}/HttpNfcLeaseProbeUrls", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Sets the disk up/download progress, and renews this lease.
     /// 
@@ -164,7 +164,7 @@ impl HttpNfcLease {
         let input = HttpNfcLeaseProgressRequestType {percent, };
         let path = format!("/HttpNfcLease/{moId}/HttpNfcLeaseProgress", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Upgrades current lease from push to pull mode.
     ///
@@ -187,7 +187,7 @@ impl HttpNfcLease {
         let input = HttpNfcLeasePullFromUrlsRequestType {files, };
         let path = format!("/HttpNfcLease/{moId}/HttpNfcLeasePullFromUrls_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Sets desired checksum algorithm per each file that will be returned in
     /// ManifestEntry.
@@ -208,21 +208,21 @@ impl HttpNfcLease {
         let input = HttpNfcLeaseSetManifestChecksumTypeRequestType {device_urls_to_checksum_types, };
         let path = format!("/HttpNfcLease/{moId}/HttpNfcLeaseSetManifestChecksumType", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Current supported capabilities by this lease
     /// See *HttpNfcLeaseCapabilities*
     pub async fn capabilities(&self) -> Result<HttpNfcLeaseCapabilities> {
         let path = format!("/HttpNfcLease/{moId}/capabilities", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// If the lease is in the error state, this property contains the
     /// error that caused the lease to be aborted.
     pub async fn error(&self) -> Result<Option<Box<dyn crate::types::traits::MethodFaultTrait>>> {
         let path = format!("/HttpNfcLease/{moId}/error", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Provides information on the objects contained in this lease.
     /// 
@@ -231,7 +231,7 @@ impl HttpNfcLease {
     pub async fn info(&self) -> Result<Option<HttpNfcLeaseInfo>> {
         let path = format!("/HttpNfcLease/{moId}/info", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Provides progress information (0-100 percent) for the initializing state
     /// of the lease.
@@ -240,7 +240,7 @@ impl HttpNfcLease {
     pub async fn initialize_progress(&self) -> Result<i32> {
         let path = format!("/HttpNfcLease/{moId}/initializeProgress", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Current mode of the lease.
     /// 
@@ -248,13 +248,13 @@ impl HttpNfcLease {
     pub async fn mode(&self) -> Result<String> {
         let path = format!("/HttpNfcLease/{moId}/mode", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// The current state of the lease.
     pub async fn state(&self) -> Result<crate::types::enums::HttpNfcLeaseStateEnum> {
         let path = format!("/HttpNfcLease/{moId}/state", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Provides progress information (0-100 percent) for current transfer.
     /// 
@@ -263,7 +263,7 @@ impl HttpNfcLease {
     pub async fn transfer_progress(&self) -> Result<i32> {
         let path = format!("/HttpNfcLease/{moId}/transferProgress", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
 }
 #[derive(serde::Serialize)]

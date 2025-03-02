@@ -31,7 +31,7 @@ impl HostAssignableHardwareManager {
     pub async fn download_description_tree(&self) -> Result<Vec<u8>> {
         let path = format!("/HostAssignableHardwareManager/{moId}/DownloadDescriptionTree", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Retrieve PCI Dynamic Passthrough info.
     /// 
@@ -42,7 +42,7 @@ impl HostAssignableHardwareManager {
     pub async fn retrieve_dynamic_passthrough_info(&self) -> Result<Option<Vec<VirtualMachineDynamicPassthroughInfo>>> {
         let path = format!("/HostAssignableHardwareManager/{moId}/RetrieveDynamicPassthroughInfo", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Retrieve VendorDeviceGroup info.
     /// 
@@ -54,7 +54,7 @@ impl HostAssignableHardwareManager {
     pub async fn retrieve_vendor_device_group_info(&self) -> Result<Option<Vec<VirtualMachineVendorDeviceGroupInfo>>> {
         let path = format!("/HostAssignableHardwareManager/{moId}/RetrieveVendorDeviceGroupInfo", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Update Assignable Hardware configuration.
     /// 
@@ -74,7 +74,7 @@ impl HostAssignableHardwareManager {
         let input = UpdateAssignableHardwareConfigRequestType {config, };
         let path = format!("/HostAssignableHardwareManager/{moId}/UpdateAssignableHardwareConfig", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Assignable Hardware bindings
     /// 
@@ -82,7 +82,7 @@ impl HostAssignableHardwareManager {
     pub async fn binding(&self) -> Result<Option<Vec<HostAssignableHardwareBinding>>> {
         let path = format!("/HostAssignableHardwareManager/{moId}/binding", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Assignable Hardware configuration
     /// 
@@ -90,7 +90,7 @@ impl HostAssignableHardwareManager {
     pub async fn config(&self) -> Result<HostAssignableHardwareConfig> {
         let path = format!("/HostAssignableHardwareManager/{moId}/config", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
 }
 #[derive(serde::Serialize)]

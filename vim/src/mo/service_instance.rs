@@ -84,7 +84,7 @@ impl ServiceInstance {
     pub async fn current_time(&self) -> Result<String> {
         let path = format!("/ServiceInstance/{moId}/CurrentTime", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Deprecated as of vSphere API 4.0, use
     /// *VirtualMachineProvisioningChecker.QueryVMotionCompatibilityEx_Task* instead.
@@ -126,7 +126,7 @@ impl ServiceInstance {
         let input = QueryVMotionCompatibilityRequestType {vm, host, compatibility, };
         let path = format!("/ServiceInstance/{moId}/QueryVMotionCompatibility", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Retrieves the properties of the service instance.
     /// 
@@ -139,7 +139,7 @@ impl ServiceInstance {
     pub async fn retrieve_service_content(&self) -> Result<ServiceContent> {
         let path = format!("/ServiceInstance/{moId}/RetrieveServiceContent", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Component information for bundled products
     /// 
@@ -147,7 +147,7 @@ impl ServiceInstance {
     pub async fn retrieve_product_components(&self) -> Result<Option<Vec<ProductComponentInfo>>> {
         let path = format!("/ServiceInstance/{moId}/RetrieveProductComponents", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Deprecated as of vSphere API 4.0, use *VirtualMachineProvisioningChecker*
     /// instead.
@@ -223,7 +223,7 @@ impl ServiceInstance {
         let input = ValidateMigrationRequestType {vm, state, test_type, pool, host, };
         let path = format!("/ServiceInstance/{moId}/ValidateMigration", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// API-wide capabilities.
     /// 
@@ -231,7 +231,7 @@ impl ServiceInstance {
     pub async fn capability(&self) -> Result<Capability> {
         let path = format!("/ServiceInstance/{moId}/capability", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// The properties of the ServiceInstance managed object.
     /// 
@@ -250,7 +250,7 @@ impl ServiceInstance {
     pub async fn content(&self) -> Result<ServiceContent> {
         let path = format!("/ServiceInstance/{moId}/content", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Contains the time most recently obtained from the server.
     /// 
@@ -266,7 +266,7 @@ impl ServiceInstance {
     pub async fn server_clock(&self) -> Result<String> {
         let path = format!("/ServiceInstance/{moId}/serverClock", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
 }
 #[derive(serde::Serialize)]

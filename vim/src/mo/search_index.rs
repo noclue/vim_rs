@@ -57,7 +57,7 @@ impl SearchIndex {
         let input = FindAllByDnsNameRequestType {datacenter, dns_name, vm_search, };
         let path = format!("/SearchIndex/{moId}/FindAllByDnsName", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Finds all virtual machines or hosts by IP address, where the IP address is
     /// in dot-decimal notation.
@@ -94,7 +94,7 @@ impl SearchIndex {
         let input = FindAllByIpRequestType {datacenter, ip, vm_search, };
         let path = format!("/SearchIndex/{moId}/FindAllByIp", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Finds all virtual machines or hosts by UUID.
     /// 
@@ -135,7 +135,7 @@ impl SearchIndex {
         let input = FindAllByUuidRequestType {datacenter, uuid, vm_search, instance_uuid, };
         let path = format!("/SearchIndex/{moId}/FindAllByUuid", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Finds a virtual machine by its location on a datastore.
     /// 
@@ -167,7 +167,7 @@ impl SearchIndex {
         let input = FindByDatastorePathRequestType {datacenter, path, };
         let path = format!("/SearchIndex/{moId}/FindByDatastorePath", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Finds a virtual machine or host by DNS name.
     /// 
@@ -203,7 +203,7 @@ impl SearchIndex {
         let input = FindByDnsNameRequestType {datacenter, dns_name, vm_search, };
         let path = format!("/SearchIndex/{moId}/FindByDnsName", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Finds a managed entity based on its location in the inventory.
     /// 
@@ -232,7 +232,7 @@ impl SearchIndex {
         let input = FindByInventoryPathRequestType {inventory_path, };
         let path = format!("/SearchIndex/{moId}/FindByInventoryPath", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Finds a virtual machine or host by IP address, where the IP address is in
     /// dot-decimal notation.
@@ -271,7 +271,7 @@ impl SearchIndex {
         let input = FindByIpRequestType {datacenter, ip, vm_search, };
         let path = format!("/SearchIndex/{moId}/FindByIp", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Finds a virtual machine or host by BIOS or instance UUID.
     /// 
@@ -311,7 +311,7 @@ impl SearchIndex {
         let input = FindByUuidRequestType {datacenter, uuid, vm_search, instance_uuid, };
         let path = format!("/SearchIndex/{moId}/FindByUuid", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Finds a particular child based on a managed entity
     /// name.
@@ -343,7 +343,7 @@ impl SearchIndex {
         let input = FindChildRequestType {entity, name, };
         let path = format!("/SearchIndex/{moId}/FindChild", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
 }
 #[derive(serde::Serialize)]

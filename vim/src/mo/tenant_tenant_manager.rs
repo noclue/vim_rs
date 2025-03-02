@@ -55,7 +55,7 @@ impl TenantTenantManager {
         let input = MarkServiceProviderEntitiesRequestType {entity, };
         let path = format!("/TenantTenantManager/{moId}/MarkServiceProviderEntities", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Retrieves the list of tenant management entities.
     /// 
@@ -69,7 +69,7 @@ impl TenantTenantManager {
     pub async fn retrieve_service_provider_entities(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
         let path = format!("/TenantTenantManager/{moId}/RetrieveServiceProviderEntities", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Resets the management type of an array of ManagedEntity objects.
     /// 
@@ -99,7 +99,7 @@ impl TenantTenantManager {
         let input = UnmarkServiceProviderEntitiesRequestType {entity, };
         let path = format!("/TenantTenantManager/{moId}/UnmarkServiceProviderEntities", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
 }
 #[derive(serde::Serialize)]

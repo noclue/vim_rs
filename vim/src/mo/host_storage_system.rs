@@ -79,7 +79,7 @@ impl HostStorageSystem {
         let input = AddInternetScsiSendTargetsRequestType {i_scsi_hba_device, targets, };
         let path = format!("/HostStorageSystem/{moId}/AddInternetScsiSendTargets", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Adds Static Target entries to the host bus adapter discovery list.
     /// 
@@ -104,7 +104,7 @@ impl HostStorageSystem {
         let input = AddInternetScsiStaticTargetsRequestType {i_scsi_hba_device, targets, };
         let path = format!("/HostStorageSystem/{moId}/AddInternetScsiStaticTargets", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Allow I/O issue to the specified detached ScsiLun.
     /// 
@@ -137,7 +137,7 @@ impl HostStorageSystem {
         let input = AttachScsiLunRequestType {lun_uuid, };
         let path = format!("/HostStorageSystem/{moId}/AttachScsiLun", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Attach one or more SCSI LUNs.
     /// 
@@ -163,7 +163,7 @@ impl HostStorageSystem {
         let input = AttachScsiLunExRequestType {lun_uuid, };
         let path = format!("/HostStorageSystem/{moId}/AttachScsiLunEx_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Extends a VMFS by attaching a disk partition as an extent.
     /// 
@@ -191,7 +191,7 @@ impl HostStorageSystem {
         let input = AttachVmfsExtentRequestType {vmfs_path, extent, };
         let path = format!("/HostStorageSystem/{moId}/AttachVmfsExtent", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Change password for existing NFS user.
     /// 
@@ -215,7 +215,7 @@ impl HostStorageSystem {
         let input = ChangeNfsUserPasswordRequestType {password, };
         let path = format!("/HostStorageSystem/{moId}/ChangeNFSUserPassword", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Clear the NFS user configured on the esx host
     /// 
@@ -228,7 +228,7 @@ impl HostStorageSystem {
     pub async fn clear_nfs_user(&self) -> Result<()> {
         let path = format!("/HostStorageSystem/{moId}/ClearNFSUser", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Computes the disk partition information given the desired disk layout.
     /// 
@@ -270,7 +270,7 @@ impl HostStorageSystem {
         let input = ComputeDiskPartitionInfoRequestType {device_path, layout, partition_format, };
         let path = format!("/HostStorageSystem/{moId}/ComputeDiskPartitionInfo", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Computes the disk partition information for the purpose of resizing
     /// a given partition.
@@ -311,7 +311,7 @@ impl HostStorageSystem {
         let input = ComputeDiskPartitionInfoForResizeRequestType {partition, block_range, partition_format, };
         let path = format!("/HostStorageSystem/{moId}/ComputeDiskPartitionInfoForResize", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Establish a connection to an NVME controller.
     /// 
@@ -344,7 +344,7 @@ impl HostStorageSystem {
         let input = ConnectNvmeControllerRequestType {connect_spec, };
         let path = format!("/HostStorageSystem/{moId}/ConnectNvmeController", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Establish a connection to one or more NVMe controllers.
     /// 
@@ -380,7 +380,7 @@ impl HostStorageSystem {
         let input = ConnectNvmeControllerExRequestType {connect_spec, };
         let path = format!("/HostStorageSystem/{moId}/ConnectNvmeControllerEx_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Creates a software NVME over RDMA adapter.
     /// 
@@ -408,7 +408,7 @@ impl HostStorageSystem {
         let input = CreateNvmeOverRdmaAdapterRequestType {rdma_device_name, };
         let path = format!("/HostStorageSystem/{moId}/CreateNvmeOverRdmaAdapter", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Creates a software host bus adapter based on the provided spec.
     /// 
@@ -438,7 +438,7 @@ impl HostStorageSystem {
         let input = CreateSoftwareAdapterRequestType {spec, };
         let path = format!("/HostStorageSystem/{moId}/CreateSoftwareAdapter", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// For previously detached SCSI Lun, remove the state information from
     /// host.
@@ -468,7 +468,7 @@ impl HostStorageSystem {
         let input = DeleteScsiLunStateRequestType {lun_canonical_name, };
         let path = format!("/HostStorageSystem/{moId}/DeleteScsiLunState", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// For previously unmounted VFFS volume, remove the state information from
     /// host.
@@ -498,7 +498,7 @@ impl HostStorageSystem {
         let input = DeleteVffsVolumeStateRequestType {vffs_uuid, };
         let path = format!("/HostStorageSystem/{moId}/DeleteVffsVolumeState", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// For previously unmounted VMFS volume, remove the state information from
     /// host.
@@ -528,7 +528,7 @@ impl HostStorageSystem {
         let input = DeleteVmfsVolumeStateRequestType {vmfs_uuid, };
         let path = format!("/HostStorageSystem/{moId}/DeleteVmfsVolumeState", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Destroy a VFFS volume.
     /// 
@@ -550,7 +550,7 @@ impl HostStorageSystem {
         let input = DestroyVffsRequestType {vffs_path, };
         let path = format!("/HostStorageSystem/{moId}/DestroyVffs", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Disallow I/O issue to the specified ScsiLun.
     /// 
@@ -592,7 +592,7 @@ impl HostStorageSystem {
         let input = DetachScsiLunRequestType {lun_uuid, };
         let path = format!("/HostStorageSystem/{moId}/DetachScsiLun", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Detach one or more SCSI LUNs.
     /// 
@@ -618,7 +618,7 @@ impl HostStorageSystem {
         let input = DetachScsiLunExRequestType {lun_uuid, };
         let path = format!("/HostStorageSystem/{moId}/DetachScsiLunEx_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Disables an enabled path for a Logical Unit.
     /// 
@@ -641,7 +641,7 @@ impl HostStorageSystem {
         let input = DisableMultipathPathRequestType {path_name, };
         let path = format!("/HostStorageSystem/{moId}/DisableMultipathPath", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Disconnect from an NVME controller.
     /// 
@@ -671,7 +671,7 @@ impl HostStorageSystem {
         let input = DisconnectNvmeControllerRequestType {disconnect_spec, };
         let path = format!("/HostStorageSystem/{moId}/DisconnectNvmeController", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Disconnect from one or more NVMe controllers.
     /// 
@@ -707,7 +707,7 @@ impl HostStorageSystem {
         let input = DisconnectNvmeControllerExRequestType {disconnect_spec, };
         let path = format!("/HostStorageSystem/{moId}/DisconnectNvmeControllerEx_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Deprecated as of vSphere API 8.0. Software FCoE not supported.
     /// 
@@ -735,7 +735,7 @@ impl HostStorageSystem {
         let input = DiscoverFcoeHbasRequestType {fcoe_spec, };
         let path = format!("/HostStorageSystem/{moId}/DiscoverFcoeHbas", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Connects to a Discovery Controller and retrieves the Discovery Log
     /// using the provided NvmeDiscoverSpec.
@@ -771,7 +771,7 @@ impl HostStorageSystem {
         let input = DiscoverNvmeControllersRequestType {discover_spec, };
         let path = format!("/HostStorageSystem/{moId}/DiscoverNvmeControllers", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Enables a disabled path for a Logical Unit.
     /// 
@@ -794,7 +794,7 @@ impl HostStorageSystem {
         let input = EnableMultipathPathRequestType {path_name, };
         let path = format!("/HostStorageSystem/{moId}/EnableMultipathPath", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Expands a VMFS extent as specified by the Disk partition specification.
     /// 
@@ -820,7 +820,7 @@ impl HostStorageSystem {
         let input = ExpandVmfsExtentRequestType {vmfs_path, extent, };
         let path = format!("/HostStorageSystem/{moId}/ExpandVmfsExtent", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Extends a VFFS by attaching a SSD.
     /// 
@@ -856,7 +856,7 @@ impl HostStorageSystem {
         let input = ExtendVffsRequestType {vffs_path, device_path, spec, };
         let path = format!("/HostStorageSystem/{moId}/ExtendVffs", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Format a new VFFS on a SSD disk
     /// 
@@ -887,7 +887,7 @@ impl HostStorageSystem {
         let input = FormatVffsRequestType {create_spec, };
         let path = format!("/HostStorageSystem/{moId}/FormatVffs", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Formats a new VMFS on a disk partition.
     /// 
@@ -917,7 +917,7 @@ impl HostStorageSystem {
         let input = FormatVmfsRequestType {create_spec, };
         let path = format!("/HostStorageSystem/{moId}/FormatVmfs", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Mark a disk to local disk, due to the reason that local disks
     /// behind some controllers might not be recongized as local correctly.
@@ -944,7 +944,7 @@ impl HostStorageSystem {
         let input = MarkAsLocalRequestType {scsi_disk_uuid, };
         let path = format!("/HostStorageSystem/{moId}/MarkAsLocal_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Mark a disk to remote disk, which is the opposite operation of
     /// *HostStorageSystem.MarkAsLocal_Task*
@@ -970,7 +970,7 @@ impl HostStorageSystem {
         let input = MarkAsNonLocalRequestType {scsi_disk_uuid, };
         let path = format!("/HostStorageSystem/{moId}/MarkAsNonLocal_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Mark a disk to Non-SSD, which is the opposite operation of
     /// *HostStorageSystem.MarkAsSsd_Task*
@@ -996,7 +996,7 @@ impl HostStorageSystem {
         let input = MarkAsNonSsdRequestType {scsi_disk_uuid, };
         let path = format!("/HostStorageSystem/{moId}/MarkAsNonSsd_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Mark a disk to SSD, due to the reason that SSDs behind some controllers
     /// might not be recongized as SSD correctly.
@@ -1023,7 +1023,7 @@ impl HostStorageSystem {
         let input = MarkAsSsdRequestType {scsi_disk_uuid, };
         let path = format!("/HostStorageSystem/{moId}/MarkAsSsd_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Deprecated as of vSphere API 8.0. Software FCoE not supported.
     /// 
@@ -1055,7 +1055,7 @@ impl HostStorageSystem {
         let input = MarkForRemovalRequestType {hba_name, remove, };
         let path = format!("/HostStorageSystem/{moId}/MarkForRemoval", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Marks the specified LUN as perennially reserved.
     /// 
@@ -1079,7 +1079,7 @@ impl HostStorageSystem {
         let input = MarkPerenniallyReservedRequestType {lun_uuid, state, };
         let path = format!("/HostStorageSystem/{moId}/MarkPerenniallyReserved", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Marks the specified one or more SCSI LUN's perennially reserved based
     /// on the sate.
@@ -1102,7 +1102,7 @@ impl HostStorageSystem {
         let input = MarkPerenniallyReservedExRequestType {lun_uuid, state, };
         let path = format!("/HostStorageSystem/{moId}/MarkPerenniallyReservedEx_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Mount the unmounted VFFS volume.
     /// 
@@ -1134,7 +1134,7 @@ impl HostStorageSystem {
         let input = MountVffsVolumeRequestType {vffs_uuid, };
         let path = format!("/HostStorageSystem/{moId}/MountVffsVolume", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Mount the unmounted Vmfs volume.
     /// 
@@ -1166,7 +1166,7 @@ impl HostStorageSystem {
         let input = MountVmfsVolumeRequestType {vmfs_uuid, };
         let path = format!("/HostStorageSystem/{moId}/MountVmfsVolume", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Mount one or more VMFS volumes.
     /// 
@@ -1192,7 +1192,7 @@ impl HostStorageSystem {
         let input = MountVmfsVolumeExRequestType {vmfs_uuid, };
         let path = format!("/HostStorageSystem/{moId}/MountVmfsVolumeEx_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Query the list SSD disks that can be used to contain a VFFS volume.
     /// 
@@ -1224,7 +1224,7 @@ impl HostStorageSystem {
         let input = QueryAvailableSsdsRequestType {vffs_path, };
         let path = format!("/HostStorageSystem/{moId}/QueryAvailableSsds", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Query the NFS user configured on the esx host
     /// 
@@ -1242,7 +1242,7 @@ impl HostStorageSystem {
     pub async fn query_nfs_user(&self) -> Result<Option<HostNasVolumeUserInfo>> {
         let path = format!("/HostStorageSystem/{moId}/QueryNFSUser", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Queries the set of path selection policy options.
     /// 
@@ -1269,7 +1269,7 @@ impl HostStorageSystem {
     pub async fn query_path_selection_policy_options(&self) -> Result<Option<Vec<HostPathSelectionPolicyOption>>> {
         let path = format!("/HostStorageSystem/{moId}/QueryPathSelectionPolicyOptions", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Queries the set of storage array type policy options.
     /// 
@@ -1294,7 +1294,7 @@ impl HostStorageSystem {
     pub async fn query_storage_array_type_policy_options(&self) -> Result<Option<Vec<HostStorageArrayTypePolicyOption>>> {
         let path = format!("/HostStorageSystem/{moId}/QueryStorageArrayTypePolicyOptions", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Get the list of unbound VMFS volumes.
     /// 
@@ -1311,7 +1311,7 @@ impl HostStorageSystem {
     pub async fn query_unresolved_vmfs_volume(&self) -> Result<Option<Vec<HostUnresolvedVmfsVolume>>> {
         let path = format!("/HostStorageSystem/{moId}/QueryUnresolvedVmfsVolume", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Get the VMFS configuration options, including block size,
     /// unmap granularity.
@@ -1324,7 +1324,7 @@ impl HostStorageSystem {
     pub async fn query_vmfs_config_option(&self) -> Result<Option<Vec<VmfsConfigOption>>> {
         let path = format!("/HostStorageSystem/{moId}/QueryVmfsConfigOption", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Obtains the latest host storage information related to storage devices, topology,
     /// and file systems.
@@ -1346,7 +1346,7 @@ impl HostStorageSystem {
     pub async fn refresh_storage_system(&self) -> Result<()> {
         let path = format!("/HostStorageSystem/{moId}/RefreshStorageSystem", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Removes Send Target entries from the host bus adapter discovery list.
     /// 
@@ -1380,7 +1380,7 @@ impl HostStorageSystem {
         let input = RemoveInternetScsiSendTargetsRequestType {i_scsi_hba_device, targets, force, };
         let path = format!("/HostStorageSystem/{moId}/RemoveInternetScsiSendTargets", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Removes static target entries from the host bus adapter discovery list.
     /// 
@@ -1408,7 +1408,7 @@ impl HostStorageSystem {
         let input = RemoveInternetScsiStaticTargetsRequestType {i_scsi_hba_device, targets, };
         let path = format!("/HostStorageSystem/{moId}/RemoveInternetScsiStaticTargets", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Removes a software NVME over RDMA adapter.
     /// 
@@ -1432,7 +1432,7 @@ impl HostStorageSystem {
         let input = RemoveNvmeOverRdmaAdapterRequestType {hba_device_name, };
         let path = format!("/HostStorageSystem/{moId}/RemoveNvmeOverRdmaAdapter", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Removes a software host bus adapter, if the adapter type allows it.
     /// 
@@ -1458,7 +1458,7 @@ impl HostStorageSystem {
         let input = RemoveSoftwareAdapterRequestType {hba_device_name, };
         let path = format!("/HostStorageSystem/{moId}/RemoveSoftwareAdapter", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Scans all host bus adapters to obtain the current list of devices and device topology.
     /// 
@@ -1483,7 +1483,7 @@ impl HostStorageSystem {
     pub async fn rescan_all_hba(&self) -> Result<()> {
         let path = format!("/HostStorageSystem/{moId}/RescanAllHba", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Issues a request to rescan a specific host bus adapter
     /// for new storage devices.
@@ -1504,7 +1504,7 @@ impl HostStorageSystem {
         let input = RescanHbaRequestType {hba_device, };
         let path = format!("/HostStorageSystem/{moId}/RescanHba", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Rescans for new VFFS.
     /// 
@@ -1524,7 +1524,7 @@ impl HostStorageSystem {
     pub async fn rescan_vffs(&self) -> Result<()> {
         let path = format!("/HostStorageSystem/{moId}/RescanVffs", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Rescans for new Virtual Machine File Systems (VMFS).
     /// 
@@ -1544,7 +1544,7 @@ impl HostStorageSystem {
     pub async fn rescan_vmfs(&self) -> Result<()> {
         let path = format!("/HostStorageSystem/{moId}/RescanVmfs", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Resignature or 'Force Mount' list of unbound VMFS volumes.
     /// 
@@ -1592,7 +1592,7 @@ impl HostStorageSystem {
         let input = ResolveMultipleUnresolvedVmfsVolumesRequestType {resolution_spec, };
         let path = format!("/HostStorageSystem/{moId}/ResolveMultipleUnresolvedVmfsVolumes", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Resignature or 'Force Mount' list of unbound VMFS volumes.
     /// 
@@ -1653,7 +1653,7 @@ impl HostStorageSystem {
         let input = ResolveMultipleUnresolvedVmfsVolumesExRequestType {resolution_spec, };
         let path = format!("/HostStorageSystem/{moId}/ResolveMultipleUnresolvedVmfsVolumesEx_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Gets the partition information for the disks named by the device names.
     /// 
@@ -1672,7 +1672,7 @@ impl HostStorageSystem {
         let input = RetrieveDiskPartitionInfoRequestType {device_path, };
         let path = format!("/HostStorageSystem/{moId}/RetrieveDiskPartitionInfo", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Assigns a value to a custom field.
     /// 
@@ -1692,7 +1692,7 @@ impl HostStorageSystem {
         let input = SetCustomValueRequestType {key, value, };
         let path = format!("/HostStorageSystem/{moId}/setCustomValue", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Updates the path selection policy for a Logical Unit.
     /// 
@@ -1720,7 +1720,7 @@ impl HostStorageSystem {
         let input = SetMultipathLunPolicyRequestType {lun_id, policy, };
         let path = format!("/HostStorageSystem/{moId}/SetMultipathLunPolicy", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Set NFS username and password on the host.
     /// 
@@ -1754,7 +1754,7 @@ impl HostStorageSystem {
         let input = SetNfsUserRequestType {user, password, };
         let path = format!("/HostStorageSystem/{moId}/SetNFSUser", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Turn off one or more disk locator LEDs.
     /// 
@@ -1780,7 +1780,7 @@ impl HostStorageSystem {
         let input = TurnDiskLocatorLedOffRequestType {scsi_disk_uuids, };
         let path = format!("/HostStorageSystem/{moId}/TurnDiskLocatorLedOff_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Turn on one or more disk locator LEDs, duration is the maximum that
     /// hardware can support.
@@ -1807,7 +1807,7 @@ impl HostStorageSystem {
         let input = TurnDiskLocatorLedOnRequestType {scsi_disk_uuids, };
         let path = format!("/HostStorageSystem/{moId}/TurnDiskLocatorLedOn_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Unmap one or more VMFS volumes.
     /// 
@@ -1832,7 +1832,7 @@ impl HostStorageSystem {
         let input = UnmapVmfsVolumeExRequestType {vmfs_uuid, };
         let path = format!("/HostStorageSystem/{moId}/UnmapVmfsVolumeEx_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Unmount the 'forceMounted' Vmfs volume.
     /// 
@@ -1861,7 +1861,7 @@ impl HostStorageSystem {
         let input = UnmountForceMountedVmfsVolumeRequestType {vmfs_uuid, };
         let path = format!("/HostStorageSystem/{moId}/UnmountForceMountedVmfsVolume", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Unmount the VFFS volume.
     /// 
@@ -1900,7 +1900,7 @@ impl HostStorageSystem {
         let input = UnmountVffsVolumeRequestType {vffs_uuid, };
         let path = format!("/HostStorageSystem/{moId}/UnmountVffsVolume", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Unmount the Vmfs volume.
     /// 
@@ -1967,7 +1967,7 @@ impl HostStorageSystem {
         let input = UnmountVmfsVolumeRequestType {vmfs_uuid, };
         let path = format!("/HostStorageSystem/{moId}/UnmountVmfsVolume", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Unmount one or more VMFS volumes.
     /// 
@@ -1993,7 +1993,7 @@ impl HostStorageSystem {
         let input = UnmountVmfsVolumeExRequestType {vmfs_uuid, };
         let path = format!("/HostStorageSystem/{moId}/UnmountVmfsVolumeEx_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Changes the partitions on the disk by supplying a partition specification
     /// and the device name.
@@ -2020,7 +2020,7 @@ impl HostStorageSystem {
         let input = UpdateDiskPartitionsRequestType {device_path, spec, };
         let path = format!("/HostStorageSystem/{moId}/UpdateDiskPartitions", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Updates the path selection policy for a HPP claimed Logical Unit.
     /// 
@@ -2048,7 +2048,7 @@ impl HostStorageSystem {
         let input = UpdateHppMultipathLunPolicyRequestType {lun_id, policy, };
         let path = format!("/HostStorageSystem/{moId}/UpdateHppMultipathLunPolicy", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Updates the advanced options the iSCSI host bus adapter or the
     /// discovery addresses and targets associated with it.
@@ -2076,7 +2076,7 @@ impl HostStorageSystem {
         let input = UpdateInternetScsiAdvancedOptionsRequestType {i_scsi_hba_device, target_set, options, };
         let path = format!("/HostStorageSystem/{moId}/UpdateInternetScsiAdvancedOptions", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Updates the alias of an iSCSI host bus adapter.
     /// 
@@ -2099,7 +2099,7 @@ impl HostStorageSystem {
         let input = UpdateInternetScsiAliasRequestType {i_scsi_hba_device, i_scsi_alias, };
         let path = format!("/HostStorageSystem/{moId}/UpdateInternetScsiAlias", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Updates the authentication properties for one or more targets or
     /// discovery addresses associated with an iSCSI host bus adapter.
@@ -2130,7 +2130,7 @@ impl HostStorageSystem {
         let input = UpdateInternetScsiAuthenticationPropertiesRequestType {i_scsi_hba_device, authentication_properties, target_set, };
         let path = format!("/HostStorageSystem/{moId}/UpdateInternetScsiAuthenticationProperties", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Updates the digest properties for the iSCSI host bus adapter or the
     /// discovery addresses and targets associated with it.
@@ -2159,7 +2159,7 @@ impl HostStorageSystem {
         let input = UpdateInternetScsiDigestPropertiesRequestType {i_scsi_hba_device, target_set, digest_properties, };
         let path = format!("/HostStorageSystem/{moId}/UpdateInternetScsiDigestProperties", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Updates the Discovery properties for an iSCSI host bus adapter.
     /// 
@@ -2182,7 +2182,7 @@ impl HostStorageSystem {
         let input = UpdateInternetScsiDiscoveryPropertiesRequestType {i_scsi_hba_device, discovery_properties, };
         let path = format!("/HostStorageSystem/{moId}/UpdateInternetScsiDiscoveryProperties", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Updates the IP properties for an iSCSI host bus adapter.
     /// 
@@ -2206,7 +2206,7 @@ impl HostStorageSystem {
         let input = UpdateInternetScsiIpPropertiesRequestType {i_scsi_hba_device, ip_properties, };
         let path = format!("/HostStorageSystem/{moId}/UpdateInternetScsiIPProperties", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Updates the name of an iSCSI host bus adapter.
     /// 
@@ -2229,7 +2229,7 @@ impl HostStorageSystem {
         let input = UpdateInternetScsiNameRequestType {i_scsi_hba_device, i_scsi_name, };
         let path = format!("/HostStorageSystem/{moId}/UpdateInternetScsiName", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Update the mutable display name associated with a ScsiLun.
     /// 
@@ -2270,7 +2270,7 @@ impl HostStorageSystem {
         let input = UpdateScsiLunDisplayNameRequestType {lun_uuid, display_name, };
         let path = format!("/HostStorageSystem/{moId}/UpdateScsiLunDisplayName", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Enables or disables Software iSCSI.
     /// 
@@ -2288,7 +2288,7 @@ impl HostStorageSystem {
         let input = UpdateSoftwareInternetScsiEnabledRequestType {enabled, };
         let path = format!("/HostStorageSystem/{moId}/UpdateSoftwareInternetScsiEnabled", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Update VMFS unmap bandwidth.
     /// 
@@ -2312,7 +2312,7 @@ impl HostStorageSystem {
         let input = UpdateVmfsUnmapBandwidthRequestType {vmfs_uuid, unmap_bandwidth_spec, };
         let path = format!("/HostStorageSystem/{moId}/UpdateVmfsUnmapBandwidth", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Update VMFS unmap priority.
     /// 
@@ -2332,7 +2332,7 @@ impl HostStorageSystem {
         let input = UpdateVmfsUnmapPriorityRequestType {vmfs_uuid, unmap_priority, };
         let path = format!("/HostStorageSystem/{moId}/UpdateVmfsUnmapPriority", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Iterates over all registered virtual machines.
     /// 
@@ -2348,7 +2348,7 @@ impl HostStorageSystem {
     pub async fn upgrade_vm_layout(&self) -> Result<()> {
         let path = format!("/HostStorageSystem/{moId}/UpgradeVmLayout", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Upgrades the VMFS to the *latest
     /// supported VMFS version*.
@@ -2375,7 +2375,7 @@ impl HostStorageSystem {
         let input = UpgradeVmfsRequestType {vmfs_path, };
         let path = format!("/HostStorageSystem/{moId}/UpgradeVmfs", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// List of custom field definitions that are valid for the object's type.
     /// 
@@ -2385,7 +2385,7 @@ impl HostStorageSystem {
     pub async fn available_field(&self) -> Result<Option<Vec<CustomFieldDef>>> {
         let path = format!("/HostStorageSystem/{moId}/availableField", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// File system volume information for the host.
     /// 
@@ -2395,7 +2395,7 @@ impl HostStorageSystem {
     pub async fn file_system_volume_info(&self) -> Result<HostFileSystemVolumeInfo> {
         let path = format!("/HostStorageSystem/{moId}/fileSystemVolumeInfo", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Runtime information about the state of a multipath path.
     /// 
@@ -2408,13 +2408,13 @@ impl HostStorageSystem {
     pub async fn multipath_state_info(&self) -> Result<Option<HostMultipathStateInfo>> {
         let path = format!("/HostStorageSystem/{moId}/multipathStateInfo", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Host storage information up to the device level.
     pub async fn storage_device_info(&self) -> Result<Option<HostStorageDeviceInfo>> {
         let path = format!("/HostStorageSystem/{moId}/storageDeviceInfo", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Datastore paths of files used by the host system on
     /// mounted volumes, for instance, the COS vmdk file of the
@@ -2424,7 +2424,7 @@ impl HostStorageSystem {
     pub async fn system_file(&self) -> Result<Option<Vec<String>>> {
         let path = format!("/HostStorageSystem/{moId}/systemFile", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// List of custom field values.
     /// 
@@ -2436,7 +2436,7 @@ impl HostStorageSystem {
     pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/HostStorageSystem/{moId}/value", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
 }
 #[derive(serde::Serialize)]

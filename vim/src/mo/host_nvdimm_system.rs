@@ -69,7 +69,7 @@ impl HostNvdimmSystem {
         let input = CreateNvdimmNamespaceRequestType {create_spec, };
         let path = format!("/HostNvdimmSystem/{moId}/CreateNvdimmNamespace_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Create persistent memory mode nvd namespace from information passed
     /// in PMemNamespaceCreationSpec.
@@ -119,7 +119,7 @@ impl HostNvdimmSystem {
         let input = CreateNvdimmPMemNamespaceRequestType {create_spec, };
         let path = format!("/HostNvdimmSystem/{moId}/CreateNvdimmPMemNamespace_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Delete all block mode namespaces in the system.
     /// 
@@ -161,7 +161,7 @@ impl HostNvdimmSystem {
     pub async fn delete_nvdimm_block_namespaces_task(&self) -> Result<ManagedObjectReference> {
         let path = format!("/HostNvdimmSystem/{moId}/DeleteNvdimmBlockNamespaces_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Delete nvd namespace whose uuid matches passed parameter.
     /// 
@@ -205,7 +205,7 @@ impl HostNvdimmSystem {
         let input = DeleteNvdimmNamespaceRequestType {delete_spec, };
         let path = format!("/HostNvdimmSystem/{moId}/DeleteNvdimmNamespace_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Host NVDIMM information.
     /// 
@@ -225,7 +225,7 @@ impl HostNvdimmSystem {
     pub async fn nvdimm_system_info(&self) -> Result<NvdimmSystemInfo> {
         let path = format!("/HostNvdimmSystem/{moId}/nvdimmSystemInfo", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
 }
 #[derive(serde::Serialize)]

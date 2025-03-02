@@ -27,7 +27,7 @@ impl HostImageConfigManager {
     pub async fn fetch_software_packages(&self) -> Result<Option<Vec<SoftwarePackage>>> {
         let path = format!("/HostImageConfigManager/{moId}/fetchSoftwarePackages", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Reports the UTC time stamp when this system was first installed.
     /// 
@@ -38,7 +38,7 @@ impl HostImageConfigManager {
     pub async fn install_date(&self) -> Result<String> {
         let path = format!("/HostImageConfigManager/{moId}/installDate", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Queries the current host acceptance level setting.
     /// 
@@ -53,7 +53,7 @@ impl HostImageConfigManager {
     pub async fn host_image_config_get_acceptance(&self) -> Result<String> {
         let path = format!("/HostImageConfigManager/{moId}/HostImageConfigGetAcceptance", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Queries the current host image profile information.
     /// 
@@ -64,7 +64,7 @@ impl HostImageConfigManager {
     pub async fn host_image_config_get_profile(&self) -> Result<HostImageProfileSummary> {
         let path = format!("/HostImageConfigManager/{moId}/HostImageConfigGetProfile", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Sets the acceptance level of the host image profile.
     /// 
@@ -86,7 +86,7 @@ impl HostImageConfigManager {
         let input = UpdateHostImageAcceptanceLevelRequestType {new_acceptance_level, };
         let path = format!("/HostImageConfigManager/{moId}/UpdateHostImageAcceptanceLevel", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
 }
 #[derive(serde::Serialize)]

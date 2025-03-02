@@ -75,7 +75,7 @@ impl VirtualMachine {
     pub async fn acquire_mks_ticket(&self) -> Result<VirtualMachineMksTicket> {
         let path = format!("/VirtualMachine/{moId}/AcquireMksTicket", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Creates and returns a one-time credential used in establishing a
     /// specific connection to this virtual machine, for example, a ticket
@@ -116,7 +116,7 @@ impl VirtualMachine {
         let input = AcquireTicketRequestType {ticket_type, };
         let path = format!("/VirtualMachine/{moId}/AcquireTicket", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Responds to a question that is blocking this virtual machine.
     /// 
@@ -143,7 +143,7 @@ impl VirtualMachine {
         let input = AnswerVmRequestType {question_id, answer_choice, };
         let path = format!("/VirtualMachine/{moId}/AnswerVM", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Applies the EVC mode masks to the virtual machine.
     /// 
@@ -182,7 +182,7 @@ impl VirtualMachine {
         let input = ApplyEvcModeVmRequestType {mask, complete_masks, };
         let path = format!("/VirtualMachine/{moId}/ApplyEvcModeVM_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Attach an existing disk to this virtual machine.
     /// 
@@ -252,7 +252,7 @@ impl VirtualMachine {
         let input = AttachDiskRequestType {disk_id, datastore, controller_key, unit_number, };
         let path = format!("/VirtualMachine/{moId}/AttachDisk_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Checks the customization specification against the virtual machine configuration.
     /// 
@@ -275,7 +275,7 @@ impl VirtualMachine {
         let input = CheckCustomizationSpecRequestType {spec, };
         let path = format!("/VirtualMachine/{moId}/CheckCustomizationSpec", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Creates a clone of this virtual machine.
     /// 
@@ -375,7 +375,7 @@ impl VirtualMachine {
         let input = CloneVmRequestType {folder, name, spec, };
         let path = format!("/VirtualMachine/{moId}/CloneVM_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Consolidate the virtual disk files of the virtual machine by finding hierarchies
     /// of redo logs that can be combined without violating data dependency.
@@ -419,7 +419,7 @@ impl VirtualMachine {
     pub async fn consolidate_vm_disks_task(&self) -> Result<ManagedObjectReference> {
         let path = format!("/VirtualMachine/{moId}/ConsolidateVMDisks_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Create a screen shot of a virtual machine.
     /// 
@@ -443,7 +443,7 @@ impl VirtualMachine {
     pub async fn create_screenshot_task(&self) -> Result<ManagedObjectReference> {
         let path = format!("/VirtualMachine/{moId}/CreateScreenshot_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Deprecated as of vSphere API 6.0, use *VirtualMachine.CreateSecondaryVMEx_Task* instead.
     /// 
@@ -514,7 +514,7 @@ impl VirtualMachine {
         let input = CreateSecondaryVmRequestType {host, };
         let path = format!("/VirtualMachine/{moId}/CreateSecondaryVM_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Creates a secondary virtual machine to be part of this fault tolerant group.
     /// 
@@ -608,7 +608,7 @@ impl VirtualMachine {
         let input = CreateSecondaryVmExRequestType {host, spec, };
         let path = format!("/VirtualMachine/{moId}/CreateSecondaryVMEx_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Deprecated as of vSphere 8.0GA, this method is deprecated. Please
     /// use *VirtualMachine.CreateSnapshotEx_Task* instead.
@@ -695,7 +695,7 @@ impl VirtualMachine {
         let input = CreateSnapshotRequestType {name, description, memory, quiesce, };
         let path = format!("/VirtualMachine/{moId}/CreateSnapshot_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Creates a new snapshot of this virtual machine.
     /// 
@@ -789,7 +789,7 @@ impl VirtualMachine {
         let input = CreateSnapshotExRequestType {name, description, memory, quiesce_spec, };
         let path = format!("/VirtualMachine/{moId}/CreateSnapshotEx_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Unlocks an encrypted virtual machine by sending the encryption keys for
     /// the Virtual Machine Home and all the Virtual Disks to the ESX Server.
@@ -811,7 +811,7 @@ impl VirtualMachine {
     pub async fn crypto_unlock_task(&self) -> Result<ManagedObjectReference> {
         let path = format!("/VirtualMachine/{moId}/CryptoUnlock_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Customizes a virtual machine's guest operating system.
     /// 
@@ -836,7 +836,7 @@ impl VirtualMachine {
         let input = CustomizeVmRequestType {spec, };
         let path = format!("/VirtualMachine/{moId}/CustomizeVM_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Defragment all virtual disks attached to this virtual machine.
     /// 
@@ -854,7 +854,7 @@ impl VirtualMachine {
     pub async fn defragment_all_disks(&self) -> Result<()> {
         let path = format!("/VirtualMachine/{moId}/DefragmentAllDisks", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Destroys this object, deleting its contents and removing it from its parent
     /// folder (if any).
@@ -880,7 +880,7 @@ impl VirtualMachine {
     pub async fn destroy_task(&self) -> Result<ManagedObjectReference> {
         let path = format!("/VirtualMachine/{moId}/Destroy_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Detach a disk from this virtual machine.
     /// 
@@ -912,7 +912,7 @@ impl VirtualMachine {
         let input = DetachDiskRequestType {disk_id, };
         let path = format!("/VirtualMachine/{moId}/DetachDisk_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Disables the specified secondary virtual machine in this fault tolerant group.
     /// 
@@ -954,7 +954,7 @@ impl VirtualMachine {
         let input = DisableSecondaryVmRequestType {vm, };
         let path = format!("/VirtualMachine/{moId}/DisableSecondaryVM_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Force the virtual machine to drop the specified connections.
     /// 
@@ -983,7 +983,7 @@ impl VirtualMachine {
         let input = DropConnectionsRequestType {list_of_connections, };
         let path = format!("/VirtualMachine/{moId}/DropConnections", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Enables the specified secondary virtual machine in this fault tolerant group.
     /// 
@@ -1055,7 +1055,7 @@ impl VirtualMachine {
         let input = EnableSecondaryVmRequestType {vm, host, };
         let path = format!("/VirtualMachine/{moId}/EnableSecondaryVM_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Estimate the temporary space required to consolidation disk
     /// files.
@@ -1095,7 +1095,7 @@ impl VirtualMachine {
     pub async fn estimate_storage_for_consolidate_snapshots_task(&self) -> Result<ManagedObjectReference> {
         let path = format!("/VirtualMachine/{moId}/EstimateStorageForConsolidateSnapshots_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Obtains an export lease on this virtual machine.
     /// 
@@ -1129,7 +1129,7 @@ impl VirtualMachine {
     pub async fn export_vm(&self) -> Result<ManagedObjectReference> {
         let path = format!("/VirtualMachine/{moId}/ExportVm", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Returns the OVF environment for a virtual machine.
     /// 
@@ -1146,7 +1146,7 @@ impl VirtualMachine {
     pub async fn extract_ovf_environment(&self) -> Result<String> {
         let path = format!("/VirtualMachine/{moId}/ExtractOvfEnvironment", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Creates a powered-on Instant Clone of a virtual machine.
     /// 
@@ -1207,7 +1207,7 @@ impl VirtualMachine {
         let input = InstantCloneRequestType {spec, };
         let path = format!("/VirtualMachine/{moId}/InstantClone_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Makes the specified secondary virtual machine from this fault tolerant group as
     /// the primary virtual machine.
@@ -1246,7 +1246,7 @@ impl VirtualMachine {
         let input = MakePrimaryVmRequestType {vm, };
         let path = format!("/VirtualMachine/{moId}/MakePrimaryVM_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Marks a VirtualMachine object as being used as a template.
     /// 
@@ -1271,7 +1271,7 @@ impl VirtualMachine {
     pub async fn mark_as_template(&self) -> Result<()> {
         let path = format!("/VirtualMachine/{moId}/MarkAsTemplate", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Clears the 'isTemplate' flag and reassociates the virtual machine with
     /// a resource pool and host.
@@ -1315,7 +1315,7 @@ impl VirtualMachine {
         let input = MarkAsVirtualMachineRequestType {pool, host, };
         let path = format!("/VirtualMachine/{moId}/MarkAsVirtualMachine", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Deprecated as of vSphere 6.5, use *VirtualMachine.RelocateVM_Task*
     /// instead.
@@ -1413,7 +1413,7 @@ impl VirtualMachine {
         let input = MigrateVmRequestType {pool, host, priority, state, };
         let path = format!("/VirtualMachine/{moId}/MigrateVM_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Mounts the VMware Tools CD installer as a CD-ROM for the guest operating system.
     /// 
@@ -1432,7 +1432,7 @@ impl VirtualMachine {
     pub async fn mount_tools_installer(&self) -> Result<()> {
         let path = format!("/VirtualMachine/{moId}/MountToolsInstaller", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Powers off this virtual machine.
     /// 
@@ -1462,7 +1462,7 @@ impl VirtualMachine {
     pub async fn power_off_vm_task(&self) -> Result<ManagedObjectReference> {
         let path = format!("/VirtualMachine/{moId}/PowerOffVM_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Powers on this virtual machine.
     /// 
@@ -1537,7 +1537,7 @@ impl VirtualMachine {
         let input = PowerOnVmRequestType {host, };
         let path = format!("/VirtualMachine/{moId}/PowerOnVM_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Promotes disks on this virtual machine that have delta disk backings.
     /// 
@@ -1599,7 +1599,7 @@ impl VirtualMachine {
         let input = PromoteDisksRequestType {unlink, disks, };
         let path = format!("/VirtualMachine/{moId}/PromoteDisks_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Inject a sequence of USB HID scan codes into the keyboard.
     /// 
@@ -1617,7 +1617,7 @@ impl VirtualMachine {
         let input = PutUsbScanCodesRequestType {spec, };
         let path = format!("/VirtualMachine/{moId}/PutUsbScanCodes", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Get a list of areas of a virtual disk belonging to this VM that have
     /// been modified since a well-defined point in the past.
@@ -1679,7 +1679,7 @@ impl VirtualMachine {
         let input = QueryChangedDiskAreasRequestType {snapshot, device_key, start_offset, change_id, };
         let path = format!("/VirtualMachine/{moId}/QueryChangedDiskAreas", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Ask the virtual machine for a list of connections.
     /// 
@@ -1702,7 +1702,7 @@ impl VirtualMachine {
     pub async fn query_connections(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::VirtualMachineConnectionTrait>>>> {
         let path = format!("/VirtualMachine/{moId}/QueryConnections", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Deprecated as of vSphere API 6.0.
     /// 
@@ -1733,7 +1733,7 @@ impl VirtualMachine {
     pub async fn query_fault_tolerance_compatibility(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::MethodFaultTrait>>>> {
         let path = format!("/VirtualMachine/{moId}/QueryFaultToleranceCompatibility", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// This API can be invoked to determine whether a virtual machine is
     /// compatible for Fault Tolerance.
@@ -1768,7 +1768,7 @@ impl VirtualMachine {
         let input = QueryFaultToleranceCompatibilityExRequestType {for_legacy_ft, };
         let path = format!("/VirtualMachine/{moId}/QueryFaultToleranceCompatibilityEx", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// For all files that belong to the vm, check that the file owner
     /// is set to the current datastore principal user, as set by
@@ -1784,7 +1784,7 @@ impl VirtualMachine {
     pub async fn query_unowned_files(&self) -> Result<Option<Vec<String>>> {
         let path = format!("/VirtualMachine/{moId}/QueryUnownedFiles", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Issues a command to the guest operating system asking it to perform
     /// a reboot.
@@ -1808,7 +1808,7 @@ impl VirtualMachine {
     pub async fn reboot_guest(&self) -> Result<()> {
         let path = format!("/VirtualMachine/{moId}/RebootGuest", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Reconfigures this virtual machine.
     /// 
@@ -1967,7 +1967,7 @@ impl VirtualMachine {
         let input = ReconfigVmRequestType {spec, };
         let path = format!("/VirtualMachine/{moId}/ReconfigVM_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Explicitly refreshes the storage information of this virtual machine,
     /// updating properties *VirtualMachine.storage*, *VirtualMachine.layoutEx*
@@ -1980,7 +1980,7 @@ impl VirtualMachine {
     pub async fn refresh_storage_info(&self) -> Result<()> {
         let path = format!("/VirtualMachine/{moId}/RefreshStorageInfo", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Reload the entity state.
     /// 
@@ -1999,7 +1999,7 @@ impl VirtualMachine {
     pub async fn reload(&self) -> Result<()> {
         let path = format!("/VirtualMachine/{moId}/Reload", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Reloads the configuration for this virtual machine from a given
     /// datastore path.
@@ -2062,7 +2062,7 @@ impl VirtualMachine {
         let input = ReloadVirtualMachineFromPathRequestType {configuration_path, };
         let path = format!("/VirtualMachine/{moId}/reloadVirtualMachineFromPath_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Relocates a virtual machine to the location specified by
     /// *VirtualMachineRelocateSpec*.
@@ -2177,7 +2177,7 @@ impl VirtualMachine {
         let input = RelocateVmRequestType {spec, priority, };
         let path = format!("/VirtualMachine/{moId}/RelocateVM_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Remove all the snapshots associated with this virtual machine.
     /// 
@@ -2220,7 +2220,7 @@ impl VirtualMachine {
         let input = RemoveAllSnapshotsRequestType {consolidate, };
         let path = format!("/VirtualMachine/{moId}/RemoveAllSnapshots_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Renames this managed entity.
     /// 
@@ -2254,7 +2254,7 @@ impl VirtualMachine {
         let input = RenameRequestType {new_name, };
         let path = format!("/VirtualMachine/{moId}/Rename_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Resets power on this virtual machine.
     /// 
@@ -2294,7 +2294,7 @@ impl VirtualMachine {
     pub async fn reset_vm_task(&self) -> Result<ManagedObjectReference> {
         let path = format!("/VirtualMachine/{moId}/ResetVM_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Clears cached guest information.
     /// 
@@ -2314,7 +2314,7 @@ impl VirtualMachine {
     pub async fn reset_guest_information(&self) -> Result<()> {
         let path = format!("/VirtualMachine/{moId}/ResetGuestInformation", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Reverts the virtual machine to the current snapshot.
     /// 
@@ -2397,7 +2397,7 @@ impl VirtualMachine {
         let input = RevertToCurrentSnapshotRequestType {host, suppress_power_on, };
         let path = format!("/VirtualMachine/{moId}/RevertToCurrentSnapshot_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Send a non-maskable interrupt (NMI).
     /// 
@@ -2412,7 +2412,7 @@ impl VirtualMachine {
     pub async fn send_nmi(&self) -> Result<()> {
         let path = format!("/VirtualMachine/{moId}/SendNMI", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Assigns a value to a custom field.
     /// 
@@ -2432,7 +2432,7 @@ impl VirtualMachine {
         let input = SetCustomValueRequestType {key, value, };
         let path = format!("/VirtualMachine/{moId}/setCustomValue", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Sets the console window's display topology as specified.
     /// 
@@ -2458,7 +2458,7 @@ impl VirtualMachine {
         let input = SetDisplayTopologyRequestType {displays, };
         let path = format!("/VirtualMachine/{moId}/SetDisplayTopology", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Sets the console window's resolution as specified.
     /// 
@@ -2486,7 +2486,7 @@ impl VirtualMachine {
         let input = SetScreenResolutionRequestType {width, height, };
         let path = format!("/VirtualMachine/{moId}/SetScreenResolution", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Issues a command to the guest operating system asking it to perform
     /// a clean shutdown of all services.
@@ -2510,7 +2510,7 @@ impl VirtualMachine {
     pub async fn shutdown_guest(&self) -> Result<()> {
         let path = format!("/VirtualMachine/{moId}/ShutdownGuest", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Issues a command to the guest operating system asking it to prepare for
     /// a suspend operation.
@@ -2534,7 +2534,7 @@ impl VirtualMachine {
     pub async fn standby_guest(&self) -> Result<()> {
         let path = format!("/VirtualMachine/{moId}/StandbyGuest", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Deprecated as of vsphere API 5.1.
     /// 
@@ -2602,7 +2602,7 @@ impl VirtualMachine {
         let input = StartRecordingRequestType {name, description, };
         let path = format!("/VirtualMachine/{moId}/StartRecording_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Deprecated as of vsphere API 5.1.
     /// 
@@ -2670,7 +2670,7 @@ impl VirtualMachine {
         let input = StartReplayingRequestType {replay_snapshot, };
         let path = format!("/VirtualMachine/{moId}/StartReplaying_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Deprecated as of vsphere API 5.1.
     /// 
@@ -2711,7 +2711,7 @@ impl VirtualMachine {
     pub async fn stop_recording_task(&self) -> Result<ManagedObjectReference> {
         let path = format!("/VirtualMachine/{moId}/StopRecording_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Deprecated as of vsphere API 5.1.
     /// 
@@ -2752,7 +2752,7 @@ impl VirtualMachine {
     pub async fn stop_replaying_task(&self) -> Result<ManagedObjectReference> {
         let path = format!("/VirtualMachine/{moId}/StopReplaying_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Suspends execution in this virtual machine.
     /// 
@@ -2779,7 +2779,7 @@ impl VirtualMachine {
     pub async fn suspend_vm_task(&self) -> Result<ManagedObjectReference> {
         let path = format!("/VirtualMachine/{moId}/SuspendVM_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Do an immediate power off of a VM.
     /// 
@@ -2800,7 +2800,7 @@ impl VirtualMachine {
     pub async fn terminate_vm(&self) -> Result<()> {
         let path = format!("/VirtualMachine/{moId}/TerminateVM", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Terminates the specified secondary virtual machine in a fault tolerant group.
     /// 
@@ -2848,7 +2848,7 @@ impl VirtualMachine {
         let input = TerminateFaultTolerantVmRequestType {vm, };
         let path = format!("/VirtualMachine/{moId}/TerminateFaultTolerantVM_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Removes all secondary virtual machines associated with the fault tolerant
     /// group and turns off protection for this virtual machine.
@@ -2878,7 +2878,7 @@ impl VirtualMachine {
     pub async fn turn_off_fault_tolerance_for_vm_task(&self) -> Result<ManagedObjectReference> {
         let path = format!("/VirtualMachine/{moId}/TurnOffFaultToleranceForVM_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Unmounts VMware Tools installer CD.
     /// 
@@ -2891,7 +2891,7 @@ impl VirtualMachine {
     pub async fn unmount_tools_installer(&self) -> Result<()> {
         let path = format!("/VirtualMachine/{moId}/UnmountToolsInstaller", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Removes this virtual machine from the inventory without removing
     /// any of the virtual machine's files on disk.
@@ -2917,7 +2917,7 @@ impl VirtualMachine {
     pub async fn unregister_vm(&self) -> Result<()> {
         let path = format!("/VirtualMachine/{moId}/UnregisterVM", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Begins the tools upgrade process.
     /// 
@@ -2956,7 +2956,7 @@ impl VirtualMachine {
         let input = UpgradeToolsRequestType {installer_options, };
         let path = format!("/VirtualMachine/{moId}/UpgradeTools_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Upgrades this virtual machine's virtual hardware to the latest revision
     /// that is supported by the virtual machine's current host.
@@ -2995,7 +2995,7 @@ impl VirtualMachine {
         let input = UpgradeVmRequestType {version, };
         let path = format!("/VirtualMachine/{moId}/UpgradeVM_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Whether alarm actions are enabled for this entity.
     /// 
@@ -3005,7 +3005,7 @@ impl VirtualMachine {
     pub async fn alarm_actions_enabled(&self) -> Result<Option<bool>> {
         let path = format!("/VirtualMachine/{moId}/alarmActionsEnabled", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// List of custom field definitions that are valid for the object's type.
     /// 
@@ -3015,13 +3015,13 @@ impl VirtualMachine {
     pub async fn available_field(&self) -> Result<Option<Vec<CustomFieldDef>>> {
         let path = format!("/VirtualMachine/{moId}/availableField", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Information about the runtime capabilities of this virtual machine.
     pub async fn capability(&self) -> Result<VirtualMachineCapability> {
         let path = format!("/VirtualMachine/{moId}/capability", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Configuration of this virtual machine, including the name and UUID.
     /// 
@@ -3036,7 +3036,7 @@ impl VirtualMachine {
     pub async fn config(&self) -> Result<Option<VirtualMachineConfigInfo>> {
         let path = format!("/VirtualMachine/{moId}/config", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Current configuration issues that have been detected for this entity.
     /// 
@@ -3048,7 +3048,7 @@ impl VirtualMachine {
     pub async fn config_issue(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::EventTrait>>>> {
         let path = format!("/VirtualMachine/{moId}/configIssue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// The configStatus indicates whether or not the system has detected a configuration
     /// issue involving this entity.
@@ -3077,7 +3077,7 @@ impl VirtualMachine {
     pub async fn config_status(&self) -> Result<crate::types::enums::ManagedEntityStatusEnum> {
         let path = format!("/VirtualMachine/{moId}/configStatus", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Custom field values.
     /// 
@@ -3085,7 +3085,7 @@ impl VirtualMachine {
     pub async fn custom_value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/VirtualMachine/{moId}/customValue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// A collection of references to the subset of datastore objects in the datacenter
     /// that is used by this virtual machine.
@@ -3098,7 +3098,7 @@ impl VirtualMachine {
     pub async fn datastore(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
         let path = format!("/VirtualMachine/{moId}/datastore", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// A set of alarm states for alarms that apply to this managed entity.
     /// 
@@ -3113,7 +3113,7 @@ impl VirtualMachine {
     pub async fn declared_alarm_state(&self) -> Result<Option<Vec<AlarmState>>> {
         let path = format!("/VirtualMachine/{moId}/declaredAlarmState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// List of operations that are disabled, given the current runtime
     /// state of the entity.
@@ -3187,7 +3187,7 @@ impl VirtualMachine {
     pub async fn disabled_method(&self) -> Result<Option<Vec<String>>> {
         let path = format!("/VirtualMachine/{moId}/disabledMethod", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Access rights the current session has to this entity.
     /// 
@@ -3195,7 +3195,7 @@ impl VirtualMachine {
     pub async fn effective_role(&self) -> Result<Option<Vec<i32>>> {
         let path = format!("/VirtualMachine/{moId}/effectiveRole", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// The current virtual machine's environment browser object.
     /// 
@@ -3210,7 +3210,7 @@ impl VirtualMachine {
     pub async fn environment_browser(&self) -> Result<ManagedObjectReference> {
         let path = format!("/VirtualMachine/{moId}/environmentBrowser", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Information about VMware Tools and about the virtual machine
     /// from the perspective of VMware Tools.
@@ -3222,7 +3222,7 @@ impl VirtualMachine {
     pub async fn guest(&self) -> Result<Option<GuestInfo>> {
         let path = format!("/VirtualMachine/{moId}/guest", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// The guest heartbeat.
     /// 
@@ -3237,7 +3237,7 @@ impl VirtualMachine {
     pub async fn guest_heartbeat_status(&self) -> Result<crate::types::enums::ManagedEntityStatusEnum> {
         let path = format!("/VirtualMachine/{moId}/guestHeartbeatStatus", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Deprecated as of vSphere API 4.0, use *VirtualMachine.layoutEx* instead.
     /// In releases after vSphere API 5.0, vSphere Servers might not
@@ -3252,7 +3252,7 @@ impl VirtualMachine {
     pub async fn layout(&self) -> Result<Option<VirtualMachineFileLayout>> {
         let path = format!("/VirtualMachine/{moId}/layout", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Detailed information about the files that comprise this virtual machine.
     /// 
@@ -3267,7 +3267,7 @@ impl VirtualMachine {
     pub async fn layout_ex(&self) -> Result<Option<VirtualMachineFileLayoutEx>> {
         let path = format!("/VirtualMachine/{moId}/layoutEx", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Name of this entity, unique relative to its parent.
     /// 
@@ -3281,7 +3281,7 @@ impl VirtualMachine {
     pub async fn name(&self) -> Result<String> {
         let path = format!("/VirtualMachine/{moId}/name", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// A collection of references to the subset of network objects in the datacenter that
     /// is used by this virtual machine.
@@ -3294,7 +3294,7 @@ impl VirtualMachine {
     pub async fn network(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
         let path = format!("/VirtualMachine/{moId}/network", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// General health of this managed entity.
     /// 
@@ -3319,7 +3319,7 @@ impl VirtualMachine {
     pub async fn overall_status(&self) -> Result<crate::types::enums::ManagedEntityStatusEnum> {
         let path = format!("/VirtualMachine/{moId}/overallStatus", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Parent of this entity.
     /// 
@@ -3335,7 +3335,7 @@ impl VirtualMachine {
     pub async fn parent(&self) -> Result<Option<ManagedObjectReference>> {
         let path = format!("/VirtualMachine/{moId}/parent", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Reference to the parent vApp.
     ///
@@ -3345,13 +3345,13 @@ impl VirtualMachine {
     pub async fn parent_v_app(&self) -> Result<Option<ManagedObjectReference>> {
         let path = format!("/VirtualMachine/{moId}/parentVApp", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// List of permissions defined for this entity.
     pub async fn permission(&self) -> Result<Option<Vec<Permission>>> {
         let path = format!("/VirtualMachine/{moId}/permission", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// The set of recent tasks operating on this managed entity.
     /// 
@@ -3381,7 +3381,7 @@ impl VirtualMachine {
     pub async fn recent_task(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
         let path = format!("/VirtualMachine/{moId}/recentTask", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// The resource configuration for a virtual machine.
     /// 
@@ -3399,7 +3399,7 @@ impl VirtualMachine {
     pub async fn resource_config(&self) -> Result<Option<ResourceConfigSpec>> {
         let path = format!("/VirtualMachine/{moId}/resourceConfig", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// The current resource pool that specifies resource allocation
     /// for this virtual machine.
@@ -3416,7 +3416,7 @@ impl VirtualMachine {
     pub async fn resource_pool(&self) -> Result<Option<ManagedObjectReference>> {
         let path = format!("/VirtualMachine/{moId}/resourcePool", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// The roots of all snapshot trees for the virtual machine.
     ///
@@ -3426,7 +3426,7 @@ impl VirtualMachine {
     pub async fn root_snapshot(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
         let path = format!("/VirtualMachine/{moId}/rootSnapshot", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Execution state and history for this virtual machine.
     /// 
@@ -3437,7 +3437,7 @@ impl VirtualMachine {
     pub async fn runtime(&self) -> Result<VirtualMachineRuntimeInfo> {
         let path = format!("/VirtualMachine/{moId}/runtime", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Current snapshot and tree.
     /// 
@@ -3453,7 +3453,7 @@ impl VirtualMachine {
     pub async fn snapshot(&self) -> Result<Option<VirtualMachineSnapshotInfo>> {
         let path = format!("/VirtualMachine/{moId}/snapshot", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Storage space used by the virtual machine, split by datastore.
     /// 
@@ -3468,7 +3468,7 @@ impl VirtualMachine {
     pub async fn storage(&self) -> Result<Option<VirtualMachineStorageInfo>> {
         let path = format!("/VirtualMachine/{moId}/storage", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Basic information about this virtual machine.
     /// 
@@ -3481,7 +3481,7 @@ impl VirtualMachine {
     pub async fn summary(&self) -> Result<VirtualMachineSummary> {
         let path = format!("/VirtualMachine/{moId}/summary", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// The set of tags associated with this managed entity.
     /// 
@@ -3491,7 +3491,7 @@ impl VirtualMachine {
     pub async fn tag(&self) -> Result<Option<Vec<Tag>>> {
         let path = format!("/VirtualMachine/{moId}/tag", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// A set of alarm states for alarms triggered by this entity
     /// or by its descendants.
@@ -3510,7 +3510,7 @@ impl VirtualMachine {
     pub async fn triggered_alarm_state(&self) -> Result<Option<Vec<AlarmState>>> {
         let path = format!("/VirtualMachine/{moId}/triggeredAlarmState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// List of custom field values.
     /// 
@@ -3522,7 +3522,7 @@ impl VirtualMachine {
     pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/VirtualMachine/{moId}/value", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
 }
 #[derive(serde::Serialize)]

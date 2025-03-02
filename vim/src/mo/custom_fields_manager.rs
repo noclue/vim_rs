@@ -55,7 +55,7 @@ impl CustomFieldsManager {
         let input = AddCustomFieldDefRequestType {name, mo_type, field_def_policy, field_policy, };
         let path = format!("/CustomFieldsManager/{moId}/AddCustomFieldDef", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Removes a custom field.
     /// 
@@ -72,7 +72,7 @@ impl CustomFieldsManager {
         let input = RemoveCustomFieldDefRequestType {key, };
         let path = format!("/CustomFieldsManager/{moId}/RemoveCustomFieldDef", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Renames a custom field.
     /// 
@@ -95,7 +95,7 @@ impl CustomFieldsManager {
         let input = RenameCustomFieldDefRequestType {key, name, };
         let path = format!("/CustomFieldsManager/{moId}/RenameCustomFieldDef", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Assigns a value to a custom field on an entity.
     ///
@@ -115,7 +115,7 @@ impl CustomFieldsManager {
         let input = SetFieldRequestType {entity, key, value, };
         let path = format!("/CustomFieldsManager/{moId}/SetField", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// List of custom fields defined on this server.
     /// 
@@ -126,7 +126,7 @@ impl CustomFieldsManager {
     pub async fn field(&self) -> Result<Option<Vec<CustomFieldDef>>> {
         let path = format!("/CustomFieldsManager/{moId}/field", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
 }
 #[derive(serde::Serialize)]

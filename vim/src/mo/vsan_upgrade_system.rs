@@ -101,7 +101,7 @@ impl VsanUpgradeSystem {
         let input = PerformVsanUpgradeRequestType {cluster, perform_object_upgrade, downgrade_format, allow_reduced_redundancy, exclude_hosts, };
         let path = format!("/VsanUpgradeSystem/{moId}/PerformVsanUpgrade_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Perform an upgrade pre-flight check on a cluster.
     /// 
@@ -129,7 +129,7 @@ impl VsanUpgradeSystem {
         let input = PerformVsanUpgradePreflightCheckRequestType {cluster, downgrade_format, };
         let path = format!("/VsanUpgradeSystem/{moId}/PerformVsanUpgradePreflightCheck", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Retrieve the latest status of a running, or the previously completed,
     /// upgrade process.
@@ -157,7 +157,7 @@ impl VsanUpgradeSystem {
         let input = QueryVsanUpgradeStatusRequestType {cluster, };
         let path = format!("/VsanUpgradeSystem/{moId}/QueryVsanUpgradeStatus", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
 }
 #[derive(serde::Serialize)]

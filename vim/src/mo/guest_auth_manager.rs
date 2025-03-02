@@ -83,7 +83,7 @@ impl GuestAuthManager {
         let input = AcquireCredentialsInGuestRequestType {vm, requested_auth, session_id, };
         let path = format!("/GuestAuthManager/{moId}/AcquireCredentialsInGuest", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Releases session data and resources associated with
     /// a *GuestAuthentication* object returned by *GuestAuthManager.AcquireCredentialsInGuest*.
@@ -137,7 +137,7 @@ impl GuestAuthManager {
         let input = ReleaseCredentialsInGuestRequestType {vm, auth, };
         let path = format!("/GuestAuthManager/{moId}/ReleaseCredentialsInGuest", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Validates the *GuestAuthentication* credentials.
     /// 
@@ -189,7 +189,7 @@ impl GuestAuthManager {
         let input = ValidateCredentialsInGuestRequestType {vm, auth, };
         let path = format!("/GuestAuthManager/{moId}/ValidateCredentialsInGuest", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
 }
 #[derive(serde::Serialize)]

@@ -56,7 +56,7 @@ impl OptionManager {
         let input = QueryOptionsRequestType {name, };
         let path = format!("/OptionManager/{moId}/QueryOptions", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Updates one or more options.
     /// 
@@ -89,20 +89,20 @@ impl OptionManager {
         let input = UpdateOptionsRequestType {changed_value, };
         let path = format!("/OptionManager/{moId}/UpdateOptions", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// A list of the current settings for the key/value pair options.
     pub async fn setting(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::OptionValueTrait>>>> {
         let path = format!("/OptionManager/{moId}/setting", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// A list of supported key/value pair options including their
     /// type information.
     pub async fn supported_option(&self) -> Result<Option<Vec<OptionDef>>> {
         let path = format!("/OptionManager/{moId}/supportedOption", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
 }
 #[derive(serde::Serialize)]

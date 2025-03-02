@@ -63,7 +63,7 @@ impl<'de> de::Visitor<'de> for VimAnyVisitor {
                 };
                 if key == "_value" {
                     let v: &serde_json::value::RawValue = map.next_value()?;
-                    return dsfunc(v).map_err(de::Error::custom).map(|x| VimAny::Value(x));
+                    return dsfunc(v).map_err(de::Error::custom).map(VimAny::Value);
                 }
                 return Err(de::Error::custom(format!("Expected key '_value' and found {}", key)));
             }
@@ -86,7 +86,7 @@ impl<'de> de::Visitor<'de> for VimAnyVisitor {
                 .get(0)
                 .ok_or_else(|| de::Error::missing_field("_value"))?
                 .1;
-            return dsfunc(v).map_err(de::Error::custom).map(|x| VimAny::Value(x));
+            return dsfunc(v).map_err(de::Error::custom).map(VimAny::Value);
         }
         Err(de::Error::custom("Invalid format for boxed value element."))
     }

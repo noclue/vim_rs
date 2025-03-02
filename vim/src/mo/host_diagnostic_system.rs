@@ -57,7 +57,7 @@ impl HostDiagnosticSystem {
         let input = CreateDiagnosticPartitionRequestType {spec, };
         let path = format!("/HostDiagnosticSystem/{moId}/CreateDiagnosticPartition", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// Retrieves a list of available diagnostic partitions.
     /// 
@@ -78,7 +78,7 @@ impl HostDiagnosticSystem {
     pub async fn query_available_partition(&self) -> Result<Option<Vec<HostDiagnosticPartition>>> {
         let path = format!("/HostDiagnosticSystem/{moId}/QueryAvailablePartition", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// For a disk, query for the diagnostic partition creation description.
     /// 
@@ -114,7 +114,7 @@ impl HostDiagnosticSystem {
         let input = QueryPartitionCreateDescRequestType {disk_uuid, diagnostic_type, };
         let path = format!("/HostDiagnosticSystem/{moId}/QueryPartitionCreateDesc", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute(req).await?)
+        self.client.execute(req).await
     }
     /// Retrieves a list of disks that can be used to contain a diagnostic
     /// partition.
@@ -147,7 +147,7 @@ impl HostDiagnosticSystem {
         let input = QueryPartitionCreateOptionsRequestType {storage_type, diagnostic_type, };
         let path = format!("/HostDiagnosticSystem/{moId}/QueryPartitionCreateOptions", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
     /// Changes the active diagnostic partition to a different partition.
     /// 
@@ -175,13 +175,13 @@ impl HostDiagnosticSystem {
         let input = SelectActivePartitionRequestType {partition, };
         let path = format!("/HostDiagnosticSystem/{moId}/SelectActivePartition", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
-        Ok(self.client.execute_void(req).await?)
+        self.client.execute_void(req).await
     }
     /// The currently active diagnostic partition.
     pub async fn active_partition(&self) -> Result<Option<HostDiagnosticPartition>> {
         let path = format!("/HostDiagnosticSystem/{moId}/activePartition", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        Ok(self.client.execute_option(req).await?)
+        self.client.execute_option(req).await
     }
 }
 #[derive(serde::Serialize)]
