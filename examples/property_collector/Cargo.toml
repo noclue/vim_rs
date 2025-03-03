@@ -1,12 +1,11 @@
 [package]
-name = "perf_metrics"
+name = "property_collector"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
 anyhow = "1.0.97"
-chrono = "0.4.40"
-env_logger = "0.11.5"
-log = "0.4.22"
+env_logger = "0.11.6"
+log = "0.4.26"
 tokio = "1.43.0"
 vim_rs = { version = "0.1.0", path = "../../vim_rs" }

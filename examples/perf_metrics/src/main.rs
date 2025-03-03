@@ -3,13 +3,13 @@ use std::collections::HashMap;
 // See https://github.com/vmware/pyvmomi-community-samples/blob/ec890d5286c966ddd8fe48f4eedda2e20620610f/samples/vm_perf_example.py#L66
 use std::env;
 use std::ops::Deref;
-use vim::mo::{ContainerView, PerformanceManager, ViewManager};
+use vim_rs::mo::{ContainerView, PerformanceManager, ViewManager};
 
-use vim::core::client::ClientBuilder;
+use vim_rs::core::client::ClientBuilder;
 use log::{debug, info};
 use anyhow::{Result, Error, Context};
-use vim::types::enums::MoTypesEnum;
-use vim::types::structs::{PerfEntityMetric, PerfMetricId, PerfMetricIntSeries, PerfQuerySpec};
+use vim_rs::types::enums::MoTypesEnum;
+use vim_rs::types::structs::{PerfEntityMetric, PerfMetricId, PerfMetricIntSeries, PerfQuerySpec};
 use chrono::{Utc, Duration as ChronoDuration};
 
 
@@ -26,9 +26,9 @@ use chrono::{Utc, Duration as ChronoDuration};
 async fn main() -> Result<()> {
     env_logger::init();
 
-    let vc_server = env::var("VC_SERVER").with_context(||"VC_SERVER env var not set")?;
-    let username = env::var("VC_USERNAME").with_context(||"VC_USERNAME env var not set")?;
-    let pwd = env::var("VC_PASSWORD").with_context(||"VC_PASSWORD env var not set")?;
+    let vc_server = env::var("VIM_SERVER").with_context(||"VIM_SERVER env var not set")?;
+    let username = env::var("VIM_USERNAME").with_context(||"VIM_USERNAME env var not set")?;
+    let pwd = env::var("VIM_PASSWORD").with_context(||"VIM_PASSWORD env var not set")?;
 
     let vim_client = ClientBuilder::new(&vc_server)
         .insecure(true)

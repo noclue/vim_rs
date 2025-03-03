@@ -1,57 +1,29 @@
-
-
-#[cfg(test)]
-mod tests {
     use std::env;
-    use vim::mo::{AlarmManager, ContainerView, PropertyCollector, ViewManager};
-    use vim::types::structs;
-    use vim::core::client::ClientBuilder;
+    use vim_rs::mo::{AlarmManager, ContainerView, PropertyCollector, ViewManager};
+    use vim_rs::types::structs;
+    use vim_rs::core::client::ClientBuilder;
 
-    use reqwest::ClientBuilder as ReqwestClientBuilder;
-    use vim::types::structs::ManagedObjectReference;
-    use vim::types::boxed_types::ValueElements;
-    use vim::types::vim_any::VimAny;
-    use vim::types::traits::MethodFaultTrait;
-    use vim::types::enums::MoTypesEnum;
+    use vim_rs::types::structs::ManagedObjectReference;
+    use vim_rs::types::boxed_types::ValueElements;
+    use vim_rs::types::vim_any::VimAny;
+    use vim_rs::types::enums::MoTypesEnum;
     use log::{debug, info};
+    use anyhow::{Result, Context};
 
     const APP_NAME: &str = env!("CARGO_PKG_NAME");
     const APP_VERSION: &str = env!("CARGO_PKG_VERSION");
-    fn init() {
-        let _ = env_logger::builder().is_test(true).try_init();
-    }
+    #[tokio::main]
+    async fn main() -> Result<()> {
+        env_logger::init();
+        let vc_server = env::var("VIM_SERVER").with_context(||"VIM_SERVER env var not set")?;
+        let username = env::var("VIM_USERNAME").with_context(||"VIM_USERNAME env var not set")?;
+        let pwd = env::var("VIM_PASSWORD").with_context(||"VIM_PASSWORD env var not set")?;
 
-    #[tokio::test(flavor = "multi_thread", worker_threads = 1)]
-    async fn get_content() {
-        init();
-        let builder = ReqwestClientBuilder::new();
-        let client = builder.danger_accept_invalid_certs(true)
-                                .danger_accept_invalid_hostnames(true)
-                                .build()
-                                .unwrap();
-        let vc_server = env::var("VC_SERVER").expect("VC_SERVER environment variable not set");
-        let uri = format!("https://{vc_server}/sdk/vim25/8.0.3.0/ServiceInstance/ServiceInstance/content");
-        let res = client.get(uri).send().await.unwrap();
-        if res.status() != 200 {
-            let fault: Box<dyn MethodFaultTrait> = res.json().await.unwrap();
-            panic!("Failed to get content: {:?}", fault);
-        }
-        let content: structs::ServiceContent = res.json().await.unwrap();
-        info!("{:?}", content.about);
-    }
-
-    #[tokio::test(flavor = "multi_thread", worker_threads = 1)]
-    async fn vm_inventory() {
-        init();
-        let vc_server = env::var("VC_SERVER").expect("VC_SERVER environment variable not set");
-        let vc_username = env::var("VC_USERNAME").expect("VC_USERNAME environment variable not set");
-        let vc_password = env::var("VC_PASSWORD").expect("VC_PASSWORD environment variable not set");
-        
         let client = ClientBuilder::new(vc_server.as_str())
             .insecure(true)
-            .basic_authn(vc_username.as_str(), vc_password.as_str())
+            .basic_authn(username.as_str(), pwd.as_str())
             .app_details(APP_NAME, APP_VERSION)
-            .build().await.unwrap();
+            .build().await?;
         debug!("Connected to {}", client.service_content().about.full_name);
         let content = client.service_content();
         let view_manager = ViewManager::new(client.clone(), content.view_manager.clone().unwrap().value.as_str());
@@ -60,7 +32,7 @@ mod tests {
             &content.root_folder,
             Some(&vec![Into::<&str>::into(MoTypesEnum::VirtualMachine).to_string()]),
             true,
-        ).await.unwrap();
+        ).await?;
 
         let view = ContainerView::new(client.clone(), &view_moref.value);
 
@@ -104,7 +76,7 @@ mod tests {
             let token = retrieve_result.token.unwrap();
             property_collector.cancel_retrieve_properties_ex(&token).await.unwrap();
         }
-        view.destroy_view().await.unwrap();
+        view.destroy_view().await?;
         if let Some(vm) = first_vm_id {
             let alarm_manager_mo_ref = content.alarm_manager.clone().unwrap().value.clone();
             let alarm_manager = AlarmManager::new(client.clone(), &alarm_manager_mo_ref);
@@ -112,12 +84,10 @@ mod tests {
                 r#type: MoTypesEnum::VirtualMachine,
                 value: vm,
             };
-            let alarm = alarm_manager.get_alarm(Some(&entity)).await.unwrap();
+            let alarm = alarm_manager.get_alarm(Some(&entity)).await?;
             debug!("Alarms for {} are: {:?}", entity.value, alarm);
         }
-
-
+        Ok(())
     }
 
 
-}

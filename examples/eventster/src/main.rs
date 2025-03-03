@@ -1,9 +1,9 @@
 use std::{env, sync::Arc};
 use tokio::time::sleep;
-use vim::mo::EventManager;
-use vim::types::structs::{EventFilterSpecByTime, ExtendedEvent, EventEx};
-use vim::types::traits::EventTrait;
-use vim::core::client::{Client, ClientBuilder};
+use vim_rs::mo::EventManager;
+use vim_rs::types::structs::{EventFilterSpecByTime, ExtendedEvent, EventEx, EventFilterSpec};
+use vim_rs::types::traits::EventTrait;
+use vim_rs::core::client::{Client, ClientBuilder};
 use log::info;
 use chrono::{Utc, Duration as ChronoDuration};
 use anyhow::{Result, Error, Context};
@@ -32,7 +32,7 @@ async fn dump_events(client: Arc<Client>, event_manager: &EventManager) -> Resul
     let thirty_minutes_ago = Utc::now() - ChronoDuration::minutes(30);
     
 
-    let filter = &vim::types::structs::EventFilterSpec {
+    let filter = &EventFilterSpec {
         entity: None,
         time: Some(EventFilterSpecByTime {
             begin_time: Some(thirty_minutes_ago.to_rfc3339()),
@@ -52,7 +52,7 @@ async fn dump_events(client: Arc<Client>, event_manager: &EventManager) -> Resul
 
     let collector = event_manager.create_collector_for_events(filter).await?;
 
-    let collector = vim::mo::EventHistoryCollector::new(client.clone(), &collector.value);
+    let collector = vim_rs::mo::EventHistoryCollector::new(client.clone(), &collector.value);
     //let events = event_manager.query_events(filter).await?;
     for _ in 0..5 {
         let events = collector.read_next_events(10).await?;
@@ -80,9 +80,9 @@ async fn main() -> Result<()> {
 
     info!("Starting up!");
 
-    let vc_server = env::var("VC_SERVER").with_context(||"VC_SERVER env var not set")?;
-    let username = env::var("VC_USERNAME").with_context(||"VC_USERNAME env var not set")?;
-    let pwd = env::var("VC_PASSWORD").with_context(||"VC_PASSWORD env var not set")?;
+    let vc_server = env::var("VIM_SERVER").with_context(||"VIM_SERVER env var not set")?;
+    let username = env::var("VIM_USERNAME").with_context(||"VIM_USERNAME env var not set")?;
+    let pwd = env::var("VIM_PASSWORD").with_context(||"VIM_PASSWORD env var not set")?;
 
     let vim_client = ClientBuilder::new(&vc_server)
         .insecure(true)

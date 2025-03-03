@@ -1,7 +1,11 @@
 [package]
-name = "vim"
+name = "vim_rs"
 version = "0.1.0"
 edition = "2021"
+authors = ["Kiril Karaatanasov <karaatanasov@gmail.com>"]
+license = "Apache-2.0"
+description = "Rust Bindings for the vCenter VI JSON API"
+readme = "../README.md"
 
 [dependencies]
 base64 = "0.22.1"
@@ -13,6 +17,10 @@ tokio = { version = "1.43.0", features = ["full"] }
 log = "0.4.26"
 strum = "0.27.1"
 strum_macros = "0.27.1"
+env_logger = "0.11.6"
 
 [build-dependencies]
 rustc_version = "0.4.1"
+
+[lib]
+doctest = false

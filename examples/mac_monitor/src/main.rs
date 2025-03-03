@@ -4,17 +4,18 @@
 use std::collections::HashMap;
 use std::time::Instant;
 use std::{env, sync::Arc};
-use vim::mo::{PropertyCollector, PropertyFilter, View, ViewManager};
-use vim::types::vim_any::VimAny;
-use vim::types::traits::VirtualEthernetCardTrait;
-use vim::types::boxed_types::ValueElements;
-use vim::types::convert::CastInto;
-use vim::types::enums::{self, MoTypesEnum};
-use vim::types::structs;
+use vim_rs::mo::{PropertyCollector, PropertyFilter, View, ViewManager};
+use vim_rs::types::vim_any::VimAny;
+use vim_rs::types::traits::VirtualEthernetCardTrait;
+use vim_rs::types::boxed_types::ValueElements;
+use vim_rs::types::convert::CastInto;
+use vim_rs::types::enums::{self, MoTypesEnum};
+use vim_rs::types::structs;
 
-use vim::core::client::{Client, ClientBuilder};
+use vim_rs::core::client::{Client, ClientBuilder};
 use log::{debug, error, info, trace};
 use anyhow::{Result, Error, Context};
+use vim_rs::types::structs::PropertyFilterSpec;
 
 const APP_NAME: &str = env!("CARGO_PKG_NAME");
 const APP_VERSION: &str = env!("CARGO_PKG_VERSION");
@@ -144,7 +145,7 @@ impl VmChangeDetector {
         let view_mgr_id = view_mgr_id.value.clone();
         let view_mgr = ViewManager::new(client.clone(), &view_mgr_id);
         let view_ref = view_mgr.create_container_view(&client.service_content().root_folder, Some(&[Into::<&str>::into(MoTypesEnum::VirtualMachine).to_string()]), true).await?;
-        let spec = vim::types::structs::PropertyFilterSpec {
+        let spec = PropertyFilterSpec {
             object_set: vec![structs::ObjectSpec {
                 obj: view_ref.clone(),
                 skip: Some(false),
@@ -341,11 +342,9 @@ impl Drop for VmChangeDetector {
 async fn main() -> Result<()> {
     env_logger::init();
 
-    info!("Starting up!");
-
-    let vc_server = env::var("VC_SERVER").with_context(||"VC_SERVER env var not set")?;
-    let username = env::var("VC_USERNAME").with_context(||"VC_USERNAME env var not set")?;
-    let pwd = env::var("VC_PASSWORD").with_context(||"VC_PASSWORD env var not set")?;
+    let vc_server = env::var("VIM_SERVER").with_context(||"VIM_SERVER env var not set")?;
+    let username = env::var("VIM_USERNAME").with_context(||"VIM_USERNAME env var not set")?;
+    let pwd = env::var("VIM_PASSWORD").with_context(||"VIM_PASSWORD env var not set")?;
 
     let vim_client = ClientBuilder::new(&vc_server)
         .insecure(true)
