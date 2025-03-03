@@ -10,10 +10,10 @@ readme = "../README.md"
 [dependencies]
 base64 = "0.22.1"
 serde = { version = "1.0.218", features = ["derive"] }
-serde_json = { version = "1.0.139", features = ["raw_value"] }
-thiserror = "2.0.11"
+serde_json = { version = "1.0.140", features = ["raw_value"] }
+thiserror = "2.0.12"
 reqwest = { version = "0.12.12", features = ["json"] }
-tokio = { version = "1.43.0", features = ["full"] }
+tokio = { version = "1.43.0", features = ["rt-multi-thread"] }
 log = "0.4.26"
 strum = "0.27.1"
 strum_macros = "0.27.1"

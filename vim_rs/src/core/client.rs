@@ -90,6 +90,7 @@ impl ClientBuilder {
     /// Set the insecure flag to allow invalid certificates and hostnames.
     /// This resets the http_client. A new reqwest::Client instance will be created instead.
     pub fn insecure(mut self, insecure: bool) -> Self {
+        warn!("!!! WARNING !!! Insecure mode enabled. TLS certificate and hostname verification is disabled. !!! WARNING !!!");
         self.insecure = Some(insecure);
         self.http_client = None;
         self

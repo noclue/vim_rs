@@ -53,7 +53,6 @@ async fn dump_events(client: Arc<Client>, event_manager: &EventManager) -> Resul
     let collector = event_manager.create_collector_for_events(filter).await?;
 
     let collector = vim_rs::mo::EventHistoryCollector::new(client.clone(), &collector.value);
-    //let events = event_manager.query_events(filter).await?;
     for _ in 0..5 {
         let events = collector.read_next_events(10).await?;
         match events {
