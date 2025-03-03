@@ -353,9 +353,11 @@ impl Drop for Client {
 }
 
 fn user_agent(app_name: Option<&str>, app_version: Option<&str>) -> String {
-    let app_name: String = app_name
-            .unwrap_or_else(|| get_executable_name().as_deref()
-                .unwrap_or_else(|| "unknown")).into();
+    let app_name: String = if app_name.is_some() {
+        app_name.unwrap().to_string()
+    } else {
+        get_executable_name().unwrap_or_else(|| "unknown".to_string())
+    };
     let Some(appv) = app_version else {
         return format!(
             "{} ({}/{}; {}; {}; rustc/{})",

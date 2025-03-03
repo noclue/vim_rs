@@ -16,7 +16,7 @@ pub fn generate_vim_object_trait(
     printer.println("/// when used through a trait reference. The other use of this trait is")?;
     printer.println("/// to upcast a trait reference to a VimObjectTrait reference needed by")?;
     printer.println("/// common library functionality.")?;
-    printer.println("pub trait VimObjectTrait: AsAny + std::fmt::Debug {")?;
+    printer.println("pub trait VimObjectTrait: AsAny + std::fmt::Debug + Send + Sync {")?;
     printer.indent();
     printer.println("fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait;")?;
     printer.println("fn data_type(&self) -> StructType;")?;

@@ -6,7 +6,7 @@ use vim::types::traits::EventTrait;
 use vim::core::client::{Client, ClientBuilder};
 use log::info;
 use chrono::{Utc, Duration as ChronoDuration};
-use utils::{Result, Error};
+use anyhow::{Result, Error, Context};
 
 const APP_NAME: &str = env!("CARGO_PKG_NAME");
 const APP_VERSION: &str = env!("CARGO_PKG_VERSION");
@@ -80,9 +80,9 @@ async fn main() -> Result<()> {
 
     info!("Starting up!");
 
-    let vc_server = env::var("VC_SERVER").map_err(|_| Error::Error(String::from("VC_SERVER env var not set")))?;
-    let username = env::var("VC_USERNAME").map_err(|_| Error::Error(String::from("VC_USERNAME env var not set")))?;
-    let pwd = env::var("VC_PASSWORD").map_err(|_| Error::Error(String::from("VC_PASSWORD env var not set")))?;
+    let vc_server = env::var("VC_SERVER").with_context(||"VC_SERVER env var not set")?;
+    let username = env::var("VC_USERNAME").with_context(||"VC_USERNAME env var not set")?;
+    let pwd = env::var("VC_PASSWORD").with_context(||"VC_PASSWORD env var not set")?;
 
     let vim_client = ClientBuilder::new(&vc_server)
         .insecure(true)
@@ -91,7 +91,7 @@ async fn main() -> Result<()> {
         .build().await?;
 
     let Some(event_manager_moref) = vim_client.service_content().event_manager.clone() else {
-        return Err(Error::Error(String::from("No event manager found")));
+        return Err(Error::msg("No event manager found"));
     };
     let event_manager = EventManager::new(vim_client.clone(), &event_manager_moref.value);
 

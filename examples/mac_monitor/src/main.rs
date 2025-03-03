@@ -14,7 +14,7 @@ use vim::types::structs;
 
 use vim::core::client::{Client, ClientBuilder};
 use log::{debug, error, info, trace};
-use utils::{Result, Error};
+use anyhow::{Result, Error, Context};
 
 const APP_NAME: &str = env!("CARGO_PKG_NAME");
 const APP_VERSION: &str = env!("CARGO_PKG_VERSION");
@@ -139,7 +139,7 @@ impl VmChangeDetector {
         // TODO : Create own property collector instance PropertyCollector::CreatePropertyCollector
         let property_collector = PropertyCollector::new(client.clone(), &pc_id);
         let Some(ref view_mgr_id) = client.service_content().view_manager else {
-            return Err(Error::Error("No view manager found".to_string()));
+            return Err(Error::msg("View manager not found in service content."));
         };
         let view_mgr_id = view_mgr_id.value.clone();
         let view_mgr = ViewManager::new(client.clone(), &view_mgr_id);
@@ -223,10 +223,11 @@ impl VmChangeDetector {
                         }
                     }
                 }
-                let elapsed = start.elapsed().as_secs();
-                if elapsed >= seconds {
-                    break;
-                }
+            }
+            let elapsed = start.elapsed().as_secs();
+            debug!("Elapsed time: {}; set seconds {}", elapsed, seconds);
+            if elapsed >= seconds {
+                break;
             }
         }
 
@@ -342,9 +343,9 @@ async fn main() -> Result<()> {
 
     info!("Starting up!");
 
-    let vc_server = env::var("VC_SERVER").map_err(|_| Error::Error(String::from("VC_SERVER env var not set")))?;
-    let username = env::var("VC_USERNAME").map_err(|_| Error::Error(String::from("VC_USERNAME env var not set")))?;
-    let pwd = env::var("VC_PASSWORD").map_err(|_| Error::Error(String::from("VC_PASSWORD env var not set")))?;
+    let vc_server = env::var("VC_SERVER").with_context(||"VC_SERVER env var not set")?;
+    let username = env::var("VC_USERNAME").with_context(||"VC_USERNAME env var not set")?;
+    let pwd = env::var("VC_PASSWORD").with_context(||"VC_PASSWORD env var not set")?;
 
     let vim_client = ClientBuilder::new(&vc_server)
         .insecure(true)

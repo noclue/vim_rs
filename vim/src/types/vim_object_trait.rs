@@ -8,7 +8,7 @@ use super::structs::*;
 /// when used through a trait reference. The other use of this trait is
 /// to upcast a trait reference to a VimObjectTrait reference needed by
 /// common library functionality.
-pub trait VimObjectTrait: AsAny + std::fmt::Debug {
+pub trait VimObjectTrait: AsAny + std::fmt::Debug + Send + Sync {
     fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait;
     fn data_type(&self) -> StructType;
 }

@@ -1,5 +1,5 @@
 [workspace]
-members = ["eventster", "mac_monitor", "vim_tests", "perf_metrics", "utils"]
+members = ["eventster", "mac_monitor", "vim_tests", "perf_metrics"]
 resolver = "2"
 
 [profile.release]

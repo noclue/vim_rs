@@ -3,11 +3,11 @@
 #[cfg(test)]
 mod tests {
     use std::env;
-    use vim::mo::{AlarmManager, ContainerView, PropertyCollector, ServiceInstance, SessionManager, ViewManager};
+    use vim::mo::{AlarmManager, ContainerView, PropertyCollector, ViewManager};
     use vim::types::structs;
-    use vim::core::client::Client;
+    use vim::core::client::ClientBuilder;
 
-    use reqwest::ClientBuilder;
+    use reqwest::ClientBuilder as ReqwestClientBuilder;
     use vim::types::structs::ManagedObjectReference;
     use vim::types::boxed_types::ValueElements;
     use vim::types::vim_any::VimAny;
@@ -15,6 +15,8 @@ mod tests {
     use vim::types::enums::MoTypesEnum;
     use log::{debug, info};
 
+    const APP_NAME: &str = env!("CARGO_PKG_NAME");
+    const APP_VERSION: &str = env!("CARGO_PKG_VERSION");
     fn init() {
         let _ = env_logger::builder().is_test(true).try_init();
     }
@@ -22,7 +24,7 @@ mod tests {
     #[tokio::test(flavor = "multi_thread", worker_threads = 1)]
     async fn get_content() {
         init();
-        let builder = ClientBuilder::new();
+        let builder = ReqwestClientBuilder::new();
         let client = builder.danger_accept_invalid_certs(true)
                                 .danger_accept_invalid_hostnames(true)
                                 .build()
@@ -41,26 +43,18 @@ mod tests {
     #[tokio::test(flavor = "multi_thread", worker_threads = 1)]
     async fn vm_inventory() {
         init();
-        let client = ClientBuilder::new()
-                                .danger_accept_invalid_certs(true)
-                                .danger_accept_invalid_hostnames(true)
-                                .build()
-                                .unwrap();
         let vc_server = env::var("VC_SERVER").expect("VC_SERVER environment variable not set");
-        let client = Client::new(client, &vc_server, None);
-        let service_instance = ServiceInstance::new(client.clone(), "ServiceInstance");
-        let content = service_instance.content().await.unwrap();
-        let session_manager_mo_ref = content.session_manager.unwrap();
-        let session_manager = SessionManager::new(client.clone(), &session_manager_mo_ref.value);
         let vc_username = env::var("VC_USERNAME").expect("VC_USERNAME environment variable not set");
         let vc_password = env::var("VC_PASSWORD").expect("VC_PASSWORD environment variable not set");
-        let session = session_manager.login(
-                            &vc_username,
-                            &vc_password, 
-                            None).await.unwrap();
-        debug!("{:?}", session);
-
-        let view_manager = ViewManager::new(client.clone(), &content.view_manager.unwrap().value);
+        
+        let client = ClientBuilder::new(vc_server.as_str())
+            .insecure(true)
+            .basic_authn(vc_username.as_str(), vc_password.as_str())
+            .app_details(APP_NAME, APP_VERSION)
+            .build().await.unwrap();
+        debug!("Connected to {}", client.service_content().about.full_name);
+        let content = client.service_content();
+        let view_manager = ViewManager::new(client.clone(), content.view_manager.clone().unwrap().value.as_str());
         
         let view_moref = view_manager.create_container_view(
             &content.root_folder,
@@ -112,8 +106,8 @@ mod tests {
         }
         view.destroy_view().await.unwrap();
         if let Some(vm) = first_vm_id {
-            let alarm_manager_mo_ref = content.alarm_manager.unwrap();
-            let alarm_manager = AlarmManager::new(client.clone(), &alarm_manager_mo_ref.value);
+            let alarm_manager_mo_ref = content.alarm_manager.clone().unwrap().value.clone();
+            let alarm_manager = AlarmManager::new(client.clone(), &alarm_manager_mo_ref);
             let entity = ManagedObjectReference {
                 r#type: MoTypesEnum::VirtualMachine,
                 value: vm,

@@ -1,9 +1,0 @@
-[package]
-name = "utils"
-version = "0.1.0"
-edition = "2024"
-
-[dependencies]
-thiserror = "2.0.11"
-reqwest = "0.12.12"
-vim = { version = "0.1.0", path = "../../vim" }
