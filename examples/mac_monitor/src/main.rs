@@ -143,7 +143,7 @@ impl VmChangeDetector {
         };
         let view_mgr_id = view_mgr_id.value.clone();
         let view_mgr = ViewManager::new(client.clone(), &view_mgr_id);
-        let view_ref = view_mgr.create_container_view(&client.service_content().root_folder, Some(&["VirtualMachine".to_string()]), true).await?;
+        let view_ref = view_mgr.create_container_view(&client.service_content().root_folder, Some(&[Into::<&str>::into(MoTypesEnum::VirtualMachine).to_string()]), true).await?;
         let spec = vim::types::structs::PropertyFilterSpec {
             object_set: vec![structs::ObjectSpec {
                 obj: view_ref.clone(),
