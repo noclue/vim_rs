@@ -1,5 +1,5 @@
 [workspace]
-members = ["eventster", "mac_monitor", "property_collector", "perf_metrics"]
+members = ["eventster", "mac_monitor", "property_collector", "perf_metrics", "environment_browser"]
 resolver = "2"
 
 [profile.release]

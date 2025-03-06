@@ -37,10 +37,7 @@ pub enum Error {
     InvalidObjectType(String, String),
 }
 
-unsafe impl Send for Error {}
-
 pub type Result<T> = std::result::Result<T, Error>;
-
 
 pub struct ClientBuilder {
     server_address: String,
