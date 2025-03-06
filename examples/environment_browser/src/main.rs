@@ -60,10 +60,9 @@ async fn main() -> Result<()> {
     let options = structs::RetrieveOptions {
         max_objects: Some(100),
     };
-    let retrieve_result = property_collector.retrieve_properties_ex(&spec_set, &options).await.unwrap().unwrap();
-    if retrieve_result.token.is_some() {
-        let token = retrieve_result.token.unwrap();
-        property_collector.cancel_retrieve_properties_ex(&token).await.unwrap();
+    let retrieve_result = property_collector.retrieve_properties_ex(&spec_set, &options).await?.unwrap();
+    if let Some(token) = retrieve_result.token {
+        property_collector.cancel_retrieve_properties_ex(&token).await?;
     }
     view.destroy_view().await?;
 
@@ -101,9 +100,30 @@ async fn main() -> Result<()> {
         error!("ConfigOptionDescriptor not found");
         return Err(anyhow::anyhow!("ConfigOptionDescriptor not found"));
     };
-    for desc in cod {
+
+    let mut config_option_descriptor = None;
+    for desc in &cod {
+        if desc.default_config_option {
+            config_option_descriptor = Some(desc);
+            info!("Found Default ConfigOption: {} - {:?}", desc.key, desc);
+        }
         info!("Key: {} -> {:?}", desc.key, desc);
     }
+    let Some(config_option_descriptor) = config_option_descriptor else {
+        error!("Default ConfigOption not found");
+        return Err(anyhow::anyhow!("Default ConfigOption not found"));
+    };
 
+    let Some(ref host) = config_option_descriptor.host else {
+        error!("Config Option Descriptor Host not set");
+        return Err(anyhow::anyhow!("Host not found"));
+    };
+    let Some(first_host) = host.first() else {
+        error!("No hosts set for default config option");
+        return Err(anyhow::anyhow!("No hosts set for default config option"));
+    };
+    let cfg_option = eb.query_config_option(Some(&config_option_descriptor.key), Some(first_host) ).await?;
+
+    info!("VM Config Option: {:?}", cfg_option);
     Ok(())
 }
