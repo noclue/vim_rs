@@ -280,7 +280,7 @@ fn create_vm_change(change_set: &Vec<structs::PropertyChange>) -> VmChange {
                     let Some(eth): Option<&dyn VirtualEthernetCardTrait> = device.as_ref().into_ref() else {
                         continue;
                     };
-                    if let Some(ref mac) = eth.get_mac_address() {
+                    if let Some(mac) = eth.get_mac_address() {
                         vnic.insert(key.into(), mac.clone());
                     }
                 }

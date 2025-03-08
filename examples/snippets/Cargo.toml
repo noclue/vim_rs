@@ -1,0 +1,32 @@
+[package]
+name = "snippets"
+version = "0.1.0"
+edition = "2024"
+
+[[bin]]
+name = "eventster"
+path = "src/eventster.rs"
+
+[[bin]]
+name = "env_browser"
+path = "src/env_browser.rs"
+
+[[bin]]
+name = "property_collector"
+path = "src/property_collector.rs"
+
+[[bin]]
+name = "perf_metrics"
+path = "src/perf_metrics.rs"
+
+[[bin]]
+name = "mac_monitor"
+path = "src/mac_monitor.rs"
+
+[dependencies]
+anyhow = "1.0.97"
+chrono = "0.4.40"
+env_logger = "0.11.6"
+log = "0.4.26"
+tokio = {  version = "1.43.0", features = ["macros"]}
+vim_rs = { version = "0.1.0", path = "../../vim_rs" }
