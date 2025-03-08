@@ -2,7 +2,7 @@ use crate::printer::Printer;
 use crate::rs_emitter::common::emit_description;
 use crate::rs_emitter::errors::{Error, Result};
 use crate::rs_emitter::{get_by_ref, getter_name, to_field_name, to_type_name, TypeDefResolver};
-use crate::vim_model::{Field, Model, Struct};
+use crate::vim_model::{EmitMode, Field, Model, Struct};
 use std::ops::Deref;
 pub struct TraitEmitter<'a> {
     type_name: String,
@@ -175,6 +175,9 @@ impl<'a> TraitEmitter<'a> {
 
     fn generate_implementations(&mut self, trait_type: &Struct) -> Result<()> {
         for child_type in self.model.children(&self.type_name)? {
+            if child_type.borrow().emit_mode.is_skip() {
+                continue;
+            }
             let struct_name = &child_type.borrow().name;
             self.emit_trait_implementation(trait_type, struct_name)?
         }
@@ -240,6 +243,9 @@ impl<'a> TraitEmitter<'a> {
         self.printer.indent();
         // Generate match arms for each data type. Arms start with the type itself and end with last_child.
         for child_struct in self.model.children(&self.type_name)? {
+            if matches!(child_struct.borrow().emit_mode, EmitMode::Skip(_)) {
+                continue;
+            }
             let type_name = child_struct.borrow().rust_name();
             self.printer.println(&format!("StructType::{type_name} => Some(from.as_any_ref().downcast_ref::<{type_name}>()?),"))?;
         }
@@ -257,6 +263,9 @@ impl<'a> TraitEmitter<'a> {
         self.printer.println("match data_type {")?;
         self.printer.indent();
         for child_struct in self.model.children(&self.type_name)? {
+            if matches!(child_struct.borrow().emit_mode, EmitMode::Skip(_)) {
+                continue;
+            }
             let type_name = child_struct.borrow().rust_name();
             self.printer.println(&format!(
                 "StructType::{type_name} => Ok(from.as_any_box().downcast::<{type_name}>()?),"

@@ -1,6 +1,6 @@
 use crate::printer::Printer;
 use crate::rs_emitter;
-use crate::vim_model::Model;
+use crate::vim_model::{EmitMode, Model};
 
 pub fn generate_serialize_polymorphic_enum(
     vim_model: &Model,
@@ -27,6 +27,10 @@ pub fn generate_serialize_polymorphic_enum(
         if struct_name == "Any" {
             continue;
         }
+        if matches!(data_type.borrow().emit_mode, EmitMode::Skip(_)) {
+            continue;
+        }
+
         printer.println(&format!(
             "StructType::{struct_name} => {struct_name}::serialize("
         ))?;

@@ -1,6 +1,6 @@
 use crate::printer::Printer;
 use crate::rs_emitter;
-use crate::vim_model::Model;
+use crate::vim_model::{EmitMode, Model};
 
 /// Generates enum with all the struct type names. The names are converted to RUST enum naming convention.
 pub fn generate_struct_enum(
@@ -29,6 +29,9 @@ pub fn generate_struct_enum(
         let struct_ref = data_type.borrow();
         let rust_type_name = struct_ref.rust_name();
         if rust_type_name == rs_emitter::structs::ANY {
+            continue;
+        }
+        if matches!(struct_ref.emit_mode, EmitMode::Skip(_)) {
             continue;
         }
         if rust_type_name != struct_ref.name {

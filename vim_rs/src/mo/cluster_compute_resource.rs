@@ -16,6 +16,7 @@ use crate::types::structs::ClusterHostRecommendation;
 use crate::types::structs::ClusterRecommendation;
 use crate::types::structs::ClusterResourceUsageSummary;
 use crate::types::structs::CustomFieldDef;
+use crate::types::structs::Event;
 use crate::types::structs::HostConnectSpec;
 use crate::types::structs::ManagedObjectReference;
 use crate::types::structs::Permission;
@@ -973,7 +974,7 @@ impl ClusterComputeResource {
     /// events as long as they are still current. The
     /// *configStatus* property provides an overall status
     /// based on these events.
-    pub async fn config_issue(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::EventTrait>>>> {
+    pub async fn config_issue(&self) -> Result<Option<Vec<Event>>> {
         let path = format!("/ClusterComputeResource/{moId}/configIssue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await

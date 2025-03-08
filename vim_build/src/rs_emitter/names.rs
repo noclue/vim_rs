@@ -10,7 +10,7 @@ use check_keyword::CheckKeyword;
 use convert_case::{Case, Casing};
 
 use crate::rs_emitter::errors::{Error, Result};
-use crate::vim_model::{DataType, Field, Model, Struct};
+use crate::vim_model::{DataType, EmitMode, Field, Model, Struct};
 
 pub fn to_type_name(name: &str) -> String {
     name.to_case(Case::Pascal).into_safe()
@@ -136,7 +136,9 @@ impl TypeDefResolver<'_> {
     /// If VIM::Any then return VimAny.
     /// If enum return just the enum Pascal case name.
     /// If structure then return a Box<> or & reference to the structure type.
-    /// If the structure has children then we need dynamic trait reference.
+    /// If the structure is "skipped" use the base type name
+    /// If the structure has children then we need dynamic trait reference unless
+    /// the structure is pruned.
     /// If the Struct has no children then we reference the Struct type.
     /// If we cannot match the name to a struct or enum this is programatic error
     fn get_ref_type_declaration(
@@ -165,19 +167,18 @@ impl TypeDefResolver<'_> {
 
 fn field_reference(root_package: String) -> StructRefRenderer {
     Box::new(move |struct_ref: &Struct, _: &Model| -> String {
-        let type_name = to_type_name(&struct_ref.name);
-        if struct_ref.has_children() {
+        let type_name = to_type_name(struct_name(&struct_ref));
+        if struct_ref.has_children() && (struct_ref.emit_mode == EmitMode::Emit) {
             box_type_declaration(&format!("dyn {root_package}::traits::{type_name}Trait"))
         } else {
             type_name
         }
     })
 }
-
 fn param_reference(lifecycle: Option<String>, root_package: String) -> StructRefRenderer {
     Box::new(move |struct_ref: &Struct, _: &Model| -> String {
-        let rust_name = to_type_name(&struct_ref.name);
-        if struct_ref.has_children() {
+        let rust_name = to_type_name(struct_name(&struct_ref));
+        if struct_ref.has_children() && (struct_ref.emit_mode == EmitMode::Emit) {
             ref_type_declaration(
                 &format!("dyn {root_package}::traits::{rust_name}Trait"),
                 lifecycle.clone(),
@@ -186,6 +187,14 @@ fn param_reference(lifecycle: Option<String>, root_package: String) -> StructRef
             ref_type_declaration(&rust_name, lifecycle.clone())
         }
     })
+}
+
+fn struct_name(struct_ref: &Struct) -> &String {
+    if let EmitMode::Skip(ref parent) = struct_ref.emit_mode {
+        parent
+    } else {
+        &struct_ref.name
+    }
 }
 
 // Add a Box<> to the type declaration

@@ -7,7 +7,7 @@ use super::errors::{Error, Result};
 use super::TypeDefResolver;
 use super::{to_fn_name, to_type_name};
 use crate::printer::Printer;
-use crate::vim_model::DataType;
+use crate::vim_model::{DataType, EmitMode};
 use crate::vim_model::HttpMethod;
 use crate::vim_model::ManagedObject;
 use crate::vim_model::Method;
@@ -104,9 +104,14 @@ impl<'a> ManagedObjectEmitter<'a> {
         }
         let rust_name = to_type_name(ref_name);
         if let Some(struct_ref) = self.vim_model.structs.get(ref_name) {
-            if struct_ref.borrow().has_children() {
+            if struct_ref.borrow().has_children() && struct_ref.borrow().emit_mode == EmitMode::Emit {
                 Ok(None)
             } else {
+                let rust_name = if let EmitMode::Skip(ref pruned) = struct_ref.borrow().emit_mode {
+                    to_type_name(pruned)
+                } else {
+                    rust_name
+                };
                 Ok(Some(format!("structs::{rust_name}")))
             }
         } else if self.vim_model.enums.contains_key(ref_name) {

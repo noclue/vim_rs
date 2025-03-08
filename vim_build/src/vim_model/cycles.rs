@@ -1,8 +1,8 @@
 /// Logic in this module detect cycles in the data model and selects fields to be boxed to break the
 /// cycle.
 use std::{borrow::Borrow, collections::HashSet};
-
-use super::{DataType::Reference, Error, Model, Result, Struct};
+use std::ops::Deref;
+use super::{DataType::Reference, EmitMode, Error, Model, Result, Struct};
 
 /// Identify cycles in the data model, select field references where the cycles can be broken and
 /// mark thge selected fields to be boxed to break the cycle.
@@ -74,23 +74,24 @@ fn detect_loops_recursive(
     for (_, field) in &struct_ref.fields {
         let ref_name = match &field.vim_type {
             Reference(ref_name) => ref_name,
-            // Skip arrays as Vec field in a struct is a pointer to the array and not the array
+            // arrays are ok as Vec field in a struct is a pointer to the array and not the array
             // itself hence cyclic references from Vec do not violate Sized constraint.
-            // Array(nested_type) => {
-            //     if let Reference(ref_name) = nested_type.as_ref() {
-            //         ref_name
-            //     } else {
-            //         continue;
-            //     }
-            // },
             _ => {
                 continue;
             }
         };
-        let Some(struct_ref) = vim_model.structs.get(ref_name) else {
+        let Some(mut struct_ref) = vim_model.structs.get(ref_name) else {
             continue;
         };
-        if struct_ref.borrow().has_children() {
+        if let EmitMode::Skip(ref pruned) = struct_ref.borrow().emit_mode {
+            if let Some(pruned_ref) = vim_model.structs.get(pruned) {
+                struct_ref = pruned_ref;
+            } else {
+                panic!("Invalid pruned type reference: {}", pruned);
+            }
+        }
+        let struct_ref = struct_ref.borrow();
+        if struct_ref.has_children() && struct_ref.emit_mode == EmitMode::Emit {
             continue;
         }
         if visited.contains(ref_name) {
@@ -107,9 +108,8 @@ fn detect_loops_recursive(
             loops.push(loop_chain);
             continue;
         }
-        let struct_ref = struct_ref.borrow();
         stack.push((ref_name.clone(), String::new()));
-        detect_loops_recursive(vim_model, struct_ref.borrow(), stack, visited, loops);
+        detect_loops_recursive(vim_model, struct_ref.deref(), stack, visited, loops);
         stack.pop();
     }
     visited.insert(struct_ref.name.clone());

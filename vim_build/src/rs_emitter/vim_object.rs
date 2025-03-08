@@ -1,6 +1,6 @@
 use crate::printer::Printer;
 use crate::rs_emitter;
-use crate::vim_model::Model;
+use crate::vim_model::{EmitMode, Model};
 
 pub fn generate_vim_object_trait(
     vim_model: &Model,
@@ -41,6 +41,9 @@ pub fn generate_vim_object_trait(
     for (_, data_type) in &vim_model.structs {
         let struct_name = data_type.borrow().rust_name();
         if struct_name == "Any" {
+            continue;
+        }
+        if matches!(data_type.borrow().emit_mode, EmitMode::Skip(_)) {
             continue;
         }
         printer.println(&format!("impl VimObjectTrait for {struct_name} {{"))?;

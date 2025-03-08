@@ -5,6 +5,7 @@ use crate::types::structs::CustomFieldDef;
 use crate::types::structs::DvPortgroupConfigInfo;
 use crate::types::structs::DvPortgroupConfigSpec;
 use crate::types::structs::EntityBackupConfig;
+use crate::types::structs::Event;
 use crate::types::structs::ManagedObjectReference;
 use crate::types::structs::Permission;
 use crate::types::structs::Tag;
@@ -283,7 +284,7 @@ impl DistributedVirtualPortgroup {
     /// events as long as they are still current. The
     /// *configStatus* property provides an overall status
     /// based on these events.
-    pub async fn config_issue(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::EventTrait>>>> {
+    pub async fn config_issue(&self) -> Result<Option<Vec<Event>>> {
         let path = format!("/DistributedVirtualPortgroup/{moId}/configIssue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await

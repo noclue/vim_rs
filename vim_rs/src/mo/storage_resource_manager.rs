@@ -1,6 +1,7 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
 use crate::types::structs::ManagedObjectReference;
+use crate::types::structs::MethodFault;
 use crate::types::structs::StorageDrsConfigSpec;
 use crate::types::structs::StorageIormConfigOption;
 use crate::types::structs::StorageIormConfigSpec;
@@ -378,7 +379,7 @@ impl StorageResourceManager {
     /// ### spec
     /// A set of storage Drs configuration changes to apply to
     /// the storage pod.
-    pub async fn validate_storage_pod_config(&self, pod: &ManagedObjectReference, spec: &StorageDrsConfigSpec) -> Result<Option<Box<dyn crate::types::traits::MethodFaultTrait>>> {
+    pub async fn validate_storage_pod_config(&self, pod: &ManagedObjectReference, spec: &StorageDrsConfigSpec) -> Result<Option<MethodFault>> {
         let input = ValidateStoragePodConfigRequestType {pod, spec, };
         let path = format!("/StorageResourceManager/{moId}/ValidateStoragePodConfig", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);

@@ -7,6 +7,7 @@ use crate::types::structs::DatastoreHostMount;
 use crate::types::structs::DatastoreMountPathDatastorePair;
 use crate::types::structs::DatastoreSummary;
 use crate::types::structs::DatastoreVVolContainerFailoverPair;
+use crate::types::structs::Event;
 use crate::types::structs::ManagedObjectReference;
 use crate::types::structs::Permission;
 use crate::types::structs::StorageIormInfo;
@@ -457,7 +458,7 @@ impl Datastore {
     /// events as long as they are still current. The
     /// *configStatus* property provides an overall status
     /// based on these events.
-    pub async fn config_issue(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::EventTrait>>>> {
+    pub async fn config_issue(&self) -> Result<Option<Vec<Event>>> {
         let path = format!("/Datastore/{moId}/configIssue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await

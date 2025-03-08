@@ -2,7 +2,6 @@ use std::sync::Arc;
 
 use tokio::sync::RwLock;
 use super::super::types::structs;
-use super::super::types::traits::MethodFaultTrait;
 use log::{warn, debug, trace, log_enabled};
 use log::Level::Trace;
 
@@ -26,7 +25,7 @@ const SERVICE_INSTANCE_MOID: &str = "ServiceInstance";
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
     #[error("MethodFault: {0:?}")]
-    MethodFault(Box<dyn MethodFaultTrait>),
+    MethodFault(structs::MethodFault),
     #[error("Reqwest error: {0}")]
     ReqwestError(#[from] reqwest::Error),
     #[error("Serde error: {0}")]
@@ -285,7 +284,7 @@ impl Client {
         }
         if !res.status().is_success() {
             warn!("HTTP error: {}", res.status());
-            let fault: Box<dyn MethodFaultTrait> = res.json().await?;
+            let fault: structs::MethodFault = res.json().await?;
             return Err(Error::MethodFault(fault));
         }
         Ok(res)

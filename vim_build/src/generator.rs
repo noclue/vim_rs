@@ -7,6 +7,8 @@ use convert_case::{Case, Casing};
 use rs_emitter::library::emit_library;
 use std::path::PathBuf;
 use std::{io::Read, path::Path, time::Instant};
+use openapi30::OpenAPI;
+use crate::vim_model::{EmitMode, Model};
 
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
@@ -34,21 +36,15 @@ pub fn load_openapi<P: AsRef<Path>>(path: P) -> Result<openapi30::OpenAPI> {
     Ok(openapi)
 }
 
-pub fn emit_vim_bindings(vi_json_spec_path: &Path, root_folder: &Path) -> Result<()> {
+pub fn emit_vim_bindings(vi_json_spec_path: &Path, root_folder: &Path, pruned_types: Option<&[&str]>) -> Result<()> {
     let start_load = Instant::now();
     let model = load_openapi(vi_json_spec_path)?;
     println!("Time to load OpenAPI: {:?}", start_load.elapsed());
-    generate_bindings(model, root_folder)
+    let vim_model = transform_model(&model, pruned_types)?;
+    generate_bindings(vim_model, root_folder)
 }
 
-pub fn generate_bindings(model: openapi30::OpenAPI, root_folder: &Path) -> Result<()> {
-    let start_model_transform = Instant::now();
-    let vim_model = vim_model::load_vim_model(&model)?;
-    println!(
-        "Time to transform OpenAPI model: {:?}",
-        start_model_transform.elapsed()
-    );
-
+pub fn generate_bindings(vim_model: Model, root_folder: &Path) -> Result<()> {
     let start_emit = Instant::now();
     emit_types(root_folder, &vim_model)?;
     println!("Time to emit types: {:?}", start_emit.elapsed());
@@ -60,6 +56,16 @@ pub fn generate_bindings(model: openapi30::OpenAPI, root_folder: &Path) -> Resul
         start_emit_mo.elapsed()
     );
     Ok(())
+}
+
+fn transform_model(model: &OpenAPI, pruned_types: Option<&[&str]>) -> Result<Model> {
+    let start_model_transform = Instant::now();
+    let vim_model = vim_model::load_vim_model(model, pruned_types)?;
+    println!(
+        "Time to transform OpenAPI model: {:?}",
+        start_model_transform.elapsed()
+    );
+    Ok(vim_model)
 }
 
 fn emit_managed_objects(root_folder: &Path, vim_model: &vim_model::Model) -> Result<()> {
@@ -139,6 +145,9 @@ fn emit_inheritable_traits(root_folder: &Path, vim_model: &vim_model::Model) -> 
         if struct_name == rs_emitter::structs::ANY || struct_ref.children.is_empty() {
             continue;
         }
+        if struct_ref.emit_mode != EmitMode::Emit {
+            continue;
+        }
 
         let mut trait_emitter = TraitEmitter::new(struct_name.clone(), vim_model, &mut printer);
 
@@ -175,8 +184,8 @@ fn emit_ser(types_folder: &Path, vim_model: &vim_model::Model) -> Result<()> {
 fn emit_de(types_folder: &Path, vim_model: &vim_model::Model) -> Result<()> {
     let mut printer = printer_for_file(types_folder.join("deserialize.rs"))?;
     printer.println("use std::fmt;")?;
+    printer.println("use serde::Deserializer;")?;
     printer.println("use serde::de;")?;
-    //printer.println("use super::enums::*;")?;
     printer.println("use super::boxed_types::ValueElements;")?;
     printer.println("use super::structs::*;")?;
     printer.println("use super::vim_any::VimAny;")?;

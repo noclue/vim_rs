@@ -1,6 +1,7 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
 use crate::types::structs::Capability;
+use crate::types::structs::Event;
 use crate::types::structs::HostVMotionCompatibility;
 use crate::types::structs::ManagedObjectReference;
 use crate::types::structs::ProductComponentInfo;
@@ -219,7 +220,7 @@ impl ServiceInstance {
     /// cluster associated with a target pool does not contain at least one
     /// potential target host. A host must be connected and not in maintenance
     /// mode in order to be considered as a potential target host.
-    pub async fn validate_migration(&self, vm: &[ManagedObjectReference], state: Option<crate::types::enums::VirtualMachinePowerStateEnum>, test_type: Option<&[String]>, pool: Option<&ManagedObjectReference>, host: Option<&ManagedObjectReference>) -> Result<Option<Vec<Box<dyn crate::types::traits::EventTrait>>>> {
+    pub async fn validate_migration(&self, vm: &[ManagedObjectReference], state: Option<crate::types::enums::VirtualMachinePowerStateEnum>, test_type: Option<&[String]>, pool: Option<&ManagedObjectReference>, host: Option<&ManagedObjectReference>) -> Result<Option<Vec<Event>>> {
         let input = ValidateMigrationRequestType {vm, state, test_type, pool, host, };
         let path = format!("/ServiceInstance/{moId}/ValidateMigration", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);

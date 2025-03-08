@@ -2,6 +2,7 @@ use std::sync::Arc;
 use crate::core::client::{Client, Result};
 use crate::types::structs::AlarmState;
 use crate::types::structs::CustomFieldDef;
+use crate::types::structs::Event;
 use crate::types::structs::ManagedObjectReference;
 use crate::types::structs::Permission;
 use crate::types::structs::ResourceConfigOption;
@@ -806,7 +807,7 @@ impl ResourcePool {
     /// events as long as they are still current. The
     /// *configStatus* property provides an overall status
     /// based on these events.
-    pub async fn config_issue(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::EventTrait>>>> {
+    pub async fn config_issue(&self) -> Result<Option<Vec<Event>>> {
         let path = format!("/ResourcePool/{moId}/configIssue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await

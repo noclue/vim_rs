@@ -1,8 +1,7 @@
 use std::{env, sync::Arc};
 use tokio::time::sleep;
 use vim_rs::mo::EventManager;
-use vim_rs::types::structs::{EventFilterSpecByTime, ExtendedEvent, EventEx, EventFilterSpec};
-use vim_rs::types::traits::EventTrait;
+use vim_rs::types::structs::{EventFilterSpecByTime, EventFilterSpec, Event};
 use vim_rs::core::client::{Client, ClientBuilder};
 use log::info;
 use chrono::{Utc, Duration as ChronoDuration};
@@ -14,17 +13,18 @@ const APP_VERSION: &str = env!("CARGO_PKG_VERSION");
 /// Get the event type ID from an event
 /// The semantics of how eventTypeId matching is done is as follows:
 /// - If the event is of type EventEx return event_type_id member of the EventEx
-/// - If the event is of type ExtendedEvent return event_id member of the ExtendedEvent
+/// - If the event is of type ExtendedEvent return event_type_id member of the ExtendedEvent
 /// - Otherwise, return the type name of the Event itself.
-fn get_event_type_id(event: &dyn EventTrait) -> String {
-    let any_ref = event.as_any_ref();
-    if let Some(event_ex) = any_ref.downcast_ref::<EventEx>() {
-        return event_ex.event_type_id.clone();
+fn get_event_type_id(event: &Event) -> String {
+    let Some(ref type_name) = event.type_name_ else {
+        return "Event".to_string();
+    };
+    if type_name == "EventEx" || type_name == "ExtendedEvent" {
+        if let Some(event_type_id) = event.extra_fields_["eventTypeId"].as_str() {
+            return event_type_id.to_string();
+        }
     }
-    if let Some(extended_event) = any_ref.downcast_ref::<ExtendedEvent>() {
-        return extended_event.event_type_id.clone();
-    }
-    <&'static str>::from(event.data_type()).to_string()
+    type_name.clone()
 }
 
 // Dump the last 30 minutes of events in vCenter
@@ -59,10 +59,10 @@ async fn dump_events(client: Arc<Client>, event_manager: &EventManager) -> Resul
             Some(events) => {
                 for event in events {
                     info!("{event_type}: {ts} - {id} - {msg}",
-                        event_type=get_event_type_id(event.as_ref()),
-                        id=event.get_key(),
-                        ts=event.get_created_time(),
-                        msg=event.get_full_formatted_message().as_ref().unwrap_or(&String::from("No message")));
+                        event_type=get_event_type_id(&event),
+                        id=event.key,
+                        ts=event.created_time,
+                        msg=event.full_formatted_message.unwrap_or(String::from("No message")));
                 }
             },
             None => info!("No events found"),

@@ -7,6 +7,7 @@ use crate::types::structs::HttpNfcLeaseProbeResult;
 use crate::types::structs::HttpNfcLeaseSourceFile;
 use crate::types::structs::KeyValue;
 use crate::types::structs::ManagedObjectReference;
+use crate::types::structs::MethodFault;
 /// Represents a lease on a *VirtualMachine* or
 /// a *VirtualApp*, which can be used to import or export
 /// disks for the entity.
@@ -79,7 +80,7 @@ impl HttpNfcLease {
     /// ***Timedout***: if the lease has timed out before this call.
     /// 
     /// ***InvalidState***: if the lease has already been aborted.
-    pub async fn http_nfc_lease_abort(&self, fault: Option<&dyn crate::types::traits::MethodFaultTrait>) -> Result<()> {
+    pub async fn http_nfc_lease_abort(&self, fault: Option<&MethodFault>) -> Result<()> {
         let input = HttpNfcLeaseAbortRequestType {fault, };
         let path = format!("/HttpNfcLease/{moId}/HttpNfcLeaseAbort", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -219,7 +220,7 @@ impl HttpNfcLease {
     }
     /// If the lease is in the error state, this property contains the
     /// error that caused the lease to be aborted.
-    pub async fn error(&self) -> Result<Option<Box<dyn crate::types::traits::MethodFaultTrait>>> {
+    pub async fn error(&self) -> Result<Option<MethodFault>> {
         let path = format!("/HttpNfcLease/{moId}/error", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -270,7 +271,7 @@ impl HttpNfcLease {
 #[serde(tag="_typeName")]
 struct HttpNfcLeaseAbortRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    fault: Option<&'a dyn crate::types::traits::MethodFaultTrait>,
+    fault: Option<&'a MethodFault>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]

@@ -21,19 +21,13 @@ impl<'a> BoxedTypesEmitter<'a> {
 
     /// Emit boxed value types from Vim like ArrayOfInt, ArrayOfString, Boolean etc.
     pub fn emit_boxed_types(&mut self) -> Result<()> {
+        self.emit_imports()?;
         self.emit_enum()?;
         self.emit_serialize()?;
         self.emit_deserialize()?;
         Ok(())
     }
     fn emit_enum(&mut self) -> Result<()> {
-        self.printer.println("use serde::de;")?;
-        self.printer.println("use serde::ser::SerializeStruct;")?;
-        self.printer
-            .println("use super::deserialize::get_value_deserializer;")?;
-        self.printer.println("use super::vim_any::VimAny;")?;
-        self.printer.println("use super::structs::*;")?;
-        self.printer.newline()?;
         self.printer.println("#[derive(Debug)]")?;
         self.printer.println("pub enum ValueElements {")?;
         self.printer.indent();
@@ -50,6 +44,17 @@ impl<'a> BoxedTypesEmitter<'a> {
         }
         self.printer.dedent();
         self.printer.println("}")?;
+        Ok(())
+    }
+
+    fn emit_imports(&mut self) -> Result<()> {
+        self.printer.println("use serde::de;")?;
+        self.printer.println("use serde::ser::SerializeStruct;")?;
+        self.printer
+            .println("use super::deserialize::get_value_deserializer;")?;
+        self.printer.println("use super::vim_any::VimAny;")?;
+        self.printer.println("use super::structs::*;")?;
+        self.printer.newline()?;
         Ok(())
     }
 

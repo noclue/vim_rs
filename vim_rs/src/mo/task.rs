@@ -2,6 +2,7 @@ use std::sync::Arc;
 use crate::core::client::{Client, Result};
 use crate::types::structs::CustomFieldDef;
 use crate::types::structs::LocalizableMessage;
+use crate::types::structs::MethodFault;
 use crate::types::structs::TaskInfo;
 use crate::types::vim_any::VimAny;
 /// A task is used to monitor and potentially cancel long
@@ -125,7 +126,7 @@ impl Task {
     /// ***InvalidState***: If attempting to change states after
     /// task is completed or in error, or attempting to set the
     /// result or fault incorrectly
-    pub async fn set_task_state(&self, state: crate::types::enums::TaskInfoStateEnum, result: Option<VimAny>, fault: Option<&dyn crate::types::traits::MethodFaultTrait>) -> Result<()> {
+    pub async fn set_task_state(&self, state: crate::types::enums::TaskInfoStateEnum, result: Option<VimAny>, fault: Option<&MethodFault>) -> Result<()> {
         let input = SetTaskStateRequestType {state, result, fault, };
         let path = format!("/Task/{moId}/SetTaskState", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -184,5 +185,5 @@ struct SetTaskStateRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     result: Option<VimAny>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    fault: Option<&'a dyn crate::types::traits::MethodFaultTrait>,
+    fault: Option<&'a MethodFault>,
 }

@@ -1,7 +1,6 @@
 // Generator for Rust data models from vim
 
 use std::borrow::Borrow;
-
 use crate::vim_model::Model;
 
 use super::super::printer::Printer;
@@ -36,7 +35,7 @@ impl<'a> TypesEmitter<'a> {
     }
     fn emit_use_statements(&mut self) -> Result<()> {
         self.printer.println("use super::vim_any::VimAny;")?;
-        self.printer.println("use serde::ser::SerializeStruct;")?;
+        self.printer.println("use serde::ser::SerializeMap;")?;
         self.printer.println("use serde::de;")?;
         self.printer.println("use std::fmt::Formatter;")?;
         self.printer.newline()?;
@@ -44,9 +43,12 @@ impl<'a> TypesEmitter<'a> {
     }
 
     fn emit_structs(&mut self) -> Result<()> {
-        for (name, vim_type_cell) in &self.vim_model.structs {
-            let struct_type = vim_type_cell.borrow();
+        for (name, vim_type) in &self.vim_model.structs {
+            let struct_type = vim_type.borrow();
             if struct_type.name == "Any" {
+                continue;
+            }
+            if let EmitMode::Skip(_) = struct_type.emit_mode {
                 continue;
             }
             self.emit_struct_type(name, &struct_type)?;
@@ -73,6 +75,12 @@ impl<'a> TypesEmitter<'a> {
             .println(&format!("pub struct {struct_name} {{"))?;
         self.printer.indent();
         self.emit_struct_all_fields(vim_type)?;
+        if vim_type.emit_mode == EmitMode::Prune {
+            self.printer.println("// Discriminator value if different from the base type")?;
+            self.printer.println("pub type_name_: Option<String>,")?;
+            self.printer.println("// Extra fields not part of the base type schema")?;
+            self.printer.println("pub extra_fields_: std::collections::HashMap<String, serde_json::Value>,")?;
+        }
         self.printer.dedent();
         self.printer.println("}")?;
         Ok(())
@@ -121,11 +129,11 @@ impl<'a> TypesEmitter<'a> {
 
     fn emit_serialize(&mut self, vim_type: &Struct) -> Result<()> {
         let struct_name = to_type_name(&vim_type.name);
-        let mut field_count = 1;
         let inheritance_chain = self.vim_model.inheritance_chain(&vim_type.name)?;
-        for struct_type in &inheritance_chain {
-            field_count += (*struct_type).borrow().fields.len();
-        }
+        // let mut field_count = 1;
+        // for struct_type in &inheritance_chain {
+        //     field_count += (*struct_type).borrow().fields.len();
+        // }
         self.printer
             .println(&format!("impl serde::Serialize for {struct_name} {{"))?;
         self.printer.indent();
@@ -137,12 +145,15 @@ impl<'a> TypesEmitter<'a> {
         self.printer.dedent();
         self.printer.println("{")?;
         self.printer.indent();
-        self.printer.println(&format!(
-            "let mut state = serializer.serialize_struct(\"{struct_name}\", {field_count})?;"
-        ))?;
-        self.printer.println(&format!(
-            "state.serialize_field(\"_typeName\", \"{struct_name}\")?;"
-        ))?;
+        self.printer.println("let mut state = serializer.serialize_map(None)?;")?;
+        if vim_type.emit_mode == EmitMode::Prune {
+            self.printer.println(&format!(r#"let type_name = self.type_name_.as_deref().unwrap_or("{struct_name}");"#))?;
+            self.printer.println(r#"state.serialize_entry("_typeName", type_name)?;"#)?;
+        } else {
+            self.printer.println(&format!(
+                "state.serialize_entry(\"_typeName\", \"{struct_name}\")?;"
+            ))?;
+        }
         for struct_type in inheritance_chain {
             for (_, field) in &struct_type.borrow().fields {
                 let field_name = to_field_name(&field.name);
@@ -154,7 +165,7 @@ impl<'a> TypesEmitter<'a> {
                         format!("&self.{field_name}")
                     };
                     self.printer.println(&format!(
-                        "state.serialize_field(\"{serialization_name}\", {field_value})?;"
+                        "state.serialize_entry(\"{serialization_name}\", {field_value})?;"
                     ))?;
                 } else {
                     let field_value = if field.vim_type == DataType::Binary {
@@ -166,17 +177,19 @@ impl<'a> TypesEmitter<'a> {
                         .println(&format!("if let Some(field_value) = &self.{field_name} {{"))?;
                     self.printer.indent();
                     self.printer.println(&format!(
-                        "state.serialize_field(\"{serialization_name}\", {field_value})?;"
+                        "state.serialize_entry(\"{serialization_name}\", {field_value})?;"
                     ))?;
-                    self.printer.dedent();
-                    self.printer.println("} else {")?;
-                    self.printer.indent();
-                    self.printer
-                        .println(&format!("state.skip_field(\"{serialization_name}\")?;"))?;
                     self.printer.dedent();
                     self.printer.println("}")?;
                 }
             }
+        }
+        if vim_type.emit_mode == EmitMode::Prune {
+            self.printer.println("for (key, value) in &self.extra_fields_ {")?;
+            self.printer.indent();
+            self.printer.println("state.serialize_entry(key, value)?;")?;
+            self.printer.dedent();
+            self.printer.println("}")?;
         }
         self.printer.println("state.end()")?;
         self.printer.dedent();
@@ -202,16 +215,27 @@ impl<'a> TypesEmitter<'a> {
             "fn deserialize<D: de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {",
         )?;
         self.printer.indent();
-        self.printer.println(&format!(
-            "deserializer.deserialize_map(__{struct_name}Visitor)"
-        ))?;
+        if vim_type.emit_mode == EmitMode::Prune {
+            self.printer.println(&format!(
+                "deserializer.deserialize_map(__{struct_name}Visitor(None))"
+            ))?;
+        } else {
+            self.printer.println(&format!(
+                "deserializer.deserialize_map(__{struct_name}Visitor)"
+            ))?;
+        }
         self.printer.dedent();
         self.printer.println("}")?;
         self.printer.dedent();
         self.printer.println("}")?;
         self.printer.newline()?;
-        self.printer
-            .println(&format!("struct __{struct_name}Visitor;"))?;
+        if vim_type.emit_mode == EmitMode::Prune {
+            self.printer
+                .println(&format!("pub struct __{struct_name}Visitor(pub Option<String>);"))?;
+        } else {
+            self.printer
+                .println(&format!("struct __{struct_name}Visitor;"))?;
+        }
         self.printer.newline()?;
         self.printer.println(&format!(
             "impl<'de> de::Visitor<'de> for __{struct_name}Visitor {{"
@@ -254,6 +278,10 @@ impl<'a> TypesEmitter<'a> {
                 field_count += 1;
             }
         }
+        if vim_type.emit_mode == EmitMode::Prune {
+            self.printer.println("let mut type_name_: Option<String> = None;")?;
+            self.printer.println("let mut extra_fields_: std::collections::HashMap<String, serde_json::Value> = std::collections::HashMap::new();")?;
+        }
         self.printer.newline()?;
         self.printer
             .println("while let Some(key) = map.next_key::<String>()? {")?;
@@ -267,7 +295,11 @@ impl<'a> TypesEmitter<'a> {
         self.printer
             .println(&format!(r#"if discriminator != "{type_name}" {{"#))?;
         self.printer.indent();
-        self.printer.println(&format!(r#"return Err(de::Error::custom(format!("Expected {type_name}, got {{discriminator}}")));"#))?;
+        if vim_type.emit_mode == EmitMode::Prune {
+            self.printer.println("type_name_ = Some(discriminator);")?;
+        } else {
+            self.printer.println(&format!(r#"return Err(de::Error::custom(format!("Expected {type_name}, got {{discriminator}}")));"#))?;
+        }
         self.printer.dedent();
         self.printer.println("}")?;
         self.printer.dedent();
@@ -289,8 +321,17 @@ impl<'a> TypesEmitter<'a> {
                 field_count += 1;
             }
         }
-        self.printer
-            .println(r#"_ => { let _: serde_json::Value = map.next_value()?; }"#)?;
+        if vim_type.emit_mode == EmitMode::Prune {
+            self.printer.println(r#"_ => {"#)?;
+            self.printer.indent();
+            self.printer.println("let value: serde_json::Value = map.next_value()?;")?;
+            self.printer.println("extra_fields_.insert(key, value);")?;
+            self.printer.dedent();
+            self.printer.println("},")?;
+        } else {
+            self.printer
+                .println(r#"_ => { let _: serde_json::Value = map.next_value()?; }"#)?;
+        }
         self.printer.dedent();
         self.printer.println("}")?;
         self.printer.dedent();
@@ -311,6 +352,10 @@ impl<'a> TypesEmitter<'a> {
                     .println(&format!("{field_name}: {field_value},"))?;
                 field_count += 1;
             }
+        }
+        if vim_type.emit_mode == EmitMode::Prune {
+            self.printer.println("type_name_,")?;
+            self.printer.println("extra_fields_,")?;
         }
         self.printer.dedent();
         self.printer.println("})")?;

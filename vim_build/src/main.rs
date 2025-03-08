@@ -17,7 +17,7 @@ use std::{path::Path, time::Instant};
 /// 4. deserialization for the descendant types will be handled by the parent type Visitor. The
 /// parent type Visitor will optionally accept the discriminator during creation to populate the
 /// correct type_name_ for the descendant types.
-const PRUNED_TYPES: [&str; 1] = ["MethodFault"];
+static PRUNED_TYPES: [&str; 2] = ["MethodFault", "Event"];
 
 fn main() {
     let root_folder = Path::new("../vim_rs/src/");
@@ -25,7 +25,7 @@ fn main() {
 
     //generate_to_console(vi_json_spec_path).unwrap();
     let start = Instant::now();
-    emit_vim_bindings(vi_json_spec_path, root_folder).unwrap();
+    emit_vim_bindings(vi_json_spec_path, root_folder, Some(&PRUNED_TYPES)).unwrap();
     println!("Total time in generation: {:?}", start.elapsed());
 }
 

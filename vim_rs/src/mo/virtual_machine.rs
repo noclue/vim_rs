@@ -4,11 +4,13 @@ use crate::types::structs::AlarmState;
 use crate::types::structs::CustomFieldDef;
 use crate::types::structs::CustomizationSpec;
 use crate::types::structs::DiskChangeInfo;
+use crate::types::structs::Event;
 use crate::types::structs::FaultToleranceConfigSpec;
 use crate::types::structs::GuestInfo;
 use crate::types::structs::HostFeatureMask;
 use crate::types::structs::Id;
 use crate::types::structs::ManagedObjectReference;
+use crate::types::structs::MethodFault;
 use crate::types::structs::Permission;
 use crate::types::structs::ResourceConfigSpec;
 use crate::types::structs::Tag;
@@ -1730,7 +1732,7 @@ impl VirtualMachine {
     /// 
     /// ***NotSupported***: if the virtual machine is a template or this operation
     /// is not supported.
-    pub async fn query_fault_tolerance_compatibility(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::MethodFaultTrait>>>> {
+    pub async fn query_fault_tolerance_compatibility(&self) -> Result<Option<Vec<MethodFault>>> {
         let path = format!("/VirtualMachine/{moId}/QueryFaultToleranceCompatibility", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute_option(req).await
@@ -1764,7 +1766,7 @@ impl VirtualMachine {
     /// 
     /// ***NotSupported***: if the virtual machine is a template or this operation
     /// is not supported.
-    pub async fn query_fault_tolerance_compatibility_ex(&self, for_legacy_ft: Option<bool>) -> Result<Option<Vec<Box<dyn crate::types::traits::MethodFaultTrait>>>> {
+    pub async fn query_fault_tolerance_compatibility_ex(&self, for_legacy_ft: Option<bool>) -> Result<Option<Vec<MethodFault>>> {
         let input = QueryFaultToleranceCompatibilityExRequestType {for_legacy_ft, };
         let path = format!("/VirtualMachine/{moId}/QueryFaultToleranceCompatibilityEx", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -3045,7 +3047,7 @@ impl VirtualMachine {
     /// events as long as they are still current. The
     /// *configStatus* property provides an overall status
     /// based on these events.
-    pub async fn config_issue(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::EventTrait>>>> {
+    pub async fn config_issue(&self) -> Result<Option<Vec<Event>>> {
         let path = format!("/VirtualMachine/{moId}/configIssue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await

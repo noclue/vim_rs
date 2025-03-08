@@ -32,6 +32,24 @@ pub struct Enum {
     pub discriminator_value: Option<String>,
 }
 
+/// Indication if a type is to be emitted or not. Types marked enum are always emitted.
+/// Types marked prune are emitted but their children are not. The children of pruned types are 
+/// marked as skip. The skip types are not emitted.
+/// To simplify code generation, the name of the pruned parent type is kept in the skipped children
+/// types.
+#[derive(Debug, PartialEq, Eq)]
+pub enum EmitMode {
+    Emit,
+    Prune,
+    Skip(String), // Keep the name of the pruned parent type to simplify deserialization code generation
+}
+
+impl EmitMode {
+    pub fn is_skip(&self) -> bool {
+        matches!(self, EmitMode::Skip(_))
+    }
+}
+
 /// Represents a Vim Struct model. All of these except the `Any` type have a parent.
 /// For example:
 /// ```yaml
@@ -61,6 +79,7 @@ pub struct Struct {
     pub discriminator_value: Option<String>,
     pub children: Vec<String>,
     pub last_child: String,
+    pub emit_mode: EmitMode,
 }
 
 impl Struct {
@@ -457,6 +476,7 @@ mod tests {
             discriminator_value: None,
             children: vec![],
             last_child: "".to_string(),
+            emit_mode: EmitMode::Emit,
         };
         assert_eq!(str.rust_name(), "StructCrateEnum");
     }

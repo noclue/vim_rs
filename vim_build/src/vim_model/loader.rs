@@ -4,6 +4,7 @@ use indexmap::IndexMap;
 use openapi30::*;
 use std::cell::RefCell;
 use std::fmt::Debug;
+use log::error;
 
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
@@ -39,7 +40,7 @@ pub enum Error {
 // Result is a type alias for handling errors.
 pub type Result<T> = std::result::Result<T, Error>;
 
-pub fn load_vim_model(model: &OpenAPI) -> Result<Model> {
+pub fn load_vim_model(model: &OpenAPI, pruned_types: Option<&[&str]>) -> Result<Model> {
     let mut vim_model = Model {
         enums: IndexMap::new(),
         structs: IndexMap::new(),
@@ -57,11 +58,43 @@ pub fn load_vim_model(model: &OpenAPI) -> Result<Model> {
     transform_schemas(schemas, &mut vim_model)?;
     process_discriminator_mappings(schemas, &mut vim_model)?;
     compute_hierarchy(&mut vim_model)?;
+    prune_structs(&mut vim_model, pruned_types)?;
     mark_cycles(&mut vim_model)?;
     load_managed_objects(model, &mut vim_model)?;
     transform_paths(model, &mut vim_model)?;
     vim_model.structs = reorder_structs(&mut vim_model.structs)?;
+    
     Ok(vim_model)
+}
+
+fn prune_structs(vim_model: &mut Model, pruned_types: Option<&[&str]>) -> Result<()> {
+    let pruned_types = pruned_types.unwrap_or(&[]);
+    for pruned_type in pruned_types {
+        let pruned_type = pruned_type.to_string();
+        if let Some(vim_type) = vim_model.structs.get_mut(&pruned_type) {
+            vim_type.borrow_mut().emit_mode = EmitMode::Prune;
+            skip_children(vim_model, &pruned_type, &pruned_type)?;
+        } else { 
+            error!("Pruned type not found: {}", pruned_type);
+        }
+    }
+    Ok(())
+}
+
+fn skip_children(vim_model: &mut Model, parent: &str, pruned: &str) -> Result<()> {
+    let parent_struct = vim_model.structs.get(parent);
+    let Some(parent_struct) = parent_struct else {
+        return Err(Error::InternalProcessing(format!("Parent struct not found: {}", parent)));
+    };
+    let children = parent_struct.borrow().children.clone();
+    for child in children {
+        let child = child.to_string();
+        if let Some(vim_type) = vim_model.structs.get_mut(&child) {
+            vim_type.borrow_mut().emit_mode = EmitMode::Skip(pruned.to_string());
+            skip_children(vim_model, &child, &pruned)?;
+        }
+    }
+    Ok(())
 }
 
 /// Populate the `children` of structs in the model.
@@ -208,6 +241,7 @@ fn build_struct_type(schema_name: &str, schema: &Schema) -> Result<Struct> {
         discriminator_value: None,
         children: vec![],
         last_child: "".to_string(),
+        emit_mode: EmitMode::Emit,
     })
 }
 
@@ -563,7 +597,7 @@ mod tests {
             }
         });
         let open_api = serde_json::from_value::<OpenAPI>(value).unwrap();
-        let vim_model = load_vim_model(&open_api).unwrap();
+        let vim_model = load_vim_model(&open_api, None).unwrap();
         assert_eq!(vim_model.enums.len(), 1);
         let test_enum = vim_model.enums.get("test").unwrap();
         assert_eq!(test_enum.description, Some("test".to_string()));
@@ -617,7 +651,7 @@ mod tests {
             }
         });
         let open_api = serde_json::from_value::<OpenAPI>(value).unwrap();
-        let vim_model = load_vim_model(&open_api).unwrap();
+        let vim_model = load_vim_model(&open_api, None).unwrap();
         assert_eq!(vim_model.structs.len(), 2);
         let test_request_type = vim_model.structs.get("TestRequestType").unwrap().borrow();
         assert_eq!(test_request_type.name, "TestRequestType");
@@ -697,7 +731,7 @@ mod tests {
             }
         });
         let open_api = serde_json::from_value::<OpenAPI>(value).unwrap();
-        let vim_model = load_vim_model(&open_api).unwrap();
+        let vim_model = load_vim_model(&open_api, None).unwrap();
         assert_eq!(vim_model.structs.len(), 2);
         let test_struct = vim_model.structs.get("MethodFault").unwrap().borrow();
         assert_eq!(test_struct.name, "MethodFault");
@@ -764,7 +798,7 @@ mod tests {
             }
         });
         let open_api = serde_json::from_value::<OpenAPI>(value).unwrap();
-        let vim_model = load_vim_model(&open_api).unwrap();
+        let vim_model = load_vim_model(&open_api, None).unwrap();
         assert_eq!(vim_model.any_value_types.len(), 1);
         let boxed_type = vim_model
             .any_value_types
@@ -791,7 +825,7 @@ mod tests {
     #[test]
     fn test_load_vim_model() {
         let model = load_openapi();
-        let vim_model = load_vim_model(&model).unwrap();
+        let vim_model = load_vim_model(&model, None).unwrap();
         assert_eq!(vim_model.any_value_types.len(), 3071);
         assert_eq!(vim_model.enums.len(), 414);
         assert_eq!(
