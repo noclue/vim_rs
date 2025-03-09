@@ -14,7 +14,7 @@ pub fn emit_enums(vim_model: &Model, printer: &mut dyn Printer) -> Result<()> {
         let enum_name = to_type_name(&vim_enum.name);
         if vim_enum.name == "MoTypes_enum" {
             // Add clone and partial eq for MoTypes_enum
-            printer.println("#[derive(Clone, Debug, PartialEq, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]")?;
+            printer.println("#[derive(Clone, Debug, PartialEq, Eq, Hash, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]")?;
         } else {
             printer.println("#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]")?;
         }

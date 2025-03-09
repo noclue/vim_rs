@@ -52,6 +52,7 @@ impl<'a> TypesEmitter<'a> {
                 continue;
             }
             self.emit_struct_type(name, &struct_type)?;
+            self.emit_debug(&struct_type)?;
             self.emit_serialize(&struct_type)?;
             self.emit_deserialize(&struct_type)?;
         }
@@ -67,9 +68,7 @@ impl<'a> TypesEmitter<'a> {
         let struct_name = to_type_name(name);
         if name == "ManagedObjectReference" {
             // Add Clone, PartialEq in addition for ManagedObjectReference
-            self.printer.println("#[derive(Debug, Clone, PartialEq)]")?;
-        } else {
-            self.printer.println("#[derive(Debug)]")?;
+            self.printer.println("#[derive(Clone, PartialEq, Eq, Hash)]")?;
         }
         self.printer
             .println(&format!("pub struct {struct_name} {{"))?;
@@ -83,6 +82,23 @@ impl<'a> TypesEmitter<'a> {
         }
         self.printer.dedent();
         self.printer.println("}")?;
+        Ok(())
+    }
+
+    fn emit_debug(&mut self, vim_type: &Struct) -> Result<()> {
+        let prn = &mut *self.printer;
+        let struct_name = to_type_name(&vim_type.name);
+        prn.println(&format!("impl std::fmt::Debug for {struct_name} {{"))?;
+        prn.indent();
+        prn.println("fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {")?;
+        prn.indent();
+        prn.println("let mut writer = crate::core::helpers::FmtWriter { formatter: f };")?;
+        prn.println("serde_json::to_writer_pretty(&mut writer, self).map_err(|_| std::fmt::Error)")?;
+        prn.dedent();
+        prn.println("}")?;
+        prn.dedent();
+        prn.println("}")?;
+        prn.newline()?;
         Ok(())
     }
 
