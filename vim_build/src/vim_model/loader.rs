@@ -72,7 +72,21 @@ fn prune_structs(vim_model: &mut Model, pruned_types: Option<&[&str]>) -> Result
     for pruned_type in pruned_types {
         let pruned_type = pruned_type.to_string();
         if let Some(vim_type) = vim_model.structs.get_mut(&pruned_type) {
-            vim_type.borrow_mut().emit_mode = EmitMode::Prune;
+            {
+                let mut vim_type = vim_type.borrow_mut();
+                vim_type.emit_mode = EmitMode::Prune;
+                if let Some(description) = &vim_type.description {
+                    vim_type.description = Some(format!("The inheritance hierarchy of this ({pruned_type}) type\n\
+                    is not generated in vim_rs. Use the `type_name_` and `extra_fields_` fields\n\
+                    instead to access the details of the descendant types. Refer the API\n\
+                    documentation for details on data types and their fields.\n\n{description}"));
+                } else {
+                    vim_type.description = Some(format!("The inheritance hierarchy of this ({pruned_type}) type\n\
+                    is not generated in vim_rs. Use the `type_name_` and `extra_fields_` fields\n\
+                    instead to access the details of the descendant types. Refer the API\n\
+                    documentation for details on data types and their fields."));
+                }
+            } 
             skip_children(vim_model, &pruned_type, &pruned_type)?;
         } else { 
             error!("Pruned type not found: {}", pruned_type);

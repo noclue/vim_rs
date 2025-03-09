@@ -42,7 +42,7 @@ async fn dump_events(client: Arc<Client>, event_manager: &EventManager) -> Resul
         event_chain_id: None,
         alarm: None,
         scheduled_task: None,
-        disable_full_message: Some(true),
+        disable_full_message: Some(false),
         category: None,
         r#type: None,
         tag: None,
@@ -54,7 +54,7 @@ async fn dump_events(client: Arc<Client>, event_manager: &EventManager) -> Resul
 
     let collector = vim_rs::mo::EventHistoryCollector::new(client.clone(), &collector.value);
     for _ in 0..5 {
-        let events = collector.read_next_events(10).await?;
+        let events = collector.read_next_events(50).await?;
         match events {
             Some(events) => {
                 for event in events {
@@ -64,8 +64,11 @@ async fn dump_events(client: Arc<Client>, event_manager: &EventManager) -> Resul
                         ts=event.created_time,
                         msg=event.full_formatted_message.unwrap_or(String::from("No message")));
                 }
+                continue; // dump events with no delay
             },
-            None => info!("No events found"),
+            None => {
+                info!("No events found")
+            },
         }
         sleep(std::time::Duration::from_secs(5)).await;
     }

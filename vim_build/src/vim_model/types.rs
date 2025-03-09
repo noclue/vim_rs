@@ -88,7 +88,11 @@ impl Struct {
     }
 
     pub fn discriminator(&self) -> String {
-        self.name.clone()
+        if let Some(discriminator_value) = &self.discriminator_value {
+            discriminator_value.clone()
+        } else {
+            self.name.clone()
+        }
     }
 
     pub fn has_parent(&self) -> bool {

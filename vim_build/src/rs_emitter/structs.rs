@@ -75,9 +75,9 @@ impl<'a> TypesEmitter<'a> {
         self.printer.indent();
         self.emit_struct_all_fields(vim_type)?;
         if vim_type.emit_mode == EmitMode::Prune {
-            self.printer.println("// Discriminator value if different from the base type")?;
+            self.printer.println(&format!(r#"/// Discriminator value. If `None` during serialization "{}" will be used."#, vim_type.discriminator()))?;
             self.printer.println("pub type_name_: Option<String>,")?;
-            self.printer.println("// Extra fields not part of the base type schema")?;
+            self.printer.println("/// Extra fields not part of the base type schema")?;
             self.printer.println("pub extra_fields_: std::collections::HashMap<String, serde_json::Value>,")?;
         }
         self.printer.dedent();
@@ -145,11 +145,8 @@ impl<'a> TypesEmitter<'a> {
 
     fn emit_serialize(&mut self, vim_type: &Struct) -> Result<()> {
         let struct_name = to_type_name(&vim_type.name);
+        let discriminant = vim_type.discriminator();
         let inheritance_chain = self.vim_model.inheritance_chain(&vim_type.name)?;
-        // let mut field_count = 1;
-        // for struct_type in &inheritance_chain {
-        //     field_count += (*struct_type).borrow().fields.len();
-        // }
         self.printer
             .println(&format!("impl serde::Serialize for {struct_name} {{"))?;
         self.printer.indent();
@@ -163,11 +160,11 @@ impl<'a> TypesEmitter<'a> {
         self.printer.indent();
         self.printer.println("let mut state = serializer.serialize_map(None)?;")?;
         if vim_type.emit_mode == EmitMode::Prune {
-            self.printer.println(&format!(r#"let type_name = self.type_name_.as_deref().unwrap_or("{struct_name}");"#))?;
+            self.printer.println(&format!(r#"let type_name = self.type_name_.as_deref().unwrap_or("{discriminant}");"#))?;
             self.printer.println(r#"state.serialize_entry("_typeName", type_name)?;"#)?;
         } else {
             self.printer.println(&format!(
-                "state.serialize_entry(\"_typeName\", \"{struct_name}\")?;"
+                "state.serialize_entry(\"_typeName\", \"{discriminant}\")?;"
             ))?;
         }
         for struct_type in inheritance_chain {
@@ -217,10 +214,7 @@ impl<'a> TypesEmitter<'a> {
 
     fn emit_deserialize(&mut self, vim_type: &Struct) -> Result<()> {
         let struct_name = to_type_name(&vim_type.name);
-        let type_name = vim_type
-            .discriminator_value
-            .clone()
-            .unwrap_or(vim_type.name.clone());
+        let type_name = vim_type.discriminator();
         let inheritance_chain = self.vim_model.inheritance_chain(&vim_type.name)?;
 
         self.printer.println(&format!(
@@ -266,7 +260,7 @@ impl<'a> TypesEmitter<'a> {
             .println("fn expecting(&self, formatter: &mut Formatter) -> std::fmt::Result {")?;
         self.printer.indent();
         self.printer
-            .println(&format!(r#"formatter.write_str("A {type_name} JSON.")"#))?;
+            .println(&format!(r#"formatter.write_str("{type_name} JSON.")"#))?;
         self.printer.dedent();
         self.printer.println("}")?;
         self.printer.newline()?;
@@ -295,7 +289,7 @@ impl<'a> TypesEmitter<'a> {
             }
         }
         if vim_type.emit_mode == EmitMode::Prune {
-            self.printer.println("let mut type_name_: Option<String> = None;")?;
+            self.printer.println(&format!("let mut type_name_: Option<String> = Some(\"{type_name}\".to_string());"))?;
             self.printer.println("let mut extra_fields_: std::collections::HashMap<String, serde_json::Value> = std::collections::HashMap::new();")?;
         }
         self.printer.newline()?;
