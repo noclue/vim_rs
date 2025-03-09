@@ -1,7 +1,8 @@
 # vim_rs usage examples
 This folder contains examples of how to use the vim_rs library.
 
-The examples are arrange in a Rust workspace to facilitate faster build time and thus faster development and testing.
+The examples are arranged in a Rust workspace to facilitate faster build time and thus faster
+development and testing.
 
 To build the examples, run the following command:
 ```bash
@@ -11,7 +12,9 @@ To run the examples you need to set the following environment variables:
 - `VIM_SERVER` - FQDN of a vCenter server version 8.0.2 or later.
 - `VIM_USERNAME` - Username to authenticate with the vCenter server.
 - `VIM_PASSWORD` - Password to authenticate with the vCenter server.
-- `RUST_LOG` - Log level for the examples. Set to `debug` to see all example logs. Set to `trace` to see all communication logs.
+- `RUST_LOG` - Log level for the examples. Set to `debug` to see all example logs. Set to `trace` 
+to see all communication logs.
+- `COMPUTE_RESOURCE` - name fo a host or cluster to be used in env_browser sample
 
 To run the examples, run the following command:
 ```bash
@@ -20,6 +23,7 @@ cargo run --bin <example_name>
 Where `<example_name>` is the name of the example you want to run.
 
 The examples are:
+- `env_browser` - demonstrates how to obtain VM provisioning options on specific compute resource (host or cluster)
 - `eventster` - retrieves events from the vCenter server.
 - `mac_monitor` - monitors the MAC and IP addresses of a VM over time using PropertyCollector::WaitForUpdates` API.
 - `perf_metrics` - retrieves Virtual Machine performance metrics from the vCenter server.

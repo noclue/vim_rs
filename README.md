@@ -28,11 +28,11 @@ const APP_VERSION: &str = env!("CARGO_PKG_VERSION");
 You can add `insecure()` to you builder configuration to by pass TLS check for both
 hostname and certificate.
 
-Optionally one can set `reqwest` client through the client builder as to reuse the
-`reqwest` connection and connection settings across multiple `vim_rs` client instances.
-The `vim_rs` client abstraction is cheap. `request` HTTP client is not cheap.
+One can set `reqwest` client through the builder `http_client` method as to reuse the
+`reqwest` connection and connection settings. The `vim_rs` client abstraction is cheap.
+`reqwest` HTTP client is not cheap.
 
-Teh `vim_client` above is an `Arc` around the actual client object. Use `.clone()` to pass
+The `vim_client` above is an `Arc` around the actual client object. Use `.clone()` to pass
 it around.
 
 If the above goes well you have a connection to the vCenter server with initialized
@@ -51,14 +51,13 @@ trick:
 let content = client.service_content();
 let property_collector = PropertyCollector::new(client.clone(), &content.property_collector.value);
 ```
-Note that the `PropertyCollector` is always present in the service content. Other object
+Note that the `PropertyCollector` is always present in the service content. Other objects
 may be optional and a check is to be made if the reference is set.
-
 
 ## Invoking APIs
 This is simple and intuitive once you have remote stub from the above step.
 
-The vim API has properties and methods. Both are exposed in the stubs. Properties are
+The VIM API has properties and methods. Both are exposed in the stubs. Properties are
 essentially remote methods that receive no parameters.
 
 ```rust
@@ -87,11 +86,13 @@ and big inventory of boxed array and primitive data types used with property col
 other dynamic APIs leverages enums with the synthetic `ValueElements` types. The VIM `Any`
 type is renamed to `VimAny` and is too represented as an `enum`.
 
-Working wit the trait system is a bit more complex. So lets look in details.
+Working with the trait system is a bit more complex. 
+
+Lets look in the details.
 
 ### Data structs
 
-Firstly for every structure type from VIM API we have a correspodning Rust struct type.
+Firstly for every structure type from VIM API we have a corresponding Rust struct type.
 For example a network card could be described with `VirtualE1000` structure. The looks
 roughly as follows:
 
@@ -122,7 +123,7 @@ form a cycle `Box` indirection is used. For fields of polymorphic types i.e. tho
 have children a `dyn *Trait` type is used which refers to a trait type implemented by all
 alterntive structures (`Option<Box<dyn DescriptionTrait>>`).
 
-Structure types support serde JSON serializaiton and deserializaiton as well as debug
+Structure types support serde JSON serialization and deserialization as well as debug
 print.
 
 ### Traits
@@ -140,7 +141,7 @@ For casting to concrete structure types all traits in the VIM aPI have `AsAny` t
 bound. `AsAny` allows conversion of reference or Box to reference to `&dyn Any` or
 `&Box<dyn Any>`. Further a developer can use `Any` or `Box` methods to attempt fallible
 conversion to their target type. For example converting `VirtualDeviceTrait` reference to
-`VirtualE1000` structure is done as follows (unwrap should be replaced with approproaite
+`VirtualE1000` structure is done as follows (unwrap should be replaced with appropriate
 handling):
 
 ```rust
@@ -150,18 +151,18 @@ let e1000 = vd[0].as_any_ref().downcast_ref::<VirtualE1000>().unwrap();
 Sometimes we want to convert from one trait to another. For example if we want to reads
 the mac address of any network card device in a VM we need to convert `VirtualDeviceTrait`
 into `VirtualEthernetCardTrait`. There are 2 options provided with the `CastInto` trait.
-One option is to covert to `Box` and the other is to convered a borrowed reference.
+One option is to covert to `Box` and the other is to convert a borrowed reference.
 
-In the examples below we see how to convert `convert Box<dyn VirtualDevice>` into refrence
+In the examples below we see how to convert `convert Box<dyn VirtualDevice>` into reference
 and `Box` respectively:
 ```rust
 let eth: &dyn VirtualEthernetCardTrait = vd.as_ref().into_ref().unwrap();
 
 let eth: Box<dyn VirtualEthernetCardTrait> = vd.into_box().unwrap();
 ```
-As with the Rust `TryInto` and `TryFrom` traits `CastInto` has a mirror trait `CastFrom`.
+As Rust `TryInto` mirrors the `TryFrom` trait so `CastInto` has a mirror `CastFrom` trait.
 
-Last but not least the VIM trait provide read-only accessors to the fields of the type
+Last but not least the VIM trait provides read-only accessors to the fields of the type
 they represent. For example the `VirtualDeviceTrait` looks as follows:
 
 ```rust
@@ -180,8 +181,42 @@ pub trait VirtualDeviceTrait : super::traits::DataObjectTrait {
 As we see the same types are used as in the struct types. The `get_*` methods return
 borrowed references to complex types.
 
-Note that to keep the compilaiton times and executable size under control `PartialEq`,
-`Eq`, `Clone` and `Default` traits are not implemented on VIM struct types at this stage.
+Note that to keep the compilation time and executable size under control `PartialEq`,
+`Eq`, `Hash`, `Clone` and `Default` traits are not implemented on VIM struct types at this stage.
+
+### Pruned Types
+
+As discussed the VIM API is big and deep inheritance hierarchy. To limit the size of the library a
+number of optimizations and compromises are made. One specific optimization has direct impact on the
+programming module. The descendant data types of `MethodFault` and `Event` types are not generated 
+(See [PRUNED_TYPES](vim_build/src/main.rs)). This reduces the generated code and compilation times
+significantly at the cost of some utility.
+
+The `MethodFault` and `Event` types do not have traits and no descendant types are generated.
+Instead both types receive 2 additional members:
+
+* `type_name_: Option<String>` - holding the discriminator value e.g. `EventEx`, `NotFound` etc.
+* `extra_fields_: HashMap<String, serde_json::Value>` - holding any data field that are not present
+in the base type e.g. `eventTypeId`.
+
+Note that both `type_name_` and `extra_fields_` content uses the API native names in camelCase
+convention instead ot eh Rust friendly names used throughout vim_rs.
+
+Below is a snippet how to decode the semantic event type using `type_name_` and `extra_fields_`:
+
+```rust
+fn get_event_type_id(event: &Event) -> String {
+    let Some(ref type_name) = event.type_name_ else {
+        return "Event".to_string();
+    };
+    if type_name == "EventEx" || type_name == "ExtendedEvent" {
+        if let Some(event_type_id) = event.extra_fields_["eventTypeId"].as_str() {
+            return event_type_id.to_string();
+        }
+    }
+    type_name.clone()
+}
+```
 
 # Repo topology & maintenance
 
@@ -189,7 +224,7 @@ There are few crates:
 
 1. `vim_rs` - the library code for calling the VIM API. Contains data types and stubs for
    the VIM API
-2. `gen` - a code generation tool that reads VI-JSON OpenAPI specs and turns it to library
+2. `vim_build` - a code generation tool that reads VI-JSON OpenAPI specs and turns it to library
    code
 3. `examples` - small programs demonstrating the use of the VIM API
 5. `openapi30` - an indigenous OpenAPI 3.0.x data library used to load the OpenAPI docs.
@@ -205,11 +240,11 @@ minutes. Time between successive runs of tests from the IDE may take 1-2 minutes
 
 ## Generating bindings
 
-To generate new `vim` content run `gen/src/main`.
+To generate new `vim` content run `vim_build/src/main`.
 
 ## Updating the OpenAPI specification
 
-The OpenAPI specification is held in `gen/data`. We use a JSON conversion of the original
+The OpenAPI specification is held in `vim_build/data`. We use a JSON conversion of the original
 specification as `DatastoreAccessible_enum` with values `True` and `False` is ambiguously
 rendered in YAML i.e. as per the YAML specs the values are interpreted as boolean
 constants and not strings.
@@ -246,7 +281,7 @@ The `vim_rs` crate has few packages worth understanding:
     * `as_any.rs`, `vim_any.rs` and `convert.rs` define utility types that are agnostic of
       code generation.
  
-## `gen` structure
+## `vim_build` structure
 
 The generator has three packages:
 
@@ -254,5 +289,4 @@ The generator has three packages:
    convert OpenAPI 3.0.x. The loader.rs converts the OpenAPI model to the Rust like model.
 1. `rs_emitter` - contains code generation logic reading from `vim_model` and rendering
    the actual Rust code for `vim` crate.
-
-In addition `printer.rs` provides basic wrapper on an output stream for code generation.
+1. `printer.rs` provides basic wrapper on an output stream for code generation.
