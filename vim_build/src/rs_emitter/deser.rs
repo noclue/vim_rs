@@ -140,7 +140,7 @@ impl<'de> de::Visitor<'de> for VimAnyVisitor {
             // Attempt to deserialize object from type_name and map
             if let Some(dsfunc) = get_object_deserializer(&type_name) {
                 let ds = de::value::MapAccessDeserializer::new(map);
-                return dsfunc(ds, &type_name).map_err(de::Error::custom);
+                return dsfunc(ds).map_err(de::Error::custom);
             } else {
                 let Some(dsfunc) = get_value_deserializer(&type_name) else {
                     return Err(de::Error::custom(format!("Unknown variant: {}", type_name)));
@@ -161,7 +161,7 @@ impl<'de> de::Visitor<'de> for VimAnyVisitor {
         if let Some(dsfunc) = get_object_deserializer(&type_name) {
             let map = de::value::MapDeserializer::new(map_data.into_iter());
             let ds = de::value::MapAccessDeserializer::new(map);
-            return dsfunc(ds, &type_name).map_err(de::Error::custom);
+            return dsfunc(ds).map_err(de::Error::custom);
         }
 
         // Process value elements
@@ -185,7 +185,7 @@ impl<'de> de::Visitor<'de> for VimAnyVisitor {
     /// Renders a hierarchical match statement that dispatches to the individual names.
     fn render_match_tree(&mut self, group_data: Vec<GroupInfo>) -> Result<()> {
         match self.deserialize_renderer {
-            ItemRenderer::Object => self.printer.println("fn get_object_deserializer<'de, A: de::MapAccess<'de>>(type_name: &str) -> Option<fn(de::value::MapAccessDeserializer<A>, &str) -> Result<VimAny, A::Error>> {")?,
+            ItemRenderer::Object => self.printer.println("fn get_object_deserializer<'de, A: de::MapAccess<'de>>(type_name: &str) -> Option<fn(de::value::MapAccessDeserializer<A>) -> Result<VimAny, A::Error>> {")?,
             ItemRenderer::Value => self.printer.println("pub(crate) fn get_value_deserializer(type_name: &str) -> Option<fn(&serde_json::value::RawValue) -> Result<ValueElements, serde_json::Error>> {")?,
         }
         self.printer.indent();
@@ -224,7 +224,7 @@ impl<'de> de::Visitor<'de> for VimAnyVisitor {
                 continue;
             };
             match self.deserialize_renderer {
-                ItemRenderer::Object => self.printer.println(&format!("fn get_object_deserializer_{}<'de, A: de::MapAccess<'de>>(type_name: &str) -> Option<fn(de::value::MapAccessDeserializer<A>, &str) -> Result<VimAny, A::Error>> {{", group.length))?,
+                ItemRenderer::Object => self.printer.println(&format!("fn get_object_deserializer_{}<'de, A: de::MapAccess<'de>>(type_name: &str) -> Option<fn(de::value::MapAccessDeserializer<A>) -> Result<VimAny, A::Error>> {{", group.length))?,
                 ItemRenderer::Value => self.printer.println(&format!("fn get_value_deserializer_{}(type_name: &str) -> Option<fn(&serde_json::value::RawValue) -> Result<ValueElements, serde_json::Error>> {{", group.length))?,
             }
             self.printer.indent();
@@ -269,15 +269,15 @@ impl<'de> de::Visitor<'de> for VimAnyVisitor {
         };
         let struct_type = struct_cell.borrow();
         if let EmitMode::Skip(ref prune_type) = struct_type.deref().emit_mode {
-            self.printer.println("Some(|ds, type_name| {")?;
+            self.printer.println("Some(|ds| {")?;
             self.printer.indent();
             self.printer.println(&format!(
-                "let v = __{}Visitor(Some(type_name.to_string()));",
-                to_type_name(prune_type)
+                "let v = __{}Visitor(Some(struct_enum::StructType::{}));",
+                to_type_name(prune_type), to_type_name(name)
             ))?;
             self.printer.println("Ok(VimAny::Object(Box::new(ds.deserialize_map(v)?)))")?;
         } else {
-            self.printer.println("Some(|ds, _| {")?;
+            self.printer.println("Some(|ds| {")?;
             self.printer.indent();
             self.printer.println(&format!(
                 "let obj: {} = de::Deserialize::deserialize(ds)?;",

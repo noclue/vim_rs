@@ -195,27 +195,42 @@ significantly at the cost of some utility.
 The `MethodFault` and `Event` types do not have traits and no descendant types are generated.
 Instead both types receive 2 additional members:
 
-* `type_name_: Option<String>` - holding the discriminator value e.g. `EventEx`, `NotFound` etc.
+* `type_: Option<StructType>` - holding the discriminator value e.g. `EventEx`, `NotFound` etc.
 * `extra_fields_: HashMap<String, serde_json::Value>` - holding any data field that are not present
 in the base type e.g. `eventTypeId`.
 
-Note that both `type_name_` and `extra_fields_` content uses the API native names in camelCase
-convention instead ot eh Rust friendly names used throughout vim_rs.
+Note that `extra_fields_` content uses the API native names in camelCase convention instead of the
+Rust friendly names used throughout vim_rs.
 
 Below is a snippet how to decode the semantic event type using `type_name_` and `extra_fields_`:
 
 ```rust
 fn get_event_type_id(event: &Event) -> String {
-    let Some(ref type_name) = event.type_name_ else {
+    let Some(ref type_) = event.type_ else {
         return "Event".to_string();
     };
-    if type_name == "EventEx" || type_name == "ExtendedEvent" {
+    if type_.child_of(&StructType::EventEx) || type_.child_of(&StructType::ExtendedEvent) {
         if let Some(event_type_id) = event.extra_fields_["eventTypeId"].as_str() {
             return event_type_id.to_string();
         }
     }
-    type_name.clone()
+    let s: &'static str = type_.into();
+    s.to_string()
 }
+```
+
+Note that `StructType` implements `child_of` method allowing to check if a type is same or
+descendant of another.
+
+In our example above we check if the event is `EventEx` or `ExtendedEvent` as to access the 
+`eventTypeId` field.
+
+Sometimes one will want to convert part of the dynamic like objects into proper binding. For example
+the  `managedObject` in the `ExtendedEvent` can be read into `ManagedObjectReference` as follows:
+
+```rust
+        let value = event.extra_fields_["managedObject"].clone();
+        let managed_object: ManagedObjectReference = serde_json::from_value(value)?;
 ```
 
 # Repo topology & maintenance

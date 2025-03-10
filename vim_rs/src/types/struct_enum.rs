@@ -9,7 +9,7 @@
 /// implemented using jump tables i.e. O(1) complexity.
 /// 1. Parent child relationship can be checked with range check.
 /// 1. Values are 32-bit integers that can be efficiently compared.
-#[derive(Debug, Clone, PartialEq, Eq, Hash, PartialOrd, strum_macros::IntoStaticStr)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash, PartialOrd, serde::Serialize, serde::Deserialize, strum_macros::IntoStaticStr)]
 #[repr(u32)]
 pub enum StructType {
     ManagedObjectReference,
@@ -25,23 +25,30 @@ pub enum StructType {
     BatchResult,
     Capability,
     ClusterComputeResourceClusterConfigResult,
+    #[serde(rename = "ClusterComputeResourceDVSSetting")]
     #[strum(serialize = "ClusterComputeResourceDVSSetting")]
     ClusterComputeResourceDvsSetting,
+    #[serde(rename = "ClusterComputeResourceDVSSettingDVPortgroupToServiceMapping")]
     #[strum(serialize = "ClusterComputeResourceDVSSettingDVPortgroupToServiceMapping")]
     ClusterComputeResourceDvsSettingDvPortgroupToServiceMapping,
     ClusterComputeResourceDvsProfile,
+    #[serde(rename = "ClusterComputeResourceDvsProfileDVPortgroupSpecToServiceMapping")]
     #[strum(serialize = "ClusterComputeResourceDvsProfileDVPortgroupSpecToServiceMapping")]
     ClusterComputeResourceDvsProfileDvPortgroupSpecToServiceMapping,
+    #[serde(rename = "ClusterComputeResourceHCIConfigInfo")]
     #[strum(serialize = "ClusterComputeResourceHCIConfigInfo")]
     ClusterComputeResourceHciConfigInfo,
+    #[serde(rename = "ClusterComputeResourceHCIConfigSpec")]
     #[strum(serialize = "ClusterComputeResourceHCIConfigSpec")]
     ClusterComputeResourceHciConfigSpec,
     ClusterComputeResourceHostConfigurationInput,
     ClusterComputeResourceHostConfigurationProfile,
     ClusterComputeResourceHostVmkNicInfo,
+    #[serde(rename = "ClusterComputeResourceVCProfile")]
     #[strum(serialize = "ClusterComputeResourceVCProfile")]
     ClusterComputeResourceVcProfile,
     ClusterComputeResourceValidationResultBase,
+    #[serde(rename = "ClusterComputeResourceDVSConfigurationValidation")]
     #[strum(serialize = "ClusterComputeResourceDVSConfigurationValidation")]
     ClusterComputeResourceDvsConfigurationValidation,
     ClusterComputeResourceHostConfigurationValidation,
@@ -50,6 +57,7 @@ pub enum StructType {
     ClusterConfigInfoEx,
     ComputeResourceConfigSpec,
     ClusterConfigSpecEx,
+    #[serde(rename = "ComputeResourceHostSPBMLicenseInfo")]
     #[strum(serialize = "ComputeResourceHostSPBMLicenseInfo")]
     ComputeResourceHostSpbmLicenseInfo,
     ComputeResourceSummary,
@@ -77,9 +85,11 @@ pub enum StructType {
     DatastoreNamespaceManagerDirectoryInfo,
     Description,
     ElementDescription,
+    #[serde(rename = "EVCMode")]
     #[strum(serialize = "EVCMode")]
     EvcMode,
     ExtendedElementDescription,
+    #[serde(rename = "FeatureEVCMode")]
     #[strum(serialize = "FeatureEVCMode")]
     FeatureEvcMode,
     OptionDef,
@@ -95,53 +105,76 @@ pub enum StructType {
     DiagnosticManagerBundleInfo,
     DiagnosticManagerLogDescriptor,
     DiagnosticManagerLogHeader,
+    #[serde(rename = "DVSBackupRestoreCapability")]
     #[strum(serialize = "DVSBackupRestoreCapability")]
     DvsBackupRestoreCapability,
+    #[serde(rename = "DVSCapability")]
     #[strum(serialize = "DVSCapability")]
     DvsCapability,
+    #[serde(rename = "DVSConfigInfo")]
     #[strum(serialize = "DVSConfigInfo")]
     DvsConfigInfo,
+    #[serde(rename = "VMwareDVSConfigInfo")]
     #[strum(serialize = "VMwareDVSConfigInfo")]
     VMwareDvsConfigInfo,
+    #[serde(rename = "DVSConfigSpec")]
     #[strum(serialize = "DVSConfigSpec")]
     DvsConfigSpec,
+    #[serde(rename = "VMwareDVSConfigSpec")]
     #[strum(serialize = "VMwareDVSConfigSpec")]
     VMwareDvsConfigSpec,
+    #[serde(rename = "DVSContactInfo")]
     #[strum(serialize = "DVSContactInfo")]
     DvsContactInfo,
+    #[serde(rename = "DVSCreateSpec")]
     #[strum(serialize = "DVSCreateSpec")]
     DvsCreateSpec,
+    #[serde(rename = "DVSFeatureCapability")]
     #[strum(serialize = "DVSFeatureCapability")]
     DvsFeatureCapability,
+    #[serde(rename = "VMwareDVSFeatureCapability")]
     #[strum(serialize = "VMwareDVSFeatureCapability")]
     VMwareDvsFeatureCapability,
+    #[serde(rename = "DVSHealthCheckConfig")]
     #[strum(serialize = "DVSHealthCheckConfig")]
     DvsHealthCheckConfig,
+    #[serde(rename = "VMwareDVSHealthCheckConfig")]
     #[strum(serialize = "VMwareDVSHealthCheckConfig")]
     VMwareDvsHealthCheckConfig,
+    #[serde(rename = "VMwareDVSTeamingHealthCheckConfig")]
     #[strum(serialize = "VMwareDVSTeamingHealthCheckConfig")]
     VMwareDvsTeamingHealthCheckConfig,
+    #[serde(rename = "VMwareDVSVlanMtuHealthCheckConfig")]
     #[strum(serialize = "VMwareDVSVlanMtuHealthCheckConfig")]
     VMwareDvsVlanMtuHealthCheckConfig,
+    #[serde(rename = "DVSHealthCheckCapability")]
     #[strum(serialize = "DVSHealthCheckCapability")]
     DvsHealthCheckCapability,
+    #[serde(rename = "VMwareDVSHealthCheckCapability")]
     #[strum(serialize = "VMwareDVSHealthCheckCapability")]
     VMwareDvsHealthCheckCapability,
     DvsHostInfrastructureTrafficResource,
     DvsHostInfrastructureTrafficResourceAllocation,
+    #[serde(rename = "DVSNetworkResourceManagementCapability")]
     #[strum(serialize = "DVSNetworkResourceManagementCapability")]
     DvsNetworkResourceManagementCapability,
     DvsResourceRuntimeInfo,
+    #[serde(rename = "DVSRollbackCapability")]
     #[strum(serialize = "DVSRollbackCapability")]
     DvsRollbackCapability,
+    #[serde(rename = "DVSRuntimeInfo")]
     #[strum(serialize = "DVSRuntimeInfo")]
     DvsRuntimeInfo,
+    #[serde(rename = "DVSSummary")]
     #[strum(serialize = "DVSSummary")]
     DvsSummary,
+    #[serde(rename = "DVSPolicy")]
     #[strum(serialize = "DVSPolicy")]
     DvsPolicy,
+    #[serde(rename = "DVSUplinkPortPolicy")]
     #[strum(serialize = "DVSUplinkPortPolicy")]
     DvsUplinkPortPolicy,
+    #[serde(rename = "DVSNameArrayUplinkPortPolicy")]
     #[strum(serialize = "DVSNameArrayUplinkPortPolicy")]
     DvsNameArrayUplinkPortPolicy,
     EnumDescription,
@@ -158,6 +191,7 @@ pub enum StructType {
     ExtensionTaskTypeInfo,
     ExtensionManagerIpAllocationUsage,
     FaultsByHost,
+    #[serde(rename = "FaultsByVM")]
     #[strum(serialize = "FaultsByVM")]
     FaultsByVm,
     FileLockInfo,
@@ -197,16 +231,22 @@ pub enum StructType {
     DvsTrafficFilterConfig,
     DvsTrafficFilterConfigSpec,
     DvsFilterPolicy,
+    #[serde(rename = "DVSTrafficShapingPolicy")]
     #[strum(serialize = "DVSTrafficShapingPolicy")]
     DvsTrafficShapingPolicy,
+    #[serde(rename = "DVSVendorSpecificConfig")]
     #[strum(serialize = "DVSVendorSpecificConfig")]
     DvsVendorSpecificConfig,
+    #[serde(rename = "DVSFailureCriteria")]
     #[strum(serialize = "DVSFailureCriteria")]
     DvsFailureCriteria,
+    #[serde(rename = "DVSMacLearningPolicy")]
     #[strum(serialize = "DVSMacLearningPolicy")]
     DvsMacLearningPolicy,
+    #[serde(rename = "DVSMacManagementPolicy")]
     #[strum(serialize = "DVSMacManagementPolicy")]
     DvsMacManagementPolicy,
+    #[serde(rename = "DVSSecurityPolicy")]
     #[strum(serialize = "DVSSecurityPolicy")]
     DvsSecurityPolicy,
     VMwareUplinkLacpPolicy,
@@ -279,11 +319,13 @@ pub enum StructType {
     PerformanceManagerCounterLevelMapping,
     PerfEntityMetricBase,
     PerfEntityMetric,
+    #[serde(rename = "PerfEntityMetricCSV")]
     #[strum(serialize = "PerfEntityMetricCSV")]
     PerfEntityMetricCsv,
     PerfMetricId,
     PerfMetricSeries,
     PerfMetricIntSeries,
+    #[serde(rename = "PerfMetricSeriesCSV")]
     #[strum(serialize = "PerfMetricSeriesCSV")]
     PerfMetricSeriesCsv,
     PerfProviderSummary,
@@ -303,11 +345,14 @@ pub enum StructType {
     ResourcePoolSummary,
     VirtualAppSummary,
     ResourcePoolQuickStats,
+    #[serde(rename = "SDDCBase")]
     #[strum(serialize = "SDDCBase")]
     SddcBase,
     SelectionSet,
+    #[serde(rename = "DVPortgroupSelection")]
     #[strum(serialize = "DVPortgroupSelection")]
     DvPortgroupSelection,
+    #[serde(rename = "DVSSelection")]
     #[strum(serialize = "DVSSelection")]
     DvsSelection,
     HostVMotionCompatibility,
@@ -316,6 +361,7 @@ pub enum StructType {
     ServiceLocator,
     ServiceLocatorCredential,
     ServiceLocatorNamePassword,
+    #[serde(rename = "ServiceLocatorSAMLCredential")]
     #[strum(serialize = "ServiceLocatorSAMLCredential")]
     ServiceLocatorSamlCredential,
     ServiceManagerServiceInfo,
@@ -328,14 +374,19 @@ pub enum StructType {
     SharesOption,
     SiteInfo,
     StoragePodSummary,
+    #[serde(rename = "StorageIOAllocationInfo")]
     #[strum(serialize = "StorageIOAllocationInfo")]
     StorageIoAllocationInfo,
+    #[serde(rename = "StorageIOAllocationOption")]
     #[strum(serialize = "StorageIOAllocationOption")]
     StorageIoAllocationOption,
+    #[serde(rename = "StorageIORMInfo")]
     #[strum(serialize = "StorageIORMInfo")]
     StorageIormInfo,
+    #[serde(rename = "StorageIORMConfigOption")]
     #[strum(serialize = "StorageIORMConfigOption")]
     StorageIormConfigOption,
+    #[serde(rename = "StorageIORMConfigSpec")]
     #[strum(serialize = "StorageIORMConfigSpec")]
     StorageIormConfigSpec,
     PodStorageDrsEntry,
@@ -360,12 +411,16 @@ pub enum StructType {
     UserSession,
     VVolVmConfigFileUpdateResult,
     VVolVmConfigFileUpdateResultFailedVmConfigFileInfo,
+    #[serde(rename = "VASAStorageArray")]
     #[strum(serialize = "VASAStorageArray")]
     VasaStorageArray,
+    #[serde(rename = "VASAStorageArrayDiscoveryFcTransport")]
     #[strum(serialize = "VASAStorageArrayDiscoveryFcTransport")]
     VasaStorageArrayDiscoveryFcTransport,
+    #[serde(rename = "VASAStorageArrayDiscoveryIpTransport")]
     #[strum(serialize = "VASAStorageArrayDiscoveryIpTransport")]
     VasaStorageArrayDiscoveryIpTransport,
+    #[serde(rename = "VASAStorageArrayDiscoverySvcInfo")]
     #[strum(serialize = "VASAStorageArrayDiscoverySvcInfo")]
     VasaStorageArrayDiscoverySvcInfo,
     VasaProviderContainerSpec,
@@ -389,6 +444,7 @@ pub enum StructType {
     VirtualMachineWipeResult,
     VsanUpgradeSystemNetworkPartitionInfo,
     VsanUpgradeSystemPreflightCheckIssue,
+    #[serde(rename = "VsanUpgradeSystemAPIBrokenIssue")]
     #[strum(serialize = "VsanUpgradeSystemAPIBrokenIssue")]
     VsanUpgradeSystemApiBrokenIssue,
     VsanUpgradeSystemAutoClaimEnabledOnHostsIssue,
@@ -409,6 +465,7 @@ pub enum StructType {
     MethodAction,
     RunScriptAction,
     SendEmailAction,
+    #[serde(rename = "SendSNMPAction")]
     #[strum(serialize = "SendSNMPAction")]
     SendSnmpAction,
     MethodActionArgument,
@@ -478,8 +535,10 @@ pub enum StructType {
     ClusterDrsMigration,
     ClusterDrsRecommendation,
     ClusterDrsVmConfigInfo,
+    #[serde(rename = "ClusterEVCManagerCheckResult")]
     #[strum(serialize = "ClusterEVCManagerCheckResult")]
     ClusterEvcManagerCheckResult,
+    #[serde(rename = "ClusterEVCManagerEVCState")]
     #[strum(serialize = "ClusterEVCManagerEVCState")]
     ClusterEvcManagerEvcState,
     ClusterEnterMaintenanceResult,
@@ -515,34 +574,46 @@ pub enum StructType {
     ClusterVmReadiness,
     ClusterVmToolsMonitoringSettings,
     DistributedVirtualPort,
+    #[serde(rename = "DVPortConfigInfo")]
     #[strum(serialize = "DVPortConfigInfo")]
     DvPortConfigInfo,
+    #[serde(rename = "DVPortConfigSpec")]
     #[strum(serialize = "DVPortConfigSpec")]
     DvPortConfigSpec,
     DvsFilterParameter,
+    #[serde(rename = "DVSHostLocalPortInfo")]
     #[strum(serialize = "DVSHostLocalPortInfo")]
     DvsHostLocalPortInfo,
+    #[serde(rename = "DVPortStatus")]
     #[strum(serialize = "DVPortStatus")]
     DvPortStatus,
+    #[serde(rename = "DVPortSetting")]
     #[strum(serialize = "DVPortSetting")]
     DvPortSetting,
+    #[serde(rename = "VMwareDVSPortSetting")]
     #[strum(serialize = "VMwareDVSPortSetting")]
     VMwareDvsPortSetting,
+    #[serde(rename = "DVPortState")]
     #[strum(serialize = "DVPortState")]
     DvPortState,
+    #[serde(rename = "DVPortgroupConfigInfo")]
     #[strum(serialize = "DVPortgroupConfigInfo")]
     DvPortgroupConfigInfo,
+    #[serde(rename = "DVPortgroupConfigSpec")]
     #[strum(serialize = "DVPortgroupConfigSpec")]
     DvPortgroupConfigSpec,
     DistributedVirtualPortgroupNsxPortgroupOperationResult,
+    #[serde(rename = "DVPortgroupPolicy")]
     #[strum(serialize = "DVPortgroupPolicy")]
     DvPortgroupPolicy,
+    #[serde(rename = "VMwareDVSPortgroupPolicy")]
     #[strum(serialize = "VMwareDVSPortgroupPolicy")]
     VMwareDvsPortgroupPolicy,
     DistributedVirtualPortgroupProblem,
     DistributedVirtualPortgroupInfo,
     DistributedVirtualSwitchInfo,
     DistributedVirtualSwitchManagerCompatibilityResult,
+    #[serde(rename = "DVSManagerDvsConfigTarget")]
     #[strum(serialize = "DVSManagerDvsConfigTarget")]
     DvsManagerDvsConfigTarget,
     DistributedVirtualSwitchManagerDvsProductSpec,
@@ -552,6 +623,7 @@ pub enum StructType {
     DistributedVirtualSwitchManagerHostContainerFilter,
     DistributedVirtualSwitchManagerHostDvsMembershipFilter,
     DistributedVirtualSwitchManagerImportResult,
+    #[serde(rename = "DVSManagerPhysicalNicsList")]
     #[strum(serialize = "DVSManagerPhysicalNicsList")]
     DvsManagerPhysicalNicsList,
     EntityBackup,
@@ -563,10 +635,13 @@ pub enum StructType {
     DistributedVirtualSwitchHostMemberConfigSpec,
     HostMemberHealthCheckResult,
     HostMemberUplinkHealthCheckResult,
+    #[serde(rename = "VMwareDVSMtuHealthCheckResult")]
     #[strum(serialize = "VMwareDVSMtuHealthCheckResult")]
     VMwareDvsMtuHealthCheckResult,
+    #[serde(rename = "VMwareDVSVlanHealthCheckResult")]
     #[strum(serialize = "VMwareDVSVlanHealthCheckResult")]
     VMwareDvsVlanHealthCheckResult,
+    #[serde(rename = "VMwareDVSTeamingHealthCheckResult")]
     #[strum(serialize = "VMwareDVSTeamingHealthCheckResult")]
     VMwareDvsTeamingHealthCheckResult,
     DistributedVirtualSwitchHostMemberPnicSpec,
@@ -576,10 +651,13 @@ pub enum StructType {
     DistributedVirtualSwitchHostProductSpec,
     DistributedVirtualSwitchKeyedOpaqueBlob,
     DistributedVirtualSwitchNetworkOffloadSpec,
+    #[serde(rename = "DVSNetworkResourcePool")]
     #[strum(serialize = "DVSNetworkResourcePool")]
     DvsNetworkResourcePool,
+    #[serde(rename = "DVSNetworkResourcePoolAllocationInfo")]
     #[strum(serialize = "DVSNetworkResourcePoolAllocationInfo")]
     DvsNetworkResourcePoolAllocationInfo,
+    #[serde(rename = "DVSNetworkResourcePoolConfigSpec")]
     #[strum(serialize = "DVSNetworkResourcePoolConfigSpec")]
     DvsNetworkResourcePoolConfigSpec,
     DistributedVirtualSwitchPortConnectee,
@@ -603,6 +681,7 @@ pub enum StructType {
     DvsMacNetworkRuleQualifier,
     DvsSystemTrafficNetworkRuleQualifier,
     DvsTrafficRuleset,
+    #[serde(rename = "DVSVmVnicNetworkResourcePool")]
     #[strum(serialize = "DVSVmVnicNetworkResourcePool")]
     DvsVmVnicNetworkResourcePool,
     DvsVmVnicResourcePoolConfigSpec,
@@ -618,12 +697,16 @@ pub enum StructType {
     VMwareDvsLagIpfixConfig,
     VMwareDvsLagVlanConfig,
     VMwareDvsMtuCapability,
+    #[serde(rename = "VMwareDVSPvlanConfigSpec")]
     #[strum(serialize = "VMwareDVSPvlanConfigSpec")]
     VMwareDvsPvlanConfigSpec,
+    #[serde(rename = "VMwareDVSPvlanMapEntry")]
     #[strum(serialize = "VMwareDVSPvlanMapEntry")]
     VMwareDvsPvlanMapEntry,
+    #[serde(rename = "VMwareDVSVspanConfigSpec")]
     #[strum(serialize = "VMwareDVSVspanConfigSpec")]
     VMwareDvsVspanConfigSpec,
+    #[serde(rename = "VMwareDVSVspanCapability")]
     #[strum(serialize = "VMwareDVSVspanCapability")]
     VMwareDvsVspanCapability,
     VMwareVspanPort,
@@ -654,6 +737,488 @@ pub enum StructType {
     ChangesInfoEventArgument,
     DvsOutOfSyncHostArgument,
     Event,
+    AlarmEvent,
+    AlarmAcknowledgedEvent,
+    AlarmActionTriggeredEvent,
+    AlarmClearedEvent,
+    AlarmCreatedEvent,
+    AlarmEmailCompletedEvent,
+    AlarmEmailFailedEvent,
+    AlarmReconfiguredEvent,
+    AlarmRemovedEvent,
+    AlarmScriptCompleteEvent,
+    AlarmScriptFailedEvent,
+    AlarmSnmpCompletedEvent,
+    AlarmSnmpFailedEvent,
+    AlarmStatusChangedEvent,
+    AuthorizationEvent,
+    PermissionEvent,
+    PermissionAddedEvent,
+    PermissionRemovedEvent,
+    PermissionUpdatedEvent,
+    RoleEvent,
+    RoleAddedEvent,
+    RoleRemovedEvent,
+    RoleUpdatedEvent,
+    ClusterEvent,
+    ClusterComplianceCheckedEvent,
+    ClusterCreatedEvent,
+    ClusterDestroyedEvent,
+    ClusterOvercommittedEvent,
+    HostOvercommittedEvent,
+    ClusterReconfiguredEvent,
+    ClusterStatusChangedEvent,
+    HostStatusChangedEvent,
+    DasAdmissionControlDisabledEvent,
+    DasAdmissionControlEnabledEvent,
+    DasAgentFoundEvent,
+    DasAgentUnavailableEvent,
+    DasClusterIsolatedEvent,
+    DasDisabledEvent,
+    DasEnabledEvent,
+    DasHostFailedEvent,
+    DasHostIsolatedEvent,
+    DrsDisabledEvent,
+    DrsEnabledEvent,
+    DrsInvocationFailedEvent,
+    DrsRecoveredFromFailureEvent,
+    FailoverLevelRestored,
+    HostMonitoringStateChangedEvent,
+    InsufficientFailoverResourcesEvent,
+    VmHealthMonitoringStateChangedEvent,
+    CustomFieldEvent,
+    CustomFieldDefEvent,
+    CustomFieldDefAddedEvent,
+    CustomFieldDefRemovedEvent,
+    CustomFieldDefRenamedEvent,
+    CustomFieldValueChangedEvent,
+    #[serde(rename = "DVPortgroupEvent")]
+    #[strum(serialize = "DVPortgroupEvent")]
+    DvPortgroupEvent,
+    #[serde(rename = "DVPortgroupCreatedEvent")]
+    #[strum(serialize = "DVPortgroupCreatedEvent")]
+    DvPortgroupCreatedEvent,
+    #[serde(rename = "DVPortgroupDestroyedEvent")]
+    #[strum(serialize = "DVPortgroupDestroyedEvent")]
+    DvPortgroupDestroyedEvent,
+    #[serde(rename = "DVPortgroupReconfiguredEvent")]
+    #[strum(serialize = "DVPortgroupReconfiguredEvent")]
+    DvPortgroupReconfiguredEvent,
+    #[serde(rename = "DVPortgroupRenamedEvent")]
+    #[strum(serialize = "DVPortgroupRenamedEvent")]
+    DvPortgroupRenamedEvent,
+    DvpgImportEvent,
+    DvpgRestoreEvent,
+    DatacenterEvent,
+    DatacenterCreatedEvent,
+    DatacenterRenamedEvent,
+    DatastoreEvent,
+    DatastoreCapacityIncreasedEvent,
+    DatastoreDestroyedEvent,
+    DatastoreDuplicatedEvent,
+    DatastoreFileEvent,
+    DatastoreFileCopiedEvent,
+    DatastoreFileDeletedEvent,
+    DatastoreFileMovedEvent,
+    #[serde(rename = "DatastoreIORMReconfiguredEvent")]
+    #[strum(serialize = "DatastoreIORMReconfiguredEvent")]
+    DatastoreIormReconfiguredEvent,
+    DatastoreRenamedEvent,
+    #[serde(rename = "NonVIWorkloadDetectedOnDatastoreEvent")]
+    #[strum(serialize = "NonVIWorkloadDetectedOnDatastoreEvent")]
+    NonViWorkloadDetectedOnDatastoreEvent,
+    DvsEvent,
+    DvsCreatedEvent,
+    DvsDestroyedEvent,
+    DvsHostBackInSyncEvent,
+    DvsHostJoinedEvent,
+    DvsHostLeftEvent,
+    DvsHostStatusUpdated,
+    DvsHostWentOutOfSyncEvent,
+    DvsImportEvent,
+    DvsMergedEvent,
+    DvsPortBlockedEvent,
+    DvsPortConnectedEvent,
+    DvsPortCreatedEvent,
+    DvsPortDeletedEvent,
+    DvsPortDisconnectedEvent,
+    DvsPortEnteredPassthruEvent,
+    DvsPortExitedPassthruEvent,
+    DvsPortJoinPortgroupEvent,
+    DvsPortLeavePortgroupEvent,
+    DvsPortLinkDownEvent,
+    DvsPortLinkUpEvent,
+    DvsPortReconfiguredEvent,
+    DvsPortRuntimeChangeEvent,
+    DvsPortUnblockedEvent,
+    DvsPortVendorSpecificStateChangeEvent,
+    DvsReconfiguredEvent,
+    DvsRenamedEvent,
+    DvsRestoreEvent,
+    DvsUpgradeAvailableEvent,
+    DvsUpgradeInProgressEvent,
+    DvsUpgradeRejectedEvent,
+    DvsUpgradedEvent,
+    HostLocalPortCreatedEvent,
+    OutOfSyncDvsHost,
+    RecoveryEvent,
+    RollbackEvent,
+    VmVnicPoolReservationViolationClearEvent,
+    VmVnicPoolReservationViolationRaiseEvent,
+    EventEx,
+    GeneralEvent,
+    ExtendedEvent,
+    GeneralHostErrorEvent,
+    GeneralHostInfoEvent,
+    GeneralHostWarningEvent,
+    GeneralUserEvent,
+    GeneralVmErrorEvent,
+    GeneralVmInfoEvent,
+    GeneralVmWarningEvent,
+    HealthStatusChangedEvent,
+    HostEvent,
+    AccountCreatedEvent,
+    AccountRemovedEvent,
+    AccountUpdatedEvent,
+    AdminPasswordNotChangedEvent,
+    CanceledHostOperationEvent,
+    DatastoreDiscoveredEvent,
+    DatastorePrincipalConfigured,
+    DatastoreRemovedOnHostEvent,
+    DatastoreRenamedOnHostEvent,
+    DrsResourceConfigureFailedEvent,
+    DrsResourceConfigureSyncedEvent,
+    DuplicateIpDetectedEvent,
+    DvsHealthStatusChangeEvent,
+    MtuMatchEvent,
+    MtuMismatchEvent,
+    TeamingMatchEvent,
+    TeamingMisMatchEvent,
+    UplinkPortMtuNotSupportEvent,
+    UplinkPortMtuSupportEvent,
+    UplinkPortVlanTrunkedEvent,
+    UplinkPortVlanUntrunkedEvent,
+    EnteredMaintenanceModeEvent,
+    EnteredStandbyModeEvent,
+    DrsEnteredStandbyModeEvent,
+    EnteringMaintenanceModeEvent,
+    EnteringStandbyModeEvent,
+    DrsEnteringStandbyModeEvent,
+    ExitMaintenanceModeEvent,
+    ExitStandbyModeFailedEvent,
+    DrsExitStandbyModeFailedEvent,
+    ExitedStandbyModeEvent,
+    DrsExitedStandbyModeEvent,
+    ExitingStandbyModeEvent,
+    DrsExitingStandbyModeEvent,
+    GhostDvsProxySwitchDetectedEvent,
+    GhostDvsProxySwitchRemovedEvent,
+    HostAddFailedEvent,
+    HostAddedEvent,
+    HostAdminDisableEvent,
+    HostAdminEnableEvent,
+    HostCnxFailedAccountFailedEvent,
+    HostCnxFailedAlreadyManagedEvent,
+    HostCnxFailedBadCcagentEvent,
+    HostCnxFailedBadUsernameEvent,
+    HostCnxFailedBadVersionEvent,
+    HostCnxFailedCcagentUpgradeEvent,
+    HostCnxFailedEvent,
+    HostCnxFailedNetworkErrorEvent,
+    HostCnxFailedNoAccessEvent,
+    HostCnxFailedNoConnectionEvent,
+    HostCnxFailedNoLicenseEvent,
+    HostCnxFailedNotFoundEvent,
+    HostCnxFailedTimeoutEvent,
+    HostComplianceCheckedEvent,
+    HostCompliantEvent,
+    HostConfigAppliedEvent,
+    HostConnectedEvent,
+    HostConnectionLostEvent,
+    HostDasDisabledEvent,
+    HostDasDisablingEvent,
+    HostDasEnabledEvent,
+    HostDasEnablingEvent,
+    HostDasErrorEvent,
+    HostDasEvent,
+    HostExtraNetworksEvent,
+    HostIsolationIpPingFailedEvent,
+    HostMissingNetworksEvent,
+    HostNoAvailableNetworksEvent,
+    #[serde(rename = "HostNoHAEnabledPortGroupsEvent")]
+    #[strum(serialize = "HostNoHAEnabledPortGroupsEvent")]
+    HostNoHaEnabledPortGroupsEvent,
+    HostNoRedundantManagementNetworkEvent,
+    HostNotInClusterEvent,
+    HostPrimaryAgentNotShortNameEvent,
+    HostShortNameInconsistentEvent,
+    HostDasOkEvent,
+    HostDisconnectedEvent,
+    HostEnableAdminFailedEvent,
+    HostGetShortNameFailedEvent,
+    HostInAuditModeEvent,
+    HostIpChangedEvent,
+    HostIpInconsistentEvent,
+    HostIpToShortNameFailedEvent,
+    HostNonCompliantEvent,
+    HostProfileAppliedEvent,
+    HostReconnectionFailedEvent,
+    HostRemovedEvent,
+    HostShortNameToIpFailedEvent,
+    HostShutdownEvent,
+    HostSpecificationChangedEvent,
+    HostSpecificationRequireEvent,
+    HostSpecificationUpdateEvent,
+    HostSubSpecificationDeleteEvent,
+    HostSubSpecificationUpdateEvent,
+    HostSyncFailedEvent,
+    HostUpgradeFailedEvent,
+    HostUserWorldSwapNotEnabledEvent,
+    #[serde(rename = "HostVnicConnectedToCustomizedDVPortEvent")]
+    #[strum(serialize = "HostVnicConnectedToCustomizedDVPortEvent")]
+    HostVnicConnectedToCustomizedDvPortEvent,
+    HostWwnChangedEvent,
+    HostWwnConflictEvent,
+    LocalDatastoreCreatedEvent,
+    #[serde(rename = "LocalTSMEnabledEvent")]
+    #[strum(serialize = "LocalTSMEnabledEvent")]
+    LocalTsmEnabledEvent,
+    #[serde(rename = "NASDatastoreCreatedEvent")]
+    #[strum(serialize = "NASDatastoreCreatedEvent")]
+    NasDatastoreCreatedEvent,
+    NoDatastoresConfiguredEvent,
+    #[serde(rename = "RemoteTSMEnabledEvent")]
+    #[strum(serialize = "RemoteTSMEnabledEvent")]
+    RemoteTsmEnabledEvent,
+    TimedOutHostOperationEvent,
+    UpdatedAgentBeingRestartedEvent,
+    UserAssignedToGroup,
+    UserPasswordChanged,
+    UserUnassignedFromGroup,
+    #[serde(rename = "VMFSDatastoreCreatedEvent")]
+    #[strum(serialize = "VMFSDatastoreCreatedEvent")]
+    VmfsDatastoreCreatedEvent,
+    #[serde(rename = "VMFSDatastoreExpandedEvent")]
+    #[strum(serialize = "VMFSDatastoreExpandedEvent")]
+    VmfsDatastoreExpandedEvent,
+    #[serde(rename = "VMFSDatastoreExtendedEvent")]
+    #[strum(serialize = "VMFSDatastoreExtendedEvent")]
+    VmfsDatastoreExtendedEvent,
+    VcAgentUninstallFailedEvent,
+    VcAgentUninstalledEvent,
+    VcAgentUpgradeFailedEvent,
+    VcAgentUpgradedEvent,
+    VimAccountPasswordChangedEvent,
+    IScsiBootFailureEvent,
+    HostInventoryUnreadableEvent,
+    LicenseEvent,
+    AllVirtualMachinesLicensedEvent,
+    HostInventoryFullEvent,
+    HostLicenseExpiredEvent,
+    IncorrectHostInformationEvent,
+    InvalidEditionEvent,
+    LicenseNonComplianceEvent,
+    LicenseRestrictedEvent,
+    LicenseServerAvailableEvent,
+    LicenseServerUnavailableEvent,
+    NoLicenseEvent,
+    ServerLicenseExpiredEvent,
+    UnlicensedVirtualMachinesEvent,
+    UnlicensedVirtualMachinesFoundEvent,
+    VMotionLicenseExpiredEvent,
+    LicenseExpiredEvent,
+    LockerMisconfiguredEvent,
+    LockerReconfiguredEvent,
+    NetworkRollbackEvent,
+    ProfileEvent,
+    ProfileAssociatedEvent,
+    ProfileChangedEvent,
+    ProfileCreatedEvent,
+    ProfileDissociatedEvent,
+    ProfileReferenceHostChangedEvent,
+    ProfileRemovedEvent,
+    ResourcePoolEvent,
+    ResourcePoolCreatedEvent,
+    ResourcePoolDestroyedEvent,
+    ResourcePoolMovedEvent,
+    ResourcePoolReconfiguredEvent,
+    ResourceViolatedEvent,
+    ScheduledTaskEvent,
+    ScheduledTaskCompletedEvent,
+    ScheduledTaskCreatedEvent,
+    ScheduledTaskEmailCompletedEvent,
+    ScheduledTaskEmailFailedEvent,
+    ScheduledTaskFailedEvent,
+    ScheduledTaskReconfiguredEvent,
+    ScheduledTaskRemovedEvent,
+    ScheduledTaskStartedEvent,
+    SessionEvent,
+    AlreadyAuthenticatedSessionEvent,
+    BadUsernameSessionEvent,
+    GlobalMessageChangedEvent,
+    NoAccessUserEvent,
+    ServerStartedSessionEvent,
+    SessionTerminatedEvent,
+    UserLoginSessionEvent,
+    UserLogoutSessionEvent,
+    TaskEvent,
+    TaskTimeoutEvent,
+    TemplateUpgradeEvent,
+    TemplateBeingUpgradedEvent,
+    TemplateUpgradeFailedEvent,
+    TemplateUpgradedEvent,
+    UpgradeEvent,
+    ErrorUpgradeEvent,
+    InfoUpgradeEvent,
+    UserUpgradeEvent,
+    WarningUpgradeEvent,
+    VmEvent,
+    CustomizationEvent,
+    CustomizationFailed,
+    CustomizationLinuxIdentityFailed,
+    CustomizationNetworkSetupFailed,
+    CustomizationSysprepFailed,
+    CustomizationUnknownFailure,
+    CustomizationStartedEvent,
+    CustomizationSucceeded,
+    DrsRuleComplianceEvent,
+    DrsRuleViolationEvent,
+    DrsSoftRuleViolationEvent,
+    MigrationEvent,
+    MigrationErrorEvent,
+    MigrationHostErrorEvent,
+    MigrationHostWarningEvent,
+    MigrationResourceErrorEvent,
+    MigrationResourceWarningEvent,
+    MigrationWarningEvent,
+    #[serde(rename = "NoMaintenanceModeDrsRecommendationForVM")]
+    #[strum(serialize = "NoMaintenanceModeDrsRecommendationForVM")]
+    NoMaintenanceModeDrsRecommendationForVm,
+    NotEnoughResourcesToStartVmEvent,
+    VmAcquiredMksTicketEvent,
+    VmAcquiredTicketEvent,
+    VmAutoRenameEvent,
+    VmBeingCreatedEvent,
+    VmBeingDeployedEvent,
+    VmBeingHotMigratedEvent,
+    VmBeingMigratedEvent,
+    VmCloneEvent,
+    VmBeingClonedEvent,
+    VmBeingClonedNoFolderEvent,
+    VmCloneFailedEvent,
+    VmClonedEvent,
+    VmConfigMissingEvent,
+    VmConnectedEvent,
+    VmCreatedEvent,
+    VmDasBeingResetEvent,
+    VmDasBeingResetWithScreenshotEvent,
+    VmDasResetFailedEvent,
+    VmDasUpdateErrorEvent,
+    VmDasUpdateOkEvent,
+    VmDateRolledBackEvent,
+    VmDeployFailedEvent,
+    VmDeployedEvent,
+    VmDisconnectedEvent,
+    VmDiscoveredEvent,
+    VmDiskFailedEvent,
+    VmEmigratingEvent,
+    VmEndRecordingEvent,
+    VmEndReplayingEvent,
+    VmFailedMigrateEvent,
+    VmFailedRelayoutEvent,
+    VmFailedRelayoutOnVmfs2DatastoreEvent,
+    VmFailedStartingSecondaryEvent,
+    VmFailedToPowerOffEvent,
+    VmFailedToPowerOnEvent,
+    VmFailedToRebootGuestEvent,
+    VmFailedToResetEvent,
+    VmFailedToShutdownGuestEvent,
+    VmFailedToStandbyGuestEvent,
+    VmFailedToSuspendEvent,
+    VmFailedUpdatingSecondaryConfig,
+    VmFailoverFailed,
+    VmFaultToleranceStateChangedEvent,
+    VmFaultToleranceTurnedOffEvent,
+    VmFaultToleranceVmTerminatedEvent,
+    #[serde(rename = "VmGuestOSCrashedEvent")]
+    #[strum(serialize = "VmGuestOSCrashedEvent")]
+    VmGuestOsCrashedEvent,
+    VmGuestRebootEvent,
+    VmGuestShutdownEvent,
+    VmGuestStandbyEvent,
+    VmInstanceUuidAssignedEvent,
+    VmInstanceUuidChangedEvent,
+    VmInstanceUuidConflictEvent,
+    VmMacAssignedEvent,
+    VmMacChangedEvent,
+    VmMacConflictEvent,
+    #[serde(rename = "VmMaxFTRestartCountReached")]
+    #[strum(serialize = "VmMaxFTRestartCountReached")]
+    VmMaxFtRestartCountReached,
+    VmMaxRestartCountReached,
+    VmMessageErrorEvent,
+    VmMessageEvent,
+    VmMessageWarningEvent,
+    VmMigratedEvent,
+    DrsVmMigratedEvent,
+    VmNoCompatibleHostForSecondaryEvent,
+    VmNoNetworkAccessEvent,
+    VmOrphanedEvent,
+    VmPoweredOffEvent,
+    VmPowerOffOnIsolationEvent,
+    VmShutdownOnIsolationEvent,
+    VmPoweredOnEvent,
+    DrsVmPoweredOnEvent,
+    VmRestartedOnAlternateHostEvent,
+    #[serde(rename = "VmPoweringOnWithCustomizedDVPortEvent")]
+    #[strum(serialize = "VmPoweringOnWithCustomizedDVPortEvent")]
+    VmPoweringOnWithCustomizedDvPortEvent,
+    VmPrimaryFailoverEvent,
+    VmReconfiguredEvent,
+    VmRegisteredEvent,
+    VmRelayoutSuccessfulEvent,
+    VmRelayoutUpToDateEvent,
+    VmReloadFromPathEvent,
+    VmReloadFromPathFailedEvent,
+    VmRelocateSpecEvent,
+    VmBeingRelocatedEvent,
+    VmRelocateFailedEvent,
+    VmRelocatedEvent,
+    VmRemoteConsoleConnectedEvent,
+    VmRemoteConsoleDisconnectedEvent,
+    VmRemovedEvent,
+    VmRenamedEvent,
+    #[serde(rename = "VmRequirementsExceedCurrentEVCModeEvent")]
+    #[strum(serialize = "VmRequirementsExceedCurrentEVCModeEvent")]
+    VmRequirementsExceedCurrentEvcModeEvent,
+    VmResettingEvent,
+    VmResourcePoolMovedEvent,
+    VmResourceReallocatedEvent,
+    VmResumingEvent,
+    VmSecondaryAddedEvent,
+    VmSecondaryDisabledBySystemEvent,
+    VmSecondaryDisabledEvent,
+    VmSecondaryEnabledEvent,
+    VmSecondaryStartedEvent,
+    VmStartRecordingEvent,
+    VmStartReplayingEvent,
+    VmStartingEvent,
+    VmUnsupportedStartingEvent,
+    VmStartingSecondaryEvent,
+    VmStaticMacConflictEvent,
+    VmStoppingEvent,
+    VmSuspendedEvent,
+    VmSuspendingEvent,
+    VmTimedoutStartingSecondaryEvent,
+    VmUpgradeCompleteEvent,
+    VmUpgradeFailedEvent,
+    VmUpgradingEvent,
+    VmUuidAssignedEvent,
+    VmUuidChangedEvent,
+    VmUuidConflictEvent,
+    VmWwnAssignedEvent,
+    VmWwnChangedEvent,
+    VmWwnConflictEvent,
     EventArgument,
     EntityEventArgument,
     AlarmEventArgument,
@@ -706,6 +1271,7 @@ pub enum StructType {
     AutoStartPowerInfo,
     HostAutoStartManagerConfig,
     AutoStartDefaults,
+    #[serde(rename = "HostBIOSInfo")]
     #[strum(serialize = "HostBIOSInfo")]
     HostBiosInfo,
     HostBootDeviceInfo,
@@ -862,8 +1428,10 @@ pub enum StructType {
     HostInternetScsiHbaDigestProperties,
     HostInternetScsiHbaDiscoveryCapabilities,
     HostInternetScsiHbaDiscoveryProperties,
+    #[serde(rename = "HostInternetScsiHbaIPCapabilities")]
     #[strum(serialize = "HostInternetScsiHbaIPCapabilities")]
     HostInternetScsiHbaIpCapabilities,
+    #[serde(rename = "HostInternetScsiHbaIPProperties")]
     #[strum(serialize = "HostInternetScsiHbaIPProperties")]
     HostInternetScsiHbaIpProperties,
     HostInternetScsiHbaIPv6Properties,
@@ -1159,10 +1727,13 @@ pub enum StructType {
     VsanPolicySatisfiability,
     HostVsanInternalSystemVsanObjectOperationResult,
     HostVsanInternalSystemVsanPhysicalDiskDiagnosticsResult,
+    #[serde(rename = "HostVvolNQN")]
     #[strum(serialize = "HostVvolNQN")]
     HostVvolNqn,
+    #[serde(rename = "VVolHostPE")]
     #[strum(serialize = "VVolHostPE")]
     VVolHostPe,
+    #[serde(rename = "HostVvolVolumeHostVvolNQN")]
     #[strum(serialize = "HostVvolVolumeHostVvolNQN")]
     HostVvolVolumeHostVvolNqn,
     HostVvolVolumeSpecification,
@@ -1185,8 +1756,10 @@ pub enum StructType {
     NetIpStackInfo,
     NetIpStackInfoDefaultRouter,
     NetIpStackInfoNetToMedia,
+    #[serde(rename = "NetBIOSConfigInfo")]
     #[strum(serialize = "NetBIOSConfigInfo")]
     NetBiosConfigInfo,
+    #[serde(rename = "WinNetBIOSConfigInfo")]
     #[strum(serialize = "WinNetBIOSConfigInfo")]
     WinNetBiosConfigInfo,
     ArrayUpdateSpec,
@@ -1352,6 +1925,7 @@ pub enum StructType {
     VAppCloneSpecNetworkMappingPair,
     VAppCloneSpecResourceMap,
     VAppEntityConfigInfo,
+    #[serde(rename = "VAppIPAssignmentInfo")]
     #[strum(serialize = "VAppIPAssignmentInfo")]
     VAppIpAssignmentInfo,
     IpPool,
@@ -1414,6 +1988,7 @@ pub enum StructType {
     FaultToleranceConfigSpec,
     FaultToleranceMetaSpec,
     FaultToleranceSecondaryOpResult,
+    #[serde(rename = "FaultToleranceVMConfigSpec")]
     #[strum(serialize = "FaultToleranceVMConfigSpec")]
     FaultToleranceVmConfigSpec,
     FaultToleranceDiskSpec,
@@ -1525,12 +2100,15 @@ pub enum StructType {
     VirtualMachineVirtualPMem,
     CheckResult,
     CustomizationAdapterMapping,
+    #[serde(rename = "CustomizationGlobalIPSettings")]
     #[strum(serialize = "CustomizationGlobalIPSettings")]
     CustomizationGlobalIpSettings,
     CustomizationGuiRunOnce,
     CustomizationGuiUnattended,
+    #[serde(rename = "CustomizationIPSettings")]
     #[strum(serialize = "CustomizationIPSettings")]
     CustomizationIpSettings,
+    #[serde(rename = "CustomizationIPSettingsIpV6AddressSpec")]
     #[strum(serialize = "CustomizationIPSettingsIpV6AddressSpec")]
     CustomizationIpSettingsIpV6AddressSpec,
     CustomizationIdentification,
@@ -1571,39 +2149,54 @@ pub enum StructType {
     VirtualDevice,
     VirtualCdrom,
     VirtualController,
+    #[serde(rename = "VirtualIDEController")]
     #[strum(serialize = "VirtualIDEController")]
     VirtualIdeController,
+    #[serde(rename = "VirtualNVDIMMController")]
     #[strum(serialize = "VirtualNVDIMMController")]
     VirtualNvdimmController,
+    #[serde(rename = "VirtualNVMEController")]
     #[strum(serialize = "VirtualNVMEController")]
     VirtualNvmeController,
+    #[serde(rename = "VirtualPCIController")]
     #[strum(serialize = "VirtualPCIController")]
     VirtualPciController,
+    #[serde(rename = "VirtualPS2Controller")]
     #[strum(serialize = "VirtualPS2Controller")]
     VirtualPs2Controller,
+    #[serde(rename = "VirtualSATAController")]
     #[strum(serialize = "VirtualSATAController")]
     VirtualSataController,
+    #[serde(rename = "VirtualAHCIController")]
     #[strum(serialize = "VirtualAHCIController")]
     VirtualAhciController,
+    #[serde(rename = "VirtualSCSIController")]
     #[strum(serialize = "VirtualSCSIController")]
     VirtualScsiController,
+    #[serde(rename = "ParaVirtualSCSIController")]
     #[strum(serialize = "ParaVirtualSCSIController")]
     ParaVirtualScsiController,
     VirtualBusLogicController,
     VirtualLsiLogicController,
+    #[serde(rename = "VirtualLsiLogicSASController")]
     #[strum(serialize = "VirtualLsiLogicSASController")]
     VirtualLsiLogicSasController,
+    #[serde(rename = "VirtualSIOController")]
     #[strum(serialize = "VirtualSIOController")]
     VirtualSioController,
+    #[serde(rename = "VirtualUSBController")]
     #[strum(serialize = "VirtualUSBController")]
     VirtualUsbController,
+    #[serde(rename = "VirtualUSBXHCIController")]
     #[strum(serialize = "VirtualUSBXHCIController")]
     VirtualUsbxhciController,
     VirtualDisk,
     VirtualEthernetCard,
     VirtualE1000,
+    #[serde(rename = "VirtualE1000e")]
     #[strum(serialize = "VirtualE1000e")]
     VirtualE1000E,
+    #[serde(rename = "VirtualPCNet32")]
     #[strum(serialize = "VirtualPCNet32")]
     VirtualPcNet32,
     VirtualSriovEthernetCard,
@@ -1613,13 +2206,16 @@ pub enum StructType {
     VirtualVmxnet3Vrdma,
     VirtualFloppy,
     VirtualKeyboard,
+    #[serde(rename = "VirtualNVDIMM")]
     #[strum(serialize = "VirtualNVDIMM")]
     VirtualNvdimm,
+    #[serde(rename = "VirtualPCIPassthrough")]
     #[strum(serialize = "VirtualPCIPassthrough")]
     VirtualPciPassthrough,
     VirtualParallelPort,
     VirtualPointingDevice,
     VirtualPrecisionClock,
+    #[serde(rename = "VirtualSCSIPassthrough")]
     #[strum(serialize = "VirtualSCSIPassthrough")]
     VirtualScsiPassthrough,
     VirtualSerialPort,
@@ -1627,15 +2223,20 @@ pub enum StructType {
     VirtualEnsoniq1371,
     VirtualHdAudioCard,
     VirtualSoundBlaster16,
+    #[serde(rename = "VirtualTPM")]
     #[strum(serialize = "VirtualTPM")]
     VirtualTpm,
+    #[serde(rename = "VirtualUSB")]
     #[strum(serialize = "VirtualUSB")]
     VirtualUsb,
+    #[serde(rename = "VirtualMachineVMCIDevice")]
     #[strum(serialize = "VirtualMachineVMCIDevice")]
     VirtualMachineVmciDevice,
+    #[serde(rename = "VirtualMachineVMIROM")]
     #[strum(serialize = "VirtualMachineVMIROM")]
     VirtualMachineVmirom,
     VirtualMachineVideoCard,
+    #[serde(rename = "VirtualWDT")]
     #[strum(serialize = "VirtualWDT")]
     VirtualWdt,
     VirtualDeviceBackingInfo,
@@ -1647,18 +2248,23 @@ pub enum StructType {
     VirtualEthernetCardLegacyNetworkBackingInfo,
     VirtualEthernetCardNetworkBackingInfo,
     VirtualFloppyDeviceBackingInfo,
+    #[serde(rename = "VirtualPCIPassthroughDeviceBackingInfo")]
     #[strum(serialize = "VirtualPCIPassthroughDeviceBackingInfo")]
     VirtualPciPassthroughDeviceBackingInfo,
+    #[serde(rename = "VirtualPCIPassthroughDynamicBackingInfo")]
     #[strum(serialize = "VirtualPCIPassthroughDynamicBackingInfo")]
     VirtualPciPassthroughDynamicBackingInfo,
     VirtualParallelPortDeviceBackingInfo,
     VirtualPointingDeviceDeviceBackingInfo,
+    #[serde(rename = "VirtualSCSIPassthroughDeviceBackingInfo")]
     #[strum(serialize = "VirtualSCSIPassthroughDeviceBackingInfo")]
     VirtualScsiPassthroughDeviceBackingInfo,
     VirtualSerialPortDeviceBackingInfo,
     VirtualSoundCardDeviceBackingInfo,
+    #[serde(rename = "VirtualUSBRemoteHostBackingInfo")]
     #[strum(serialize = "VirtualUSBRemoteHostBackingInfo")]
     VirtualUsbRemoteHostBackingInfo,
+    #[serde(rename = "VirtualUSBUSBBackingInfo")]
     #[strum(serialize = "VirtualUSBUSBBackingInfo")]
     VirtualUsbusbBackingInfo,
     VirtualDeviceFileBackingInfo,
@@ -1671,6 +2277,7 @@ pub enum StructType {
     VirtualDiskSparseVer1BackingInfo,
     VirtualDiskSparseVer2BackingInfo,
     VirtualFloppyImageBackingInfo,
+    #[serde(rename = "VirtualNVDIMMBackingInfo")]
     #[strum(serialize = "VirtualNVDIMMBackingInfo")]
     VirtualNvdimmBackingInfo,
     VirtualParallelPortFileBackingInfo,
@@ -1681,18 +2288,24 @@ pub enum StructType {
     VirtualCdromRemoteAtapiBackingInfo,
     VirtualCdromRemotePassthroughBackingInfo,
     VirtualFloppyRemoteDeviceBackingInfo,
+    #[serde(rename = "VirtualUSBRemoteClientBackingInfo")]
     #[strum(serialize = "VirtualUSBRemoteClientBackingInfo")]
     VirtualUsbRemoteClientBackingInfo,
+    #[serde(rename = "VirtualDeviceURIBackingInfo")]
     #[strum(serialize = "VirtualDeviceURIBackingInfo")]
     VirtualDeviceUriBackingInfo,
+    #[serde(rename = "VirtualSerialPortURIBackingInfo")]
     #[strum(serialize = "VirtualSerialPortURIBackingInfo")]
     VirtualSerialPortUriBackingInfo,
     VirtualEthernetCardDistributedVirtualPortBackingInfo,
     VirtualEthernetCardOpaqueNetworkBackingInfo,
+    #[serde(rename = "VirtualPCIPassthroughDvxBackingInfo")]
     #[strum(serialize = "VirtualPCIPassthroughDvxBackingInfo")]
     VirtualPciPassthroughDvxBackingInfo,
+    #[serde(rename = "VirtualPCIPassthroughPluginBackingInfo")]
     #[strum(serialize = "VirtualPCIPassthroughPluginBackingInfo")]
     VirtualPciPassthroughPluginBackingInfo,
+    #[serde(rename = "VirtualPCIPassthroughVmiopBackingInfo")]
     #[strum(serialize = "VirtualPCIPassthroughVmiopBackingInfo")]
     VirtualPciPassthroughVmiopBackingInfo,
     VirtualPrecisionClockSystemClockBackingInfo,
@@ -1700,6 +2313,7 @@ pub enum StructType {
     VirtualSriovEthernetCardSriovBackingInfo,
     VirtualDeviceBusSlotInfo,
     VirtualDevicePciBusSlotInfo,
+    #[serde(rename = "VirtualUSBControllerPciBusSlotInfo")]
     #[strum(serialize = "VirtualUSBControllerPciBusSlotInfo")]
     VirtualUsbControllerPciBusSlotInfo,
     VirtualDeviceConnectInfo,
@@ -1707,39 +2321,54 @@ pub enum StructType {
     VirtualDeviceOption,
     VirtualCdromOption,
     VirtualControllerOption,
+    #[serde(rename = "VirtualIDEControllerOption")]
     #[strum(serialize = "VirtualIDEControllerOption")]
     VirtualIdeControllerOption,
+    #[serde(rename = "VirtualNVDIMMControllerOption")]
     #[strum(serialize = "VirtualNVDIMMControllerOption")]
     VirtualNvdimmControllerOption,
+    #[serde(rename = "VirtualNVMEControllerOption")]
     #[strum(serialize = "VirtualNVMEControllerOption")]
     VirtualNvmeControllerOption,
+    #[serde(rename = "VirtualPCIControllerOption")]
     #[strum(serialize = "VirtualPCIControllerOption")]
     VirtualPciControllerOption,
+    #[serde(rename = "VirtualPS2ControllerOption")]
     #[strum(serialize = "VirtualPS2ControllerOption")]
     VirtualPs2ControllerOption,
+    #[serde(rename = "VirtualSATAControllerOption")]
     #[strum(serialize = "VirtualSATAControllerOption")]
     VirtualSataControllerOption,
+    #[serde(rename = "VirtualAHCIControllerOption")]
     #[strum(serialize = "VirtualAHCIControllerOption")]
     VirtualAhciControllerOption,
+    #[serde(rename = "VirtualSCSIControllerOption")]
     #[strum(serialize = "VirtualSCSIControllerOption")]
     VirtualScsiControllerOption,
+    #[serde(rename = "ParaVirtualSCSIControllerOption")]
     #[strum(serialize = "ParaVirtualSCSIControllerOption")]
     ParaVirtualScsiControllerOption,
     VirtualBusLogicControllerOption,
     VirtualLsiLogicControllerOption,
+    #[serde(rename = "VirtualLsiLogicSASControllerOption")]
     #[strum(serialize = "VirtualLsiLogicSASControllerOption")]
     VirtualLsiLogicSasControllerOption,
+    #[serde(rename = "VirtualSIOControllerOption")]
     #[strum(serialize = "VirtualSIOControllerOption")]
     VirtualSioControllerOption,
+    #[serde(rename = "VirtualUSBControllerOption")]
     #[strum(serialize = "VirtualUSBControllerOption")]
     VirtualUsbControllerOption,
+    #[serde(rename = "VirtualUSBXHCIControllerOption")]
     #[strum(serialize = "VirtualUSBXHCIControllerOption")]
     VirtualUsbxhciControllerOption,
     VirtualDiskOption,
     VirtualEthernetCardOption,
     VirtualE1000Option,
+    #[serde(rename = "VirtualE1000eOption")]
     #[strum(serialize = "VirtualE1000eOption")]
     VirtualE1000EOption,
+    #[serde(rename = "VirtualPCNet32Option")]
     #[strum(serialize = "VirtualPCNet32Option")]
     VirtualPcNet32Option,
     VirtualSriovEthernetCardOption,
@@ -1749,13 +2378,16 @@ pub enum StructType {
     VirtualVmxnet3VrdmaOption,
     VirtualFloppyOption,
     VirtualKeyboardOption,
+    #[serde(rename = "VirtualNVDIMMOption")]
     #[strum(serialize = "VirtualNVDIMMOption")]
     VirtualNvdimmOption,
+    #[serde(rename = "VirtualPCIPassthroughOption")]
     #[strum(serialize = "VirtualPCIPassthroughOption")]
     VirtualPciPassthroughOption,
     VirtualParallelPortOption,
     VirtualPointingDeviceOption,
     VirtualPrecisionClockOption,
+    #[serde(rename = "VirtualSCSIPassthroughOption")]
     #[strum(serialize = "VirtualSCSIPassthroughOption")]
     VirtualScsiPassthroughOption,
     VirtualSerialPortOption,
@@ -1763,15 +2395,20 @@ pub enum StructType {
     VirtualEnsoniq1371Option,
     VirtualHdAudioCardOption,
     VirtualSoundBlaster16Option,
+    #[serde(rename = "VirtualTPMOption")]
     #[strum(serialize = "VirtualTPMOption")]
     VirtualTpmOption,
+    #[serde(rename = "VirtualUSBOption")]
     #[strum(serialize = "VirtualUSBOption")]
     VirtualUsbOption,
+    #[serde(rename = "VirtualMachineVMCIDeviceOption")]
     #[strum(serialize = "VirtualMachineVMCIDeviceOption")]
     VirtualMachineVmciDeviceOption,
+    #[serde(rename = "VirtualVMIROMOption")]
     #[strum(serialize = "VirtualVMIROMOption")]
     VirtualVmiromOption,
     VirtualVideoCardOption,
+    #[serde(rename = "VirtualWDTOption")]
     #[strum(serialize = "VirtualWDTOption")]
     VirtualWdtOption,
     VirtualDeviceBackingOption,
@@ -1785,18 +2422,23 @@ pub enum StructType {
     VirtualEthernetCardLegacyNetworkBackingOption,
     VirtualEthernetCardNetworkBackingOption,
     VirtualFloppyDeviceBackingOption,
+    #[serde(rename = "VirtualPCIPassthroughDeviceBackingOption")]
     #[strum(serialize = "VirtualPCIPassthroughDeviceBackingOption")]
     VirtualPciPassthroughDeviceBackingOption,
+    #[serde(rename = "VirtualPCIPassthroughDynamicBackingOption")]
     #[strum(serialize = "VirtualPCIPassthroughDynamicBackingOption")]
     VirtualPciPassthroughDynamicBackingOption,
     VirtualParallelPortDeviceBackingOption,
     VirtualPointingDeviceBackingOption,
+    #[serde(rename = "VirtualSCSIPassthroughDeviceBackingOption")]
     #[strum(serialize = "VirtualSCSIPassthroughDeviceBackingOption")]
     VirtualScsiPassthroughDeviceBackingOption,
     VirtualSerialPortDeviceBackingOption,
     VirtualSoundCardDeviceBackingOption,
+    #[serde(rename = "VirtualUSBRemoteHostBackingOption")]
     #[strum(serialize = "VirtualUSBRemoteHostBackingOption")]
     VirtualUsbRemoteHostBackingOption,
+    #[serde(rename = "VirtualUSBUSBBackingOption")]
     #[strum(serialize = "VirtualUSBUSBBackingOption")]
     VirtualUsbusbBackingOption,
     VirtualDeviceFileBackingOption,
@@ -1815,19 +2457,26 @@ pub enum StructType {
     VirtualDeviceRemoteDeviceBackingOption,
     VirtualCdromRemotePassthroughBackingOption,
     VirtualFloppyRemoteDeviceBackingOption,
+    #[serde(rename = "VirtualUSBRemoteClientBackingOption")]
     #[strum(serialize = "VirtualUSBRemoteClientBackingOption")]
     VirtualUsbRemoteClientBackingOption,
+    #[serde(rename = "VirtualDeviceURIBackingOption")]
     #[strum(serialize = "VirtualDeviceURIBackingOption")]
     VirtualDeviceUriBackingOption,
+    #[serde(rename = "VirtualSerialPortURIBackingOption")]
     #[strum(serialize = "VirtualSerialPortURIBackingOption")]
     VirtualSerialPortUriBackingOption,
+    #[serde(rename = "VirtualEthernetCardDVPortBackingOption")]
     #[strum(serialize = "VirtualEthernetCardDVPortBackingOption")]
     VirtualEthernetCardDvPortBackingOption,
     VirtualEthernetCardOpaqueNetworkBackingOption,
+    #[serde(rename = "VirtualPCIPassthroughDvxBackingOption")]
     #[strum(serialize = "VirtualPCIPassthroughDvxBackingOption")]
     VirtualPciPassthroughDvxBackingOption,
+    #[serde(rename = "VirtualPCIPassthroughPluginBackingOption")]
     #[strum(serialize = "VirtualPCIPassthroughPluginBackingOption")]
     VirtualPciPassthroughPluginBackingOption,
+    #[serde(rename = "VirtualPCIPassthroughVmiopBackingOption")]
     #[strum(serialize = "VirtualPCIPassthroughVmiopBackingOption")]
     VirtualPciPassthroughVmiopBackingOption,
     VirtualPrecisionClockSystemClockBackingOption,
@@ -1843,12 +2492,16 @@ pub enum StructType {
     VirtualDiskDeltaDiskFormatsSupported,
     VirtualDiskOptionVFlashCacheConfigOption,
     VirtualEthernetCardResourceAllocation,
+    #[serde(rename = "VirtualPCIPassthroughAllowedDevice")]
     #[strum(serialize = "VirtualPCIPassthroughAllowedDevice")]
     VirtualPciPassthroughAllowedDevice,
+    #[serde(rename = "VirtualMachineVMCIDeviceFilterInfo")]
     #[strum(serialize = "VirtualMachineVMCIDeviceFilterInfo")]
     VirtualMachineVmciDeviceFilterInfo,
+    #[serde(rename = "VirtualMachineVMCIDeviceFilterSpec")]
     #[strum(serialize = "VirtualMachineVMCIDeviceFilterSpec")]
     VirtualMachineVmciDeviceFilterSpec,
+    #[serde(rename = "VirtualMachineVMCIDeviceOptionFilterSpecOption")]
     #[strum(serialize = "VirtualMachineVMCIDeviceOptionFilterSpecOption")]
     VirtualMachineVmciDeviceOptionFilterSpecOption,
     GuestAliases,
@@ -1865,8 +2518,10 @@ pub enum StructType {
     GuestListFileInfo,
     GuestAuthentication,
     NamePasswordAuthentication,
+    #[serde(rename = "SAMLTokenAuthentication")]
     #[strum(serialize = "SAMLTokenAuthentication")]
     SamlTokenAuthentication,
+    #[serde(rename = "SSPIAuthentication")]
     #[strum(serialize = "SSPIAuthentication")]
     SspiAuthentication,
     TicketedSessionAuthentication,
@@ -1921,10 +2576,13 @@ pub enum StructType {
     VslmCreateSpecDiskFileBackingSpec,
     VslmCreateSpecRawDiskMappingBackingSpec,
     DiskCryptoSpec,
+    #[serde(rename = "ID")]
     #[strum(serialize = "ID")]
     Id,
+    #[serde(rename = "vslmInfrastructureObjectPolicy")]
     #[strum(serialize = "vslmInfrastructureObjectPolicy")]
     VslmInfrastructureObjectPolicy,
+    #[serde(rename = "vslmInfrastructureObjectPolicySpec")]
     #[strum(serialize = "vslmInfrastructureObjectPolicySpec")]
     VslmInfrastructureObjectPolicySpec,
     VslmMigrateSpec,
@@ -1932,6 +2590,7 @@ pub enum StructType {
     VslmRelocateSpec,
     VStorageObjectStateInfo,
     VslmTagEntry,
+    #[serde(rename = "vslmVClockInfo")]
     #[strum(serialize = "vslmVClockInfo")]
     VslmVClockInfo,
     VStorageObject,
@@ -1963,4 +2622,1174 @@ pub enum StructType {
     UpdateSet,
     WaitOptions,
     MethodFault,
+    VimFault,
+    ActiveDirectoryFault,
+    DomainNotFound,
+    #[serde(rename = "InvalidCAMServer")]
+    #[strum(serialize = "InvalidCAMServer")]
+    InvalidCamServer,
+    #[serde(rename = "CAMServerRefusedConnection")]
+    #[strum(serialize = "CAMServerRefusedConnection")]
+    CamServerRefusedConnection,
+    #[serde(rename = "InvalidCAMCertificate")]
+    #[strum(serialize = "InvalidCAMCertificate")]
+    InvalidCamCertificate,
+    #[serde(rename = "NoPermissionOnAD")]
+    #[strum(serialize = "NoPermissionOnAD")]
+    NoPermissionOnAd,
+    #[serde(rename = "NonADUserRequired")]
+    #[strum(serialize = "NonADUserRequired")]
+    NonAdUserRequired,
+    AlreadyExists,
+    AlreadyUpgraded,
+    AnswerFileUpdateFailed,
+    AuthMinimumAdminPermission,
+    CannotAccessLocalSource,
+    CannotDisconnectHostWithFaultToleranceVm,
+    CannotEnableVmcpForCluster,
+    CannotMoveFaultToleranceVm,
+    CannotMoveHostWithFaultToleranceVm,
+    CannotPlaceWithoutPrerequisiteMoves,
+    ConcurrentAccess,
+    CustomizationFault,
+    CannotDecryptPasswords,
+    CustomizationPending,
+    IpHostnameGeneratorError,
+    LinuxVolumeNotClean,
+    MissingLinuxCustResources,
+    MissingWindowsCustResources,
+    MountError,
+    NicSettingMismatch,
+    NoDisksToCustomize,
+    UncustomizableGuest,
+    UnexpectedCustomizationFault,
+    VolumeEditorError,
+    DasConfigFault,
+    DrsDisabledOnVm,
+    DuplicateName,
+    DvsFault,
+    BackupBlobReadFailure,
+    BackupBlobWriteFailure,
+    CollectorAddressUnset,
+    ConflictingConfiguration,
+    DvsApplyOperationFault,
+    DvsNotAuthorized,
+    DvsOperationBulkFault,
+    DvsScopeViolated,
+    ImportHostAddFailure,
+    ImportOperationBulkFault,
+    InvalidIpfixConfig,
+    RollbackFailure,
+    SwitchIpUnset,
+    SwitchNotInUpgradeMode,
+    VspanDestPortConflict,
+    VspanPortConflict,
+    VspanPortMoveFault,
+    VspanPortPromiscChangeFault,
+    VspanPortgroupPromiscChangeFault,
+    VspanPortgroupTypeChangeFault,
+    VspanPromiscuousPortNotSupported,
+    VspanSameSessionPortConflict,
+    #[serde(rename = "EVCConfigFault")]
+    #[strum(serialize = "EVCConfigFault")]
+    EvcConfigFault,
+    #[serde(rename = "ActiveVMsBlockingEVC")]
+    #[strum(serialize = "ActiveVMsBlockingEVC")]
+    ActiveVMsBlockingEvc,
+    #[serde(rename = "DisconnectedHostsBlockingEVC")]
+    #[strum(serialize = "DisconnectedHostsBlockingEVC")]
+    DisconnectedHostsBlockingEvc,
+    #[serde(rename = "EVCModeIllegalByVendor")]
+    #[strum(serialize = "EVCModeIllegalByVendor")]
+    EvcModeIllegalByVendor,
+    #[serde(rename = "EVCModeUnsupportedByHosts")]
+    #[strum(serialize = "EVCModeUnsupportedByHosts")]
+    EvcModeUnsupportedByHosts,
+    #[serde(rename = "EVCUnsupportedByHostHardware")]
+    #[strum(serialize = "EVCUnsupportedByHostHardware")]
+    EvcUnsupportedByHostHardware,
+    #[serde(rename = "EVCUnsupportedByHostSoftware")]
+    #[strum(serialize = "EVCUnsupportedByHostSoftware")]
+    EvcUnsupportedByHostSoftware,
+    #[serde(rename = "HeterogenousHostsBlockingEVC")]
+    #[strum(serialize = "HeterogenousHostsBlockingEVC")]
+    HeterogenousHostsBlockingEvc,
+    ExtendedFault,
+    FaultToleranceVmNotDasProtected,
+    FcoeFault,
+    FcoeFaultPnicHasNoPortSet,
+    FileFault,
+    CannotAccessFile,
+    CannotCreateFile,
+    CannotDeleteFile,
+    DirectoryNotEmpty,
+    FileAlreadyExists,
+    FileLocked,
+    FileNameTooLong,
+    FileNotFound,
+    FileNotWritable,
+    FileTooLarge,
+    IncorrectFileType,
+    NetworkCopyFault,
+    NoDiskSpace,
+    NotADirectory,
+    NotAFile,
+    TooManyConcurrentNativeClones,
+    TooManyNativeCloneLevels,
+    TooManyNativeClonesOnFile,
+    GenericDrsFault,
+    GuestOperationsFault,
+    GuestAuthenticationChallenge,
+    GuestComponentsOutOfDate,
+    GuestMultipleMappings,
+    GuestOperationsUnavailable,
+    GuestPermissionDenied,
+    GuestProcessNotFound,
+    GuestRegistryFault,
+    GuestRegistryKeyFault,
+    GuestRegistryKeyAlreadyExists,
+    GuestRegistryKeyHasSubkeys,
+    GuestRegistryKeyInvalid,
+    GuestRegistryKeyParentVolatile,
+    GuestRegistryValueFault,
+    GuestRegistryValueNotFound,
+    InvalidGuestLogin,
+    OperationDisabledByGuest,
+    OperationNotSupportedByGuest,
+    TooManyGuestLogons,
+    HostConfigFault,
+    AdminDisabled,
+    AdminNotDisabled,
+    BlockedByFirewall,
+    ClockSkew,
+    DisableAdminNotSupported,
+    HostConfigFailed,
+    HostInDomain,
+    InvalidHostName,
+    NasConfigFault,
+    InvalidNasCredentials,
+    InvalidNetworkResource,
+    NasConnectionLimitReached,
+    NasSessionCredentialConflict,
+    NasVolumeNotMounted,
+    NetworkInaccessible,
+    NoPermissionOnNasVolume,
+    NoGateway,
+    NoVirtualNic,
+    PlatformConfigFault,
+    InvalidBundle,
+    PatchInstallFailed,
+    PatchIntegrityError,
+    VmfsMountFault,
+    VmfsAlreadyMounted,
+    VmfsAmbiguousMount,
+    HostConnectFault,
+    AgentInstallFailed,
+    AlreadyBeingManaged,
+    AlreadyConnected,
+    #[serde(rename = "CannotAddHostWithFTVmAsStandalone")]
+    #[strum(serialize = "CannotAddHostWithFTVmAsStandalone")]
+    CannotAddHostWithFtVmAsStandalone,
+    #[serde(rename = "CannotAddHostWithFTVmToDifferentCluster")]
+    #[strum(serialize = "CannotAddHostWithFTVmToDifferentCluster")]
+    CannotAddHostWithFtVmToDifferentCluster,
+    #[serde(rename = "CannotAddHostWithFTVmToNonHACluster")]
+    #[strum(serialize = "CannotAddHostWithFTVmToNonHACluster")]
+    CannotAddHostWithFtVmToNonHaCluster,
+    GatewayConnectFault,
+    GatewayNotFound,
+    GatewayNotReachable,
+    GatewayOperationRefused,
+    GatewayToHostConnectFault,
+    GatewayHostNotReachable,
+    GatewayToHostAuthFault,
+    GatewayToHostTrustVerifyFault,
+    MultipleCertificatesVerifyFault,
+    NoHost,
+    NoPermissionOnHost,
+    NotSupportedHost,
+    NonVmwareOuiMacNotSupportedHost,
+    NotSupportedHostForVFlash,
+    NotSupportedHostForVmcp,
+    NotSupportedHostForVmemFile,
+    NotSupportedHostForVsan,
+    NotSupportedHostInCluster,
+    #[serde(rename = "EVCAdmissionFailed")]
+    #[strum(serialize = "EVCAdmissionFailed")]
+    EvcAdmissionFailed,
+    #[serde(rename = "EVCAdmissionFailedCPUFeaturesForMode")]
+    #[strum(serialize = "EVCAdmissionFailedCPUFeaturesForMode")]
+    EvcAdmissionFailedCpuFeaturesForMode,
+    #[serde(rename = "EVCAdmissionFailedCPUModel")]
+    #[strum(serialize = "EVCAdmissionFailedCPUModel")]
+    EvcAdmissionFailedCpuModel,
+    #[serde(rename = "EVCAdmissionFailedCPUModelForMode")]
+    #[strum(serialize = "EVCAdmissionFailedCPUModelForMode")]
+    EvcAdmissionFailedCpuModelForMode,
+    #[serde(rename = "EVCAdmissionFailedCPUVendor")]
+    #[strum(serialize = "EVCAdmissionFailedCPUVendor")]
+    EvcAdmissionFailedCpuVendor,
+    #[serde(rename = "EVCAdmissionFailedCPUVendorUnknown")]
+    #[strum(serialize = "EVCAdmissionFailedCPUVendorUnknown")]
+    EvcAdmissionFailedCpuVendorUnknown,
+    #[serde(rename = "EVCAdmissionFailedHostDisconnected")]
+    #[strum(serialize = "EVCAdmissionFailedHostDisconnected")]
+    EvcAdmissionFailedHostDisconnected,
+    #[serde(rename = "EVCAdmissionFailedHostSoftware")]
+    #[strum(serialize = "EVCAdmissionFailedHostSoftware")]
+    EvcAdmissionFailedHostSoftware,
+    #[serde(rename = "EVCAdmissionFailedHostSoftwareForMode")]
+    #[strum(serialize = "EVCAdmissionFailedHostSoftwareForMode")]
+    EvcAdmissionFailedHostSoftwareForMode,
+    #[serde(rename = "EVCAdmissionFailedVmActive")]
+    #[strum(serialize = "EVCAdmissionFailedVmActive")]
+    EvcAdmissionFailedVmActive,
+    NotSupportedHostInDvs,
+    #[serde(rename = "NotSupportedHostInHACluster")]
+    #[strum(serialize = "NotSupportedHostInHACluster")]
+    NotSupportedHostInHaCluster,
+    ReadHostResourcePoolTreeFailed,
+    #[serde(rename = "SSLDisabledFault")]
+    #[strum(serialize = "SSLDisabledFault")]
+    SslDisabledFault,
+    #[serde(rename = "SSLVerifyFault")]
+    #[strum(serialize = "SSLVerifyFault")]
+    SslVerifyFault,
+    TooManyHosts,
+    HostHasComponentFailure,
+    HostIncompatibleForRecordReplay,
+    HostPowerOpFailed,
+    NoPeerHostFound,
+    VmotionInterfaceNotEnabled,
+    #[serde(rename = "WakeOnLanNotSupportedByVmotionNIC")]
+    #[strum(serialize = "WakeOnLanNotSupportedByVmotionNIC")]
+    WakeOnLanNotSupportedByVmotionNic,
+    HostSpecificationOperationFailed,
+    HttpFault,
+    #[serde(rename = "IORMNotSupportedHostOnDatastore")]
+    #[strum(serialize = "IORMNotSupportedHostOnDatastore")]
+    IormNotSupportedHostOnDatastore,
+    InaccessibleVFlashSource,
+    InsufficientResourcesFault,
+    InsufficientAgentVmsDeployed,
+    InsufficientCpuResourcesFault,
+    InsufficientFailoverResourcesFault,
+    InsufficientGraphicsResourcesFault,
+    InsufficientHostCapacityFault,
+    InsufficientHostCpuCapacityFault,
+    InsufficientHostMemoryCapacityFault,
+    InsufficientPerCpuCapacity,
+    InsufficientMemoryResourcesFault,
+    InsufficientNetworkCapacity,
+    InsufficientNetworkResourcePoolCapacity,
+    InsufficientStandbyResource,
+    InsufficientStandbyCpuResource,
+    InsufficientStandbyMemoryResource,
+    InsufficientStorageSpace,
+    InsufficientVFlashResourcesFault,
+    InvalidResourcePoolStructureFault,
+    NumVirtualCpusExceedsLimit,
+    VmFaultToleranceTooManyFtVcpusOnHost,
+    VmFaultToleranceTooManyVMsOnHost,
+    VmSmpFaultToleranceTooManyVMsOnHost,
+    InsufficientStorageIops,
+    InvalidAffinitySettingFault,
+    InvalidBmcRole,
+    InvalidDatastore,
+    DatastoreNotWritableOnHost,
+    SwapDatastoreNotWritableOnHost,
+    InaccessibleDatastore,
+    #[serde(rename = "InaccessibleFTMetadataDatastore")]
+    #[strum(serialize = "InaccessibleFTMetadataDatastore")]
+    InaccessibleFtMetadataDatastore,
+    InvalidDatastorePath,
+    InvalidEvent,
+    InvalidFolder,
+    VmAlreadyExistsInDatacenter,
+    InvalidIpmiLoginInfo,
+    InvalidIpmiMacAddress,
+    InvalidLicense,
+    InvalidLocale,
+    InvalidLogin,
+    InvalidClientCertificate,
+    PasswordExpired,
+    InvalidName,
+    InvalidPrivilege,
+    InvalidState,
+    CannotPowerOffVmInCluster,
+    EncryptionKeyRequired,
+    InvalidDatastoreState,
+    InvalidHostState,
+    InvalidHostConnectionState,
+    InvalidPowerState,
+    InvalidVmState,
+    MksConnectionLimitReached,
+    NoActiveHostInCluster,
+    OvfConsumerPowerOnFault,
+    QuestionPending,
+    VmPowerOnDisabled,
+    IscsiFault,
+    IscsiFaultInvalidVnic,
+    IscsiFaultPnicInUse,
+    IscsiFaultVnicAlreadyBound,
+    IscsiFaultVnicHasActivePaths,
+    IscsiFaultVnicHasMultipleUplinks,
+    IscsiFaultVnicHasNoUplinks,
+    IscsiFaultVnicHasWrongUplink,
+    IscsiFaultVnicInUse,
+    IscsiFaultVnicIsLastPath,
+    IscsiFaultVnicNotBound,
+    IscsiFaultVnicNotFound,
+    KeyNotFound,
+    LicenseEntityNotFound,
+    LicenseServerUnavailable,
+    LimitExceeded,
+    LogBundlingFailed,
+    MigrationFault,
+    AffinityConfigured,
+    CannotModifyConfigCpuRequirements,
+    CannotMoveVmWithDeltaDisk,
+    CannotMoveVmWithNativeDeltaDisk,
+    CloneFromSnapshotNotSupported,
+    DatacenterMismatch,
+    DisallowedMigrationDeviceAttached,
+    DiskMoveTypeNotSupported,
+    FaultToleranceAntiAffinityViolated,
+    FaultToleranceNeedsThickDisk,
+    FaultToleranceNotSameBuild,
+    #[serde(rename = "HAErrorsAtDest")]
+    #[strum(serialize = "HAErrorsAtDest")]
+    HaErrorsAtDest,
+    IncompatibleDefaultDevice,
+    #[serde(rename = "LargeRDMConversionNotSupported")]
+    #[strum(serialize = "LargeRDMConversionNotSupported")]
+    LargeRdmConversionNotSupported,
+    MaintenanceModeFileMove,
+    MigrationDisabled,
+    MigrationFeatureNotSupported,
+    FullStorageVMotionNotSupported,
+    IndependentDiskVMotionNotSupported,
+    #[serde(rename = "NonHomeRDMVMotionNotSupported")]
+    #[strum(serialize = "NonHomeRDMVMotionNotSupported")]
+    NonHomeRdmvMotionNotSupported,
+    StorageVMotionNotSupported,
+    UnsharedSwapVMotionNotSupported,
+    VMotionAcrossNetworkNotSupported,
+    MigrationNotReady,
+    MismatchedNetworkPolicies,
+    MismatchedVMotionNetworkNames,
+    NetworksMayNotBeTheSame,
+    NoGuestHeartbeat,
+    #[serde(rename = "RDMConversionNotSupported")]
+    #[strum(serialize = "RDMConversionNotSupported")]
+    RdmConversionNotSupported,
+    #[serde(rename = "RDMNotPreserved")]
+    #[strum(serialize = "RDMNotPreserved")]
+    RdmNotPreserved,
+    ReadOnlyDisksWithLegacyDestination,
+    SnapshotCopyNotSupported,
+    HotSnapshotMoveNotSupported,
+    SnapshotCloneNotSupported,
+    SnapshotMoveFromNonHomeNotSupported,
+    SnapshotMoveNotSupported,
+    SnapshotMoveToNonHomeNotSupported,
+    SnapshotRevertIssue,
+    SuspendedRelocateNotSupported,
+    TooManyDisksOnLegacyHost,
+    ToolsInstallationInProgress,
+    UncommittedUndoableDisk,
+    VMotionInterfaceIssue,
+    VMotionLinkCapacityLow,
+    VMotionLinkDown,
+    VMotionNotConfigured,
+    VMotionNotLicensed,
+    VMotionNotSupported,
+    VMotionProtocolIncompatible,
+    #[serde(rename = "WillLoseHAProtection")]
+    #[strum(serialize = "WillLoseHAProtection")]
+    WillLoseHaProtection,
+    WillModifyConfigCpuRequirements,
+    WillResetSnapshotDirectory,
+    MismatchedBundle,
+    MissingBmcSupport,
+    NamespaceFull,
+    NamespaceLimitReached,
+    NamespaceWriteProtected,
+    NetworkDisruptedAndConfigRolledBack,
+    NoClientCertificate,
+    NoCompatibleDatastore,
+    NoCompatibleHost,
+    NoCompatibleHostWithAccessToDevice,
+    NoConnectedDatastore,
+    NoDiskFound,
+    NoSubjectName,
+    NotFound,
+    NotSupportedHostForChecksum,
+    OutOfBounds,
+    OvfFault,
+    OvfConsumerCallbackFault,
+    OvfConsumerCommunicationError,
+    OvfConsumerFault,
+    OvfConsumerInvalidSection,
+    OvfConsumerUndeclaredSection,
+    OvfConsumerUndefinedPrefix,
+    OvfExport,
+    ConnectedIso,
+    OvfDuplicatedPropertyIdExport,
+    OvfDuplicatedPropertyIdImport,
+    OvfExportFailed,
+    OvfHardwareExport,
+    OvfConnectedDevice,
+    OvfConnectedDeviceFloppy,
+    OvfConnectedDeviceIso,
+    OvfUnableToExportDisk,
+    OvfUnknownDeviceBacking,
+    OvfUnsupportedDeviceExport,
+    OvfPropertyExport,
+    OvfPropertyNetworkExport,
+    OvfImport,
+    OvfCpuCompatibility,
+    OvfCpuCompatibilityCheckNotSupported,
+    OvfHardwareCheck,
+    OvfImportFailed,
+    OvfMappedOsId,
+    OvfMissingHardware,
+    OvfNetworkMappingNotSupported,
+    OvfUnsupportedDiskProvisioning,
+    OvfInvalidPackage,
+    OvfAttribute,
+    OvfInvalidValue,
+    OvfInvalidValueConfiguration,
+    OvfInvalidValueEmpty,
+    OvfInvalidValueFormatMalformed,
+    OvfInvalidValueReference,
+    OvfMissingAttribute,
+    OvfConstraint,
+    OvfDiskOrderConstraint,
+    OvfHostResourceConstraint,
+    OvfElement,
+    OvfDuplicateElement,
+    OvfDuplicatedElementBoundary,
+    OvfElementInvalidValue,
+    OvfMissingElement,
+    OvfMissingElementNormalBoundary,
+    OvfUnexpectedElement,
+    OvfWrongElement,
+    OvfProperty,
+    OvfPropertyNetwork,
+    OvfPropertyQualifier,
+    OvfPropertyQualifierDuplicate,
+    OvfPropertyQualifierIgnored,
+    OvfPropertyType,
+    OvfPropertyValue,
+    OvfWrongNamespace,
+    OvfXmlFormat,
+    OvfSystemFault,
+    OvfDiskMappingNotFound,
+    OvfHostValueNotParsed,
+    OvfInternalError,
+    OvfToXmlUnsupportedElement,
+    OvfUnknownDevice,
+    OvfUnknownEntity,
+    OvfUnsupportedDeviceBackingInfo,
+    OvfUnsupportedDeviceBackingOption,
+    OvfUnsupportedPackage,
+    OvfInvalidVmName,
+    OvfNoHostNic,
+    OvfNoSupportedHardwareFamily,
+    OvfUnsupportedAttribute,
+    OvfUnsupportedAttributeValue,
+    OvfUnsupportedElement,
+    OvfNoSpaceOnController,
+    OvfUnsupportedElementValue,
+    OvfUnsupportedSection,
+    OvfUnsupportedSubType,
+    OvfUnsupportedType,
+    PatchBinariesNotFound,
+    PatchMetadataInvalid,
+    PatchMetadataCorrupted,
+    PatchMetadataNotFound,
+    PatchNotApplicable,
+    PatchAlreadyInstalled,
+    PatchMissingDependencies,
+    PatchSuperseded,
+    ProfileUpdateFailed,
+    RebootRequired,
+    RecordReplayDisabled,
+    RemoveFailed,
+    ReplicationFault,
+    IncompatibleHostForVmReplication,
+    ReplicationConfigFault,
+    ReplicationDiskConfigFault,
+    ReplicationVmConfigFault,
+    #[serde(rename = "ReplicationIncompatibleWithFT")]
+    #[strum(serialize = "ReplicationIncompatibleWithFT")]
+    ReplicationIncompatibleWithFt,
+    ReplicationInvalidOptions,
+    ReplicationNotSupportedOnHost,
+    ReplicationVmFault,
+    ReplicationVmInProgressFault,
+    ResourceInUse,
+    FilterInUse,
+    #[serde(rename = "QuiesceDatastoreIOForHAFailed")]
+    #[strum(serialize = "QuiesceDatastoreIOForHAFailed")]
+    QuiesceDatastoreIoForHaFailed,
+    ResourceNotAvailable,
+    #[serde(rename = "SSPIChallenge")]
+    #[strum(serialize = "SSPIChallenge")]
+    SspiChallenge,
+    ShrinkDiskFault,
+    SnapshotFault,
+    ApplicationQuiesceFault,
+    FilesystemQuiesceFault,
+    MemorySnapshotOnIndependentDisk,
+    MultipleSnapshotsNotSupported,
+    SnapshotDisabled,
+    SnapshotIncompatibleDeviceInVm,
+    SnapshotLocked,
+    SnapshotNoChange,
+    TooManySnapshotLevels,
+    SsdDiskNotAvailable,
+    StorageDrsCannotMoveDiskInMultiWriterMode,
+    #[serde(rename = "StorageDrsCannotMoveFTVm")]
+    #[strum(serialize = "StorageDrsCannotMoveFTVm")]
+    StorageDrsCannotMoveFtVm,
+    StorageDrsCannotMoveIndependentDisk,
+    StorageDrsCannotMoveManuallyPlacedSwapFile,
+    StorageDrsCannotMoveManuallyPlacedVm,
+    StorageDrsCannotMoveSharedDisk,
+    StorageDrsCannotMoveTemplate,
+    StorageDrsCannotMoveVmInUserFolder,
+    #[serde(rename = "StorageDrsCannotMoveVmWithMountedCDROM")]
+    #[strum(serialize = "StorageDrsCannotMoveVmWithMountedCDROM")]
+    StorageDrsCannotMoveVmWithMountedCdrom,
+    StorageDrsCannotMoveVmWithNoFilesInLayout,
+    StorageDrsDatacentersCannotShareDatastore,
+    StorageDrsDisabledOnVm,
+    StorageDrsHbrDiskNotMovable,
+    StorageDrsHmsMoveInProgress,
+    StorageDrsHmsUnreachable,
+    StorageDrsIolbDisabledInternally,
+    StorageDrsRelocateDisabled,
+    StorageDrsStaleHmsCollection,
+    StorageDrsUnableToMoveFiles,
+    SwapDatastoreUnset,
+    TaskInProgress,
+    VAppTaskInProgress,
+    Timedout,
+    PowerOnFtSecondaryTimedout,
+    TooManyConsecutiveOverrides,
+    ToolsUnavailable,
+    UnrecognizedHost,
+    UnsupportedVimApiVersion,
+    UserNotFound,
+    VAppConfigFault,
+    MissingPowerOffConfiguration,
+    MissingPowerOnConfiguration,
+    NoVmInVApp,
+    VFlashModuleVersionIncompatible,
+    VmConfigFault,
+    CannotAccessVmComponent,
+    CannotAccessVmConfig,
+    CannotAccessVmDevice,
+    CannotAccessNetwork,
+    DestinationSwitchFull,
+    LegacyNetworkInterfaceInUse,
+    #[serde(rename = "VMOnConflictDVPort")]
+    #[strum(serialize = "VMOnConflictDVPort")]
+    VmOnConflictDvPort,
+    #[serde(rename = "VMOnVirtualIntranet")]
+    #[strum(serialize = "VMOnVirtualIntranet")]
+    VmOnVirtualIntranet,
+    CannotAccessVmDisk,
+    #[serde(rename = "RDMPointsToInaccessibleDisk")]
+    #[strum(serialize = "RDMPointsToInaccessibleDisk")]
+    RdmPointsToInaccessibleDisk,
+    CannotDisableSnapshot,
+    CannotUseNetwork,
+    CpuHotPlugNotSupported,
+    DeltaDiskFormatNotSupported,
+    EightHostLimitViolated,
+    FaultToleranceCannotEditMem,
+    GenericVmConfigFault,
+    InvalidFormat,
+    InvalidDiskFormat,
+    InvalidSnapshotFormat,
+    InvalidVmConfig,
+    InvalidDeviceSpec,
+    DeviceHotPlugNotSupported,
+    DeviceNotFound,
+    DeviceUnsupportedForVmPlatform,
+    DeviceUnsupportedForVmVersion,
+    DisallowedDiskModeChange,
+    InvalidController,
+    InvalidDeviceBacking,
+    InvalidDeviceOperation,
+    MissingController,
+    SwapPlacementOverrideNotSupported,
+    TooManyDevices,
+    UnsupportedGuest,
+    VmWwnConflict,
+    #[serde(rename = "LargeRDMNotSupportedOnDatastore")]
+    #[strum(serialize = "LargeRDMNotSupportedOnDatastore")]
+    LargeRdmNotSupportedOnDatastore,
+    MemoryHotPlugNotSupported,
+    NoCompatibleHardAffinityHost,
+    NoCompatibleSoftAffinityHost,
+    NumVirtualCpusIncompatible,
+    OvfConsumerValidationFault,
+    QuarantineModeFault,
+    #[serde(rename = "RDMNotSupportedOnDatastore")]
+    #[strum(serialize = "RDMNotSupportedOnDatastore")]
+    RdmNotSupportedOnDatastore,
+    RuleViolation,
+    SoftRuleVioCorrectionDisallowed,
+    SoftRuleVioCorrectionImpact,
+    UnsupportedDatastore,
+    MemoryFileFormatNotSupportedByDatastore,
+    UnSupportedDatastoreForVFlash,
+    UnsupportedVmxLocation,
+    VAppNotRunning,
+    VAppPropertyFault,
+    InvalidNetworkInType,
+    InvalidPropertyType,
+    InvalidPropertyValue,
+    UnconfiguredPropertyValue,
+    MissingIpPool,
+    MissingNetworkIpConfig,
+    NoAvailableIp,
+    NoVcManagedIpConfigured,
+    NotUserConfigurableProperty,
+    VFlashCacheHotConfigNotSupported,
+    VFlashModuleNotSupported,
+    VirtualHardwareCompatibilityIssue,
+    CpuIncompatible,
+    CpuCompatibilityUnknown,
+    #[serde(rename = "CpuIncompatible1ECX")]
+    #[strum(serialize = "CpuIncompatible1ECX")]
+    CpuIncompatible1Ecx,
+    #[serde(rename = "CpuIncompatible81EDX")]
+    #[strum(serialize = "CpuIncompatible81EDX")]
+    CpuIncompatible81Edx,
+    FaultToleranceCpuIncompatible,
+    DeviceNotSupported,
+    DeviceBackingNotSupported,
+    #[serde(rename = "DVPortNotSupported")]
+    #[strum(serialize = "DVPortNotSupported")]
+    DvPortNotSupported,
+    UnusedVirtualDiskBlocksNotScrubbed,
+    VirtualDiskBlocksNotFullyProvisioned,
+    DeviceControllerNotSupported,
+    DigestNotSupported,
+    FileBackedPortNotSupported,
+    MultiWriterNotSupported,
+    NonPersistentDisksNotSupported,
+    #[serde(rename = "RDMNotSupported")]
+    #[strum(serialize = "RDMNotSupported")]
+    RdmNotSupported,
+    #[serde(rename = "PhysCompatRDMNotSupported")]
+    #[strum(serialize = "PhysCompatRDMNotSupported")]
+    PhysCompatRdmNotSupported,
+    RawDiskNotSupported,
+    RemoteDeviceNotSupported,
+    SharedBusControllerNotSupported,
+    #[serde(rename = "VMINotSupported")]
+    #[strum(serialize = "VMINotSupported")]
+    VmiNotSupported,
+    VirtualDiskModeNotSupported,
+    VirtualEthernetCardNotSupported,
+    DiskNotSupported,
+    #[serde(rename = "IDEDiskNotSupported")]
+    #[strum(serialize = "IDEDiskNotSupported")]
+    IdeDiskNotSupported,
+    DrsVmotionIncompatibleFault,
+    FeatureRequirementsNotMet,
+    MemorySizeNotRecommended,
+    MemorySizeNotSupported,
+    MemorySizeNotSupportedByDatastore,
+    NotEnoughCpus,
+    NotEnoughLogicalCpus,
+    NumVirtualCoresPerSocketNotSupported,
+    NumVirtualCpusNotSupported,
+    StorageVmotionIncompatible,
+    VirtualHardwareVersionNotSupported,
+    WakeOnLanNotSupported,
+    VmConfigIncompatibleForFaultTolerance,
+    VmConfigIncompatibleForRecordReplay,
+    VmHostAffinityRuleViolation,
+    VmFaultToleranceIssue,
+    CannotChangeDrsBehaviorForFtSecondary,
+    CannotChangeHaSettingsForFtSecondary,
+    #[serde(rename = "CannotComputeFTCompatibleHosts")]
+    #[strum(serialize = "CannotComputeFTCompatibleHosts")]
+    CannotComputeFtCompatibleHosts,
+    FaultToleranceNotLicensed,
+    FaultTolerancePrimaryPowerOnNotAttempted,
+    FtIssuesOnHost,
+    HostIncompatibleForFaultTolerance,
+    IncompatibleHostForFtSecondary,
+    InvalidOperationOnSecondaryVm,
+    NoHostSuitableForFtSecondary,
+    #[serde(rename = "NotSupportedDeviceForFT")]
+    #[strum(serialize = "NotSupportedDeviceForFT")]
+    NotSupportedDeviceForFt,
+    PowerOnFtSecondaryFailed,
+    SecondaryVmAlreadyDisabled,
+    SecondaryVmAlreadyEnabled,
+    SecondaryVmAlreadyRegistered,
+    SecondaryVmNotRegistered,
+    VmFaultToleranceConfigIssue,
+    VmFaultToleranceConfigIssueWrapper,
+    VmFaultToleranceInvalidFileBacking,
+    VmFaultToleranceOpIssuesList,
+    VmMetadataManagerFault,
+    VmMonitorIncompatibleForFaultTolerance,
+    VmToolsUpgradeFault,
+    ToolsAlreadyUpgraded,
+    ToolsAutoUpgradeNotSupported,
+    ToolsImageCopyFailed,
+    ToolsImageNotAvailable,
+    ToolsImageSignatureCheckFailed,
+    ToolsUpgradeCancelled,
+    VmValidateMaxDevice,
+    VsanFault,
+    CannotChangeVsanClusterUuid,
+    CannotChangeVsanNodeUuid,
+    CannotMoveVsanEnabledHost,
+    DestinationVsanDisabled,
+    VsanClusterUuidMismatch,
+    CannotReconfigureVsanWhenHaEnabled,
+    DuplicateVsanNetworkInterface,
+    VsanDiskFault,
+    DiskHasPartitions,
+    #[serde(rename = "DiskIsLastRemainingNonSSD")]
+    #[strum(serialize = "DiskIsLastRemainingNonSSD")]
+    DiskIsLastRemainingNonSsd,
+    DiskIsNonLocal,
+    #[serde(rename = "DiskIsUSB")]
+    #[strum(serialize = "DiskIsUSB")]
+    DiskIsUsb,
+    DiskTooSmall,
+    DuplicateDisks,
+    InsufficientDisks,
+    VsanIncompatibleDiskMapping,
+    WipeDiskFault,
+    RuntimeFault,
+    CannotDisableDrsOnClustersWithVApps,
+    ConflictingDatastoreFound,
+    DatabaseError,
+    DisallowedChangeByService,
+    DisallowedOperationOnFailoverHost,
+    FailToLockFaultToleranceVMs,
+    InvalidProfileReferenceHost,
+    InvalidScheduledTask,
+    LicenseAssignmentFailed,
+    MethodAlreadyDisabledFault,
+    MethodDisabled,
+    OperationDisallowedOnHost,
+    RestrictedByAdministrator,
+    ThirdPartyLicenseAssignmentFailed,
+    VAppOperationInProgress,
+    HostCommunication,
+    HostNotConnected,
+    HostNotReachable,
+    InvalidArgument,
+    IncompatibleSetting,
+    InvalidDasConfigArgument,
+    InvalidDasRestartPriorityForFtVm,
+    InvalidDrsBehaviorForFtVm,
+    InvalidIndexArgument,
+    InvalidRequest,
+    InvalidType,
+    MethodNotFound,
+    ManagedObjectNotFound,
+    NotEnoughLicenses,
+    ExpiredFeatureLicense,
+    ExpiredAddonLicense,
+    ExpiredEditionLicense,
+    #[serde(rename = "FailToEnableSPBM")]
+    #[strum(serialize = "FailToEnableSPBM")]
+    FailToEnableSpbm,
+    HostInventoryFull,
+    InUseFeatureManipulationDisallowed,
+    IncorrectHostInformation,
+    InvalidEditionLicense,
+    InventoryHasStandardAloneHosts,
+    LicenseDowngradeDisallowed,
+    LicenseExpired,
+    LicenseKeyEntityMismatch,
+    LicenseRestricted,
+    LicenseSourceUnavailable,
+    NoLicenseServerConfigured,
+    VmLimitLicense,
+    VramLimitLicense,
+    NotImplemented,
+    NotSupported,
+    HostAccessRestrictedToManagementServer,
+    RequestCanceled,
+    SecurityError,
+    NoPermission,
+    NotAuthenticated,
+    RestrictedVersion,
+    SolutionUserRequired,
+    SystemError,
+    UnexpectedFault,
+    InvalidCollectorVersion,
+    InvalidProperty,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+impl StructType {
+    pub fn child_of(&self, other: &StructType) -> bool {
+        if self < other {
+            false // Not equals and not a child - false
+        } else if other == self {
+            true // Equals - true
+        } else {
+            match other {
+                StructType::DataObject => *self <= StructType::WaitOptions,
+                StructType::ClusterComputeResourceValidationResultBase => *self <= StructType::ClusterComputeResourceHostConfigurationValidation,
+                StructType::ComputeResourceConfigInfo => *self <= StructType::ClusterConfigInfoEx,
+                StructType::ComputeResourceConfigSpec => *self <= StructType::ClusterConfigSpecEx,
+                StructType::ComputeResourceSummary => *self <= StructType::ClusterComputeResourceSummary,
+                StructType::CustomFieldValue => *self <= StructType::CustomFieldStringValue,
+                StructType::DatastoreInfo => *self <= StructType::VvolDatastoreInfo,
+                StructType::Description => *self <= StructType::ScheduledTaskDetail,
+                StructType::ElementDescription => *self <= StructType::OptionDef,
+                StructType::TypeDescription => *self <= StructType::ScheduledTaskDetail,
+                StructType::DvsConfigInfo => *self <= StructType::VMwareDvsConfigInfo,
+                StructType::DvsConfigSpec => *self <= StructType::VMwareDvsConfigSpec,
+                StructType::DvsFeatureCapability => *self <= StructType::VMwareDvsFeatureCapability,
+                StructType::DvsHealthCheckConfig => *self <= StructType::VMwareDvsVlanMtuHealthCheckConfig,
+                StructType::VMwareDvsHealthCheckConfig => *self <= StructType::VMwareDvsVlanMtuHealthCheckConfig,
+                StructType::DvsHealthCheckCapability => *self <= StructType::VMwareDvsHealthCheckCapability,
+                StructType::DvsUplinkPortPolicy => *self <= StructType::DvsNameArrayUplinkPortPolicy,
+                StructType::ImportSpec => *self <= StructType::VirtualMachineImportSpec,
+                StructType::InheritablePolicy => *self <= StructType::VmwareDistributedVirtualSwitchVlanIdSpec,
+                StructType::DvsFilterConfig => *self <= StructType::DvsTrafficFilterConfigSpec,
+                StructType::DvsTrafficFilterConfig => *self <= StructType::DvsTrafficFilterConfigSpec,
+                StructType::VmwareDistributedVirtualSwitchVlanSpec => *self <= StructType::VmwareDistributedVirtualSwitchVlanIdSpec,
+                StructType::IoFilterInfo => *self <= StructType::HostIoFilterInfo,
+                StructType::LicenseSource => *self <= StructType::LocalLicenseSource,
+                StructType::NegatableExpression => *self <= StructType::DvsSingleIpPort,
+                StructType::IpAddress => *self <= StructType::SingleIp,
+                StructType::MacAddress => *self <= StructType::SingleMac,
+                StructType::DvsIpPort => *self <= StructType::DvsSingleIpPort,
+                StructType::NetworkSummary => *self <= StructType::OpaqueNetworkSummary,
+                StructType::OvfManagerCommonParams => *self <= StructType::OvfValidateHostParams,
+                StructType::PerfEntityMetricBase => *self <= StructType::PerfEntityMetricCsv,
+                StructType::PerfMetricSeries => *self <= StructType::PerfMetricSeriesCsv,
+                StructType::ResourcePoolSummary => *self <= StructType::VirtualAppSummary,
+                StructType::SelectionSet => *self <= StructType::DvsSelection,
+                StructType::ServiceLocatorCredential => *self <= StructType::ServiceLocatorSamlCredential,
+                StructType::SessionManagerServiceRequestSpec => *self <= StructType::SessionManagerVmomiServiceRequestSpec,
+                StructType::TaskReason => *self <= StructType::TaskReasonUser,
+                StructType::UserSearchResult => *self <= StructType::PosixUserSearchResult,
+                StructType::VirtualDiskSpec => *self <= StructType::SeSparseVirtualDiskSpec,
+                StructType::FileBackedVirtualDiskSpec => *self <= StructType::SeSparseVirtualDiskSpec,
+                StructType::VirtualMachineConnection => *self <= StructType::VirtualMachineMksConnection,
+                StructType::VsanUpgradeSystemPreflightCheckIssue => *self <= StructType::VsanUpgradeSystemWrongEsxVersionIssue,
+                StructType::VsanUpgradeSystemUpgradeHistoryItem => *self <= StructType::VsanUpgradeSystemUpgradeHistoryPreflightFail,
+                StructType::Action => *self <= StructType::SendSnmpAction,
+                StructType::AlarmAction => *self <= StructType::GroupAlarmAction,
+                StructType::AlarmExpression => *self <= StructType::StateAlarmExpression,
+                StructType::AlarmSpec => *self <= StructType::AlarmInfo,
+                StructType::ClusterAction => *self <= StructType::StoragePlacementAction,
+                StructType::ClusterDasAdmissionControlInfo => *self <= StructType::ClusterFailoverResourcesAdmissionControlInfo,
+                StructType::ClusterDasAdmissionControlPolicy => *self <= StructType::ClusterFailoverResourcesAdmissionControlPolicy,
+                StructType::ClusterDasAdvancedRuntimeInfo => *self <= StructType::ClusterDasFailoverLevelAdvancedRuntimeInfo,
+                StructType::ClusterDasData => *self <= StructType::ClusterDasDataSummary,
+                StructType::ClusterDasHostInfo => *self <= StructType::ClusterDasAamHostInfo,
+                StructType::ClusterDrsFaultsFaultsByVm => *self <= StructType::ClusterDrsFaultsFaultsByVirtualDisk,
+                StructType::ClusterGroupInfo => *self <= StructType::ClusterVmGroup,
+                StructType::ClusterRuleInfo => *self <= StructType::VirtualDiskRuleSpec,
+                StructType::ClusterSlotPolicy => *self <= StructType::ClusterFixedSizeSlotPolicy,
+                StructType::DvPortSetting => *self <= StructType::VMwareDvsPortSetting,
+                StructType::DvPortgroupPolicy => *self <= StructType::VMwareDvsPortgroupPolicy,
+                StructType::DistributedVirtualSwitchManagerHostDvsFilterSpec => *self <= StructType::DistributedVirtualSwitchManagerHostDvsMembershipFilter,
+                StructType::DistributedVirtualSwitchHostMemberBacking => *self <= StructType::DistributedVirtualSwitchHostMemberPnicBacking,
+                StructType::HostMemberHealthCheckResult => *self <= StructType::VMwareDvsTeamingHealthCheckResult,
+                StructType::HostMemberUplinkHealthCheckResult => *self <= StructType::VMwareDvsVlanHealthCheckResult,
+                StructType::DvsNetworkRuleAction => *self <= StructType::DvsUpdateTagNetworkRuleAction,
+                StructType::DvsNetworkRuleQualifier => *self <= StructType::DvsSystemTrafficNetworkRuleQualifier,
+                StructType::CryptoSpec => *self <= StructType::CryptoSpecShallowRecrypt,
+                StructType::CryptoSpecNoOp => *self <= StructType::CryptoSpecRegister,
+                StructType::Event => *self <= StructType::VmWwnConflictEvent,
+                StructType::AlarmEvent => *self <= StructType::AlarmStatusChangedEvent,
+                StructType::AuthorizationEvent => *self <= StructType::RoleUpdatedEvent,
+                StructType::PermissionEvent => *self <= StructType::PermissionUpdatedEvent,
+                StructType::RoleEvent => *self <= StructType::RoleUpdatedEvent,
+                StructType::ClusterEvent => *self <= StructType::VmHealthMonitoringStateChangedEvent,
+                StructType::ClusterOvercommittedEvent => *self <= StructType::HostOvercommittedEvent,
+                StructType::ClusterStatusChangedEvent => *self <= StructType::HostStatusChangedEvent,
+                StructType::CustomFieldEvent => *self <= StructType::CustomFieldValueChangedEvent,
+                StructType::CustomFieldDefEvent => *self <= StructType::CustomFieldDefRenamedEvent,
+                StructType::DvPortgroupEvent => *self <= StructType::DvpgRestoreEvent,
+                StructType::DatacenterEvent => *self <= StructType::DatacenterRenamedEvent,
+                StructType::DatastoreEvent => *self <= StructType::NonViWorkloadDetectedOnDatastoreEvent,
+                StructType::DatastoreFileEvent => *self <= StructType::DatastoreFileMovedEvent,
+                StructType::DvsEvent => *self <= StructType::VmVnicPoolReservationViolationRaiseEvent,
+                StructType::GeneralEvent => *self <= StructType::GeneralVmWarningEvent,
+                StructType::HostEvent => *self <= StructType::IScsiBootFailureEvent,
+                StructType::DvsHealthStatusChangeEvent => *self <= StructType::UplinkPortVlanUntrunkedEvent,
+                StructType::EnteredStandbyModeEvent => *self <= StructType::DrsEnteredStandbyModeEvent,
+                StructType::EnteringStandbyModeEvent => *self <= StructType::DrsEnteringStandbyModeEvent,
+                StructType::ExitStandbyModeFailedEvent => *self <= StructType::DrsExitStandbyModeFailedEvent,
+                StructType::ExitedStandbyModeEvent => *self <= StructType::DrsExitedStandbyModeEvent,
+                StructType::ExitingStandbyModeEvent => *self <= StructType::DrsExitingStandbyModeEvent,
+                StructType::HostDasEvent => *self <= StructType::HostShortNameInconsistentEvent,
+                StructType::LicenseEvent => *self <= StructType::VMotionLicenseExpiredEvent,
+                StructType::ProfileEvent => *self <= StructType::ProfileRemovedEvent,
+                StructType::ResourcePoolEvent => *self <= StructType::ResourceViolatedEvent,
+                StructType::ScheduledTaskEvent => *self <= StructType::ScheduledTaskStartedEvent,
+                StructType::SessionEvent => *self <= StructType::UserLogoutSessionEvent,
+                StructType::TaskEvent => *self <= StructType::TaskTimeoutEvent,
+                StructType::TemplateUpgradeEvent => *self <= StructType::TemplateUpgradedEvent,
+                StructType::UpgradeEvent => *self <= StructType::WarningUpgradeEvent,
+                StructType::VmEvent => *self <= StructType::VmWwnConflictEvent,
+                StructType::CustomizationEvent => *self <= StructType::CustomizationSucceeded,
+                StructType::CustomizationFailed => *self <= StructType::CustomizationUnknownFailure,
+                StructType::MigrationEvent => *self <= StructType::MigrationWarningEvent,
+                StructType::VmCloneEvent => *self <= StructType::VmClonedEvent,
+                StructType::VmDasBeingResetEvent => *self <= StructType::VmDasBeingResetWithScreenshotEvent,
+                StructType::VmMigratedEvent => *self <= StructType::DrsVmMigratedEvent,
+                StructType::VmPoweredOffEvent => *self <= StructType::VmShutdownOnIsolationEvent,
+                StructType::VmPoweredOnEvent => *self <= StructType::VmRestartedOnAlternateHostEvent,
+                StructType::VmRelocateSpecEvent => *self <= StructType::VmRelocatedEvent,
+                StructType::VmStartingEvent => *self <= StructType::VmUnsupportedStartingEvent,
+                StructType::EventArgument => *self <= StructType::RoleEventArgument,
+                StructType::EntityEventArgument => *self <= StructType::VmEventArgument,
+                StructType::HostAuthenticationStoreInfo => *self <= StructType::HostLocalAuthenticationInfo,
+                StructType::HostDirectoryStoreInfo => *self <= StructType::HostActiveDirectoryInfo,
+                StructType::HostDatastoreConnectInfo => *self <= StructType::HostDatastoreNameConflictConnectInfo,
+                StructType::HostConnectInfoNetworkInfo => *self <= StructType::HostNewNetworkConnectInfo,
+                StructType::HostDataTransportConnectionInfo => *self <= StructType::HostNfcConnectionInfo,
+                StructType::FileInfo => *self <= StructType::VmSnapshotFileInfo,
+                StructType::VmConfigFileInfo => *self <= StructType::TemplateConfigFileInfo,
+                StructType::FileQuery => *self <= StructType::VmSnapshotFileQuery,
+                StructType::VmConfigFileQuery => *self <= StructType::TemplateConfigFileQuery,
+                StructType::HostDevice => *self <= StructType::HostScsiDisk,
+                StructType::ScsiLun => *self <= StructType::HostScsiDisk,
+                StructType::HostDigestInfo => *self <= StructType::HostTpmDigestInfo,
+                StructType::HostDnsConfig => *self <= StructType::HostDnsConfigSpec,
+                StructType::HostFileSystemVolume => *self <= StructType::HostVvolVolume,
+                StructType::HostHardwareElementInfo => *self <= StructType::HostStorageElementInfo,
+                StructType::HostHbaCreateSpec => *self <= StructType::HostTcpHbaCreateSpec,
+                StructType::HostHostBusAdapter => *self <= StructType::HostTcpHba,
+                StructType::HostFibreChannelHba => *self <= StructType::HostFibreChannelOverEthernetHba,
+                StructType::HostIpRouteConfig => *self <= StructType::HostIpRouteConfigSpec,
+                StructType::HostAccountSpec => *self <= StructType::HostPosixAccountSpec,
+                StructType::HostMultipathInfoLogicalUnitPolicy => *self <= StructType::HostMultipathInfoHppLogicalUnitPolicy,
+                StructType::HostNvmeSpec => *self <= StructType::HostNvmeDiscoverSpec,
+                StructType::HostNvmeTransportParameters => *self <= StructType::HostNvmeOverTcpParameters,
+                StructType::HostPciPassthruConfig => *self <= StructType::HostSriovConfig,
+                StructType::HostPciPassthruInfo => *self <= StructType::HostSriovInfo,
+                StructType::PhysicalNicHint => *self <= StructType::PhysicalNicNameHint,
+                StructType::HostRdmaDeviceBacking => *self <= StructType::HostRdmaDevicePnicBacking,
+                StructType::HostSriovDevicePoolInfo => *self <= StructType::HostSriovNetworkDevicePoolInfo,
+                StructType::HostSystemSwapConfigurationSystemSwapOption => *self <= StructType::HostSystemSwapConfigurationHostLocalSwapOption,
+                StructType::HostTargetTransport => *self <= StructType::HostTcpTargetTransport,
+                StructType::HostFibreChannelTargetTransport => *self <= StructType::HostFibreChannelOverEthernetTargetTransport,
+                StructType::HostTpmEventDetails => *self <= StructType::HostTpmVersionEventDetails,
+                StructType::HostTpmBootSecurityOptionEventDetails => *self <= StructType::HostTpmSignerEventDetails,
+                StructType::HostVirtualSwitchBridge => *self <= StructType::HostVirtualSwitchSimpleBridge,
+                StructType::VmfsDatastoreBaseOption => *self <= StructType::VmfsDatastoreAllExtentOption,
+                StructType::VmfsDatastoreSingleExtentOption => *self <= StructType::VmfsDatastoreAllExtentOption,
+                StructType::VmfsDatastoreSpec => *self <= StructType::VmfsDatastoreExtendSpec,
+                StructType::NetBiosConfigInfo => *self <= StructType::WinNetBiosConfigInfo,
+                StructType::ArrayUpdateSpec => *self <= StructType::VirtualMachineCpuIdInfoSpec,
+                StructType::OptionType => *self <= StructType::StringOption,
+                StructType::OptionValue => *self <= StructType::HostInternetScsiHbaParamValue,
+                StructType::ApplyProfile => *self <= StructType::NumPortsProfile,
+                StructType::DvsVNicProfile => *self <= StructType::DvsServiceConsoleVNicProfile,
+                StructType::PortGroupProfile => *self <= StructType::VmPortGroupProfile,
+                StructType::ProfileExpression => *self <= StructType::ProfileSimpleExpression,
+                StructType::PolicyOption => *self <= StructType::CompositePolicyOption,
+                StructType::ProfilePolicyOptionMetadata => *self <= StructType::UserInputRequiredParameterMetadata,
+                StructType::ProfileConfigInfo => *self <= StructType::HostProfileConfigInfo,
+                StructType::ProfileCreateSpec => *self <= StructType::HostProfileHostBasedConfigSpec,
+                StructType::ProfileSerializedCreateSpec => *self <= StructType::HostProfileSerializedHostProfileSpec,
+                StructType::ClusterProfileCreateSpec => *self <= StructType::ClusterProfileConfigServiceCreateSpec,
+                StructType::ClusterProfileConfigSpec => *self <= StructType::ClusterProfileConfigServiceCreateSpec,
+                StructType::HostProfileConfigSpec => *self <= StructType::HostProfileHostBasedConfigSpec,
+                StructType::ProfileExecuteResult => *self <= StructType::ApplyHostProfileConfigurationSpec,
+                StructType::AnswerFileCreateSpec => *self <= StructType::AnswerFileSerializedCreateSpec,
+                StructType::HostProfilesEntityCustomizations => *self <= StructType::StructuredCustomizations,
+                StructType::ScheduledTaskSpec => *self <= StructType::ScheduledTaskInfo,
+                StructType::TaskScheduler => *self <= StructType::WeeklyTaskScheduler,
+                StructType::RecurrentTaskScheduler => *self <= StructType::WeeklyTaskScheduler,
+                StructType::HourlyTaskScheduler => *self <= StructType::WeeklyTaskScheduler,
+                StructType::DailyTaskScheduler => *self <= StructType::WeeklyTaskScheduler,
+                StructType::MonthlyTaskScheduler => *self <= StructType::MonthlyByWeekdayTaskScheduler,
+                StructType::VmConfigInfo => *self <= StructType::VAppConfigInfo,
+                StructType::VmConfigSpec => *self <= StructType::VAppConfigSpec,
+                StructType::NodeDeploymentSpec => *self <= StructType::PassiveNodeDeploymentSpec,
+                StructType::NodeNetworkSpec => *self <= StructType::PassiveNodeNetworkSpec,
+                StructType::VirtualMachineBaseIndependentFilterSpec => *self <= StructType::VirtualMachineIndependentFilterSpec,
+                StructType::VirtualMachineBootOptionsBootableDevice => *self <= StructType::VirtualMachineBootOptionsBootableFloppyDevice,
+                StructType::VirtualMachineDeviceRuntimeInfoDeviceRuntimeState => *self <= StructType::VirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeState,
+                StructType::FaultToleranceConfigInfo => *self <= StructType::FaultToleranceSecondaryConfigInfo,
+                StructType::VirtualMachineGuestQuiesceSpec => *self <= StructType::VirtualMachineWindowsQuiesceSpec,
+                StructType::VirtualMachineProfileSpec => *self <= StructType::VirtualMachineEmptyProfileSpec,
+                StructType::VirtualMachineSriovDevicePoolInfo => *self <= StructType::VirtualMachineSriovNetworkDevicePoolInfo,
+                StructType::VirtualMachineTargetInfo => *self <= StructType::VirtualMachineVgpuProfileInfo,
+                StructType::VirtualMachineDiskDeviceInfo => *self <= StructType::VirtualMachineScsiDiskDeviceInfo,
+                StructType::VirtualMachinePciPassthroughInfo => *self <= StructType::VirtualMachineSriovInfo,
+                StructType::VirtualMachineVirtualDeviceGroupsDeviceGroup => *self <= StructType::VirtualMachineVirtualDeviceGroupsVendorDeviceGroup,
+                StructType::CustomizationIdentitySettings => *self <= StructType::CustomizationSysprepText,
+                StructType::CustomizationIpGenerator => *self <= StructType::CustomizationUnknownIpGenerator,
+                StructType::CustomizationIpV6Generator => *self <= StructType::CustomizationUnknownIpV6Generator,
+                StructType::CustomizationName => *self <= StructType::CustomizationVirtualMachineName,
+                StructType::CustomizationOptions => *self <= StructType::CustomizationWinOptions,
+                StructType::VirtualDevice => *self <= StructType::VirtualWdt,
+                StructType::VirtualController => *self <= StructType::VirtualUsbxhciController,
+                StructType::VirtualSataController => *self <= StructType::VirtualAhciController,
+                StructType::VirtualScsiController => *self <= StructType::VirtualLsiLogicSasController,
+                StructType::VirtualEthernetCard => *self <= StructType::VirtualVmxnet3Vrdma,
+                StructType::VirtualVmxnet => *self <= StructType::VirtualVmxnet3Vrdma,
+                StructType::VirtualVmxnet3 => *self <= StructType::VirtualVmxnet3Vrdma,
+                StructType::VirtualSoundCard => *self <= StructType::VirtualSoundBlaster16,
+                StructType::VirtualDeviceBackingInfo => *self <= StructType::VirtualSriovEthernetCardSriovBackingInfo,
+                StructType::VirtualDeviceDeviceBackingInfo => *self <= StructType::VirtualUsbusbBackingInfo,
+                StructType::VirtualDiskRawDiskVer2BackingInfo => *self <= StructType::VirtualDiskPartitionedRawDiskVer2BackingInfo,
+                StructType::VirtualDeviceFileBackingInfo => *self <= StructType::VirtualSerialPortFileBackingInfo,
+                StructType::VirtualDevicePipeBackingInfo => *self <= StructType::VirtualSerialPortPipeBackingInfo,
+                StructType::VirtualDeviceRemoteDeviceBackingInfo => *self <= StructType::VirtualUsbRemoteClientBackingInfo,
+                StructType::VirtualDeviceUriBackingInfo => *self <= StructType::VirtualSerialPortUriBackingInfo,
+                StructType::VirtualPciPassthroughPluginBackingInfo => *self <= StructType::VirtualPciPassthroughVmiopBackingInfo,
+                StructType::VirtualDeviceBusSlotInfo => *self <= StructType::VirtualUsbControllerPciBusSlotInfo,
+                StructType::VirtualDevicePciBusSlotInfo => *self <= StructType::VirtualUsbControllerPciBusSlotInfo,
+                StructType::VirtualDeviceOption => *self <= StructType::VirtualWdtOption,
+                StructType::VirtualControllerOption => *self <= StructType::VirtualUsbxhciControllerOption,
+                StructType::VirtualSataControllerOption => *self <= StructType::VirtualAhciControllerOption,
+                StructType::VirtualScsiControllerOption => *self <= StructType::VirtualLsiLogicSasControllerOption,
+                StructType::VirtualEthernetCardOption => *self <= StructType::VirtualVmxnet3VrdmaOption,
+                StructType::VirtualVmxnetOption => *self <= StructType::VirtualVmxnet3VrdmaOption,
+                StructType::VirtualVmxnet3Option => *self <= StructType::VirtualVmxnet3VrdmaOption,
+                StructType::VirtualSoundCardOption => *self <= StructType::VirtualSoundBlaster16Option,
+                StructType::VirtualDeviceBackingOption => *self <= StructType::VirtualSriovEthernetCardSriovBackingOption,
+                StructType::VirtualDeviceDeviceBackingOption => *self <= StructType::VirtualUsbusbBackingOption,
+                StructType::VirtualDiskRawDiskVer2BackingOption => *self <= StructType::VirtualDiskPartitionedRawDiskVer2BackingOption,
+                StructType::VirtualDeviceFileBackingOption => *self <= StructType::VirtualSerialPortFileBackingOption,
+                StructType::VirtualDevicePipeBackingOption => *self <= StructType::VirtualSerialPortPipeBackingOption,
+                StructType::VirtualDeviceRemoteDeviceBackingOption => *self <= StructType::VirtualUsbRemoteClientBackingOption,
+                StructType::VirtualDeviceUriBackingOption => *self <= StructType::VirtualSerialPortUriBackingOption,
+                StructType::VirtualPciPassthroughPluginBackingOption => *self <= StructType::VirtualPciPassthroughVmiopBackingOption,
+                StructType::VirtualDeviceConfigSpec => *self <= StructType::VirtualDiskConfigSpec,
+                StructType::GuestAuthSubject => *self <= StructType::GuestAuthNamedSubject,
+                StructType::GuestFileAttributes => *self <= StructType::GuestWindowsFileAttributes,
+                StructType::GuestAuthentication => *self <= StructType::TicketedSessionAuthentication,
+                StructType::GuestProgramSpec => *self <= StructType::GuestWindowsProgramSpec,
+                StructType::GuestRegValueDataSpec => *self <= StructType::GuestRegValueStringSpec,
+                StructType::BaseConfigInfo => *self <= StructType::VStorageObjectConfigInfo,
+                StructType::BaseConfigInfoBackingInfo => *self <= StructType::BaseConfigInfoRawDiskMappingBackingInfo,
+                StructType::BaseConfigInfoFileBackingInfo => *self <= StructType::BaseConfigInfoRawDiskMappingBackingInfo,
+                StructType::VslmCreateSpecBackingSpec => *self <= StructType::VslmCreateSpecRawDiskMappingBackingSpec,
+                StructType::VslmMigrateSpec => *self <= StructType::VslmRelocateSpec,
+                StructType::SelectionSpec => *self <= StructType::TraversalSpec,
+                StructType::MethodFault => *self <= StructType::InvalidProperty,
+                StructType::VimFault => *self <= StructType::WipeDiskFault,
+                StructType::ActiveDirectoryFault => *self <= StructType::NonAdUserRequired,
+                StructType::InvalidCamServer => *self <= StructType::InvalidCamCertificate,
+                StructType::CustomizationFault => *self <= StructType::VolumeEditorError,
+                StructType::DvsFault => *self <= StructType::VspanSameSessionPortConflict,
+                StructType::EvcConfigFault => *self <= StructType::HeterogenousHostsBlockingEvc,
+                StructType::FcoeFault => *self <= StructType::FcoeFaultPnicHasNoPortSet,
+                StructType::FileFault => *self <= StructType::TooManyNativeClonesOnFile,
+                StructType::GuestOperationsFault => *self <= StructType::TooManyGuestLogons,
+                StructType::GuestRegistryFault => *self <= StructType::GuestRegistryValueNotFound,
+                StructType::GuestRegistryKeyFault => *self <= StructType::GuestRegistryKeyParentVolatile,
+                StructType::GuestRegistryValueFault => *self <= StructType::GuestRegistryValueNotFound,
+                StructType::HostConfigFault => *self <= StructType::VmfsAmbiguousMount,
+                StructType::NasConfigFault => *self <= StructType::NoPermissionOnNasVolume,
+                StructType::PlatformConfigFault => *self <= StructType::PatchIntegrityError,
+                StructType::VmfsMountFault => *self <= StructType::VmfsAmbiguousMount,
+                StructType::HostConnectFault => *self <= StructType::TooManyHosts,
+                StructType::GatewayConnectFault => *self <= StructType::GatewayToHostTrustVerifyFault,
+                StructType::GatewayToHostConnectFault => *self <= StructType::GatewayToHostTrustVerifyFault,
+                StructType::NotSupportedHost => *self <= StructType::NotSupportedHostInHaCluster,
+                StructType::NotSupportedHostInCluster => *self <= StructType::EvcAdmissionFailedVmActive,
+                StructType::EvcAdmissionFailed => *self <= StructType::EvcAdmissionFailedVmActive,
+                StructType::HostPowerOpFailed => *self <= StructType::WakeOnLanNotSupportedByVmotionNic,
+                StructType::InsufficientResourcesFault => *self <= StructType::VmSmpFaultToleranceTooManyVMsOnHost,
+                StructType::InsufficientHostCapacityFault => *self <= StructType::InsufficientPerCpuCapacity,
+                StructType::InsufficientStandbyResource => *self <= StructType::InsufficientStandbyMemoryResource,
+                StructType::InvalidDatastore => *self <= StructType::InvalidDatastorePath,
+                StructType::DatastoreNotWritableOnHost => *self <= StructType::SwapDatastoreNotWritableOnHost,
+                StructType::InaccessibleDatastore => *self <= StructType::InaccessibleFtMetadataDatastore,
+                StructType::InvalidFolder => *self <= StructType::VmAlreadyExistsInDatacenter,
+                StructType::InvalidLogin => *self <= StructType::PasswordExpired,
+                StructType::InvalidState => *self <= StructType::VmPowerOnDisabled,
+                StructType::InvalidHostState => *self <= StructType::InvalidHostConnectionState,
+                StructType::IscsiFault => *self <= StructType::IscsiFaultVnicNotFound,
+                StructType::MigrationFault => *self <= StructType::WillResetSnapshotDirectory,
+                StructType::MigrationFeatureNotSupported => *self <= StructType::VMotionAcrossNetworkNotSupported,
+                StructType::SnapshotCopyNotSupported => *self <= StructType::SnapshotMoveToNonHomeNotSupported,
+                StructType::VMotionInterfaceIssue => *self <= StructType::VMotionNotSupported,
+                StructType::NoCompatibleHost => *self <= StructType::NoCompatibleHostWithAccessToDevice,
+                StructType::OvfFault => *self <= StructType::OvfUnsupportedType,
+                StructType::OvfConsumerCallbackFault => *self <= StructType::OvfConsumerUndefinedPrefix,
+                StructType::OvfExport => *self <= StructType::OvfPropertyNetworkExport,
+                StructType::OvfHardwareExport => *self <= StructType::OvfUnsupportedDeviceExport,
+                StructType::OvfConnectedDevice => *self <= StructType::OvfConnectedDeviceIso,
+                StructType::OvfImport => *self <= StructType::OvfUnsupportedDiskProvisioning,
+                StructType::OvfInvalidPackage => *self <= StructType::OvfXmlFormat,
+                StructType::OvfAttribute => *self <= StructType::OvfMissingAttribute,
+                StructType::OvfInvalidValue => *self <= StructType::OvfInvalidValueReference,
+                StructType::OvfConstraint => *self <= StructType::OvfHostResourceConstraint,
+                StructType::OvfElement => *self <= StructType::OvfWrongElement,
+                StructType::OvfMissingElement => *self <= StructType::OvfMissingElementNormalBoundary,
+                StructType::OvfProperty => *self <= StructType::OvfPropertyValue,
+                StructType::OvfSystemFault => *self <= StructType::OvfUnsupportedDeviceBackingOption,
+                StructType::OvfUnsupportedPackage => *self <= StructType::OvfUnsupportedType,
+                StructType::OvfUnsupportedAttribute => *self <= StructType::OvfUnsupportedAttributeValue,
+                StructType::OvfUnsupportedElement => *self <= StructType::OvfUnsupportedSection,
+                StructType::PatchMetadataInvalid => *self <= StructType::PatchMetadataNotFound,
+                StructType::PatchNotApplicable => *self <= StructType::PatchSuperseded,
+                StructType::ReplicationFault => *self <= StructType::ReplicationVmInProgressFault,
+                StructType::ReplicationConfigFault => *self <= StructType::ReplicationVmConfigFault,
+                StructType::ReplicationVmFault => *self <= StructType::ReplicationVmInProgressFault,
+                StructType::ResourceInUse => *self <= StructType::QuiesceDatastoreIoForHaFailed,
+                StructType::SnapshotFault => *self <= StructType::TooManySnapshotLevels,
+                StructType::TaskInProgress => *self <= StructType::VAppTaskInProgress,
+                StructType::Timedout => *self <= StructType::PowerOnFtSecondaryTimedout,
+                StructType::VAppConfigFault => *self <= StructType::NoVmInVApp,
+                StructType::VmConfigFault => *self <= StructType::VmHostAffinityRuleViolation,
+                StructType::CannotAccessVmComponent => *self <= StructType::RdmPointsToInaccessibleDisk,
+                StructType::CannotAccessVmDevice => *self <= StructType::RdmPointsToInaccessibleDisk,
+                StructType::CannotAccessNetwork => *self <= StructType::VmOnVirtualIntranet,
+                StructType::CannotAccessVmDisk => *self <= StructType::RdmPointsToInaccessibleDisk,
+                StructType::InvalidFormat => *self <= StructType::InvalidSnapshotFormat,
+                StructType::InvalidVmConfig => *self <= StructType::VmWwnConflict,
+                StructType::InvalidDeviceSpec => *self <= StructType::MissingController,
+                StructType::UnsupportedDatastore => *self <= StructType::UnSupportedDatastoreForVFlash,
+                StructType::VAppPropertyFault => *self <= StructType::NotUserConfigurableProperty,
+                StructType::InvalidPropertyValue => *self <= StructType::UnconfiguredPropertyValue,
+                StructType::VirtualHardwareCompatibilityIssue => *self <= StructType::WakeOnLanNotSupported,
+                StructType::CpuIncompatible => *self <= StructType::FaultToleranceCpuIncompatible,
+                StructType::DeviceNotSupported => *self <= StructType::VirtualEthernetCardNotSupported,
+                StructType::DeviceBackingNotSupported => *self <= StructType::VirtualDiskBlocksNotFullyProvisioned,
+                StructType::RdmNotSupported => *self <= StructType::PhysCompatRdmNotSupported,
+                StructType::DiskNotSupported => *self <= StructType::IdeDiskNotSupported,
+                StructType::NotEnoughCpus => *self <= StructType::NotEnoughLogicalCpus,
+                StructType::VmFaultToleranceIssue => *self <= StructType::VmFaultToleranceOpIssuesList,
+                StructType::VmToolsUpgradeFault => *self <= StructType::ToolsUpgradeCancelled,
+                StructType::VsanFault => *self <= StructType::VsanIncompatibleDiskMapping,
+                StructType::CannotMoveVsanEnabledHost => *self <= StructType::VsanClusterUuidMismatch,
+                StructType::VsanDiskFault => *self <= StructType::VsanIncompatibleDiskMapping,
+                StructType::RuntimeFault => *self <= StructType::UnexpectedFault,
+                StructType::HostCommunication => *self <= StructType::HostNotReachable,
+                StructType::InvalidArgument => *self <= StructType::InvalidIndexArgument,
+                StructType::InvalidRequest => *self <= StructType::MethodNotFound,
+                StructType::NotEnoughLicenses => *self <= StructType::VramLimitLicense,
+                StructType::ExpiredFeatureLicense => *self <= StructType::ExpiredEditionLicense,
+                StructType::NotSupported => *self <= StructType::HostAccessRestrictedToManagementServer,
+                StructType::SecurityError => *self <= StructType::SolutionUserRequired,
+                StructType::NoPermission => *self <= StructType::NotAuthenticated,
+                _ => false // Others
+            }
+        }
+    }
 }

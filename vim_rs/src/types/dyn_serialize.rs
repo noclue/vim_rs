@@ -7106,5 +7106,6 @@ where
             p.as_any_ref().downcast_ref::<MethodFault>().unwrap(),
             serializer,
         ),
+        _ => Err(serde::ser::Error::custom("Unknown VIM data type")),
     }
 }

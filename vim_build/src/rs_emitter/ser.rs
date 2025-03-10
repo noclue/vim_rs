@@ -42,6 +42,7 @@ pub fn generate_serialize_polymorphic_enum(
         printer.dedent();
         printer.println("),")?;
     }
+    printer.println("_ => Err(serde::ser::Error::custom(\"Unknown VIM data type\")),")?;
     printer.dedent();
     printer.println("}")?;
     printer.dedent();

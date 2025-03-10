@@ -187,6 +187,7 @@ fn emit_de(types_folder: &Path, vim_model: &vim_model::Model) -> Result<()> {
     printer.println("use serde::Deserializer;")?;
     printer.println("use serde::de;")?;
     printer.println("use super::boxed_types::ValueElements;")?;
+    printer.println("use super::struct_enum;")?;
     printer.println("use super::structs::*;")?;
     printer.println("use super::vim_any::VimAny;")?;
 

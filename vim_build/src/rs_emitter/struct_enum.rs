@@ -68,7 +68,7 @@ pub fn generate_child_of_impl(
     prn.dedent();
     prn.println("} else {")?;
     prn.indent();
-    prn.println("match (other) {")?;
+    prn.println("match other {")?;
     prn.indent();
     for (_, data_type) in &vim_model.structs {
         let data_type = data_type.borrow();

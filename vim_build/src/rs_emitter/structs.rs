@@ -35,6 +35,7 @@ impl<'a> TypesEmitter<'a> {
     }
     fn emit_use_statements(&mut self) -> Result<()> {
         self.printer.println("use super::vim_any::VimAny;")?;
+        self.printer.println("use super::struct_enum;")?;
         self.printer.println("use serde::ser::SerializeMap;")?;
         self.printer.println("use serde::de;")?;
         self.printer.println("use std::fmt::Formatter;")?;
@@ -76,7 +77,7 @@ impl<'a> TypesEmitter<'a> {
         self.emit_struct_all_fields(vim_type)?;
         if vim_type.emit_mode == EmitMode::Prune {
             self.printer.println(&format!(r#"/// Discriminator value. If `None` during serialization "{}" will be used."#, vim_type.discriminator()))?;
-            self.printer.println("pub type_name_: Option<String>,")?;
+            self.printer.println("pub type_: Option<struct_enum::StructType>,")?;
             self.printer.println("/// Extra fields not part of the base type schema")?;
             self.printer.println("pub extra_fields_: std::collections::HashMap<String, serde_json::Value>,")?;
         }
@@ -160,8 +161,8 @@ impl<'a> TypesEmitter<'a> {
         self.printer.indent();
         self.printer.println("let mut state = serializer.serialize_map(None)?;")?;
         if vim_type.emit_mode == EmitMode::Prune {
-            self.printer.println(&format!(r#"let type_name = self.type_name_.as_deref().unwrap_or("{discriminant}");"#))?;
-            self.printer.println(r#"state.serialize_entry("_typeName", type_name)?;"#)?;
+            self.printer.println(&format!(r#"let type_ = self.type_.as_ref().unwrap_or(&struct_enum::StructType::{struct_name});"#))?;
+            self.printer.println(r#"state.serialize_entry("_typeName", type_)?;"#)?;
         } else {
             self.printer.println(&format!(
                 "state.serialize_entry(\"_typeName\", \"{discriminant}\")?;"
@@ -241,7 +242,7 @@ impl<'a> TypesEmitter<'a> {
         self.printer.newline()?;
         if vim_type.emit_mode == EmitMode::Prune {
             self.printer
-                .println(&format!("pub struct __{struct_name}Visitor(pub Option<String>);"))?;
+                .println(&format!("pub struct __{struct_name}Visitor(pub Option<struct_enum::StructType>);"))?;
         } else {
             self.printer
                 .println(&format!("struct __{struct_name}Visitor;"))?;
@@ -289,7 +290,7 @@ impl<'a> TypesEmitter<'a> {
             }
         }
         if vim_type.emit_mode == EmitMode::Prune {
-            self.printer.println(&format!("let mut type_name_: Option<String> = Some(\"{type_name}\".to_string());"))?;
+            self.printer.println(&format!("let mut type_: Option<struct_enum::StructType> = Some(struct_enum::StructType::{struct_name});"))?;
             self.printer.println("let mut extra_fields_: std::collections::HashMap<String, serde_json::Value> = std::collections::HashMap::new();")?;
         }
         self.printer.newline()?;
@@ -301,14 +302,14 @@ impl<'a> TypesEmitter<'a> {
         self.printer.println(r#""_typeName" => {"#)?;
         self.printer.indent();
         self.printer
-            .println("let discriminator: String = map.next_value()?;")?;
+            .println("let discriminator: struct_enum::StructType = map.next_value()?;")?;
         self.printer
-            .println(&format!(r#"if discriminator != "{type_name}" {{"#))?;
+            .println(&format!(r#"if discriminator != struct_enum::StructType::{struct_name} {{"#))?;
         self.printer.indent();
         if vim_type.emit_mode == EmitMode::Prune {
-            self.printer.println("type_name_ = Some(discriminator);")?;
+            self.printer.println("type_ = Some(discriminator);")?;
         } else {
-            self.printer.println(&format!(r#"return Err(de::Error::custom(format!("Expected {type_name}, got {{discriminator}}")));"#))?;
+            self.printer.println(&format!(r#"return Err(de::Error::custom(format!("Expected {type_name}, got {{:?}}", discriminator)));"#))?;
         }
         self.printer.dedent();
         self.printer.println("}")?;
@@ -364,7 +365,7 @@ impl<'a> TypesEmitter<'a> {
             }
         }
         if vim_type.emit_mode == EmitMode::Prune {
-            self.printer.println("type_name_,")?;
+            self.printer.println("type_,")?;
             self.printer.println("extra_fields_,")?;
         }
         self.printer.dedent();
