@@ -1,9 +1,9 @@
 use std::{env, sync::Arc};
 use tokio::time::sleep;
 use vim_rs::mo::EventManager;
-use vim_rs::types::structs::{EventFilterSpecByTime, EventFilterSpec, Event, ManagedObjectReference};
+use vim_rs::types::structs::{EventFilterSpecByTime, EventFilterSpec, Event};
 use vim_rs::core::client::{Client, ClientBuilder};
-use log::{info, warn};
+use log::info;
 use chrono::{Utc, Duration as ChronoDuration};
 use anyhow::{Result, Error, Context};
 use vim_rs::types::struct_enum::StructType;
