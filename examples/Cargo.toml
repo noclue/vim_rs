@@ -1,5 +1,5 @@
 [workspace]
-members = ["snippets"]
+members = ["snippets", "tui"]
 resolver = "2"
 
 [profile.release]
