@@ -206,10 +206,10 @@ Below is a snippet how to decode the semantic event type using `type_name_` and 
 
 ```rust
 fn get_event_type_id(event: &Event) -> String {
-    let Some(ref type_) = event.type_ else {
+    let Some(type_) = event.type_ else {
         return "Event".to_string();
     };
-    if type_.child_of(&StructType::EventEx) || type_.child_of(&StructType::ExtendedEvent) {
+    if type_.child_of(StructType::EventEx) || type_.child_of(StructType::ExtendedEvent) {
         if let Some(event_type_id) = event.extra_fields_["eventTypeId"].as_str() {
             return event_type_id.to_string();
         }

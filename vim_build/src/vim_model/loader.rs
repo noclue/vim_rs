@@ -105,7 +105,7 @@ fn skip_children(vim_model: &mut Model, parent: &str, pruned: &str) -> Result<()
         let child = child.to_string();
         if let Some(vim_type) = vim_model.structs.get_mut(&child) {
             vim_type.borrow_mut().emit_mode = EmitMode::Skip(pruned.to_string());
-            skip_children(vim_model, &child, &pruned)?;
+            skip_children(vim_model, &child, pruned)?;
         }
     }
     Ok(())

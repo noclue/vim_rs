@@ -2,9 +2,9 @@ use std::fmt::{Display, Formatter};
 use std::io::Write;
 
 #[cfg(windows)]
-const LINE_ENDING: &'static str = "\r\n";
+const LINE_ENDING: &str = "\r\n";
 #[cfg(not(windows))]
-const LINE_ENDING: &'static str = "\n";
+const LINE_ENDING: &str = "\n";
 
 #[derive(Debug, thiserror::Error)]
 pub enum Error {

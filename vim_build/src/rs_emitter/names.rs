@@ -167,7 +167,7 @@ impl TypeDefResolver<'_> {
 
 fn field_reference(root_package: String) -> StructRefRenderer {
     Box::new(move |struct_ref: &Struct, _: &Model| -> String {
-        let type_name = to_type_name(struct_name(&struct_ref));
+        let type_name = to_type_name(struct_name(struct_ref));
         if struct_ref.has_children() && (struct_ref.emit_mode == EmitMode::Emit) {
             box_type_declaration(&format!("dyn {root_package}::traits::{type_name}Trait"))
         } else {
@@ -177,7 +177,7 @@ fn field_reference(root_package: String) -> StructRefRenderer {
 }
 fn param_reference(lifecycle: Option<String>, root_package: String) -> StructRefRenderer {
     Box::new(move |struct_ref: &Struct, _: &Model| -> String {
-        let rust_name = to_type_name(struct_name(&struct_ref));
+        let rust_name = to_type_name(struct_name(struct_ref));
         if struct_ref.has_children() && (struct_ref.emit_mode == EmitMode::Emit) {
             ref_type_declaration(
                 &format!("dyn {root_package}::traits::{rust_name}Trait"),

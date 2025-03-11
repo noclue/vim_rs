@@ -30,7 +30,7 @@ async fn main() -> Result<()> {
     
     let view_moref = view_manager.create_container_view(
         &content.root_folder,
-        Some(&vec![Into::<&str>::into(MoTypesEnum::ComputeResource).to_string()]),
+        Some(&[Into::<&str>::into(MoTypesEnum::ComputeResource).to_string()]),
         true,
     ).await?;
 
@@ -69,9 +69,9 @@ async fn main() -> Result<()> {
     let mut cr_moref : Option<String> = None;
     for obj in retrieve_result.objects {
         let propset = &obj.prop_set.unwrap();
-        let val = &propset.get(0).unwrap().val;
+        let val = &propset.first().unwrap().val;
         let name = match val {
-            VimAny::Value(ValueElements::PrimitiveString(s)) => &s,
+            VimAny::Value(ValueElements::PrimitiveString(s)) => s,
             _ => "Unexpected value type",
         };
         if name == compute_resource {

@@ -61,7 +61,7 @@ async fn dump_events(client: Arc<Client>, event_manager: &EventManager) -> Resul
             Some(events) => {
                 for event in &events {
                     info!("{event_type}: {ts} - {id} - {msg}",
-                        event_type=get_event_type_id(&event),
+                        event_type=get_event_type_id(event),
                         id=event.key,
                         ts=event.created_time,
                         msg=event.full_formatted_message.as_deref().unwrap_or("No message"));
