@@ -21,7 +21,7 @@ pub fn generate_struct_enum(
     printer.println("/// 1. Parent child relationship can be checked with range check.")?;
     printer.println("/// 1. Values are 32-bit integers that can be efficiently compared.")?;
     printer.println(
-        "#[derive(Debug, Clone, PartialEq, Eq, Hash, PartialOrd, serde::Serialize, serde::Deserialize, strum_macros::IntoStaticStr)]",
+        "#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash, PartialOrd, serde::Serialize, serde::Deserialize, strum_macros::IntoStaticStr)]",
     )?;
     printer.println("#[repr(u32)]")?;
     printer.println("pub enum StructType {")?;
@@ -38,11 +38,6 @@ pub fn generate_struct_enum(
         }
         printer.println(&format!("{},", rust_type_name))?;
     }
-    // Make enums open i.e. handle unknown values possibly from future API servers
-    printer.println("/// This variant handles values not known at compile time.")?;
-    printer.println("#[serde(untagged)]")?;
-    printer.println("#[strum(serialize = \"__OTHER__\")]")?;
-    printer.println("Other_(String),")?;
     printer.dedent();
     printer.println("}")?;
     generate_child_of_impl(vim_model, printer)?;
@@ -56,7 +51,7 @@ pub fn generate_child_of_impl(
 ) -> rs_emitter::errors::Result<()> {
     prn.println("impl StructType {")?;
     prn.indent();
-    prn.println("pub fn child_of(&self, other: &StructType) -> bool {")?;
+    prn.println("pub fn child_of(self, other: StructType) -> bool {")?;
     prn.indent();
     prn.println("if self < other {")?;
     prn.indent();
@@ -83,7 +78,7 @@ pub fn generate_child_of_impl(
         }
         let parent = &data_type.name.to_case(Case::Pascal);
         let last_child = &data_type.last_child.to_case(Case::Pascal);
-        prn.println(&format!("StructType::{parent} => *self <= StructType::{last_child},"))?
+        prn.println(&format!("StructType::{parent} => self <= StructType::{last_child},"))?
     }
     prn.println("_ => false // Others")?;
     prn.dedent();
