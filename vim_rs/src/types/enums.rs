@@ -138,7 +138,7 @@
 /// - `VirtualizationManager`
 /// - `VmwareDistributedVirtualSwitch`
 /// - `VsanUpgradeSystem`
-#[derive(Clone, Debug, PartialEq, Eq, Hash, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum MoTypesEnum {
     Alarm,
     AlarmManager,
@@ -283,17 +283,13 @@ pub enum MoTypesEnum {
     VirtualizationManager,
     VmwareDistributedVirtualSwitch,
     VsanUpgradeSystem,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Enum representing result of batch-APis.
 /// 
 /// Possible values:
 /// - `success`
 /// - `fail`
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum BatchResultResultEnum {
     #[serde(rename = "success")]
     #[strum(serialize = "success")]
@@ -301,10 +297,6 @@ pub enum BatchResultResultEnum {
     #[serde(rename = "fail")]
     #[strum(serialize = "fail")]
     Fail,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// HCIWorkflowState identifies the state of the cluser from the perspective of HCI
 /// workflow.
@@ -317,7 +309,7 @@ pub enum BatchResultResultEnum {
 /// - `done`: Indicates cluster configuration is complete.
 /// - `invalid`: Indicates the workflow was abandoned on the cluster before the
 ///   configuration could complete.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum ClusterComputeResourceHciWorkflowStateEnum {
     #[serde(rename = "in_progress")]
     #[strum(serialize = "in_progress")]
@@ -328,10 +320,6 @@ pub enum ClusterComputeResourceHciWorkflowStateEnum {
     #[serde(rename = "invalid")]
     #[strum(serialize = "invalid")]
     Invalid,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `healthy`: Indicates vCS health status is normal.
@@ -339,7 +327,7 @@ pub enum ClusterComputeResourceHciWorkflowStateEnum {
 /// - `nonhealthy`: Indicates vCS is unhealthy and other cluster services are impacted.
 ///   
 /// ***Since:*** vSphere API Release 7.0.1.1
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum ClusterComputeResourceVcsHealthStatusEnum {
     #[serde(rename = "healthy")]
     #[strum(serialize = "healthy")]
@@ -350,10 +338,6 @@ pub enum ClusterComputeResourceVcsHealthStatusEnum {
     #[serde(rename = "nonhealthy")]
     #[strum(serialize = "nonhealthy")]
     Nonhealthy,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The SPBM(Storage Policy Based Management) license state for a host
 /// 
@@ -362,7 +346,7 @@ pub enum ClusterComputeResourceVcsHealthStatusEnum {
 /// - `unlicensed`: The host is not licensed
 /// - `unknown`: The host license information is unknown, this could happen if the
 ///   host is not in a available state
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum ComputeResourceHostSpbmLicenseInfoHostSpbmLicenseStateEnum {
     #[serde(rename = "licensed")]
     #[strum(serialize = "licensed")]
@@ -373,10 +357,6 @@ pub enum ComputeResourceHostSpbmLicenseInfoHostSpbmLicenseStateEnum {
     #[serde(rename = "unknown")]
     #[strum(serialize = "unknown")]
     Unknown,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Config spec operation type.
 /// 
@@ -384,7 +364,7 @@ pub enum ComputeResourceHostSpbmLicenseInfoHostSpbmLicenseStateEnum {
 /// - `add`: Indicates the addition of an element to the configuration.
 /// - `edit`: Indicates the change of an element in the configuration.
 /// - `remove`: Indicates the removal of an element in the configuration.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum ConfigSpecOperationEnum {
     #[serde(rename = "add")]
     #[strum(serialize = "add")]
@@ -395,22 +375,14 @@ pub enum ConfigSpecOperationEnum {
     #[serde(rename = "remove")]
     #[strum(serialize = "remove")]
     Remove,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `True`: Is accessible
 /// - `False`: Is not accessible
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum DatastoreAccessibleEnum {
     True,
     False,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Defines the current maintenance mode state of the datastore.
 /// 
@@ -421,7 +393,7 @@ pub enum DatastoreAccessibleEnum {
 ///   This could happen when waiting for user input or for
 ///   long-running vmotions to complete.
 /// - `inMaintenance`: Successfully entered maintenance mode.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum DatastoreSummaryMaintenanceModeStateEnum {
     #[serde(rename = "normal")]
     #[strum(serialize = "normal")]
@@ -432,10 +404,6 @@ pub enum DatastoreSummaryMaintenanceModeStateEnum {
     #[serde(rename = "inMaintenance")]
     #[strum(serialize = "inMaintenance")]
     InMaintenance,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Pre-defined constants for possible creators of log files.
 /// 
@@ -447,7 +415,7 @@ pub enum DatastoreSummaryMaintenanceModeStateEnum {
 /// - `install`: Installation
 /// - `vpxClient`: Virtual infrastructure client
 /// - `recordLog`: System Record Log
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum DiagnosticManagerLogCreatorEnum {
     #[serde(rename = "vpxd")]
     #[strum(serialize = "vpxd")]
@@ -470,10 +438,6 @@ pub enum DiagnosticManagerLogCreatorEnum {
     #[serde(rename = "recordLog")]
     #[strum(serialize = "recordLog")]
     RecordLog,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Constants for defined formats.
 /// 
@@ -481,15 +445,11 @@ pub enum DiagnosticManagerLogCreatorEnum {
 /// 
 /// Possible values:
 /// - `plain`: A standard ASCII-based line-based log file.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum DiagnosticManagerLogFormatEnum {
     #[serde(rename = "plain")]
     #[strum(serialize = "plain")]
     Plain,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// List of possible host infrastructure traffic classes
 /// 
@@ -509,7 +469,7 @@ pub enum DiagnosticManagerLogFormatEnum {
 /// - `nvmetcp`: vSphere NVMETCP Traffic
 ///   
 ///   ***Since:*** vSphere API Release 7.0.3.0
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum DistributedVirtualSwitchHostInfrastructureTrafficClassEnum {
     #[serde(rename = "management")]
     #[strum(serialize = "management")]
@@ -544,17 +504,13 @@ pub enum DistributedVirtualSwitchHostInfrastructureTrafficClassEnum {
     #[serde(rename = "nvmetcp")]
     #[strum(serialize = "nvmetcp")]
     Nvmetcp,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Network resource control version types.
 /// 
 /// Possible values:
 /// - `version2`: Network Resource Control API version 2
 /// - `version3`: Network Resource Control API version 3
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum DistributedVirtualSwitchNetworkResourceControlVersionEnum {
     #[serde(rename = "version2")]
     #[strum(serialize = "version2")]
@@ -562,10 +518,6 @@ pub enum DistributedVirtualSwitchNetworkResourceControlVersionEnum {
     #[serde(rename = "version3")]
     #[strum(serialize = "version3")]
     Version3,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// List of possible teaming modes supported by the vNetwork Distributed
 /// Switch.
@@ -584,7 +536,7 @@ pub enum DistributedVirtualSwitchNetworkResourceControlVersionEnum {
 ///   This is the recommended teaming policy when the
 ///   network I/O control feature is enabled for the vNetwork
 ///   Distributed Switch.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum DistributedVirtualSwitchNicTeamingPolicyModeEnum {
     #[serde(rename = "loadbalance_ip")]
     #[strum(serialize = "loadbalance_ip")]
@@ -601,10 +553,6 @@ pub enum DistributedVirtualSwitchNicTeamingPolicyModeEnum {
     #[serde(rename = "loadbalance_loadbased")]
     #[strum(serialize = "loadbalance_loadbased")]
     LoadbalanceLoadbased,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The product spec operation types.
 /// 
@@ -643,7 +591,7 @@ pub enum DistributedVirtualSwitchNicTeamingPolicyModeEnum {
 ///   corresponding properties of the switch's product info, a fault will
 ///   be thrown. Updating the bundle ID will result in installing the new host
 ///   component identified by the bundle ID.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum DistributedVirtualSwitchProductSpecOperationTypeEnum {
     #[serde(rename = "preInstall")]
     #[strum(serialize = "preInstall")]
@@ -660,10 +608,6 @@ pub enum DistributedVirtualSwitchProductSpecOperationTypeEnum {
     #[serde(rename = "updateBundleInfo")]
     #[strum(serialize = "updateBundleInfo")]
     UpdateBundleInfo,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Correlation state as computed by storageRM
 /// module on host.
@@ -671,19 +615,15 @@ pub enum DistributedVirtualSwitchProductSpecOperationTypeEnum {
 /// Possible values:
 /// - `Correlated`
 /// - `Uncorrelated`
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum DrsInjectorWorkloadCorrelationStateEnum {
     Correlated,
     Uncorrelated,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `maintenance`: Add host in maintenance mode.
 /// - `non_maintenance`: Add host in non-maintenance mode.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum FolderDesiredHostStateEnum {
     #[serde(rename = "maintenance")]
     #[strum(serialize = "maintenance")]
@@ -691,10 +631,6 @@ pub enum FolderDesiredHostStateEnum {
     #[serde(rename = "non_maintenance")]
     #[strum(serialize = "non_maintenance")]
     NonMaintenance,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Describes the current state of a replicated *VirtualMachine*
 /// 
@@ -714,7 +650,7 @@ pub enum FolderDesiredHostStateEnum {
 ///   errors.
 ///   
 ///   XXX Currently unused.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum ReplicationVmStateEnum {
     #[serde(rename = "none")]
     #[strum(serialize = "none")]
@@ -734,10 +670,6 @@ pub enum ReplicationVmStateEnum {
     #[serde(rename = "error")]
     #[strum(serialize = "error")]
     Error,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Quiescing is a boolean flag in *ReplicationConfigSpec*
 /// and QuiesceModeType describes the supported quiesce mode
@@ -755,7 +687,7 @@ pub enum ReplicationVmStateEnum {
 ///   *VirtualMachine*.
 /// - `none`: HBR does not support quescing for this
 ///   *VirtualMachine*.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum QuiesceModeEnum {
     #[serde(rename = "application")]
     #[strum(serialize = "application")]
@@ -766,10 +698,6 @@ pub enum QuiesceModeEnum {
     #[serde(rename = "none")]
     #[strum(serialize = "none")]
     None,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `Memory`
@@ -777,17 +705,13 @@ pub enum QuiesceModeEnum {
 /// - `Fan`
 /// - `Network`
 /// - `Storage`
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HealthUpdateInfoComponentTypeEnum {
     Memory,
     Power,
     Fan,
     Network,
     Storage,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Defines a host's connection state.
 /// 
@@ -805,7 +729,7 @@ pub enum HealthUpdateInfoComponentTypeEnum {
 ///   VirtualCenter does not expect to
 ///   receive heartbeats from the host. The next time a heartbeat is received, the
 ///   host is moved to the connected state again and an event is logged.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostSystemConnectionStateEnum {
     #[serde(rename = "connected")]
     #[strum(serialize = "connected")]
@@ -816,10 +740,6 @@ pub enum HostSystemConnectionStateEnum {
     #[serde(rename = "disconnected")]
     #[strum(serialize = "disconnected")]
     Disconnected,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Defines a host's encryption state
 /// 
@@ -834,7 +754,7 @@ pub enum HostSystemConnectionStateEnum {
 ///   When host is in this state, creating encrypted virtual
 ///   machines is not allowed, but still need a reboot to totally clean
 ///   up and enter incapable state.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostCryptoStateEnum {
     #[serde(rename = "incapable")]
     #[strum(serialize = "incapable")]
@@ -848,10 +768,6 @@ pub enum HostCryptoStateEnum {
     #[serde(rename = "pendingIncapable")]
     #[strum(serialize = "pendingIncapable")]
     PendingIncapable,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Defines a host's power state.
 /// 
@@ -881,7 +797,7 @@ pub enum HostCryptoStateEnum {
 ///   
 ///   Hence, the host
 ///   is marked as unknown.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostSystemPowerStateEnum {
     #[serde(rename = "poweredOn")]
     #[strum(serialize = "poweredOn")]
@@ -895,10 +811,6 @@ pub enum HostSystemPowerStateEnum {
     #[serde(rename = "unknown")]
     #[strum(serialize = "unknown")]
     Unknown,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Valid state for host profile remediation.
 /// 
@@ -909,7 +821,7 @@ pub enum HostSystemPowerStateEnum {
 /// - `precheckRemediationFailed`: Preecheck remediation failed.
 /// - `remediationRunning`: Remediation is running.
 /// - `remediationFailed`: Remediation failed.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostSystemRemediationStateStateEnum {
     #[serde(rename = "remediationReady")]
     #[strum(serialize = "remediationReady")]
@@ -929,10 +841,6 @@ pub enum HostSystemRemediationStateStateEnum {
     #[serde(rename = "remediationFailed")]
     #[strum(serialize = "remediationFailed")]
     RemediationFailed,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Defines a host's standby mode.
 /// 
@@ -942,7 +850,7 @@ pub enum HostSystemRemediationStateStateEnum {
 /// - `in`: The host is in standby mode.
 /// - `none`: The host is not in standy mode, and it is not
 ///   in the process of entering/exiting standby mode.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostStandbyModeEnum {
     #[serde(rename = "entering")]
     #[strum(serialize = "entering")]
@@ -956,17 +864,13 @@ pub enum HostStandbyModeEnum {
     #[serde(rename = "none")]
     #[strum(serialize = "none")]
     None,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// List of supported algorithms for checksum calculation.
 /// 
 /// Possible values:
 /// - `sha1`
 /// - `sha256`
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HttpNfcLeaseManifestEntryChecksumTypeEnum {
     #[serde(rename = "sha1")]
     #[strum(serialize = "sha1")]
@@ -974,10 +878,6 @@ pub enum HttpNfcLeaseManifestEntryChecksumTypeEnum {
     #[serde(rename = "sha256")]
     #[strum(serialize = "sha256")]
     Sha256,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// List of supported modes by HttpNfcLease
 /// 
@@ -987,7 +887,7 @@ pub enum HttpNfcLeaseManifestEntryChecksumTypeEnum {
 /// - `pull`: Mode where hosts itself pull files from source URLs.
 ///   
 ///   See *HttpNfcLease.HttpNfcLeasePullFromUrls_Task*
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HttpNfcLeaseModeEnum {
     #[serde(rename = "pushOrGet")]
     #[strum(serialize = "pushOrGet")]
@@ -995,10 +895,6 @@ pub enum HttpNfcLeaseModeEnum {
     #[serde(rename = "pull")]
     #[strum(serialize = "pull")]
     Pull,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// List of possible states of a lease.
 /// 
@@ -1008,7 +904,7 @@ pub enum HttpNfcLeaseModeEnum {
 /// - `done`: When the import/export session is completed, and the lease
 ///   is no longer held.
 /// - `error`: When an error has occurred.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HttpNfcLeaseStateEnum {
     #[serde(rename = "initializing")]
     #[strum(serialize = "initializing")]
@@ -1022,10 +918,6 @@ pub enum HttpNfcLeaseStateEnum {
     #[serde(rename = "error")]
     #[strum(serialize = "error")]
     Error,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Defines the type of an IO Filter.
 /// 
@@ -1040,7 +932,7 @@ pub enum HttpNfcLeaseStateEnum {
 /// - `dataCapture`: Lightweight Data Capture.
 ///   
 ///   ***Since:*** vSphere API Release 7.0.2.1
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum IoFilterTypeEnum {
     #[serde(rename = "cache")]
     #[strum(serialize = "cache")]
@@ -1066,10 +958,6 @@ pub enum IoFilterTypeEnum {
     #[serde(rename = "dataCapture")]
     #[strum(serialize = "dataCapture")]
     DataCapture,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Defines the type of operation for an IO Filter.
 /// 
@@ -1077,7 +965,7 @@ pub enum IoFilterTypeEnum {
 /// - `install`: Install an IO Filter.
 /// - `uninstall`: Uninstall an IO Filter.
 /// - `upgrade`: Upgrade an IO Filter.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum IoFilterOperationEnum {
     #[serde(rename = "install")]
     #[strum(serialize = "install")]
@@ -1088,10 +976,6 @@ pub enum IoFilterOperationEnum {
     #[serde(rename = "upgrade")]
     #[strum(serialize = "upgrade")]
     Upgrade,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Enumeration of the nominal latency-sensitive values which can be
 /// used to specify the latency-sensitivity level of the application.
@@ -1118,7 +1002,7 @@ pub enum IoFilterOperationEnum {
 ///   When this value is set to *LatencySensitivity.level* the
 ///   *LatencySensitivity.sensitivity* property should be
 ///   set also.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum LatencySensitivitySensitivityLevelEnum {
     #[serde(rename = "low")]
     #[strum(serialize = "low")]
@@ -1135,10 +1019,6 @@ pub enum LatencySensitivitySensitivityLevelEnum {
     #[serde(rename = "custom")]
     #[strum(serialize = "custom")]
     Custom,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Cost units apply to licenses for the purpose of determining
 /// how many licenses are needed.
@@ -1149,7 +1029,7 @@ pub enum LatencySensitivitySensitivityLevelEnum {
 /// - `cpuPackage`: One license is acquired per CPU package.
 /// - `server`: One license is acquired per server.
 /// - `vm`: One license is acquired per virtual machine.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum LicenseFeatureInfoUnitEnum {
     #[serde(rename = "host")]
     #[strum(serialize = "host")]
@@ -1166,10 +1046,6 @@ pub enum LicenseFeatureInfoUnitEnum {
     #[serde(rename = "vm")]
     #[strum(serialize = "vm")]
     Vm,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Some licenses may only be allowed to load from a specified source.
 /// 
@@ -1179,7 +1055,7 @@ pub enum LicenseFeatureInfoUnitEnum {
 /// - `unrestricted`: The feature does not have a source restriction.
 /// - `served`: The feature's license can only be served.
 /// - `file`: The feature's license can only come from a file.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum LicenseFeatureInfoSourceRestrictionEnum {
     #[serde(rename = "unrestricted")]
     #[strum(serialize = "unrestricted")]
@@ -1190,10 +1066,6 @@ pub enum LicenseFeatureInfoSourceRestrictionEnum {
     #[serde(rename = "file")]
     #[strum(serialize = "file")]
     File,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Describes the state of the feature.
 /// 
@@ -1205,7 +1077,7 @@ pub enum LicenseFeatureInfoSourceRestrictionEnum {
 ///   The
 ///   *LicenseManager.EnableFeature* and *LicenseManager.DisableFeature* methods can be used to enable or disable
 ///   this feature.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum LicenseFeatureInfoStateEnum {
     #[serde(rename = "enabled")]
     #[strum(serialize = "enabled")]
@@ -1216,10 +1088,6 @@ pub enum LicenseFeatureInfoStateEnum {
     #[serde(rename = "optional")]
     #[strum(serialize = "optional")]
     Optional,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Identifiers of currently supported resources.
 /// 
@@ -1230,7 +1098,7 @@ pub enum LicenseFeatureInfoStateEnum {
 /// - `memoryForVms`: Total size of memory configured for VMs on this host, measured in kilobytes.
 /// - `numVmsStarted`: Number of VMs already running on this host.
 /// - `numVmsStarting`: Number of VMs that are currently powering-on, immigrating, etc.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostLicensableResourceKeyEnum {
     #[serde(rename = "numCpuPackages")]
     #[strum(serialize = "numCpuPackages")]
@@ -1250,10 +1118,6 @@ pub enum HostLicensableResourceKeyEnum {
     #[serde(rename = "numVmsStarting")]
     #[strum(serialize = "numVmsStarting")]
     NumVmsStarting,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Deprecated as of VI API 2.5, use *LicenseManager.QueryLicenseSourceAvailability*
 /// to obtain an array of *LicenseAvailabilityInfo* data
@@ -1324,7 +1188,7 @@ pub enum HostLicensableResourceKeyEnum {
 /// - `das`: Enable VirtualCenter HA.
 ///   
 ///   This is a per ESX server CPU package license.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum LicenseManagerLicenseKeyEnum {
     #[serde(rename = "esxFull")]
     #[strum(serialize = "esxFull")]
@@ -1377,10 +1241,6 @@ pub enum LicenseManagerLicenseKeyEnum {
     #[serde(rename = "das")]
     #[strum(serialize = "das")]
     Das,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Deprecated as of vSphere API 4.0, this is not used by the system.
 /// 
@@ -1391,7 +1251,7 @@ pub enum LicenseManagerLicenseKeyEnum {
 /// - `normal`: Running within operating parameters.
 /// - `marginal`: License source unavailable, using license cache.
 /// - `fault`: Initialization has failed or grace period expired.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum LicenseManagerStateEnum {
     #[serde(rename = "initializing")]
     #[strum(serialize = "initializing")]
@@ -1405,10 +1265,6 @@ pub enum LicenseManagerStateEnum {
     #[serde(rename = "fault")]
     #[strum(serialize = "fault")]
     Fault,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Describes the reservation state of a license.
 /// 
@@ -1427,7 +1283,7 @@ pub enum LicenseManagerStateEnum {
 ///   example, when a license server becomes unavailable after a license had been
 ///   successfully reserved from it.
 /// - `licensed`: The required number of licenses have been acquired from the license source.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum LicenseReservationInfoStateEnum {
     #[serde(rename = "notUsed")]
     #[strum(serialize = "notUsed")]
@@ -1441,10 +1297,6 @@ pub enum LicenseReservationInfoStateEnum {
     #[serde(rename = "licensed")]
     #[strum(serialize = "licensed")]
     Licensed,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The Status enumeration defines a general "health" value for a managed entity.
 /// 
@@ -1453,7 +1305,7 @@ pub enum LicenseReservationInfoStateEnum {
 /// - `green`: The entity is OK.
 /// - `yellow`: The entity might have a problem.
 /// - `red`: The entity definitely has a problem.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum ManagedEntityStatusEnum {
     #[serde(rename = "gray")]
     #[strum(serialize = "gray")]
@@ -1467,10 +1319,6 @@ pub enum ManagedEntityStatusEnum {
     #[serde(rename = "red")]
     #[strum(serialize = "red")]
     Red,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The type of an OST node.
 /// 
@@ -1481,7 +1329,7 @@ pub enum ManagedEntityStatusEnum {
 /// - `envelope`
 /// - `virtualSystem`
 /// - `virtualSystemCollection`
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum OvfConsumerOstNodeTypeEnum {
     #[serde(rename = "envelope")]
     #[strum(serialize = "envelope")]
@@ -1492,10 +1340,6 @@ pub enum OvfConsumerOstNodeTypeEnum {
     #[serde(rename = "virtualSystemCollection")]
     #[strum(serialize = "virtualSystemCollection")]
     VirtualSystemCollection,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Types of disk provisioning that can be set for the disk in the deployed OVF
 /// package.
@@ -1535,7 +1379,7 @@ pub enum OvfConsumerOstNodeTypeEnum {
 ///   MonolithicSparse or Thin.
 /// - `flat`: Depending on the host type, Flat is mapped to either
 ///   MonolithicFlat or Thick.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum OvfCreateImportSpecParamsDiskProvisioningTypeEnum {
     #[serde(rename = "monolithicSparse")]
     #[strum(serialize = "monolithicSparse")]
@@ -1567,10 +1411,6 @@ pub enum OvfCreateImportSpecParamsDiskProvisioningTypeEnum {
     #[serde(rename = "flat")]
     #[strum(serialize = "flat")]
     Flat,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Indicates how multiple samples of a specific counter type are
 /// transformed into a single statistical value.
@@ -1587,7 +1427,7 @@ pub enum OvfCreateImportSpecParamsDiskProvisioningTypeEnum {
 /// - `summation`: The sum of all the values of the performance counter over the
 ///   summarization period.
 /// - `none`: The counter is never rolled up.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum PerfSummaryTypeEnum {
     #[serde(rename = "average")]
     #[strum(serialize = "average")]
@@ -1607,10 +1447,6 @@ pub enum PerfSummaryTypeEnum {
     #[serde(rename = "none")]
     #[strum(serialize = "none")]
     None,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Indicates the type of statistical measurement that a counter&#146;s
 /// value represents.
@@ -1637,7 +1473,7 @@ pub enum PerfSummaryTypeEnum {
 ///   
 ///   For example,
 ///   the number of reads per second.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum PerfStatsTypeEnum {
     #[serde(rename = "absolute")]
     #[strum(serialize = "absolute")]
@@ -1648,10 +1484,6 @@ pub enum PerfStatsTypeEnum {
     #[serde(rename = "rate")]
     #[strum(serialize = "rate")]
     Rate,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Indicates the unit of measure represented by a counter or statistical
 /// value.
@@ -1677,7 +1509,7 @@ pub enum PerfStatsTypeEnum {
 /// - `nanosecond`: The time in nanoseconds.
 ///   
 ///   ***Since:*** vSphere API Release 8.0.0.1
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum PerformanceManagerUnitEnum {
     #[serde(rename = "percent")]
     #[strum(serialize = "percent")]
@@ -1724,17 +1556,13 @@ pub enum PerformanceManagerUnitEnum {
     #[serde(rename = "nanosecond")]
     #[strum(serialize = "nanosecond")]
     Nanosecond,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The format in which performance counter data is returned.
 /// 
 /// Possible values:
 /// - `normal`: Counters returned in an array of data objects.
 /// - `csv`: Counters returned in comma-separate value (CSV) format.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum PerfFormatEnum {
     #[serde(rename = "normal")]
     #[strum(serialize = "normal")]
@@ -1742,15 +1570,11 @@ pub enum PerfFormatEnum {
     #[serde(rename = "csv")]
     #[strum(serialize = "csv")]
     Csv,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `disabled`: Do not scale shares
 /// - `scaleCpuAndMemoryShares`: Scale both CPU and memory shares
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum ResourceConfigSpecScaleSharesBehaviorEnum {
     #[serde(rename = "disabled")]
     #[strum(serialize = "disabled")]
@@ -1758,10 +1582,6 @@ pub enum ResourceConfigSpecScaleSharesBehaviorEnum {
     #[serde(rename = "scaleCpuAndMemoryShares")]
     #[strum(serialize = "scaleCpuAndMemoryShares")]
     ScaleCpuAndMemoryShares,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Types of a host's compatibility with a designated virtual machine
 /// that is a candidate for VMotion.
@@ -1776,7 +1596,7 @@ pub enum ResourceConfigSpecScaleSharesBehaviorEnum {
 ///   the virtual machine's requirements.
 /// - `software`: The software platform on the host supports VMotion
 ///   and is compatible with the virtual machine.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VMotionCompatibilityTypeEnum {
     #[serde(rename = "cpu")]
     #[strum(serialize = "cpu")]
@@ -1784,10 +1604,6 @@ pub enum VMotionCompatibilityTypeEnum {
     #[serde(rename = "software")]
     #[strum(serialize = "software")]
     Software,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Deprecated as of vSphere API 4.0, use *CheckTestType_enum* instead.
 /// 
@@ -1818,7 +1634,7 @@ pub enum VMotionCompatibilityTypeEnum {
 ///   The
 ///   destination host or cluster is relevant because it will affect the
 ///   amount of overhead memory required to run the virtual machine.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum ValidateMigrationTestTypeEnum {
     #[serde(rename = "sourceTests")]
     #[strum(serialize = "sourceTests")]
@@ -1832,10 +1648,6 @@ pub enum ValidateMigrationTestTypeEnum {
     #[serde(rename = "resourceTests")]
     #[strum(serialize = "resourceTests")]
     ResourceTests,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `HttpNfcServiceTicket`: Ticket used for HttpNfc access to a file or disk on a datastore
@@ -1843,15 +1655,11 @@ pub enum ValidateMigrationTestTypeEnum {
 /// - `VcServiceTicket`: Ticket used for service request on a VC
 ///   
 /// ***Since:*** vSphere API Release 7.0.2.0
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum SessionManagerGenericServiceTicketTicketTypeEnum {
     HttpNfcServiceTicket,
     HostServiceTicket,
     VcServiceTicket,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// HTTP request methods.
 /// 
@@ -1864,7 +1672,7 @@ pub enum SessionManagerGenericServiceTicketTicketTypeEnum {
 /// - `httpDelete`
 /// - `httpTrace`
 /// - `httpConnect`
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum SessionManagerHttpServiceRequestSpecMethodEnum {
     #[serde(rename = "httpOptions")]
     #[strum(serialize = "httpOptions")]
@@ -1890,10 +1698,6 @@ pub enum SessionManagerHttpServiceRequestSpecMethodEnum {
     #[serde(rename = "httpConnect")]
     #[strum(serialize = "httpConnect")]
     HttpConnect,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Simplified shares notation.
 /// 
@@ -1913,7 +1717,7 @@ pub enum SessionManagerHttpServiceRequestSpecMethodEnum {
 ///   For Disk: Shares = 2000  
 ///   For Network: Shares = *DVSFeatureCapability.networkResourcePoolHighShareValue*
 /// - `custom`: If you specify <code>custom</code> for the *SharesInfo.level* property, when there is resource contention the Server uses the *SharesInfo.shares* value to determine resource allocation.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum SharesLevelEnum {
     #[serde(rename = "low")]
     #[strum(serialize = "low")]
@@ -1927,10 +1731,6 @@ pub enum SharesLevelEnum {
     #[serde(rename = "custom")]
     #[strum(serialize = "custom")]
     Custom,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The encoding of the resultant return data.
 /// 
@@ -1941,7 +1741,7 @@ pub enum SharesLevelEnum {
 /// - `CSV`: Comma separated values
 /// - `HEX`: Hex encoded binary data
 /// - `STRING`
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum SimpleCommandEncodingEnum {
     #[serde(rename = "CSV")]
     #[strum(serialize = "CSV")]
@@ -1952,10 +1752,6 @@ pub enum SimpleCommandEncodingEnum {
     #[serde(rename = "STRING")]
     #[strum(serialize = "STRING")]
     String,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// User specification of congestion threshold mode on a given datastore
 /// 
@@ -1968,7 +1764,7 @@ pub enum SimpleCommandEncodingEnum {
 ///   
 ///   This is the default setting
 /// - `manual`: Use user specified Storage IO Control congestion threshold value
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum StorageIormThresholdModeEnum {
     #[serde(rename = "automatic")]
     #[strum(serialize = "automatic")]
@@ -1976,10 +1772,6 @@ pub enum StorageIormThresholdModeEnum {
     #[serde(rename = "manual")]
     #[strum(serialize = "manual")]
     Manual,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// This option specifies how to select tasks based on child relationships
 /// in the inventory hierarchy.
@@ -1996,7 +1788,7 @@ pub enum StorageIormThresholdModeEnum {
 ///   tasks pertaining to the specified managed entity itself.
 /// - `all`: Returns tasks pertaining either to the specified managed entity
 ///   or to its child entities.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum TaskFilterSpecRecursionOptionEnum {
     #[serde(rename = "self")]
     #[strum(serialize = "self")]
@@ -2007,10 +1799,6 @@ pub enum TaskFilterSpecRecursionOptionEnum {
     #[serde(rename = "all")]
     #[strum(serialize = "all")]
     All,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// This option specifies a time stamp governing the selection of tasks.
 /// 
@@ -2018,7 +1806,7 @@ pub enum TaskFilterSpecRecursionOptionEnum {
 /// - `queuedTime`: The time stamp when the task was created and queued.
 /// - `startedTime`: The time stamp when the task started.
 /// - `completedTime`: The time stamp when the task finished.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum TaskFilterSpecTimeOptionEnum {
     #[serde(rename = "queuedTime")]
     #[strum(serialize = "queuedTime")]
@@ -2029,10 +1817,6 @@ pub enum TaskFilterSpecTimeOptionEnum {
     #[serde(rename = "completedTime")]
     #[strum(serialize = "completedTime")]
     CompletedTime,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// List of possible states of a task.
 /// 
@@ -2044,7 +1828,7 @@ pub enum TaskFilterSpecTimeOptionEnum {
 ///   Then the queued tasks are marked as running.
 /// - `success`: When a running task has completed.
 /// - `error`: When a running task has encountered an error.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum TaskInfoStateEnum {
     #[serde(rename = "queued")]
     #[strum(serialize = "queued")]
@@ -2058,10 +1842,6 @@ pub enum TaskInfoStateEnum {
     #[serde(rename = "error")]
     #[strum(serialize = "error")]
     Error,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The VAppState type defines the set of states a vApp can be
 /// in.
@@ -2075,7 +1855,7 @@ pub enum TaskInfoStateEnum {
 /// - `stopped`: The vApp is currently powered off or suspended.
 /// - `starting`: The vApp is in the process of starting.
 /// - `stopping`: The vApp is in the process of stopping.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualAppVAppStateEnum {
     #[serde(rename = "started")]
     #[strum(serialize = "started")]
@@ -2089,10 +1869,6 @@ pub enum VirtualAppVAppStateEnum {
     #[serde(rename = "stopping")]
     #[strum(serialize = "stopping")]
     Stopping,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The types of virtual disk adapters used by virtual disks
 /// 
@@ -2100,7 +1876,7 @@ pub enum VirtualAppVAppStateEnum {
 /// - `ide`: Use IDE emulation for the virtual disk
 /// - `busLogic`: Use BusLogic emulation for the virtual disk
 /// - `lsiLogic`: Use LSILogic emulation for the virtual disk
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualDiskAdapterTypeEnum {
     #[serde(rename = "ide")]
     #[strum(serialize = "ide")]
@@ -2111,10 +1887,6 @@ pub enum VirtualDiskAdapterTypeEnum {
     #[serde(rename = "lsiLogic")]
     #[strum(serialize = "lsiLogic")]
     LsiLogic,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The types of virtual disks that can be created or cloned.
 /// 
@@ -2184,7 +1956,7 @@ pub enum VirtualDiskAdapterTypeEnum {
 ///   generally insecure and should not be used. Due to better performance
 ///   and security properties, the use of the 'preallocated' format is
 ///   preferred over this format.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualDiskTypeEnum {
     #[serde(rename = "preallocated")]
     #[strum(serialize = "preallocated")]
@@ -2225,10 +1997,6 @@ pub enum VirtualDiskTypeEnum {
     #[serde(rename = "thick")]
     #[strum(serialize = "thick")]
     Thick,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Application heartbeat status type.
 /// 
@@ -2236,7 +2004,7 @@ pub enum VirtualDiskTypeEnum {
 /// - `appStatusGray`: Heartbeat status is disabled
 /// - `appStatusGreen`: Heartbeat status is OK
 /// - `appStatusRed`: Heartbeating has stopped
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualMachineAppHeartbeatStatusTypeEnum {
     #[serde(rename = "appStatusGray")]
     #[strum(serialize = "appStatusGray")]
@@ -2247,10 +2015,6 @@ pub enum VirtualMachineAppHeartbeatStatusTypeEnum {
     #[serde(rename = "appStatusRed")]
     #[strum(serialize = "appStatusRed")]
     AppStatusRed,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The connectivity state of a virtual machine.
 /// 
@@ -2283,7 +2047,7 @@ pub enum VirtualMachineAppHeartbeatStatusTypeEnum {
 ///   on disk, but corrupted in a way that does not allow the server to read the
 ///   content. In this case, no configuration can be returned for a virtual
 ///   machine.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualMachineConnectionStateEnum {
     #[serde(rename = "connected")]
     #[strum(serialize = "connected")]
@@ -2300,10 +2064,6 @@ pub enum VirtualMachineConnectionStateEnum {
     #[serde(rename = "invalid")]
     #[strum(serialize = "invalid")]
     Invalid,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The crypto state of a encrypted virtual machine.
 /// 
@@ -2311,7 +2071,7 @@ pub enum VirtualMachineConnectionStateEnum {
 /// - `unlocked`: The virtual machine is in unlocked state.
 /// - `locked`: The virtual machine is in locked state for the configuration key missing
 ///   on the ESX host where the VM is registered.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualMachineCryptoStateEnum {
     #[serde(rename = "unlocked")]
     #[strum(serialize = "unlocked")]
@@ -2319,10 +2079,6 @@ pub enum VirtualMachineCryptoStateEnum {
     #[serde(rename = "locked")]
     #[strum(serialize = "locked")]
     Locked,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The FaultToleranceState type defines a simple set of states for a
 /// fault tolerant virtual machine:
@@ -2360,7 +2116,7 @@ pub enum VirtualMachineCryptoStateEnum {
 ///   synchronizing its state with the primary virtual machine.
 /// - `running`: This state indicates that the virtual machine is running with fault
 ///   tolerance protection.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualMachineFaultToleranceStateEnum {
     #[serde(rename = "notConfigured")]
     #[strum(serialize = "notConfigured")]
@@ -2380,10 +2136,6 @@ pub enum VirtualMachineFaultToleranceStateEnum {
     #[serde(rename = "running")]
     #[strum(serialize = "running")]
     Running,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The FaultToleranceType defines the type of fault tolerance, if any,
 /// the virtual machine is configured for.
@@ -2392,7 +2144,7 @@ pub enum VirtualMachineFaultToleranceStateEnum {
 /// - `unset`: FT not set
 /// - `recordReplay`: Record/replay
 /// - `checkpointing`: Checkpointing
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualMachineFaultToleranceTypeEnum {
     #[serde(rename = "unset")]
     #[strum(serialize = "unset")]
@@ -2403,10 +2155,6 @@ pub enum VirtualMachineFaultToleranceTypeEnum {
     #[serde(rename = "checkpointing")]
     #[strum(serialize = "checkpointing")]
     Checkpointing,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// MovePriority is an enumeration of values that indicate the priority of the task
 /// that moves a virtual machine from one host to another or one storage location
@@ -2418,7 +2166,7 @@ pub enum VirtualMachineFaultToleranceTypeEnum {
 /// - `lowPriority`: The task of moving this virtual machine is low priority.
 /// - `highPriority`: The task of moving this virtual machine is high priority.
 /// - `defaultPriority`: The task of moving this virtual machine is the default priority.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualMachineMovePriorityEnum {
     #[serde(rename = "lowPriority")]
     #[strum(serialize = "lowPriority")]
@@ -2429,10 +2177,6 @@ pub enum VirtualMachineMovePriorityEnum {
     #[serde(rename = "defaultPriority")]
     #[strum(serialize = "defaultPriority")]
     DefaultPriority,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The NeedSecondaryReason type defines all reasons a virtual machine is
 /// in the needSecondary Fault Tolerance state following a failure.
@@ -2445,7 +2189,7 @@ pub enum VirtualMachineMovePriorityEnum {
 /// - `userAction`: Terminated by user
 /// - `checkpointError`: Checkpoint error
 /// - `other`: All other reasons
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualMachineNeedSecondaryReasonEnum {
     #[serde(rename = "initializing")]
     #[strum(serialize = "initializing")]
@@ -2468,10 +2212,6 @@ pub enum VirtualMachineNeedSecondaryReasonEnum {
     #[serde(rename = "other")]
     #[strum(serialize = "other")]
     Other,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The PowerState type defines a simple set of states for a virtual machine:
 /// poweredOn, poweredOff, and suspended.
@@ -2492,7 +2232,7 @@ pub enum VirtualMachineNeedSecondaryReasonEnum {
 /// - `poweredOff`: The virtual machine is currently powered off.
 /// - `poweredOn`: The virtual machine is currently powered on.
 /// - `suspended`: The virtual machine is currently suspended.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualMachinePowerStateEnum {
     #[serde(rename = "poweredOff")]
     #[strum(serialize = "poweredOff")]
@@ -2503,10 +2243,6 @@ pub enum VirtualMachinePowerStateEnum {
     #[serde(rename = "suspended")]
     #[strum(serialize = "suspended")]
     Suspended,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Deprecated as of vSphere API 6.0.
 /// 
@@ -2518,7 +2254,7 @@ pub enum VirtualMachinePowerStateEnum {
 /// - `replaying`: The virtual machine is replaying.
 /// - `inactive`: The virtual machine is currently not participating
 ///   in record or replay.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualMachineRecordReplayStateEnum {
     #[serde(rename = "recording")]
     #[strum(serialize = "recording")]
@@ -2529,10 +2265,6 @@ pub enum VirtualMachineRecordReplayStateEnum {
     #[serde(rename = "inactive")]
     #[strum(serialize = "inactive")]
     Inactive,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The virtual machine ticket type.
 /// 
@@ -2565,7 +2297,7 @@ pub enum VirtualMachineRecordReplayStateEnum {
 ///   This ticket grants the client read-only access to guest integrity
 ///   messages and alerts.
 /// - `webRemoteDevice`: Remote device over WebSocket ticket.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualMachineTicketTypeEnum {
     #[serde(rename = "mks")]
     #[strum(serialize = "mks")]
@@ -2585,17 +2317,13 @@ pub enum VirtualMachineTicketTypeEnum {
     #[serde(rename = "webRemoteDevice")]
     #[strum(serialize = "webRemoteDevice")]
     WebRemoteDevice,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Type of disk group operation performed.
 /// 
 /// Possible values:
 /// - `add`: Disk group is being (re-)added.
 /// - `remove`: Disk group is being removed.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VsanUpgradeSystemUpgradeHistoryDiskGroupOpTypeEnum {
     #[serde(rename = "add")]
     #[strum(serialize = "add")]
@@ -2603,10 +2331,6 @@ pub enum VsanUpgradeSystemUpgradeHistoryDiskGroupOpTypeEnum {
     #[serde(rename = "remove")]
     #[strum(serialize = "remove")]
     Remove,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// These constant strings can be used as parameters in user-specified
 /// email subject and body templates as well as in scripts.
@@ -2627,7 +2351,7 @@ pub enum VsanUpgradeSystemUpgradeHistoryDiskGroupOpTypeEnum {
 /// - `eventDescription`: The event description.
 /// - `target`: The object of the entity where the alarm is associated.
 /// - `alarm`: The object of the triggering alarm.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum ActionParameterEnum {
     #[serde(rename = "targetName")]
     #[strum(serialize = "targetName")]
@@ -2656,10 +2380,6 @@ pub enum ActionParameterEnum {
     #[serde(rename = "alarm")]
     #[strum(serialize = "alarm")]
     Alarm,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Alarm entity type
 /// 
@@ -2667,7 +2387,7 @@ pub enum ActionParameterEnum {
 /// - `entityTypeAll`: Alarms on all entity types.
 /// - `entityTypeHost`: Host alarms
 /// - `entityTypeVm`: VM alarms
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum AlarmFilterSpecAlarmTypeByEntityEnum {
     #[serde(rename = "entityTypeAll")]
     #[strum(serialize = "entityTypeAll")]
@@ -2678,10 +2398,6 @@ pub enum AlarmFilterSpecAlarmTypeByEntityEnum {
     #[serde(rename = "entityTypeVm")]
     #[strum(serialize = "entityTypeVm")]
     EntityTypeVm,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Alarm triggering type.
 /// 
@@ -2692,7 +2408,7 @@ pub enum AlarmFilterSpecAlarmTypeByEntityEnum {
 /// - `triggerTypeAll`: All alarm types.
 /// - `triggerTypeEvent`: Event based alarms
 /// - `triggerTypeMetric`: Metric or state alarms
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum AlarmFilterSpecAlarmTypeByTriggerEnum {
     #[serde(rename = "triggerTypeAll")]
     #[strum(serialize = "triggerTypeAll")]
@@ -2703,10 +2419,6 @@ pub enum AlarmFilterSpecAlarmTypeByTriggerEnum {
     #[serde(rename = "triggerTypeMetric")]
     #[strum(serialize = "triggerTypeMetric")]
     TriggerTypeMetric,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Basic Comparison operators
 /// 
@@ -2717,7 +2429,7 @@ pub enum AlarmFilterSpecAlarmTypeByTriggerEnum {
 /// - `doesNotStartWith`: attribute does not start with specified value
 /// - `endsWith`: attribute ends with specified value
 /// - `doesNotEndWith`: attribute does not end with specified value
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum EventAlarmExpressionComparisonOperatorEnum {
     #[serde(rename = "equals")]
     #[strum(serialize = "equals")]
@@ -2737,17 +2449,13 @@ pub enum EventAlarmExpressionComparisonOperatorEnum {
     #[serde(rename = "doesNotEndWith")]
     #[strum(serialize = "doesNotEndWith")]
     DoesNotEndWith,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The operation on the target metric item.
 /// 
 /// Possible values:
 /// - `isAbove`: Test if the target metric item is above the given red or yellow values.
 /// - `isBelow`: Test if the target metric item is below the given red or yellow values.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum MetricAlarmOperatorEnum {
     #[serde(rename = "isAbove")]
     #[strum(serialize = "isAbove")]
@@ -2755,17 +2463,13 @@ pub enum MetricAlarmOperatorEnum {
     #[serde(rename = "isBelow")]
     #[strum(serialize = "isBelow")]
     IsBelow,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The operation on the target state.
 /// 
 /// Possible values:
 /// - `isEqual`: Test if the target state matches the given red or yellow states.
 /// - `isUnequal`: Test if the target state does not match the given red or yellow states.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum StateAlarmOperatorEnum {
     #[serde(rename = "isEqual")]
     #[strum(serialize = "isEqual")]
@@ -2773,10 +2477,6 @@ pub enum StateAlarmOperatorEnum {
     #[serde(rename = "isUnequal")]
     #[strum(serialize = "isUnequal")]
     IsUnequal,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Pre-defined constants for possible action types.
 /// 
@@ -2792,7 +2492,7 @@ pub enum StateAlarmOperatorEnum {
 /// - `StoragePlacementV1`: Initial placement action for a virtual machine or a virtual disk
 /// - `PlacementV1`: Initial placement action for a virtual machine and its virtual disks
 /// - `HostInfraUpdateHaV1`: Host changing infrastructure update ha mode action type.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum ActionTypeEnum {
     MigrationV1,
     VmPowerV1,
@@ -2802,15 +2502,11 @@ pub enum ActionTypeEnum {
     StoragePlacementV1,
     PlacementV1,
     HostInfraUpdateHaV1,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `onDemand`: Put each host into the crypto safe state automatically when needed.
 /// - `forceEnable`: Put each host into the crypto safe state immediately.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum ClusterCryptoConfigInfoCryptoModeEnum {
     #[serde(rename = "onDemand")]
     #[strum(serialize = "onDemand")]
@@ -2818,10 +2514,6 @@ pub enum ClusterCryptoConfigInfoCryptoModeEnum {
     #[serde(rename = "forceEnable")]
     #[strum(serialize = "forceEnable")]
     ForceEnable,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The *ClusterDasAamNodeStateDasState_enum* enumerated type defines
 /// values for host HA configuration and runtime state properties
@@ -2843,7 +2535,7 @@ pub enum ClusterCryptoConfigInfoCryptoModeEnum {
 ///   
 ///   This can represent a host failure
 ///   or an isolated host.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum ClusterDasAamNodeStateDasStateEnum {
     #[serde(rename = "uninitialized")]
     #[strum(serialize = "uninitialized")]
@@ -2869,10 +2561,6 @@ pub enum ClusterDasAamNodeStateDasStateEnum {
     #[serde(rename = "nodeFailed")]
     #[strum(serialize = "nodeFailed")]
     NodeFailed,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The policy to determine the candidates from which vCenter Server can
 /// choose heartbeat datastores.
@@ -2896,7 +2584,7 @@ pub enum ClusterDasAamNodeStateDasStateEnum {
 ///   
 ///   More specifically, the datastores not included in *ClusterDasConfigInfo.heartbeatDatastore* will be
 ///   chosen if and only if the specified ones are not sufficient.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum ClusterDasConfigInfoHbDatastoreCandidateEnum {
     #[serde(rename = "userSelectedDs")]
     #[strum(serialize = "userSelectedDs")]
@@ -2907,10 +2595,6 @@ pub enum ClusterDasConfigInfoHbDatastoreCandidateEnum {
     #[serde(rename = "allFeasibleDsWithUserPreference")]
     #[strum(serialize = "allFeasibleDsWithUserPreference")]
     AllFeasibleDsWithUserPreference,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible states of an HA service.
 /// 
@@ -2920,7 +2604,7 @@ pub enum ClusterDasConfigInfoHbDatastoreCandidateEnum {
 /// Possible values:
 /// - `disabled`: HA service is disabled.
 /// - `enabled`: HA service is enabled.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum ClusterDasConfigInfoServiceStateEnum {
     #[serde(rename = "disabled")]
     #[strum(serialize = "disabled")]
@@ -2928,10 +2612,6 @@ pub enum ClusterDasConfigInfoServiceStateEnum {
     #[serde(rename = "enabled")]
     #[strum(serialize = "enabled")]
     Enabled,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The *ClusterDasConfigInfoVmMonitoringState_enum* enum defines values that indicate
 /// the state of Virtual Machine Health Monitoring.
@@ -2968,7 +2648,7 @@ pub enum ClusterDasConfigInfoServiceStateEnum {
 ///   - To retrieve the application heartbeat status, use the
 ///     *GuestInfo*.*GuestInfo.appHeartbeatStatus*
 ///     property.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum ClusterDasConfigInfoVmMonitoringStateEnum {
     #[serde(rename = "vmMonitoringDisabled")]
     #[strum(serialize = "vmMonitoringDisabled")]
@@ -2979,10 +2659,6 @@ pub enum ClusterDasConfigInfoVmMonitoringStateEnum {
     #[serde(rename = "vmAndAppMonitoring")]
     #[strum(serialize = "vmAndAppMonitoring")]
     VmAndAppMonitoring,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The *ClusterDasFdmAvailabilityState_enum* enumeration describes the
 /// availability states of hosts in a vSphere HA cluster.
@@ -3071,7 +2747,7 @@ pub enum ClusterDasConfigInfoVmMonitoringStateEnum {
 ///   This state is reported by vCenter.
 ///   
 ///   ***Since:*** vSphere API Release 8.0.0.0
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum ClusterDasFdmAvailabilityStateEnum {
     #[serde(rename = "uninitialized")]
     #[strum(serialize = "uninitialized")]
@@ -3106,10 +2782,6 @@ pub enum ClusterDasFdmAvailabilityStateEnum {
     #[serde(rename = "retry")]
     #[strum(serialize = "retry")]
     Retry,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Deprecated as of VI API 2.5, use *ClusterDasVmSettingsRestartPriority_enum*.
 /// 
@@ -3132,7 +2804,7 @@ pub enum ClusterDasFdmAvailabilityStateEnum {
 /// - `high`: Virtual machines with this priority have a higher chance of powering on after a
 ///   failure if there is insufficient capacity on hosts to meet all virtual machine
 ///   needs.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum DasVmPriorityEnum {
     #[serde(rename = "disabled")]
     #[strum(serialize = "disabled")]
@@ -3146,10 +2818,6 @@ pub enum DasVmPriorityEnum {
     #[serde(rename = "high")]
     #[strum(serialize = "high")]
     High,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The *ClusterDasVmSettingsIsolationResponse_enum* enum defines
 /// values that indicate whether or not the virtual machine should be
@@ -3209,7 +2877,7 @@ pub enum DasVmPriorityEnum {
 ///   shutdown.
 /// - `clusterIsolationResponse`: Use the default isolation response defined for the cluster
 ///   that contains this virtual machine.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum ClusterDasVmSettingsIsolationResponseEnum {
     #[serde(rename = "none")]
     #[strum(serialize = "none")]
@@ -3223,10 +2891,6 @@ pub enum ClusterDasVmSettingsIsolationResponseEnum {
     #[serde(rename = "clusterIsolationResponse")]
     #[strum(serialize = "clusterIsolationResponse")]
     ClusterIsolationResponse,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The *ClusterDasVmSettingsRestartPriority_enum* enum defines
 /// virtual machine restart priority values to resolve resource contention.
@@ -3261,7 +2925,7 @@ pub enum ClusterDasVmSettingsIsolationResponseEnum {
 ///   hosts to meet all virtual machine needs.
 /// - `clusterRestartPriority`: Virtual machines with this priority use the default restart
 ///   priority defined for the cluster that contains this virtual machine.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum ClusterDasVmSettingsRestartPriorityEnum {
     #[serde(rename = "disabled")]
     #[strum(serialize = "disabled")]
@@ -3284,10 +2948,6 @@ pub enum ClusterDasVmSettingsRestartPriorityEnum {
     #[serde(rename = "clusterRestartPriority")]
     #[strum(serialize = "clusterRestartPriority")]
     ClusterRestartPriority,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `manual`: Specifies that VirtualCenter should generate recommendations
@@ -3296,7 +2956,7 @@ pub enum ClusterDasVmSettingsRestartPriorityEnum {
 /// - `automated`: Specifies that VirtualCenter should generate recommendations
 ///   for host power operations, and should execute the
 ///   recommendations automatically.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum DpmBehaviorEnum {
     #[serde(rename = "manual")]
     #[strum(serialize = "manual")]
@@ -3304,10 +2964,6 @@ pub enum DpmBehaviorEnum {
     #[serde(rename = "automated")]
     #[strum(serialize = "automated")]
     Automated,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `manual`: Specifies that VirtualCenter should generate recommendations for
@@ -3318,7 +2974,7 @@ pub enum DpmBehaviorEnum {
 ///   but should automatically implement only the placement at power on.
 /// - `fullyAutomated`: Specifies that VirtualCenter should automate both the migration
 ///   of virtual machines and their placement with a host at power on.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum DrsBehaviorEnum {
     #[serde(rename = "manual")]
     #[strum(serialize = "manual")]
@@ -3329,10 +2985,6 @@ pub enum DrsBehaviorEnum {
     #[serde(rename = "fullyAutomated")]
     #[strum(serialize = "fullyAutomated")]
     FullyAutomated,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Deprecated as of VI API 2.5 use *RecommendationReasonCode_enum*.
 /// 
@@ -3344,7 +2996,7 @@ pub enum DrsBehaviorEnum {
 /// - `jointAffin`: Fulfill affinity rule.
 /// - `antiAffin`: Fulfill anti-affinity rule.
 /// - `hostMaint`: Host entering maintenance mode.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum DrsRecommendationReasonCodeEnum {
     #[serde(rename = "fairnessCpuAvg")]
     #[strum(serialize = "fairnessCpuAvg")]
@@ -3361,10 +3013,6 @@ pub enum DrsRecommendationReasonCodeEnum {
     #[serde(rename = "hostMaint")]
     #[strum(serialize = "hostMaint")]
     HostMaint,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Describes the operation type of the action.
 /// 
@@ -3376,7 +3024,7 @@ pub enum DrsRecommendationReasonCodeEnum {
 /// - `enterQuarantine`
 /// - `exitQuarantine`
 /// - `enterMaintenance`
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum ClusterHostInfraUpdateHaModeActionOperationTypeEnum {
     #[serde(rename = "enterQuarantine")]
     #[strum(serialize = "enterQuarantine")]
@@ -3387,10 +3035,6 @@ pub enum ClusterHostInfraUpdateHaModeActionOperationTypeEnum {
     #[serde(rename = "enterMaintenance")]
     #[strum(serialize = "enterMaintenance")]
     EnterMaintenance,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `powerOn`: Power On Operation
@@ -3398,7 +3042,7 @@ pub enum ClusterHostInfraUpdateHaModeActionOperationTypeEnum {
 ///   
 ///   Power off operation puts the host in
 ///   a state that can be woken up remotely.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostPowerOperationTypeEnum {
     #[serde(rename = "powerOn")]
     #[strum(serialize = "powerOn")]
@@ -3406,38 +3050,26 @@ pub enum HostPowerOperationTypeEnum {
     #[serde(rename = "powerOff")]
     #[strum(serialize = "powerOff")]
     PowerOff,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `Manual`: With this behavior configured, the proposed DRS recommendations
 ///   require manual approval before they are executed.
 /// - `Automated`: With this behavior configured, the proposed DRS recommendations are
 ///   executed immediately.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum ClusterInfraUpdateHaConfigInfoBehaviorTypeEnum {
     Manual,
     Automated,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `QuarantineMode`: With this behavior configured, a degraded host will be recommended
 ///   to be placed in Quarantine Mode.
 /// - `MaintenanceMode`: With this behavior configured, a degraded host will be recommended
 ///   to be placed in Maintenance Mode.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum ClusterInfraUpdateHaConfigInfoRemediationTypeEnum {
     QuarantineMode,
     MaintenanceMode,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Defines the type of placement
 /// 
@@ -3446,7 +3078,7 @@ pub enum ClusterInfraUpdateHaConfigInfoRemediationTypeEnum {
 /// - `reconfigure`: Reconfigure a VM
 /// - `relocate`: Relocate a VM
 /// - `clone`: Clone a VM
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum PlacementSpecPlacementTypeEnum {
     #[serde(rename = "create")]
     #[strum(serialize = "create")]
@@ -3460,10 +3092,6 @@ pub enum PlacementSpecPlacementTypeEnum {
     #[serde(rename = "clone")]
     #[strum(serialize = "clone")]
     Clone,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Defines the options for a Datacenter::powerOnVm() invocation.
 /// 
@@ -3487,14 +3115,10 @@ pub enum PlacementSpecPlacementTypeEnum {
 ///   option is effective on DRS clusters only.
 ///   Value type: boolean
 ///   Default value: false
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum ClusterPowerOnVmOptionEnum {
     OverrideAutomationLevel,
     ReserveResources,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// List of defined migration reason codes:
 /// 
@@ -3536,7 +3160,7 @@ pub enum ClusterPowerOnVmOptionEnum {
 /// - `ahPlacementOptimization`: Optimize assignable hardware resource orchestration
 ///   
 ///   ***Since:*** vSphere API Release 8.0.2.0
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum RecommendationReasonCodeEnum {
     #[serde(rename = "fairnessCpuAvg")]
     #[strum(serialize = "fairnessCpuAvg")]
@@ -3643,10 +3267,6 @@ pub enum RecommendationReasonCodeEnum {
     #[serde(rename = "ahPlacementOptimization")]
     #[strum(serialize = "ahPlacementOptimization")]
     AhPlacementOptimization,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Pre-defined constants for possible recommendation types.
 /// 
@@ -3655,20 +3275,16 @@ pub enum RecommendationReasonCodeEnum {
 /// 
 /// Possible values:
 /// - `V1`
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum RecommendationTypeEnum {
     V1,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `SYSTEM_MANAGED`: System VMs are fully managed by the system.
 /// - `ABSENT`: System VMs are absent on the managed entity.
 ///   
 /// ***Since:*** vSphere API Release 8.0.2.0
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum ClusterSystemVMsConfigInfoDeploymentModeEnum {
     #[serde(rename = "SYSTEM_MANAGED")]
     #[strum(serialize = "SYSTEM_MANAGED")]
@@ -3676,10 +3292,6 @@ pub enum ClusterSystemVMsConfigInfoDeploymentModeEnum {
     #[serde(rename = "ABSENT")]
     #[strum(serialize = "ABSENT")]
     Absent,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The VM policy settings that determine the response to
 /// storage failures.
@@ -3710,7 +3322,7 @@ pub enum ClusterSystemVMsConfigInfoDeploymentModeEnum {
 ///   
 ///   This option is only meaningful for
 ///   per-VM settings.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum ClusterVmComponentProtectionSettingsStorageVmReactionEnum {
     #[serde(rename = "disabled")]
     #[strum(serialize = "disabled")]
@@ -3727,10 +3339,6 @@ pub enum ClusterVmComponentProtectionSettingsStorageVmReactionEnum {
     #[serde(rename = "clusterDefault")]
     #[strum(serialize = "clusterDefault")]
     ClusterDefault,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// If an APD condition clears after an APD timeout condition has been declared and before
 /// VM Component Protection service terminated the VM, the guestOS and application may
@@ -3748,7 +3356,7 @@ pub enum ClusterVmComponentProtectionSettingsStorageVmReactionEnum {
 ///   
 ///   This option is only meaningful for
 ///   per-VM settings.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum ClusterVmComponentProtectionSettingsVmReactionOnApdClearedEnum {
     #[serde(rename = "none")]
     #[strum(serialize = "none")]
@@ -3759,10 +3367,6 @@ pub enum ClusterVmComponentProtectionSettingsVmReactionOnApdClearedEnum {
     #[serde(rename = "useClusterDefault")]
     #[strum(serialize = "useClusterDefault")]
     UseClusterDefault,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Condition for VM's readiness
 /// 
@@ -3785,7 +3389,7 @@ pub enum ClusterVmComponentProtectionSettingsVmReactionOnApdClearedEnum {
 ///   
 ///   This option is only
 ///   meaningful for per-VM settings.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum ClusterVmReadinessReadyConditionEnum {
     #[serde(rename = "none")]
     #[strum(serialize = "none")]
@@ -3802,10 +3406,6 @@ pub enum ClusterVmReadinessReadyConditionEnum {
     #[serde(rename = "useClusterDefault")]
     #[strum(serialize = "useClusterDefault")]
     UseClusterDefault,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Network Filter on Failure Type.
 /// 
@@ -3816,7 +3416,7 @@ pub enum ClusterVmReadinessReadyConditionEnum {
 /// Possible values:
 /// - `failOpen`: Allows all the packets when the Filter fails to configure.
 /// - `failClosed`: Denies all the packets when the Filter fails to configure.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum DvsFilterOnFailureEnum {
     #[serde(rename = "failOpen")]
     #[strum(serialize = "failOpen")]
@@ -3824,10 +3424,6 @@ pub enum DvsFilterOnFailureEnum {
     #[serde(rename = "failClosed")]
     #[strum(serialize = "failClosed")]
     FailClosed,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Set of possible values for
 /// *DVPortStatus*.*DVPortStatus.vmDirectPathGen2InactiveReasonNetwork*.
@@ -3845,7 +3441,7 @@ pub enum DvsFilterOnFailureEnum {
 ///   support VMDirectPath Gen 2, but all available network-passthrough
 ///   resources are in use by other ports.
 /// - `portNptDisabledForPort`: VMDirectPath Gen 2 has been explicitly disabled for this port.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum DvPortStatusVmDirectPathGen2InactiveReasonNetworkEnum {
     #[serde(rename = "portNptIncompatibleDvs")]
     #[strum(serialize = "portNptIncompatibleDvs")]
@@ -3859,10 +3455,6 @@ pub enum DvPortStatusVmDirectPathGen2InactiveReasonNetworkEnum {
     #[serde(rename = "portNptDisabledForPort")]
     #[strum(serialize = "portNptDisabledForPort")]
     PortNptDisabledForPort,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Set of possible values for
 /// *DVPortStatus*.*DVPortStatus.vmDirectPathGen2InactiveReasonOther*.
@@ -3880,7 +3472,7 @@ pub enum DvPortStatusVmDirectPathGen2InactiveReasonNetworkEnum {
 ///   *VirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeState.vmDirectPathGen2InactiveReasonExtended*
 ///   in the appropriate element of the RuntimeInfo.device array of the
 ///   virtual machine connected to this port.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum DvPortStatusVmDirectPathGen2InactiveReasonOtherEnum {
     #[serde(rename = "portNptIncompatibleHost")]
     #[strum(serialize = "portNptIncompatibleHost")]
@@ -3888,10 +3480,6 @@ pub enum DvPortStatusVmDirectPathGen2InactiveReasonOtherEnum {
     #[serde(rename = "portNptIncompatibleConnectee")]
     #[strum(serialize = "portNptIncompatibleConnectee")]
     PortNptIncompatibleConnectee,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The *DistributedVirtualPortgroupBackingType_enum* enum defines
 /// the distributed virtual portgroup backing type.
@@ -3905,7 +3493,7 @@ pub enum DvPortStatusVmDirectPathGen2InactiveReasonOtherEnum {
 ///   ephemeral, A *DistributedVirtualPort* will be
 ///   dynamicly created by NSX when the virtual machine is reconfigured
 ///   to connect to the portgroup.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum DistributedVirtualPortgroupBackingTypeEnum {
     #[serde(rename = "standard")]
     #[strum(serialize = "standard")]
@@ -3913,10 +3501,6 @@ pub enum DistributedVirtualPortgroupBackingTypeEnum {
     #[serde(rename = "nsx")]
     #[strum(serialize = "nsx")]
     Nsx,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The meta tag names recognizable in the
 /// *DVPortgroupConfigInfo.portNameFormat* string.
@@ -3925,7 +3509,7 @@ pub enum DistributedVirtualPortgroupBackingTypeEnum {
 /// - `dvsName`: This tag will be expanded to the name of the switch.
 /// - `portgroupName`: This tag will be expanded to the name of the portgroup.
 /// - `portIndex`: This tag will be expanded to the current index of the port.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum DistributedVirtualPortgroupMetaTagNameEnum {
     #[serde(rename = "dvsName")]
     #[strum(serialize = "dvsName")]
@@ -3936,10 +3520,6 @@ pub enum DistributedVirtualPortgroupMetaTagNameEnum {
     #[serde(rename = "portIndex")]
     #[strum(serialize = "portIndex")]
     PortIndex,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The *DistributedVirtualPortgroupPortgroupType_enum* enum defines
 /// the distributed virtual portgroup types
@@ -3969,7 +3549,7 @@ pub enum DistributedVirtualPortgroupMetaTagNameEnum {
 ///   In cases where the vCenter Server is unavailable the host can
 ///   create conflict ports in this portgroup to be used by a virtual machine
 ///   at power on.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum DistributedVirtualPortgroupPortgroupTypeEnum {
     #[serde(rename = "earlyBinding")]
     #[strum(serialize = "earlyBinding")]
@@ -3980,10 +3560,6 @@ pub enum DistributedVirtualPortgroupPortgroupTypeEnum {
     #[serde(rename = "ephemeral")]
     #[strum(serialize = "ephemeral")]
     Ephemeral,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The *EntityType_enum* enum identifies
 /// the type of entity that was exported
@@ -3992,7 +3568,7 @@ pub enum DistributedVirtualPortgroupPortgroupTypeEnum {
 /// Possible values:
 /// - `distributedVirtualSwitch`: Indicates the exported entity is a *DistributedVirtualSwitch*.
 /// - `distributedVirtualPortgroup`: Indicates the exported entity is a *DistributedVirtualPortgroup*.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum EntityTypeEnum {
     #[serde(rename = "distributedVirtualSwitch")]
     #[strum(serialize = "distributedVirtualSwitch")]
@@ -4000,10 +3576,6 @@ pub enum EntityTypeEnum {
     #[serde(rename = "distributedVirtualPortgroup")]
     #[strum(serialize = "distributedVirtualPortgroup")]
     DistributedVirtualPortgroup,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The *EntityImportType_enum* enum defines the import type for a
 /// *DistributedVirtualSwitchManager*.*DistributedVirtualSwitchManager.DVSManagerImportEntity_Task*
@@ -4048,7 +3620,7 @@ pub enum EntityTypeEnum {
 ///   The Server ignores any value for the
 ///   *EntityBackupConfig*.*EntityBackupConfig.container*
 ///   property.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum EntityImportTypeEnum {
     #[serde(rename = "createEntityWithNewIdentifier")]
     #[strum(serialize = "createEntityWithNewIdentifier")]
@@ -4059,10 +3631,6 @@ pub enum EntityImportTypeEnum {
     #[serde(rename = "applyToEntitySpecified")]
     #[strum(serialize = "applyToEntitySpecified")]
     ApplyToEntitySpecified,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The enum defines the distributed virtual switch mode.
 /// 
@@ -4071,7 +3639,7 @@ pub enum EntityImportTypeEnum {
 /// - `mux`: ENS mode which skips packet parsing and flow table lookup.
 ///   
 /// ***Since:*** vSphere API Release 8.0.0.1
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostDvsConfigSpecSwitchModeEnum {
     #[serde(rename = "normal")]
     #[strum(serialize = "normal")]
@@ -4079,10 +3647,6 @@ pub enum HostDvsConfigSpecSwitchModeEnum {
     #[serde(rename = "mux")]
     #[strum(serialize = "mux")]
     Mux,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Describes the state of the host proxy switch.
 /// 
@@ -4094,7 +3658,7 @@ pub enum HostDvsConfigSpecSwitchModeEnum {
 /// - `warning`: The host requires attention.
 /// - `disconnected`: The host is disconnected or it is not responding.
 /// - `down`: The host proxy is down.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum DistributedVirtualSwitchHostMemberHostComponentStateEnum {
     #[serde(rename = "up")]
     #[strum(serialize = "up")]
@@ -4114,17 +3678,13 @@ pub enum DistributedVirtualSwitchHostMemberHostComponentStateEnum {
     #[serde(rename = "down")]
     #[strum(serialize = "down")]
     Down,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Transport zone type.
 /// 
 /// Possible values:
 /// - `vlan`: VLAN based networking
 /// - `overlay`: VXLAN based networking
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum DistributedVirtualSwitchHostMemberTransportZoneTypeEnum {
     #[serde(rename = "vlan")]
     #[strum(serialize = "vlan")]
@@ -4132,10 +3692,6 @@ pub enum DistributedVirtualSwitchHostMemberTransportZoneTypeEnum {
     #[serde(rename = "overlay")]
     #[strum(serialize = "overlay")]
     Overlay,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The connectee types.
 /// 
@@ -4147,7 +3703,7 @@ pub enum DistributedVirtualSwitchHostMemberTransportZoneTypeEnum {
 /// - `systemCrxVnic`: The port connects to a Virtual NIC in a System CRX VM.
 ///   
 ///   ***Since:*** vSphere API Release 8.0.1.0
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum DistributedVirtualSwitchPortConnecteeConnecteeTypeEnum {
     #[serde(rename = "pnic")]
     #[strum(serialize = "pnic")]
@@ -4164,10 +3720,6 @@ pub enum DistributedVirtualSwitchPortConnecteeConnecteeTypeEnum {
     #[serde(rename = "systemCrxVnic")]
     #[strum(serialize = "systemCrxVnic")]
     SystemCrxVnic,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Network Traffic Rule direction types.
 /// 
@@ -4181,7 +3733,7 @@ pub enum DistributedVirtualSwitchPortConnecteeConnecteeTypeEnum {
 ///   outgoing packets.
 /// - `both`: This specifies that the network rule has to be applied only for
 ///   both incoming and outgoing packets.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum DvsNetworkRuleDirectionTypeEnum {
     #[serde(rename = "incomingPackets")]
     #[strum(serialize = "incomingPackets")]
@@ -4192,10 +3744,6 @@ pub enum DvsNetworkRuleDirectionTypeEnum {
     #[serde(rename = "both")]
     #[strum(serialize = "both")]
     Both,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Link Aggregation Control Protocol API versions.
 /// 
@@ -4206,7 +3754,7 @@ pub enum DvsNetworkRuleDirectionTypeEnum {
 ///   
 ///   One Link Aggregation Control Protocol group in the switch
 /// - `multipleLag`: Multiple Link Aggregation Control Protocol in the switch.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VMwareDvsLacpApiVersionEnum {
     #[serde(rename = "singleLag")]
     #[strum(serialize = "singleLag")]
@@ -4214,10 +3762,6 @@ pub enum VMwareDvsLacpApiVersionEnum {
     #[serde(rename = "multipleLag")]
     #[strum(serialize = "multipleLag")]
     MultipleLag,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Load balance algorithm in a Link Aggregation Control Protocol group.
 /// 
@@ -4243,7 +3787,7 @@ pub enum VMwareDvsLacpApiVersionEnum {
 /// - `srcDestIp`: Source and Destination IP
 /// - `vlan`: VLAN only
 /// - `srcPortId`: Source Virtual Port Id
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VMwareDvsLacpLoadBalanceAlgorithmEnum {
     #[serde(rename = "srcMac")]
     #[strum(serialize = "srcMac")]
@@ -4305,15 +3849,11 @@ pub enum VMwareDvsLacpLoadBalanceAlgorithmEnum {
     #[serde(rename = "srcPortId")]
     #[strum(serialize = "srcPortId")]
     SrcPortId,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `allow`
 /// - `drop`
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum DvsMacLimitPolicyTypeEnum {
     #[serde(rename = "allow")]
     #[strum(serialize = "allow")]
@@ -4321,17 +3861,13 @@ pub enum DvsMacLimitPolicyTypeEnum {
     #[serde(rename = "drop")]
     #[strum(serialize = "drop")]
     Drop,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Multicast Filtering mode.
 /// 
 /// Possible values:
 /// - `legacyFiltering`: Legacy filtering mode
 /// - `snooping`: IGMP/MLD snooping mode
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VMwareDvsMulticastFilteringModeEnum {
     #[serde(rename = "legacyFiltering")]
     #[strum(serialize = "legacyFiltering")]
@@ -4339,10 +3875,6 @@ pub enum VMwareDvsMulticastFilteringModeEnum {
     #[serde(rename = "snooping")]
     #[strum(serialize = "snooping")]
     Snooping,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The PVLAN port types.
 /// 
@@ -4356,7 +3888,7 @@ pub enum VMwareDvsMulticastFilteringModeEnum {
 ///   
 ///   any other traffics are
 ///   blocked.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VmwareDistributedVirtualSwitchPvlanPortTypeEnum {
     #[serde(rename = "promiscuous")]
     #[strum(serialize = "promiscuous")]
@@ -4367,10 +3899,6 @@ pub enum VmwareDistributedVirtualSwitchPvlanPortTypeEnum {
     #[serde(rename = "community")]
     #[strum(serialize = "community")]
     Community,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The teaming health check match status.
 /// 
@@ -4391,7 +3919,7 @@ pub enum VmwareDistributedVirtualSwitchPvlanPortTypeEnum {
 ///   *VmwareUplinkPortTeamingPolicy.policy*
 ///   in the vSphere Distributed Switch, but the external physical switch
 ///   has EtherChannel configuration.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VMwareDvsTeamingMatchStatusEnum {
     #[serde(rename = "iphashMatch")]
     #[strum(serialize = "iphashMatch")]
@@ -4405,17 +3933,13 @@ pub enum VMwareDvsTeamingMatchStatusEnum {
     #[serde(rename = "nonIphashMismatch")]
     #[strum(serialize = "nonIphashMismatch")]
     NonIphashMismatch,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Link Aggregation Control Protocol policy modes.
 /// 
 /// Possible values:
 /// - `active`: Link Aggregation Control Protocol always sends frames along the configured uplinks
 /// - `passive`: Link Aggregation Control Protocol acts as "speak when spoken to".
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VMwareUplinkLacpModeEnum {
     #[serde(rename = "active")]
     #[strum(serialize = "active")]
@@ -4423,10 +3947,6 @@ pub enum VMwareUplinkLacpModeEnum {
     #[serde(rename = "passive")]
     #[strum(serialize = "passive")]
     Passive,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Link Aggregation Control Protocol timeout policy modes.
 /// 
@@ -4439,7 +3959,7 @@ pub enum VMwareUplinkLacpModeEnum {
 ///   Device send slow LACPDUs
 /// 
 /// ***Since:*** vSphere API Release 7.0.2.0
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VMwareUplinkLacpTimeoutModeEnum {
     #[serde(rename = "fast")]
     #[strum(serialize = "fast")]
@@ -4447,10 +3967,6 @@ pub enum VMwareUplinkLacpTimeoutModeEnum {
     #[serde(rename = "slow")]
     #[strum(serialize = "slow")]
     Slow,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Distributed Port Mirroring session Encapsulation types.
 /// 
@@ -4458,7 +3974,7 @@ pub enum VMwareUplinkLacpTimeoutModeEnum {
 /// - `gre`: Encapsulate original packets with GRE protocol
 /// - `erspan2`: Encapsulate original packets with ERSPAN Type2 protocol
 /// - `erspan3`: Encapsulate original packets with ERSPAN Type3 protocol
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VMwareDvsVspanSessionEncapTypeEnum {
     #[serde(rename = "gre")]
     #[strum(serialize = "gre")]
@@ -4469,10 +3985,6 @@ pub enum VMwareDvsVspanSessionEncapTypeEnum {
     #[serde(rename = "erspan3")]
     #[strum(serialize = "erspan3")]
     Erspan3,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Distributed Port Mirroring session types.
 /// 
@@ -4491,7 +4003,7 @@ pub enum VMwareDvsVspanSessionEncapTypeEnum {
 ///   and Distributed Ports can be used as destination entities.
 /// - `encapsulatedRemoteMirrorSource`: In encapsulatedRemoteMirrorSource session, Distributed Ports can be used as source entities,
 ///   and Ip address can be used as destination entities.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VMwareDvsVspanSessionTypeEnum {
     #[serde(rename = "mixedDestMirror")]
     #[strum(serialize = "mixedDestMirror")]
@@ -4508,10 +4020,6 @@ pub enum VMwareDvsVspanSessionTypeEnum {
     #[serde(rename = "encapsulatedRemoteMirrorSource")]
     #[strum(serialize = "encapsulatedRemoteMirrorSource")]
     EncapsulatedRemoteMirrorSource,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Key management type.
 /// 
@@ -4521,7 +4029,7 @@ pub enum VMwareDvsVspanSessionTypeEnum {
 /// - `external`
 /// 
 /// ***Since:*** vSphere API Release 8.0.1.0
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum CryptoManagerHostKeyManagementTypeEnum {
     #[serde(rename = "unknown")]
     #[strum(serialize = "unknown")]
@@ -4532,10 +4040,6 @@ pub enum CryptoManagerHostKeyManagementTypeEnum {
     #[serde(rename = "external")]
     #[strum(serialize = "external")]
     External,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `KeyStateMissingInCache`: Key not found in VC cache and does not specify a provider
@@ -4544,7 +4048,7 @@ pub enum CryptoManagerHostKeyManagementTypeEnum {
 /// - `KeyStateMissingInKMS`: Key not found in KMS
 /// - `KeyStateNotActiveOrEnabled`: Key not active or enabled
 /// - `KeyStateManagedByTrustAuthority`: Key is managed by Trust Authority
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum CryptoManagerKmipCryptoKeyStatusKeyUnavailableReasonEnum {
     KeyStateMissingInCache,
     KeyStateClusterInvalid,
@@ -4554,10 +4058,6 @@ pub enum CryptoManagerKmipCryptoKeyStatusKeyUnavailableReasonEnum {
     KeyStateMissingInKms,
     KeyStateNotActiveOrEnabled,
     KeyStateManagedByTrustAuthority,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Key provider management type.
 /// 
@@ -4566,7 +4066,7 @@ pub enum CryptoManagerKmipCryptoKeyStatusKeyUnavailableReasonEnum {
 /// - `vCenter`
 /// - `trustAuthority`
 /// - `nativeProvider`: ***Since:*** vSphere API Release 7.0.2.0
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum KmipClusterInfoKmsManagementTypeEnum {
     #[serde(rename = "unknown")]
     #[strum(serialize = "unknown")]
@@ -4580,10 +4080,6 @@ pub enum KmipClusterInfoKmsManagementTypeEnum {
     #[serde(rename = "nativeProvider")]
     #[strum(serialize = "nativeProvider")]
     NativeProvider,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `userDefinedScriptDisabled`: The user defined script is disabled during customization
@@ -4596,7 +4092,7 @@ pub enum KmipClusterInfoKmsManagementTypeEnum {
 /// - `wrongMetadataFormat`: The cloud-init meta data is not valid format
 ///   
 ///   ***Since:*** vSphere API Release 7.0.3.0
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum CustomizationFailedReasonCodeEnum {
     #[serde(rename = "userDefinedScriptDisabled")]
     #[strum(serialize = "userDefinedScriptDisabled")]
@@ -4610,10 +4106,6 @@ pub enum CustomizationFailedReasonCodeEnum {
     #[serde(rename = "wrongMetadataFormat")]
     #[strum(serialize = "wrongMetadataFormat")]
     WrongMetadataFormat,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The port blocked/unblocked state.
 /// 
@@ -4622,7 +4114,7 @@ pub enum CustomizationFailedReasonCodeEnum {
 /// - `blocked`: The dvs port is in blocked state
 /// - `unblocked`: The dvs port is in unblocked state
 /// - `unknown`: The dvs port is in unknown state
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum DvsEventPortBlockStateEnum {
     #[serde(rename = "unset")]
     #[strum(serialize = "unset")]
@@ -4636,10 +4128,6 @@ pub enum DvsEventPortBlockStateEnum {
     #[serde(rename = "unknown")]
     #[strum(serialize = "unknown")]
     Unknown,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Severity level constants.
 /// 
@@ -4648,7 +4136,7 @@ pub enum DvsEventPortBlockStateEnum {
 /// - `warning`: Should be corrected, but the system can continue operating normally
 /// - `info`: An informational message
 /// - `user`: A user-related message
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum EventEventSeverityEnum {
     #[serde(rename = "error")]
     #[strum(serialize = "error")]
@@ -4662,17 +4150,13 @@ pub enum EventEventSeverityEnum {
     #[serde(rename = "user")]
     #[strum(serialize = "user")]
     User,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `info`: Returns informational events.
 /// - `warning`: Returns warning events.
 /// - `error`: Returns error events.
 /// - `user`: Returns events pertaining to users.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum EventCategoryEnum {
     #[serde(rename = "info")]
     #[strum(serialize = "info")]
@@ -4686,10 +4170,6 @@ pub enum EventCategoryEnum {
     #[serde(rename = "user")]
     #[strum(serialize = "user")]
     User,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// This option specifies how to select events based on child relationships
 /// in the inventory hierarchy.
@@ -4706,7 +4186,7 @@ pub enum EventCategoryEnum {
 ///   events pertaining to the specified managed entity itself.
 /// - `all`: Returns events pertaining either to the specified managed entity
 ///   or to its child entities.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum EventFilterSpecRecursionOptionEnum {
     #[serde(rename = "self")]
     #[strum(serialize = "self")]
@@ -4717,10 +4197,6 @@ pub enum EventFilterSpecRecursionOptionEnum {
     #[serde(rename = "all")]
     #[strum(serialize = "all")]
     All,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `configFailed`: Error while configuring/unconfiguring HA
@@ -4731,7 +4207,7 @@ pub enum EventFilterSpecRecursionOptionEnum {
 /// - `agentShutdown`: HA agent was shutdown
 /// - `isolationAddressUnpingable`: HA isolation address unpingable
 /// - `other`: Other reason
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostDasErrorEventHostDasErrorReasonEnum {
     #[serde(rename = "configFailed")]
     #[strum(serialize = "configFailed")]
@@ -4757,10 +4233,6 @@ pub enum HostDasErrorEventHostDasErrorReasonEnum {
     #[serde(rename = "other")]
     #[strum(serialize = "other")]
     Other,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `sslThumbprintVerifyFailed`: Failed to verify SSL thumbprint
@@ -4772,7 +4244,7 @@ pub enum HostDasErrorEventHostDasErrorReasonEnum {
 /// - `passwordDecryptFailure`: Failed to decrypt password
 /// - `unknown`: Unknown reason
 /// - `vcVRAMCapacityExceeded`: The vRAM capacity of vCenter will be exceeded
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostDisconnectedEventReasonCodeEnum {
     #[serde(rename = "sslThumbprintVerifyFailed")]
     #[strum(serialize = "sslThumbprintVerifyFailed")]
@@ -4801,17 +4273,13 @@ pub enum HostDisconnectedEventReasonCodeEnum {
     #[serde(rename = "vcVRAMCapacityExceeded")]
     #[strum(serialize = "vcVRAMCapacityExceeded")]
     VcVramCapacityExceeded,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `vmtoolsHeartbeatFailure`: vmtools heartbeat failure
 /// - `appHeartbeatFailure`: application heartbeat failure
 /// - `appImmediateResetRequest`: immediate reset request
 /// - `vmcpResetApdCleared`: reset issued by VMCP when APD cleared
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VmDasBeingResetEventReasonCodeEnum {
     #[serde(rename = "vmtoolsHeartbeatFailure")]
     #[strum(serialize = "vmtoolsHeartbeatFailure")]
@@ -4825,10 +4293,6 @@ pub enum VmDasBeingResetEventReasonCodeEnum {
     #[serde(rename = "vmcpResetApdCleared")]
     #[strum(serialize = "vmcpResetApdCleared")]
     VmcpResetApdCleared,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The reason for the failure.
 /// 
@@ -4841,7 +4305,7 @@ pub enum VmDasBeingResetEventReasonCodeEnum {
 /// - `registerVmFailed`: Registration of the secondary virtual machine
 ///   on the remote host failed.
 /// - `migrateFailed`: Migration failed.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VmFailedStartingSecondaryEventFailureReasonEnum {
     #[serde(rename = "incompatibleHost")]
     #[strum(serialize = "incompatibleHost")]
@@ -4855,15 +4319,11 @@ pub enum VmFailedStartingSecondaryEventFailureReasonEnum {
     #[serde(rename = "migrateFailed")]
     #[strum(serialize = "migrateFailed")]
     MigrateFailed,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `shutdown`: The virtual machine was shut down
 /// - `poweredOff`: The virtual machine was powered off because shut down failed
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VmShutdownOnIsolationEventOperationEnum {
     #[serde(rename = "shutdown")]
     #[strum(serialize = "shutdown")]
@@ -4871,17 +4331,13 @@ pub enum VmShutdownOnIsolationEventOperationEnum {
     #[serde(rename = "poweredOff")]
     #[strum(serialize = "poweredOff")]
     PoweredOff,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Types of affinities.
 /// 
 /// Possible values:
 /// - `memory`
 /// - `cpu`
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum AffinityTypeEnum {
     #[serde(rename = "memory")]
     #[strum(serialize = "memory")]
@@ -4889,10 +4345,6 @@ pub enum AffinityTypeEnum {
     #[serde(rename = "cpu")]
     #[strum(serialize = "cpu")]
     Cpu,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `NotEnoughSpaceOnDevice`: There is not enough storage space on the host to install the agent.
@@ -4904,7 +4356,7 @@ pub enum AffinityTypeEnum {
 /// - `AgentUploadFailed`: Failed to upload the agent installer.
 /// - `AgentUploadTimedout`: The agent upload took too long.
 /// - `UnknownInstallerError`: The agent installer failed for an unknown reason.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum AgentInstallFailedReasonEnum {
     NotEnoughSpaceOnDevice,
     PrepareToUpgradeFailed,
@@ -4915,27 +4367,19 @@ pub enum AgentInstallFailedReasonEnum {
     AgentUploadFailed,
     AgentUploadTimedout,
     UnknownInstallerError,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `APDTimeoutDisabled`: APD timeout has been disabled on one of the host
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum CannotEnableVmcpForClusterReasonEnum {
     #[serde(rename = "APDTimeoutDisabled")]
     #[strum(serialize = "APDTimeoutDisabled")]
     ApdTimeoutDisabled,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `resourcePool`: Move out of the resouce pool
 /// - `cluster`: Move out of the cluster
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum CannotMoveFaultToleranceVmMoveTypeEnum {
     #[serde(rename = "resourcePool")]
     #[strum(serialize = "resourcePool")]
@@ -4943,17 +4387,13 @@ pub enum CannotMoveFaultToleranceVmMoveTypeEnum {
     #[serde(rename = "cluster")]
     #[strum(serialize = "cluster")]
     Cluster,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `suspend`: suspend
 /// - `powerOff`: power off
 /// - `guestShutdown`: guest shutdown
 /// - `guestSuspend`: guest suspend
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum CannotPowerOffVmInClusterOperationEnum {
     #[serde(rename = "suspend")]
     #[strum(serialize = "suspend")]
@@ -4967,10 +4407,6 @@ pub enum CannotPowerOffVmInClusterOperationEnum {
     #[serde(rename = "guestSuspend")]
     #[strum(serialize = "guestSuspend")]
     GuestSuspend,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `NetworkReservationNotSupported`: Network does not support reservation
@@ -4979,7 +4415,7 @@ pub enum CannotPowerOffVmInClusterOperationEnum {
 /// - `VMotionToUnsupportedNetworkType`: VMotion to unsupported destination network type
 /// - `NetworkUnderMaintenance`: The network is under maintenance
 /// - `MismatchedEnsMode`: Source and destination networks do not have same ENS(Enhanced Network Stack) mode
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum CannotUseNetworkReasonEnum {
     NetworkReservationNotSupported,
     MismatchedNetworkPolicies,
@@ -4987,10 +4423,6 @@ pub enum CannotUseNetworkReasonEnum {
     VMotionToUnsupportedNetworkType,
     NetworkUnderMaintenance,
     MismatchedEnsMode,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `HostNetworkMisconfiguration`: There is a problem with the host network configuration.
@@ -5006,7 +4438,7 @@ pub enum CannotUseNetworkReasonEnum {
 /// - `DasNetworkMisconfiguration`: There is a problem with the cluster network configuration.
 /// - `SetDesiredImageSpecFailed`: Setting desired imageSpec in Personality Manager failed
 /// - `ApplyHAVibsOnClusterFailed`: The ApplyHA call to Personality Manager failed
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum DasConfigFaultDasConfigFaultReasonEnum {
     HostNetworkMisconfiguration,
     HostMisconfiguration,
@@ -5021,10 +4453,6 @@ pub enum DasConfigFaultDasConfigFaultReasonEnum {
     #[serde(rename = "ApplyHAVibsOnClusterFailed")]
     #[strum(serialize = "ApplyHAVibsOnClusterFailed")]
     ApplyHaVibsOnClusterFailed,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Reasons why a virtual device would not be supported on a host.
 /// 
@@ -5032,7 +4460,7 @@ pub enum DasConfigFaultDasConfigFaultReasonEnum {
 /// - `host`: The host does not support this virtual device at all.
 /// - `guest`: The device is supported by the host in general, but not for
 ///   the specific guest OS the virtual machine is using.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum DeviceNotSupportedReasonEnum {
     #[serde(rename = "host")]
     #[strum(serialize = "host")]
@@ -5040,24 +4468,16 @@ pub enum DeviceNotSupportedReasonEnum {
     #[serde(rename = "guest")]
     #[strum(serialize = "guest")]
     Guest,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The disallowed change type.
 /// 
 /// Possible values:
 /// - `hotExtendDisk`: Online extend disk operation.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum DisallowedChangeByServiceDisallowedChangeEnum {
     #[serde(rename = "hotExtendDisk")]
     #[strum(serialize = "hotExtendDisk")]
     HotExtendDisk,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// HostSelectionType defines how the host was selected
 /// 
@@ -5065,7 +4485,7 @@ pub enum DisallowedChangeByServiceDisallowedChangeEnum {
 /// - `user`: The host was specified by the user
 /// - `vc`: The host was selected by Virtual Center
 /// - `drs`: The host was selected by DRS
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum FtIssuesOnHostHostSelectionTypeEnum {
     #[serde(rename = "user")]
     #[strum(serialize = "user")]
@@ -5076,27 +4496,19 @@ pub enum FtIssuesOnHostHostSelectionTypeEnum {
     #[serde(rename = "drs")]
     #[strum(serialize = "drs")]
     Drs,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `Datastore`
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostHasComponentFailureHostComponentTypeEnum {
     Datastore,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Reasons why fault tolerance is not supported on the host.
 /// 
 /// Possible values:
 /// - `product`: The product does not support fault tolerance.
 /// - `processor`: The product supports fault tolerance but the host CPU does not.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostIncompatibleForFaultToleranceReasonEnum {
     #[serde(rename = "product")]
     #[strum(serialize = "product")]
@@ -5104,17 +4516,13 @@ pub enum HostIncompatibleForFaultToleranceReasonEnum {
     #[serde(rename = "processor")]
     #[strum(serialize = "processor")]
     Processor,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Reasons why record/replay is not supported on a host.
 /// 
 /// Possible values:
 /// - `product`: The product does not support record/replay.
 /// - `processor`: The product supports record/replay but the host CPU does not.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostIncompatibleForRecordReplayReasonEnum {
     #[serde(rename = "product")]
     #[strum(serialize = "product")]
@@ -5122,16 +4530,12 @@ pub enum HostIncompatibleForRecordReplayReasonEnum {
     #[serde(rename = "processor")]
     #[strum(serialize = "processor")]
     Processor,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `rpo`: Host does not support the RPO configured for VM replication.
 /// - `netCompression`: Host does not support network compression configured for VM
 ///   replication.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum IncompatibleHostForVmReplicationIncompatibleReasonEnum {
     #[serde(rename = "rpo")]
     #[strum(serialize = "rpo")]
@@ -5139,16 +4543,12 @@ pub enum IncompatibleHostForVmReplicationIncompatibleReasonEnum {
     #[serde(rename = "netCompression")]
     #[strum(serialize = "netCompression")]
     NetCompression,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `admissionControl`: Policies for admission control
 /// - `userHeartbeatDs`: User-specified heartbeat datastores
 /// - `vmConfig`: VM override
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum InvalidDasConfigArgumentEntryForInvalidArgumentEnum {
     #[serde(rename = "admissionControl")]
     #[strum(serialize = "admissionControl")]
@@ -5159,15 +4559,11 @@ pub enum InvalidDasConfigArgumentEntryForInvalidArgumentEnum {
     #[serde(rename = "vmConfig")]
     #[strum(serialize = "vmConfig")]
     VmConfig,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `incompatibleVersion`: The associated host and profile version are incompatible.
 /// - `missingReferenceHost`: There is no reference host associated with the profile.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum InvalidProfileReferenceHostReasonEnum {
     #[serde(rename = "incompatibleVersion")]
     #[strum(serialize = "incompatibleVersion")]
@@ -5175,17 +4571,13 @@ pub enum InvalidProfileReferenceHostReasonEnum {
     #[serde(rename = "missingReferenceHost")]
     #[strum(serialize = "missingReferenceHost")]
     MissingReferenceHost,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `keyEntityMismatch`: The license and the entity to which it is to be assigned are not compatible.
 /// - `downgradeDisallowed`: The license downgrade is disallowed because some features are in use.
 /// - `inventoryNotManageableByVirtualCenter`: The inventory has hosts which are not manageable by vCenter unless in evaluation.
 /// - `hostsUnmanageableByVirtualCenterWithoutLicenseServer`: The inventory has hosts that need the license server to be configured unless vCenter is in evaluation
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum LicenseAssignmentFailedReasonEnum {
     #[serde(rename = "keyEntityMismatch")]
     #[strum(serialize = "keyEntityMismatch")]
@@ -5199,15 +4591,11 @@ pub enum LicenseAssignmentFailedReasonEnum {
     #[serde(rename = "hostsUnmanageableByVirtualCenterWithoutLicenseServer")]
     #[strum(serialize = "hostsUnmanageableByVirtualCenterWithoutLicenseServer")]
     HostsUnmanageableByVirtualCenterWithoutLicenseServer,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `virtualVmxnet3`: vmxnet3 virtual Ethernet adapter
 /// - `paraVirtualSCSIController`: paravirtualized SCSI controller
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum NotSupportedDeviceForFtDeviceTypeEnum {
     #[serde(rename = "virtualVmxnet3")]
     #[strum(serialize = "virtualVmxnet3")]
@@ -5215,10 +4603,6 @@ pub enum NotSupportedDeviceForFtDeviceTypeEnum {
     #[serde(rename = "paraVirtualSCSIController")]
     #[strum(serialize = "paraVirtualSCSIController")]
     ParaVirtualScsiController,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Reasons why the number of virtual CPUs is incompatible.
 /// 
@@ -5229,7 +4613,7 @@ pub enum NotSupportedDeviceForFtDeviceTypeEnum {
 ///   
 ///   The virtual machine needs to support record/replay functionality.
 /// - `faultTolerance`: The virtual machine is enabled for fault tolerance.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum NumVirtualCpusIncompatibleReasonEnum {
     #[serde(rename = "recordReplay")]
     #[strum(serialize = "recordReplay")]
@@ -5237,10 +4621,6 @@ pub enum NumVirtualCpusIncompatibleReasonEnum {
     #[serde(rename = "faultTolerance")]
     #[strum(serialize = "faultTolerance")]
     FaultTolerance,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `NoCompatibleNonQuarantinedHost`: The cluster does not contain any non-quarantined host satisfying the
@@ -5253,15 +4633,11 @@ pub enum NumVirtualCpusIncompatibleReasonEnum {
 /// - `CorrectionImpact`: DRS has determined that evacuation of VMs from quarantined hosts
 ///   impacts respecting cluster constraints or performance goals so they
 ///   are not evacuated.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum QuarantineModeFaultFaultTypeEnum {
     NoCompatibleNonQuarantinedHost,
     CorrectionDisallowed,
     CorrectionImpact,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `diskNotFound`: Could not look up device by key
@@ -5271,7 +4647,7 @@ pub enum QuarantineModeFaultFaultTypeEnum {
 /// - `duplicateDiskReplicationId`: Another disk in the VM has the same replication ID
 /// - `invalidPersistentFilePath`: Invalid path (string) for the persistent file
 /// - `reconfigureDiskReplicationIdNotAllowed`: Attempting to re-configure the disk's replication ID
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum ReplicationDiskConfigFaultReasonForFaultEnum {
     #[serde(rename = "diskNotFound")]
     #[strum(serialize = "diskNotFound")]
@@ -5294,10 +4670,6 @@ pub enum ReplicationDiskConfigFaultReasonForFaultEnum {
     #[serde(rename = "reconfigureDiskReplicationIdNotAllowed")]
     #[strum(serialize = "reconfigureDiskReplicationIdNotAllowed")]
     ReconfigureDiskReplicationIdNotAllowed,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `incompatibleHwVersion`: Incompatible VM hardware version
@@ -5319,7 +4691,7 @@ pub enum ReplicationDiskConfigFaultReasonForFaultEnum {
 /// - `encryptedVm`: VM is encrypted
 /// - `invalidThumbprint`: Remote certificate thumbprint is invalid
 /// - `incompatibleDevice`: VM hardware contains devices incompatible with replication
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum ReplicationVmConfigFaultReasonForFaultEnum {
     #[serde(rename = "incompatibleHwVersion")]
     #[strum(serialize = "incompatibleHwVersion")]
@@ -5372,10 +4744,6 @@ pub enum ReplicationVmConfigFaultReasonForFaultEnum {
     #[serde(rename = "incompatibleDevice")]
     #[strum(serialize = "incompatibleDevice")]
     IncompatibleDevice,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `notConfigured`: *VirtualMachine* is not configured for replication
@@ -5396,7 +4764,7 @@ pub enum ReplicationVmConfigFaultReasonForFaultEnum {
 ///   is not successful, throw this fault.
 /// - `groupExist`: *VirtualMachine* is trying to create a group already
 ///   owned by another VM.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum ReplicationVmFaultReasonForFaultEnum {
     #[serde(rename = "notConfigured")]
     #[strum(serialize = "notConfigured")]
@@ -5425,15 +4793,11 @@ pub enum ReplicationVmFaultReasonForFaultEnum {
     #[serde(rename = "groupExist")]
     #[strum(serialize = "groupExist")]
     GroupExist,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `fullSync`: Initial synchronization with the remote site
 /// - `delta`: Delta updates to generate a consistent instance
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum ReplicationVmInProgressFaultActivityEnum {
     #[serde(rename = "fullSync")]
     #[strum(serialize = "fullSync")]
@@ -5441,15 +4805,11 @@ pub enum ReplicationVmInProgressFaultActivityEnum {
     #[serde(rename = "delta")]
     #[strum(serialize = "delta")]
     Delta,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `licenseAssignmentFailed`: A general failure has occurred during assigning license to the 3rd party module
 /// - `moduleNotInstalled`: The 3rd party module we are trying to license is not installed.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum ThirdPartyLicenseAssignmentFailedReasonEnum {
     #[serde(rename = "licenseAssignmentFailed")]
     #[strum(serialize = "licenseAssignmentFailed")]
@@ -5457,10 +4817,6 @@ pub enum ThirdPartyLicenseAssignmentFailedReasonEnum {
     #[serde(rename = "moduleNotInstalled")]
     #[strum(serialize = "moduleNotInstalled")]
     ModuleNotInstalled,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `CacheModeNotSupported`
@@ -5468,17 +4824,13 @@ pub enum ThirdPartyLicenseAssignmentFailedReasonEnum {
 /// - `CacheBlockSizeNotSupported`
 /// - `CacheReservationNotSupported`
 /// - `DiskSizeNotSupported`
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VFlashModuleNotSupportedReasonEnum {
     CacheModeNotSupported,
     CacheConsistencyTypeNotSupported,
     CacheBlockSizeNotSupported,
     CacheReservationNotSupported,
     DiskSizeNotSupported,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `haNotEnabled`: HA is not enabled on the cluster
@@ -5535,7 +4887,7 @@ pub enum VFlashModuleNotSupportedReasonEnum {
 /// - `unsupportedPMemHAFailOver`: Virtual Machine with Pmem HA Failover is not supported
 ///   
 ///   ***Since:*** vSphere API Release 7.0.2.0
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VmFaultToleranceConfigIssueReasonForIssueEnum {
     #[serde(rename = "haNotEnabled")]
     #[strum(serialize = "haNotEnabled")]
@@ -5630,10 +4982,6 @@ pub enum VmFaultToleranceConfigIssueReasonForIssueEnum {
     #[serde(rename = "unsupportedPMemHAFailOver")]
     #[strum(serialize = "unsupportedPMemHAFailOver")]
     UnsupportedPMemHaFailOver,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `virtualFloppy`: virtual floppy
@@ -5641,7 +4989,7 @@ pub enum VmFaultToleranceConfigIssueReasonForIssueEnum {
 /// - `virtualSerialPort`: virtual serial port
 /// - `virtualParallelPort`: virtual parallel port
 /// - `virtualDisk`: virtual disk
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VmFaultToleranceInvalidFileBackingDeviceTypeEnum {
     #[serde(rename = "virtualFloppy")]
     #[strum(serialize = "virtualFloppy")]
@@ -5658,15 +5006,11 @@ pub enum VmFaultToleranceInvalidFileBackingDeviceTypeEnum {
     #[serde(rename = "virtualDisk")]
     #[strum(serialize = "virtualDisk")]
     VirtualDisk,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `svmotion`: storage vmotion resolution
 /// - `relocate`: relocate resolution
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum WillLoseHaProtectionResolutionEnum {
     #[serde(rename = "svmotion")]
     #[strum(serialize = "svmotion")]
@@ -5674,22 +5018,14 @@ pub enum WillLoseHaProtectionResolutionEnum {
     #[serde(rename = "relocate")]
     #[strum(serialize = "relocate")]
     Relocate,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `SHA1`
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostActiveDirectoryAuthenticationCertificateDigestEnum {
     #[serde(rename = "SHA1")]
     #[strum(serialize = "SHA1")]
     Sha1,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `unknown`: The Active Directory integration provider does not support
@@ -5702,7 +5038,7 @@ pub enum HostActiveDirectoryAuthenticationCertificateDigestEnum {
 ///   (or bad machine password).
 /// - `inconsistentTrust`: Unexpected domain controller responded.
 /// - `otherProblem`: There's some problem with the domain membership.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostActiveDirectoryInfoDomainMembershipStatusEnum {
     #[serde(rename = "unknown")]
     #[strum(serialize = "unknown")]
@@ -5725,10 +5061,6 @@ pub enum HostActiveDirectoryInfoDomainMembershipStatusEnum {
     #[serde(rename = "otherProblem")]
     #[strum(serialize = "otherProblem")]
     OtherProblem,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `none`: No action is taken for this virtual machine.
@@ -5748,7 +5080,7 @@ pub enum HostActiveDirectoryInfoDomainMembershipStatusEnum {
 /// - `guestShutdown`: The guest operating system for a virtual machine is shut down when that
 ///   virtual machine in next in the auto-stop order.
 /// - `suspend`: This virtual machine is suspended when it is next in the auto-stop order.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum AutoStartActionEnum {
     #[serde(rename = "none")]
     #[strum(serialize = "none")]
@@ -5768,10 +5100,6 @@ pub enum AutoStartActionEnum {
     #[serde(rename = "suspend")]
     #[strum(serialize = "suspend")]
     Suspend,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Determines if the virtual machine should start after receiving a heartbeat,
 /// ignore heartbeats and start after the startDelay has elapsed, or follow the
@@ -5791,7 +5119,7 @@ pub enum AutoStartActionEnum {
 ///   This is the default setting.
 /// - `systemDefault`: The system uses the default value to determine whether or not to wait to
 ///   receive a heartbeat before powering on the next machine in the order.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum AutoStartWaitHeartbeatSettingEnum {
     #[serde(rename = "yes")]
     #[strum(serialize = "yes")]
@@ -5802,10 +5130,6 @@ pub enum AutoStartWaitHeartbeatSettingEnum {
     #[serde(rename = "systemDefault")]
     #[strum(serialize = "systemDefault")]
     SystemDefault,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Enumeration of the supported firmware types.
 /// 
@@ -5814,7 +5138,7 @@ pub enum AutoStartWaitHeartbeatSettingEnum {
 /// - `UEFI`
 /// 
 /// ***Since:*** vSphere API Release 8.0.2.0
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostBiosInfoFirmwareTypeEnum {
     #[serde(rename = "BIOS")]
     #[strum(serialize = "BIOS")]
@@ -5822,10 +5146,6 @@ pub enum HostBiosInfoFirmwareTypeEnum {
     #[serde(rename = "UEFI")]
     #[strum(serialize = "UEFI")]
     Uefi,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Deprecated as of vSphere API 7.0, use
 /// *VmFaultToleranceConfigIssueReasonForIssue_enum*.
@@ -5845,7 +5165,7 @@ pub enum HostBiosInfoFirmwareTypeEnum {
 /// - `cpuHwmmuUnsupported`: Host CPU does not support hardware MMU virtualization
 /// - `cpuHvDisabled`: Host CPU is compatible for replay-based FT, but hardware
 ///   virtualization has been disabled in the BIOS.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostCapabilityFtUnsupportedReasonEnum {
     #[serde(rename = "vMotionNotLicensed")]
     #[strum(serialize = "vMotionNotLicensed")]
@@ -5874,10 +5194,6 @@ pub enum HostCapabilityFtUnsupportedReasonEnum {
     #[serde(rename = "cpuHvDisabled")]
     #[strum(serialize = "cpuHvDisabled")]
     CpuHvDisabled,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Deprecated as of vSphere API 6.0.
 /// 
@@ -5892,7 +5208,7 @@ pub enum HostCapabilityFtUnsupportedReasonEnum {
 /// - `cpuidLimitSet`
 /// - `oldBIOS`
 /// - `unknown`
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostReplayUnsupportedReasonEnum {
     #[serde(rename = "incompatibleProduct")]
     #[strum(serialize = "incompatibleProduct")]
@@ -5912,10 +5228,6 @@ pub enum HostReplayUnsupportedReasonEnum {
     #[serde(rename = "unknown")]
     #[strum(serialize = "unknown")]
     Unknown,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Set of VMFS unmap API version.
 /// 
@@ -5924,7 +5236,7 @@ pub enum HostReplayUnsupportedReasonEnum {
 /// - `fixed`: the unmap bandwidth can be set as a fixed value
 /// - `dynamic`: the unmap bandwidth can be set as a range, where the actual
 ///   bandwidth will be dynamically throttled by the backened
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostCapabilityUnmapMethodSupportedEnum {
     #[serde(rename = "priority")]
     #[strum(serialize = "priority")]
@@ -5935,10 +5247,6 @@ pub enum HostCapabilityUnmapMethodSupportedEnum {
     #[serde(rename = "dynamic")]
     #[strum(serialize = "dynamic")]
     Dynamic,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Set of possible values for *HostCapability.vmDirectPathGen2UnsupportedReason*.
 /// 
@@ -5950,7 +5258,7 @@ pub enum HostCapabilityUnmapMethodSupportedEnum {
 ///   this is a general capability for the host and is independent of
 ///   support by a given physical NIC.
 /// - `hostNptDisabled`: The host is configured to disable VMDirectPath Gen 2.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostCapabilityVmDirectPathGen2UnsupportedReasonEnum {
     #[serde(rename = "hostNptIncompatibleProduct")]
     #[strum(serialize = "hostNptIncompatibleProduct")]
@@ -5961,10 +5269,6 @@ pub enum HostCapabilityVmDirectPathGen2UnsupportedReasonEnum {
     #[serde(rename = "hostNptDisabled")]
     #[strum(serialize = "hostNptDisabled")]
     HostNptDisabled,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The status of a given certificate as computed per the soft and the hard
 /// thresholds in vCenter Server.
@@ -6004,7 +5308,7 @@ pub enum HostCapabilityVmDirectPathGen2UnsupportedReasonEnum {
 ///   
 ///   (hard threshold)
 /// - `good`: The certificate is good.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostCertificateManagerCertificateInfoCertificateStatusEnum {
     #[serde(rename = "unknown")]
     #[strum(serialize = "unknown")]
@@ -6024,10 +5328,6 @@ pub enum HostCertificateManagerCertificateInfoCertificateStatusEnum {
     #[serde(rename = "good")]
     #[strum(serialize = "good")]
     Good,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Certificate type supported by Host
 /// 
@@ -6036,16 +5336,12 @@ pub enum HostCertificateManagerCertificateInfoCertificateStatusEnum {
 /// - `VASAClient`: VASA Client certificate used for communication with VASA Provider
 ///   
 /// ***Since:*** vSphere API Release 8.0.1.0
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostCertificateManagerCertificateKindEnum {
     Machine,
     #[serde(rename = "VASAClient")]
     #[strum(serialize = "VASAClient")]
     VasaClient,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// This is a global mode on a configuration specification indicating
 /// whether the structure represents the desired state or the set of
@@ -6056,7 +5352,7 @@ pub enum HostCertificateManagerCertificateKindEnum {
 ///   set of operations to apply on the managed object.
 /// - `replace`: Indicates that the structure represents the
 ///   desired state of the managed object.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostConfigChangeModeEnum {
     #[serde(rename = "modify")]
     #[strum(serialize = "modify")]
@@ -6064,10 +5360,6 @@ pub enum HostConfigChangeModeEnum {
     #[serde(rename = "replace")]
     #[strum(serialize = "replace")]
     Replace,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// This list indicates the operation that should be performed for an
 /// entity.
@@ -6081,7 +5373,7 @@ pub enum HostConfigChangeModeEnum {
 ///   *NotFound* error will be thrown.
 /// - `ignore`: Indicates that an entity will be ignored: it won't be added when it
 ///   doesn't exist, or removed/changed when it exists.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostConfigChangeOperationEnum {
     #[serde(rename = "add")]
     #[strum(serialize = "add")]
@@ -6095,17 +5387,13 @@ pub enum HostConfigChangeOperationEnum {
     #[serde(rename = "ignore")]
     #[strum(serialize = "ignore")]
     Ignore,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `unknown`
 /// - `intel`
 /// - `amd`
 /// - `hygon`
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostCpuPackageVendorEnum {
     #[serde(rename = "unknown")]
     #[strum(serialize = "unknown")]
@@ -6119,10 +5407,6 @@ pub enum HostCpuPackageVendorEnum {
     #[serde(rename = "hygon")]
     #[strum(serialize = "hygon")]
     Hygon,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values for Current CPU power management policy
 /// 
@@ -6130,7 +5414,7 @@ pub enum HostCpuPackageVendorEnum {
 /// - `off`
 /// - `staticPolicy`
 /// - `dynamicPolicy`
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostCpuPowerManagementInfoPolicyTypeEnum {
     #[serde(rename = "off")]
     #[strum(serialize = "off")]
@@ -6141,17 +5425,13 @@ pub enum HostCpuPowerManagementInfoPolicyTypeEnum {
     #[serde(rename = "dynamicPolicy")]
     #[strum(serialize = "dynamicPolicy")]
     DynamicPolicy,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Types of time synchronization protocols.
 /// 
 /// Possible values:
 /// - `ntp`: Network Time Protocol (NTP).
 /// - `ptp`: Precision Time Protocol (PTP).
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostDateTimeInfoProtocolEnum {
     #[serde(rename = "ntp")]
     #[strum(serialize = "ntp")]
@@ -6159,10 +5439,6 @@ pub enum HostDateTimeInfoProtocolEnum {
     #[serde(rename = "ptp")]
     #[strum(serialize = "ptp")]
     Ptp,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The type of diagnostic partition.
 /// 
@@ -6173,7 +5449,7 @@ pub enum HostDateTimeInfoProtocolEnum {
 /// Possible values:
 /// - `singleHost`
 /// - `multiHost`
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum DiagnosticPartitionTypeEnum {
     #[serde(rename = "singleHost")]
     #[strum(serialize = "singleHost")]
@@ -6181,10 +5457,6 @@ pub enum DiagnosticPartitionTypeEnum {
     #[serde(rename = "multiHost")]
     #[strum(serialize = "multiHost")]
     MultiHost,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Type of partition indicating the type of storage on which the partition
 /// resides.
@@ -6196,7 +5468,7 @@ pub enum DiagnosticPartitionTypeEnum {
 /// Possible values:
 /// - `directAttached`
 /// - `networkAttached`
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum DiagnosticPartitionStorageTypeEnum {
     #[serde(rename = "directAttached")]
     #[strum(serialize = "directAttached")]
@@ -6204,10 +5476,6 @@ pub enum DiagnosticPartitionStorageTypeEnum {
     #[serde(rename = "networkAttached")]
     #[strum(serialize = "networkAttached")]
     NetworkAttached,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The set of digest methods that can be used by TPM to calculate the PCR
 /// values.
@@ -6223,7 +5491,7 @@ pub enum DiagnosticPartitionStorageTypeEnum {
 /// - `SHA384`
 /// - `SHA512`
 /// - `SM3_256`
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostDigestInfoDigestMethodTypeEnum {
     #[serde(rename = "SHA1")]
     #[strum(serialize = "SHA1")]
@@ -6243,10 +5511,6 @@ pub enum HostDigestInfoDigestMethodTypeEnum {
     #[serde(rename = "SM3_256")]
     #[strum(serialize = "SM3_256")]
     Sm3256,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// This enum specifies the supported digest verification settings.
 /// 
@@ -6263,7 +5527,7 @@ pub enum HostDigestInfoDigestMethodTypeEnum {
 /// - `headerAndData`: Both header and data digest verification are enabled.
 ///   
 /// ***Since:*** vSphere API Release 7.0.3.0
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostDigestVerificationSettingEnum {
     #[serde(rename = "digestDisabled")]
     #[strum(serialize = "digestDisabled")]
@@ -6277,10 +5541,6 @@ pub enum HostDigestVerificationSettingEnum {
     #[serde(rename = "headerAndData")]
     #[strum(serialize = "headerAndData")]
     HeaderAndData,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// List of partition format types.
 /// 
@@ -6290,7 +5550,7 @@ pub enum HostDigestVerificationSettingEnum {
 /// - `gpt`
 /// - `mbr`
 /// - `unknown`
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostDiskPartitionInfoPartitionFormatEnum {
     #[serde(rename = "gpt")]
     #[strum(serialize = "gpt")]
@@ -6301,10 +5561,6 @@ pub enum HostDiskPartitionInfoPartitionFormatEnum {
     #[serde(rename = "unknown")]
     #[strum(serialize = "unknown")]
     Unknown,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// List of symbol partition types
 /// 
@@ -6317,7 +5573,7 @@ pub enum HostDiskPartitionInfoPartitionFormatEnum {
 /// - `ntfs`
 /// - `vmkDiagnostic`
 /// - `vffs`
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostDiskPartitionInfoTypeEnum {
     #[serde(rename = "none")]
     #[strum(serialize = "none")]
@@ -6343,10 +5599,6 @@ pub enum HostDiskPartitionInfoTypeEnum {
     #[serde(rename = "vffs")]
     #[strum(serialize = "vffs")]
     Vffs,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Set of possible values for
 /// *HostFeatureVersionInfo.key*, which
@@ -6363,15 +5615,11 @@ pub enum HostDiskPartitionInfoTypeEnum {
 ///   X refers to host agent Fault Tolerance version number,
 ///   Y refers to VMX Fault Tolerance version number,
 ///   Z refers to VMkernal Fault Tolerance version
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostFeatureVersionKeyEnum {
     #[serde(rename = "faultTolerance")]
     #[strum(serialize = "faultTolerance")]
     FaultTolerance,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The operating mode of the adapter.
 /// 
@@ -6380,7 +5628,7 @@ pub enum HostFeatureVersionKeyEnum {
 /// - `loop`
 /// - `pointToPoint`
 /// - `unknown`
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum FibreChannelPortTypeEnum {
     #[serde(rename = "fabric")]
     #[strum(serialize = "fabric")]
@@ -6394,10 +5642,6 @@ pub enum FibreChannelPortTypeEnum {
     #[serde(rename = "unknown")]
     #[strum(serialize = "unknown")]
     Unknown,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Status of volume's support for vStorage hardware acceleration.
 /// 
@@ -6418,7 +5662,7 @@ pub enum FibreChannelPortTypeEnum {
 ///   
 ///   The ESX host will handle all storage-related operations.
 /// - `vStorageUnknown`: Initial support status value.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum FileSystemMountInfoVStorageSupportStatusEnum {
     #[serde(rename = "vStorageSupported")]
     #[strum(serialize = "vStorageSupported")]
@@ -6429,10 +5673,6 @@ pub enum FileSystemMountInfoVStorageSupportStatusEnum {
     #[serde(rename = "vStorageUnknown")]
     #[strum(serialize = "vStorageUnknown")]
     VStorageUnknown,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Type of file system volume.
 /// 
@@ -6466,7 +5706,7 @@ pub enum FileSystemMountInfoVStorageSupportStatusEnum {
 ///   
 ///   Used mostly for reporting purposes. The other types are described
 ///   by the otherType property.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostFileSystemVolumeFileSystemTypeEnum {
     #[serde(rename = "VMFS")]
     #[strum(serialize = "VMFS")]
@@ -6498,10 +5738,6 @@ pub enum HostFileSystemVolumeFileSystemTypeEnum {
     #[serde(rename = "OTHER")]
     #[strum(serialize = "OTHER")]
     Other,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// List of available firewall ruleset ids
 /// 
@@ -6512,7 +5748,7 @@ pub enum HostFileSystemVolumeFileSystemTypeEnum {
 /// - `vpxHeartbeats`
 /// 
 /// ***Since:*** vSphere API Release 8.0.2.0
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostFirewallSystemRuleSetIdEnum {
     #[serde(rename = "faultTolerance")]
     #[strum(serialize = "faultTolerance")]
@@ -6526,10 +5762,6 @@ pub enum HostFirewallSystemRuleSetIdEnum {
     #[serde(rename = "vpxHeartbeats")]
     #[strum(serialize = "vpxHeartbeats")]
     VpxHeartbeats,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// List of available service names
 /// 
@@ -6537,15 +5769,11 @@ pub enum HostFirewallSystemRuleSetIdEnum {
 /// - `vpxa`
 /// 
 /// ***Since:*** vSphere API Release 8.0.2.0
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostFirewallSystemServiceNameEnum {
     #[serde(rename = "vpxa")]
     #[strum(serialize = "vpxa")]
     Vpxa,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The vendor definition for type of Field Replaceable Unit (FRU).
 /// 
@@ -6553,7 +5781,7 @@ pub enum HostFirewallSystemServiceNameEnum {
 /// - `undefined`
 /// - `board`
 /// - `product`
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostFruFruTypeEnum {
     #[serde(rename = "undefined")]
     #[strum(serialize = "undefined")]
@@ -6564,10 +5792,6 @@ pub enum HostFruFruTypeEnum {
     #[serde(rename = "product")]
     #[strum(serialize = "product")]
     Product,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values for graphics type.
 /// 
@@ -6578,7 +5802,7 @@ pub enum HostFruFruTypeEnum {
 /// - `sharedDirect`: Shared direct graphics (ex.
 ///   
 ///   vendor vGPU shared passthrough).
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostGraphicsConfigGraphicsTypeEnum {
     #[serde(rename = "shared")]
     #[strum(serialize = "shared")]
@@ -6586,17 +5810,13 @@ pub enum HostGraphicsConfigGraphicsTypeEnum {
     #[serde(rename = "sharedDirect")]
     #[strum(serialize = "sharedDirect")]
     SharedDirect,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values for shared passthrough assignment policy
 /// 
 /// Possible values:
 /// - `performance`: Performance policy: assign VM to GPU with fewest VMs.
 /// - `consolidation`: Consolidation policy: group like VMs on GPU until fully loaded.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostGraphicsConfigSharedPassthruAssignmentPolicyEnum {
     #[serde(rename = "performance")]
     #[strum(serialize = "performance")]
@@ -6604,10 +5824,6 @@ pub enum HostGraphicsConfigSharedPassthruAssignmentPolicyEnum {
     #[serde(rename = "consolidation")]
     #[strum(serialize = "consolidation")]
     Consolidation,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values for graphics type.
 /// 
@@ -6622,7 +5838,7 @@ pub enum HostGraphicsConfigSharedPassthruAssignmentPolicyEnum {
 /// - `sharedDirect`: Shared direct graphics (ex.
 ///   
 ///   vGPU shared passthrough).
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostGraphicsInfoGraphicsTypeEnum {
     #[serde(rename = "basic")]
     #[strum(serialize = "basic")]
@@ -6636,10 +5852,6 @@ pub enum HostGraphicsInfoGraphicsTypeEnum {
     #[serde(rename = "sharedDirect")]
     #[strum(serialize = "sharedDirect")]
     SharedDirect,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The current status of the hardware
 /// 
@@ -6652,16 +5864,12 @@ pub enum HostGraphicsInfoGraphicsTypeEnum {
 ///   
 ///   It is possible that some or all
 ///   functionalities of this physical element is degraded or not working.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostHardwareElementStatusEnum {
     Unknown,
     Green,
     Yellow,
     Red,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Defines different access modes that a user may have on the host for
 /// direct host connections.
@@ -6699,7 +5907,7 @@ pub enum HostHardwareElementStatusEnum {
 ///   *accessOther*.
 /// - `accessOther`: Describes a combination of one or more roles/permissions which are
 ///   none of the above.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostAccessModeEnum {
     #[serde(rename = "accessNone")]
     #[strum(serialize = "accessNone")]
@@ -6716,10 +5924,6 @@ pub enum HostAccessModeEnum {
     #[serde(rename = "accessOther")]
     #[strum(serialize = "accessOther")]
     AccessOther,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Defines the possible states of lockdown mode.
 /// 
@@ -6732,7 +5936,7 @@ pub enum HostAccessModeEnum {
 ///   If the host is in "strict" lockdown mode then no one will be able
 ///   to exit lockdown mode through DCUI in emergency situations,
 ///   i.e. when the connection to vCenter server is permanently lost.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostLockdownModeEnum {
     #[serde(rename = "lockdownDisabled")]
     #[strum(serialize = "lockdownDisabled")]
@@ -6743,10 +5947,6 @@ pub enum HostLockdownModeEnum {
     #[serde(rename = "lockdownStrict")]
     #[strum(serialize = "lockdownStrict")]
     LockdownStrict,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Acceptance level definitions
 /// 
@@ -6755,7 +5955,7 @@ pub enum HostLockdownModeEnum {
 /// - `vmware_accepted`: "VMware-accepted"
 /// - `partner`: "Partner-supported"
 /// - `community`: "Community-supported"
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostImageAcceptanceLevelEnum {
     #[serde(rename = "vmware_certified")]
     #[strum(serialize = "vmware_certified")]
@@ -6769,10 +5969,6 @@ pub enum HostImageAcceptanceLevelEnum {
     #[serde(rename = "community")]
     #[strum(serialize = "community")]
     Community,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The type of CHAP authentication setting to use.
 /// 
@@ -6789,7 +5985,7 @@ pub enum HostImageAcceptanceLevelEnum {
 /// - `chapDiscouraged`
 /// - `chapPreferred`
 /// - `chapRequired`
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostInternetScsiHbaChapAuthenticationTypeEnum {
     #[serde(rename = "chapProhibited")]
     #[strum(serialize = "chapProhibited")]
@@ -6803,10 +5999,6 @@ pub enum HostInternetScsiHbaChapAuthenticationTypeEnum {
     #[serde(rename = "chapRequired")]
     #[strum(serialize = "chapRequired")]
     ChapRequired,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The type of integrity checks to use.
 /// 
@@ -6825,7 +6017,7 @@ pub enum HostInternetScsiHbaChapAuthenticationTypeEnum {
 /// - `digestDiscouraged`
 /// - `digestPreferred`
 /// - `digestRequired`
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostInternetScsiHbaDigestTypeEnum {
     #[serde(rename = "digestProhibited")]
     #[strum(serialize = "digestProhibited")]
@@ -6839,10 +6031,6 @@ pub enum HostInternetScsiHbaDigestTypeEnum {
     #[serde(rename = "digestRequired")]
     #[strum(serialize = "digestRequired")]
     DigestRequired,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The available iSNS discovery methods.
 /// 
@@ -6850,7 +6038,7 @@ pub enum HostInternetScsiHbaDigestTypeEnum {
 /// - `isnsStatic`
 /// - `isnsDhcp`
 /// - `isnsSlp`
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum InternetScsiSnsDiscoveryMethodEnum {
     #[serde(rename = "isnsStatic")]
     #[strum(serialize = "isnsStatic")]
@@ -6861,10 +6049,6 @@ pub enum InternetScsiSnsDiscoveryMethodEnum {
     #[serde(rename = "isnsSlp")]
     #[strum(serialize = "isnsSlp")]
     IsnsSlp,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The available SLP discovery methods.
 /// 
@@ -6875,7 +6059,7 @@ pub enum InternetScsiSnsDiscoveryMethodEnum {
 ///   Only DAs on the current subnet will be found.
 /// - `slpAutoMulticast`: Use the well known multicast address to find DAs.
 /// - `slpManual`: User specified address for a DA.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum SlpDiscoveryMethodEnum {
     #[serde(rename = "slpDhcp")]
     #[strum(serialize = "slpDhcp")]
@@ -6889,10 +6073,6 @@ pub enum SlpDiscoveryMethodEnum {
     #[serde(rename = "slpManual")]
     #[strum(serialize = "slpManual")]
     SlpManual,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// enum listing possible IPv6 address configuration methods.
 /// 
@@ -6907,7 +6087,7 @@ pub enum SlpDiscoveryMethodEnum {
 ///   Typically user specified addresses will be static addresses.
 ///   User can specify link local address. Only Static addresses can be added or removed.
 /// - `Other`: Other or unknown type.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostInternetScsiHbaIscsiIpv6AddressAddressConfigurationTypeEnum {
     #[serde(rename = "DHCP")]
     #[strum(serialize = "DHCP")]
@@ -6915,17 +6095,13 @@ pub enum HostInternetScsiHbaIscsiIpv6AddressAddressConfigurationTypeEnum {
     AutoConfigured,
     Static,
     Other,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// enum listing IPv6 address operations.
 /// 
 /// Possible values:
 /// - `add`
 /// - `remove`
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostInternetScsiHbaIscsiIpv6AddressIPv6AddressOperationEnum {
     #[serde(rename = "add")]
     #[strum(serialize = "add")]
@@ -6933,10 +6109,6 @@ pub enum HostInternetScsiHbaIscsiIpv6AddressIPv6AddressOperationEnum {
     #[serde(rename = "remove")]
     #[strum(serialize = "remove")]
     Remove,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The binding mode of the adapter.
 /// 
@@ -6944,7 +6116,7 @@ pub enum HostInternetScsiHbaIscsiIpv6AddressIPv6AddressOperationEnum {
 /// - `notsupported`
 /// - `optional`
 /// - `required`
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostInternetScsiHbaNetworkBindingSupportTypeEnum {
     #[serde(rename = "notsupported")]
     #[strum(serialize = "notsupported")]
@@ -6955,10 +6127,6 @@ pub enum HostInternetScsiHbaNetworkBindingSupportTypeEnum {
     #[serde(rename = "required")]
     #[strum(serialize = "required")]
     Required,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The method of discovery of an iScsi target.
 /// 
@@ -6974,7 +6142,7 @@ pub enum HostInternetScsiHbaNetworkBindingSupportTypeEnum {
 /// - `slpMethod`
 /// - `isnsMethod`
 /// - `unknownMethod`
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostInternetScsiHbaStaticTargetTargetDiscoveryMethodEnum {
     #[serde(rename = "staticMethod")]
     #[strum(serialize = "staticMethod")]
@@ -6991,10 +6159,6 @@ pub enum HostInternetScsiHbaStaticTargetTargetDiscoveryMethodEnum {
     #[serde(rename = "unknownMethod")]
     #[strum(serialize = "unknownMethod")]
     UnknownMethod,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// This specifies how the ipv6 address is configured for the interface.
 /// 
@@ -7013,7 +6177,7 @@ pub enum HostInternetScsiHbaStaticTargetTargetDiscoveryMethodEnum {
 /// - `random`: The address is chosen by the system at random
 ///   e.g., an IPv4 address within 169.254/16, or an RFC
 ///   3041 privacy address.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostIpConfigIpV6AddressConfigTypeEnum {
     #[serde(rename = "other")]
     #[strum(serialize = "other")]
@@ -7030,10 +6194,6 @@ pub enum HostIpConfigIpV6AddressConfigTypeEnum {
     #[serde(rename = "random")]
     #[strum(serialize = "random")]
     Random,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `preferred`: Indicates that this is a valid address.
@@ -7047,7 +6207,7 @@ pub enum HostIpConfigIpV6AddressConfigTypeEnum {
 ///   address on the link is presently being verified.
 /// - `duplicate`: Indicates the address has been determined to be non-unique
 ///   on the link, this address will not be reachable.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostIpConfigIpV6AddressStatusEnum {
     #[serde(rename = "preferred")]
     #[strum(serialize = "preferred")]
@@ -7070,10 +6230,6 @@ pub enum HostIpConfigIpV6AddressStatusEnum {
     #[serde(rename = "duplicate")]
     #[strum(serialize = "duplicate")]
     Duplicate,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `notUsed`: There are no paths on this Virtual NIC
@@ -7086,7 +6242,7 @@ pub enum HostIpConfigIpV6AddressStatusEnum {
 ///   transitions.
 /// - `lastActive`: One or more paths on the Virtual NIC is the last active
 ///   path to a particular storage device.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum IscsiPortInfoPathStatusEnum {
     #[serde(rename = "notUsed")]
     #[strum(serialize = "notUsed")]
@@ -7100,10 +6256,6 @@ pub enum IscsiPortInfoPathStatusEnum {
     #[serde(rename = "lastActive")]
     #[strum(serialize = "lastActive")]
     LastActive,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The Discovery Protocol operation.
 /// 
@@ -7116,7 +6268,7 @@ pub enum IscsiPortInfoPathStatusEnum {
 ///   discovery packets.
 /// - `both`: Sent discovery packets for the switch and listen for incoming
 ///   discovery packets.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum LinkDiscoveryProtocolConfigOperationTypeEnum {
     #[serde(rename = "none")]
     #[strum(serialize = "none")]
@@ -7130,17 +6282,13 @@ pub enum LinkDiscoveryProtocolConfigOperationTypeEnum {
     #[serde(rename = "both")]
     #[strum(serialize = "both")]
     Both,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The Discovery Protocol types.
 /// 
 /// Possible values:
 /// - `cdp`: Cisco Discovery Protocol
 /// - `lldp`: Link Layer Discovery Protocol
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum LinkDiscoveryProtocolConfigProtocolTypeEnum {
     #[serde(rename = "cdp")]
     #[strum(serialize = "cdp")]
@@ -7148,10 +6296,6 @@ pub enum LinkDiscoveryProtocolConfigProtocolTypeEnum {
     #[serde(rename = "lldp")]
     #[strum(serialize = "lldp")]
     Lldp,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// This enum defines the possible types of file types that can be reserved
 /// or deleted
@@ -7160,15 +6304,11 @@ pub enum LinkDiscoveryProtocolConfigProtocolTypeEnum {
 /// - `File`
 /// - `VirtualDisk`
 /// - `Directory`
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostLowLevelProvisioningManagerFileTypeEnum {
     File,
     VirtualDisk,
     Directory,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The target of the disk reload.
 /// 
@@ -7178,7 +6318,7 @@ pub enum HostLowLevelProvisioningManagerFileTypeEnum {
 ///   
 ///   If the virtual machine has multiple snapshots, all of the snapshot's
 ///   config will be reloaded.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostLowLevelProvisioningManagerReloadTargetEnum {
     #[serde(rename = "currentConfig")]
     #[strum(serialize = "currentConfig")]
@@ -7186,22 +6326,14 @@ pub enum HostLowLevelProvisioningManagerReloadTargetEnum {
     #[serde(rename = "snapshotConfig")]
     #[strum(serialize = "snapshotConfig")]
     SnapshotConfig,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `hostUpgrade`
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostMaintenanceSpecPurposeEnum {
     #[serde(rename = "hostUpgrade")]
     #[strum(serialize = "hostUpgrade")]
     HostUpgrade,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Means for allocating additional memory for virtual machines.
 /// 
@@ -7209,7 +6341,7 @@ pub enum HostMaintenanceSpecPurposeEnum {
 /// - `swapNone`: Fit all virtual machine memory into reserved host memory.
 /// - `swapSome`: Allow some virtual machine memory to be swapped.
 /// - `swapMost`: Allow most virtual machine memory to be swapped.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualMachineMemoryAllocationPolicyEnum {
     #[serde(rename = "swapNone")]
     #[strum(serialize = "swapNone")]
@@ -7220,10 +6352,6 @@ pub enum VirtualMachineMemoryAllocationPolicyEnum {
     #[serde(rename = "swapMost")]
     #[strum(serialize = "swapMost")]
     SwapMost,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Enumeration of flags pertaining to a memory tier.
 /// 
@@ -7257,7 +6385,7 @@ pub enum VirtualMachineMemoryAllocationPolicyEnum {
 /// - `cachingTier`: Flag indicating that the tier is a cache for main memory.
 ///   
 /// ***Since:*** vSphere API Release 7.0.3.0
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostMemoryTierFlagsEnum {
     #[serde(rename = "memoryTier")]
     #[strum(serialize = "memoryTier")]
@@ -7268,10 +6396,6 @@ pub enum HostMemoryTierFlagsEnum {
     #[serde(rename = "cachingTier")]
     #[strum(serialize = "cachingTier")]
     CachingTier,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Enumeration of supported types of memory tiers.
 /// 
@@ -7280,16 +6404,12 @@ pub enum HostMemoryTierFlagsEnum {
 /// - `PMem`: Persistent memory.
 ///   
 /// ***Since:*** vSphere API Release 7.0.3.0
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostMemoryTierTypeEnum {
     #[serde(rename = "DRAM")]
     #[strum(serialize = "DRAM")]
     Dram,
     PMem,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Enumeration of the supported kinds of memory tiering configurations.
 /// 
@@ -7301,7 +6421,7 @@ pub enum HostMemoryTierTypeEnum {
 ///   Intel's Memory Mode.
 /// 
 /// ***Since:*** vSphere API Release 7.0.3.0
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostMemoryTieringTypeEnum {
     #[serde(rename = "noTiering")]
     #[strum(serialize = "noTiering")]
@@ -7309,17 +6429,13 @@ pub enum HostMemoryTieringTypeEnum {
     #[serde(rename = "hardwareTiering")]
     #[strum(serialize = "hardwareTiering")]
     HardwareTiering,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Defines the access mode of the datastore.
 /// 
 /// Possible values:
 /// - `readWrite`: The host system has read/write access to the file system.
 /// - `readOnly`: The host system has read-only access to the file system.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostMountModeEnum {
     #[serde(rename = "readWrite")]
     #[strum(serialize = "readWrite")]
@@ -7327,10 +6443,6 @@ pub enum HostMountModeEnum {
     #[serde(rename = "readOnly")]
     #[strum(serialize = "readOnly")]
     ReadOnly,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// A datastore can become inaccessible due to a number of reasons as
 /// defined in this enum *HostMountInfoInaccessibleReason_enum*.
@@ -7364,7 +6476,7 @@ pub enum HostMountModeEnum {
 ///   After the datastore property is set to AllPathsDown\_Timeout, all data i/o
 ///   to the datastore will be fast-failed (failed immediately).
 /// - `PermanentDeviceLoss`: A PDL condition is reported as PermanentDeviceLoss.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostMountInfoInaccessibleReasonEnum {
     #[serde(rename = "AllPathsDown_Start")]
     #[strum(serialize = "AllPathsDown_Start")]
@@ -7373,10 +6485,6 @@ pub enum HostMountInfoInaccessibleReasonEnum {
     #[strum(serialize = "AllPathsDown_Timeout")]
     AllPathsDownTimeout,
     PermanentDeviceLoss,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// NFS mount request can be failed due to a number of reasons as
 /// defined in this enum *HostMountInfoMountFailedReason_enum*.
@@ -7399,7 +6507,7 @@ pub enum HostMountInfoInaccessibleReasonEnum {
 /// - `OTHERS`: Any other reason which is not present in above list.
 ///   
 /// ***Since:*** vSphere API Release 8.0.0.1
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostMountInfoMountFailedReasonEnum {
     #[serde(rename = "CONNECT_FAILURE")]
     #[strum(serialize = "CONNECT_FAILURE")]
@@ -7428,10 +6536,6 @@ pub enum HostMountInfoMountFailedReasonEnum {
     #[serde(rename = "OTHERS")]
     #[strum(serialize = "OTHERS")]
     Others,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Set of constants defining the possible states of a multipath path.
 /// 
@@ -7441,7 +6545,7 @@ pub enum HostMountInfoMountFailedReasonEnum {
 /// - `disabled`
 /// - `dead`
 /// - `unknown`
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum MultipathStateEnum {
     #[serde(rename = "standby")]
     #[strum(serialize = "standby")]
@@ -7458,10 +6562,6 @@ pub enum MultipathStateEnum {
     #[serde(rename = "unknown")]
     #[strum(serialize = "unknown")]
     Unknown,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Security type supported.
 /// 
@@ -7484,7 +6584,7 @@ pub enum MultipathStateEnum {
 ///   
 ///   This
 ///   ensures the integrity of the NFS file data.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostNasVolumeSecurityTypeEnum {
     #[serde(rename = "AUTH_SYS")]
     #[strum(serialize = "AUTH_SYS")]
@@ -7495,10 +6595,6 @@ pub enum HostNasVolumeSecurityTypeEnum {
     #[serde(rename = "SEC_KRB5I")]
     #[strum(serialize = "SEC_KRB5I")]
     SecKrb5I,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Define TCP congestion control algorithm used by an instance
 /// 
@@ -7509,7 +6605,7 @@ pub enum HostNasVolumeSecurityTypeEnum {
 /// - `cubic`: Cubic Algorithm.
 ///   
 ///   See http://tools.ietf.org/id/draft-rhee-tcp-cubic-00.txt for detail.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostNetStackInstanceCongestionControlAlgorithmTypeEnum {
     #[serde(rename = "newreno")]
     #[strum(serialize = "newreno")]
@@ -7517,10 +6613,6 @@ pub enum HostNetStackInstanceCongestionControlAlgorithmTypeEnum {
     #[serde(rename = "cubic")]
     #[strum(serialize = "cubic")]
     Cubic,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Define the instance identifier for different traffic type
 /// 
@@ -7534,7 +6626,7 @@ pub enum HostNetStackInstanceCongestionControlAlgorithmTypeEnum {
 /// - `ops`: Stack key used for ops applications
 ///   
 ///   ***Since:*** vSphere API Release 8.0.0.1
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostNetStackInstanceSystemStackKeyEnum {
     #[serde(rename = "defaultTcpipStack")]
     #[strum(serialize = "defaultTcpipStack")]
@@ -7551,10 +6643,6 @@ pub enum HostNetStackInstanceSystemStackKeyEnum {
     #[serde(rename = "ops")]
     #[strum(serialize = "ops")]
     Ops,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Health state of the numeric sensor as reported by the sensor probes.
 /// 
@@ -7570,7 +6658,7 @@ pub enum HostNetStackInstanceSystemStackKeyEnum {
 ///   This may
 ///   directly affect the functioning of both the sensor and related
 ///   components.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostNumericSensorHealthStateEnum {
     #[serde(rename = "unknown")]
     #[strum(serialize = "unknown")]
@@ -7584,10 +6672,6 @@ pub enum HostNumericSensorHealthStateEnum {
     #[serde(rename = "red")]
     #[strum(serialize = "red")]
     Red,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Sensor Types for specific hardware component are either based on
 /// class of sensor or what the sensor monitors to allow for grouping
@@ -7606,7 +6690,7 @@ pub enum HostNumericSensorHealthStateEnum {
 /// - `bios`: BIOS/firmware related sensor.
 /// - `cable`: cable related sensor.
 /// - `watchdog`: Watchdog related sensor.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostNumericSensorTypeEnum {
     #[serde(rename = "fan")]
     #[strum(serialize = "fan")]
@@ -7647,10 +6731,6 @@ pub enum HostNumericSensorTypeEnum {
     #[serde(rename = "watchdog")]
     #[strum(serialize = "watchdog")]
     Watchdog,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Overall state of NVDIMM
 /// 
@@ -7659,7 +6739,7 @@ pub enum HostNumericSensorTypeEnum {
 /// - `error`: Error in NVDIMM state.
 ///   
 ///   Potential data loss.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum NvdimmNvdimmHealthInfoStateEnum {
     #[serde(rename = "normal")]
     #[strum(serialize = "normal")]
@@ -7667,17 +6747,13 @@ pub enum NvdimmNvdimmHealthInfoStateEnum {
     #[serde(rename = "error")]
     #[strum(serialize = "error")]
     Error,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// State of interleave set
 /// 
 /// Possible values:
 /// - `invalid`: Interleave set is invalid
 /// - `active`: Interleave set is valid and active
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum NvdimmInterleaveSetStateEnum {
     #[serde(rename = "invalid")]
     #[strum(serialize = "invalid")]
@@ -7685,10 +6761,6 @@ pub enum NvdimmInterleaveSetStateEnum {
     #[serde(rename = "active")]
     #[strum(serialize = "active")]
     Active,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Overall health state for a namespace
 /// 
@@ -7698,7 +6770,7 @@ pub enum NvdimmInterleaveSetStateEnum {
 /// - `labelMissing`: Namespace health label is missing
 /// - `interleaveBroken`: Namespace health interleave broken
 /// - `labelInconsistent`: Namespace health label is inconsistent
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum NvdimmNamespaceDetailsHealthStatusEnum {
     #[serde(rename = "normal")]
     #[strum(serialize = "normal")]
@@ -7715,10 +6787,6 @@ pub enum NvdimmNamespaceDetailsHealthStatusEnum {
     #[serde(rename = "labelInconsistent")]
     #[strum(serialize = "labelInconsistent")]
     LabelInconsistent,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// State of Namespace
 /// 
@@ -7726,7 +6794,7 @@ pub enum NvdimmNamespaceDetailsHealthStatusEnum {
 /// - `invalid`: Namespace is invalid
 /// - `notInUse`: Namespace is valid but not in use
 /// - `inUse`: Namespace is valid and is in use
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum NvdimmNamespaceDetailsStateEnum {
     #[serde(rename = "invalid")]
     #[strum(serialize = "invalid")]
@@ -7737,10 +6805,6 @@ pub enum NvdimmNamespaceDetailsStateEnum {
     #[serde(rename = "inUse")]
     #[strum(serialize = "inUse")]
     InUse,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Overall health state for a namespace
 /// 
@@ -7752,7 +6816,7 @@ pub enum NvdimmNamespaceDetailsStateEnum {
 /// - `labelInconsistent`: Namespace health label is inconsistent
 /// - `bttCorrupt`: Namespace health BTT is corrupt
 /// - `badBlockSize`: Namespace health encountered bad block
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum NvdimmNamespaceHealthStatusEnum {
     #[serde(rename = "normal")]
     #[strum(serialize = "normal")]
@@ -7775,10 +6839,6 @@ pub enum NvdimmNamespaceHealthStatusEnum {
     #[serde(rename = "badBlockSize")]
     #[strum(serialize = "badBlockSize")]
     BadBlockSize,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// State of Namespace
 /// 
@@ -7786,7 +6846,7 @@ pub enum NvdimmNamespaceHealthStatusEnum {
 /// - `invalid`: Namespace is invalid
 /// - `notInUse`: Namespace is valid but not in use
 /// - `inUse`: Namespace is valid and is in use
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum NvdimmNamespaceStateEnum {
     #[serde(rename = "invalid")]
     #[strum(serialize = "invalid")]
@@ -7797,17 +6857,13 @@ pub enum NvdimmNamespaceStateEnum {
     #[serde(rename = "inUse")]
     #[strum(serialize = "inUse")]
     InUse,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Type of namespace.
 /// 
 /// Possible values:
 /// - `blockNamespace`: Block mode namespace
 /// - `persistentNamespace`: Persistent mode namespace
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum NvdimmNamespaceTypeEnum {
     #[serde(rename = "blockNamespace")]
     #[strum(serialize = "blockNamespace")]
@@ -7815,10 +6871,6 @@ pub enum NvdimmNamespaceTypeEnum {
     #[serde(rename = "persistentNamespace")]
     #[strum(serialize = "persistentNamespace")]
     PersistentNamespace,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// An indicator of how a memory range is being used
 /// 
@@ -7831,7 +6883,7 @@ pub enum NvdimmNamespaceTypeEnum {
 /// - `volatileVirtualCDRange`: NVDIMM volatile virtual CD region
 /// - `persistentVirtualDiskRange`: NVDIMM persistent virtual disk region
 /// - `persistentVirtualCDRange`: NVDIMM persistent virtual CD region
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum NvdimmRangeTypeEnum {
     #[serde(rename = "volatileRange")]
     #[strum(serialize = "volatileRange")]
@@ -7857,17 +6909,13 @@ pub enum NvdimmRangeTypeEnum {
     #[serde(rename = "persistentVirtualCDRange")]
     #[strum(serialize = "persistentVirtualCDRange")]
     PersistentVirtualCdRange,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// This enum represents the supported NVM subsystem types.
 /// 
 /// Possible values:
 /// - `discovery`: A Discovery service, composed of Discovery controllers.
 /// - `nvm`: An NVM subsystem whose controllers may have attached namespaces.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostNvmeDiscoveryLogSubsystemTypeEnum {
     #[serde(rename = "discovery")]
     #[strum(serialize = "discovery")]
@@ -7875,10 +6923,6 @@ pub enum HostNvmeDiscoveryLogSubsystemTypeEnum {
     #[serde(rename = "nvm")]
     #[strum(serialize = "nvm")]
     Nvm,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// This enum represents the supported types of transport requirements.
 /// 
@@ -7886,7 +6930,7 @@ pub enum HostNvmeDiscoveryLogSubsystemTypeEnum {
 /// - `secureChannelRequired`: A fabric secure channel is required.
 /// - `secureChannelNotRequired`: A fabric secure channel is not required.
 /// - `requirementsNotSpecified`: Requirements are not specified
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostNvmeDiscoveryLogTransportRequirementsEnum {
     #[serde(rename = "secureChannelRequired")]
     #[strum(serialize = "secureChannelRequired")]
@@ -7897,10 +6941,6 @@ pub enum HostNvmeDiscoveryLogTransportRequirementsEnum {
     #[serde(rename = "requirementsNotSpecified")]
     #[strum(serialize = "requirementsNotSpecified")]
     RequirementsNotSpecified,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// This enum specifies the supported address families for
 /// NVME over Fabrics.
@@ -7916,7 +6956,7 @@ pub enum HostNvmeDiscoveryLogTransportRequirementsEnum {
 /// - `fc`: Fibre Channel address family.
 /// - `loopback`: Intra-host transport.
 /// - `unknown`: Unrecognized address family.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostNvmeTransportParametersNvmeAddressFamilyEnum {
     #[serde(rename = "ipv4")]
     #[strum(serialize = "ipv4")]
@@ -7936,10 +6976,6 @@ pub enum HostNvmeTransportParametersNvmeAddressFamilyEnum {
     #[serde(rename = "unknown")]
     #[strum(serialize = "unknown")]
     Unknown,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The set of NVM Express over Fabrics transport types.
 /// 
@@ -7956,7 +6992,7 @@ pub enum HostNvmeTransportParametersNvmeAddressFamilyEnum {
 ///   ***Since:*** vSphere API Release 7.0.3.0
 /// - `loopback`: Intra-host transport.
 /// - `unsupported`: The transport type is not among the currently supported ones.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostNvmeTransportTypeEnum {
     #[serde(rename = "pcie")]
     #[strum(serialize = "pcie")]
@@ -7976,17 +7012,13 @@ pub enum HostNvmeTransportTypeEnum {
     #[serde(rename = "unsupported")]
     #[strum(serialize = "unsupported")]
     Unsupported,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `up`: The opaque switch is up and running.
 /// - `warning`: The opaque switch requires attention.
 /// - `down`: The opaque switch is down.
 /// - `maintenance`: The opaque switch is under upgrade.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostOpaqueSwitchOpaqueSwitchStateEnum {
     #[serde(rename = "up")]
     #[strum(serialize = "up")]
@@ -8000,17 +7032,13 @@ pub enum HostOpaqueSwitchOpaqueSwitchStateEnum {
     #[serde(rename = "maintenance")]
     #[strum(serialize = "maintenance")]
     Maintenance,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The installation state if the update is installed on the server.
 /// 
 /// Possible values:
 /// - `hostRestarted`: The server has been restarted since the update installation.
 /// - `imageActive`: Indicates if the newly installed image is active on the server
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostPatchManagerInstallStateEnum {
     #[serde(rename = "hostRestarted")]
     #[strum(serialize = "hostRestarted")]
@@ -8018,10 +7046,6 @@ pub enum HostPatchManagerInstallStateEnum {
     #[serde(rename = "imageActive")]
     #[strum(serialize = "imageActive")]
     ImageActive,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The integrity validation status.
 /// 
@@ -8034,7 +7058,7 @@ pub enum HostPatchManagerInstallStateEnum {
 /// - `digestMismatch`: A digital signature of the update does not match.
 /// - `notEnoughSignatures`: Not enough signed signatures on the update.
 /// - `validationError`: The integrity validation failed.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostPatchManagerIntegrityStatusEnum {
     #[serde(rename = "validated")]
     #[strum(serialize = "validated")]
@@ -8057,10 +7081,6 @@ pub enum HostPatchManagerIntegrityStatusEnum {
     #[serde(rename = "validationError")]
     #[strum(serialize = "validationError")]
     ValidationError,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Reasons why an update is not applicable to the ESX host.
 /// 
@@ -8076,7 +7096,7 @@ pub enum HostPatchManagerIntegrityStatusEnum {
 ///   installed on the host.
 /// - `conflictLib`: The update conflicts with RPMs or libraries installed on the
 ///   host.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostPatchManagerReasonEnum {
     #[serde(rename = "obsoleted")]
     #[strum(serialize = "obsoleted")]
@@ -8096,17 +7116,13 @@ pub enum HostPatchManagerReasonEnum {
     #[serde(rename = "conflictLib")]
     #[strum(serialize = "conflictLib")]
     ConflictLib,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `userOptOut`: Indicates that the user has opted out the Physical NIC from resource pool
 ///   based scheduling.
 /// - `hardwareUnsupported`: Indicates that the NIC device does is not capable of resource pool
 ///   based scheduling.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum PhysicalNicResourcePoolSchedulerDisallowedReasonEnum {
     #[serde(rename = "userOptOut")]
     #[strum(serialize = "userOptOut")]
@@ -8114,24 +7130,16 @@ pub enum PhysicalNicResourcePoolSchedulerDisallowedReasonEnum {
     #[serde(rename = "hardwareUnsupported")]
     #[strum(serialize = "hardwareUnsupported")]
     HardwareUnsupported,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Set of possible values for *PhysicalNic.vmDirectPathGen2SupportedMode*.
 /// 
 /// Possible values:
 /// - `upt`
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum PhysicalNicVmDirectPathGen2SupportedModeEnum {
     #[serde(rename = "upt")]
     #[strum(serialize = "upt")]
     Upt,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The type of component connected to a port group.
 /// 
@@ -8141,7 +7149,7 @@ pub enum PhysicalNicVmDirectPathGen2SupportedModeEnum {
 ///   is connected to this port group.
 /// - `host`: The VMkernel is connected to this port group.
 /// - `unknown`: This port group serves an entity of unspecified kind.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum PortGroupConnecteeTypeEnum {
     #[serde(rename = "virtualMachine")]
     #[strum(serialize = "virtualMachine")]
@@ -8155,10 +7163,6 @@ pub enum PortGroupConnecteeTypeEnum {
     #[serde(rename = "unknown")]
     #[strum(serialize = "unknown")]
     Unknown,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Deprecated from all vmodl version above @released("6.0").
 /// 
@@ -8167,7 +7171,7 @@ pub enum PortGroupConnecteeTypeEnum {
 /// Possible values:
 /// - `block`
 /// - `nas`
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostProtocolEndpointPeTypeEnum {
     #[serde(rename = "block")]
     #[strum(serialize = "block")]
@@ -8175,10 +7179,6 @@ pub enum HostProtocolEndpointPeTypeEnum {
     #[serde(rename = "nas")]
     #[strum(serialize = "nas")]
     Nas,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// ProtocolEndpoint type.
 /// 
@@ -8186,7 +7186,7 @@ pub enum HostProtocolEndpointPeTypeEnum {
 /// - `scsi`
 /// - `nfs`
 /// - `nfs4x`
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostProtocolEndpointProtocolEndpointTypeEnum {
     #[serde(rename = "scsi")]
     #[strum(serialize = "scsi")]
@@ -8197,10 +7197,6 @@ pub enum HostProtocolEndpointProtocolEndpointTypeEnum {
     #[serde(rename = "nfs4x")]
     #[strum(serialize = "nfs4x")]
     Nfs4X,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// PTP capable network device type.
 /// 
@@ -8215,7 +7211,7 @@ pub enum HostProtocolEndpointProtocolEndpointTypeEnum {
 ///   on the host.
 /// 
 /// ***Since:*** vSphere API Release 7.0.3.0
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostPtpConfigDeviceTypeEnum {
     #[serde(rename = "none")]
     #[strum(serialize = "none")]
@@ -8226,10 +7222,6 @@ pub enum HostPtpConfigDeviceTypeEnum {
     #[serde(rename = "pciPassthruNic")]
     #[strum(serialize = "pciPassthruNic")]
     PciPassthruNic,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `nvmeQualifiedName`: The NVMe Qualified Name (NQN) of this host.
@@ -8238,7 +7230,7 @@ pub enum HostPtpConfigDeviceTypeEnum {
 ///   ***Since:*** vSphere API Release 8.0.0.0
 /// 
 /// ***Since:*** vSphere API Release 7.0.3.0
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostQualifiedNameTypeEnum {
     #[serde(rename = "nvmeQualifiedName")]
     #[strum(serialize = "nvmeQualifiedName")]
@@ -8246,10 +7238,6 @@ pub enum HostQualifiedNameTypeEnum {
     #[serde(rename = "vvolNvmeQualifiedName")]
     #[strum(serialize = "vvolNvmeQualifiedName")]
     VvolNvmeQualifiedName,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible RDMA device connection states.
 /// 
@@ -8293,7 +7281,7 @@ pub enum HostQualifiedNameTypeEnum {
 ///   physical link has suffered a failure. If it recovers
 ///   within a timeout, the connection state will return to active,
 ///   otherwise it will move to down.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostRdmaDeviceConnectionStateEnum {
     #[serde(rename = "unknown")]
     #[strum(serialize = "unknown")]
@@ -8313,17 +7301,13 @@ pub enum HostRdmaDeviceConnectionStateEnum {
     #[serde(rename = "activeDefer")]
     #[strum(serialize = "activeDefer")]
     ActiveDefer,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Enumeration of port directions.
 /// 
 /// Possible values:
 /// - `inbound`
 /// - `outbound`
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostFirewallRuleDirectionEnum {
     #[serde(rename = "inbound")]
     #[strum(serialize = "inbound")]
@@ -8331,17 +7315,13 @@ pub enum HostFirewallRuleDirectionEnum {
     #[serde(rename = "outbound")]
     #[strum(serialize = "outbound")]
     Outbound,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Enumeration of port types.
 /// 
 /// Possible values:
 /// - `src`
 /// - `dst`
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostFirewallRulePortTypeEnum {
     #[serde(rename = "src")]
     #[strum(serialize = "src")]
@@ -8349,17 +7329,13 @@ pub enum HostFirewallRulePortTypeEnum {
     #[serde(rename = "dst")]
     #[strum(serialize = "dst")]
     Dst,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Set of valid port protocols.
 /// 
 /// Possible values:
 /// - `tcp`
 /// - `udp`
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostFirewallRuleProtocolEnum {
     #[serde(rename = "tcp")]
     #[strum(serialize = "tcp")]
@@ -8367,10 +7343,6 @@ pub enum HostFirewallRuleProtocolEnum {
     #[serde(rename = "udp")]
     #[strum(serialize = "udp")]
     Udp,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Define the instance state type
 /// 
@@ -8379,7 +7351,7 @@ pub enum HostFirewallRuleProtocolEnum {
 /// - `active`: The instance is running
 /// - `deactivating`: The instance is in the progress of asynchronous deletion
 /// - `activating`: Reserved state for future proofing asynchronous creation
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostRuntimeInfoNetStackInstanceRuntimeInfoStateEnum {
     #[serde(rename = "inactive")]
     #[strum(serialize = "inactive")]
@@ -8393,10 +7365,6 @@ pub enum HostRuntimeInfoNetStackInstanceRuntimeInfoStateEnum {
     #[serde(rename = "activating")]
     #[strum(serialize = "activating")]
     Activating,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Valid protection modes for persistent state encryption.
 /// 
@@ -8405,7 +7373,7 @@ pub enum HostRuntimeInfoNetStackInstanceRuntimeInfoStateEnum {
 /// - `tpm`: Encryption is TPM protected.
 ///   
 /// ***Since:*** vSphere API Release 7.0.3.0
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostRuntimeInfoStateEncryptionInfoProtectionModeEnum {
     #[serde(rename = "none")]
     #[strum(serialize = "none")]
@@ -8413,10 +7381,6 @@ pub enum HostRuntimeInfoStateEncryptionInfoProtectionModeEnum {
     #[serde(rename = "tpm")]
     #[strum(serialize = "tpm")]
     Tpm,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Defines if the host is ready for NVDS to VDS migration.
 /// 
@@ -8426,7 +7390,7 @@ pub enum HostRuntimeInfoStateEncryptionInfoProtectionModeEnum {
 /// - `unknown`: The host is disconnected from VC.
 ///   
 /// ***Since:*** vSphere API Release 7.0.2.0
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostRuntimeInfoStatelessNvdsMigrationStateEnum {
     #[serde(rename = "ready")]
     #[strum(serialize = "ready")]
@@ -8437,10 +7401,6 @@ pub enum HostRuntimeInfoStatelessNvdsMigrationStateEnum {
     #[serde(rename = "unknown")]
     #[strum(serialize = "unknown")]
     Unknown,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The types of disk drives.
 /// 
@@ -8450,7 +7410,7 @@ pub enum HostRuntimeInfoStatelessNvdsMigrationStateEnum {
 /// - `native4k`: 4K native sector size drive.
 /// - `SoftwareEmulated4k`: Software emulated 4k.
 /// - `unknown`: Unknown type.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum ScsiDiskTypeEnum {
     #[serde(rename = "native512")]
     #[strum(serialize = "native512")]
@@ -8467,10 +7427,6 @@ pub enum ScsiDiskTypeEnum {
     #[serde(rename = "unknown")]
     #[strum(serialize = "unknown")]
     Unknown,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// An indicator of the utility of Descriptor in being used as an
 /// identifier that is stable, unique, and correlatable.
@@ -8484,7 +7440,7 @@ pub enum ScsiDiskTypeEnum {
 ///   identification and correlation across hosts.
 /// - `unknownQuality`: The Descriptor has an identifier that may or may not be useful for
 ///   identification and correlation across hosts.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum ScsiLunDescriptorQualityEnum {
     #[serde(rename = "highQuality")]
     #[strum(serialize = "highQuality")]
@@ -8498,10 +7454,6 @@ pub enum ScsiLunDescriptorQualityEnum {
     #[serde(rename = "unknownQuality")]
     #[strum(serialize = "unknownQuality")]
     UnknownQuality,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The list of Device Protocols.
 /// 
@@ -8512,7 +7464,7 @@ pub enum ScsiLunDescriptorQualityEnum {
 /// - `SCSI`
 /// 
 /// ***Since:*** vSphere API Release 8.0.1.0
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum DeviceProtocolEnum {
     #[serde(rename = "NVMe")]
     #[strum(serialize = "NVMe")]
@@ -8520,10 +7472,6 @@ pub enum DeviceProtocolEnum {
     #[serde(rename = "SCSI")]
     #[strum(serialize = "SCSI")]
     Scsi,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The list of SCSI device types.
 /// 
@@ -8544,7 +7492,7 @@ pub enum DeviceProtocolEnum {
 /// - `storageArrayController`
 /// - `enclosure`
 /// - `unknown`
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum ScsiLunTypeEnum {
     #[serde(rename = "disk")]
     #[strum(serialize = "disk")]
@@ -8585,10 +7533,6 @@ pub enum ScsiLunTypeEnum {
     #[serde(rename = "unknown")]
     #[strum(serialize = "unknown")]
     Unknown,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The Operational state of the LUN
 /// 
@@ -8606,7 +7550,7 @@ pub enum ScsiLunTypeEnum {
 /// - `lostCommunication`: No more paths are available to the LUN.
 /// - `timeout`: All Paths have been down for the timeout condition
 ///   determined by a user-configurable host advanced option.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum ScsiLunStateEnum {
     #[serde(rename = "unknownState")]
     #[strum(serialize = "unknownState")]
@@ -8632,10 +7576,6 @@ pub enum ScsiLunStateEnum {
     #[serde(rename = "timeout")]
     #[strum(serialize = "timeout")]
     Timeout,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Storage array hardware acceleration support status.
 /// 
@@ -8653,7 +7593,7 @@ pub enum ScsiLunStateEnum {
 ///   
 ///   The ESX host will handle all storage-related operations.
 /// - `vStorageUnknown`: Initial support status value.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum ScsiLunVStorageSupportStatusEnum {
     #[serde(rename = "vStorageSupported")]
     #[strum(serialize = "vStorageSupported")]
@@ -8664,10 +7604,6 @@ pub enum ScsiLunVStorageSupportStatusEnum {
     #[serde(rename = "vStorageUnknown")]
     #[strum(serialize = "vStorageUnknown")]
     VStorageUnknown,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Set of valid service policy strings.
 /// 
@@ -8675,7 +7611,7 @@ pub enum ScsiLunVStorageSupportStatusEnum {
 /// - `on`: Service should be started when the host starts up.
 /// - `automatic`: Service should run if and only if it has open firewall ports.
 /// - `off`: Service should not be started when the host starts up.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostServicePolicyEnum {
     #[serde(rename = "on")]
     #[strum(serialize = "on")]
@@ -8686,10 +7622,6 @@ pub enum HostServicePolicyEnum {
     #[serde(rename = "off")]
     #[strum(serialize = "off")]
     Off,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `uninitialized`
@@ -8697,7 +7629,7 @@ pub enum HostServicePolicyEnum {
 /// - `working`
 /// 
 /// ***Since:*** vSphere API Release 7.0.1.0
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostSevInfoSevStateEnum {
     #[serde(rename = "uninitialized")]
     #[strum(serialize = "uninitialized")]
@@ -8708,10 +7640,6 @@ pub enum HostSevInfoSevStateEnum {
     #[serde(rename = "working")]
     #[strum(serialize = "working")]
     Working,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Flexible Launch Enclave (FLC) modes.
 /// 
@@ -8724,7 +7652,7 @@ pub enum HostSevInfoSevStateEnum {
 ///   initialized with the provided public key hash.
 /// - `unlocked`: FLC is available and the "launch enclave MSRs" are writeable and
 ///   initialized with Intel's public key hash.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostSgxInfoFlcModesEnum {
     #[serde(rename = "off")]
     #[strum(serialize = "off")]
@@ -8735,10 +7663,6 @@ pub enum HostSgxInfoFlcModesEnum {
     #[serde(rename = "unlocked")]
     #[strum(serialize = "unlocked")]
     Unlocked,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Host SGX states.
 /// 
@@ -8754,7 +7678,7 @@ pub enum HostSgxInfoFlcModesEnum {
 /// - `disabledMaxEPCRegs`: SGX is disabled because the host exceeds the maximum supported
 ///   number of EPC regions.
 /// - `enabled`: SGX is enabled.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostSgxInfoSgxStatesEnum {
     #[serde(rename = "notPresent")]
     #[strum(serialize = "notPresent")]
@@ -8780,10 +7704,6 @@ pub enum HostSgxInfoSgxStatesEnum {
     #[serde(rename = "enabled")]
     #[strum(serialize = "enabled")]
     Enabled,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// SGX registration status for ESX host.
 /// 
@@ -8793,7 +7713,7 @@ pub enum HostSgxInfoSgxStatesEnum {
 /// - `complete`: SGX registration is complete.
 ///   
 /// ***Since:*** vSphere API Release 8.0.0.1
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostSgxRegistrationInfoRegistrationStatusEnum {
     #[serde(rename = "notApplicable")]
     #[strum(serialize = "notApplicable")]
@@ -8804,10 +7724,6 @@ pub enum HostSgxRegistrationInfoRegistrationStatusEnum {
     #[serde(rename = "complete")]
     #[strum(serialize = "complete")]
     Complete,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// SGX host registration type.
 /// 
@@ -8817,7 +7733,7 @@ pub enum HostSgxRegistrationInfoRegistrationStatusEnum {
 /// - `addPackage`: Indicates that new CPU package was added.
 ///   
 /// ***Since:*** vSphere API Release 8.0.0.1
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostSgxRegistrationInfoRegistrationTypeEnum {
     #[serde(rename = "manifest")]
     #[strum(serialize = "manifest")]
@@ -8825,10 +7741,6 @@ pub enum HostSgxRegistrationInfoRegistrationTypeEnum {
     #[serde(rename = "addPackage")]
     #[strum(serialize = "addPackage")]
     AddPackage,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// SNMP Agent supported capabilities enum
 /// 
@@ -8836,7 +7748,7 @@ pub enum HostSgxRegistrationInfoRegistrationTypeEnum {
 /// - `COMPLETE`: Implements test notifications and allows agent configuration
 /// - `DIAGNOSTICS`: Implements only test notification capability only
 /// - `CONFIGURATION`: Allows for agent configuration only
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostSnmpAgentCapabilityEnum {
     #[serde(rename = "COMPLETE")]
     #[strum(serialize = "COMPLETE")]
@@ -8847,10 +7759,6 @@ pub enum HostSnmpAgentCapabilityEnum {
     #[serde(rename = "CONFIGURATION")]
     #[strum(serialize = "CONFIGURATION")]
     Configuration,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// These are the constraint relationships between software packages.
 /// 
@@ -8860,7 +7768,7 @@ pub enum HostSnmpAgentCapabilityEnum {
 /// - `lessThanEqual`
 /// - `greaterThanEqual`
 /// - `greaterThan`
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum SoftwarePackageConstraintEnum {
     #[serde(rename = "equals")]
     #[strum(serialize = "equals")]
@@ -8877,17 +7785,13 @@ pub enum SoftwarePackageConstraintEnum {
     #[serde(rename = "greaterThan")]
     #[strum(serialize = "greaterThan")]
     GreaterThan,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `bootbank`: This package is installed into bootbank in storage.
 /// - `tools`: This package is installed into tools partition in storage.
 /// - `meta`: This package contains install related data without
 ///   content to install.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum SoftwarePackageVibTypeEnum {
     #[serde(rename = "bootbank")]
     #[strum(serialize = "bootbank")]
@@ -8898,17 +7802,13 @@ pub enum SoftwarePackageVibTypeEnum {
     #[serde(rename = "meta")]
     #[strum(serialize = "meta")]
     Meta,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The set of supported host bus adapter protocols.
 /// 
 /// Possible values:
 /// - `scsi`: The Small Computer System Interface (SCSI) protocol.
 /// - `nvme`: The Non-Volatile Memory Express (NVME) protocol.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostStorageProtocolEnum {
     #[serde(rename = "scsi")]
     #[strum(serialize = "scsi")]
@@ -8916,10 +7816,6 @@ pub enum HostStorageProtocolEnum {
     #[serde(rename = "nvme")]
     #[strum(serialize = "nvme")]
     Nvme,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `AssetTag`: The Asset tag of the system
@@ -8927,24 +7823,20 @@ pub enum HostStorageProtocolEnum {
 /// - `OemSpecificString`: OEM specific string
 /// - `EnclosureSerialNumberTag`: The Enclosure Serial Number tag of the system
 /// - `SerialNumberTag`: The Serial Number tag of the system
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostSystemIdentificationInfoIdentifierEnum {
     AssetTag,
     ServiceTag,
     OemSpecificString,
     EnclosureSerialNumberTag,
     SerialNumberTag,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Status constants of TPM attestation.
 /// 
 /// Possible values:
 /// - `notAccepted`: TPM attestation failed.
 /// - `accepted`: TPM attestation succeeded.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostTpmAttestationInfoAcceptanceStatusEnum {
     #[serde(rename = "notAccepted")]
     #[strum(serialize = "notAccepted")]
@@ -8952,10 +7844,6 @@ pub enum HostTpmAttestationInfoAcceptanceStatusEnum {
     #[serde(rename = "accepted")]
     #[strum(serialize = "accepted")]
     Accepted,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `attested`: Attestation succeeded.
@@ -8963,7 +7851,7 @@ pub enum HostTpmAttestationInfoAcceptanceStatusEnum {
 /// - `unknown`: Attestation status is unknown.
 ///   
 /// ***Since:*** vSphere API Release 7.0.1.0
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostTrustAuthorityAttestationInfoAttestationStatusEnum {
     #[serde(rename = "attested")]
     #[strum(serialize = "attested")]
@@ -8974,10 +7862,6 @@ pub enum HostTrustAuthorityAttestationInfoAttestationStatusEnum {
     #[serde(rename = "unknown")]
     #[strum(serialize = "unknown")]
     Unknown,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Reasons for identifying the disk extent
 /// as copy of VMFS volume extent.
@@ -8986,7 +7870,7 @@ pub enum HostTrustAuthorityAttestationInfoAttestationStatusEnum {
 /// - `diskIdMismatch`: The VMFS detected 'diskid' does not match with
 ///   LVM detected 'diskId'
 /// - `uuidConflict`: VMFS 'uuid' does not match
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostUnresolvedVmfsExtentUnresolvedReasonEnum {
     #[serde(rename = "diskIdMismatch")]
     #[strum(serialize = "diskIdMismatch")]
@@ -8994,10 +7878,6 @@ pub enum HostUnresolvedVmfsExtentUnresolvedReasonEnum {
     #[serde(rename = "uuidConflict")]
     #[strum(serialize = "uuidConflict")]
     UuidConflict,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `resignature`: Resignature the Unresolved VMFS volume.
@@ -9010,7 +7890,7 @@ pub enum HostUnresolvedVmfsExtentUnresolvedReasonEnum {
 ///   In the event the volume to be force mounted contains multiple
 ///   extents but only a single copy of each extent exists, only the
 ///   head extent needs to be specified.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostUnresolvedVmfsResolutionSpecVmfsUuidResolutionEnum {
     #[serde(rename = "resignature")]
     #[strum(serialize = "resignature")]
@@ -9018,10 +7898,6 @@ pub enum HostUnresolvedVmfsResolutionSpecVmfsUuidResolutionEnum {
     #[serde(rename = "forceMount")]
     #[strum(serialize = "forceMount")]
     ForceMount,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `vmotion`: The VirtualNic is used for VMotion.
@@ -9070,7 +7946,7 @@ pub enum HostUnresolvedVmfsResolutionSpecVmfsUuidResolutionEnum {
 /// - `nvmeRdma`: The VirtualNic is used for NVMe over RDMA traffic.
 ///   
 ///   ***Since:*** vSphere API Release 7.0.3.0
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostVirtualNicManagerNicTypeEnum {
     #[serde(rename = "vmotion")]
     #[strum(serialize = "vmotion")]
@@ -9108,10 +7984,6 @@ pub enum HostVirtualNicManagerNicTypeEnum {
     #[serde(rename = "nvmeRdma")]
     #[strum(serialize = "nvmeRdma")]
     NvmeRdma,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Set of possible values for mode field in AccessSpec.
 /// 
@@ -9119,7 +7991,7 @@ pub enum HostVirtualNicManagerNicTypeEnum {
 /// - `grant`: Grant access to specified services in addition to existing services.
 /// - `replace`: Replace existing services with specified services.
 /// - `revoke`: Revoke the specified services.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostVmciAccessManagerModeEnum {
     #[serde(rename = "grant")]
     #[strum(serialize = "grant")]
@@ -9130,10 +8002,6 @@ pub enum HostVmciAccessManagerModeEnum {
     #[serde(rename = "revoke")]
     #[strum(serialize = "revoke")]
     Revoke,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// VMFS unmap bandwidth policy.
 /// 
@@ -9143,7 +8011,7 @@ pub enum HostVmciAccessManagerModeEnum {
 /// Possible values:
 /// - `fixed`: Unmap bandwidth is a fixed value.
 /// - `dynamic`: Unmaps bandwidth is a dynamic value with lower and upper limits
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostVmfsVolumeUnmapBandwidthPolicyEnum {
     #[serde(rename = "fixed")]
     #[strum(serialize = "fixed")]
@@ -9151,10 +8019,6 @@ pub enum HostVmfsVolumeUnmapBandwidthPolicyEnum {
     #[serde(rename = "dynamic")]
     #[strum(serialize = "dynamic")]
     Dynamic,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// VMFS unmap priority.
 /// 
@@ -9164,7 +8028,7 @@ pub enum HostVmfsVolumeUnmapBandwidthPolicyEnum {
 /// Possible values:
 /// - `none`: Unmap is disabled.
 /// - `low`: Unmaps are processed at low rate.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostVmfsVolumeUnmapPriorityEnum {
     #[serde(rename = "none")]
     #[strum(serialize = "none")]
@@ -9172,10 +8036,6 @@ pub enum HostVmfsVolumeUnmapPriorityEnum {
     #[serde(rename = "low")]
     #[strum(serialize = "low")]
     Low,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// This specifies how an IP address was obtained for a given interface.
 /// 
@@ -9197,7 +8057,7 @@ pub enum HostVmfsVolumeUnmapPriorityEnum {
 ///   See RFC 4862, IPv6 Stateless Address Autoconfiguration.
 /// - `random`: The address is chosen by the system at random
 ///   e.g., an IPv4 address within 169.254/16, or an RFC 3041 privacy address.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum NetIpConfigInfoIpAddressOriginEnum {
     #[serde(rename = "other")]
     #[strum(serialize = "other")]
@@ -9214,10 +8074,6 @@ pub enum NetIpConfigInfoIpAddressOriginEnum {
     #[serde(rename = "random")]
     #[strum(serialize = "random")]
     Random,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `preferred`: Indicates that this is a valid address.
@@ -9231,7 +8087,7 @@ pub enum NetIpConfigInfoIpAddressOriginEnum {
 ///   address on the link is presently being verified.
 /// - `duplicate`: Indicates the address has been determined to be non-unique
 ///   on the link, this address will not be reachable.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum NetIpConfigInfoIpAddressStatusEnum {
     #[serde(rename = "preferred")]
     #[strum(serialize = "preferred")]
@@ -9254,10 +8110,6 @@ pub enum NetIpConfigInfoIpAddressStatusEnum {
     #[serde(rename = "duplicate")]
     #[strum(serialize = "duplicate")]
     Duplicate,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// IP Stack keeps state on entries in IpNetToMedia table to perform
 /// physical address lookups for IP addresses.
@@ -9271,7 +8123,7 @@ pub enum NetIpConfigInfoIpAddressStatusEnum {
 /// - `invalid`: The IP Stack has marked this entry as not useable.
 /// - `dynamic`: This entry has been learned using ARP or NDP.
 /// - `manual`: This entry was set manually.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum NetIpStackInfoEntryTypeEnum {
     #[serde(rename = "other")]
     #[strum(serialize = "other")]
@@ -9285,10 +8137,6 @@ pub enum NetIpStackInfoEntryTypeEnum {
     #[serde(rename = "manual")]
     #[strum(serialize = "manual")]
     Manual,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The set of values used to determine ordering of default routers.
 /// 
@@ -9299,7 +8147,7 @@ pub enum NetIpStackInfoEntryTypeEnum {
 /// - `low`
 /// - `medium`
 /// - `high`
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum NetIpStackInfoPreferenceEnum {
     #[serde(rename = "reserved")]
     #[strum(serialize = "reserved")]
@@ -9313,10 +8161,6 @@ pub enum NetIpStackInfoPreferenceEnum {
     #[serde(rename = "high")]
     #[strum(serialize = "high")]
     High,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// NetBIOS configuration mode.
 /// 
@@ -9325,7 +8169,7 @@ pub enum NetIpStackInfoPreferenceEnum {
 /// - `enabled`: NetBIOS is enabled.
 /// - `disabled`: NetBIOS is disabled.
 /// - `enabledViaDHCP`: DHCP server decides whether or not to use NetBIOS.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum NetBiosConfigInfoModeEnum {
     #[serde(rename = "unknown")]
     #[strum(serialize = "unknown")]
@@ -9339,10 +8183,6 @@ pub enum NetBiosConfigInfoModeEnum {
     #[serde(rename = "enabledViaDHCP")]
     #[strum(serialize = "enabledViaDHCP")]
     EnabledViaDhcp,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// This list specifies the type of operation being performed on the array.
 /// 
@@ -9354,7 +8194,7 @@ pub enum NetBiosConfigInfoModeEnum {
 ///   In this case the key field must contain the key of the element
 ///   to be removed.
 /// - `edit`: indicates changes to an element in the array.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum ArrayUpdateOperationEnum {
     #[serde(rename = "add")]
     #[strum(serialize = "add")]
@@ -9365,17 +8205,13 @@ pub enum ArrayUpdateOperationEnum {
     #[serde(rename = "edit")]
     #[strum(serialize = "edit")]
     Edit,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `compliant`: Entity is in Compliance
 /// - `nonCompliant`: Entity is out of Compliance
 /// - `unknown`: Compliance status of the entity is not known
 /// - `running`: Compliance check on this host is running.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum ComplianceResultStatusEnum {
     #[serde(rename = "compliant")]
     #[strum(serialize = "compliant")]
@@ -9389,10 +8225,6 @@ pub enum ComplianceResultStatusEnum {
     #[serde(rename = "running")]
     #[strum(serialize = "running")]
     Running,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Enumerates different operations supported for comparing
 /// numerical values.
@@ -9404,7 +8236,7 @@ pub enum ComplianceResultStatusEnum {
 /// - `notEqual`
 /// - `greaterThanEqual`
 /// - `greaterThan`
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum ProfileNumericComparatorEnum {
     #[serde(rename = "lessThan")]
     #[strum(serialize = "lessThan")]
@@ -9424,10 +8256,6 @@ pub enum ProfileNumericComparatorEnum {
     #[serde(rename = "greaterThan")]
     #[strum(serialize = "greaterThan")]
     GreaterThan,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The relation type to be supported.
 /// 
@@ -9438,7 +8266,7 @@ pub enum ProfileNumericComparatorEnum {
 /// - `localizable_relation`: The value list contains localization keys instead of values.
 /// - `static_relation`: The relation is defined by static valid value list.
 /// - `validation_relation`: The relation is defined for validation purpose.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum ProfileParameterMetadataRelationTypeEnum {
     #[serde(rename = "dynamic_relation")]
     #[strum(serialize = "dynamic_relation")]
@@ -9455,10 +8283,6 @@ pub enum ProfileParameterMetadataRelationTypeEnum {
     #[serde(rename = "validation_relation")]
     #[strum(serialize = "validation_relation")]
     ValidationRelation,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Type of services for which Profile can be requested for
 /// 
@@ -9467,7 +8291,7 @@ pub enum ProfileParameterMetadataRelationTypeEnum {
 /// - `HA`: High Availability
 /// - `DPM`: Distributed Power Management
 /// - `FT`: Fault tolerance
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum ClusterProfileServiceTypeEnum {
     #[serde(rename = "DRS")]
     #[strum(serialize = "DRS")]
@@ -9481,10 +8305,6 @@ pub enum ClusterProfileServiceTypeEnum {
     #[serde(rename = "FT")]
     #[strum(serialize = "FT")]
     Ft,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Defines the result status values for a
 /// *HostProfile*.*HostProfile.ExecuteHostProfile*
@@ -9505,7 +8325,7 @@ pub enum ClusterProfileServiceTypeEnum {
 /// - `error`: Profile execution generated an error.
 ///   
 ///   See *ProfileExecuteResult*.*ProfileExecuteResult.error*.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum ProfileExecuteResultStatusEnum {
     #[serde(rename = "success")]
     #[strum(serialize = "success")]
@@ -9516,10 +8336,6 @@ pub enum ProfileExecuteResultStatusEnum {
     #[serde(rename = "error")]
     #[strum(serialize = "error")]
     Error,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Types of host profile update.
 /// 
@@ -9528,16 +8344,12 @@ pub enum ProfileExecuteResultStatusEnum {
 /// - `Import`: Import host profile.
 /// - `Edit`: Edit host profile.
 /// - `Compose`: Compose setting from host profile.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostProfileValidationFailureInfoUpdateTypeEnum {
     HostBased,
     Import,
     Edit,
     Compose,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// This defines validation state values for host profile.
 /// 
@@ -9545,15 +8357,11 @@ pub enum HostProfileValidationFailureInfoUpdateTypeEnum {
 /// - `Ready`
 /// - `Running`
 /// - `Failed`
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostProfileValidationStateEnum {
     Ready,
     Running,
     Failed,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The *HostProfileManagerAnswerFileStatus_enum* enum
 /// defines possible values for answer file status.
@@ -9573,7 +8381,7 @@ pub enum HostProfileValidationStateEnum {
 ///     list. After you execute the profile successfully, you can pass the complete required
 ///     input list to the apply method.
 /// - `unknown`: Answer file status is not known.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostProfileManagerAnswerFileStatusEnum {
     #[serde(rename = "valid")]
     #[strum(serialize = "valid")]
@@ -9584,10 +8392,6 @@ pub enum HostProfileManagerAnswerFileStatusEnum {
     #[serde(rename = "unknown")]
     #[strum(serialize = "unknown")]
     Unknown,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `success`: Remediation succeeded.
@@ -9604,7 +8408,7 @@ pub enum HostProfileManagerAnswerFileStatusEnum {
 ///   be done.
 /// - `exit_maintenancemode_failed`: Exit maintenance mode failed.
 /// - `canceled`: The remediation was canceled.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum ApplyHostProfileConfigurationResultStatusEnum {
     #[serde(rename = "success")]
     #[strum(serialize = "success")]
@@ -9630,17 +8434,13 @@ pub enum ApplyHostProfileConfigurationResultStatusEnum {
     #[serde(rename = "canceled")]
     #[strum(serialize = "canceled")]
     Canceled,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The composition status class.
 /// 
 /// Possible values:
 /// - `success`
 /// - `error`
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostProfileManagerCompositionResultResultElementStatusEnum {
     #[serde(rename = "success")]
     #[strum(serialize = "success")]
@@ -9648,17 +8448,13 @@ pub enum HostProfileManagerCompositionResultResultElementStatusEnum {
     #[serde(rename = "error")]
     #[strum(serialize = "error")]
     Error,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The composition validation status class.
 /// 
 /// Possible values:
 /// - `success`
 /// - `error`
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostProfileManagerCompositionValidationResultResultElementStatusEnum {
     #[serde(rename = "success")]
     #[strum(serialize = "success")]
@@ -9666,10 +8462,6 @@ pub enum HostProfileManagerCompositionValidationResultResultElementStatusEnum {
     #[serde(rename = "error")]
     #[strum(serialize = "error")]
     Error,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The *HostProfileManagerTaskListRequirement_enum* enum
 /// defines possible values for requirements when applying a *HostConfigSpec*
@@ -9682,7 +8474,7 @@ pub enum HostProfileManagerCompositionValidationResultResultElementStatusEnum {
 /// - `rebootRequired`: The ESXi host must be rebooted after the task list is applied in order
 ///   for the new settings in the *HostConfigSpec* to take
 ///   effect on the host.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostProfileManagerTaskListRequirementEnum {
     #[serde(rename = "maintenanceModeRequired")]
     #[strum(serialize = "maintenanceModeRequired")]
@@ -9690,10 +8482,6 @@ pub enum HostProfileManagerTaskListRequirementEnum {
     #[serde(rename = "rebootRequired")]
     #[strum(serialize = "rebootRequired")]
     RebootRequired,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Defines the result status values for a validating answer file.
 /// 
@@ -9701,7 +8489,7 @@ pub enum HostProfileManagerTaskListRequirementEnum {
 /// - `success`: Answer File validation was successful.
 /// - `failed`: Answer File validation failed.
 /// - `failed_defaults`: Answer File validation failed to generate default.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum AnswerFileValidationInfoStatusEnum {
     #[serde(rename = "success")]
     #[strum(serialize = "success")]
@@ -9712,10 +8500,6 @@ pub enum AnswerFileValidationInfoStatusEnum {
     #[serde(rename = "failed_defaults")]
     #[strum(serialize = "failed_defaults")]
     FailedDefaults,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `sunday`
@@ -9725,7 +8509,7 @@ pub enum AnswerFileValidationInfoStatusEnum {
 /// - `thursday`
 /// - `friday`
 /// - `saturday`
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum DayOfWeekEnum {
     #[serde(rename = "sunday")]
     #[strum(serialize = "sunday")]
@@ -9748,10 +8532,6 @@ pub enum DayOfWeekEnum {
     #[serde(rename = "saturday")]
     #[strum(serialize = "saturday")]
     Saturday,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `first`
@@ -9759,7 +8539,7 @@ pub enum DayOfWeekEnum {
 /// - `third`
 /// - `fourth`
 /// - `last`
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum WeekOfMonthEnum {
     #[serde(rename = "first")]
     #[strum(serialize = "first")]
@@ -9776,10 +8556,6 @@ pub enum WeekOfMonthEnum {
     #[serde(rename = "last")]
     #[strum(serialize = "last")]
     Last,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Rule scope determines conditions when an affinity rule is
 /// satisfied.
@@ -9795,7 +8571,7 @@ pub enum WeekOfMonthEnum {
 /// - `host`: individual hosts are the scope
 /// - `storagePod`: datastore cluster is teh scope
 /// - `datastore`: individual datastores are the scope
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum PlacementAffinityRuleRuleScopeEnum {
     #[serde(rename = "cluster")]
     #[strum(serialize = "cluster")]
@@ -9809,10 +8585,6 @@ pub enum PlacementAffinityRuleRuleScopeEnum {
     #[serde(rename = "datastore")]
     #[strum(serialize = "datastore")]
     Datastore,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Rule type determines how the affinity rule is to be enforced:
 /// affinity: Vms in the list are kept together within the rule
@@ -9827,7 +8599,7 @@ pub enum PlacementAffinityRuleRuleScopeEnum {
 /// - `antiAffinity`: Anti-Affinity
 /// - `softAffinity`: Best-effort affinity
 /// - `softAntiAffinity`: Best-effort anti-affinity
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum PlacementAffinityRuleRuleTypeEnum {
     #[serde(rename = "affinity")]
     #[strum(serialize = "affinity")]
@@ -9841,10 +8613,6 @@ pub enum PlacementAffinityRuleRuleTypeEnum {
     #[serde(rename = "softAntiAffinity")]
     #[strum(serialize = "softAntiAffinity")]
     SoftAntiAffinity,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Storage DRS behavior.
 /// 
@@ -9859,7 +8627,7 @@ pub enum PlacementAffinityRuleRuleTypeEnum {
 ///   The recommendations for virtual disk migrations
 ///   will be executed automatically, but the placement
 ///   recommendations will be done manually.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum StorageDrsPodConfigInfoBehaviorEnum {
     #[serde(rename = "manual")]
     #[strum(serialize = "manual")]
@@ -9867,17 +8635,13 @@ pub enum StorageDrsPodConfigInfoBehaviorEnum {
     #[serde(rename = "automated")]
     #[strum(serialize = "automated")]
     Automated,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Defines the two ways a space utilization threshold can be specified.
 /// 
 /// Possible values:
 /// - `utilization`: Default mode: threshold as a percentage of datastore capacity
 /// - `freeSpace`: Threshold as an absolute value of free space in GBs
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum StorageDrsSpaceLoadBalanceConfigSpaceThresholdModeEnum {
     #[serde(rename = "utilization")]
     #[strum(serialize = "utilization")]
@@ -9885,10 +8649,6 @@ pub enum StorageDrsSpaceLoadBalanceConfigSpaceThresholdModeEnum {
     #[serde(rename = "freeSpace")]
     #[strum(serialize = "freeSpace")]
     FreeSpace,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Defines the storage placement operation type.
 /// 
@@ -9897,7 +8657,7 @@ pub enum StorageDrsSpaceLoadBalanceConfigSpaceThresholdModeEnum {
 /// - `reconfigure`: Reconfigure a VM.
 /// - `relocate`: Relocate a VM.
 /// - `clone`: Clone a VM.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum StoragePlacementSpecPlacementTypeEnum {
     #[serde(rename = "create")]
     #[strum(serialize = "create")]
@@ -9911,10 +8671,6 @@ pub enum StoragePlacementSpecPlacementTypeEnum {
     #[serde(rename = "clone")]
     #[strum(serialize = "clone")]
     Clone,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Rule type determines how the virtual disks in a vm can be grouped
 /// together.
@@ -9924,7 +8680,7 @@ pub enum StoragePlacementSpecPlacementTypeEnum {
 ///   the same data store.
 /// - `antiAffinity`: Virtual disks in the list are placed on different data stores.
 /// - `disabled`: SDRS will be disabled for the disks in the list.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualDiskRuleSpecRuleTypeEnum {
     #[serde(rename = "affinity")]
     #[strum(serialize = "affinity")]
@@ -9935,10 +8691,6 @@ pub enum VirtualDiskRuleSpecRuleTypeEnum {
     #[serde(rename = "disabled")]
     #[strum(serialize = "disabled")]
     Disabled,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The cloned VMs can either be provisioned the same way as the VMs
 /// they are a clone of, thin provisioned or thick provisioned, or
@@ -9955,7 +8707,7 @@ pub enum VirtualDiskRuleSpecRuleTypeEnum {
 ///   create thick disks.
 /// - `thick`: Each disk in the cloned virtual machines are allocated and
 ///   committed in full size immediately.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VAppCloneSpecProvisioningTypeEnum {
     #[serde(rename = "sameAsSource")]
     #[strum(serialize = "sameAsSource")]
@@ -9966,10 +8718,6 @@ pub enum VAppCloneSpecProvisioningTypeEnum {
     #[serde(rename = "thick")]
     #[strum(serialize = "thick")]
     Thick,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `none`: No action is taken for this virtual machine.
@@ -9984,7 +8732,7 @@ pub enum VAppCloneSpecProvisioningTypeEnum {
 /// - `guestShutdown`: The guest operating system for a virtual machine is shut down when that
 ///   virtual machine in next in the auto-stop order.
 /// - `suspend`: This virtual machine is suspended when it is next in the auto-stop order.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VAppAutoStartActionEnum {
     #[serde(rename = "none")]
     #[strum(serialize = "none")]
@@ -10001,10 +8749,6 @@ pub enum VAppAutoStartActionEnum {
     #[serde(rename = "suspend")]
     #[strum(serialize = "suspend")]
     Suspend,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// IP allocation schemes supported by the guest.
 /// 
@@ -10012,7 +8756,7 @@ pub enum VAppAutoStartActionEnum {
 /// - `dhcp`: The vApp supports DHCP to acquire IP configuration.
 /// - `ovfenv`: The vApp supports setting the IP configuration through the
 ///   properties provided in the OVF environment.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VAppIpAssignmentInfoAllocationSchemesEnum {
     #[serde(rename = "dhcp")]
     #[strum(serialize = "dhcp")]
@@ -10020,10 +8764,6 @@ pub enum VAppIpAssignmentInfoAllocationSchemesEnum {
     #[serde(rename = "ovfenv")]
     #[strum(serialize = "ovfenv")]
     Ovfenv,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// IP allocation policy for a deployment.
 /// 
@@ -10046,7 +8786,7 @@ pub enum VAppIpAssignmentInfoAllocationSchemesEnum {
 ///   The IP addresses are allocated at first power-on, and remain
 ///   allocated at power-off. This will ensure that a vApp gets a consistent
 ///   IP for its life-time.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VAppIpAssignmentInfoIpAllocationPolicyEnum {
     #[serde(rename = "dhcpPolicy")]
     #[strum(serialize = "dhcpPolicy")]
@@ -10060,31 +8800,23 @@ pub enum VAppIpAssignmentInfoIpAllocationPolicyEnum {
     #[serde(rename = "fixedAllocatedPolicy")]
     #[strum(serialize = "fixedAllocatedPolicy")]
     FixedAllocatedPolicy,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// IP protocols supported by the guest.
 /// 
 /// Possible values:
 /// - `IPv4`: The vApp supports IPv4 protocol.
 /// - `IPv6`: The vApp supports IPv6 protocol.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VAppIpAssignmentInfoProtocolsEnum {
     IPv4,
     IPv6,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `configured`: VCHA cluster is configured.
 /// - `notConfigured`: VCHA cluster is not configured.
 /// - `invalid`: VCHA cluster is in an invalid/dirty state.
 /// - `prepared`: VC appliance has been prepared for VCHA cluster configuration.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VchaStateEnum {
     #[serde(rename = "configured")]
     #[strum(serialize = "configured")]
@@ -10098,10 +8830,6 @@ pub enum VchaStateEnum {
     #[serde(rename = "prepared")]
     #[strum(serialize = "prepared")]
     Prepared,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// VchaClusterMode enum defines the possible modes for a VCHA Cluster.
 /// 
@@ -10119,7 +8847,7 @@ pub enum VchaStateEnum {
 ///   State replication between the
 ///   Active and Passive node is enabled but automatic failover
 ///   is not allowed.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VchaClusterModeEnum {
     #[serde(rename = "enabled")]
     #[strum(serialize = "enabled")]
@@ -10130,10 +8858,6 @@ pub enum VchaClusterModeEnum {
     #[serde(rename = "maintenance")]
     #[strum(serialize = "maintenance")]
     Maintenance,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// VchaClusterState enum defines the possible states for a VCHA Cluster.
 /// 
@@ -10149,7 +8873,7 @@ pub enum VchaClusterModeEnum {
 ///   
 ///   \- State replication between the Active and Passive node fails.
 /// - `isolated`: All three nodes are isolated from each other.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VchaClusterStateEnum {
     #[serde(rename = "healthy")]
     #[strum(serialize = "healthy")]
@@ -10160,10 +8884,6 @@ pub enum VchaClusterStateEnum {
     #[serde(rename = "isolated")]
     #[strum(serialize = "isolated")]
     Isolated,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `active`: Node is having a role of Active.
@@ -10179,7 +8899,7 @@ pub enum VchaClusterStateEnum {
 ///   
 ///   In this role, node acts as a quorom
 ///   node for avoiding the classic split-brain problem.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VchaNodeRoleEnum {
     #[serde(rename = "active")]
     #[strum(serialize = "active")]
@@ -10190,10 +8910,6 @@ pub enum VchaNodeRoleEnum {
     #[serde(rename = "witness")]
     #[strum(serialize = "witness")]
     Witness,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// VchaNodeState enum defines possible state a node can be in a
 /// VCHA Cluster.
@@ -10201,7 +8917,7 @@ pub enum VchaNodeRoleEnum {
 /// Possible values:
 /// - `up`: Node is up and has joined the VCHA Cluster.
 /// - `down`: Node is down and has left the VCHA Cluster.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VchaNodeStateEnum {
     #[serde(rename = "up")]
     #[strum(serialize = "up")]
@@ -10209,10 +8925,6 @@ pub enum VchaNodeStateEnum {
     #[serde(rename = "down")]
     #[strum(serialize = "down")]
     Down,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `ipv4`: PXE (or Apple NetBoot) over IPv4.
@@ -10221,7 +8933,7 @@ pub enum VchaNodeStateEnum {
 /// - `ipv6`: PXE over IPv6.
 ///   
 ///   Only meaningful for EFI virtual machines.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualMachineBootOptionsNetworkBootProtocolTypeEnum {
     #[serde(rename = "ipv4")]
     #[strum(serialize = "ipv4")]
@@ -10229,10 +8941,6 @@ pub enum VirtualMachineBootOptionsNetworkBootProtocolTypeEnum {
     #[serde(rename = "ipv6")]
     #[strum(serialize = "ipv6")]
     Ipv6,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Set of supported hash algorithms for thumbprints.
 /// 
@@ -10240,15 +8948,11 @@ pub enum VirtualMachineBootOptionsNetworkBootProtocolTypeEnum {
 /// - `sha256`: SHA256
 ///   
 /// ***Since:*** vSphere API Release 7.0.3.1
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualMachineCertThumbprintHashAlgorithmEnum {
     #[serde(rename = "sha256")]
     #[strum(serialize = "sha256")]
     Sha256,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// TPM provisioning policies used when cloning a VM with a virtual TPM
 /// device.
@@ -10264,7 +8968,7 @@ pub enum VirtualMachineCertThumbprintHashAlgorithmEnum {
 ///   will not have access to the original virtual machine's TPM secrets.
 /// 
 /// ***Since:*** vSphere API Release 8.0.0.1
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualMachineCloneSpecTpmProvisionPolicyEnum {
     #[serde(rename = "copy")]
     #[strum(serialize = "copy")]
@@ -10272,10 +8976,6 @@ pub enum VirtualMachineCloneSpecTpmProvisionPolicyEnum {
     #[serde(rename = "replace")]
     #[strum(serialize = "replace")]
     Replace,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The NPIV WWN source type.
 /// 
@@ -10283,7 +8983,7 @@ pub enum VirtualMachineCloneSpecTpmProvisionPolicyEnum {
 /// - `vc`: This set of WWNs is generated by VC server.
 /// - `host`: This set of WWNs is generated by Host Agent.
 /// - `external`: This set of WWNs is provided by the client.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualMachineConfigInfoNpivWwnTypeEnum {
     #[serde(rename = "vc")]
     #[strum(serialize = "vc")]
@@ -10294,10 +8994,6 @@ pub enum VirtualMachineConfigInfoNpivWwnTypeEnum {
     #[serde(rename = "external")]
     #[strum(serialize = "external")]
     External,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Available choices for virtual machine swapfile placement policy.
 /// 
@@ -10322,7 +9018,7 @@ pub enum VirtualMachineConfigInfoNpivWwnTypeEnum {
 ///   swapfile in the same directory as the virtual machine.
 ///   
 ///   Note: This setting may degrade VMotion performance.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualMachineConfigInfoSwapPlacementTypeEnum {
     #[serde(rename = "inherit")]
     #[strum(serialize = "inherit")]
@@ -10333,10 +9029,6 @@ pub enum VirtualMachineConfigInfoSwapPlacementTypeEnum {
     #[serde(rename = "hostLocal")]
     #[strum(serialize = "hostLocal")]
     HostLocal,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The set of valid encrypted Fault Tolerance modes for a VM.
 /// 
@@ -10356,7 +9048,7 @@ pub enum VirtualMachineConfigInfoSwapPlacementTypeEnum {
 ///   do not allow the Fault Tolerance to occur.
 /// 
 /// ***Since:*** vSphere API Release 7.0.2.0
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualMachineConfigSpecEncryptedFtModesEnum {
     #[serde(rename = "ftEncryptionDisabled")]
     #[strum(serialize = "ftEncryptionDisabled")]
@@ -10367,10 +9059,6 @@ pub enum VirtualMachineConfigSpecEncryptedFtModesEnum {
     #[serde(rename = "ftEncryptionRequired")]
     #[strum(serialize = "ftEncryptionRequired")]
     FtEncryptionRequired,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The set of valid encrypted vMotion modes for a VM.
 /// 
@@ -10386,7 +9074,7 @@ pub enum VirtualMachineConfigSpecEncryptedFtModesEnum {
 ///   
 ///   If the source or destination host does
 ///   not support vMotion encryption, do not allow the vMotion to occur.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualMachineConfigSpecEncryptedVMotionModesEnum {
     #[serde(rename = "disabled")]
     #[strum(serialize = "disabled")]
@@ -10397,10 +9085,6 @@ pub enum VirtualMachineConfigSpecEncryptedVMotionModesEnum {
     #[serde(rename = "required")]
     #[strum(serialize = "required")]
     Required,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The root WWN operation mode.
 /// 
@@ -10413,7 +9097,7 @@ pub enum VirtualMachineConfigSpecEncryptedVMotionModesEnum {
 ///   than existing then we will append them to the existing list of WWNs.
 /// - `remove`: Remove the currently assigned WWNs from the virtual machine.
 /// - `extend`: Generate a new set of WWNs and append them to the existing list
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualMachineConfigSpecNpivWwnOpEnum {
     #[serde(rename = "generate")]
     #[strum(serialize = "generate")]
@@ -10427,10 +9111,6 @@ pub enum VirtualMachineConfigSpecNpivWwnOpEnum {
     #[serde(rename = "extend")]
     #[strum(serialize = "extend")]
     Extend,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The list of possible default power operations available for the virtual machine
 /// 
@@ -10438,7 +9118,7 @@ pub enum VirtualMachineConfigSpecNpivWwnOpEnum {
 /// - `soft`
 /// - `hard`
 /// - `preset`
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualMachinePowerOpTypeEnum {
     #[serde(rename = "soft")]
     #[strum(serialize = "soft")]
@@ -10449,10 +9129,6 @@ pub enum VirtualMachinePowerOpTypeEnum {
     #[serde(rename = "preset")]
     #[strum(serialize = "preset")]
     Preset,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The list of possible standby actions that the virtual machine can take
 /// for S1 ACPI.
@@ -10460,7 +9136,7 @@ pub enum VirtualMachinePowerOpTypeEnum {
 /// Possible values:
 /// - `checkpoint`
 /// - `powerOnSuspend`
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualMachineStandbyActionTypeEnum {
     #[serde(rename = "checkpoint")]
     #[strum(serialize = "checkpoint")]
@@ -10468,10 +9144,6 @@ pub enum VirtualMachineStandbyActionTypeEnum {
     #[serde(rename = "powerOnSuspend")]
     #[strum(serialize = "powerOnSuspend")]
     PowerOnSuspend,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `vmNptIncompatibleHost`: The virtual machine's host does not support VMDirectPath Gen 2.
@@ -10486,7 +9158,7 @@ pub enum VirtualMachineStandbyActionTypeEnum {
 ///   *vmDirectPathGen2InactiveReasonExtended*
 ///   in the RuntimeInfo of the DistributedVirtualPort connected to this
 ///   device.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeStateVmDirectPathGen2InactiveReasonOtherEnum {
     #[serde(rename = "vmNptIncompatibleHost")]
     #[strum(serialize = "vmNptIncompatibleHost")]
@@ -10494,10 +9166,6 @@ pub enum VirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeStateVmDirectP
     #[serde(rename = "vmNptIncompatibleNetwork")]
     #[strum(serialize = "vmNptIncompatibleNetwork")]
     VmNptIncompatibleNetwork,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `vmNptIncompatibleGuest`: The virtual machine's guest OS does not support
@@ -10543,7 +9211,7 @@ pub enum VirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeStateVmDirectP
 ///   Kill the relevant VMCI
 ///   application(s) and restart the VM will allow the vNIC(s) to enter
 ///   passthrough mode.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeStateVmDirectPathGen2InactiveReasonVmEnum {
     #[serde(rename = "vmNptIncompatibleGuest")]
     #[strum(serialize = "vmNptIncompatibleGuest")]
@@ -10587,10 +9255,6 @@ pub enum VirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeStateVmDirectP
     #[serde(rename = "vmNptVMCIActive")]
     #[strum(serialize = "vmNptVMCIActive")]
     VmNptVmciActive,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// File-type constants.
 /// 
@@ -10630,7 +9294,7 @@ pub enum VirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeStateVmDirectP
 /// - `screenshot`: Screenshot file.
 /// - `ftMetadata`: Fault Tolerance metadata file.
 /// - `guestCustomization`: Guest image customization file.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualMachineFileLayoutExFileTypeEnum {
     #[serde(rename = "config")]
     #[strum(serialize = "config")]
@@ -10707,10 +9371,6 @@ pub enum VirtualMachineFileLayoutExFileTypeEnum {
     #[serde(rename = "guestCustomization")]
     #[strum(serialize = "guestCustomization")]
     GuestCustomization,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Deprecated as of vSphere API 6.7.
 /// 
@@ -10736,7 +9396,7 @@ pub enum VirtualMachineFileLayoutExFileTypeEnum {
 ///   configuration option is only permitted for SMP virtual
 ///   machines. If applied to a uniprocessor virtual machine, it
 ///   will be converted to the "none" sharing option.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualMachineHtSharingEnum {
     #[serde(rename = "any")]
     #[strum(serialize = "any")]
@@ -10747,10 +9407,6 @@ pub enum VirtualMachineHtSharingEnum {
     #[serde(rename = "internal")]
     #[strum(serialize = "internal")]
     Internal,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Set of possible values for *VirtualMachineFlagInfo.monitorType*.
 /// 
@@ -10758,7 +9414,7 @@ pub enum VirtualMachineHtSharingEnum {
 /// - `release`: Run vmx in default mode, matching the build type of vmkernel.
 /// - `debug`: Run vmx in debug mode.
 /// - `stats`: Run vmx in stats mode.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualMachineFlagInfoMonitorTypeEnum {
     #[serde(rename = "release")]
     #[strum(serialize = "release")]
@@ -10769,10 +9425,6 @@ pub enum VirtualMachineFlagInfoMonitorTypeEnum {
     #[serde(rename = "stats")]
     #[strum(serialize = "stats")]
     Stats,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Set of possible values for *VirtualMachineFlagInfo.snapshotPowerOffBehavior*.
 /// 
@@ -10781,7 +9433,7 @@ pub enum VirtualMachineFlagInfoMonitorTypeEnum {
 /// - `revert`: Revert to the snapshot.
 /// - `prompt`: Prompt the user for instructions at power-off time.
 /// - `take`: Take a new snapshot.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualMachinePowerOffBehaviorEnum {
     #[serde(rename = "powerOff")]
     #[strum(serialize = "powerOff")]
@@ -10795,10 +9447,6 @@ pub enum VirtualMachinePowerOffBehaviorEnum {
     #[serde(rename = "take")]
     #[strum(serialize = "take")]
     Take,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Set of possible values for *VirtualMachineFlagInfo.virtualExecUsage*.
 /// 
@@ -10806,7 +9454,7 @@ pub enum VirtualMachinePowerOffBehaviorEnum {
 /// - `hvAuto`: Determine automatically whether to use hardware virtualization (HV) support.
 /// - `hvOn`: Use hardware virtualization (HV) support if the physical hardware supports it.
 /// - `hvOff`: Do not use hardware virtualization (HV) support.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualMachineFlagInfoVirtualExecUsageEnum {
     #[serde(rename = "hvAuto")]
     #[strum(serialize = "hvAuto")]
@@ -10817,10 +9465,6 @@ pub enum VirtualMachineFlagInfoVirtualExecUsageEnum {
     #[serde(rename = "hvOff")]
     #[strum(serialize = "hvOff")]
     HvOff,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Set of possible values for *VirtualMachineFlagInfo.virtualMmuUsage*.
 /// 
@@ -10828,7 +9472,7 @@ pub enum VirtualMachineFlagInfoVirtualExecUsageEnum {
 /// - `automatic`: Determine automatically whether to use nested page table hardware support.
 /// - `on`: Use nested paging hardware support if the physical hardware supports it.
 /// - `off`: Do not use nested page table hardware support.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualMachineFlagInfoVirtualMmuUsageEnum {
     #[serde(rename = "automatic")]
     #[strum(serialize = "automatic")]
@@ -10839,10 +9483,6 @@ pub enum VirtualMachineFlagInfoVirtualMmuUsageEnum {
     #[serde(rename = "off")]
     #[strum(serialize = "off")]
     Off,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Fork child type.
 /// 
@@ -10853,7 +9493,7 @@ pub enum VirtualMachineFlagInfoVirtualMmuUsageEnum {
 /// - `none`: The virtual machine is not a child.
 /// - `persistent`: The virtual machine is a persistent child.
 /// - `nonpersistent`: The virtual machine is a non-persistent child.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualMachineForkConfigInfoChildTypeEnum {
     #[serde(rename = "none")]
     #[strum(serialize = "none")]
@@ -10864,10 +9504,6 @@ pub enum VirtualMachineForkConfigInfoChildTypeEnum {
     #[serde(rename = "nonpersistent")]
     #[strum(serialize = "nonpersistent")]
     Nonpersistent,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Application state type.
 /// 
@@ -10878,7 +9514,7 @@ pub enum VirtualMachineForkConfigInfoChildTypeEnum {
 /// - `appStateOk`: The guest's application agent declared its state as normal and doesn't
 ///   require any action
 /// - `appStateNeedReset`: Guest's application agent asks for immediate reset
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum GuestInfoAppStateTypeEnum {
     #[serde(rename = "none")]
     #[strum(serialize = "none")]
@@ -10889,10 +9525,6 @@ pub enum GuestInfoAppStateTypeEnum {
     #[serde(rename = "appStateNeedReset")]
     #[strum(serialize = "appStateNeedReset")]
     AppStateNeedReset,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Guest customization status
 /// 
@@ -10906,7 +9538,7 @@ pub enum GuestInfoAppStateTypeEnum {
 /// - `TOOLSDEPLOYPKG_FAILED`: The customizatio process has failed inside the guest OS
 ///   
 /// ***Since:*** vSphere API Release 7.0.2.0
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum GuestInfoCustomizationStatusEnum {
     #[serde(rename = "TOOLSDEPLOYPKG_IDLE")]
     #[strum(serialize = "TOOLSDEPLOYPKG_IDLE")]
@@ -10923,10 +9555,6 @@ pub enum GuestInfoCustomizationStatusEnum {
     #[serde(rename = "TOOLSDEPLOYPKG_FAILED")]
     #[strum(serialize = "TOOLSDEPLOYPKG_FAILED")]
     ToolsdeploypkgFailed,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The possible hints that the guest could display about current tasks
 /// inside the guest.
@@ -10938,7 +9566,7 @@ pub enum GuestInfoCustomizationStatusEnum {
 /// - `standby`
 /// - `notRunning`
 /// - `unknown`
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualMachineGuestStateEnum {
     #[serde(rename = "running")]
     #[strum(serialize = "running")]
@@ -10958,10 +9586,6 @@ pub enum VirtualMachineGuestStateEnum {
     #[serde(rename = "unknown")]
     #[strum(serialize = "unknown")]
     Unknown,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The installation type of tools in the VM.
 /// 
@@ -10979,7 +9603,7 @@ pub enum VirtualMachineGuestStateEnum {
 ///   See http://packages.vmware.com
 /// - `guestToolsTypeOpenVMTools`: open-vm-tools are the open-source version of VMware Tools, may have
 ///   been packaged by the OS vendor.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualMachineToolsInstallTypeEnum {
     #[serde(rename = "guestToolsTypeUnknown")]
     #[strum(serialize = "guestToolsTypeUnknown")]
@@ -10996,10 +9620,6 @@ pub enum VirtualMachineToolsInstallTypeEnum {
     #[serde(rename = "guestToolsTypeOpenVMTools")]
     #[strum(serialize = "guestToolsTypeOpenVMTools")]
     GuestToolsTypeOpenVmTools,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Current running status of VMware Tools running in the guest
 /// operating system.
@@ -11008,7 +9628,7 @@ pub enum VirtualMachineToolsInstallTypeEnum {
 /// - `guestToolsNotRunning`: VMware Tools is not running.
 /// - `guestToolsRunning`: VMware Tools is running.
 /// - `guestToolsExecutingScripts`: VMware Tools is starting.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualMachineToolsRunningStatusEnum {
     #[serde(rename = "guestToolsNotRunning")]
     #[strum(serialize = "guestToolsNotRunning")]
@@ -11019,10 +9639,6 @@ pub enum VirtualMachineToolsRunningStatusEnum {
     #[serde(rename = "guestToolsExecutingScripts")]
     #[strum(serialize = "guestToolsExecutingScripts")]
     GuestToolsExecutingScripts,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Deprecated as of vSphere API 4.0 use *VirtualMachineToolsVersionStatus_enum*
 /// and *VirtualMachineToolsRunningStatus_enum*.
@@ -11035,7 +9651,7 @@ pub enum VirtualMachineToolsRunningStatusEnum {
 /// - `toolsNotRunning`: VMware Tools is not running.
 /// - `toolsOld`: VMware Tools is running, but the version is not current.
 /// - `toolsOk`: VMware Tools is running and the version is current.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualMachineToolsStatusEnum {
     #[serde(rename = "toolsNotInstalled")]
     #[strum(serialize = "toolsNotInstalled")]
@@ -11049,10 +9665,6 @@ pub enum VirtualMachineToolsStatusEnum {
     #[serde(rename = "toolsOk")]
     #[strum(serialize = "toolsOk")]
     ToolsOk,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Current version status of VMware Tools installed in the guest operating
 /// system.
@@ -11075,7 +9687,7 @@ pub enum VirtualMachineToolsStatusEnum {
 ///   too new to work correctly with this virtual machine.
 /// - `guestToolsBlacklisted`: VMware Tools is installed, but the installed version is
 ///   known to have a grave bug and should be immediately upgraded.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualMachineToolsVersionStatusEnum {
     #[serde(rename = "guestToolsNotInstalled")]
     #[strum(serialize = "guestToolsNotInstalled")]
@@ -11104,17 +9716,13 @@ pub enum VirtualMachineToolsVersionStatusEnum {
     #[serde(rename = "guestToolsBlacklisted")]
     #[strum(serialize = "guestToolsBlacklisted")]
     GuestToolsBlacklisted,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Firmware types
 /// 
 /// Possible values:
 /// - `bios`: BIOS firmware
 /// - `efi`: Extensible Firmware Interface
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum GuestOsDescriptorFirmwareTypeEnum {
     #[serde(rename = "bios")]
     #[strum(serialize = "bios")]
@@ -11122,10 +9730,6 @@ pub enum GuestOsDescriptorFirmwareTypeEnum {
     #[serde(rename = "efi")]
     #[strum(serialize = "efi")]
     Efi,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Guest operating system family constants.
 /// 
@@ -11136,7 +9740,7 @@ pub enum GuestOsDescriptorFirmwareTypeEnum {
 /// - `solarisGuest`: Solaris operating system
 /// - `darwinGuestFamily`: Mac OS operating system
 /// - `otherGuestFamily`: Other operating systems
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualMachineGuestOsFamilyEnum {
     #[serde(rename = "windowsGuest")]
     #[strum(serialize = "windowsGuest")]
@@ -11156,10 +9760,6 @@ pub enum VirtualMachineGuestOsFamilyEnum {
     #[serde(rename = "otherGuestFamily")]
     #[strum(serialize = "otherGuestFamily")]
     OtherGuestFamily,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Guest operating system identifier.
 /// 
@@ -11413,7 +10013,7 @@ pub enum VirtualMachineGuestOsFamilyEnum {
 ///   ***Since:*** vSphere API Release 8.0.0.1
 /// - `otherGuest`: Other Operating System
 /// - `otherGuest64`: Other Operating System (64 bit)
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualMachineGuestOsIdentifierEnum {
     #[serde(rename = "dosGuest")]
     #[strum(serialize = "dosGuest")]
@@ -12000,10 +10600,6 @@ pub enum VirtualMachineGuestOsIdentifierEnum {
     #[serde(rename = "otherGuest64")]
     #[strum(serialize = "otherGuest64")]
     OtherGuest64,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Guest OS support level
 /// 
@@ -12020,7 +10616,7 @@ pub enum VirtualMachineGuestOsIdentifierEnum {
 ///   Please migrate to using a different operating system.
 /// - `techPreview`: This operating system may not be supported yet,
 ///   please check VMware compatibility guide.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum GuestOsDescriptorSupportLevelEnum {
     #[serde(rename = "experimental")]
     #[strum(serialize = "experimental")]
@@ -12043,53 +10639,37 @@ pub enum GuestOsDescriptorSupportLevelEnum {
     #[serde(rename = "techPreview")]
     #[strum(serialize = "techPreview")]
     TechPreview,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// End guest quiesce phase error types.
 /// 
 /// Possible values:
 /// - `failure`: Fail the end phase of guest quiesce creation.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum GuestQuiesceEndGuestQuiesceErrorEnum {
     #[serde(rename = "failure")]
     #[strum(serialize = "failure")]
     Failure,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// This enum represents the set of legal operations
 /// 
 /// Possible values:
 /// - `Update`: Create or update the Metadata for the specified VM
 /// - `Remove`: Remove the Metadata for the specified VM
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualMachineMetadataManagerVmMetadataOpEnum {
     Update,
     Remove,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// This enum contains a list of valid owner values for
 /// the name field
 /// 
 /// Possible values:
 /// - `ComVmwareVsphereHA`
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualMachineMetadataManagerVmMetadataOwnerOwnerEnum {
     #[serde(rename = "ComVmwareVsphereHA")]
     #[strum(serialize = "ComVmwareVsphereHA")]
     ComVmwareVsphereHa,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Specifies how a virtual disk is moved or copied to a
 /// datastore.
@@ -12158,7 +10738,7 @@ pub enum VirtualMachineMetadataManagerVmMetadataOwnerOwnerEnum {
 ///   During a *clone operation* or a
 ///   *VirtualMachine.MigrateVM_Task*, any delta disk backings will be
 ///   consolidated.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualMachineRelocateDiskMoveOptionsEnum {
     #[serde(rename = "moveAllDiskBackingsAndAllowSharing")]
     #[strum(serialize = "moveAllDiskBackingsAndAllowSharing")]
@@ -12175,10 +10755,6 @@ pub enum VirtualMachineRelocateDiskMoveOptionsEnum {
     #[serde(rename = "moveAllDiskBackingsAndConsolidate")]
     #[strum(serialize = "moveAllDiskBackingsAndConsolidate")]
     MoveAllDiskBackingsAndConsolidate,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Deprecated as of vSphere API 5.0.
 /// 
@@ -12188,7 +10764,7 @@ pub enum VirtualMachineRelocateDiskMoveOptionsEnum {
 /// Possible values:
 /// - `flat`
 /// - `sparse`
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualMachineRelocateTransformationEnum {
     #[serde(rename = "flat")]
     #[strum(serialize = "flat")]
@@ -12196,10 +10772,6 @@ pub enum VirtualMachineRelocateTransformationEnum {
     #[serde(rename = "sparse")]
     #[strum(serialize = "sparse")]
     Sparse,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The policy setting used to determine when to perform scheduled
 /// upgrades for a virtual machine.
@@ -12208,7 +10780,7 @@ pub enum VirtualMachineRelocateTransformationEnum {
 /// - `never`: No scheduled upgrades.
 /// - `onSoftPowerOff`: Run scheduled upgrades only on normal guest OS shutdown.
 /// - `always`: Always run scheduled upgrades.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum ScheduledHardwareUpgradeInfoHardwareUpgradePolicyEnum {
     #[serde(rename = "never")]
     #[strum(serialize = "never")]
@@ -12219,10 +10791,6 @@ pub enum ScheduledHardwareUpgradeInfoHardwareUpgradePolicyEnum {
     #[serde(rename = "always")]
     #[strum(serialize = "always")]
     Always,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Status for last attempt to run scheduled hardware upgrade.
 /// 
@@ -12235,7 +10803,7 @@ pub enum ScheduledHardwareUpgradeInfoHardwareUpgradePolicyEnum {
 ///   For more information about the failure
 ///   
 ///   See also *ScheduledHardwareUpgradeInfo.fault*.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum ScheduledHardwareUpgradeInfoHardwareUpgradeStatusEnum {
     #[serde(rename = "none")]
     #[strum(serialize = "none")]
@@ -12249,10 +10817,6 @@ pub enum ScheduledHardwareUpgradeInfoHardwareUpgradeStatusEnum {
     #[serde(rename = "failed")]
     #[strum(serialize = "failed")]
     Failed,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible SCSI classes.
 /// 
@@ -12269,7 +10833,7 @@ pub enum ScheduledHardwareUpgradeInfoHardwareUpgradeStatusEnum {
 /// - `com`
 /// - `raid`
 /// - `unknown`
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualMachineScsiPassthroughTypeEnum {
     #[serde(rename = "disk")]
     #[strum(serialize = "disk")]
@@ -12307,10 +10871,6 @@ pub enum VirtualMachineScsiPassthroughTypeEnum {
     #[serde(rename = "unknown")]
     #[strum(serialize = "unknown")]
     Unknown,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Flexible Launch Enclave (FLC) modes.
 /// 
@@ -12323,7 +10883,7 @@ pub enum VirtualMachineScsiPassthroughTypeEnum {
 ///   
 ///   The "launch enclave MSRs" are writeable
 ///   and initialized with Intel's public key hash.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualMachineSgxInfoFlcModesEnum {
     #[serde(rename = "locked")]
     #[strum(serialize = "locked")]
@@ -12331,10 +10891,6 @@ pub enum VirtualMachineSgxInfoFlcModesEnum {
     #[serde(rename = "unlocked")]
     #[strum(serialize = "unlocked")]
     Unlocked,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Describes how widely the endpoint is available in a cluster.
 /// 
@@ -12344,7 +10900,7 @@ pub enum VirtualMachineSgxInfoFlcModesEnum {
 /// - `compliant`: Indicates that this device is part of the cluster compliant
 ///   specification.
 /// - `clusterWide`: Indicates that this is available for all hosts in the cluster.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualMachineTargetInfoConfigurationTagEnum {
     #[serde(rename = "compliant")]
     #[strum(serialize = "compliant")]
@@ -12352,10 +10908,6 @@ pub enum VirtualMachineTargetInfoConfigurationTagEnum {
     #[serde(rename = "clusterWide")]
     #[strum(serialize = "clusterWide")]
     ClusterWide,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The policy setting used to determine when tools are auto-upgraded for
 /// a virtual machine
@@ -12372,7 +10924,7 @@ pub enum VirtualMachineTargetInfoConfigurationTagEnum {
 ///   If it
 ///   is available, a tools upgrade is automatically performed on the
 ///   virtual machine and it is rebooted if necessary.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum UpgradePolicyEnum {
     #[serde(rename = "manual")]
     #[strum(serialize = "manual")]
@@ -12380,10 +10932,6 @@ pub enum UpgradePolicyEnum {
     #[serde(rename = "upgradeAtPowerCycle")]
     #[strum(serialize = "upgradeAtPowerCycle")]
     UpgradeAtPowerCycle,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Device class family.
 /// 
@@ -12410,7 +10958,7 @@ pub enum UpgradePolicyEnum {
 /// - `other`: Other miscellaneous device.
 /// - `unknownFamily`: There was an error in determining this device's classes
 ///   accurately.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualMachineUsbInfoFamilyEnum {
     #[serde(rename = "audio")]
     #[strum(serialize = "audio")]
@@ -12469,10 +11017,6 @@ pub enum VirtualMachineUsbInfoFamilyEnum {
     #[serde(rename = "unknownFamily")]
     #[strum(serialize = "unknownFamily")]
     UnknownFamily,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Device speed.
 /// 
@@ -12486,7 +11030,7 @@ pub enum VirtualMachineUsbInfoFamilyEnum {
 ///   
 ///   ***Since:*** vSphere API Release 7.0.3.2
 /// - `unknownSpeed`: This device's speed is unknown.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualMachineUsbInfoSpeedEnum {
     #[serde(rename = "low")]
     #[strum(serialize = "low")]
@@ -12509,10 +11053,6 @@ pub enum VirtualMachineUsbInfoSpeedEnum {
     #[serde(rename = "unknownSpeed")]
     #[strum(serialize = "unknownSpeed")]
     UnknownSpeed,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Type of component device.
 /// 
@@ -12523,7 +11063,7 @@ pub enum VirtualMachineUsbInfoSpeedEnum {
 /// - `dvx`
 /// 
 /// ***Since:*** vSphere API Release 8.0.0.1
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualMachineVendorDeviceGroupInfoComponentDeviceInfoComponentTypeEnum {
     #[serde(rename = "pciPassthru")]
     #[strum(serialize = "pciPassthru")]
@@ -12537,10 +11077,6 @@ pub enum VirtualMachineVendorDeviceGroupInfoComponentDeviceInfoComponentTypeEnum
     #[serde(rename = "dvx")]
     #[strum(serialize = "dvx")]
     Dvx,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values for profile class.
 /// 
@@ -12549,7 +11085,7 @@ pub enum VirtualMachineVendorDeviceGroupInfoComponentDeviceInfoComponentTypeEnum
 /// - `quadro`
 /// 
 /// ***Since:*** vSphere API Release 7.0.3.0
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualMachineVgpuProfileInfoProfileClassEnum {
     #[serde(rename = "compute")]
     #[strum(serialize = "compute")]
@@ -12557,10 +11093,6 @@ pub enum VirtualMachineVgpuProfileInfoProfileClassEnum {
     #[serde(rename = "quadro")]
     #[strum(serialize = "quadro")]
     Quadro,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values for profile sharing.
 /// 
@@ -12569,7 +11101,7 @@ pub enum VirtualMachineVgpuProfileInfoProfileClassEnum {
 /// - `mig`: Multi-instance GPU partitioning
 ///   
 /// ***Since:*** vSphere API Release 7.0.3.0
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualMachineVgpuProfileInfoProfileSharingEnum {
     #[serde(rename = "timeSliced")]
     #[strum(serialize = "timeSliced")]
@@ -12577,10 +11109,6 @@ pub enum VirtualMachineVgpuProfileInfoProfileSharingEnum {
     #[serde(rename = "mig")]
     #[strum(serialize = "mig")]
     Mig,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `none`: No operation active.
@@ -12590,7 +11118,7 @@ pub enum VirtualMachineVgpuProfileInfoProfileSharingEnum {
 /// - `completed`: Device swap successfully completed.
 ///   
 /// ***Since:*** vSphere API Release 8.0.0.1
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualMachineVirtualDeviceSwapDeviceSwapStatusEnum {
     #[serde(rename = "none")]
     #[strum(serialize = "none")]
@@ -12607,10 +11135,6 @@ pub enum VirtualMachineVirtualDeviceSwapDeviceSwapStatusEnum {
     #[serde(rename = "completed")]
     #[strum(serialize = "completed")]
     Completed,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Motherboard layout of the VM.
 /// 
@@ -12619,7 +11143,7 @@ pub enum VirtualMachineVirtualDeviceSwapDeviceSwapStatusEnum {
 /// - `acpiHostBridges`: Multiple ACPI host bridges.
 ///   
 /// ***Since:*** vSphere API Release 8.0.0.1
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualHardwareMotherboardLayoutEnum {
     #[serde(rename = "i440bxHostBridge")]
     #[strum(serialize = "i440bxHostBridge")]
@@ -12627,10 +11151,6 @@ pub enum VirtualHardwareMotherboardLayoutEnum {
     #[serde(rename = "acpiHostBridges")]
     #[strum(serialize = "acpiHostBridges")]
     AcpiHostBridges,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The set of supported snapshot modes for VMs configured with NVDIMMs.
 /// 
@@ -12642,7 +11162,7 @@ pub enum VirtualHardwareMotherboardLayoutEnum {
 /// - `independent_eraseonrevert`: Virtual NVDIMMs are erased and recreated upon snapshot reverts.
 ///   
 /// ***Since:*** vSphere API Release 7.0.3.0
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualMachineVirtualPMemSnapshotModeEnum {
     #[serde(rename = "independent_persistent")]
     #[strum(serialize = "independent_persistent")]
@@ -12650,10 +11170,6 @@ pub enum VirtualMachineVirtualPMemSnapshotModeEnum {
     #[serde(rename = "independent_eraseonrevert")]
     #[strum(serialize = "independent_eraseonrevert")]
     IndependentEraseonrevert,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The VSS Snapshot Context
 /// VSS\_SNAPSHOT\_CONTEXT values not listed below are not implemented.
@@ -12666,7 +11182,7 @@ pub enum VirtualMachineVirtualPMemSnapshotModeEnum {
 ///   if ctx\_backup is not available.
 /// - `ctx_backup`: Indicate VSS\_CTX\_BACKUP.
 /// - `ctx_file_share_backup`: Indicate VSS\_CTX\_FILE\_SHARE\_BACKUP.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualMachineWindowsQuiesceSpecVssBackupContextEnum {
     #[serde(rename = "ctx_auto")]
     #[strum(serialize = "ctx_auto")]
@@ -12677,10 +11193,6 @@ pub enum VirtualMachineWindowsQuiesceSpecVssBackupContextEnum {
     #[serde(rename = "ctx_file_share_backup")]
     #[strum(serialize = "ctx_file_share_backup")]
     CtxFileShareBackup,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The types of tests which can requested by any of the methods in either
 /// *VirtualMachineCompatibilityChecker* or *VirtualMachineProvisioningChecker*.
@@ -12710,7 +11222,7 @@ pub enum VirtualMachineWindowsQuiesceSpecVssBackupContextEnum {
 /// - `networkTests`: Tests that check that the
 ///   destination host or cluster can see the networks that the virtual
 ///   machine's virtual nic devices are going to be connected.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum CheckTestTypeEnum {
     #[serde(rename = "sourceTests")]
     #[strum(serialize = "sourceTests")]
@@ -12727,10 +11239,6 @@ pub enum CheckTestTypeEnum {
     #[serde(rename = "networkTests")]
     #[strum(serialize = "networkTests")]
     NetworkTests,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// NetBIOS setting for Windows.
 /// 
@@ -12738,7 +11246,7 @@ pub enum CheckTestTypeEnum {
 /// - `enableNetBIOSViaDhcp`: DHCP server decides whether or not to use NetBIOS.
 /// - `enableNetBIOS`: Always use NetBIOS.
 /// - `disableNetBIOS`: Never use NetBIOS.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum CustomizationNetBiosModeEnum {
     #[serde(rename = "enableNetBIOSViaDhcp")]
     #[strum(serialize = "enableNetBIOSViaDhcp")]
@@ -12749,10 +11257,6 @@ pub enum CustomizationNetBiosModeEnum {
     #[serde(rename = "disableNetBIOS")]
     #[strum(serialize = "disableNetBIOS")]
     DisableNetBios,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Enumeration of AutoMode values.
 /// 
@@ -12762,7 +11266,7 @@ pub enum CustomizationNetBiosModeEnum {
 ///   server.
 /// - `perSeat`: Indicates that a client access license has been purchased for each computer
 ///   that accesses the VirtualCenter server.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum CustomizationLicenseDataModeEnum {
     #[serde(rename = "perServer")]
     #[strum(serialize = "perServer")]
@@ -12770,10 +11274,6 @@ pub enum CustomizationLicenseDataModeEnum {
     #[serde(rename = "perSeat")]
     #[strum(serialize = "perSeat")]
     PerSeat,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// A enum constant specifying what should be done to the guest vm after running
 /// sysprep.
@@ -12792,7 +11292,7 @@ pub enum CustomizationLicenseDataModeEnum {
 ///   
 ///   This puts the vm in a
 ///   sealed state.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum CustomizationSysprepRebootOptionEnum {
     #[serde(rename = "reboot")]
     #[strum(serialize = "reboot")]
@@ -12803,10 +11303,6 @@ pub enum CustomizationSysprepRebootOptionEnum {
     #[serde(rename = "shutdown")]
     #[strum(serialize = "shutdown")]
     Shutdown,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Contains information about connectable virtual devices when
 /// the virtual machine restores from a migration.
@@ -12826,7 +11322,7 @@ pub enum CustomizationSysprepRebootOptionEnum {
 ///   
 ///   Under most circumstances, a device will return to the same
 ///   connection state before the migration was initiated.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualDeviceConnectInfoMigrateConnectOpEnum {
     #[serde(rename = "connect")]
     #[strum(serialize = "connect")]
@@ -12837,10 +11333,6 @@ pub enum VirtualDeviceConnectInfoMigrateConnectOpEnum {
     #[serde(rename = "unset")]
     #[strum(serialize = "unset")]
     Unset,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Specifies the connectable virtual device status.
 /// 
@@ -12858,7 +11350,7 @@ pub enum VirtualDeviceConnectInfoMigrateConnectOpEnum {
 ///   a floppy device that does not exist would result in this status.
 /// - `untried`: The device status is unknown, or it has not been requested to
 ///   connect when the VM is powered on.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualDeviceConnectInfoStatusEnum {
     #[serde(rename = "ok")]
     #[strum(serialize = "ok")]
@@ -12872,10 +11364,6 @@ pub enum VirtualDeviceConnectInfoStatusEnum {
     #[serde(rename = "untried")]
     #[strum(serialize = "untried")]
     Untried,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// All known file extensions.
 /// 
@@ -12887,7 +11375,7 @@ pub enum VirtualDeviceConnectInfoStatusEnum {
 /// - `vmdk`: virtual disks
 /// - `dsk`: legacy virtual disks
 /// - `rdm`: pre 3.0 virtual disks using Raw Disk Maps
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualDeviceFileExtensionEnum {
     #[serde(rename = "iso")]
     #[strum(serialize = "iso")]
@@ -12904,10 +11392,6 @@ pub enum VirtualDeviceFileExtensionEnum {
     #[serde(rename = "rdm")]
     #[strum(serialize = "rdm")]
     Rdm,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The <code>VirtualDeviceURIBackingOptionDirection</code> enum type
 /// provides values for the direction of a network connection.
@@ -12918,7 +11402,7 @@ pub enum VirtualDeviceFileExtensionEnum {
 /// - `client`: Indicates that the virtual machine can initiate a connection
 ///   with a system on the network using the specified
 ///   *VirtualDeviceURIBackingInfo.serviceURI*.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualDeviceUriBackingOptionDirectionEnum {
     #[serde(rename = "server")]
     #[strum(serialize = "server")]
@@ -12926,10 +11410,6 @@ pub enum VirtualDeviceUriBackingOptionDirectionEnum {
     #[serde(rename = "client")]
     #[strum(serialize = "client")]
     Client,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Describes the change mode of the device.
 /// 
@@ -12941,7 +11421,7 @@ pub enum VirtualDeviceUriBackingOptionDirectionEnum {
 /// - `skip`
 /// 
 /// ***Since:*** vSphere API Release 8.0.0.1
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualDeviceConfigSpecChangeModeEnum {
     #[serde(rename = "fail")]
     #[strum(serialize = "fail")]
@@ -12949,10 +11429,6 @@ pub enum VirtualDeviceConfigSpecChangeModeEnum {
     #[serde(rename = "skip")]
     #[strum(serialize = "skip")]
     Skip,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The type of operation being performed on the backing of a virtual device.
 /// 
@@ -12964,7 +11440,7 @@ pub enum VirtualDeviceConfigSpecChangeModeEnum {
 /// - `destroy`: Specifies the destruction of a device backing.
 /// - `replace`: Specifies the deletion of the existing backing for a virtual device
 ///   and the creation of a new backing.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualDeviceConfigSpecFileOperationEnum {
     #[serde(rename = "create")]
     #[strum(serialize = "create")]
@@ -12975,10 +11451,6 @@ pub enum VirtualDeviceConfigSpecFileOperationEnum {
     #[serde(rename = "replace")]
     #[strum(serialize = "replace")]
     Replace,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The type of operation being performed on the specified virtual device.
 /// 
@@ -12988,7 +11460,7 @@ pub enum VirtualDeviceConfigSpecFileOperationEnum {
 /// - `add`: Specifies the addition of a virtual device to the configuration.
 /// - `remove`: Specifies the removal of a virtual device.
 /// - `edit`: Specifies changes to the virtual device specification.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualDeviceConfigSpecOperationEnum {
     #[serde(rename = "add")]
     #[strum(serialize = "add")]
@@ -12999,10 +11471,6 @@ pub enum VirtualDeviceConfigSpecOperationEnum {
     #[serde(rename = "edit")]
     #[strum(serialize = "edit")]
     Edit,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The delta disk format constants
 /// 
@@ -13010,7 +11478,7 @@ pub enum VirtualDeviceConfigSpecOperationEnum {
 /// - `redoLogFormat`: redo-log based format
 /// - `nativeFormat`: native snapshot format
 /// - `seSparseFormat`: Flex-SE redo-log based format
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualDiskDeltaDiskFormatEnum {
     #[serde(rename = "redoLogFormat")]
     #[strum(serialize = "redoLogFormat")]
@@ -13021,17 +11489,13 @@ pub enum VirtualDiskDeltaDiskFormatEnum {
     #[serde(rename = "seSparseFormat")]
     #[strum(serialize = "seSparseFormat")]
     SeSparseFormat,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The delta disk format variant constants
 /// 
 /// Possible values:
 /// - `vmfsSparseVariant`: vmfsSparse based redo-log format
 /// - `vsanSparseVariant`: vsanSparse based redo-log format
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualDiskDeltaDiskFormatVariantEnum {
     #[serde(rename = "vmfsSparseVariant")]
     #[strum(serialize = "vmfsSparseVariant")]
@@ -13039,10 +11503,6 @@ pub enum VirtualDiskDeltaDiskFormatVariantEnum {
     #[serde(rename = "vsanSparseVariant")]
     #[strum(serialize = "vsanSparseVariant")]
     VsanSparseVariant,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The sharing mode of the virtual disk.
 /// 
@@ -13053,7 +11513,7 @@ pub enum VirtualDiskDeltaDiskFormatVariantEnum {
 /// Possible values:
 /// - `sharingNone`: The virtual disk is not shared.
 /// - `sharingMultiWriter`: The virtual disk is shared between multiple virtual machines.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualDiskSharingEnum {
     #[serde(rename = "sharingNone")]
     #[strum(serialize = "sharingNone")]
@@ -13061,10 +11521,6 @@ pub enum VirtualDiskSharingEnum {
     #[serde(rename = "sharingMultiWriter")]
     #[strum(serialize = "sharingMultiWriter")]
     SharingMultiWriter,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Pre-defined constants for cache consistency types
 /// 
@@ -13072,7 +11528,7 @@ pub enum VirtualDiskSharingEnum {
 /// - `strong`: With strong consistency, it ensures that
 ///   a crash will leave the cache data consistent.
 /// - `weak`: Cache data consistency is not guaranteed after a crash.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualDiskVFlashCacheConfigInfoCacheConsistencyTypeEnum {
     #[serde(rename = "strong")]
     #[strum(serialize = "strong")]
@@ -13080,10 +11536,6 @@ pub enum VirtualDiskVFlashCacheConfigInfoCacheConsistencyTypeEnum {
     #[serde(rename = "weak")]
     #[strum(serialize = "weak")]
     Weak,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Pre-defined constants for cache modes.
 /// 
@@ -13098,7 +11550,7 @@ pub enum VirtualDiskVFlashCacheConfigInfoCacheConsistencyTypeEnum {
 ///   
 ///   Cache holds data temporarily till it can be permanently saved or
 ///   otherwise modified.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualDiskVFlashCacheConfigInfoCacheModeEnum {
     #[serde(rename = "write_thru")]
     #[strum(serialize = "write_thru")]
@@ -13106,10 +11558,6 @@ pub enum VirtualDiskVFlashCacheConfigInfoCacheModeEnum {
     #[serde(rename = "write_back")]
     #[strum(serialize = "write_back")]
     WriteBack,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// All known compatibility modes for raw disk mappings.
 /// 
@@ -13126,7 +11574,7 @@ pub enum VirtualDiskVFlashCacheConfigInfoCacheModeEnum {
 /// - `physicalMode`: A disk device backed by a physical compatibility mode raw disk mapping cannot
 ///   use disk modes, and commands are passed straight through to the LUN
 ///   indicated by the raw disk mapping.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualDiskCompatibilityModeEnum {
     #[serde(rename = "virtualMode")]
     #[strum(serialize = "virtualMode")]
@@ -13134,10 +11582,6 @@ pub enum VirtualDiskCompatibilityModeEnum {
     #[serde(rename = "physicalMode")]
     #[strum(serialize = "physicalMode")]
     PhysicalMode,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The list of known disk modes.
 /// 
@@ -13151,7 +11595,7 @@ pub enum VirtualDiskCompatibilityModeEnum {
 /// - `independent_persistent`: Same as persistent, but not affected by snapshots.
 /// - `independent_nonpersistent`: Same as nonpersistent, but not affected by snapshots.
 /// - `append`: Changes are appended to the redo log; you revoke changes by removing the undo log.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualDiskModeEnum {
     #[serde(rename = "persistent")]
     #[strum(serialize = "persistent")]
@@ -13171,10 +11615,6 @@ pub enum VirtualDiskModeEnum {
     #[serde(rename = "append")]
     #[strum(serialize = "append")]
     Append,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible device names for legacy network backing option are listed below.
 /// 
@@ -13190,7 +11630,7 @@ pub enum VirtualDiskModeEnum {
 /// - `bridged`
 /// - `nat`
 /// - `hostonly`
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualEthernetCardLegacyNetworkDeviceNameEnum {
     #[serde(rename = "bridged")]
     #[strum(serialize = "bridged")]
@@ -13201,10 +11641,6 @@ pub enum VirtualEthernetCardLegacyNetworkDeviceNameEnum {
     #[serde(rename = "hostonly")]
     #[strum(serialize = "hostonly")]
     Hostonly,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The enumeration of all known valid MAC address types.
 /// 
@@ -13212,7 +11648,7 @@ pub enum VirtualEthernetCardLegacyNetworkDeviceNameEnum {
 /// - `manual`: A statistically assigned MAC address.
 /// - `generated`: An automatically generated MAC address.
 /// - `assigned`: A MAC address assigned by VirtualCenter.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualEthernetCardMacTypeEnum {
     #[serde(rename = "manual")]
     #[strum(serialize = "manual")]
@@ -13223,17 +11659,13 @@ pub enum VirtualEthernetCardMacTypeEnum {
     #[serde(rename = "assigned")]
     #[strum(serialize = "assigned")]
     Assigned,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `noSharing`
 /// - `physicalSharing`
 /// 
 /// ***Since:*** vSphere API Release 8.0.2.0
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualNvmeControllerSharingEnum {
     #[serde(rename = "noSharing")]
     #[strum(serialize = "noSharing")]
@@ -13241,10 +11673,6 @@ pub enum VirtualNvmeControllerSharingEnum {
     #[serde(rename = "physicalSharing")]
     #[strum(serialize = "physicalSharing")]
     PhysicalSharing,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The valid choices for host pointing devices are:
 /// 
@@ -13257,7 +11685,7 @@ pub enum VirtualNvmeControllerSharingEnum {
 /// - `mouseSystems`: The Mouse Systems Mouse.
 /// - `mousemanSerial`: The Logitech MouseMan Serial Bus Mouse.
 /// - `ps2`: A generic mouse with a PS2 connection.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualPointingDeviceHostChoiceEnum {
     #[serde(rename = "autodetect")]
     #[strum(serialize = "autodetect")]
@@ -13283,10 +11711,6 @@ pub enum VirtualPointingDeviceHostChoiceEnum {
     #[serde(rename = "ps2")]
     #[strum(serialize = "ps2")]
     Ps2,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Sharing describes three possible ways of sharing the SCSI bus:
 /// One of these values is assigned to the sharedBus object to determine
@@ -13299,7 +11723,7 @@ pub enum VirtualPointingDeviceHostChoiceEnum {
 ///   In this case, no physical machine is involved.
 /// - `physicalSharing`: The virtual SCSI bus is shared between two or more virtual machines
 ///   residing on different physical hosts.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualScsiSharingEnum {
     #[serde(rename = "noSharing")]
     #[strum(serialize = "noSharing")]
@@ -13310,10 +11734,6 @@ pub enum VirtualScsiSharingEnum {
     #[serde(rename = "physicalSharing")]
     #[strum(serialize = "physicalSharing")]
     PhysicalSharing,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The <code>*VirtualSerialPortEndPoint_enum* enum defines
 /// endpoint values for virtual serial port pipe backing.
@@ -13334,7 +11754,7 @@ pub enum VirtualScsiSharingEnum {
 /// Possible values:
 /// - `client`
 /// - `server`
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualSerialPortEndPointEnum {
     #[serde(rename = "client")]
     #[strum(serialize = "client")]
@@ -13342,10 +11762,6 @@ pub enum VirtualSerialPortEndPointEnum {
     #[serde(rename = "server")]
     #[strum(serialize = "server")]
     Server,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Set of possible values for action field in FilterSpec.
 /// 
@@ -13354,7 +11770,7 @@ pub enum VirtualSerialPortEndPointEnum {
 /// Possible values:
 /// - `allow`: Allow communication.
 /// - `deny`: Deny communication.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualMachineVmciDeviceActionEnum {
     #[serde(rename = "allow")]
     #[strum(serialize = "allow")]
@@ -13362,10 +11778,6 @@ pub enum VirtualMachineVmciDeviceActionEnum {
     #[serde(rename = "deny")]
     #[strum(serialize = "deny")]
     Deny,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Set of possible values for direction field in FilterSpec.
 /// 
@@ -13373,7 +11785,7 @@ pub enum VirtualMachineVmciDeviceActionEnum {
 /// - `guest`: from host to guest
 /// - `host`: from guest to host
 /// - `anyDirection`: all of the above
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualMachineVmciDeviceDirectionEnum {
     #[serde(rename = "guest")]
     #[strum(serialize = "guest")]
@@ -13384,10 +11796,6 @@ pub enum VirtualMachineVmciDeviceDirectionEnum {
     #[serde(rename = "anyDirection")]
     #[strum(serialize = "anyDirection")]
     AnyDirection,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Set of possible values for protocol field in FilterSpec.
 /// 
@@ -13405,7 +11813,7 @@ pub enum VirtualMachineVmciDeviceDirectionEnum {
 ///   there is no need to distinguish between the two.
 /// - `stream`: VMCI Stream Socket connect op.
 /// - `anyProtocol`: All of the above.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualMachineVmciDeviceProtocolEnum {
     #[serde(rename = "hypervisor")]
     #[strum(serialize = "hypervisor")]
@@ -13425,10 +11833,6 @@ pub enum VirtualMachineVmciDeviceProtocolEnum {
     #[serde(rename = "anyProtocol")]
     #[strum(serialize = "anyProtocol")]
     AnyProtocol,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Set of possible values for *VirtualMachineVideoCard.use3dRenderer*.
 /// 
@@ -13436,7 +11840,7 @@ pub enum VirtualMachineVmciDeviceProtocolEnum {
 /// - `automatic`: Determine automatically whether to render 3D with software or hardware.
 /// - `software`: Render 3D with software.
 /// - `hardware`: Render 3D with graphics hardware.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualMachineVideoCardUse3DRendererEnum {
     #[serde(rename = "automatic")]
     #[strum(serialize = "automatic")]
@@ -13447,17 +11851,13 @@ pub enum VirtualMachineVideoCardUse3DRendererEnum {
     #[serde(rename = "hardware")]
     #[strum(serialize = "hardware")]
     Hardware,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The enumeration of all known valid VRDMA device protocols.
 /// 
 /// Possible values:
 /// - `rocev1`: A RoCEv1 device.
 /// - `rocev2`: A RoCEv2 device.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualVmxnet3VrdmaOptionDeviceProtocolsEnum {
     #[serde(rename = "rocev1")]
     #[strum(serialize = "rocev1")]
@@ -13465,17 +11865,13 @@ pub enum VirtualVmxnet3VrdmaOptionDeviceProtocolsEnum {
     #[serde(rename = "rocev2")]
     #[strum(serialize = "rocev2")]
     Rocev2,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `file`: Regular files, and on Posix filesystems, unix domain sockets
 ///   and devices.
 /// - `directory`: directory
 /// - `symlink`: symbolic link
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum GuestFileTypeEnum {
     #[serde(rename = "file")]
     #[strum(serialize = "file")]
@@ -13486,10 +11882,6 @@ pub enum GuestFileTypeEnum {
     #[serde(rename = "symlink")]
     #[strum(serialize = "symlink")]
     Symlink,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// This describes the bitness (32-bit or 64-bit) of a registry view in a
 /// Windows OS that supports WOW64.
@@ -13506,7 +11898,7 @@ pub enum GuestFileTypeEnum {
 ///   64-bit on 64-bit versions of Windows).
 /// - `WOW32`: Access the key from the 32-bit view of the Registry.
 /// - `WOW64`: Access the key from the 64-bit view of the Registry.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum GuestRegKeyWowSpecEnum {
     #[serde(rename = "WOWNative")]
     #[strum(serialize = "WOWNative")]
@@ -13517,10 +11909,6 @@ pub enum GuestRegKeyWowSpecEnum {
     #[serde(rename = "WOW64")]
     #[strum(serialize = "WOW64")]
     Wow64,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The action to take with regard to storage objects upon decommissioning
 /// a host from use with the VSAN service.
@@ -13531,7 +11919,7 @@ pub enum GuestRegKeyWowSpecEnum {
 ///   object accessibility.
 /// - `evacuateAllData`: VSAN data evacuation should be performed such that all storage
 ///   object data is removed from the host.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VsanHostDecommissionModeObjectActionEnum {
     #[serde(rename = "noAction")]
     #[strum(serialize = "noAction")]
@@ -13542,10 +11930,6 @@ pub enum VsanHostDecommissionModeObjectActionEnum {
     #[serde(rename = "evacuateAllData")]
     #[strum(serialize = "evacuateAllData")]
     EvacuateAllData,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Values used for indicating a disk's status for use by the VSAN service.
 /// 
@@ -13566,7 +11950,7 @@ pub enum VsanHostDecommissionModeObjectActionEnum {
 ///   and is not currently in use.
 ///   
 ///   See also *VsanHostDiskResult.error*.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VsanHostDiskResultStateEnum {
     #[serde(rename = "inUse")]
     #[strum(serialize = "inUse")]
@@ -13577,10 +11961,6 @@ pub enum VsanHostDiskResultStateEnum {
     #[serde(rename = "ineligible")]
     #[strum(serialize = "ineligible")]
     Ineligible,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// A *VsanHostHealthState_enum* represents the state of a participating
 /// host in the VSAN service.
@@ -13591,7 +11971,7 @@ pub enum VsanHostDiskResultStateEnum {
 /// - `unknown`: Node health is unknown.
 /// - `healthy`: Node is considered healthy.
 /// - `unhealthy`: Node is considered unhealthy.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VsanHostHealthStateEnum {
     #[serde(rename = "unknown")]
     #[strum(serialize = "unknown")]
@@ -13602,10 +11982,6 @@ pub enum VsanHostHealthStateEnum {
     #[serde(rename = "unhealthy")]
     #[strum(serialize = "unhealthy")]
     Unhealthy,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// A *VsanHostNodeState_enum* represents the state of participation of a host
 /// in the VSAN service.
@@ -13633,7 +12009,7 @@ pub enum VsanHostHealthStateEnum {
 ///   See also *HostSystem.ExitMaintenanceMode_Task*.
 /// - `decommissioning`: The node is being decommissioned from the VSAN service; this state is
 ///   considered transitory.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VsanHostNodeStateEnum {
     #[serde(rename = "error")]
     #[strum(serialize = "error")]
@@ -13665,10 +12041,6 @@ pub enum VsanHostNodeStateEnum {
     #[serde(rename = "decommissioning")]
     #[strum(serialize = "decommissioning")]
     Decommissioning,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// The list of disk issues.
 /// 
@@ -13676,7 +12048,7 @@ pub enum VsanHostNodeStateEnum {
 /// - `nonExist`
 /// - `stampMismatch`
 /// - `unknown`
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VsanDiskIssueTypeEnum {
     #[serde(rename = "nonExist")]
     #[strum(serialize = "nonExist")]
@@ -13687,10 +12059,6 @@ pub enum VsanDiskIssueTypeEnum {
     #[serde(rename = "unknown")]
     #[strum(serialize = "unknown")]
     Unknown,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Provisioning type constants.
 /// 
@@ -13706,7 +12074,7 @@ pub enum VsanDiskIssueTypeEnum {
 /// - `lazyZeroedThick`: A thick virtual disk has all space allocated at creation time.
 ///   
 ///   This space may contain stale data on the physical media.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum BaseConfigInfoDiskFileBackingInfoProvisioningTypeEnum {
     #[serde(rename = "thin")]
     #[strum(serialize = "thin")]
@@ -13717,10 +12085,6 @@ pub enum BaseConfigInfoDiskFileBackingInfoProvisioningTypeEnum {
     #[serde(rename = "lazyZeroedThick")]
     #[strum(serialize = "lazyZeroedThick")]
     LazyZeroedThick,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Flags representing the different information of a disk.
 /// 
@@ -13751,7 +12115,7 @@ pub enum BaseConfigInfoDiskFileBackingInfoProvisioningTypeEnum {
 /// - `cbtEnabled`: If virtual storage object has changed block tracking enabled.
 ///   
 /// ***Since:*** vSphere API Release 8.0.0.1
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VslmDiskInfoFlagEnum {
     #[serde(rename = "id")]
     #[strum(serialize = "id")]
@@ -13816,10 +12180,6 @@ pub enum VslmDiskInfoFlagEnum {
     #[serde(rename = "cbtEnabled")]
     #[strum(serialize = "cbtEnabled")]
     CbtEnabled,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Consumption type constants.
 /// 
@@ -13828,15 +12188,11 @@ pub enum VslmDiskInfoFlagEnum {
 /// 
 /// Possible values:
 /// - `disk`: Disk type.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VStorageObjectConsumptionTypeEnum {
     #[serde(rename = "disk")]
     #[strum(serialize = "disk")]
     Disk,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Possible values:
 /// - `keepAfterDeleteVm`: Choice of the deletion behavior of this virtual storage object.
@@ -13848,7 +12204,7 @@ pub enum VStorageObjectConsumptionTypeEnum {
 /// - `enableChangedBlockTracking`: Is Virtual storage object has changed blocked tracking enabled.
 ///   
 ///   If not set, default value is false.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VslmVStorageObjectControlFlagEnum {
     #[serde(rename = "keepAfterDeleteVm")]
     #[strum(serialize = "keepAfterDeleteVm")]
@@ -13859,10 +12215,6 @@ pub enum VslmVStorageObjectControlFlagEnum {
     #[serde(rename = "enableChangedBlockTracking")]
     #[strum(serialize = "enableChangedBlockTracking")]
     EnableChangedBlockTracking,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Enumeration of possible changes to a property.
 /// 
@@ -13871,7 +12223,7 @@ pub enum VslmVStorageObjectControlFlagEnum {
 /// - `remove`
 /// - `assign`
 /// - `indirectRemove`
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum PropertyChangeOpEnum {
     #[serde(rename = "add")]
     #[strum(serialize = "add")]
@@ -13885,10 +12237,6 @@ pub enum PropertyChangeOpEnum {
     #[serde(rename = "indirectRemove")]
     #[strum(serialize = "indirectRemove")]
     IndirectRemove,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
 /// Enumeration of different kinds of updates.
 /// 
@@ -13902,7 +12250,7 @@ pub enum PropertyChangeOpEnum {
 ///   
 ///   For
 ///   instance, this can happen when a virtual machine is destroyed.
-#[derive(Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum ObjectUpdateKindEnum {
     #[serde(rename = "modify")]
     #[strum(serialize = "modify")]
@@ -13913,8 +12261,4 @@ pub enum ObjectUpdateKindEnum {
     #[serde(rename = "leave")]
     #[strum(serialize = "leave")]
     Leave,
-    /// This variant handles values not known at compile time.
-    #[serde(untagged)]
-    #[strum(serialize = "__OTHER__")]
-    Other_(String),
 }
