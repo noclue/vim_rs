@@ -4,28 +4,26 @@ use std::{
     time::Duration,
 };
 
-use anyhow::{Result, Context};
+use anyhow::{anyhow, Context, Result};
 use ratatui::{
     buffer::Buffer,
     crossterm::event::{Event, EventStream, KeyCode, KeyEventKind},
     layout::{Constraint, Layout, Rect},
     style::{Style, Stylize},
     text::Line,
-    widgets::{Block, HighlightSpacing, Row, StatefulWidget, Table, TableState, Widget},
+    widgets::{Block, HighlightSpacing, StatefulWidget, Table, TableState, Widget},
     DefaultTerminal, Frame,
 };
-use vim_rs::{
-    core::client::{Client, ClientBuilder},
-};
+use vim_rs::core::client::{Client, ClientBuilder};
 use vim_rs::mo::{ContainerView, PropertyCollector, ViewManager};
-use vim_rs::types::boxed_types::ValueElements;
-use vim_rs::types::enums::{ManagedEntityStatusEnum, MoTypesEnum, VirtualMachinePowerStateEnum};
+use vim_rs::types::enums::MoTypesEnum;
 use vim_rs::types::structs;
-use vim_rs::types::structs::ObjectContent;
-use vim_rs::types::vim_any::VimAny;
+use vim_rs::types::structs::{ManagedObjectReference, ObjectSpec, TraversalSpec};
 use futures_util::stream::StreamExt;
-use ratatui::prelude::Span;
-use ratatui::widgets::Cell;
+use indexmap::IndexMap;
+use vm::VirtualMachine;
+
+mod vm;
 
 const APP_NAME: &str = env!("CARGO_PKG_NAME");
 const APP_VERSION: &str = env!("CARGO_PKG_VERSION");
@@ -119,22 +117,12 @@ struct VmListWidget {
 
 #[derive(Debug, Default)]
 struct VmListState {
-    vms: Vec<VirtualMachine>,
+    vms: IndexMap<String, VirtualMachine>,
     loading_state: LoadingState,
     table_state: TableState,
 }
 
-#[derive(Debug, Clone)]
-struct VirtualMachine {
-    id: String,
-    name: String,
-    os: String,
-    used_space: Option<i64>, // summary.storage.committed
-    host_cpu: Option<i32>, // summary.quickStats.overallCpuUsage
-    host_memory: Option<i32>, // summary.quickStats.hostMemoryUsage
-    status: Option<ManagedEntityStatusEnum>, // summary.overallStatus
-    power_state: Option<VirtualMachinePowerStateEnum>, // summary.runtime.powerState
-}
+
 
 #[derive(Debug, Clone, Default, PartialEq, Eq)]
 enum LoadingState {
@@ -164,80 +152,61 @@ impl VmListWidget {
     async fn fetch_vms(self) {
         self.set_loading_state(LoadingState::Loading);
 
-        let content = self.client.service_content();
-        let view_manager = ViewManager::new(self.client.clone(), content.view_manager.clone().unwrap().value.as_str());
+        let client = self.client.clone();
 
-        let Ok(view_moref) = view_manager.create_container_view(
+        let vms = match self.query_vms(client).await {
+            Ok(value) => value,
+            Err(e) => {
+                self.set_loading_state(LoadingState::Error(e.to_string()));
+                return
+            },
+        };
+
+        let mut state = self.state.write().unwrap();
+        vms.iter().for_each(|x| { state.vms.insert(x.id().into(), x.clone()); });
+        if !state.vms.is_empty() {
+            state.table_state.select(Some(0));
+        }
+    }
+
+    async fn query_vms(&self, client: Arc<Client>) -> Result<Vec<VirtualMachine>> {
+        let content = client.service_content();
+        let view_manager = ViewManager::new(client.clone(), content.view_manager.clone().unwrap().value.as_str());
+
+        let view_moref = view_manager.create_container_view(
             &content.root_folder,
             Some(&[Into::<&str>::into(MoTypesEnum::VirtualMachine).to_string()]),
             true,
-        ).await else {
-            self.set_loading_state(LoadingState::Error("Failed to create container view.".to_string()));
-            return;
-        };
+        ).await?;
 
-        let view = ContainerView::new(self.client.clone(), &view_moref.value);
+        let view = ContainerView::new(client.clone(), &view_moref.value);
 
-        let property_collector = PropertyCollector::new(self.client.clone(), &content.property_collector.value);
+        let property_collector = PropertyCollector::new(client.clone(), &content.property_collector.value);
 
         let spec_set = vec![structs::PropertyFilterSpec {
-            object_set: vec![structs::ObjectSpec {
-                obj: view_moref.clone(),
-                skip: Some(false),
-                select_set: Some(vec![Box::new(structs::TraversalSpec {
-                    name: Some("traverseEntities".to_string()),
-                    r#type: Into::<&str>::into(MoTypesEnum::ContainerView).to_string(),
-                    path: "view".to_string(),
-                    skip: Some(false),
-                    select_set: None,
-                })]),
-            }],
-            prop_set: vec![structs::PropertySpec {
-                all: Some(false),
-                path_set: Some(vec![
-                    "name".into(),
-                    "summary.guest.guestFullName".into(),
-                    "summary.storage.committed".into(),
-                    "summary.quickStats.overallCpuUsage".into(),
-                    "summary.quickStats.hostMemoryUsage".into(),
-                    "overallStatus".into(),
-                    "runtime.powerState".into(),
-                ]),
-                r#type: Into::<&str>::into(MoTypesEnum::VirtualMachine).to_string(),
-            }],
+            object_set: obj_spec_for_view(view_moref),
+            prop_set: vec![VirtualMachine::prop_spec()],
             report_missing_objects_in_results: Some(true),
         }];
         let options = structs::RetrieveOptions {
             max_objects: Some(100),
         };
-        let Ok(Some(retrieve_result)) = property_collector.retrieve_properties_ex(&spec_set, &options).await else {
-            self.set_loading_state(LoadingState::Error("No virtual machines found.".to_string()));
-            return;
+
+        let Some(retrieve_result) = property_collector.retrieve_properties_ex(&spec_set, &options).await? else {
+            return Err(anyhow!("No virtual machines found."));
         };
         if let Some(token) = retrieve_result.token {
-            property_collector.cancel_retrieve_properties_ex(&token).await.unwrap();
+            property_collector.cancel_retrieve_properties_ex(&token).await?;
         }
-        view.destroy_view().await.unwrap();
+        view.destroy_view().await?;
 
         self.set_loading_state(LoadingState::Loaded);
-        let vms = retrieve_result.objects.iter().map(|obj| {
-            VirtualMachine {
-                id: obj.obj.value.clone(),
-                name: get_str_property(obj, "name").unwrap_or_else(|| "<Unknown>".to_string()),
-                os: get_str_property(obj, "summary.guest.guestFullName").unwrap_or_else(|| "<Unknown>".to_string()),
-                status: get_entity_status_property(obj, "overallStatus"),
-                power_state: get_power_state_property(obj, "runtime.powerState"),
-                used_space: get_i64_property(obj, "summary.storage.committed"),
-                host_cpu: get_i32_property(obj, "summary.quickStats.overallCpuUsage"),
-                host_memory: get_i32_property(obj, "summary.quickStats.hostMemoryUsage"),
-            }
-        }).collect::<Vec<_>>();
-        let mut state = self.state.write().unwrap();
-        state.vms.extend(vms);
-        if !state.vms.is_empty() {
-            state.table_state.select(Some(0));
-        }
+        let vms = retrieve_result.objects.iter()
+            .filter_map(|obj| VirtualMachine::try_from(obj).ok())
+            .collect::<Vec<_>>();
+        Ok(vms)
     }
+
 
 
     fn set_loading_state(&self, state: LoadingState) {
@@ -265,7 +234,7 @@ impl Widget for &VmListWidget {
             .title_bottom("j/k to scroll, q to quit");
 
         // a table with the list of pull requests
-        let rows = state.vms.iter();
+        let rows = state.vms.values();
         let widths = [
             Constraint::Length(10),
             Constraint::Length(4),
@@ -288,109 +257,19 @@ impl Widget for &VmListWidget {
     }
 }
 
-fn get_str_property(obj: &ObjectContent, property: &str) -> Option<String> {
-    let row = obj.prop_set.as_ref()?;
-    for prop in row {
-        if prop.name == property {
-            return match prop.val {
-                VimAny::Value(ValueElements::PrimitiveString(ref val)) => Some(val.clone()),
-                _ => None,
-            }
-        }
-    }
-    None
-}
 
-fn get_i32_property(obj: &ObjectContent, property: &str) -> Option<i32> {
-    let prop = get_property(obj, property)?;
-    match prop {
-        VimAny::Value(ValueElements::PrimitiveInt(val)) => Some(*val),
-        _ => None,
-    }
-}
-
-fn get_i64_property(obj: &ObjectContent, property: &str) -> Option<i64> {
-    let prop = get_property(obj, property)?;
-    match prop {
-        VimAny::Value(ValueElements::PrimitiveLong(val)) => Some(*val),
-        _ => None,
-    }
-}
-
-fn get_entity_status_property(obj: &ObjectContent, property: &str) -> Option<ManagedEntityStatusEnum> {
-    let prop = get_property(obj, property)?;
-    match prop {
-        VimAny::Value(ValueElements::ManagedEntityStatus(val)) => Some(val.clone()),
-        _ => None,
-    }
-}
-
-fn get_power_state_property(obj: &ObjectContent, property: &str) -> Option<VirtualMachinePowerStateEnum> {
-    let prop = get_property(obj, property)?;
-    match prop {
-        VimAny::Value(ValueElements::VirtualMachinePowerState(val)) => Some(val.clone()),
-        _ => None,
-    }
+fn obj_spec_for_view(view_moref: ManagedObjectReference) -> Vec<ObjectSpec> {
+    vec![ObjectSpec {
+        obj: view_moref.clone(),
+        skip: Some(false),
+        select_set: Some(vec![Box::new(TraversalSpec {
+            name: Some("traverseEntities".to_string()),
+            r#type: Into::<&str>::into(MoTypesEnum::ContainerView).to_string(),
+            path: "view".to_string(),
+            skip: Some(false),
+            select_set: None,
+        })]),
+    }]
 }
 
 
-fn get_property<'a>(obj: &'a ObjectContent, property: &str) -> Option<&'a VimAny> {
-    let row = obj.prop_set.as_ref()?;
-    for prop in row {
-        if prop.name == property {
-            return Some(&prop.val);
-        }
-    }
-    None
-}
-
-impl From<&VirtualMachine> for Row<'_> {
-    fn from(vm: &VirtualMachine) -> Self {
-        let vm = vm.clone();
-        let color = match vm.status {
-            Some(ManagedEntityStatusEnum::Green) => Style::new().fg(ratatui::style::Color::Green),
-            Some(ManagedEntityStatusEnum::Yellow) => Style::new().fg(ratatui::style::Color::Yellow),
-            Some(ManagedEntityStatusEnum::Red) => Style::new().fg(ratatui::style::Color::Red),
-            Some(ManagedEntityStatusEnum::Gray) => Style::new().fg(ratatui::style::Color::Gray),
-            _ => Style::default(),
-        };
-        let power_state = match vm.power_state {
-            Some(VirtualMachinePowerStateEnum::PoweredOn) => Span::from("▶").green(),
-            Some(VirtualMachinePowerStateEnum::PoweredOff) => Span::from("⏹").red(),
-            Some(VirtualMachinePowerStateEnum::Suspended) => Span::from("⏸").yellow(),
-            _ => Span::from("?").gray(),
-        };
-        let used_space = if let Some(used_space) = vm.used_space {
-            Cell::from(format!("{:.2} GB", used_space as f64 / 1024.0 / 1024.0 / 1024.0))
-        } else {
-            Cell::default()
-        };
-        let host_cpu = if let Some(host_cpu) = vm.host_cpu {
-            Cell::from(format!("{:.2} MHz", host_cpu as f32))
-        } else {
-            Cell::default()
-        };
-        let host_memory = if let Some(host_memory) = vm.host_memory {
-            if host_memory > 1024 {
-                Cell::from(format!("{:.2} GB", host_memory as f32 / 1024.0))
-            } else {
-                Cell::from(format!("{:.2} MB", host_memory as f32))
-            }
-        } else {
-            Cell::default()
-        };
-
-        Row::new(vec![
-            Cell::from(vm.id),
-            Cell::from(Span::from("⏺").style(color)),
-            Cell::from(power_state),
-
-            Cell::from(vm.name),
-            Cell::from(vm.os),
-            used_space,
-
-            host_cpu,
-            host_memory,
-        ])
-    }
-}
