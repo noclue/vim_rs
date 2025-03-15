@@ -1,6 +1,6 @@
 use ratatui::widgets::{Cell, Row};
 use vim_rs::types::enums::{ManagedEntityStatusEnum, MoTypesEnum, VirtualMachinePowerStateEnum};
-use ratatui::prelude::{Span, Style, Stylize};
+use ratatui::prelude::{Color, Span, Style, Stylize};
 use vim_rs::types::structs::{ObjectUpdate, PropertyChange, PropertySpec};
 use vim_rs::types::vim_any::VimAny;
 use vim_rs::types::boxed_types::ValueElements;
@@ -172,8 +172,10 @@ impl TryFrom<&ObjectUpdate> for VirtualMachine {
 }
 
 
-
-
+const STATUS: &str = "● ";
+const POWER_ON: &str = "● ";    // U+25CF
+const POWER_OFF: &str = "○ ";   // U+25CB
+const SUSPENDED: &str = "◐ ";   // U+25D0
 
 
 impl From<&VirtualMachine> for Row<'_> {
@@ -187,9 +189,9 @@ impl From<&VirtualMachine> for Row<'_> {
             _ => Style::default(),
         };
         let power_state = match vm.power_state {
-            Some(VirtualMachinePowerStateEnum::PoweredOn) => Span::from("▶").green(),
-            Some(VirtualMachinePowerStateEnum::PoweredOff) => Span::from("⏹").red(),
-            Some(VirtualMachinePowerStateEnum::Suspended) => Span::from("⏸").yellow(),
+            Some(VirtualMachinePowerStateEnum::PoweredOn) => Span::styled(POWER_ON, Style::default().fg(Color::Green)),
+            Some(VirtualMachinePowerStateEnum::PoweredOff) => Span::styled(POWER_OFF, Style::default().fg(Color::Red)),
+            Some(VirtualMachinePowerStateEnum::Suspended) => Span::styled(SUSPENDED, Style::default().fg(Color::Yellow)),
             _ => Span::from("?").gray(),
         };
         let used_space = if let Some(used_space) = vm.used_space {
@@ -214,7 +216,7 @@ impl From<&VirtualMachine> for Row<'_> {
 
         Row::new(vec![
             Cell::from(vm.id),
-            Cell::from(Span::from("⏺").style(color)),
+            Cell::from(Span::from(STATUS).style(color)),
             Cell::from(power_state),
 
             Cell::from(vm.name),

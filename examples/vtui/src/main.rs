@@ -1,7 +1,6 @@
 use std::{
     env,
-    sync::Arc
-    ,
+    sync::Arc,
 };
 use anyhow::{Context, Result};
 use vim_rs::core::client::{Client, ClientBuilder};
@@ -46,6 +45,3 @@ async fn init_vim_client() -> Result<Arc<Client>> {
         .build().await?;
     Ok(client)
 }
-
-
-
