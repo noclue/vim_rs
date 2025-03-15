@@ -1,29 +1,20 @@
 use std::{
     env,
-    sync::{Arc, RwLock},
-    time::Duration,
+    sync::Arc
+    ,
 };
-
-use anyhow::{anyhow, Context, Result};
-use ratatui::{
-    buffer::Buffer,
-    crossterm::event::{Event, EventStream, KeyCode, KeyEventKind},
-    layout::{Constraint, Layout, Rect},
-    style::{Style, Stylize},
-    text::Line,
-    widgets::{Block, HighlightSpacing, StatefulWidget, Table, TableState, Widget},
-    DefaultTerminal, Frame,
-};
+use anyhow::{Context, Result};
 use vim_rs::core::client::{Client, ClientBuilder};
-use vim_rs::mo::{ContainerView, PropertyCollector, ViewManager};
-use vim_rs::types::enums::MoTypesEnum;
-use vim_rs::types::structs;
-use vim_rs::types::structs::{ManagedObjectReference, ObjectSpec, TraversalSpec};
-use futures_util::stream::StreamExt;
-use indexmap::IndexMap;
+use app::App;
 use vm::VirtualMachine;
+use crate::event::EventHandler;
+use crate::monitor::Monitor;
 
 mod vm;
+mod event;
+mod monitor;
+mod vm_list;
+mod app;
 
 const APP_NAME: &str = env!("CARGO_PKG_NAME");
 const APP_VERSION: &str = env!("CARGO_PKG_VERSION");
@@ -31,8 +22,14 @@ const APP_VERSION: &str = env!("CARGO_PKG_VERSION");
 #[tokio::main]
 async fn main() -> Result<()> {
     let client = init_vim_client().await?;
+    let monitor = Monitor::new(
+        client.clone(),
+        client.service_content().root_folder.clone(),
+        VirtualMachine::prop_spec())
+        .await?;
+    let event_handler = EventHandler::new(monitor);
     let terminal = ratatui::init();
-    let app_result = App::new(client).run(terminal).await;
+    let app_result = App::new(event_handler).run(terminal).await;
     ratatui::restore();
     app_result
 }
@@ -50,226 +47,5 @@ async fn init_vim_client() -> Result<Arc<Client>> {
     Ok(client)
 }
 
-struct App {
-    should_quit: bool,
-    vms: VmListWidget,
-}
-
-impl App {
-    const FRAMES_PER_SECOND: f32 = 60.0;
-
-    pub fn new(client: Arc<Client>) -> Self {
-        Self {
-            should_quit: false,
-            vms: VmListWidget::new(client),
-        }
-    }
-
-    pub async fn run(mut self, mut terminal: DefaultTerminal) -> Result<()> {
-        self.vms.run();
-
-        let period = Duration::from_secs_f32(1.0 / Self::FRAMES_PER_SECOND);
-        let mut interval = tokio::time::interval(period);
-        let mut events = EventStream::new();
-
-        while !self.should_quit {
-            tokio::select! {
-                _ = interval.tick() => { terminal.draw(|frame| self.draw(frame))?; },
-                Some(Ok(event)) = events.next() => self.handle_event(&event),
-            }
-        }
-        Ok(())
-    }
-
-    fn draw(&self, frame: &mut Frame) {
-        let vertical = Layout::vertical([Constraint::Length(1), Constraint::Fill(1)]);
-        let [title_area, body_area] = vertical.areas(frame.area());
-        let title = Line::from("VIM-RS Ratatui example").centered().bold();
-        frame.render_widget(title, title_area);
-        frame.render_widget(&self.vms, body_area);
-    }
-
-    fn handle_event(&mut self, event: &Event) {
-        if let Event::Key(key) = event {
-            if key.kind == KeyEventKind::Press {
-                match key.code {
-                    KeyCode::Char('q') | KeyCode::Esc => self.should_quit = true,
-                    KeyCode::Char('j') | KeyCode::Down => self.vms.scroll_down(),
-                    KeyCode::Char('k') | KeyCode::Up => self.vms.scroll_up(),
-                    _ => {}
-                }
-            }
-        }
-    }
-}
-
-/// A widget that displays a list of virtual machines.
-///
-/// This is an async widget that fetches the list of VMs from the vCenter API. It contains
-/// an inner `Arc<RwLock<VmListState>>` that holds the state of the widget. Cloning the
-/// widget will clone the Arc, so you can pass it around to other threads, and this is used to spawn
-/// a background task to fetch the VMs.
-#[derive(Clone)]
-struct VmListWidget {
-    state: Arc<RwLock<VmListState>>,
-    client: Arc<Client>,
-}
-
-#[derive(Debug, Default)]
-struct VmListState {
-    vms: IndexMap<String, VirtualMachine>,
-    loading_state: LoadingState,
-    table_state: TableState,
-}
-
-
-
-#[derive(Debug, Clone, Default, PartialEq, Eq)]
-enum LoadingState {
-    #[default]
-    Idle,
-    Loading,
-    Loaded,
-    Error(String),
-}
-
-impl VmListWidget {
-    fn new(client: Arc<Client>) -> Self {
-        Self {
-            state: Arc::new(RwLock::new(VmListState::default())),
-            client,
-        }
-    }
-    /// Start fetching the VMs in the background.
-    ///
-    /// This method spawns a background task that fetches the VMs from the vCenter API.
-    /// The result of the fetch is then converted to view state that is displayed.
-    fn run(&self) {
-        let this = self.clone(); // clone the widget to pass to the background task
-        tokio::spawn(this.fetch_vms());
-    }
-
-    async fn fetch_vms(self) {
-        self.set_loading_state(LoadingState::Loading);
-
-        let client = self.client.clone();
-
-        let vms = match self.query_vms(client).await {
-            Ok(value) => value,
-            Err(e) => {
-                self.set_loading_state(LoadingState::Error(e.to_string()));
-                return
-            },
-        };
-
-        let mut state = self.state.write().unwrap();
-        vms.iter().for_each(|x| { state.vms.insert(x.id().into(), x.clone()); });
-        if !state.vms.is_empty() {
-            state.table_state.select(Some(0));
-        }
-    }
-
-    async fn query_vms(&self, client: Arc<Client>) -> Result<Vec<VirtualMachine>> {
-        let content = client.service_content();
-        let view_manager = ViewManager::new(client.clone(), content.view_manager.clone().unwrap().value.as_str());
-
-        let view_moref = view_manager.create_container_view(
-            &content.root_folder,
-            Some(&[Into::<&str>::into(MoTypesEnum::VirtualMachine).to_string()]),
-            true,
-        ).await?;
-
-        let view = ContainerView::new(client.clone(), &view_moref.value);
-
-        let property_collector = PropertyCollector::new(client.clone(), &content.property_collector.value);
-
-        let spec_set = vec![structs::PropertyFilterSpec {
-            object_set: obj_spec_for_view(view_moref),
-            prop_set: vec![VirtualMachine::prop_spec()],
-            report_missing_objects_in_results: Some(true),
-        }];
-        let options = structs::RetrieveOptions {
-            max_objects: Some(100),
-        };
-
-        let Some(retrieve_result) = property_collector.retrieve_properties_ex(&spec_set, &options).await? else {
-            return Err(anyhow!("No virtual machines found."));
-        };
-        if let Some(token) = retrieve_result.token {
-            property_collector.cancel_retrieve_properties_ex(&token).await?;
-        }
-        view.destroy_view().await?;
-
-        self.set_loading_state(LoadingState::Loaded);
-        let vms = retrieve_result.objects.iter()
-            .filter_map(|obj| VirtualMachine::try_from(obj).ok())
-            .collect::<Vec<_>>();
-        Ok(vms)
-    }
-
-
-
-    fn set_loading_state(&self, state: LoadingState) {
-        self.state.write().unwrap().loading_state = state;
-    }
-
-    fn scroll_down(&self) {
-        self.state.write().unwrap().table_state.scroll_down_by(1);
-    }
-
-    fn scroll_up(&self) {
-        self.state.write().unwrap().table_state.scroll_up_by(1);
-    }
-}
-
-impl Widget for &VmListWidget {
-    fn render(self, area: Rect, buf: &mut Buffer) {
-        let mut state = self.state.write().unwrap();
-
-        // a block with a right aligned title with the loading state on the right
-        let loading_state = Line::from(format!("{:?}", state.loading_state)).right_aligned();
-        let block = Block::bordered()
-            .title("Virtual Machines")
-            .title(loading_state)
-            .title_bottom("j/k to scroll, q to quit");
-
-        // a table with the list of pull requests
-        let rows = state.vms.values();
-        let widths = [
-            Constraint::Length(10),
-            Constraint::Length(4),
-            Constraint::Length(4),
-
-            Constraint::Fill(1),
-            Constraint::Max(25),
-            Constraint::Max(15),
-
-            Constraint::Max(15),
-            Constraint::Max(15),
-        ];
-        let table = Table::new(rows, widths)
-            .block(block)
-            .highlight_spacing(HighlightSpacing::Always)
-            .highlight_symbol(">>")
-            .row_highlight_style(Style::new().on_blue());
-
-        StatefulWidget::render(table, area, buf, &mut state.table_state);
-    }
-}
-
-
-fn obj_spec_for_view(view_moref: ManagedObjectReference) -> Vec<ObjectSpec> {
-    vec![ObjectSpec {
-        obj: view_moref.clone(),
-        skip: Some(false),
-        select_set: Some(vec![Box::new(TraversalSpec {
-            name: Some("traverseEntities".to_string()),
-            r#type: Into::<&str>::into(MoTypesEnum::ContainerView).to_string(),
-            path: "view".to_string(),
-            skip: Some(false),
-            select_set: None,
-        })]),
-    }]
-}
 
 

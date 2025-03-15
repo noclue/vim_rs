@@ -1,11 +1,11 @@
 use ratatui::widgets::{Cell, Row};
 use vim_rs::types::enums::{ManagedEntityStatusEnum, MoTypesEnum, VirtualMachinePowerStateEnum};
 use ratatui::prelude::{Span, Style, Stylize};
-use vim_rs::types::structs::{ObjectContent, PropertySpec};
+use vim_rs::types::structs::{ObjectUpdate, PropertyChange, PropertySpec};
 use vim_rs::types::vim_any::VimAny;
 use vim_rs::types::boxed_types::ValueElements;
 use vim_rs::types::structs;
-use anyhow::Context;
+use anyhow::{Context, Result};
 
 
 
@@ -41,13 +41,66 @@ impl VirtualMachine {
     pub fn id(&self) -> &str {
         &self.id
     }
+
+    pub fn apply_update(&mut self, row: &Vec<PropertyChange>) -> Result<()>{
+        for prop in row {
+            match prop.name.as_str() {
+                "name" => {
+                    self.name = match &prop.val {
+                        Some(VimAny::Value(ValueElements::PrimitiveString(val))) => val.clone(),
+                        _ => "<Unknown>".to_string(),
+                    };
+                }
+                "summary.guest.guestFullName" => {
+                    self.os = match &prop.val {
+                        Some(VimAny::Value(ValueElements::PrimitiveString(val))) => val.clone(),
+                        _ => "<Unknown>".to_string(),
+                    };
+                }
+                "summary.storage.committed" => {
+                    self.used_space = match &prop.val {
+                        Some(VimAny::Value(ValueElements::PrimitiveLong(val))) => Some(*val),
+                        _ => None,
+                    };
+                }
+                "summary.quickStats.overallCpuUsage" => {
+                    self.host_cpu = match &prop.val {
+                        Some(VimAny::Value(ValueElements::PrimitiveInt(val))) => Some(*val),
+                        _ => None,
+                    };
+                }
+                "summary.quickStats.hostMemoryUsage" => {
+                    self.host_memory = match &prop.val {
+                        Some(VimAny::Value(ValueElements::PrimitiveInt(val))) => Some(*val),
+                        _ => None,
+                    };
+                }
+                "overallStatus" => {
+                    self.status = match &prop.val {
+                        Some(VimAny::Value(ValueElements::ManagedEntityStatus(val))) => Some(val.clone()),
+                        _ => None,
+                    };
+                }
+                "runtime.powerState" => {
+                    self.power_state = match &prop.val {
+                        Some(VimAny::Value(ValueElements::VirtualMachinePowerState(val))) => Some(val.clone()),
+                        _ => None,
+                    };
+                }
+                _ => {}
+            }
+        }
+        Ok(())
+    }
 }
 
-impl TryFrom<&ObjectContent> for VirtualMachine {
+impl TryFrom<&ObjectUpdate> for VirtualMachine {
     type Error = anyhow::Error;
 
-    fn try_from(obj: &ObjectContent) -> anyhow::Result<Self> {
-        let row = obj.prop_set.as_ref().with_context(|| format!("Missing property set in object content for {}", obj.obj.value))?;
+    fn try_from(row: &ObjectUpdate) -> anyhow::Result<Self> {
+        let id = row.obj.value.clone();
+        let row = row.change_set.as_ref().context("No change set found")?;
+
         let mut name = "<Unknown>".to_string();
         let mut os = "<Unknown>".to_string();
         let mut used_space = None;
@@ -60,43 +113,45 @@ impl TryFrom<&ObjectContent> for VirtualMachine {
             match prop.name.as_str() {
                 "name" => {
                     name = match &prop.val {
-                        VimAny::Value(ValueElements::PrimitiveString(val)) => val.clone(),
+                        Some(VimAny::Value(ValueElements::PrimitiveString(val))) => val.clone(),
+                        None => continue,
                         _ => return Err(anyhow::anyhow!("Invalid value type for property 'name'")),
                     };
                 }
                 "summary.guest.guestFullName" => {
                     os = match &prop.val {
-                        VimAny::Value(ValueElements::PrimitiveString(val)) => val.clone(),
+                        Some(VimAny::Value(ValueElements::PrimitiveString(val))) => val.clone(),
+                        None => continue,
                         _ => return Err(anyhow::anyhow!("Invalid value type for property 'summary.guest.guestFullName'")),
                     };
                 }
                 "summary.storage.committed" => {
                     used_space = match &prop.val {
-                        VimAny::Value(ValueElements::PrimitiveLong(val)) => Some(*val),
+                        Some(VimAny::Value(ValueElements::PrimitiveLong(val))) => Some(*val),
                         _ => return Err(anyhow::anyhow!("Invalid value type for property 'summary.storage.committed'")),
                     };
                 }
                 "summary.quickStats.overallCpuUsage" => {
                     host_cpu = match &prop.val {
-                        VimAny::Value(ValueElements::PrimitiveInt(val)) => Some(*val),
+                        Some(VimAny::Value(ValueElements::PrimitiveInt(val))) => Some(*val),
                         _ => return Err(anyhow::anyhow!("Invalid value type for property 'summary.quickStats.overallCpuUsage'")),
                     };
                 }
                 "summary.quickStats.hostMemoryUsage" => {
                     host_memory = match &prop.val {
-                        VimAny::Value(ValueElements::PrimitiveInt(val)) => Some(*val),
+                        Some(VimAny::Value(ValueElements::PrimitiveInt(val))) => Some(*val),
                         _ => return Err(anyhow::anyhow!("Invalid value type for property 'summary.quickStats.hostMemoryUsage'")),
                     };
                 }
                 "overallStatus" => {
                     status = match &prop.val {
-                        VimAny::Value(ValueElements::ManagedEntityStatus(val)) => Some(val.clone()),
+                        Some(VimAny::Value(ValueElements::ManagedEntityStatus(val))) => Some(val.clone()),
                         _ => return Err(anyhow::anyhow!("Invalid value type for property 'overallStatus'")),
                     };
                 }
                 "runtime.powerState" => {
                     power_state = match &prop.val {
-                        VimAny::Value(ValueElements::VirtualMachinePowerState(val)) => Some(val.clone()),
+                        Some(VimAny::Value(ValueElements::VirtualMachinePowerState(val))) => Some(val.clone()),
                         _ => return Err(anyhow::anyhow!("Invalid value type for property 'runtime.powerState'")),
                     };
                 }
@@ -104,7 +159,7 @@ impl TryFrom<&ObjectContent> for VirtualMachine {
             }
         }
         Ok(VirtualMachine {
-            id: obj.obj.value.clone(),
+            id,
             name,
             os,
             status,
