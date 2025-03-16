@@ -14,9 +14,12 @@ const LIB_VERSION: &str = env!("CARGO_PKG_VERSION");
 // See build.rs for the RUSTC_VERSION
 const RUSTC_VERSION: &str = env!("RUSTC_VERSION");
 
+/// Compatible API releases i.e. current and older API releases that can be negotiated with a server
+pub const COMPATIBLE_API_RELEASES: [&str; 2] = ["8.0.2.0", "8.0.1.0"];
 
-/// The API version found in the OpenAPI specification
-const API_RELEASE: &str = "8.0.2.0";
+/// The default API version found in the OpenAPI specification
+pub const API_RELEASE: &str = "8.0.2.0";
+
 /// The header key for the session key
 const AUTHN_HEADER: &str = "vmware-api-session-id";
 
@@ -34,13 +37,16 @@ pub enum Error {
     MissingOrInvalidSessionKey,
     #[error("Invalid object type {0} expected: {1}")]
     InvalidObjectType(String, String),
+    #[error("Cannot negotiate compatible API release. Attempted with: {0:?}")]
+    CannotNegotiateAPIRelease(Vec<String>),
 }
 
 pub type Result<T> = std::result::Result<T, Error>;
 
 pub struct ClientBuilder {
     server_address: String,
-    api_release: String,
+    compatible_api_releases: Option<Vec<String>>,
+    api_release: Option<String>,
     http_client: Option<reqwest::Client>,
     insecure: Option<bool>,
     app_name: Option<String>,
@@ -57,7 +63,8 @@ impl ClientBuilder {
     pub fn new(server_address: &str) -> Self {
         Self {
             server_address: server_address.to_string(),
-            api_release: API_RELEASE.to_string(),
+            compatible_api_releases: None,
+            api_release: None,
             http_client: None,
             insecure: None,
             app_name: None,
@@ -68,15 +75,29 @@ impl ClientBuilder {
         }
     }
 
-    /// Set the vCenter API release version. The default is set from the openapi spec.
+    /// Set the compatible API releases. The default is set from the openapi spec. If `api_release`
+    /// is not explicitly set then this value or `COMPATIBLE_API_RELEASES` will be used to call the
+    /// vCenter [Hello System](https://developer.broadcom.com/xapis/vsphere-automation-api/latest/vcenter/api/vcenter/system__action=hello/post/index)
+    /// API to negotiate an API release.
+    /// * `compatible_api_releases` - List of compatible API releases
+    pub fn compatible_api_releases(mut self, releases: Vec<&str>) -> Self {
+        self.compatible_api_releases = Some(releases.iter().map(|s| s.to_string()).collect());
+        self
+    }
+
+    /// Set the vCenter API release version. The default value from the OpenAPI spec can be used
+    /// by setting here the `API_RELEASE` constant. If this is set then the Hello System API will
+    /// not be called to negotiate the API release.
+    /// * `api_release` - API release version
     pub fn api_release(mut self, api_release: &str) -> Self {
-        self.api_release = api_release.to_string();
+        self.api_release = Some(api_release.to_string());
         self
     }
 
     /// Set the reqwest::Client instance to use for HTTP requests.
     /// This resets the insecure flag. Use the http_client methods to set the certificate and
     /// hostname verification behavior.
+    /// * `http_client` - preconfigured reqwest::Client instance
     pub fn http_client(mut self, http_client: reqwest::Client) -> Self {
         self.http_client = Some(http_client);
         self.insecure = None;
@@ -85,6 +106,7 @@ impl ClientBuilder {
 
     /// Set the insecure flag to allow invalid certificates and hostnames.
     /// This resets the http_client. A new reqwest::Client instance will be created instead.
+    /// * `insecure` - Allow invalid certificates and hostnames
     pub fn insecure(mut self, insecure: bool) -> Self {
         warn!("!!! WARNING !!! Insecure mode enabled. TLS certificate and hostname verification is disabled. !!! WARNING !!!");
         self.insecure = Some(insecure);
@@ -139,11 +161,41 @@ impl ClientBuilder {
         let session_key = Arc::new(RwLock::new(None));
 
         let user_agent = user_agent(self.app_name.as_deref(), self.app_version.as_deref());
-        let base_url = format!("https://{}/sdk/vim25/{}", self.server_address, self.api_release);
+
+        // Negotiate the API release if not set
+        let api_release = match self.api_release {
+            Some(release) => release,
+            None => {
+                let releases = self.compatible_api_releases
+                    .unwrap_or_else(|| COMPATIBLE_API_RELEASES.iter().map(|s| s.to_string()).collect());
+                let spec = HelloSpec {
+                    api_releases: &releases,
+                };
+                let path = format!("https://{}/api/vcenter/system?action=hello", self.server_address);
+                let req = http_client.post(&path)
+                    .header("Content-Type", "application/json")
+                    .header("User-Agent", &user_agent)
+                    .json(&spec);
+                let res = req.send().await?;
+                let res = res.error_for_status()?;
+                let result: HelloResult = res.json().await?;
+                let api_release = result.api_release;
+                // Throw error if api_release is empty string indicating no compatible API release
+                // was found.
+                if api_release.is_empty() {
+                    return Err(Error::CannotNegotiateAPIRelease(releases));
+                }
+                debug!("Negotiated API release: {}", api_release);
+                api_release
+            },
+        };
+
+        let base_url = format!("https://{}/sdk/vim25/{}", self.server_address, api_release);
 
         let bootstrap = Arc::new(Client {
             http_client: http_client.clone(),
             session_key: session_key.clone(),
+            api_release: api_release.clone(),
             base_url: base_url.clone(),
             user_agent: user_agent.clone(),
             service_content: None,
@@ -158,6 +210,7 @@ impl ClientBuilder {
         let client = Arc::new(Client {
             http_client: http_client.clone(),
             session_key: session_key.clone(),
+            api_release: api_release.clone(),
             base_url: base_url.clone(),
             user_agent: user_agent.clone(),
             service_content: Some(content),
@@ -176,6 +229,7 @@ impl ClientBuilder {
 pub struct Client {
     http_client: reqwest::Client,
     session_key: Arc<RwLock<Option<String>>>,
+    api_release: String,
     base_url: String,
     user_agent: String,
     service_content: Option<ServiceContent>,
@@ -191,6 +245,14 @@ impl Client {
     pub fn service_content(&self) -> &ServiceContent {
         // Safe to unwrap as the service_content is set during construction
         self.service_content.as_ref().unwrap()
+    }
+
+    /// Get the currently used API release. This may be lower than `API_RELEASE` and should be used
+    /// to downgrade client expectations. For example if client is using library 8.0.3.0 with
+    /// vCenter 8.0.1.0 the negotiated release will be 8.0.1.0 and the client should not call APIs
+    /// or set parameters that are only available in 8.0.3.0.
+    pub fn api_release(&self) -> String {
+        self.api_release.clone()
     }
 
     /// Prepare GET request
@@ -385,4 +447,25 @@ fn get_executable_name() -> Option<String> {
         .and_then(|path| path.file_name())
         .and_then(OsStr::to_str)
         .map(|s| s.to_owned())
+}
+
+
+/// The Hello System API request. This is not full-fledged binding but a simple request to
+/// negotiate the API release version.
+/// See [Hello System](https://developer.broadcom.com/xapis/vsphere-automation-api/latest/vcenter/api/vcenter/system__action=hello/post/index)
+#[derive(serde::Serialize, Debug)]
+struct HelloSpec<'a> {
+    /// List of API release IDs that the client can work with in order of preference. The server will select the first mutually supported release ID.
+    api_releases: &'a Vec<String>,
+}
+
+/// The Hello System API response. This is not full-fledged binding but a simple response to
+/// negotiate the API release version.
+#[derive(serde::Deserialize, Debug)]
+struct HelloResult {
+    /// The ID of a mutually-supported API release. This ID should be used in subsequent API calls
+    /// to the current vCenter system. If there is no mutually-supported API release, the value will
+    /// be an empty string, e.g. "". Typically, this is a case where one of the parties is much
+    /// older than the other party.
+    api_release: String,
 }
