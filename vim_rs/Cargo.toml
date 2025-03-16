@@ -4,8 +4,14 @@ version = "0.1.0"
 edition = "2021"
 authors = ["Kiril Karaatanasov <karaatanasov@gmail.com>"]
 license = "Apache-2.0"
-description = "Rust Bindings for the vCenter VI JSON API"
+description = "Rust Bindings for the VMware by Broadcom vCenter VI JSON API"
 readme = "../README.md"
+repository = "https://github.com/noclue/vim_rs"
+homepage = "https://github.com/noclue/vim-rs"
+documentation = "https://docs.rs/vim_rs"
+keywords = ["vi-json", "vim", "bindings", "vcenter", "vmware"]
+categories = ["api-bindings", "network-programming"]
+exclude = ["target/*", "**/*.rs.bk"]
 
 [dependencies]
 base64 = "0.22.1"
