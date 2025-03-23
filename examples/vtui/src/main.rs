@@ -14,6 +14,7 @@ mod event;
 mod monitor;
 mod vm_list;
 mod app;
+mod vm_disp;
 
 const APP_NAME: &str = env!("CARGO_PKG_NAME");
 const APP_VERSION: &str = env!("CARGO_PKG_VERSION");

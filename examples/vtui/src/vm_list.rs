@@ -43,15 +43,15 @@ impl VmListWidget {
         for update in updates {
             match update.kind {
                 ObjectUpdateKindEnum::Enter => {
-                    self.add_vm(&update);
+                    self.add_vm(update);
                 }
                 ObjectUpdateKindEnum::Modify => {
                     let state = self.state.get_mut();
-                    let Some(ref row) = update.change_set else {
+                    let Some(vm) = state.vms.get_mut(&update.obj.value) else {
+                        self.add_vm(update);
                         continue;
                     };
-                    let Some(vm) = state.vms.get_mut(&update.obj.value) else {
-                        self.add_vm(&update);
+                    let Some(row) = update.change_set else {
                         continue;
                     };
                     vm.apply_update(row).unwrap();
@@ -67,7 +67,6 @@ impl VmListWidget {
         let vm_count = self.state.borrow().vms.len();
         if vm_count == 0 {
             self.set_loading_state(LoadingState::Error("No VMs found".to_string()));
-            return;
         } else {
             let mut state = self.state.borrow_mut();
             match state.table_state.selected() {
@@ -83,7 +82,7 @@ impl VmListWidget {
         }
     }
 
-    fn add_vm(&mut self, update: &ObjectUpdate) {
+    fn add_vm(&mut self, update: ObjectUpdate) {
         let vm = match VirtualMachine::try_from(update) {
             Ok(vm) => vm,
             Err(e) => {
@@ -93,7 +92,7 @@ impl VmListWidget {
             }
         };
         let state = self.state.get_mut();
-        state.vms.insert(vm.id().to_string(), vm);
+        state.vms.insert(vm.id().value.to_string(), vm);
     }
 
     pub(crate) fn set_loading_state(&mut self, state: LoadingState) {

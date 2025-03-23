@@ -1,90 +1,135 @@
-use ratatui::widgets::{Cell, Row};
 use vim_rs::types::enums::{ManagedEntityStatusEnum, MoTypesEnum, VirtualMachinePowerStateEnum};
-use ratatui::prelude::{Color, Span, Style, Stylize};
-use vim_rs::types::structs::{ObjectUpdate, PropertyChange, PropertySpec};
+use vim_rs::types::structs::{ManagedObjectReference, ObjectUpdate, PropertyChange, PropertySpec};
 use vim_rs::types::vim_any::VimAny;
 use vim_rs::types::boxed_types::ValueElements;
-use vim_rs::types::structs;
-use anyhow::{Context, Result};
+use thiserror::Error;
+use vim_rs::types::convert::CastInto;
 
+#[derive(Debug, Error)]
+pub enum Error {
+    #[error("Invalid data type for property {property}. Expected `{expected}` got '{got}'")]
+    InvalidPropertyType{property: String, expected: String, got: String},
+    #[error("Received None for required field '{0}'")]
+    NoneValueForRequiredField(String),
+    #[error("No change set found in ObjectUpdate")]
+    NoChangeSetFound,
+}
 
+pub type Result<T> = std::result::Result<T, Error>;
 
-#[derive(Debug, Clone)]
+#[derive(Debug)]
 pub struct VirtualMachine {
-    id: String,
-    name: String,
-    os: String,
-    used_space: Option<i64>, // summary.storage.committed
-    host_cpu: Option<i32>, // summary.quickStats.overallCpuUsage
-    host_memory: Option<i32>, // summary.quickStats.hostMemoryUsage
-    status: Option<ManagedEntityStatusEnum>, // summary.overallStatus
-    power_state: Option<VirtualMachinePowerStateEnum>, // summary.runtime.powerState
+    pub id: ManagedObjectReference,
+    pub name: String, // name
+    pub os: Option<String>, // summary.guest.guestFullName
+    pub storage: Option<vim_rs::types::structs::VirtualMachineStorageSummary>, // summary.storage
+    pub host_cpu: Option<i32>, // summary.quickStats.overallCpuUsage
+    pub host_memory: Option<i32>, // summary.quickStats.hostMemoryUsage
+    pub status: ManagedEntityStatusEnum, // overallStatus
+    pub power_state: VirtualMachinePowerStateEnum, // runtime.powerState
+    pub ft_info: Option<Box<dyn vim_rs::types::traits::FaultToleranceConfigInfoTrait>>, // config.ftInfo
+    pub devices: Option<Vec<Box<dyn vim_rs::types::traits::VirtualDeviceTrait>>>, // config.hardware.device
 }
 
 impl VirtualMachine {
     pub fn prop_spec() -> PropertySpec {
-        structs::PropertySpec {
+        vim_rs::types::structs::PropertySpec {
             all: Some(false),
             path_set: Some(vec![
                 "name".into(),
                 "summary.guest.guestFullName".into(),
-                "summary.storage.committed".into(),
+                "summary.storage".into(),
                 "summary.quickStats.overallCpuUsage".into(),
                 "summary.quickStats.hostMemoryUsage".into(),
                 "overallStatus".into(),
                 "runtime.powerState".into(),
+                "config.ftInfo".into(),
+                "config.hardware.device".into(),
             ]),
             r#type: Into::<&str>::into(MoTypesEnum::VirtualMachine).to_string(),
         }
     }
 
-    pub fn id(&self) -> &str {
+    pub fn id(&self) -> &ManagedObjectReference {
         &self.id
     }
 
-    pub fn apply_update(&mut self, row: &Vec<PropertyChange>) -> Result<()>{
+    pub fn apply_update(&mut self, row: Vec<PropertyChange>) -> Result<()>{
         for prop in row {
             match prop.name.as_str() {
                 "name" => {
-                    self.name = match &prop.val {
+                    self.name = match prop.val {
                         Some(VimAny::Value(ValueElements::PrimitiveString(val))) => val.clone(),
+                        None => return Err(Error::NoneValueForRequiredField("name".to_string())),
                         _ => "<Unknown>".to_string(),
                     };
                 }
                 "summary.guest.guestFullName" => {
-                    self.os = match &prop.val {
-                        Some(VimAny::Value(ValueElements::PrimitiveString(val))) => val.clone(),
-                        _ => "<Unknown>".to_string(),
+                    self.os = match prop.val {
+                        Some(VimAny::Value(ValueElements::PrimitiveString(val))) => Some(val.clone()),
+                        None => None,
+                        _ => return Err(Error::InvalidPropertyType {property: "summary.guest.guestFullName".to_string(), expected: "String".to_string(), got: type_name(&prop.val)}),
                     };
                 }
-                "summary.storage.committed" => {
-                    self.used_space = match &prop.val {
-                        Some(VimAny::Value(ValueElements::PrimitiveLong(val))) => Some(*val),
-                        _ => None,
+                "summary.storage" => {
+                    self.storage = match prop.val {
+                        Some(VimAny::Object(obj)) => {
+                            let name: &'static str = obj.data_type().into();
+                            match obj.as_any_box().downcast::<vim_rs::types::structs::VirtualMachineStorageSummary>() {
+                                Ok(storage) => Some(*storage),
+                                Err(_) => return Err(Error::InvalidPropertyType {property: "summary.storage".to_string(), expected: "VirtualMachineStorageSummary".to_string(), got: name.to_string()}),
+                            }
+                        },
+                        None => None,
+                        _ => return Err(Error::InvalidPropertyType {property: "summary.storage".to_string(), expected: "VirtualMachineStorageSummary".to_string(), got: type_name(&prop.val)}),
                     };
                 }
                 "summary.quickStats.overallCpuUsage" => {
-                    self.host_cpu = match &prop.val {
-                        Some(VimAny::Value(ValueElements::PrimitiveInt(val))) => Some(*val),
-                        _ => None,
+                    self.host_cpu = match prop.val {
+                        Some(VimAny::Value(ValueElements::PrimitiveInt(val))) => Some(val),
+                        None => None,
+                        _ => return Err(Error::InvalidPropertyType {property: "summary.quickStats.overallCpuUsage".to_string(), expected: "i32".to_string(), got: type_name(&prop.val)}),
                     };
                 }
                 "summary.quickStats.hostMemoryUsage" => {
-                    self.host_memory = match &prop.val {
-                        Some(VimAny::Value(ValueElements::PrimitiveInt(val))) => Some(*val),
-                        _ => None,
+                    self.host_memory = match prop.val {
+                        Some(VimAny::Value(ValueElements::PrimitiveInt(val))) => Some(val),
+                        None => None,
+                        _ => return Err(Error::InvalidPropertyType {property: "summary.quickStats.hostMemoryUsage".to_string(), expected: "i32".to_string(), got: type_name(&prop.val)}),
                     };
                 }
                 "overallStatus" => {
-                    self.status = match &prop.val {
-                        Some(VimAny::Value(ValueElements::ManagedEntityStatus(val))) => Some(val.clone()),
-                        _ => None,
+                    self.status = match prop.val {
+                        Some(VimAny::Value(ValueElements::ManagedEntityStatus(val))) => val.clone(),
+                        None => return Err(Error::NoneValueForRequiredField("overallStatus".to_string())),
+                        _ => return Err(Error::InvalidPropertyType {property: "overallStatus".to_string(), expected: "ManagedEntityStatus".to_string(), got: type_name(&prop.val)}),
                     };
                 }
                 "runtime.powerState" => {
-                    self.power_state = match &prop.val {
-                        Some(VimAny::Value(ValueElements::VirtualMachinePowerState(val))) => Some(val.clone()),
-                        _ => None,
+                    self.power_state = match prop.val {
+                        Some(VimAny::Value(ValueElements::VirtualMachinePowerState(val))) => val.clone(),
+                        None => return Err(Error::NoneValueForRequiredField("runtime.powerState".to_string())),
+                        _ => return Err(Error::InvalidPropertyType { property: "runtime.powerState".to_string(), expected: "VirtualMachinePowerState".to_string(), got: type_name(&prop.val)}),
+                    };
+                }
+                "config.ftInfo" => {
+                    self.ft_info = match prop.val {
+                        Some(VimAny::Object(obj)) => {
+                            let name: &'static str = obj.data_type().into();
+                            match obj.into_box() {
+                                Ok(ft_info) => Some(ft_info),
+                                Err(_) => return Err(Error::InvalidPropertyType {property: "config.ftInfo".to_string(), expected: "FaultToleranceConfigInfo".to_string(), got: name.to_string()}),
+                            }
+                        },
+                        None => None,
+                        _ => return Err(Error::InvalidPropertyType {property: "config.ftInfo".to_string(), expected: "FaultToleranceConfigInfo".to_string(), got: type_name(&prop.val)}),
+                    };
+                }
+                "config.hardware.device" => {
+                    self.devices = match prop.val {
+                        Some(VimAny::Value(ValueElements::ArrayOfVirtualDevice(vd))) => Some(vd),
+                        None => None,
+                        _ => return Err(Error::InvalidPropertyType {property: "config.hardware.device".to_string(), expected: "ArrayOfVirtualDevice".to_string(), got: type_name(&prop.val)}),
                     };
                 }
                 _ => {}
@@ -94,65 +139,100 @@ impl VirtualMachine {
     }
 }
 
-impl TryFrom<&ObjectUpdate> for VirtualMachine {
-    type Error = anyhow::Error;
+impl TryFrom<ObjectUpdate> for VirtualMachine {
+    type Error = Error;
 
-    fn try_from(row: &ObjectUpdate) -> anyhow::Result<Self> {
-        let id = row.obj.value.clone();
-        let row = row.change_set.as_ref().context("No change set found")?;
+    fn try_from(row: ObjectUpdate) -> Result<Self> {
+        let id = row.obj;
+        let Some(row) = row.change_set else {
+            return Err(Error::NoChangeSetFound);
+        };
 
-        let mut name = "<Unknown>".to_string();
-        let mut os = "<Unknown>".to_string();
-        let mut used_space = None;
-        let mut host_cpu = None;
-        let mut host_memory = None;
-        let mut status = None;
-        let mut power_state = None;
+        let mut field1 = None;
+        let mut field2 = None;
+        let mut field5 = None;
+        let mut field6 = None;
+        let mut field7 = None;
+        let mut field3 = None;
+        let mut field4 = None;
+        let mut field8 = None;
+        let mut field9 = None;
 
         for prop in row {
             match prop.name.as_str() {
                 "name" => {
-                    name = match &prop.val {
-                        Some(VimAny::Value(ValueElements::PrimitiveString(val))) => val.clone(),
+                    field1 = match prop.val {
+                        Some(VimAny::Value(ValueElements::PrimitiveString(val))) => Some(val),
                         None => continue,
-                        _ => return Err(anyhow::anyhow!("Invalid value type for property 'name'")),
+                        _ => return Err(Error::InvalidPropertyType {property: "name".to_string(), expected: "String".to_string(), got: type_name(&prop.val)}),
                     };
                 }
                 "summary.guest.guestFullName" => {
-                    os = match &prop.val {
-                        Some(VimAny::Value(ValueElements::PrimitiveString(val))) => val.clone(),
+                    field2 = match &prop.val {
+                        Some(VimAny::Value(ValueElements::PrimitiveString(val))) => Some(val.clone()),
                         None => continue,
-                        _ => return Err(anyhow::anyhow!("Invalid value type for property 'summary.guest.guestFullName'")),
+                        _ => return Err(Error::InvalidPropertyType {property: "summary.guest.guestFullName".to_string(), expected: "String".to_string(), got: type_name(&prop.val)}),
                     };
                 }
-                "summary.storage.committed" => {
-                    used_space = match &prop.val {
-                        Some(VimAny::Value(ValueElements::PrimitiveLong(val))) => Some(*val),
-                        _ => return Err(anyhow::anyhow!("Invalid value type for property 'summary.storage.committed'")),
+                "summary.storage" => {
+                    field5 = match prop.val {
+                        Some(VimAny::Object(obj)) => {
+                            let name: &'static str = obj.data_type().into();
+                            match obj.as_any_box().downcast() {
+                                Ok(storage) => Some(*storage),
+                                Err(_) => return Err(Error::InvalidPropertyType {property: "summary.storage".to_string(), expected: "VirtualMachineStorageSummary".to_string(), got: name.to_string()}),
+                            }
+                        },
+                        None => continue,
+                        _ => return Err(Error::InvalidPropertyType {property: "summary.storage".to_string(), expected: "VirtualMachineStorageSummary".to_string(), got: type_name(&prop.val)}),
                     };
                 }
                 "summary.quickStats.overallCpuUsage" => {
-                    host_cpu = match &prop.val {
-                        Some(VimAny::Value(ValueElements::PrimitiveInt(val))) => Some(*val),
-                        _ => return Err(anyhow::anyhow!("Invalid value type for property 'summary.quickStats.overallCpuUsage'")),
+                    field6 = match prop.val {
+                        Some(VimAny::Value(ValueElements::PrimitiveInt(val))) => Some(val),
+                        None => continue,
+                        _ => return Err(Error::InvalidPropertyType { property: "summary.quickStats.overallCpuUsage".to_string(), expected: "i32".to_string(), got: type_name(&prop.val)}),
                     };
                 }
                 "summary.quickStats.hostMemoryUsage" => {
-                    host_memory = match &prop.val {
-                        Some(VimAny::Value(ValueElements::PrimitiveInt(val))) => Some(*val),
-                        _ => return Err(anyhow::anyhow!("Invalid value type for property 'summary.quickStats.hostMemoryUsage'")),
+                    field7 = match prop.val {
+                        Some(VimAny::Value(ValueElements::PrimitiveInt(val))) => Some(val),
+                        None => continue,
+                        _ => return Err(Error::InvalidPropertyType { property: "summary.quickStats.hostMemoryUsage".to_string(), expected: "i32".to_string(), got: type_name(&prop.val)}),
                     };
                 }
                 "overallStatus" => {
-                    status = match &prop.val {
+                    field3 = match prop.val {
                         Some(VimAny::Value(ValueElements::ManagedEntityStatus(val))) => Some(val.clone()),
-                        _ => return Err(anyhow::anyhow!("Invalid value type for property 'overallStatus'")),
+                        None => continue,
+                        _ => return Err(Error::InvalidPropertyType { property: "overallStatus".to_string(), expected: "ManagedEntityStatus".to_string(), got: type_name(&prop.val)}),
                     };
                 }
                 "runtime.powerState" => {
-                    power_state = match &prop.val {
+                    field4 = match prop.val {
                         Some(VimAny::Value(ValueElements::VirtualMachinePowerState(val))) => Some(val.clone()),
-                        _ => return Err(anyhow::anyhow!("Invalid value type for property 'runtime.powerState'")),
+                        None => continue,
+                        _ => return Err(Error::InvalidPropertyType { property: "runtime.powerState".to_string(), expected: "VirtualMachinePowerState".to_string(), got: type_name(&prop.val)}),
+                    };
+                }
+                "config.ftInfo" => {
+                    field8 = match prop.val {
+                        Some(VimAny::Object(obj)) => {
+                            let name: &'static str = obj.data_type().into();
+                            match obj.into_box() {
+                                Ok(ft_info) => Some(ft_info),
+                                Err(_) => return Err(Error::InvalidPropertyType { property: "config.ftInfo".to_string(), expected: "FaultToleranceConfigInfo".to_string(), got: name.to_string()}),
+                            }
+                        },
+                        None => continue,
+                        _ => return Err(Error::InvalidPropertyType { property: "config.ftInfo".to_string(), expected: "FaultToleranceConfigInfo".to_string(), got: type_name(&prop.val)}),
+                    };
+                }
+                "config.hardware.device" => {
+                    field9 = match prop.val {
+                        Some(VimAny::Value(ValueElements::ArrayOfVirtualDevice(vd))) => Some(vd),
+                        None => continue,
+                        _ => return Err(Error::InvalidPropertyType { property: "config.hardware.device".to_string(), expected: "ArrayOfVirtualDevice".to_string(), got: type_name(&prop.val)}),
                     };
                 }
                 _ => {}
@@ -160,71 +240,31 @@ impl TryFrom<&ObjectUpdate> for VirtualMachine {
         }
         Ok(VirtualMachine {
             id,
-            name,
-            os,
-            status,
-            power_state,
-            used_space,
-            host_cpu,
-            host_memory,
+            name: field1.ok_or(Error::NoneValueForRequiredField(String::from("name")))?,
+            os: field2,
+            status: field3.ok_or(Error::NoneValueForRequiredField(String::from("overallStatus")))?,
+            power_state: field4.ok_or(Error::NoneValueForRequiredField(String::from("runtime.powerState")))?,
+            storage: field5,
+            host_cpu: field6,
+            host_memory: field7,
+            ft_info: field8,
+            devices: field9,
         })
     }
 }
 
 
-const STATUS: &str = "● ";
-const POWER_ON: &str = "● ";    // U+25CF
-const POWER_OFF: &str = "○ ";   // U+25CB
-const SUSPENDED: &str = "◐ ";   // U+25D0
-
-
-impl From<&VirtualMachine> for Row<'_> {
-    fn from(vm: &VirtualMachine) -> Self {
-        let vm = vm.clone();
-        let color = match vm.status {
-            Some(ManagedEntityStatusEnum::Green) => Style::new().fg(ratatui::style::Color::Green),
-            Some(ManagedEntityStatusEnum::Yellow) => Style::new().fg(ratatui::style::Color::Yellow),
-            Some(ManagedEntityStatusEnum::Red) => Style::new().fg(ratatui::style::Color::Red),
-            Some(ManagedEntityStatusEnum::Gray) => Style::new().fg(ratatui::style::Color::Gray),
-            _ => Style::default(),
-        };
-        let power_state = match vm.power_state {
-            Some(VirtualMachinePowerStateEnum::PoweredOn) => Span::styled(POWER_ON, Style::default().fg(Color::Green)),
-            Some(VirtualMachinePowerStateEnum::PoweredOff) => Span::styled(POWER_OFF, Style::default().fg(Color::Red)),
-            Some(VirtualMachinePowerStateEnum::Suspended) => Span::styled(SUSPENDED, Style::default().fg(Color::Yellow)),
-            _ => Span::from("?").gray(),
-        };
-        let used_space = if let Some(used_space) = vm.used_space {
-            Cell::from(format!("{:.2} GB", used_space as f64 / 1024.0 / 1024.0 / 1024.0))
-        } else {
-            Cell::default()
-        };
-        let host_cpu = if let Some(host_cpu) = vm.host_cpu {
-            Cell::from(format!("{:.2} MHz", host_cpu as f32))
-        } else {
-            Cell::default()
-        };
-        let host_memory = if let Some(host_memory) = vm.host_memory {
-            if host_memory > 1024 {
-                Cell::from(format!("{:.2} GB", host_memory as f32 / 1024.0))
-            } else {
-                Cell::from(format!("{:.2} MB", host_memory as f32))
-            }
-        } else {
-            Cell::default()
-        };
-
-        Row::new(vec![
-            Cell::from(vm.id),
-            Cell::from(Span::from(STATUS).style(color)),
-            Cell::from(power_state),
-
-            Cell::from(vm.name),
-            Cell::from(vm.os),
-            used_space,
-
-            host_cpu,
-            host_memory,
-        ])
+fn type_name(value :&Option<VimAny>) -> String {
+    match value {
+        Some(VimAny::Value(value)) => {
+            let type_name : &'static str = value.into();
+            type_name.to_string()
+        },
+        Some(VimAny::Object(obj)) => {
+            let type_name : &'static str = obj.data_type().into();
+            type_name.to_string()
+        },
+        None => "None".to_string(),
     }
 }
+
