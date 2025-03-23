@@ -4,7 +4,7 @@ use super::deserialize::get_value_deserializer;
 use super::vim_any::VimAny;
 use super::structs::*;
 
-#[derive(Debug)]
+#[derive(Debug, strum_macros::IntoStaticStr)]
 pub enum ValueElements {
     /// A boxed array of *Any*. To be used in *Any* placeholders.
     ArrayOfAnyType(Vec<VimAny>),

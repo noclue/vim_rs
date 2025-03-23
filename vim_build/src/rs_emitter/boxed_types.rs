@@ -28,7 +28,7 @@ impl<'a> BoxedTypesEmitter<'a> {
         Ok(())
     }
     fn emit_enum(&mut self) -> Result<()> {
-        self.printer.println("#[derive(Debug)]")?;
+        self.printer.println("#[derive(Debug, strum_macros::IntoStaticStr)]")?;
         self.printer.println("pub enum ValueElements {")?;
         self.printer.indent();
         for (_, box_type) in &self.vim_model.any_value_types {
