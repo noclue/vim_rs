@@ -6,12 +6,12 @@ use vim_rs::types::enums::{ManagedEntityStatusEnum, VirtualMachinePowerStateEnum
 vim_updatable!(
     struct VM: VirtualMachine {
         name = "name",
-        os = "summary.guest.guestFullName",
+        os = "summary.guest.guest_full_name",
         used_space = "summary.storage.committed",
-        host_cpu = "summary.quickStats.overallCpuUsage",
-        host_memory = "summary.quickStats.hostMemoryUsage",
-        status = "summary.overallStatus",
-        power_state = "runtime.powerState",
+        host_cpu = "summary.quick_stats.overall_cpu_usage",
+        host_memory = "summary.quick_stats.host_memory_usage",
+        status = "summary.overall_status",
+        power_state = "runtime.power_state",
     }
 );
 
