@@ -1,21 +1,11 @@
-use vim_rs::types::enums::{ManagedEntityStatusEnum, MoTypesEnum, VirtualMachinePowerStateEnum};
-use vim_rs::types::structs::{ManagedObjectReference, ObjectUpdate, PropertyChange, PropertySpec};
+use vim_rs::types::enums::{ManagedEntityStatusEnum, MoTypesEnum, PropertyChangeOpEnum, VirtualMachinePowerStateEnum};
+use vim_rs::types::structs::{ManagedObjectReference, ObjectContent, ObjectUpdate, PropertyChange, PropertySpec};
 use vim_rs::types::vim_any::VimAny;
 use vim_rs::types::boxed_types::ValueElements;
-use thiserror::Error;
 use vim_rs::types::convert::CastInto;
+use log::error;
+use vim_rs::core::pc_helpers;
 
-#[derive(Debug, Error)]
-pub enum Error {
-    #[error("Invalid data type for property {property}. Expected `{expected}` got '{got}'")]
-    InvalidPropertyType{property: String, expected: String, got: String},
-    #[error("Received None for required field '{0}'")]
-    NoneValueForRequiredField(String),
-    #[error("No change set found in ObjectUpdate")]
-    NoChangeSetFound,
-}
-
-pub type Result<T> = std::result::Result<T, Error>;
 
 #[derive(Debug)]
 pub struct VirtualMachine {
@@ -54,13 +44,23 @@ impl VirtualMachine {
         &self.id
     }
 
-    pub fn apply_update(&mut self, row: Vec<PropertyChange>) -> Result<()>{
+    pub fn apply_update(&mut self, row: Vec<PropertyChange>) -> pc_helpers::Result<()> {
         for prop in row {
+            if matches!(prop.op, PropertyChangeOpEnum::Add | PropertyChangeOpEnum::Remove | PropertyChangeOpEnum::Other_(_)) {
+                // It is assumption of the code here that create_filter was called with `partial_updates = false`.
+                // This flag value implies only `assign` and `indirectRemove` operations are returned. `add` and
+                // `remove` operations are used when `partial_updates = true`. The big problem is that with
+                // `partial_updates` server will return paths to sub-properties that we cannot easily resolve in
+                // Rust hence the assumption that `partial_updates = false` is made.`Add` and `Remove` operations
+                // are not supported in this code.
+                error!("Unsupported PropertyChangeOp: {:?} for property {} in  object {:?}", prop.op, prop.name, self.id);
+                continue;
+            }
             match prop.name.as_str() {
                 "name" => {
                     self.name = match prop.val {
                         Some(VimAny::Value(ValueElements::PrimitiveString(val))) => val.clone(),
-                        None => return Err(Error::NoneValueForRequiredField("name".to_string())),
+                        None => return Err(pc_helpers::Error::NoneValueForRequiredField("name".to_string())),
                         _ => "<Unknown>".to_string(),
                     };
                 }
@@ -68,7 +68,7 @@ impl VirtualMachine {
                     self.os = match prop.val {
                         Some(VimAny::Value(ValueElements::PrimitiveString(val))) => Some(val.clone()),
                         None => None,
-                        _ => return Err(Error::InvalidPropertyType {property: "summary.guest.guestFullName".to_string(), expected: "String".to_string(), got: type_name(&prop.val)}),
+                        Some(ref val) => return Err(pc_helpers::Error::InvalidPropertyType {property: "summary.guest.guestFullName".to_string(), expected: "String".to_string(), got: pc_helpers::type_name(val)}),
                     };
                 }
                 "summary.storage" => {
@@ -77,39 +77,39 @@ impl VirtualMachine {
                             let name: &'static str = obj.data_type().into();
                             match obj.as_any_box().downcast::<vim_rs::types::structs::VirtualMachineStorageSummary>() {
                                 Ok(storage) => Some(*storage),
-                                Err(_) => return Err(Error::InvalidPropertyType {property: "summary.storage".to_string(), expected: "VirtualMachineStorageSummary".to_string(), got: name.to_string()}),
+                                Err(_) => return Err(pc_helpers::Error::InvalidPropertyType {property: "summary.storage".to_string(), expected: "VirtualMachineStorageSummary".to_string(), got: name.to_string()}),
                             }
                         },
                         None => None,
-                        _ => return Err(Error::InvalidPropertyType {property: "summary.storage".to_string(), expected: "VirtualMachineStorageSummary".to_string(), got: type_name(&prop.val)}),
+                        Some(ref val) => return Err(pc_helpers::Error::InvalidPropertyType {property: "summary.storage".to_string(), expected: "VirtualMachineStorageSummary".to_string(), got: pc_helpers::type_name(val)}),
                     };
                 }
                 "summary.quickStats.overallCpuUsage" => {
                     self.host_cpu = match prop.val {
                         Some(VimAny::Value(ValueElements::PrimitiveInt(val))) => Some(val),
                         None => None,
-                        _ => return Err(Error::InvalidPropertyType {property: "summary.quickStats.overallCpuUsage".to_string(), expected: "i32".to_string(), got: type_name(&prop.val)}),
+                        Some(ref val) => return Err(pc_helpers::Error::InvalidPropertyType {property: "summary.quickStats.overallCpuUsage".to_string(), expected: "i32".to_string(), got: pc_helpers::type_name(val)}),
                     };
                 }
                 "summary.quickStats.hostMemoryUsage" => {
                     self.host_memory = match prop.val {
                         Some(VimAny::Value(ValueElements::PrimitiveInt(val))) => Some(val),
                         None => None,
-                        _ => return Err(Error::InvalidPropertyType {property: "summary.quickStats.hostMemoryUsage".to_string(), expected: "i32".to_string(), got: type_name(&prop.val)}),
+                        Some(ref val) => return Err(pc_helpers::Error::InvalidPropertyType {property: "summary.quickStats.hostMemoryUsage".to_string(), expected: "i32".to_string(), got: pc_helpers::type_name(val)}),
                     };
                 }
                 "overallStatus" => {
                     self.status = match prop.val {
                         Some(VimAny::Value(ValueElements::ManagedEntityStatus(val))) => val.clone(),
-                        None => return Err(Error::NoneValueForRequiredField("overallStatus".to_string())),
-                        _ => return Err(Error::InvalidPropertyType {property: "overallStatus".to_string(), expected: "ManagedEntityStatus".to_string(), got: type_name(&prop.val)}),
+                        None => return Err(pc_helpers::Error::NoneValueForRequiredField("overallStatus".to_string())),
+                        Some(ref val) => return Err(pc_helpers::Error::InvalidPropertyType {property: "overallStatus".to_string(), expected: "ManagedEntityStatus".to_string(), got: pc_helpers::type_name(val)}),
                     };
                 }
                 "runtime.powerState" => {
                     self.power_state = match prop.val {
                         Some(VimAny::Value(ValueElements::VirtualMachinePowerState(val))) => val.clone(),
-                        None => return Err(Error::NoneValueForRequiredField("runtime.powerState".to_string())),
-                        _ => return Err(Error::InvalidPropertyType { property: "runtime.powerState".to_string(), expected: "VirtualMachinePowerState".to_string(), got: type_name(&prop.val)}),
+                        None => return Err(pc_helpers::Error::NoneValueForRequiredField("runtime.powerState".to_string())),
+                        Some(ref val) => return Err(pc_helpers::Error::InvalidPropertyType { property: "runtime.powerState".to_string(), expected: "VirtualMachinePowerState".to_string(), got: pc_helpers::type_name(val)}),
                     };
                 }
                 "config.ftInfo" => {
@@ -118,18 +118,18 @@ impl VirtualMachine {
                             let name: &'static str = obj.data_type().into();
                             match obj.into_box() {
                                 Ok(ft_info) => Some(ft_info),
-                                Err(_) => return Err(Error::InvalidPropertyType {property: "config.ftInfo".to_string(), expected: "FaultToleranceConfigInfo".to_string(), got: name.to_string()}),
+                                Err(_) => return Err(pc_helpers::Error::InvalidPropertyType {property: "config.ftInfo".to_string(), expected: "FaultToleranceConfigInfo".to_string(), got: name.to_string()}),
                             }
                         },
                         None => None,
-                        _ => return Err(Error::InvalidPropertyType {property: "config.ftInfo".to_string(), expected: "FaultToleranceConfigInfo".to_string(), got: type_name(&prop.val)}),
+                        Some(ref val) => return Err(pc_helpers::Error::InvalidPropertyType {property: "config.ftInfo".to_string(), expected: "FaultToleranceConfigInfo".to_string(), got: pc_helpers::type_name(val)}),
                     };
                 }
                 "config.hardware.device" => {
                     self.devices = match prop.val {
                         Some(VimAny::Value(ValueElements::ArrayOfVirtualDevice(vd))) => Some(vd),
                         None => None,
-                        _ => return Err(Error::InvalidPropertyType {property: "config.hardware.device".to_string(), expected: "ArrayOfVirtualDevice".to_string(), got: type_name(&prop.val)}),
+                        Some(ref val) => return Err(pc_helpers::Error::InvalidPropertyType {property: "config.hardware.device".to_string(), expected: "ArrayOfVirtualDevice".to_string(), got: pc_helpers::type_name(val)}),
                     };
                 }
                 _ => {}
@@ -140,12 +140,136 @@ impl VirtualMachine {
 }
 
 impl TryFrom<ObjectUpdate> for VirtualMachine {
-    type Error = Error;
+    type Error = pc_helpers::Error;
 
-    fn try_from(row: ObjectUpdate) -> Result<Self> {
+    fn try_from(row: ObjectUpdate) -> pc_helpers::Result<Self> {
         let id = row.obj;
         let Some(row) = row.change_set else {
-            return Err(Error::NoChangeSetFound);
+            return Err(pc_helpers::Error::NoDataFound);
+        };
+
+        let mut field1 = None;
+        let mut field2 = None;
+        let mut field5 = None;
+        let mut field6 = None;
+        let mut field7 = None;
+        let mut field3 = None;
+        let mut field4 = None;
+        let mut field8 = None;
+        let mut field9 = None;
+
+        for prop in row {
+            if matches!(prop.op, PropertyChangeOpEnum::Add | PropertyChangeOpEnum::Remove | PropertyChangeOpEnum::Other_(_)) {
+                // It is assumption of the code here that create_filter was called with `partial_updates = false`.
+                // This flag value implies only `assign` and `indirectRemove` operations are returned. `add` and
+                // `remove` operations are used when `partial_updates = true`. The big problem is that with
+                // `partial_updates` server will return paths to sub-properties that we cannot easily resolve in
+                // Rust hence the assumption that `partial_updates = false` is made.`Add` and `Remove` operations
+                // are not supported in this code.
+                error!("Unsupported PropertyChangeOp: {:?} for property {} in  object {:?}", prop.op, prop.name, id);
+                continue;
+            }
+            match prop.name.as_str() {
+                "name" => {
+                    field1 = match prop.val {
+                        Some(VimAny::Value(ValueElements::PrimitiveString(val))) => Some(val),
+                        None => continue,
+                        Some(ref val) => return Err(pc_helpers::Error::InvalidPropertyType {property: "name".to_string(), expected: "String".to_string(), got: pc_helpers::type_name(val)}),
+                    };
+                }
+                "summary.guest.guestFullName" => {
+                    field2 = match prop.val {
+                        Some(VimAny::Value(ValueElements::PrimitiveString(val))) => Some(val.clone()),
+                        None => continue,
+                        Some(ref val) => return Err(pc_helpers::Error::InvalidPropertyType {property: "summary.guest.guestFullName".to_string(), expected: "String".to_string(), got: pc_helpers::type_name(val)}),
+                    };
+                }
+                "summary.storage" => {
+                    field5 = match prop.val {
+                        Some(VimAny::Object(obj)) => {
+                            let name: &'static str = obj.data_type().into();
+                            match obj.as_any_box().downcast() {
+                                Ok(storage) => Some(*storage),
+                                Err(_) => return Err(pc_helpers::Error::InvalidPropertyType {property: "summary.storage".to_string(), expected: "VirtualMachineStorageSummary".to_string(), got: name.to_string()}),
+                            }
+                        },
+                        None => continue,
+                        Some(ref val) => return Err(pc_helpers::Error::InvalidPropertyType {property: "summary.storage".to_string(), expected: "VirtualMachineStorageSummary".to_string(), got: pc_helpers::type_name(val)}),
+                    };
+                }
+                "summary.quickStats.overallCpuUsage" => {
+                    field6 = match prop.val {
+                        Some(VimAny::Value(ValueElements::PrimitiveInt(val))) => Some(val),
+                        None => continue,
+                        Some(ref val) => return Err(pc_helpers::Error::InvalidPropertyType { property: "summary.quickStats.overallCpuUsage".to_string(), expected: "i32".to_string(), got: pc_helpers::type_name(val)}),
+                    };
+                }
+                "summary.quickStats.hostMemoryUsage" => {
+                    field7 = match prop.val {
+                        Some(VimAny::Value(ValueElements::PrimitiveInt(val))) => Some(val),
+                        None => continue,
+                        Some(ref val) => return Err(pc_helpers::Error::InvalidPropertyType { property: "summary.quickStats.hostMemoryUsage".to_string(), expected: "i32".to_string(), got: pc_helpers::type_name(val)}),
+                    };
+                }
+                "overallStatus" => {
+                    field3 = match prop.val {
+                        Some(VimAny::Value(ValueElements::ManagedEntityStatus(val))) => Some(val.clone()),
+                        None => continue,
+                        Some(ref val) => return Err(pc_helpers::Error::InvalidPropertyType { property: "overallStatus".to_string(), expected: "ManagedEntityStatus".to_string(), got: pc_helpers::type_name(val)}),
+                    };
+                }
+                "runtime.powerState" => {
+                    field4 = match prop.val {
+                        Some(VimAny::Value(ValueElements::VirtualMachinePowerState(val))) => Some(val.clone()),
+                        None => continue,
+                        Some(ref val) => return Err(pc_helpers::Error::InvalidPropertyType { property: "runtime.powerState".to_string(), expected: "VirtualMachinePowerState".to_string(), got: pc_helpers::type_name(val)}),
+                    };
+                }
+                "config.ftInfo" => {
+                    field8 = match prop.val {
+                        Some(VimAny::Object(obj)) => {
+                            let name: &'static str = obj.data_type().into();
+                            match obj.into_box() {
+                                Ok(ft_info) => Some(ft_info),
+                                Err(_) => return Err(pc_helpers::Error::InvalidPropertyType { property: "config.ftInfo".to_string(), expected: "FaultToleranceConfigInfo".to_string(), got: name.to_string()}),
+                            }
+                        },
+                        None => continue,
+                        Some(ref val) => return Err(pc_helpers::Error::InvalidPropertyType { property: "config.ftInfo".to_string(), expected: "FaultToleranceConfigInfo".to_string(), got: pc_helpers::type_name(val)}),
+                    };
+                }
+                "config.hardware.device" => {
+                    field9 = match prop.val {
+                        Some(VimAny::Value(ValueElements::ArrayOfVirtualDevice(vd))) => Some(vd),
+                        None => continue,
+                        Some(ref val) => return Err(pc_helpers::Error::InvalidPropertyType { property: "config.hardware.device".to_string(), expected: "ArrayOfVirtualDevice".to_string(), got: pc_helpers::type_name(val)}),
+                    };
+                }
+                _ => {}
+            }
+        }
+        Ok(VirtualMachine {
+            id,
+            name: field1.ok_or(pc_helpers::Error::NoneValueForRequiredField(String::from("name")))?,
+            os: field2,
+            status: field3.ok_or(pc_helpers::Error::NoneValueForRequiredField(String::from("overallStatus")))?,
+            power_state: field4.ok_or(pc_helpers::Error::NoneValueForRequiredField(String::from("runtime.powerState")))?,
+            storage: field5,
+            host_cpu: field6,
+            host_memory: field7,
+            ft_info: field8,
+            devices: field9,
+        })
+    }
+}
+
+impl TryFrom<ObjectContent> for VirtualMachine {
+    type Error = pc_helpers::Error;
+
+    fn try_from(row: ObjectContent) -> pc_helpers::Result<Self> {
+        let id = row.obj;
+        let Some(row) = row.prop_set else {
+            return Err(pc_helpers::Error::NoDataFound);
         };
 
         let mut field1 = None;
@@ -162,88 +286,81 @@ impl TryFrom<ObjectUpdate> for VirtualMachine {
             match prop.name.as_str() {
                 "name" => {
                     field1 = match prop.val {
-                        Some(VimAny::Value(ValueElements::PrimitiveString(val))) => Some(val),
-                        None => continue,
-                        _ => return Err(Error::InvalidPropertyType {property: "name".to_string(), expected: "String".to_string(), got: type_name(&prop.val)}),
+                        VimAny::Value(ValueElements::PrimitiveString(val)) => Some(val),
+                        ref val => return Err(pc_helpers::Error::InvalidPropertyType {property: "name".to_string(), expected: "PrimitiveString".to_string(), got: pc_helpers::type_name(val)}),
                     };
                 }
                 "summary.guest.guestFullName" => {
-                    field2 = match &prop.val {
-                        Some(VimAny::Value(ValueElements::PrimitiveString(val))) => Some(val.clone()),
-                        None => continue,
-                        _ => return Err(Error::InvalidPropertyType {property: "summary.guest.guestFullName".to_string(), expected: "String".to_string(), got: type_name(&prop.val)}),
+                    field2 = match prop.val {
+                        VimAny::Value(ValueElements::PrimitiveString(val)) => Some(val.clone()),
+                        ref val => return Err(pc_helpers::Error::InvalidPropertyType {property: "summary.guest.guestFullName".to_string(), expected: "PrimitiveString".to_string(), got: pc_helpers::type_name(val)}),
                     };
                 }
                 "summary.storage" => {
                     field5 = match prop.val {
-                        Some(VimAny::Object(obj)) => {
+                        VimAny::Object(obj) => {
                             let name: &'static str = obj.data_type().into();
                             match obj.as_any_box().downcast() {
-                                Ok(storage) => Some(*storage),
-                                Err(_) => return Err(Error::InvalidPropertyType {property: "summary.storage".to_string(), expected: "VirtualMachineStorageSummary".to_string(), got: name.to_string()}),
+                                Ok(val) => Some(*val),
+                                Err(_) => return Err(pc_helpers::Error::InvalidPropertyType {property: "summary.storage".to_string(), expected: "VirtualMachineStorageSummary".to_string(), got: name.to_string()}),
                             }
                         },
-                        None => continue,
-                        _ => return Err(Error::InvalidPropertyType {property: "summary.storage".to_string(), expected: "VirtualMachineStorageSummary".to_string(), got: type_name(&prop.val)}),
+                        ref val => return Err(pc_helpers::Error::InvalidPropertyType {property: "summary.storage".to_string(), expected: "VirtualMachineStorageSummary".to_string(), got: pc_helpers::type_name(val)}),
                     };
                 }
                 "summary.quickStats.overallCpuUsage" => {
                     field6 = match prop.val {
-                        Some(VimAny::Value(ValueElements::PrimitiveInt(val))) => Some(val),
-                        None => continue,
-                        _ => return Err(Error::InvalidPropertyType { property: "summary.quickStats.overallCpuUsage".to_string(), expected: "i32".to_string(), got: type_name(&prop.val)}),
+                        VimAny::Value(ValueElements::PrimitiveInt(val)) => Some(val),
+                        ref val => return Err(pc_helpers::Error::InvalidPropertyType { property: "summary.quickStats.overallCpuUsage".to_string(), expected: "i32".to_string(), got: pc_helpers::type_name(val)}),
                     };
                 }
                 "summary.quickStats.hostMemoryUsage" => {
                     field7 = match prop.val {
-                        Some(VimAny::Value(ValueElements::PrimitiveInt(val))) => Some(val),
-                        None => continue,
-                        _ => return Err(Error::InvalidPropertyType { property: "summary.quickStats.hostMemoryUsage".to_string(), expected: "i32".to_string(), got: type_name(&prop.val)}),
+                        VimAny::Value(ValueElements::PrimitiveInt(val)) => Some(val),
+                        ref val => return Err(pc_helpers::Error::InvalidPropertyType { property: "summary.quickStats.hostMemoryUsage".to_string(), expected: "i32".to_string(), got: pc_helpers::type_name(val)}),
                     };
                 }
                 "overallStatus" => {
                     field3 = match prop.val {
-                        Some(VimAny::Value(ValueElements::ManagedEntityStatus(val))) => Some(val.clone()),
-                        None => continue,
-                        _ => return Err(Error::InvalidPropertyType { property: "overallStatus".to_string(), expected: "ManagedEntityStatus".to_string(), got: type_name(&prop.val)}),
+                        VimAny::Value(ValueElements::ManagedEntityStatus(val)) => Some(val.clone()),
+                        ref val => return Err(pc_helpers::Error::InvalidPropertyType { property: "overallStatus".to_string(), expected: "ManagedEntityStatus".to_string(), got: pc_helpers::type_name(val)}),
                     };
                 }
                 "runtime.powerState" => {
                     field4 = match prop.val {
-                        Some(VimAny::Value(ValueElements::VirtualMachinePowerState(val))) => Some(val.clone()),
-                        None => continue,
-                        _ => return Err(Error::InvalidPropertyType { property: "runtime.powerState".to_string(), expected: "VirtualMachinePowerState".to_string(), got: type_name(&prop.val)}),
+                        VimAny::Value(ValueElements::VirtualMachinePowerState(val)) => Some(val.clone()),
+                        ref val => return Err(pc_helpers::Error::InvalidPropertyType { property: "runtime.powerState".to_string(), expected: "VirtualMachinePowerState".to_string(), got: pc_helpers::type_name(val)}),
                     };
                 }
                 "config.ftInfo" => {
                     field8 = match prop.val {
-                        Some(VimAny::Object(obj)) => {
+                        VimAny::Object(obj) => {
                             let name: &'static str = obj.data_type().into();
                             match obj.into_box() {
-                                Ok(ft_info) => Some(ft_info),
-                                Err(_) => return Err(Error::InvalidPropertyType { property: "config.ftInfo".to_string(), expected: "FaultToleranceConfigInfo".to_string(), got: name.to_string()}),
+                                Ok(val) => Some(val),
+                                Err(_) => return Err(pc_helpers::Error::InvalidPropertyType { property: "config.ftInfo".to_string(), expected: "FaultToleranceConfigInfo".to_string(), got: name.to_string()}),
                             }
                         },
-                        None => continue,
-                        _ => return Err(Error::InvalidPropertyType { property: "config.ftInfo".to_string(), expected: "FaultToleranceConfigInfo".to_string(), got: type_name(&prop.val)}),
+                        ref val => return Err(pc_helpers::Error::InvalidPropertyType { property: "config.ftInfo".to_string(), expected: "FaultToleranceConfigInfo".to_string(), got: pc_helpers::type_name(val)}),
                     };
                 }
                 "config.hardware.device" => {
                     field9 = match prop.val {
-                        Some(VimAny::Value(ValueElements::ArrayOfVirtualDevice(vd))) => Some(vd),
-                        None => continue,
-                        _ => return Err(Error::InvalidPropertyType { property: "config.hardware.device".to_string(), expected: "ArrayOfVirtualDevice".to_string(), got: type_name(&prop.val)}),
+                        VimAny::Value(ValueElements::ArrayOfVirtualDevice(vd)) => Some(vd),
+                        ref val => return Err(pc_helpers::Error::InvalidPropertyType { property: "config.hardware.device".to_string(), expected: "ArrayOfVirtualDevice".to_string(), got: pc_helpers::type_name(val)}),
                     };
                 }
-                _ => {}
+                name => {
+                    error!("Unexpected property {} in object {:?}", name, id);
+                }
             }
         }
         Ok(VirtualMachine {
             id,
-            name: field1.ok_or(Error::NoneValueForRequiredField(String::from("name")))?,
+            name: field1.ok_or(pc_helpers::Error::NoneValueForRequiredField(String::from("name")))?,
             os: field2,
-            status: field3.ok_or(Error::NoneValueForRequiredField(String::from("overallStatus")))?,
-            power_state: field4.ok_or(Error::NoneValueForRequiredField(String::from("runtime.powerState")))?,
+            status: field3.ok_or(pc_helpers::Error::NoneValueForRequiredField(String::from("overallStatus")))?,
+            power_state: field4.ok_or(pc_helpers::Error::NoneValueForRequiredField(String::from("runtime.powerState")))?,
             storage: field5,
             host_cpu: field6,
             host_memory: field7,
@@ -254,17 +371,5 @@ impl TryFrom<ObjectUpdate> for VirtualMachine {
 }
 
 
-fn type_name(value :&Option<VimAny>) -> String {
-    match value {
-        Some(VimAny::Value(value)) => {
-            let type_name : &'static str = value.into();
-            type_name.to_string()
-        },
-        Some(VimAny::Object(obj)) => {
-            let type_name : &'static str = obj.data_type().into();
-            type_name.to_string()
-        },
-        None => "None".to_string(),
-    }
-}
+
 
