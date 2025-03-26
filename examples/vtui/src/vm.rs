@@ -1,4 +1,4 @@
-use vim_rs::types::enums::{ManagedEntityStatusEnum, MoTypesEnum, PropertyChangeOpEnum, VirtualMachinePowerStateEnum};
+use vim_rs::types::enums::{MoTypesEnum, PropertyChangeOpEnum};
 use vim_rs::types::structs::{ManagedObjectReference, ObjectContent, ObjectUpdate, PropertyChange, PropertySpec};
 use vim_rs::types::vim_any::VimAny;
 use vim_rs::types::boxed_types::ValueElements;
@@ -15,8 +15,8 @@ pub struct VirtualMachine {
     pub storage: Option<vim_rs::types::structs::VirtualMachineStorageSummary>, // summary.storage
     pub host_cpu: Option<i32>, // summary.quickStats.overallCpuUsage
     pub host_memory: Option<i32>, // summary.quickStats.hostMemoryUsage
-    pub status: ManagedEntityStatusEnum, // overallStatus
-    pub power_state: VirtualMachinePowerStateEnum, // runtime.powerState
+    pub status: vim_rs::types::enums::ManagedEntityStatusEnum, // overallStatus
+    pub power_state: vim_rs::types::enums::VirtualMachinePowerStateEnum, // runtime.powerState
     pub ft_info: Option<Box<dyn vim_rs::types::traits::FaultToleranceConfigInfoTrait>>, // config.ftInfo
     pub devices: Option<Vec<Box<dyn vim_rs::types::traits::VirtualDeviceTrait>>>, // config.hardware.device
 }
@@ -61,7 +61,7 @@ impl VirtualMachine {
                     self.name = match prop.val {
                         Some(VimAny::Value(ValueElements::PrimitiveString(val))) => val.clone(),
                         None => return Err(pc_helpers::Error::NoneValueForRequiredField("name".to_string())),
-                        _ => "<Unknown>".to_string(),
+                        Some(ref val) => return Err(pc_helpers::Error::InvalidPropertyType {property: "name".to_string(), expected: "PrimitiveString".to_string(), got: pc_helpers::type_name(val)}),
                     };
                 }
                 "summary.guest.guestFullName" => {

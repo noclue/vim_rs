@@ -1,9 +1,10 @@
 mod hierarchy;
+mod resolver;
 
 use proc_macro::TokenStream;
 use quote::{quote};
 use syn::{parse_macro_input, Token, braced, punctuated::Punctuated, parse::Parse, parse::ParseStream, Result, Ident, LitStr, token};
-use crate::hierarchy::get_default_field_data;
+use resolver::get_default_field_data;
 
 #[allow(dead_code)]
 struct PropertyField {
@@ -48,7 +49,7 @@ impl Parse for VimObjectMacro {
 
 struct FieldInfo<'a> {
     property_field: &'a PropertyField,
-    field_data: hierarchy::FieldData,
+    field_data: resolver::FieldData,
 }
 
 #[proc_macro]
@@ -60,7 +61,7 @@ pub fn vim_updatable(input: TokenStream) -> TokenStream {
     let mut errors: Vec<proc_macro2::TokenStream> = Vec::new();
     for property_field in &fields {
         let path_str = property_field.path.value();
-        let res = hierarchy::resolve_path(&managed_object_type.to_string(), &path_str);
+        let res = resolver::resolve_path(&managed_object_type.to_string(), &path_str);
         let field_data = match res {
             Ok(field_type) => field_type,
             Err(e) => {
@@ -99,7 +100,7 @@ fn generate_struct_decl(struct_name: &Ident, fields: &Vec<FieldInfo>) -> proc_ma
     }
 
     let struct_tokens = quote! {
-        #[derive(Debug, Clone)]
+        #[derive(Debug)]
         pub struct #struct_name {
             id: String,
             #(#field_declarations,)*
@@ -147,13 +148,13 @@ fn generate_try_from_object_content(struct_name: &Ident, fields: &Vec<FieldInfo>
         let field_name = &field.property_field.name;
         field_declarations.push(quote! { let mut #field_alias = None; });
         match field.field_data.processing_type {
-            hierarchy::FieldProcessingType::Enum(enum_field_name) => {
+            resolver::FieldProcessingType::Enum(enum_field_name) => {
                 field_conversions.push(generate_enum_field_deserialize_code(field, &field_alias, &enum_field_name));
             },
-            hierarchy::FieldProcessingType::Struct => {
+            resolver::FieldProcessingType::Struct => {
                 field_conversions.push(generate_struct_field_deserialize_code(field, &field_alias, &field.field_data.data_type));
             },
-            hierarchy::FieldProcessingType::Trait => {
+            resolver::FieldProcessingType::Trait => {
                 field_conversions.push(generate_trait_field_deserialize_code(field, &field_alias, &field.field_data.data_type));
             },
         }

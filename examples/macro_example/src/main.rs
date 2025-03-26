@@ -2,16 +2,19 @@ use vim_macros::vim_updatable;
 //use vim_rs::types::structs::ObjectUpdate;
 use anyhow::Result;
 use vim_rs::types::enums::{ManagedEntityStatusEnum, VirtualMachinePowerStateEnum};
+use vim_rs::types::structs::VirtualMachineStorageSummary;
 
 vim_updatable!(
     struct VM: VirtualMachine {
         name = "name",
         os = "summary.guest.guest_full_name",
-        used_space = "summary.storage.committed",
+        storage = "summary.storage",
         host_cpu = "summary.quick_stats.overall_cpu_usage",
         host_memory = "summary.quick_stats.host_memory_usage",
         status = "summary.overall_status",
         power_state = "runtime.power_state",
+        devices = "config.hardware.device",
+        ft_info = "config.ft_info",
     }
 );
 
@@ -25,11 +28,18 @@ fn main() -> Result<()> {
         id: "365".to_string(),
         name: "My VM".to_string(),
         os: Some("Ubuntu 64-bit".to_string()),
-        used_space: Some(1024),
+        storage: Some(VirtualMachineStorageSummary{
+            committed: 1024,
+            uncommitted: 512,
+            unshared: 256,
+            timestamp: "".to_string(),
+        }),
         host_cpu: Some(64000),
         host_memory: Some(1024),
         status: ManagedEntityStatusEnum::Gray,
         power_state: VirtualMachinePowerStateEnum::PoweredOff,
+        devices: None,
+        ft_info: None,
     };
 
     // Example of how we might use this in a real application
