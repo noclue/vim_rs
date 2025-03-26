@@ -11,6 +11,8 @@ pub enum Error {
     NoneValueForRequiredField(String),
     #[error("No data found in ObjectUpdate/ObjectContent")]
     NoDataFound,
+    #[error("Unexpected property path = `{0}`")]
+    UnexpectedPropertyPath(String),
 }
 
 pub type Result<T> = std::result::Result<T, Error>;

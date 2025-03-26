@@ -1,8 +1,8 @@
 use vim_macros::vim_updatable;
 //use vim_rs::types::structs::ObjectUpdate;
 use anyhow::Result;
-use vim_rs::types::enums::{ManagedEntityStatusEnum, VirtualMachinePowerStateEnum};
-use vim_rs::types::structs::VirtualMachineStorageSummary;
+use vim_rs::types::enums::{ManagedEntityStatusEnum, MoTypesEnum, VirtualMachinePowerStateEnum};
+use vim_rs::types::structs::{ManagedObjectReference, VirtualMachineStorageSummary};
 
 vim_updatable!(
     struct VM: VirtualMachine {
@@ -25,7 +25,10 @@ fn main() -> Result<()> {
     println!("Generated property spec: {:?}", prop_spec);
 
     let _test_vm = VM{
-        id: "365".to_string(),
+        id: ManagedObjectReference{
+            r#type: MoTypesEnum::VirtualMachine,
+            value: "vm-42".to_string(),
+        },
         name: "My VM".to_string(),
         os: Some("Ubuntu 64-bit".to_string()),
         storage: Some(VirtualMachineStorageSummary{

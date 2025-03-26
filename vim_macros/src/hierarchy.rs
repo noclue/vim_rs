@@ -88,7 +88,7 @@ pub(crate) fn lookup_field_data(class: &str, field: &str) -> resolver::Result<&'
                     type_decl: "vim_rs::types::enums::ManagedEntityStatusEnum",
                     type_name: "",
                     is_optional: false,
-                    processing_type: FieldProcessingType::Enum("ManagedEntityStatusEnum"),
+                    processing_type: FieldProcessingType::Enum("ManagedEntityStatus"),
                     path_segment: "overallStatus",
                 }),
                 "guest" => Ok(&NodeData {
@@ -192,7 +192,7 @@ pub(crate) fn lookup_field_data(class: &str, field: &str) -> resolver::Result<&'
                     type_decl: "vim_rs::types::enums::VirtualMachinePowerStateEnum",
                     type_name: "",
                     is_optional: false,
-                    processing_type: FieldProcessingType::Enum("VirtualMachinePowerStateEnum"),
+                    processing_type: FieldProcessingType::Enum("VirtualMachinePowerState"),
                     path_segment: "powerState",
                 }),
                 _ => Err(HierarchyError::UnknownField(class.to_string(), field.to_string())),

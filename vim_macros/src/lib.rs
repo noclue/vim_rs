@@ -102,7 +102,7 @@ fn generate_struct_decl(struct_name: &Ident, fields: &Vec<FieldInfo>) -> proc_ma
     let struct_tokens = quote! {
         #[derive(Debug)]
         pub struct #struct_name {
-            id: String,
+            id: vim_rs::types::structs::ManagedObjectReference,
             #(#field_declarations,)*
         }
     };
@@ -128,7 +128,7 @@ fn generate_struct_impl(struct_name: &Ident, managed_object_type: &Ident, fields
                 }
             }
 
-            pub fn id(&self) -> &str {
+            pub fn id(&self) -> &vim_rs::types::structs::ManagedObjectReference {
                 &self.id
             }
         }
@@ -159,10 +159,10 @@ fn generate_try_from_object_content(struct_name: &Ident, fields: &Vec<FieldInfo>
             },
         }
         if field.field_data.is_optional {
-            field_assignments.push(quote! { #field_name: #field_alias, });
+            field_assignments.push(quote! { #field_name: #field_alias });
         } else {
             let field_name_str = field.field_data.vim_path.as_str();
-            field_assignments.push(quote! { #field_name: #field_alias.ok_or_else(|| vim_rs::core::pc_helpers::Error::NoneValueForRequiredField(#field_name_str.to_string()))?, });
+            field_assignments.push(quote! { #field_name: #field_alias.ok_or_else(|| vim_rs::core::pc_helpers::Error::NoneValueForRequiredField(#field_name_str.to_string()))? });
         }
         idx += 1;
     }
@@ -182,6 +182,9 @@ fn generate_try_from_object_content(struct_name: &Ident, fields: &Vec<FieldInfo>
                 for prop in row {
                     match prop.name.as_str() {
                         #(#field_conversions)*
+                        name => {
+                            return Err(vim_rs::core::pc_helpers::Error::UnexpectedPropertyPath(name.to_string()));
+                        }
                     }
                 }
 
@@ -209,8 +212,8 @@ fn generate_enum_field_deserialize_code(field: &FieldInfo, field_alias: &Ident, 
     quote! {
         #path => {
             #field_alias = match prop.val {
-                VimAny::Value(ValueElements::#enum_field(vd)) => Some(vd),
-                ref val => return Err(pc_helpers::Error::InvalidPropertyType { property: #path.to_string(), expected: #enum_field_name.to_string(), got: vim_rs::core::pc_helpers::type_name(val)}),
+                vim_rs::types::vim_any::VimAny::Value(vim_rs::types::boxed_types::ValueElements::#enum_field(vd)) => Some(vd),
+                ref val => return Err(vim_rs::core::pc_helpers::Error::InvalidPropertyType { property: #path.to_string(), expected: #enum_field_name.to_string(), got: vim_rs::core::pc_helpers::type_name(val)}),
             };
         }
     }
@@ -235,14 +238,14 @@ fn generate_struct_field_deserialize_code(field: &FieldInfo, field_alias: &Ident
     quote! {
         #path => {
             #field_alias = match prop.val {
-                VimAny::Object(obj) => {
+                vim_rs::types::vim_any::VimAny::Object(obj) => {
                     let name: &'static str = obj.data_type().into();
                     match obj.as_any_box().downcast() {
                         Ok(val) => Some(*val),
-                        Err(_) => return Err(pc_helpers::Error::InvalidPropertyType {property: #path.to_string(), expected: #struct_type.to_string(), got: name.to_string()}),
+                        Err(_) => return Err(vim_rs::core::pc_helpers::Error::InvalidPropertyType {property: #path.to_string(), expected: #struct_type.to_string(), got: name.to_string()}),
                     }
                 },
-                ref val => return Err(pc_helpers::Error::InvalidPropertyType {property: #path.to_string(), expected: #struct_type.to_string(), got: pc_helpers::type_name(val)}),
+                ref val => return Err(vim_rs::core::pc_helpers::Error::InvalidPropertyType {property: #path.to_string(), expected: #struct_type.to_string(), got: vim_rs::core::pc_helpers::type_name(val)}),
             };
         }
     }
@@ -252,7 +255,7 @@ fn generate_struct_field_deserialize_code(field: &FieldInfo, field_alias: &Ident
 // 3. Generate trait type deserialize code for structs with children
 //                "<property path>" => {
 //                     <field name with ordinal> = match prop.val {
-//                         VimAny::Object(obj) => {
+//                         vim_rs::types::vim_any::VimAny::Object(obj) => {
 //                             let name: &'static str = obj.data_type().into();
 //                             match obj.into_box() {
 //                                 Ok(val) => Some(val),
@@ -267,14 +270,14 @@ fn generate_trait_field_deserialize_code(field: &FieldInfo, field_alias: &Ident,
     quote! {
         #path => {
             #field_alias = match prop.val {
-                VimAny::Object(obj) => {
+                vim_rs::types::vim_any::VimAny::Object(obj) => {
                     let name: &'static str = obj.data_type().into();
-                    match obj.into_box() {
+                    match vim_rs::types::convert::CastInto::into_box(obj) {
                         Ok(val) => Some(val),
-                        Err(_) => return Err(pc_helpers::Error::InvalidPropertyType {property: #path.to_string(), expected: #trait_type.to_string(), got: name.to_string()}),
+                        Err(_) => return Err(vim_rs::core::pc_helpers::Error::InvalidPropertyType {property: #path.to_string(), expected: #trait_type.to_string(), got: name.to_string()}),
                     }
                 },
-                ref val => return Err(pc_helpers::Error::InvalidPropertyType {property: #path.to_string(), expected: #trait_type.to_string(), got: pc_helpers::type_name(val)}),
+                ref val => return Err(vim_rs::core::pc_helpers::Error::InvalidPropertyType {property: #path.to_string(), expected: #trait_type.to_string(), got: vim_rs::core::pc_helpers::type_name(val)}),
             };
         }
     }
