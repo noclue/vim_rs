@@ -11,6 +11,7 @@ pub mod struct_enum;
 pub(crate) mod structs;
 pub(crate) mod trait_emitter;
 pub mod vim_object;
+pub mod field_data;
 
 pub use errors::*;
 pub use mo::*;

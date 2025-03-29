@@ -1,5 +1,5 @@
-mod hierarchy;
 mod resolver;
+mod field_data;
 
 use proc_macro::TokenStream;
 use quote::{quote};

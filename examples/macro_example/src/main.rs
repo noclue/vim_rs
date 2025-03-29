@@ -18,6 +18,15 @@ vim_updatable!(
     }
 );
 
+vim_updatable!(
+    struct Host: HostSystem {
+        name = "name",
+        power_state = "runtime.power_state",
+        runtime = "runtime",
+    }
+);
+
+
 fn main() -> Result<()> {
     //let r#type: String = Into::<&str>::into(vim_rs::types::enums::MoTypesEnum::VirtualMachine).to_string();
     // Create a property spec for VMs

@@ -8,6 +8,7 @@ use rs_emitter::library::emit_library;
 use std::path::PathBuf;
 use std::{io::Read, path::Path, time::Instant};
 use openapi30::OpenAPI;
+use crate::rs_emitter::field_data::FieldDataEmitter;
 use crate::vim_model::{EmitMode, Model};
 
 #[derive(Debug, thiserror::Error)]
@@ -41,16 +42,27 @@ pub fn emit_vim_bindings(vi_json_spec_path: &Path, root_folder: &Path, pruned_ty
     let model = load_openapi(vi_json_spec_path)?;
     println!("Time to load OpenAPI: {:?}", start_load.elapsed());
     let vim_model = transform_model(&model, pruned_types)?;
-    generate_bindings(vim_model, root_folder)
+    generate_bindings(&vim_model, &*root_folder.join("vim_rs/src/"))?;
+    generate_field_data(&vim_model, &*root_folder.join("vim_macros/src/field_data.rs"))?;
+    Ok(())
 }
 
-pub fn generate_bindings(vim_model: Model, root_folder: &Path) -> Result<()> {
+fn generate_field_data(vim_model: &Model, file: &Path) -> Result<()> {
+    let file = std::fs::File::create(file)?;
+    let mut printer = printer::FilePrinter::new(file, None, None);
+    let mut emitter = FieldDataEmitter::new(vim_model, &mut printer);
+    emitter.emit_field_data()?;
+    Ok(())
+
+}
+
+pub fn generate_bindings(vim_model: &Model, root_folder: &Path) -> Result<()> {
     let start_emit = Instant::now();
-    emit_types(root_folder, &vim_model)?;
+    emit_types(root_folder, vim_model)?;
     println!("Time to emit types: {:?}", start_emit.elapsed());
 
     let start_emit_mo = Instant::now();
-    emit_managed_objects(root_folder, &vim_model)?;
+    emit_managed_objects(root_folder, vim_model)?;
     println!(
         "Time to emit managed objects: {:?}",
         start_emit_mo.elapsed()

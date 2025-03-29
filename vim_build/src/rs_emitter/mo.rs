@@ -280,7 +280,7 @@ impl<'a> ManagedObjectEmitter<'a> {
 
     fn emit_returns_doc(&mut self, method: &Method) -> Result<()> {
         if let Some(output_description) = &method.output_description {
-            // Some return type descrptions read "OK" and are not helpful.
+            // Some return type descriptions read "OK" and are not helpful.
             if method.output.is_some() && output_description.len() > 5 {
                 self.printer.println("///")?;
                 self.printer.println("/// ## Returns:")?;

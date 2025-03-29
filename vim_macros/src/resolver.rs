@@ -1,5 +1,6 @@
 use thiserror::Error;
-use crate::hierarchy;
+use crate::field_data::lookup_field_data;
+
 
 // Add not found error, no properties under node error
 #[derive(Error, Debug, PartialEq, Eq)]
@@ -78,7 +79,7 @@ pub fn resolve_path(managed_object: &str, path: &str) -> Result<FieldData> {
         if matches!(field_data.processing_type, FieldProcessingType::Enum(_)) {
             return Err(HierarchyError::NoSubPropertiesAvailable(path.join(".").to_string()));
         }
-        field_data = hierarchy::lookup_field_data(obj, segment)?;
+        field_data = lookup_field_data(obj, segment)?;
         obj = field_data.type_name;
         optional = optional | field_data.is_optional;
         path.push(field_data.path_segment);

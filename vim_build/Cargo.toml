@@ -16,3 +16,4 @@ convert_case = "0.8.0"
 check_keyword = "0.3.1"
 openapi30 = { path = "../openapi30" }
 log = "0.4.26"
+phf_codegen = "0.11.3"

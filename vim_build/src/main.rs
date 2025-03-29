@@ -20,7 +20,7 @@ use std::{path::Path, time::Instant};
 static PRUNED_TYPES: [&str; 2] = ["MethodFault", "Event"];
 
 fn main() {
-    let root_folder = Path::new("../vim_rs/src/");
+    let root_folder = Path::new("../");
     let vi_json_spec_path = Path::new("data/vi_json_openapi_specification_v8_0_2_0.json");
 
     //generate_to_console(vi_json_spec_path).unwrap();
