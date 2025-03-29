@@ -5,7 +5,7 @@ use vim_rs::types::boxed_types::ValueElements;
 use vim_rs::types::convert::CastInto;
 use log::error;
 use vim_rs::core::pc_helpers;
-use crate::object_cache::Cacheable;
+use vim_rs::core::pc_helpers::Cacheable;
 
 #[derive(Debug)]
 pub struct VirtualMachine {

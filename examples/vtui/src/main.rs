@@ -8,8 +8,7 @@ use anyhow::{Context, Result};
 use vim_rs::core::client::{Client, ClientBuilder};
 use app::App;
 use crate::event::EventHandler;
-use object_cache::Monitor;
-use crate::object_cache::{CacheManager, ObjectCache, SharedRefCacheProxy};
+use vim_rs::core::pc_helpers::{Monitor, CacheManager, ObjectCache, SharedRefCacheProxy};
 use crate::vm_list::VmListWidget;
 
 mod vm;
@@ -17,7 +16,7 @@ mod event;
 mod vm_list;
 mod app;
 mod vm_disp;
-mod object_cache;
+
 
 const APP_NAME: &str = env!("CARGO_PKG_NAME");
 const APP_VERSION: &str = env!("CARGO_PKG_VERSION");

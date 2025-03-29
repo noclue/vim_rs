@@ -5,7 +5,7 @@ use crossterm::event::{Event as CrosstermEvent, KeyCode, KeyEventKind};
 use ratatui::layout::{Constraint, Layout};
 use ratatui::prelude::{Line, Stylize};
 use crate::event::{AppEvent, Event, EventHandler};
-use crate::object_cache::CacheManager;
+use vim_rs::core::pc_helpers::CacheManager;
 use crate::vm_list::{LoadingState, VmListWidget};
 
 pub struct App {

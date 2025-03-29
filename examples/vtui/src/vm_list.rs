@@ -5,7 +5,7 @@ use ratatui::widgets::{Block, Cell, HighlightSpacing, Row, Table, TableState};
 use std::cell::RefCell;
 use std::ops::DerefMut;
 use std::rc::Rc;
-use crate::object_cache::ObjectCache;
+use vim_rs::core::pc_helpers::ObjectCache;
 use crate::vm::VirtualMachine;
 
 /// A widget that displays a list of virtual machines.
