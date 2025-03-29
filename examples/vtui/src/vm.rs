@@ -62,7 +62,7 @@ impl Cacheable for VirtualMachine {
             match prop.name.as_str() {
                 "name" => {
                     self.name = match prop.val {
-                        Some(VimAny::Value(ValueElements::PrimitiveString(val))) => val.clone(),
+                        Some(VimAny::Value(ValueElements::PrimitiveString(val))) => val,
                         None => return Err(pc_helpers::Error::NoneValueForRequiredField("name".to_string())),
                         Some(ref val) => return Err(pc_helpers::Error::InvalidPropertyType {property: "name".to_string(), expected: "PrimitiveString".to_string(), got: pc_helpers::type_name(val)}),
                     };

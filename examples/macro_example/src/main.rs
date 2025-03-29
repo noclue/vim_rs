@@ -1,6 +1,6 @@
 use vim_macros::vim_updatable;
-//use vim_rs::types::structs::ObjectUpdate;
 use anyhow::Result;
+use vim_rs::core::pc_helpers::Cacheable;
 use vim_rs::types::enums::{ManagedEntityStatusEnum, MoTypesEnum, VirtualMachinePowerStateEnum};
 use vim_rs::types::structs::{ManagedObjectReference, VirtualMachineStorageSummary};
 
