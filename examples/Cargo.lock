@@ -1871,6 +1871,7 @@ version = "0.1.0"
 dependencies = [
  "base64",
  "env_logger",
+ "indexmap",
  "log",
  "reqwest",
  "rustc_version",
