@@ -1,11 +1,11 @@
 use vim_rs::types::enums::{MoTypesEnum, PropertyChangeOpEnum};
-use vim_rs::types::structs::{ManagedObjectReference, ObjectContent, ObjectUpdate, PropertyChange, PropertySpec};
+use vim_rs::types::structs::{ManagedObjectReference, ObjectContent, ObjectUpdate, PropertySpec};
 use vim_rs::types::vim_any::VimAny;
 use vim_rs::types::boxed_types::ValueElements;
 use vim_rs::types::convert::CastInto;
 use log::error;
 use vim_rs::core::pc_helpers;
-
+use crate::object_cache::Cacheable;
 
 #[derive(Debug)]
 pub struct VirtualMachine {
@@ -21,8 +21,8 @@ pub struct VirtualMachine {
     pub devices: Option<Vec<Box<dyn vim_rs::types::traits::VirtualDeviceTrait>>>, // config.hardware.device
 }
 
-impl VirtualMachine {
-    pub fn prop_spec() -> PropertySpec {
+impl Cacheable for VirtualMachine {
+    fn prop_spec() -> PropertySpec {
         vim_rs::types::structs::PropertySpec {
             all: Some(false),
             path_set: Some(vec![
@@ -40,11 +40,14 @@ impl VirtualMachine {
         }
     }
 
-    pub fn id(&self) -> &ManagedObjectReference {
+    fn id(&self) -> &ManagedObjectReference {
         &self.id
     }
 
-    pub fn apply_update(&mut self, row: Vec<PropertyChange>) -> pc_helpers::Result<()> {
+    fn apply_update(&mut self, update: ObjectUpdate) -> pc_helpers::Result<()> {
+        let Some(row) = update.change_set else {
+            return Ok(());
+        };
         for prop in row {
             if matches!(prop.op, PropertyChangeOpEnum::Add | PropertyChangeOpEnum::Remove | PropertyChangeOpEnum::Other_(_)) {
                 // It is assumption of the code here that create_filter was called with `partial_updates = false`.

@@ -1,4 +1,5 @@
 use super::super::types::vim_any::VimAny;
+use super::client;
 use thiserror::Error;
 
 /// Error type for Unmarshalling PropertyCollector data into a Rust struct. This is used whenever
@@ -11,6 +12,10 @@ pub enum Error {
     NoneValueForRequiredField(String),
     #[error("No data found in ObjectUpdate/ObjectContent")]
     NoDataFound,
+    #[error("Internal Error: {0}")]
+    InternalError(String),
+    #[error("Remote call failure: {0:?}")]
+    RemoteCommunicationError(#[from] client::Error),
     #[error("Unexpected property path = `{0}`")]
     UnexpectedPropertyPath(String),
 }

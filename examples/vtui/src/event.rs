@@ -1,9 +1,9 @@
-use crate::monitor::Monitor;
+use crate::object_cache::Monitor;
 use anyhow::{Context, Result};
 use futures::{FutureExt, StreamExt};
 use ratatui::crossterm::event::Event as CrosstermEvent;
 use tokio::sync::mpsc;
-use vim_rs::types::structs::ObjectUpdate;
+use vim_rs::types::structs::PropertyFilterUpdate;
 
 /// Representation of all possible events.
 #[derive(Debug)]
@@ -30,7 +30,7 @@ pub enum AppEvent {
     /// Property collector events.
     ///
     /// These events are emitted by the property collector waiting for updates.
-    PropertyCollector(Vec<ObjectUpdate>),
+    PropertyCollector(Vec<PropertyFilterUpdate>),
     /// Error Message
     ErrorMessage(String),
 }

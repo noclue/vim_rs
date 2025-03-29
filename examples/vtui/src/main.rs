@@ -2,19 +2,22 @@ use std::{
     env,
     sync::Arc,
 };
+use std::cell::RefCell;
+use std::rc::Rc;
 use anyhow::{Context, Result};
 use vim_rs::core::client::{Client, ClientBuilder};
 use app::App;
-use vm::VirtualMachine;
 use crate::event::EventHandler;
-use crate::monitor::Monitor;
+use object_cache::Monitor;
+use crate::object_cache::{CacheManager, ObjectCache, SharedRefCacheProxy};
+use crate::vm_list::VmListWidget;
 
 mod vm;
 mod event;
-mod monitor;
 mod vm_list;
 mod app;
 mod vm_disp;
+mod object_cache;
 
 const APP_NAME: &str = env!("CARGO_PKG_NAME");
 const APP_VERSION: &str = env!("CARGO_PKG_VERSION");
@@ -22,15 +25,20 @@ const APP_VERSION: &str = env!("CARGO_PKG_VERSION");
 #[tokio::main]
 async fn main() -> Result<()> {
     let client = init_vim_client().await?;
+    let cache = Rc::new(RefCell::new(ObjectCache::new()));
+    let cache_manager = Rc::new(RefCell::new(CacheManager::new(client.clone())?));
+    let _vm_cache_filter = cache_manager.borrow_mut().add_container_cache(
+        Box::new(SharedRefCacheProxy::new(cache.clone())),
+        &client.service_content().root_folder,
+    ).await?;
+    let widget = VmListWidget::new(cache.clone());
     let monitor = Monitor::new(
-        client.clone(),
-        client.service_content().root_folder.clone(),
-        VirtualMachine::prop_spec())
-        .await?;
+        client.clone())?;
     let event_handler = EventHandler::new(monitor);
     let terminal = ratatui::init();
-    let app_result = App::new(event_handler).run(terminal).await;
+    let app_result = App::new(event_handler, cache_manager.clone(), widget).run(terminal).await;
     ratatui::restore();
+    cache_manager.borrow_mut().destroy().await?;
     app_result
 }
 
