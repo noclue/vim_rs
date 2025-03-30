@@ -2,6 +2,7 @@ use std::sync::Arc;
 use crate::core::client::{Client, Result};
 /// *HostDirectoryStore* is a base class for
 /// directory-based authentication stores.
+#[derive(Clone)]
 pub struct HostDirectoryStore {
     client: Arc<Client>,
     mo_id: String,

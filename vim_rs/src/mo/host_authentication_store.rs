@@ -7,6 +7,7 @@ use crate::core::client::{Client, Result};
 /// - Active Directory authentication for ESX hosts relies on
 ///   an established Active Directory account that
 ///   has the authority to add the host to a domain.
+#[derive(Clone)]
 pub struct HostAuthenticationStore {
     client: Arc<Client>,
     mo_id: String,

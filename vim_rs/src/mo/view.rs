@@ -20,6 +20,7 @@ use crate::core::client::{Client, Result};
 /// obtain notification of changes to the virtual environment.
 /// For information about using views with the PropertyCollector,
 /// see the description of *ViewManager*.
+#[derive(Clone)]
 pub struct View {
     client: Arc<Client>,
     mo_id: String,

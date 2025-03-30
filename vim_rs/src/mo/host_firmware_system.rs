@@ -5,6 +5,7 @@ use crate::core::client::{Client, Result};
 /// 
 /// It provides operations to backup, restore, and reset the
 /// configuration of an embedded ESX host.
+#[derive(Clone)]
 pub struct HostFirmwareSystem {
     client: Arc<Client>,
     mo_id: String,

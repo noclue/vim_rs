@@ -23,6 +23,7 @@ use crate::core::client::{Client, Result};
 ///   an empty string (&quot;&quot;) for the domain argument.
 ///   If the /etc/passwd file contains Sun NIS or NIS+ users and groups,
 ///   RetrieveUserGroups returns information about these accounts as well.
+#[derive(Clone)]
 pub struct UserDirectory {
     client: Arc<Client>,
     mo_id: String,

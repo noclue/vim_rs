@@ -13,6 +13,7 @@ use crate::core::client::{Client, Result};
 /// ";", "\\n", and so on. In short, all the platform dependent rules and
 /// restrictions regarding naming of users/groups and password apply here.
 /// An InvalidArgument fault is thrown if any of these rules are not obeyed.
+#[derive(Clone)]
 pub struct HostLocalAccountManager {
     client: Arc<Client>,
     mo_id: String,

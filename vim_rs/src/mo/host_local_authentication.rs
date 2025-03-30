@@ -2,6 +2,7 @@ use std::sync::Arc;
 use crate::core::client::{Client, Result};
 /// The *HostLocalAuthentication* managed object represents
 /// local authentication for user accounts on an ESX host.
+#[derive(Clone)]
 pub struct HostLocalAuthentication {
     client: Arc<Client>,
     mo_id: String,
