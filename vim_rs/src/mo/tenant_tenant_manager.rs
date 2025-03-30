@@ -1,7 +1,7 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::ManagedObjectReference;
 /// A singleton managed object for managing vCenter tenants.
+#[derive(Clone)]
 pub struct TenantTenantManager {
     client: Arc<Client>,
     mo_id: String,
@@ -51,7 +51,7 @@ impl TenantTenantManager {
     /// ***AuthMinimumAdminPermission***: if this change will leave the
     /// system with no Administrator permission on the root folder
     /// of the service provider inventory.
-    pub async fn mark_service_provider_entities(&self, entity: Option<&[ManagedObjectReference]>) -> Result<()> {
+    pub async fn mark_service_provider_entities(&self, entity: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<()> {
         let input = MarkServiceProviderEntitiesRequestType {entity, };
         let path = format!("/TenantTenantManager/{moId}/MarkServiceProviderEntities", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -66,7 +66,7 @@ impl TenantTenantManager {
     /// the array of tenant management resources.
     /// 
     /// Refers instances of *ManagedEntity*.
-    pub async fn retrieve_service_provider_entities(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
+    pub async fn retrieve_service_provider_entities(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/TenantTenantManager/{moId}/RetrieveServiceProviderEntities", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute_option(req).await
@@ -95,7 +95,7 @@ impl TenantTenantManager {
     /// ## Errors:
     ///
     /// ***ManagedObjectNotFound***: if any of the entities doesn't exist.
-    pub async fn unmark_service_provider_entities(&self, entity: Option<&[ManagedObjectReference]>) -> Result<()> {
+    pub async fn unmark_service_provider_entities(&self, entity: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<()> {
         let input = UnmarkServiceProviderEntitiesRequestType {entity, };
         let path = format!("/TenantTenantManager/{moId}/UnmarkServiceProviderEntities", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -106,11 +106,11 @@ impl TenantTenantManager {
 #[serde(tag="_typeName")]
 struct MarkServiceProviderEntitiesRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    entity: Option<&'a [ManagedObjectReference]>,
+    entity: Option<&'a [crate::types::structs::ManagedObjectReference]>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct UnmarkServiceProviderEntitiesRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    entity: Option<&'a [ManagedObjectReference]>,
+    entity: Option<&'a [crate::types::structs::ManagedObjectReference]>,
 }

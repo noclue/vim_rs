@@ -1,8 +1,7 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::CustomFieldDef;
-use crate::types::structs::ScheduledTaskInfo;
 /// The scheduled task object.
+#[derive(Clone)]
 pub struct ScheduledTask {
     client: Arc<Client>,
     mo_id: String,
@@ -89,13 +88,13 @@ impl ScheduledTask {
     /// The fields are sorted by *CustomFieldDef.name*.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn available_field(&self) -> Result<Option<Vec<CustomFieldDef>>> {
+    pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
         let path = format!("/ScheduledTask/{moId}/availableField", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
     }
     /// Information about the current scheduled task.
-    pub async fn info(&self) -> Result<ScheduledTaskInfo> {
+    pub async fn info(&self) -> Result<crate::types::structs::ScheduledTaskInfo> {
         let path = format!("/ScheduledTask/{moId}/info", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute(req).await

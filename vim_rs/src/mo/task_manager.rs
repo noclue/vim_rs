@@ -1,9 +1,5 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::ManagedObjectReference;
-use crate::types::structs::TaskDescription;
-use crate::types::structs::TaskFilterSpec;
-use crate::types::structs::TaskInfo;
 /// The TaskManager managed object provides an interface for creating and managing
 /// *Task* managed objects.
 /// 
@@ -11,6 +7,7 @@ use crate::types::structs::TaskInfo;
 /// returning a *Task* managed object that can be monitored by a
 /// client application. *Task* managed objects may also be
 /// accessed through the TaskManager.
+#[derive(Clone)]
 pub struct TaskManager {
     client: Arc<Client>,
     mo_id: String,
@@ -50,7 +47,7 @@ impl TaskManager {
     /// task collectors.
     /// 
     /// ***NotSupported***: if called directly on a host.
-    pub async fn create_collector_for_tasks(&self, filter: &TaskFilterSpec) -> Result<ManagedObjectReference> {
+    pub async fn create_collector_for_tasks(&self, filter: &crate::types::structs::TaskFilterSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateCollectorForTasksRequestType {filter, };
         let path = format!("/TaskManager/{moId}/CreateCollectorForTasks", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -93,7 +90,7 @@ impl TaskManager {
     /// ## Returns:
     ///
     /// *TaskInfo* data object describing the new task
-    pub async fn create_task(&self, obj: &ManagedObjectReference, task_type_id: &str, initiated_by: Option<&str>, cancelable: bool, parent_task_key: Option<&str>, activation_id: Option<&str>) -> Result<TaskInfo> {
+    pub async fn create_task(&self, obj: &crate::types::structs::ManagedObjectReference, task_type_id: &str, initiated_by: Option<&str>, cancelable: bool, parent_task_key: Option<&str>, activation_id: Option<&str>) -> Result<crate::types::structs::TaskInfo> {
         let input = CreateTaskRequestType {obj, task_type_id, initiated_by, cancelable, parent_task_key, activation_id, };
         let path = format!("/TaskManager/{moId}/CreateTask", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -103,7 +100,7 @@ impl TaskManager {
     /// information to users.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn description(&self) -> Result<TaskDescription> {
+    pub async fn description(&self) -> Result<crate::types::structs::TaskDescription> {
         let path = format!("/TaskManager/{moId}/description", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute(req).await
@@ -146,7 +143,7 @@ impl TaskManager {
     /// ## Returns:
     ///
     /// Refers instances of *Task*.
-    pub async fn recent_task(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
+    pub async fn recent_task(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/TaskManager/{moId}/recentTask", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -155,12 +152,12 @@ impl TaskManager {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct CreateCollectorForTasksRequestType<'a> {
-    filter: &'a TaskFilterSpec,
+    filter: &'a crate::types::structs::TaskFilterSpec,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct CreateTaskRequestType<'a> {
-    obj: &'a ManagedObjectReference,
+    obj: &'a crate::types::structs::ManagedObjectReference,
     #[serde(rename = "taskTypeId")]
     task_type_id: &'a str,
     #[serde(default, skip_serializing_if = "Option::is_none")]

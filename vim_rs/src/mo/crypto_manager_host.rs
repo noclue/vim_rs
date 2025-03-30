@@ -1,10 +1,6 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::CryptoKeyId;
-use crate::types::structs::CryptoKeyPlain;
-use crate::types::structs::CryptoKeyResult;
-use crate::types::structs::CryptoManagerHostKeyStatus;
-use crate::types::structs::ManagedObjectReference;
+#[derive(Clone)]
 pub struct CryptoManagerHost {
     client: Arc<Client>,
     mo_id: String,
@@ -33,7 +29,7 @@ impl CryptoManagerHost {
     /// 
     /// ***InvalidArgument***: in case the keyID is duplicated or key properties
     /// are incorrect.
-    pub async fn add_key(&self, key: &CryptoKeyPlain) -> Result<()> {
+    pub async fn add_key(&self, key: &crate::types::structs::CryptoKeyPlain) -> Result<()> {
         let input = AddKeyRequestType {key, };
         let path = format!("/CryptoManagerHost/{moId}/AddKey", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -55,7 +51,7 @@ impl CryptoManagerHost {
     /// ## Errors:
     ///
     /// ***InvalidState***: in case the host is not Crypto Safe
-    pub async fn add_keys(&self, keys: Option<&[CryptoKeyPlain]>) -> Result<Option<Vec<CryptoKeyResult>>> {
+    pub async fn add_keys(&self, keys: Option<&[crate::types::structs::CryptoKeyPlain]>) -> Result<Option<Vec<crate::types::structs::CryptoKeyResult>>> {
         let input = AddKeysRequestType {keys, };
         let path = format!("/CryptoManagerHost/{moId}/AddKeys", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -81,7 +77,7 @@ impl CryptoManagerHost {
     ///
     /// ***InvalidState***: if the host is not in
     /// *safe* state
-    pub async fn change_key_task(&self, new_key: &CryptoKeyPlain) -> Result<ManagedObjectReference> {
+    pub async fn change_key_task(&self, new_key: &crate::types::structs::CryptoKeyPlain) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ChangeKeyRequestType {new_key, };
         let path = format!("/CryptoManagerHost/{moId}/ChangeKey_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -122,7 +118,7 @@ impl CryptoManagerHost {
     /// *safe* state and initialKey differs
     /// from the existing core dump
     /// encryption key
-    pub async fn crypto_manager_host_enable(&self, initial_key: &CryptoKeyPlain) -> Result<()> {
+    pub async fn crypto_manager_host_enable(&self, initial_key: &crate::types::structs::CryptoKeyPlain) -> Result<()> {
         let input = CryptoManagerHostEnableRequestType {initial_key, };
         let path = format!("/CryptoManagerHost/{moId}/CryptoManagerHostEnable", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -142,7 +138,7 @@ impl CryptoManagerHost {
     /// ## Returns:
     ///
     /// the key status.
-    pub async fn get_crypto_key_status(&self, keys: Option<&[CryptoKeyId]>) -> Result<Option<Vec<CryptoManagerHostKeyStatus>>> {
+    pub async fn get_crypto_key_status(&self, keys: Option<&[crate::types::structs::CryptoKeyId]>) -> Result<Option<Vec<crate::types::structs::CryptoManagerHostKeyStatus>>> {
         let input = GetCryptoKeyStatusRequestType {keys, };
         let path = format!("/CryptoManagerHost/{moId}/GetCryptoKeyStatus", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -165,7 +161,7 @@ impl CryptoManagerHost {
     /// ## Returns:
     ///
     /// List of known keys.
-    pub async fn list_keys(&self, limit: Option<i32>) -> Result<Option<Vec<CryptoKeyId>>> {
+    pub async fn list_keys(&self, limit: Option<i32>) -> Result<Option<Vec<crate::types::structs::CryptoKeyId>>> {
         let input = ListKeysRequestType {limit, };
         let path = format!("/CryptoManagerHost/{moId}/ListKeys", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -206,7 +202,7 @@ impl CryptoManagerHost {
     /// 
     /// ***ResourceInUse***: if the key is used to encrypt any object
     /// and "force" is false.
-    pub async fn remove_key(&self, key: &CryptoKeyId, force: bool) -> Result<()> {
+    pub async fn remove_key(&self, key: &crate::types::structs::CryptoKeyId, force: bool) -> Result<()> {
         let input = RemoveKeyRequestType {key, force, };
         let path = format!("/CryptoManagerHost/{moId}/RemoveKey", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -225,7 +221,7 @@ impl CryptoManagerHost {
     ///
     /// ### force
     /// \[in\] Remove the key even if in use. Always successful.
-    pub async fn remove_keys(&self, keys: Option<&[CryptoKeyId]>, force: bool) -> Result<Option<Vec<CryptoKeyResult>>> {
+    pub async fn remove_keys(&self, keys: Option<&[crate::types::structs::CryptoKeyId]>, force: bool) -> Result<Option<Vec<crate::types::structs::CryptoKeyResult>>> {
         let input = RemoveKeysRequestType {keys, force, };
         let path = format!("/CryptoManagerHost/{moId}/RemoveKeys", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -241,31 +237,31 @@ impl CryptoManagerHost {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct AddKeyRequestType<'a> {
-    key: &'a CryptoKeyPlain,
+    key: &'a crate::types::structs::CryptoKeyPlain,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct AddKeysRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    keys: Option<&'a [CryptoKeyPlain]>,
+    keys: Option<&'a [crate::types::structs::CryptoKeyPlain]>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct ChangeKeyRequestType<'a> {
     #[serde(rename = "newKey")]
-    new_key: &'a CryptoKeyPlain,
+    new_key: &'a crate::types::structs::CryptoKeyPlain,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct CryptoManagerHostEnableRequestType<'a> {
     #[serde(rename = "initialKey")]
-    initial_key: &'a CryptoKeyPlain,
+    initial_key: &'a crate::types::structs::CryptoKeyPlain,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct GetCryptoKeyStatusRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    keys: Option<&'a [CryptoKeyId]>,
+    keys: Option<&'a [crate::types::structs::CryptoKeyId]>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -276,13 +272,13 @@ struct ListKeysRequestType {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct RemoveKeyRequestType<'a> {
-    key: &'a CryptoKeyId,
+    key: &'a crate::types::structs::CryptoKeyId,
     force: bool,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct RemoveKeysRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    keys: Option<&'a [CryptoKeyId]>,
+    keys: Option<&'a [crate::types::structs::CryptoKeyId]>,
     force: bool,
 }

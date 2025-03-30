@@ -1,8 +1,7 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::ManagedObjectReference;
-use crate::types::structs::ScheduledTaskDescription;
 /// Object manager for scheduled tasks.
+#[derive(Clone)]
 pub struct ScheduledTaskManager {
     client: Arc<Client>,
     mo_id: String,
@@ -49,7 +48,7 @@ impl ScheduledTaskManager {
     /// ***DuplicateName***: if a scheduled task with the name already exists.
     /// 
     /// ***InvalidArgument***: if the specification is invalid.
-    pub async fn create_scheduled_task(&self, entity: &ManagedObjectReference, spec: &dyn crate::types::traits::ScheduledTaskSpecTrait) -> Result<ManagedObjectReference> {
+    pub async fn create_scheduled_task(&self, entity: &crate::types::structs::ManagedObjectReference, spec: &dyn crate::types::traits::ScheduledTaskSpecTrait) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateScheduledTaskRequestType {entity, spec, };
         let path = format!("/ScheduledTaskManager/{moId}/CreateScheduledTask", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -82,7 +81,7 @@ impl ScheduledTaskManager {
     /// ***DuplicateName***: if a scheduled task with the name already exists.
     /// 
     /// ***InvalidArgument***: if the specification is invalid.
-    pub async fn create_object_scheduled_task(&self, obj: &ManagedObjectReference, spec: &dyn crate::types::traits::ScheduledTaskSpecTrait) -> Result<ManagedObjectReference> {
+    pub async fn create_object_scheduled_task(&self, obj: &crate::types::structs::ManagedObjectReference, spec: &dyn crate::types::traits::ScheduledTaskSpecTrait) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateObjectScheduledTaskRequestType {obj, spec, };
         let path = format!("/ScheduledTaskManager/{moId}/CreateObjectScheduledTask", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -105,7 +104,7 @@ impl ScheduledTaskManager {
     /// The scheduled tasks.
     /// 
     /// Refers instances of *ScheduledTask*.
-    pub async fn retrieve_entity_scheduled_task(&self, entity: Option<&ManagedObjectReference>) -> Result<Option<Vec<ManagedObjectReference>>> {
+    pub async fn retrieve_entity_scheduled_task(&self, entity: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let input = RetrieveEntityScheduledTaskRequestType {entity, };
         let path = format!("/ScheduledTaskManager/{moId}/RetrieveEntityScheduledTask", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -126,7 +125,7 @@ impl ScheduledTaskManager {
     /// The scheduled tasks.
     /// 
     /// Refers instances of *ScheduledTask*.
-    pub async fn retrieve_object_scheduled_task(&self, obj: Option<&ManagedObjectReference>) -> Result<Option<Vec<ManagedObjectReference>>> {
+    pub async fn retrieve_object_scheduled_task(&self, obj: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let input = RetrieveObjectScheduledTaskRequestType {obj, };
         let path = format!("/ScheduledTaskManager/{moId}/RetrieveObjectScheduledTask", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -135,7 +134,7 @@ impl ScheduledTaskManager {
     /// Static descriptive strings used in scheduled tasks.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn description(&self) -> Result<ScheduledTaskDescription> {
+    pub async fn description(&self) -> Result<crate::types::structs::ScheduledTaskDescription> {
         let path = format!("/ScheduledTaskManager/{moId}/description", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute(req).await
@@ -147,7 +146,7 @@ impl ScheduledTaskManager {
     /// ## Returns:
     ///
     /// Refers instances of *ScheduledTask*.
-    pub async fn scheduled_task(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
+    pub async fn scheduled_task(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/ScheduledTaskManager/{moId}/scheduledTask", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -156,24 +155,24 @@ impl ScheduledTaskManager {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct CreateScheduledTaskRequestType<'a> {
-    entity: &'a ManagedObjectReference,
+    entity: &'a crate::types::structs::ManagedObjectReference,
     spec: &'a dyn crate::types::traits::ScheduledTaskSpecTrait,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct CreateObjectScheduledTaskRequestType<'a> {
-    obj: &'a ManagedObjectReference,
+    obj: &'a crate::types::structs::ManagedObjectReference,
     spec: &'a dyn crate::types::traits::ScheduledTaskSpecTrait,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct RetrieveEntityScheduledTaskRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    entity: Option<&'a ManagedObjectReference>,
+    entity: Option<&'a crate::types::structs::ManagedObjectReference>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct RetrieveObjectScheduledTaskRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    obj: Option<&'a ManagedObjectReference>,
+    obj: Option<&'a crate::types::structs::ManagedObjectReference>,
 }

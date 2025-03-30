@@ -1,11 +1,5 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::AlarmState;
-use crate::types::structs::CustomFieldDef;
-use crate::types::structs::Event;
-use crate::types::structs::ManagedObjectReference;
-use crate::types::structs::Permission;
-use crate::types::structs::Tag;
 /// Represents a network accessible by either hosts or virtual machines.
 /// 
 /// This can be a
@@ -20,6 +14,7 @@ use crate::types::structs::Tag;
 /// To configure network access for hosts and virtual machines, use
 /// *DistributedVirtualSwitch* and
 /// *DistributedVirtualPortgroup* managed objects.
+#[derive(Clone)]
 pub struct Network {
     client: Arc<Client>,
     mo_id: String,
@@ -52,7 +47,7 @@ impl Network {
     /// ## Errors:
     ///
     /// Failure
-    pub async fn destroy_task(&self) -> Result<ManagedObjectReference> {
+    pub async fn destroy_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/Network/{moId}/Destroy_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute(req).await
@@ -124,7 +119,7 @@ impl Network {
     /// ***DuplicateName***: If another object in the same folder has the target name.
     /// 
     /// ***InvalidName***: If the new name is not a valid entity name.
-    pub async fn rename_task(&self, new_name: &str) -> Result<ManagedObjectReference> {
+    pub async fn rename_task(&self, new_name: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RenameRequestType {new_name, };
         let path = format!("/Network/{moId}/Rename_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -165,7 +160,7 @@ impl Network {
     /// The fields are sorted by *CustomFieldDef.name*.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn available_field(&self) -> Result<Option<Vec<CustomFieldDef>>> {
+    pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
         let path = format!("/Network/{moId}/availableField", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -177,7 +172,7 @@ impl Network {
     /// events as long as they are still current. The
     /// *configStatus* property provides an overall status
     /// based on these events.
-    pub async fn config_issue(&self) -> Result<Option<Vec<Event>>> {
+    pub async fn config_issue(&self) -> Result<Option<Vec<crate::types::structs::Event>>> {
         let path = format!("/Network/{moId}/configIssue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -229,7 +224,7 @@ impl Network {
     /// This set does not include alarms that are defined on descendants of this entity.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn declared_alarm_state(&self) -> Result<Option<Vec<AlarmState>>> {
+    pub async fn declared_alarm_state(&self) -> Result<Option<Vec<crate::types::structs::AlarmState>>> {
         let path = format!("/Network/{moId}/declaredAlarmState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -321,7 +316,7 @@ impl Network {
     /// ## Returns:
     ///
     /// Refers instances of *HostSystem*.
-    pub async fn host(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
+    pub async fn host(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/Network/{moId}/host", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -376,13 +371,13 @@ impl Network {
     /// ## Returns:
     ///
     /// Refers instance of *ManagedEntity*.
-    pub async fn parent(&self) -> Result<Option<ManagedObjectReference>> {
+    pub async fn parent(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let path = format!("/Network/{moId}/parent", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
     }
     /// List of permissions defined for this entity.
-    pub async fn permission(&self) -> Result<Option<Vec<Permission>>> {
+    pub async fn permission(&self) -> Result<Option<Vec<crate::types::structs::Permission>>> {
         let path = format!("/Network/{moId}/permission", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -412,7 +407,7 @@ impl Network {
     /// ## Returns:
     ///
     /// Refers instances of *Task*.
-    pub async fn recent_task(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
+    pub async fn recent_task(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/Network/{moId}/recentTask", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -428,7 +423,7 @@ impl Network {
     /// Experimental. Subject to change.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn tag(&self) -> Result<Option<Vec<Tag>>> {
+    pub async fn tag(&self) -> Result<Option<Vec<crate::types::structs::Tag>>> {
         let path = format!("/Network/{moId}/tag", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -447,7 +442,7 @@ impl Network {
     /// produce any property values as no updates are generated.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn triggered_alarm_state(&self) -> Result<Option<Vec<AlarmState>>> {
+    pub async fn triggered_alarm_state(&self) -> Result<Option<Vec<crate::types::structs::AlarmState>>> {
         let path = format!("/Network/{moId}/triggeredAlarmState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -469,7 +464,7 @@ impl Network {
     /// ## Returns:
     ///
     /// Refers instances of *VirtualMachine*.
-    pub async fn vm(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
+    pub async fn vm(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/Network/{moId}/vm", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await

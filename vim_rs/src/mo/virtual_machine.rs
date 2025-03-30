@@ -1,36 +1,5 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::AlarmState;
-use crate::types::structs::CustomFieldDef;
-use crate::types::structs::CustomizationSpec;
-use crate::types::structs::DiskChangeInfo;
-use crate::types::structs::Event;
-use crate::types::structs::FaultToleranceConfigSpec;
-use crate::types::structs::GuestInfo;
-use crate::types::structs::HostFeatureMask;
-use crate::types::structs::Id;
-use crate::types::structs::ManagedObjectReference;
-use crate::types::structs::MethodFault;
-use crate::types::structs::Permission;
-use crate::types::structs::ResourceConfigSpec;
-use crate::types::structs::Tag;
-use crate::types::structs::UsbScanCodeSpec;
-use crate::types::structs::VirtualDisk;
-use crate::types::structs::VirtualMachineCapability;
-use crate::types::structs::VirtualMachineCloneSpec;
-use crate::types::structs::VirtualMachineConfigInfo;
-use crate::types::structs::VirtualMachineConfigSpec;
-use crate::types::structs::VirtualMachineDisplayTopology;
-use crate::types::structs::VirtualMachineFileLayout;
-use crate::types::structs::VirtualMachineFileLayoutEx;
-use crate::types::structs::VirtualMachineInstantCloneSpec;
-use crate::types::structs::VirtualMachineMksTicket;
-use crate::types::structs::VirtualMachineRelocateSpec;
-use crate::types::structs::VirtualMachineRuntimeInfo;
-use crate::types::structs::VirtualMachineSnapshotInfo;
-use crate::types::structs::VirtualMachineStorageInfo;
-use crate::types::structs::VirtualMachineSummary;
-use crate::types::structs::VirtualMachineTicket;
 /// VirtualMachine is the managed object type for manipulating virtual machines,
 /// including templates that can be deployed (repeatedly) as new virtual machines.
 /// 
@@ -44,6 +13,7 @@ use crate::types::structs::VirtualMachineTicket;
 /// the virtual disks. To remove a virtual machine while retaining its
 /// virtual disk storage, a client must remove the virtual disks
 /// from the virtual machine before destroying it.
+#[derive(Clone)]
 pub struct VirtualMachine {
     client: Arc<Client>,
     mo_id: String,
@@ -74,7 +44,7 @@ impl VirtualMachine {
     ///
     /// A one-time credential used in establishing a remote
     /// mouse-keyboard-screen connection.
-    pub async fn acquire_mks_ticket(&self) -> Result<VirtualMachineMksTicket> {
+    pub async fn acquire_mks_ticket(&self) -> Result<crate::types::structs::VirtualMachineMksTicket> {
         let path = format!("/VirtualMachine/{moId}/AcquireMksTicket", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute(req).await
@@ -114,7 +84,7 @@ impl VirtualMachine {
     /// ## Errors:
     ///
     /// ***InvalidState***: if the virtual machine is not connected.
-    pub async fn acquire_ticket(&self, ticket_type: &str) -> Result<VirtualMachineTicket> {
+    pub async fn acquire_ticket(&self, ticket_type: &str) -> Result<crate::types::structs::VirtualMachineTicket> {
         let input = AcquireTicketRequestType {ticket_type, };
         let path = format!("/VirtualMachine/{moId}/AcquireTicket", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -180,7 +150,7 @@ impl VirtualMachine {
     /// ## Errors:
     ///
     /// ***InvalidPowerState***: if the power state is not poweredOff.
-    pub async fn apply_evc_mode_vm_task(&self, mask: Option<&[HostFeatureMask]>, complete_masks: Option<bool>) -> Result<ManagedObjectReference> {
+    pub async fn apply_evc_mode_vm_task(&self, mask: Option<&[crate::types::structs::HostFeatureMask]>, complete_masks: Option<bool>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ApplyEvcModeVmRequestType {mask, complete_masks, };
         let path = format!("/VirtualMachine/{moId}/ApplyEvcModeVM_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -250,7 +220,7 @@ impl VirtualMachine {
     /// 
     /// ***DeviceUnsupportedForVmVersion***: If the virtual machine's version is
     /// incompatible for the given device.
-    pub async fn attach_disk_task(&self, disk_id: &Id, datastore: &ManagedObjectReference, controller_key: Option<i32>, unit_number: Option<i32>) -> Result<ManagedObjectReference> {
+    pub async fn attach_disk_task(&self, disk_id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, controller_key: Option<i32>, unit_number: Option<i32>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = AttachDiskRequestType {disk_id, datastore, controller_key, unit_number, };
         let path = format!("/VirtualMachine/{moId}/AttachDisk_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -273,7 +243,7 @@ impl VirtualMachine {
     /// ## Errors:
     ///
     /// ***CustomizationFault***: A subclass of CustomizationFault is thrown.
-    pub async fn check_customization_spec(&self, spec: &CustomizationSpec) -> Result<()> {
+    pub async fn check_customization_spec(&self, spec: &crate::types::structs::CustomizationSpec) -> Result<()> {
         let input = CheckCustomizationSpecRequestType {spec, };
         let path = format!("/VirtualMachine/{moId}/CheckCustomizationSpec", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -373,7 +343,7 @@ impl VirtualMachine {
     /// 
     /// ***NoPermission***: if source virtual machine is encrypted, but the
     /// the user does not have Cryptographer.Clone permission on it.
-    pub async fn clone_vm_task(&self, folder: &ManagedObjectReference, name: &str, spec: &VirtualMachineCloneSpec) -> Result<ManagedObjectReference> {
+    pub async fn clone_vm_task(&self, folder: &crate::types::structs::ManagedObjectReference, name: &str, spec: &crate::types::structs::VirtualMachineCloneSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CloneVmRequestType {folder, name, spec, };
         let path = format!("/VirtualMachine/{moId}/CloneVM_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -418,7 +388,7 @@ impl VirtualMachine {
     /// such as *InvalidDiskFormat* if a disk cannot
     /// be read, or *InvalidSnapshotFormat* if the
     /// snapshot configuration is invalid.
-    pub async fn consolidate_vm_disks_task(&self) -> Result<ManagedObjectReference> {
+    pub async fn consolidate_vm_disks_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/VirtualMachine/{moId}/ConsolidateVMDisks_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute(req).await
@@ -442,7 +412,7 @@ impl VirtualMachine {
     /// 
     /// ***InvalidState***: if the virtual machine is not ready to respond to
     /// such requests.
-    pub async fn create_screenshot_task(&self) -> Result<ManagedObjectReference> {
+    pub async fn create_screenshot_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/VirtualMachine/{moId}/CreateScreenshot_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute(req).await
@@ -512,7 +482,7 @@ impl VirtualMachine {
     /// ***VmConfigFault***: if a configuration issue prevents creating the secondary.
     /// Typically, a more specific fault such as
     /// VmConfigIncompatibleForFaultTolerance is thrown.
-    pub async fn create_secondary_vm_task(&self, host: Option<&ManagedObjectReference>) -> Result<ManagedObjectReference> {
+    pub async fn create_secondary_vm_task(&self, host: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateSecondaryVmRequestType {host, };
         let path = format!("/VirtualMachine/{moId}/CreateSecondaryVM_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -606,7 +576,7 @@ impl VirtualMachine {
     /// ***VmConfigFault***: if a configuration issue prevents creating the secondary.
     /// Typically, a more specific fault such as
     /// VmConfigIncompatibleForFaultTolerance is thrown.
-    pub async fn create_secondary_vm_ex_task(&self, host: Option<&ManagedObjectReference>, spec: Option<&FaultToleranceConfigSpec>) -> Result<ManagedObjectReference> {
+    pub async fn create_secondary_vm_ex_task(&self, host: Option<&crate::types::structs::ManagedObjectReference>, spec: Option<&crate::types::structs::FaultToleranceConfigSpec>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateSecondaryVmExRequestType {host, spec, };
         let path = format!("/VirtualMachine/{moId}/CreateSecondaryVMEx_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -693,7 +663,7 @@ impl VirtualMachine {
     /// ***InvalidState***: if the operation cannot be performed because of the
     /// virtual machine's current state. For example, the virtual machine
     /// configuration information is not available.
-    pub async fn create_snapshot_task(&self, name: &str, description: Option<&str>, memory: bool, quiesce: bool) -> Result<ManagedObjectReference> {
+    pub async fn create_snapshot_task(&self, name: &str, description: Option<&str>, memory: bool, quiesce: bool) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateSnapshotRequestType {name, description, memory, quiesce, };
         let path = format!("/VirtualMachine/{moId}/CreateSnapshot_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -787,7 +757,7 @@ impl VirtualMachine {
     /// ***InvalidState***: if the operation cannot be performed because of the
     /// virtual machine's current state. For example, the virtual machine
     /// configuration information is not available.
-    pub async fn create_snapshot_ex_task(&self, name: &str, description: Option<&str>, memory: bool, quiesce_spec: Option<&dyn crate::types::traits::VirtualMachineGuestQuiesceSpecTrait>) -> Result<ManagedObjectReference> {
+    pub async fn create_snapshot_ex_task(&self, name: &str, description: Option<&str>, memory: bool, quiesce_spec: Option<&dyn crate::types::traits::VirtualMachineGuestQuiesceSpecTrait>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateSnapshotExRequestType {name, description, memory, quiesce_spec, };
         let path = format!("/VirtualMachine/{moId}/CreateSnapshotEx_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -810,7 +780,7 @@ impl VirtualMachine {
     /// ***InvalidVmState***: when the virtual machine failed to unlock.
     /// 
     /// ***NotSupported***: if the ESX server doesn't support encryption.
-    pub async fn crypto_unlock_task(&self) -> Result<ManagedObjectReference> {
+    pub async fn crypto_unlock_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/VirtualMachine/{moId}/CryptoUnlock_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute(req).await
@@ -834,7 +804,7 @@ impl VirtualMachine {
     /// ## Errors:
     ///
     /// ***CustomizationFault***: A subclass of CustomizationFault is thrown.
-    pub async fn customize_vm_task(&self, spec: &CustomizationSpec) -> Result<ManagedObjectReference> {
+    pub async fn customize_vm_task(&self, spec: &crate::types::structs::CustomizationSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CustomizeVmRequestType {spec, };
         let path = format!("/VirtualMachine/{moId}/CustomizeVM_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -879,7 +849,7 @@ impl VirtualMachine {
     /// ## Errors:
     ///
     /// Failure
-    pub async fn destroy_task(&self) -> Result<ManagedObjectReference> {
+    pub async fn destroy_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/VirtualMachine/{moId}/Destroy_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute(req).await
@@ -910,7 +880,7 @@ impl VirtualMachine {
     /// ***InvalidState***: if the operation cannot be performed in the current
     /// state of the virtual machine. For example, because the virtual
     /// machine's configuration is not available.
-    pub async fn detach_disk_task(&self, disk_id: &Id) -> Result<ManagedObjectReference> {
+    pub async fn detach_disk_task(&self, disk_id: &crate::types::structs::Id) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = DetachDiskRequestType {disk_id, };
         let path = format!("/VirtualMachine/{moId}/DetachDisk_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -952,7 +922,7 @@ impl VirtualMachine {
     /// 
     /// ***InvalidState***: if the host is in maintenance mode or if
     /// the virtual machine's configuration information is not available.
-    pub async fn disable_secondary_vm_task(&self, vm: &ManagedObjectReference) -> Result<ManagedObjectReference> {
+    pub async fn disable_secondary_vm_task(&self, vm: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = DisableSecondaryVmRequestType {vm, };
         let path = format!("/VirtualMachine/{moId}/DisableSecondaryVM_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -1053,7 +1023,7 @@ impl VirtualMachine {
     /// ***InvalidState***: if the virtual machine's configuration information is not
     /// available, if the secondary virtual machine is not disabled, or if a
     /// power-on is attempted and one is already in progress.
-    pub async fn enable_secondary_vm_task(&self, vm: &ManagedObjectReference, host: Option<&ManagedObjectReference>) -> Result<ManagedObjectReference> {
+    pub async fn enable_secondary_vm_task(&self, vm: &crate::types::structs::ManagedObjectReference, host: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = EnableSecondaryVmRequestType {vm, host, };
         let path = format!("/VirtualMachine/{moId}/EnableSecondaryVM_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -1094,7 +1064,7 @@ impl VirtualMachine {
     /// 
     /// ***VmConfigFault***: if a virtual machine configuration issue prevents
     /// the estimation. Typically, a more specific fault is thrown.
-    pub async fn estimate_storage_for_consolidate_snapshots_task(&self) -> Result<ManagedObjectReference> {
+    pub async fn estimate_storage_for_consolidate_snapshots_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/VirtualMachine/{moId}/EstimateStorageForConsolidateSnapshots_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute(req).await
@@ -1128,7 +1098,7 @@ impl VirtualMachine {
     /// configuration information is not available.
     /// 
     /// ***FileFault***: if there is an error accessing the virtual machine files.
-    pub async fn export_vm(&self) -> Result<ManagedObjectReference> {
+    pub async fn export_vm(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/VirtualMachine/{moId}/ExportVm", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute(req).await
@@ -1205,7 +1175,7 @@ impl VirtualMachine {
     /// to the source virtual machine are not supported for the Instant
     /// Clone operation or if device change specification contains
     /// changes that are not supported.
-    pub async fn instant_clone_task(&self, spec: &VirtualMachineInstantCloneSpec) -> Result<ManagedObjectReference> {
+    pub async fn instant_clone_task(&self, spec: &crate::types::structs::VirtualMachineInstantCloneSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = InstantCloneRequestType {spec, };
         let path = format!("/VirtualMachine/{moId}/InstantClone_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -1244,7 +1214,7 @@ impl VirtualMachine {
     /// 
     /// ***InvalidState***: if the host is in maintenance mode or if
     /// the virtual machine's configuration information is not available.
-    pub async fn make_primary_vm_task(&self, vm: &ManagedObjectReference) -> Result<ManagedObjectReference> {
+    pub async fn make_primary_vm_task(&self, vm: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = MakePrimaryVmRequestType {vm, };
         let path = format!("/VirtualMachine/{moId}/MakePrimaryVM_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -1313,7 +1283,7 @@ impl VirtualMachine {
     /// does not support the disk backings of the template.
     /// 
     /// ***FileFault***: if there is an error accessing the virtual machine files.
-    pub async fn mark_as_virtual_machine(&self, pool: &ManagedObjectReference, host: Option<&ManagedObjectReference>) -> Result<()> {
+    pub async fn mark_as_virtual_machine(&self, pool: &crate::types::structs::ManagedObjectReference, host: Option<&crate::types::structs::ManagedObjectReference>) -> Result<()> {
         let input = MarkAsVirtualMachineRequestType {pool, host, };
         let path = format!("/VirtualMachine/{moId}/MarkAsVirtualMachine", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -1411,7 +1381,7 @@ impl VirtualMachine {
     /// 
     /// ***NoPermission***: if the virtual machine is encrypted, but the
     /// the user does not have Cryptographer.Migrate permission on the VM.
-    pub async fn migrate_vm_task(&self, pool: Option<&ManagedObjectReference>, host: Option<&ManagedObjectReference>, priority: crate::types::enums::VirtualMachineMovePriorityEnum, state: Option<crate::types::enums::VirtualMachinePowerStateEnum>) -> Result<ManagedObjectReference> {
+    pub async fn migrate_vm_task(&self, pool: Option<&crate::types::structs::ManagedObjectReference>, host: Option<&crate::types::structs::ManagedObjectReference>, priority: crate::types::enums::VirtualMachineMovePriorityEnum, state: Option<crate::types::enums::VirtualMachinePowerStateEnum>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = MigrateVmRequestType {pool, host, priority, state, };
         let path = format!("/VirtualMachine/{moId}/MigrateVM_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -1461,7 +1431,7 @@ impl VirtualMachine {
     /// ***InvalidState***: if the operation cannot be performed because of the
     /// virtual machine's current state. For example, if the virtual machine
     /// configuration information is not available.
-    pub async fn power_off_vm_task(&self) -> Result<ManagedObjectReference> {
+    pub async fn power_off_vm_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/VirtualMachine/{moId}/PowerOffVM_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute(req).await
@@ -1535,7 +1505,7 @@ impl VirtualMachine {
     /// 
     /// ***DisallowedOperationOnFailoverHost***: if the host specified is a failover
     /// host. See *ClusterFailoverHostAdmissionControlPolicy*.
-    pub async fn power_on_vm_task(&self, host: Option<&ManagedObjectReference>) -> Result<ManagedObjectReference> {
+    pub async fn power_on_vm_task(&self, host: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = PowerOnVmRequestType {host, };
         let path = format!("/VirtualMachine/{moId}/PowerOnVM_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -1597,7 +1567,7 @@ impl VirtualMachine {
     /// 
     /// ***InvalidState***: if the virtual machine is not ready to respond to
     /// such requests.
-    pub async fn promote_disks_task(&self, unlink: bool, disks: Option<&[VirtualDisk]>) -> Result<ManagedObjectReference> {
+    pub async fn promote_disks_task(&self, unlink: bool, disks: Option<&[crate::types::structs::VirtualDisk]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = PromoteDisksRequestType {unlink, disks, };
         let path = format!("/VirtualMachine/{moId}/PromoteDisks_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -1615,7 +1585,7 @@ impl VirtualMachine {
     /// ## Returns:
     ///
     /// Number of keys injected.
-    pub async fn put_usb_scan_codes(&self, spec: &UsbScanCodeSpec) -> Result<i32> {
+    pub async fn put_usb_scan_codes(&self, spec: &crate::types::structs::UsbScanCodeSpec) -> Result<i32> {
         let input = PutUsbScanCodesRequestType {spec, };
         let path = format!("/VirtualMachine/{moId}/PutUsbScanCodes", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -1677,7 +1647,7 @@ impl VirtualMachine {
     /// tracking is not supported for this particular disk.
     /// 
     /// ***FileFault***: if the virtual disk files cannot be accessed/queried.
-    pub async fn query_changed_disk_areas(&self, snapshot: Option<&ManagedObjectReference>, device_key: i32, start_offset: i64, change_id: &str) -> Result<DiskChangeInfo> {
+    pub async fn query_changed_disk_areas(&self, snapshot: Option<&crate::types::structs::ManagedObjectReference>, device_key: i32, start_offset: i64, change_id: &str) -> Result<crate::types::structs::DiskChangeInfo> {
         let input = QueryChangedDiskAreasRequestType {snapshot, device_key, start_offset, change_id, };
         let path = format!("/VirtualMachine/{moId}/QueryChangedDiskAreas", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -1732,7 +1702,7 @@ impl VirtualMachine {
     /// 
     /// ***NotSupported***: if the virtual machine is a template or this operation
     /// is not supported.
-    pub async fn query_fault_tolerance_compatibility(&self) -> Result<Option<Vec<MethodFault>>> {
+    pub async fn query_fault_tolerance_compatibility(&self) -> Result<Option<Vec<crate::types::structs::MethodFault>>> {
         let path = format!("/VirtualMachine/{moId}/QueryFaultToleranceCompatibility", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute_option(req).await
@@ -1766,7 +1736,7 @@ impl VirtualMachine {
     /// 
     /// ***NotSupported***: if the virtual machine is a template or this operation
     /// is not supported.
-    pub async fn query_fault_tolerance_compatibility_ex(&self, for_legacy_ft: Option<bool>) -> Result<Option<Vec<MethodFault>>> {
+    pub async fn query_fault_tolerance_compatibility_ex(&self, for_legacy_ft: Option<bool>) -> Result<Option<Vec<crate::types::structs::MethodFault>>> {
         let input = QueryFaultToleranceCompatibilityExRequestType {for_legacy_ft, };
         let path = format!("/VirtualMachine/{moId}/QueryFaultToleranceCompatibilityEx", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -1965,7 +1935,7 @@ impl VirtualMachine {
     /// ***NoPermission***: if the virtual machine is encrypted and the
     /// encryption is not enabled on the host, but the user does not have
     /// Cryptographer.RegisterHost privilege on the host.
-    pub async fn reconfig_vm_task(&self, spec: &VirtualMachineConfigSpec) -> Result<ManagedObjectReference> {
+    pub async fn reconfig_vm_task(&self, spec: &crate::types::structs::VirtualMachineConfigSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ReconfigVmRequestType {spec, };
         let path = format!("/VirtualMachine/{moId}/ReconfigVM_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -2060,7 +2030,7 @@ impl VirtualMachine {
     /// InvalidDiskFormat if the disks cannot be read.
     /// 
     /// ***AlreadyExists***: if the virtual machine is already registered.
-    pub async fn reload_virtual_machine_from_path_task(&self, configuration_path: &str) -> Result<ManagedObjectReference> {
+    pub async fn reload_virtual_machine_from_path_task(&self, configuration_path: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ReloadVirtualMachineFromPathRequestType {configuration_path, };
         let path = format!("/VirtualMachine/{moId}/reloadVirtualMachineFromPath_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -2175,7 +2145,7 @@ impl VirtualMachine {
     /// ***DisallowedOperationOnFailoverHost***: if the virtual machine is powered on
     /// and is being migrated to a failover host. See
     /// *ClusterFailoverHostAdmissionControlPolicy*.
-    pub async fn relocate_vm_task(&self, spec: &VirtualMachineRelocateSpec, priority: Option<crate::types::enums::VirtualMachineMovePriorityEnum>) -> Result<ManagedObjectReference> {
+    pub async fn relocate_vm_task(&self, spec: &crate::types::structs::VirtualMachineRelocateSpec, priority: Option<crate::types::enums::VirtualMachineMovePriorityEnum>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RelocateVmRequestType {spec, priority, };
         let path = format!("/VirtualMachine/{moId}/RelocateVM_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -2218,7 +2188,7 @@ impl VirtualMachine {
     /// ***InvalidState***: if the operation cannot be performed because of the
     /// virtual machine's current state. For example, if the virtual machine
     /// configuration information is not available.
-    pub async fn remove_all_snapshots_task(&self, consolidate: Option<bool>) -> Result<ManagedObjectReference> {
+    pub async fn remove_all_snapshots_task(&self, consolidate: Option<bool>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RemoveAllSnapshotsRequestType {consolidate, };
         let path = format!("/VirtualMachine/{moId}/RemoveAllSnapshots_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -2252,7 +2222,7 @@ impl VirtualMachine {
     /// ***DuplicateName***: If another object in the same folder has the target name.
     /// 
     /// ***InvalidName***: If the new name is not a valid entity name.
-    pub async fn rename_task(&self, new_name: &str) -> Result<ManagedObjectReference> {
+    pub async fn rename_task(&self, new_name: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RenameRequestType {new_name, };
         let path = format!("/VirtualMachine/{moId}/Rename_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -2293,7 +2263,7 @@ impl VirtualMachine {
     /// ***InvalidState***: if the operation cannot be performed because of the
     /// virtual machine's current state. For example, if the virtual machine
     /// configuration information is not available.
-    pub async fn reset_vm_task(&self) -> Result<ManagedObjectReference> {
+    pub async fn reset_vm_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/VirtualMachine/{moId}/ResetVM_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute(req).await
@@ -2395,7 +2365,7 @@ impl VirtualMachine {
     /// ***DisallowedOperationOnFailoverHost***: if the virtual machine is being
     /// reverted to a powered on state and the host specified is a failover host.
     /// See *ClusterFailoverHostAdmissionControlPolicy*.
-    pub async fn revert_to_current_snapshot_task(&self, host: Option<&ManagedObjectReference>, suppress_power_on: Option<bool>) -> Result<ManagedObjectReference> {
+    pub async fn revert_to_current_snapshot_task(&self, host: Option<&crate::types::structs::ManagedObjectReference>, suppress_power_on: Option<bool>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RevertToCurrentSnapshotRequestType {host, suppress_power_on, };
         let path = format!("/VirtualMachine/{moId}/RevertToCurrentSnapshot_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -2456,7 +2426,7 @@ impl VirtualMachine {
     /// ***InvalidState***: if the virtual machine is not connected.
     /// 
     /// ***ToolsUnavailable***: if VMware Tools is not running.
-    pub async fn set_display_topology(&self, displays: &[VirtualMachineDisplayTopology]) -> Result<()> {
+    pub async fn set_display_topology(&self, displays: &[crate::types::structs::VirtualMachineDisplayTopology]) -> Result<()> {
         let input = SetDisplayTopologyRequestType {displays, };
         let path = format!("/VirtualMachine/{moId}/SetDisplayTopology", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -2600,7 +2570,7 @@ impl VirtualMachine {
     /// 
     /// ***HostIncompatibleForRecordReplay***: if the virtual machine is located
     /// on a host that does not support record/replay.
-    pub async fn start_recording_task(&self, name: &str, description: Option<&str>) -> Result<ManagedObjectReference> {
+    pub async fn start_recording_task(&self, name: &str, description: Option<&str>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = StartRecordingRequestType {name, description, };
         let path = format!("/VirtualMachine/{moId}/StartRecording_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -2668,7 +2638,7 @@ impl VirtualMachine {
     /// 
     /// ***HostIncompatibleForRecordReplay***: if the virtual machine is located
     /// on a host that does not support record/replay.
-    pub async fn start_replaying_task(&self, replay_snapshot: &ManagedObjectReference) -> Result<ManagedObjectReference> {
+    pub async fn start_replaying_task(&self, replay_snapshot: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = StartReplayingRequestType {replay_snapshot, };
         let path = format!("/VirtualMachine/{moId}/StartReplaying_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -2710,7 +2680,7 @@ impl VirtualMachine {
     /// ***InvalidState***: if the operation cannot be performed because of the
     /// virtual machine's current state. For example, the virtual machine
     /// does not have an active recording session.
-    pub async fn stop_recording_task(&self) -> Result<ManagedObjectReference> {
+    pub async fn stop_recording_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/VirtualMachine/{moId}/StopRecording_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute(req).await
@@ -2751,7 +2721,7 @@ impl VirtualMachine {
     /// ***InvalidState***: if the operation cannot be performed because of the
     /// virtual machine's current state. For example, the virtual machine
     /// does not have an active recording session.
-    pub async fn stop_replaying_task(&self) -> Result<ManagedObjectReference> {
+    pub async fn stop_replaying_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/VirtualMachine/{moId}/StopReplaying_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute(req).await
@@ -2778,7 +2748,7 @@ impl VirtualMachine {
     /// ***InvalidState***: if the operation cannot be performed because of the
     /// virtual machine's current state. For example, if the virtual machine
     /// configuration information is not available.
-    pub async fn suspend_vm_task(&self) -> Result<ManagedObjectReference> {
+    pub async fn suspend_vm_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/VirtualMachine/{moId}/SuspendVM_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute(req).await
@@ -2846,7 +2816,7 @@ impl VirtualMachine {
     /// 
     /// ***InvalidState***: if the host is in maintenance mode or if
     /// the virtual machine's configuration information is not available.
-    pub async fn terminate_fault_tolerant_vm_task(&self, vm: Option<&ManagedObjectReference>) -> Result<ManagedObjectReference> {
+    pub async fn terminate_fault_tolerant_vm_task(&self, vm: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = TerminateFaultTolerantVmRequestType {vm, };
         let path = format!("/VirtualMachine/{moId}/TerminateFaultTolerantVM_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -2877,7 +2847,7 @@ impl VirtualMachine {
     /// 
     /// ***InvalidState***: if the host is in maintenance mode or if
     /// the virtual machine's configuration information is not available.
-    pub async fn turn_off_fault_tolerance_for_vm_task(&self) -> Result<ManagedObjectReference> {
+    pub async fn turn_off_fault_tolerance_for_vm_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/VirtualMachine/{moId}/TurnOffFaultToleranceForVM_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute(req).await
@@ -2954,7 +2924,7 @@ impl VirtualMachine {
     /// ***VmToolsUpgradeFault***: if the upgrade failed.
     /// 
     /// ***ToolsUnavailable***: if VMware Tools is not running.
-    pub async fn upgrade_tools_task(&self, installer_options: Option<&str>) -> Result<ManagedObjectReference> {
+    pub async fn upgrade_tools_task(&self, installer_options: Option<&str>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = UpgradeToolsRequestType {installer_options, };
         let path = format!("/VirtualMachine/{moId}/UpgradeTools_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -2993,7 +2963,7 @@ impl VirtualMachine {
     /// if the virtual machine is in a state in which the operation
     /// cannot be performed. For example, if the configuration
     /// information is not available.
-    pub async fn upgrade_vm_task(&self, version: Option<&str>) -> Result<ManagedObjectReference> {
+    pub async fn upgrade_vm_task(&self, version: Option<&str>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = UpgradeVmRequestType {version, };
         let path = format!("/VirtualMachine/{moId}/UpgradeVM_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -3014,13 +2984,13 @@ impl VirtualMachine {
     /// The fields are sorted by *CustomFieldDef.name*.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn available_field(&self) -> Result<Option<Vec<CustomFieldDef>>> {
+    pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
         let path = format!("/VirtualMachine/{moId}/availableField", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
     }
     /// Information about the runtime capabilities of this virtual machine.
-    pub async fn capability(&self) -> Result<VirtualMachineCapability> {
+    pub async fn capability(&self) -> Result<crate::types::structs::VirtualMachineCapability> {
         let path = format!("/VirtualMachine/{moId}/capability", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute(req).await
@@ -3035,7 +3005,7 @@ impl VirtualMachine {
     /// if the server is unable to access the virtual machine files on disk,
     /// and is often also unavailable during the initial phases of
     /// virtual machine creation.
-    pub async fn config(&self) -> Result<Option<VirtualMachineConfigInfo>> {
+    pub async fn config(&self) -> Result<Option<crate::types::structs::VirtualMachineConfigInfo>> {
         let path = format!("/VirtualMachine/{moId}/config", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -3047,7 +3017,7 @@ impl VirtualMachine {
     /// events as long as they are still current. The
     /// *configStatus* property provides an overall status
     /// based on these events.
-    pub async fn config_issue(&self) -> Result<Option<Vec<Event>>> {
+    pub async fn config_issue(&self) -> Result<Option<Vec<crate::types::structs::Event>>> {
         let path = format!("/VirtualMachine/{moId}/configIssue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -3097,7 +3067,7 @@ impl VirtualMachine {
     /// ## Returns:
     ///
     /// Refers instances of *Datastore*.
-    pub async fn datastore(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
+    pub async fn datastore(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/VirtualMachine/{moId}/datastore", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -3112,7 +3082,7 @@ impl VirtualMachine {
     /// This set does not include alarms that are defined on descendants of this entity.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn declared_alarm_state(&self) -> Result<Option<Vec<AlarmState>>> {
+    pub async fn declared_alarm_state(&self) -> Result<Option<Vec<crate::types::structs::AlarmState>>> {
         let path = format!("/VirtualMachine/{moId}/declaredAlarmState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -3209,7 +3179,7 @@ impl VirtualMachine {
     /// ## Returns:
     ///
     /// Refers instance of *EnvironmentBrowser*.
-    pub async fn environment_browser(&self) -> Result<ManagedObjectReference> {
+    pub async fn environment_browser(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/VirtualMachine/{moId}/environmentBrowser", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute(req).await
@@ -3221,7 +3191,7 @@ impl VirtualMachine {
     /// operating system information reflects the last known state of the virtual machine.
     /// For powered on machines, this is current information. For powered off machines,
     /// this is the last recorded state before the virtual machine was powered off.
-    pub async fn guest(&self) -> Result<Option<GuestInfo>> {
+    pub async fn guest(&self) -> Result<Option<crate::types::structs::GuestInfo>> {
         let path = format!("/VirtualMachine/{moId}/guest", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -3251,7 +3221,7 @@ impl VirtualMachine {
     /// produce any property values as no updates are generated.
     /// 
     /// Detailed information about the files that comprise this virtual machine.
-    pub async fn layout(&self) -> Result<Option<VirtualMachineFileLayout>> {
+    pub async fn layout(&self) -> Result<Option<crate::types::structs::VirtualMachineFileLayout>> {
         let path = format!("/VirtualMachine/{moId}/layout", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -3266,7 +3236,7 @@ impl VirtualMachine {
     /// If you use the PropertyCollector.WaitForUpdatesEx method, specify
     /// an empty string for the version parameter. Any other version value will not
     /// produce any property values as no updates are generated.
-    pub async fn layout_ex(&self) -> Result<Option<VirtualMachineFileLayoutEx>> {
+    pub async fn layout_ex(&self) -> Result<Option<crate::types::structs::VirtualMachineFileLayoutEx>> {
         let path = format!("/VirtualMachine/{moId}/layoutEx", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -3293,7 +3263,7 @@ impl VirtualMachine {
     /// ## Returns:
     ///
     /// Refers instances of *Network*.
-    pub async fn network(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
+    pub async fn network(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/VirtualMachine/{moId}/network", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -3334,7 +3304,7 @@ impl VirtualMachine {
     /// ## Returns:
     ///
     /// Refers instance of *ManagedEntity*.
-    pub async fn parent(&self) -> Result<Option<ManagedObjectReference>> {
+    pub async fn parent(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let path = format!("/VirtualMachine/{moId}/parent", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -3344,13 +3314,13 @@ impl VirtualMachine {
     /// ## Returns:
     ///
     /// Refers instance of *ManagedEntity*.
-    pub async fn parent_v_app(&self) -> Result<Option<ManagedObjectReference>> {
+    pub async fn parent_v_app(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let path = format!("/VirtualMachine/{moId}/parentVApp", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
     }
     /// List of permissions defined for this entity.
-    pub async fn permission(&self) -> Result<Option<Vec<Permission>>> {
+    pub async fn permission(&self) -> Result<Option<Vec<crate::types::structs::Permission>>> {
         let path = format!("/VirtualMachine/{moId}/permission", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -3380,7 +3350,7 @@ impl VirtualMachine {
     /// ## Returns:
     ///
     /// Refers instances of *Task*.
-    pub async fn recent_task(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
+    pub async fn recent_task(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/VirtualMachine/{moId}/recentTask", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -3398,7 +3368,7 @@ impl VirtualMachine {
     /// 
     /// To change the configuration, use
     /// *ResourcePool.UpdateChildResourceConfiguration*.
-    pub async fn resource_config(&self) -> Result<Option<ResourceConfigSpec>> {
+    pub async fn resource_config(&self) -> Result<Option<crate::types::structs::ResourceConfigSpec>> {
         let path = format!("/VirtualMachine/{moId}/resourceConfig", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -3415,7 +3385,7 @@ impl VirtualMachine {
     /// ## Returns:
     ///
     /// Refers instance of *ResourcePool*.
-    pub async fn resource_pool(&self) -> Result<Option<ManagedObjectReference>> {
+    pub async fn resource_pool(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let path = format!("/VirtualMachine/{moId}/resourcePool", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -3425,7 +3395,7 @@ impl VirtualMachine {
     /// ## Returns:
     ///
     /// Refers instances of *VirtualMachineSnapshot*.
-    pub async fn root_snapshot(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
+    pub async fn root_snapshot(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/VirtualMachine/{moId}/rootSnapshot", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -3436,7 +3406,7 @@ impl VirtualMachine {
     /// - the virtual machine's power state changes.
     /// - an execution message is pending.
     /// - an event occurs.
-    pub async fn runtime(&self) -> Result<VirtualMachineRuntimeInfo> {
+    pub async fn runtime(&self) -> Result<crate::types::structs::VirtualMachineRuntimeInfo> {
         let path = format!("/VirtualMachine/{moId}/runtime", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute(req).await
@@ -3452,7 +3422,7 @@ impl VirtualMachine {
     /// - *remove*
     /// - *revert*
     /// - *removeAllSnapshots*
-    pub async fn snapshot(&self) -> Result<Option<VirtualMachineSnapshotInfo>> {
+    pub async fn snapshot(&self) -> Result<Option<crate::types::structs::VirtualMachineSnapshotInfo>> {
         let path = format!("/VirtualMachine/{moId}/snapshot", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -3467,7 +3437,7 @@ impl VirtualMachine {
     /// If you use the PropertyCollector.WaitForUpdatesEx method, specify
     /// an empty string for the version parameter. Any other version value will not
     /// produce any property values as no updates are generated.
-    pub async fn storage(&self) -> Result<Option<VirtualMachineStorageInfo>> {
+    pub async fn storage(&self) -> Result<Option<crate::types::structs::VirtualMachineStorageInfo>> {
         let path = format!("/VirtualMachine/{moId}/storage", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -3480,7 +3450,7 @@ impl VirtualMachine {
     /// - basic configuration
     /// - alarms
     /// - performance information
-    pub async fn summary(&self) -> Result<VirtualMachineSummary> {
+    pub async fn summary(&self) -> Result<crate::types::structs::VirtualMachineSummary> {
         let path = format!("/VirtualMachine/{moId}/summary", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute(req).await
@@ -3490,7 +3460,7 @@ impl VirtualMachine {
     /// Experimental. Subject to change.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn tag(&self) -> Result<Option<Vec<Tag>>> {
+    pub async fn tag(&self) -> Result<Option<Vec<crate::types::structs::Tag>>> {
         let path = format!("/VirtualMachine/{moId}/tag", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -3509,7 +3479,7 @@ impl VirtualMachine {
     /// produce any property values as no updates are generated.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn triggered_alarm_state(&self) -> Result<Option<Vec<AlarmState>>> {
+    pub async fn triggered_alarm_state(&self) -> Result<Option<Vec<crate::types::structs::AlarmState>>> {
         let path = format!("/VirtualMachine/{moId}/triggeredAlarmState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -3545,7 +3515,7 @@ struct AnswerVmRequestType<'a> {
 #[serde(rename = "ApplyEvcModeVMRequestType", tag = "_typeName")]
 struct ApplyEvcModeVmRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    mask: Option<&'a [HostFeatureMask]>,
+    mask: Option<&'a [crate::types::structs::HostFeatureMask]>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "completeMasks")]
     complete_masks: Option<bool>,
@@ -3554,8 +3524,8 @@ struct ApplyEvcModeVmRequestType<'a> {
 #[serde(tag="_typeName")]
 struct AttachDiskRequestType<'a> {
     #[serde(rename = "diskId")]
-    disk_id: &'a Id,
-    datastore: &'a ManagedObjectReference,
+    disk_id: &'a crate::types::structs::Id,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "controllerKey")]
     controller_key: Option<i32>,
@@ -3566,28 +3536,28 @@ struct AttachDiskRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct CheckCustomizationSpecRequestType<'a> {
-    spec: &'a CustomizationSpec,
+    spec: &'a crate::types::structs::CustomizationSpec,
 }
 #[derive(serde::Serialize)]
 #[serde(rename = "CloneVMRequestType", tag = "_typeName")]
 struct CloneVmRequestType<'a> {
-    folder: &'a ManagedObjectReference,
+    folder: &'a crate::types::structs::ManagedObjectReference,
     name: &'a str,
-    spec: &'a VirtualMachineCloneSpec,
+    spec: &'a crate::types::structs::VirtualMachineCloneSpec,
 }
 #[derive(serde::Serialize)]
 #[serde(rename = "CreateSecondaryVMRequestType", tag = "_typeName")]
 struct CreateSecondaryVmRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    host: Option<&'a ManagedObjectReference>,
+    host: Option<&'a crate::types::structs::ManagedObjectReference>,
 }
 #[derive(serde::Serialize)]
 #[serde(rename = "CreateSecondaryVMExRequestType", tag = "_typeName")]
 struct CreateSecondaryVmExRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    host: Option<&'a ManagedObjectReference>,
+    host: Option<&'a crate::types::structs::ManagedObjectReference>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    spec: Option<&'a FaultToleranceConfigSpec>,
+    spec: Option<&'a crate::types::structs::FaultToleranceConfigSpec>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -3612,18 +3582,18 @@ struct CreateSnapshotExRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(rename = "CustomizeVMRequestType", tag = "_typeName")]
 struct CustomizeVmRequestType<'a> {
-    spec: &'a CustomizationSpec,
+    spec: &'a crate::types::structs::CustomizationSpec,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct DetachDiskRequestType<'a> {
     #[serde(rename = "diskId")]
-    disk_id: &'a Id,
+    disk_id: &'a crate::types::structs::Id,
 }
 #[derive(serde::Serialize)]
 #[serde(rename = "DisableSecondaryVMRequestType", tag = "_typeName")]
 struct DisableSecondaryVmRequestType<'a> {
-    vm: &'a ManagedObjectReference,
+    vm: &'a crate::types::structs::ManagedObjectReference,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -3635,34 +3605,34 @@ struct DropConnectionsRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(rename = "EnableSecondaryVMRequestType", tag = "_typeName")]
 struct EnableSecondaryVmRequestType<'a> {
-    vm: &'a ManagedObjectReference,
+    vm: &'a crate::types::structs::ManagedObjectReference,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    host: Option<&'a ManagedObjectReference>,
+    host: Option<&'a crate::types::structs::ManagedObjectReference>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct InstantCloneRequestType<'a> {
-    spec: &'a VirtualMachineInstantCloneSpec,
+    spec: &'a crate::types::structs::VirtualMachineInstantCloneSpec,
 }
 #[derive(serde::Serialize)]
 #[serde(rename = "MakePrimaryVMRequestType", tag = "_typeName")]
 struct MakePrimaryVmRequestType<'a> {
-    vm: &'a ManagedObjectReference,
+    vm: &'a crate::types::structs::ManagedObjectReference,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct MarkAsVirtualMachineRequestType<'a> {
-    pool: &'a ManagedObjectReference,
+    pool: &'a crate::types::structs::ManagedObjectReference,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    host: Option<&'a ManagedObjectReference>,
+    host: Option<&'a crate::types::structs::ManagedObjectReference>,
 }
 #[derive(serde::Serialize)]
 #[serde(rename = "MigrateVMRequestType", tag = "_typeName")]
 struct MigrateVmRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pool: Option<&'a ManagedObjectReference>,
+    pool: Option<&'a crate::types::structs::ManagedObjectReference>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    host: Option<&'a ManagedObjectReference>,
+    host: Option<&'a crate::types::structs::ManagedObjectReference>,
     priority: crate::types::enums::VirtualMachineMovePriorityEnum,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     state: Option<crate::types::enums::VirtualMachinePowerStateEnum>,
@@ -3671,25 +3641,25 @@ struct MigrateVmRequestType<'a> {
 #[serde(rename = "PowerOnVMRequestType", tag = "_typeName")]
 struct PowerOnVmRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    host: Option<&'a ManagedObjectReference>,
+    host: Option<&'a crate::types::structs::ManagedObjectReference>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct PromoteDisksRequestType<'a> {
     unlink: bool,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    disks: Option<&'a [VirtualDisk]>,
+    disks: Option<&'a [crate::types::structs::VirtualDisk]>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct PutUsbScanCodesRequestType<'a> {
-    spec: &'a UsbScanCodeSpec,
+    spec: &'a crate::types::structs::UsbScanCodeSpec,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct QueryChangedDiskAreasRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    snapshot: Option<&'a ManagedObjectReference>,
+    snapshot: Option<&'a crate::types::structs::ManagedObjectReference>,
     #[serde(rename = "deviceKey")]
     device_key: i32,
     #[serde(rename = "startOffset")]
@@ -3707,7 +3677,7 @@ struct QueryFaultToleranceCompatibilityExRequestType {
 #[derive(serde::Serialize)]
 #[serde(rename = "ReconfigVMRequestType", tag = "_typeName")]
 struct ReconfigVmRequestType<'a> {
-    spec: &'a VirtualMachineConfigSpec,
+    spec: &'a crate::types::structs::VirtualMachineConfigSpec,
 }
 #[derive(serde::Serialize)]
 #[serde(rename = "reloadVirtualMachineFromPathRequestType", tag = "_typeName")]
@@ -3718,7 +3688,7 @@ struct ReloadVirtualMachineFromPathRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(rename = "RelocateVMRequestType", tag = "_typeName")]
 struct RelocateVmRequestType<'a> {
-    spec: &'a VirtualMachineRelocateSpec,
+    spec: &'a crate::types::structs::VirtualMachineRelocateSpec,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     priority: Option<crate::types::enums::VirtualMachineMovePriorityEnum>,
 }
@@ -3738,7 +3708,7 @@ struct RenameRequestType<'a> {
 #[serde(tag="_typeName")]
 struct RevertToCurrentSnapshotRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    host: Option<&'a ManagedObjectReference>,
+    host: Option<&'a crate::types::structs::ManagedObjectReference>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "suppressPowerOn")]
     suppress_power_on: Option<bool>,
@@ -3752,7 +3722,7 @@ struct SetCustomValueRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct SetDisplayTopologyRequestType<'a> {
-    displays: &'a [VirtualMachineDisplayTopology],
+    displays: &'a [crate::types::structs::VirtualMachineDisplayTopology],
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -3771,13 +3741,13 @@ struct StartRecordingRequestType<'a> {
 #[serde(tag="_typeName")]
 struct StartReplayingRequestType<'a> {
     #[serde(rename = "replaySnapshot")]
-    replay_snapshot: &'a ManagedObjectReference,
+    replay_snapshot: &'a crate::types::structs::ManagedObjectReference,
 }
 #[derive(serde::Serialize)]
 #[serde(rename = "TerminateFaultTolerantVMRequestType", tag = "_typeName")]
 struct TerminateFaultTolerantVmRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    vm: Option<&'a ManagedObjectReference>,
+    vm: Option<&'a crate::types::structs::ManagedObjectReference>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]

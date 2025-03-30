@@ -1,6 +1,5 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::OptionDef;
 /// This managed object type is used for managing key/value pair
 /// options.
 /// - You can define options on the fly only if the option is supported
@@ -14,6 +13,7 @@ use crate::types::structs::OptionDef;
 ///   implementation may result in unexpected side-effects.
 /// - You can use the queryMethod to retrieve a single property or
 ///   a subset of properties based on the dot notation path.
+#[derive(Clone)]
 pub struct OptionManager {
     client: Arc<Client>,
     mo_id: String,
@@ -99,7 +99,7 @@ impl OptionManager {
     }
     /// A list of supported key/value pair options including their
     /// type information.
-    pub async fn supported_option(&self) -> Result<Option<Vec<OptionDef>>> {
+    pub async fn supported_option(&self) -> Result<Option<Vec<crate::types::structs::OptionDef>>> {
         let path = format!("/OptionManager/{moId}/supportedOption", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await

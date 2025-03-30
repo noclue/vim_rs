@@ -1,15 +1,13 @@
 use serde::de;
 use serde::ser::SerializeStruct;
 use super::deserialize::get_value_deserializer;
-use super::vim_any::VimAny;
-use super::structs::*;
 
 #[derive(Debug, strum_macros::IntoStaticStr)]
 pub enum ValueElements {
     /// A boxed array of *Any*. To be used in *Any* placeholders.
-    ArrayOfAnyType(Vec<VimAny>),
+    ArrayOfAnyType(Vec<super::vim_any::VimAny>),
     /// A boxed array of *ManagedObjectReference*. To be used in *Any* placeholders.
-    ArrayOfManagedObjectReference(Vec<ManagedObjectReference>),
+    ArrayOfManagedObjectReference(Vec<super::structs::ManagedObjectReference>),
     /// A boxed Boolean primitive. To be used in *Any* placeholders.
     PrimitiveBoolean(bool),
     /// A boxed array of *PrimitiveBoolean*. To be used in *Any* placeholders.
@@ -67,135 +65,135 @@ pub enum ValueElements {
     /// A boxed array of *PrimitiveMethodName*. To be used in *Any* placeholders.
     ArrayOfMethodName(Vec<String>),
     /// A boxed array of *AboutInfo*. To be used in *Any* placeholders.
-    ArrayOfAboutInfo(Vec<AboutInfo>),
+    ArrayOfAboutInfo(Vec<super::structs::AboutInfo>),
     /// A boxed array of *AuthorizationDescription*. To be used in *Any* placeholders.
-    ArrayOfAuthorizationDescription(Vec<AuthorizationDescription>),
+    ArrayOfAuthorizationDescription(Vec<super::structs::AuthorizationDescription>),
     /// A boxed array of *EntityPrivilege*. To be used in *Any* placeholders.
-    ArrayOfEntityPrivilege(Vec<EntityPrivilege>),
+    ArrayOfEntityPrivilege(Vec<super::structs::EntityPrivilege>),
     /// A boxed array of *Permission*. To be used in *Any* placeholders.
-    ArrayOfPermission(Vec<Permission>),
+    ArrayOfPermission(Vec<super::structs::Permission>),
     /// A boxed array of *AuthorizationPrivilege*. To be used in *Any* placeholders.
-    ArrayOfAuthorizationPrivilege(Vec<AuthorizationPrivilege>),
+    ArrayOfAuthorizationPrivilege(Vec<super::structs::AuthorizationPrivilege>),
     /// A boxed array of *PrivilegeAvailability*. To be used in *Any* placeholders.
-    ArrayOfPrivilegeAvailability(Vec<PrivilegeAvailability>),
+    ArrayOfPrivilegeAvailability(Vec<super::structs::PrivilegeAvailability>),
     /// A boxed array of *AuthorizationRole*. To be used in *Any* placeholders.
-    ArrayOfAuthorizationRole(Vec<AuthorizationRole>),
+    ArrayOfAuthorizationRole(Vec<super::structs::AuthorizationRole>),
     /// A boxed array of *UserPrivilegeResult*. To be used in *Any* placeholders.
-    ArrayOfUserPrivilegeResult(Vec<UserPrivilegeResult>),
+    ArrayOfUserPrivilegeResult(Vec<super::structs::UserPrivilegeResult>),
     /// A boxed array of *BatchResult*. To be used in *Any* placeholders.
-    ArrayOfBatchResult(Vec<BatchResult>),
+    ArrayOfBatchResult(Vec<super::structs::BatchResult>),
     /// A boxed array of *BoolPolicy*. To be used in *Any* placeholders.
-    ArrayOfBoolPolicy(Vec<BoolPolicy>),
+    ArrayOfBoolPolicy(Vec<super::structs::BoolPolicy>),
     /// A boxed array of *Capability*. To be used in *Any* placeholders.
-    ArrayOfCapability(Vec<Capability>),
+    ArrayOfCapability(Vec<super::structs::Capability>),
     /// A boxed array of *ClusterComputeResourceClusterConfigResult*. To be used in *Any* placeholders.
-    ArrayOfClusterComputeResourceClusterConfigResult(Vec<ClusterComputeResourceClusterConfigResult>),
+    ArrayOfClusterComputeResourceClusterConfigResult(Vec<super::structs::ClusterComputeResourceClusterConfigResult>),
     /// A boxed array of *ClusterComputeResourceDVSConfigurationValidation*. To be used in *Any* placeholders.
-    ArrayOfClusterComputeResourceDvsConfigurationValidation(Vec<ClusterComputeResourceDvsConfigurationValidation>),
+    ArrayOfClusterComputeResourceDvsConfigurationValidation(Vec<super::structs::ClusterComputeResourceDvsConfigurationValidation>),
     /// A boxed array of *ClusterComputeResourceDVSSetting*. To be used in *Any* placeholders.
-    ArrayOfClusterComputeResourceDvsSetting(Vec<ClusterComputeResourceDvsSetting>),
+    ArrayOfClusterComputeResourceDvsSetting(Vec<super::structs::ClusterComputeResourceDvsSetting>),
     /// A boxed array of *ClusterComputeResourceDVSSettingDVPortgroupToServiceMapping*. To be used in *Any* placeholders.
-    ArrayOfClusterComputeResourceDvsSettingDvPortgroupToServiceMapping(Vec<ClusterComputeResourceDvsSettingDvPortgroupToServiceMapping>),
+    ArrayOfClusterComputeResourceDvsSettingDvPortgroupToServiceMapping(Vec<super::structs::ClusterComputeResourceDvsSettingDvPortgroupToServiceMapping>),
     /// A boxed array of *ClusterComputeResourceDvsProfile*. To be used in *Any* placeholders.
-    ArrayOfClusterComputeResourceDvsProfile(Vec<ClusterComputeResourceDvsProfile>),
+    ArrayOfClusterComputeResourceDvsProfile(Vec<super::structs::ClusterComputeResourceDvsProfile>),
     /// A boxed array of *ClusterComputeResourceDvsProfileDVPortgroupSpecToServiceMapping*. To be used in *Any* placeholders.
-    ArrayOfClusterComputeResourceDvsProfileDvPortgroupSpecToServiceMapping(Vec<ClusterComputeResourceDvsProfileDvPortgroupSpecToServiceMapping>),
+    ArrayOfClusterComputeResourceDvsProfileDvPortgroupSpecToServiceMapping(Vec<super::structs::ClusterComputeResourceDvsProfileDvPortgroupSpecToServiceMapping>),
     /// A boxed array of *ClusterComputeResourceHCIConfigInfo*. To be used in *Any* placeholders.
-    ArrayOfClusterComputeResourceHciConfigInfo(Vec<ClusterComputeResourceHciConfigInfo>),
+    ArrayOfClusterComputeResourceHciConfigInfo(Vec<super::structs::ClusterComputeResourceHciConfigInfo>),
     /// A boxed array of *ClusterComputeResourceHCIConfigSpec*. To be used in *Any* placeholders.
-    ArrayOfClusterComputeResourceHciConfigSpec(Vec<ClusterComputeResourceHciConfigSpec>),
+    ArrayOfClusterComputeResourceHciConfigSpec(Vec<super::structs::ClusterComputeResourceHciConfigSpec>),
     /// A boxed array of *ClusterComputeResourceHostConfigurationInput*. To be used in *Any* placeholders.
-    ArrayOfClusterComputeResourceHostConfigurationInput(Vec<ClusterComputeResourceHostConfigurationInput>),
+    ArrayOfClusterComputeResourceHostConfigurationInput(Vec<super::structs::ClusterComputeResourceHostConfigurationInput>),
     /// A boxed array of *ClusterComputeResourceHostConfigurationProfile*. To be used in *Any* placeholders.
-    ArrayOfClusterComputeResourceHostConfigurationProfile(Vec<ClusterComputeResourceHostConfigurationProfile>),
+    ArrayOfClusterComputeResourceHostConfigurationProfile(Vec<super::structs::ClusterComputeResourceHostConfigurationProfile>),
     /// A boxed array of *ClusterComputeResourceHostConfigurationValidation*. To be used in *Any* placeholders.
-    ArrayOfClusterComputeResourceHostConfigurationValidation(Vec<ClusterComputeResourceHostConfigurationValidation>),
+    ArrayOfClusterComputeResourceHostConfigurationValidation(Vec<super::structs::ClusterComputeResourceHostConfigurationValidation>),
     /// A boxed array of *ClusterComputeResourceHostVmkNicInfo*. To be used in *Any* placeholders.
-    ArrayOfClusterComputeResourceHostVmkNicInfo(Vec<ClusterComputeResourceHostVmkNicInfo>),
+    ArrayOfClusterComputeResourceHostVmkNicInfo(Vec<super::structs::ClusterComputeResourceHostVmkNicInfo>),
     /// A boxed array of *ClusterComputeResourceSummary*. To be used in *Any* placeholders.
-    ArrayOfClusterComputeResourceSummary(Vec<ClusterComputeResourceSummary>),
+    ArrayOfClusterComputeResourceSummary(Vec<super::structs::ClusterComputeResourceSummary>),
     /// A boxed array of *ClusterComputeResourceVCProfile*. To be used in *Any* placeholders.
-    ArrayOfClusterComputeResourceVcProfile(Vec<ClusterComputeResourceVcProfile>),
+    ArrayOfClusterComputeResourceVcProfile(Vec<super::structs::ClusterComputeResourceVcProfile>),
     /// A boxed array of *ClusterComputeResourceValidationResultBase*. To be used in *Any* placeholders.
     ArrayOfClusterComputeResourceValidationResultBase(Vec<Box<dyn super::traits::ClusterComputeResourceValidationResultBaseTrait>>),
     /// A boxed array of *ClusterComputeResourceVcsSlots*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 7.0.1.1
-    ArrayOfClusterComputeResourceVcsSlots(Vec<ClusterComputeResourceVcsSlots>),
+    ArrayOfClusterComputeResourceVcsSlots(Vec<super::structs::ClusterComputeResourceVcsSlots>),
     /// A boxed array of *ComputeResourceConfigInfo*. To be used in *Any* placeholders.
     ArrayOfComputeResourceConfigInfo(Vec<Box<dyn super::traits::ComputeResourceConfigInfoTrait>>),
     /// A boxed array of *ComputeResourceConfigSpec*. To be used in *Any* placeholders.
     ArrayOfComputeResourceConfigSpec(Vec<Box<dyn super::traits::ComputeResourceConfigSpecTrait>>),
     /// A boxed array of *ComputeResourceHostSPBMLicenseInfo*. To be used in *Any* placeholders.
-    ArrayOfComputeResourceHostSpbmLicenseInfo(Vec<ComputeResourceHostSpbmLicenseInfo>),
+    ArrayOfComputeResourceHostSpbmLicenseInfo(Vec<super::structs::ComputeResourceHostSpbmLicenseInfo>),
     /// A boxed array of *ComputeResourceSummary*. To be used in *Any* placeholders.
     ArrayOfComputeResourceSummary(Vec<Box<dyn super::traits::ComputeResourceSummaryTrait>>),
     /// A boxed array of *CustomFieldDef*. To be used in *Any* placeholders.
-    ArrayOfCustomFieldDef(Vec<CustomFieldDef>),
+    ArrayOfCustomFieldDef(Vec<super::structs::CustomFieldDef>),
     /// A boxed array of *CustomFieldStringValue*. To be used in *Any* placeholders.
-    ArrayOfCustomFieldStringValue(Vec<CustomFieldStringValue>),
+    ArrayOfCustomFieldStringValue(Vec<super::structs::CustomFieldStringValue>),
     /// A boxed array of *CustomFieldValue*. To be used in *Any* placeholders.
     ArrayOfCustomFieldValue(Vec<Box<dyn super::traits::CustomFieldValueTrait>>),
     /// A boxed array of *CustomizationSpecInfo*. To be used in *Any* placeholders.
-    ArrayOfCustomizationSpecInfo(Vec<CustomizationSpecInfo>),
+    ArrayOfCustomizationSpecInfo(Vec<super::structs::CustomizationSpecInfo>),
     /// A boxed array of *CustomizationSpecItem*. To be used in *Any* placeholders.
-    ArrayOfCustomizationSpecItem(Vec<CustomizationSpecItem>),
+    ArrayOfCustomizationSpecItem(Vec<super::structs::CustomizationSpecItem>),
     /// A boxed array of *DatacenterBasicConnectInfo*. To be used in *Any* placeholders.
-    ArrayOfDatacenterBasicConnectInfo(Vec<DatacenterBasicConnectInfo>),
+    ArrayOfDatacenterBasicConnectInfo(Vec<super::structs::DatacenterBasicConnectInfo>),
     /// A boxed array of *DatacenterConfigInfo*. To be used in *Any* placeholders.
-    ArrayOfDatacenterConfigInfo(Vec<DatacenterConfigInfo>),
+    ArrayOfDatacenterConfigInfo(Vec<super::structs::DatacenterConfigInfo>),
     /// A boxed array of *DatacenterConfigSpec*. To be used in *Any* placeholders.
-    ArrayOfDatacenterConfigSpec(Vec<DatacenterConfigSpec>),
+    ArrayOfDatacenterConfigSpec(Vec<super::structs::DatacenterConfigSpec>),
     /// A boxed array of *DatastoreCapability*. To be used in *Any* placeholders.
-    ArrayOfDatastoreCapability(Vec<DatastoreCapability>),
+    ArrayOfDatastoreCapability(Vec<super::structs::DatastoreCapability>),
     /// A boxed array of *DatastoreHostMount*. To be used in *Any* placeholders.
-    ArrayOfDatastoreHostMount(Vec<DatastoreHostMount>),
+    ArrayOfDatastoreHostMount(Vec<super::structs::DatastoreHostMount>),
     /// A boxed array of *DatastoreInfo*. To be used in *Any* placeholders.
     ArrayOfDatastoreInfo(Vec<Box<dyn super::traits::DatastoreInfoTrait>>),
     /// A boxed array of *DatastoreMountPathDatastorePair*. To be used in *Any* placeholders.
-    ArrayOfDatastoreMountPathDatastorePair(Vec<DatastoreMountPathDatastorePair>),
+    ArrayOfDatastoreMountPathDatastorePair(Vec<super::structs::DatastoreMountPathDatastorePair>),
     /// A boxed array of *DatastoreSummary*. To be used in *Any* placeholders.
-    ArrayOfDatastoreSummary(Vec<DatastoreSummary>),
+    ArrayOfDatastoreSummary(Vec<super::structs::DatastoreSummary>),
     /// A boxed array of *DatastoreVVolContainerFailoverPair*. To be used in *Any* placeholders.
-    ArrayOfDatastoreVVolContainerFailoverPair(Vec<DatastoreVVolContainerFailoverPair>),
+    ArrayOfDatastoreVVolContainerFailoverPair(Vec<super::structs::DatastoreVVolContainerFailoverPair>),
     /// A boxed array of *DatastoreNamespaceManagerDirectoryInfo*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 8.0.1.0
-    ArrayOfDatastoreNamespaceManagerDirectoryInfo(Vec<DatastoreNamespaceManagerDirectoryInfo>),
+    ArrayOfDatastoreNamespaceManagerDirectoryInfo(Vec<super::structs::DatastoreNamespaceManagerDirectoryInfo>),
     /// A boxed array of *Description*. To be used in *Any* placeholders.
     ArrayOfDescription(Vec<Box<dyn super::traits::DescriptionTrait>>),
     /// A boxed array of *DesiredSoftwareSpec*. To be used in *Any* placeholders.
-    ArrayOfDesiredSoftwareSpec(Vec<DesiredSoftwareSpec>),
+    ArrayOfDesiredSoftwareSpec(Vec<super::structs::DesiredSoftwareSpec>),
     /// A boxed array of *DesiredSoftwareSpecBaseImageSpec*. To be used in *Any* placeholders.
-    ArrayOfDesiredSoftwareSpecBaseImageSpec(Vec<DesiredSoftwareSpecBaseImageSpec>),
+    ArrayOfDesiredSoftwareSpecBaseImageSpec(Vec<super::structs::DesiredSoftwareSpecBaseImageSpec>),
     /// A boxed array of *DesiredSoftwareSpecComponentSpec*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 7.0.2.0
-    ArrayOfDesiredSoftwareSpecComponentSpec(Vec<DesiredSoftwareSpecComponentSpec>),
+    ArrayOfDesiredSoftwareSpecComponentSpec(Vec<super::structs::DesiredSoftwareSpecComponentSpec>),
     /// A boxed array of *DesiredSoftwareSpecVendorAddOnSpec*. To be used in *Any* placeholders.
-    ArrayOfDesiredSoftwareSpecVendorAddOnSpec(Vec<DesiredSoftwareSpecVendorAddOnSpec>),
+    ArrayOfDesiredSoftwareSpecVendorAddOnSpec(Vec<super::structs::DesiredSoftwareSpecVendorAddOnSpec>),
     /// A boxed array of *DiagnosticManagerAuditRecordResult*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 7.0.3.0
-    ArrayOfDiagnosticManagerAuditRecordResult(Vec<DiagnosticManagerAuditRecordResult>),
+    ArrayOfDiagnosticManagerAuditRecordResult(Vec<super::structs::DiagnosticManagerAuditRecordResult>),
     /// A boxed array of *DiagnosticManagerBundleInfo*. To be used in *Any* placeholders.
-    ArrayOfDiagnosticManagerBundleInfo(Vec<DiagnosticManagerBundleInfo>),
+    ArrayOfDiagnosticManagerBundleInfo(Vec<super::structs::DiagnosticManagerBundleInfo>),
     /// A boxed array of *DiagnosticManagerLogDescriptor*. To be used in *Any* placeholders.
-    ArrayOfDiagnosticManagerLogDescriptor(Vec<DiagnosticManagerLogDescriptor>),
+    ArrayOfDiagnosticManagerLogDescriptor(Vec<super::structs::DiagnosticManagerLogDescriptor>),
     /// A boxed array of *DiagnosticManagerLogHeader*. To be used in *Any* placeholders.
-    ArrayOfDiagnosticManagerLogHeader(Vec<DiagnosticManagerLogHeader>),
+    ArrayOfDiagnosticManagerLogHeader(Vec<super::structs::DiagnosticManagerLogHeader>),
     /// A boxed array of *DVSBackupRestoreCapability*. To be used in *Any* placeholders.
-    ArrayOfDvsBackupRestoreCapability(Vec<DvsBackupRestoreCapability>),
+    ArrayOfDvsBackupRestoreCapability(Vec<super::structs::DvsBackupRestoreCapability>),
     /// A boxed array of *DVSCapability*. To be used in *Any* placeholders.
-    ArrayOfDvsCapability(Vec<DvsCapability>),
+    ArrayOfDvsCapability(Vec<super::structs::DvsCapability>),
     /// A boxed array of *DVSConfigInfo*. To be used in *Any* placeholders.
     ArrayOfDvsConfigInfo(Vec<Box<dyn super::traits::DvsConfigInfoTrait>>),
     /// A boxed array of *DVSConfigSpec*. To be used in *Any* placeholders.
     ArrayOfDvsConfigSpec(Vec<Box<dyn super::traits::DvsConfigSpecTrait>>),
     /// A boxed array of *DVSContactInfo*. To be used in *Any* placeholders.
-    ArrayOfDvsContactInfo(Vec<DvsContactInfo>),
+    ArrayOfDvsContactInfo(Vec<super::structs::DvsContactInfo>),
     /// A boxed array of *DVSCreateSpec*. To be used in *Any* placeholders.
-    ArrayOfDvsCreateSpec(Vec<DvsCreateSpec>),
+    ArrayOfDvsCreateSpec(Vec<super::structs::DvsCreateSpec>),
     /// A boxed array of *DVSFeatureCapability*. To be used in *Any* placeholders.
     ArrayOfDvsFeatureCapability(Vec<Box<dyn super::traits::DvsFeatureCapabilityTrait>>),
     /// A boxed array of *DVSHealthCheckConfig*. To be used in *Any* placeholders.
@@ -203,425 +201,425 @@ pub enum ValueElements {
     /// A boxed array of *DVSHealthCheckCapability*. To be used in *Any* placeholders.
     ArrayOfDvsHealthCheckCapability(Vec<Box<dyn super::traits::DvsHealthCheckCapabilityTrait>>),
     /// A boxed array of *DvsHostInfrastructureTrafficResource*. To be used in *Any* placeholders.
-    ArrayOfDvsHostInfrastructureTrafficResource(Vec<DvsHostInfrastructureTrafficResource>),
+    ArrayOfDvsHostInfrastructureTrafficResource(Vec<super::structs::DvsHostInfrastructureTrafficResource>),
     /// A boxed array of *DvsHostInfrastructureTrafficResourceAllocation*. To be used in *Any* placeholders.
-    ArrayOfDvsHostInfrastructureTrafficResourceAllocation(Vec<DvsHostInfrastructureTrafficResourceAllocation>),
+    ArrayOfDvsHostInfrastructureTrafficResourceAllocation(Vec<super::structs::DvsHostInfrastructureTrafficResourceAllocation>),
     /// A boxed array of *DVSNameArrayUplinkPortPolicy*. To be used in *Any* placeholders.
-    ArrayOfDvsNameArrayUplinkPortPolicy(Vec<DvsNameArrayUplinkPortPolicy>),
+    ArrayOfDvsNameArrayUplinkPortPolicy(Vec<super::structs::DvsNameArrayUplinkPortPolicy>),
     /// A boxed array of *DVSNetworkResourceManagementCapability*. To be used in *Any* placeholders.
-    ArrayOfDvsNetworkResourceManagementCapability(Vec<DvsNetworkResourceManagementCapability>),
+    ArrayOfDvsNetworkResourceManagementCapability(Vec<super::structs::DvsNetworkResourceManagementCapability>),
     /// A boxed array of *DvsResourceRuntimeInfo*. To be used in *Any* placeholders.
-    ArrayOfDvsResourceRuntimeInfo(Vec<DvsResourceRuntimeInfo>),
+    ArrayOfDvsResourceRuntimeInfo(Vec<super::structs::DvsResourceRuntimeInfo>),
     /// A boxed array of *DVSRollbackCapability*. To be used in *Any* placeholders.
-    ArrayOfDvsRollbackCapability(Vec<DvsRollbackCapability>),
+    ArrayOfDvsRollbackCapability(Vec<super::structs::DvsRollbackCapability>),
     /// A boxed array of *DVSRuntimeInfo*. To be used in *Any* placeholders.
-    ArrayOfDvsRuntimeInfo(Vec<DvsRuntimeInfo>),
+    ArrayOfDvsRuntimeInfo(Vec<super::structs::DvsRuntimeInfo>),
     /// A boxed array of *DVSSummary*. To be used in *Any* placeholders.
-    ArrayOfDvsSummary(Vec<DvsSummary>),
+    ArrayOfDvsSummary(Vec<super::structs::DvsSummary>),
     /// A boxed array of *DVSPolicy*. To be used in *Any* placeholders.
-    ArrayOfDvsPolicy(Vec<DvsPolicy>),
+    ArrayOfDvsPolicy(Vec<super::structs::DvsPolicy>),
     /// A boxed array of *DVSUplinkPortPolicy*. To be used in *Any* placeholders.
     ArrayOfDvsUplinkPortPolicy(Vec<Box<dyn super::traits::DvsUplinkPortPolicyTrait>>),
     /// A boxed array of *EVCMode*. To be used in *Any* placeholders.
-    ArrayOfEvcMode(Vec<EvcMode>),
+    ArrayOfEvcMode(Vec<super::structs::EvcMode>),
     /// A boxed array of *ElementDescription*. To be used in *Any* placeholders.
     ArrayOfElementDescription(Vec<Box<dyn super::traits::ElementDescriptionTrait>>),
     /// A boxed array of *EnumDescription*. To be used in *Any* placeholders.
-    ArrayOfEnumDescription(Vec<EnumDescription>),
+    ArrayOfEnumDescription(Vec<super::structs::EnumDescription>),
     /// A boxed array of *EnvironmentBrowserConfigOptionQuerySpec*. To be used in *Any* placeholders.
-    ArrayOfEnvironmentBrowserConfigOptionQuerySpec(Vec<EnvironmentBrowserConfigOptionQuerySpec>),
+    ArrayOfEnvironmentBrowserConfigOptionQuerySpec(Vec<super::structs::EnvironmentBrowserConfigOptionQuerySpec>),
     /// A boxed array of *ExtendedDescription*. To be used in *Any* placeholders.
-    ArrayOfExtendedDescription(Vec<ExtendedDescription>),
+    ArrayOfExtendedDescription(Vec<super::structs::ExtendedDescription>),
     /// A boxed array of *ExtendedElementDescription*. To be used in *Any* placeholders.
-    ArrayOfExtendedElementDescription(Vec<ExtendedElementDescription>),
+    ArrayOfExtendedElementDescription(Vec<super::structs::ExtendedElementDescription>),
     /// A boxed array of *Extension*. To be used in *Any* placeholders.
-    ArrayOfExtension(Vec<Extension>),
+    ArrayOfExtension(Vec<super::structs::Extension>),
     /// A boxed array of *ExtensionClientInfo*. To be used in *Any* placeholders.
-    ArrayOfExtensionClientInfo(Vec<ExtensionClientInfo>),
+    ArrayOfExtensionClientInfo(Vec<super::structs::ExtensionClientInfo>),
     /// A boxed array of *ExtensionEventTypeInfo*. To be used in *Any* placeholders.
-    ArrayOfExtensionEventTypeInfo(Vec<ExtensionEventTypeInfo>),
+    ArrayOfExtensionEventTypeInfo(Vec<super::structs::ExtensionEventTypeInfo>),
     /// A boxed array of *ExtensionFaultTypeInfo*. To be used in *Any* placeholders.
-    ArrayOfExtensionFaultTypeInfo(Vec<ExtensionFaultTypeInfo>),
+    ArrayOfExtensionFaultTypeInfo(Vec<super::structs::ExtensionFaultTypeInfo>),
     /// A boxed array of *ExtensionHealthInfo*. To be used in *Any* placeholders.
-    ArrayOfExtensionHealthInfo(Vec<ExtensionHealthInfo>),
+    ArrayOfExtensionHealthInfo(Vec<super::structs::ExtensionHealthInfo>),
     /// A boxed array of *ExtensionOvfConsumerInfo*. To be used in *Any* placeholders.
-    ArrayOfExtensionOvfConsumerInfo(Vec<ExtensionOvfConsumerInfo>),
+    ArrayOfExtensionOvfConsumerInfo(Vec<super::structs::ExtensionOvfConsumerInfo>),
     /// A boxed array of *ExtensionPrivilegeInfo*. To be used in *Any* placeholders.
-    ArrayOfExtensionPrivilegeInfo(Vec<ExtensionPrivilegeInfo>),
+    ArrayOfExtensionPrivilegeInfo(Vec<super::structs::ExtensionPrivilegeInfo>),
     /// A boxed array of *ExtensionResourceInfo*. To be used in *Any* placeholders.
-    ArrayOfExtensionResourceInfo(Vec<ExtensionResourceInfo>),
+    ArrayOfExtensionResourceInfo(Vec<super::structs::ExtensionResourceInfo>),
     /// A boxed array of *ExtensionServerInfo*. To be used in *Any* placeholders.
-    ArrayOfExtensionServerInfo(Vec<ExtensionServerInfo>),
+    ArrayOfExtensionServerInfo(Vec<super::structs::ExtensionServerInfo>),
     /// A boxed array of *ExtensionTaskTypeInfo*. To be used in *Any* placeholders.
-    ArrayOfExtensionTaskTypeInfo(Vec<ExtensionTaskTypeInfo>),
+    ArrayOfExtensionTaskTypeInfo(Vec<super::structs::ExtensionTaskTypeInfo>),
     /// A boxed array of *ExtensionManagerIpAllocationUsage*. To be used in *Any* placeholders.
-    ArrayOfExtensionManagerIpAllocationUsage(Vec<ExtensionManagerIpAllocationUsage>),
+    ArrayOfExtensionManagerIpAllocationUsage(Vec<super::structs::ExtensionManagerIpAllocationUsage>),
     /// A boxed array of *FaultsByHost*. To be used in *Any* placeholders.
-    ArrayOfFaultsByHost(Vec<FaultsByHost>),
+    ArrayOfFaultsByHost(Vec<super::structs::FaultsByHost>),
     /// A boxed array of *FaultsByVM*. To be used in *Any* placeholders.
-    ArrayOfFaultsByVm(Vec<FaultsByVm>),
+    ArrayOfFaultsByVm(Vec<super::structs::FaultsByVm>),
     /// A boxed array of *FeatureEVCMode*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 7.0.1.0
-    ArrayOfFeatureEvcMode(Vec<FeatureEvcMode>),
+    ArrayOfFeatureEvcMode(Vec<super::structs::FeatureEvcMode>),
     /// A boxed array of *FileLockInfo*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 8.0.2.0
-    ArrayOfFileLockInfo(Vec<FileLockInfo>),
+    ArrayOfFileLockInfo(Vec<super::structs::FileLockInfo>),
     /// A boxed array of *FileLockInfoResult*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 8.0.2.0
-    ArrayOfFileLockInfoResult(Vec<FileLockInfoResult>),
+    ArrayOfFileLockInfoResult(Vec<super::structs::FileLockInfoResult>),
     /// A boxed array of *FolderBatchAddHostsToClusterResult*. To be used in *Any* placeholders.
-    ArrayOfFolderBatchAddHostsToClusterResult(Vec<FolderBatchAddHostsToClusterResult>),
+    ArrayOfFolderBatchAddHostsToClusterResult(Vec<super::structs::FolderBatchAddHostsToClusterResult>),
     /// A boxed array of *FolderBatchAddStandaloneHostsResult*. To be used in *Any* placeholders.
-    ArrayOfFolderBatchAddStandaloneHostsResult(Vec<FolderBatchAddStandaloneHostsResult>),
+    ArrayOfFolderBatchAddStandaloneHostsResult(Vec<super::structs::FolderBatchAddStandaloneHostsResult>),
     /// A boxed array of *FolderFailedHostResult*. To be used in *Any* placeholders.
-    ArrayOfFolderFailedHostResult(Vec<FolderFailedHostResult>),
+    ArrayOfFolderFailedHostResult(Vec<super::structs::FolderFailedHostResult>),
     /// A boxed array of *FolderNewHostSpec*. To be used in *Any* placeholders.
-    ArrayOfFolderNewHostSpec(Vec<FolderNewHostSpec>),
+    ArrayOfFolderNewHostSpec(Vec<super::structs::FolderNewHostSpec>),
     /// A boxed array of *HbrManagerReplicationVmInfo*. To be used in *Any* placeholders.
-    ArrayOfHbrManagerReplicationVmInfo(Vec<HbrManagerReplicationVmInfo>),
+    ArrayOfHbrManagerReplicationVmInfo(Vec<super::structs::HbrManagerReplicationVmInfo>),
     /// A boxed array of *ReplicationVmProgressInfo*. To be used in *Any* placeholders.
-    ArrayOfReplicationVmProgressInfo(Vec<ReplicationVmProgressInfo>),
+    ArrayOfReplicationVmProgressInfo(Vec<super::structs::ReplicationVmProgressInfo>),
     /// A boxed array of *HbrManagerVmReplicationCapability*. To be used in *Any* placeholders.
-    ArrayOfHbrManagerVmReplicationCapability(Vec<HbrManagerVmReplicationCapability>),
+    ArrayOfHbrManagerVmReplicationCapability(Vec<super::structs::HbrManagerVmReplicationCapability>),
     /// A boxed array of *HealthUpdate*. To be used in *Any* placeholders.
-    ArrayOfHealthUpdate(Vec<HealthUpdate>),
+    ArrayOfHealthUpdate(Vec<super::structs::HealthUpdate>),
     /// A boxed array of *HealthUpdateInfo*. To be used in *Any* placeholders.
-    ArrayOfHealthUpdateInfo(Vec<HealthUpdateInfo>),
+    ArrayOfHealthUpdateInfo(Vec<super::structs::HealthUpdateInfo>),
     /// A boxed array of *PerfInterval*. To be used in *Any* placeholders.
-    ArrayOfPerfInterval(Vec<PerfInterval>),
+    ArrayOfPerfInterval(Vec<super::structs::PerfInterval>),
     /// A boxed array of *HostServiceTicket*. To be used in *Any* placeholders.
-    ArrayOfHostServiceTicket(Vec<HostServiceTicket>),
+    ArrayOfHostServiceTicket(Vec<super::structs::HostServiceTicket>),
     /// A boxed array of *HostSystemComplianceCheckState*. To be used in *Any* placeholders.
-    ArrayOfHostSystemComplianceCheckState(Vec<HostSystemComplianceCheckState>),
+    ArrayOfHostSystemComplianceCheckState(Vec<super::structs::HostSystemComplianceCheckState>),
     /// A boxed array of *HostSystemReconnectSpec*. To be used in *Any* placeholders.
-    ArrayOfHostSystemReconnectSpec(Vec<HostSystemReconnectSpec>),
+    ArrayOfHostSystemReconnectSpec(Vec<super::structs::HostSystemReconnectSpec>),
     /// A boxed array of *HostSystemRemediationState*. To be used in *Any* placeholders.
-    ArrayOfHostSystemRemediationState(Vec<HostSystemRemediationState>),
+    ArrayOfHostSystemRemediationState(Vec<super::structs::HostSystemRemediationState>),
     /// A boxed array of *HttpNfcLeaseCapabilities*. To be used in *Any* placeholders.
-    ArrayOfHttpNfcLeaseCapabilities(Vec<HttpNfcLeaseCapabilities>),
+    ArrayOfHttpNfcLeaseCapabilities(Vec<super::structs::HttpNfcLeaseCapabilities>),
     /// A boxed array of *HttpNfcLeaseDatastoreLeaseInfo*. To be used in *Any* placeholders.
-    ArrayOfHttpNfcLeaseDatastoreLeaseInfo(Vec<HttpNfcLeaseDatastoreLeaseInfo>),
+    ArrayOfHttpNfcLeaseDatastoreLeaseInfo(Vec<super::structs::HttpNfcLeaseDatastoreLeaseInfo>),
     /// A boxed array of *HttpNfcLeaseDeviceUrl*. To be used in *Any* placeholders.
-    ArrayOfHttpNfcLeaseDeviceUrl(Vec<HttpNfcLeaseDeviceUrl>),
+    ArrayOfHttpNfcLeaseDeviceUrl(Vec<super::structs::HttpNfcLeaseDeviceUrl>),
     /// A boxed array of *HttpNfcLeaseHostInfo*. To be used in *Any* placeholders.
-    ArrayOfHttpNfcLeaseHostInfo(Vec<HttpNfcLeaseHostInfo>),
+    ArrayOfHttpNfcLeaseHostInfo(Vec<super::structs::HttpNfcLeaseHostInfo>),
     /// A boxed array of *HttpNfcLeaseInfo*. To be used in *Any* placeholders.
-    ArrayOfHttpNfcLeaseInfo(Vec<HttpNfcLeaseInfo>),
+    ArrayOfHttpNfcLeaseInfo(Vec<super::structs::HttpNfcLeaseInfo>),
     /// A boxed array of *HttpNfcLeaseManifestEntry*. To be used in *Any* placeholders.
-    ArrayOfHttpNfcLeaseManifestEntry(Vec<HttpNfcLeaseManifestEntry>),
+    ArrayOfHttpNfcLeaseManifestEntry(Vec<super::structs::HttpNfcLeaseManifestEntry>),
     /// A boxed array of *HttpNfcLeaseProbeResult*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 7.0.2.0
-    ArrayOfHttpNfcLeaseProbeResult(Vec<HttpNfcLeaseProbeResult>),
+    ArrayOfHttpNfcLeaseProbeResult(Vec<super::structs::HttpNfcLeaseProbeResult>),
     /// A boxed array of *HttpNfcLeaseSourceFile*. To be used in *Any* placeholders.
-    ArrayOfHttpNfcLeaseSourceFile(Vec<HttpNfcLeaseSourceFile>),
+    ArrayOfHttpNfcLeaseSourceFile(Vec<super::structs::HttpNfcLeaseSourceFile>),
     /// A boxed array of *ImportSpec*. To be used in *Any* placeholders.
     ArrayOfImportSpec(Vec<Box<dyn super::traits::ImportSpecTrait>>),
     /// A boxed array of *InheritablePolicy*. To be used in *Any* placeholders.
     ArrayOfInheritablePolicy(Vec<Box<dyn super::traits::InheritablePolicyTrait>>),
     /// A boxed array of *IntExpression*. To be used in *Any* placeholders.
-    ArrayOfIntExpression(Vec<IntExpression>),
+    ArrayOfIntExpression(Vec<super::structs::IntExpression>),
     /// A boxed array of *IntPolicy*. To be used in *Any* placeholders.
-    ArrayOfIntPolicy(Vec<IntPolicy>),
+    ArrayOfIntPolicy(Vec<super::structs::IntPolicy>),
     /// A boxed array of *ClusterIoFilterInfo*. To be used in *Any* placeholders.
-    ArrayOfClusterIoFilterInfo(Vec<ClusterIoFilterInfo>),
+    ArrayOfClusterIoFilterInfo(Vec<super::structs::ClusterIoFilterInfo>),
     /// A boxed array of *HostIoFilterInfo*. To be used in *Any* placeholders.
-    ArrayOfHostIoFilterInfo(Vec<HostIoFilterInfo>),
+    ArrayOfHostIoFilterInfo(Vec<super::structs::HostIoFilterInfo>),
     /// A boxed array of *IoFilterInfo*. To be used in *Any* placeholders.
     ArrayOfIoFilterInfo(Vec<Box<dyn super::traits::IoFilterInfoTrait>>),
     /// A boxed array of *IoFilterQueryIssueResult*. To be used in *Any* placeholders.
-    ArrayOfIoFilterQueryIssueResult(Vec<IoFilterQueryIssueResult>),
+    ArrayOfIoFilterQueryIssueResult(Vec<super::structs::IoFilterQueryIssueResult>),
     /// A boxed array of *IoFilterHostIssue*. To be used in *Any* placeholders.
-    ArrayOfIoFilterHostIssue(Vec<IoFilterHostIssue>),
+    ArrayOfIoFilterHostIssue(Vec<super::structs::IoFilterHostIssue>),
     /// A boxed array of *IpAddress*. To be used in *Any* placeholders.
     ArrayOfIpAddress(Vec<Box<dyn super::traits::IpAddressTrait>>),
     /// A boxed array of *IpPoolManagerIpAllocation*. To be used in *Any* placeholders.
-    ArrayOfIpPoolManagerIpAllocation(Vec<IpPoolManagerIpAllocation>),
+    ArrayOfIpPoolManagerIpAllocation(Vec<super::structs::IpPoolManagerIpAllocation>),
     /// A boxed array of *IpRange*. To be used in *Any* placeholders.
-    ArrayOfIpRange(Vec<IpRange>),
+    ArrayOfIpRange(Vec<super::structs::IpRange>),
     /// A boxed array of *KeyValue*. To be used in *Any* placeholders.
-    ArrayOfKeyValue(Vec<KeyValue>),
+    ArrayOfKeyValue(Vec<super::structs::KeyValue>),
     /// A boxed array of *LatencySensitivity*. To be used in *Any* placeholders.
-    ArrayOfLatencySensitivity(Vec<LatencySensitivity>),
+    ArrayOfLatencySensitivity(Vec<super::structs::LatencySensitivity>),
     /// A boxed array of *LicenseAssignmentManagerLicenseAssignment*. To be used in *Any* placeholders.
-    ArrayOfLicenseAssignmentManagerLicenseAssignment(Vec<LicenseAssignmentManagerLicenseAssignment>),
+    ArrayOfLicenseAssignmentManagerLicenseAssignment(Vec<super::structs::LicenseAssignmentManagerLicenseAssignment>),
     /// A boxed array of *LicenseAvailabilityInfo*. To be used in *Any* placeholders.
-    ArrayOfLicenseAvailabilityInfo(Vec<LicenseAvailabilityInfo>),
+    ArrayOfLicenseAvailabilityInfo(Vec<super::structs::LicenseAvailabilityInfo>),
     /// A boxed array of *LicenseDiagnostics*. To be used in *Any* placeholders.
-    ArrayOfLicenseDiagnostics(Vec<LicenseDiagnostics>),
+    ArrayOfLicenseDiagnostics(Vec<super::structs::LicenseDiagnostics>),
     /// A boxed array of *LicenseManagerEvaluationInfo*. To be used in *Any* placeholders.
-    ArrayOfLicenseManagerEvaluationInfo(Vec<LicenseManagerEvaluationInfo>),
+    ArrayOfLicenseManagerEvaluationInfo(Vec<super::structs::LicenseManagerEvaluationInfo>),
     /// A boxed array of *EvaluationLicenseSource*. To be used in *Any* placeholders.
-    ArrayOfEvaluationLicenseSource(Vec<EvaluationLicenseSource>),
+    ArrayOfEvaluationLicenseSource(Vec<super::structs::EvaluationLicenseSource>),
     /// A boxed array of *LicenseFeatureInfo*. To be used in *Any* placeholders.
-    ArrayOfLicenseFeatureInfo(Vec<LicenseFeatureInfo>),
+    ArrayOfLicenseFeatureInfo(Vec<super::structs::LicenseFeatureInfo>),
     /// A boxed array of *HostLicensableResourceInfo*. To be used in *Any* placeholders.
-    ArrayOfHostLicensableResourceInfo(Vec<HostLicensableResourceInfo>),
+    ArrayOfHostLicensableResourceInfo(Vec<super::structs::HostLicensableResourceInfo>),
     /// A boxed array of *LicenseManagerLicenseInfo*. To be used in *Any* placeholders.
-    ArrayOfLicenseManagerLicenseInfo(Vec<LicenseManagerLicenseInfo>),
+    ArrayOfLicenseManagerLicenseInfo(Vec<super::structs::LicenseManagerLicenseInfo>),
     /// A boxed array of *LicenseServerSource*. To be used in *Any* placeholders.
-    ArrayOfLicenseServerSource(Vec<LicenseServerSource>),
+    ArrayOfLicenseServerSource(Vec<super::structs::LicenseServerSource>),
     /// A boxed array of *LicenseSource*. To be used in *Any* placeholders.
     ArrayOfLicenseSource(Vec<Box<dyn super::traits::LicenseSourceTrait>>),
     /// A boxed array of *LicenseUsageInfo*. To be used in *Any* placeholders.
-    ArrayOfLicenseUsageInfo(Vec<LicenseUsageInfo>),
+    ArrayOfLicenseUsageInfo(Vec<super::structs::LicenseUsageInfo>),
     /// A boxed array of *LocalLicenseSource*. To be used in *Any* placeholders.
-    ArrayOfLocalLicenseSource(Vec<LocalLicenseSource>),
+    ArrayOfLocalLicenseSource(Vec<super::structs::LocalLicenseSource>),
     /// A boxed array of *LicenseReservationInfo*. To be used in *Any* placeholders.
-    ArrayOfLicenseReservationInfo(Vec<LicenseReservationInfo>),
+    ArrayOfLicenseReservationInfo(Vec<super::structs::LicenseReservationInfo>),
     /// A boxed array of *LocalizationManagerMessageCatalog*. To be used in *Any* placeholders.
-    ArrayOfLocalizationManagerMessageCatalog(Vec<LocalizationManagerMessageCatalog>),
+    ArrayOfLocalizationManagerMessageCatalog(Vec<super::structs::LocalizationManagerMessageCatalog>),
     /// A boxed array of *LongPolicy*. To be used in *Any* placeholders.
-    ArrayOfLongPolicy(Vec<LongPolicy>),
+    ArrayOfLongPolicy(Vec<super::structs::LongPolicy>),
     /// A boxed array of *MacAddress*. To be used in *Any* placeholders.
     ArrayOfMacAddress(Vec<Box<dyn super::traits::MacAddressTrait>>),
     /// A boxed array of *MacRange*. To be used in *Any* placeholders.
-    ArrayOfMacRange(Vec<MacRange>),
+    ArrayOfMacRange(Vec<super::structs::MacRange>),
     /// A boxed array of *MethodDescription*. To be used in *Any* placeholders.
-    ArrayOfMethodDescription(Vec<MethodDescription>),
+    ArrayOfMethodDescription(Vec<super::structs::MethodDescription>),
     /// A boxed array of *NegatableExpression*. To be used in *Any* placeholders.
     ArrayOfNegatableExpression(Vec<Box<dyn super::traits::NegatableExpressionTrait>>),
     /// A boxed array of *NetworkSummary*. To be used in *Any* placeholders.
     ArrayOfNetworkSummary(Vec<Box<dyn super::traits::NetworkSummaryTrait>>),
     /// A boxed array of *NumericRange*. To be used in *Any* placeholders.
-    ArrayOfNumericRange(Vec<NumericRange>),
+    ArrayOfNumericRange(Vec<super::structs::NumericRange>),
     /// A boxed array of *OpaqueNetworkCapability*. To be used in *Any* placeholders.
-    ArrayOfOpaqueNetworkCapability(Vec<OpaqueNetworkCapability>),
+    ArrayOfOpaqueNetworkCapability(Vec<super::structs::OpaqueNetworkCapability>),
     /// A boxed array of *OpaqueNetworkSummary*. To be used in *Any* placeholders.
-    ArrayOfOpaqueNetworkSummary(Vec<OpaqueNetworkSummary>),
+    ArrayOfOpaqueNetworkSummary(Vec<super::structs::OpaqueNetworkSummary>),
     /// A boxed array of *OvfConsumerOstNode*. To be used in *Any* placeholders.
-    ArrayOfOvfConsumerOstNode(Vec<OvfConsumerOstNode>),
+    ArrayOfOvfConsumerOstNode(Vec<super::structs::OvfConsumerOstNode>),
     /// A boxed array of *OvfConsumerOvfSection*. To be used in *Any* placeholders.
-    ArrayOfOvfConsumerOvfSection(Vec<OvfConsumerOvfSection>),
+    ArrayOfOvfConsumerOvfSection(Vec<super::structs::OvfConsumerOvfSection>),
     /// A boxed array of *OvfManagerCommonParams*. To be used in *Any* placeholders.
     ArrayOfOvfManagerCommonParams(Vec<Box<dyn super::traits::OvfManagerCommonParamsTrait>>),
     /// A boxed array of *OvfCreateDescriptorParams*. To be used in *Any* placeholders.
-    ArrayOfOvfCreateDescriptorParams(Vec<OvfCreateDescriptorParams>),
+    ArrayOfOvfCreateDescriptorParams(Vec<super::structs::OvfCreateDescriptorParams>),
     /// A boxed array of *OvfCreateDescriptorResult*. To be used in *Any* placeholders.
-    ArrayOfOvfCreateDescriptorResult(Vec<OvfCreateDescriptorResult>),
+    ArrayOfOvfCreateDescriptorResult(Vec<super::structs::OvfCreateDescriptorResult>),
     /// A boxed array of *OvfCreateImportSpecParams*. To be used in *Any* placeholders.
-    ArrayOfOvfCreateImportSpecParams(Vec<OvfCreateImportSpecParams>),
+    ArrayOfOvfCreateImportSpecParams(Vec<super::structs::OvfCreateImportSpecParams>),
     /// A boxed array of *OvfCreateImportSpecResult*. To be used in *Any* placeholders.
-    ArrayOfOvfCreateImportSpecResult(Vec<OvfCreateImportSpecResult>),
+    ArrayOfOvfCreateImportSpecResult(Vec<super::structs::OvfCreateImportSpecResult>),
     /// A boxed array of *OvfDeploymentOption*. To be used in *Any* placeholders.
-    ArrayOfOvfDeploymentOption(Vec<OvfDeploymentOption>),
+    ArrayOfOvfDeploymentOption(Vec<super::structs::OvfDeploymentOption>),
     /// A boxed array of *OvfFileItem*. To be used in *Any* placeholders.
-    ArrayOfOvfFileItem(Vec<OvfFileItem>),
+    ArrayOfOvfFileItem(Vec<super::structs::OvfFileItem>),
     /// A boxed array of *OvfNetworkInfo*. To be used in *Any* placeholders.
-    ArrayOfOvfNetworkInfo(Vec<OvfNetworkInfo>),
+    ArrayOfOvfNetworkInfo(Vec<super::structs::OvfNetworkInfo>),
     /// A boxed array of *OvfNetworkMapping*. To be used in *Any* placeholders.
-    ArrayOfOvfNetworkMapping(Vec<OvfNetworkMapping>),
+    ArrayOfOvfNetworkMapping(Vec<super::structs::OvfNetworkMapping>),
     /// A boxed array of *OvfFile*. To be used in *Any* placeholders.
-    ArrayOfOvfFile(Vec<OvfFile>),
+    ArrayOfOvfFile(Vec<super::structs::OvfFile>),
     /// A boxed array of *OvfOptionInfo*. To be used in *Any* placeholders.
-    ArrayOfOvfOptionInfo(Vec<OvfOptionInfo>),
+    ArrayOfOvfOptionInfo(Vec<super::structs::OvfOptionInfo>),
     /// A boxed array of *OvfParseDescriptorParams*. To be used in *Any* placeholders.
-    ArrayOfOvfParseDescriptorParams(Vec<OvfParseDescriptorParams>),
+    ArrayOfOvfParseDescriptorParams(Vec<super::structs::OvfParseDescriptorParams>),
     /// A boxed array of *OvfParseDescriptorResult*. To be used in *Any* placeholders.
-    ArrayOfOvfParseDescriptorResult(Vec<OvfParseDescriptorResult>),
+    ArrayOfOvfParseDescriptorResult(Vec<super::structs::OvfParseDescriptorResult>),
     /// A boxed array of *OvfResourceMap*. To be used in *Any* placeholders.
-    ArrayOfOvfResourceMap(Vec<OvfResourceMap>),
+    ArrayOfOvfResourceMap(Vec<super::structs::OvfResourceMap>),
     /// A boxed array of *OvfValidateHostParams*. To be used in *Any* placeholders.
-    ArrayOfOvfValidateHostParams(Vec<OvfValidateHostParams>),
+    ArrayOfOvfValidateHostParams(Vec<super::structs::OvfValidateHostParams>),
     /// A boxed array of *OvfValidateHostResult*. To be used in *Any* placeholders.
-    ArrayOfOvfValidateHostResult(Vec<OvfValidateHostResult>),
+    ArrayOfOvfValidateHostResult(Vec<super::structs::OvfValidateHostResult>),
     /// A boxed array of *PasswordField*. To be used in *Any* placeholders.
-    ArrayOfPasswordField(Vec<PasswordField>),
+    ArrayOfPasswordField(Vec<super::structs::PasswordField>),
     /// A boxed array of *PerformanceDescription*. To be used in *Any* placeholders.
-    ArrayOfPerformanceDescription(Vec<PerformanceDescription>),
+    ArrayOfPerformanceDescription(Vec<super::structs::PerformanceDescription>),
     /// A boxed array of *PerfCompositeMetric*. To be used in *Any* placeholders.
-    ArrayOfPerfCompositeMetric(Vec<PerfCompositeMetric>),
+    ArrayOfPerfCompositeMetric(Vec<super::structs::PerfCompositeMetric>),
     /// A boxed array of *PerfCounterInfo*. To be used in *Any* placeholders.
-    ArrayOfPerfCounterInfo(Vec<PerfCounterInfo>),
+    ArrayOfPerfCounterInfo(Vec<super::structs::PerfCounterInfo>),
     /// A boxed array of *PerformanceManagerCounterLevelMapping*. To be used in *Any* placeholders.
-    ArrayOfPerformanceManagerCounterLevelMapping(Vec<PerformanceManagerCounterLevelMapping>),
+    ArrayOfPerformanceManagerCounterLevelMapping(Vec<super::structs::PerformanceManagerCounterLevelMapping>),
     /// A boxed array of *PerfEntityMetric*. To be used in *Any* placeholders.
-    ArrayOfPerfEntityMetric(Vec<PerfEntityMetric>),
+    ArrayOfPerfEntityMetric(Vec<super::structs::PerfEntityMetric>),
     /// A boxed array of *PerfEntityMetricBase*. To be used in *Any* placeholders.
     ArrayOfPerfEntityMetricBase(Vec<Box<dyn super::traits::PerfEntityMetricBaseTrait>>),
     /// A boxed array of *PerfEntityMetricCSV*. To be used in *Any* placeholders.
-    ArrayOfPerfEntityMetricCsv(Vec<PerfEntityMetricCsv>),
+    ArrayOfPerfEntityMetricCsv(Vec<super::structs::PerfEntityMetricCsv>),
     /// A boxed array of *PerfMetricIntSeries*. To be used in *Any* placeholders.
-    ArrayOfPerfMetricIntSeries(Vec<PerfMetricIntSeries>),
+    ArrayOfPerfMetricIntSeries(Vec<super::structs::PerfMetricIntSeries>),
     /// A boxed array of *PerfMetricId*. To be used in *Any* placeholders.
-    ArrayOfPerfMetricId(Vec<PerfMetricId>),
+    ArrayOfPerfMetricId(Vec<super::structs::PerfMetricId>),
     /// A boxed array of *PerfMetricSeries*. To be used in *Any* placeholders.
     ArrayOfPerfMetricSeries(Vec<Box<dyn super::traits::PerfMetricSeriesTrait>>),
     /// A boxed array of *PerfMetricSeriesCSV*. To be used in *Any* placeholders.
-    ArrayOfPerfMetricSeriesCsv(Vec<PerfMetricSeriesCsv>),
+    ArrayOfPerfMetricSeriesCsv(Vec<super::structs::PerfMetricSeriesCsv>),
     /// A boxed array of *PerfProviderSummary*. To be used in *Any* placeholders.
-    ArrayOfPerfProviderSummary(Vec<PerfProviderSummary>),
+    ArrayOfPerfProviderSummary(Vec<super::structs::PerfProviderSummary>),
     /// A boxed array of *PerfQuerySpec*. To be used in *Any* placeholders.
-    ArrayOfPerfQuerySpec(Vec<PerfQuerySpec>),
+    ArrayOfPerfQuerySpec(Vec<super::structs::PerfQuerySpec>),
     /// A boxed array of *PerfSampleInfo*. To be used in *Any* placeholders.
-    ArrayOfPerfSampleInfo(Vec<PerfSampleInfo>),
+    ArrayOfPerfSampleInfo(Vec<super::structs::PerfSampleInfo>),
     /// A boxed array of *PosixUserSearchResult*. To be used in *Any* placeholders.
-    ArrayOfPosixUserSearchResult(Vec<PosixUserSearchResult>),
+    ArrayOfPosixUserSearchResult(Vec<super::structs::PosixUserSearchResult>),
     /// A boxed array of *PrivilegePolicyDef*. To be used in *Any* placeholders.
-    ArrayOfPrivilegePolicyDef(Vec<PrivilegePolicyDef>),
+    ArrayOfPrivilegePolicyDef(Vec<super::structs::PrivilegePolicyDef>),
     /// A boxed array of *ResourceAllocationInfo*. To be used in *Any* placeholders.
-    ArrayOfResourceAllocationInfo(Vec<ResourceAllocationInfo>),
+    ArrayOfResourceAllocationInfo(Vec<super::structs::ResourceAllocationInfo>),
     /// A boxed array of *ResourceAllocationOption*. To be used in *Any* placeholders.
-    ArrayOfResourceAllocationOption(Vec<ResourceAllocationOption>),
+    ArrayOfResourceAllocationOption(Vec<super::structs::ResourceAllocationOption>),
     /// A boxed array of *ResourceConfigOption*. To be used in *Any* placeholders.
-    ArrayOfResourceConfigOption(Vec<ResourceConfigOption>),
+    ArrayOfResourceConfigOption(Vec<super::structs::ResourceConfigOption>),
     /// A boxed array of *ResourceConfigSpec*. To be used in *Any* placeholders.
-    ArrayOfResourceConfigSpec(Vec<ResourceConfigSpec>),
+    ArrayOfResourceConfigSpec(Vec<super::structs::ResourceConfigSpec>),
     /// A boxed array of *DatabaseSizeEstimate*. To be used in *Any* placeholders.
-    ArrayOfDatabaseSizeEstimate(Vec<DatabaseSizeEstimate>),
+    ArrayOfDatabaseSizeEstimate(Vec<super::structs::DatabaseSizeEstimate>),
     /// A boxed array of *DatabaseSizeParam*. To be used in *Any* placeholders.
-    ArrayOfDatabaseSizeParam(Vec<DatabaseSizeParam>),
+    ArrayOfDatabaseSizeParam(Vec<super::structs::DatabaseSizeParam>),
     /// A boxed array of *InventoryDescription*. To be used in *Any* placeholders.
-    ArrayOfInventoryDescription(Vec<InventoryDescription>),
+    ArrayOfInventoryDescription(Vec<super::structs::InventoryDescription>),
     /// A boxed array of *PerformanceStatisticsDescription*. To be used in *Any* placeholders.
-    ArrayOfPerformanceStatisticsDescription(Vec<PerformanceStatisticsDescription>),
+    ArrayOfPerformanceStatisticsDescription(Vec<super::structs::PerformanceStatisticsDescription>),
     /// A boxed array of *ResourcePoolResourceUsage*. To be used in *Any* placeholders.
-    ArrayOfResourcePoolResourceUsage(Vec<ResourcePoolResourceUsage>),
+    ArrayOfResourcePoolResourceUsage(Vec<super::structs::ResourcePoolResourceUsage>),
     /// A boxed array of *ResourcePoolRuntimeInfo*. To be used in *Any* placeholders.
-    ArrayOfResourcePoolRuntimeInfo(Vec<ResourcePoolRuntimeInfo>),
+    ArrayOfResourcePoolRuntimeInfo(Vec<super::structs::ResourcePoolRuntimeInfo>),
     /// A boxed array of *ResourcePoolSummary*. To be used in *Any* placeholders.
     ArrayOfResourcePoolSummary(Vec<Box<dyn super::traits::ResourcePoolSummaryTrait>>),
     /// A boxed array of *ResourcePoolQuickStats*. To be used in *Any* placeholders.
-    ArrayOfResourcePoolQuickStats(Vec<ResourcePoolQuickStats>),
+    ArrayOfResourcePoolQuickStats(Vec<super::structs::ResourcePoolQuickStats>),
     /// A boxed array of *SDDCBase*. To be used in *Any* placeholders.
-    ArrayOfSddcBase(Vec<SddcBase>),
+    ArrayOfSddcBase(Vec<super::structs::SddcBase>),
     /// A boxed array of *SelectionSet*. To be used in *Any* placeholders.
     ArrayOfSelectionSet(Vec<Box<dyn super::traits::SelectionSetTrait>>),
     /// A boxed array of *HostVMotionCompatibility*. To be used in *Any* placeholders.
-    ArrayOfHostVMotionCompatibility(Vec<HostVMotionCompatibility>),
+    ArrayOfHostVMotionCompatibility(Vec<super::structs::HostVMotionCompatibility>),
     /// A boxed array of *ProductComponentInfo*. To be used in *Any* placeholders.
-    ArrayOfProductComponentInfo(Vec<ProductComponentInfo>),
+    ArrayOfProductComponentInfo(Vec<super::structs::ProductComponentInfo>),
     /// A boxed array of *ServiceContent*. To be used in *Any* placeholders.
-    ArrayOfServiceContent(Vec<ServiceContent>),
+    ArrayOfServiceContent(Vec<super::structs::ServiceContent>),
     /// A boxed array of *ServiceLocator*. To be used in *Any* placeholders.
-    ArrayOfServiceLocator(Vec<ServiceLocator>),
+    ArrayOfServiceLocator(Vec<super::structs::ServiceLocator>),
     /// A boxed array of *ServiceLocatorCredential*. To be used in *Any* placeholders.
     ArrayOfServiceLocatorCredential(Vec<Box<dyn super::traits::ServiceLocatorCredentialTrait>>),
     /// A boxed array of *ServiceLocatorNamePassword*. To be used in *Any* placeholders.
-    ArrayOfServiceLocatorNamePassword(Vec<ServiceLocatorNamePassword>),
+    ArrayOfServiceLocatorNamePassword(Vec<super::structs::ServiceLocatorNamePassword>),
     /// A boxed array of *ServiceLocatorSAMLCredential*. To be used in *Any* placeholders.
-    ArrayOfServiceLocatorSamlCredential(Vec<ServiceLocatorSamlCredential>),
+    ArrayOfServiceLocatorSamlCredential(Vec<super::structs::ServiceLocatorSamlCredential>),
     /// A boxed array of *ServiceManagerServiceInfo*. To be used in *Any* placeholders.
-    ArrayOfServiceManagerServiceInfo(Vec<ServiceManagerServiceInfo>),
+    ArrayOfServiceManagerServiceInfo(Vec<super::structs::ServiceManagerServiceInfo>),
     /// A boxed array of *SessionManagerGenericServiceTicket*. To be used in *Any* placeholders.
-    ArrayOfSessionManagerGenericServiceTicket(Vec<SessionManagerGenericServiceTicket>),
+    ArrayOfSessionManagerGenericServiceTicket(Vec<super::structs::SessionManagerGenericServiceTicket>),
     /// A boxed array of *SessionManagerHttpServiceRequestSpec*. To be used in *Any* placeholders.
-    ArrayOfSessionManagerHttpServiceRequestSpec(Vec<SessionManagerHttpServiceRequestSpec>),
+    ArrayOfSessionManagerHttpServiceRequestSpec(Vec<super::structs::SessionManagerHttpServiceRequestSpec>),
     /// A boxed array of *SessionManagerLocalTicket*. To be used in *Any* placeholders.
-    ArrayOfSessionManagerLocalTicket(Vec<SessionManagerLocalTicket>),
+    ArrayOfSessionManagerLocalTicket(Vec<super::structs::SessionManagerLocalTicket>),
     /// A boxed array of *SessionManagerServiceRequestSpec*. To be used in *Any* placeholders.
     ArrayOfSessionManagerServiceRequestSpec(Vec<Box<dyn super::traits::SessionManagerServiceRequestSpecTrait>>),
     /// A boxed array of *SessionManagerVmomiServiceRequestSpec*. To be used in *Any* placeholders.
-    ArrayOfSessionManagerVmomiServiceRequestSpec(Vec<SessionManagerVmomiServiceRequestSpec>),
+    ArrayOfSessionManagerVmomiServiceRequestSpec(Vec<super::structs::SessionManagerVmomiServiceRequestSpec>),
     /// A boxed array of *SharesInfo*. To be used in *Any* placeholders.
-    ArrayOfSharesInfo(Vec<SharesInfo>),
+    ArrayOfSharesInfo(Vec<super::structs::SharesInfo>),
     /// A boxed array of *SharesOption*. To be used in *Any* placeholders.
-    ArrayOfSharesOption(Vec<SharesOption>),
+    ArrayOfSharesOption(Vec<super::structs::SharesOption>),
     /// A boxed array of *SingleIp*. To be used in *Any* placeholders.
-    ArrayOfSingleIp(Vec<SingleIp>),
+    ArrayOfSingleIp(Vec<super::structs::SingleIp>),
     /// A boxed array of *SingleMac*. To be used in *Any* placeholders.
-    ArrayOfSingleMac(Vec<SingleMac>),
+    ArrayOfSingleMac(Vec<super::structs::SingleMac>),
     /// A boxed array of *SiteInfo*. To be used in *Any* placeholders.
-    ArrayOfSiteInfo(Vec<SiteInfo>),
+    ArrayOfSiteInfo(Vec<super::structs::SiteInfo>),
     /// A boxed array of *StoragePodSummary*. To be used in *Any* placeholders.
-    ArrayOfStoragePodSummary(Vec<StoragePodSummary>),
+    ArrayOfStoragePodSummary(Vec<super::structs::StoragePodSummary>),
     /// A boxed array of *StorageIOAllocationInfo*. To be used in *Any* placeholders.
-    ArrayOfStorageIoAllocationInfo(Vec<StorageIoAllocationInfo>),
+    ArrayOfStorageIoAllocationInfo(Vec<super::structs::StorageIoAllocationInfo>),
     /// A boxed array of *StorageIOAllocationOption*. To be used in *Any* placeholders.
-    ArrayOfStorageIoAllocationOption(Vec<StorageIoAllocationOption>),
+    ArrayOfStorageIoAllocationOption(Vec<super::structs::StorageIoAllocationOption>),
     /// A boxed array of *StorageIORMInfo*. To be used in *Any* placeholders.
-    ArrayOfStorageIormInfo(Vec<StorageIormInfo>),
+    ArrayOfStorageIormInfo(Vec<super::structs::StorageIormInfo>),
     /// A boxed array of *StorageIORMConfigOption*. To be used in *Any* placeholders.
-    ArrayOfStorageIormConfigOption(Vec<StorageIormConfigOption>),
+    ArrayOfStorageIormConfigOption(Vec<super::structs::StorageIormConfigOption>),
     /// A boxed array of *StorageIORMConfigSpec*. To be used in *Any* placeholders.
-    ArrayOfStorageIormConfigSpec(Vec<StorageIormConfigSpec>),
+    ArrayOfStorageIormConfigSpec(Vec<super::structs::StorageIormConfigSpec>),
     /// A boxed array of *PodStorageDrsEntry*. To be used in *Any* placeholders.
-    ArrayOfPodStorageDrsEntry(Vec<PodStorageDrsEntry>),
+    ArrayOfPodStorageDrsEntry(Vec<super::structs::PodStorageDrsEntry>),
     /// A boxed array of *StoragePerformanceSummary*. To be used in *Any* placeholders.
-    ArrayOfStoragePerformanceSummary(Vec<StoragePerformanceSummary>),
+    ArrayOfStoragePerformanceSummary(Vec<super::structs::StoragePerformanceSummary>),
     /// A boxed array of *StorageResourceManagerStorageProfileStatistics*. To be used in *Any* placeholders.
-    ArrayOfStorageResourceManagerStorageProfileStatistics(Vec<StorageResourceManagerStorageProfileStatistics>),
+    ArrayOfStorageResourceManagerStorageProfileStatistics(Vec<super::structs::StorageResourceManagerStorageProfileStatistics>),
     /// A boxed array of *StringExpression*. To be used in *Any* placeholders.
-    ArrayOfStringExpression(Vec<StringExpression>),
+    ArrayOfStringExpression(Vec<super::structs::StringExpression>),
     /// A boxed array of *StringPolicy*. To be used in *Any* placeholders.
-    ArrayOfStringPolicy(Vec<StringPolicy>),
+    ArrayOfStringPolicy(Vec<super::structs::StringPolicy>),
     /// A boxed array of *Tag*. To be used in *Any* placeholders.
-    ArrayOfTag(Vec<Tag>),
+    ArrayOfTag(Vec<super::structs::Tag>),
     /// A boxed array of *TaskDescription*. To be used in *Any* placeholders.
-    ArrayOfTaskDescription(Vec<TaskDescription>),
+    ArrayOfTaskDescription(Vec<super::structs::TaskDescription>),
     /// A boxed array of *TaskFilterSpec*. To be used in *Any* placeholders.
-    ArrayOfTaskFilterSpec(Vec<TaskFilterSpec>),
+    ArrayOfTaskFilterSpec(Vec<super::structs::TaskFilterSpec>),
     /// A boxed array of *TaskFilterSpecByEntity*. To be used in *Any* placeholders.
-    ArrayOfTaskFilterSpecByEntity(Vec<TaskFilterSpecByEntity>),
+    ArrayOfTaskFilterSpecByEntity(Vec<super::structs::TaskFilterSpecByEntity>),
     /// A boxed array of *TaskFilterSpecByTime*. To be used in *Any* placeholders.
-    ArrayOfTaskFilterSpecByTime(Vec<TaskFilterSpecByTime>),
+    ArrayOfTaskFilterSpecByTime(Vec<super::structs::TaskFilterSpecByTime>),
     /// A boxed array of *TaskFilterSpecByUsername*. To be used in *Any* placeholders.
-    ArrayOfTaskFilterSpecByUsername(Vec<TaskFilterSpecByUsername>),
+    ArrayOfTaskFilterSpecByUsername(Vec<super::structs::TaskFilterSpecByUsername>),
     /// A boxed array of *TaskInfo*. To be used in *Any* placeholders.
-    ArrayOfTaskInfo(Vec<TaskInfo>),
+    ArrayOfTaskInfo(Vec<super::structs::TaskInfo>),
     /// A boxed array of *TaskReason*. To be used in *Any* placeholders.
     ArrayOfTaskReason(Vec<Box<dyn super::traits::TaskReasonTrait>>),
     /// A boxed array of *TaskReasonAlarm*. To be used in *Any* placeholders.
-    ArrayOfTaskReasonAlarm(Vec<TaskReasonAlarm>),
+    ArrayOfTaskReasonAlarm(Vec<super::structs::TaskReasonAlarm>),
     /// A boxed array of *TaskReasonSchedule*. To be used in *Any* placeholders.
-    ArrayOfTaskReasonSchedule(Vec<TaskReasonSchedule>),
+    ArrayOfTaskReasonSchedule(Vec<super::structs::TaskReasonSchedule>),
     /// A boxed array of *TaskReasonSystem*. To be used in *Any* placeholders.
-    ArrayOfTaskReasonSystem(Vec<TaskReasonSystem>),
+    ArrayOfTaskReasonSystem(Vec<super::structs::TaskReasonSystem>),
     /// A boxed array of *TaskReasonUser*. To be used in *Any* placeholders.
-    ArrayOfTaskReasonUser(Vec<TaskReasonUser>),
+    ArrayOfTaskReasonUser(Vec<super::structs::TaskReasonUser>),
     /// A boxed array of *TypeDescription*. To be used in *Any* placeholders.
     ArrayOfTypeDescription(Vec<Box<dyn super::traits::TypeDescriptionTrait>>),
     /// A boxed array of *UpdateVirtualMachineFilesResult*. To be used in *Any* placeholders.
-    ArrayOfUpdateVirtualMachineFilesResult(Vec<UpdateVirtualMachineFilesResult>),
+    ArrayOfUpdateVirtualMachineFilesResult(Vec<super::structs::UpdateVirtualMachineFilesResult>),
     /// A boxed array of *UpdateVirtualMachineFilesResultFailedVmFileInfo*. To be used in *Any* placeholders.
-    ArrayOfUpdateVirtualMachineFilesResultFailedVmFileInfo(Vec<UpdateVirtualMachineFilesResultFailedVmFileInfo>),
+    ArrayOfUpdateVirtualMachineFilesResultFailedVmFileInfo(Vec<super::structs::UpdateVirtualMachineFilesResultFailedVmFileInfo>),
     /// A boxed array of *UserSearchResult*. To be used in *Any* placeholders.
     ArrayOfUserSearchResult(Vec<Box<dyn super::traits::UserSearchResultTrait>>),
     /// A boxed array of *UserSession*. To be used in *Any* placeholders.
-    ArrayOfUserSession(Vec<UserSession>),
+    ArrayOfUserSession(Vec<super::structs::UserSession>),
     /// A boxed array of *VVolVmConfigFileUpdateResult*. To be used in *Any* placeholders.
-    ArrayOfVVolVmConfigFileUpdateResult(Vec<VVolVmConfigFileUpdateResult>),
+    ArrayOfVVolVmConfigFileUpdateResult(Vec<super::structs::VVolVmConfigFileUpdateResult>),
     /// A boxed array of *VVolVmConfigFileUpdateResultFailedVmConfigFileInfo*. To be used in *Any* placeholders.
-    ArrayOfVVolVmConfigFileUpdateResultFailedVmConfigFileInfo(Vec<VVolVmConfigFileUpdateResultFailedVmConfigFileInfo>),
+    ArrayOfVVolVmConfigFileUpdateResultFailedVmConfigFileInfo(Vec<super::structs::VVolVmConfigFileUpdateResultFailedVmConfigFileInfo>),
     /// A boxed array of *VASAStorageArray*. To be used in *Any* placeholders.
-    ArrayOfVasaStorageArray(Vec<VasaStorageArray>),
+    ArrayOfVasaStorageArray(Vec<super::structs::VasaStorageArray>),
     /// A boxed array of *VASAStorageArrayDiscoveryFcTransport*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 8.0.0.0
-    ArrayOfVasaStorageArrayDiscoveryFcTransport(Vec<VasaStorageArrayDiscoveryFcTransport>),
+    ArrayOfVasaStorageArrayDiscoveryFcTransport(Vec<super::structs::VasaStorageArrayDiscoveryFcTransport>),
     /// A boxed array of *VASAStorageArrayDiscoveryIpTransport*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 8.0.0.0
-    ArrayOfVasaStorageArrayDiscoveryIpTransport(Vec<VasaStorageArrayDiscoveryIpTransport>),
+    ArrayOfVasaStorageArrayDiscoveryIpTransport(Vec<super::structs::VasaStorageArrayDiscoveryIpTransport>),
     /// A boxed array of *VASAStorageArrayDiscoverySvcInfo*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 8.0.0.0
-    ArrayOfVasaStorageArrayDiscoverySvcInfo(Vec<VasaStorageArrayDiscoverySvcInfo>),
+    ArrayOfVasaStorageArrayDiscoverySvcInfo(Vec<super::structs::VasaStorageArrayDiscoverySvcInfo>),
     /// A boxed array of *VasaProviderContainerSpec*. To be used in *Any* placeholders.
-    ArrayOfVasaProviderContainerSpec(Vec<VasaProviderContainerSpec>),
+    ArrayOfVasaProviderContainerSpec(Vec<super::structs::VasaProviderContainerSpec>),
     /// A boxed array of *VimVasaProvider*. To be used in *Any* placeholders.
-    ArrayOfVimVasaProvider(Vec<VimVasaProvider>),
+    ArrayOfVimVasaProvider(Vec<super::structs::VimVasaProvider>),
     /// A boxed array of *VimVasaProviderStatePerArray*. To be used in *Any* placeholders.
-    ArrayOfVimVasaProviderStatePerArray(Vec<VimVasaProviderStatePerArray>),
+    ArrayOfVimVasaProviderStatePerArray(Vec<super::structs::VimVasaProviderStatePerArray>),
     /// A boxed array of *VimVasaProviderVirtualHostConfig*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 8.0.1.0
-    ArrayOfVimVasaProviderVirtualHostConfig(Vec<VimVasaProviderVirtualHostConfig>),
+    ArrayOfVimVasaProviderVirtualHostConfig(Vec<super::structs::VimVasaProviderVirtualHostConfig>),
     /// A boxed array of *VimVasaProviderInfo*. To be used in *Any* placeholders.
-    ArrayOfVimVasaProviderInfo(Vec<VimVasaProviderInfo>),
+    ArrayOfVimVasaProviderInfo(Vec<super::structs::VimVasaProviderInfo>),
     /// A boxed array of *VirtualAppLinkInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualAppLinkInfo(Vec<VirtualAppLinkInfo>),
+    ArrayOfVirtualAppLinkInfo(Vec<super::structs::VirtualAppLinkInfo>),
     /// A boxed array of *VirtualAppSummary*. To be used in *Any* placeholders.
-    ArrayOfVirtualAppSummary(Vec<VirtualAppSummary>),
+    ArrayOfVirtualAppSummary(Vec<super::structs::VirtualAppSummary>),
     /// A boxed array of *DeviceBackedVirtualDiskSpec*. To be used in *Any* placeholders.
-    ArrayOfDeviceBackedVirtualDiskSpec(Vec<DeviceBackedVirtualDiskSpec>),
+    ArrayOfDeviceBackedVirtualDiskSpec(Vec<super::structs::DeviceBackedVirtualDiskSpec>),
     /// A boxed array of *FileBackedVirtualDiskSpec*. To be used in *Any* placeholders.
     ArrayOfFileBackedVirtualDiskSpec(Vec<Box<dyn super::traits::FileBackedVirtualDiskSpecTrait>>),
     /// A boxed array of *SeSparseVirtualDiskSpec*. To be used in *Any* placeholders.
-    ArrayOfSeSparseVirtualDiskSpec(Vec<SeSparseVirtualDiskSpec>),
+    ArrayOfSeSparseVirtualDiskSpec(Vec<super::structs::SeSparseVirtualDiskSpec>),
     /// A boxed array of *VirtualDiskSpec*. To be used in *Any* placeholders.
     ArrayOfVirtualDiskSpec(Vec<Box<dyn super::traits::VirtualDiskSpecTrait>>),
     /// A boxed array of *VirtualMachineConnection*. To be used in *Any* placeholders.
@@ -629,131 +627,131 @@ pub enum ValueElements {
     /// ***Since:*** vSphere API Release 7.0.1.0
     ArrayOfVirtualMachineConnection(Vec<Box<dyn super::traits::VirtualMachineConnectionTrait>>),
     /// A boxed array of *DiskChangeInfo*. To be used in *Any* placeholders.
-    ArrayOfDiskChangeInfo(Vec<DiskChangeInfo>),
+    ArrayOfDiskChangeInfo(Vec<super::structs::DiskChangeInfo>),
     /// A boxed array of *DiskChangeExtent*. To be used in *Any* placeholders.
-    ArrayOfDiskChangeExtent(Vec<DiskChangeExtent>),
+    ArrayOfDiskChangeExtent(Vec<super::structs::DiskChangeExtent>),
     /// A boxed array of *VirtualMachineDisplayTopology*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineDisplayTopology(Vec<VirtualMachineDisplayTopology>),
+    ArrayOfVirtualMachineDisplayTopology(Vec<super::structs::VirtualMachineDisplayTopology>),
     /// A boxed array of *VirtualMachineMksConnection*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 7.0.1.0
-    ArrayOfVirtualMachineMksConnection(Vec<VirtualMachineMksConnection>),
+    ArrayOfVirtualMachineMksConnection(Vec<super::structs::VirtualMachineMksConnection>),
     /// A boxed array of *VirtualMachineMksTicket*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineMksTicket(Vec<VirtualMachineMksTicket>),
+    ArrayOfVirtualMachineMksTicket(Vec<super::structs::VirtualMachineMksTicket>),
     /// A boxed array of *StorageRequirement*. To be used in *Any* placeholders.
-    ArrayOfStorageRequirement(Vec<StorageRequirement>),
+    ArrayOfStorageRequirement(Vec<super::structs::StorageRequirement>),
     /// A boxed array of *VirtualMachineTicket*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineTicket(Vec<VirtualMachineTicket>),
+    ArrayOfVirtualMachineTicket(Vec<super::structs::VirtualMachineTicket>),
     /// A boxed array of *VirtualMachineWipeResult*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineWipeResult(Vec<VirtualMachineWipeResult>),
+    ArrayOfVirtualMachineWipeResult(Vec<super::structs::VirtualMachineWipeResult>),
     /// A boxed array of *VsanUpgradeSystemAPIBrokenIssue*. To be used in *Any* placeholders.
-    ArrayOfVsanUpgradeSystemApiBrokenIssue(Vec<VsanUpgradeSystemApiBrokenIssue>),
+    ArrayOfVsanUpgradeSystemApiBrokenIssue(Vec<super::structs::VsanUpgradeSystemApiBrokenIssue>),
     /// A boxed array of *VsanUpgradeSystemAutoClaimEnabledOnHostsIssue*. To be used in *Any* placeholders.
-    ArrayOfVsanUpgradeSystemAutoClaimEnabledOnHostsIssue(Vec<VsanUpgradeSystemAutoClaimEnabledOnHostsIssue>),
+    ArrayOfVsanUpgradeSystemAutoClaimEnabledOnHostsIssue(Vec<super::structs::VsanUpgradeSystemAutoClaimEnabledOnHostsIssue>),
     /// A boxed array of *VsanUpgradeSystemHostsDisconnectedIssue*. To be used in *Any* placeholders.
-    ArrayOfVsanUpgradeSystemHostsDisconnectedIssue(Vec<VsanUpgradeSystemHostsDisconnectedIssue>),
+    ArrayOfVsanUpgradeSystemHostsDisconnectedIssue(Vec<super::structs::VsanUpgradeSystemHostsDisconnectedIssue>),
     /// A boxed array of *VsanUpgradeSystemMissingHostsInClusterIssue*. To be used in *Any* placeholders.
-    ArrayOfVsanUpgradeSystemMissingHostsInClusterIssue(Vec<VsanUpgradeSystemMissingHostsInClusterIssue>),
+    ArrayOfVsanUpgradeSystemMissingHostsInClusterIssue(Vec<super::structs::VsanUpgradeSystemMissingHostsInClusterIssue>),
     /// A boxed array of *VsanUpgradeSystemNetworkPartitionInfo*. To be used in *Any* placeholders.
-    ArrayOfVsanUpgradeSystemNetworkPartitionInfo(Vec<VsanUpgradeSystemNetworkPartitionInfo>),
+    ArrayOfVsanUpgradeSystemNetworkPartitionInfo(Vec<super::structs::VsanUpgradeSystemNetworkPartitionInfo>),
     /// A boxed array of *VsanUpgradeSystemNetworkPartitionIssue*. To be used in *Any* placeholders.
-    ArrayOfVsanUpgradeSystemNetworkPartitionIssue(Vec<VsanUpgradeSystemNetworkPartitionIssue>),
+    ArrayOfVsanUpgradeSystemNetworkPartitionIssue(Vec<super::structs::VsanUpgradeSystemNetworkPartitionIssue>),
     /// A boxed array of *VsanUpgradeSystemNotEnoughFreeCapacityIssue*. To be used in *Any* placeholders.
-    ArrayOfVsanUpgradeSystemNotEnoughFreeCapacityIssue(Vec<VsanUpgradeSystemNotEnoughFreeCapacityIssue>),
+    ArrayOfVsanUpgradeSystemNotEnoughFreeCapacityIssue(Vec<super::structs::VsanUpgradeSystemNotEnoughFreeCapacityIssue>),
     /// A boxed array of *VsanUpgradeSystemPreflightCheckIssue*. To be used in *Any* placeholders.
     ArrayOfVsanUpgradeSystemPreflightCheckIssue(Vec<Box<dyn super::traits::VsanUpgradeSystemPreflightCheckIssueTrait>>),
     /// A boxed array of *VsanUpgradeSystemPreflightCheckResult*. To be used in *Any* placeholders.
-    ArrayOfVsanUpgradeSystemPreflightCheckResult(Vec<VsanUpgradeSystemPreflightCheckResult>),
+    ArrayOfVsanUpgradeSystemPreflightCheckResult(Vec<super::structs::VsanUpgradeSystemPreflightCheckResult>),
     /// A boxed array of *VsanUpgradeSystemRogueHostsInClusterIssue*. To be used in *Any* placeholders.
-    ArrayOfVsanUpgradeSystemRogueHostsInClusterIssue(Vec<VsanUpgradeSystemRogueHostsInClusterIssue>),
+    ArrayOfVsanUpgradeSystemRogueHostsInClusterIssue(Vec<super::structs::VsanUpgradeSystemRogueHostsInClusterIssue>),
     /// A boxed array of *VsanUpgradeSystemUpgradeHistoryDiskGroupOp*. To be used in *Any* placeholders.
-    ArrayOfVsanUpgradeSystemUpgradeHistoryDiskGroupOp(Vec<VsanUpgradeSystemUpgradeHistoryDiskGroupOp>),
+    ArrayOfVsanUpgradeSystemUpgradeHistoryDiskGroupOp(Vec<super::structs::VsanUpgradeSystemUpgradeHistoryDiskGroupOp>),
     /// A boxed array of *VsanUpgradeSystemUpgradeHistoryItem*. To be used in *Any* placeholders.
     ArrayOfVsanUpgradeSystemUpgradeHistoryItem(Vec<Box<dyn super::traits::VsanUpgradeSystemUpgradeHistoryItemTrait>>),
     /// A boxed array of *VsanUpgradeSystemUpgradeHistoryPreflightFail*. To be used in *Any* placeholders.
-    ArrayOfVsanUpgradeSystemUpgradeHistoryPreflightFail(Vec<VsanUpgradeSystemUpgradeHistoryPreflightFail>),
+    ArrayOfVsanUpgradeSystemUpgradeHistoryPreflightFail(Vec<super::structs::VsanUpgradeSystemUpgradeHistoryPreflightFail>),
     /// A boxed array of *VsanUpgradeSystemUpgradeStatus*. To be used in *Any* placeholders.
-    ArrayOfVsanUpgradeSystemUpgradeStatus(Vec<VsanUpgradeSystemUpgradeStatus>),
+    ArrayOfVsanUpgradeSystemUpgradeStatus(Vec<super::structs::VsanUpgradeSystemUpgradeStatus>),
     /// A boxed array of *VsanUpgradeSystemV2ObjectsPresentDuringDowngradeIssue*. To be used in *Any* placeholders.
-    ArrayOfVsanUpgradeSystemV2ObjectsPresentDuringDowngradeIssue(Vec<VsanUpgradeSystemV2ObjectsPresentDuringDowngradeIssue>),
+    ArrayOfVsanUpgradeSystemV2ObjectsPresentDuringDowngradeIssue(Vec<super::structs::VsanUpgradeSystemV2ObjectsPresentDuringDowngradeIssue>),
     /// A boxed array of *VsanUpgradeSystemWrongEsxVersionIssue*. To be used in *Any* placeholders.
-    ArrayOfVsanUpgradeSystemWrongEsxVersionIssue(Vec<VsanUpgradeSystemWrongEsxVersionIssue>),
+    ArrayOfVsanUpgradeSystemWrongEsxVersionIssue(Vec<super::structs::VsanUpgradeSystemWrongEsxVersionIssue>),
     /// A boxed array of *Action*. To be used in *Any* placeholders.
     ArrayOfAction(Vec<Box<dyn super::traits::ActionTrait>>),
     /// A boxed array of *CreateTaskAction*. To be used in *Any* placeholders.
-    ArrayOfCreateTaskAction(Vec<CreateTaskAction>),
+    ArrayOfCreateTaskAction(Vec<super::structs::CreateTaskAction>),
     /// A boxed array of *MethodAction*. To be used in *Any* placeholders.
-    ArrayOfMethodAction(Vec<MethodAction>),
+    ArrayOfMethodAction(Vec<super::structs::MethodAction>),
     /// A boxed array of *MethodActionArgument*. To be used in *Any* placeholders.
-    ArrayOfMethodActionArgument(Vec<MethodActionArgument>),
+    ArrayOfMethodActionArgument(Vec<super::structs::MethodActionArgument>),
     /// A boxed array of *RunScriptAction*. To be used in *Any* placeholders.
-    ArrayOfRunScriptAction(Vec<RunScriptAction>),
+    ArrayOfRunScriptAction(Vec<super::structs::RunScriptAction>),
     /// A boxed array of *SendEmailAction*. To be used in *Any* placeholders.
-    ArrayOfSendEmailAction(Vec<SendEmailAction>),
+    ArrayOfSendEmailAction(Vec<super::structs::SendEmailAction>),
     /// A boxed array of *SendSNMPAction*. To be used in *Any* placeholders.
-    ArrayOfSendSnmpAction(Vec<SendSnmpAction>),
+    ArrayOfSendSnmpAction(Vec<super::structs::SendSnmpAction>),
     /// A boxed array of *AlarmAction*. To be used in *Any* placeholders.
     ArrayOfAlarmAction(Vec<Box<dyn super::traits::AlarmActionTrait>>),
     /// A boxed array of *AlarmDescription*. To be used in *Any* placeholders.
-    ArrayOfAlarmDescription(Vec<AlarmDescription>),
+    ArrayOfAlarmDescription(Vec<super::structs::AlarmDescription>),
     /// A boxed array of *AlarmExpression*. To be used in *Any* placeholders.
     ArrayOfAlarmExpression(Vec<Box<dyn super::traits::AlarmExpressionTrait>>),
     /// A boxed array of *AlarmFilterSpec*. To be used in *Any* placeholders.
-    ArrayOfAlarmFilterSpec(Vec<AlarmFilterSpec>),
+    ArrayOfAlarmFilterSpec(Vec<super::structs::AlarmFilterSpec>),
     /// A boxed array of *AlarmInfo*. To be used in *Any* placeholders.
-    ArrayOfAlarmInfo(Vec<AlarmInfo>),
+    ArrayOfAlarmInfo(Vec<super::structs::AlarmInfo>),
     /// A boxed array of *AlarmSetting*. To be used in *Any* placeholders.
-    ArrayOfAlarmSetting(Vec<AlarmSetting>),
+    ArrayOfAlarmSetting(Vec<super::structs::AlarmSetting>),
     /// A boxed array of *AlarmSpec*. To be used in *Any* placeholders.
     ArrayOfAlarmSpec(Vec<Box<dyn super::traits::AlarmSpecTrait>>),
     /// A boxed array of *AlarmState*. To be used in *Any* placeholders.
-    ArrayOfAlarmState(Vec<AlarmState>),
+    ArrayOfAlarmState(Vec<super::structs::AlarmState>),
     /// A boxed array of *AlarmTriggeringAction*. To be used in *Any* placeholders.
-    ArrayOfAlarmTriggeringAction(Vec<AlarmTriggeringAction>),
+    ArrayOfAlarmTriggeringAction(Vec<super::structs::AlarmTriggeringAction>),
     /// A boxed array of *AlarmTriggeringActionTransitionSpec*. To be used in *Any* placeholders.
-    ArrayOfAlarmTriggeringActionTransitionSpec(Vec<AlarmTriggeringActionTransitionSpec>),
+    ArrayOfAlarmTriggeringActionTransitionSpec(Vec<super::structs::AlarmTriggeringActionTransitionSpec>),
     /// A boxed array of *AndAlarmExpression*. To be used in *Any* placeholders.
-    ArrayOfAndAlarmExpression(Vec<AndAlarmExpression>),
+    ArrayOfAndAlarmExpression(Vec<super::structs::AndAlarmExpression>),
     /// A boxed array of *EventAlarmExpression*. To be used in *Any* placeholders.
-    ArrayOfEventAlarmExpression(Vec<EventAlarmExpression>),
+    ArrayOfEventAlarmExpression(Vec<super::structs::EventAlarmExpression>),
     /// A boxed array of *EventAlarmExpressionComparison*. To be used in *Any* placeholders.
-    ArrayOfEventAlarmExpressionComparison(Vec<EventAlarmExpressionComparison>),
+    ArrayOfEventAlarmExpressionComparison(Vec<super::structs::EventAlarmExpressionComparison>),
     /// A boxed array of *GroupAlarmAction*. To be used in *Any* placeholders.
-    ArrayOfGroupAlarmAction(Vec<GroupAlarmAction>),
+    ArrayOfGroupAlarmAction(Vec<super::structs::GroupAlarmAction>),
     /// A boxed array of *MetricAlarmExpression*. To be used in *Any* placeholders.
-    ArrayOfMetricAlarmExpression(Vec<MetricAlarmExpression>),
+    ArrayOfMetricAlarmExpression(Vec<super::structs::MetricAlarmExpression>),
     /// A boxed array of *OrAlarmExpression*. To be used in *Any* placeholders.
-    ArrayOfOrAlarmExpression(Vec<OrAlarmExpression>),
+    ArrayOfOrAlarmExpression(Vec<super::structs::OrAlarmExpression>),
     /// A boxed array of *StateAlarmExpression*. To be used in *Any* placeholders.
-    ArrayOfStateAlarmExpression(Vec<StateAlarmExpression>),
+    ArrayOfStateAlarmExpression(Vec<super::structs::StateAlarmExpression>),
     /// A boxed array of *ClusterAction*. To be used in *Any* placeholders.
     ArrayOfClusterAction(Vec<Box<dyn super::traits::ClusterActionTrait>>),
     /// A boxed array of *ClusterActionHistory*. To be used in *Any* placeholders.
-    ArrayOfClusterActionHistory(Vec<ClusterActionHistory>),
+    ArrayOfClusterActionHistory(Vec<super::structs::ClusterActionHistory>),
     /// A boxed array of *ClusterAffinityRuleSpec*. To be used in *Any* placeholders.
-    ArrayOfClusterAffinityRuleSpec(Vec<ClusterAffinityRuleSpec>),
+    ArrayOfClusterAffinityRuleSpec(Vec<super::structs::ClusterAffinityRuleSpec>),
     /// A boxed array of *ClusterAntiAffinityRuleSpec*. To be used in *Any* placeholders.
-    ArrayOfClusterAntiAffinityRuleSpec(Vec<ClusterAntiAffinityRuleSpec>),
+    ArrayOfClusterAntiAffinityRuleSpec(Vec<super::structs::ClusterAntiAffinityRuleSpec>),
     /// A boxed array of *ClusterAttemptedVmInfo*. To be used in *Any* placeholders.
-    ArrayOfClusterAttemptedVmInfo(Vec<ClusterAttemptedVmInfo>),
+    ArrayOfClusterAttemptedVmInfo(Vec<super::structs::ClusterAttemptedVmInfo>),
     /// A boxed array of *ClusterClusterInitialPlacementAction*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 8.0.0.1
-    ArrayOfClusterClusterInitialPlacementAction(Vec<ClusterClusterInitialPlacementAction>),
+    ArrayOfClusterClusterInitialPlacementAction(Vec<super::structs::ClusterClusterInitialPlacementAction>),
     /// A boxed array of *ClusterConfigInfo*. To be used in *Any* placeholders.
-    ArrayOfClusterConfigInfo(Vec<ClusterConfigInfo>),
+    ArrayOfClusterConfigInfo(Vec<super::structs::ClusterConfigInfo>),
     /// A boxed array of *ClusterConfigInfoEx*. To be used in *Any* placeholders.
-    ArrayOfClusterConfigInfoEx(Vec<ClusterConfigInfoEx>),
+    ArrayOfClusterConfigInfoEx(Vec<super::structs::ClusterConfigInfoEx>),
     /// A boxed array of *ClusterConfigSpec*. To be used in *Any* placeholders.
-    ArrayOfClusterConfigSpec(Vec<ClusterConfigSpec>),
+    ArrayOfClusterConfigSpec(Vec<super::structs::ClusterConfigSpec>),
     /// A boxed array of *ClusterConfigSpecEx*. To be used in *Any* placeholders.
-    ArrayOfClusterConfigSpecEx(Vec<ClusterConfigSpecEx>),
+    ArrayOfClusterConfigSpecEx(Vec<super::structs::ClusterConfigSpecEx>),
     /// A boxed array of *ClusterCryptoConfigInfo*. To be used in *Any* placeholders.
-    ArrayOfClusterCryptoConfigInfo(Vec<ClusterCryptoConfigInfo>),
+    ArrayOfClusterCryptoConfigInfo(Vec<super::structs::ClusterCryptoConfigInfo>),
     /// A boxed array of *ClusterDasAamHostInfo*. To be used in *Any* placeholders.
-    ArrayOfClusterDasAamHostInfo(Vec<ClusterDasAamHostInfo>),
+    ArrayOfClusterDasAamHostInfo(Vec<super::structs::ClusterDasAamHostInfo>),
     /// A boxed array of *ClusterDasAamNodeState*. To be used in *Any* placeholders.
-    ArrayOfClusterDasAamNodeState(Vec<ClusterDasAamNodeState>),
+    ArrayOfClusterDasAamNodeState(Vec<super::structs::ClusterDasAamNodeState>),
     /// A boxed array of *ClusterDasAdmissionControlInfo*. To be used in *Any* placeholders.
     ArrayOfClusterDasAdmissionControlInfo(Vec<Box<dyn super::traits::ClusterDasAdmissionControlInfoTrait>>),
     /// A boxed array of *ClusterDasAdmissionControlPolicy*. To be used in *Any* placeholders.
@@ -761,2865 +759,2865 @@ pub enum ValueElements {
     /// A boxed array of *ClusterDasAdvancedRuntimeInfo*. To be used in *Any* placeholders.
     ArrayOfClusterDasAdvancedRuntimeInfo(Vec<Box<dyn super::traits::ClusterDasAdvancedRuntimeInfoTrait>>),
     /// A boxed array of *DasHeartbeatDatastoreInfo*. To be used in *Any* placeholders.
-    ArrayOfDasHeartbeatDatastoreInfo(Vec<DasHeartbeatDatastoreInfo>),
+    ArrayOfDasHeartbeatDatastoreInfo(Vec<super::structs::DasHeartbeatDatastoreInfo>),
     /// A boxed array of *ClusterDasAdvancedRuntimeInfoVmcpCapabilityInfo*. To be used in *Any* placeholders.
-    ArrayOfClusterDasAdvancedRuntimeInfoVmcpCapabilityInfo(Vec<ClusterDasAdvancedRuntimeInfoVmcpCapabilityInfo>),
+    ArrayOfClusterDasAdvancedRuntimeInfoVmcpCapabilityInfo(Vec<super::structs::ClusterDasAdvancedRuntimeInfoVmcpCapabilityInfo>),
     /// A boxed array of *ClusterDasConfigInfo*. To be used in *Any* placeholders.
-    ArrayOfClusterDasConfigInfo(Vec<ClusterDasConfigInfo>),
+    ArrayOfClusterDasConfigInfo(Vec<super::structs::ClusterDasConfigInfo>),
     /// A boxed array of *ClusterDasData*. To be used in *Any* placeholders.
     ArrayOfClusterDasData(Vec<Box<dyn super::traits::ClusterDasDataTrait>>),
     /// A boxed array of *ClusterDasDataSummary*. To be used in *Any* placeholders.
-    ArrayOfClusterDasDataSummary(Vec<ClusterDasDataSummary>),
+    ArrayOfClusterDasDataSummary(Vec<super::structs::ClusterDasDataSummary>),
     /// A boxed array of *ClusterDasFailoverLevelAdvancedRuntimeInfo*. To be used in *Any* placeholders.
-    ArrayOfClusterDasFailoverLevelAdvancedRuntimeInfo(Vec<ClusterDasFailoverLevelAdvancedRuntimeInfo>),
+    ArrayOfClusterDasFailoverLevelAdvancedRuntimeInfo(Vec<super::structs::ClusterDasFailoverLevelAdvancedRuntimeInfo>),
     /// A boxed array of *ClusterDasFailoverLevelAdvancedRuntimeInfoHostSlots*. To be used in *Any* placeholders.
-    ArrayOfClusterDasFailoverLevelAdvancedRuntimeInfoHostSlots(Vec<ClusterDasFailoverLevelAdvancedRuntimeInfoHostSlots>),
+    ArrayOfClusterDasFailoverLevelAdvancedRuntimeInfoHostSlots(Vec<super::structs::ClusterDasFailoverLevelAdvancedRuntimeInfoHostSlots>),
     /// A boxed array of *ClusterDasFailoverLevelAdvancedRuntimeInfoSlotInfo*. To be used in *Any* placeholders.
-    ArrayOfClusterDasFailoverLevelAdvancedRuntimeInfoSlotInfo(Vec<ClusterDasFailoverLevelAdvancedRuntimeInfoSlotInfo>),
+    ArrayOfClusterDasFailoverLevelAdvancedRuntimeInfoSlotInfo(Vec<super::structs::ClusterDasFailoverLevelAdvancedRuntimeInfoSlotInfo>),
     /// A boxed array of *ClusterDasFailoverLevelAdvancedRuntimeInfoVmSlots*. To be used in *Any* placeholders.
-    ArrayOfClusterDasFailoverLevelAdvancedRuntimeInfoVmSlots(Vec<ClusterDasFailoverLevelAdvancedRuntimeInfoVmSlots>),
+    ArrayOfClusterDasFailoverLevelAdvancedRuntimeInfoVmSlots(Vec<super::structs::ClusterDasFailoverLevelAdvancedRuntimeInfoVmSlots>),
     /// A boxed array of *ClusterDasFdmHostState*. To be used in *Any* placeholders.
-    ArrayOfClusterDasFdmHostState(Vec<ClusterDasFdmHostState>),
+    ArrayOfClusterDasFdmHostState(Vec<super::structs::ClusterDasFdmHostState>),
     /// A boxed array of *ClusterDasHostInfo*. To be used in *Any* placeholders.
     ArrayOfClusterDasHostInfo(Vec<Box<dyn super::traits::ClusterDasHostInfoTrait>>),
     /// A boxed array of *ClusterDasHostRecommendation*. To be used in *Any* placeholders.
-    ArrayOfClusterDasHostRecommendation(Vec<ClusterDasHostRecommendation>),
+    ArrayOfClusterDasHostRecommendation(Vec<super::structs::ClusterDasHostRecommendation>),
     /// A boxed array of *ClusterDasVmConfigInfo*. To be used in *Any* placeholders.
-    ArrayOfClusterDasVmConfigInfo(Vec<ClusterDasVmConfigInfo>),
+    ArrayOfClusterDasVmConfigInfo(Vec<super::structs::ClusterDasVmConfigInfo>),
     /// A boxed array of *ClusterDasVmConfigSpec*. To be used in *Any* placeholders.
-    ArrayOfClusterDasVmConfigSpec(Vec<ClusterDasVmConfigSpec>),
+    ArrayOfClusterDasVmConfigSpec(Vec<super::structs::ClusterDasVmConfigSpec>),
     /// A boxed array of *ClusterDasVmSettings*. To be used in *Any* placeholders.
-    ArrayOfClusterDasVmSettings(Vec<ClusterDasVmSettings>),
+    ArrayOfClusterDasVmSettings(Vec<super::structs::ClusterDasVmSettings>),
     /// A boxed array of *ClusterDatastoreUpdateSpec*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 7.0.3.0
-    ArrayOfClusterDatastoreUpdateSpec(Vec<ClusterDatastoreUpdateSpec>),
+    ArrayOfClusterDatastoreUpdateSpec(Vec<super::structs::ClusterDatastoreUpdateSpec>),
     /// A boxed array of *ClusterDependencyRuleInfo*. To be used in *Any* placeholders.
-    ArrayOfClusterDependencyRuleInfo(Vec<ClusterDependencyRuleInfo>),
+    ArrayOfClusterDependencyRuleInfo(Vec<super::structs::ClusterDependencyRuleInfo>),
     /// A boxed array of *ClusterDpmConfigInfo*. To be used in *Any* placeholders.
-    ArrayOfClusterDpmConfigInfo(Vec<ClusterDpmConfigInfo>),
+    ArrayOfClusterDpmConfigInfo(Vec<super::structs::ClusterDpmConfigInfo>),
     /// A boxed array of *ClusterDpmHostConfigInfo*. To be used in *Any* placeholders.
-    ArrayOfClusterDpmHostConfigInfo(Vec<ClusterDpmHostConfigInfo>),
+    ArrayOfClusterDpmHostConfigInfo(Vec<super::structs::ClusterDpmHostConfigInfo>),
     /// A boxed array of *ClusterDpmHostConfigSpec*. To be used in *Any* placeholders.
-    ArrayOfClusterDpmHostConfigSpec(Vec<ClusterDpmHostConfigSpec>),
+    ArrayOfClusterDpmHostConfigSpec(Vec<super::structs::ClusterDpmHostConfigSpec>),
     /// A boxed array of *ClusterDrsConfigInfo*. To be used in *Any* placeholders.
-    ArrayOfClusterDrsConfigInfo(Vec<ClusterDrsConfigInfo>),
+    ArrayOfClusterDrsConfigInfo(Vec<super::structs::ClusterDrsConfigInfo>),
     /// A boxed array of *ClusterDrsFaults*. To be used in *Any* placeholders.
-    ArrayOfClusterDrsFaults(Vec<ClusterDrsFaults>),
+    ArrayOfClusterDrsFaults(Vec<super::structs::ClusterDrsFaults>),
     /// A boxed array of *ClusterDrsFaultsFaultsByVirtualDisk*. To be used in *Any* placeholders.
-    ArrayOfClusterDrsFaultsFaultsByVirtualDisk(Vec<ClusterDrsFaultsFaultsByVirtualDisk>),
+    ArrayOfClusterDrsFaultsFaultsByVirtualDisk(Vec<super::structs::ClusterDrsFaultsFaultsByVirtualDisk>),
     /// A boxed array of *ClusterDrsFaultsFaultsByVm*. To be used in *Any* placeholders.
     ArrayOfClusterDrsFaultsFaultsByVm(Vec<Box<dyn super::traits::ClusterDrsFaultsFaultsByVmTrait>>),
     /// A boxed array of *ClusterDrsMigration*. To be used in *Any* placeholders.
-    ArrayOfClusterDrsMigration(Vec<ClusterDrsMigration>),
+    ArrayOfClusterDrsMigration(Vec<super::structs::ClusterDrsMigration>),
     /// A boxed array of *ClusterDrsRecommendation*. To be used in *Any* placeholders.
-    ArrayOfClusterDrsRecommendation(Vec<ClusterDrsRecommendation>),
+    ArrayOfClusterDrsRecommendation(Vec<super::structs::ClusterDrsRecommendation>),
     /// A boxed array of *ClusterDrsVmConfigInfo*. To be used in *Any* placeholders.
-    ArrayOfClusterDrsVmConfigInfo(Vec<ClusterDrsVmConfigInfo>),
+    ArrayOfClusterDrsVmConfigInfo(Vec<super::structs::ClusterDrsVmConfigInfo>),
     /// A boxed array of *ClusterDrsVmConfigSpec*. To be used in *Any* placeholders.
-    ArrayOfClusterDrsVmConfigSpec(Vec<ClusterDrsVmConfigSpec>),
+    ArrayOfClusterDrsVmConfigSpec(Vec<super::structs::ClusterDrsVmConfigSpec>),
     /// A boxed array of *ClusterEVCManagerCheckResult*. To be used in *Any* placeholders.
-    ArrayOfClusterEvcManagerCheckResult(Vec<ClusterEvcManagerCheckResult>),
+    ArrayOfClusterEvcManagerCheckResult(Vec<super::structs::ClusterEvcManagerCheckResult>),
     /// A boxed array of *ClusterEVCManagerEVCState*. To be used in *Any* placeholders.
-    ArrayOfClusterEvcManagerEvcState(Vec<ClusterEvcManagerEvcState>),
+    ArrayOfClusterEvcManagerEvcState(Vec<super::structs::ClusterEvcManagerEvcState>),
     /// A boxed array of *ClusterEnterMaintenanceResult*. To be used in *Any* placeholders.
-    ArrayOfClusterEnterMaintenanceResult(Vec<ClusterEnterMaintenanceResult>),
+    ArrayOfClusterEnterMaintenanceResult(Vec<super::structs::ClusterEnterMaintenanceResult>),
     /// A boxed array of *ClusterFailoverHostAdmissionControlInfo*. To be used in *Any* placeholders.
-    ArrayOfClusterFailoverHostAdmissionControlInfo(Vec<ClusterFailoverHostAdmissionControlInfo>),
+    ArrayOfClusterFailoverHostAdmissionControlInfo(Vec<super::structs::ClusterFailoverHostAdmissionControlInfo>),
     /// A boxed array of *ClusterFailoverHostAdmissionControlInfoHostStatus*. To be used in *Any* placeholders.
-    ArrayOfClusterFailoverHostAdmissionControlInfoHostStatus(Vec<ClusterFailoverHostAdmissionControlInfoHostStatus>),
+    ArrayOfClusterFailoverHostAdmissionControlInfoHostStatus(Vec<super::structs::ClusterFailoverHostAdmissionControlInfoHostStatus>),
     /// A boxed array of *ClusterFailoverHostAdmissionControlPolicy*. To be used in *Any* placeholders.
-    ArrayOfClusterFailoverHostAdmissionControlPolicy(Vec<ClusterFailoverHostAdmissionControlPolicy>),
+    ArrayOfClusterFailoverHostAdmissionControlPolicy(Vec<super::structs::ClusterFailoverHostAdmissionControlPolicy>),
     /// A boxed array of *ClusterFailoverLevelAdmissionControlInfo*. To be used in *Any* placeholders.
-    ArrayOfClusterFailoverLevelAdmissionControlInfo(Vec<ClusterFailoverLevelAdmissionControlInfo>),
+    ArrayOfClusterFailoverLevelAdmissionControlInfo(Vec<super::structs::ClusterFailoverLevelAdmissionControlInfo>),
     /// A boxed array of *ClusterFailoverLevelAdmissionControlPolicy*. To be used in *Any* placeholders.
-    ArrayOfClusterFailoverLevelAdmissionControlPolicy(Vec<ClusterFailoverLevelAdmissionControlPolicy>),
+    ArrayOfClusterFailoverLevelAdmissionControlPolicy(Vec<super::structs::ClusterFailoverLevelAdmissionControlPolicy>),
     /// A boxed array of *ClusterFailoverResourcesAdmissionControlInfo*. To be used in *Any* placeholders.
-    ArrayOfClusterFailoverResourcesAdmissionControlInfo(Vec<ClusterFailoverResourcesAdmissionControlInfo>),
+    ArrayOfClusterFailoverResourcesAdmissionControlInfo(Vec<super::structs::ClusterFailoverResourcesAdmissionControlInfo>),
     /// A boxed array of *ClusterFailoverResourcesAdmissionControlPolicy*. To be used in *Any* placeholders.
-    ArrayOfClusterFailoverResourcesAdmissionControlPolicy(Vec<ClusterFailoverResourcesAdmissionControlPolicy>),
+    ArrayOfClusterFailoverResourcesAdmissionControlPolicy(Vec<super::structs::ClusterFailoverResourcesAdmissionControlPolicy>),
     /// A boxed array of *ClusterFixedSizeSlotPolicy*. To be used in *Any* placeholders.
-    ArrayOfClusterFixedSizeSlotPolicy(Vec<ClusterFixedSizeSlotPolicy>),
+    ArrayOfClusterFixedSizeSlotPolicy(Vec<super::structs::ClusterFixedSizeSlotPolicy>),
     /// A boxed array of *ClusterGroupInfo*. To be used in *Any* placeholders.
     ArrayOfClusterGroupInfo(Vec<Box<dyn super::traits::ClusterGroupInfoTrait>>),
     /// A boxed array of *ClusterGroupSpec*. To be used in *Any* placeholders.
-    ArrayOfClusterGroupSpec(Vec<ClusterGroupSpec>),
+    ArrayOfClusterGroupSpec(Vec<super::structs::ClusterGroupSpec>),
     /// A boxed array of *ClusterHostGroup*. To be used in *Any* placeholders.
-    ArrayOfClusterHostGroup(Vec<ClusterHostGroup>),
+    ArrayOfClusterHostGroup(Vec<super::structs::ClusterHostGroup>),
     /// A boxed array of *ClusterHostInfraUpdateHaModeAction*. To be used in *Any* placeholders.
-    ArrayOfClusterHostInfraUpdateHaModeAction(Vec<ClusterHostInfraUpdateHaModeAction>),
+    ArrayOfClusterHostInfraUpdateHaModeAction(Vec<super::structs::ClusterHostInfraUpdateHaModeAction>),
     /// A boxed array of *ClusterHostPowerAction*. To be used in *Any* placeholders.
-    ArrayOfClusterHostPowerAction(Vec<ClusterHostPowerAction>),
+    ArrayOfClusterHostPowerAction(Vec<super::structs::ClusterHostPowerAction>),
     /// A boxed array of *ClusterHostRecommendation*. To be used in *Any* placeholders.
-    ArrayOfClusterHostRecommendation(Vec<ClusterHostRecommendation>),
+    ArrayOfClusterHostRecommendation(Vec<super::structs::ClusterHostRecommendation>),
     /// A boxed array of *ClusterInfraUpdateHaConfigInfo*. To be used in *Any* placeholders.
-    ArrayOfClusterInfraUpdateHaConfigInfo(Vec<ClusterInfraUpdateHaConfigInfo>),
+    ArrayOfClusterInfraUpdateHaConfigInfo(Vec<super::structs::ClusterInfraUpdateHaConfigInfo>),
     /// A boxed array of *ClusterInitialPlacementAction*. To be used in *Any* placeholders.
-    ArrayOfClusterInitialPlacementAction(Vec<ClusterInitialPlacementAction>),
+    ArrayOfClusterInitialPlacementAction(Vec<super::structs::ClusterInitialPlacementAction>),
     /// A boxed array of *ClusterMigrationAction*. To be used in *Any* placeholders.
-    ArrayOfClusterMigrationAction(Vec<ClusterMigrationAction>),
+    ArrayOfClusterMigrationAction(Vec<super::structs::ClusterMigrationAction>),
     /// A boxed array of *ClusterNotAttemptedVmInfo*. To be used in *Any* placeholders.
-    ArrayOfClusterNotAttemptedVmInfo(Vec<ClusterNotAttemptedVmInfo>),
+    ArrayOfClusterNotAttemptedVmInfo(Vec<super::structs::ClusterNotAttemptedVmInfo>),
     /// A boxed array of *ClusterOrchestrationInfo*. To be used in *Any* placeholders.
-    ArrayOfClusterOrchestrationInfo(Vec<ClusterOrchestrationInfo>),
+    ArrayOfClusterOrchestrationInfo(Vec<super::structs::ClusterOrchestrationInfo>),
     /// A boxed array of *PlacementAction*. To be used in *Any* placeholders.
-    ArrayOfPlacementAction(Vec<PlacementAction>),
+    ArrayOfPlacementAction(Vec<super::structs::PlacementAction>),
     /// A boxed array of *PlacementResult*. To be used in *Any* placeholders.
-    ArrayOfPlacementResult(Vec<PlacementResult>),
+    ArrayOfPlacementResult(Vec<super::structs::PlacementResult>),
     /// A boxed array of *PlacementSpec*. To be used in *Any* placeholders.
-    ArrayOfPlacementSpec(Vec<PlacementSpec>),
+    ArrayOfPlacementSpec(Vec<super::structs::PlacementSpec>),
     /// A boxed array of *ClusterPowerOnVmResult*. To be used in *Any* placeholders.
-    ArrayOfClusterPowerOnVmResult(Vec<ClusterPowerOnVmResult>),
+    ArrayOfClusterPowerOnVmResult(Vec<super::structs::ClusterPowerOnVmResult>),
     /// A boxed array of *ClusterPreemptibleVmPairInfo*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 8.0.0.1
-    ArrayOfClusterPreemptibleVmPairInfo(Vec<ClusterPreemptibleVmPairInfo>),
+    ArrayOfClusterPreemptibleVmPairInfo(Vec<super::structs::ClusterPreemptibleVmPairInfo>),
     /// A boxed array of *ClusterPreemptibleVmPairSpec*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 8.0.0.1
-    ArrayOfClusterPreemptibleVmPairSpec(Vec<ClusterPreemptibleVmPairSpec>),
+    ArrayOfClusterPreemptibleVmPairSpec(Vec<super::structs::ClusterPreemptibleVmPairSpec>),
     /// A boxed array of *ClusterProactiveDrsConfigInfo*. To be used in *Any* placeholders.
-    ArrayOfClusterProactiveDrsConfigInfo(Vec<ClusterProactiveDrsConfigInfo>),
+    ArrayOfClusterProactiveDrsConfigInfo(Vec<super::structs::ClusterProactiveDrsConfigInfo>),
     /// A boxed array of *ClusterRecommendation*. To be used in *Any* placeholders.
-    ArrayOfClusterRecommendation(Vec<ClusterRecommendation>),
+    ArrayOfClusterRecommendation(Vec<super::structs::ClusterRecommendation>),
     /// A boxed array of *ClusterResourceUsageSummary*. To be used in *Any* placeholders.
-    ArrayOfClusterResourceUsageSummary(Vec<ClusterResourceUsageSummary>),
+    ArrayOfClusterResourceUsageSummary(Vec<super::structs::ClusterResourceUsageSummary>),
     /// A boxed array of *ClusterRuleInfo*. To be used in *Any* placeholders.
     ArrayOfClusterRuleInfo(Vec<Box<dyn super::traits::ClusterRuleInfoTrait>>),
     /// A boxed array of *ClusterRuleSpec*. To be used in *Any* placeholders.
-    ArrayOfClusterRuleSpec(Vec<ClusterRuleSpec>),
+    ArrayOfClusterRuleSpec(Vec<super::structs::ClusterRuleSpec>),
     /// A boxed array of *ClusterSlotPolicy*. To be used in *Any* placeholders.
     ArrayOfClusterSlotPolicy(Vec<Box<dyn super::traits::ClusterSlotPolicyTrait>>),
     /// A boxed array of *ClusterSystemVMsConfigInfo*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 7.0.3.0
-    ArrayOfClusterSystemVMsConfigInfo(Vec<ClusterSystemVMsConfigInfo>),
+    ArrayOfClusterSystemVMsConfigInfo(Vec<super::structs::ClusterSystemVMsConfigInfo>),
     /// A boxed array of *ClusterSystemVMsConfigSpec*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 7.0.3.0
-    ArrayOfClusterSystemVMsConfigSpec(Vec<ClusterSystemVMsConfigSpec>),
+    ArrayOfClusterSystemVMsConfigSpec(Vec<super::structs::ClusterSystemVMsConfigSpec>),
     /// A boxed array of *ClusterTagCategoryUpdateSpec*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 7.0.3.0
-    ArrayOfClusterTagCategoryUpdateSpec(Vec<ClusterTagCategoryUpdateSpec>),
+    ArrayOfClusterTagCategoryUpdateSpec(Vec<super::structs::ClusterTagCategoryUpdateSpec>),
     /// A boxed array of *ClusterUsageSummary*. To be used in *Any* placeholders.
-    ArrayOfClusterUsageSummary(Vec<ClusterUsageSummary>),
+    ArrayOfClusterUsageSummary(Vec<super::structs::ClusterUsageSummary>),
     /// A boxed array of *ClusterVmComponentProtectionSettings*. To be used in *Any* placeholders.
-    ArrayOfClusterVmComponentProtectionSettings(Vec<ClusterVmComponentProtectionSettings>),
+    ArrayOfClusterVmComponentProtectionSettings(Vec<super::structs::ClusterVmComponentProtectionSettings>),
     /// A boxed array of *ClusterVmGroup*. To be used in *Any* placeholders.
-    ArrayOfClusterVmGroup(Vec<ClusterVmGroup>),
+    ArrayOfClusterVmGroup(Vec<super::structs::ClusterVmGroup>),
     /// A boxed array of *ClusterVmHostRuleInfo*. To be used in *Any* placeholders.
-    ArrayOfClusterVmHostRuleInfo(Vec<ClusterVmHostRuleInfo>),
+    ArrayOfClusterVmHostRuleInfo(Vec<super::structs::ClusterVmHostRuleInfo>),
     /// A boxed array of *ClusterVmOrchestrationInfo*. To be used in *Any* placeholders.
-    ArrayOfClusterVmOrchestrationInfo(Vec<ClusterVmOrchestrationInfo>),
+    ArrayOfClusterVmOrchestrationInfo(Vec<super::structs::ClusterVmOrchestrationInfo>),
     /// A boxed array of *ClusterVmOrchestrationSpec*. To be used in *Any* placeholders.
-    ArrayOfClusterVmOrchestrationSpec(Vec<ClusterVmOrchestrationSpec>),
+    ArrayOfClusterVmOrchestrationSpec(Vec<super::structs::ClusterVmOrchestrationSpec>),
     /// A boxed array of *ClusterVmReadiness*. To be used in *Any* placeholders.
-    ArrayOfClusterVmReadiness(Vec<ClusterVmReadiness>),
+    ArrayOfClusterVmReadiness(Vec<super::structs::ClusterVmReadiness>),
     /// A boxed array of *ClusterVmToolsMonitoringSettings*. To be used in *Any* placeholders.
-    ArrayOfClusterVmToolsMonitoringSettings(Vec<ClusterVmToolsMonitoringSettings>),
+    ArrayOfClusterVmToolsMonitoringSettings(Vec<super::structs::ClusterVmToolsMonitoringSettings>),
     /// A boxed array of *DistributedVirtualPort*. To be used in *Any* placeholders.
-    ArrayOfDistributedVirtualPort(Vec<DistributedVirtualPort>),
+    ArrayOfDistributedVirtualPort(Vec<super::structs::DistributedVirtualPort>),
     /// A boxed array of *DVPortConfigInfo*. To be used in *Any* placeholders.
-    ArrayOfDvPortConfigInfo(Vec<DvPortConfigInfo>),
+    ArrayOfDvPortConfigInfo(Vec<super::structs::DvPortConfigInfo>),
     /// A boxed array of *DVPortConfigSpec*. To be used in *Any* placeholders.
-    ArrayOfDvPortConfigSpec(Vec<DvPortConfigSpec>),
+    ArrayOfDvPortConfigSpec(Vec<super::structs::DvPortConfigSpec>),
     /// A boxed array of *DvsFilterConfig*. To be used in *Any* placeholders.
     ArrayOfDvsFilterConfig(Vec<Box<dyn super::traits::DvsFilterConfigTrait>>),
     /// A boxed array of *DvsFilterConfigSpec*. To be used in *Any* placeholders.
-    ArrayOfDvsFilterConfigSpec(Vec<DvsFilterConfigSpec>),
+    ArrayOfDvsFilterConfigSpec(Vec<super::structs::DvsFilterConfigSpec>),
     /// A boxed array of *DvsFilterParameter*. To be used in *Any* placeholders.
-    ArrayOfDvsFilterParameter(Vec<DvsFilterParameter>),
+    ArrayOfDvsFilterParameter(Vec<super::structs::DvsFilterParameter>),
     /// A boxed array of *DvsFilterPolicy*. To be used in *Any* placeholders.
-    ArrayOfDvsFilterPolicy(Vec<DvsFilterPolicy>),
+    ArrayOfDvsFilterPolicy(Vec<super::structs::DvsFilterPolicy>),
     /// A boxed array of *DVSHostLocalPortInfo*. To be used in *Any* placeholders.
-    ArrayOfDvsHostLocalPortInfo(Vec<DvsHostLocalPortInfo>),
+    ArrayOfDvsHostLocalPortInfo(Vec<super::structs::DvsHostLocalPortInfo>),
     /// A boxed array of *DVPortStatus*. To be used in *Any* placeholders.
-    ArrayOfDvPortStatus(Vec<DvPortStatus>),
+    ArrayOfDvPortStatus(Vec<super::structs::DvPortStatus>),
     /// A boxed array of *DVPortSetting*. To be used in *Any* placeholders.
     ArrayOfDvPortSetting(Vec<Box<dyn super::traits::DvPortSettingTrait>>),
     /// A boxed array of *DVPortState*. To be used in *Any* placeholders.
-    ArrayOfDvPortState(Vec<DvPortState>),
+    ArrayOfDvPortState(Vec<super::structs::DvPortState>),
     /// A boxed array of *DvsTrafficFilterConfig*. To be used in *Any* placeholders.
     ArrayOfDvsTrafficFilterConfig(Vec<Box<dyn super::traits::DvsTrafficFilterConfigTrait>>),
     /// A boxed array of *DvsTrafficFilterConfigSpec*. To be used in *Any* placeholders.
-    ArrayOfDvsTrafficFilterConfigSpec(Vec<DvsTrafficFilterConfigSpec>),
+    ArrayOfDvsTrafficFilterConfigSpec(Vec<super::structs::DvsTrafficFilterConfigSpec>),
     /// A boxed array of *DVSTrafficShapingPolicy*. To be used in *Any* placeholders.
-    ArrayOfDvsTrafficShapingPolicy(Vec<DvsTrafficShapingPolicy>),
+    ArrayOfDvsTrafficShapingPolicy(Vec<super::structs::DvsTrafficShapingPolicy>),
     /// A boxed array of *DVSVendorSpecificConfig*. To be used in *Any* placeholders.
-    ArrayOfDvsVendorSpecificConfig(Vec<DvsVendorSpecificConfig>),
+    ArrayOfDvsVendorSpecificConfig(Vec<super::structs::DvsVendorSpecificConfig>),
     /// A boxed array of *DVPortgroupConfigInfo*. To be used in *Any* placeholders.
-    ArrayOfDvPortgroupConfigInfo(Vec<DvPortgroupConfigInfo>),
+    ArrayOfDvPortgroupConfigInfo(Vec<super::structs::DvPortgroupConfigInfo>),
     /// A boxed array of *DVPortgroupConfigSpec*. To be used in *Any* placeholders.
-    ArrayOfDvPortgroupConfigSpec(Vec<DvPortgroupConfigSpec>),
+    ArrayOfDvPortgroupConfigSpec(Vec<super::structs::DvPortgroupConfigSpec>),
     /// A boxed array of *DistributedVirtualPortgroupNsxPortgroupOperationResult*. To be used in *Any* placeholders.
-    ArrayOfDistributedVirtualPortgroupNsxPortgroupOperationResult(Vec<DistributedVirtualPortgroupNsxPortgroupOperationResult>),
+    ArrayOfDistributedVirtualPortgroupNsxPortgroupOperationResult(Vec<super::structs::DistributedVirtualPortgroupNsxPortgroupOperationResult>),
     /// A boxed array of *DVPortgroupPolicy*. To be used in *Any* placeholders.
     ArrayOfDvPortgroupPolicy(Vec<Box<dyn super::traits::DvPortgroupPolicyTrait>>),
     /// A boxed array of *DistributedVirtualPortgroupProblem*. To be used in *Any* placeholders.
-    ArrayOfDistributedVirtualPortgroupProblem(Vec<DistributedVirtualPortgroupProblem>),
+    ArrayOfDistributedVirtualPortgroupProblem(Vec<super::structs::DistributedVirtualPortgroupProblem>),
     /// A boxed array of *DistributedVirtualPortgroupInfo*. To be used in *Any* placeholders.
-    ArrayOfDistributedVirtualPortgroupInfo(Vec<DistributedVirtualPortgroupInfo>),
+    ArrayOfDistributedVirtualPortgroupInfo(Vec<super::structs::DistributedVirtualPortgroupInfo>),
     /// A boxed array of *DVPortgroupSelection*. To be used in *Any* placeholders.
-    ArrayOfDvPortgroupSelection(Vec<DvPortgroupSelection>),
+    ArrayOfDvPortgroupSelection(Vec<super::structs::DvPortgroupSelection>),
     /// A boxed array of *DistributedVirtualSwitchInfo*. To be used in *Any* placeholders.
-    ArrayOfDistributedVirtualSwitchInfo(Vec<DistributedVirtualSwitchInfo>),
+    ArrayOfDistributedVirtualSwitchInfo(Vec<super::structs::DistributedVirtualSwitchInfo>),
     /// A boxed array of *DistributedVirtualSwitchManagerCompatibilityResult*. To be used in *Any* placeholders.
-    ArrayOfDistributedVirtualSwitchManagerCompatibilityResult(Vec<DistributedVirtualSwitchManagerCompatibilityResult>),
+    ArrayOfDistributedVirtualSwitchManagerCompatibilityResult(Vec<super::structs::DistributedVirtualSwitchManagerCompatibilityResult>),
     /// A boxed array of *DVSManagerDvsConfigTarget*. To be used in *Any* placeholders.
-    ArrayOfDvsManagerDvsConfigTarget(Vec<DvsManagerDvsConfigTarget>),
+    ArrayOfDvsManagerDvsConfigTarget(Vec<super::structs::DvsManagerDvsConfigTarget>),
     /// A boxed array of *DistributedVirtualSwitchManagerDvsProductSpec*. To be used in *Any* placeholders.
-    ArrayOfDistributedVirtualSwitchManagerDvsProductSpec(Vec<DistributedVirtualSwitchManagerDvsProductSpec>),
+    ArrayOfDistributedVirtualSwitchManagerDvsProductSpec(Vec<super::structs::DistributedVirtualSwitchManagerDvsProductSpec>),
     /// A boxed array of *DistributedVirtualSwitchManagerHostArrayFilter*. To be used in *Any* placeholders.
-    ArrayOfDistributedVirtualSwitchManagerHostArrayFilter(Vec<DistributedVirtualSwitchManagerHostArrayFilter>),
+    ArrayOfDistributedVirtualSwitchManagerHostArrayFilter(Vec<super::structs::DistributedVirtualSwitchManagerHostArrayFilter>),
     /// A boxed array of *DistributedVirtualSwitchManagerHostContainer*. To be used in *Any* placeholders.
-    ArrayOfDistributedVirtualSwitchManagerHostContainer(Vec<DistributedVirtualSwitchManagerHostContainer>),
+    ArrayOfDistributedVirtualSwitchManagerHostContainer(Vec<super::structs::DistributedVirtualSwitchManagerHostContainer>),
     /// A boxed array of *DistributedVirtualSwitchManagerHostContainerFilter*. To be used in *Any* placeholders.
-    ArrayOfDistributedVirtualSwitchManagerHostContainerFilter(Vec<DistributedVirtualSwitchManagerHostContainerFilter>),
+    ArrayOfDistributedVirtualSwitchManagerHostContainerFilter(Vec<super::structs::DistributedVirtualSwitchManagerHostContainerFilter>),
     /// A boxed array of *DistributedVirtualSwitchManagerHostDvsFilterSpec*. To be used in *Any* placeholders.
     ArrayOfDistributedVirtualSwitchManagerHostDvsFilterSpec(Vec<Box<dyn super::traits::DistributedVirtualSwitchManagerHostDvsFilterSpecTrait>>),
     /// A boxed array of *DistributedVirtualSwitchManagerHostDvsMembershipFilter*. To be used in *Any* placeholders.
-    ArrayOfDistributedVirtualSwitchManagerHostDvsMembershipFilter(Vec<DistributedVirtualSwitchManagerHostDvsMembershipFilter>),
+    ArrayOfDistributedVirtualSwitchManagerHostDvsMembershipFilter(Vec<super::structs::DistributedVirtualSwitchManagerHostDvsMembershipFilter>),
     /// A boxed array of *DistributedVirtualSwitchManagerImportResult*. To be used in *Any* placeholders.
-    ArrayOfDistributedVirtualSwitchManagerImportResult(Vec<DistributedVirtualSwitchManagerImportResult>),
+    ArrayOfDistributedVirtualSwitchManagerImportResult(Vec<super::structs::DistributedVirtualSwitchManagerImportResult>),
     /// A boxed array of *DVSManagerPhysicalNicsList*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 8.0.0.1
-    ArrayOfDvsManagerPhysicalNicsList(Vec<DvsManagerPhysicalNicsList>),
+    ArrayOfDvsManagerPhysicalNicsList(Vec<super::structs::DvsManagerPhysicalNicsList>),
     /// A boxed array of *DVSSelection*. To be used in *Any* placeholders.
-    ArrayOfDvsSelection(Vec<DvsSelection>),
+    ArrayOfDvsSelection(Vec<super::structs::DvsSelection>),
     /// A boxed array of *EntityBackup*. To be used in *Any* placeholders.
-    ArrayOfEntityBackup(Vec<EntityBackup>),
+    ArrayOfEntityBackup(Vec<super::structs::EntityBackup>),
     /// A boxed array of *EntityBackupConfig*. To be used in *Any* placeholders.
-    ArrayOfEntityBackupConfig(Vec<EntityBackupConfig>),
+    ArrayOfEntityBackupConfig(Vec<super::structs::EntityBackupConfig>),
     /// A boxed array of *DistributedVirtualSwitchHostMember*. To be used in *Any* placeholders.
-    ArrayOfDistributedVirtualSwitchHostMember(Vec<DistributedVirtualSwitchHostMember>),
+    ArrayOfDistributedVirtualSwitchHostMember(Vec<super::structs::DistributedVirtualSwitchHostMember>),
     /// A boxed array of *DistributedVirtualSwitchHostMemberBacking*. To be used in *Any* placeholders.
     ArrayOfDistributedVirtualSwitchHostMemberBacking(Vec<Box<dyn super::traits::DistributedVirtualSwitchHostMemberBackingTrait>>),
     /// A boxed array of *DistributedVirtualSwitchHostMemberConfigInfo*. To be used in *Any* placeholders.
-    ArrayOfDistributedVirtualSwitchHostMemberConfigInfo(Vec<DistributedVirtualSwitchHostMemberConfigInfo>),
+    ArrayOfDistributedVirtualSwitchHostMemberConfigInfo(Vec<super::structs::DistributedVirtualSwitchHostMemberConfigInfo>),
     /// A boxed array of *DistributedVirtualSwitchHostMemberConfigSpec*. To be used in *Any* placeholders.
-    ArrayOfDistributedVirtualSwitchHostMemberConfigSpec(Vec<DistributedVirtualSwitchHostMemberConfigSpec>),
+    ArrayOfDistributedVirtualSwitchHostMemberConfigSpec(Vec<super::structs::DistributedVirtualSwitchHostMemberConfigSpec>),
     /// A boxed array of *HostMemberHealthCheckResult*. To be used in *Any* placeholders.
     ArrayOfHostMemberHealthCheckResult(Vec<Box<dyn super::traits::HostMemberHealthCheckResultTrait>>),
     /// A boxed array of *DistributedVirtualSwitchHostMemberPnicBacking*. To be used in *Any* placeholders.
-    ArrayOfDistributedVirtualSwitchHostMemberPnicBacking(Vec<DistributedVirtualSwitchHostMemberPnicBacking>),
+    ArrayOfDistributedVirtualSwitchHostMemberPnicBacking(Vec<super::structs::DistributedVirtualSwitchHostMemberPnicBacking>),
     /// A boxed array of *DistributedVirtualSwitchHostMemberPnicSpec*. To be used in *Any* placeholders.
-    ArrayOfDistributedVirtualSwitchHostMemberPnicSpec(Vec<DistributedVirtualSwitchHostMemberPnicSpec>),
+    ArrayOfDistributedVirtualSwitchHostMemberPnicSpec(Vec<super::structs::DistributedVirtualSwitchHostMemberPnicSpec>),
     /// A boxed array of *HostMemberRuntimeInfo*. To be used in *Any* placeholders.
-    ArrayOfHostMemberRuntimeInfo(Vec<HostMemberRuntimeInfo>),
+    ArrayOfHostMemberRuntimeInfo(Vec<super::structs::HostMemberRuntimeInfo>),
     /// A boxed array of *DistributedVirtualSwitchHostMemberRuntimeState*. To be used in *Any* placeholders.
-    ArrayOfDistributedVirtualSwitchHostMemberRuntimeState(Vec<DistributedVirtualSwitchHostMemberRuntimeState>),
+    ArrayOfDistributedVirtualSwitchHostMemberRuntimeState(Vec<super::structs::DistributedVirtualSwitchHostMemberRuntimeState>),
     /// A boxed array of *DistributedVirtualSwitchHostMemberTransportZoneInfo*. To be used in *Any* placeholders.
-    ArrayOfDistributedVirtualSwitchHostMemberTransportZoneInfo(Vec<DistributedVirtualSwitchHostMemberTransportZoneInfo>),
+    ArrayOfDistributedVirtualSwitchHostMemberTransportZoneInfo(Vec<super::structs::DistributedVirtualSwitchHostMemberTransportZoneInfo>),
     /// A boxed array of *HostMemberUplinkHealthCheckResult*. To be used in *Any* placeholders.
     ArrayOfHostMemberUplinkHealthCheckResult(Vec<Box<dyn super::traits::HostMemberUplinkHealthCheckResultTrait>>),
     /// A boxed array of *DistributedVirtualSwitchHostProductSpec*. To be used in *Any* placeholders.
-    ArrayOfDistributedVirtualSwitchHostProductSpec(Vec<DistributedVirtualSwitchHostProductSpec>),
+    ArrayOfDistributedVirtualSwitchHostProductSpec(Vec<super::structs::DistributedVirtualSwitchHostProductSpec>),
     /// A boxed array of *DistributedVirtualSwitchKeyedOpaqueBlob*. To be used in *Any* placeholders.
-    ArrayOfDistributedVirtualSwitchKeyedOpaqueBlob(Vec<DistributedVirtualSwitchKeyedOpaqueBlob>),
+    ArrayOfDistributedVirtualSwitchKeyedOpaqueBlob(Vec<super::structs::DistributedVirtualSwitchKeyedOpaqueBlob>),
     /// A boxed array of *DistributedVirtualSwitchNetworkOffloadSpec*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 8.0.0.1
-    ArrayOfDistributedVirtualSwitchNetworkOffloadSpec(Vec<DistributedVirtualSwitchNetworkOffloadSpec>),
+    ArrayOfDistributedVirtualSwitchNetworkOffloadSpec(Vec<super::structs::DistributedVirtualSwitchNetworkOffloadSpec>),
     /// A boxed array of *DVSNetworkResourcePool*. To be used in *Any* placeholders.
-    ArrayOfDvsNetworkResourcePool(Vec<DvsNetworkResourcePool>),
+    ArrayOfDvsNetworkResourcePool(Vec<super::structs::DvsNetworkResourcePool>),
     /// A boxed array of *DVSNetworkResourcePoolAllocationInfo*. To be used in *Any* placeholders.
-    ArrayOfDvsNetworkResourcePoolAllocationInfo(Vec<DvsNetworkResourcePoolAllocationInfo>),
+    ArrayOfDvsNetworkResourcePoolAllocationInfo(Vec<super::structs::DvsNetworkResourcePoolAllocationInfo>),
     /// A boxed array of *DVSNetworkResourcePoolConfigSpec*. To be used in *Any* placeholders.
-    ArrayOfDvsNetworkResourcePoolConfigSpec(Vec<DvsNetworkResourcePoolConfigSpec>),
+    ArrayOfDvsNetworkResourcePoolConfigSpec(Vec<super::structs::DvsNetworkResourcePoolConfigSpec>),
     /// A boxed array of *DistributedVirtualSwitchPortConnectee*. To be used in *Any* placeholders.
-    ArrayOfDistributedVirtualSwitchPortConnectee(Vec<DistributedVirtualSwitchPortConnectee>),
+    ArrayOfDistributedVirtualSwitchPortConnectee(Vec<super::structs::DistributedVirtualSwitchPortConnectee>),
     /// A boxed array of *DistributedVirtualSwitchPortConnection*. To be used in *Any* placeholders.
-    ArrayOfDistributedVirtualSwitchPortConnection(Vec<DistributedVirtualSwitchPortConnection>),
+    ArrayOfDistributedVirtualSwitchPortConnection(Vec<super::structs::DistributedVirtualSwitchPortConnection>),
     /// A boxed array of *DistributedVirtualSwitchPortCriteria*. To be used in *Any* placeholders.
-    ArrayOfDistributedVirtualSwitchPortCriteria(Vec<DistributedVirtualSwitchPortCriteria>),
+    ArrayOfDistributedVirtualSwitchPortCriteria(Vec<super::structs::DistributedVirtualSwitchPortCriteria>),
     /// A boxed array of *DistributedVirtualSwitchPortStatistics*. To be used in *Any* placeholders.
-    ArrayOfDistributedVirtualSwitchPortStatistics(Vec<DistributedVirtualSwitchPortStatistics>),
+    ArrayOfDistributedVirtualSwitchPortStatistics(Vec<super::structs::DistributedVirtualSwitchPortStatistics>),
     /// A boxed array of *DistributedVirtualSwitchProductSpec*. To be used in *Any* placeholders.
-    ArrayOfDistributedVirtualSwitchProductSpec(Vec<DistributedVirtualSwitchProductSpec>),
+    ArrayOfDistributedVirtualSwitchProductSpec(Vec<super::structs::DistributedVirtualSwitchProductSpec>),
     /// A boxed array of *DvsTrafficRule*. To be used in *Any* placeholders.
-    ArrayOfDvsTrafficRule(Vec<DvsTrafficRule>),
+    ArrayOfDvsTrafficRule(Vec<super::structs::DvsTrafficRule>),
     /// A boxed array of *DvsAcceptNetworkRuleAction*. To be used in *Any* placeholders.
-    ArrayOfDvsAcceptNetworkRuleAction(Vec<DvsAcceptNetworkRuleAction>),
+    ArrayOfDvsAcceptNetworkRuleAction(Vec<super::structs::DvsAcceptNetworkRuleAction>),
     /// A boxed array of *DvsNetworkRuleAction*. To be used in *Any* placeholders.
     ArrayOfDvsNetworkRuleAction(Vec<Box<dyn super::traits::DvsNetworkRuleActionTrait>>),
     /// A boxed array of *DvsCopyNetworkRuleAction*. To be used in *Any* placeholders.
-    ArrayOfDvsCopyNetworkRuleAction(Vec<DvsCopyNetworkRuleAction>),
+    ArrayOfDvsCopyNetworkRuleAction(Vec<super::structs::DvsCopyNetworkRuleAction>),
     /// A boxed array of *DvsDropNetworkRuleAction*. To be used in *Any* placeholders.
-    ArrayOfDvsDropNetworkRuleAction(Vec<DvsDropNetworkRuleAction>),
+    ArrayOfDvsDropNetworkRuleAction(Vec<super::structs::DvsDropNetworkRuleAction>),
     /// A boxed array of *DvsGreEncapNetworkRuleAction*. To be used in *Any* placeholders.
-    ArrayOfDvsGreEncapNetworkRuleAction(Vec<DvsGreEncapNetworkRuleAction>),
+    ArrayOfDvsGreEncapNetworkRuleAction(Vec<super::structs::DvsGreEncapNetworkRuleAction>),
     /// A boxed array of *DvsIpPort*. To be used in *Any* placeholders.
     ArrayOfDvsIpPort(Vec<Box<dyn super::traits::DvsIpPortTrait>>),
     /// A boxed array of *DvsIpPortRange*. To be used in *Any* placeholders.
-    ArrayOfDvsIpPortRange(Vec<DvsIpPortRange>),
+    ArrayOfDvsIpPortRange(Vec<super::structs::DvsIpPortRange>),
     /// A boxed array of *DvsIpNetworkRuleQualifier*. To be used in *Any* placeholders.
-    ArrayOfDvsIpNetworkRuleQualifier(Vec<DvsIpNetworkRuleQualifier>),
+    ArrayOfDvsIpNetworkRuleQualifier(Vec<super::structs::DvsIpNetworkRuleQualifier>),
     /// A boxed array of *DvsLogNetworkRuleAction*. To be used in *Any* placeholders.
-    ArrayOfDvsLogNetworkRuleAction(Vec<DvsLogNetworkRuleAction>),
+    ArrayOfDvsLogNetworkRuleAction(Vec<super::structs::DvsLogNetworkRuleAction>),
     /// A boxed array of *DvsMacNetworkRuleQualifier*. To be used in *Any* placeholders.
-    ArrayOfDvsMacNetworkRuleQualifier(Vec<DvsMacNetworkRuleQualifier>),
+    ArrayOfDvsMacNetworkRuleQualifier(Vec<super::structs::DvsMacNetworkRuleQualifier>),
     /// A boxed array of *DvsMacRewriteNetworkRuleAction*. To be used in *Any* placeholders.
-    ArrayOfDvsMacRewriteNetworkRuleAction(Vec<DvsMacRewriteNetworkRuleAction>),
+    ArrayOfDvsMacRewriteNetworkRuleAction(Vec<super::structs::DvsMacRewriteNetworkRuleAction>),
     /// A boxed array of *DvsPuntNetworkRuleAction*. To be used in *Any* placeholders.
-    ArrayOfDvsPuntNetworkRuleAction(Vec<DvsPuntNetworkRuleAction>),
+    ArrayOfDvsPuntNetworkRuleAction(Vec<super::structs::DvsPuntNetworkRuleAction>),
     /// A boxed array of *DvsNetworkRuleQualifier*. To be used in *Any* placeholders.
     ArrayOfDvsNetworkRuleQualifier(Vec<Box<dyn super::traits::DvsNetworkRuleQualifierTrait>>),
     /// A boxed array of *DvsRateLimitNetworkRuleAction*. To be used in *Any* placeholders.
-    ArrayOfDvsRateLimitNetworkRuleAction(Vec<DvsRateLimitNetworkRuleAction>),
+    ArrayOfDvsRateLimitNetworkRuleAction(Vec<super::structs::DvsRateLimitNetworkRuleAction>),
     /// A boxed array of *DvsSingleIpPort*. To be used in *Any* placeholders.
-    ArrayOfDvsSingleIpPort(Vec<DvsSingleIpPort>),
+    ArrayOfDvsSingleIpPort(Vec<super::structs::DvsSingleIpPort>),
     /// A boxed array of *DvsSystemTrafficNetworkRuleQualifier*. To be used in *Any* placeholders.
-    ArrayOfDvsSystemTrafficNetworkRuleQualifier(Vec<DvsSystemTrafficNetworkRuleQualifier>),
+    ArrayOfDvsSystemTrafficNetworkRuleQualifier(Vec<super::structs::DvsSystemTrafficNetworkRuleQualifier>),
     /// A boxed array of *DvsUpdateTagNetworkRuleAction*. To be used in *Any* placeholders.
-    ArrayOfDvsUpdateTagNetworkRuleAction(Vec<DvsUpdateTagNetworkRuleAction>),
+    ArrayOfDvsUpdateTagNetworkRuleAction(Vec<super::structs::DvsUpdateTagNetworkRuleAction>),
     /// A boxed array of *DvsTrafficRuleset*. To be used in *Any* placeholders.
-    ArrayOfDvsTrafficRuleset(Vec<DvsTrafficRuleset>),
+    ArrayOfDvsTrafficRuleset(Vec<super::structs::DvsTrafficRuleset>),
     /// A boxed array of *DVSVmVnicNetworkResourcePool*. To be used in *Any* placeholders.
-    ArrayOfDvsVmVnicNetworkResourcePool(Vec<DvsVmVnicNetworkResourcePool>),
+    ArrayOfDvsVmVnicNetworkResourcePool(Vec<super::structs::DvsVmVnicNetworkResourcePool>),
     /// A boxed array of *DvsVmVnicResourcePoolConfigSpec*. To be used in *Any* placeholders.
-    ArrayOfDvsVmVnicResourcePoolConfigSpec(Vec<DvsVmVnicResourcePoolConfigSpec>),
+    ArrayOfDvsVmVnicResourcePoolConfigSpec(Vec<super::structs::DvsVmVnicResourcePoolConfigSpec>),
     /// A boxed array of *DvsVmVnicResourceAllocation*. To be used in *Any* placeholders.
-    ArrayOfDvsVmVnicResourceAllocation(Vec<DvsVmVnicResourceAllocation>),
+    ArrayOfDvsVmVnicResourceAllocation(Vec<super::structs::DvsVmVnicResourceAllocation>),
     /// A boxed array of *DvsVmVnicNetworkResourcePoolRuntimeInfo*. To be used in *Any* placeholders.
-    ArrayOfDvsVmVnicNetworkResourcePoolRuntimeInfo(Vec<DvsVmVnicNetworkResourcePoolRuntimeInfo>),
+    ArrayOfDvsVmVnicNetworkResourcePoolRuntimeInfo(Vec<super::structs::DvsVmVnicNetworkResourcePoolRuntimeInfo>),
     /// A boxed array of *DvsVnicAllocatedResource*. To be used in *Any* placeholders.
-    ArrayOfDvsVnicAllocatedResource(Vec<DvsVnicAllocatedResource>),
+    ArrayOfDvsVnicAllocatedResource(Vec<super::structs::DvsVnicAllocatedResource>),
     /// A boxed array of *VMwareDVSConfigInfo*. To be used in *Any* placeholders.
-    ArrayOfVMwareDvsConfigInfo(Vec<VMwareDvsConfigInfo>),
+    ArrayOfVMwareDvsConfigInfo(Vec<super::structs::VMwareDvsConfigInfo>),
     /// A boxed array of *VMwareDVSConfigSpec*. To be used in *Any* placeholders.
-    ArrayOfVMwareDvsConfigSpec(Vec<VMwareDvsConfigSpec>),
+    ArrayOfVMwareDvsConfigSpec(Vec<super::structs::VMwareDvsConfigSpec>),
     /// A boxed array of *VMwareDvsDpuCapability*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 8.0.0.1
-    ArrayOfVMwareDvsDpuCapability(Vec<VMwareDvsDpuCapability>),
+    ArrayOfVMwareDvsDpuCapability(Vec<super::structs::VMwareDvsDpuCapability>),
     /// A boxed array of *DVSFailureCriteria*. To be used in *Any* placeholders.
-    ArrayOfDvsFailureCriteria(Vec<DvsFailureCriteria>),
+    ArrayOfDvsFailureCriteria(Vec<super::structs::DvsFailureCriteria>),
     /// A boxed array of *VMwareDVSFeatureCapability*. To be used in *Any* placeholders.
-    ArrayOfVMwareDvsFeatureCapability(Vec<VMwareDvsFeatureCapability>),
+    ArrayOfVMwareDvsFeatureCapability(Vec<super::structs::VMwareDvsFeatureCapability>),
     /// A boxed array of *VMwareIpfixConfig*. To be used in *Any* placeholders.
-    ArrayOfVMwareIpfixConfig(Vec<VMwareIpfixConfig>),
+    ArrayOfVMwareIpfixConfig(Vec<super::structs::VMwareIpfixConfig>),
     /// A boxed array of *VMwareDvsIpfixCapability*. To be used in *Any* placeholders.
-    ArrayOfVMwareDvsIpfixCapability(Vec<VMwareDvsIpfixCapability>),
+    ArrayOfVMwareDvsIpfixCapability(Vec<super::structs::VMwareDvsIpfixCapability>),
     /// A boxed array of *VMwareDvsLacpCapability*. To be used in *Any* placeholders.
-    ArrayOfVMwareDvsLacpCapability(Vec<VMwareDvsLacpCapability>),
+    ArrayOfVMwareDvsLacpCapability(Vec<super::structs::VMwareDvsLacpCapability>),
     /// A boxed array of *VMwareDvsLacpGroupConfig*. To be used in *Any* placeholders.
-    ArrayOfVMwareDvsLacpGroupConfig(Vec<VMwareDvsLacpGroupConfig>),
+    ArrayOfVMwareDvsLacpGroupConfig(Vec<super::structs::VMwareDvsLacpGroupConfig>),
     /// A boxed array of *VMwareDvsLacpGroupSpec*. To be used in *Any* placeholders.
-    ArrayOfVMwareDvsLacpGroupSpec(Vec<VMwareDvsLacpGroupSpec>),
+    ArrayOfVMwareDvsLacpGroupSpec(Vec<super::structs::VMwareDvsLacpGroupSpec>),
     /// A boxed array of *VMwareDvsLagIpfixConfig*. To be used in *Any* placeholders.
-    ArrayOfVMwareDvsLagIpfixConfig(Vec<VMwareDvsLagIpfixConfig>),
+    ArrayOfVMwareDvsLagIpfixConfig(Vec<super::structs::VMwareDvsLagIpfixConfig>),
     /// A boxed array of *VMwareDvsLagVlanConfig*. To be used in *Any* placeholders.
-    ArrayOfVMwareDvsLagVlanConfig(Vec<VMwareDvsLagVlanConfig>),
+    ArrayOfVMwareDvsLagVlanConfig(Vec<super::structs::VMwareDvsLagVlanConfig>),
     /// A boxed array of *DVSMacLearningPolicy*. To be used in *Any* placeholders.
-    ArrayOfDvsMacLearningPolicy(Vec<DvsMacLearningPolicy>),
+    ArrayOfDvsMacLearningPolicy(Vec<super::structs::DvsMacLearningPolicy>),
     /// A boxed array of *DVSMacManagementPolicy*. To be used in *Any* placeholders.
-    ArrayOfDvsMacManagementPolicy(Vec<DvsMacManagementPolicy>),
+    ArrayOfDvsMacManagementPolicy(Vec<super::structs::DvsMacManagementPolicy>),
     /// A boxed array of *VMwareDvsMtuCapability*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 7.0.2.0
-    ArrayOfVMwareDvsMtuCapability(Vec<VMwareDvsMtuCapability>),
+    ArrayOfVMwareDvsMtuCapability(Vec<super::structs::VMwareDvsMtuCapability>),
     /// A boxed array of *VMwareDVSMtuHealthCheckResult*. To be used in *Any* placeholders.
-    ArrayOfVMwareDvsMtuHealthCheckResult(Vec<VMwareDvsMtuHealthCheckResult>),
+    ArrayOfVMwareDvsMtuHealthCheckResult(Vec<super::structs::VMwareDvsMtuHealthCheckResult>),
     /// A boxed array of *VMwareDVSPvlanConfigSpec*. To be used in *Any* placeholders.
-    ArrayOfVMwareDvsPvlanConfigSpec(Vec<VMwareDvsPvlanConfigSpec>),
+    ArrayOfVMwareDvsPvlanConfigSpec(Vec<super::structs::VMwareDvsPvlanConfigSpec>),
     /// A boxed array of *VMwareDVSPvlanMapEntry*. To be used in *Any* placeholders.
-    ArrayOfVMwareDvsPvlanMapEntry(Vec<VMwareDvsPvlanMapEntry>),
+    ArrayOfVMwareDvsPvlanMapEntry(Vec<super::structs::VMwareDvsPvlanMapEntry>),
     /// A boxed array of *VmwareDistributedVirtualSwitchPvlanSpec*. To be used in *Any* placeholders.
-    ArrayOfVmwareDistributedVirtualSwitchPvlanSpec(Vec<VmwareDistributedVirtualSwitchPvlanSpec>),
+    ArrayOfVmwareDistributedVirtualSwitchPvlanSpec(Vec<super::structs::VmwareDistributedVirtualSwitchPvlanSpec>),
     /// A boxed array of *DVSSecurityPolicy*. To be used in *Any* placeholders.
-    ArrayOfDvsSecurityPolicy(Vec<DvsSecurityPolicy>),
+    ArrayOfDvsSecurityPolicy(Vec<super::structs::DvsSecurityPolicy>),
     /// A boxed array of *VMwareDVSTeamingHealthCheckConfig*. To be used in *Any* placeholders.
-    ArrayOfVMwareDvsTeamingHealthCheckConfig(Vec<VMwareDvsTeamingHealthCheckConfig>),
+    ArrayOfVMwareDvsTeamingHealthCheckConfig(Vec<super::structs::VMwareDvsTeamingHealthCheckConfig>),
     /// A boxed array of *VMwareDVSTeamingHealthCheckResult*. To be used in *Any* placeholders.
-    ArrayOfVMwareDvsTeamingHealthCheckResult(Vec<VMwareDvsTeamingHealthCheckResult>),
+    ArrayOfVMwareDvsTeamingHealthCheckResult(Vec<super::structs::VMwareDvsTeamingHealthCheckResult>),
     /// A boxed array of *VmwareDistributedVirtualSwitchTrunkVlanSpec*. To be used in *Any* placeholders.
-    ArrayOfVmwareDistributedVirtualSwitchTrunkVlanSpec(Vec<VmwareDistributedVirtualSwitchTrunkVlanSpec>),
+    ArrayOfVmwareDistributedVirtualSwitchTrunkVlanSpec(Vec<super::structs::VmwareDistributedVirtualSwitchTrunkVlanSpec>),
     /// A boxed array of *VMwareUplinkLacpPolicy*. To be used in *Any* placeholders.
-    ArrayOfVMwareUplinkLacpPolicy(Vec<VMwareUplinkLacpPolicy>),
+    ArrayOfVMwareUplinkLacpPolicy(Vec<super::structs::VMwareUplinkLacpPolicy>),
     /// A boxed array of *VMwareUplinkPortOrderPolicy*. To be used in *Any* placeholders.
-    ArrayOfVMwareUplinkPortOrderPolicy(Vec<VMwareUplinkPortOrderPolicy>),
+    ArrayOfVMwareUplinkPortOrderPolicy(Vec<super::structs::VMwareUplinkPortOrderPolicy>),
     /// A boxed array of *VmwareUplinkPortTeamingPolicy*. To be used in *Any* placeholders.
-    ArrayOfVmwareUplinkPortTeamingPolicy(Vec<VmwareUplinkPortTeamingPolicy>),
+    ArrayOfVmwareUplinkPortTeamingPolicy(Vec<super::structs::VmwareUplinkPortTeamingPolicy>),
     /// A boxed array of *VMwareDVSPortgroupPolicy*. To be used in *Any* placeholders.
-    ArrayOfVMwareDvsPortgroupPolicy(Vec<VMwareDvsPortgroupPolicy>),
+    ArrayOfVMwareDvsPortgroupPolicy(Vec<super::structs::VMwareDvsPortgroupPolicy>),
     /// A boxed array of *VMwareDVSVlanHealthCheckResult*. To be used in *Any* placeholders.
-    ArrayOfVMwareDvsVlanHealthCheckResult(Vec<VMwareDvsVlanHealthCheckResult>),
+    ArrayOfVMwareDvsVlanHealthCheckResult(Vec<super::structs::VMwareDvsVlanHealthCheckResult>),
     /// A boxed array of *VmwareDistributedVirtualSwitchVlanIdSpec*. To be used in *Any* placeholders.
-    ArrayOfVmwareDistributedVirtualSwitchVlanIdSpec(Vec<VmwareDistributedVirtualSwitchVlanIdSpec>),
+    ArrayOfVmwareDistributedVirtualSwitchVlanIdSpec(Vec<super::structs::VmwareDistributedVirtualSwitchVlanIdSpec>),
     /// A boxed array of *VMwareDVSVlanMtuHealthCheckConfig*. To be used in *Any* placeholders.
-    ArrayOfVMwareDvsVlanMtuHealthCheckConfig(Vec<VMwareDvsVlanMtuHealthCheckConfig>),
+    ArrayOfVMwareDvsVlanMtuHealthCheckConfig(Vec<super::structs::VMwareDvsVlanMtuHealthCheckConfig>),
     /// A boxed array of *VmwareDistributedVirtualSwitchVlanSpec*. To be used in *Any* placeholders.
     ArrayOfVmwareDistributedVirtualSwitchVlanSpec(Vec<Box<dyn super::traits::VmwareDistributedVirtualSwitchVlanSpecTrait>>),
     /// A boxed array of *VMwareDVSHealthCheckConfig*. To be used in *Any* placeholders.
     ArrayOfVMwareDvsHealthCheckConfig(Vec<Box<dyn super::traits::VMwareDvsHealthCheckConfigTrait>>),
     /// A boxed array of *VMwareDVSHealthCheckCapability*. To be used in *Any* placeholders.
-    ArrayOfVMwareDvsHealthCheckCapability(Vec<VMwareDvsHealthCheckCapability>),
+    ArrayOfVMwareDvsHealthCheckCapability(Vec<super::structs::VMwareDvsHealthCheckCapability>),
     /// A boxed array of *VMwareDVSPortSetting*. To be used in *Any* placeholders.
-    ArrayOfVMwareDvsPortSetting(Vec<VMwareDvsPortSetting>),
+    ArrayOfVMwareDvsPortSetting(Vec<super::structs::VMwareDvsPortSetting>),
     /// A boxed array of *VMwareDVSVspanConfigSpec*. To be used in *Any* placeholders.
-    ArrayOfVMwareDvsVspanConfigSpec(Vec<VMwareDvsVspanConfigSpec>),
+    ArrayOfVMwareDvsVspanConfigSpec(Vec<super::structs::VMwareDvsVspanConfigSpec>),
     /// A boxed array of *VMwareDVSVspanCapability*. To be used in *Any* placeholders.
-    ArrayOfVMwareDvsVspanCapability(Vec<VMwareDvsVspanCapability>),
+    ArrayOfVMwareDvsVspanCapability(Vec<super::structs::VMwareDvsVspanCapability>),
     /// A boxed array of *VMwareVspanPort*. To be used in *Any* placeholders.
-    ArrayOfVMwareVspanPort(Vec<VMwareVspanPort>),
+    ArrayOfVMwareVspanPort(Vec<super::structs::VMwareVspanPort>),
     /// A boxed array of *VMwareVspanSession*. To be used in *Any* placeholders.
-    ArrayOfVMwareVspanSession(Vec<VMwareVspanSession>),
+    ArrayOfVMwareVspanSession(Vec<super::structs::VMwareVspanSession>),
     /// A boxed array of *CryptoKeyId*. To be used in *Any* placeholders.
-    ArrayOfCryptoKeyId(Vec<CryptoKeyId>),
+    ArrayOfCryptoKeyId(Vec<super::structs::CryptoKeyId>),
     /// A boxed array of *CryptoKeyPlain*. To be used in *Any* placeholders.
-    ArrayOfCryptoKeyPlain(Vec<CryptoKeyPlain>),
+    ArrayOfCryptoKeyPlain(Vec<super::structs::CryptoKeyPlain>),
     /// A boxed array of *CryptoKeyResult*. To be used in *Any* placeholders.
-    ArrayOfCryptoKeyResult(Vec<CryptoKeyResult>),
+    ArrayOfCryptoKeyResult(Vec<super::structs::CryptoKeyResult>),
     /// A boxed array of *CryptoManagerHostKeyStatus*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 8.0.1.0
-    ArrayOfCryptoManagerHostKeyStatus(Vec<CryptoManagerHostKeyStatus>),
+    ArrayOfCryptoManagerHostKeyStatus(Vec<super::structs::CryptoManagerHostKeyStatus>),
     /// A boxed array of *CryptoManagerKmipCertSignRequest*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 8.0.1.0
-    ArrayOfCryptoManagerKmipCertSignRequest(Vec<CryptoManagerKmipCertSignRequest>),
+    ArrayOfCryptoManagerKmipCertSignRequest(Vec<super::structs::CryptoManagerKmipCertSignRequest>),
     /// A boxed array of *CryptoManagerKmipCertificateInfo*. To be used in *Any* placeholders.
-    ArrayOfCryptoManagerKmipCertificateInfo(Vec<CryptoManagerKmipCertificateInfo>),
+    ArrayOfCryptoManagerKmipCertificateInfo(Vec<super::structs::CryptoManagerKmipCertificateInfo>),
     /// A boxed array of *CryptoManagerKmipClusterStatus*. To be used in *Any* placeholders.
-    ArrayOfCryptoManagerKmipClusterStatus(Vec<CryptoManagerKmipClusterStatus>),
+    ArrayOfCryptoManagerKmipClusterStatus(Vec<super::structs::CryptoManagerKmipClusterStatus>),
     /// A boxed array of *CryptoManagerKmipCryptoKeyStatus*. To be used in *Any* placeholders.
-    ArrayOfCryptoManagerKmipCryptoKeyStatus(Vec<CryptoManagerKmipCryptoKeyStatus>),
+    ArrayOfCryptoManagerKmipCryptoKeyStatus(Vec<super::structs::CryptoManagerKmipCryptoKeyStatus>),
     /// A boxed array of *CryptoManagerKmipCustomAttributeSpec*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 8.0.1.0
-    ArrayOfCryptoManagerKmipCustomAttributeSpec(Vec<CryptoManagerKmipCustomAttributeSpec>),
+    ArrayOfCryptoManagerKmipCustomAttributeSpec(Vec<super::structs::CryptoManagerKmipCustomAttributeSpec>),
     /// A boxed array of *CryptoManagerKmipServerCertInfo*. To be used in *Any* placeholders.
-    ArrayOfCryptoManagerKmipServerCertInfo(Vec<CryptoManagerKmipServerCertInfo>),
+    ArrayOfCryptoManagerKmipServerCertInfo(Vec<super::structs::CryptoManagerKmipServerCertInfo>),
     /// A boxed array of *CryptoManagerKmipServerStatus*. To be used in *Any* placeholders.
-    ArrayOfCryptoManagerKmipServerStatus(Vec<CryptoManagerKmipServerStatus>),
+    ArrayOfCryptoManagerKmipServerStatus(Vec<super::structs::CryptoManagerKmipServerStatus>),
     /// A boxed array of *CryptoSpec*. To be used in *Any* placeholders.
     ArrayOfCryptoSpec(Vec<Box<dyn super::traits::CryptoSpecTrait>>),
     /// A boxed array of *CryptoSpecDecrypt*. To be used in *Any* placeholders.
-    ArrayOfCryptoSpecDecrypt(Vec<CryptoSpecDecrypt>),
+    ArrayOfCryptoSpecDecrypt(Vec<super::structs::CryptoSpecDecrypt>),
     /// A boxed array of *CryptoSpecDeepRecrypt*. To be used in *Any* placeholders.
-    ArrayOfCryptoSpecDeepRecrypt(Vec<CryptoSpecDeepRecrypt>),
+    ArrayOfCryptoSpecDeepRecrypt(Vec<super::structs::CryptoSpecDeepRecrypt>),
     /// A boxed array of *CryptoSpecEncrypt*. To be used in *Any* placeholders.
-    ArrayOfCryptoSpecEncrypt(Vec<CryptoSpecEncrypt>),
+    ArrayOfCryptoSpecEncrypt(Vec<super::structs::CryptoSpecEncrypt>),
     /// A boxed array of *CryptoSpecNoOp*. To be used in *Any* placeholders.
     ArrayOfCryptoSpecNoOp(Vec<Box<dyn super::traits::CryptoSpecNoOpTrait>>),
     /// A boxed array of *CryptoSpecRegister*. To be used in *Any* placeholders.
-    ArrayOfCryptoSpecRegister(Vec<CryptoSpecRegister>),
+    ArrayOfCryptoSpecRegister(Vec<super::structs::CryptoSpecRegister>),
     /// A boxed array of *CryptoSpecShallowRecrypt*. To be used in *Any* placeholders.
-    ArrayOfCryptoSpecShallowRecrypt(Vec<CryptoSpecShallowRecrypt>),
+    ArrayOfCryptoSpecShallowRecrypt(Vec<super::structs::CryptoSpecShallowRecrypt>),
     /// A boxed array of *KeyProviderId*. To be used in *Any* placeholders.
-    ArrayOfKeyProviderId(Vec<KeyProviderId>),
+    ArrayOfKeyProviderId(Vec<super::structs::KeyProviderId>),
     /// A boxed array of *KmipClusterInfo*. To be used in *Any* placeholders.
-    ArrayOfKmipClusterInfo(Vec<KmipClusterInfo>),
+    ArrayOfKmipClusterInfo(Vec<super::structs::KmipClusterInfo>),
     /// A boxed array of *KmipServerInfo*. To be used in *Any* placeholders.
-    ArrayOfKmipServerInfo(Vec<KmipServerInfo>),
+    ArrayOfKmipServerInfo(Vec<super::structs::KmipServerInfo>),
     /// A boxed array of *KmipServerSpec*. To be used in *Any* placeholders.
-    ArrayOfKmipServerSpec(Vec<KmipServerSpec>),
+    ArrayOfKmipServerSpec(Vec<super::structs::KmipServerSpec>),
     /// A boxed array of *KmipServerStatus*. To be used in *Any* placeholders.
-    ArrayOfKmipServerStatus(Vec<KmipServerStatus>),
+    ArrayOfKmipServerStatus(Vec<super::structs::KmipServerStatus>),
     /// A boxed array of *AccountCreatedEvent*. To be used in *Any* placeholders.
-    ArrayOfAccountCreatedEvent(Vec<Event>),
+    ArrayOfAccountCreatedEvent(Vec<super::structs::Event>),
     /// A boxed array of *AccountRemovedEvent*. To be used in *Any* placeholders.
-    ArrayOfAccountRemovedEvent(Vec<Event>),
+    ArrayOfAccountRemovedEvent(Vec<super::structs::Event>),
     /// A boxed array of *AccountUpdatedEvent*. To be used in *Any* placeholders.
-    ArrayOfAccountUpdatedEvent(Vec<Event>),
+    ArrayOfAccountUpdatedEvent(Vec<super::structs::Event>),
     /// A boxed array of *AdminPasswordNotChangedEvent*. To be used in *Any* placeholders.
-    ArrayOfAdminPasswordNotChangedEvent(Vec<Event>),
+    ArrayOfAdminPasswordNotChangedEvent(Vec<super::structs::Event>),
     /// A boxed array of *AlarmAcknowledgedEvent*. To be used in *Any* placeholders.
-    ArrayOfAlarmAcknowledgedEvent(Vec<Event>),
+    ArrayOfAlarmAcknowledgedEvent(Vec<super::structs::Event>),
     /// A boxed array of *AlarmActionTriggeredEvent*. To be used in *Any* placeholders.
-    ArrayOfAlarmActionTriggeredEvent(Vec<Event>),
+    ArrayOfAlarmActionTriggeredEvent(Vec<super::structs::Event>),
     /// A boxed array of *AlarmClearedEvent*. To be used in *Any* placeholders.
-    ArrayOfAlarmClearedEvent(Vec<Event>),
+    ArrayOfAlarmClearedEvent(Vec<super::structs::Event>),
     /// A boxed array of *AlarmCreatedEvent*. To be used in *Any* placeholders.
-    ArrayOfAlarmCreatedEvent(Vec<Event>),
+    ArrayOfAlarmCreatedEvent(Vec<super::structs::Event>),
     /// A boxed array of *AlarmEmailCompletedEvent*. To be used in *Any* placeholders.
-    ArrayOfAlarmEmailCompletedEvent(Vec<Event>),
+    ArrayOfAlarmEmailCompletedEvent(Vec<super::structs::Event>),
     /// A boxed array of *AlarmEmailFailedEvent*. To be used in *Any* placeholders.
-    ArrayOfAlarmEmailFailedEvent(Vec<Event>),
+    ArrayOfAlarmEmailFailedEvent(Vec<super::structs::Event>),
     /// A boxed array of *AlarmEvent*. To be used in *Any* placeholders.
-    ArrayOfAlarmEvent(Vec<Event>),
+    ArrayOfAlarmEvent(Vec<super::structs::Event>),
     /// A boxed array of *AlarmEventArgument*. To be used in *Any* placeholders.
-    ArrayOfAlarmEventArgument(Vec<AlarmEventArgument>),
+    ArrayOfAlarmEventArgument(Vec<super::structs::AlarmEventArgument>),
     /// A boxed array of *AlarmReconfiguredEvent*. To be used in *Any* placeholders.
-    ArrayOfAlarmReconfiguredEvent(Vec<Event>),
+    ArrayOfAlarmReconfiguredEvent(Vec<super::structs::Event>),
     /// A boxed array of *AlarmRemovedEvent*. To be used in *Any* placeholders.
-    ArrayOfAlarmRemovedEvent(Vec<Event>),
+    ArrayOfAlarmRemovedEvent(Vec<super::structs::Event>),
     /// A boxed array of *AlarmScriptCompleteEvent*. To be used in *Any* placeholders.
-    ArrayOfAlarmScriptCompleteEvent(Vec<Event>),
+    ArrayOfAlarmScriptCompleteEvent(Vec<super::structs::Event>),
     /// A boxed array of *AlarmScriptFailedEvent*. To be used in *Any* placeholders.
-    ArrayOfAlarmScriptFailedEvent(Vec<Event>),
+    ArrayOfAlarmScriptFailedEvent(Vec<super::structs::Event>),
     /// A boxed array of *AlarmSnmpCompletedEvent*. To be used in *Any* placeholders.
-    ArrayOfAlarmSnmpCompletedEvent(Vec<Event>),
+    ArrayOfAlarmSnmpCompletedEvent(Vec<super::structs::Event>),
     /// A boxed array of *AlarmSnmpFailedEvent*. To be used in *Any* placeholders.
-    ArrayOfAlarmSnmpFailedEvent(Vec<Event>),
+    ArrayOfAlarmSnmpFailedEvent(Vec<super::structs::Event>),
     /// A boxed array of *AlarmStatusChangedEvent*. To be used in *Any* placeholders.
-    ArrayOfAlarmStatusChangedEvent(Vec<Event>),
+    ArrayOfAlarmStatusChangedEvent(Vec<super::structs::Event>),
     /// A boxed array of *AllVirtualMachinesLicensedEvent*. To be used in *Any* placeholders.
-    ArrayOfAllVirtualMachinesLicensedEvent(Vec<Event>),
+    ArrayOfAllVirtualMachinesLicensedEvent(Vec<super::structs::Event>),
     /// A boxed array of *AlreadyAuthenticatedSessionEvent*. To be used in *Any* placeholders.
-    ArrayOfAlreadyAuthenticatedSessionEvent(Vec<Event>),
+    ArrayOfAlreadyAuthenticatedSessionEvent(Vec<super::structs::Event>),
     /// A boxed array of *AuthorizationEvent*. To be used in *Any* placeholders.
-    ArrayOfAuthorizationEvent(Vec<Event>),
+    ArrayOfAuthorizationEvent(Vec<super::structs::Event>),
     /// A boxed array of *BadUsernameSessionEvent*. To be used in *Any* placeholders.
-    ArrayOfBadUsernameSessionEvent(Vec<Event>),
+    ArrayOfBadUsernameSessionEvent(Vec<super::structs::Event>),
     /// A boxed array of *CanceledHostOperationEvent*. To be used in *Any* placeholders.
-    ArrayOfCanceledHostOperationEvent(Vec<Event>),
+    ArrayOfCanceledHostOperationEvent(Vec<super::structs::Event>),
     /// A boxed array of *ChangesInfoEventArgument*. To be used in *Any* placeholders.
-    ArrayOfChangesInfoEventArgument(Vec<ChangesInfoEventArgument>),
+    ArrayOfChangesInfoEventArgument(Vec<super::structs::ChangesInfoEventArgument>),
     /// A boxed array of *ClusterComplianceCheckedEvent*. To be used in *Any* placeholders.
-    ArrayOfClusterComplianceCheckedEvent(Vec<Event>),
+    ArrayOfClusterComplianceCheckedEvent(Vec<super::structs::Event>),
     /// A boxed array of *ClusterCreatedEvent*. To be used in *Any* placeholders.
-    ArrayOfClusterCreatedEvent(Vec<Event>),
+    ArrayOfClusterCreatedEvent(Vec<super::structs::Event>),
     /// A boxed array of *ClusterDestroyedEvent*. To be used in *Any* placeholders.
-    ArrayOfClusterDestroyedEvent(Vec<Event>),
+    ArrayOfClusterDestroyedEvent(Vec<super::structs::Event>),
     /// A boxed array of *ClusterEvent*. To be used in *Any* placeholders.
-    ArrayOfClusterEvent(Vec<Event>),
+    ArrayOfClusterEvent(Vec<super::structs::Event>),
     /// A boxed array of *ClusterOvercommittedEvent*. To be used in *Any* placeholders.
-    ArrayOfClusterOvercommittedEvent(Vec<Event>),
+    ArrayOfClusterOvercommittedEvent(Vec<super::structs::Event>),
     /// A boxed array of *ClusterReconfiguredEvent*. To be used in *Any* placeholders.
-    ArrayOfClusterReconfiguredEvent(Vec<Event>),
+    ArrayOfClusterReconfiguredEvent(Vec<super::structs::Event>),
     /// A boxed array of *ClusterStatusChangedEvent*. To be used in *Any* placeholders.
-    ArrayOfClusterStatusChangedEvent(Vec<Event>),
+    ArrayOfClusterStatusChangedEvent(Vec<super::structs::Event>),
     /// A boxed array of *ComputeResourceEventArgument*. To be used in *Any* placeholders.
-    ArrayOfComputeResourceEventArgument(Vec<ComputeResourceEventArgument>),
+    ArrayOfComputeResourceEventArgument(Vec<super::structs::ComputeResourceEventArgument>),
     /// A boxed array of *CustomFieldDefAddedEvent*. To be used in *Any* placeholders.
-    ArrayOfCustomFieldDefAddedEvent(Vec<Event>),
+    ArrayOfCustomFieldDefAddedEvent(Vec<super::structs::Event>),
     /// A boxed array of *CustomFieldDefEvent*. To be used in *Any* placeholders.
-    ArrayOfCustomFieldDefEvent(Vec<Event>),
+    ArrayOfCustomFieldDefEvent(Vec<super::structs::Event>),
     /// A boxed array of *CustomFieldDefRemovedEvent*. To be used in *Any* placeholders.
-    ArrayOfCustomFieldDefRemovedEvent(Vec<Event>),
+    ArrayOfCustomFieldDefRemovedEvent(Vec<super::structs::Event>),
     /// A boxed array of *CustomFieldDefRenamedEvent*. To be used in *Any* placeholders.
-    ArrayOfCustomFieldDefRenamedEvent(Vec<Event>),
+    ArrayOfCustomFieldDefRenamedEvent(Vec<super::structs::Event>),
     /// A boxed array of *CustomFieldEvent*. To be used in *Any* placeholders.
-    ArrayOfCustomFieldEvent(Vec<Event>),
+    ArrayOfCustomFieldEvent(Vec<super::structs::Event>),
     /// A boxed array of *CustomFieldValueChangedEvent*. To be used in *Any* placeholders.
-    ArrayOfCustomFieldValueChangedEvent(Vec<Event>),
+    ArrayOfCustomFieldValueChangedEvent(Vec<super::structs::Event>),
     /// A boxed array of *CustomizationEvent*. To be used in *Any* placeholders.
-    ArrayOfCustomizationEvent(Vec<Event>),
+    ArrayOfCustomizationEvent(Vec<super::structs::Event>),
     /// A boxed array of *CustomizationFailed*. To be used in *Any* placeholders.
-    ArrayOfCustomizationFailed(Vec<Event>),
+    ArrayOfCustomizationFailed(Vec<super::structs::Event>),
     /// A boxed array of *CustomizationLinuxIdentityFailed*. To be used in *Any* placeholders.
-    ArrayOfCustomizationLinuxIdentityFailed(Vec<Event>),
+    ArrayOfCustomizationLinuxIdentityFailed(Vec<super::structs::Event>),
     /// A boxed array of *CustomizationNetworkSetupFailed*. To be used in *Any* placeholders.
-    ArrayOfCustomizationNetworkSetupFailed(Vec<Event>),
+    ArrayOfCustomizationNetworkSetupFailed(Vec<super::structs::Event>),
     /// A boxed array of *CustomizationStartedEvent*. To be used in *Any* placeholders.
-    ArrayOfCustomizationStartedEvent(Vec<Event>),
+    ArrayOfCustomizationStartedEvent(Vec<super::structs::Event>),
     /// A boxed array of *CustomizationSucceeded*. To be used in *Any* placeholders.
-    ArrayOfCustomizationSucceeded(Vec<Event>),
+    ArrayOfCustomizationSucceeded(Vec<super::structs::Event>),
     /// A boxed array of *CustomizationSysprepFailed*. To be used in *Any* placeholders.
-    ArrayOfCustomizationSysprepFailed(Vec<Event>),
+    ArrayOfCustomizationSysprepFailed(Vec<super::structs::Event>),
     /// A boxed array of *CustomizationUnknownFailure*. To be used in *Any* placeholders.
-    ArrayOfCustomizationUnknownFailure(Vec<Event>),
+    ArrayOfCustomizationUnknownFailure(Vec<super::structs::Event>),
     /// A boxed array of *DVPortgroupCreatedEvent*. To be used in *Any* placeholders.
-    ArrayOfDvPortgroupCreatedEvent(Vec<Event>),
+    ArrayOfDvPortgroupCreatedEvent(Vec<super::structs::Event>),
     /// A boxed array of *DVPortgroupDestroyedEvent*. To be used in *Any* placeholders.
-    ArrayOfDvPortgroupDestroyedEvent(Vec<Event>),
+    ArrayOfDvPortgroupDestroyedEvent(Vec<super::structs::Event>),
     /// A boxed array of *DVPortgroupEvent*. To be used in *Any* placeholders.
-    ArrayOfDvPortgroupEvent(Vec<Event>),
+    ArrayOfDvPortgroupEvent(Vec<super::structs::Event>),
     /// A boxed array of *DVPortgroupReconfiguredEvent*. To be used in *Any* placeholders.
-    ArrayOfDvPortgroupReconfiguredEvent(Vec<Event>),
+    ArrayOfDvPortgroupReconfiguredEvent(Vec<super::structs::Event>),
     /// A boxed array of *DVPortgroupRenamedEvent*. To be used in *Any* placeholders.
-    ArrayOfDvPortgroupRenamedEvent(Vec<Event>),
+    ArrayOfDvPortgroupRenamedEvent(Vec<super::structs::Event>),
     /// A boxed array of *DasAdmissionControlDisabledEvent*. To be used in *Any* placeholders.
-    ArrayOfDasAdmissionControlDisabledEvent(Vec<Event>),
+    ArrayOfDasAdmissionControlDisabledEvent(Vec<super::structs::Event>),
     /// A boxed array of *DasAdmissionControlEnabledEvent*. To be used in *Any* placeholders.
-    ArrayOfDasAdmissionControlEnabledEvent(Vec<Event>),
+    ArrayOfDasAdmissionControlEnabledEvent(Vec<super::structs::Event>),
     /// A boxed array of *DasAgentFoundEvent*. To be used in *Any* placeholders.
-    ArrayOfDasAgentFoundEvent(Vec<Event>),
+    ArrayOfDasAgentFoundEvent(Vec<super::structs::Event>),
     /// A boxed array of *DasAgentUnavailableEvent*. To be used in *Any* placeholders.
-    ArrayOfDasAgentUnavailableEvent(Vec<Event>),
+    ArrayOfDasAgentUnavailableEvent(Vec<super::structs::Event>),
     /// A boxed array of *DasClusterIsolatedEvent*. To be used in *Any* placeholders.
-    ArrayOfDasClusterIsolatedEvent(Vec<Event>),
+    ArrayOfDasClusterIsolatedEvent(Vec<super::structs::Event>),
     /// A boxed array of *DasDisabledEvent*. To be used in *Any* placeholders.
-    ArrayOfDasDisabledEvent(Vec<Event>),
+    ArrayOfDasDisabledEvent(Vec<super::structs::Event>),
     /// A boxed array of *DasEnabledEvent*. To be used in *Any* placeholders.
-    ArrayOfDasEnabledEvent(Vec<Event>),
+    ArrayOfDasEnabledEvent(Vec<super::structs::Event>),
     /// A boxed array of *DasHostFailedEvent*. To be used in *Any* placeholders.
-    ArrayOfDasHostFailedEvent(Vec<Event>),
+    ArrayOfDasHostFailedEvent(Vec<super::structs::Event>),
     /// A boxed array of *DasHostIsolatedEvent*. To be used in *Any* placeholders.
-    ArrayOfDasHostIsolatedEvent(Vec<Event>),
+    ArrayOfDasHostIsolatedEvent(Vec<super::structs::Event>),
     /// A boxed array of *DatacenterCreatedEvent*. To be used in *Any* placeholders.
-    ArrayOfDatacenterCreatedEvent(Vec<Event>),
+    ArrayOfDatacenterCreatedEvent(Vec<super::structs::Event>),
     /// A boxed array of *DatacenterEvent*. To be used in *Any* placeholders.
-    ArrayOfDatacenterEvent(Vec<Event>),
+    ArrayOfDatacenterEvent(Vec<super::structs::Event>),
     /// A boxed array of *DatacenterEventArgument*. To be used in *Any* placeholders.
-    ArrayOfDatacenterEventArgument(Vec<DatacenterEventArgument>),
+    ArrayOfDatacenterEventArgument(Vec<super::structs::DatacenterEventArgument>),
     /// A boxed array of *DatacenterRenamedEvent*. To be used in *Any* placeholders.
-    ArrayOfDatacenterRenamedEvent(Vec<Event>),
+    ArrayOfDatacenterRenamedEvent(Vec<super::structs::Event>),
     /// A boxed array of *DatastoreCapacityIncreasedEvent*. To be used in *Any* placeholders.
-    ArrayOfDatastoreCapacityIncreasedEvent(Vec<Event>),
+    ArrayOfDatastoreCapacityIncreasedEvent(Vec<super::structs::Event>),
     /// A boxed array of *DatastoreDestroyedEvent*. To be used in *Any* placeholders.
-    ArrayOfDatastoreDestroyedEvent(Vec<Event>),
+    ArrayOfDatastoreDestroyedEvent(Vec<super::structs::Event>),
     /// A boxed array of *DatastoreDiscoveredEvent*. To be used in *Any* placeholders.
-    ArrayOfDatastoreDiscoveredEvent(Vec<Event>),
+    ArrayOfDatastoreDiscoveredEvent(Vec<super::structs::Event>),
     /// A boxed array of *DatastoreDuplicatedEvent*. To be used in *Any* placeholders.
-    ArrayOfDatastoreDuplicatedEvent(Vec<Event>),
+    ArrayOfDatastoreDuplicatedEvent(Vec<super::structs::Event>),
     /// A boxed array of *DatastoreEvent*. To be used in *Any* placeholders.
-    ArrayOfDatastoreEvent(Vec<Event>),
+    ArrayOfDatastoreEvent(Vec<super::structs::Event>),
     /// A boxed array of *DatastoreEventArgument*. To be used in *Any* placeholders.
-    ArrayOfDatastoreEventArgument(Vec<DatastoreEventArgument>),
+    ArrayOfDatastoreEventArgument(Vec<super::structs::DatastoreEventArgument>),
     /// A boxed array of *DatastoreFileCopiedEvent*. To be used in *Any* placeholders.
-    ArrayOfDatastoreFileCopiedEvent(Vec<Event>),
+    ArrayOfDatastoreFileCopiedEvent(Vec<super::structs::Event>),
     /// A boxed array of *DatastoreFileDeletedEvent*. To be used in *Any* placeholders.
-    ArrayOfDatastoreFileDeletedEvent(Vec<Event>),
+    ArrayOfDatastoreFileDeletedEvent(Vec<super::structs::Event>),
     /// A boxed array of *DatastoreFileEvent*. To be used in *Any* placeholders.
-    ArrayOfDatastoreFileEvent(Vec<Event>),
+    ArrayOfDatastoreFileEvent(Vec<super::structs::Event>),
     /// A boxed array of *DatastoreFileMovedEvent*. To be used in *Any* placeholders.
-    ArrayOfDatastoreFileMovedEvent(Vec<Event>),
+    ArrayOfDatastoreFileMovedEvent(Vec<super::structs::Event>),
     /// A boxed array of *DatastoreIORMReconfiguredEvent*. To be used in *Any* placeholders.
-    ArrayOfDatastoreIormReconfiguredEvent(Vec<Event>),
+    ArrayOfDatastoreIormReconfiguredEvent(Vec<super::structs::Event>),
     /// A boxed array of *DatastorePrincipalConfigured*. To be used in *Any* placeholders.
-    ArrayOfDatastorePrincipalConfigured(Vec<Event>),
+    ArrayOfDatastorePrincipalConfigured(Vec<super::structs::Event>),
     /// A boxed array of *DatastoreRemovedOnHostEvent*. To be used in *Any* placeholders.
-    ArrayOfDatastoreRemovedOnHostEvent(Vec<Event>),
+    ArrayOfDatastoreRemovedOnHostEvent(Vec<super::structs::Event>),
     /// A boxed array of *DatastoreRenamedEvent*. To be used in *Any* placeholders.
-    ArrayOfDatastoreRenamedEvent(Vec<Event>),
+    ArrayOfDatastoreRenamedEvent(Vec<super::structs::Event>),
     /// A boxed array of *DatastoreRenamedOnHostEvent*. To be used in *Any* placeholders.
-    ArrayOfDatastoreRenamedOnHostEvent(Vec<Event>),
+    ArrayOfDatastoreRenamedOnHostEvent(Vec<super::structs::Event>),
     /// A boxed array of *DrsDisabledEvent*. To be used in *Any* placeholders.
-    ArrayOfDrsDisabledEvent(Vec<Event>),
+    ArrayOfDrsDisabledEvent(Vec<super::structs::Event>),
     /// A boxed array of *DrsEnabledEvent*. To be used in *Any* placeholders.
-    ArrayOfDrsEnabledEvent(Vec<Event>),
+    ArrayOfDrsEnabledEvent(Vec<super::structs::Event>),
     /// A boxed array of *DrsEnteredStandbyModeEvent*. To be used in *Any* placeholders.
-    ArrayOfDrsEnteredStandbyModeEvent(Vec<Event>),
+    ArrayOfDrsEnteredStandbyModeEvent(Vec<super::structs::Event>),
     /// A boxed array of *DrsEnteringStandbyModeEvent*. To be used in *Any* placeholders.
-    ArrayOfDrsEnteringStandbyModeEvent(Vec<Event>),
+    ArrayOfDrsEnteringStandbyModeEvent(Vec<super::structs::Event>),
     /// A boxed array of *DrsExitStandbyModeFailedEvent*. To be used in *Any* placeholders.
-    ArrayOfDrsExitStandbyModeFailedEvent(Vec<Event>),
+    ArrayOfDrsExitStandbyModeFailedEvent(Vec<super::structs::Event>),
     /// A boxed array of *DrsExitedStandbyModeEvent*. To be used in *Any* placeholders.
-    ArrayOfDrsExitedStandbyModeEvent(Vec<Event>),
+    ArrayOfDrsExitedStandbyModeEvent(Vec<super::structs::Event>),
     /// A boxed array of *DrsExitingStandbyModeEvent*. To be used in *Any* placeholders.
-    ArrayOfDrsExitingStandbyModeEvent(Vec<Event>),
+    ArrayOfDrsExitingStandbyModeEvent(Vec<super::structs::Event>),
     /// A boxed array of *DrsInvocationFailedEvent*. To be used in *Any* placeholders.
-    ArrayOfDrsInvocationFailedEvent(Vec<Event>),
+    ArrayOfDrsInvocationFailedEvent(Vec<super::structs::Event>),
     /// A boxed array of *DrsRecoveredFromFailureEvent*. To be used in *Any* placeholders.
-    ArrayOfDrsRecoveredFromFailureEvent(Vec<Event>),
+    ArrayOfDrsRecoveredFromFailureEvent(Vec<super::structs::Event>),
     /// A boxed array of *DrsResourceConfigureFailedEvent*. To be used in *Any* placeholders.
-    ArrayOfDrsResourceConfigureFailedEvent(Vec<Event>),
+    ArrayOfDrsResourceConfigureFailedEvent(Vec<super::structs::Event>),
     /// A boxed array of *DrsResourceConfigureSyncedEvent*. To be used in *Any* placeholders.
-    ArrayOfDrsResourceConfigureSyncedEvent(Vec<Event>),
+    ArrayOfDrsResourceConfigureSyncedEvent(Vec<super::structs::Event>),
     /// A boxed array of *DrsRuleComplianceEvent*. To be used in *Any* placeholders.
-    ArrayOfDrsRuleComplianceEvent(Vec<Event>),
+    ArrayOfDrsRuleComplianceEvent(Vec<super::structs::Event>),
     /// A boxed array of *DrsRuleViolationEvent*. To be used in *Any* placeholders.
-    ArrayOfDrsRuleViolationEvent(Vec<Event>),
+    ArrayOfDrsRuleViolationEvent(Vec<super::structs::Event>),
     /// A boxed array of *DrsSoftRuleViolationEvent*. To be used in *Any* placeholders.
-    ArrayOfDrsSoftRuleViolationEvent(Vec<Event>),
+    ArrayOfDrsSoftRuleViolationEvent(Vec<super::structs::Event>),
     /// A boxed array of *DrsVmMigratedEvent*. To be used in *Any* placeholders.
-    ArrayOfDrsVmMigratedEvent(Vec<Event>),
+    ArrayOfDrsVmMigratedEvent(Vec<super::structs::Event>),
     /// A boxed array of *DrsVmPoweredOnEvent*. To be used in *Any* placeholders.
-    ArrayOfDrsVmPoweredOnEvent(Vec<Event>),
+    ArrayOfDrsVmPoweredOnEvent(Vec<super::structs::Event>),
     /// A boxed array of *DuplicateIpDetectedEvent*. To be used in *Any* placeholders.
-    ArrayOfDuplicateIpDetectedEvent(Vec<Event>),
+    ArrayOfDuplicateIpDetectedEvent(Vec<super::structs::Event>),
     /// A boxed array of *DvpgImportEvent*. To be used in *Any* placeholders.
-    ArrayOfDvpgImportEvent(Vec<Event>),
+    ArrayOfDvpgImportEvent(Vec<super::structs::Event>),
     /// A boxed array of *DvpgRestoreEvent*. To be used in *Any* placeholders.
-    ArrayOfDvpgRestoreEvent(Vec<Event>),
+    ArrayOfDvpgRestoreEvent(Vec<super::structs::Event>),
     /// A boxed array of *DvsCreatedEvent*. To be used in *Any* placeholders.
-    ArrayOfDvsCreatedEvent(Vec<Event>),
+    ArrayOfDvsCreatedEvent(Vec<super::structs::Event>),
     /// A boxed array of *DvsDestroyedEvent*. To be used in *Any* placeholders.
-    ArrayOfDvsDestroyedEvent(Vec<Event>),
+    ArrayOfDvsDestroyedEvent(Vec<super::structs::Event>),
     /// A boxed array of *DvsEvent*. To be used in *Any* placeholders.
-    ArrayOfDvsEvent(Vec<Event>),
+    ArrayOfDvsEvent(Vec<super::structs::Event>),
     /// A boxed array of *DvsEventArgument*. To be used in *Any* placeholders.
-    ArrayOfDvsEventArgument(Vec<DvsEventArgument>),
+    ArrayOfDvsEventArgument(Vec<super::structs::DvsEventArgument>),
     /// A boxed array of *DvsHealthStatusChangeEvent*. To be used in *Any* placeholders.
-    ArrayOfDvsHealthStatusChangeEvent(Vec<Event>),
+    ArrayOfDvsHealthStatusChangeEvent(Vec<super::structs::Event>),
     /// A boxed array of *DvsHostBackInSyncEvent*. To be used in *Any* placeholders.
-    ArrayOfDvsHostBackInSyncEvent(Vec<Event>),
+    ArrayOfDvsHostBackInSyncEvent(Vec<super::structs::Event>),
     /// A boxed array of *DvsHostJoinedEvent*. To be used in *Any* placeholders.
-    ArrayOfDvsHostJoinedEvent(Vec<Event>),
+    ArrayOfDvsHostJoinedEvent(Vec<super::structs::Event>),
     /// A boxed array of *DvsHostLeftEvent*. To be used in *Any* placeholders.
-    ArrayOfDvsHostLeftEvent(Vec<Event>),
+    ArrayOfDvsHostLeftEvent(Vec<super::structs::Event>),
     /// A boxed array of *DvsHostStatusUpdated*. To be used in *Any* placeholders.
-    ArrayOfDvsHostStatusUpdated(Vec<Event>),
+    ArrayOfDvsHostStatusUpdated(Vec<super::structs::Event>),
     /// A boxed array of *DvsHostWentOutOfSyncEvent*. To be used in *Any* placeholders.
-    ArrayOfDvsHostWentOutOfSyncEvent(Vec<Event>),
+    ArrayOfDvsHostWentOutOfSyncEvent(Vec<super::structs::Event>),
     /// A boxed array of *DvsImportEvent*. To be used in *Any* placeholders.
-    ArrayOfDvsImportEvent(Vec<Event>),
+    ArrayOfDvsImportEvent(Vec<super::structs::Event>),
     /// A boxed array of *DvsMergedEvent*. To be used in *Any* placeholders.
-    ArrayOfDvsMergedEvent(Vec<Event>),
+    ArrayOfDvsMergedEvent(Vec<super::structs::Event>),
     /// A boxed array of *DvsOutOfSyncHostArgument*. To be used in *Any* placeholders.
-    ArrayOfDvsOutOfSyncHostArgument(Vec<DvsOutOfSyncHostArgument>),
+    ArrayOfDvsOutOfSyncHostArgument(Vec<super::structs::DvsOutOfSyncHostArgument>),
     /// A boxed array of *DvsPortBlockedEvent*. To be used in *Any* placeholders.
-    ArrayOfDvsPortBlockedEvent(Vec<Event>),
+    ArrayOfDvsPortBlockedEvent(Vec<super::structs::Event>),
     /// A boxed array of *DvsPortConnectedEvent*. To be used in *Any* placeholders.
-    ArrayOfDvsPortConnectedEvent(Vec<Event>),
+    ArrayOfDvsPortConnectedEvent(Vec<super::structs::Event>),
     /// A boxed array of *DvsPortCreatedEvent*. To be used in *Any* placeholders.
-    ArrayOfDvsPortCreatedEvent(Vec<Event>),
+    ArrayOfDvsPortCreatedEvent(Vec<super::structs::Event>),
     /// A boxed array of *DvsPortDeletedEvent*. To be used in *Any* placeholders.
-    ArrayOfDvsPortDeletedEvent(Vec<Event>),
+    ArrayOfDvsPortDeletedEvent(Vec<super::structs::Event>),
     /// A boxed array of *DvsPortDisconnectedEvent*. To be used in *Any* placeholders.
-    ArrayOfDvsPortDisconnectedEvent(Vec<Event>),
+    ArrayOfDvsPortDisconnectedEvent(Vec<super::structs::Event>),
     /// A boxed array of *DvsPortEnteredPassthruEvent*. To be used in *Any* placeholders.
-    ArrayOfDvsPortEnteredPassthruEvent(Vec<Event>),
+    ArrayOfDvsPortEnteredPassthruEvent(Vec<super::structs::Event>),
     /// A boxed array of *DvsPortExitedPassthruEvent*. To be used in *Any* placeholders.
-    ArrayOfDvsPortExitedPassthruEvent(Vec<Event>),
+    ArrayOfDvsPortExitedPassthruEvent(Vec<super::structs::Event>),
     /// A boxed array of *DvsPortJoinPortgroupEvent*. To be used in *Any* placeholders.
-    ArrayOfDvsPortJoinPortgroupEvent(Vec<Event>),
+    ArrayOfDvsPortJoinPortgroupEvent(Vec<super::structs::Event>),
     /// A boxed array of *DvsPortLeavePortgroupEvent*. To be used in *Any* placeholders.
-    ArrayOfDvsPortLeavePortgroupEvent(Vec<Event>),
+    ArrayOfDvsPortLeavePortgroupEvent(Vec<super::structs::Event>),
     /// A boxed array of *DvsPortLinkDownEvent*. To be used in *Any* placeholders.
-    ArrayOfDvsPortLinkDownEvent(Vec<Event>),
+    ArrayOfDvsPortLinkDownEvent(Vec<super::structs::Event>),
     /// A boxed array of *DvsPortLinkUpEvent*. To be used in *Any* placeholders.
-    ArrayOfDvsPortLinkUpEvent(Vec<Event>),
+    ArrayOfDvsPortLinkUpEvent(Vec<super::structs::Event>),
     /// A boxed array of *DvsPortReconfiguredEvent*. To be used in *Any* placeholders.
-    ArrayOfDvsPortReconfiguredEvent(Vec<Event>),
+    ArrayOfDvsPortReconfiguredEvent(Vec<super::structs::Event>),
     /// A boxed array of *DvsPortRuntimeChangeEvent*. To be used in *Any* placeholders.
-    ArrayOfDvsPortRuntimeChangeEvent(Vec<Event>),
+    ArrayOfDvsPortRuntimeChangeEvent(Vec<super::structs::Event>),
     /// A boxed array of *DvsPortUnblockedEvent*. To be used in *Any* placeholders.
-    ArrayOfDvsPortUnblockedEvent(Vec<Event>),
+    ArrayOfDvsPortUnblockedEvent(Vec<super::structs::Event>),
     /// A boxed array of *DvsPortVendorSpecificStateChangeEvent*. To be used in *Any* placeholders.
-    ArrayOfDvsPortVendorSpecificStateChangeEvent(Vec<Event>),
+    ArrayOfDvsPortVendorSpecificStateChangeEvent(Vec<super::structs::Event>),
     /// A boxed array of *DvsReconfiguredEvent*. To be used in *Any* placeholders.
-    ArrayOfDvsReconfiguredEvent(Vec<Event>),
+    ArrayOfDvsReconfiguredEvent(Vec<super::structs::Event>),
     /// A boxed array of *DvsRenamedEvent*. To be used in *Any* placeholders.
-    ArrayOfDvsRenamedEvent(Vec<Event>),
+    ArrayOfDvsRenamedEvent(Vec<super::structs::Event>),
     /// A boxed array of *DvsRestoreEvent*. To be used in *Any* placeholders.
-    ArrayOfDvsRestoreEvent(Vec<Event>),
+    ArrayOfDvsRestoreEvent(Vec<super::structs::Event>),
     /// A boxed array of *DvsUpgradeAvailableEvent*. To be used in *Any* placeholders.
-    ArrayOfDvsUpgradeAvailableEvent(Vec<Event>),
+    ArrayOfDvsUpgradeAvailableEvent(Vec<super::structs::Event>),
     /// A boxed array of *DvsUpgradeInProgressEvent*. To be used in *Any* placeholders.
-    ArrayOfDvsUpgradeInProgressEvent(Vec<Event>),
+    ArrayOfDvsUpgradeInProgressEvent(Vec<super::structs::Event>),
     /// A boxed array of *DvsUpgradeRejectedEvent*. To be used in *Any* placeholders.
-    ArrayOfDvsUpgradeRejectedEvent(Vec<Event>),
+    ArrayOfDvsUpgradeRejectedEvent(Vec<super::structs::Event>),
     /// A boxed array of *DvsUpgradedEvent*. To be used in *Any* placeholders.
-    ArrayOfDvsUpgradedEvent(Vec<Event>),
+    ArrayOfDvsUpgradedEvent(Vec<super::structs::Event>),
     /// A boxed array of *EnteredMaintenanceModeEvent*. To be used in *Any* placeholders.
-    ArrayOfEnteredMaintenanceModeEvent(Vec<Event>),
+    ArrayOfEnteredMaintenanceModeEvent(Vec<super::structs::Event>),
     /// A boxed array of *EnteredStandbyModeEvent*. To be used in *Any* placeholders.
-    ArrayOfEnteredStandbyModeEvent(Vec<Event>),
+    ArrayOfEnteredStandbyModeEvent(Vec<super::structs::Event>),
     /// A boxed array of *EnteringMaintenanceModeEvent*. To be used in *Any* placeholders.
-    ArrayOfEnteringMaintenanceModeEvent(Vec<Event>),
+    ArrayOfEnteringMaintenanceModeEvent(Vec<super::structs::Event>),
     /// A boxed array of *EnteringStandbyModeEvent*. To be used in *Any* placeholders.
-    ArrayOfEnteringStandbyModeEvent(Vec<Event>),
+    ArrayOfEnteringStandbyModeEvent(Vec<super::structs::Event>),
     /// A boxed array of *EntityEventArgument*. To be used in *Any* placeholders.
     ArrayOfEntityEventArgument(Vec<Box<dyn super::traits::EntityEventArgumentTrait>>),
     /// A boxed array of *ErrorUpgradeEvent*. To be used in *Any* placeholders.
-    ArrayOfErrorUpgradeEvent(Vec<Event>),
+    ArrayOfErrorUpgradeEvent(Vec<super::structs::Event>),
     /// A boxed array of *Event*. To be used in *Any* placeholders.
-    ArrayOfEvent(Vec<Event>),
+    ArrayOfEvent(Vec<super::structs::Event>),
     /// A boxed array of *EventArgument*. To be used in *Any* placeholders.
     ArrayOfEventArgument(Vec<Box<dyn super::traits::EventArgumentTrait>>),
     /// A boxed array of *EventDescription*. To be used in *Any* placeholders.
-    ArrayOfEventDescription(Vec<EventDescription>),
+    ArrayOfEventDescription(Vec<super::structs::EventDescription>),
     /// A boxed array of *EventArgDesc*. To be used in *Any* placeholders.
-    ArrayOfEventArgDesc(Vec<EventArgDesc>),
+    ArrayOfEventArgDesc(Vec<super::structs::EventArgDesc>),
     /// A boxed array of *EventDescriptionEventDetail*. To be used in *Any* placeholders.
-    ArrayOfEventDescriptionEventDetail(Vec<EventDescriptionEventDetail>),
+    ArrayOfEventDescriptionEventDetail(Vec<super::structs::EventDescriptionEventDetail>),
     /// A boxed array of *EventEx*. To be used in *Any* placeholders.
-    ArrayOfEventEx(Vec<Event>),
+    ArrayOfEventEx(Vec<super::structs::Event>),
     /// A boxed array of *EventFilterSpec*. To be used in *Any* placeholders.
-    ArrayOfEventFilterSpec(Vec<EventFilterSpec>),
+    ArrayOfEventFilterSpec(Vec<super::structs::EventFilterSpec>),
     /// A boxed array of *EventFilterSpecByEntity*. To be used in *Any* placeholders.
-    ArrayOfEventFilterSpecByEntity(Vec<EventFilterSpecByEntity>),
+    ArrayOfEventFilterSpecByEntity(Vec<super::structs::EventFilterSpecByEntity>),
     /// A boxed array of *EventFilterSpecByTime*. To be used in *Any* placeholders.
-    ArrayOfEventFilterSpecByTime(Vec<EventFilterSpecByTime>),
+    ArrayOfEventFilterSpecByTime(Vec<super::structs::EventFilterSpecByTime>),
     /// A boxed array of *EventFilterSpecByUsername*. To be used in *Any* placeholders.
-    ArrayOfEventFilterSpecByUsername(Vec<EventFilterSpecByUsername>),
+    ArrayOfEventFilterSpecByUsername(Vec<super::structs::EventFilterSpecByUsername>),
     /// A boxed array of *ExitMaintenanceModeEvent*. To be used in *Any* placeholders.
-    ArrayOfExitMaintenanceModeEvent(Vec<Event>),
+    ArrayOfExitMaintenanceModeEvent(Vec<super::structs::Event>),
     /// A boxed array of *ExitStandbyModeFailedEvent*. To be used in *Any* placeholders.
-    ArrayOfExitStandbyModeFailedEvent(Vec<Event>),
+    ArrayOfExitStandbyModeFailedEvent(Vec<super::structs::Event>),
     /// A boxed array of *ExitedStandbyModeEvent*. To be used in *Any* placeholders.
-    ArrayOfExitedStandbyModeEvent(Vec<Event>),
+    ArrayOfExitedStandbyModeEvent(Vec<super::structs::Event>),
     /// A boxed array of *ExitingStandbyModeEvent*. To be used in *Any* placeholders.
-    ArrayOfExitingStandbyModeEvent(Vec<Event>),
+    ArrayOfExitingStandbyModeEvent(Vec<super::structs::Event>),
     /// A boxed array of *ExtendedEvent*. To be used in *Any* placeholders.
-    ArrayOfExtendedEvent(Vec<Event>),
+    ArrayOfExtendedEvent(Vec<super::structs::Event>),
     /// A boxed array of *ExtendedEventPair*. To be used in *Any* placeholders.
-    ArrayOfExtendedEventPair(Vec<ExtendedEventPair>),
+    ArrayOfExtendedEventPair(Vec<super::structs::ExtendedEventPair>),
     /// A boxed array of *FailoverLevelRestored*. To be used in *Any* placeholders.
-    ArrayOfFailoverLevelRestored(Vec<Event>),
+    ArrayOfFailoverLevelRestored(Vec<super::structs::Event>),
     /// A boxed array of *FolderEventArgument*. To be used in *Any* placeholders.
-    ArrayOfFolderEventArgument(Vec<FolderEventArgument>),
+    ArrayOfFolderEventArgument(Vec<super::structs::FolderEventArgument>),
     /// A boxed array of *GeneralEvent*. To be used in *Any* placeholders.
-    ArrayOfGeneralEvent(Vec<Event>),
+    ArrayOfGeneralEvent(Vec<super::structs::Event>),
     /// A boxed array of *GeneralHostErrorEvent*. To be used in *Any* placeholders.
-    ArrayOfGeneralHostErrorEvent(Vec<Event>),
+    ArrayOfGeneralHostErrorEvent(Vec<super::structs::Event>),
     /// A boxed array of *GeneralHostInfoEvent*. To be used in *Any* placeholders.
-    ArrayOfGeneralHostInfoEvent(Vec<Event>),
+    ArrayOfGeneralHostInfoEvent(Vec<super::structs::Event>),
     /// A boxed array of *GeneralHostWarningEvent*. To be used in *Any* placeholders.
-    ArrayOfGeneralHostWarningEvent(Vec<Event>),
+    ArrayOfGeneralHostWarningEvent(Vec<super::structs::Event>),
     /// A boxed array of *GeneralUserEvent*. To be used in *Any* placeholders.
-    ArrayOfGeneralUserEvent(Vec<Event>),
+    ArrayOfGeneralUserEvent(Vec<super::structs::Event>),
     /// A boxed array of *GeneralVmErrorEvent*. To be used in *Any* placeholders.
-    ArrayOfGeneralVmErrorEvent(Vec<Event>),
+    ArrayOfGeneralVmErrorEvent(Vec<super::structs::Event>),
     /// A boxed array of *GeneralVmInfoEvent*. To be used in *Any* placeholders.
-    ArrayOfGeneralVmInfoEvent(Vec<Event>),
+    ArrayOfGeneralVmInfoEvent(Vec<super::structs::Event>),
     /// A boxed array of *GeneralVmWarningEvent*. To be used in *Any* placeholders.
-    ArrayOfGeneralVmWarningEvent(Vec<Event>),
+    ArrayOfGeneralVmWarningEvent(Vec<super::structs::Event>),
     /// A boxed array of *GhostDvsProxySwitchDetectedEvent*. To be used in *Any* placeholders.
-    ArrayOfGhostDvsProxySwitchDetectedEvent(Vec<Event>),
+    ArrayOfGhostDvsProxySwitchDetectedEvent(Vec<super::structs::Event>),
     /// A boxed array of *GhostDvsProxySwitchRemovedEvent*. To be used in *Any* placeholders.
-    ArrayOfGhostDvsProxySwitchRemovedEvent(Vec<Event>),
+    ArrayOfGhostDvsProxySwitchRemovedEvent(Vec<super::structs::Event>),
     /// A boxed array of *GlobalMessageChangedEvent*. To be used in *Any* placeholders.
-    ArrayOfGlobalMessageChangedEvent(Vec<Event>),
+    ArrayOfGlobalMessageChangedEvent(Vec<super::structs::Event>),
     /// A boxed array of *HealthStatusChangedEvent*. To be used in *Any* placeholders.
-    ArrayOfHealthStatusChangedEvent(Vec<Event>),
+    ArrayOfHealthStatusChangedEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostAddFailedEvent*. To be used in *Any* placeholders.
-    ArrayOfHostAddFailedEvent(Vec<Event>),
+    ArrayOfHostAddFailedEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostAddedEvent*. To be used in *Any* placeholders.
-    ArrayOfHostAddedEvent(Vec<Event>),
+    ArrayOfHostAddedEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostAdminDisableEvent*. To be used in *Any* placeholders.
-    ArrayOfHostAdminDisableEvent(Vec<Event>),
+    ArrayOfHostAdminDisableEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostAdminEnableEvent*. To be used in *Any* placeholders.
-    ArrayOfHostAdminEnableEvent(Vec<Event>),
+    ArrayOfHostAdminEnableEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostCnxFailedAccountFailedEvent*. To be used in *Any* placeholders.
-    ArrayOfHostCnxFailedAccountFailedEvent(Vec<Event>),
+    ArrayOfHostCnxFailedAccountFailedEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostCnxFailedAlreadyManagedEvent*. To be used in *Any* placeholders.
-    ArrayOfHostCnxFailedAlreadyManagedEvent(Vec<Event>),
+    ArrayOfHostCnxFailedAlreadyManagedEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostCnxFailedBadCcagentEvent*. To be used in *Any* placeholders.
-    ArrayOfHostCnxFailedBadCcagentEvent(Vec<Event>),
+    ArrayOfHostCnxFailedBadCcagentEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostCnxFailedBadUsernameEvent*. To be used in *Any* placeholders.
-    ArrayOfHostCnxFailedBadUsernameEvent(Vec<Event>),
+    ArrayOfHostCnxFailedBadUsernameEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostCnxFailedBadVersionEvent*. To be used in *Any* placeholders.
-    ArrayOfHostCnxFailedBadVersionEvent(Vec<Event>),
+    ArrayOfHostCnxFailedBadVersionEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostCnxFailedCcagentUpgradeEvent*. To be used in *Any* placeholders.
-    ArrayOfHostCnxFailedCcagentUpgradeEvent(Vec<Event>),
+    ArrayOfHostCnxFailedCcagentUpgradeEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostCnxFailedEvent*. To be used in *Any* placeholders.
-    ArrayOfHostCnxFailedEvent(Vec<Event>),
+    ArrayOfHostCnxFailedEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostCnxFailedNetworkErrorEvent*. To be used in *Any* placeholders.
-    ArrayOfHostCnxFailedNetworkErrorEvent(Vec<Event>),
+    ArrayOfHostCnxFailedNetworkErrorEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostCnxFailedNoAccessEvent*. To be used in *Any* placeholders.
-    ArrayOfHostCnxFailedNoAccessEvent(Vec<Event>),
+    ArrayOfHostCnxFailedNoAccessEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostCnxFailedNoConnectionEvent*. To be used in *Any* placeholders.
-    ArrayOfHostCnxFailedNoConnectionEvent(Vec<Event>),
+    ArrayOfHostCnxFailedNoConnectionEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostCnxFailedNoLicenseEvent*. To be used in *Any* placeholders.
-    ArrayOfHostCnxFailedNoLicenseEvent(Vec<Event>),
+    ArrayOfHostCnxFailedNoLicenseEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostCnxFailedNotFoundEvent*. To be used in *Any* placeholders.
-    ArrayOfHostCnxFailedNotFoundEvent(Vec<Event>),
+    ArrayOfHostCnxFailedNotFoundEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostCnxFailedTimeoutEvent*. To be used in *Any* placeholders.
-    ArrayOfHostCnxFailedTimeoutEvent(Vec<Event>),
+    ArrayOfHostCnxFailedTimeoutEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostComplianceCheckedEvent*. To be used in *Any* placeholders.
-    ArrayOfHostComplianceCheckedEvent(Vec<Event>),
+    ArrayOfHostComplianceCheckedEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostCompliantEvent*. To be used in *Any* placeholders.
-    ArrayOfHostCompliantEvent(Vec<Event>),
+    ArrayOfHostCompliantEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostConfigAppliedEvent*. To be used in *Any* placeholders.
-    ArrayOfHostConfigAppliedEvent(Vec<Event>),
+    ArrayOfHostConfigAppliedEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostConnectedEvent*. To be used in *Any* placeholders.
-    ArrayOfHostConnectedEvent(Vec<Event>),
+    ArrayOfHostConnectedEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostConnectionLostEvent*. To be used in *Any* placeholders.
-    ArrayOfHostConnectionLostEvent(Vec<Event>),
+    ArrayOfHostConnectionLostEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostDasDisabledEvent*. To be used in *Any* placeholders.
-    ArrayOfHostDasDisabledEvent(Vec<Event>),
+    ArrayOfHostDasDisabledEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostDasDisablingEvent*. To be used in *Any* placeholders.
-    ArrayOfHostDasDisablingEvent(Vec<Event>),
+    ArrayOfHostDasDisablingEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostDasEnabledEvent*. To be used in *Any* placeholders.
-    ArrayOfHostDasEnabledEvent(Vec<Event>),
+    ArrayOfHostDasEnabledEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostDasEnablingEvent*. To be used in *Any* placeholders.
-    ArrayOfHostDasEnablingEvent(Vec<Event>),
+    ArrayOfHostDasEnablingEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostDasErrorEvent*. To be used in *Any* placeholders.
-    ArrayOfHostDasErrorEvent(Vec<Event>),
+    ArrayOfHostDasErrorEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostDasEvent*. To be used in *Any* placeholders.
-    ArrayOfHostDasEvent(Vec<Event>),
+    ArrayOfHostDasEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostDasOkEvent*. To be used in *Any* placeholders.
-    ArrayOfHostDasOkEvent(Vec<Event>),
+    ArrayOfHostDasOkEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostDisconnectedEvent*. To be used in *Any* placeholders.
-    ArrayOfHostDisconnectedEvent(Vec<Event>),
+    ArrayOfHostDisconnectedEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostEnableAdminFailedEvent*. To be used in *Any* placeholders.
-    ArrayOfHostEnableAdminFailedEvent(Vec<Event>),
+    ArrayOfHostEnableAdminFailedEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostEvent*. To be used in *Any* placeholders.
-    ArrayOfHostEvent(Vec<Event>),
+    ArrayOfHostEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostEventArgument*. To be used in *Any* placeholders.
-    ArrayOfHostEventArgument(Vec<HostEventArgument>),
+    ArrayOfHostEventArgument(Vec<super::structs::HostEventArgument>),
     /// A boxed array of *HostExtraNetworksEvent*. To be used in *Any* placeholders.
-    ArrayOfHostExtraNetworksEvent(Vec<Event>),
+    ArrayOfHostExtraNetworksEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostGetShortNameFailedEvent*. To be used in *Any* placeholders.
-    ArrayOfHostGetShortNameFailedEvent(Vec<Event>),
+    ArrayOfHostGetShortNameFailedEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostInAuditModeEvent*. To be used in *Any* placeholders.
-    ArrayOfHostInAuditModeEvent(Vec<Event>),
+    ArrayOfHostInAuditModeEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostInventoryFullEvent*. To be used in *Any* placeholders.
-    ArrayOfHostInventoryFullEvent(Vec<Event>),
+    ArrayOfHostInventoryFullEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostInventoryUnreadableEvent*. To be used in *Any* placeholders.
-    ArrayOfHostInventoryUnreadableEvent(Vec<Event>),
+    ArrayOfHostInventoryUnreadableEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostIpChangedEvent*. To be used in *Any* placeholders.
-    ArrayOfHostIpChangedEvent(Vec<Event>),
+    ArrayOfHostIpChangedEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostIpInconsistentEvent*. To be used in *Any* placeholders.
-    ArrayOfHostIpInconsistentEvent(Vec<Event>),
+    ArrayOfHostIpInconsistentEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostIpToShortNameFailedEvent*. To be used in *Any* placeholders.
-    ArrayOfHostIpToShortNameFailedEvent(Vec<Event>),
+    ArrayOfHostIpToShortNameFailedEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostIsolationIpPingFailedEvent*. To be used in *Any* placeholders.
-    ArrayOfHostIsolationIpPingFailedEvent(Vec<Event>),
+    ArrayOfHostIsolationIpPingFailedEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostLicenseExpiredEvent*. To be used in *Any* placeholders.
-    ArrayOfHostLicenseExpiredEvent(Vec<Event>),
+    ArrayOfHostLicenseExpiredEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostLocalPortCreatedEvent*. To be used in *Any* placeholders.
-    ArrayOfHostLocalPortCreatedEvent(Vec<Event>),
+    ArrayOfHostLocalPortCreatedEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostMissingNetworksEvent*. To be used in *Any* placeholders.
-    ArrayOfHostMissingNetworksEvent(Vec<Event>),
+    ArrayOfHostMissingNetworksEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostMonitoringStateChangedEvent*. To be used in *Any* placeholders.
-    ArrayOfHostMonitoringStateChangedEvent(Vec<Event>),
+    ArrayOfHostMonitoringStateChangedEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostNoAvailableNetworksEvent*. To be used in *Any* placeholders.
-    ArrayOfHostNoAvailableNetworksEvent(Vec<Event>),
+    ArrayOfHostNoAvailableNetworksEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostNoHAEnabledPortGroupsEvent*. To be used in *Any* placeholders.
-    ArrayOfHostNoHaEnabledPortGroupsEvent(Vec<Event>),
+    ArrayOfHostNoHaEnabledPortGroupsEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostNoRedundantManagementNetworkEvent*. To be used in *Any* placeholders.
-    ArrayOfHostNoRedundantManagementNetworkEvent(Vec<Event>),
+    ArrayOfHostNoRedundantManagementNetworkEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostNonCompliantEvent*. To be used in *Any* placeholders.
-    ArrayOfHostNonCompliantEvent(Vec<Event>),
+    ArrayOfHostNonCompliantEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostNotInClusterEvent*. To be used in *Any* placeholders.
-    ArrayOfHostNotInClusterEvent(Vec<Event>),
+    ArrayOfHostNotInClusterEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostOvercommittedEvent*. To be used in *Any* placeholders.
-    ArrayOfHostOvercommittedEvent(Vec<Event>),
+    ArrayOfHostOvercommittedEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostPrimaryAgentNotShortNameEvent*. To be used in *Any* placeholders.
-    ArrayOfHostPrimaryAgentNotShortNameEvent(Vec<Event>),
+    ArrayOfHostPrimaryAgentNotShortNameEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostProfileAppliedEvent*. To be used in *Any* placeholders.
-    ArrayOfHostProfileAppliedEvent(Vec<Event>),
+    ArrayOfHostProfileAppliedEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostReconnectionFailedEvent*. To be used in *Any* placeholders.
-    ArrayOfHostReconnectionFailedEvent(Vec<Event>),
+    ArrayOfHostReconnectionFailedEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostRemovedEvent*. To be used in *Any* placeholders.
-    ArrayOfHostRemovedEvent(Vec<Event>),
+    ArrayOfHostRemovedEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostShortNameInconsistentEvent*. To be used in *Any* placeholders.
-    ArrayOfHostShortNameInconsistentEvent(Vec<Event>),
+    ArrayOfHostShortNameInconsistentEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostShortNameToIpFailedEvent*. To be used in *Any* placeholders.
-    ArrayOfHostShortNameToIpFailedEvent(Vec<Event>),
+    ArrayOfHostShortNameToIpFailedEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostShutdownEvent*. To be used in *Any* placeholders.
-    ArrayOfHostShutdownEvent(Vec<Event>),
+    ArrayOfHostShutdownEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostSpecificationChangedEvent*. To be used in *Any* placeholders.
-    ArrayOfHostSpecificationChangedEvent(Vec<Event>),
+    ArrayOfHostSpecificationChangedEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostSpecificationRequireEvent*. To be used in *Any* placeholders.
-    ArrayOfHostSpecificationRequireEvent(Vec<Event>),
+    ArrayOfHostSpecificationRequireEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostSpecificationUpdateEvent*. To be used in *Any* placeholders.
-    ArrayOfHostSpecificationUpdateEvent(Vec<Event>),
+    ArrayOfHostSpecificationUpdateEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostStatusChangedEvent*. To be used in *Any* placeholders.
-    ArrayOfHostStatusChangedEvent(Vec<Event>),
+    ArrayOfHostStatusChangedEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostSubSpecificationDeleteEvent*. To be used in *Any* placeholders.
-    ArrayOfHostSubSpecificationDeleteEvent(Vec<Event>),
+    ArrayOfHostSubSpecificationDeleteEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostSubSpecificationUpdateEvent*. To be used in *Any* placeholders.
-    ArrayOfHostSubSpecificationUpdateEvent(Vec<Event>),
+    ArrayOfHostSubSpecificationUpdateEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostSyncFailedEvent*. To be used in *Any* placeholders.
-    ArrayOfHostSyncFailedEvent(Vec<Event>),
+    ArrayOfHostSyncFailedEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostUpgradeFailedEvent*. To be used in *Any* placeholders.
-    ArrayOfHostUpgradeFailedEvent(Vec<Event>),
+    ArrayOfHostUpgradeFailedEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostUserWorldSwapNotEnabledEvent*. To be used in *Any* placeholders.
-    ArrayOfHostUserWorldSwapNotEnabledEvent(Vec<Event>),
+    ArrayOfHostUserWorldSwapNotEnabledEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostVnicConnectedToCustomizedDVPortEvent*. To be used in *Any* placeholders.
-    ArrayOfHostVnicConnectedToCustomizedDvPortEvent(Vec<Event>),
+    ArrayOfHostVnicConnectedToCustomizedDvPortEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostWwnChangedEvent*. To be used in *Any* placeholders.
-    ArrayOfHostWwnChangedEvent(Vec<Event>),
+    ArrayOfHostWwnChangedEvent(Vec<super::structs::Event>),
     /// A boxed array of *HostWwnConflictEvent*. To be used in *Any* placeholders.
-    ArrayOfHostWwnConflictEvent(Vec<Event>),
+    ArrayOfHostWwnConflictEvent(Vec<super::structs::Event>),
     /// A boxed array of *IncorrectHostInformationEvent*. To be used in *Any* placeholders.
-    ArrayOfIncorrectHostInformationEvent(Vec<Event>),
+    ArrayOfIncorrectHostInformationEvent(Vec<super::structs::Event>),
     /// A boxed array of *InfoUpgradeEvent*. To be used in *Any* placeholders.
-    ArrayOfInfoUpgradeEvent(Vec<Event>),
+    ArrayOfInfoUpgradeEvent(Vec<super::structs::Event>),
     /// A boxed array of *InsufficientFailoverResourcesEvent*. To be used in *Any* placeholders.
-    ArrayOfInsufficientFailoverResourcesEvent(Vec<Event>),
+    ArrayOfInsufficientFailoverResourcesEvent(Vec<super::structs::Event>),
     /// A boxed array of *InvalidEditionEvent*. To be used in *Any* placeholders.
-    ArrayOfInvalidEditionEvent(Vec<Event>),
+    ArrayOfInvalidEditionEvent(Vec<super::structs::Event>),
     /// A boxed array of *LicenseEvent*. To be used in *Any* placeholders.
-    ArrayOfLicenseEvent(Vec<Event>),
+    ArrayOfLicenseEvent(Vec<super::structs::Event>),
     /// A boxed array of *LicenseExpiredEvent*. To be used in *Any* placeholders.
-    ArrayOfLicenseExpiredEvent(Vec<Event>),
+    ArrayOfLicenseExpiredEvent(Vec<super::structs::Event>),
     /// A boxed array of *LicenseNonComplianceEvent*. To be used in *Any* placeholders.
-    ArrayOfLicenseNonComplianceEvent(Vec<Event>),
+    ArrayOfLicenseNonComplianceEvent(Vec<super::structs::Event>),
     /// A boxed array of *LicenseRestrictedEvent*. To be used in *Any* placeholders.
-    ArrayOfLicenseRestrictedEvent(Vec<Event>),
+    ArrayOfLicenseRestrictedEvent(Vec<super::structs::Event>),
     /// A boxed array of *LicenseServerAvailableEvent*. To be used in *Any* placeholders.
-    ArrayOfLicenseServerAvailableEvent(Vec<Event>),
+    ArrayOfLicenseServerAvailableEvent(Vec<super::structs::Event>),
     /// A boxed array of *LicenseServerUnavailableEvent*. To be used in *Any* placeholders.
-    ArrayOfLicenseServerUnavailableEvent(Vec<Event>),
+    ArrayOfLicenseServerUnavailableEvent(Vec<super::structs::Event>),
     /// A boxed array of *LocalDatastoreCreatedEvent*. To be used in *Any* placeholders.
-    ArrayOfLocalDatastoreCreatedEvent(Vec<Event>),
+    ArrayOfLocalDatastoreCreatedEvent(Vec<super::structs::Event>),
     /// A boxed array of *LocalTSMEnabledEvent*. To be used in *Any* placeholders.
-    ArrayOfLocalTsmEnabledEvent(Vec<Event>),
+    ArrayOfLocalTsmEnabledEvent(Vec<super::structs::Event>),
     /// A boxed array of *LockerMisconfiguredEvent*. To be used in *Any* placeholders.
-    ArrayOfLockerMisconfiguredEvent(Vec<Event>),
+    ArrayOfLockerMisconfiguredEvent(Vec<super::structs::Event>),
     /// A boxed array of *LockerReconfiguredEvent*. To be used in *Any* placeholders.
-    ArrayOfLockerReconfiguredEvent(Vec<Event>),
+    ArrayOfLockerReconfiguredEvent(Vec<super::structs::Event>),
     /// A boxed array of *ManagedEntityEventArgument*. To be used in *Any* placeholders.
-    ArrayOfManagedEntityEventArgument(Vec<ManagedEntityEventArgument>),
+    ArrayOfManagedEntityEventArgument(Vec<super::structs::ManagedEntityEventArgument>),
     /// A boxed array of *MigrationErrorEvent*. To be used in *Any* placeholders.
-    ArrayOfMigrationErrorEvent(Vec<Event>),
+    ArrayOfMigrationErrorEvent(Vec<super::structs::Event>),
     /// A boxed array of *MigrationEvent*. To be used in *Any* placeholders.
-    ArrayOfMigrationEvent(Vec<Event>),
+    ArrayOfMigrationEvent(Vec<super::structs::Event>),
     /// A boxed array of *MigrationHostErrorEvent*. To be used in *Any* placeholders.
-    ArrayOfMigrationHostErrorEvent(Vec<Event>),
+    ArrayOfMigrationHostErrorEvent(Vec<super::structs::Event>),
     /// A boxed array of *MigrationHostWarningEvent*. To be used in *Any* placeholders.
-    ArrayOfMigrationHostWarningEvent(Vec<Event>),
+    ArrayOfMigrationHostWarningEvent(Vec<super::structs::Event>),
     /// A boxed array of *MigrationResourceErrorEvent*. To be used in *Any* placeholders.
-    ArrayOfMigrationResourceErrorEvent(Vec<Event>),
+    ArrayOfMigrationResourceErrorEvent(Vec<super::structs::Event>),
     /// A boxed array of *MigrationResourceWarningEvent*. To be used in *Any* placeholders.
-    ArrayOfMigrationResourceWarningEvent(Vec<Event>),
+    ArrayOfMigrationResourceWarningEvent(Vec<super::structs::Event>),
     /// A boxed array of *MigrationWarningEvent*. To be used in *Any* placeholders.
-    ArrayOfMigrationWarningEvent(Vec<Event>),
+    ArrayOfMigrationWarningEvent(Vec<super::structs::Event>),
     /// A boxed array of *MtuMatchEvent*. To be used in *Any* placeholders.
-    ArrayOfMtuMatchEvent(Vec<Event>),
+    ArrayOfMtuMatchEvent(Vec<super::structs::Event>),
     /// A boxed array of *MtuMismatchEvent*. To be used in *Any* placeholders.
-    ArrayOfMtuMismatchEvent(Vec<Event>),
+    ArrayOfMtuMismatchEvent(Vec<super::structs::Event>),
     /// A boxed array of *NASDatastoreCreatedEvent*. To be used in *Any* placeholders.
-    ArrayOfNasDatastoreCreatedEvent(Vec<Event>),
+    ArrayOfNasDatastoreCreatedEvent(Vec<super::structs::Event>),
     /// A boxed array of *NetworkEventArgument*. To be used in *Any* placeholders.
-    ArrayOfNetworkEventArgument(Vec<NetworkEventArgument>),
+    ArrayOfNetworkEventArgument(Vec<super::structs::NetworkEventArgument>),
     /// A boxed array of *NetworkRollbackEvent*. To be used in *Any* placeholders.
-    ArrayOfNetworkRollbackEvent(Vec<Event>),
+    ArrayOfNetworkRollbackEvent(Vec<super::structs::Event>),
     /// A boxed array of *NoAccessUserEvent*. To be used in *Any* placeholders.
-    ArrayOfNoAccessUserEvent(Vec<Event>),
+    ArrayOfNoAccessUserEvent(Vec<super::structs::Event>),
     /// A boxed array of *NoDatastoresConfiguredEvent*. To be used in *Any* placeholders.
-    ArrayOfNoDatastoresConfiguredEvent(Vec<Event>),
+    ArrayOfNoDatastoresConfiguredEvent(Vec<super::structs::Event>),
     /// A boxed array of *NoLicenseEvent*. To be used in *Any* placeholders.
-    ArrayOfNoLicenseEvent(Vec<Event>),
+    ArrayOfNoLicenseEvent(Vec<super::structs::Event>),
     /// A boxed array of *NoMaintenanceModeDrsRecommendationForVM*. To be used in *Any* placeholders.
-    ArrayOfNoMaintenanceModeDrsRecommendationForVm(Vec<Event>),
+    ArrayOfNoMaintenanceModeDrsRecommendationForVm(Vec<super::structs::Event>),
     /// A boxed array of *NonVIWorkloadDetectedOnDatastoreEvent*. To be used in *Any* placeholders.
-    ArrayOfNonViWorkloadDetectedOnDatastoreEvent(Vec<Event>),
+    ArrayOfNonViWorkloadDetectedOnDatastoreEvent(Vec<super::structs::Event>),
     /// A boxed array of *NotEnoughResourcesToStartVmEvent*. To be used in *Any* placeholders.
-    ArrayOfNotEnoughResourcesToStartVmEvent(Vec<Event>),
+    ArrayOfNotEnoughResourcesToStartVmEvent(Vec<super::structs::Event>),
     /// A boxed array of *OutOfSyncDvsHost*. To be used in *Any* placeholders.
-    ArrayOfOutOfSyncDvsHost(Vec<Event>),
+    ArrayOfOutOfSyncDvsHost(Vec<super::structs::Event>),
     /// A boxed array of *PermissionAddedEvent*. To be used in *Any* placeholders.
-    ArrayOfPermissionAddedEvent(Vec<Event>),
+    ArrayOfPermissionAddedEvent(Vec<super::structs::Event>),
     /// A boxed array of *PermissionEvent*. To be used in *Any* placeholders.
-    ArrayOfPermissionEvent(Vec<Event>),
+    ArrayOfPermissionEvent(Vec<super::structs::Event>),
     /// A boxed array of *PermissionRemovedEvent*. To be used in *Any* placeholders.
-    ArrayOfPermissionRemovedEvent(Vec<Event>),
+    ArrayOfPermissionRemovedEvent(Vec<super::structs::Event>),
     /// A boxed array of *PermissionUpdatedEvent*. To be used in *Any* placeholders.
-    ArrayOfPermissionUpdatedEvent(Vec<Event>),
+    ArrayOfPermissionUpdatedEvent(Vec<super::structs::Event>),
     /// A boxed array of *ProfileAssociatedEvent*. To be used in *Any* placeholders.
-    ArrayOfProfileAssociatedEvent(Vec<Event>),
+    ArrayOfProfileAssociatedEvent(Vec<super::structs::Event>),
     /// A boxed array of *ProfileChangedEvent*. To be used in *Any* placeholders.
-    ArrayOfProfileChangedEvent(Vec<Event>),
+    ArrayOfProfileChangedEvent(Vec<super::structs::Event>),
     /// A boxed array of *ProfileCreatedEvent*. To be used in *Any* placeholders.
-    ArrayOfProfileCreatedEvent(Vec<Event>),
+    ArrayOfProfileCreatedEvent(Vec<super::structs::Event>),
     /// A boxed array of *ProfileDissociatedEvent*. To be used in *Any* placeholders.
-    ArrayOfProfileDissociatedEvent(Vec<Event>),
+    ArrayOfProfileDissociatedEvent(Vec<super::structs::Event>),
     /// A boxed array of *ProfileEvent*. To be used in *Any* placeholders.
-    ArrayOfProfileEvent(Vec<Event>),
+    ArrayOfProfileEvent(Vec<super::structs::Event>),
     /// A boxed array of *ProfileEventArgument*. To be used in *Any* placeholders.
-    ArrayOfProfileEventArgument(Vec<ProfileEventArgument>),
+    ArrayOfProfileEventArgument(Vec<super::structs::ProfileEventArgument>),
     /// A boxed array of *ProfileReferenceHostChangedEvent*. To be used in *Any* placeholders.
-    ArrayOfProfileReferenceHostChangedEvent(Vec<Event>),
+    ArrayOfProfileReferenceHostChangedEvent(Vec<super::structs::Event>),
     /// A boxed array of *ProfileRemovedEvent*. To be used in *Any* placeholders.
-    ArrayOfProfileRemovedEvent(Vec<Event>),
+    ArrayOfProfileRemovedEvent(Vec<super::structs::Event>),
     /// A boxed array of *RecoveryEvent*. To be used in *Any* placeholders.
-    ArrayOfRecoveryEvent(Vec<Event>),
+    ArrayOfRecoveryEvent(Vec<super::structs::Event>),
     /// A boxed array of *RemoteTSMEnabledEvent*. To be used in *Any* placeholders.
-    ArrayOfRemoteTsmEnabledEvent(Vec<Event>),
+    ArrayOfRemoteTsmEnabledEvent(Vec<super::structs::Event>),
     /// A boxed array of *ResourcePoolCreatedEvent*. To be used in *Any* placeholders.
-    ArrayOfResourcePoolCreatedEvent(Vec<Event>),
+    ArrayOfResourcePoolCreatedEvent(Vec<super::structs::Event>),
     /// A boxed array of *ResourcePoolDestroyedEvent*. To be used in *Any* placeholders.
-    ArrayOfResourcePoolDestroyedEvent(Vec<Event>),
+    ArrayOfResourcePoolDestroyedEvent(Vec<super::structs::Event>),
     /// A boxed array of *ResourcePoolEvent*. To be used in *Any* placeholders.
-    ArrayOfResourcePoolEvent(Vec<Event>),
+    ArrayOfResourcePoolEvent(Vec<super::structs::Event>),
     /// A boxed array of *ResourcePoolEventArgument*. To be used in *Any* placeholders.
-    ArrayOfResourcePoolEventArgument(Vec<ResourcePoolEventArgument>),
+    ArrayOfResourcePoolEventArgument(Vec<super::structs::ResourcePoolEventArgument>),
     /// A boxed array of *ResourcePoolMovedEvent*. To be used in *Any* placeholders.
-    ArrayOfResourcePoolMovedEvent(Vec<Event>),
+    ArrayOfResourcePoolMovedEvent(Vec<super::structs::Event>),
     /// A boxed array of *ResourcePoolReconfiguredEvent*. To be used in *Any* placeholders.
-    ArrayOfResourcePoolReconfiguredEvent(Vec<Event>),
+    ArrayOfResourcePoolReconfiguredEvent(Vec<super::structs::Event>),
     /// A boxed array of *ResourceViolatedEvent*. To be used in *Any* placeholders.
-    ArrayOfResourceViolatedEvent(Vec<Event>),
+    ArrayOfResourceViolatedEvent(Vec<super::structs::Event>),
     /// A boxed array of *RoleAddedEvent*. To be used in *Any* placeholders.
-    ArrayOfRoleAddedEvent(Vec<Event>),
+    ArrayOfRoleAddedEvent(Vec<super::structs::Event>),
     /// A boxed array of *RoleEvent*. To be used in *Any* placeholders.
-    ArrayOfRoleEvent(Vec<Event>),
+    ArrayOfRoleEvent(Vec<super::structs::Event>),
     /// A boxed array of *RoleEventArgument*. To be used in *Any* placeholders.
-    ArrayOfRoleEventArgument(Vec<RoleEventArgument>),
+    ArrayOfRoleEventArgument(Vec<super::structs::RoleEventArgument>),
     /// A boxed array of *RoleRemovedEvent*. To be used in *Any* placeholders.
-    ArrayOfRoleRemovedEvent(Vec<Event>),
+    ArrayOfRoleRemovedEvent(Vec<super::structs::Event>),
     /// A boxed array of *RoleUpdatedEvent*. To be used in *Any* placeholders.
-    ArrayOfRoleUpdatedEvent(Vec<Event>),
+    ArrayOfRoleUpdatedEvent(Vec<super::structs::Event>),
     /// A boxed array of *RollbackEvent*. To be used in *Any* placeholders.
-    ArrayOfRollbackEvent(Vec<Event>),
+    ArrayOfRollbackEvent(Vec<super::structs::Event>),
     /// A boxed array of *ScheduledTaskCompletedEvent*. To be used in *Any* placeholders.
-    ArrayOfScheduledTaskCompletedEvent(Vec<Event>),
+    ArrayOfScheduledTaskCompletedEvent(Vec<super::structs::Event>),
     /// A boxed array of *ScheduledTaskCreatedEvent*. To be used in *Any* placeholders.
-    ArrayOfScheduledTaskCreatedEvent(Vec<Event>),
+    ArrayOfScheduledTaskCreatedEvent(Vec<super::structs::Event>),
     /// A boxed array of *ScheduledTaskEmailCompletedEvent*. To be used in *Any* placeholders.
-    ArrayOfScheduledTaskEmailCompletedEvent(Vec<Event>),
+    ArrayOfScheduledTaskEmailCompletedEvent(Vec<super::structs::Event>),
     /// A boxed array of *ScheduledTaskEmailFailedEvent*. To be used in *Any* placeholders.
-    ArrayOfScheduledTaskEmailFailedEvent(Vec<Event>),
+    ArrayOfScheduledTaskEmailFailedEvent(Vec<super::structs::Event>),
     /// A boxed array of *ScheduledTaskEvent*. To be used in *Any* placeholders.
-    ArrayOfScheduledTaskEvent(Vec<Event>),
+    ArrayOfScheduledTaskEvent(Vec<super::structs::Event>),
     /// A boxed array of *ScheduledTaskEventArgument*. To be used in *Any* placeholders.
-    ArrayOfScheduledTaskEventArgument(Vec<ScheduledTaskEventArgument>),
+    ArrayOfScheduledTaskEventArgument(Vec<super::structs::ScheduledTaskEventArgument>),
     /// A boxed array of *ScheduledTaskFailedEvent*. To be used in *Any* placeholders.
-    ArrayOfScheduledTaskFailedEvent(Vec<Event>),
+    ArrayOfScheduledTaskFailedEvent(Vec<super::structs::Event>),
     /// A boxed array of *ScheduledTaskReconfiguredEvent*. To be used in *Any* placeholders.
-    ArrayOfScheduledTaskReconfiguredEvent(Vec<Event>),
+    ArrayOfScheduledTaskReconfiguredEvent(Vec<super::structs::Event>),
     /// A boxed array of *ScheduledTaskRemovedEvent*. To be used in *Any* placeholders.
-    ArrayOfScheduledTaskRemovedEvent(Vec<Event>),
+    ArrayOfScheduledTaskRemovedEvent(Vec<super::structs::Event>),
     /// A boxed array of *ScheduledTaskStartedEvent*. To be used in *Any* placeholders.
-    ArrayOfScheduledTaskStartedEvent(Vec<Event>),
+    ArrayOfScheduledTaskStartedEvent(Vec<super::structs::Event>),
     /// A boxed array of *ServerLicenseExpiredEvent*. To be used in *Any* placeholders.
-    ArrayOfServerLicenseExpiredEvent(Vec<Event>),
+    ArrayOfServerLicenseExpiredEvent(Vec<super::structs::Event>),
     /// A boxed array of *ServerStartedSessionEvent*. To be used in *Any* placeholders.
-    ArrayOfServerStartedSessionEvent(Vec<Event>),
+    ArrayOfServerStartedSessionEvent(Vec<super::structs::Event>),
     /// A boxed array of *SessionEvent*. To be used in *Any* placeholders.
-    ArrayOfSessionEvent(Vec<Event>),
+    ArrayOfSessionEvent(Vec<super::structs::Event>),
     /// A boxed array of *SessionTerminatedEvent*. To be used in *Any* placeholders.
-    ArrayOfSessionTerminatedEvent(Vec<Event>),
+    ArrayOfSessionTerminatedEvent(Vec<super::structs::Event>),
     /// A boxed array of *TaskEvent*. To be used in *Any* placeholders.
-    ArrayOfTaskEvent(Vec<Event>),
+    ArrayOfTaskEvent(Vec<super::structs::Event>),
     /// A boxed array of *TaskTimeoutEvent*. To be used in *Any* placeholders.
-    ArrayOfTaskTimeoutEvent(Vec<Event>),
+    ArrayOfTaskTimeoutEvent(Vec<super::structs::Event>),
     /// A boxed array of *TeamingMatchEvent*. To be used in *Any* placeholders.
-    ArrayOfTeamingMatchEvent(Vec<Event>),
+    ArrayOfTeamingMatchEvent(Vec<super::structs::Event>),
     /// A boxed array of *TeamingMisMatchEvent*. To be used in *Any* placeholders.
-    ArrayOfTeamingMisMatchEvent(Vec<Event>),
+    ArrayOfTeamingMisMatchEvent(Vec<super::structs::Event>),
     /// A boxed array of *TemplateBeingUpgradedEvent*. To be used in *Any* placeholders.
-    ArrayOfTemplateBeingUpgradedEvent(Vec<Event>),
+    ArrayOfTemplateBeingUpgradedEvent(Vec<super::structs::Event>),
     /// A boxed array of *TemplateUpgradeEvent*. To be used in *Any* placeholders.
-    ArrayOfTemplateUpgradeEvent(Vec<Event>),
+    ArrayOfTemplateUpgradeEvent(Vec<super::structs::Event>),
     /// A boxed array of *TemplateUpgradeFailedEvent*. To be used in *Any* placeholders.
-    ArrayOfTemplateUpgradeFailedEvent(Vec<Event>),
+    ArrayOfTemplateUpgradeFailedEvent(Vec<super::structs::Event>),
     /// A boxed array of *TemplateUpgradedEvent*. To be used in *Any* placeholders.
-    ArrayOfTemplateUpgradedEvent(Vec<Event>),
+    ArrayOfTemplateUpgradedEvent(Vec<super::structs::Event>),
     /// A boxed array of *TimedOutHostOperationEvent*. To be used in *Any* placeholders.
-    ArrayOfTimedOutHostOperationEvent(Vec<Event>),
+    ArrayOfTimedOutHostOperationEvent(Vec<super::structs::Event>),
     /// A boxed array of *UnlicensedVirtualMachinesEvent*. To be used in *Any* placeholders.
-    ArrayOfUnlicensedVirtualMachinesEvent(Vec<Event>),
+    ArrayOfUnlicensedVirtualMachinesEvent(Vec<super::structs::Event>),
     /// A boxed array of *UnlicensedVirtualMachinesFoundEvent*. To be used in *Any* placeholders.
-    ArrayOfUnlicensedVirtualMachinesFoundEvent(Vec<Event>),
+    ArrayOfUnlicensedVirtualMachinesFoundEvent(Vec<super::structs::Event>),
     /// A boxed array of *UpdatedAgentBeingRestartedEvent*. To be used in *Any* placeholders.
-    ArrayOfUpdatedAgentBeingRestartedEvent(Vec<Event>),
+    ArrayOfUpdatedAgentBeingRestartedEvent(Vec<super::structs::Event>),
     /// A boxed array of *UpgradeEvent*. To be used in *Any* placeholders.
-    ArrayOfUpgradeEvent(Vec<Event>),
+    ArrayOfUpgradeEvent(Vec<super::structs::Event>),
     /// A boxed array of *UplinkPortMtuNotSupportEvent*. To be used in *Any* placeholders.
-    ArrayOfUplinkPortMtuNotSupportEvent(Vec<Event>),
+    ArrayOfUplinkPortMtuNotSupportEvent(Vec<super::structs::Event>),
     /// A boxed array of *UplinkPortMtuSupportEvent*. To be used in *Any* placeholders.
-    ArrayOfUplinkPortMtuSupportEvent(Vec<Event>),
+    ArrayOfUplinkPortMtuSupportEvent(Vec<super::structs::Event>),
     /// A boxed array of *UplinkPortVlanTrunkedEvent*. To be used in *Any* placeholders.
-    ArrayOfUplinkPortVlanTrunkedEvent(Vec<Event>),
+    ArrayOfUplinkPortVlanTrunkedEvent(Vec<super::structs::Event>),
     /// A boxed array of *UplinkPortVlanUntrunkedEvent*. To be used in *Any* placeholders.
-    ArrayOfUplinkPortVlanUntrunkedEvent(Vec<Event>),
+    ArrayOfUplinkPortVlanUntrunkedEvent(Vec<super::structs::Event>),
     /// A boxed array of *UserAssignedToGroup*. To be used in *Any* placeholders.
-    ArrayOfUserAssignedToGroup(Vec<Event>),
+    ArrayOfUserAssignedToGroup(Vec<super::structs::Event>),
     /// A boxed array of *UserLoginSessionEvent*. To be used in *Any* placeholders.
-    ArrayOfUserLoginSessionEvent(Vec<Event>),
+    ArrayOfUserLoginSessionEvent(Vec<super::structs::Event>),
     /// A boxed array of *UserLogoutSessionEvent*. To be used in *Any* placeholders.
-    ArrayOfUserLogoutSessionEvent(Vec<Event>),
+    ArrayOfUserLogoutSessionEvent(Vec<super::structs::Event>),
     /// A boxed array of *UserPasswordChanged*. To be used in *Any* placeholders.
-    ArrayOfUserPasswordChanged(Vec<Event>),
+    ArrayOfUserPasswordChanged(Vec<super::structs::Event>),
     /// A boxed array of *UserUnassignedFromGroup*. To be used in *Any* placeholders.
-    ArrayOfUserUnassignedFromGroup(Vec<Event>),
+    ArrayOfUserUnassignedFromGroup(Vec<super::structs::Event>),
     /// A boxed array of *UserUpgradeEvent*. To be used in *Any* placeholders.
-    ArrayOfUserUpgradeEvent(Vec<Event>),
+    ArrayOfUserUpgradeEvent(Vec<super::structs::Event>),
     /// A boxed array of *VMFSDatastoreCreatedEvent*. To be used in *Any* placeholders.
-    ArrayOfVmfsDatastoreCreatedEvent(Vec<Event>),
+    ArrayOfVmfsDatastoreCreatedEvent(Vec<super::structs::Event>),
     /// A boxed array of *VMFSDatastoreExpandedEvent*. To be used in *Any* placeholders.
-    ArrayOfVmfsDatastoreExpandedEvent(Vec<Event>),
+    ArrayOfVmfsDatastoreExpandedEvent(Vec<super::structs::Event>),
     /// A boxed array of *VMFSDatastoreExtendedEvent*. To be used in *Any* placeholders.
-    ArrayOfVmfsDatastoreExtendedEvent(Vec<Event>),
+    ArrayOfVmfsDatastoreExtendedEvent(Vec<super::structs::Event>),
     /// A boxed array of *VMotionLicenseExpiredEvent*. To be used in *Any* placeholders.
-    ArrayOfVMotionLicenseExpiredEvent(Vec<Event>),
+    ArrayOfVMotionLicenseExpiredEvent(Vec<super::structs::Event>),
     /// A boxed array of *VcAgentUninstallFailedEvent*. To be used in *Any* placeholders.
-    ArrayOfVcAgentUninstallFailedEvent(Vec<Event>),
+    ArrayOfVcAgentUninstallFailedEvent(Vec<super::structs::Event>),
     /// A boxed array of *VcAgentUninstalledEvent*. To be used in *Any* placeholders.
-    ArrayOfVcAgentUninstalledEvent(Vec<Event>),
+    ArrayOfVcAgentUninstalledEvent(Vec<super::structs::Event>),
     /// A boxed array of *VcAgentUpgradeFailedEvent*. To be used in *Any* placeholders.
-    ArrayOfVcAgentUpgradeFailedEvent(Vec<Event>),
+    ArrayOfVcAgentUpgradeFailedEvent(Vec<super::structs::Event>),
     /// A boxed array of *VcAgentUpgradedEvent*. To be used in *Any* placeholders.
-    ArrayOfVcAgentUpgradedEvent(Vec<Event>),
+    ArrayOfVcAgentUpgradedEvent(Vec<super::structs::Event>),
     /// A boxed array of *VimAccountPasswordChangedEvent*. To be used in *Any* placeholders.
-    ArrayOfVimAccountPasswordChangedEvent(Vec<Event>),
+    ArrayOfVimAccountPasswordChangedEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmAcquiredMksTicketEvent*. To be used in *Any* placeholders.
-    ArrayOfVmAcquiredMksTicketEvent(Vec<Event>),
+    ArrayOfVmAcquiredMksTicketEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmAcquiredTicketEvent*. To be used in *Any* placeholders.
-    ArrayOfVmAcquiredTicketEvent(Vec<Event>),
+    ArrayOfVmAcquiredTicketEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmAutoRenameEvent*. To be used in *Any* placeholders.
-    ArrayOfVmAutoRenameEvent(Vec<Event>),
+    ArrayOfVmAutoRenameEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmBeingClonedEvent*. To be used in *Any* placeholders.
-    ArrayOfVmBeingClonedEvent(Vec<Event>),
+    ArrayOfVmBeingClonedEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmBeingClonedNoFolderEvent*. To be used in *Any* placeholders.
-    ArrayOfVmBeingClonedNoFolderEvent(Vec<Event>),
+    ArrayOfVmBeingClonedNoFolderEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmBeingCreatedEvent*. To be used in *Any* placeholders.
-    ArrayOfVmBeingCreatedEvent(Vec<Event>),
+    ArrayOfVmBeingCreatedEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmBeingDeployedEvent*. To be used in *Any* placeholders.
-    ArrayOfVmBeingDeployedEvent(Vec<Event>),
+    ArrayOfVmBeingDeployedEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmBeingHotMigratedEvent*. To be used in *Any* placeholders.
-    ArrayOfVmBeingHotMigratedEvent(Vec<Event>),
+    ArrayOfVmBeingHotMigratedEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmBeingMigratedEvent*. To be used in *Any* placeholders.
-    ArrayOfVmBeingMigratedEvent(Vec<Event>),
+    ArrayOfVmBeingMigratedEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmBeingRelocatedEvent*. To be used in *Any* placeholders.
-    ArrayOfVmBeingRelocatedEvent(Vec<Event>),
+    ArrayOfVmBeingRelocatedEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmCloneEvent*. To be used in *Any* placeholders.
-    ArrayOfVmCloneEvent(Vec<Event>),
+    ArrayOfVmCloneEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmCloneFailedEvent*. To be used in *Any* placeholders.
-    ArrayOfVmCloneFailedEvent(Vec<Event>),
+    ArrayOfVmCloneFailedEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmClonedEvent*. To be used in *Any* placeholders.
-    ArrayOfVmClonedEvent(Vec<Event>),
+    ArrayOfVmClonedEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmConfigMissingEvent*. To be used in *Any* placeholders.
-    ArrayOfVmConfigMissingEvent(Vec<Event>),
+    ArrayOfVmConfigMissingEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmConnectedEvent*. To be used in *Any* placeholders.
-    ArrayOfVmConnectedEvent(Vec<Event>),
+    ArrayOfVmConnectedEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmCreatedEvent*. To be used in *Any* placeholders.
-    ArrayOfVmCreatedEvent(Vec<Event>),
+    ArrayOfVmCreatedEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmDasBeingResetEvent*. To be used in *Any* placeholders.
-    ArrayOfVmDasBeingResetEvent(Vec<Event>),
+    ArrayOfVmDasBeingResetEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmDasBeingResetWithScreenshotEvent*. To be used in *Any* placeholders.
-    ArrayOfVmDasBeingResetWithScreenshotEvent(Vec<Event>),
+    ArrayOfVmDasBeingResetWithScreenshotEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmDasResetFailedEvent*. To be used in *Any* placeholders.
-    ArrayOfVmDasResetFailedEvent(Vec<Event>),
+    ArrayOfVmDasResetFailedEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmDasUpdateErrorEvent*. To be used in *Any* placeholders.
-    ArrayOfVmDasUpdateErrorEvent(Vec<Event>),
+    ArrayOfVmDasUpdateErrorEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmDasUpdateOkEvent*. To be used in *Any* placeholders.
-    ArrayOfVmDasUpdateOkEvent(Vec<Event>),
+    ArrayOfVmDasUpdateOkEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmDateRolledBackEvent*. To be used in *Any* placeholders.
-    ArrayOfVmDateRolledBackEvent(Vec<Event>),
+    ArrayOfVmDateRolledBackEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmDeployFailedEvent*. To be used in *Any* placeholders.
-    ArrayOfVmDeployFailedEvent(Vec<Event>),
+    ArrayOfVmDeployFailedEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmDeployedEvent*. To be used in *Any* placeholders.
-    ArrayOfVmDeployedEvent(Vec<Event>),
+    ArrayOfVmDeployedEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmDisconnectedEvent*. To be used in *Any* placeholders.
-    ArrayOfVmDisconnectedEvent(Vec<Event>),
+    ArrayOfVmDisconnectedEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmDiscoveredEvent*. To be used in *Any* placeholders.
-    ArrayOfVmDiscoveredEvent(Vec<Event>),
+    ArrayOfVmDiscoveredEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmDiskFailedEvent*. To be used in *Any* placeholders.
-    ArrayOfVmDiskFailedEvent(Vec<Event>),
+    ArrayOfVmDiskFailedEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmEmigratingEvent*. To be used in *Any* placeholders.
-    ArrayOfVmEmigratingEvent(Vec<Event>),
+    ArrayOfVmEmigratingEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmEndRecordingEvent*. To be used in *Any* placeholders.
-    ArrayOfVmEndRecordingEvent(Vec<Event>),
+    ArrayOfVmEndRecordingEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmEndReplayingEvent*. To be used in *Any* placeholders.
-    ArrayOfVmEndReplayingEvent(Vec<Event>),
+    ArrayOfVmEndReplayingEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmEvent*. To be used in *Any* placeholders.
-    ArrayOfVmEvent(Vec<Event>),
+    ArrayOfVmEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmEventArgument*. To be used in *Any* placeholders.
-    ArrayOfVmEventArgument(Vec<VmEventArgument>),
+    ArrayOfVmEventArgument(Vec<super::structs::VmEventArgument>),
     /// A boxed array of *VmFailedMigrateEvent*. To be used in *Any* placeholders.
-    ArrayOfVmFailedMigrateEvent(Vec<Event>),
+    ArrayOfVmFailedMigrateEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmFailedRelayoutEvent*. To be used in *Any* placeholders.
-    ArrayOfVmFailedRelayoutEvent(Vec<Event>),
+    ArrayOfVmFailedRelayoutEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmFailedRelayoutOnVmfs2DatastoreEvent*. To be used in *Any* placeholders.
-    ArrayOfVmFailedRelayoutOnVmfs2DatastoreEvent(Vec<Event>),
+    ArrayOfVmFailedRelayoutOnVmfs2DatastoreEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmFailedStartingSecondaryEvent*. To be used in *Any* placeholders.
-    ArrayOfVmFailedStartingSecondaryEvent(Vec<Event>),
+    ArrayOfVmFailedStartingSecondaryEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmFailedToPowerOffEvent*. To be used in *Any* placeholders.
-    ArrayOfVmFailedToPowerOffEvent(Vec<Event>),
+    ArrayOfVmFailedToPowerOffEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmFailedToPowerOnEvent*. To be used in *Any* placeholders.
-    ArrayOfVmFailedToPowerOnEvent(Vec<Event>),
+    ArrayOfVmFailedToPowerOnEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmFailedToRebootGuestEvent*. To be used in *Any* placeholders.
-    ArrayOfVmFailedToRebootGuestEvent(Vec<Event>),
+    ArrayOfVmFailedToRebootGuestEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmFailedToResetEvent*. To be used in *Any* placeholders.
-    ArrayOfVmFailedToResetEvent(Vec<Event>),
+    ArrayOfVmFailedToResetEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmFailedToShutdownGuestEvent*. To be used in *Any* placeholders.
-    ArrayOfVmFailedToShutdownGuestEvent(Vec<Event>),
+    ArrayOfVmFailedToShutdownGuestEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmFailedToStandbyGuestEvent*. To be used in *Any* placeholders.
-    ArrayOfVmFailedToStandbyGuestEvent(Vec<Event>),
+    ArrayOfVmFailedToStandbyGuestEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmFailedToSuspendEvent*. To be used in *Any* placeholders.
-    ArrayOfVmFailedToSuspendEvent(Vec<Event>),
+    ArrayOfVmFailedToSuspendEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmFailedUpdatingSecondaryConfig*. To be used in *Any* placeholders.
-    ArrayOfVmFailedUpdatingSecondaryConfig(Vec<Event>),
+    ArrayOfVmFailedUpdatingSecondaryConfig(Vec<super::structs::Event>),
     /// A boxed array of *VmFailoverFailed*. To be used in *Any* placeholders.
-    ArrayOfVmFailoverFailed(Vec<Event>),
+    ArrayOfVmFailoverFailed(Vec<super::structs::Event>),
     /// A boxed array of *VmFaultToleranceStateChangedEvent*. To be used in *Any* placeholders.
-    ArrayOfVmFaultToleranceStateChangedEvent(Vec<Event>),
+    ArrayOfVmFaultToleranceStateChangedEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmFaultToleranceTurnedOffEvent*. To be used in *Any* placeholders.
-    ArrayOfVmFaultToleranceTurnedOffEvent(Vec<Event>),
+    ArrayOfVmFaultToleranceTurnedOffEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmFaultToleranceVmTerminatedEvent*. To be used in *Any* placeholders.
-    ArrayOfVmFaultToleranceVmTerminatedEvent(Vec<Event>),
+    ArrayOfVmFaultToleranceVmTerminatedEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmGuestOSCrashedEvent*. To be used in *Any* placeholders.
-    ArrayOfVmGuestOsCrashedEvent(Vec<Event>),
+    ArrayOfVmGuestOsCrashedEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmGuestRebootEvent*. To be used in *Any* placeholders.
-    ArrayOfVmGuestRebootEvent(Vec<Event>),
+    ArrayOfVmGuestRebootEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmGuestShutdownEvent*. To be used in *Any* placeholders.
-    ArrayOfVmGuestShutdownEvent(Vec<Event>),
+    ArrayOfVmGuestShutdownEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmGuestStandbyEvent*. To be used in *Any* placeholders.
-    ArrayOfVmGuestStandbyEvent(Vec<Event>),
+    ArrayOfVmGuestStandbyEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmHealthMonitoringStateChangedEvent*. To be used in *Any* placeholders.
-    ArrayOfVmHealthMonitoringStateChangedEvent(Vec<Event>),
+    ArrayOfVmHealthMonitoringStateChangedEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmInstanceUuidAssignedEvent*. To be used in *Any* placeholders.
-    ArrayOfVmInstanceUuidAssignedEvent(Vec<Event>),
+    ArrayOfVmInstanceUuidAssignedEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmInstanceUuidChangedEvent*. To be used in *Any* placeholders.
-    ArrayOfVmInstanceUuidChangedEvent(Vec<Event>),
+    ArrayOfVmInstanceUuidChangedEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmInstanceUuidConflictEvent*. To be used in *Any* placeholders.
-    ArrayOfVmInstanceUuidConflictEvent(Vec<Event>),
+    ArrayOfVmInstanceUuidConflictEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmMacAssignedEvent*. To be used in *Any* placeholders.
-    ArrayOfVmMacAssignedEvent(Vec<Event>),
+    ArrayOfVmMacAssignedEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmMacChangedEvent*. To be used in *Any* placeholders.
-    ArrayOfVmMacChangedEvent(Vec<Event>),
+    ArrayOfVmMacChangedEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmMacConflictEvent*. To be used in *Any* placeholders.
-    ArrayOfVmMacConflictEvent(Vec<Event>),
+    ArrayOfVmMacConflictEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmMaxFTRestartCountReached*. To be used in *Any* placeholders.
-    ArrayOfVmMaxFtRestartCountReached(Vec<Event>),
+    ArrayOfVmMaxFtRestartCountReached(Vec<super::structs::Event>),
     /// A boxed array of *VmMaxRestartCountReached*. To be used in *Any* placeholders.
-    ArrayOfVmMaxRestartCountReached(Vec<Event>),
+    ArrayOfVmMaxRestartCountReached(Vec<super::structs::Event>),
     /// A boxed array of *VmMessageErrorEvent*. To be used in *Any* placeholders.
-    ArrayOfVmMessageErrorEvent(Vec<Event>),
+    ArrayOfVmMessageErrorEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmMessageEvent*. To be used in *Any* placeholders.
-    ArrayOfVmMessageEvent(Vec<Event>),
+    ArrayOfVmMessageEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmMessageWarningEvent*. To be used in *Any* placeholders.
-    ArrayOfVmMessageWarningEvent(Vec<Event>),
+    ArrayOfVmMessageWarningEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmMigratedEvent*. To be used in *Any* placeholders.
-    ArrayOfVmMigratedEvent(Vec<Event>),
+    ArrayOfVmMigratedEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmNoCompatibleHostForSecondaryEvent*. To be used in *Any* placeholders.
-    ArrayOfVmNoCompatibleHostForSecondaryEvent(Vec<Event>),
+    ArrayOfVmNoCompatibleHostForSecondaryEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmNoNetworkAccessEvent*. To be used in *Any* placeholders.
-    ArrayOfVmNoNetworkAccessEvent(Vec<Event>),
+    ArrayOfVmNoNetworkAccessEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmOrphanedEvent*. To be used in *Any* placeholders.
-    ArrayOfVmOrphanedEvent(Vec<Event>),
+    ArrayOfVmOrphanedEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmPowerOffOnIsolationEvent*. To be used in *Any* placeholders.
-    ArrayOfVmPowerOffOnIsolationEvent(Vec<Event>),
+    ArrayOfVmPowerOffOnIsolationEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmPoweredOffEvent*. To be used in *Any* placeholders.
-    ArrayOfVmPoweredOffEvent(Vec<Event>),
+    ArrayOfVmPoweredOffEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmPoweredOnEvent*. To be used in *Any* placeholders.
-    ArrayOfVmPoweredOnEvent(Vec<Event>),
+    ArrayOfVmPoweredOnEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmPoweringOnWithCustomizedDVPortEvent*. To be used in *Any* placeholders.
-    ArrayOfVmPoweringOnWithCustomizedDvPortEvent(Vec<Event>),
+    ArrayOfVmPoweringOnWithCustomizedDvPortEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmPrimaryFailoverEvent*. To be used in *Any* placeholders.
-    ArrayOfVmPrimaryFailoverEvent(Vec<Event>),
+    ArrayOfVmPrimaryFailoverEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmReconfiguredEvent*. To be used in *Any* placeholders.
-    ArrayOfVmReconfiguredEvent(Vec<Event>),
+    ArrayOfVmReconfiguredEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmRegisteredEvent*. To be used in *Any* placeholders.
-    ArrayOfVmRegisteredEvent(Vec<Event>),
+    ArrayOfVmRegisteredEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmRelayoutSuccessfulEvent*. To be used in *Any* placeholders.
-    ArrayOfVmRelayoutSuccessfulEvent(Vec<Event>),
+    ArrayOfVmRelayoutSuccessfulEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmRelayoutUpToDateEvent*. To be used in *Any* placeholders.
-    ArrayOfVmRelayoutUpToDateEvent(Vec<Event>),
+    ArrayOfVmRelayoutUpToDateEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmReloadFromPathEvent*. To be used in *Any* placeholders.
-    ArrayOfVmReloadFromPathEvent(Vec<Event>),
+    ArrayOfVmReloadFromPathEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmReloadFromPathFailedEvent*. To be used in *Any* placeholders.
-    ArrayOfVmReloadFromPathFailedEvent(Vec<Event>),
+    ArrayOfVmReloadFromPathFailedEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmRelocateFailedEvent*. To be used in *Any* placeholders.
-    ArrayOfVmRelocateFailedEvent(Vec<Event>),
+    ArrayOfVmRelocateFailedEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmRelocateSpecEvent*. To be used in *Any* placeholders.
-    ArrayOfVmRelocateSpecEvent(Vec<Event>),
+    ArrayOfVmRelocateSpecEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmRelocatedEvent*. To be used in *Any* placeholders.
-    ArrayOfVmRelocatedEvent(Vec<Event>),
+    ArrayOfVmRelocatedEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmRemoteConsoleConnectedEvent*. To be used in *Any* placeholders.
-    ArrayOfVmRemoteConsoleConnectedEvent(Vec<Event>),
+    ArrayOfVmRemoteConsoleConnectedEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmRemoteConsoleDisconnectedEvent*. To be used in *Any* placeholders.
-    ArrayOfVmRemoteConsoleDisconnectedEvent(Vec<Event>),
+    ArrayOfVmRemoteConsoleDisconnectedEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmRemovedEvent*. To be used in *Any* placeholders.
-    ArrayOfVmRemovedEvent(Vec<Event>),
+    ArrayOfVmRemovedEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmRenamedEvent*. To be used in *Any* placeholders.
-    ArrayOfVmRenamedEvent(Vec<Event>),
+    ArrayOfVmRenamedEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmRequirementsExceedCurrentEVCModeEvent*. To be used in *Any* placeholders.
-    ArrayOfVmRequirementsExceedCurrentEvcModeEvent(Vec<Event>),
+    ArrayOfVmRequirementsExceedCurrentEvcModeEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmResettingEvent*. To be used in *Any* placeholders.
-    ArrayOfVmResettingEvent(Vec<Event>),
+    ArrayOfVmResettingEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmResourcePoolMovedEvent*. To be used in *Any* placeholders.
-    ArrayOfVmResourcePoolMovedEvent(Vec<Event>),
+    ArrayOfVmResourcePoolMovedEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmResourceReallocatedEvent*. To be used in *Any* placeholders.
-    ArrayOfVmResourceReallocatedEvent(Vec<Event>),
+    ArrayOfVmResourceReallocatedEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmRestartedOnAlternateHostEvent*. To be used in *Any* placeholders.
-    ArrayOfVmRestartedOnAlternateHostEvent(Vec<Event>),
+    ArrayOfVmRestartedOnAlternateHostEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmResumingEvent*. To be used in *Any* placeholders.
-    ArrayOfVmResumingEvent(Vec<Event>),
+    ArrayOfVmResumingEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmSecondaryAddedEvent*. To be used in *Any* placeholders.
-    ArrayOfVmSecondaryAddedEvent(Vec<Event>),
+    ArrayOfVmSecondaryAddedEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmSecondaryDisabledBySystemEvent*. To be used in *Any* placeholders.
-    ArrayOfVmSecondaryDisabledBySystemEvent(Vec<Event>),
+    ArrayOfVmSecondaryDisabledBySystemEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmSecondaryDisabledEvent*. To be used in *Any* placeholders.
-    ArrayOfVmSecondaryDisabledEvent(Vec<Event>),
+    ArrayOfVmSecondaryDisabledEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmSecondaryEnabledEvent*. To be used in *Any* placeholders.
-    ArrayOfVmSecondaryEnabledEvent(Vec<Event>),
+    ArrayOfVmSecondaryEnabledEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmSecondaryStartedEvent*. To be used in *Any* placeholders.
-    ArrayOfVmSecondaryStartedEvent(Vec<Event>),
+    ArrayOfVmSecondaryStartedEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmShutdownOnIsolationEvent*. To be used in *Any* placeholders.
-    ArrayOfVmShutdownOnIsolationEvent(Vec<Event>),
+    ArrayOfVmShutdownOnIsolationEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmStartRecordingEvent*. To be used in *Any* placeholders.
-    ArrayOfVmStartRecordingEvent(Vec<Event>),
+    ArrayOfVmStartRecordingEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmStartReplayingEvent*. To be used in *Any* placeholders.
-    ArrayOfVmStartReplayingEvent(Vec<Event>),
+    ArrayOfVmStartReplayingEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmStartingEvent*. To be used in *Any* placeholders.
-    ArrayOfVmStartingEvent(Vec<Event>),
+    ArrayOfVmStartingEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmStartingSecondaryEvent*. To be used in *Any* placeholders.
-    ArrayOfVmStartingSecondaryEvent(Vec<Event>),
+    ArrayOfVmStartingSecondaryEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmStaticMacConflictEvent*. To be used in *Any* placeholders.
-    ArrayOfVmStaticMacConflictEvent(Vec<Event>),
+    ArrayOfVmStaticMacConflictEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmStoppingEvent*. To be used in *Any* placeholders.
-    ArrayOfVmStoppingEvent(Vec<Event>),
+    ArrayOfVmStoppingEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmSuspendedEvent*. To be used in *Any* placeholders.
-    ArrayOfVmSuspendedEvent(Vec<Event>),
+    ArrayOfVmSuspendedEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmSuspendingEvent*. To be used in *Any* placeholders.
-    ArrayOfVmSuspendingEvent(Vec<Event>),
+    ArrayOfVmSuspendingEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmTimedoutStartingSecondaryEvent*. To be used in *Any* placeholders.
-    ArrayOfVmTimedoutStartingSecondaryEvent(Vec<Event>),
+    ArrayOfVmTimedoutStartingSecondaryEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmUnsupportedStartingEvent*. To be used in *Any* placeholders.
-    ArrayOfVmUnsupportedStartingEvent(Vec<Event>),
+    ArrayOfVmUnsupportedStartingEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmUpgradeCompleteEvent*. To be used in *Any* placeholders.
-    ArrayOfVmUpgradeCompleteEvent(Vec<Event>),
+    ArrayOfVmUpgradeCompleteEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmUpgradeFailedEvent*. To be used in *Any* placeholders.
-    ArrayOfVmUpgradeFailedEvent(Vec<Event>),
+    ArrayOfVmUpgradeFailedEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmUpgradingEvent*. To be used in *Any* placeholders.
-    ArrayOfVmUpgradingEvent(Vec<Event>),
+    ArrayOfVmUpgradingEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmUuidAssignedEvent*. To be used in *Any* placeholders.
-    ArrayOfVmUuidAssignedEvent(Vec<Event>),
+    ArrayOfVmUuidAssignedEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmUuidChangedEvent*. To be used in *Any* placeholders.
-    ArrayOfVmUuidChangedEvent(Vec<Event>),
+    ArrayOfVmUuidChangedEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmUuidConflictEvent*. To be used in *Any* placeholders.
-    ArrayOfVmUuidConflictEvent(Vec<Event>),
+    ArrayOfVmUuidConflictEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmVnicPoolReservationViolationClearEvent*. To be used in *Any* placeholders.
-    ArrayOfVmVnicPoolReservationViolationClearEvent(Vec<Event>),
+    ArrayOfVmVnicPoolReservationViolationClearEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmVnicPoolReservationViolationRaiseEvent*. To be used in *Any* placeholders.
-    ArrayOfVmVnicPoolReservationViolationRaiseEvent(Vec<Event>),
+    ArrayOfVmVnicPoolReservationViolationRaiseEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmWwnAssignedEvent*. To be used in *Any* placeholders.
-    ArrayOfVmWwnAssignedEvent(Vec<Event>),
+    ArrayOfVmWwnAssignedEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmWwnChangedEvent*. To be used in *Any* placeholders.
-    ArrayOfVmWwnChangedEvent(Vec<Event>),
+    ArrayOfVmWwnChangedEvent(Vec<super::structs::Event>),
     /// A boxed array of *VmWwnConflictEvent*. To be used in *Any* placeholders.
-    ArrayOfVmWwnConflictEvent(Vec<Event>),
+    ArrayOfVmWwnConflictEvent(Vec<super::structs::Event>),
     /// A boxed array of *VnicPortArgument*. To be used in *Any* placeholders.
-    ArrayOfVnicPortArgument(Vec<VnicPortArgument>),
+    ArrayOfVnicPortArgument(Vec<super::structs::VnicPortArgument>),
     /// A boxed array of *WarningUpgradeEvent*. To be used in *Any* placeholders.
-    ArrayOfWarningUpgradeEvent(Vec<Event>),
+    ArrayOfWarningUpgradeEvent(Vec<super::structs::Event>),
     /// A boxed array of *IScsiBootFailureEvent*. To be used in *Any* placeholders.
-    ArrayOfIScsiBootFailureEvent(Vec<Event>),
+    ArrayOfIScsiBootFailureEvent(Vec<super::structs::Event>),
     /// A boxed array of *ExtExtendedProductInfo*. To be used in *Any* placeholders.
-    ArrayOfExtExtendedProductInfo(Vec<ExtExtendedProductInfo>),
+    ArrayOfExtExtendedProductInfo(Vec<super::structs::ExtExtendedProductInfo>),
     /// A boxed array of *ManagedByInfo*. To be used in *Any* placeholders.
-    ArrayOfManagedByInfo(Vec<ManagedByInfo>),
+    ArrayOfManagedByInfo(Vec<super::structs::ManagedByInfo>),
     /// A boxed array of *ExtManagedEntityInfo*. To be used in *Any* placeholders.
-    ArrayOfExtManagedEntityInfo(Vec<ExtManagedEntityInfo>),
+    ArrayOfExtManagedEntityInfo(Vec<super::structs::ExtManagedEntityInfo>),
     /// A boxed array of *ExtSolutionManagerInfo*. To be used in *Any* placeholders.
-    ArrayOfExtSolutionManagerInfo(Vec<ExtSolutionManagerInfo>),
+    ArrayOfExtSolutionManagerInfo(Vec<super::structs::ExtSolutionManagerInfo>),
     /// A boxed array of *ExtSolutionManagerInfoTabInfo*. To be used in *Any* placeholders.
-    ArrayOfExtSolutionManagerInfoTabInfo(Vec<ExtSolutionManagerInfoTabInfo>),
+    ArrayOfExtSolutionManagerInfoTabInfo(Vec<super::structs::ExtSolutionManagerInfoTabInfo>),
     /// A boxed array of *ActiveDirectoryFault*. To be used in *Any* placeholders.
-    ArrayOfActiveDirectoryFault(Vec<MethodFault>),
+    ArrayOfActiveDirectoryFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *ActiveVMsBlockingEVC*. To be used in *Any* placeholders.
-    ArrayOfActiveVMsBlockingEvc(Vec<MethodFault>),
+    ArrayOfActiveVMsBlockingEvc(Vec<super::structs::MethodFault>),
     /// A boxed array of *AdminDisabled*. To be used in *Any* placeholders.
-    ArrayOfAdminDisabled(Vec<MethodFault>),
+    ArrayOfAdminDisabled(Vec<super::structs::MethodFault>),
     /// A boxed array of *AdminNotDisabled*. To be used in *Any* placeholders.
-    ArrayOfAdminNotDisabled(Vec<MethodFault>),
+    ArrayOfAdminNotDisabled(Vec<super::structs::MethodFault>),
     /// A boxed array of *AffinityConfigured*. To be used in *Any* placeholders.
-    ArrayOfAffinityConfigured(Vec<MethodFault>),
+    ArrayOfAffinityConfigured(Vec<super::structs::MethodFault>),
     /// A boxed array of *AgentInstallFailed*. To be used in *Any* placeholders.
-    ArrayOfAgentInstallFailed(Vec<MethodFault>),
+    ArrayOfAgentInstallFailed(Vec<super::structs::MethodFault>),
     /// A boxed array of *AlreadyBeingManaged*. To be used in *Any* placeholders.
-    ArrayOfAlreadyBeingManaged(Vec<MethodFault>),
+    ArrayOfAlreadyBeingManaged(Vec<super::structs::MethodFault>),
     /// A boxed array of *AlreadyConnected*. To be used in *Any* placeholders.
-    ArrayOfAlreadyConnected(Vec<MethodFault>),
+    ArrayOfAlreadyConnected(Vec<super::structs::MethodFault>),
     /// A boxed array of *AlreadyExists*. To be used in *Any* placeholders.
-    ArrayOfAlreadyExists(Vec<MethodFault>),
+    ArrayOfAlreadyExists(Vec<super::structs::MethodFault>),
     /// A boxed array of *AlreadyUpgraded*. To be used in *Any* placeholders.
-    ArrayOfAlreadyUpgraded(Vec<MethodFault>),
+    ArrayOfAlreadyUpgraded(Vec<super::structs::MethodFault>),
     /// A boxed array of *AnswerFileUpdateFailed*. To be used in *Any* placeholders.
-    ArrayOfAnswerFileUpdateFailed(Vec<MethodFault>),
+    ArrayOfAnswerFileUpdateFailed(Vec<super::structs::MethodFault>),
     /// A boxed array of *AnswerFileUpdateFailure*. To be used in *Any* placeholders.
-    ArrayOfAnswerFileUpdateFailure(Vec<AnswerFileUpdateFailure>),
+    ArrayOfAnswerFileUpdateFailure(Vec<super::structs::AnswerFileUpdateFailure>),
     /// A boxed array of *ApplicationQuiesceFault*. To be used in *Any* placeholders.
-    ArrayOfApplicationQuiesceFault(Vec<MethodFault>),
+    ArrayOfApplicationQuiesceFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *AuthMinimumAdminPermission*. To be used in *Any* placeholders.
-    ArrayOfAuthMinimumAdminPermission(Vec<MethodFault>),
+    ArrayOfAuthMinimumAdminPermission(Vec<super::structs::MethodFault>),
     /// A boxed array of *BackupBlobReadFailure*. To be used in *Any* placeholders.
-    ArrayOfBackupBlobReadFailure(Vec<MethodFault>),
+    ArrayOfBackupBlobReadFailure(Vec<super::structs::MethodFault>),
     /// A boxed array of *BackupBlobWriteFailure*. To be used in *Any* placeholders.
-    ArrayOfBackupBlobWriteFailure(Vec<MethodFault>),
+    ArrayOfBackupBlobWriteFailure(Vec<super::structs::MethodFault>),
     /// A boxed array of *BlockedByFirewall*. To be used in *Any* placeholders.
-    ArrayOfBlockedByFirewall(Vec<MethodFault>),
+    ArrayOfBlockedByFirewall(Vec<super::structs::MethodFault>),
     /// A boxed array of *CAMServerRefusedConnection*. To be used in *Any* placeholders.
-    ArrayOfCamServerRefusedConnection(Vec<MethodFault>),
+    ArrayOfCamServerRefusedConnection(Vec<super::structs::MethodFault>),
     /// A boxed array of *CannotAccessFile*. To be used in *Any* placeholders.
-    ArrayOfCannotAccessFile(Vec<MethodFault>),
+    ArrayOfCannotAccessFile(Vec<super::structs::MethodFault>),
     /// A boxed array of *CannotAccessLocalSource*. To be used in *Any* placeholders.
-    ArrayOfCannotAccessLocalSource(Vec<MethodFault>),
+    ArrayOfCannotAccessLocalSource(Vec<super::structs::MethodFault>),
     /// A boxed array of *CannotAccessNetwork*. To be used in *Any* placeholders.
-    ArrayOfCannotAccessNetwork(Vec<MethodFault>),
+    ArrayOfCannotAccessNetwork(Vec<super::structs::MethodFault>),
     /// A boxed array of *CannotAccessVmComponent*. To be used in *Any* placeholders.
-    ArrayOfCannotAccessVmComponent(Vec<MethodFault>),
+    ArrayOfCannotAccessVmComponent(Vec<super::structs::MethodFault>),
     /// A boxed array of *CannotAccessVmConfig*. To be used in *Any* placeholders.
-    ArrayOfCannotAccessVmConfig(Vec<MethodFault>),
+    ArrayOfCannotAccessVmConfig(Vec<super::structs::MethodFault>),
     /// A boxed array of *CannotAccessVmDevice*. To be used in *Any* placeholders.
-    ArrayOfCannotAccessVmDevice(Vec<MethodFault>),
+    ArrayOfCannotAccessVmDevice(Vec<super::structs::MethodFault>),
     /// A boxed array of *CannotAccessVmDisk*. To be used in *Any* placeholders.
-    ArrayOfCannotAccessVmDisk(Vec<MethodFault>),
+    ArrayOfCannotAccessVmDisk(Vec<super::structs::MethodFault>),
     /// A boxed array of *CannotAddHostWithFTVmAsStandalone*. To be used in *Any* placeholders.
-    ArrayOfCannotAddHostWithFtVmAsStandalone(Vec<MethodFault>),
+    ArrayOfCannotAddHostWithFtVmAsStandalone(Vec<super::structs::MethodFault>),
     /// A boxed array of *CannotAddHostWithFTVmToDifferentCluster*. To be used in *Any* placeholders.
-    ArrayOfCannotAddHostWithFtVmToDifferentCluster(Vec<MethodFault>),
+    ArrayOfCannotAddHostWithFtVmToDifferentCluster(Vec<super::structs::MethodFault>),
     /// A boxed array of *CannotAddHostWithFTVmToNonHACluster*. To be used in *Any* placeholders.
-    ArrayOfCannotAddHostWithFtVmToNonHaCluster(Vec<MethodFault>),
+    ArrayOfCannotAddHostWithFtVmToNonHaCluster(Vec<super::structs::MethodFault>),
     /// A boxed array of *CannotChangeDrsBehaviorForFtSecondary*. To be used in *Any* placeholders.
-    ArrayOfCannotChangeDrsBehaviorForFtSecondary(Vec<MethodFault>),
+    ArrayOfCannotChangeDrsBehaviorForFtSecondary(Vec<super::structs::MethodFault>),
     /// A boxed array of *CannotChangeHaSettingsForFtSecondary*. To be used in *Any* placeholders.
-    ArrayOfCannotChangeHaSettingsForFtSecondary(Vec<MethodFault>),
+    ArrayOfCannotChangeHaSettingsForFtSecondary(Vec<super::structs::MethodFault>),
     /// A boxed array of *CannotChangeVsanClusterUuid*. To be used in *Any* placeholders.
-    ArrayOfCannotChangeVsanClusterUuid(Vec<MethodFault>),
+    ArrayOfCannotChangeVsanClusterUuid(Vec<super::structs::MethodFault>),
     /// A boxed array of *CannotChangeVsanNodeUuid*. To be used in *Any* placeholders.
-    ArrayOfCannotChangeVsanNodeUuid(Vec<MethodFault>),
+    ArrayOfCannotChangeVsanNodeUuid(Vec<super::structs::MethodFault>),
     /// A boxed array of *CannotComputeFTCompatibleHosts*. To be used in *Any* placeholders.
-    ArrayOfCannotComputeFtCompatibleHosts(Vec<MethodFault>),
+    ArrayOfCannotComputeFtCompatibleHosts(Vec<super::structs::MethodFault>),
     /// A boxed array of *CannotCreateFile*. To be used in *Any* placeholders.
-    ArrayOfCannotCreateFile(Vec<MethodFault>),
+    ArrayOfCannotCreateFile(Vec<super::structs::MethodFault>),
     /// A boxed array of *CannotDecryptPasswords*. To be used in *Any* placeholders.
-    ArrayOfCannotDecryptPasswords(Vec<MethodFault>),
+    ArrayOfCannotDecryptPasswords(Vec<super::structs::MethodFault>),
     /// A boxed array of *CannotDeleteFile*. To be used in *Any* placeholders.
-    ArrayOfCannotDeleteFile(Vec<MethodFault>),
+    ArrayOfCannotDeleteFile(Vec<super::structs::MethodFault>),
     /// A boxed array of *CannotDisableDrsOnClustersWithVApps*. To be used in *Any* placeholders.
-    ArrayOfCannotDisableDrsOnClustersWithVApps(Vec<MethodFault>),
+    ArrayOfCannotDisableDrsOnClustersWithVApps(Vec<super::structs::MethodFault>),
     /// A boxed array of *CannotDisableSnapshot*. To be used in *Any* placeholders.
-    ArrayOfCannotDisableSnapshot(Vec<MethodFault>),
+    ArrayOfCannotDisableSnapshot(Vec<super::structs::MethodFault>),
     /// A boxed array of *CannotDisconnectHostWithFaultToleranceVm*. To be used in *Any* placeholders.
-    ArrayOfCannotDisconnectHostWithFaultToleranceVm(Vec<MethodFault>),
+    ArrayOfCannotDisconnectHostWithFaultToleranceVm(Vec<super::structs::MethodFault>),
     /// A boxed array of *CannotEnableVmcpForCluster*. To be used in *Any* placeholders.
-    ArrayOfCannotEnableVmcpForCluster(Vec<MethodFault>),
+    ArrayOfCannotEnableVmcpForCluster(Vec<super::structs::MethodFault>),
     /// A boxed array of *CannotModifyConfigCpuRequirements*. To be used in *Any* placeholders.
-    ArrayOfCannotModifyConfigCpuRequirements(Vec<MethodFault>),
+    ArrayOfCannotModifyConfigCpuRequirements(Vec<super::structs::MethodFault>),
     /// A boxed array of *CannotMoveFaultToleranceVm*. To be used in *Any* placeholders.
-    ArrayOfCannotMoveFaultToleranceVm(Vec<MethodFault>),
+    ArrayOfCannotMoveFaultToleranceVm(Vec<super::structs::MethodFault>),
     /// A boxed array of *CannotMoveHostWithFaultToleranceVm*. To be used in *Any* placeholders.
-    ArrayOfCannotMoveHostWithFaultToleranceVm(Vec<MethodFault>),
+    ArrayOfCannotMoveHostWithFaultToleranceVm(Vec<super::structs::MethodFault>),
     /// A boxed array of *CannotMoveVmWithDeltaDisk*. To be used in *Any* placeholders.
-    ArrayOfCannotMoveVmWithDeltaDisk(Vec<MethodFault>),
+    ArrayOfCannotMoveVmWithDeltaDisk(Vec<super::structs::MethodFault>),
     /// A boxed array of *CannotMoveVmWithNativeDeltaDisk*. To be used in *Any* placeholders.
-    ArrayOfCannotMoveVmWithNativeDeltaDisk(Vec<MethodFault>),
+    ArrayOfCannotMoveVmWithNativeDeltaDisk(Vec<super::structs::MethodFault>),
     /// A boxed array of *CannotMoveVsanEnabledHost*. To be used in *Any* placeholders.
-    ArrayOfCannotMoveVsanEnabledHost(Vec<MethodFault>),
+    ArrayOfCannotMoveVsanEnabledHost(Vec<super::structs::MethodFault>),
     /// A boxed array of *CannotPlaceWithoutPrerequisiteMoves*. To be used in *Any* placeholders.
-    ArrayOfCannotPlaceWithoutPrerequisiteMoves(Vec<MethodFault>),
+    ArrayOfCannotPlaceWithoutPrerequisiteMoves(Vec<super::structs::MethodFault>),
     /// A boxed array of *CannotPowerOffVmInCluster*. To be used in *Any* placeholders.
-    ArrayOfCannotPowerOffVmInCluster(Vec<MethodFault>),
+    ArrayOfCannotPowerOffVmInCluster(Vec<super::structs::MethodFault>),
     /// A boxed array of *CannotReconfigureVsanWhenHaEnabled*. To be used in *Any* placeholders.
-    ArrayOfCannotReconfigureVsanWhenHaEnabled(Vec<MethodFault>),
+    ArrayOfCannotReconfigureVsanWhenHaEnabled(Vec<super::structs::MethodFault>),
     /// A boxed array of *CannotUseNetwork*. To be used in *Any* placeholders.
-    ArrayOfCannotUseNetwork(Vec<MethodFault>),
+    ArrayOfCannotUseNetwork(Vec<super::structs::MethodFault>),
     /// A boxed array of *ClockSkew*. To be used in *Any* placeholders.
-    ArrayOfClockSkew(Vec<MethodFault>),
+    ArrayOfClockSkew(Vec<super::structs::MethodFault>),
     /// A boxed array of *CloneFromSnapshotNotSupported*. To be used in *Any* placeholders.
-    ArrayOfCloneFromSnapshotNotSupported(Vec<MethodFault>),
+    ArrayOfCloneFromSnapshotNotSupported(Vec<super::structs::MethodFault>),
     /// A boxed array of *CollectorAddressUnset*. To be used in *Any* placeholders.
-    ArrayOfCollectorAddressUnset(Vec<MethodFault>),
+    ArrayOfCollectorAddressUnset(Vec<super::structs::MethodFault>),
     /// A boxed array of *ConcurrentAccess*. To be used in *Any* placeholders.
-    ArrayOfConcurrentAccess(Vec<MethodFault>),
+    ArrayOfConcurrentAccess(Vec<super::structs::MethodFault>),
     /// A boxed array of *ConflictingConfiguration*. To be used in *Any* placeholders.
-    ArrayOfConflictingConfiguration(Vec<MethodFault>),
+    ArrayOfConflictingConfiguration(Vec<super::structs::MethodFault>),
     /// A boxed array of *ConflictingConfigurationConfig*. To be used in *Any* placeholders.
-    ArrayOfConflictingConfigurationConfig(Vec<ConflictingConfigurationConfig>),
+    ArrayOfConflictingConfigurationConfig(Vec<super::structs::ConflictingConfigurationConfig>),
     /// A boxed array of *ConflictingDatastoreFound*. To be used in *Any* placeholders.
-    ArrayOfConflictingDatastoreFound(Vec<MethodFault>),
+    ArrayOfConflictingDatastoreFound(Vec<super::structs::MethodFault>),
     /// A boxed array of *ConnectedIso*. To be used in *Any* placeholders.
-    ArrayOfConnectedIso(Vec<MethodFault>),
+    ArrayOfConnectedIso(Vec<super::structs::MethodFault>),
     /// A boxed array of *CpuCompatibilityUnknown*. To be used in *Any* placeholders.
-    ArrayOfCpuCompatibilityUnknown(Vec<MethodFault>),
+    ArrayOfCpuCompatibilityUnknown(Vec<super::structs::MethodFault>),
     /// A boxed array of *CpuHotPlugNotSupported*. To be used in *Any* placeholders.
-    ArrayOfCpuHotPlugNotSupported(Vec<MethodFault>),
+    ArrayOfCpuHotPlugNotSupported(Vec<super::structs::MethodFault>),
     /// A boxed array of *CpuIncompatible*. To be used in *Any* placeholders.
-    ArrayOfCpuIncompatible(Vec<MethodFault>),
+    ArrayOfCpuIncompatible(Vec<super::structs::MethodFault>),
     /// A boxed array of *CpuIncompatible1ECX*. To be used in *Any* placeholders.
-    ArrayOfCpuIncompatible1Ecx(Vec<MethodFault>),
+    ArrayOfCpuIncompatible1Ecx(Vec<super::structs::MethodFault>),
     /// A boxed array of *CpuIncompatible81EDX*. To be used in *Any* placeholders.
-    ArrayOfCpuIncompatible81Edx(Vec<MethodFault>),
+    ArrayOfCpuIncompatible81Edx(Vec<super::structs::MethodFault>),
     /// A boxed array of *CustomizationFault*. To be used in *Any* placeholders.
-    ArrayOfCustomizationFault(Vec<MethodFault>),
+    ArrayOfCustomizationFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *CustomizationPending*. To be used in *Any* placeholders.
-    ArrayOfCustomizationPending(Vec<MethodFault>),
+    ArrayOfCustomizationPending(Vec<super::structs::MethodFault>),
     /// A boxed array of *DVPortNotSupported*. To be used in *Any* placeholders.
-    ArrayOfDvPortNotSupported(Vec<MethodFault>),
+    ArrayOfDvPortNotSupported(Vec<super::structs::MethodFault>),
     /// A boxed array of *DasConfigFault*. To be used in *Any* placeholders.
-    ArrayOfDasConfigFault(Vec<MethodFault>),
+    ArrayOfDasConfigFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *DatabaseError*. To be used in *Any* placeholders.
-    ArrayOfDatabaseError(Vec<MethodFault>),
+    ArrayOfDatabaseError(Vec<super::structs::MethodFault>),
     /// A boxed array of *DatacenterMismatch*. To be used in *Any* placeholders.
-    ArrayOfDatacenterMismatch(Vec<MethodFault>),
+    ArrayOfDatacenterMismatch(Vec<super::structs::MethodFault>),
     /// A boxed array of *DatacenterMismatchArgument*. To be used in *Any* placeholders.
-    ArrayOfDatacenterMismatchArgument(Vec<DatacenterMismatchArgument>),
+    ArrayOfDatacenterMismatchArgument(Vec<super::structs::DatacenterMismatchArgument>),
     /// A boxed array of *DatastoreNotWritableOnHost*. To be used in *Any* placeholders.
-    ArrayOfDatastoreNotWritableOnHost(Vec<MethodFault>),
+    ArrayOfDatastoreNotWritableOnHost(Vec<super::structs::MethodFault>),
     /// A boxed array of *DeltaDiskFormatNotSupported*. To be used in *Any* placeholders.
-    ArrayOfDeltaDiskFormatNotSupported(Vec<MethodFault>),
+    ArrayOfDeltaDiskFormatNotSupported(Vec<super::structs::MethodFault>),
     /// A boxed array of *DestinationSwitchFull*. To be used in *Any* placeholders.
-    ArrayOfDestinationSwitchFull(Vec<MethodFault>),
+    ArrayOfDestinationSwitchFull(Vec<super::structs::MethodFault>),
     /// A boxed array of *DestinationVsanDisabled*. To be used in *Any* placeholders.
-    ArrayOfDestinationVsanDisabled(Vec<MethodFault>),
+    ArrayOfDestinationVsanDisabled(Vec<super::structs::MethodFault>),
     /// A boxed array of *DeviceBackingNotSupported*. To be used in *Any* placeholders.
-    ArrayOfDeviceBackingNotSupported(Vec<MethodFault>),
+    ArrayOfDeviceBackingNotSupported(Vec<super::structs::MethodFault>),
     /// A boxed array of *DeviceControllerNotSupported*. To be used in *Any* placeholders.
-    ArrayOfDeviceControllerNotSupported(Vec<MethodFault>),
+    ArrayOfDeviceControllerNotSupported(Vec<super::structs::MethodFault>),
     /// A boxed array of *DeviceHotPlugNotSupported*. To be used in *Any* placeholders.
-    ArrayOfDeviceHotPlugNotSupported(Vec<MethodFault>),
+    ArrayOfDeviceHotPlugNotSupported(Vec<super::structs::MethodFault>),
     /// A boxed array of *DeviceNotFound*. To be used in *Any* placeholders.
-    ArrayOfDeviceNotFound(Vec<MethodFault>),
+    ArrayOfDeviceNotFound(Vec<super::structs::MethodFault>),
     /// A boxed array of *DeviceNotSupported*. To be used in *Any* placeholders.
-    ArrayOfDeviceNotSupported(Vec<MethodFault>),
+    ArrayOfDeviceNotSupported(Vec<super::structs::MethodFault>),
     /// A boxed array of *DeviceUnsupportedForVmPlatform*. To be used in *Any* placeholders.
-    ArrayOfDeviceUnsupportedForVmPlatform(Vec<MethodFault>),
+    ArrayOfDeviceUnsupportedForVmPlatform(Vec<super::structs::MethodFault>),
     /// A boxed array of *DeviceUnsupportedForVmVersion*. To be used in *Any* placeholders.
-    ArrayOfDeviceUnsupportedForVmVersion(Vec<MethodFault>),
+    ArrayOfDeviceUnsupportedForVmVersion(Vec<super::structs::MethodFault>),
     /// A boxed array of *DigestNotSupported*. To be used in *Any* placeholders.
-    ArrayOfDigestNotSupported(Vec<MethodFault>),
+    ArrayOfDigestNotSupported(Vec<super::structs::MethodFault>),
     /// A boxed array of *DirectoryNotEmpty*. To be used in *Any* placeholders.
-    ArrayOfDirectoryNotEmpty(Vec<MethodFault>),
+    ArrayOfDirectoryNotEmpty(Vec<super::structs::MethodFault>),
     /// A boxed array of *DisableAdminNotSupported*. To be used in *Any* placeholders.
-    ArrayOfDisableAdminNotSupported(Vec<MethodFault>),
+    ArrayOfDisableAdminNotSupported(Vec<super::structs::MethodFault>),
     /// A boxed array of *DisallowedChangeByService*. To be used in *Any* placeholders.
-    ArrayOfDisallowedChangeByService(Vec<MethodFault>),
+    ArrayOfDisallowedChangeByService(Vec<super::structs::MethodFault>),
     /// A boxed array of *DisallowedDiskModeChange*. To be used in *Any* placeholders.
-    ArrayOfDisallowedDiskModeChange(Vec<MethodFault>),
+    ArrayOfDisallowedDiskModeChange(Vec<super::structs::MethodFault>),
     /// A boxed array of *DisallowedMigrationDeviceAttached*. To be used in *Any* placeholders.
-    ArrayOfDisallowedMigrationDeviceAttached(Vec<MethodFault>),
+    ArrayOfDisallowedMigrationDeviceAttached(Vec<super::structs::MethodFault>),
     /// A boxed array of *DisallowedOperationOnFailoverHost*. To be used in *Any* placeholders.
-    ArrayOfDisallowedOperationOnFailoverHost(Vec<MethodFault>),
+    ArrayOfDisallowedOperationOnFailoverHost(Vec<super::structs::MethodFault>),
     /// A boxed array of *DisconnectedHostsBlockingEVC*. To be used in *Any* placeholders.
-    ArrayOfDisconnectedHostsBlockingEvc(Vec<MethodFault>),
+    ArrayOfDisconnectedHostsBlockingEvc(Vec<super::structs::MethodFault>),
     /// A boxed array of *DiskHasPartitions*. To be used in *Any* placeholders.
-    ArrayOfDiskHasPartitions(Vec<MethodFault>),
+    ArrayOfDiskHasPartitions(Vec<super::structs::MethodFault>),
     /// A boxed array of *DiskIsLastRemainingNonSSD*. To be used in *Any* placeholders.
-    ArrayOfDiskIsLastRemainingNonSsd(Vec<MethodFault>),
+    ArrayOfDiskIsLastRemainingNonSsd(Vec<super::structs::MethodFault>),
     /// A boxed array of *DiskIsNonLocal*. To be used in *Any* placeholders.
-    ArrayOfDiskIsNonLocal(Vec<MethodFault>),
+    ArrayOfDiskIsNonLocal(Vec<super::structs::MethodFault>),
     /// A boxed array of *DiskIsUSB*. To be used in *Any* placeholders.
-    ArrayOfDiskIsUsb(Vec<MethodFault>),
+    ArrayOfDiskIsUsb(Vec<super::structs::MethodFault>),
     /// A boxed array of *DiskMoveTypeNotSupported*. To be used in *Any* placeholders.
-    ArrayOfDiskMoveTypeNotSupported(Vec<MethodFault>),
+    ArrayOfDiskMoveTypeNotSupported(Vec<super::structs::MethodFault>),
     /// A boxed array of *DiskNotSupported*. To be used in *Any* placeholders.
-    ArrayOfDiskNotSupported(Vec<MethodFault>),
+    ArrayOfDiskNotSupported(Vec<super::structs::MethodFault>),
     /// A boxed array of *DiskTooSmall*. To be used in *Any* placeholders.
-    ArrayOfDiskTooSmall(Vec<MethodFault>),
+    ArrayOfDiskTooSmall(Vec<super::structs::MethodFault>),
     /// A boxed array of *DomainNotFound*. To be used in *Any* placeholders.
-    ArrayOfDomainNotFound(Vec<MethodFault>),
+    ArrayOfDomainNotFound(Vec<super::structs::MethodFault>),
     /// A boxed array of *DrsDisabledOnVm*. To be used in *Any* placeholders.
-    ArrayOfDrsDisabledOnVm(Vec<MethodFault>),
+    ArrayOfDrsDisabledOnVm(Vec<super::structs::MethodFault>),
     /// A boxed array of *DrsVmotionIncompatibleFault*. To be used in *Any* placeholders.
-    ArrayOfDrsVmotionIncompatibleFault(Vec<MethodFault>),
+    ArrayOfDrsVmotionIncompatibleFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *DuplicateDisks*. To be used in *Any* placeholders.
-    ArrayOfDuplicateDisks(Vec<MethodFault>),
+    ArrayOfDuplicateDisks(Vec<super::structs::MethodFault>),
     /// A boxed array of *DuplicateName*. To be used in *Any* placeholders.
-    ArrayOfDuplicateName(Vec<MethodFault>),
+    ArrayOfDuplicateName(Vec<super::structs::MethodFault>),
     /// A boxed array of *DuplicateVsanNetworkInterface*. To be used in *Any* placeholders.
-    ArrayOfDuplicateVsanNetworkInterface(Vec<MethodFault>),
+    ArrayOfDuplicateVsanNetworkInterface(Vec<super::structs::MethodFault>),
     /// A boxed array of *DvsApplyOperationFault*. To be used in *Any* placeholders.
-    ArrayOfDvsApplyOperationFault(Vec<MethodFault>),
+    ArrayOfDvsApplyOperationFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *DvsApplyOperationFaultFaultOnObject*. To be used in *Any* placeholders.
-    ArrayOfDvsApplyOperationFaultFaultOnObject(Vec<DvsApplyOperationFaultFaultOnObject>),
+    ArrayOfDvsApplyOperationFaultFaultOnObject(Vec<super::structs::DvsApplyOperationFaultFaultOnObject>),
     /// A boxed array of *DvsFault*. To be used in *Any* placeholders.
-    ArrayOfDvsFault(Vec<MethodFault>),
+    ArrayOfDvsFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *DvsNotAuthorized*. To be used in *Any* placeholders.
-    ArrayOfDvsNotAuthorized(Vec<MethodFault>),
+    ArrayOfDvsNotAuthorized(Vec<super::structs::MethodFault>),
     /// A boxed array of *DvsOperationBulkFault*. To be used in *Any* placeholders.
-    ArrayOfDvsOperationBulkFault(Vec<MethodFault>),
+    ArrayOfDvsOperationBulkFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *DvsOperationBulkFaultFaultOnHost*. To be used in *Any* placeholders.
-    ArrayOfDvsOperationBulkFaultFaultOnHost(Vec<DvsOperationBulkFaultFaultOnHost>),
+    ArrayOfDvsOperationBulkFaultFaultOnHost(Vec<super::structs::DvsOperationBulkFaultFaultOnHost>),
     /// A boxed array of *DvsScopeViolated*. To be used in *Any* placeholders.
-    ArrayOfDvsScopeViolated(Vec<MethodFault>),
+    ArrayOfDvsScopeViolated(Vec<super::structs::MethodFault>),
     /// A boxed array of *EVCAdmissionFailed*. To be used in *Any* placeholders.
-    ArrayOfEvcAdmissionFailed(Vec<MethodFault>),
+    ArrayOfEvcAdmissionFailed(Vec<super::structs::MethodFault>),
     /// A boxed array of *EVCAdmissionFailedCPUFeaturesForMode*. To be used in *Any* placeholders.
-    ArrayOfEvcAdmissionFailedCpuFeaturesForMode(Vec<MethodFault>),
+    ArrayOfEvcAdmissionFailedCpuFeaturesForMode(Vec<super::structs::MethodFault>),
     /// A boxed array of *EVCAdmissionFailedCPUModel*. To be used in *Any* placeholders.
-    ArrayOfEvcAdmissionFailedCpuModel(Vec<MethodFault>),
+    ArrayOfEvcAdmissionFailedCpuModel(Vec<super::structs::MethodFault>),
     /// A boxed array of *EVCAdmissionFailedCPUModelForMode*. To be used in *Any* placeholders.
-    ArrayOfEvcAdmissionFailedCpuModelForMode(Vec<MethodFault>),
+    ArrayOfEvcAdmissionFailedCpuModelForMode(Vec<super::structs::MethodFault>),
     /// A boxed array of *EVCAdmissionFailedCPUVendor*. To be used in *Any* placeholders.
-    ArrayOfEvcAdmissionFailedCpuVendor(Vec<MethodFault>),
+    ArrayOfEvcAdmissionFailedCpuVendor(Vec<super::structs::MethodFault>),
     /// A boxed array of *EVCAdmissionFailedCPUVendorUnknown*. To be used in *Any* placeholders.
-    ArrayOfEvcAdmissionFailedCpuVendorUnknown(Vec<MethodFault>),
+    ArrayOfEvcAdmissionFailedCpuVendorUnknown(Vec<super::structs::MethodFault>),
     /// A boxed array of *EVCAdmissionFailedHostDisconnected*. To be used in *Any* placeholders.
-    ArrayOfEvcAdmissionFailedHostDisconnected(Vec<MethodFault>),
+    ArrayOfEvcAdmissionFailedHostDisconnected(Vec<super::structs::MethodFault>),
     /// A boxed array of *EVCAdmissionFailedHostSoftware*. To be used in *Any* placeholders.
-    ArrayOfEvcAdmissionFailedHostSoftware(Vec<MethodFault>),
+    ArrayOfEvcAdmissionFailedHostSoftware(Vec<super::structs::MethodFault>),
     /// A boxed array of *EVCAdmissionFailedHostSoftwareForMode*. To be used in *Any* placeholders.
-    ArrayOfEvcAdmissionFailedHostSoftwareForMode(Vec<MethodFault>),
+    ArrayOfEvcAdmissionFailedHostSoftwareForMode(Vec<super::structs::MethodFault>),
     /// A boxed array of *EVCAdmissionFailedVmActive*. To be used in *Any* placeholders.
-    ArrayOfEvcAdmissionFailedVmActive(Vec<MethodFault>),
+    ArrayOfEvcAdmissionFailedVmActive(Vec<super::structs::MethodFault>),
     /// A boxed array of *EVCConfigFault*. To be used in *Any* placeholders.
-    ArrayOfEvcConfigFault(Vec<MethodFault>),
+    ArrayOfEvcConfigFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *EVCModeIllegalByVendor*. To be used in *Any* placeholders.
-    ArrayOfEvcModeIllegalByVendor(Vec<MethodFault>),
+    ArrayOfEvcModeIllegalByVendor(Vec<super::structs::MethodFault>),
     /// A boxed array of *EVCModeUnsupportedByHosts*. To be used in *Any* placeholders.
-    ArrayOfEvcModeUnsupportedByHosts(Vec<MethodFault>),
+    ArrayOfEvcModeUnsupportedByHosts(Vec<super::structs::MethodFault>),
     /// A boxed array of *EVCUnsupportedByHostHardware*. To be used in *Any* placeholders.
-    ArrayOfEvcUnsupportedByHostHardware(Vec<MethodFault>),
+    ArrayOfEvcUnsupportedByHostHardware(Vec<super::structs::MethodFault>),
     /// A boxed array of *EVCUnsupportedByHostSoftware*. To be used in *Any* placeholders.
-    ArrayOfEvcUnsupportedByHostSoftware(Vec<MethodFault>),
+    ArrayOfEvcUnsupportedByHostSoftware(Vec<super::structs::MethodFault>),
     /// A boxed array of *EightHostLimitViolated*. To be used in *Any* placeholders.
-    ArrayOfEightHostLimitViolated(Vec<MethodFault>),
+    ArrayOfEightHostLimitViolated(Vec<super::structs::MethodFault>),
     /// A boxed array of *EncryptionKeyRequired*. To be used in *Any* placeholders.
-    ArrayOfEncryptionKeyRequired(Vec<MethodFault>),
+    ArrayOfEncryptionKeyRequired(Vec<super::structs::MethodFault>),
     /// A boxed array of *ExpiredAddonLicense*. To be used in *Any* placeholders.
-    ArrayOfExpiredAddonLicense(Vec<MethodFault>),
+    ArrayOfExpiredAddonLicense(Vec<super::structs::MethodFault>),
     /// A boxed array of *ExpiredEditionLicense*. To be used in *Any* placeholders.
-    ArrayOfExpiredEditionLicense(Vec<MethodFault>),
+    ArrayOfExpiredEditionLicense(Vec<super::structs::MethodFault>),
     /// A boxed array of *ExpiredFeatureLicense*. To be used in *Any* placeholders.
-    ArrayOfExpiredFeatureLicense(Vec<MethodFault>),
+    ArrayOfExpiredFeatureLicense(Vec<super::structs::MethodFault>),
     /// A boxed array of *ExtendedFault*. To be used in *Any* placeholders.
-    ArrayOfExtendedFault(Vec<MethodFault>),
+    ArrayOfExtendedFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *FailToEnableSPBM*. To be used in *Any* placeholders.
-    ArrayOfFailToEnableSpbm(Vec<MethodFault>),
+    ArrayOfFailToEnableSpbm(Vec<super::structs::MethodFault>),
     /// A boxed array of *FailToLockFaultToleranceVMs*. To be used in *Any* placeholders.
-    ArrayOfFailToLockFaultToleranceVMs(Vec<MethodFault>),
+    ArrayOfFailToLockFaultToleranceVMs(Vec<super::structs::MethodFault>),
     /// A boxed array of *FaultToleranceAntiAffinityViolated*. To be used in *Any* placeholders.
-    ArrayOfFaultToleranceAntiAffinityViolated(Vec<MethodFault>),
+    ArrayOfFaultToleranceAntiAffinityViolated(Vec<super::structs::MethodFault>),
     /// A boxed array of *FaultToleranceCannotEditMem*. To be used in *Any* placeholders.
-    ArrayOfFaultToleranceCannotEditMem(Vec<MethodFault>),
+    ArrayOfFaultToleranceCannotEditMem(Vec<super::structs::MethodFault>),
     /// A boxed array of *FaultToleranceCpuIncompatible*. To be used in *Any* placeholders.
-    ArrayOfFaultToleranceCpuIncompatible(Vec<MethodFault>),
+    ArrayOfFaultToleranceCpuIncompatible(Vec<super::structs::MethodFault>),
     /// A boxed array of *FaultToleranceNeedsThickDisk*. To be used in *Any* placeholders.
-    ArrayOfFaultToleranceNeedsThickDisk(Vec<MethodFault>),
+    ArrayOfFaultToleranceNeedsThickDisk(Vec<super::structs::MethodFault>),
     /// A boxed array of *FaultToleranceNotLicensed*. To be used in *Any* placeholders.
-    ArrayOfFaultToleranceNotLicensed(Vec<MethodFault>),
+    ArrayOfFaultToleranceNotLicensed(Vec<super::structs::MethodFault>),
     /// A boxed array of *FaultToleranceNotSameBuild*. To be used in *Any* placeholders.
-    ArrayOfFaultToleranceNotSameBuild(Vec<MethodFault>),
+    ArrayOfFaultToleranceNotSameBuild(Vec<super::structs::MethodFault>),
     /// A boxed array of *FaultTolerancePrimaryPowerOnNotAttempted*. To be used in *Any* placeholders.
-    ArrayOfFaultTolerancePrimaryPowerOnNotAttempted(Vec<MethodFault>),
+    ArrayOfFaultTolerancePrimaryPowerOnNotAttempted(Vec<super::structs::MethodFault>),
     /// A boxed array of *FaultToleranceVmNotDasProtected*. To be used in *Any* placeholders.
-    ArrayOfFaultToleranceVmNotDasProtected(Vec<MethodFault>),
+    ArrayOfFaultToleranceVmNotDasProtected(Vec<super::structs::MethodFault>),
     /// A boxed array of *FcoeFault*. To be used in *Any* placeholders.
-    ArrayOfFcoeFault(Vec<MethodFault>),
+    ArrayOfFcoeFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *FcoeFaultPnicHasNoPortSet*. To be used in *Any* placeholders.
-    ArrayOfFcoeFaultPnicHasNoPortSet(Vec<MethodFault>),
+    ArrayOfFcoeFaultPnicHasNoPortSet(Vec<super::structs::MethodFault>),
     /// A boxed array of *FeatureRequirementsNotMet*. To be used in *Any* placeholders.
-    ArrayOfFeatureRequirementsNotMet(Vec<MethodFault>),
+    ArrayOfFeatureRequirementsNotMet(Vec<super::structs::MethodFault>),
     /// A boxed array of *FileAlreadyExists*. To be used in *Any* placeholders.
-    ArrayOfFileAlreadyExists(Vec<MethodFault>),
+    ArrayOfFileAlreadyExists(Vec<super::structs::MethodFault>),
     /// A boxed array of *FileBackedPortNotSupported*. To be used in *Any* placeholders.
-    ArrayOfFileBackedPortNotSupported(Vec<MethodFault>),
+    ArrayOfFileBackedPortNotSupported(Vec<super::structs::MethodFault>),
     /// A boxed array of *FileFault*. To be used in *Any* placeholders.
-    ArrayOfFileFault(Vec<MethodFault>),
+    ArrayOfFileFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *FileLocked*. To be used in *Any* placeholders.
-    ArrayOfFileLocked(Vec<MethodFault>),
+    ArrayOfFileLocked(Vec<super::structs::MethodFault>),
     /// A boxed array of *FileNameTooLong*. To be used in *Any* placeholders.
-    ArrayOfFileNameTooLong(Vec<MethodFault>),
+    ArrayOfFileNameTooLong(Vec<super::structs::MethodFault>),
     /// A boxed array of *FileNotFound*. To be used in *Any* placeholders.
-    ArrayOfFileNotFound(Vec<MethodFault>),
+    ArrayOfFileNotFound(Vec<super::structs::MethodFault>),
     /// A boxed array of *FileNotWritable*. To be used in *Any* placeholders.
-    ArrayOfFileNotWritable(Vec<MethodFault>),
+    ArrayOfFileNotWritable(Vec<super::structs::MethodFault>),
     /// A boxed array of *FileTooLarge*. To be used in *Any* placeholders.
-    ArrayOfFileTooLarge(Vec<MethodFault>),
+    ArrayOfFileTooLarge(Vec<super::structs::MethodFault>),
     /// A boxed array of *FilesystemQuiesceFault*. To be used in *Any* placeholders.
-    ArrayOfFilesystemQuiesceFault(Vec<MethodFault>),
+    ArrayOfFilesystemQuiesceFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *FilterInUse*. To be used in *Any* placeholders.
-    ArrayOfFilterInUse(Vec<MethodFault>),
+    ArrayOfFilterInUse(Vec<super::structs::MethodFault>),
     /// A boxed array of *FtIssuesOnHost*. To be used in *Any* placeholders.
-    ArrayOfFtIssuesOnHost(Vec<MethodFault>),
+    ArrayOfFtIssuesOnHost(Vec<super::structs::MethodFault>),
     /// A boxed array of *FullStorageVMotionNotSupported*. To be used in *Any* placeholders.
-    ArrayOfFullStorageVMotionNotSupported(Vec<MethodFault>),
+    ArrayOfFullStorageVMotionNotSupported(Vec<super::structs::MethodFault>),
     /// A boxed array of *GatewayConnectFault*. To be used in *Any* placeholders.
-    ArrayOfGatewayConnectFault(Vec<MethodFault>),
+    ArrayOfGatewayConnectFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *GatewayHostNotReachable*. To be used in *Any* placeholders.
-    ArrayOfGatewayHostNotReachable(Vec<MethodFault>),
+    ArrayOfGatewayHostNotReachable(Vec<super::structs::MethodFault>),
     /// A boxed array of *GatewayNotFound*. To be used in *Any* placeholders.
-    ArrayOfGatewayNotFound(Vec<MethodFault>),
+    ArrayOfGatewayNotFound(Vec<super::structs::MethodFault>),
     /// A boxed array of *GatewayNotReachable*. To be used in *Any* placeholders.
-    ArrayOfGatewayNotReachable(Vec<MethodFault>),
+    ArrayOfGatewayNotReachable(Vec<super::structs::MethodFault>),
     /// A boxed array of *GatewayOperationRefused*. To be used in *Any* placeholders.
-    ArrayOfGatewayOperationRefused(Vec<MethodFault>),
+    ArrayOfGatewayOperationRefused(Vec<super::structs::MethodFault>),
     /// A boxed array of *GatewayToHostAuthFault*. To be used in *Any* placeholders.
-    ArrayOfGatewayToHostAuthFault(Vec<MethodFault>),
+    ArrayOfGatewayToHostAuthFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *GatewayToHostConnectFault*. To be used in *Any* placeholders.
-    ArrayOfGatewayToHostConnectFault(Vec<MethodFault>),
+    ArrayOfGatewayToHostConnectFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *GatewayToHostTrustVerifyFault*. To be used in *Any* placeholders.
-    ArrayOfGatewayToHostTrustVerifyFault(Vec<MethodFault>),
+    ArrayOfGatewayToHostTrustVerifyFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *GenericDrsFault*. To be used in *Any* placeholders.
-    ArrayOfGenericDrsFault(Vec<MethodFault>),
+    ArrayOfGenericDrsFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *GenericVmConfigFault*. To be used in *Any* placeholders.
-    ArrayOfGenericVmConfigFault(Vec<MethodFault>),
+    ArrayOfGenericVmConfigFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *GuestAuthenticationChallenge*. To be used in *Any* placeholders.
-    ArrayOfGuestAuthenticationChallenge(Vec<MethodFault>),
+    ArrayOfGuestAuthenticationChallenge(Vec<super::structs::MethodFault>),
     /// A boxed array of *GuestComponentsOutOfDate*. To be used in *Any* placeholders.
-    ArrayOfGuestComponentsOutOfDate(Vec<MethodFault>),
+    ArrayOfGuestComponentsOutOfDate(Vec<super::structs::MethodFault>),
     /// A boxed array of *GuestMultipleMappings*. To be used in *Any* placeholders.
-    ArrayOfGuestMultipleMappings(Vec<MethodFault>),
+    ArrayOfGuestMultipleMappings(Vec<super::structs::MethodFault>),
     /// A boxed array of *GuestOperationsFault*. To be used in *Any* placeholders.
-    ArrayOfGuestOperationsFault(Vec<MethodFault>),
+    ArrayOfGuestOperationsFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *GuestOperationsUnavailable*. To be used in *Any* placeholders.
-    ArrayOfGuestOperationsUnavailable(Vec<MethodFault>),
+    ArrayOfGuestOperationsUnavailable(Vec<super::structs::MethodFault>),
     /// A boxed array of *GuestPermissionDenied*. To be used in *Any* placeholders.
-    ArrayOfGuestPermissionDenied(Vec<MethodFault>),
+    ArrayOfGuestPermissionDenied(Vec<super::structs::MethodFault>),
     /// A boxed array of *GuestProcessNotFound*. To be used in *Any* placeholders.
-    ArrayOfGuestProcessNotFound(Vec<MethodFault>),
+    ArrayOfGuestProcessNotFound(Vec<super::structs::MethodFault>),
     /// A boxed array of *GuestRegistryFault*. To be used in *Any* placeholders.
-    ArrayOfGuestRegistryFault(Vec<MethodFault>),
+    ArrayOfGuestRegistryFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *GuestRegistryKeyAlreadyExists*. To be used in *Any* placeholders.
-    ArrayOfGuestRegistryKeyAlreadyExists(Vec<MethodFault>),
+    ArrayOfGuestRegistryKeyAlreadyExists(Vec<super::structs::MethodFault>),
     /// A boxed array of *GuestRegistryKeyFault*. To be used in *Any* placeholders.
-    ArrayOfGuestRegistryKeyFault(Vec<MethodFault>),
+    ArrayOfGuestRegistryKeyFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *GuestRegistryKeyHasSubkeys*. To be used in *Any* placeholders.
-    ArrayOfGuestRegistryKeyHasSubkeys(Vec<MethodFault>),
+    ArrayOfGuestRegistryKeyHasSubkeys(Vec<super::structs::MethodFault>),
     /// A boxed array of *GuestRegistryKeyInvalid*. To be used in *Any* placeholders.
-    ArrayOfGuestRegistryKeyInvalid(Vec<MethodFault>),
+    ArrayOfGuestRegistryKeyInvalid(Vec<super::structs::MethodFault>),
     /// A boxed array of *GuestRegistryKeyParentVolatile*. To be used in *Any* placeholders.
-    ArrayOfGuestRegistryKeyParentVolatile(Vec<MethodFault>),
+    ArrayOfGuestRegistryKeyParentVolatile(Vec<super::structs::MethodFault>),
     /// A boxed array of *GuestRegistryValueFault*. To be used in *Any* placeholders.
-    ArrayOfGuestRegistryValueFault(Vec<MethodFault>),
+    ArrayOfGuestRegistryValueFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *GuestRegistryValueNotFound*. To be used in *Any* placeholders.
-    ArrayOfGuestRegistryValueNotFound(Vec<MethodFault>),
+    ArrayOfGuestRegistryValueNotFound(Vec<super::structs::MethodFault>),
     /// A boxed array of *HAErrorsAtDest*. To be used in *Any* placeholders.
-    ArrayOfHaErrorsAtDest(Vec<MethodFault>),
+    ArrayOfHaErrorsAtDest(Vec<super::structs::MethodFault>),
     /// A boxed array of *HeterogenousHostsBlockingEVC*. To be used in *Any* placeholders.
-    ArrayOfHeterogenousHostsBlockingEvc(Vec<MethodFault>),
+    ArrayOfHeterogenousHostsBlockingEvc(Vec<super::structs::MethodFault>),
     /// A boxed array of *HostAccessRestrictedToManagementServer*. To be used in *Any* placeholders.
-    ArrayOfHostAccessRestrictedToManagementServer(Vec<MethodFault>),
+    ArrayOfHostAccessRestrictedToManagementServer(Vec<super::structs::MethodFault>),
     /// A boxed array of *HostConfigFailed*. To be used in *Any* placeholders.
-    ArrayOfHostConfigFailed(Vec<MethodFault>),
+    ArrayOfHostConfigFailed(Vec<super::structs::MethodFault>),
     /// A boxed array of *HostConfigFault*. To be used in *Any* placeholders.
-    ArrayOfHostConfigFault(Vec<MethodFault>),
+    ArrayOfHostConfigFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *HostConnectFault*. To be used in *Any* placeholders.
-    ArrayOfHostConnectFault(Vec<MethodFault>),
+    ArrayOfHostConnectFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *HostHasComponentFailure*. To be used in *Any* placeholders.
-    ArrayOfHostHasComponentFailure(Vec<MethodFault>),
+    ArrayOfHostHasComponentFailure(Vec<super::structs::MethodFault>),
     /// A boxed array of *HostInDomain*. To be used in *Any* placeholders.
-    ArrayOfHostInDomain(Vec<MethodFault>),
+    ArrayOfHostInDomain(Vec<super::structs::MethodFault>),
     /// A boxed array of *HostIncompatibleForFaultTolerance*. To be used in *Any* placeholders.
-    ArrayOfHostIncompatibleForFaultTolerance(Vec<MethodFault>),
+    ArrayOfHostIncompatibleForFaultTolerance(Vec<super::structs::MethodFault>),
     /// A boxed array of *HostIncompatibleForRecordReplay*. To be used in *Any* placeholders.
-    ArrayOfHostIncompatibleForRecordReplay(Vec<MethodFault>),
+    ArrayOfHostIncompatibleForRecordReplay(Vec<super::structs::MethodFault>),
     /// A boxed array of *HostInventoryFull*. To be used in *Any* placeholders.
-    ArrayOfHostInventoryFull(Vec<MethodFault>),
+    ArrayOfHostInventoryFull(Vec<super::structs::MethodFault>),
     /// A boxed array of *HostPowerOpFailed*. To be used in *Any* placeholders.
-    ArrayOfHostPowerOpFailed(Vec<MethodFault>),
+    ArrayOfHostPowerOpFailed(Vec<super::structs::MethodFault>),
     /// A boxed array of *HostSpecificationOperationFailed*. To be used in *Any* placeholders.
-    ArrayOfHostSpecificationOperationFailed(Vec<MethodFault>),
+    ArrayOfHostSpecificationOperationFailed(Vec<super::structs::MethodFault>),
     /// A boxed array of *HotSnapshotMoveNotSupported*. To be used in *Any* placeholders.
-    ArrayOfHotSnapshotMoveNotSupported(Vec<MethodFault>),
+    ArrayOfHotSnapshotMoveNotSupported(Vec<super::structs::MethodFault>),
     /// A boxed array of *HttpFault*. To be used in *Any* placeholders.
-    ArrayOfHttpFault(Vec<MethodFault>),
+    ArrayOfHttpFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *IDEDiskNotSupported*. To be used in *Any* placeholders.
-    ArrayOfIdeDiskNotSupported(Vec<MethodFault>),
+    ArrayOfIdeDiskNotSupported(Vec<super::structs::MethodFault>),
     /// A boxed array of *IORMNotSupportedHostOnDatastore*. To be used in *Any* placeholders.
-    ArrayOfIormNotSupportedHostOnDatastore(Vec<MethodFault>),
+    ArrayOfIormNotSupportedHostOnDatastore(Vec<super::structs::MethodFault>),
     /// A boxed array of *ImportHostAddFailure*. To be used in *Any* placeholders.
-    ArrayOfImportHostAddFailure(Vec<MethodFault>),
+    ArrayOfImportHostAddFailure(Vec<super::structs::MethodFault>),
     /// A boxed array of *ImportOperationBulkFault*. To be used in *Any* placeholders.
-    ArrayOfImportOperationBulkFault(Vec<MethodFault>),
+    ArrayOfImportOperationBulkFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *ImportOperationBulkFaultFaultOnImport*. To be used in *Any* placeholders.
-    ArrayOfImportOperationBulkFaultFaultOnImport(Vec<ImportOperationBulkFaultFaultOnImport>),
+    ArrayOfImportOperationBulkFaultFaultOnImport(Vec<super::structs::ImportOperationBulkFaultFaultOnImport>),
     /// A boxed array of *InUseFeatureManipulationDisallowed*. To be used in *Any* placeholders.
-    ArrayOfInUseFeatureManipulationDisallowed(Vec<MethodFault>),
+    ArrayOfInUseFeatureManipulationDisallowed(Vec<super::structs::MethodFault>),
     /// A boxed array of *InaccessibleDatastore*. To be used in *Any* placeholders.
-    ArrayOfInaccessibleDatastore(Vec<MethodFault>),
+    ArrayOfInaccessibleDatastore(Vec<super::structs::MethodFault>),
     /// A boxed array of *InaccessibleFTMetadataDatastore*. To be used in *Any* placeholders.
-    ArrayOfInaccessibleFtMetadataDatastore(Vec<MethodFault>),
+    ArrayOfInaccessibleFtMetadataDatastore(Vec<super::structs::MethodFault>),
     /// A boxed array of *InaccessibleVFlashSource*. To be used in *Any* placeholders.
-    ArrayOfInaccessibleVFlashSource(Vec<MethodFault>),
+    ArrayOfInaccessibleVFlashSource(Vec<super::structs::MethodFault>),
     /// A boxed array of *IncompatibleDefaultDevice*. To be used in *Any* placeholders.
-    ArrayOfIncompatibleDefaultDevice(Vec<MethodFault>),
+    ArrayOfIncompatibleDefaultDevice(Vec<super::structs::MethodFault>),
     /// A boxed array of *IncompatibleHostForFtSecondary*. To be used in *Any* placeholders.
-    ArrayOfIncompatibleHostForFtSecondary(Vec<MethodFault>),
+    ArrayOfIncompatibleHostForFtSecondary(Vec<super::structs::MethodFault>),
     /// A boxed array of *IncompatibleHostForVmReplication*. To be used in *Any* placeholders.
-    ArrayOfIncompatibleHostForVmReplication(Vec<MethodFault>),
+    ArrayOfIncompatibleHostForVmReplication(Vec<super::structs::MethodFault>),
     /// A boxed array of *IncompatibleSetting*. To be used in *Any* placeholders.
-    ArrayOfIncompatibleSetting(Vec<MethodFault>),
+    ArrayOfIncompatibleSetting(Vec<super::structs::MethodFault>),
     /// A boxed array of *IncorrectFileType*. To be used in *Any* placeholders.
-    ArrayOfIncorrectFileType(Vec<MethodFault>),
+    ArrayOfIncorrectFileType(Vec<super::structs::MethodFault>),
     /// A boxed array of *IncorrectHostInformation*. To be used in *Any* placeholders.
-    ArrayOfIncorrectHostInformation(Vec<MethodFault>),
+    ArrayOfIncorrectHostInformation(Vec<super::structs::MethodFault>),
     /// A boxed array of *IndependentDiskVMotionNotSupported*. To be used in *Any* placeholders.
-    ArrayOfIndependentDiskVMotionNotSupported(Vec<MethodFault>),
+    ArrayOfIndependentDiskVMotionNotSupported(Vec<super::structs::MethodFault>),
     /// A boxed array of *InsufficientAgentVmsDeployed*. To be used in *Any* placeholders.
-    ArrayOfInsufficientAgentVmsDeployed(Vec<MethodFault>),
+    ArrayOfInsufficientAgentVmsDeployed(Vec<super::structs::MethodFault>),
     /// A boxed array of *InsufficientCpuResourcesFault*. To be used in *Any* placeholders.
-    ArrayOfInsufficientCpuResourcesFault(Vec<MethodFault>),
+    ArrayOfInsufficientCpuResourcesFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *InsufficientDisks*. To be used in *Any* placeholders.
-    ArrayOfInsufficientDisks(Vec<MethodFault>),
+    ArrayOfInsufficientDisks(Vec<super::structs::MethodFault>),
     /// A boxed array of *InsufficientFailoverResourcesFault*. To be used in *Any* placeholders.
-    ArrayOfInsufficientFailoverResourcesFault(Vec<MethodFault>),
+    ArrayOfInsufficientFailoverResourcesFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *InsufficientGraphicsResourcesFault*. To be used in *Any* placeholders.
-    ArrayOfInsufficientGraphicsResourcesFault(Vec<MethodFault>),
+    ArrayOfInsufficientGraphicsResourcesFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *InsufficientHostCapacityFault*. To be used in *Any* placeholders.
-    ArrayOfInsufficientHostCapacityFault(Vec<MethodFault>),
+    ArrayOfInsufficientHostCapacityFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *InsufficientHostCpuCapacityFault*. To be used in *Any* placeholders.
-    ArrayOfInsufficientHostCpuCapacityFault(Vec<MethodFault>),
+    ArrayOfInsufficientHostCpuCapacityFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *InsufficientHostMemoryCapacityFault*. To be used in *Any* placeholders.
-    ArrayOfInsufficientHostMemoryCapacityFault(Vec<MethodFault>),
+    ArrayOfInsufficientHostMemoryCapacityFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *InsufficientMemoryResourcesFault*. To be used in *Any* placeholders.
-    ArrayOfInsufficientMemoryResourcesFault(Vec<MethodFault>),
+    ArrayOfInsufficientMemoryResourcesFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *InsufficientNetworkCapacity*. To be used in *Any* placeholders.
-    ArrayOfInsufficientNetworkCapacity(Vec<MethodFault>),
+    ArrayOfInsufficientNetworkCapacity(Vec<super::structs::MethodFault>),
     /// A boxed array of *InsufficientNetworkResourcePoolCapacity*. To be used in *Any* placeholders.
-    ArrayOfInsufficientNetworkResourcePoolCapacity(Vec<MethodFault>),
+    ArrayOfInsufficientNetworkResourcePoolCapacity(Vec<super::structs::MethodFault>),
     /// A boxed array of *InsufficientPerCpuCapacity*. To be used in *Any* placeholders.
-    ArrayOfInsufficientPerCpuCapacity(Vec<MethodFault>),
+    ArrayOfInsufficientPerCpuCapacity(Vec<super::structs::MethodFault>),
     /// A boxed array of *InsufficientResourcesFault*. To be used in *Any* placeholders.
-    ArrayOfInsufficientResourcesFault(Vec<MethodFault>),
+    ArrayOfInsufficientResourcesFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *InsufficientStandbyCpuResource*. To be used in *Any* placeholders.
-    ArrayOfInsufficientStandbyCpuResource(Vec<MethodFault>),
+    ArrayOfInsufficientStandbyCpuResource(Vec<super::structs::MethodFault>),
     /// A boxed array of *InsufficientStandbyMemoryResource*. To be used in *Any* placeholders.
-    ArrayOfInsufficientStandbyMemoryResource(Vec<MethodFault>),
+    ArrayOfInsufficientStandbyMemoryResource(Vec<super::structs::MethodFault>),
     /// A boxed array of *InsufficientStandbyResource*. To be used in *Any* placeholders.
-    ArrayOfInsufficientStandbyResource(Vec<MethodFault>),
+    ArrayOfInsufficientStandbyResource(Vec<super::structs::MethodFault>),
     /// A boxed array of *InsufficientStorageIops*. To be used in *Any* placeholders.
-    ArrayOfInsufficientStorageIops(Vec<MethodFault>),
+    ArrayOfInsufficientStorageIops(Vec<super::structs::MethodFault>),
     /// A boxed array of *InsufficientStorageSpace*. To be used in *Any* placeholders.
-    ArrayOfInsufficientStorageSpace(Vec<MethodFault>),
+    ArrayOfInsufficientStorageSpace(Vec<super::structs::MethodFault>),
     /// A boxed array of *InsufficientVFlashResourcesFault*. To be used in *Any* placeholders.
-    ArrayOfInsufficientVFlashResourcesFault(Vec<MethodFault>),
+    ArrayOfInsufficientVFlashResourcesFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *InvalidAffinitySettingFault*. To be used in *Any* placeholders.
-    ArrayOfInvalidAffinitySettingFault(Vec<MethodFault>),
+    ArrayOfInvalidAffinitySettingFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *InvalidBmcRole*. To be used in *Any* placeholders.
-    ArrayOfInvalidBmcRole(Vec<MethodFault>),
+    ArrayOfInvalidBmcRole(Vec<super::structs::MethodFault>),
     /// A boxed array of *InvalidBundle*. To be used in *Any* placeholders.
-    ArrayOfInvalidBundle(Vec<MethodFault>),
+    ArrayOfInvalidBundle(Vec<super::structs::MethodFault>),
     /// A boxed array of *InvalidCAMCertificate*. To be used in *Any* placeholders.
-    ArrayOfInvalidCamCertificate(Vec<MethodFault>),
+    ArrayOfInvalidCamCertificate(Vec<super::structs::MethodFault>),
     /// A boxed array of *InvalidCAMServer*. To be used in *Any* placeholders.
-    ArrayOfInvalidCamServer(Vec<MethodFault>),
+    ArrayOfInvalidCamServer(Vec<super::structs::MethodFault>),
     /// A boxed array of *InvalidClientCertificate*. To be used in *Any* placeholders.
-    ArrayOfInvalidClientCertificate(Vec<MethodFault>),
+    ArrayOfInvalidClientCertificate(Vec<super::structs::MethodFault>),
     /// A boxed array of *InvalidController*. To be used in *Any* placeholders.
-    ArrayOfInvalidController(Vec<MethodFault>),
+    ArrayOfInvalidController(Vec<super::structs::MethodFault>),
     /// A boxed array of *InvalidDasConfigArgument*. To be used in *Any* placeholders.
-    ArrayOfInvalidDasConfigArgument(Vec<MethodFault>),
+    ArrayOfInvalidDasConfigArgument(Vec<super::structs::MethodFault>),
     /// A boxed array of *InvalidDasRestartPriorityForFtVm*. To be used in *Any* placeholders.
-    ArrayOfInvalidDasRestartPriorityForFtVm(Vec<MethodFault>),
+    ArrayOfInvalidDasRestartPriorityForFtVm(Vec<super::structs::MethodFault>),
     /// A boxed array of *InvalidDatastore*. To be used in *Any* placeholders.
-    ArrayOfInvalidDatastore(Vec<MethodFault>),
+    ArrayOfInvalidDatastore(Vec<super::structs::MethodFault>),
     /// A boxed array of *InvalidDatastorePath*. To be used in *Any* placeholders.
-    ArrayOfInvalidDatastorePath(Vec<MethodFault>),
+    ArrayOfInvalidDatastorePath(Vec<super::structs::MethodFault>),
     /// A boxed array of *InvalidDatastoreState*. To be used in *Any* placeholders.
-    ArrayOfInvalidDatastoreState(Vec<MethodFault>),
+    ArrayOfInvalidDatastoreState(Vec<super::structs::MethodFault>),
     /// A boxed array of *InvalidDeviceBacking*. To be used in *Any* placeholders.
-    ArrayOfInvalidDeviceBacking(Vec<MethodFault>),
+    ArrayOfInvalidDeviceBacking(Vec<super::structs::MethodFault>),
     /// A boxed array of *InvalidDeviceOperation*. To be used in *Any* placeholders.
-    ArrayOfInvalidDeviceOperation(Vec<MethodFault>),
+    ArrayOfInvalidDeviceOperation(Vec<super::structs::MethodFault>),
     /// A boxed array of *InvalidDeviceSpec*. To be used in *Any* placeholders.
-    ArrayOfInvalidDeviceSpec(Vec<MethodFault>),
+    ArrayOfInvalidDeviceSpec(Vec<super::structs::MethodFault>),
     /// A boxed array of *InvalidDiskFormat*. To be used in *Any* placeholders.
-    ArrayOfInvalidDiskFormat(Vec<MethodFault>),
+    ArrayOfInvalidDiskFormat(Vec<super::structs::MethodFault>),
     /// A boxed array of *InvalidDrsBehaviorForFtVm*. To be used in *Any* placeholders.
-    ArrayOfInvalidDrsBehaviorForFtVm(Vec<MethodFault>),
+    ArrayOfInvalidDrsBehaviorForFtVm(Vec<super::structs::MethodFault>),
     /// A boxed array of *InvalidEditionLicense*. To be used in *Any* placeholders.
-    ArrayOfInvalidEditionLicense(Vec<MethodFault>),
+    ArrayOfInvalidEditionLicense(Vec<super::structs::MethodFault>),
     /// A boxed array of *InvalidEvent*. To be used in *Any* placeholders.
-    ArrayOfInvalidEvent(Vec<MethodFault>),
+    ArrayOfInvalidEvent(Vec<super::structs::MethodFault>),
     /// A boxed array of *InvalidFolder*. To be used in *Any* placeholders.
-    ArrayOfInvalidFolder(Vec<MethodFault>),
+    ArrayOfInvalidFolder(Vec<super::structs::MethodFault>),
     /// A boxed array of *InvalidFormat*. To be used in *Any* placeholders.
-    ArrayOfInvalidFormat(Vec<MethodFault>),
+    ArrayOfInvalidFormat(Vec<super::structs::MethodFault>),
     /// A boxed array of *InvalidGuestLogin*. To be used in *Any* placeholders.
-    ArrayOfInvalidGuestLogin(Vec<MethodFault>),
+    ArrayOfInvalidGuestLogin(Vec<super::structs::MethodFault>),
     /// A boxed array of *InvalidHostConnectionState*. To be used in *Any* placeholders.
-    ArrayOfInvalidHostConnectionState(Vec<MethodFault>),
+    ArrayOfInvalidHostConnectionState(Vec<super::structs::MethodFault>),
     /// A boxed array of *InvalidHostName*. To be used in *Any* placeholders.
-    ArrayOfInvalidHostName(Vec<MethodFault>),
+    ArrayOfInvalidHostName(Vec<super::structs::MethodFault>),
     /// A boxed array of *InvalidHostState*. To be used in *Any* placeholders.
-    ArrayOfInvalidHostState(Vec<MethodFault>),
+    ArrayOfInvalidHostState(Vec<super::structs::MethodFault>),
     /// A boxed array of *InvalidIndexArgument*. To be used in *Any* placeholders.
-    ArrayOfInvalidIndexArgument(Vec<MethodFault>),
+    ArrayOfInvalidIndexArgument(Vec<super::structs::MethodFault>),
     /// A boxed array of *InvalidIpfixConfig*. To be used in *Any* placeholders.
-    ArrayOfInvalidIpfixConfig(Vec<MethodFault>),
+    ArrayOfInvalidIpfixConfig(Vec<super::structs::MethodFault>),
     /// A boxed array of *InvalidIpmiLoginInfo*. To be used in *Any* placeholders.
-    ArrayOfInvalidIpmiLoginInfo(Vec<MethodFault>),
+    ArrayOfInvalidIpmiLoginInfo(Vec<super::structs::MethodFault>),
     /// A boxed array of *InvalidIpmiMacAddress*. To be used in *Any* placeholders.
-    ArrayOfInvalidIpmiMacAddress(Vec<MethodFault>),
+    ArrayOfInvalidIpmiMacAddress(Vec<super::structs::MethodFault>),
     /// A boxed array of *InvalidLicense*. To be used in *Any* placeholders.
-    ArrayOfInvalidLicense(Vec<MethodFault>),
+    ArrayOfInvalidLicense(Vec<super::structs::MethodFault>),
     /// A boxed array of *InvalidLocale*. To be used in *Any* placeholders.
-    ArrayOfInvalidLocale(Vec<MethodFault>),
+    ArrayOfInvalidLocale(Vec<super::structs::MethodFault>),
     /// A boxed array of *InvalidLogin*. To be used in *Any* placeholders.
-    ArrayOfInvalidLogin(Vec<MethodFault>),
+    ArrayOfInvalidLogin(Vec<super::structs::MethodFault>),
     /// A boxed array of *InvalidName*. To be used in *Any* placeholders.
-    ArrayOfInvalidName(Vec<MethodFault>),
+    ArrayOfInvalidName(Vec<super::structs::MethodFault>),
     /// A boxed array of *InvalidNasCredentials*. To be used in *Any* placeholders.
-    ArrayOfInvalidNasCredentials(Vec<MethodFault>),
+    ArrayOfInvalidNasCredentials(Vec<super::structs::MethodFault>),
     /// A boxed array of *InvalidNetworkInType*. To be used in *Any* placeholders.
-    ArrayOfInvalidNetworkInType(Vec<MethodFault>),
+    ArrayOfInvalidNetworkInType(Vec<super::structs::MethodFault>),
     /// A boxed array of *InvalidNetworkResource*. To be used in *Any* placeholders.
-    ArrayOfInvalidNetworkResource(Vec<MethodFault>),
+    ArrayOfInvalidNetworkResource(Vec<super::structs::MethodFault>),
     /// A boxed array of *InvalidOperationOnSecondaryVm*. To be used in *Any* placeholders.
-    ArrayOfInvalidOperationOnSecondaryVm(Vec<MethodFault>),
+    ArrayOfInvalidOperationOnSecondaryVm(Vec<super::structs::MethodFault>),
     /// A boxed array of *InvalidPowerState*. To be used in *Any* placeholders.
-    ArrayOfInvalidPowerState(Vec<MethodFault>),
+    ArrayOfInvalidPowerState(Vec<super::structs::MethodFault>),
     /// A boxed array of *InvalidPrivilege*. To be used in *Any* placeholders.
-    ArrayOfInvalidPrivilege(Vec<MethodFault>),
+    ArrayOfInvalidPrivilege(Vec<super::structs::MethodFault>),
     /// A boxed array of *InvalidProfileReferenceHost*. To be used in *Any* placeholders.
-    ArrayOfInvalidProfileReferenceHost(Vec<MethodFault>),
+    ArrayOfInvalidProfileReferenceHost(Vec<super::structs::MethodFault>),
     /// A boxed array of *InvalidPropertyType*. To be used in *Any* placeholders.
-    ArrayOfInvalidPropertyType(Vec<MethodFault>),
+    ArrayOfInvalidPropertyType(Vec<super::structs::MethodFault>),
     /// A boxed array of *InvalidPropertyValue*. To be used in *Any* placeholders.
-    ArrayOfInvalidPropertyValue(Vec<MethodFault>),
+    ArrayOfInvalidPropertyValue(Vec<super::structs::MethodFault>),
     /// A boxed array of *InvalidResourcePoolStructureFault*. To be used in *Any* placeholders.
-    ArrayOfInvalidResourcePoolStructureFault(Vec<MethodFault>),
+    ArrayOfInvalidResourcePoolStructureFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *InvalidScheduledTask*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 8.0.2.0
-    ArrayOfInvalidScheduledTask(Vec<MethodFault>),
+    ArrayOfInvalidScheduledTask(Vec<super::structs::MethodFault>),
     /// A boxed array of *InvalidSnapshotFormat*. To be used in *Any* placeholders.
-    ArrayOfInvalidSnapshotFormat(Vec<MethodFault>),
+    ArrayOfInvalidSnapshotFormat(Vec<super::structs::MethodFault>),
     /// A boxed array of *InvalidState*. To be used in *Any* placeholders.
-    ArrayOfInvalidState(Vec<MethodFault>),
+    ArrayOfInvalidState(Vec<super::structs::MethodFault>),
     /// A boxed array of *InvalidVmConfig*. To be used in *Any* placeholders.
-    ArrayOfInvalidVmConfig(Vec<MethodFault>),
+    ArrayOfInvalidVmConfig(Vec<super::structs::MethodFault>),
     /// A boxed array of *InvalidVmState*. To be used in *Any* placeholders.
-    ArrayOfInvalidVmState(Vec<MethodFault>),
+    ArrayOfInvalidVmState(Vec<super::structs::MethodFault>),
     /// A boxed array of *InventoryHasStandardAloneHosts*. To be used in *Any* placeholders.
-    ArrayOfInventoryHasStandardAloneHosts(Vec<MethodFault>),
+    ArrayOfInventoryHasStandardAloneHosts(Vec<super::structs::MethodFault>),
     /// A boxed array of *IpHostnameGeneratorError*. To be used in *Any* placeholders.
-    ArrayOfIpHostnameGeneratorError(Vec<MethodFault>),
+    ArrayOfIpHostnameGeneratorError(Vec<super::structs::MethodFault>),
     /// A boxed array of *IscsiFault*. To be used in *Any* placeholders.
-    ArrayOfIscsiFault(Vec<MethodFault>),
+    ArrayOfIscsiFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *IscsiFaultInvalidVnic*. To be used in *Any* placeholders.
-    ArrayOfIscsiFaultInvalidVnic(Vec<MethodFault>),
+    ArrayOfIscsiFaultInvalidVnic(Vec<super::structs::MethodFault>),
     /// A boxed array of *IscsiFaultPnicInUse*. To be used in *Any* placeholders.
-    ArrayOfIscsiFaultPnicInUse(Vec<MethodFault>),
+    ArrayOfIscsiFaultPnicInUse(Vec<super::structs::MethodFault>),
     /// A boxed array of *IscsiFaultVnicAlreadyBound*. To be used in *Any* placeholders.
-    ArrayOfIscsiFaultVnicAlreadyBound(Vec<MethodFault>),
+    ArrayOfIscsiFaultVnicAlreadyBound(Vec<super::structs::MethodFault>),
     /// A boxed array of *IscsiFaultVnicHasActivePaths*. To be used in *Any* placeholders.
-    ArrayOfIscsiFaultVnicHasActivePaths(Vec<MethodFault>),
+    ArrayOfIscsiFaultVnicHasActivePaths(Vec<super::structs::MethodFault>),
     /// A boxed array of *IscsiFaultVnicHasMultipleUplinks*. To be used in *Any* placeholders.
-    ArrayOfIscsiFaultVnicHasMultipleUplinks(Vec<MethodFault>),
+    ArrayOfIscsiFaultVnicHasMultipleUplinks(Vec<super::structs::MethodFault>),
     /// A boxed array of *IscsiFaultVnicHasNoUplinks*. To be used in *Any* placeholders.
-    ArrayOfIscsiFaultVnicHasNoUplinks(Vec<MethodFault>),
+    ArrayOfIscsiFaultVnicHasNoUplinks(Vec<super::structs::MethodFault>),
     /// A boxed array of *IscsiFaultVnicHasWrongUplink*. To be used in *Any* placeholders.
-    ArrayOfIscsiFaultVnicHasWrongUplink(Vec<MethodFault>),
+    ArrayOfIscsiFaultVnicHasWrongUplink(Vec<super::structs::MethodFault>),
     /// A boxed array of *IscsiFaultVnicInUse*. To be used in *Any* placeholders.
-    ArrayOfIscsiFaultVnicInUse(Vec<MethodFault>),
+    ArrayOfIscsiFaultVnicInUse(Vec<super::structs::MethodFault>),
     /// A boxed array of *IscsiFaultVnicIsLastPath*. To be used in *Any* placeholders.
-    ArrayOfIscsiFaultVnicIsLastPath(Vec<MethodFault>),
+    ArrayOfIscsiFaultVnicIsLastPath(Vec<super::structs::MethodFault>),
     /// A boxed array of *IscsiFaultVnicNotBound*. To be used in *Any* placeholders.
-    ArrayOfIscsiFaultVnicNotBound(Vec<MethodFault>),
+    ArrayOfIscsiFaultVnicNotBound(Vec<super::structs::MethodFault>),
     /// A boxed array of *IscsiFaultVnicNotFound*. To be used in *Any* placeholders.
-    ArrayOfIscsiFaultVnicNotFound(Vec<MethodFault>),
+    ArrayOfIscsiFaultVnicNotFound(Vec<super::structs::MethodFault>),
     /// A boxed array of *KeyNotFound*. To be used in *Any* placeholders.
-    ArrayOfKeyNotFound(Vec<MethodFault>),
+    ArrayOfKeyNotFound(Vec<super::structs::MethodFault>),
     /// A boxed array of *LargeRDMConversionNotSupported*. To be used in *Any* placeholders.
-    ArrayOfLargeRdmConversionNotSupported(Vec<MethodFault>),
+    ArrayOfLargeRdmConversionNotSupported(Vec<super::structs::MethodFault>),
     /// A boxed array of *LargeRDMNotSupportedOnDatastore*. To be used in *Any* placeholders.
-    ArrayOfLargeRdmNotSupportedOnDatastore(Vec<MethodFault>),
+    ArrayOfLargeRdmNotSupportedOnDatastore(Vec<super::structs::MethodFault>),
     /// A boxed array of *LegacyNetworkInterfaceInUse*. To be used in *Any* placeholders.
-    ArrayOfLegacyNetworkInterfaceInUse(Vec<MethodFault>),
+    ArrayOfLegacyNetworkInterfaceInUse(Vec<super::structs::MethodFault>),
     /// A boxed array of *LicenseAssignmentFailed*. To be used in *Any* placeholders.
-    ArrayOfLicenseAssignmentFailed(Vec<MethodFault>),
+    ArrayOfLicenseAssignmentFailed(Vec<super::structs::MethodFault>),
     /// A boxed array of *LicenseDowngradeDisallowed*. To be used in *Any* placeholders.
-    ArrayOfLicenseDowngradeDisallowed(Vec<MethodFault>),
+    ArrayOfLicenseDowngradeDisallowed(Vec<super::structs::MethodFault>),
     /// A boxed array of *LicenseEntityNotFound*. To be used in *Any* placeholders.
-    ArrayOfLicenseEntityNotFound(Vec<MethodFault>),
+    ArrayOfLicenseEntityNotFound(Vec<super::structs::MethodFault>),
     /// A boxed array of *LicenseExpired*. To be used in *Any* placeholders.
-    ArrayOfLicenseExpired(Vec<MethodFault>),
+    ArrayOfLicenseExpired(Vec<super::structs::MethodFault>),
     /// A boxed array of *LicenseKeyEntityMismatch*. To be used in *Any* placeholders.
-    ArrayOfLicenseKeyEntityMismatch(Vec<MethodFault>),
+    ArrayOfLicenseKeyEntityMismatch(Vec<super::structs::MethodFault>),
     /// A boxed array of *LicenseRestricted*. To be used in *Any* placeholders.
-    ArrayOfLicenseRestricted(Vec<MethodFault>),
+    ArrayOfLicenseRestricted(Vec<super::structs::MethodFault>),
     /// A boxed array of *LicenseServerUnavailable*. To be used in *Any* placeholders.
-    ArrayOfLicenseServerUnavailable(Vec<MethodFault>),
+    ArrayOfLicenseServerUnavailable(Vec<super::structs::MethodFault>),
     /// A boxed array of *LicenseSourceUnavailable*. To be used in *Any* placeholders.
-    ArrayOfLicenseSourceUnavailable(Vec<MethodFault>),
+    ArrayOfLicenseSourceUnavailable(Vec<super::structs::MethodFault>),
     /// A boxed array of *LimitExceeded*. To be used in *Any* placeholders.
-    ArrayOfLimitExceeded(Vec<MethodFault>),
+    ArrayOfLimitExceeded(Vec<super::structs::MethodFault>),
     /// A boxed array of *LinuxVolumeNotClean*. To be used in *Any* placeholders.
-    ArrayOfLinuxVolumeNotClean(Vec<MethodFault>),
+    ArrayOfLinuxVolumeNotClean(Vec<super::structs::MethodFault>),
     /// A boxed array of *LogBundlingFailed*. To be used in *Any* placeholders.
-    ArrayOfLogBundlingFailed(Vec<MethodFault>),
+    ArrayOfLogBundlingFailed(Vec<super::structs::MethodFault>),
     /// A boxed array of *MaintenanceModeFileMove*. To be used in *Any* placeholders.
-    ArrayOfMaintenanceModeFileMove(Vec<MethodFault>),
+    ArrayOfMaintenanceModeFileMove(Vec<super::structs::MethodFault>),
     /// A boxed array of *MemoryFileFormatNotSupportedByDatastore*. To be used in *Any* placeholders.
-    ArrayOfMemoryFileFormatNotSupportedByDatastore(Vec<MethodFault>),
+    ArrayOfMemoryFileFormatNotSupportedByDatastore(Vec<super::structs::MethodFault>),
     /// A boxed array of *MemoryHotPlugNotSupported*. To be used in *Any* placeholders.
-    ArrayOfMemoryHotPlugNotSupported(Vec<MethodFault>),
+    ArrayOfMemoryHotPlugNotSupported(Vec<super::structs::MethodFault>),
     /// A boxed array of *MemorySizeNotRecommended*. To be used in *Any* placeholders.
-    ArrayOfMemorySizeNotRecommended(Vec<MethodFault>),
+    ArrayOfMemorySizeNotRecommended(Vec<super::structs::MethodFault>),
     /// A boxed array of *MemorySizeNotSupported*. To be used in *Any* placeholders.
-    ArrayOfMemorySizeNotSupported(Vec<MethodFault>),
+    ArrayOfMemorySizeNotSupported(Vec<super::structs::MethodFault>),
     /// A boxed array of *MemorySizeNotSupportedByDatastore*. To be used in *Any* placeholders.
-    ArrayOfMemorySizeNotSupportedByDatastore(Vec<MethodFault>),
+    ArrayOfMemorySizeNotSupportedByDatastore(Vec<super::structs::MethodFault>),
     /// A boxed array of *MemorySnapshotOnIndependentDisk*. To be used in *Any* placeholders.
-    ArrayOfMemorySnapshotOnIndependentDisk(Vec<MethodFault>),
+    ArrayOfMemorySnapshotOnIndependentDisk(Vec<super::structs::MethodFault>),
     /// A boxed array of *MethodAlreadyDisabledFault*. To be used in *Any* placeholders.
-    ArrayOfMethodAlreadyDisabledFault(Vec<MethodFault>),
+    ArrayOfMethodAlreadyDisabledFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *MethodDisabled*. To be used in *Any* placeholders.
-    ArrayOfMethodDisabled(Vec<MethodFault>),
+    ArrayOfMethodDisabled(Vec<super::structs::MethodFault>),
     /// A boxed array of *MigrationDisabled*. To be used in *Any* placeholders.
-    ArrayOfMigrationDisabled(Vec<MethodFault>),
+    ArrayOfMigrationDisabled(Vec<super::structs::MethodFault>),
     /// A boxed array of *MigrationFault*. To be used in *Any* placeholders.
-    ArrayOfMigrationFault(Vec<MethodFault>),
+    ArrayOfMigrationFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *MigrationFeatureNotSupported*. To be used in *Any* placeholders.
-    ArrayOfMigrationFeatureNotSupported(Vec<MethodFault>),
+    ArrayOfMigrationFeatureNotSupported(Vec<super::structs::MethodFault>),
     /// A boxed array of *MigrationNotReady*. To be used in *Any* placeholders.
-    ArrayOfMigrationNotReady(Vec<MethodFault>),
+    ArrayOfMigrationNotReady(Vec<super::structs::MethodFault>),
     /// A boxed array of *MismatchedBundle*. To be used in *Any* placeholders.
-    ArrayOfMismatchedBundle(Vec<MethodFault>),
+    ArrayOfMismatchedBundle(Vec<super::structs::MethodFault>),
     /// A boxed array of *MismatchedNetworkPolicies*. To be used in *Any* placeholders.
-    ArrayOfMismatchedNetworkPolicies(Vec<MethodFault>),
+    ArrayOfMismatchedNetworkPolicies(Vec<super::structs::MethodFault>),
     /// A boxed array of *MismatchedVMotionNetworkNames*. To be used in *Any* placeholders.
-    ArrayOfMismatchedVMotionNetworkNames(Vec<MethodFault>),
+    ArrayOfMismatchedVMotionNetworkNames(Vec<super::structs::MethodFault>),
     /// A boxed array of *MissingBmcSupport*. To be used in *Any* placeholders.
-    ArrayOfMissingBmcSupport(Vec<MethodFault>),
+    ArrayOfMissingBmcSupport(Vec<super::structs::MethodFault>),
     /// A boxed array of *MissingController*. To be used in *Any* placeholders.
-    ArrayOfMissingController(Vec<MethodFault>),
+    ArrayOfMissingController(Vec<super::structs::MethodFault>),
     /// A boxed array of *MissingIpPool*. To be used in *Any* placeholders.
-    ArrayOfMissingIpPool(Vec<MethodFault>),
+    ArrayOfMissingIpPool(Vec<super::structs::MethodFault>),
     /// A boxed array of *MissingLinuxCustResources*. To be used in *Any* placeholders.
-    ArrayOfMissingLinuxCustResources(Vec<MethodFault>),
+    ArrayOfMissingLinuxCustResources(Vec<super::structs::MethodFault>),
     /// A boxed array of *MissingNetworkIpConfig*. To be used in *Any* placeholders.
-    ArrayOfMissingNetworkIpConfig(Vec<MethodFault>),
+    ArrayOfMissingNetworkIpConfig(Vec<super::structs::MethodFault>),
     /// A boxed array of *MissingPowerOffConfiguration*. To be used in *Any* placeholders.
-    ArrayOfMissingPowerOffConfiguration(Vec<MethodFault>),
+    ArrayOfMissingPowerOffConfiguration(Vec<super::structs::MethodFault>),
     /// A boxed array of *MissingPowerOnConfiguration*. To be used in *Any* placeholders.
-    ArrayOfMissingPowerOnConfiguration(Vec<MethodFault>),
+    ArrayOfMissingPowerOnConfiguration(Vec<super::structs::MethodFault>),
     /// A boxed array of *MissingWindowsCustResources*. To be used in *Any* placeholders.
-    ArrayOfMissingWindowsCustResources(Vec<MethodFault>),
+    ArrayOfMissingWindowsCustResources(Vec<super::structs::MethodFault>),
     /// A boxed array of *MksConnectionLimitReached*. To be used in *Any* placeholders.
-    ArrayOfMksConnectionLimitReached(Vec<MethodFault>),
+    ArrayOfMksConnectionLimitReached(Vec<super::structs::MethodFault>),
     /// A boxed array of *MountError*. To be used in *Any* placeholders.
-    ArrayOfMountError(Vec<MethodFault>),
+    ArrayOfMountError(Vec<super::structs::MethodFault>),
     /// A boxed array of *MultiWriterNotSupported*. To be used in *Any* placeholders.
-    ArrayOfMultiWriterNotSupported(Vec<MethodFault>),
+    ArrayOfMultiWriterNotSupported(Vec<super::structs::MethodFault>),
     /// A boxed array of *MultipleCertificatesVerifyFault*. To be used in *Any* placeholders.
-    ArrayOfMultipleCertificatesVerifyFault(Vec<MethodFault>),
+    ArrayOfMultipleCertificatesVerifyFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *MultipleCertificatesVerifyFaultThumbprintData*. To be used in *Any* placeholders.
-    ArrayOfMultipleCertificatesVerifyFaultThumbprintData(Vec<MultipleCertificatesVerifyFaultThumbprintData>),
+    ArrayOfMultipleCertificatesVerifyFaultThumbprintData(Vec<super::structs::MultipleCertificatesVerifyFaultThumbprintData>),
     /// A boxed array of *MultipleSnapshotsNotSupported*. To be used in *Any* placeholders.
-    ArrayOfMultipleSnapshotsNotSupported(Vec<MethodFault>),
+    ArrayOfMultipleSnapshotsNotSupported(Vec<super::structs::MethodFault>),
     /// A boxed array of *NamespaceFull*. To be used in *Any* placeholders.
-    ArrayOfNamespaceFull(Vec<MethodFault>),
+    ArrayOfNamespaceFull(Vec<super::structs::MethodFault>),
     /// A boxed array of *NamespaceLimitReached*. To be used in *Any* placeholders.
-    ArrayOfNamespaceLimitReached(Vec<MethodFault>),
+    ArrayOfNamespaceLimitReached(Vec<super::structs::MethodFault>),
     /// A boxed array of *NamespaceWriteProtected*. To be used in *Any* placeholders.
-    ArrayOfNamespaceWriteProtected(Vec<MethodFault>),
+    ArrayOfNamespaceWriteProtected(Vec<super::structs::MethodFault>),
     /// A boxed array of *NasConfigFault*. To be used in *Any* placeholders.
-    ArrayOfNasConfigFault(Vec<MethodFault>),
+    ArrayOfNasConfigFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *NasConnectionLimitReached*. To be used in *Any* placeholders.
-    ArrayOfNasConnectionLimitReached(Vec<MethodFault>),
+    ArrayOfNasConnectionLimitReached(Vec<super::structs::MethodFault>),
     /// A boxed array of *NasSessionCredentialConflict*. To be used in *Any* placeholders.
-    ArrayOfNasSessionCredentialConflict(Vec<MethodFault>),
+    ArrayOfNasSessionCredentialConflict(Vec<super::structs::MethodFault>),
     /// A boxed array of *NasVolumeNotMounted*. To be used in *Any* placeholders.
-    ArrayOfNasVolumeNotMounted(Vec<MethodFault>),
+    ArrayOfNasVolumeNotMounted(Vec<super::structs::MethodFault>),
     /// A boxed array of *NetworkCopyFault*. To be used in *Any* placeholders.
-    ArrayOfNetworkCopyFault(Vec<MethodFault>),
+    ArrayOfNetworkCopyFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *NetworkDisruptedAndConfigRolledBack*. To be used in *Any* placeholders.
-    ArrayOfNetworkDisruptedAndConfigRolledBack(Vec<MethodFault>),
+    ArrayOfNetworkDisruptedAndConfigRolledBack(Vec<super::structs::MethodFault>),
     /// A boxed array of *NetworkInaccessible*. To be used in *Any* placeholders.
-    ArrayOfNetworkInaccessible(Vec<MethodFault>),
+    ArrayOfNetworkInaccessible(Vec<super::structs::MethodFault>),
     /// A boxed array of *NetworksMayNotBeTheSame*. To be used in *Any* placeholders.
-    ArrayOfNetworksMayNotBeTheSame(Vec<MethodFault>),
+    ArrayOfNetworksMayNotBeTheSame(Vec<super::structs::MethodFault>),
     /// A boxed array of *NicSettingMismatch*. To be used in *Any* placeholders.
-    ArrayOfNicSettingMismatch(Vec<MethodFault>),
+    ArrayOfNicSettingMismatch(Vec<super::structs::MethodFault>),
     /// A boxed array of *NoActiveHostInCluster*. To be used in *Any* placeholders.
-    ArrayOfNoActiveHostInCluster(Vec<MethodFault>),
+    ArrayOfNoActiveHostInCluster(Vec<super::structs::MethodFault>),
     /// A boxed array of *NoAvailableIp*. To be used in *Any* placeholders.
-    ArrayOfNoAvailableIp(Vec<MethodFault>),
+    ArrayOfNoAvailableIp(Vec<super::structs::MethodFault>),
     /// A boxed array of *NoClientCertificate*. To be used in *Any* placeholders.
-    ArrayOfNoClientCertificate(Vec<MethodFault>),
+    ArrayOfNoClientCertificate(Vec<super::structs::MethodFault>),
     /// A boxed array of *NoCompatibleDatastore*. To be used in *Any* placeholders.
-    ArrayOfNoCompatibleDatastore(Vec<MethodFault>),
+    ArrayOfNoCompatibleDatastore(Vec<super::structs::MethodFault>),
     /// A boxed array of *NoCompatibleHardAffinityHost*. To be used in *Any* placeholders.
-    ArrayOfNoCompatibleHardAffinityHost(Vec<MethodFault>),
+    ArrayOfNoCompatibleHardAffinityHost(Vec<super::structs::MethodFault>),
     /// A boxed array of *NoCompatibleHost*. To be used in *Any* placeholders.
-    ArrayOfNoCompatibleHost(Vec<MethodFault>),
+    ArrayOfNoCompatibleHost(Vec<super::structs::MethodFault>),
     /// A boxed array of *NoCompatibleHostWithAccessToDevice*. To be used in *Any* placeholders.
-    ArrayOfNoCompatibleHostWithAccessToDevice(Vec<MethodFault>),
+    ArrayOfNoCompatibleHostWithAccessToDevice(Vec<super::structs::MethodFault>),
     /// A boxed array of *NoCompatibleSoftAffinityHost*. To be used in *Any* placeholders.
-    ArrayOfNoCompatibleSoftAffinityHost(Vec<MethodFault>),
+    ArrayOfNoCompatibleSoftAffinityHost(Vec<super::structs::MethodFault>),
     /// A boxed array of *NoConnectedDatastore*. To be used in *Any* placeholders.
-    ArrayOfNoConnectedDatastore(Vec<MethodFault>),
+    ArrayOfNoConnectedDatastore(Vec<super::structs::MethodFault>),
     /// A boxed array of *NoDiskFound*. To be used in *Any* placeholders.
-    ArrayOfNoDiskFound(Vec<MethodFault>),
+    ArrayOfNoDiskFound(Vec<super::structs::MethodFault>),
     /// A boxed array of *NoDiskSpace*. To be used in *Any* placeholders.
-    ArrayOfNoDiskSpace(Vec<MethodFault>),
+    ArrayOfNoDiskSpace(Vec<super::structs::MethodFault>),
     /// A boxed array of *NoDisksToCustomize*. To be used in *Any* placeholders.
-    ArrayOfNoDisksToCustomize(Vec<MethodFault>),
+    ArrayOfNoDisksToCustomize(Vec<super::structs::MethodFault>),
     /// A boxed array of *NoGateway*. To be used in *Any* placeholders.
-    ArrayOfNoGateway(Vec<MethodFault>),
+    ArrayOfNoGateway(Vec<super::structs::MethodFault>),
     /// A boxed array of *NoGuestHeartbeat*. To be used in *Any* placeholders.
-    ArrayOfNoGuestHeartbeat(Vec<MethodFault>),
+    ArrayOfNoGuestHeartbeat(Vec<super::structs::MethodFault>),
     /// A boxed array of *NoHost*. To be used in *Any* placeholders.
-    ArrayOfNoHost(Vec<MethodFault>),
+    ArrayOfNoHost(Vec<super::structs::MethodFault>),
     /// A boxed array of *NoHostSuitableForFtSecondary*. To be used in *Any* placeholders.
-    ArrayOfNoHostSuitableForFtSecondary(Vec<MethodFault>),
+    ArrayOfNoHostSuitableForFtSecondary(Vec<super::structs::MethodFault>),
     /// A boxed array of *NoLicenseServerConfigured*. To be used in *Any* placeholders.
-    ArrayOfNoLicenseServerConfigured(Vec<MethodFault>),
+    ArrayOfNoLicenseServerConfigured(Vec<super::structs::MethodFault>),
     /// A boxed array of *NoPeerHostFound*. To be used in *Any* placeholders.
-    ArrayOfNoPeerHostFound(Vec<MethodFault>),
+    ArrayOfNoPeerHostFound(Vec<super::structs::MethodFault>),
     /// A boxed array of *NoPermission*. To be used in *Any* placeholders.
-    ArrayOfNoPermission(Vec<MethodFault>),
+    ArrayOfNoPermission(Vec<super::structs::MethodFault>),
     /// A boxed array of *NoPermissionEntityPrivileges*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 7.0.3.2
-    ArrayOfNoPermissionEntityPrivileges(Vec<NoPermissionEntityPrivileges>),
+    ArrayOfNoPermissionEntityPrivileges(Vec<super::structs::NoPermissionEntityPrivileges>),
     /// A boxed array of *NoPermissionOnAD*. To be used in *Any* placeholders.
-    ArrayOfNoPermissionOnAd(Vec<MethodFault>),
+    ArrayOfNoPermissionOnAd(Vec<super::structs::MethodFault>),
     /// A boxed array of *NoPermissionOnHost*. To be used in *Any* placeholders.
-    ArrayOfNoPermissionOnHost(Vec<MethodFault>),
+    ArrayOfNoPermissionOnHost(Vec<super::structs::MethodFault>),
     /// A boxed array of *NoPermissionOnNasVolume*. To be used in *Any* placeholders.
-    ArrayOfNoPermissionOnNasVolume(Vec<MethodFault>),
+    ArrayOfNoPermissionOnNasVolume(Vec<super::structs::MethodFault>),
     /// A boxed array of *NoSubjectName*. To be used in *Any* placeholders.
-    ArrayOfNoSubjectName(Vec<MethodFault>),
+    ArrayOfNoSubjectName(Vec<super::structs::MethodFault>),
     /// A boxed array of *NoVcManagedIpConfigured*. To be used in *Any* placeholders.
-    ArrayOfNoVcManagedIpConfigured(Vec<MethodFault>),
+    ArrayOfNoVcManagedIpConfigured(Vec<super::structs::MethodFault>),
     /// A boxed array of *NoVirtualNic*. To be used in *Any* placeholders.
-    ArrayOfNoVirtualNic(Vec<MethodFault>),
+    ArrayOfNoVirtualNic(Vec<super::structs::MethodFault>),
     /// A boxed array of *NoVmInVApp*. To be used in *Any* placeholders.
-    ArrayOfNoVmInVApp(Vec<MethodFault>),
+    ArrayOfNoVmInVApp(Vec<super::structs::MethodFault>),
     /// A boxed array of *NonADUserRequired*. To be used in *Any* placeholders.
-    ArrayOfNonAdUserRequired(Vec<MethodFault>),
+    ArrayOfNonAdUserRequired(Vec<super::structs::MethodFault>),
     /// A boxed array of *NonHomeRDMVMotionNotSupported*. To be used in *Any* placeholders.
-    ArrayOfNonHomeRdmvMotionNotSupported(Vec<MethodFault>),
+    ArrayOfNonHomeRdmvMotionNotSupported(Vec<super::structs::MethodFault>),
     /// A boxed array of *NonPersistentDisksNotSupported*. To be used in *Any* placeholders.
-    ArrayOfNonPersistentDisksNotSupported(Vec<MethodFault>),
+    ArrayOfNonPersistentDisksNotSupported(Vec<super::structs::MethodFault>),
     /// A boxed array of *NonVmwareOuiMacNotSupportedHost*. To be used in *Any* placeholders.
-    ArrayOfNonVmwareOuiMacNotSupportedHost(Vec<MethodFault>),
+    ArrayOfNonVmwareOuiMacNotSupportedHost(Vec<super::structs::MethodFault>),
     /// A boxed array of *NotADirectory*. To be used in *Any* placeholders.
-    ArrayOfNotADirectory(Vec<MethodFault>),
+    ArrayOfNotADirectory(Vec<super::structs::MethodFault>),
     /// A boxed array of *NotAFile*. To be used in *Any* placeholders.
-    ArrayOfNotAFile(Vec<MethodFault>),
+    ArrayOfNotAFile(Vec<super::structs::MethodFault>),
     /// A boxed array of *NotAuthenticated*. To be used in *Any* placeholders.
-    ArrayOfNotAuthenticated(Vec<MethodFault>),
+    ArrayOfNotAuthenticated(Vec<super::structs::MethodFault>),
     /// A boxed array of *NotEnoughCpus*. To be used in *Any* placeholders.
-    ArrayOfNotEnoughCpus(Vec<MethodFault>),
+    ArrayOfNotEnoughCpus(Vec<super::structs::MethodFault>),
     /// A boxed array of *NotEnoughLogicalCpus*. To be used in *Any* placeholders.
-    ArrayOfNotEnoughLogicalCpus(Vec<MethodFault>),
+    ArrayOfNotEnoughLogicalCpus(Vec<super::structs::MethodFault>),
     /// A boxed array of *NotFound*. To be used in *Any* placeholders.
-    ArrayOfNotFound(Vec<MethodFault>),
+    ArrayOfNotFound(Vec<super::structs::MethodFault>),
     /// A boxed array of *NotSupportedDeviceForFT*. To be used in *Any* placeholders.
-    ArrayOfNotSupportedDeviceForFt(Vec<MethodFault>),
+    ArrayOfNotSupportedDeviceForFt(Vec<super::structs::MethodFault>),
     /// A boxed array of *NotSupportedHost*. To be used in *Any* placeholders.
-    ArrayOfNotSupportedHost(Vec<MethodFault>),
+    ArrayOfNotSupportedHost(Vec<super::structs::MethodFault>),
     /// A boxed array of *NotSupportedHostForChecksum*. To be used in *Any* placeholders.
-    ArrayOfNotSupportedHostForChecksum(Vec<MethodFault>),
+    ArrayOfNotSupportedHostForChecksum(Vec<super::structs::MethodFault>),
     /// A boxed array of *NotSupportedHostForVFlash*. To be used in *Any* placeholders.
-    ArrayOfNotSupportedHostForVFlash(Vec<MethodFault>),
+    ArrayOfNotSupportedHostForVFlash(Vec<super::structs::MethodFault>),
     /// A boxed array of *NotSupportedHostForVmcp*. To be used in *Any* placeholders.
-    ArrayOfNotSupportedHostForVmcp(Vec<MethodFault>),
+    ArrayOfNotSupportedHostForVmcp(Vec<super::structs::MethodFault>),
     /// A boxed array of *NotSupportedHostForVmemFile*. To be used in *Any* placeholders.
-    ArrayOfNotSupportedHostForVmemFile(Vec<MethodFault>),
+    ArrayOfNotSupportedHostForVmemFile(Vec<super::structs::MethodFault>),
     /// A boxed array of *NotSupportedHostForVsan*. To be used in *Any* placeholders.
-    ArrayOfNotSupportedHostForVsan(Vec<MethodFault>),
+    ArrayOfNotSupportedHostForVsan(Vec<super::structs::MethodFault>),
     /// A boxed array of *NotSupportedHostInCluster*. To be used in *Any* placeholders.
-    ArrayOfNotSupportedHostInCluster(Vec<MethodFault>),
+    ArrayOfNotSupportedHostInCluster(Vec<super::structs::MethodFault>),
     /// A boxed array of *NotSupportedHostInDvs*. To be used in *Any* placeholders.
-    ArrayOfNotSupportedHostInDvs(Vec<MethodFault>),
+    ArrayOfNotSupportedHostInDvs(Vec<super::structs::MethodFault>),
     /// A boxed array of *NotSupportedHostInHACluster*. To be used in *Any* placeholders.
-    ArrayOfNotSupportedHostInHaCluster(Vec<MethodFault>),
+    ArrayOfNotSupportedHostInHaCluster(Vec<super::structs::MethodFault>),
     /// A boxed array of *NotUserConfigurableProperty*. To be used in *Any* placeholders.
-    ArrayOfNotUserConfigurableProperty(Vec<MethodFault>),
+    ArrayOfNotUserConfigurableProperty(Vec<super::structs::MethodFault>),
     /// A boxed array of *NumVirtualCoresPerSocketNotSupported*. To be used in *Any* placeholders.
-    ArrayOfNumVirtualCoresPerSocketNotSupported(Vec<MethodFault>),
+    ArrayOfNumVirtualCoresPerSocketNotSupported(Vec<super::structs::MethodFault>),
     /// A boxed array of *NumVirtualCpusExceedsLimit*. To be used in *Any* placeholders.
-    ArrayOfNumVirtualCpusExceedsLimit(Vec<MethodFault>),
+    ArrayOfNumVirtualCpusExceedsLimit(Vec<super::structs::MethodFault>),
     /// A boxed array of *NumVirtualCpusIncompatible*. To be used in *Any* placeholders.
-    ArrayOfNumVirtualCpusIncompatible(Vec<MethodFault>),
+    ArrayOfNumVirtualCpusIncompatible(Vec<super::structs::MethodFault>),
     /// A boxed array of *NumVirtualCpusNotSupported*. To be used in *Any* placeholders.
-    ArrayOfNumVirtualCpusNotSupported(Vec<MethodFault>),
+    ArrayOfNumVirtualCpusNotSupported(Vec<super::structs::MethodFault>),
     /// A boxed array of *OperationDisabledByGuest*. To be used in *Any* placeholders.
-    ArrayOfOperationDisabledByGuest(Vec<MethodFault>),
+    ArrayOfOperationDisabledByGuest(Vec<super::structs::MethodFault>),
     /// A boxed array of *OperationDisallowedOnHost*. To be used in *Any* placeholders.
-    ArrayOfOperationDisallowedOnHost(Vec<MethodFault>),
+    ArrayOfOperationDisallowedOnHost(Vec<super::structs::MethodFault>),
     /// A boxed array of *OperationNotSupportedByGuest*. To be used in *Any* placeholders.
-    ArrayOfOperationNotSupportedByGuest(Vec<MethodFault>),
+    ArrayOfOperationNotSupportedByGuest(Vec<super::structs::MethodFault>),
     /// A boxed array of *OutOfBounds*. To be used in *Any* placeholders.
-    ArrayOfOutOfBounds(Vec<MethodFault>),
+    ArrayOfOutOfBounds(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfAttribute*. To be used in *Any* placeholders.
-    ArrayOfOvfAttribute(Vec<MethodFault>),
+    ArrayOfOvfAttribute(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfConnectedDevice*. To be used in *Any* placeholders.
-    ArrayOfOvfConnectedDevice(Vec<MethodFault>),
+    ArrayOfOvfConnectedDevice(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfConnectedDeviceFloppy*. To be used in *Any* placeholders.
-    ArrayOfOvfConnectedDeviceFloppy(Vec<MethodFault>),
+    ArrayOfOvfConnectedDeviceFloppy(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfConnectedDeviceIso*. To be used in *Any* placeholders.
-    ArrayOfOvfConnectedDeviceIso(Vec<MethodFault>),
+    ArrayOfOvfConnectedDeviceIso(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfConstraint*. To be used in *Any* placeholders.
-    ArrayOfOvfConstraint(Vec<MethodFault>),
+    ArrayOfOvfConstraint(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfConsumerCallbackFault*. To be used in *Any* placeholders.
-    ArrayOfOvfConsumerCallbackFault(Vec<MethodFault>),
+    ArrayOfOvfConsumerCallbackFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfConsumerCommunicationError*. To be used in *Any* placeholders.
-    ArrayOfOvfConsumerCommunicationError(Vec<MethodFault>),
+    ArrayOfOvfConsumerCommunicationError(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfConsumerFault*. To be used in *Any* placeholders.
-    ArrayOfOvfConsumerFault(Vec<MethodFault>),
+    ArrayOfOvfConsumerFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfConsumerInvalidSection*. To be used in *Any* placeholders.
-    ArrayOfOvfConsumerInvalidSection(Vec<MethodFault>),
+    ArrayOfOvfConsumerInvalidSection(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfConsumerPowerOnFault*. To be used in *Any* placeholders.
-    ArrayOfOvfConsumerPowerOnFault(Vec<MethodFault>),
+    ArrayOfOvfConsumerPowerOnFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfConsumerUndeclaredSection*. To be used in *Any* placeholders.
-    ArrayOfOvfConsumerUndeclaredSection(Vec<MethodFault>),
+    ArrayOfOvfConsumerUndeclaredSection(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfConsumerUndefinedPrefix*. To be used in *Any* placeholders.
-    ArrayOfOvfConsumerUndefinedPrefix(Vec<MethodFault>),
+    ArrayOfOvfConsumerUndefinedPrefix(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfConsumerValidationFault*. To be used in *Any* placeholders.
-    ArrayOfOvfConsumerValidationFault(Vec<MethodFault>),
+    ArrayOfOvfConsumerValidationFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfCpuCompatibility*. To be used in *Any* placeholders.
-    ArrayOfOvfCpuCompatibility(Vec<MethodFault>),
+    ArrayOfOvfCpuCompatibility(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfCpuCompatibilityCheckNotSupported*. To be used in *Any* placeholders.
-    ArrayOfOvfCpuCompatibilityCheckNotSupported(Vec<MethodFault>),
+    ArrayOfOvfCpuCompatibilityCheckNotSupported(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfDiskMappingNotFound*. To be used in *Any* placeholders.
-    ArrayOfOvfDiskMappingNotFound(Vec<MethodFault>),
+    ArrayOfOvfDiskMappingNotFound(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfDiskOrderConstraint*. To be used in *Any* placeholders.
-    ArrayOfOvfDiskOrderConstraint(Vec<MethodFault>),
+    ArrayOfOvfDiskOrderConstraint(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfDuplicateElement*. To be used in *Any* placeholders.
-    ArrayOfOvfDuplicateElement(Vec<MethodFault>),
+    ArrayOfOvfDuplicateElement(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfDuplicatedElementBoundary*. To be used in *Any* placeholders.
-    ArrayOfOvfDuplicatedElementBoundary(Vec<MethodFault>),
+    ArrayOfOvfDuplicatedElementBoundary(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfDuplicatedPropertyIdExport*. To be used in *Any* placeholders.
-    ArrayOfOvfDuplicatedPropertyIdExport(Vec<MethodFault>),
+    ArrayOfOvfDuplicatedPropertyIdExport(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfDuplicatedPropertyIdImport*. To be used in *Any* placeholders.
-    ArrayOfOvfDuplicatedPropertyIdImport(Vec<MethodFault>),
+    ArrayOfOvfDuplicatedPropertyIdImport(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfElement*. To be used in *Any* placeholders.
-    ArrayOfOvfElement(Vec<MethodFault>),
+    ArrayOfOvfElement(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfElementInvalidValue*. To be used in *Any* placeholders.
-    ArrayOfOvfElementInvalidValue(Vec<MethodFault>),
+    ArrayOfOvfElementInvalidValue(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfExport*. To be used in *Any* placeholders.
-    ArrayOfOvfExport(Vec<MethodFault>),
+    ArrayOfOvfExport(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfExportFailed*. To be used in *Any* placeholders.
-    ArrayOfOvfExportFailed(Vec<MethodFault>),
+    ArrayOfOvfExportFailed(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfFault*. To be used in *Any* placeholders.
-    ArrayOfOvfFault(Vec<MethodFault>),
+    ArrayOfOvfFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfHardwareCheck*. To be used in *Any* placeholders.
-    ArrayOfOvfHardwareCheck(Vec<MethodFault>),
+    ArrayOfOvfHardwareCheck(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfHardwareExport*. To be used in *Any* placeholders.
-    ArrayOfOvfHardwareExport(Vec<MethodFault>),
+    ArrayOfOvfHardwareExport(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfHostResourceConstraint*. To be used in *Any* placeholders.
-    ArrayOfOvfHostResourceConstraint(Vec<MethodFault>),
+    ArrayOfOvfHostResourceConstraint(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfHostValueNotParsed*. To be used in *Any* placeholders.
-    ArrayOfOvfHostValueNotParsed(Vec<MethodFault>),
+    ArrayOfOvfHostValueNotParsed(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfImport*. To be used in *Any* placeholders.
-    ArrayOfOvfImport(Vec<MethodFault>),
+    ArrayOfOvfImport(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfImportFailed*. To be used in *Any* placeholders.
-    ArrayOfOvfImportFailed(Vec<MethodFault>),
+    ArrayOfOvfImportFailed(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfInternalError*. To be used in *Any* placeholders.
-    ArrayOfOvfInternalError(Vec<MethodFault>),
+    ArrayOfOvfInternalError(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfInvalidPackage*. To be used in *Any* placeholders.
-    ArrayOfOvfInvalidPackage(Vec<MethodFault>),
+    ArrayOfOvfInvalidPackage(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfInvalidValue*. To be used in *Any* placeholders.
-    ArrayOfOvfInvalidValue(Vec<MethodFault>),
+    ArrayOfOvfInvalidValue(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfInvalidValueConfiguration*. To be used in *Any* placeholders.
-    ArrayOfOvfInvalidValueConfiguration(Vec<MethodFault>),
+    ArrayOfOvfInvalidValueConfiguration(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfInvalidValueEmpty*. To be used in *Any* placeholders.
-    ArrayOfOvfInvalidValueEmpty(Vec<MethodFault>),
+    ArrayOfOvfInvalidValueEmpty(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfInvalidValueFormatMalformed*. To be used in *Any* placeholders.
-    ArrayOfOvfInvalidValueFormatMalformed(Vec<MethodFault>),
+    ArrayOfOvfInvalidValueFormatMalformed(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfInvalidValueReference*. To be used in *Any* placeholders.
-    ArrayOfOvfInvalidValueReference(Vec<MethodFault>),
+    ArrayOfOvfInvalidValueReference(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfInvalidVmName*. To be used in *Any* placeholders.
-    ArrayOfOvfInvalidVmName(Vec<MethodFault>),
+    ArrayOfOvfInvalidVmName(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfMappedOsId*. To be used in *Any* placeholders.
-    ArrayOfOvfMappedOsId(Vec<MethodFault>),
+    ArrayOfOvfMappedOsId(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfMissingAttribute*. To be used in *Any* placeholders.
-    ArrayOfOvfMissingAttribute(Vec<MethodFault>),
+    ArrayOfOvfMissingAttribute(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfMissingElement*. To be used in *Any* placeholders.
-    ArrayOfOvfMissingElement(Vec<MethodFault>),
+    ArrayOfOvfMissingElement(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfMissingElementNormalBoundary*. To be used in *Any* placeholders.
-    ArrayOfOvfMissingElementNormalBoundary(Vec<MethodFault>),
+    ArrayOfOvfMissingElementNormalBoundary(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfMissingHardware*. To be used in *Any* placeholders.
-    ArrayOfOvfMissingHardware(Vec<MethodFault>),
+    ArrayOfOvfMissingHardware(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfNetworkMappingNotSupported*. To be used in *Any* placeholders.
-    ArrayOfOvfNetworkMappingNotSupported(Vec<MethodFault>),
+    ArrayOfOvfNetworkMappingNotSupported(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfNoHostNic*. To be used in *Any* placeholders.
-    ArrayOfOvfNoHostNic(Vec<MethodFault>),
+    ArrayOfOvfNoHostNic(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfNoSpaceOnController*. To be used in *Any* placeholders.
-    ArrayOfOvfNoSpaceOnController(Vec<MethodFault>),
+    ArrayOfOvfNoSpaceOnController(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfNoSupportedHardwareFamily*. To be used in *Any* placeholders.
-    ArrayOfOvfNoSupportedHardwareFamily(Vec<MethodFault>),
+    ArrayOfOvfNoSupportedHardwareFamily(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfProperty*. To be used in *Any* placeholders.
-    ArrayOfOvfProperty(Vec<MethodFault>),
+    ArrayOfOvfProperty(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfPropertyExport*. To be used in *Any* placeholders.
-    ArrayOfOvfPropertyExport(Vec<MethodFault>),
+    ArrayOfOvfPropertyExport(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfPropertyNetwork*. To be used in *Any* placeholders.
-    ArrayOfOvfPropertyNetwork(Vec<MethodFault>),
+    ArrayOfOvfPropertyNetwork(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfPropertyNetworkExport*. To be used in *Any* placeholders.
-    ArrayOfOvfPropertyNetworkExport(Vec<MethodFault>),
+    ArrayOfOvfPropertyNetworkExport(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfPropertyQualifier*. To be used in *Any* placeholders.
-    ArrayOfOvfPropertyQualifier(Vec<MethodFault>),
+    ArrayOfOvfPropertyQualifier(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfPropertyQualifierDuplicate*. To be used in *Any* placeholders.
-    ArrayOfOvfPropertyQualifierDuplicate(Vec<MethodFault>),
+    ArrayOfOvfPropertyQualifierDuplicate(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfPropertyQualifierIgnored*. To be used in *Any* placeholders.
-    ArrayOfOvfPropertyQualifierIgnored(Vec<MethodFault>),
+    ArrayOfOvfPropertyQualifierIgnored(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfPropertyType*. To be used in *Any* placeholders.
-    ArrayOfOvfPropertyType(Vec<MethodFault>),
+    ArrayOfOvfPropertyType(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfPropertyValue*. To be used in *Any* placeholders.
-    ArrayOfOvfPropertyValue(Vec<MethodFault>),
+    ArrayOfOvfPropertyValue(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfSystemFault*. To be used in *Any* placeholders.
-    ArrayOfOvfSystemFault(Vec<MethodFault>),
+    ArrayOfOvfSystemFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfToXmlUnsupportedElement*. To be used in *Any* placeholders.
-    ArrayOfOvfToXmlUnsupportedElement(Vec<MethodFault>),
+    ArrayOfOvfToXmlUnsupportedElement(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfUnableToExportDisk*. To be used in *Any* placeholders.
-    ArrayOfOvfUnableToExportDisk(Vec<MethodFault>),
+    ArrayOfOvfUnableToExportDisk(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfUnexpectedElement*. To be used in *Any* placeholders.
-    ArrayOfOvfUnexpectedElement(Vec<MethodFault>),
+    ArrayOfOvfUnexpectedElement(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfUnknownDevice*. To be used in *Any* placeholders.
-    ArrayOfOvfUnknownDevice(Vec<MethodFault>),
+    ArrayOfOvfUnknownDevice(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfUnknownDeviceBacking*. To be used in *Any* placeholders.
-    ArrayOfOvfUnknownDeviceBacking(Vec<MethodFault>),
+    ArrayOfOvfUnknownDeviceBacking(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfUnknownEntity*. To be used in *Any* placeholders.
-    ArrayOfOvfUnknownEntity(Vec<MethodFault>),
+    ArrayOfOvfUnknownEntity(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfUnsupportedAttribute*. To be used in *Any* placeholders.
-    ArrayOfOvfUnsupportedAttribute(Vec<MethodFault>),
+    ArrayOfOvfUnsupportedAttribute(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfUnsupportedAttributeValue*. To be used in *Any* placeholders.
-    ArrayOfOvfUnsupportedAttributeValue(Vec<MethodFault>),
+    ArrayOfOvfUnsupportedAttributeValue(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfUnsupportedDeviceBackingInfo*. To be used in *Any* placeholders.
-    ArrayOfOvfUnsupportedDeviceBackingInfo(Vec<MethodFault>),
+    ArrayOfOvfUnsupportedDeviceBackingInfo(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfUnsupportedDeviceBackingOption*. To be used in *Any* placeholders.
-    ArrayOfOvfUnsupportedDeviceBackingOption(Vec<MethodFault>),
+    ArrayOfOvfUnsupportedDeviceBackingOption(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfUnsupportedDeviceExport*. To be used in *Any* placeholders.
-    ArrayOfOvfUnsupportedDeviceExport(Vec<MethodFault>),
+    ArrayOfOvfUnsupportedDeviceExport(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfUnsupportedDiskProvisioning*. To be used in *Any* placeholders.
-    ArrayOfOvfUnsupportedDiskProvisioning(Vec<MethodFault>),
+    ArrayOfOvfUnsupportedDiskProvisioning(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfUnsupportedElement*. To be used in *Any* placeholders.
-    ArrayOfOvfUnsupportedElement(Vec<MethodFault>),
+    ArrayOfOvfUnsupportedElement(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfUnsupportedElementValue*. To be used in *Any* placeholders.
-    ArrayOfOvfUnsupportedElementValue(Vec<MethodFault>),
+    ArrayOfOvfUnsupportedElementValue(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfUnsupportedPackage*. To be used in *Any* placeholders.
-    ArrayOfOvfUnsupportedPackage(Vec<MethodFault>),
+    ArrayOfOvfUnsupportedPackage(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfUnsupportedSection*. To be used in *Any* placeholders.
-    ArrayOfOvfUnsupportedSection(Vec<MethodFault>),
+    ArrayOfOvfUnsupportedSection(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfUnsupportedSubType*. To be used in *Any* placeholders.
-    ArrayOfOvfUnsupportedSubType(Vec<MethodFault>),
+    ArrayOfOvfUnsupportedSubType(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfUnsupportedType*. To be used in *Any* placeholders.
-    ArrayOfOvfUnsupportedType(Vec<MethodFault>),
+    ArrayOfOvfUnsupportedType(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfWrongElement*. To be used in *Any* placeholders.
-    ArrayOfOvfWrongElement(Vec<MethodFault>),
+    ArrayOfOvfWrongElement(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfWrongNamespace*. To be used in *Any* placeholders.
-    ArrayOfOvfWrongNamespace(Vec<MethodFault>),
+    ArrayOfOvfWrongNamespace(Vec<super::structs::MethodFault>),
     /// A boxed array of *OvfXmlFormat*. To be used in *Any* placeholders.
-    ArrayOfOvfXmlFormat(Vec<MethodFault>),
+    ArrayOfOvfXmlFormat(Vec<super::structs::MethodFault>),
     /// A boxed array of *PasswordExpired*. To be used in *Any* placeholders.
-    ArrayOfPasswordExpired(Vec<MethodFault>),
+    ArrayOfPasswordExpired(Vec<super::structs::MethodFault>),
     /// A boxed array of *PatchAlreadyInstalled*. To be used in *Any* placeholders.
-    ArrayOfPatchAlreadyInstalled(Vec<MethodFault>),
+    ArrayOfPatchAlreadyInstalled(Vec<super::structs::MethodFault>),
     /// A boxed array of *PatchBinariesNotFound*. To be used in *Any* placeholders.
-    ArrayOfPatchBinariesNotFound(Vec<MethodFault>),
+    ArrayOfPatchBinariesNotFound(Vec<super::structs::MethodFault>),
     /// A boxed array of *PatchInstallFailed*. To be used in *Any* placeholders.
-    ArrayOfPatchInstallFailed(Vec<MethodFault>),
+    ArrayOfPatchInstallFailed(Vec<super::structs::MethodFault>),
     /// A boxed array of *PatchIntegrityError*. To be used in *Any* placeholders.
-    ArrayOfPatchIntegrityError(Vec<MethodFault>),
+    ArrayOfPatchIntegrityError(Vec<super::structs::MethodFault>),
     /// A boxed array of *PatchMetadataCorrupted*. To be used in *Any* placeholders.
-    ArrayOfPatchMetadataCorrupted(Vec<MethodFault>),
+    ArrayOfPatchMetadataCorrupted(Vec<super::structs::MethodFault>),
     /// A boxed array of *PatchMetadataInvalid*. To be used in *Any* placeholders.
-    ArrayOfPatchMetadataInvalid(Vec<MethodFault>),
+    ArrayOfPatchMetadataInvalid(Vec<super::structs::MethodFault>),
     /// A boxed array of *PatchMetadataNotFound*. To be used in *Any* placeholders.
-    ArrayOfPatchMetadataNotFound(Vec<MethodFault>),
+    ArrayOfPatchMetadataNotFound(Vec<super::structs::MethodFault>),
     /// A boxed array of *PatchMissingDependencies*. To be used in *Any* placeholders.
-    ArrayOfPatchMissingDependencies(Vec<MethodFault>),
+    ArrayOfPatchMissingDependencies(Vec<super::structs::MethodFault>),
     /// A boxed array of *PatchNotApplicable*. To be used in *Any* placeholders.
-    ArrayOfPatchNotApplicable(Vec<MethodFault>),
+    ArrayOfPatchNotApplicable(Vec<super::structs::MethodFault>),
     /// A boxed array of *PatchSuperseded*. To be used in *Any* placeholders.
-    ArrayOfPatchSuperseded(Vec<MethodFault>),
+    ArrayOfPatchSuperseded(Vec<super::structs::MethodFault>),
     /// A boxed array of *PhysCompatRDMNotSupported*. To be used in *Any* placeholders.
-    ArrayOfPhysCompatRdmNotSupported(Vec<MethodFault>),
+    ArrayOfPhysCompatRdmNotSupported(Vec<super::structs::MethodFault>),
     /// A boxed array of *PlatformConfigFault*. To be used in *Any* placeholders.
-    ArrayOfPlatformConfigFault(Vec<MethodFault>),
+    ArrayOfPlatformConfigFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *PowerOnFtSecondaryFailed*. To be used in *Any* placeholders.
-    ArrayOfPowerOnFtSecondaryFailed(Vec<MethodFault>),
+    ArrayOfPowerOnFtSecondaryFailed(Vec<super::structs::MethodFault>),
     /// A boxed array of *PowerOnFtSecondaryTimedout*. To be used in *Any* placeholders.
-    ArrayOfPowerOnFtSecondaryTimedout(Vec<MethodFault>),
+    ArrayOfPowerOnFtSecondaryTimedout(Vec<super::structs::MethodFault>),
     /// A boxed array of *ProfileUpdateFailed*. To be used in *Any* placeholders.
-    ArrayOfProfileUpdateFailed(Vec<MethodFault>),
+    ArrayOfProfileUpdateFailed(Vec<super::structs::MethodFault>),
     /// A boxed array of *ProfileUpdateFailedUpdateFailure*. To be used in *Any* placeholders.
-    ArrayOfProfileUpdateFailedUpdateFailure(Vec<ProfileUpdateFailedUpdateFailure>),
+    ArrayOfProfileUpdateFailedUpdateFailure(Vec<super::structs::ProfileUpdateFailedUpdateFailure>),
     /// A boxed array of *QuarantineModeFault*. To be used in *Any* placeholders.
-    ArrayOfQuarantineModeFault(Vec<MethodFault>),
+    ArrayOfQuarantineModeFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *QuestionPending*. To be used in *Any* placeholders.
-    ArrayOfQuestionPending(Vec<MethodFault>),
+    ArrayOfQuestionPending(Vec<super::structs::MethodFault>),
     /// A boxed array of *QuiesceDatastoreIOForHAFailed*. To be used in *Any* placeholders.
-    ArrayOfQuiesceDatastoreIoForHaFailed(Vec<MethodFault>),
+    ArrayOfQuiesceDatastoreIoForHaFailed(Vec<super::structs::MethodFault>),
     /// A boxed array of *RDMConversionNotSupported*. To be used in *Any* placeholders.
-    ArrayOfRdmConversionNotSupported(Vec<MethodFault>),
+    ArrayOfRdmConversionNotSupported(Vec<super::structs::MethodFault>),
     /// A boxed array of *RDMNotPreserved*. To be used in *Any* placeholders.
-    ArrayOfRdmNotPreserved(Vec<MethodFault>),
+    ArrayOfRdmNotPreserved(Vec<super::structs::MethodFault>),
     /// A boxed array of *RDMNotSupported*. To be used in *Any* placeholders.
-    ArrayOfRdmNotSupported(Vec<MethodFault>),
+    ArrayOfRdmNotSupported(Vec<super::structs::MethodFault>),
     /// A boxed array of *RDMNotSupportedOnDatastore*. To be used in *Any* placeholders.
-    ArrayOfRdmNotSupportedOnDatastore(Vec<MethodFault>),
+    ArrayOfRdmNotSupportedOnDatastore(Vec<super::structs::MethodFault>),
     /// A boxed array of *RDMPointsToInaccessibleDisk*. To be used in *Any* placeholders.
-    ArrayOfRdmPointsToInaccessibleDisk(Vec<MethodFault>),
+    ArrayOfRdmPointsToInaccessibleDisk(Vec<super::structs::MethodFault>),
     /// A boxed array of *RawDiskNotSupported*. To be used in *Any* placeholders.
-    ArrayOfRawDiskNotSupported(Vec<MethodFault>),
+    ArrayOfRawDiskNotSupported(Vec<super::structs::MethodFault>),
     /// A boxed array of *ReadHostResourcePoolTreeFailed*. To be used in *Any* placeholders.
-    ArrayOfReadHostResourcePoolTreeFailed(Vec<MethodFault>),
+    ArrayOfReadHostResourcePoolTreeFailed(Vec<super::structs::MethodFault>),
     /// A boxed array of *ReadOnlyDisksWithLegacyDestination*. To be used in *Any* placeholders.
-    ArrayOfReadOnlyDisksWithLegacyDestination(Vec<MethodFault>),
+    ArrayOfReadOnlyDisksWithLegacyDestination(Vec<super::structs::MethodFault>),
     /// A boxed array of *RebootRequired*. To be used in *Any* placeholders.
-    ArrayOfRebootRequired(Vec<MethodFault>),
+    ArrayOfRebootRequired(Vec<super::structs::MethodFault>),
     /// A boxed array of *RecordReplayDisabled*. To be used in *Any* placeholders.
-    ArrayOfRecordReplayDisabled(Vec<MethodFault>),
+    ArrayOfRecordReplayDisabled(Vec<super::structs::MethodFault>),
     /// A boxed array of *RemoteDeviceNotSupported*. To be used in *Any* placeholders.
-    ArrayOfRemoteDeviceNotSupported(Vec<MethodFault>),
+    ArrayOfRemoteDeviceNotSupported(Vec<super::structs::MethodFault>),
     /// A boxed array of *RemoveFailed*. To be used in *Any* placeholders.
-    ArrayOfRemoveFailed(Vec<MethodFault>),
+    ArrayOfRemoveFailed(Vec<super::structs::MethodFault>),
     /// A boxed array of *ReplicationConfigFault*. To be used in *Any* placeholders.
-    ArrayOfReplicationConfigFault(Vec<MethodFault>),
+    ArrayOfReplicationConfigFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *ReplicationDiskConfigFault*. To be used in *Any* placeholders.
-    ArrayOfReplicationDiskConfigFault(Vec<MethodFault>),
+    ArrayOfReplicationDiskConfigFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *ReplicationFault*. To be used in *Any* placeholders.
-    ArrayOfReplicationFault(Vec<MethodFault>),
+    ArrayOfReplicationFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *ReplicationIncompatibleWithFT*. To be used in *Any* placeholders.
-    ArrayOfReplicationIncompatibleWithFt(Vec<MethodFault>),
+    ArrayOfReplicationIncompatibleWithFt(Vec<super::structs::MethodFault>),
     /// A boxed array of *ReplicationInvalidOptions*. To be used in *Any* placeholders.
-    ArrayOfReplicationInvalidOptions(Vec<MethodFault>),
+    ArrayOfReplicationInvalidOptions(Vec<super::structs::MethodFault>),
     /// A boxed array of *ReplicationNotSupportedOnHost*. To be used in *Any* placeholders.
-    ArrayOfReplicationNotSupportedOnHost(Vec<MethodFault>),
+    ArrayOfReplicationNotSupportedOnHost(Vec<super::structs::MethodFault>),
     /// A boxed array of *ReplicationVmConfigFault*. To be used in *Any* placeholders.
-    ArrayOfReplicationVmConfigFault(Vec<MethodFault>),
+    ArrayOfReplicationVmConfigFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *ReplicationVmFault*. To be used in *Any* placeholders.
-    ArrayOfReplicationVmFault(Vec<MethodFault>),
+    ArrayOfReplicationVmFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *ReplicationVmInProgressFault*. To be used in *Any* placeholders.
-    ArrayOfReplicationVmInProgressFault(Vec<MethodFault>),
+    ArrayOfReplicationVmInProgressFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *ResourceInUse*. To be used in *Any* placeholders.
-    ArrayOfResourceInUse(Vec<MethodFault>),
+    ArrayOfResourceInUse(Vec<super::structs::MethodFault>),
     /// A boxed array of *ResourceNotAvailable*. To be used in *Any* placeholders.
-    ArrayOfResourceNotAvailable(Vec<MethodFault>),
+    ArrayOfResourceNotAvailable(Vec<super::structs::MethodFault>),
     /// A boxed array of *RestrictedByAdministrator*. To be used in *Any* placeholders.
-    ArrayOfRestrictedByAdministrator(Vec<MethodFault>),
+    ArrayOfRestrictedByAdministrator(Vec<super::structs::MethodFault>),
     /// A boxed array of *RestrictedVersion*. To be used in *Any* placeholders.
-    ArrayOfRestrictedVersion(Vec<MethodFault>),
+    ArrayOfRestrictedVersion(Vec<super::structs::MethodFault>),
     /// A boxed array of *RollbackFailure*. To be used in *Any* placeholders.
-    ArrayOfRollbackFailure(Vec<MethodFault>),
+    ArrayOfRollbackFailure(Vec<super::structs::MethodFault>),
     /// A boxed array of *RuleViolation*. To be used in *Any* placeholders.
-    ArrayOfRuleViolation(Vec<MethodFault>),
+    ArrayOfRuleViolation(Vec<super::structs::MethodFault>),
     /// A boxed array of *SSLDisabledFault*. To be used in *Any* placeholders.
-    ArrayOfSslDisabledFault(Vec<MethodFault>),
+    ArrayOfSslDisabledFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *SSLVerifyFault*. To be used in *Any* placeholders.
-    ArrayOfSslVerifyFault(Vec<MethodFault>),
+    ArrayOfSslVerifyFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *SSPIChallenge*. To be used in *Any* placeholders.
-    ArrayOfSspiChallenge(Vec<MethodFault>),
+    ArrayOfSspiChallenge(Vec<super::structs::MethodFault>),
     /// A boxed array of *SecondaryVmAlreadyDisabled*. To be used in *Any* placeholders.
-    ArrayOfSecondaryVmAlreadyDisabled(Vec<MethodFault>),
+    ArrayOfSecondaryVmAlreadyDisabled(Vec<super::structs::MethodFault>),
     /// A boxed array of *SecondaryVmAlreadyEnabled*. To be used in *Any* placeholders.
-    ArrayOfSecondaryVmAlreadyEnabled(Vec<MethodFault>),
+    ArrayOfSecondaryVmAlreadyEnabled(Vec<super::structs::MethodFault>),
     /// A boxed array of *SecondaryVmAlreadyRegistered*. To be used in *Any* placeholders.
-    ArrayOfSecondaryVmAlreadyRegistered(Vec<MethodFault>),
+    ArrayOfSecondaryVmAlreadyRegistered(Vec<super::structs::MethodFault>),
     /// A boxed array of *SecondaryVmNotRegistered*. To be used in *Any* placeholders.
-    ArrayOfSecondaryVmNotRegistered(Vec<MethodFault>),
+    ArrayOfSecondaryVmNotRegistered(Vec<super::structs::MethodFault>),
     /// A boxed array of *SharedBusControllerNotSupported*. To be used in *Any* placeholders.
-    ArrayOfSharedBusControllerNotSupported(Vec<MethodFault>),
+    ArrayOfSharedBusControllerNotSupported(Vec<super::structs::MethodFault>),
     /// A boxed array of *ShrinkDiskFault*. To be used in *Any* placeholders.
-    ArrayOfShrinkDiskFault(Vec<MethodFault>),
+    ArrayOfShrinkDiskFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *SnapshotCloneNotSupported*. To be used in *Any* placeholders.
-    ArrayOfSnapshotCloneNotSupported(Vec<MethodFault>),
+    ArrayOfSnapshotCloneNotSupported(Vec<super::structs::MethodFault>),
     /// A boxed array of *SnapshotCopyNotSupported*. To be used in *Any* placeholders.
-    ArrayOfSnapshotCopyNotSupported(Vec<MethodFault>),
+    ArrayOfSnapshotCopyNotSupported(Vec<super::structs::MethodFault>),
     /// A boxed array of *SnapshotDisabled*. To be used in *Any* placeholders.
-    ArrayOfSnapshotDisabled(Vec<MethodFault>),
+    ArrayOfSnapshotDisabled(Vec<super::structs::MethodFault>),
     /// A boxed array of *SnapshotFault*. To be used in *Any* placeholders.
-    ArrayOfSnapshotFault(Vec<MethodFault>),
+    ArrayOfSnapshotFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *SnapshotIncompatibleDeviceInVm*. To be used in *Any* placeholders.
-    ArrayOfSnapshotIncompatibleDeviceInVm(Vec<MethodFault>),
+    ArrayOfSnapshotIncompatibleDeviceInVm(Vec<super::structs::MethodFault>),
     /// A boxed array of *SnapshotLocked*. To be used in *Any* placeholders.
-    ArrayOfSnapshotLocked(Vec<MethodFault>),
+    ArrayOfSnapshotLocked(Vec<super::structs::MethodFault>),
     /// A boxed array of *SnapshotMoveFromNonHomeNotSupported*. To be used in *Any* placeholders.
-    ArrayOfSnapshotMoveFromNonHomeNotSupported(Vec<MethodFault>),
+    ArrayOfSnapshotMoveFromNonHomeNotSupported(Vec<super::structs::MethodFault>),
     /// A boxed array of *SnapshotMoveNotSupported*. To be used in *Any* placeholders.
-    ArrayOfSnapshotMoveNotSupported(Vec<MethodFault>),
+    ArrayOfSnapshotMoveNotSupported(Vec<super::structs::MethodFault>),
     /// A boxed array of *SnapshotMoveToNonHomeNotSupported*. To be used in *Any* placeholders.
-    ArrayOfSnapshotMoveToNonHomeNotSupported(Vec<MethodFault>),
+    ArrayOfSnapshotMoveToNonHomeNotSupported(Vec<super::structs::MethodFault>),
     /// A boxed array of *SnapshotNoChange*. To be used in *Any* placeholders.
-    ArrayOfSnapshotNoChange(Vec<MethodFault>),
+    ArrayOfSnapshotNoChange(Vec<super::structs::MethodFault>),
     /// A boxed array of *SnapshotRevertIssue*. To be used in *Any* placeholders.
-    ArrayOfSnapshotRevertIssue(Vec<MethodFault>),
+    ArrayOfSnapshotRevertIssue(Vec<super::structs::MethodFault>),
     /// A boxed array of *SoftRuleVioCorrectionDisallowed*. To be used in *Any* placeholders.
-    ArrayOfSoftRuleVioCorrectionDisallowed(Vec<MethodFault>),
+    ArrayOfSoftRuleVioCorrectionDisallowed(Vec<super::structs::MethodFault>),
     /// A boxed array of *SoftRuleVioCorrectionImpact*. To be used in *Any* placeholders.
-    ArrayOfSoftRuleVioCorrectionImpact(Vec<MethodFault>),
+    ArrayOfSoftRuleVioCorrectionImpact(Vec<super::structs::MethodFault>),
     /// A boxed array of *SolutionUserRequired*. To be used in *Any* placeholders.
-    ArrayOfSolutionUserRequired(Vec<MethodFault>),
+    ArrayOfSolutionUserRequired(Vec<super::structs::MethodFault>),
     /// A boxed array of *SsdDiskNotAvailable*. To be used in *Any* placeholders.
-    ArrayOfSsdDiskNotAvailable(Vec<MethodFault>),
+    ArrayOfSsdDiskNotAvailable(Vec<super::structs::MethodFault>),
     /// A boxed array of *StorageDrsCannotMoveDiskInMultiWriterMode*. To be used in *Any* placeholders.
-    ArrayOfStorageDrsCannotMoveDiskInMultiWriterMode(Vec<MethodFault>),
+    ArrayOfStorageDrsCannotMoveDiskInMultiWriterMode(Vec<super::structs::MethodFault>),
     /// A boxed array of *StorageDrsCannotMoveFTVm*. To be used in *Any* placeholders.
-    ArrayOfStorageDrsCannotMoveFtVm(Vec<MethodFault>),
+    ArrayOfStorageDrsCannotMoveFtVm(Vec<super::structs::MethodFault>),
     /// A boxed array of *StorageDrsCannotMoveIndependentDisk*. To be used in *Any* placeholders.
-    ArrayOfStorageDrsCannotMoveIndependentDisk(Vec<MethodFault>),
+    ArrayOfStorageDrsCannotMoveIndependentDisk(Vec<super::structs::MethodFault>),
     /// A boxed array of *StorageDrsCannotMoveManuallyPlacedSwapFile*. To be used in *Any* placeholders.
-    ArrayOfStorageDrsCannotMoveManuallyPlacedSwapFile(Vec<MethodFault>),
+    ArrayOfStorageDrsCannotMoveManuallyPlacedSwapFile(Vec<super::structs::MethodFault>),
     /// A boxed array of *StorageDrsCannotMoveManuallyPlacedVm*. To be used in *Any* placeholders.
-    ArrayOfStorageDrsCannotMoveManuallyPlacedVm(Vec<MethodFault>),
+    ArrayOfStorageDrsCannotMoveManuallyPlacedVm(Vec<super::structs::MethodFault>),
     /// A boxed array of *StorageDrsCannotMoveSharedDisk*. To be used in *Any* placeholders.
-    ArrayOfStorageDrsCannotMoveSharedDisk(Vec<MethodFault>),
+    ArrayOfStorageDrsCannotMoveSharedDisk(Vec<super::structs::MethodFault>),
     /// A boxed array of *StorageDrsCannotMoveTemplate*. To be used in *Any* placeholders.
-    ArrayOfStorageDrsCannotMoveTemplate(Vec<MethodFault>),
+    ArrayOfStorageDrsCannotMoveTemplate(Vec<super::structs::MethodFault>),
     /// A boxed array of *StorageDrsCannotMoveVmInUserFolder*. To be used in *Any* placeholders.
-    ArrayOfStorageDrsCannotMoveVmInUserFolder(Vec<MethodFault>),
+    ArrayOfStorageDrsCannotMoveVmInUserFolder(Vec<super::structs::MethodFault>),
     /// A boxed array of *StorageDrsCannotMoveVmWithMountedCDROM*. To be used in *Any* placeholders.
-    ArrayOfStorageDrsCannotMoveVmWithMountedCdrom(Vec<MethodFault>),
+    ArrayOfStorageDrsCannotMoveVmWithMountedCdrom(Vec<super::structs::MethodFault>),
     /// A boxed array of *StorageDrsCannotMoveVmWithNoFilesInLayout*. To be used in *Any* placeholders.
-    ArrayOfStorageDrsCannotMoveVmWithNoFilesInLayout(Vec<MethodFault>),
+    ArrayOfStorageDrsCannotMoveVmWithNoFilesInLayout(Vec<super::structs::MethodFault>),
     /// A boxed array of *StorageDrsDatacentersCannotShareDatastore*. To be used in *Any* placeholders.
-    ArrayOfStorageDrsDatacentersCannotShareDatastore(Vec<MethodFault>),
+    ArrayOfStorageDrsDatacentersCannotShareDatastore(Vec<super::structs::MethodFault>),
     /// A boxed array of *StorageDrsDisabledOnVm*. To be used in *Any* placeholders.
-    ArrayOfStorageDrsDisabledOnVm(Vec<MethodFault>),
+    ArrayOfStorageDrsDisabledOnVm(Vec<super::structs::MethodFault>),
     /// A boxed array of *StorageDrsHbrDiskNotMovable*. To be used in *Any* placeholders.
-    ArrayOfStorageDrsHbrDiskNotMovable(Vec<MethodFault>),
+    ArrayOfStorageDrsHbrDiskNotMovable(Vec<super::structs::MethodFault>),
     /// A boxed array of *StorageDrsHmsMoveInProgress*. To be used in *Any* placeholders.
-    ArrayOfStorageDrsHmsMoveInProgress(Vec<MethodFault>),
+    ArrayOfStorageDrsHmsMoveInProgress(Vec<super::structs::MethodFault>),
     /// A boxed array of *StorageDrsHmsUnreachable*. To be used in *Any* placeholders.
-    ArrayOfStorageDrsHmsUnreachable(Vec<MethodFault>),
+    ArrayOfStorageDrsHmsUnreachable(Vec<super::structs::MethodFault>),
     /// A boxed array of *StorageDrsIolbDisabledInternally*. To be used in *Any* placeholders.
-    ArrayOfStorageDrsIolbDisabledInternally(Vec<MethodFault>),
+    ArrayOfStorageDrsIolbDisabledInternally(Vec<super::structs::MethodFault>),
     /// A boxed array of *StorageDrsRelocateDisabled*. To be used in *Any* placeholders.
-    ArrayOfStorageDrsRelocateDisabled(Vec<MethodFault>),
+    ArrayOfStorageDrsRelocateDisabled(Vec<super::structs::MethodFault>),
     /// A boxed array of *StorageDrsStaleHmsCollection*. To be used in *Any* placeholders.
-    ArrayOfStorageDrsStaleHmsCollection(Vec<MethodFault>),
+    ArrayOfStorageDrsStaleHmsCollection(Vec<super::structs::MethodFault>),
     /// A boxed array of *StorageDrsUnableToMoveFiles*. To be used in *Any* placeholders.
-    ArrayOfStorageDrsUnableToMoveFiles(Vec<MethodFault>),
+    ArrayOfStorageDrsUnableToMoveFiles(Vec<super::structs::MethodFault>),
     /// A boxed array of *StorageVMotionNotSupported*. To be used in *Any* placeholders.
-    ArrayOfStorageVMotionNotSupported(Vec<MethodFault>),
+    ArrayOfStorageVMotionNotSupported(Vec<super::structs::MethodFault>),
     /// A boxed array of *StorageVmotionIncompatible*. To be used in *Any* placeholders.
-    ArrayOfStorageVmotionIncompatible(Vec<MethodFault>),
+    ArrayOfStorageVmotionIncompatible(Vec<super::structs::MethodFault>),
     /// A boxed array of *SuspendedRelocateNotSupported*. To be used in *Any* placeholders.
-    ArrayOfSuspendedRelocateNotSupported(Vec<MethodFault>),
+    ArrayOfSuspendedRelocateNotSupported(Vec<super::structs::MethodFault>),
     /// A boxed array of *SwapDatastoreNotWritableOnHost*. To be used in *Any* placeholders.
-    ArrayOfSwapDatastoreNotWritableOnHost(Vec<MethodFault>),
+    ArrayOfSwapDatastoreNotWritableOnHost(Vec<super::structs::MethodFault>),
     /// A boxed array of *SwapDatastoreUnset*. To be used in *Any* placeholders.
-    ArrayOfSwapDatastoreUnset(Vec<MethodFault>),
+    ArrayOfSwapDatastoreUnset(Vec<super::structs::MethodFault>),
     /// A boxed array of *SwapPlacementOverrideNotSupported*. To be used in *Any* placeholders.
-    ArrayOfSwapPlacementOverrideNotSupported(Vec<MethodFault>),
+    ArrayOfSwapPlacementOverrideNotSupported(Vec<super::structs::MethodFault>),
     /// A boxed array of *SwitchIpUnset*. To be used in *Any* placeholders.
-    ArrayOfSwitchIpUnset(Vec<MethodFault>),
+    ArrayOfSwitchIpUnset(Vec<super::structs::MethodFault>),
     /// A boxed array of *SwitchNotInUpgradeMode*. To be used in *Any* placeholders.
-    ArrayOfSwitchNotInUpgradeMode(Vec<MethodFault>),
+    ArrayOfSwitchNotInUpgradeMode(Vec<super::structs::MethodFault>),
     /// A boxed array of *TaskInProgress*. To be used in *Any* placeholders.
-    ArrayOfTaskInProgress(Vec<MethodFault>),
+    ArrayOfTaskInProgress(Vec<super::structs::MethodFault>),
     /// A boxed array of *ThirdPartyLicenseAssignmentFailed*. To be used in *Any* placeholders.
-    ArrayOfThirdPartyLicenseAssignmentFailed(Vec<MethodFault>),
+    ArrayOfThirdPartyLicenseAssignmentFailed(Vec<super::structs::MethodFault>),
     /// A boxed array of *Timedout*. To be used in *Any* placeholders.
-    ArrayOfTimedout(Vec<MethodFault>),
+    ArrayOfTimedout(Vec<super::structs::MethodFault>),
     /// A boxed array of *TooManyConcurrentNativeClones*. To be used in *Any* placeholders.
-    ArrayOfTooManyConcurrentNativeClones(Vec<MethodFault>),
+    ArrayOfTooManyConcurrentNativeClones(Vec<super::structs::MethodFault>),
     /// A boxed array of *TooManyConsecutiveOverrides*. To be used in *Any* placeholders.
-    ArrayOfTooManyConsecutiveOverrides(Vec<MethodFault>),
+    ArrayOfTooManyConsecutiveOverrides(Vec<super::structs::MethodFault>),
     /// A boxed array of *TooManyDevices*. To be used in *Any* placeholders.
-    ArrayOfTooManyDevices(Vec<MethodFault>),
+    ArrayOfTooManyDevices(Vec<super::structs::MethodFault>),
     /// A boxed array of *TooManyDisksOnLegacyHost*. To be used in *Any* placeholders.
-    ArrayOfTooManyDisksOnLegacyHost(Vec<MethodFault>),
+    ArrayOfTooManyDisksOnLegacyHost(Vec<super::structs::MethodFault>),
     /// A boxed array of *TooManyGuestLogons*. To be used in *Any* placeholders.
-    ArrayOfTooManyGuestLogons(Vec<MethodFault>),
+    ArrayOfTooManyGuestLogons(Vec<super::structs::MethodFault>),
     /// A boxed array of *TooManyHosts*. To be used in *Any* placeholders.
-    ArrayOfTooManyHosts(Vec<MethodFault>),
+    ArrayOfTooManyHosts(Vec<super::structs::MethodFault>),
     /// A boxed array of *TooManyNativeCloneLevels*. To be used in *Any* placeholders.
-    ArrayOfTooManyNativeCloneLevels(Vec<MethodFault>),
+    ArrayOfTooManyNativeCloneLevels(Vec<super::structs::MethodFault>),
     /// A boxed array of *TooManyNativeClonesOnFile*. To be used in *Any* placeholders.
-    ArrayOfTooManyNativeClonesOnFile(Vec<MethodFault>),
+    ArrayOfTooManyNativeClonesOnFile(Vec<super::structs::MethodFault>),
     /// A boxed array of *TooManySnapshotLevels*. To be used in *Any* placeholders.
-    ArrayOfTooManySnapshotLevels(Vec<MethodFault>),
+    ArrayOfTooManySnapshotLevels(Vec<super::structs::MethodFault>),
     /// A boxed array of *ToolsAlreadyUpgraded*. To be used in *Any* placeholders.
-    ArrayOfToolsAlreadyUpgraded(Vec<MethodFault>),
+    ArrayOfToolsAlreadyUpgraded(Vec<super::structs::MethodFault>),
     /// A boxed array of *ToolsAutoUpgradeNotSupported*. To be used in *Any* placeholders.
-    ArrayOfToolsAutoUpgradeNotSupported(Vec<MethodFault>),
+    ArrayOfToolsAutoUpgradeNotSupported(Vec<super::structs::MethodFault>),
     /// A boxed array of *ToolsImageCopyFailed*. To be used in *Any* placeholders.
-    ArrayOfToolsImageCopyFailed(Vec<MethodFault>),
+    ArrayOfToolsImageCopyFailed(Vec<super::structs::MethodFault>),
     /// A boxed array of *ToolsImageNotAvailable*. To be used in *Any* placeholders.
-    ArrayOfToolsImageNotAvailable(Vec<MethodFault>),
+    ArrayOfToolsImageNotAvailable(Vec<super::structs::MethodFault>),
     /// A boxed array of *ToolsImageSignatureCheckFailed*. To be used in *Any* placeholders.
-    ArrayOfToolsImageSignatureCheckFailed(Vec<MethodFault>),
+    ArrayOfToolsImageSignatureCheckFailed(Vec<super::structs::MethodFault>),
     /// A boxed array of *ToolsInstallationInProgress*. To be used in *Any* placeholders.
-    ArrayOfToolsInstallationInProgress(Vec<MethodFault>),
+    ArrayOfToolsInstallationInProgress(Vec<super::structs::MethodFault>),
     /// A boxed array of *ToolsUnavailable*. To be used in *Any* placeholders.
-    ArrayOfToolsUnavailable(Vec<MethodFault>),
+    ArrayOfToolsUnavailable(Vec<super::structs::MethodFault>),
     /// A boxed array of *ToolsUpgradeCancelled*. To be used in *Any* placeholders.
-    ArrayOfToolsUpgradeCancelled(Vec<MethodFault>),
+    ArrayOfToolsUpgradeCancelled(Vec<super::structs::MethodFault>),
     /// A boxed array of *UnSupportedDatastoreForVFlash*. To be used in *Any* placeholders.
-    ArrayOfUnSupportedDatastoreForVFlash(Vec<MethodFault>),
+    ArrayOfUnSupportedDatastoreForVFlash(Vec<super::structs::MethodFault>),
     /// A boxed array of *UncommittedUndoableDisk*. To be used in *Any* placeholders.
-    ArrayOfUncommittedUndoableDisk(Vec<MethodFault>),
+    ArrayOfUncommittedUndoableDisk(Vec<super::structs::MethodFault>),
     /// A boxed array of *UnconfiguredPropertyValue*. To be used in *Any* placeholders.
-    ArrayOfUnconfiguredPropertyValue(Vec<MethodFault>),
+    ArrayOfUnconfiguredPropertyValue(Vec<super::structs::MethodFault>),
     /// A boxed array of *UncustomizableGuest*. To be used in *Any* placeholders.
-    ArrayOfUncustomizableGuest(Vec<MethodFault>),
+    ArrayOfUncustomizableGuest(Vec<super::structs::MethodFault>),
     /// A boxed array of *UnexpectedCustomizationFault*. To be used in *Any* placeholders.
-    ArrayOfUnexpectedCustomizationFault(Vec<MethodFault>),
+    ArrayOfUnexpectedCustomizationFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *UnrecognizedHost*. To be used in *Any* placeholders.
-    ArrayOfUnrecognizedHost(Vec<MethodFault>),
+    ArrayOfUnrecognizedHost(Vec<super::structs::MethodFault>),
     /// A boxed array of *UnsharedSwapVMotionNotSupported*. To be used in *Any* placeholders.
-    ArrayOfUnsharedSwapVMotionNotSupported(Vec<MethodFault>),
+    ArrayOfUnsharedSwapVMotionNotSupported(Vec<super::structs::MethodFault>),
     /// A boxed array of *UnsupportedDatastore*. To be used in *Any* placeholders.
-    ArrayOfUnsupportedDatastore(Vec<MethodFault>),
+    ArrayOfUnsupportedDatastore(Vec<super::structs::MethodFault>),
     /// A boxed array of *UnsupportedGuest*. To be used in *Any* placeholders.
-    ArrayOfUnsupportedGuest(Vec<MethodFault>),
+    ArrayOfUnsupportedGuest(Vec<super::structs::MethodFault>),
     /// A boxed array of *UnsupportedVimApiVersion*. To be used in *Any* placeholders.
-    ArrayOfUnsupportedVimApiVersion(Vec<MethodFault>),
+    ArrayOfUnsupportedVimApiVersion(Vec<super::structs::MethodFault>),
     /// A boxed array of *UnsupportedVmxLocation*. To be used in *Any* placeholders.
-    ArrayOfUnsupportedVmxLocation(Vec<MethodFault>),
+    ArrayOfUnsupportedVmxLocation(Vec<super::structs::MethodFault>),
     /// A boxed array of *UnusedVirtualDiskBlocksNotScrubbed*. To be used in *Any* placeholders.
-    ArrayOfUnusedVirtualDiskBlocksNotScrubbed(Vec<MethodFault>),
+    ArrayOfUnusedVirtualDiskBlocksNotScrubbed(Vec<super::structs::MethodFault>),
     /// A boxed array of *UserNotFound*. To be used in *Any* placeholders.
-    ArrayOfUserNotFound(Vec<MethodFault>),
+    ArrayOfUserNotFound(Vec<super::structs::MethodFault>),
     /// A boxed array of *VAppConfigFault*. To be used in *Any* placeholders.
-    ArrayOfVAppConfigFault(Vec<MethodFault>),
+    ArrayOfVAppConfigFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *VAppNotRunning*. To be used in *Any* placeholders.
-    ArrayOfVAppNotRunning(Vec<MethodFault>),
+    ArrayOfVAppNotRunning(Vec<super::structs::MethodFault>),
     /// A boxed array of *VAppOperationInProgress*. To be used in *Any* placeholders.
-    ArrayOfVAppOperationInProgress(Vec<MethodFault>),
+    ArrayOfVAppOperationInProgress(Vec<super::structs::MethodFault>),
     /// A boxed array of *VAppPropertyFault*. To be used in *Any* placeholders.
-    ArrayOfVAppPropertyFault(Vec<MethodFault>),
+    ArrayOfVAppPropertyFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *VAppTaskInProgress*. To be used in *Any* placeholders.
-    ArrayOfVAppTaskInProgress(Vec<MethodFault>),
+    ArrayOfVAppTaskInProgress(Vec<super::structs::MethodFault>),
     /// A boxed array of *VFlashCacheHotConfigNotSupported*. To be used in *Any* placeholders.
-    ArrayOfVFlashCacheHotConfigNotSupported(Vec<MethodFault>),
+    ArrayOfVFlashCacheHotConfigNotSupported(Vec<super::structs::MethodFault>),
     /// A boxed array of *VFlashModuleNotSupported*. To be used in *Any* placeholders.
-    ArrayOfVFlashModuleNotSupported(Vec<MethodFault>),
+    ArrayOfVFlashModuleNotSupported(Vec<super::structs::MethodFault>),
     /// A boxed array of *VFlashModuleVersionIncompatible*. To be used in *Any* placeholders.
-    ArrayOfVFlashModuleVersionIncompatible(Vec<MethodFault>),
+    ArrayOfVFlashModuleVersionIncompatible(Vec<super::structs::MethodFault>),
     /// A boxed array of *VMINotSupported*. To be used in *Any* placeholders.
-    ArrayOfVmiNotSupported(Vec<MethodFault>),
+    ArrayOfVmiNotSupported(Vec<super::structs::MethodFault>),
     /// A boxed array of *VMOnConflictDVPort*. To be used in *Any* placeholders.
-    ArrayOfVmOnConflictDvPort(Vec<MethodFault>),
+    ArrayOfVmOnConflictDvPort(Vec<super::structs::MethodFault>),
     /// A boxed array of *VMOnVirtualIntranet*. To be used in *Any* placeholders.
-    ArrayOfVmOnVirtualIntranet(Vec<MethodFault>),
+    ArrayOfVmOnVirtualIntranet(Vec<super::structs::MethodFault>),
     /// A boxed array of *VMotionAcrossNetworkNotSupported*. To be used in *Any* placeholders.
-    ArrayOfVMotionAcrossNetworkNotSupported(Vec<MethodFault>),
+    ArrayOfVMotionAcrossNetworkNotSupported(Vec<super::structs::MethodFault>),
     /// A boxed array of *VMotionInterfaceIssue*. To be used in *Any* placeholders.
-    ArrayOfVMotionInterfaceIssue(Vec<MethodFault>),
+    ArrayOfVMotionInterfaceIssue(Vec<super::structs::MethodFault>),
     /// A boxed array of *VMotionLinkCapacityLow*. To be used in *Any* placeholders.
-    ArrayOfVMotionLinkCapacityLow(Vec<MethodFault>),
+    ArrayOfVMotionLinkCapacityLow(Vec<super::structs::MethodFault>),
     /// A boxed array of *VMotionLinkDown*. To be used in *Any* placeholders.
-    ArrayOfVMotionLinkDown(Vec<MethodFault>),
+    ArrayOfVMotionLinkDown(Vec<super::structs::MethodFault>),
     /// A boxed array of *VMotionNotConfigured*. To be used in *Any* placeholders.
-    ArrayOfVMotionNotConfigured(Vec<MethodFault>),
+    ArrayOfVMotionNotConfigured(Vec<super::structs::MethodFault>),
     /// A boxed array of *VMotionNotLicensed*. To be used in *Any* placeholders.
-    ArrayOfVMotionNotLicensed(Vec<MethodFault>),
+    ArrayOfVMotionNotLicensed(Vec<super::structs::MethodFault>),
     /// A boxed array of *VMotionNotSupported*. To be used in *Any* placeholders.
-    ArrayOfVMotionNotSupported(Vec<MethodFault>),
+    ArrayOfVMotionNotSupported(Vec<super::structs::MethodFault>),
     /// A boxed array of *VMotionProtocolIncompatible*. To be used in *Any* placeholders.
-    ArrayOfVMotionProtocolIncompatible(Vec<MethodFault>),
+    ArrayOfVMotionProtocolIncompatible(Vec<super::structs::MethodFault>),
     /// A boxed array of *VimFault*. To be used in *Any* placeholders.
-    ArrayOfVimFault(Vec<MethodFault>),
+    ArrayOfVimFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *VirtualDiskBlocksNotFullyProvisioned*. To be used in *Any* placeholders.
-    ArrayOfVirtualDiskBlocksNotFullyProvisioned(Vec<MethodFault>),
+    ArrayOfVirtualDiskBlocksNotFullyProvisioned(Vec<super::structs::MethodFault>),
     /// A boxed array of *VirtualDiskModeNotSupported*. To be used in *Any* placeholders.
-    ArrayOfVirtualDiskModeNotSupported(Vec<MethodFault>),
+    ArrayOfVirtualDiskModeNotSupported(Vec<super::structs::MethodFault>),
     /// A boxed array of *VirtualEthernetCardNotSupported*. To be used in *Any* placeholders.
-    ArrayOfVirtualEthernetCardNotSupported(Vec<MethodFault>),
+    ArrayOfVirtualEthernetCardNotSupported(Vec<super::structs::MethodFault>),
     /// A boxed array of *VirtualHardwareCompatibilityIssue*. To be used in *Any* placeholders.
-    ArrayOfVirtualHardwareCompatibilityIssue(Vec<MethodFault>),
+    ArrayOfVirtualHardwareCompatibilityIssue(Vec<super::structs::MethodFault>),
     /// A boxed array of *VirtualHardwareVersionNotSupported*. To be used in *Any* placeholders.
-    ArrayOfVirtualHardwareVersionNotSupported(Vec<MethodFault>),
+    ArrayOfVirtualHardwareVersionNotSupported(Vec<super::structs::MethodFault>),
     /// A boxed array of *VmAlreadyExistsInDatacenter*. To be used in *Any* placeholders.
-    ArrayOfVmAlreadyExistsInDatacenter(Vec<MethodFault>),
+    ArrayOfVmAlreadyExistsInDatacenter(Vec<super::structs::MethodFault>),
     /// A boxed array of *VmConfigFault*. To be used in *Any* placeholders.
-    ArrayOfVmConfigFault(Vec<MethodFault>),
+    ArrayOfVmConfigFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *VmConfigIncompatibleForFaultTolerance*. To be used in *Any* placeholders.
-    ArrayOfVmConfigIncompatibleForFaultTolerance(Vec<MethodFault>),
+    ArrayOfVmConfigIncompatibleForFaultTolerance(Vec<super::structs::MethodFault>),
     /// A boxed array of *VmConfigIncompatibleForRecordReplay*. To be used in *Any* placeholders.
-    ArrayOfVmConfigIncompatibleForRecordReplay(Vec<MethodFault>),
+    ArrayOfVmConfigIncompatibleForRecordReplay(Vec<super::structs::MethodFault>),
     /// A boxed array of *VmFaultToleranceConfigIssue*. To be used in *Any* placeholders.
-    ArrayOfVmFaultToleranceConfigIssue(Vec<MethodFault>),
+    ArrayOfVmFaultToleranceConfigIssue(Vec<super::structs::MethodFault>),
     /// A boxed array of *VmFaultToleranceConfigIssueWrapper*. To be used in *Any* placeholders.
-    ArrayOfVmFaultToleranceConfigIssueWrapper(Vec<MethodFault>),
+    ArrayOfVmFaultToleranceConfigIssueWrapper(Vec<super::structs::MethodFault>),
     /// A boxed array of *VmFaultToleranceInvalidFileBacking*. To be used in *Any* placeholders.
-    ArrayOfVmFaultToleranceInvalidFileBacking(Vec<MethodFault>),
+    ArrayOfVmFaultToleranceInvalidFileBacking(Vec<super::structs::MethodFault>),
     /// A boxed array of *VmFaultToleranceIssue*. To be used in *Any* placeholders.
-    ArrayOfVmFaultToleranceIssue(Vec<MethodFault>),
+    ArrayOfVmFaultToleranceIssue(Vec<super::structs::MethodFault>),
     /// A boxed array of *VmFaultToleranceOpIssuesList*. To be used in *Any* placeholders.
-    ArrayOfVmFaultToleranceOpIssuesList(Vec<MethodFault>),
+    ArrayOfVmFaultToleranceOpIssuesList(Vec<super::structs::MethodFault>),
     /// A boxed array of *VmFaultToleranceTooManyFtVcpusOnHost*. To be used in *Any* placeholders.
-    ArrayOfVmFaultToleranceTooManyFtVcpusOnHost(Vec<MethodFault>),
+    ArrayOfVmFaultToleranceTooManyFtVcpusOnHost(Vec<super::structs::MethodFault>),
     /// A boxed array of *VmFaultToleranceTooManyVMsOnHost*. To be used in *Any* placeholders.
-    ArrayOfVmFaultToleranceTooManyVMsOnHost(Vec<MethodFault>),
+    ArrayOfVmFaultToleranceTooManyVMsOnHost(Vec<super::structs::MethodFault>),
     /// A boxed array of *VmHostAffinityRuleViolation*. To be used in *Any* placeholders.
-    ArrayOfVmHostAffinityRuleViolation(Vec<MethodFault>),
+    ArrayOfVmHostAffinityRuleViolation(Vec<super::structs::MethodFault>),
     /// A boxed array of *VmLimitLicense*. To be used in *Any* placeholders.
-    ArrayOfVmLimitLicense(Vec<MethodFault>),
+    ArrayOfVmLimitLicense(Vec<super::structs::MethodFault>),
     /// A boxed array of *VmMetadataManagerFault*. To be used in *Any* placeholders.
-    ArrayOfVmMetadataManagerFault(Vec<MethodFault>),
+    ArrayOfVmMetadataManagerFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *VmMonitorIncompatibleForFaultTolerance*. To be used in *Any* placeholders.
-    ArrayOfVmMonitorIncompatibleForFaultTolerance(Vec<MethodFault>),
+    ArrayOfVmMonitorIncompatibleForFaultTolerance(Vec<super::structs::MethodFault>),
     /// A boxed array of *VmPowerOnDisabled*. To be used in *Any* placeholders.
-    ArrayOfVmPowerOnDisabled(Vec<MethodFault>),
+    ArrayOfVmPowerOnDisabled(Vec<super::structs::MethodFault>),
     /// A boxed array of *VmSmpFaultToleranceTooManyVMsOnHost*. To be used in *Any* placeholders.
-    ArrayOfVmSmpFaultToleranceTooManyVMsOnHost(Vec<MethodFault>),
+    ArrayOfVmSmpFaultToleranceTooManyVMsOnHost(Vec<super::structs::MethodFault>),
     /// A boxed array of *VmToolsUpgradeFault*. To be used in *Any* placeholders.
-    ArrayOfVmToolsUpgradeFault(Vec<MethodFault>),
+    ArrayOfVmToolsUpgradeFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *VmValidateMaxDevice*. To be used in *Any* placeholders.
-    ArrayOfVmValidateMaxDevice(Vec<MethodFault>),
+    ArrayOfVmValidateMaxDevice(Vec<super::structs::MethodFault>),
     /// A boxed array of *VmWwnConflict*. To be used in *Any* placeholders.
-    ArrayOfVmWwnConflict(Vec<MethodFault>),
+    ArrayOfVmWwnConflict(Vec<super::structs::MethodFault>),
     /// A boxed array of *VmfsAlreadyMounted*. To be used in *Any* placeholders.
-    ArrayOfVmfsAlreadyMounted(Vec<MethodFault>),
+    ArrayOfVmfsAlreadyMounted(Vec<super::structs::MethodFault>),
     /// A boxed array of *VmfsAmbiguousMount*. To be used in *Any* placeholders.
-    ArrayOfVmfsAmbiguousMount(Vec<MethodFault>),
+    ArrayOfVmfsAmbiguousMount(Vec<super::structs::MethodFault>),
     /// A boxed array of *VmfsMountFault*. To be used in *Any* placeholders.
-    ArrayOfVmfsMountFault(Vec<MethodFault>),
+    ArrayOfVmfsMountFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *VmotionInterfaceNotEnabled*. To be used in *Any* placeholders.
-    ArrayOfVmotionInterfaceNotEnabled(Vec<MethodFault>),
+    ArrayOfVmotionInterfaceNotEnabled(Vec<super::structs::MethodFault>),
     /// A boxed array of *VolumeEditorError*. To be used in *Any* placeholders.
-    ArrayOfVolumeEditorError(Vec<MethodFault>),
+    ArrayOfVolumeEditorError(Vec<super::structs::MethodFault>),
     /// A boxed array of *VramLimitLicense*. To be used in *Any* placeholders.
-    ArrayOfVramLimitLicense(Vec<MethodFault>),
+    ArrayOfVramLimitLicense(Vec<super::structs::MethodFault>),
     /// A boxed array of *VsanClusterUuidMismatch*. To be used in *Any* placeholders.
-    ArrayOfVsanClusterUuidMismatch(Vec<MethodFault>),
+    ArrayOfVsanClusterUuidMismatch(Vec<super::structs::MethodFault>),
     /// A boxed array of *VsanDiskFault*. To be used in *Any* placeholders.
-    ArrayOfVsanDiskFault(Vec<MethodFault>),
+    ArrayOfVsanDiskFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *VsanFault*. To be used in *Any* placeholders.
-    ArrayOfVsanFault(Vec<MethodFault>),
+    ArrayOfVsanFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *VsanIncompatibleDiskMapping*. To be used in *Any* placeholders.
-    ArrayOfVsanIncompatibleDiskMapping(Vec<MethodFault>),
+    ArrayOfVsanIncompatibleDiskMapping(Vec<super::structs::MethodFault>),
     /// A boxed array of *VspanDestPortConflict*. To be used in *Any* placeholders.
-    ArrayOfVspanDestPortConflict(Vec<MethodFault>),
+    ArrayOfVspanDestPortConflict(Vec<super::structs::MethodFault>),
     /// A boxed array of *VspanPortConflict*. To be used in *Any* placeholders.
-    ArrayOfVspanPortConflict(Vec<MethodFault>),
+    ArrayOfVspanPortConflict(Vec<super::structs::MethodFault>),
     /// A boxed array of *VspanPortMoveFault*. To be used in *Any* placeholders.
-    ArrayOfVspanPortMoveFault(Vec<MethodFault>),
+    ArrayOfVspanPortMoveFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *VspanPortPromiscChangeFault*. To be used in *Any* placeholders.
-    ArrayOfVspanPortPromiscChangeFault(Vec<MethodFault>),
+    ArrayOfVspanPortPromiscChangeFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *VspanPortgroupPromiscChangeFault*. To be used in *Any* placeholders.
-    ArrayOfVspanPortgroupPromiscChangeFault(Vec<MethodFault>),
+    ArrayOfVspanPortgroupPromiscChangeFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *VspanPortgroupTypeChangeFault*. To be used in *Any* placeholders.
-    ArrayOfVspanPortgroupTypeChangeFault(Vec<MethodFault>),
+    ArrayOfVspanPortgroupTypeChangeFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *VspanPromiscuousPortNotSupported*. To be used in *Any* placeholders.
-    ArrayOfVspanPromiscuousPortNotSupported(Vec<MethodFault>),
+    ArrayOfVspanPromiscuousPortNotSupported(Vec<super::structs::MethodFault>),
     /// A boxed array of *VspanSameSessionPortConflict*. To be used in *Any* placeholders.
-    ArrayOfVspanSameSessionPortConflict(Vec<MethodFault>),
+    ArrayOfVspanSameSessionPortConflict(Vec<super::structs::MethodFault>),
     /// A boxed array of *WakeOnLanNotSupported*. To be used in *Any* placeholders.
-    ArrayOfWakeOnLanNotSupported(Vec<MethodFault>),
+    ArrayOfWakeOnLanNotSupported(Vec<super::structs::MethodFault>),
     /// A boxed array of *WakeOnLanNotSupportedByVmotionNIC*. To be used in *Any* placeholders.
-    ArrayOfWakeOnLanNotSupportedByVmotionNic(Vec<MethodFault>),
+    ArrayOfWakeOnLanNotSupportedByVmotionNic(Vec<super::structs::MethodFault>),
     /// A boxed array of *WillLoseHAProtection*. To be used in *Any* placeholders.
-    ArrayOfWillLoseHaProtection(Vec<MethodFault>),
+    ArrayOfWillLoseHaProtection(Vec<super::structs::MethodFault>),
     /// A boxed array of *WillModifyConfigCpuRequirements*. To be used in *Any* placeholders.
-    ArrayOfWillModifyConfigCpuRequirements(Vec<MethodFault>),
+    ArrayOfWillModifyConfigCpuRequirements(Vec<super::structs::MethodFault>),
     /// A boxed array of *WillResetSnapshotDirectory*. To be used in *Any* placeholders.
-    ArrayOfWillResetSnapshotDirectory(Vec<MethodFault>),
+    ArrayOfWillResetSnapshotDirectory(Vec<super::structs::MethodFault>),
     /// A boxed array of *WipeDiskFault*. To be used in *Any* placeholders.
-    ArrayOfWipeDiskFault(Vec<MethodFault>),
+    ArrayOfWipeDiskFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *HostActiveDirectoryInfo*. To be used in *Any* placeholders.
-    ArrayOfHostActiveDirectoryInfo(Vec<HostActiveDirectoryInfo>),
+    ArrayOfHostActiveDirectoryInfo(Vec<super::structs::HostActiveDirectoryInfo>),
     /// A boxed array of *HostActiveDirectory*. To be used in *Any* placeholders.
-    ArrayOfHostActiveDirectory(Vec<HostActiveDirectory>),
+    ArrayOfHostActiveDirectory(Vec<super::structs::HostActiveDirectory>),
     /// A boxed array of *HostActiveDirectorySpec*. To be used in *Any* placeholders.
-    ArrayOfHostActiveDirectorySpec(Vec<HostActiveDirectorySpec>),
+    ArrayOfHostActiveDirectorySpec(Vec<super::structs::HostActiveDirectorySpec>),
     /// A boxed array of *HostAssignableHardwareBinding*. To be used in *Any* placeholders.
-    ArrayOfHostAssignableHardwareBinding(Vec<HostAssignableHardwareBinding>),
+    ArrayOfHostAssignableHardwareBinding(Vec<super::structs::HostAssignableHardwareBinding>),
     /// A boxed array of *HostAssignableHardwareConfig*. To be used in *Any* placeholders.
-    ArrayOfHostAssignableHardwareConfig(Vec<HostAssignableHardwareConfig>),
+    ArrayOfHostAssignableHardwareConfig(Vec<super::structs::HostAssignableHardwareConfig>),
     /// A boxed array of *HostAssignableHardwareConfigAttributeOverride*. To be used in *Any* placeholders.
-    ArrayOfHostAssignableHardwareConfigAttributeOverride(Vec<HostAssignableHardwareConfigAttributeOverride>),
+    ArrayOfHostAssignableHardwareConfigAttributeOverride(Vec<super::structs::HostAssignableHardwareConfigAttributeOverride>),
     /// A boxed array of *HostAuthenticationManagerInfo*. To be used in *Any* placeholders.
-    ArrayOfHostAuthenticationManagerInfo(Vec<HostAuthenticationManagerInfo>),
+    ArrayOfHostAuthenticationManagerInfo(Vec<super::structs::HostAuthenticationManagerInfo>),
     /// A boxed array of *HostAuthenticationStoreInfo*. To be used in *Any* placeholders.
     ArrayOfHostAuthenticationStoreInfo(Vec<Box<dyn super::traits::HostAuthenticationStoreInfoTrait>>),
     /// A boxed array of *AutoStartPowerInfo*. To be used in *Any* placeholders.
-    ArrayOfAutoStartPowerInfo(Vec<AutoStartPowerInfo>),
+    ArrayOfAutoStartPowerInfo(Vec<super::structs::AutoStartPowerInfo>),
     /// A boxed array of *HostAutoStartManagerConfig*. To be used in *Any* placeholders.
-    ArrayOfHostAutoStartManagerConfig(Vec<HostAutoStartManagerConfig>),
+    ArrayOfHostAutoStartManagerConfig(Vec<super::structs::HostAutoStartManagerConfig>),
     /// A boxed array of *AutoStartDefaults*. To be used in *Any* placeholders.
-    ArrayOfAutoStartDefaults(Vec<AutoStartDefaults>),
+    ArrayOfAutoStartDefaults(Vec<super::structs::AutoStartDefaults>),
     /// A boxed array of *HostBIOSInfo*. To be used in *Any* placeholders.
-    ArrayOfHostBiosInfo(Vec<HostBiosInfo>),
+    ArrayOfHostBiosInfo(Vec<super::structs::HostBiosInfo>),
     /// A boxed array of *HostBlockAdapterTargetTransport*. To be used in *Any* placeholders.
-    ArrayOfHostBlockAdapterTargetTransport(Vec<HostBlockAdapterTargetTransport>),
+    ArrayOfHostBlockAdapterTargetTransport(Vec<super::structs::HostBlockAdapterTargetTransport>),
     /// A boxed array of *HostBlockHba*. To be used in *Any* placeholders.
-    ArrayOfHostBlockHba(Vec<HostBlockHba>),
+    ArrayOfHostBlockHba(Vec<super::structs::HostBlockHba>),
     /// A boxed array of *HostBootDeviceInfo*. To be used in *Any* placeholders.
-    ArrayOfHostBootDeviceInfo(Vec<HostBootDeviceInfo>),
+    ArrayOfHostBootDeviceInfo(Vec<super::structs::HostBootDeviceInfo>),
     /// A boxed array of *HostBootDevice*. To be used in *Any* placeholders.
-    ArrayOfHostBootDevice(Vec<HostBootDevice>),
+    ArrayOfHostBootDevice(Vec<super::structs::HostBootDevice>),
     /// A boxed array of *HostCacheConfigurationInfo*. To be used in *Any* placeholders.
-    ArrayOfHostCacheConfigurationInfo(Vec<HostCacheConfigurationInfo>),
+    ArrayOfHostCacheConfigurationInfo(Vec<super::structs::HostCacheConfigurationInfo>),
     /// A boxed array of *HostCacheConfigurationSpec*. To be used in *Any* placeholders.
-    ArrayOfHostCacheConfigurationSpec(Vec<HostCacheConfigurationSpec>),
+    ArrayOfHostCacheConfigurationSpec(Vec<super::structs::HostCacheConfigurationSpec>),
     /// A boxed array of *HostCapability*. To be used in *Any* placeholders.
-    ArrayOfHostCapability(Vec<HostCapability>),
+    ArrayOfHostCapability(Vec<super::structs::HostCapability>),
     /// A boxed array of *HostCertificateManagerCertificateInfo*. To be used in *Any* placeholders.
-    ArrayOfHostCertificateManagerCertificateInfo(Vec<HostCertificateManagerCertificateInfo>),
+    ArrayOfHostCertificateManagerCertificateInfo(Vec<super::structs::HostCertificateManagerCertificateInfo>),
     /// A boxed array of *HostCertificateManagerCertificateSpec*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 8.0.1.0
-    ArrayOfHostCertificateManagerCertificateSpec(Vec<HostCertificateManagerCertificateSpec>),
+    ArrayOfHostCertificateManagerCertificateSpec(Vec<super::structs::HostCertificateManagerCertificateSpec>),
     /// A boxed array of *HostConfigChange*. To be used in *Any* placeholders.
-    ArrayOfHostConfigChange(Vec<HostConfigChange>),
+    ArrayOfHostConfigChange(Vec<super::structs::HostConfigChange>),
     /// A boxed array of *HostConfigInfo*. To be used in *Any* placeholders.
-    ArrayOfHostConfigInfo(Vec<HostConfigInfo>),
+    ArrayOfHostConfigInfo(Vec<super::structs::HostConfigInfo>),
     /// A boxed array of *HostConfigManager*. To be used in *Any* placeholders.
-    ArrayOfHostConfigManager(Vec<HostConfigManager>),
+    ArrayOfHostConfigManager(Vec<super::structs::HostConfigManager>),
     /// A boxed array of *HostConfigSpec*. To be used in *Any* placeholders.
-    ArrayOfHostConfigSpec(Vec<HostConfigSpec>),
+    ArrayOfHostConfigSpec(Vec<super::structs::HostConfigSpec>),
     /// A boxed array of *HostConnectInfo*. To be used in *Any* placeholders.
-    ArrayOfHostConnectInfo(Vec<HostConnectInfo>),
+    ArrayOfHostConnectInfo(Vec<super::structs::HostConnectInfo>),
     /// A boxed array of *HostDatastoreExistsConnectInfo*. To be used in *Any* placeholders.
-    ArrayOfHostDatastoreExistsConnectInfo(Vec<HostDatastoreExistsConnectInfo>),
+    ArrayOfHostDatastoreExistsConnectInfo(Vec<super::structs::HostDatastoreExistsConnectInfo>),
     /// A boxed array of *HostDatastoreConnectInfo*. To be used in *Any* placeholders.
     ArrayOfHostDatastoreConnectInfo(Vec<Box<dyn super::traits::HostDatastoreConnectInfoTrait>>),
     /// A boxed array of *HostDatastoreNameConflictConnectInfo*. To be used in *Any* placeholders.
-    ArrayOfHostDatastoreNameConflictConnectInfo(Vec<HostDatastoreNameConflictConnectInfo>),
+    ArrayOfHostDatastoreNameConflictConnectInfo(Vec<super::structs::HostDatastoreNameConflictConnectInfo>),
     /// A boxed array of *HostLicenseConnectInfo*. To be used in *Any* placeholders.
-    ArrayOfHostLicenseConnectInfo(Vec<HostLicenseConnectInfo>),
+    ArrayOfHostLicenseConnectInfo(Vec<super::structs::HostLicenseConnectInfo>),
     /// A boxed array of *HostConnectInfoNetworkInfo*. To be used in *Any* placeholders.
     ArrayOfHostConnectInfoNetworkInfo(Vec<Box<dyn super::traits::HostConnectInfoNetworkInfoTrait>>),
     /// A boxed array of *HostNewNetworkConnectInfo*. To be used in *Any* placeholders.
-    ArrayOfHostNewNetworkConnectInfo(Vec<HostNewNetworkConnectInfo>),
+    ArrayOfHostNewNetworkConnectInfo(Vec<super::structs::HostNewNetworkConnectInfo>),
     /// A boxed array of *HostConnectSpec*. To be used in *Any* placeholders.
-    ArrayOfHostConnectSpec(Vec<HostConnectSpec>),
+    ArrayOfHostConnectSpec(Vec<super::structs::HostConnectSpec>),
     /// A boxed array of *HostCpuIdInfo*. To be used in *Any* placeholders.
-    ArrayOfHostCpuIdInfo(Vec<HostCpuIdInfo>),
+    ArrayOfHostCpuIdInfo(Vec<super::structs::HostCpuIdInfo>),
     /// A boxed array of *HostCpuInfo*. To be used in *Any* placeholders.
-    ArrayOfHostCpuInfo(Vec<HostCpuInfo>),
+    ArrayOfHostCpuInfo(Vec<super::structs::HostCpuInfo>),
     /// A boxed array of *HostCpuPackage*. To be used in *Any* placeholders.
-    ArrayOfHostCpuPackage(Vec<HostCpuPackage>),
+    ArrayOfHostCpuPackage(Vec<super::structs::HostCpuPackage>),
     /// A boxed array of *HostCpuPowerManagementInfo*. To be used in *Any* placeholders.
-    ArrayOfHostCpuPowerManagementInfo(Vec<HostCpuPowerManagementInfo>),
+    ArrayOfHostCpuPowerManagementInfo(Vec<super::structs::HostCpuPowerManagementInfo>),
     /// A boxed array of *HostHyperThreadScheduleInfo*. To be used in *Any* placeholders.
-    ArrayOfHostHyperThreadScheduleInfo(Vec<HostHyperThreadScheduleInfo>),
+    ArrayOfHostHyperThreadScheduleInfo(Vec<super::structs::HostHyperThreadScheduleInfo>),
     /// A boxed array of *HostDataTransportConnectionInfo*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 7.0.3.0
@@ -3627,727 +3625,727 @@ pub enum ValueElements {
     /// A boxed array of *FileInfo*. To be used in *Any* placeholders.
     ArrayOfFileInfo(Vec<Box<dyn super::traits::FileInfoTrait>>),
     /// A boxed array of *FileQueryFlags*. To be used in *Any* placeholders.
-    ArrayOfFileQueryFlags(Vec<FileQueryFlags>),
+    ArrayOfFileQueryFlags(Vec<super::structs::FileQueryFlags>),
     /// A boxed array of *FloppyImageFileInfo*. To be used in *Any* placeholders.
-    ArrayOfFloppyImageFileInfo(Vec<FloppyImageFileInfo>),
+    ArrayOfFloppyImageFileInfo(Vec<super::structs::FloppyImageFileInfo>),
     /// A boxed array of *FloppyImageFileQuery*. To be used in *Any* placeholders.
-    ArrayOfFloppyImageFileQuery(Vec<FloppyImageFileQuery>),
+    ArrayOfFloppyImageFileQuery(Vec<super::structs::FloppyImageFileQuery>),
     /// A boxed array of *FolderFileInfo*. To be used in *Any* placeholders.
-    ArrayOfFolderFileInfo(Vec<FolderFileInfo>),
+    ArrayOfFolderFileInfo(Vec<super::structs::FolderFileInfo>),
     /// A boxed array of *FolderFileQuery*. To be used in *Any* placeholders.
-    ArrayOfFolderFileQuery(Vec<FolderFileQuery>),
+    ArrayOfFolderFileQuery(Vec<super::structs::FolderFileQuery>),
     /// A boxed array of *IsoImageFileInfo*. To be used in *Any* placeholders.
-    ArrayOfIsoImageFileInfo(Vec<IsoImageFileInfo>),
+    ArrayOfIsoImageFileInfo(Vec<super::structs::IsoImageFileInfo>),
     /// A boxed array of *IsoImageFileQuery*. To be used in *Any* placeholders.
-    ArrayOfIsoImageFileQuery(Vec<IsoImageFileQuery>),
+    ArrayOfIsoImageFileQuery(Vec<super::structs::IsoImageFileQuery>),
     /// A boxed array of *FileQuery*. To be used in *Any* placeholders.
     ArrayOfFileQuery(Vec<Box<dyn super::traits::FileQueryTrait>>),
     /// A boxed array of *HostDatastoreBrowserSearchResults*. To be used in *Any* placeholders.
-    ArrayOfHostDatastoreBrowserSearchResults(Vec<HostDatastoreBrowserSearchResults>),
+    ArrayOfHostDatastoreBrowserSearchResults(Vec<super::structs::HostDatastoreBrowserSearchResults>),
     /// A boxed array of *HostDatastoreBrowserSearchSpec*. To be used in *Any* placeholders.
-    ArrayOfHostDatastoreBrowserSearchSpec(Vec<HostDatastoreBrowserSearchSpec>),
+    ArrayOfHostDatastoreBrowserSearchSpec(Vec<super::structs::HostDatastoreBrowserSearchSpec>),
     /// A boxed array of *TemplateConfigFileInfo*. To be used in *Any* placeholders.
-    ArrayOfTemplateConfigFileInfo(Vec<TemplateConfigFileInfo>),
+    ArrayOfTemplateConfigFileInfo(Vec<super::structs::TemplateConfigFileInfo>),
     /// A boxed array of *TemplateConfigFileQuery*. To be used in *Any* placeholders.
-    ArrayOfTemplateConfigFileQuery(Vec<TemplateConfigFileQuery>),
+    ArrayOfTemplateConfigFileQuery(Vec<super::structs::TemplateConfigFileQuery>),
     /// A boxed array of *VmConfigFileInfo*. To be used in *Any* placeholders.
     ArrayOfVmConfigFileInfo(Vec<Box<dyn super::traits::VmConfigFileInfoTrait>>),
     /// A boxed array of *VmConfigFileEncryptionInfo*. To be used in *Any* placeholders.
-    ArrayOfVmConfigFileEncryptionInfo(Vec<VmConfigFileEncryptionInfo>),
+    ArrayOfVmConfigFileEncryptionInfo(Vec<super::structs::VmConfigFileEncryptionInfo>),
     /// A boxed array of *VmConfigFileQuery*. To be used in *Any* placeholders.
     ArrayOfVmConfigFileQuery(Vec<Box<dyn super::traits::VmConfigFileQueryTrait>>),
     /// A boxed array of *VmConfigFileQueryFlags*. To be used in *Any* placeholders.
-    ArrayOfVmConfigFileQueryFlags(Vec<VmConfigFileQueryFlags>),
+    ArrayOfVmConfigFileQueryFlags(Vec<super::structs::VmConfigFileQueryFlags>),
     /// A boxed array of *VmConfigFileQueryFilter*. To be used in *Any* placeholders.
-    ArrayOfVmConfigFileQueryFilter(Vec<VmConfigFileQueryFilter>),
+    ArrayOfVmConfigFileQueryFilter(Vec<super::structs::VmConfigFileQueryFilter>),
     /// A boxed array of *VmDiskFileInfo*. To be used in *Any* placeholders.
-    ArrayOfVmDiskFileInfo(Vec<VmDiskFileInfo>),
+    ArrayOfVmDiskFileInfo(Vec<super::structs::VmDiskFileInfo>),
     /// A boxed array of *VmDiskFileEncryptionInfo*. To be used in *Any* placeholders.
-    ArrayOfVmDiskFileEncryptionInfo(Vec<VmDiskFileEncryptionInfo>),
+    ArrayOfVmDiskFileEncryptionInfo(Vec<super::structs::VmDiskFileEncryptionInfo>),
     /// A boxed array of *VmDiskFileQuery*. To be used in *Any* placeholders.
-    ArrayOfVmDiskFileQuery(Vec<VmDiskFileQuery>),
+    ArrayOfVmDiskFileQuery(Vec<super::structs::VmDiskFileQuery>),
     /// A boxed array of *VmDiskFileQueryFlags*. To be used in *Any* placeholders.
-    ArrayOfVmDiskFileQueryFlags(Vec<VmDiskFileQueryFlags>),
+    ArrayOfVmDiskFileQueryFlags(Vec<super::structs::VmDiskFileQueryFlags>),
     /// A boxed array of *VmDiskFileQueryFilter*. To be used in *Any* placeholders.
-    ArrayOfVmDiskFileQueryFilter(Vec<VmDiskFileQueryFilter>),
+    ArrayOfVmDiskFileQueryFilter(Vec<super::structs::VmDiskFileQueryFilter>),
     /// A boxed array of *VmLogFileInfo*. To be used in *Any* placeholders.
-    ArrayOfVmLogFileInfo(Vec<VmLogFileInfo>),
+    ArrayOfVmLogFileInfo(Vec<super::structs::VmLogFileInfo>),
     /// A boxed array of *VmLogFileQuery*. To be used in *Any* placeholders.
-    ArrayOfVmLogFileQuery(Vec<VmLogFileQuery>),
+    ArrayOfVmLogFileQuery(Vec<super::structs::VmLogFileQuery>),
     /// A boxed array of *VmNvramFileInfo*. To be used in *Any* placeholders.
-    ArrayOfVmNvramFileInfo(Vec<VmNvramFileInfo>),
+    ArrayOfVmNvramFileInfo(Vec<super::structs::VmNvramFileInfo>),
     /// A boxed array of *VmNvramFileQuery*. To be used in *Any* placeholders.
-    ArrayOfVmNvramFileQuery(Vec<VmNvramFileQuery>),
+    ArrayOfVmNvramFileQuery(Vec<super::structs::VmNvramFileQuery>),
     /// A boxed array of *VmSnapshotFileInfo*. To be used in *Any* placeholders.
-    ArrayOfVmSnapshotFileInfo(Vec<VmSnapshotFileInfo>),
+    ArrayOfVmSnapshotFileInfo(Vec<super::structs::VmSnapshotFileInfo>),
     /// A boxed array of *VmSnapshotFileQuery*. To be used in *Any* placeholders.
-    ArrayOfVmSnapshotFileQuery(Vec<VmSnapshotFileQuery>),
+    ArrayOfVmSnapshotFileQuery(Vec<super::structs::VmSnapshotFileQuery>),
     /// A boxed array of *HostDatastoreSystemCapabilities*. To be used in *Any* placeholders.
-    ArrayOfHostDatastoreSystemCapabilities(Vec<HostDatastoreSystemCapabilities>),
+    ArrayOfHostDatastoreSystemCapabilities(Vec<super::structs::HostDatastoreSystemCapabilities>),
     /// A boxed array of *HostDatastoreSystemDatastoreResult*. To be used in *Any* placeholders.
-    ArrayOfHostDatastoreSystemDatastoreResult(Vec<HostDatastoreSystemDatastoreResult>),
+    ArrayOfHostDatastoreSystemDatastoreResult(Vec<super::structs::HostDatastoreSystemDatastoreResult>),
     /// A boxed array of *HostDatastoreSystemVvolDatastoreSpec*. To be used in *Any* placeholders.
-    ArrayOfHostDatastoreSystemVvolDatastoreSpec(Vec<HostDatastoreSystemVvolDatastoreSpec>),
+    ArrayOfHostDatastoreSystemVvolDatastoreSpec(Vec<super::structs::HostDatastoreSystemVvolDatastoreSpec>),
     /// A boxed array of *HostDateTimeConfig*. To be used in *Any* placeholders.
-    ArrayOfHostDateTimeConfig(Vec<HostDateTimeConfig>),
+    ArrayOfHostDateTimeConfig(Vec<super::structs::HostDateTimeConfig>),
     /// A boxed array of *HostDateTimeInfo*. To be used in *Any* placeholders.
-    ArrayOfHostDateTimeInfo(Vec<HostDateTimeInfo>),
+    ArrayOfHostDateTimeInfo(Vec<super::structs::HostDateTimeInfo>),
     /// A boxed array of *HostDateTimeSystemServiceTestResult*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 7.0.3.0
-    ArrayOfHostDateTimeSystemServiceTestResult(Vec<HostDateTimeSystemServiceTestResult>),
+    ArrayOfHostDateTimeSystemServiceTestResult(Vec<super::structs::HostDateTimeSystemServiceTestResult>),
     /// A boxed array of *HostDateTimeSystemTimeZone*. To be used in *Any* placeholders.
-    ArrayOfHostDateTimeSystemTimeZone(Vec<HostDateTimeSystemTimeZone>),
+    ArrayOfHostDateTimeSystemTimeZone(Vec<super::structs::HostDateTimeSystemTimeZone>),
     /// A boxed array of *HostDeploymentInfo*. To be used in *Any* placeholders.
-    ArrayOfHostDeploymentInfo(Vec<HostDeploymentInfo>),
+    ArrayOfHostDeploymentInfo(Vec<super::structs::HostDeploymentInfo>),
     /// A boxed array of *HostDevice*. To be used in *Any* placeholders.
     ArrayOfHostDevice(Vec<Box<dyn super::traits::HostDeviceTrait>>),
     /// A boxed array of *HostDhcpService*. To be used in *Any* placeholders.
-    ArrayOfHostDhcpService(Vec<HostDhcpService>),
+    ArrayOfHostDhcpService(Vec<super::structs::HostDhcpService>),
     /// A boxed array of *HostDhcpServiceConfig*. To be used in *Any* placeholders.
-    ArrayOfHostDhcpServiceConfig(Vec<HostDhcpServiceConfig>),
+    ArrayOfHostDhcpServiceConfig(Vec<super::structs::HostDhcpServiceConfig>),
     /// A boxed array of *HostDhcpServiceSpec*. To be used in *Any* placeholders.
-    ArrayOfHostDhcpServiceSpec(Vec<HostDhcpServiceSpec>),
+    ArrayOfHostDhcpServiceSpec(Vec<super::structs::HostDhcpServiceSpec>),
     /// A boxed array of *HostDiagnosticPartition*. To be used in *Any* placeholders.
-    ArrayOfHostDiagnosticPartition(Vec<HostDiagnosticPartition>),
+    ArrayOfHostDiagnosticPartition(Vec<super::structs::HostDiagnosticPartition>),
     /// A boxed array of *HostDiagnosticPartitionCreateDescription*. To be used in *Any* placeholders.
-    ArrayOfHostDiagnosticPartitionCreateDescription(Vec<HostDiagnosticPartitionCreateDescription>),
+    ArrayOfHostDiagnosticPartitionCreateDescription(Vec<super::structs::HostDiagnosticPartitionCreateDescription>),
     /// A boxed array of *HostDiagnosticPartitionCreateOption*. To be used in *Any* placeholders.
-    ArrayOfHostDiagnosticPartitionCreateOption(Vec<HostDiagnosticPartitionCreateOption>),
+    ArrayOfHostDiagnosticPartitionCreateOption(Vec<super::structs::HostDiagnosticPartitionCreateOption>),
     /// A boxed array of *HostDiagnosticPartitionCreateSpec*. To be used in *Any* placeholders.
-    ArrayOfHostDiagnosticPartitionCreateSpec(Vec<HostDiagnosticPartitionCreateSpec>),
+    ArrayOfHostDiagnosticPartitionCreateSpec(Vec<super::structs::HostDiagnosticPartitionCreateSpec>),
     /// A boxed array of *HostDigestInfo*. To be used in *Any* placeholders.
     ArrayOfHostDigestInfo(Vec<Box<dyn super::traits::HostDigestInfoTrait>>),
     /// A boxed array of *HostDirectoryStoreInfo*. To be used in *Any* placeholders.
     ArrayOfHostDirectoryStoreInfo(Vec<Box<dyn super::traits::HostDirectoryStoreInfoTrait>>),
     /// A boxed array of *HostDiskConfigurationResult*. To be used in *Any* placeholders.
-    ArrayOfHostDiskConfigurationResult(Vec<HostDiskConfigurationResult>),
+    ArrayOfHostDiskConfigurationResult(Vec<super::structs::HostDiskConfigurationResult>),
     /// A boxed array of *HostDiskDimensions*. To be used in *Any* placeholders.
-    ArrayOfHostDiskDimensions(Vec<HostDiskDimensions>),
+    ArrayOfHostDiskDimensions(Vec<super::structs::HostDiskDimensions>),
     /// A boxed array of *HostDiskDimensionsChs*. To be used in *Any* placeholders.
-    ArrayOfHostDiskDimensionsChs(Vec<HostDiskDimensionsChs>),
+    ArrayOfHostDiskDimensionsChs(Vec<super::structs::HostDiskDimensionsChs>),
     /// A boxed array of *HostDiskDimensionsLba*. To be used in *Any* placeholders.
-    ArrayOfHostDiskDimensionsLba(Vec<HostDiskDimensionsLba>),
+    ArrayOfHostDiskDimensionsLba(Vec<super::structs::HostDiskDimensionsLba>),
     /// A boxed array of *HostDiskPartitionInfo*. To be used in *Any* placeholders.
-    ArrayOfHostDiskPartitionInfo(Vec<HostDiskPartitionInfo>),
+    ArrayOfHostDiskPartitionInfo(Vec<super::structs::HostDiskPartitionInfo>),
     /// A boxed array of *HostDiskPartitionBlockRange*. To be used in *Any* placeholders.
-    ArrayOfHostDiskPartitionBlockRange(Vec<HostDiskPartitionBlockRange>),
+    ArrayOfHostDiskPartitionBlockRange(Vec<super::structs::HostDiskPartitionBlockRange>),
     /// A boxed array of *HostDiskPartitionLayout*. To be used in *Any* placeholders.
-    ArrayOfHostDiskPartitionLayout(Vec<HostDiskPartitionLayout>),
+    ArrayOfHostDiskPartitionLayout(Vec<super::structs::HostDiskPartitionLayout>),
     /// A boxed array of *HostDiskPartitionAttributes*. To be used in *Any* placeholders.
-    ArrayOfHostDiskPartitionAttributes(Vec<HostDiskPartitionAttributes>),
+    ArrayOfHostDiskPartitionAttributes(Vec<super::structs::HostDiskPartitionAttributes>),
     /// A boxed array of *HostDiskPartitionSpec*. To be used in *Any* placeholders.
-    ArrayOfHostDiskPartitionSpec(Vec<HostDiskPartitionSpec>),
+    ArrayOfHostDiskPartitionSpec(Vec<super::structs::HostDiskPartitionSpec>),
     /// A boxed array of *HostDnsConfig*. To be used in *Any* placeholders.
     ArrayOfHostDnsConfig(Vec<Box<dyn super::traits::HostDnsConfigTrait>>),
     /// A boxed array of *HostDnsConfigSpec*. To be used in *Any* placeholders.
-    ArrayOfHostDnsConfigSpec(Vec<HostDnsConfigSpec>),
+    ArrayOfHostDnsConfigSpec(Vec<super::structs::HostDnsConfigSpec>),
     /// A boxed array of *HostDvxClass*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 8.0.0.1
-    ArrayOfHostDvxClass(Vec<HostDvxClass>),
+    ArrayOfHostDvxClass(Vec<super::structs::HostDvxClass>),
     /// A boxed array of *HostEnterMaintenanceResult*. To be used in *Any* placeholders.
-    ArrayOfHostEnterMaintenanceResult(Vec<HostEnterMaintenanceResult>),
+    ArrayOfHostEnterMaintenanceResult(Vec<super::structs::HostEnterMaintenanceResult>),
     /// A boxed array of *HostEsxAgentHostManagerConfigInfo*. To be used in *Any* placeholders.
-    ArrayOfHostEsxAgentHostManagerConfigInfo(Vec<HostEsxAgentHostManagerConfigInfo>),
+    ArrayOfHostEsxAgentHostManagerConfigInfo(Vec<super::structs::HostEsxAgentHostManagerConfigInfo>),
     /// A boxed array of *HostFaultToleranceManagerComponentHealthInfo*. To be used in *Any* placeholders.
-    ArrayOfHostFaultToleranceManagerComponentHealthInfo(Vec<HostFaultToleranceManagerComponentHealthInfo>),
+    ArrayOfHostFaultToleranceManagerComponentHealthInfo(Vec<super::structs::HostFaultToleranceManagerComponentHealthInfo>),
     /// A boxed array of *FcoeConfig*. To be used in *Any* placeholders.
-    ArrayOfFcoeConfig(Vec<FcoeConfig>),
+    ArrayOfFcoeConfig(Vec<super::structs::FcoeConfig>),
     /// A boxed array of *FcoeConfigFcoeCapabilities*. To be used in *Any* placeholders.
-    ArrayOfFcoeConfigFcoeCapabilities(Vec<FcoeConfigFcoeCapabilities>),
+    ArrayOfFcoeConfigFcoeCapabilities(Vec<super::structs::FcoeConfigFcoeCapabilities>),
     /// A boxed array of *FcoeConfigFcoeSpecification*. To be used in *Any* placeholders.
-    ArrayOfFcoeConfigFcoeSpecification(Vec<FcoeConfigFcoeSpecification>),
+    ArrayOfFcoeConfigFcoeSpecification(Vec<super::structs::FcoeConfigFcoeSpecification>),
     /// A boxed array of *FcoeConfigVlanRange*. To be used in *Any* placeholders.
-    ArrayOfFcoeConfigVlanRange(Vec<FcoeConfigVlanRange>),
+    ArrayOfFcoeConfigVlanRange(Vec<super::structs::FcoeConfigVlanRange>),
     /// A boxed array of *HostFeatureCapability*. To be used in *Any* placeholders.
-    ArrayOfHostFeatureCapability(Vec<HostFeatureCapability>),
+    ArrayOfHostFeatureCapability(Vec<super::structs::HostFeatureCapability>),
     /// A boxed array of *HostFeatureMask*. To be used in *Any* placeholders.
-    ArrayOfHostFeatureMask(Vec<HostFeatureMask>),
+    ArrayOfHostFeatureMask(Vec<super::structs::HostFeatureMask>),
     /// A boxed array of *HostFeatureVersionInfo*. To be used in *Any* placeholders.
-    ArrayOfHostFeatureVersionInfo(Vec<HostFeatureVersionInfo>),
+    ArrayOfHostFeatureVersionInfo(Vec<super::structs::HostFeatureVersionInfo>),
     /// A boxed array of *HostFibreChannelHba*. To be used in *Any* placeholders.
     ArrayOfHostFibreChannelHba(Vec<Box<dyn super::traits::HostFibreChannelHbaTrait>>),
     /// A boxed array of *HostFibreChannelOverEthernetHba*. To be used in *Any* placeholders.
-    ArrayOfHostFibreChannelOverEthernetHba(Vec<HostFibreChannelOverEthernetHba>),
+    ArrayOfHostFibreChannelOverEthernetHba(Vec<super::structs::HostFibreChannelOverEthernetHba>),
     /// A boxed array of *HostFibreChannelOverEthernetHbaLinkInfo*. To be used in *Any* placeholders.
-    ArrayOfHostFibreChannelOverEthernetHbaLinkInfo(Vec<HostFibreChannelOverEthernetHbaLinkInfo>),
+    ArrayOfHostFibreChannelOverEthernetHbaLinkInfo(Vec<super::structs::HostFibreChannelOverEthernetHbaLinkInfo>),
     /// A boxed array of *HostFibreChannelOverEthernetTargetTransport*. To be used in *Any* placeholders.
-    ArrayOfHostFibreChannelOverEthernetTargetTransport(Vec<HostFibreChannelOverEthernetTargetTransport>),
+    ArrayOfHostFibreChannelOverEthernetTargetTransport(Vec<super::structs::HostFibreChannelOverEthernetTargetTransport>),
     /// A boxed array of *HostFibreChannelTargetTransport*. To be used in *Any* placeholders.
     ArrayOfHostFibreChannelTargetTransport(Vec<Box<dyn super::traits::HostFibreChannelTargetTransportTrait>>),
     /// A boxed array of *HostFileAccess*. To be used in *Any* placeholders.
-    ArrayOfHostFileAccess(Vec<HostFileAccess>),
+    ArrayOfHostFileAccess(Vec<super::structs::HostFileAccess>),
     /// A boxed array of *ModeInfo*. To be used in *Any* placeholders.
-    ArrayOfModeInfo(Vec<ModeInfo>),
+    ArrayOfModeInfo(Vec<super::structs::ModeInfo>),
     /// A boxed array of *HostFileSystemMountInfo*. To be used in *Any* placeholders.
-    ArrayOfHostFileSystemMountInfo(Vec<HostFileSystemMountInfo>),
+    ArrayOfHostFileSystemMountInfo(Vec<super::structs::HostFileSystemMountInfo>),
     /// A boxed array of *HostFileSystemVolume*. To be used in *Any* placeholders.
     ArrayOfHostFileSystemVolume(Vec<Box<dyn super::traits::HostFileSystemVolumeTrait>>),
     /// A boxed array of *HostFileSystemVolumeInfo*. To be used in *Any* placeholders.
-    ArrayOfHostFileSystemVolumeInfo(Vec<HostFileSystemVolumeInfo>),
+    ArrayOfHostFileSystemVolumeInfo(Vec<super::structs::HostFileSystemVolumeInfo>),
     /// A boxed array of *HostFirewallConfig*. To be used in *Any* placeholders.
-    ArrayOfHostFirewallConfig(Vec<HostFirewallConfig>),
+    ArrayOfHostFirewallConfig(Vec<super::structs::HostFirewallConfig>),
     /// A boxed array of *HostFirewallConfigRuleSetConfig*. To be used in *Any* placeholders.
-    ArrayOfHostFirewallConfigRuleSetConfig(Vec<HostFirewallConfigRuleSetConfig>),
+    ArrayOfHostFirewallConfigRuleSetConfig(Vec<super::structs::HostFirewallConfigRuleSetConfig>),
     /// A boxed array of *HostFirewallInfo*. To be used in *Any* placeholders.
-    ArrayOfHostFirewallInfo(Vec<HostFirewallInfo>),
+    ArrayOfHostFirewallInfo(Vec<super::structs::HostFirewallInfo>),
     /// A boxed array of *HostFirewallDefaultPolicy*. To be used in *Any* placeholders.
-    ArrayOfHostFirewallDefaultPolicy(Vec<HostFirewallDefaultPolicy>),
+    ArrayOfHostFirewallDefaultPolicy(Vec<super::structs::HostFirewallDefaultPolicy>),
     /// A boxed array of *HostFlagInfo*. To be used in *Any* placeholders.
-    ArrayOfHostFlagInfo(Vec<HostFlagInfo>),
+    ArrayOfHostFlagInfo(Vec<super::structs::HostFlagInfo>),
     /// A boxed array of *HostForceMountedInfo*. To be used in *Any* placeholders.
-    ArrayOfHostForceMountedInfo(Vec<HostForceMountedInfo>),
+    ArrayOfHostForceMountedInfo(Vec<super::structs::HostForceMountedInfo>),
     /// A boxed array of *HostFru*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 8.0.0.1
-    ArrayOfHostFru(Vec<HostFru>),
+    ArrayOfHostFru(Vec<super::structs::HostFru>),
     /// A boxed array of *HostGatewaySpec*. To be used in *Any* placeholders.
-    ArrayOfHostGatewaySpec(Vec<HostGatewaySpec>),
+    ArrayOfHostGatewaySpec(Vec<super::structs::HostGatewaySpec>),
     /// A boxed array of *HostGraphicsConfig*. To be used in *Any* placeholders.
-    ArrayOfHostGraphicsConfig(Vec<HostGraphicsConfig>),
+    ArrayOfHostGraphicsConfig(Vec<super::structs::HostGraphicsConfig>),
     /// A boxed array of *HostGraphicsConfigDeviceType*. To be used in *Any* placeholders.
-    ArrayOfHostGraphicsConfigDeviceType(Vec<HostGraphicsConfigDeviceType>),
+    ArrayOfHostGraphicsConfigDeviceType(Vec<super::structs::HostGraphicsConfigDeviceType>),
     /// A boxed array of *HostGraphicsInfo*. To be used in *Any* placeholders.
-    ArrayOfHostGraphicsInfo(Vec<HostGraphicsInfo>),
+    ArrayOfHostGraphicsInfo(Vec<super::structs::HostGraphicsInfo>),
     /// A boxed array of *HostHardwareInfo*. To be used in *Any* placeholders.
-    ArrayOfHostHardwareInfo(Vec<HostHardwareInfo>),
+    ArrayOfHostHardwareInfo(Vec<super::structs::HostHardwareInfo>),
     /// A boxed array of *HostHardwareStatusInfo*. To be used in *Any* placeholders.
-    ArrayOfHostHardwareStatusInfo(Vec<HostHardwareStatusInfo>),
+    ArrayOfHostHardwareStatusInfo(Vec<super::structs::HostHardwareStatusInfo>),
     /// A boxed array of *DpuStatusInfo*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 8.0.0.1
-    ArrayOfDpuStatusInfo(Vec<DpuStatusInfo>),
+    ArrayOfDpuStatusInfo(Vec<super::structs::DpuStatusInfo>),
     /// A boxed array of *DpuStatusInfoOperationalInfo*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 8.0.0.1
-    ArrayOfDpuStatusInfoOperationalInfo(Vec<DpuStatusInfoOperationalInfo>),
+    ArrayOfDpuStatusInfoOperationalInfo(Vec<super::structs::DpuStatusInfoOperationalInfo>),
     /// A boxed array of *HostHardwareElementInfo*. To be used in *Any* placeholders.
     ArrayOfHostHardwareElementInfo(Vec<Box<dyn super::traits::HostHardwareElementInfoTrait>>),
     /// A boxed array of *HostStorageElementInfo*. To be used in *Any* placeholders.
-    ArrayOfHostStorageElementInfo(Vec<HostStorageElementInfo>),
+    ArrayOfHostStorageElementInfo(Vec<super::structs::HostStorageElementInfo>),
     /// A boxed array of *HostStorageOperationalInfo*. To be used in *Any* placeholders.
-    ArrayOfHostStorageOperationalInfo(Vec<HostStorageOperationalInfo>),
+    ArrayOfHostStorageOperationalInfo(Vec<super::structs::HostStorageOperationalInfo>),
     /// A boxed array of *HostHbaCreateSpec*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 7.0.3.0
     ArrayOfHostHbaCreateSpec(Vec<Box<dyn super::traits::HostHbaCreateSpecTrait>>),
     /// A boxed array of *HealthSystemRuntime*. To be used in *Any* placeholders.
-    ArrayOfHealthSystemRuntime(Vec<HealthSystemRuntime>),
+    ArrayOfHealthSystemRuntime(Vec<super::structs::HealthSystemRuntime>),
     /// A boxed array of *HostAccessControlEntry*. To be used in *Any* placeholders.
-    ArrayOfHostAccessControlEntry(Vec<HostAccessControlEntry>),
+    ArrayOfHostAccessControlEntry(Vec<super::structs::HostAccessControlEntry>),
     /// A boxed array of *HostHostBusAdapter*. To be used in *Any* placeholders.
     ArrayOfHostHostBusAdapter(Vec<Box<dyn super::traits::HostHostBusAdapterTrait>>),
     /// A boxed array of *HostProxySwitch*. To be used in *Any* placeholders.
-    ArrayOfHostProxySwitch(Vec<HostProxySwitch>),
+    ArrayOfHostProxySwitch(Vec<super::structs::HostProxySwitch>),
     /// A boxed array of *HostProxySwitchConfig*. To be used in *Any* placeholders.
-    ArrayOfHostProxySwitchConfig(Vec<HostProxySwitchConfig>),
+    ArrayOfHostProxySwitchConfig(Vec<super::structs::HostProxySwitchConfig>),
     /// A boxed array of *HostProxySwitchEnsInfo*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 8.0.0.1
-    ArrayOfHostProxySwitchEnsInfo(Vec<HostProxySwitchEnsInfo>),
+    ArrayOfHostProxySwitchEnsInfo(Vec<super::structs::HostProxySwitchEnsInfo>),
     /// A boxed array of *HostProxySwitchHostLagConfig*. To be used in *Any* placeholders.
-    ArrayOfHostProxySwitchHostLagConfig(Vec<HostProxySwitchHostLagConfig>),
+    ArrayOfHostProxySwitchHostLagConfig(Vec<super::structs::HostProxySwitchHostLagConfig>),
     /// A boxed array of *HostProxySwitchSpec*. To be used in *Any* placeholders.
-    ArrayOfHostProxySwitchSpec(Vec<HostProxySwitchSpec>),
+    ArrayOfHostProxySwitchSpec(Vec<super::structs::HostProxySwitchSpec>),
     /// A boxed array of *HostImageProfileSummary*. To be used in *Any* placeholders.
-    ArrayOfHostImageProfileSummary(Vec<HostImageProfileSummary>),
+    ArrayOfHostImageProfileSummary(Vec<super::structs::HostImageProfileSummary>),
     /// A boxed array of *HostInternetScsiHba*. To be used in *Any* placeholders.
-    ArrayOfHostInternetScsiHba(Vec<HostInternetScsiHba>),
+    ArrayOfHostInternetScsiHba(Vec<super::structs::HostInternetScsiHba>),
     /// A boxed array of *HostInternetScsiHbaAuthenticationCapabilities*. To be used in *Any* placeholders.
-    ArrayOfHostInternetScsiHbaAuthenticationCapabilities(Vec<HostInternetScsiHbaAuthenticationCapabilities>),
+    ArrayOfHostInternetScsiHbaAuthenticationCapabilities(Vec<super::structs::HostInternetScsiHbaAuthenticationCapabilities>),
     /// A boxed array of *HostInternetScsiHbaAuthenticationProperties*. To be used in *Any* placeholders.
-    ArrayOfHostInternetScsiHbaAuthenticationProperties(Vec<HostInternetScsiHbaAuthenticationProperties>),
+    ArrayOfHostInternetScsiHbaAuthenticationProperties(Vec<super::structs::HostInternetScsiHbaAuthenticationProperties>),
     /// A boxed array of *HostInternetScsiHbaDigestCapabilities*. To be used in *Any* placeholders.
-    ArrayOfHostInternetScsiHbaDigestCapabilities(Vec<HostInternetScsiHbaDigestCapabilities>),
+    ArrayOfHostInternetScsiHbaDigestCapabilities(Vec<super::structs::HostInternetScsiHbaDigestCapabilities>),
     /// A boxed array of *HostInternetScsiHbaDigestProperties*. To be used in *Any* placeholders.
-    ArrayOfHostInternetScsiHbaDigestProperties(Vec<HostInternetScsiHbaDigestProperties>),
+    ArrayOfHostInternetScsiHbaDigestProperties(Vec<super::structs::HostInternetScsiHbaDigestProperties>),
     /// A boxed array of *HostInternetScsiHbaDiscoveryCapabilities*. To be used in *Any* placeholders.
-    ArrayOfHostInternetScsiHbaDiscoveryCapabilities(Vec<HostInternetScsiHbaDiscoveryCapabilities>),
+    ArrayOfHostInternetScsiHbaDiscoveryCapabilities(Vec<super::structs::HostInternetScsiHbaDiscoveryCapabilities>),
     /// A boxed array of *HostInternetScsiHbaDiscoveryProperties*. To be used in *Any* placeholders.
-    ArrayOfHostInternetScsiHbaDiscoveryProperties(Vec<HostInternetScsiHbaDiscoveryProperties>),
+    ArrayOfHostInternetScsiHbaDiscoveryProperties(Vec<super::structs::HostInternetScsiHbaDiscoveryProperties>),
     /// A boxed array of *HostInternetScsiHbaIPCapabilities*. To be used in *Any* placeholders.
-    ArrayOfHostInternetScsiHbaIpCapabilities(Vec<HostInternetScsiHbaIpCapabilities>),
+    ArrayOfHostInternetScsiHbaIpCapabilities(Vec<super::structs::HostInternetScsiHbaIpCapabilities>),
     /// A boxed array of *HostInternetScsiHbaIPProperties*. To be used in *Any* placeholders.
-    ArrayOfHostInternetScsiHbaIpProperties(Vec<HostInternetScsiHbaIpProperties>),
+    ArrayOfHostInternetScsiHbaIpProperties(Vec<super::structs::HostInternetScsiHbaIpProperties>),
     /// A boxed array of *HostInternetScsiHbaIPv6Properties*. To be used in *Any* placeholders.
-    ArrayOfHostInternetScsiHbaIPv6Properties(Vec<HostInternetScsiHbaIPv6Properties>),
+    ArrayOfHostInternetScsiHbaIPv6Properties(Vec<super::structs::HostInternetScsiHbaIPv6Properties>),
     /// A boxed array of *HostInternetScsiHbaIscsiIpv6Address*. To be used in *Any* placeholders.
-    ArrayOfHostInternetScsiHbaIscsiIpv6Address(Vec<HostInternetScsiHbaIscsiIpv6Address>),
+    ArrayOfHostInternetScsiHbaIscsiIpv6Address(Vec<super::structs::HostInternetScsiHbaIscsiIpv6Address>),
     /// A boxed array of *HostInternetScsiHbaParamValue*. To be used in *Any* placeholders.
-    ArrayOfHostInternetScsiHbaParamValue(Vec<HostInternetScsiHbaParamValue>),
+    ArrayOfHostInternetScsiHbaParamValue(Vec<super::structs::HostInternetScsiHbaParamValue>),
     /// A boxed array of *HostInternetScsiHbaSendTarget*. To be used in *Any* placeholders.
-    ArrayOfHostInternetScsiHbaSendTarget(Vec<HostInternetScsiHbaSendTarget>),
+    ArrayOfHostInternetScsiHbaSendTarget(Vec<super::structs::HostInternetScsiHbaSendTarget>),
     /// A boxed array of *HostInternetScsiHbaStaticTarget*. To be used in *Any* placeholders.
-    ArrayOfHostInternetScsiHbaStaticTarget(Vec<HostInternetScsiHbaStaticTarget>),
+    ArrayOfHostInternetScsiHbaStaticTarget(Vec<super::structs::HostInternetScsiHbaStaticTarget>),
     /// A boxed array of *HostInternetScsiHbaTargetSet*. To be used in *Any* placeholders.
-    ArrayOfHostInternetScsiHbaTargetSet(Vec<HostInternetScsiHbaTargetSet>),
+    ArrayOfHostInternetScsiHbaTargetSet(Vec<super::structs::HostInternetScsiHbaTargetSet>),
     /// A boxed array of *HostInternetScsiTargetTransport*. To be used in *Any* placeholders.
-    ArrayOfHostInternetScsiTargetTransport(Vec<HostInternetScsiTargetTransport>),
+    ArrayOfHostInternetScsiTargetTransport(Vec<super::structs::HostInternetScsiTargetTransport>),
     /// A boxed array of *HostIpConfig*. To be used in *Any* placeholders.
-    ArrayOfHostIpConfig(Vec<HostIpConfig>),
+    ArrayOfHostIpConfig(Vec<super::structs::HostIpConfig>),
     /// A boxed array of *HostIpConfigIpV6Address*. To be used in *Any* placeholders.
-    ArrayOfHostIpConfigIpV6Address(Vec<HostIpConfigIpV6Address>),
+    ArrayOfHostIpConfigIpV6Address(Vec<super::structs::HostIpConfigIpV6Address>),
     /// A boxed array of *HostIpConfigIpV6AddressConfiguration*. To be used in *Any* placeholders.
-    ArrayOfHostIpConfigIpV6AddressConfiguration(Vec<HostIpConfigIpV6AddressConfiguration>),
+    ArrayOfHostIpConfigIpV6AddressConfiguration(Vec<super::structs::HostIpConfigIpV6AddressConfiguration>),
     /// A boxed array of *HostIpRouteConfig*. To be used in *Any* placeholders.
     ArrayOfHostIpRouteConfig(Vec<Box<dyn super::traits::HostIpRouteConfigTrait>>),
     /// A boxed array of *HostIpRouteConfigSpec*. To be used in *Any* placeholders.
-    ArrayOfHostIpRouteConfigSpec(Vec<HostIpRouteConfigSpec>),
+    ArrayOfHostIpRouteConfigSpec(Vec<super::structs::HostIpRouteConfigSpec>),
     /// A boxed array of *HostIpRouteEntry*. To be used in *Any* placeholders.
-    ArrayOfHostIpRouteEntry(Vec<HostIpRouteEntry>),
+    ArrayOfHostIpRouteEntry(Vec<super::structs::HostIpRouteEntry>),
     /// A boxed array of *HostIpRouteOp*. To be used in *Any* placeholders.
-    ArrayOfHostIpRouteOp(Vec<HostIpRouteOp>),
+    ArrayOfHostIpRouteOp(Vec<super::structs::HostIpRouteOp>),
     /// A boxed array of *HostIpRouteTableConfig*. To be used in *Any* placeholders.
-    ArrayOfHostIpRouteTableConfig(Vec<HostIpRouteTableConfig>),
+    ArrayOfHostIpRouteTableConfig(Vec<super::structs::HostIpRouteTableConfig>),
     /// A boxed array of *HostIpRouteTableInfo*. To be used in *Any* placeholders.
-    ArrayOfHostIpRouteTableInfo(Vec<HostIpRouteTableInfo>),
+    ArrayOfHostIpRouteTableInfo(Vec<super::structs::HostIpRouteTableInfo>),
     /// A boxed array of *HostIpmiInfo*. To be used in *Any* placeholders.
-    ArrayOfHostIpmiInfo(Vec<HostIpmiInfo>),
+    ArrayOfHostIpmiInfo(Vec<super::structs::HostIpmiInfo>),
     /// A boxed array of *IscsiDependencyEntity*. To be used in *Any* placeholders.
-    ArrayOfIscsiDependencyEntity(Vec<IscsiDependencyEntity>),
+    ArrayOfIscsiDependencyEntity(Vec<super::structs::IscsiDependencyEntity>),
     /// A boxed array of *IscsiMigrationDependency*. To be used in *Any* placeholders.
-    ArrayOfIscsiMigrationDependency(Vec<IscsiMigrationDependency>),
+    ArrayOfIscsiMigrationDependency(Vec<super::structs::IscsiMigrationDependency>),
     /// A boxed array of *IscsiPortInfo*. To be used in *Any* placeholders.
-    ArrayOfIscsiPortInfo(Vec<IscsiPortInfo>),
+    ArrayOfIscsiPortInfo(Vec<super::structs::IscsiPortInfo>),
     /// A boxed array of *IscsiStatus*. To be used in *Any* placeholders.
-    ArrayOfIscsiStatus(Vec<IscsiStatus>),
+    ArrayOfIscsiStatus(Vec<super::structs::IscsiStatus>),
     /// A boxed array of *KernelModuleInfo*. To be used in *Any* placeholders.
-    ArrayOfKernelModuleInfo(Vec<KernelModuleInfo>),
+    ArrayOfKernelModuleInfo(Vec<super::structs::KernelModuleInfo>),
     /// A boxed array of *KernelModuleSectionInfo*. To be used in *Any* placeholders.
-    ArrayOfKernelModuleSectionInfo(Vec<KernelModuleSectionInfo>),
+    ArrayOfKernelModuleSectionInfo(Vec<super::structs::KernelModuleSectionInfo>),
     /// A boxed array of *HostLicenseSpec*. To be used in *Any* placeholders.
-    ArrayOfHostLicenseSpec(Vec<HostLicenseSpec>),
+    ArrayOfHostLicenseSpec(Vec<super::structs::HostLicenseSpec>),
     /// A boxed array of *LinkDiscoveryProtocolConfig*. To be used in *Any* placeholders.
-    ArrayOfLinkDiscoveryProtocolConfig(Vec<LinkDiscoveryProtocolConfig>),
+    ArrayOfLinkDiscoveryProtocolConfig(Vec<super::structs::LinkDiscoveryProtocolConfig>),
     /// A boxed array of *HostAccountSpec*. To be used in *Any* placeholders.
     ArrayOfHostAccountSpec(Vec<Box<dyn super::traits::HostAccountSpecTrait>>),
     /// A boxed array of *HostPosixAccountSpec*. To be used in *Any* placeholders.
-    ArrayOfHostPosixAccountSpec(Vec<HostPosixAccountSpec>),
+    ArrayOfHostPosixAccountSpec(Vec<super::structs::HostPosixAccountSpec>),
     /// A boxed array of *HostLocalAuthenticationInfo*. To be used in *Any* placeholders.
-    ArrayOfHostLocalAuthenticationInfo(Vec<HostLocalAuthenticationInfo>),
+    ArrayOfHostLocalAuthenticationInfo(Vec<super::structs::HostLocalAuthenticationInfo>),
     /// A boxed array of *LocalDatastoreInfo*. To be used in *Any* placeholders.
-    ArrayOfLocalDatastoreInfo(Vec<LocalDatastoreInfo>),
+    ArrayOfLocalDatastoreInfo(Vec<super::structs::LocalDatastoreInfo>),
     /// A boxed array of *HostLocalFileSystemVolume*. To be used in *Any* placeholders.
-    ArrayOfHostLocalFileSystemVolume(Vec<HostLocalFileSystemVolume>),
+    ArrayOfHostLocalFileSystemVolume(Vec<super::structs::HostLocalFileSystemVolume>),
     /// A boxed array of *HostLocalFileSystemVolumeSpec*. To be used in *Any* placeholders.
-    ArrayOfHostLocalFileSystemVolumeSpec(Vec<HostLocalFileSystemVolumeSpec>),
+    ArrayOfHostLocalFileSystemVolumeSpec(Vec<super::structs::HostLocalFileSystemVolumeSpec>),
     /// A boxed array of *HostLowLevelProvisioningManagerDiskLayoutSpec*. To be used in *Any* placeholders.
-    ArrayOfHostLowLevelProvisioningManagerDiskLayoutSpec(Vec<HostLowLevelProvisioningManagerDiskLayoutSpec>),
+    ArrayOfHostLowLevelProvisioningManagerDiskLayoutSpec(Vec<super::structs::HostLowLevelProvisioningManagerDiskLayoutSpec>),
     /// A boxed array of *HostLowLevelProvisioningManagerFileDeleteResult*. To be used in *Any* placeholders.
-    ArrayOfHostLowLevelProvisioningManagerFileDeleteResult(Vec<HostLowLevelProvisioningManagerFileDeleteResult>),
+    ArrayOfHostLowLevelProvisioningManagerFileDeleteResult(Vec<super::structs::HostLowLevelProvisioningManagerFileDeleteResult>),
     /// A boxed array of *HostLowLevelProvisioningManagerFileDeleteSpec*. To be used in *Any* placeholders.
-    ArrayOfHostLowLevelProvisioningManagerFileDeleteSpec(Vec<HostLowLevelProvisioningManagerFileDeleteSpec>),
+    ArrayOfHostLowLevelProvisioningManagerFileDeleteSpec(Vec<super::structs::HostLowLevelProvisioningManagerFileDeleteSpec>),
     /// A boxed array of *HostLowLevelProvisioningManagerFileReserveResult*. To be used in *Any* placeholders.
-    ArrayOfHostLowLevelProvisioningManagerFileReserveResult(Vec<HostLowLevelProvisioningManagerFileReserveResult>),
+    ArrayOfHostLowLevelProvisioningManagerFileReserveResult(Vec<super::structs::HostLowLevelProvisioningManagerFileReserveResult>),
     /// A boxed array of *HostLowLevelProvisioningManagerFileReserveSpec*. To be used in *Any* placeholders.
-    ArrayOfHostLowLevelProvisioningManagerFileReserveSpec(Vec<HostLowLevelProvisioningManagerFileReserveSpec>),
+    ArrayOfHostLowLevelProvisioningManagerFileReserveSpec(Vec<super::structs::HostLowLevelProvisioningManagerFileReserveSpec>),
     /// A boxed array of *HostLowLevelProvisioningManagerSnapshotLayoutSpec*. To be used in *Any* placeholders.
-    ArrayOfHostLowLevelProvisioningManagerSnapshotLayoutSpec(Vec<HostLowLevelProvisioningManagerSnapshotLayoutSpec>),
+    ArrayOfHostLowLevelProvisioningManagerSnapshotLayoutSpec(Vec<super::structs::HostLowLevelProvisioningManagerSnapshotLayoutSpec>),
     /// A boxed array of *HostLowLevelProvisioningManagerVmMigrationStatus*. To be used in *Any* placeholders.
-    ArrayOfHostLowLevelProvisioningManagerVmMigrationStatus(Vec<HostLowLevelProvisioningManagerVmMigrationStatus>),
+    ArrayOfHostLowLevelProvisioningManagerVmMigrationStatus(Vec<super::structs::HostLowLevelProvisioningManagerVmMigrationStatus>),
     /// A boxed array of *HostLowLevelProvisioningManagerVmRecoveryInfo*. To be used in *Any* placeholders.
-    ArrayOfHostLowLevelProvisioningManagerVmRecoveryInfo(Vec<HostLowLevelProvisioningManagerVmRecoveryInfo>),
+    ArrayOfHostLowLevelProvisioningManagerVmRecoveryInfo(Vec<super::structs::HostLowLevelProvisioningManagerVmRecoveryInfo>),
     /// A boxed array of *HostMaintenanceSpec*. To be used in *Any* placeholders.
-    ArrayOfHostMaintenanceSpec(Vec<HostMaintenanceSpec>),
+    ArrayOfHostMaintenanceSpec(Vec<super::structs::HostMaintenanceSpec>),
     /// A boxed array of *ServiceConsoleReservationInfo*. To be used in *Any* placeholders.
-    ArrayOfServiceConsoleReservationInfo(Vec<ServiceConsoleReservationInfo>),
+    ArrayOfServiceConsoleReservationInfo(Vec<super::structs::ServiceConsoleReservationInfo>),
     /// A boxed array of *VirtualMachineMemoryReservationInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineMemoryReservationInfo(Vec<VirtualMachineMemoryReservationInfo>),
+    ArrayOfVirtualMachineMemoryReservationInfo(Vec<super::structs::VirtualMachineMemoryReservationInfo>),
     /// A boxed array of *VirtualMachineMemoryReservationSpec*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineMemoryReservationSpec(Vec<VirtualMachineMemoryReservationSpec>),
+    ArrayOfVirtualMachineMemoryReservationSpec(Vec<super::structs::VirtualMachineMemoryReservationSpec>),
     /// A boxed array of *HostMemorySpec*. To be used in *Any* placeholders.
-    ArrayOfHostMemorySpec(Vec<HostMemorySpec>),
+    ArrayOfHostMemorySpec(Vec<super::structs::HostMemorySpec>),
     /// A boxed array of *HostMemoryTierInfo*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 7.0.3.0
-    ArrayOfHostMemoryTierInfo(Vec<HostMemoryTierInfo>),
+    ArrayOfHostMemoryTierInfo(Vec<super::structs::HostMemoryTierInfo>),
     /// A boxed array of *HostMountInfo*. To be used in *Any* placeholders.
-    ArrayOfHostMountInfo(Vec<HostMountInfo>),
+    ArrayOfHostMountInfo(Vec<super::structs::HostMountInfo>),
     /// A boxed array of *HostMultipathInfo*. To be used in *Any* placeholders.
-    ArrayOfHostMultipathInfo(Vec<HostMultipathInfo>),
+    ArrayOfHostMultipathInfo(Vec<super::structs::HostMultipathInfo>),
     /// A boxed array of *HostMultipathInfoFixedLogicalUnitPolicy*. To be used in *Any* placeholders.
-    ArrayOfHostMultipathInfoFixedLogicalUnitPolicy(Vec<HostMultipathInfoFixedLogicalUnitPolicy>),
+    ArrayOfHostMultipathInfoFixedLogicalUnitPolicy(Vec<super::structs::HostMultipathInfoFixedLogicalUnitPolicy>),
     /// A boxed array of *HostMultipathInfoHppLogicalUnitPolicy*. To be used in *Any* placeholders.
-    ArrayOfHostMultipathInfoHppLogicalUnitPolicy(Vec<HostMultipathInfoHppLogicalUnitPolicy>),
+    ArrayOfHostMultipathInfoHppLogicalUnitPolicy(Vec<super::structs::HostMultipathInfoHppLogicalUnitPolicy>),
     /// A boxed array of *HostMultipathInfoLogicalUnit*. To be used in *Any* placeholders.
-    ArrayOfHostMultipathInfoLogicalUnit(Vec<HostMultipathInfoLogicalUnit>),
+    ArrayOfHostMultipathInfoLogicalUnit(Vec<super::structs::HostMultipathInfoLogicalUnit>),
     /// A boxed array of *HostMultipathInfoLogicalUnitPolicy*. To be used in *Any* placeholders.
     ArrayOfHostMultipathInfoLogicalUnitPolicy(Vec<Box<dyn super::traits::HostMultipathInfoLogicalUnitPolicyTrait>>),
     /// A boxed array of *HostMultipathInfoLogicalUnitStorageArrayTypePolicy*. To be used in *Any* placeholders.
-    ArrayOfHostMultipathInfoLogicalUnitStorageArrayTypePolicy(Vec<HostMultipathInfoLogicalUnitStorageArrayTypePolicy>),
+    ArrayOfHostMultipathInfoLogicalUnitStorageArrayTypePolicy(Vec<super::structs::HostMultipathInfoLogicalUnitStorageArrayTypePolicy>),
     /// A boxed array of *HostMultipathInfoPath*. To be used in *Any* placeholders.
-    ArrayOfHostMultipathInfoPath(Vec<HostMultipathInfoPath>),
+    ArrayOfHostMultipathInfoPath(Vec<super::structs::HostMultipathInfoPath>),
     /// A boxed array of *HostMultipathStateInfo*. To be used in *Any* placeholders.
-    ArrayOfHostMultipathStateInfo(Vec<HostMultipathStateInfo>),
+    ArrayOfHostMultipathStateInfo(Vec<super::structs::HostMultipathStateInfo>),
     /// A boxed array of *HostMultipathStateInfoPath*. To be used in *Any* placeholders.
-    ArrayOfHostMultipathStateInfoPath(Vec<HostMultipathStateInfoPath>),
+    ArrayOfHostMultipathStateInfoPath(Vec<super::structs::HostMultipathStateInfoPath>),
     /// A boxed array of *NasDatastoreInfo*. To be used in *Any* placeholders.
-    ArrayOfNasDatastoreInfo(Vec<NasDatastoreInfo>),
+    ArrayOfNasDatastoreInfo(Vec<super::structs::NasDatastoreInfo>),
     /// A boxed array of *HostNasVolume*. To be used in *Any* placeholders.
-    ArrayOfHostNasVolume(Vec<HostNasVolume>),
+    ArrayOfHostNasVolume(Vec<super::structs::HostNasVolume>),
     /// A boxed array of *HostNasVolumeConfig*. To be used in *Any* placeholders.
-    ArrayOfHostNasVolumeConfig(Vec<HostNasVolumeConfig>),
+    ArrayOfHostNasVolumeConfig(Vec<super::structs::HostNasVolumeConfig>),
     /// A boxed array of *HostNasVolumeSpec*. To be used in *Any* placeholders.
-    ArrayOfHostNasVolumeSpec(Vec<HostNasVolumeSpec>),
+    ArrayOfHostNasVolumeSpec(Vec<super::structs::HostNasVolumeSpec>),
     /// A boxed array of *HostNasVolumeUserInfo*. To be used in *Any* placeholders.
-    ArrayOfHostNasVolumeUserInfo(Vec<HostNasVolumeUserInfo>),
+    ArrayOfHostNasVolumeUserInfo(Vec<super::structs::HostNasVolumeUserInfo>),
     /// A boxed array of *HostNatService*. To be used in *Any* placeholders.
-    ArrayOfHostNatService(Vec<HostNatService>),
+    ArrayOfHostNatService(Vec<super::structs::HostNatService>),
     /// A boxed array of *HostNatServiceConfig*. To be used in *Any* placeholders.
-    ArrayOfHostNatServiceConfig(Vec<HostNatServiceConfig>),
+    ArrayOfHostNatServiceConfig(Vec<super::structs::HostNatServiceConfig>),
     /// A boxed array of *HostNatServiceNameServiceSpec*. To be used in *Any* placeholders.
-    ArrayOfHostNatServiceNameServiceSpec(Vec<HostNatServiceNameServiceSpec>),
+    ArrayOfHostNatServiceNameServiceSpec(Vec<super::structs::HostNatServiceNameServiceSpec>),
     /// A boxed array of *HostNatServicePortForwardSpec*. To be used in *Any* placeholders.
-    ArrayOfHostNatServicePortForwardSpec(Vec<HostNatServicePortForwardSpec>),
+    ArrayOfHostNatServicePortForwardSpec(Vec<super::structs::HostNatServicePortForwardSpec>),
     /// A boxed array of *HostNatServiceSpec*. To be used in *Any* placeholders.
-    ArrayOfHostNatServiceSpec(Vec<HostNatServiceSpec>),
+    ArrayOfHostNatServiceSpec(Vec<super::structs::HostNatServiceSpec>),
     /// A boxed array of *HostNetCapabilities*. To be used in *Any* placeholders.
-    ArrayOfHostNetCapabilities(Vec<HostNetCapabilities>),
+    ArrayOfHostNetCapabilities(Vec<super::structs::HostNetCapabilities>),
     /// A boxed array of *HostNetOffloadCapabilities*. To be used in *Any* placeholders.
-    ArrayOfHostNetOffloadCapabilities(Vec<HostNetOffloadCapabilities>),
+    ArrayOfHostNetOffloadCapabilities(Vec<super::structs::HostNetOffloadCapabilities>),
     /// A boxed array of *HostNetStackInstance*. To be used in *Any* placeholders.
-    ArrayOfHostNetStackInstance(Vec<HostNetStackInstance>),
+    ArrayOfHostNetStackInstance(Vec<super::structs::HostNetStackInstance>),
     /// A boxed array of *HostNetworkConfig*. To be used in *Any* placeholders.
-    ArrayOfHostNetworkConfig(Vec<HostNetworkConfig>),
+    ArrayOfHostNetworkConfig(Vec<super::structs::HostNetworkConfig>),
     /// A boxed array of *HostNetworkConfigNetStackSpec*. To be used in *Any* placeholders.
-    ArrayOfHostNetworkConfigNetStackSpec(Vec<HostNetworkConfigNetStackSpec>),
+    ArrayOfHostNetworkConfigNetStackSpec(Vec<super::structs::HostNetworkConfigNetStackSpec>),
     /// A boxed array of *HostNetworkConfigResult*. To be used in *Any* placeholders.
-    ArrayOfHostNetworkConfigResult(Vec<HostNetworkConfigResult>),
+    ArrayOfHostNetworkConfigResult(Vec<super::structs::HostNetworkConfigResult>),
     /// A boxed array of *HostNetworkInfo*. To be used in *Any* placeholders.
-    ArrayOfHostNetworkInfo(Vec<HostNetworkInfo>),
+    ArrayOfHostNetworkInfo(Vec<super::structs::HostNetworkInfo>),
     /// A boxed array of *HostNetworkPolicy*. To be used in *Any* placeholders.
-    ArrayOfHostNetworkPolicy(Vec<HostNetworkPolicy>),
+    ArrayOfHostNetworkPolicy(Vec<super::structs::HostNetworkPolicy>),
     /// A boxed array of *HostNicFailureCriteria*. To be used in *Any* placeholders.
-    ArrayOfHostNicFailureCriteria(Vec<HostNicFailureCriteria>),
+    ArrayOfHostNicFailureCriteria(Vec<super::structs::HostNicFailureCriteria>),
     /// A boxed array of *HostNicOrderPolicy*. To be used in *Any* placeholders.
-    ArrayOfHostNicOrderPolicy(Vec<HostNicOrderPolicy>),
+    ArrayOfHostNicOrderPolicy(Vec<super::structs::HostNicOrderPolicy>),
     /// A boxed array of *HostNicTeamingPolicy*. To be used in *Any* placeholders.
-    ArrayOfHostNicTeamingPolicy(Vec<HostNicTeamingPolicy>),
+    ArrayOfHostNicTeamingPolicy(Vec<super::structs::HostNicTeamingPolicy>),
     /// A boxed array of *HostNetworkSecurityPolicy*. To be used in *Any* placeholders.
-    ArrayOfHostNetworkSecurityPolicy(Vec<HostNetworkSecurityPolicy>),
+    ArrayOfHostNetworkSecurityPolicy(Vec<super::structs::HostNetworkSecurityPolicy>),
     /// A boxed array of *HostNetworkTrafficShapingPolicy*. To be used in *Any* placeholders.
-    ArrayOfHostNetworkTrafficShapingPolicy(Vec<HostNetworkTrafficShapingPolicy>),
+    ArrayOfHostNetworkTrafficShapingPolicy(Vec<super::structs::HostNetworkTrafficShapingPolicy>),
     /// A boxed array of *HostNfcConnectionInfo*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 7.0.3.0
-    ArrayOfHostNfcConnectionInfo(Vec<HostNfcConnectionInfo>),
+    ArrayOfHostNfcConnectionInfo(Vec<super::structs::HostNfcConnectionInfo>),
     /// A boxed array of *HostNtpConfig*. To be used in *Any* placeholders.
-    ArrayOfHostNtpConfig(Vec<HostNtpConfig>),
+    ArrayOfHostNtpConfig(Vec<super::structs::HostNtpConfig>),
     /// A boxed array of *HostNumaInfo*. To be used in *Any* placeholders.
-    ArrayOfHostNumaInfo(Vec<HostNumaInfo>),
+    ArrayOfHostNumaInfo(Vec<super::structs::HostNumaInfo>),
     /// A boxed array of *HostNumaNode*. To be used in *Any* placeholders.
-    ArrayOfHostNumaNode(Vec<HostNumaNode>),
+    ArrayOfHostNumaNode(Vec<super::structs::HostNumaNode>),
     /// A boxed array of *HostNumericSensorInfo*. To be used in *Any* placeholders.
-    ArrayOfHostNumericSensorInfo(Vec<HostNumericSensorInfo>),
+    ArrayOfHostNumericSensorInfo(Vec<super::structs::HostNumericSensorInfo>),
     /// A boxed array of *NvdimmDimmInfo*. To be used in *Any* placeholders.
-    ArrayOfNvdimmDimmInfo(Vec<NvdimmDimmInfo>),
+    ArrayOfNvdimmDimmInfo(Vec<super::structs::NvdimmDimmInfo>),
     /// A boxed array of *NvdimmGuid*. To be used in *Any* placeholders.
-    ArrayOfNvdimmGuid(Vec<NvdimmGuid>),
+    ArrayOfNvdimmGuid(Vec<super::structs::NvdimmGuid>),
     /// A boxed array of *NvdimmHealthInfo*. To be used in *Any* placeholders.
-    ArrayOfNvdimmHealthInfo(Vec<NvdimmHealthInfo>),
+    ArrayOfNvdimmHealthInfo(Vec<super::structs::NvdimmHealthInfo>),
     /// A boxed array of *NvdimmInterleaveSetInfo*. To be used in *Any* placeholders.
-    ArrayOfNvdimmInterleaveSetInfo(Vec<NvdimmInterleaveSetInfo>),
+    ArrayOfNvdimmInterleaveSetInfo(Vec<super::structs::NvdimmInterleaveSetInfo>),
     /// A boxed array of *NvdimmNamespaceCreateSpec*. To be used in *Any* placeholders.
-    ArrayOfNvdimmNamespaceCreateSpec(Vec<NvdimmNamespaceCreateSpec>),
+    ArrayOfNvdimmNamespaceCreateSpec(Vec<super::structs::NvdimmNamespaceCreateSpec>),
     /// A boxed array of *NvdimmNamespaceDeleteSpec*. To be used in *Any* placeholders.
-    ArrayOfNvdimmNamespaceDeleteSpec(Vec<NvdimmNamespaceDeleteSpec>),
+    ArrayOfNvdimmNamespaceDeleteSpec(Vec<super::structs::NvdimmNamespaceDeleteSpec>),
     /// A boxed array of *NvdimmNamespaceDetails*. To be used in *Any* placeholders.
-    ArrayOfNvdimmNamespaceDetails(Vec<NvdimmNamespaceDetails>),
+    ArrayOfNvdimmNamespaceDetails(Vec<super::structs::NvdimmNamespaceDetails>),
     /// A boxed array of *NvdimmNamespaceInfo*. To be used in *Any* placeholders.
-    ArrayOfNvdimmNamespaceInfo(Vec<NvdimmNamespaceInfo>),
+    ArrayOfNvdimmNamespaceInfo(Vec<super::structs::NvdimmNamespaceInfo>),
     /// A boxed array of *NvdimmSystemInfo*. To be used in *Any* placeholders.
-    ArrayOfNvdimmSystemInfo(Vec<NvdimmSystemInfo>),
+    ArrayOfNvdimmSystemInfo(Vec<super::structs::NvdimmSystemInfo>),
     /// A boxed array of *NvdimmPMemNamespaceCreateSpec*. To be used in *Any* placeholders.
-    ArrayOfNvdimmPMemNamespaceCreateSpec(Vec<NvdimmPMemNamespaceCreateSpec>),
+    ArrayOfNvdimmPMemNamespaceCreateSpec(Vec<super::structs::NvdimmPMemNamespaceCreateSpec>),
     /// A boxed array of *NvdimmRegionInfo*. To be used in *Any* placeholders.
-    ArrayOfNvdimmRegionInfo(Vec<NvdimmRegionInfo>),
+    ArrayOfNvdimmRegionInfo(Vec<super::structs::NvdimmRegionInfo>),
     /// A boxed array of *NvdimmSummary*. To be used in *Any* placeholders.
-    ArrayOfNvdimmSummary(Vec<NvdimmSummary>),
+    ArrayOfNvdimmSummary(Vec<super::structs::NvdimmSummary>),
     /// A boxed array of *HostNvmeConnectSpec*. To be used in *Any* placeholders.
-    ArrayOfHostNvmeConnectSpec(Vec<HostNvmeConnectSpec>),
+    ArrayOfHostNvmeConnectSpec(Vec<super::structs::HostNvmeConnectSpec>),
     /// A boxed array of *HostNvmeController*. To be used in *Any* placeholders.
-    ArrayOfHostNvmeController(Vec<HostNvmeController>),
+    ArrayOfHostNvmeController(Vec<super::structs::HostNvmeController>),
     /// A boxed array of *HostNvmeDisconnectSpec*. To be used in *Any* placeholders.
-    ArrayOfHostNvmeDisconnectSpec(Vec<HostNvmeDisconnectSpec>),
+    ArrayOfHostNvmeDisconnectSpec(Vec<super::structs::HostNvmeDisconnectSpec>),
     /// A boxed array of *HostNvmeDiscoverSpec*. To be used in *Any* placeholders.
-    ArrayOfHostNvmeDiscoverSpec(Vec<HostNvmeDiscoverSpec>),
+    ArrayOfHostNvmeDiscoverSpec(Vec<super::structs::HostNvmeDiscoverSpec>),
     /// A boxed array of *HostNvmeDiscoveryLog*. To be used in *Any* placeholders.
-    ArrayOfHostNvmeDiscoveryLog(Vec<HostNvmeDiscoveryLog>),
+    ArrayOfHostNvmeDiscoveryLog(Vec<super::structs::HostNvmeDiscoveryLog>),
     /// A boxed array of *HostNvmeDiscoveryLogEntry*. To be used in *Any* placeholders.
-    ArrayOfHostNvmeDiscoveryLogEntry(Vec<HostNvmeDiscoveryLogEntry>),
+    ArrayOfHostNvmeDiscoveryLogEntry(Vec<super::structs::HostNvmeDiscoveryLogEntry>),
     /// A boxed array of *HostNvmeNamespace*. To be used in *Any* placeholders.
-    ArrayOfHostNvmeNamespace(Vec<HostNvmeNamespace>),
+    ArrayOfHostNvmeNamespace(Vec<super::structs::HostNvmeNamespace>),
     /// A boxed array of *HostNvmeOpaqueTransportParameters*. To be used in *Any* placeholders.
-    ArrayOfHostNvmeOpaqueTransportParameters(Vec<HostNvmeOpaqueTransportParameters>),
+    ArrayOfHostNvmeOpaqueTransportParameters(Vec<super::structs::HostNvmeOpaqueTransportParameters>),
     /// A boxed array of *HostNvmeOverFibreChannelParameters*. To be used in *Any* placeholders.
-    ArrayOfHostNvmeOverFibreChannelParameters(Vec<HostNvmeOverFibreChannelParameters>),
+    ArrayOfHostNvmeOverFibreChannelParameters(Vec<super::structs::HostNvmeOverFibreChannelParameters>),
     /// A boxed array of *HostNvmeOverRdmaParameters*. To be used in *Any* placeholders.
-    ArrayOfHostNvmeOverRdmaParameters(Vec<HostNvmeOverRdmaParameters>),
+    ArrayOfHostNvmeOverRdmaParameters(Vec<super::structs::HostNvmeOverRdmaParameters>),
     /// A boxed array of *HostNvmeOverTcpParameters*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 7.0.3.0
-    ArrayOfHostNvmeOverTcpParameters(Vec<HostNvmeOverTcpParameters>),
+    ArrayOfHostNvmeOverTcpParameters(Vec<super::structs::HostNvmeOverTcpParameters>),
     /// A boxed array of *HostNvmeSpec*. To be used in *Any* placeholders.
     ArrayOfHostNvmeSpec(Vec<Box<dyn super::traits::HostNvmeSpecTrait>>),
     /// A boxed array of *HostNvmeTopology*. To be used in *Any* placeholders.
-    ArrayOfHostNvmeTopology(Vec<HostNvmeTopology>),
+    ArrayOfHostNvmeTopology(Vec<super::structs::HostNvmeTopology>),
     /// A boxed array of *HostNvmeTopologyInterface*. To be used in *Any* placeholders.
-    ArrayOfHostNvmeTopologyInterface(Vec<HostNvmeTopologyInterface>),
+    ArrayOfHostNvmeTopologyInterface(Vec<super::structs::HostNvmeTopologyInterface>),
     /// A boxed array of *HostNvmeTransportParameters*. To be used in *Any* placeholders.
     ArrayOfHostNvmeTransportParameters(Vec<Box<dyn super::traits::HostNvmeTransportParametersTrait>>),
     /// A boxed array of *HostOpaqueNetworkInfo*. To be used in *Any* placeholders.
-    ArrayOfHostOpaqueNetworkInfo(Vec<HostOpaqueNetworkInfo>),
+    ArrayOfHostOpaqueNetworkInfo(Vec<super::structs::HostOpaqueNetworkInfo>),
     /// A boxed array of *HostOpaqueSwitch*. To be used in *Any* placeholders.
-    ArrayOfHostOpaqueSwitch(Vec<HostOpaqueSwitch>),
+    ArrayOfHostOpaqueSwitch(Vec<super::structs::HostOpaqueSwitch>),
     /// A boxed array of *HostOpaqueSwitchPhysicalNicZone*. To be used in *Any* placeholders.
-    ArrayOfHostOpaqueSwitchPhysicalNicZone(Vec<HostOpaqueSwitchPhysicalNicZone>),
+    ArrayOfHostOpaqueSwitchPhysicalNicZone(Vec<super::structs::HostOpaqueSwitchPhysicalNicZone>),
     /// A boxed array of *PMemDatastoreInfo*. To be used in *Any* placeholders.
-    ArrayOfPMemDatastoreInfo(Vec<PMemDatastoreInfo>),
+    ArrayOfPMemDatastoreInfo(Vec<super::structs::PMemDatastoreInfo>),
     /// A boxed array of *HostPMemVolume*. To be used in *Any* placeholders.
-    ArrayOfHostPMemVolume(Vec<HostPMemVolume>),
+    ArrayOfHostPMemVolume(Vec<super::structs::HostPMemVolume>),
     /// A boxed array of *HostParallelScsiHba*. To be used in *Any* placeholders.
-    ArrayOfHostParallelScsiHba(Vec<HostParallelScsiHba>),
+    ArrayOfHostParallelScsiHba(Vec<super::structs::HostParallelScsiHba>),
     /// A boxed array of *HostParallelScsiTargetTransport*. To be used in *Any* placeholders.
-    ArrayOfHostParallelScsiTargetTransport(Vec<HostParallelScsiTargetTransport>),
+    ArrayOfHostParallelScsiTargetTransport(Vec<super::structs::HostParallelScsiTargetTransport>),
     /// A boxed array of *HostPatchManagerLocator*. To be used in *Any* placeholders.
-    ArrayOfHostPatchManagerLocator(Vec<HostPatchManagerLocator>),
+    ArrayOfHostPatchManagerLocator(Vec<super::structs::HostPatchManagerLocator>),
     /// A boxed array of *HostPatchManagerPatchManagerOperationSpec*. To be used in *Any* placeholders.
-    ArrayOfHostPatchManagerPatchManagerOperationSpec(Vec<HostPatchManagerPatchManagerOperationSpec>),
+    ArrayOfHostPatchManagerPatchManagerOperationSpec(Vec<super::structs::HostPatchManagerPatchManagerOperationSpec>),
     /// A boxed array of *HostPatchManagerResult*. To be used in *Any* placeholders.
-    ArrayOfHostPatchManagerResult(Vec<HostPatchManagerResult>),
+    ArrayOfHostPatchManagerResult(Vec<super::structs::HostPatchManagerResult>),
     /// A boxed array of *HostPatchManagerStatus*. To be used in *Any* placeholders.
-    ArrayOfHostPatchManagerStatus(Vec<HostPatchManagerStatus>),
+    ArrayOfHostPatchManagerStatus(Vec<super::structs::HostPatchManagerStatus>),
     /// A boxed array of *HostPatchManagerStatusPrerequisitePatch*. To be used in *Any* placeholders.
-    ArrayOfHostPatchManagerStatusPrerequisitePatch(Vec<HostPatchManagerStatusPrerequisitePatch>),
+    ArrayOfHostPatchManagerStatusPrerequisitePatch(Vec<super::structs::HostPatchManagerStatusPrerequisitePatch>),
     /// A boxed array of *HostPathSelectionPolicyOption*. To be used in *Any* placeholders.
-    ArrayOfHostPathSelectionPolicyOption(Vec<HostPathSelectionPolicyOption>),
+    ArrayOfHostPathSelectionPolicyOption(Vec<super::structs::HostPathSelectionPolicyOption>),
     /// A boxed array of *HostPciDevice*. To be used in *Any* placeholders.
-    ArrayOfHostPciDevice(Vec<HostPciDevice>),
+    ArrayOfHostPciDevice(Vec<super::structs::HostPciDevice>),
     /// A boxed array of *HostPciPassthruConfig*. To be used in *Any* placeholders.
     ArrayOfHostPciPassthruConfig(Vec<Box<dyn super::traits::HostPciPassthruConfigTrait>>),
     /// A boxed array of *HostPciPassthruInfo*. To be used in *Any* placeholders.
     ArrayOfHostPciPassthruInfo(Vec<Box<dyn super::traits::HostPciPassthruInfoTrait>>),
     /// A boxed array of *HostPcieHba*. To be used in *Any* placeholders.
-    ArrayOfHostPcieHba(Vec<HostPcieHba>),
+    ArrayOfHostPcieHba(Vec<super::structs::HostPcieHba>),
     /// A boxed array of *HostPcieTargetTransport*. To be used in *Any* placeholders.
-    ArrayOfHostPcieTargetTransport(Vec<HostPcieTargetTransport>),
+    ArrayOfHostPcieTargetTransport(Vec<super::structs::HostPcieTargetTransport>),
     /// A boxed array of *HostPersistentMemoryInfo*. To be used in *Any* placeholders.
-    ArrayOfHostPersistentMemoryInfo(Vec<HostPersistentMemoryInfo>),
+    ArrayOfHostPersistentMemoryInfo(Vec<super::structs::HostPersistentMemoryInfo>),
     /// A boxed array of *PhysicalNic*. To be used in *Any* placeholders.
-    ArrayOfPhysicalNic(Vec<PhysicalNic>),
+    ArrayOfPhysicalNic(Vec<super::structs::PhysicalNic>),
     /// A boxed array of *PhysicalNicCdpDeviceCapability*. To be used in *Any* placeholders.
-    ArrayOfPhysicalNicCdpDeviceCapability(Vec<PhysicalNicCdpDeviceCapability>),
+    ArrayOfPhysicalNicCdpDeviceCapability(Vec<super::structs::PhysicalNicCdpDeviceCapability>),
     /// A boxed array of *PhysicalNicCdpInfo*. To be used in *Any* placeholders.
-    ArrayOfPhysicalNicCdpInfo(Vec<PhysicalNicCdpInfo>),
+    ArrayOfPhysicalNicCdpInfo(Vec<super::structs::PhysicalNicCdpInfo>),
     /// A boxed array of *PhysicalNicConfig*. To be used in *Any* placeholders.
-    ArrayOfPhysicalNicConfig(Vec<PhysicalNicConfig>),
+    ArrayOfPhysicalNicConfig(Vec<super::structs::PhysicalNicConfig>),
     /// A boxed array of *PhysicalNicLinkInfo*. To be used in *Any* placeholders.
-    ArrayOfPhysicalNicLinkInfo(Vec<PhysicalNicLinkInfo>),
+    ArrayOfPhysicalNicLinkInfo(Vec<super::structs::PhysicalNicLinkInfo>),
     /// A boxed array of *LinkLayerDiscoveryProtocolInfo*. To be used in *Any* placeholders.
-    ArrayOfLinkLayerDiscoveryProtocolInfo(Vec<LinkLayerDiscoveryProtocolInfo>),
+    ArrayOfLinkLayerDiscoveryProtocolInfo(Vec<super::structs::LinkLayerDiscoveryProtocolInfo>),
     /// A boxed array of *PhysicalNicHintInfo*. To be used in *Any* placeholders.
-    ArrayOfPhysicalNicHintInfo(Vec<PhysicalNicHintInfo>),
+    ArrayOfPhysicalNicHintInfo(Vec<super::structs::PhysicalNicHintInfo>),
     /// A boxed array of *PhysicalNicHint*. To be used in *Any* placeholders.
     ArrayOfPhysicalNicHint(Vec<Box<dyn super::traits::PhysicalNicHintTrait>>),
     /// A boxed array of *PhysicalNicIpHint*. To be used in *Any* placeholders.
-    ArrayOfPhysicalNicIpHint(Vec<PhysicalNicIpHint>),
+    ArrayOfPhysicalNicIpHint(Vec<super::structs::PhysicalNicIpHint>),
     /// A boxed array of *PhysicalNicNameHint*. To be used in *Any* placeholders.
-    ArrayOfPhysicalNicNameHint(Vec<PhysicalNicNameHint>),
+    ArrayOfPhysicalNicNameHint(Vec<super::structs::PhysicalNicNameHint>),
     /// A boxed array of *PhysicalNicSpec*. To be used in *Any* placeholders.
-    ArrayOfPhysicalNicSpec(Vec<PhysicalNicSpec>),
+    ArrayOfPhysicalNicSpec(Vec<super::structs::PhysicalNicSpec>),
     /// A boxed array of *HostPlugStoreTopology*. To be used in *Any* placeholders.
-    ArrayOfHostPlugStoreTopology(Vec<HostPlugStoreTopology>),
+    ArrayOfHostPlugStoreTopology(Vec<super::structs::HostPlugStoreTopology>),
     /// A boxed array of *HostPlugStoreTopologyAdapter*. To be used in *Any* placeholders.
-    ArrayOfHostPlugStoreTopologyAdapter(Vec<HostPlugStoreTopologyAdapter>),
+    ArrayOfHostPlugStoreTopologyAdapter(Vec<super::structs::HostPlugStoreTopologyAdapter>),
     /// A boxed array of *HostPlugStoreTopologyDevice*. To be used in *Any* placeholders.
-    ArrayOfHostPlugStoreTopologyDevice(Vec<HostPlugStoreTopologyDevice>),
+    ArrayOfHostPlugStoreTopologyDevice(Vec<super::structs::HostPlugStoreTopologyDevice>),
     /// A boxed array of *HostPlugStoreTopologyPath*. To be used in *Any* placeholders.
-    ArrayOfHostPlugStoreTopologyPath(Vec<HostPlugStoreTopologyPath>),
+    ArrayOfHostPlugStoreTopologyPath(Vec<super::structs::HostPlugStoreTopologyPath>),
     /// A boxed array of *HostPlugStoreTopologyPlugin*. To be used in *Any* placeholders.
-    ArrayOfHostPlugStoreTopologyPlugin(Vec<HostPlugStoreTopologyPlugin>),
+    ArrayOfHostPlugStoreTopologyPlugin(Vec<super::structs::HostPlugStoreTopologyPlugin>),
     /// A boxed array of *HostPlugStoreTopologyTarget*. To be used in *Any* placeholders.
-    ArrayOfHostPlugStoreTopologyTarget(Vec<HostPlugStoreTopologyTarget>),
+    ArrayOfHostPlugStoreTopologyTarget(Vec<super::structs::HostPlugStoreTopologyTarget>),
     /// A boxed array of *HostPortGroup*. To be used in *Any* placeholders.
-    ArrayOfHostPortGroup(Vec<HostPortGroup>),
+    ArrayOfHostPortGroup(Vec<super::structs::HostPortGroup>),
     /// A boxed array of *HostPortGroupConfig*. To be used in *Any* placeholders.
-    ArrayOfHostPortGroupConfig(Vec<HostPortGroupConfig>),
+    ArrayOfHostPortGroupConfig(Vec<super::structs::HostPortGroupConfig>),
     /// A boxed array of *HostPortGroupPort*. To be used in *Any* placeholders.
-    ArrayOfHostPortGroupPort(Vec<HostPortGroupPort>),
+    ArrayOfHostPortGroupPort(Vec<super::structs::HostPortGroupPort>),
     /// A boxed array of *HostPortGroupSpec*. To be used in *Any* placeholders.
-    ArrayOfHostPortGroupSpec(Vec<HostPortGroupSpec>),
+    ArrayOfHostPortGroupSpec(Vec<super::structs::HostPortGroupSpec>),
     /// A boxed array of *PowerSystemCapability*. To be used in *Any* placeholders.
-    ArrayOfPowerSystemCapability(Vec<PowerSystemCapability>),
+    ArrayOfPowerSystemCapability(Vec<super::structs::PowerSystemCapability>),
     /// A boxed array of *PowerSystemInfo*. To be used in *Any* placeholders.
-    ArrayOfPowerSystemInfo(Vec<PowerSystemInfo>),
+    ArrayOfPowerSystemInfo(Vec<super::structs::PowerSystemInfo>),
     /// A boxed array of *HostPowerPolicy*. To be used in *Any* placeholders.
-    ArrayOfHostPowerPolicy(Vec<HostPowerPolicy>),
+    ArrayOfHostPowerPolicy(Vec<super::structs::HostPowerPolicy>),
     /// A boxed array of *HostProtocolEndpoint*. To be used in *Any* placeholders.
-    ArrayOfHostProtocolEndpoint(Vec<HostProtocolEndpoint>),
+    ArrayOfHostProtocolEndpoint(Vec<super::structs::HostProtocolEndpoint>),
     /// A boxed array of *HostPtpConfig*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 7.0.3.0
-    ArrayOfHostPtpConfig(Vec<HostPtpConfig>),
+    ArrayOfHostPtpConfig(Vec<super::structs::HostPtpConfig>),
     /// A boxed array of *HostPtpConfigPtpPort*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 7.0.3.0
-    ArrayOfHostPtpConfigPtpPort(Vec<HostPtpConfigPtpPort>),
+    ArrayOfHostPtpConfigPtpPort(Vec<super::structs::HostPtpConfigPtpPort>),
     /// A boxed array of *HostQualifiedName*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 7.0.3.0
-    ArrayOfHostQualifiedName(Vec<HostQualifiedName>),
+    ArrayOfHostQualifiedName(Vec<super::structs::HostQualifiedName>),
     /// A boxed array of *HostRdmaDevice*. To be used in *Any* placeholders.
-    ArrayOfHostRdmaDevice(Vec<HostRdmaDevice>),
+    ArrayOfHostRdmaDevice(Vec<super::structs::HostRdmaDevice>),
     /// A boxed array of *HostRdmaDeviceBacking*. To be used in *Any* placeholders.
     ArrayOfHostRdmaDeviceBacking(Vec<Box<dyn super::traits::HostRdmaDeviceBackingTrait>>),
     /// A boxed array of *HostRdmaDeviceCapability*. To be used in *Any* placeholders.
-    ArrayOfHostRdmaDeviceCapability(Vec<HostRdmaDeviceCapability>),
+    ArrayOfHostRdmaDeviceCapability(Vec<super::structs::HostRdmaDeviceCapability>),
     /// A boxed array of *HostRdmaDeviceConnectionInfo*. To be used in *Any* placeholders.
-    ArrayOfHostRdmaDeviceConnectionInfo(Vec<HostRdmaDeviceConnectionInfo>),
+    ArrayOfHostRdmaDeviceConnectionInfo(Vec<super::structs::HostRdmaDeviceConnectionInfo>),
     /// A boxed array of *HostRdmaDevicePnicBacking*. To be used in *Any* placeholders.
-    ArrayOfHostRdmaDevicePnicBacking(Vec<HostRdmaDevicePnicBacking>),
+    ArrayOfHostRdmaDevicePnicBacking(Vec<super::structs::HostRdmaDevicePnicBacking>),
     /// A boxed array of *HostRdmaHba*. To be used in *Any* placeholders.
-    ArrayOfHostRdmaHba(Vec<HostRdmaHba>),
+    ArrayOfHostRdmaHba(Vec<super::structs::HostRdmaHba>),
     /// A boxed array of *HostRdmaTargetTransport*. To be used in *Any* placeholders.
-    ArrayOfHostRdmaTargetTransport(Vec<HostRdmaTargetTransport>),
+    ArrayOfHostRdmaTargetTransport(Vec<super::structs::HostRdmaTargetTransport>),
     /// A boxed array of *HostReliableMemoryInfo*. To be used in *Any* placeholders.
-    ArrayOfHostReliableMemoryInfo(Vec<HostReliableMemoryInfo>),
+    ArrayOfHostReliableMemoryInfo(Vec<super::structs::HostReliableMemoryInfo>),
     /// A boxed array of *HostResignatureRescanResult*. To be used in *Any* placeholders.
-    ArrayOfHostResignatureRescanResult(Vec<HostResignatureRescanResult>),
+    ArrayOfHostResignatureRescanResult(Vec<super::structs::HostResignatureRescanResult>),
     /// A boxed array of *HostFirewallRuleset*. To be used in *Any* placeholders.
-    ArrayOfHostFirewallRuleset(Vec<HostFirewallRuleset>),
+    ArrayOfHostFirewallRuleset(Vec<super::structs::HostFirewallRuleset>),
     /// A boxed array of *HostFirewallRulesetIpList*. To be used in *Any* placeholders.
-    ArrayOfHostFirewallRulesetIpList(Vec<HostFirewallRulesetIpList>),
+    ArrayOfHostFirewallRulesetIpList(Vec<super::structs::HostFirewallRulesetIpList>),
     /// A boxed array of *HostFirewallRulesetIpNetwork*. To be used in *Any* placeholders.
-    ArrayOfHostFirewallRulesetIpNetwork(Vec<HostFirewallRulesetIpNetwork>),
+    ArrayOfHostFirewallRulesetIpNetwork(Vec<super::structs::HostFirewallRulesetIpNetwork>),
     /// A boxed array of *HostFirewallRule*. To be used in *Any* placeholders.
-    ArrayOfHostFirewallRule(Vec<HostFirewallRule>),
+    ArrayOfHostFirewallRule(Vec<super::structs::HostFirewallRule>),
     /// A boxed array of *HostFirewallRulesetRulesetSpec*. To be used in *Any* placeholders.
-    ArrayOfHostFirewallRulesetRulesetSpec(Vec<HostFirewallRulesetRulesetSpec>),
+    ArrayOfHostFirewallRulesetRulesetSpec(Vec<super::structs::HostFirewallRulesetRulesetSpec>),
     /// A boxed array of *HostRuntimeInfo*. To be used in *Any* placeholders.
-    ArrayOfHostRuntimeInfo(Vec<HostRuntimeInfo>),
+    ArrayOfHostRuntimeInfo(Vec<super::structs::HostRuntimeInfo>),
     /// A boxed array of *HostRuntimeInfoNetStackInstanceRuntimeInfo*. To be used in *Any* placeholders.
-    ArrayOfHostRuntimeInfoNetStackInstanceRuntimeInfo(Vec<HostRuntimeInfoNetStackInstanceRuntimeInfo>),
+    ArrayOfHostRuntimeInfoNetStackInstanceRuntimeInfo(Vec<super::structs::HostRuntimeInfoNetStackInstanceRuntimeInfo>),
     /// A boxed array of *HostNetworkResourceRuntime*. To be used in *Any* placeholders.
-    ArrayOfHostNetworkResourceRuntime(Vec<HostNetworkResourceRuntime>),
+    ArrayOfHostNetworkResourceRuntime(Vec<super::structs::HostNetworkResourceRuntime>),
     /// A boxed array of *HostRuntimeInfoNetworkRuntimeInfo*. To be used in *Any* placeholders.
-    ArrayOfHostRuntimeInfoNetworkRuntimeInfo(Vec<HostRuntimeInfoNetworkRuntimeInfo>),
+    ArrayOfHostRuntimeInfoNetworkRuntimeInfo(Vec<super::structs::HostRuntimeInfoNetworkRuntimeInfo>),
     /// A boxed array of *HostPlacedVirtualNicIdentifier*. To be used in *Any* placeholders.
-    ArrayOfHostPlacedVirtualNicIdentifier(Vec<HostPlacedVirtualNicIdentifier>),
+    ArrayOfHostPlacedVirtualNicIdentifier(Vec<super::structs::HostPlacedVirtualNicIdentifier>),
     /// A boxed array of *HostPnicNetworkResourceInfo*. To be used in *Any* placeholders.
-    ArrayOfHostPnicNetworkResourceInfo(Vec<HostPnicNetworkResourceInfo>),
+    ArrayOfHostPnicNetworkResourceInfo(Vec<super::structs::HostPnicNetworkResourceInfo>),
     /// A boxed array of *HostRuntimeInfoStateEncryptionInfo*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 7.0.3.0
-    ArrayOfHostRuntimeInfoStateEncryptionInfo(Vec<HostRuntimeInfoStateEncryptionInfo>),
+    ArrayOfHostRuntimeInfoStateEncryptionInfo(Vec<super::structs::HostRuntimeInfoStateEncryptionInfo>),
     /// A boxed array of *HostScsiDisk*. To be used in *Any* placeholders.
-    ArrayOfHostScsiDisk(Vec<HostScsiDisk>),
+    ArrayOfHostScsiDisk(Vec<super::structs::HostScsiDisk>),
     /// A boxed array of *HostScsiDiskPartition*. To be used in *Any* placeholders.
-    ArrayOfHostScsiDiskPartition(Vec<HostScsiDiskPartition>),
+    ArrayOfHostScsiDiskPartition(Vec<super::structs::HostScsiDiskPartition>),
     /// A boxed array of *ScsiLun*. To be used in *Any* placeholders.
     ArrayOfScsiLun(Vec<Box<dyn super::traits::ScsiLunTrait>>),
     /// A boxed array of *ScsiLunCapabilities*. To be used in *Any* placeholders.
-    ArrayOfScsiLunCapabilities(Vec<ScsiLunCapabilities>),
+    ArrayOfScsiLunCapabilities(Vec<super::structs::ScsiLunCapabilities>),
     /// A boxed array of *ScsiLunDescriptor*. To be used in *Any* placeholders.
-    ArrayOfScsiLunDescriptor(Vec<ScsiLunDescriptor>),
+    ArrayOfScsiLunDescriptor(Vec<super::structs::ScsiLunDescriptor>),
     /// A boxed array of *ScsiLunDurableName*. To be used in *Any* placeholders.
-    ArrayOfScsiLunDurableName(Vec<ScsiLunDurableName>),
+    ArrayOfScsiLunDurableName(Vec<super::structs::ScsiLunDurableName>),
     /// A boxed array of *HostScsiTopology*. To be used in *Any* placeholders.
-    ArrayOfHostScsiTopology(Vec<HostScsiTopology>),
+    ArrayOfHostScsiTopology(Vec<super::structs::HostScsiTopology>),
     /// A boxed array of *HostScsiTopologyInterface*. To be used in *Any* placeholders.
-    ArrayOfHostScsiTopologyInterface(Vec<HostScsiTopologyInterface>),
+    ArrayOfHostScsiTopologyInterface(Vec<super::structs::HostScsiTopologyInterface>),
     /// A boxed array of *HostScsiTopologyLun*. To be used in *Any* placeholders.
-    ArrayOfHostScsiTopologyLun(Vec<HostScsiTopologyLun>),
+    ArrayOfHostScsiTopologyLun(Vec<super::structs::HostScsiTopologyLun>),
     /// A boxed array of *HostScsiTopologyTarget*. To be used in *Any* placeholders.
-    ArrayOfHostScsiTopologyTarget(Vec<HostScsiTopologyTarget>),
+    ArrayOfHostScsiTopologyTarget(Vec<super::structs::HostScsiTopologyTarget>),
     /// A boxed array of *HostSecuritySpec*. To be used in *Any* placeholders.
-    ArrayOfHostSecuritySpec(Vec<HostSecuritySpec>),
+    ArrayOfHostSecuritySpec(Vec<super::structs::HostSecuritySpec>),
     /// A boxed array of *HostSerialAttachedHba*. To be used in *Any* placeholders.
-    ArrayOfHostSerialAttachedHba(Vec<HostSerialAttachedHba>),
+    ArrayOfHostSerialAttachedHba(Vec<super::structs::HostSerialAttachedHba>),
     /// A boxed array of *HostSerialAttachedTargetTransport*. To be used in *Any* placeholders.
-    ArrayOfHostSerialAttachedTargetTransport(Vec<HostSerialAttachedTargetTransport>),
+    ArrayOfHostSerialAttachedTargetTransport(Vec<super::structs::HostSerialAttachedTargetTransport>),
     /// A boxed array of *HostService*. To be used in *Any* placeholders.
-    ArrayOfHostService(Vec<HostService>),
+    ArrayOfHostService(Vec<super::structs::HostService>),
     /// A boxed array of *HostServiceSourcePackage*. To be used in *Any* placeholders.
-    ArrayOfHostServiceSourcePackage(Vec<HostServiceSourcePackage>),
+    ArrayOfHostServiceSourcePackage(Vec<super::structs::HostServiceSourcePackage>),
     /// A boxed array of *HostServiceConfig*. To be used in *Any* placeholders.
-    ArrayOfHostServiceConfig(Vec<HostServiceConfig>),
+    ArrayOfHostServiceConfig(Vec<super::structs::HostServiceConfig>),
     /// A boxed array of *HostServiceInfo*. To be used in *Any* placeholders.
-    ArrayOfHostServiceInfo(Vec<HostServiceInfo>),
+    ArrayOfHostServiceInfo(Vec<super::structs::HostServiceInfo>),
     /// A boxed array of *HostSevInfo*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 7.0.1.0
-    ArrayOfHostSevInfo(Vec<HostSevInfo>),
+    ArrayOfHostSevInfo(Vec<super::structs::HostSevInfo>),
     /// A boxed array of *HostSgxInfo*. To be used in *Any* placeholders.
-    ArrayOfHostSgxInfo(Vec<HostSgxInfo>),
+    ArrayOfHostSgxInfo(Vec<super::structs::HostSgxInfo>),
     /// A boxed array of *HostSgxRegistrationInfo*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 8.0.0.1
-    ArrayOfHostSgxRegistrationInfo(Vec<HostSgxRegistrationInfo>),
+    ArrayOfHostSgxRegistrationInfo(Vec<super::structs::HostSgxRegistrationInfo>),
     /// A boxed array of *HostSharedGpuCapabilities*. To be used in *Any* placeholders.
-    ArrayOfHostSharedGpuCapabilities(Vec<HostSharedGpuCapabilities>),
+    ArrayOfHostSharedGpuCapabilities(Vec<super::structs::HostSharedGpuCapabilities>),
     /// A boxed array of *HostSnmpSystemAgentLimits*. To be used in *Any* placeholders.
-    ArrayOfHostSnmpSystemAgentLimits(Vec<HostSnmpSystemAgentLimits>),
+    ArrayOfHostSnmpSystemAgentLimits(Vec<super::structs::HostSnmpSystemAgentLimits>),
     /// A boxed array of *HostSnmpConfigSpec*. To be used in *Any* placeholders.
-    ArrayOfHostSnmpConfigSpec(Vec<HostSnmpConfigSpec>),
+    ArrayOfHostSnmpConfigSpec(Vec<super::structs::HostSnmpConfigSpec>),
     /// A boxed array of *HostSnmpDestination*. To be used in *Any* placeholders.
-    ArrayOfHostSnmpDestination(Vec<HostSnmpDestination>),
+    ArrayOfHostSnmpDestination(Vec<super::structs::HostSnmpDestination>),
     /// A boxed array of *SoftwarePackage*. To be used in *Any* placeholders.
-    ArrayOfSoftwarePackage(Vec<SoftwarePackage>),
+    ArrayOfSoftwarePackage(Vec<super::structs::SoftwarePackage>),
     /// A boxed array of *SoftwarePackageCapability*. To be used in *Any* placeholders.
-    ArrayOfSoftwarePackageCapability(Vec<SoftwarePackageCapability>),
+    ArrayOfSoftwarePackageCapability(Vec<super::structs::SoftwarePackageCapability>),
     /// A boxed array of *Relation*. To be used in *Any* placeholders.
-    ArrayOfRelation(Vec<Relation>),
+    ArrayOfRelation(Vec<super::structs::Relation>),
     /// A boxed array of *HostSriovConfig*. To be used in *Any* placeholders.
-    ArrayOfHostSriovConfig(Vec<HostSriovConfig>),
+    ArrayOfHostSriovConfig(Vec<super::structs::HostSriovConfig>),
     /// A boxed array of *HostSriovDevicePoolInfo*. To be used in *Any* placeholders.
     ArrayOfHostSriovDevicePoolInfo(Vec<Box<dyn super::traits::HostSriovDevicePoolInfoTrait>>),
     /// A boxed array of *HostSriovInfo*. To be used in *Any* placeholders.
-    ArrayOfHostSriovInfo(Vec<HostSriovInfo>),
+    ArrayOfHostSriovInfo(Vec<super::structs::HostSriovInfo>),
     /// A boxed array of *HostSriovNetworkDevicePoolInfo*. To be used in *Any* placeholders.
-    ArrayOfHostSriovNetworkDevicePoolInfo(Vec<HostSriovNetworkDevicePoolInfo>),
+    ArrayOfHostSriovNetworkDevicePoolInfo(Vec<super::structs::HostSriovNetworkDevicePoolInfo>),
     /// A boxed array of *HostSslThumbprintInfo*. To be used in *Any* placeholders.
-    ArrayOfHostSslThumbprintInfo(Vec<HostSslThumbprintInfo>),
+    ArrayOfHostSslThumbprintInfo(Vec<super::structs::HostSslThumbprintInfo>),
     /// A boxed array of *HostStorageArrayTypePolicyOption*. To be used in *Any* placeholders.
-    ArrayOfHostStorageArrayTypePolicyOption(Vec<HostStorageArrayTypePolicyOption>),
+    ArrayOfHostStorageArrayTypePolicyOption(Vec<super::structs::HostStorageArrayTypePolicyOption>),
     /// A boxed array of *HostStorageDeviceInfo*. To be used in *Any* placeholders.
-    ArrayOfHostStorageDeviceInfo(Vec<HostStorageDeviceInfo>),
+    ArrayOfHostStorageDeviceInfo(Vec<super::structs::HostStorageDeviceInfo>),
     /// A boxed array of *HostStorageSystemDiskLocatorLedResult*. To be used in *Any* placeholders.
-    ArrayOfHostStorageSystemDiskLocatorLedResult(Vec<HostStorageSystemDiskLocatorLedResult>),
+    ArrayOfHostStorageSystemDiskLocatorLedResult(Vec<super::structs::HostStorageSystemDiskLocatorLedResult>),
     /// A boxed array of *HostStorageSystemScsiLunResult*. To be used in *Any* placeholders.
-    ArrayOfHostStorageSystemScsiLunResult(Vec<HostStorageSystemScsiLunResult>),
+    ArrayOfHostStorageSystemScsiLunResult(Vec<super::structs::HostStorageSystemScsiLunResult>),
     /// A boxed array of *HostStorageSystemVmfsVolumeResult*. To be used in *Any* placeholders.
-    ArrayOfHostStorageSystemVmfsVolumeResult(Vec<HostStorageSystemVmfsVolumeResult>),
+    ArrayOfHostStorageSystemVmfsVolumeResult(Vec<super::structs::HostStorageSystemVmfsVolumeResult>),
     /// A boxed array of *HostListSummary*. To be used in *Any* placeholders.
-    ArrayOfHostListSummary(Vec<HostListSummary>),
+    ArrayOfHostListSummary(Vec<super::structs::HostListSummary>),
     /// A boxed array of *HostConfigSummary*. To be used in *Any* placeholders.
-    ArrayOfHostConfigSummary(Vec<HostConfigSummary>),
+    ArrayOfHostConfigSummary(Vec<super::structs::HostConfigSummary>),
     /// A boxed array of *HostListSummaryGatewaySummary*. To be used in *Any* placeholders.
-    ArrayOfHostListSummaryGatewaySummary(Vec<HostListSummaryGatewaySummary>),
+    ArrayOfHostListSummaryGatewaySummary(Vec<super::structs::HostListSummaryGatewaySummary>),
     /// A boxed array of *HostHardwareSummary*. To be used in *Any* placeholders.
-    ArrayOfHostHardwareSummary(Vec<HostHardwareSummary>),
+    ArrayOfHostHardwareSummary(Vec<super::structs::HostHardwareSummary>),
     /// A boxed array of *HostListSummaryQuickStats*. To be used in *Any* placeholders.
-    ArrayOfHostListSummaryQuickStats(Vec<HostListSummaryQuickStats>),
+    ArrayOfHostListSummaryQuickStats(Vec<super::structs::HostListSummaryQuickStats>),
     /// A boxed array of *SystemEventInfo*. To be used in *Any* placeholders.
-    ArrayOfSystemEventInfo(Vec<SystemEventInfo>),
+    ArrayOfSystemEventInfo(Vec<super::structs::SystemEventInfo>),
     /// A boxed array of *HostSystemHealthInfo*. To be used in *Any* placeholders.
-    ArrayOfHostSystemHealthInfo(Vec<HostSystemHealthInfo>),
+    ArrayOfHostSystemHealthInfo(Vec<super::structs::HostSystemHealthInfo>),
     /// A boxed array of *HostSystemIdentificationInfo*. To be used in *Any* placeholders.
-    ArrayOfHostSystemIdentificationInfo(Vec<HostSystemIdentificationInfo>),
+    ArrayOfHostSystemIdentificationInfo(Vec<super::structs::HostSystemIdentificationInfo>),
     /// A boxed array of *HostSystemInfo*. To be used in *Any* placeholders.
-    ArrayOfHostSystemInfo(Vec<HostSystemInfo>),
+    ArrayOfHostSystemInfo(Vec<super::structs::HostSystemInfo>),
     /// A boxed array of *HostSystemResourceInfo*. To be used in *Any* placeholders.
-    ArrayOfHostSystemResourceInfo(Vec<HostSystemResourceInfo>),
+    ArrayOfHostSystemResourceInfo(Vec<super::structs::HostSystemResourceInfo>),
     /// A boxed array of *HostSystemSwapConfiguration*. To be used in *Any* placeholders.
-    ArrayOfHostSystemSwapConfiguration(Vec<HostSystemSwapConfiguration>),
+    ArrayOfHostSystemSwapConfiguration(Vec<super::structs::HostSystemSwapConfiguration>),
     /// A boxed array of *HostSystemSwapConfigurationDatastoreOption*. To be used in *Any* placeholders.
-    ArrayOfHostSystemSwapConfigurationDatastoreOption(Vec<HostSystemSwapConfigurationDatastoreOption>),
+    ArrayOfHostSystemSwapConfigurationDatastoreOption(Vec<super::structs::HostSystemSwapConfigurationDatastoreOption>),
     /// A boxed array of *HostSystemSwapConfigurationDisabledOption*. To be used in *Any* placeholders.
-    ArrayOfHostSystemSwapConfigurationDisabledOption(Vec<HostSystemSwapConfigurationDisabledOption>),
+    ArrayOfHostSystemSwapConfigurationDisabledOption(Vec<super::structs::HostSystemSwapConfigurationDisabledOption>),
     /// A boxed array of *HostSystemSwapConfigurationHostCacheOption*. To be used in *Any* placeholders.
-    ArrayOfHostSystemSwapConfigurationHostCacheOption(Vec<HostSystemSwapConfigurationHostCacheOption>),
+    ArrayOfHostSystemSwapConfigurationHostCacheOption(Vec<super::structs::HostSystemSwapConfigurationHostCacheOption>),
     /// A boxed array of *HostSystemSwapConfigurationHostLocalSwapOption*. To be used in *Any* placeholders.
-    ArrayOfHostSystemSwapConfigurationHostLocalSwapOption(Vec<HostSystemSwapConfigurationHostLocalSwapOption>),
+    ArrayOfHostSystemSwapConfigurationHostLocalSwapOption(Vec<super::structs::HostSystemSwapConfigurationHostLocalSwapOption>),
     /// A boxed array of *HostSystemSwapConfigurationSystemSwapOption*. To be used in *Any* placeholders.
     ArrayOfHostSystemSwapConfigurationSystemSwapOption(Vec<Box<dyn super::traits::HostSystemSwapConfigurationSystemSwapOptionTrait>>),
     /// A boxed array of *HostTargetTransport*. To be used in *Any* placeholders.
@@ -4355,297 +4353,297 @@ pub enum ValueElements {
     /// A boxed array of *HostTcpHba*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 7.0.3.0
-    ArrayOfHostTcpHba(Vec<HostTcpHba>),
+    ArrayOfHostTcpHba(Vec<super::structs::HostTcpHba>),
     /// A boxed array of *HostTcpHbaCreateSpec*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 7.0.3.0
-    ArrayOfHostTcpHbaCreateSpec(Vec<HostTcpHbaCreateSpec>),
+    ArrayOfHostTcpHbaCreateSpec(Vec<super::structs::HostTcpHbaCreateSpec>),
     /// A boxed array of *HostTcpTargetTransport*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 7.0.3.0
-    ArrayOfHostTcpTargetTransport(Vec<HostTcpTargetTransport>),
+    ArrayOfHostTcpTargetTransport(Vec<super::structs::HostTcpTargetTransport>),
     /// A boxed array of *HostTpmAttestationInfo*. To be used in *Any* placeholders.
-    ArrayOfHostTpmAttestationInfo(Vec<HostTpmAttestationInfo>),
+    ArrayOfHostTpmAttestationInfo(Vec<super::structs::HostTpmAttestationInfo>),
     /// A boxed array of *HostTpmAttestationReport*. To be used in *Any* placeholders.
-    ArrayOfHostTpmAttestationReport(Vec<HostTpmAttestationReport>),
+    ArrayOfHostTpmAttestationReport(Vec<super::structs::HostTpmAttestationReport>),
     /// A boxed array of *HostTpmBootCompleteEventDetails*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 8.0.1.0
-    ArrayOfHostTpmBootCompleteEventDetails(Vec<HostTpmBootCompleteEventDetails>),
+    ArrayOfHostTpmBootCompleteEventDetails(Vec<super::structs::HostTpmBootCompleteEventDetails>),
     /// A boxed array of *HostTpmBootSecurityOptionEventDetails*. To be used in *Any* placeholders.
     ArrayOfHostTpmBootSecurityOptionEventDetails(Vec<Box<dyn super::traits::HostTpmBootSecurityOptionEventDetailsTrait>>),
     /// A boxed array of *HostTpmCommandEventDetails*. To be used in *Any* placeholders.
-    ArrayOfHostTpmCommandEventDetails(Vec<HostTpmCommandEventDetails>),
+    ArrayOfHostTpmCommandEventDetails(Vec<super::structs::HostTpmCommandEventDetails>),
     /// A boxed array of *HostTpmDigestInfo*. To be used in *Any* placeholders.
-    ArrayOfHostTpmDigestInfo(Vec<HostTpmDigestInfo>),
+    ArrayOfHostTpmDigestInfo(Vec<super::structs::HostTpmDigestInfo>),
     /// A boxed array of *HostTpmEventDetails*. To be used in *Any* placeholders.
     ArrayOfHostTpmEventDetails(Vec<Box<dyn super::traits::HostTpmEventDetailsTrait>>),
     /// A boxed array of *HostTpmEventLogEntry*. To be used in *Any* placeholders.
-    ArrayOfHostTpmEventLogEntry(Vec<HostTpmEventLogEntry>),
+    ArrayOfHostTpmEventLogEntry(Vec<super::structs::HostTpmEventLogEntry>),
     /// A boxed array of *HostTpmNvTagEventDetails*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 7.0.2.0
-    ArrayOfHostTpmNvTagEventDetails(Vec<HostTpmNvTagEventDetails>),
+    ArrayOfHostTpmNvTagEventDetails(Vec<super::structs::HostTpmNvTagEventDetails>),
     /// A boxed array of *HostTpmOptionEventDetails*. To be used in *Any* placeholders.
-    ArrayOfHostTpmOptionEventDetails(Vec<HostTpmOptionEventDetails>),
+    ArrayOfHostTpmOptionEventDetails(Vec<super::structs::HostTpmOptionEventDetails>),
     /// A boxed array of *HostTpmSignerEventDetails*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 8.0.0.1
-    ArrayOfHostTpmSignerEventDetails(Vec<HostTpmSignerEventDetails>),
+    ArrayOfHostTpmSignerEventDetails(Vec<super::structs::HostTpmSignerEventDetails>),
     /// A boxed array of *HostTpmSoftwareComponentEventDetails*. To be used in *Any* placeholders.
-    ArrayOfHostTpmSoftwareComponentEventDetails(Vec<HostTpmSoftwareComponentEventDetails>),
+    ArrayOfHostTpmSoftwareComponentEventDetails(Vec<super::structs::HostTpmSoftwareComponentEventDetails>),
     /// A boxed array of *HostTpmVersionEventDetails*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 8.0.0.1
-    ArrayOfHostTpmVersionEventDetails(Vec<HostTpmVersionEventDetails>),
+    ArrayOfHostTpmVersionEventDetails(Vec<super::structs::HostTpmVersionEventDetails>),
     /// A boxed array of *HostTrustAuthorityAttestationInfo*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 7.0.1.0
-    ArrayOfHostTrustAuthorityAttestationInfo(Vec<HostTrustAuthorityAttestationInfo>),
+    ArrayOfHostTrustAuthorityAttestationInfo(Vec<super::structs::HostTrustAuthorityAttestationInfo>),
     /// A boxed array of *HostUnresolvedVmfsExtent*. To be used in *Any* placeholders.
-    ArrayOfHostUnresolvedVmfsExtent(Vec<HostUnresolvedVmfsExtent>),
+    ArrayOfHostUnresolvedVmfsExtent(Vec<super::structs::HostUnresolvedVmfsExtent>),
     /// A boxed array of *HostUnresolvedVmfsResignatureSpec*. To be used in *Any* placeholders.
-    ArrayOfHostUnresolvedVmfsResignatureSpec(Vec<HostUnresolvedVmfsResignatureSpec>),
+    ArrayOfHostUnresolvedVmfsResignatureSpec(Vec<super::structs::HostUnresolvedVmfsResignatureSpec>),
     /// A boxed array of *HostUnresolvedVmfsResolutionResult*. To be used in *Any* placeholders.
-    ArrayOfHostUnresolvedVmfsResolutionResult(Vec<HostUnresolvedVmfsResolutionResult>),
+    ArrayOfHostUnresolvedVmfsResolutionResult(Vec<super::structs::HostUnresolvedVmfsResolutionResult>),
     /// A boxed array of *HostUnresolvedVmfsResolutionSpec*. To be used in *Any* placeholders.
-    ArrayOfHostUnresolvedVmfsResolutionSpec(Vec<HostUnresolvedVmfsResolutionSpec>),
+    ArrayOfHostUnresolvedVmfsResolutionSpec(Vec<super::structs::HostUnresolvedVmfsResolutionSpec>),
     /// A boxed array of *HostUnresolvedVmfsVolume*. To be used in *Any* placeholders.
-    ArrayOfHostUnresolvedVmfsVolume(Vec<HostUnresolvedVmfsVolume>),
+    ArrayOfHostUnresolvedVmfsVolume(Vec<super::structs::HostUnresolvedVmfsVolume>),
     /// A boxed array of *HostUnresolvedVmfsVolumeResolveStatus*. To be used in *Any* placeholders.
-    ArrayOfHostUnresolvedVmfsVolumeResolveStatus(Vec<HostUnresolvedVmfsVolumeResolveStatus>),
+    ArrayOfHostUnresolvedVmfsVolumeResolveStatus(Vec<super::structs::HostUnresolvedVmfsVolumeResolveStatus>),
     /// A boxed array of *HostVFlashManagerVFlashCacheConfigInfo*. To be used in *Any* placeholders.
-    ArrayOfHostVFlashManagerVFlashCacheConfigInfo(Vec<HostVFlashManagerVFlashCacheConfigInfo>),
+    ArrayOfHostVFlashManagerVFlashCacheConfigInfo(Vec<super::structs::HostVFlashManagerVFlashCacheConfigInfo>),
     /// A boxed array of *HostVFlashManagerVFlashCacheConfigInfoVFlashModuleConfigOption*. To be used in *Any* placeholders.
-    ArrayOfHostVFlashManagerVFlashCacheConfigInfoVFlashModuleConfigOption(Vec<HostVFlashManagerVFlashCacheConfigInfoVFlashModuleConfigOption>),
+    ArrayOfHostVFlashManagerVFlashCacheConfigInfoVFlashModuleConfigOption(Vec<super::structs::HostVFlashManagerVFlashCacheConfigInfoVFlashModuleConfigOption>),
     /// A boxed array of *HostVFlashManagerVFlashCacheConfigSpec*. To be used in *Any* placeholders.
-    ArrayOfHostVFlashManagerVFlashCacheConfigSpec(Vec<HostVFlashManagerVFlashCacheConfigSpec>),
+    ArrayOfHostVFlashManagerVFlashCacheConfigSpec(Vec<super::structs::HostVFlashManagerVFlashCacheConfigSpec>),
     /// A boxed array of *HostVFlashManagerVFlashConfigInfo*. To be used in *Any* placeholders.
-    ArrayOfHostVFlashManagerVFlashConfigInfo(Vec<HostVFlashManagerVFlashConfigInfo>),
+    ArrayOfHostVFlashManagerVFlashConfigInfo(Vec<super::structs::HostVFlashManagerVFlashConfigInfo>),
     /// A boxed array of *HostVFlashManagerVFlashResourceConfigInfo*. To be used in *Any* placeholders.
-    ArrayOfHostVFlashManagerVFlashResourceConfigInfo(Vec<HostVFlashManagerVFlashResourceConfigInfo>),
+    ArrayOfHostVFlashManagerVFlashResourceConfigInfo(Vec<super::structs::HostVFlashManagerVFlashResourceConfigInfo>),
     /// A boxed array of *HostVFlashManagerVFlashResourceConfigSpec*. To be used in *Any* placeholders.
-    ArrayOfHostVFlashManagerVFlashResourceConfigSpec(Vec<HostVFlashManagerVFlashResourceConfigSpec>),
+    ArrayOfHostVFlashManagerVFlashResourceConfigSpec(Vec<super::structs::HostVFlashManagerVFlashResourceConfigSpec>),
     /// A boxed array of *HostVFlashManagerVFlashResourceRunTimeInfo*. To be used in *Any* placeholders.
-    ArrayOfHostVFlashManagerVFlashResourceRunTimeInfo(Vec<HostVFlashManagerVFlashResourceRunTimeInfo>),
+    ArrayOfHostVFlashManagerVFlashResourceRunTimeInfo(Vec<super::structs::HostVFlashManagerVFlashResourceRunTimeInfo>),
     /// A boxed array of *HostVFlashResourceConfigurationResult*. To be used in *Any* placeholders.
-    ArrayOfHostVFlashResourceConfigurationResult(Vec<HostVFlashResourceConfigurationResult>),
+    ArrayOfHostVFlashResourceConfigurationResult(Vec<super::structs::HostVFlashResourceConfigurationResult>),
     /// A boxed array of *HostVMotionConfig*. To be used in *Any* placeholders.
-    ArrayOfHostVMotionConfig(Vec<HostVMotionConfig>),
+    ArrayOfHostVMotionConfig(Vec<super::structs::HostVMotionConfig>),
     /// A boxed array of *HostVMotionInfo*. To be used in *Any* placeholders.
-    ArrayOfHostVMotionInfo(Vec<HostVMotionInfo>),
+    ArrayOfHostVMotionInfo(Vec<super::structs::HostVMotionInfo>),
     /// A boxed array of *HostVMotionManagerDstInstantCloneResult*. To be used in *Any* placeholders.
-    ArrayOfHostVMotionManagerDstInstantCloneResult(Vec<HostVMotionManagerDstInstantCloneResult>),
+    ArrayOfHostVMotionManagerDstInstantCloneResult(Vec<super::structs::HostVMotionManagerDstInstantCloneResult>),
     /// A boxed array of *HostVMotionManagerSrcInstantCloneResult*. To be used in *Any* placeholders.
-    ArrayOfHostVMotionManagerSrcInstantCloneResult(Vec<HostVMotionManagerSrcInstantCloneResult>),
+    ArrayOfHostVMotionManagerSrcInstantCloneResult(Vec<super::structs::HostVMotionManagerSrcInstantCloneResult>),
     /// A boxed array of *HostVMotionNetConfig*. To be used in *Any* placeholders.
-    ArrayOfHostVMotionNetConfig(Vec<HostVMotionNetConfig>),
+    ArrayOfHostVMotionNetConfig(Vec<super::structs::HostVMotionNetConfig>),
     /// A boxed array of *HostVfatVolume*. To be used in *Any* placeholders.
-    ArrayOfHostVfatVolume(Vec<HostVfatVolume>),
+    ArrayOfHostVfatVolume(Vec<super::structs::HostVfatVolume>),
     /// A boxed array of *HostVffsVolume*. To be used in *Any* placeholders.
-    ArrayOfHostVffsVolume(Vec<HostVffsVolume>),
+    ArrayOfHostVffsVolume(Vec<super::structs::HostVffsVolume>),
     /// A boxed array of *HostVffsSpec*. To be used in *Any* placeholders.
-    ArrayOfHostVffsSpec(Vec<HostVffsSpec>),
+    ArrayOfHostVffsSpec(Vec<super::structs::HostVffsSpec>),
     /// A boxed array of *HostVirtualNic*. To be used in *Any* placeholders.
-    ArrayOfHostVirtualNic(Vec<HostVirtualNic>),
+    ArrayOfHostVirtualNic(Vec<super::structs::HostVirtualNic>),
     /// A boxed array of *HostVirtualNicConfig*. To be used in *Any* placeholders.
-    ArrayOfHostVirtualNicConfig(Vec<HostVirtualNicConfig>),
+    ArrayOfHostVirtualNicConfig(Vec<super::structs::HostVirtualNicConfig>),
     /// A boxed array of *HostVirtualNicIpRouteSpec*. To be used in *Any* placeholders.
-    ArrayOfHostVirtualNicIpRouteSpec(Vec<HostVirtualNicIpRouteSpec>),
+    ArrayOfHostVirtualNicIpRouteSpec(Vec<super::structs::HostVirtualNicIpRouteSpec>),
     /// A boxed array of *HostVirtualNicOpaqueNetworkSpec*. To be used in *Any* placeholders.
-    ArrayOfHostVirtualNicOpaqueNetworkSpec(Vec<HostVirtualNicOpaqueNetworkSpec>),
+    ArrayOfHostVirtualNicOpaqueNetworkSpec(Vec<super::structs::HostVirtualNicOpaqueNetworkSpec>),
     /// A boxed array of *HostVirtualNicSpec*. To be used in *Any* placeholders.
-    ArrayOfHostVirtualNicSpec(Vec<HostVirtualNicSpec>),
+    ArrayOfHostVirtualNicSpec(Vec<super::structs::HostVirtualNicSpec>),
     /// A boxed array of *HostVirtualNicConnection*. To be used in *Any* placeholders.
-    ArrayOfHostVirtualNicConnection(Vec<HostVirtualNicConnection>),
+    ArrayOfHostVirtualNicConnection(Vec<super::structs::HostVirtualNicConnection>),
     /// A boxed array of *VirtualNicManagerNetConfig*. To be used in *Any* placeholders.
-    ArrayOfVirtualNicManagerNetConfig(Vec<VirtualNicManagerNetConfig>),
+    ArrayOfVirtualNicManagerNetConfig(Vec<super::structs::VirtualNicManagerNetConfig>),
     /// A boxed array of *HostVirtualNicManagerNicTypeSelection*. To be used in *Any* placeholders.
-    ArrayOfHostVirtualNicManagerNicTypeSelection(Vec<HostVirtualNicManagerNicTypeSelection>),
+    ArrayOfHostVirtualNicManagerNicTypeSelection(Vec<super::structs::HostVirtualNicManagerNicTypeSelection>),
     /// A boxed array of *HostVirtualNicManagerInfo*. To be used in *Any* placeholders.
-    ArrayOfHostVirtualNicManagerInfo(Vec<HostVirtualNicManagerInfo>),
+    ArrayOfHostVirtualNicManagerInfo(Vec<super::structs::HostVirtualNicManagerInfo>),
     /// A boxed array of *HostVirtualSwitch*. To be used in *Any* placeholders.
-    ArrayOfHostVirtualSwitch(Vec<HostVirtualSwitch>),
+    ArrayOfHostVirtualSwitch(Vec<super::structs::HostVirtualSwitch>),
     /// A boxed array of *HostVirtualSwitchAutoBridge*. To be used in *Any* placeholders.
-    ArrayOfHostVirtualSwitchAutoBridge(Vec<HostVirtualSwitchAutoBridge>),
+    ArrayOfHostVirtualSwitchAutoBridge(Vec<super::structs::HostVirtualSwitchAutoBridge>),
     /// A boxed array of *HostVirtualSwitchBeaconConfig*. To be used in *Any* placeholders.
-    ArrayOfHostVirtualSwitchBeaconConfig(Vec<HostVirtualSwitchBeaconConfig>),
+    ArrayOfHostVirtualSwitchBeaconConfig(Vec<super::structs::HostVirtualSwitchBeaconConfig>),
     /// A boxed array of *HostVirtualSwitchBondBridge*. To be used in *Any* placeholders.
-    ArrayOfHostVirtualSwitchBondBridge(Vec<HostVirtualSwitchBondBridge>),
+    ArrayOfHostVirtualSwitchBondBridge(Vec<super::structs::HostVirtualSwitchBondBridge>),
     /// A boxed array of *HostVirtualSwitchBridge*. To be used in *Any* placeholders.
     ArrayOfHostVirtualSwitchBridge(Vec<Box<dyn super::traits::HostVirtualSwitchBridgeTrait>>),
     /// A boxed array of *HostVirtualSwitchConfig*. To be used in *Any* placeholders.
-    ArrayOfHostVirtualSwitchConfig(Vec<HostVirtualSwitchConfig>),
+    ArrayOfHostVirtualSwitchConfig(Vec<super::structs::HostVirtualSwitchConfig>),
     /// A boxed array of *HostVirtualSwitchSimpleBridge*. To be used in *Any* placeholders.
-    ArrayOfHostVirtualSwitchSimpleBridge(Vec<HostVirtualSwitchSimpleBridge>),
+    ArrayOfHostVirtualSwitchSimpleBridge(Vec<super::structs::HostVirtualSwitchSimpleBridge>),
     /// A boxed array of *HostVirtualSwitchSpec*. To be used in *Any* placeholders.
-    ArrayOfHostVirtualSwitchSpec(Vec<HostVirtualSwitchSpec>),
+    ArrayOfHostVirtualSwitchSpec(Vec<super::structs::HostVirtualSwitchSpec>),
     /// A boxed array of *HostVmciAccessManagerAccessSpec*. To be used in *Any* placeholders.
-    ArrayOfHostVmciAccessManagerAccessSpec(Vec<HostVmciAccessManagerAccessSpec>),
+    ArrayOfHostVmciAccessManagerAccessSpec(Vec<super::structs::HostVmciAccessManagerAccessSpec>),
     /// A boxed array of *VmfsDatastoreCreateSpec*. To be used in *Any* placeholders.
-    ArrayOfVmfsDatastoreCreateSpec(Vec<VmfsDatastoreCreateSpec>),
+    ArrayOfVmfsDatastoreCreateSpec(Vec<super::structs::VmfsDatastoreCreateSpec>),
     /// A boxed array of *VmfsDatastoreExpandSpec*. To be used in *Any* placeholders.
-    ArrayOfVmfsDatastoreExpandSpec(Vec<VmfsDatastoreExpandSpec>),
+    ArrayOfVmfsDatastoreExpandSpec(Vec<super::structs::VmfsDatastoreExpandSpec>),
     /// A boxed array of *VmfsDatastoreExtendSpec*. To be used in *Any* placeholders.
-    ArrayOfVmfsDatastoreExtendSpec(Vec<VmfsDatastoreExtendSpec>),
+    ArrayOfVmfsDatastoreExtendSpec(Vec<super::structs::VmfsDatastoreExtendSpec>),
     /// A boxed array of *VmfsDatastoreInfo*. To be used in *Any* placeholders.
-    ArrayOfVmfsDatastoreInfo(Vec<VmfsDatastoreInfo>),
+    ArrayOfVmfsDatastoreInfo(Vec<super::structs::VmfsDatastoreInfo>),
     /// A boxed array of *VmfsDatastoreOption*. To be used in *Any* placeholders.
-    ArrayOfVmfsDatastoreOption(Vec<VmfsDatastoreOption>),
+    ArrayOfVmfsDatastoreOption(Vec<super::structs::VmfsDatastoreOption>),
     /// A boxed array of *VmfsDatastoreAllExtentOption*. To be used in *Any* placeholders.
-    ArrayOfVmfsDatastoreAllExtentOption(Vec<VmfsDatastoreAllExtentOption>),
+    ArrayOfVmfsDatastoreAllExtentOption(Vec<super::structs::VmfsDatastoreAllExtentOption>),
     /// A boxed array of *VmfsDatastoreBaseOption*. To be used in *Any* placeholders.
     ArrayOfVmfsDatastoreBaseOption(Vec<Box<dyn super::traits::VmfsDatastoreBaseOptionTrait>>),
     /// A boxed array of *VmfsDatastoreMultipleExtentOption*. To be used in *Any* placeholders.
-    ArrayOfVmfsDatastoreMultipleExtentOption(Vec<VmfsDatastoreMultipleExtentOption>),
+    ArrayOfVmfsDatastoreMultipleExtentOption(Vec<super::structs::VmfsDatastoreMultipleExtentOption>),
     /// A boxed array of *VmfsDatastoreSingleExtentOption*. To be used in *Any* placeholders.
     ArrayOfVmfsDatastoreSingleExtentOption(Vec<Box<dyn super::traits::VmfsDatastoreSingleExtentOptionTrait>>),
     /// A boxed array of *VmfsDatastoreSpec*. To be used in *Any* placeholders.
     ArrayOfVmfsDatastoreSpec(Vec<Box<dyn super::traits::VmfsDatastoreSpecTrait>>),
     /// A boxed array of *HostVmfsRescanResult*. To be used in *Any* placeholders.
-    ArrayOfHostVmfsRescanResult(Vec<HostVmfsRescanResult>),
+    ArrayOfHostVmfsRescanResult(Vec<super::structs::HostVmfsRescanResult>),
     /// A boxed array of *HostVmfsVolume*. To be used in *Any* placeholders.
-    ArrayOfHostVmfsVolume(Vec<HostVmfsVolume>),
+    ArrayOfHostVmfsVolume(Vec<super::structs::HostVmfsVolume>),
     /// A boxed array of *VmfsConfigOption*. To be used in *Any* placeholders.
-    ArrayOfVmfsConfigOption(Vec<VmfsConfigOption>),
+    ArrayOfVmfsConfigOption(Vec<super::structs::VmfsConfigOption>),
     /// A boxed array of *HostVmfsSpec*. To be used in *Any* placeholders.
-    ArrayOfHostVmfsSpec(Vec<HostVmfsSpec>),
+    ArrayOfHostVmfsSpec(Vec<super::structs::HostVmfsSpec>),
     /// A boxed array of *VmfsUnmapBandwidthSpec*. To be used in *Any* placeholders.
-    ArrayOfVmfsUnmapBandwidthSpec(Vec<VmfsUnmapBandwidthSpec>),
+    ArrayOfVmfsUnmapBandwidthSpec(Vec<super::structs::VmfsUnmapBandwidthSpec>),
     /// A boxed array of *VsanDatastoreInfo*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 7.0.1.0
-    ArrayOfVsanDatastoreInfo(Vec<VsanDatastoreInfo>),
+    ArrayOfVsanDatastoreInfo(Vec<super::structs::VsanDatastoreInfo>),
     /// A boxed array of *HostVsanInternalSystemCmmdsQuery*. To be used in *Any* placeholders.
-    ArrayOfHostVsanInternalSystemCmmdsQuery(Vec<HostVsanInternalSystemCmmdsQuery>),
+    ArrayOfHostVsanInternalSystemCmmdsQuery(Vec<super::structs::HostVsanInternalSystemCmmdsQuery>),
     /// A boxed array of *HostVsanInternalSystemDeleteVsanObjectsResult*. To be used in *Any* placeholders.
-    ArrayOfHostVsanInternalSystemDeleteVsanObjectsResult(Vec<HostVsanInternalSystemDeleteVsanObjectsResult>),
+    ArrayOfHostVsanInternalSystemDeleteVsanObjectsResult(Vec<super::structs::HostVsanInternalSystemDeleteVsanObjectsResult>),
     /// A boxed array of *VsanNewPolicyBatch*. To be used in *Any* placeholders.
-    ArrayOfVsanNewPolicyBatch(Vec<VsanNewPolicyBatch>),
+    ArrayOfVsanNewPolicyBatch(Vec<super::structs::VsanNewPolicyBatch>),
     /// A boxed array of *VsanPolicyChangeBatch*. To be used in *Any* placeholders.
-    ArrayOfVsanPolicyChangeBatch(Vec<VsanPolicyChangeBatch>),
+    ArrayOfVsanPolicyChangeBatch(Vec<super::structs::VsanPolicyChangeBatch>),
     /// A boxed array of *VsanPolicyCost*. To be used in *Any* placeholders.
-    ArrayOfVsanPolicyCost(Vec<VsanPolicyCost>),
+    ArrayOfVsanPolicyCost(Vec<super::structs::VsanPolicyCost>),
     /// A boxed array of *VsanPolicySatisfiability*. To be used in *Any* placeholders.
-    ArrayOfVsanPolicySatisfiability(Vec<VsanPolicySatisfiability>),
+    ArrayOfVsanPolicySatisfiability(Vec<super::structs::VsanPolicySatisfiability>),
     /// A boxed array of *HostVsanInternalSystemVsanObjectOperationResult*. To be used in *Any* placeholders.
-    ArrayOfHostVsanInternalSystemVsanObjectOperationResult(Vec<HostVsanInternalSystemVsanObjectOperationResult>),
+    ArrayOfHostVsanInternalSystemVsanObjectOperationResult(Vec<super::structs::HostVsanInternalSystemVsanObjectOperationResult>),
     /// A boxed array of *HostVsanInternalSystemVsanPhysicalDiskDiagnosticsResult*. To be used in *Any* placeholders.
-    ArrayOfHostVsanInternalSystemVsanPhysicalDiskDiagnosticsResult(Vec<HostVsanInternalSystemVsanPhysicalDiskDiagnosticsResult>),
+    ArrayOfHostVsanInternalSystemVsanPhysicalDiskDiagnosticsResult(Vec<super::structs::HostVsanInternalSystemVsanPhysicalDiskDiagnosticsResult>),
     /// A boxed array of *VvolDatastoreInfo*. To be used in *Any* placeholders.
-    ArrayOfVvolDatastoreInfo(Vec<VvolDatastoreInfo>),
+    ArrayOfVvolDatastoreInfo(Vec<super::structs::VvolDatastoreInfo>),
     /// A boxed array of *HostVvolNQN*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 8.0.2.0
-    ArrayOfHostVvolNqn(Vec<HostVvolNqn>),
+    ArrayOfHostVvolNqn(Vec<super::structs::HostVvolNqn>),
     /// A boxed array of *HostVvolVolume*. To be used in *Any* placeholders.
-    ArrayOfHostVvolVolume(Vec<HostVvolVolume>),
+    ArrayOfHostVvolVolume(Vec<super::structs::HostVvolVolume>),
     /// A boxed array of *VVolHostPE*. To be used in *Any* placeholders.
-    ArrayOfVVolHostPe(Vec<VVolHostPe>),
+    ArrayOfVVolHostPe(Vec<super::structs::VVolHostPe>),
     /// A boxed array of *HostVvolVolumeHostVvolNQN*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 8.0.2.0
-    ArrayOfHostVvolVolumeHostVvolNqn(Vec<HostVvolVolumeHostVvolNqn>),
+    ArrayOfHostVvolVolumeHostVvolNqn(Vec<super::structs::HostVvolVolumeHostVvolNqn>),
     /// A boxed array of *HostVvolVolumeSpecification*. To be used in *Any* placeholders.
-    ArrayOfHostVvolVolumeSpecification(Vec<HostVvolVolumeSpecification>),
+    ArrayOfHostVvolVolumeSpecification(Vec<super::structs::HostVvolVolumeSpecification>),
     /// A boxed array of *NetDhcpConfigInfo*. To be used in *Any* placeholders.
-    ArrayOfNetDhcpConfigInfo(Vec<NetDhcpConfigInfo>),
+    ArrayOfNetDhcpConfigInfo(Vec<super::structs::NetDhcpConfigInfo>),
     /// A boxed array of *NetDhcpConfigInfoDhcpOptions*. To be used in *Any* placeholders.
-    ArrayOfNetDhcpConfigInfoDhcpOptions(Vec<NetDhcpConfigInfoDhcpOptions>),
+    ArrayOfNetDhcpConfigInfoDhcpOptions(Vec<super::structs::NetDhcpConfigInfoDhcpOptions>),
     /// A boxed array of *NetDhcpConfigSpec*. To be used in *Any* placeholders.
-    ArrayOfNetDhcpConfigSpec(Vec<NetDhcpConfigSpec>),
+    ArrayOfNetDhcpConfigSpec(Vec<super::structs::NetDhcpConfigSpec>),
     /// A boxed array of *NetDhcpConfigSpecDhcpOptionsSpec*. To be used in *Any* placeholders.
-    ArrayOfNetDhcpConfigSpecDhcpOptionsSpec(Vec<NetDhcpConfigSpecDhcpOptionsSpec>),
+    ArrayOfNetDhcpConfigSpecDhcpOptionsSpec(Vec<super::structs::NetDhcpConfigSpecDhcpOptionsSpec>),
     /// A boxed array of *NetDnsConfigInfo*. To be used in *Any* placeholders.
-    ArrayOfNetDnsConfigInfo(Vec<NetDnsConfigInfo>),
+    ArrayOfNetDnsConfigInfo(Vec<super::structs::NetDnsConfigInfo>),
     /// A boxed array of *NetDnsConfigSpec*. To be used in *Any* placeholders.
-    ArrayOfNetDnsConfigSpec(Vec<NetDnsConfigSpec>),
+    ArrayOfNetDnsConfigSpec(Vec<super::structs::NetDnsConfigSpec>),
     /// A boxed array of *NetIpConfigInfo*. To be used in *Any* placeholders.
-    ArrayOfNetIpConfigInfo(Vec<NetIpConfigInfo>),
+    ArrayOfNetIpConfigInfo(Vec<super::structs::NetIpConfigInfo>),
     /// A boxed array of *NetIpConfigInfoIpAddress*. To be used in *Any* placeholders.
-    ArrayOfNetIpConfigInfoIpAddress(Vec<NetIpConfigInfoIpAddress>),
+    ArrayOfNetIpConfigInfoIpAddress(Vec<super::structs::NetIpConfigInfoIpAddress>),
     /// A boxed array of *NetIpConfigSpec*. To be used in *Any* placeholders.
-    ArrayOfNetIpConfigSpec(Vec<NetIpConfigSpec>),
+    ArrayOfNetIpConfigSpec(Vec<super::structs::NetIpConfigSpec>),
     /// A boxed array of *NetIpConfigSpecIpAddressSpec*. To be used in *Any* placeholders.
-    ArrayOfNetIpConfigSpecIpAddressSpec(Vec<NetIpConfigSpecIpAddressSpec>),
+    ArrayOfNetIpConfigSpecIpAddressSpec(Vec<super::structs::NetIpConfigSpecIpAddressSpec>),
     /// A boxed array of *NetIpRouteConfigInfo*. To be used in *Any* placeholders.
-    ArrayOfNetIpRouteConfigInfo(Vec<NetIpRouteConfigInfo>),
+    ArrayOfNetIpRouteConfigInfo(Vec<super::structs::NetIpRouteConfigInfo>),
     /// A boxed array of *NetIpRouteConfigInfoGateway*. To be used in *Any* placeholders.
-    ArrayOfNetIpRouteConfigInfoGateway(Vec<NetIpRouteConfigInfoGateway>),
+    ArrayOfNetIpRouteConfigInfoGateway(Vec<super::structs::NetIpRouteConfigInfoGateway>),
     /// A boxed array of *NetIpRouteConfigInfoIpRoute*. To be used in *Any* placeholders.
-    ArrayOfNetIpRouteConfigInfoIpRoute(Vec<NetIpRouteConfigInfoIpRoute>),
+    ArrayOfNetIpRouteConfigInfoIpRoute(Vec<super::structs::NetIpRouteConfigInfoIpRoute>),
     /// A boxed array of *NetIpRouteConfigSpec*. To be used in *Any* placeholders.
-    ArrayOfNetIpRouteConfigSpec(Vec<NetIpRouteConfigSpec>),
+    ArrayOfNetIpRouteConfigSpec(Vec<super::structs::NetIpRouteConfigSpec>),
     /// A boxed array of *NetIpRouteConfigSpecGatewaySpec*. To be used in *Any* placeholders.
-    ArrayOfNetIpRouteConfigSpecGatewaySpec(Vec<NetIpRouteConfigSpecGatewaySpec>),
+    ArrayOfNetIpRouteConfigSpecGatewaySpec(Vec<super::structs::NetIpRouteConfigSpecGatewaySpec>),
     /// A boxed array of *NetIpRouteConfigSpecIpRouteSpec*. To be used in *Any* placeholders.
-    ArrayOfNetIpRouteConfigSpecIpRouteSpec(Vec<NetIpRouteConfigSpecIpRouteSpec>),
+    ArrayOfNetIpRouteConfigSpecIpRouteSpec(Vec<super::structs::NetIpRouteConfigSpecIpRouteSpec>),
     /// A boxed array of *NetIpStackInfo*. To be used in *Any* placeholders.
-    ArrayOfNetIpStackInfo(Vec<NetIpStackInfo>),
+    ArrayOfNetIpStackInfo(Vec<super::structs::NetIpStackInfo>),
     /// A boxed array of *NetIpStackInfoDefaultRouter*. To be used in *Any* placeholders.
-    ArrayOfNetIpStackInfoDefaultRouter(Vec<NetIpStackInfoDefaultRouter>),
+    ArrayOfNetIpStackInfoDefaultRouter(Vec<super::structs::NetIpStackInfoDefaultRouter>),
     /// A boxed array of *NetIpStackInfoNetToMedia*. To be used in *Any* placeholders.
-    ArrayOfNetIpStackInfoNetToMedia(Vec<NetIpStackInfoNetToMedia>),
+    ArrayOfNetIpStackInfoNetToMedia(Vec<super::structs::NetIpStackInfoNetToMedia>),
     /// A boxed array of *NetBIOSConfigInfo*. To be used in *Any* placeholders.
     ArrayOfNetBiosConfigInfo(Vec<Box<dyn super::traits::NetBiosConfigInfoTrait>>),
     /// A boxed array of *WinNetBIOSConfigInfo*. To be used in *Any* placeholders.
-    ArrayOfWinNetBiosConfigInfo(Vec<WinNetBiosConfigInfo>),
+    ArrayOfWinNetBiosConfigInfo(Vec<super::structs::WinNetBiosConfigInfo>),
     /// A boxed array of *ArrayUpdateSpec*. To be used in *Any* placeholders.
     ArrayOfArrayUpdateSpec(Vec<Box<dyn super::traits::ArrayUpdateSpecTrait>>),
     /// A boxed array of *BoolOption*. To be used in *Any* placeholders.
-    ArrayOfBoolOption(Vec<BoolOption>),
+    ArrayOfBoolOption(Vec<super::structs::BoolOption>),
     /// A boxed array of *ChoiceOption*. To be used in *Any* placeholders.
-    ArrayOfChoiceOption(Vec<ChoiceOption>),
+    ArrayOfChoiceOption(Vec<super::structs::ChoiceOption>),
     /// A boxed array of *FloatOption*. To be used in *Any* placeholders.
-    ArrayOfFloatOption(Vec<FloatOption>),
+    ArrayOfFloatOption(Vec<super::structs::FloatOption>),
     /// A boxed array of *IntOption*. To be used in *Any* placeholders.
-    ArrayOfIntOption(Vec<IntOption>),
+    ArrayOfIntOption(Vec<super::structs::IntOption>),
     /// A boxed array of *LongOption*. To be used in *Any* placeholders.
-    ArrayOfLongOption(Vec<LongOption>),
+    ArrayOfLongOption(Vec<super::structs::LongOption>),
     /// A boxed array of *OptionDef*. To be used in *Any* placeholders.
-    ArrayOfOptionDef(Vec<OptionDef>),
+    ArrayOfOptionDef(Vec<super::structs::OptionDef>),
     /// A boxed array of *OptionType*. To be used in *Any* placeholders.
     ArrayOfOptionType(Vec<Box<dyn super::traits::OptionTypeTrait>>),
     /// A boxed array of *OptionValue*. To be used in *Any* placeholders.
     ArrayOfOptionValue(Vec<Box<dyn super::traits::OptionValueTrait>>),
     /// A boxed array of *StringOption*. To be used in *Any* placeholders.
-    ArrayOfStringOption(Vec<StringOption>),
+    ArrayOfStringOption(Vec<super::structs::StringOption>),
     /// A boxed array of *ApplyProfile*. To be used in *Any* placeholders.
     ArrayOfApplyProfile(Vec<Box<dyn super::traits::ApplyProfileTrait>>),
     /// A boxed array of *ProfileApplyProfileElement*. To be used in *Any* placeholders.
-    ArrayOfProfileApplyProfileElement(Vec<ProfileApplyProfileElement>),
+    ArrayOfProfileApplyProfileElement(Vec<super::structs::ProfileApplyProfileElement>),
     /// A boxed array of *ProfileApplyProfileProperty*. To be used in *Any* placeholders.
-    ArrayOfProfileApplyProfileProperty(Vec<ProfileApplyProfileProperty>),
+    ArrayOfProfileApplyProfileProperty(Vec<super::structs::ProfileApplyProfileProperty>),
     /// A boxed array of *ComplianceLocator*. To be used in *Any* placeholders.
-    ArrayOfComplianceLocator(Vec<ComplianceLocator>),
+    ArrayOfComplianceLocator(Vec<super::structs::ComplianceLocator>),
     /// A boxed array of *ComplianceProfile*. To be used in *Any* placeholders.
-    ArrayOfComplianceProfile(Vec<ComplianceProfile>),
+    ArrayOfComplianceProfile(Vec<super::structs::ComplianceProfile>),
     /// A boxed array of *ComplianceResult*. To be used in *Any* placeholders.
-    ArrayOfComplianceResult(Vec<ComplianceResult>),
+    ArrayOfComplianceResult(Vec<super::structs::ComplianceResult>),
     /// A boxed array of *ComplianceFailure*. To be used in *Any* placeholders.
-    ArrayOfComplianceFailure(Vec<ComplianceFailure>),
+    ArrayOfComplianceFailure(Vec<super::structs::ComplianceFailure>),
     /// A boxed array of *ComplianceFailureComplianceFailureValues*. To be used in *Any* placeholders.
-    ArrayOfComplianceFailureComplianceFailureValues(Vec<ComplianceFailureComplianceFailureValues>),
+    ArrayOfComplianceFailureComplianceFailureValues(Vec<super::structs::ComplianceFailureComplianceFailureValues>),
     /// A boxed array of *ProfileCompositeExpression*. To be used in *Any* placeholders.
-    ArrayOfProfileCompositeExpression(Vec<ProfileCompositeExpression>),
+    ArrayOfProfileCompositeExpression(Vec<super::structs::ProfileCompositeExpression>),
     /// A boxed array of *CompositePolicyOption*. To be used in *Any* placeholders.
-    ArrayOfCompositePolicyOption(Vec<CompositePolicyOption>),
+    ArrayOfCompositePolicyOption(Vec<super::structs::CompositePolicyOption>),
     /// A boxed array of *ProfileCompositePolicyOptionMetadata*. To be used in *Any* placeholders.
-    ArrayOfProfileCompositePolicyOptionMetadata(Vec<ProfileCompositePolicyOptionMetadata>),
+    ArrayOfProfileCompositePolicyOptionMetadata(Vec<super::structs::ProfileCompositePolicyOptionMetadata>),
     /// A boxed array of *ProfileDeferredPolicyOptionParameter*. To be used in *Any* placeholders.
-    ArrayOfProfileDeferredPolicyOptionParameter(Vec<ProfileDeferredPolicyOptionParameter>),
+    ArrayOfProfileDeferredPolicyOptionParameter(Vec<super::structs::ProfileDeferredPolicyOptionParameter>),
     /// A boxed array of *ProfileExpression*. To be used in *Any* placeholders.
     ArrayOfProfileExpression(Vec<Box<dyn super::traits::ProfileExpressionTrait>>),
     /// A boxed array of *ProfileExpressionMetadata*. To be used in *Any* placeholders.
-    ArrayOfProfileExpressionMetadata(Vec<ProfileExpressionMetadata>),
+    ArrayOfProfileExpressionMetadata(Vec<super::structs::ProfileExpressionMetadata>),
     /// A boxed array of *ProfileParameterMetadata*. To be used in *Any* placeholders.
-    ArrayOfProfileParameterMetadata(Vec<ProfileParameterMetadata>),
+    ArrayOfProfileParameterMetadata(Vec<super::structs::ProfileParameterMetadata>),
     /// A boxed array of *ProfileParameterMetadataParameterRelationMetadata*. To be used in *Any* placeholders.
-    ArrayOfProfileParameterMetadataParameterRelationMetadata(Vec<ProfileParameterMetadataParameterRelationMetadata>),
+    ArrayOfProfileParameterMetadataParameterRelationMetadata(Vec<super::structs::ProfileParameterMetadataParameterRelationMetadata>),
     /// A boxed array of *ProfilePolicy*. To be used in *Any* placeholders.
-    ArrayOfProfilePolicy(Vec<ProfilePolicy>),
+    ArrayOfProfilePolicy(Vec<super::structs::ProfilePolicy>),
     /// A boxed array of *ProfilePolicyMetadata*. To be used in *Any* placeholders.
-    ArrayOfProfilePolicyMetadata(Vec<ProfilePolicyMetadata>),
+    ArrayOfProfilePolicyMetadata(Vec<super::structs::ProfilePolicyMetadata>),
     /// A boxed array of *PolicyOption*. To be used in *Any* placeholders.
     ArrayOfPolicyOption(Vec<Box<dyn super::traits::PolicyOptionTrait>>),
     /// A boxed array of *ProfilePolicyOptionMetadata*. To be used in *Any* placeholders.
@@ -4655,677 +4653,677 @@ pub enum ValueElements {
     /// A boxed array of *ProfileCreateSpec*. To be used in *Any* placeholders.
     ArrayOfProfileCreateSpec(Vec<Box<dyn super::traits::ProfileCreateSpecTrait>>),
     /// A boxed array of *ProfileDescription*. To be used in *Any* placeholders.
-    ArrayOfProfileDescription(Vec<ProfileDescription>),
+    ArrayOfProfileDescription(Vec<super::structs::ProfileDescription>),
     /// A boxed array of *ProfileDescriptionSection*. To be used in *Any* placeholders.
-    ArrayOfProfileDescriptionSection(Vec<ProfileDescriptionSection>),
+    ArrayOfProfileDescriptionSection(Vec<super::structs::ProfileDescriptionSection>),
     /// A boxed array of *ProfileSerializedCreateSpec*. To be used in *Any* placeholders.
     ArrayOfProfileSerializedCreateSpec(Vec<Box<dyn super::traits::ProfileSerializedCreateSpecTrait>>),
     /// A boxed array of *ProfileMetadata*. To be used in *Any* placeholders.
-    ArrayOfProfileMetadata(Vec<ProfileMetadata>),
+    ArrayOfProfileMetadata(Vec<super::structs::ProfileMetadata>),
     /// A boxed array of *ProfileMetadataProfileOperationMessage*. To be used in *Any* placeholders.
-    ArrayOfProfileMetadataProfileOperationMessage(Vec<ProfileMetadataProfileOperationMessage>),
+    ArrayOfProfileMetadataProfileOperationMessage(Vec<super::structs::ProfileMetadataProfileOperationMessage>),
     /// A boxed array of *ProfileMetadataProfileSortSpec*. To be used in *Any* placeholders.
-    ArrayOfProfileMetadataProfileSortSpec(Vec<ProfileMetadataProfileSortSpec>),
+    ArrayOfProfileMetadataProfileSortSpec(Vec<super::structs::ProfileMetadataProfileSortSpec>),
     /// A boxed array of *ProfilePropertyPath*. To be used in *Any* placeholders.
-    ArrayOfProfilePropertyPath(Vec<ProfilePropertyPath>),
+    ArrayOfProfilePropertyPath(Vec<super::structs::ProfilePropertyPath>),
     /// A boxed array of *ProfileProfileStructure*. To be used in *Any* placeholders.
-    ArrayOfProfileProfileStructure(Vec<ProfileProfileStructure>),
+    ArrayOfProfileProfileStructure(Vec<super::structs::ProfileProfileStructure>),
     /// A boxed array of *ProfileProfileStructureProperty*. To be used in *Any* placeholders.
-    ArrayOfProfileProfileStructureProperty(Vec<ProfileProfileStructureProperty>),
+    ArrayOfProfileProfileStructureProperty(Vec<super::structs::ProfileProfileStructureProperty>),
     /// A boxed array of *ProfileSimpleExpression*. To be used in *Any* placeholders.
-    ArrayOfProfileSimpleExpression(Vec<ProfileSimpleExpression>),
+    ArrayOfProfileSimpleExpression(Vec<super::structs::ProfileSimpleExpression>),
     /// A boxed array of *UserInputRequiredParameterMetadata*. To be used in *Any* placeholders.
-    ArrayOfUserInputRequiredParameterMetadata(Vec<UserInputRequiredParameterMetadata>),
+    ArrayOfUserInputRequiredParameterMetadata(Vec<super::structs::UserInputRequiredParameterMetadata>),
     /// A boxed array of *ClusterProfileCompleteConfigSpec*. To be used in *Any* placeholders.
-    ArrayOfClusterProfileCompleteConfigSpec(Vec<ClusterProfileCompleteConfigSpec>),
+    ArrayOfClusterProfileCompleteConfigSpec(Vec<super::structs::ClusterProfileCompleteConfigSpec>),
     /// A boxed array of *ClusterProfileConfigInfo*. To be used in *Any* placeholders.
-    ArrayOfClusterProfileConfigInfo(Vec<ClusterProfileConfigInfo>),
+    ArrayOfClusterProfileConfigInfo(Vec<super::structs::ClusterProfileConfigInfo>),
     /// A boxed array of *ClusterProfileConfigServiceCreateSpec*. To be used in *Any* placeholders.
-    ArrayOfClusterProfileConfigServiceCreateSpec(Vec<ClusterProfileConfigServiceCreateSpec>),
+    ArrayOfClusterProfileConfigServiceCreateSpec(Vec<super::structs::ClusterProfileConfigServiceCreateSpec>),
     /// A boxed array of *ClusterProfileConfigSpec*. To be used in *Any* placeholders.
     ArrayOfClusterProfileConfigSpec(Vec<Box<dyn super::traits::ClusterProfileConfigSpecTrait>>),
     /// A boxed array of *ClusterProfileCreateSpec*. To be used in *Any* placeholders.
     ArrayOfClusterProfileCreateSpec(Vec<Box<dyn super::traits::ClusterProfileCreateSpecTrait>>),
     /// A boxed array of *ActiveDirectoryProfile*. To be used in *Any* placeholders.
-    ArrayOfActiveDirectoryProfile(Vec<ActiveDirectoryProfile>),
+    ArrayOfActiveDirectoryProfile(Vec<super::structs::ActiveDirectoryProfile>),
     /// A boxed array of *AnswerFile*. To be used in *Any* placeholders.
-    ArrayOfAnswerFile(Vec<AnswerFile>),
+    ArrayOfAnswerFile(Vec<super::structs::AnswerFile>),
     /// A boxed array of *AnswerFileStatusResult*. To be used in *Any* placeholders.
-    ArrayOfAnswerFileStatusResult(Vec<AnswerFileStatusResult>),
+    ArrayOfAnswerFileStatusResult(Vec<super::structs::AnswerFileStatusResult>),
     /// A boxed array of *AnswerFileStatusError*. To be used in *Any* placeholders.
-    ArrayOfAnswerFileStatusError(Vec<AnswerFileStatusError>),
+    ArrayOfAnswerFileStatusError(Vec<super::structs::AnswerFileStatusError>),
     /// A boxed array of *AuthenticationProfile*. To be used in *Any* placeholders.
-    ArrayOfAuthenticationProfile(Vec<AuthenticationProfile>),
+    ArrayOfAuthenticationProfile(Vec<super::structs::AuthenticationProfile>),
     /// A boxed array of *DateTimeProfile*. To be used in *Any* placeholders.
-    ArrayOfDateTimeProfile(Vec<DateTimeProfile>),
+    ArrayOfDateTimeProfile(Vec<super::structs::DateTimeProfile>),
     /// A boxed array of *DvsHostVNicProfile*. To be used in *Any* placeholders.
-    ArrayOfDvsHostVNicProfile(Vec<DvsHostVNicProfile>),
+    ArrayOfDvsHostVNicProfile(Vec<super::structs::DvsHostVNicProfile>),
     /// A boxed array of *DvsProfile*. To be used in *Any* placeholders.
-    ArrayOfDvsProfile(Vec<DvsProfile>),
+    ArrayOfDvsProfile(Vec<super::structs::DvsProfile>),
     /// A boxed array of *DvsServiceConsoleVNicProfile*. To be used in *Any* placeholders.
-    ArrayOfDvsServiceConsoleVNicProfile(Vec<DvsServiceConsoleVNicProfile>),
+    ArrayOfDvsServiceConsoleVNicProfile(Vec<super::structs::DvsServiceConsoleVNicProfile>),
     /// A boxed array of *DvsVNicProfile*. To be used in *Any* placeholders.
     ArrayOfDvsVNicProfile(Vec<Box<dyn super::traits::DvsVNicProfileTrait>>),
     /// A boxed array of *ProfileExecuteResult*. To be used in *Any* placeholders.
     ArrayOfProfileExecuteResult(Vec<Box<dyn super::traits::ProfileExecuteResultTrait>>),
     /// A boxed array of *ProfileExecuteError*. To be used in *Any* placeholders.
-    ArrayOfProfileExecuteError(Vec<ProfileExecuteError>),
+    ArrayOfProfileExecuteError(Vec<super::structs::ProfileExecuteError>),
     /// A boxed array of *FirewallProfile*. To be used in *Any* placeholders.
-    ArrayOfFirewallProfile(Vec<FirewallProfile>),
+    ArrayOfFirewallProfile(Vec<super::structs::FirewallProfile>),
     /// A boxed array of *FirewallProfileRulesetProfile*. To be used in *Any* placeholders.
-    ArrayOfFirewallProfileRulesetProfile(Vec<FirewallProfileRulesetProfile>),
+    ArrayOfFirewallProfileRulesetProfile(Vec<super::structs::FirewallProfileRulesetProfile>),
     /// A boxed array of *HostApplyProfile*. To be used in *Any* placeholders.
-    ArrayOfHostApplyProfile(Vec<HostApplyProfile>),
+    ArrayOfHostApplyProfile(Vec<super::structs::HostApplyProfile>),
     /// A boxed array of *HostMemoryProfile*. To be used in *Any* placeholders.
-    ArrayOfHostMemoryProfile(Vec<HostMemoryProfile>),
+    ArrayOfHostMemoryProfile(Vec<super::structs::HostMemoryProfile>),
     /// A boxed array of *HostPortGroupProfile*. To be used in *Any* placeholders.
-    ArrayOfHostPortGroupProfile(Vec<HostPortGroupProfile>),
+    ArrayOfHostPortGroupProfile(Vec<super::structs::HostPortGroupProfile>),
     /// A boxed array of *HostProfileCompleteConfigSpec*. To be used in *Any* placeholders.
-    ArrayOfHostProfileCompleteConfigSpec(Vec<HostProfileCompleteConfigSpec>),
+    ArrayOfHostProfileCompleteConfigSpec(Vec<super::structs::HostProfileCompleteConfigSpec>),
     /// A boxed array of *HostProfileConfigInfo*. To be used in *Any* placeholders.
-    ArrayOfHostProfileConfigInfo(Vec<HostProfileConfigInfo>),
+    ArrayOfHostProfileConfigInfo(Vec<super::structs::HostProfileConfigInfo>),
     /// A boxed array of *HostProfileConfigSpec*. To be used in *Any* placeholders.
     ArrayOfHostProfileConfigSpec(Vec<Box<dyn super::traits::HostProfileConfigSpecTrait>>),
     /// A boxed array of *HostProfileHostBasedConfigSpec*. To be used in *Any* placeholders.
-    ArrayOfHostProfileHostBasedConfigSpec(Vec<HostProfileHostBasedConfigSpec>),
+    ArrayOfHostProfileHostBasedConfigSpec(Vec<super::structs::HostProfileHostBasedConfigSpec>),
     /// A boxed array of *HostProfileSerializedHostProfileSpec*. To be used in *Any* placeholders.
-    ArrayOfHostProfileSerializedHostProfileSpec(Vec<HostProfileSerializedHostProfileSpec>),
+    ArrayOfHostProfileSerializedHostProfileSpec(Vec<super::structs::HostProfileSerializedHostProfileSpec>),
     /// A boxed array of *HostProfileValidationFailureInfo*. To be used in *Any* placeholders.
-    ArrayOfHostProfileValidationFailureInfo(Vec<HostProfileValidationFailureInfo>),
+    ArrayOfHostProfileValidationFailureInfo(Vec<super::structs::HostProfileValidationFailureInfo>),
     /// A boxed array of *HostSpecification*. To be used in *Any* placeholders.
-    ArrayOfHostSpecification(Vec<HostSpecification>),
+    ArrayOfHostSpecification(Vec<super::structs::HostSpecification>),
     /// A boxed array of *HostSubSpecification*. To be used in *Any* placeholders.
-    ArrayOfHostSubSpecification(Vec<HostSubSpecification>),
+    ArrayOfHostSubSpecification(Vec<super::structs::HostSubSpecification>),
     /// A boxed array of *IpAddressProfile*. To be used in *Any* placeholders.
-    ArrayOfIpAddressProfile(Vec<IpAddressProfile>),
+    ArrayOfIpAddressProfile(Vec<super::structs::IpAddressProfile>),
     /// A boxed array of *IpRouteProfile*. To be used in *Any* placeholders.
-    ArrayOfIpRouteProfile(Vec<IpRouteProfile>),
+    ArrayOfIpRouteProfile(Vec<super::structs::IpRouteProfile>),
     /// A boxed array of *NasStorageProfile*. To be used in *Any* placeholders.
-    ArrayOfNasStorageProfile(Vec<NasStorageProfile>),
+    ArrayOfNasStorageProfile(Vec<super::structs::NasStorageProfile>),
     /// A boxed array of *NetStackInstanceProfile*. To be used in *Any* placeholders.
-    ArrayOfNetStackInstanceProfile(Vec<NetStackInstanceProfile>),
+    ArrayOfNetStackInstanceProfile(Vec<super::structs::NetStackInstanceProfile>),
     /// A boxed array of *NetworkPolicyProfile*. To be used in *Any* placeholders.
-    ArrayOfNetworkPolicyProfile(Vec<NetworkPolicyProfile>),
+    ArrayOfNetworkPolicyProfile(Vec<super::structs::NetworkPolicyProfile>),
     /// A boxed array of *NetworkProfile*. To be used in *Any* placeholders.
-    ArrayOfNetworkProfile(Vec<NetworkProfile>),
+    ArrayOfNetworkProfile(Vec<super::structs::NetworkProfile>),
     /// A boxed array of *NetworkProfileDnsConfigProfile*. To be used in *Any* placeholders.
-    ArrayOfNetworkProfileDnsConfigProfile(Vec<NetworkProfileDnsConfigProfile>),
+    ArrayOfNetworkProfileDnsConfigProfile(Vec<super::structs::NetworkProfileDnsConfigProfile>),
     /// A boxed array of *NsxHostVNicProfile*. To be used in *Any* placeholders.
-    ArrayOfNsxHostVNicProfile(Vec<NsxHostVNicProfile>),
+    ArrayOfNsxHostVNicProfile(Vec<super::structs::NsxHostVNicProfile>),
     /// A boxed array of *OpaqueSwitchProfile*. To be used in *Any* placeholders.
-    ArrayOfOpaqueSwitchProfile(Vec<OpaqueSwitchProfile>),
+    ArrayOfOpaqueSwitchProfile(Vec<super::structs::OpaqueSwitchProfile>),
     /// A boxed array of *OptionProfile*. To be used in *Any* placeholders.
-    ArrayOfOptionProfile(Vec<OptionProfile>),
+    ArrayOfOptionProfile(Vec<super::structs::OptionProfile>),
     /// A boxed array of *PermissionProfile*. To be used in *Any* placeholders.
-    ArrayOfPermissionProfile(Vec<PermissionProfile>),
+    ArrayOfPermissionProfile(Vec<super::structs::PermissionProfile>),
     /// A boxed array of *PhysicalNicProfile*. To be used in *Any* placeholders.
-    ArrayOfPhysicalNicProfile(Vec<PhysicalNicProfile>),
+    ArrayOfPhysicalNicProfile(Vec<super::structs::PhysicalNicProfile>),
     /// A boxed array of *PnicUplinkProfile*. To be used in *Any* placeholders.
-    ArrayOfPnicUplinkProfile(Vec<PnicUplinkProfile>),
+    ArrayOfPnicUplinkProfile(Vec<super::structs::PnicUplinkProfile>),
     /// A boxed array of *PortGroupProfile*. To be used in *Any* placeholders.
     ArrayOfPortGroupProfile(Vec<Box<dyn super::traits::PortGroupProfileTrait>>),
     /// A boxed array of *VirtualSwitchSelectionProfile*. To be used in *Any* placeholders.
-    ArrayOfVirtualSwitchSelectionProfile(Vec<VirtualSwitchSelectionProfile>),
+    ArrayOfVirtualSwitchSelectionProfile(Vec<super::structs::VirtualSwitchSelectionProfile>),
     /// A boxed array of *VlanProfile*. To be used in *Any* placeholders.
-    ArrayOfVlanProfile(Vec<VlanProfile>),
+    ArrayOfVlanProfile(Vec<super::structs::VlanProfile>),
     /// A boxed array of *AnswerFileCreateSpec*. To be used in *Any* placeholders.
     ArrayOfAnswerFileCreateSpec(Vec<Box<dyn super::traits::AnswerFileCreateSpecTrait>>),
     /// A boxed array of *AnswerFileOptionsCreateSpec*. To be used in *Any* placeholders.
-    ArrayOfAnswerFileOptionsCreateSpec(Vec<AnswerFileOptionsCreateSpec>),
+    ArrayOfAnswerFileOptionsCreateSpec(Vec<super::structs::AnswerFileOptionsCreateSpec>),
     /// A boxed array of *AnswerFileSerializedCreateSpec*. To be used in *Any* placeholders.
-    ArrayOfAnswerFileSerializedCreateSpec(Vec<AnswerFileSerializedCreateSpec>),
+    ArrayOfAnswerFileSerializedCreateSpec(Vec<super::structs::AnswerFileSerializedCreateSpec>),
     /// A boxed array of *ApplyHostProfileConfigurationResult*. To be used in *Any* placeholders.
-    ArrayOfApplyHostProfileConfigurationResult(Vec<ApplyHostProfileConfigurationResult>),
+    ArrayOfApplyHostProfileConfigurationResult(Vec<super::structs::ApplyHostProfileConfigurationResult>),
     /// A boxed array of *ApplyHostProfileConfigurationSpec*. To be used in *Any* placeholders.
-    ArrayOfApplyHostProfileConfigurationSpec(Vec<ApplyHostProfileConfigurationSpec>),
+    ArrayOfApplyHostProfileConfigurationSpec(Vec<super::structs::ApplyHostProfileConfigurationSpec>),
     /// A boxed array of *HostProfileManagerCompositionResult*. To be used in *Any* placeholders.
-    ArrayOfHostProfileManagerCompositionResult(Vec<HostProfileManagerCompositionResult>),
+    ArrayOfHostProfileManagerCompositionResult(Vec<super::structs::HostProfileManagerCompositionResult>),
     /// A boxed array of *HostProfileManagerCompositionResultResultElement*. To be used in *Any* placeholders.
-    ArrayOfHostProfileManagerCompositionResultResultElement(Vec<HostProfileManagerCompositionResultResultElement>),
+    ArrayOfHostProfileManagerCompositionResultResultElement(Vec<super::structs::HostProfileManagerCompositionResultResultElement>),
     /// A boxed array of *HostProfileManagerCompositionValidationResult*. To be used in *Any* placeholders.
-    ArrayOfHostProfileManagerCompositionValidationResult(Vec<HostProfileManagerCompositionValidationResult>),
+    ArrayOfHostProfileManagerCompositionValidationResult(Vec<super::structs::HostProfileManagerCompositionValidationResult>),
     /// A boxed array of *HostProfileManagerCompositionValidationResultResultElement*. To be used in *Any* placeholders.
-    ArrayOfHostProfileManagerCompositionValidationResultResultElement(Vec<HostProfileManagerCompositionValidationResultResultElement>),
+    ArrayOfHostProfileManagerCompositionValidationResultResultElement(Vec<super::structs::HostProfileManagerCompositionValidationResultResultElement>),
     /// A boxed array of *HostProfileManagerConfigTaskList*. To be used in *Any* placeholders.
-    ArrayOfHostProfileManagerConfigTaskList(Vec<HostProfileManagerConfigTaskList>),
+    ArrayOfHostProfileManagerConfigTaskList(Vec<super::structs::HostProfileManagerConfigTaskList>),
     /// A boxed array of *HostProfilesEntityCustomizations*. To be used in *Any* placeholders.
     ArrayOfHostProfilesEntityCustomizations(Vec<Box<dyn super::traits::HostProfilesEntityCustomizationsTrait>>),
     /// A boxed array of *HostProfileManagerHostToConfigSpecMap*. To be used in *Any* placeholders.
-    ArrayOfHostProfileManagerHostToConfigSpecMap(Vec<HostProfileManagerHostToConfigSpecMap>),
+    ArrayOfHostProfileManagerHostToConfigSpecMap(Vec<super::structs::HostProfileManagerHostToConfigSpecMap>),
     /// A boxed array of *StructuredCustomizations*. To be used in *Any* placeholders.
-    ArrayOfStructuredCustomizations(Vec<StructuredCustomizations>),
+    ArrayOfStructuredCustomizations(Vec<super::structs::StructuredCustomizations>),
     /// A boxed array of *SecurityProfile*. To be used in *Any* placeholders.
-    ArrayOfSecurityProfile(Vec<SecurityProfile>),
+    ArrayOfSecurityProfile(Vec<super::structs::SecurityProfile>),
     /// A boxed array of *ServiceConsolePortGroupProfile*. To be used in *Any* placeholders.
-    ArrayOfServiceConsolePortGroupProfile(Vec<ServiceConsolePortGroupProfile>),
+    ArrayOfServiceConsolePortGroupProfile(Vec<super::structs::ServiceConsolePortGroupProfile>),
     /// A boxed array of *ServiceProfile*. To be used in *Any* placeholders.
-    ArrayOfServiceProfile(Vec<ServiceProfile>),
+    ArrayOfServiceProfile(Vec<super::structs::ServiceProfile>),
     /// A boxed array of *StaticRouteProfile*. To be used in *Any* placeholders.
-    ArrayOfStaticRouteProfile(Vec<StaticRouteProfile>),
+    ArrayOfStaticRouteProfile(Vec<super::structs::StaticRouteProfile>),
     /// A boxed array of *StorageProfile*. To be used in *Any* placeholders.
-    ArrayOfStorageProfile(Vec<StorageProfile>),
+    ArrayOfStorageProfile(Vec<super::structs::StorageProfile>),
     /// A boxed array of *UserGroupProfile*. To be used in *Any* placeholders.
-    ArrayOfUserGroupProfile(Vec<UserGroupProfile>),
+    ArrayOfUserGroupProfile(Vec<super::structs::UserGroupProfile>),
     /// A boxed array of *UserProfile*. To be used in *Any* placeholders.
-    ArrayOfUserProfile(Vec<UserProfile>),
+    ArrayOfUserProfile(Vec<super::structs::UserProfile>),
     /// A boxed array of *VirtualSwitchProfile*. To be used in *Any* placeholders.
-    ArrayOfVirtualSwitchProfile(Vec<VirtualSwitchProfile>),
+    ArrayOfVirtualSwitchProfile(Vec<super::structs::VirtualSwitchProfile>),
     /// A boxed array of *LinkProfile*. To be used in *Any* placeholders.
-    ArrayOfLinkProfile(Vec<LinkProfile>),
+    ArrayOfLinkProfile(Vec<super::structs::LinkProfile>),
     /// A boxed array of *NumPortsProfile*. To be used in *Any* placeholders.
-    ArrayOfNumPortsProfile(Vec<NumPortsProfile>),
+    ArrayOfNumPortsProfile(Vec<super::structs::NumPortsProfile>),
     /// A boxed array of *VmPortGroupProfile*. To be used in *Any* placeholders.
-    ArrayOfVmPortGroupProfile(Vec<VmPortGroupProfile>),
+    ArrayOfVmPortGroupProfile(Vec<super::structs::VmPortGroupProfile>),
     /// A boxed array of *AfterStartupTaskScheduler*. To be used in *Any* placeholders.
-    ArrayOfAfterStartupTaskScheduler(Vec<AfterStartupTaskScheduler>),
+    ArrayOfAfterStartupTaskScheduler(Vec<super::structs::AfterStartupTaskScheduler>),
     /// A boxed array of *DailyTaskScheduler*. To be used in *Any* placeholders.
     ArrayOfDailyTaskScheduler(Vec<Box<dyn super::traits::DailyTaskSchedulerTrait>>),
     /// A boxed array of *HourlyTaskScheduler*. To be used in *Any* placeholders.
     ArrayOfHourlyTaskScheduler(Vec<Box<dyn super::traits::HourlyTaskSchedulerTrait>>),
     /// A boxed array of *MonthlyByDayTaskScheduler*. To be used in *Any* placeholders.
-    ArrayOfMonthlyByDayTaskScheduler(Vec<MonthlyByDayTaskScheduler>),
+    ArrayOfMonthlyByDayTaskScheduler(Vec<super::structs::MonthlyByDayTaskScheduler>),
     /// A boxed array of *MonthlyByWeekdayTaskScheduler*. To be used in *Any* placeholders.
-    ArrayOfMonthlyByWeekdayTaskScheduler(Vec<MonthlyByWeekdayTaskScheduler>),
+    ArrayOfMonthlyByWeekdayTaskScheduler(Vec<super::structs::MonthlyByWeekdayTaskScheduler>),
     /// A boxed array of *MonthlyTaskScheduler*. To be used in *Any* placeholders.
     ArrayOfMonthlyTaskScheduler(Vec<Box<dyn super::traits::MonthlyTaskSchedulerTrait>>),
     /// A boxed array of *OnceTaskScheduler*. To be used in *Any* placeholders.
-    ArrayOfOnceTaskScheduler(Vec<OnceTaskScheduler>),
+    ArrayOfOnceTaskScheduler(Vec<super::structs::OnceTaskScheduler>),
     /// A boxed array of *RecurrentTaskScheduler*. To be used in *Any* placeholders.
     ArrayOfRecurrentTaskScheduler(Vec<Box<dyn super::traits::RecurrentTaskSchedulerTrait>>),
     /// A boxed array of *ScheduledTaskDescription*. To be used in *Any* placeholders.
-    ArrayOfScheduledTaskDescription(Vec<ScheduledTaskDescription>),
+    ArrayOfScheduledTaskDescription(Vec<super::structs::ScheduledTaskDescription>),
     /// A boxed array of *ScheduledTaskDetail*. To be used in *Any* placeholders.
-    ArrayOfScheduledTaskDetail(Vec<ScheduledTaskDetail>),
+    ArrayOfScheduledTaskDetail(Vec<super::structs::ScheduledTaskDetail>),
     /// A boxed array of *ScheduledTaskInfo*. To be used in *Any* placeholders.
-    ArrayOfScheduledTaskInfo(Vec<ScheduledTaskInfo>),
+    ArrayOfScheduledTaskInfo(Vec<super::structs::ScheduledTaskInfo>),
     /// A boxed array of *ScheduledTaskSpec*. To be used in *Any* placeholders.
     ArrayOfScheduledTaskSpec(Vec<Box<dyn super::traits::ScheduledTaskSpecTrait>>),
     /// A boxed array of *TaskScheduler*. To be used in *Any* placeholders.
     ArrayOfTaskScheduler(Vec<Box<dyn super::traits::TaskSchedulerTrait>>),
     /// A boxed array of *WeeklyTaskScheduler*. To be used in *Any* placeholders.
-    ArrayOfWeeklyTaskScheduler(Vec<WeeklyTaskScheduler>),
+    ArrayOfWeeklyTaskScheduler(Vec<super::structs::WeeklyTaskScheduler>),
     /// A boxed array of *ApplyStorageRecommendationResult*. To be used in *Any* placeholders.
-    ArrayOfApplyStorageRecommendationResult(Vec<ApplyStorageRecommendationResult>),
+    ArrayOfApplyStorageRecommendationResult(Vec<super::structs::ApplyStorageRecommendationResult>),
     /// A boxed array of *StorageDrsAutomationConfig*. To be used in *Any* placeholders.
-    ArrayOfStorageDrsAutomationConfig(Vec<StorageDrsAutomationConfig>),
+    ArrayOfStorageDrsAutomationConfig(Vec<super::structs::StorageDrsAutomationConfig>),
     /// A boxed array of *StorageDrsConfigInfo*. To be used in *Any* placeholders.
-    ArrayOfStorageDrsConfigInfo(Vec<StorageDrsConfigInfo>),
+    ArrayOfStorageDrsConfigInfo(Vec<super::structs::StorageDrsConfigInfo>),
     /// A boxed array of *StorageDrsConfigSpec*. To be used in *Any* placeholders.
-    ArrayOfStorageDrsConfigSpec(Vec<StorageDrsConfigSpec>),
+    ArrayOfStorageDrsConfigSpec(Vec<super::structs::StorageDrsConfigSpec>),
     /// A boxed array of *HbrDiskMigrationAction*. To be used in *Any* placeholders.
-    ArrayOfHbrDiskMigrationAction(Vec<HbrDiskMigrationAction>),
+    ArrayOfHbrDiskMigrationAction(Vec<super::structs::HbrDiskMigrationAction>),
     /// A boxed array of *StorageDrsIoLoadBalanceConfig*. To be used in *Any* placeholders.
-    ArrayOfStorageDrsIoLoadBalanceConfig(Vec<StorageDrsIoLoadBalanceConfig>),
+    ArrayOfStorageDrsIoLoadBalanceConfig(Vec<super::structs::StorageDrsIoLoadBalanceConfig>),
     /// A boxed array of *StorageDrsOptionSpec*. To be used in *Any* placeholders.
-    ArrayOfStorageDrsOptionSpec(Vec<StorageDrsOptionSpec>),
+    ArrayOfStorageDrsOptionSpec(Vec<super::structs::StorageDrsOptionSpec>),
     /// A boxed array of *PlacementAffinityRule*. To be used in *Any* placeholders.
-    ArrayOfPlacementAffinityRule(Vec<PlacementAffinityRule>),
+    ArrayOfPlacementAffinityRule(Vec<super::structs::PlacementAffinityRule>),
     /// A boxed array of *PlacementRankResult*. To be used in *Any* placeholders.
-    ArrayOfPlacementRankResult(Vec<PlacementRankResult>),
+    ArrayOfPlacementRankResult(Vec<super::structs::PlacementRankResult>),
     /// A boxed array of *PlacementRankSpec*. To be used in *Any* placeholders.
-    ArrayOfPlacementRankSpec(Vec<PlacementRankSpec>),
+    ArrayOfPlacementRankSpec(Vec<super::structs::PlacementRankSpec>),
     /// A boxed array of *StorageDrsPlacementRankVmSpec*. To be used in *Any* placeholders.
-    ArrayOfStorageDrsPlacementRankVmSpec(Vec<StorageDrsPlacementRankVmSpec>),
+    ArrayOfStorageDrsPlacementRankVmSpec(Vec<super::structs::StorageDrsPlacementRankVmSpec>),
     /// A boxed array of *StorageDrsPodConfigInfo*. To be used in *Any* placeholders.
-    ArrayOfStorageDrsPodConfigInfo(Vec<StorageDrsPodConfigInfo>),
+    ArrayOfStorageDrsPodConfigInfo(Vec<super::structs::StorageDrsPodConfigInfo>),
     /// A boxed array of *StorageDrsPodConfigSpec*. To be used in *Any* placeholders.
-    ArrayOfStorageDrsPodConfigSpec(Vec<StorageDrsPodConfigSpec>),
+    ArrayOfStorageDrsPodConfigSpec(Vec<super::structs::StorageDrsPodConfigSpec>),
     /// A boxed array of *StorageDrsPodSelectionSpec*. To be used in *Any* placeholders.
-    ArrayOfStorageDrsPodSelectionSpec(Vec<StorageDrsPodSelectionSpec>),
+    ArrayOfStorageDrsPodSelectionSpec(Vec<super::structs::StorageDrsPodSelectionSpec>),
     /// A boxed array of *PodDiskLocator*. To be used in *Any* placeholders.
-    ArrayOfPodDiskLocator(Vec<PodDiskLocator>),
+    ArrayOfPodDiskLocator(Vec<super::structs::PodDiskLocator>),
     /// A boxed array of *VmPodConfigForPlacement*. To be used in *Any* placeholders.
-    ArrayOfVmPodConfigForPlacement(Vec<VmPodConfigForPlacement>),
+    ArrayOfVmPodConfigForPlacement(Vec<super::structs::VmPodConfigForPlacement>),
     /// A boxed array of *StorageDrsSpaceLoadBalanceConfig*. To be used in *Any* placeholders.
-    ArrayOfStorageDrsSpaceLoadBalanceConfig(Vec<StorageDrsSpaceLoadBalanceConfig>),
+    ArrayOfStorageDrsSpaceLoadBalanceConfig(Vec<super::structs::StorageDrsSpaceLoadBalanceConfig>),
     /// A boxed array of *StorageMigrationAction*. To be used in *Any* placeholders.
-    ArrayOfStorageMigrationAction(Vec<StorageMigrationAction>),
+    ArrayOfStorageMigrationAction(Vec<super::structs::StorageMigrationAction>),
     /// A boxed array of *StoragePlacementAction*. To be used in *Any* placeholders.
-    ArrayOfStoragePlacementAction(Vec<StoragePlacementAction>),
+    ArrayOfStoragePlacementAction(Vec<super::structs::StoragePlacementAction>),
     /// A boxed array of *StoragePlacementResult*. To be used in *Any* placeholders.
-    ArrayOfStoragePlacementResult(Vec<StoragePlacementResult>),
+    ArrayOfStoragePlacementResult(Vec<super::structs::StoragePlacementResult>),
     /// A boxed array of *StoragePlacementSpec*. To be used in *Any* placeholders.
-    ArrayOfStoragePlacementSpec(Vec<StoragePlacementSpec>),
+    ArrayOfStoragePlacementSpec(Vec<super::structs::StoragePlacementSpec>),
     /// A boxed array of *VirtualDiskAntiAffinityRuleSpec*. To be used in *Any* placeholders.
-    ArrayOfVirtualDiskAntiAffinityRuleSpec(Vec<VirtualDiskAntiAffinityRuleSpec>),
+    ArrayOfVirtualDiskAntiAffinityRuleSpec(Vec<super::structs::VirtualDiskAntiAffinityRuleSpec>),
     /// A boxed array of *VirtualDiskRuleSpec*. To be used in *Any* placeholders.
-    ArrayOfVirtualDiskRuleSpec(Vec<VirtualDiskRuleSpec>),
+    ArrayOfVirtualDiskRuleSpec(Vec<super::structs::VirtualDiskRuleSpec>),
     /// A boxed array of *StorageDrsVmConfigInfo*. To be used in *Any* placeholders.
-    ArrayOfStorageDrsVmConfigInfo(Vec<StorageDrsVmConfigInfo>),
+    ArrayOfStorageDrsVmConfigInfo(Vec<super::structs::StorageDrsVmConfigInfo>),
     /// A boxed array of *StorageDrsVmConfigSpec*. To be used in *Any* placeholders.
-    ArrayOfStorageDrsVmConfigSpec(Vec<StorageDrsVmConfigSpec>),
+    ArrayOfStorageDrsVmConfigSpec(Vec<super::structs::StorageDrsVmConfigSpec>),
     /// A boxed array of *VAppCloneSpec*. To be used in *Any* placeholders.
-    ArrayOfVAppCloneSpec(Vec<VAppCloneSpec>),
+    ArrayOfVAppCloneSpec(Vec<super::structs::VAppCloneSpec>),
     /// A boxed array of *VAppCloneSpecNetworkMappingPair*. To be used in *Any* placeholders.
-    ArrayOfVAppCloneSpecNetworkMappingPair(Vec<VAppCloneSpecNetworkMappingPair>),
+    ArrayOfVAppCloneSpecNetworkMappingPair(Vec<super::structs::VAppCloneSpecNetworkMappingPair>),
     /// A boxed array of *VAppCloneSpecResourceMap*. To be used in *Any* placeholders.
-    ArrayOfVAppCloneSpecResourceMap(Vec<VAppCloneSpecResourceMap>),
+    ArrayOfVAppCloneSpecResourceMap(Vec<super::structs::VAppCloneSpecResourceMap>),
     /// A boxed array of *VAppEntityConfigInfo*. To be used in *Any* placeholders.
-    ArrayOfVAppEntityConfigInfo(Vec<VAppEntityConfigInfo>),
+    ArrayOfVAppEntityConfigInfo(Vec<super::structs::VAppEntityConfigInfo>),
     /// A boxed array of *VAppIPAssignmentInfo*. To be used in *Any* placeholders.
-    ArrayOfVAppIpAssignmentInfo(Vec<VAppIpAssignmentInfo>),
+    ArrayOfVAppIpAssignmentInfo(Vec<super::structs::VAppIpAssignmentInfo>),
     /// A boxed array of *IpPool*. To be used in *Any* placeholders.
-    ArrayOfIpPool(Vec<IpPool>),
+    ArrayOfIpPool(Vec<super::structs::IpPool>),
     /// A boxed array of *IpPoolAssociation*. To be used in *Any* placeholders.
-    ArrayOfIpPoolAssociation(Vec<IpPoolAssociation>),
+    ArrayOfIpPoolAssociation(Vec<super::structs::IpPoolAssociation>),
     /// A boxed array of *IpPoolIpPoolConfigInfo*. To be used in *Any* placeholders.
-    ArrayOfIpPoolIpPoolConfigInfo(Vec<IpPoolIpPoolConfigInfo>),
+    ArrayOfIpPoolIpPoolConfigInfo(Vec<super::structs::IpPoolIpPoolConfigInfo>),
     /// A boxed array of *VAppOvfSectionInfo*. To be used in *Any* placeholders.
-    ArrayOfVAppOvfSectionInfo(Vec<VAppOvfSectionInfo>),
+    ArrayOfVAppOvfSectionInfo(Vec<super::structs::VAppOvfSectionInfo>),
     /// A boxed array of *VAppOvfSectionSpec*. To be used in *Any* placeholders.
-    ArrayOfVAppOvfSectionSpec(Vec<VAppOvfSectionSpec>),
+    ArrayOfVAppOvfSectionSpec(Vec<super::structs::VAppOvfSectionSpec>),
     /// A boxed array of *VAppProductInfo*. To be used in *Any* placeholders.
-    ArrayOfVAppProductInfo(Vec<VAppProductInfo>),
+    ArrayOfVAppProductInfo(Vec<super::structs::VAppProductInfo>),
     /// A boxed array of *VAppProductSpec*. To be used in *Any* placeholders.
-    ArrayOfVAppProductSpec(Vec<VAppProductSpec>),
+    ArrayOfVAppProductSpec(Vec<super::structs::VAppProductSpec>),
     /// A boxed array of *VAppPropertyInfo*. To be used in *Any* placeholders.
-    ArrayOfVAppPropertyInfo(Vec<VAppPropertyInfo>),
+    ArrayOfVAppPropertyInfo(Vec<super::structs::VAppPropertyInfo>),
     /// A boxed array of *VAppPropertySpec*. To be used in *Any* placeholders.
-    ArrayOfVAppPropertySpec(Vec<VAppPropertySpec>),
+    ArrayOfVAppPropertySpec(Vec<super::structs::VAppPropertySpec>),
     /// A boxed array of *VAppConfigInfo*. To be used in *Any* placeholders.
-    ArrayOfVAppConfigInfo(Vec<VAppConfigInfo>),
+    ArrayOfVAppConfigInfo(Vec<super::structs::VAppConfigInfo>),
     /// A boxed array of *VAppConfigSpec*. To be used in *Any* placeholders.
-    ArrayOfVAppConfigSpec(Vec<VAppConfigSpec>),
+    ArrayOfVAppConfigSpec(Vec<super::structs::VAppConfigSpec>),
     /// A boxed array of *VirtualAppImportSpec*. To be used in *Any* placeholders.
-    ArrayOfVirtualAppImportSpec(Vec<VirtualAppImportSpec>),
+    ArrayOfVirtualAppImportSpec(Vec<super::structs::VirtualAppImportSpec>),
     /// A boxed array of *VmConfigInfo*. To be used in *Any* placeholders.
     ArrayOfVmConfigInfo(Vec<Box<dyn super::traits::VmConfigInfoTrait>>),
     /// A boxed array of *VmConfigSpec*. To be used in *Any* placeholders.
     ArrayOfVmConfigSpec(Vec<Box<dyn super::traits::VmConfigSpecTrait>>),
     /// A boxed array of *ClusterNetworkConfigSpec*. To be used in *Any* placeholders.
-    ArrayOfClusterNetworkConfigSpec(Vec<ClusterNetworkConfigSpec>),
+    ArrayOfClusterNetworkConfigSpec(Vec<super::structs::ClusterNetworkConfigSpec>),
     /// A boxed array of *FailoverNodeInfo*. To be used in *Any* placeholders.
-    ArrayOfFailoverNodeInfo(Vec<FailoverNodeInfo>),
+    ArrayOfFailoverNodeInfo(Vec<super::structs::FailoverNodeInfo>),
     /// A boxed array of *NodeDeploymentSpec*. To be used in *Any* placeholders.
     ArrayOfNodeDeploymentSpec(Vec<Box<dyn super::traits::NodeDeploymentSpecTrait>>),
     /// A boxed array of *NodeNetworkSpec*. To be used in *Any* placeholders.
     ArrayOfNodeNetworkSpec(Vec<Box<dyn super::traits::NodeNetworkSpecTrait>>),
     /// A boxed array of *PassiveNodeDeploymentSpec*. To be used in *Any* placeholders.
-    ArrayOfPassiveNodeDeploymentSpec(Vec<PassiveNodeDeploymentSpec>),
+    ArrayOfPassiveNodeDeploymentSpec(Vec<super::structs::PassiveNodeDeploymentSpec>),
     /// A boxed array of *PassiveNodeNetworkSpec*. To be used in *Any* placeholders.
-    ArrayOfPassiveNodeNetworkSpec(Vec<PassiveNodeNetworkSpec>),
+    ArrayOfPassiveNodeNetworkSpec(Vec<super::structs::PassiveNodeNetworkSpec>),
     /// A boxed array of *SourceNodeSpec*. To be used in *Any* placeholders.
-    ArrayOfSourceNodeSpec(Vec<SourceNodeSpec>),
+    ArrayOfSourceNodeSpec(Vec<super::structs::SourceNodeSpec>),
     /// A boxed array of *VchaClusterConfigInfo*. To be used in *Any* placeholders.
-    ArrayOfVchaClusterConfigInfo(Vec<VchaClusterConfigInfo>),
+    ArrayOfVchaClusterConfigInfo(Vec<super::structs::VchaClusterConfigInfo>),
     /// A boxed array of *VchaClusterConfigSpec*. To be used in *Any* placeholders.
-    ArrayOfVchaClusterConfigSpec(Vec<VchaClusterConfigSpec>),
+    ArrayOfVchaClusterConfigSpec(Vec<super::structs::VchaClusterConfigSpec>),
     /// A boxed array of *VchaClusterDeploymentSpec*. To be used in *Any* placeholders.
-    ArrayOfVchaClusterDeploymentSpec(Vec<VchaClusterDeploymentSpec>),
+    ArrayOfVchaClusterDeploymentSpec(Vec<super::structs::VchaClusterDeploymentSpec>),
     /// A boxed array of *VchaClusterNetworkSpec*. To be used in *Any* placeholders.
-    ArrayOfVchaClusterNetworkSpec(Vec<VchaClusterNetworkSpec>),
+    ArrayOfVchaClusterNetworkSpec(Vec<super::structs::VchaClusterNetworkSpec>),
     /// A boxed array of *WitnessNodeInfo*. To be used in *Any* placeholders.
-    ArrayOfWitnessNodeInfo(Vec<WitnessNodeInfo>),
+    ArrayOfWitnessNodeInfo(Vec<super::structs::WitnessNodeInfo>),
     /// A boxed array of *VchaClusterHealth*. To be used in *Any* placeholders.
-    ArrayOfVchaClusterHealth(Vec<VchaClusterHealth>),
+    ArrayOfVchaClusterHealth(Vec<super::structs::VchaClusterHealth>),
     /// A boxed array of *VchaClusterRuntimeInfo*. To be used in *Any* placeholders.
-    ArrayOfVchaClusterRuntimeInfo(Vec<VchaClusterRuntimeInfo>),
+    ArrayOfVchaClusterRuntimeInfo(Vec<super::structs::VchaClusterRuntimeInfo>),
     /// A boxed array of *VchaNodeRuntimeInfo*. To be used in *Any* placeholders.
-    ArrayOfVchaNodeRuntimeInfo(Vec<VchaNodeRuntimeInfo>),
+    ArrayOfVchaNodeRuntimeInfo(Vec<super::structs::VchaNodeRuntimeInfo>),
     /// A boxed array of *VirtualMachineAffinityInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineAffinityInfo(Vec<VirtualMachineAffinityInfo>),
+    ArrayOfVirtualMachineAffinityInfo(Vec<super::structs::VirtualMachineAffinityInfo>),
     /// A boxed array of *VirtualMachineBaseIndependentFilterSpec*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 7.0.2.1
     ArrayOfVirtualMachineBaseIndependentFilterSpec(Vec<Box<dyn super::traits::VirtualMachineBaseIndependentFilterSpecTrait>>),
     /// A boxed array of *VirtualMachineBootOptions*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineBootOptions(Vec<VirtualMachineBootOptions>),
+    ArrayOfVirtualMachineBootOptions(Vec<super::structs::VirtualMachineBootOptions>),
     /// A boxed array of *VirtualMachineBootOptionsBootableCdromDevice*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineBootOptionsBootableCdromDevice(Vec<VirtualMachineBootOptionsBootableCdromDevice>),
+    ArrayOfVirtualMachineBootOptionsBootableCdromDevice(Vec<super::structs::VirtualMachineBootOptionsBootableCdromDevice>),
     /// A boxed array of *VirtualMachineBootOptionsBootableDevice*. To be used in *Any* placeholders.
     ArrayOfVirtualMachineBootOptionsBootableDevice(Vec<Box<dyn super::traits::VirtualMachineBootOptionsBootableDeviceTrait>>),
     /// A boxed array of *VirtualMachineBootOptionsBootableDiskDevice*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineBootOptionsBootableDiskDevice(Vec<VirtualMachineBootOptionsBootableDiskDevice>),
+    ArrayOfVirtualMachineBootOptionsBootableDiskDevice(Vec<super::structs::VirtualMachineBootOptionsBootableDiskDevice>),
     /// A boxed array of *VirtualMachineBootOptionsBootableEthernetDevice*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineBootOptionsBootableEthernetDevice(Vec<VirtualMachineBootOptionsBootableEthernetDevice>),
+    ArrayOfVirtualMachineBootOptionsBootableEthernetDevice(Vec<super::structs::VirtualMachineBootOptionsBootableEthernetDevice>),
     /// A boxed array of *VirtualMachineBootOptionsBootableFloppyDevice*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineBootOptionsBootableFloppyDevice(Vec<VirtualMachineBootOptionsBootableFloppyDevice>),
+    ArrayOfVirtualMachineBootOptionsBootableFloppyDevice(Vec<super::structs::VirtualMachineBootOptionsBootableFloppyDevice>),
     /// A boxed array of *VirtualMachineCapability*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineCapability(Vec<VirtualMachineCapability>),
+    ArrayOfVirtualMachineCapability(Vec<super::structs::VirtualMachineCapability>),
     /// A boxed array of *VirtualMachineCdromInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineCdromInfo(Vec<VirtualMachineCdromInfo>),
+    ArrayOfVirtualMachineCdromInfo(Vec<super::structs::VirtualMachineCdromInfo>),
     /// A boxed array of *VirtualMachineCertThumbprint*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 7.0.3.1
-    ArrayOfVirtualMachineCertThumbprint(Vec<VirtualMachineCertThumbprint>),
+    ArrayOfVirtualMachineCertThumbprint(Vec<super::structs::VirtualMachineCertThumbprint>),
     /// A boxed array of *VirtualMachineCloneSpec*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineCloneSpec(Vec<VirtualMachineCloneSpec>),
+    ArrayOfVirtualMachineCloneSpec(Vec<super::structs::VirtualMachineCloneSpec>),
     /// A boxed array of *VirtualMachineConfigInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineConfigInfo(Vec<VirtualMachineConfigInfo>),
+    ArrayOfVirtualMachineConfigInfo(Vec<super::structs::VirtualMachineConfigInfo>),
     /// A boxed array of *VirtualMachineConfigInfoDatastoreUrlPair*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineConfigInfoDatastoreUrlPair(Vec<VirtualMachineConfigInfoDatastoreUrlPair>),
+    ArrayOfVirtualMachineConfigInfoDatastoreUrlPair(Vec<super::structs::VirtualMachineConfigInfoDatastoreUrlPair>),
     /// A boxed array of *VirtualMachineConfigInfoOverheadInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineConfigInfoOverheadInfo(Vec<VirtualMachineConfigInfoOverheadInfo>),
+    ArrayOfVirtualMachineConfigInfoOverheadInfo(Vec<super::structs::VirtualMachineConfigInfoOverheadInfo>),
     /// A boxed array of *VirtualMachineConfigOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineConfigOption(Vec<VirtualMachineConfigOption>),
+    ArrayOfVirtualMachineConfigOption(Vec<super::structs::VirtualMachineConfigOption>),
     /// A boxed array of *VirtualMachineConfigOptionDescriptor*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineConfigOptionDescriptor(Vec<VirtualMachineConfigOptionDescriptor>),
+    ArrayOfVirtualMachineConfigOptionDescriptor(Vec<super::structs::VirtualMachineConfigOptionDescriptor>),
     /// A boxed array of *VirtualMachineConfigSpec*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineConfigSpec(Vec<VirtualMachineConfigSpec>),
+    ArrayOfVirtualMachineConfigSpec(Vec<super::structs::VirtualMachineConfigSpec>),
     /// A boxed array of *VirtualMachineCpuIdInfoSpec*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineCpuIdInfoSpec(Vec<VirtualMachineCpuIdInfoSpec>),
+    ArrayOfVirtualMachineCpuIdInfoSpec(Vec<super::structs::VirtualMachineCpuIdInfoSpec>),
     /// A boxed array of *ConfigTarget*. To be used in *Any* placeholders.
-    ArrayOfConfigTarget(Vec<ConfigTarget>),
+    ArrayOfConfigTarget(Vec<super::structs::ConfigTarget>),
     /// A boxed array of *VirtualMachineConsolePreferences*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineConsolePreferences(Vec<VirtualMachineConsolePreferences>),
+    ArrayOfVirtualMachineConsolePreferences(Vec<super::structs::VirtualMachineConsolePreferences>),
     /// A boxed array of *VirtualMachineContentLibraryItemInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineContentLibraryItemInfo(Vec<VirtualMachineContentLibraryItemInfo>),
+    ArrayOfVirtualMachineContentLibraryItemInfo(Vec<super::structs::VirtualMachineContentLibraryItemInfo>),
     /// A boxed array of *VirtualMachineDatastoreInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineDatastoreInfo(Vec<VirtualMachineDatastoreInfo>),
+    ArrayOfVirtualMachineDatastoreInfo(Vec<super::structs::VirtualMachineDatastoreInfo>),
     /// A boxed array of *DatastoreOption*. To be used in *Any* placeholders.
-    ArrayOfDatastoreOption(Vec<DatastoreOption>),
+    ArrayOfDatastoreOption(Vec<super::structs::DatastoreOption>),
     /// A boxed array of *VirtualMachineDatastoreVolumeOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineDatastoreVolumeOption(Vec<VirtualMachineDatastoreVolumeOption>),
+    ArrayOfVirtualMachineDatastoreVolumeOption(Vec<super::structs::VirtualMachineDatastoreVolumeOption>),
     /// A boxed array of *VirtualMachineDefaultPowerOpInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineDefaultPowerOpInfo(Vec<VirtualMachineDefaultPowerOpInfo>),
+    ArrayOfVirtualMachineDefaultPowerOpInfo(Vec<super::structs::VirtualMachineDefaultPowerOpInfo>),
     /// A boxed array of *VirtualMachineDefaultProfileSpec*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineDefaultProfileSpec(Vec<VirtualMachineDefaultProfileSpec>),
+    ArrayOfVirtualMachineDefaultProfileSpec(Vec<super::structs::VirtualMachineDefaultProfileSpec>),
     /// A boxed array of *VirtualMachineDefinedProfileSpec*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineDefinedProfileSpec(Vec<VirtualMachineDefinedProfileSpec>),
+    ArrayOfVirtualMachineDefinedProfileSpec(Vec<super::structs::VirtualMachineDefinedProfileSpec>),
     /// A boxed array of *VirtualMachineDeviceRuntimeInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineDeviceRuntimeInfo(Vec<VirtualMachineDeviceRuntimeInfo>),
+    ArrayOfVirtualMachineDeviceRuntimeInfo(Vec<super::structs::VirtualMachineDeviceRuntimeInfo>),
     /// A boxed array of *VirtualMachineDeviceRuntimeInfoDeviceRuntimeState*. To be used in *Any* placeholders.
     ArrayOfVirtualMachineDeviceRuntimeInfoDeviceRuntimeState(Vec<Box<dyn super::traits::VirtualMachineDeviceRuntimeInfoDeviceRuntimeStateTrait>>),
     /// A boxed array of *VirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeState*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeState(Vec<VirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeState>),
+    ArrayOfVirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeState(Vec<super::structs::VirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeState>),
     /// A boxed array of *VirtualMachineDiskDeviceInfo*. To be used in *Any* placeholders.
     ArrayOfVirtualMachineDiskDeviceInfo(Vec<Box<dyn super::traits::VirtualMachineDiskDeviceInfoTrait>>),
     /// A boxed array of *VirtualMachineDvxClassInfo*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 8.0.0.1
-    ArrayOfVirtualMachineDvxClassInfo(Vec<VirtualMachineDvxClassInfo>),
+    ArrayOfVirtualMachineDvxClassInfo(Vec<super::structs::VirtualMachineDvxClassInfo>),
     /// A boxed array of *VirtualMachineDynamicPassthroughInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineDynamicPassthroughInfo(Vec<VirtualMachineDynamicPassthroughInfo>),
+    ArrayOfVirtualMachineDynamicPassthroughInfo(Vec<super::structs::VirtualMachineDynamicPassthroughInfo>),
     /// A boxed array of *VirtualMachineEmptyIndependentFilterSpec*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 7.0.2.1
-    ArrayOfVirtualMachineEmptyIndependentFilterSpec(Vec<VirtualMachineEmptyIndependentFilterSpec>),
+    ArrayOfVirtualMachineEmptyIndependentFilterSpec(Vec<super::structs::VirtualMachineEmptyIndependentFilterSpec>),
     /// A boxed array of *VirtualMachineEmptyProfileSpec*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineEmptyProfileSpec(Vec<VirtualMachineEmptyProfileSpec>),
+    ArrayOfVirtualMachineEmptyProfileSpec(Vec<super::structs::VirtualMachineEmptyProfileSpec>),
     /// A boxed array of *FaultToleranceConfigInfo*. To be used in *Any* placeholders.
     ArrayOfFaultToleranceConfigInfo(Vec<Box<dyn super::traits::FaultToleranceConfigInfoTrait>>),
     /// A boxed array of *FaultToleranceConfigSpec*. To be used in *Any* placeholders.
-    ArrayOfFaultToleranceConfigSpec(Vec<FaultToleranceConfigSpec>),
+    ArrayOfFaultToleranceConfigSpec(Vec<super::structs::FaultToleranceConfigSpec>),
     /// A boxed array of *FaultToleranceMetaSpec*. To be used in *Any* placeholders.
-    ArrayOfFaultToleranceMetaSpec(Vec<FaultToleranceMetaSpec>),
+    ArrayOfFaultToleranceMetaSpec(Vec<super::structs::FaultToleranceMetaSpec>),
     /// A boxed array of *FaultTolerancePrimaryConfigInfo*. To be used in *Any* placeholders.
-    ArrayOfFaultTolerancePrimaryConfigInfo(Vec<FaultTolerancePrimaryConfigInfo>),
+    ArrayOfFaultTolerancePrimaryConfigInfo(Vec<super::structs::FaultTolerancePrimaryConfigInfo>),
     /// A boxed array of *FaultToleranceSecondaryConfigInfo*. To be used in *Any* placeholders.
-    ArrayOfFaultToleranceSecondaryConfigInfo(Vec<FaultToleranceSecondaryConfigInfo>),
+    ArrayOfFaultToleranceSecondaryConfigInfo(Vec<super::structs::FaultToleranceSecondaryConfigInfo>),
     /// A boxed array of *FaultToleranceSecondaryOpResult*. To be used in *Any* placeholders.
-    ArrayOfFaultToleranceSecondaryOpResult(Vec<FaultToleranceSecondaryOpResult>),
+    ArrayOfFaultToleranceSecondaryOpResult(Vec<super::structs::FaultToleranceSecondaryOpResult>),
     /// A boxed array of *FaultToleranceVMConfigSpec*. To be used in *Any* placeholders.
-    ArrayOfFaultToleranceVmConfigSpec(Vec<FaultToleranceVmConfigSpec>),
+    ArrayOfFaultToleranceVmConfigSpec(Vec<super::structs::FaultToleranceVmConfigSpec>),
     /// A boxed array of *FaultToleranceDiskSpec*. To be used in *Any* placeholders.
-    ArrayOfFaultToleranceDiskSpec(Vec<FaultToleranceDiskSpec>),
+    ArrayOfFaultToleranceDiskSpec(Vec<super::structs::FaultToleranceDiskSpec>),
     /// A boxed array of *VirtualMachineFeatureRequirement*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineFeatureRequirement(Vec<VirtualMachineFeatureRequirement>),
+    ArrayOfVirtualMachineFeatureRequirement(Vec<super::structs::VirtualMachineFeatureRequirement>),
     /// A boxed array of *VirtualMachineFileInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineFileInfo(Vec<VirtualMachineFileInfo>),
+    ArrayOfVirtualMachineFileInfo(Vec<super::structs::VirtualMachineFileInfo>),
     /// A boxed array of *VirtualMachineFileLayout*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineFileLayout(Vec<VirtualMachineFileLayout>),
+    ArrayOfVirtualMachineFileLayout(Vec<super::structs::VirtualMachineFileLayout>),
     /// A boxed array of *VirtualMachineFileLayoutDiskLayout*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineFileLayoutDiskLayout(Vec<VirtualMachineFileLayoutDiskLayout>),
+    ArrayOfVirtualMachineFileLayoutDiskLayout(Vec<super::structs::VirtualMachineFileLayoutDiskLayout>),
     /// A boxed array of *VirtualMachineFileLayoutSnapshotLayout*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineFileLayoutSnapshotLayout(Vec<VirtualMachineFileLayoutSnapshotLayout>),
+    ArrayOfVirtualMachineFileLayoutSnapshotLayout(Vec<super::structs::VirtualMachineFileLayoutSnapshotLayout>),
     /// A boxed array of *VirtualMachineFileLayoutEx*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineFileLayoutEx(Vec<VirtualMachineFileLayoutEx>),
+    ArrayOfVirtualMachineFileLayoutEx(Vec<super::structs::VirtualMachineFileLayoutEx>),
     /// A boxed array of *VirtualMachineFileLayoutExDiskLayout*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineFileLayoutExDiskLayout(Vec<VirtualMachineFileLayoutExDiskLayout>),
+    ArrayOfVirtualMachineFileLayoutExDiskLayout(Vec<super::structs::VirtualMachineFileLayoutExDiskLayout>),
     /// A boxed array of *VirtualMachineFileLayoutExDiskUnit*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineFileLayoutExDiskUnit(Vec<VirtualMachineFileLayoutExDiskUnit>),
+    ArrayOfVirtualMachineFileLayoutExDiskUnit(Vec<super::structs::VirtualMachineFileLayoutExDiskUnit>),
     /// A boxed array of *VirtualMachineFileLayoutExFileInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineFileLayoutExFileInfo(Vec<VirtualMachineFileLayoutExFileInfo>),
+    ArrayOfVirtualMachineFileLayoutExFileInfo(Vec<super::structs::VirtualMachineFileLayoutExFileInfo>),
     /// A boxed array of *VirtualMachineFileLayoutExSnapshotLayout*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineFileLayoutExSnapshotLayout(Vec<VirtualMachineFileLayoutExSnapshotLayout>),
+    ArrayOfVirtualMachineFileLayoutExSnapshotLayout(Vec<super::structs::VirtualMachineFileLayoutExSnapshotLayout>),
     /// A boxed array of *VirtualMachineFlagInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineFlagInfo(Vec<VirtualMachineFlagInfo>),
+    ArrayOfVirtualMachineFlagInfo(Vec<super::structs::VirtualMachineFlagInfo>),
     /// A boxed array of *VirtualMachineFloppyInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineFloppyInfo(Vec<VirtualMachineFloppyInfo>),
+    ArrayOfVirtualMachineFloppyInfo(Vec<super::structs::VirtualMachineFloppyInfo>),
     /// A boxed array of *VirtualMachineForkConfigInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineForkConfigInfo(Vec<VirtualMachineForkConfigInfo>),
+    ArrayOfVirtualMachineForkConfigInfo(Vec<super::structs::VirtualMachineForkConfigInfo>),
     /// A boxed array of *GuestInfo*. To be used in *Any* placeholders.
-    ArrayOfGuestInfo(Vec<GuestInfo>),
+    ArrayOfGuestInfo(Vec<super::structs::GuestInfo>),
     /// A boxed array of *GuestInfoCustomizationInfo*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 7.0.2.0
-    ArrayOfGuestInfoCustomizationInfo(Vec<GuestInfoCustomizationInfo>),
+    ArrayOfGuestInfoCustomizationInfo(Vec<super::structs::GuestInfoCustomizationInfo>),
     /// A boxed array of *GuestDiskInfo*. To be used in *Any* placeholders.
-    ArrayOfGuestDiskInfo(Vec<GuestDiskInfo>),
+    ArrayOfGuestDiskInfo(Vec<super::structs::GuestDiskInfo>),
     /// A boxed array of *GuestInfoNamespaceGenerationInfo*. To be used in *Any* placeholders.
-    ArrayOfGuestInfoNamespaceGenerationInfo(Vec<GuestInfoNamespaceGenerationInfo>),
+    ArrayOfGuestInfoNamespaceGenerationInfo(Vec<super::structs::GuestInfoNamespaceGenerationInfo>),
     /// A boxed array of *GuestNicInfo*. To be used in *Any* placeholders.
-    ArrayOfGuestNicInfo(Vec<GuestNicInfo>),
+    ArrayOfGuestNicInfo(Vec<super::structs::GuestNicInfo>),
     /// A boxed array of *GuestScreenInfo*. To be used in *Any* placeholders.
-    ArrayOfGuestScreenInfo(Vec<GuestScreenInfo>),
+    ArrayOfGuestScreenInfo(Vec<super::structs::GuestScreenInfo>),
     /// A boxed array of *GuestStackInfo*. To be used in *Any* placeholders.
-    ArrayOfGuestStackInfo(Vec<GuestStackInfo>),
+    ArrayOfGuestStackInfo(Vec<super::structs::GuestStackInfo>),
     /// A boxed array of *GuestInfoVirtualDiskMapping*. To be used in *Any* placeholders.
-    ArrayOfGuestInfoVirtualDiskMapping(Vec<GuestInfoVirtualDiskMapping>),
+    ArrayOfGuestInfoVirtualDiskMapping(Vec<super::structs::GuestInfoVirtualDiskMapping>),
     /// A boxed array of *VirtualMachineGuestIntegrityInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineGuestIntegrityInfo(Vec<VirtualMachineGuestIntegrityInfo>),
+    ArrayOfVirtualMachineGuestIntegrityInfo(Vec<super::structs::VirtualMachineGuestIntegrityInfo>),
     /// A boxed array of *VirtualMachineGuestMonitoringModeInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineGuestMonitoringModeInfo(Vec<VirtualMachineGuestMonitoringModeInfo>),
+    ArrayOfVirtualMachineGuestMonitoringModeInfo(Vec<super::structs::VirtualMachineGuestMonitoringModeInfo>),
     /// A boxed array of *GuestOsDescriptor*. To be used in *Any* placeholders.
-    ArrayOfGuestOsDescriptor(Vec<GuestOsDescriptor>),
+    ArrayOfGuestOsDescriptor(Vec<super::structs::GuestOsDescriptor>),
     /// A boxed array of *VirtualMachineGuestQuiesceSpec*. To be used in *Any* placeholders.
     ArrayOfVirtualMachineGuestQuiesceSpec(Vec<Box<dyn super::traits::VirtualMachineGuestQuiesceSpecTrait>>),
     /// A boxed array of *VirtualMachineIdeDiskDeviceInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineIdeDiskDeviceInfo(Vec<VirtualMachineIdeDiskDeviceInfo>),
+    ArrayOfVirtualMachineIdeDiskDeviceInfo(Vec<super::structs::VirtualMachineIdeDiskDeviceInfo>),
     /// A boxed array of *VirtualMachineIdeDiskDevicePartitionInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineIdeDiskDevicePartitionInfo(Vec<VirtualMachineIdeDiskDevicePartitionInfo>),
+    ArrayOfVirtualMachineIdeDiskDevicePartitionInfo(Vec<super::structs::VirtualMachineIdeDiskDevicePartitionInfo>),
     /// A boxed array of *VirtualMachineIndependentFilterSpec*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 7.0.2.1
-    ArrayOfVirtualMachineIndependentFilterSpec(Vec<VirtualMachineIndependentFilterSpec>),
+    ArrayOfVirtualMachineIndependentFilterSpec(Vec<super::structs::VirtualMachineIndependentFilterSpec>),
     /// A boxed array of *VirtualMachineInstantCloneSpec*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineInstantCloneSpec(Vec<VirtualMachineInstantCloneSpec>),
+    ArrayOfVirtualMachineInstantCloneSpec(Vec<super::structs::VirtualMachineInstantCloneSpec>),
     /// A boxed array of *VirtualMachineLegacyNetworkSwitchInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineLegacyNetworkSwitchInfo(Vec<VirtualMachineLegacyNetworkSwitchInfo>),
+    ArrayOfVirtualMachineLegacyNetworkSwitchInfo(Vec<super::structs::VirtualMachineLegacyNetworkSwitchInfo>),
     /// A boxed array of *VirtualMachineMessage*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineMessage(Vec<VirtualMachineMessage>),
+    ArrayOfVirtualMachineMessage(Vec<super::structs::VirtualMachineMessage>),
     /// A boxed array of *VirtualMachineMetadataManagerVmMetadata*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineMetadataManagerVmMetadata(Vec<VirtualMachineMetadataManagerVmMetadata>),
+    ArrayOfVirtualMachineMetadataManagerVmMetadata(Vec<super::structs::VirtualMachineMetadataManagerVmMetadata>),
     /// A boxed array of *VirtualMachineMetadataManagerVmMetadataInput*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineMetadataManagerVmMetadataInput(Vec<VirtualMachineMetadataManagerVmMetadataInput>),
+    ArrayOfVirtualMachineMetadataManagerVmMetadataInput(Vec<super::structs::VirtualMachineMetadataManagerVmMetadataInput>),
     /// A boxed array of *VirtualMachineMetadataManagerVmMetadataOwner*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineMetadataManagerVmMetadataOwner(Vec<VirtualMachineMetadataManagerVmMetadataOwner>),
+    ArrayOfVirtualMachineMetadataManagerVmMetadataOwner(Vec<super::structs::VirtualMachineMetadataManagerVmMetadataOwner>),
     /// A boxed array of *VirtualMachineMetadataManagerVmMetadataResult*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineMetadataManagerVmMetadataResult(Vec<VirtualMachineMetadataManagerVmMetadataResult>),
+    ArrayOfVirtualMachineMetadataManagerVmMetadataResult(Vec<super::structs::VirtualMachineMetadataManagerVmMetadataResult>),
     /// A boxed array of *VirtualMachineNetworkInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineNetworkInfo(Vec<VirtualMachineNetworkInfo>),
+    ArrayOfVirtualMachineNetworkInfo(Vec<super::structs::VirtualMachineNetworkInfo>),
     /// A boxed array of *VirtualMachineNetworkShaperInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineNetworkShaperInfo(Vec<VirtualMachineNetworkShaperInfo>),
+    ArrayOfVirtualMachineNetworkShaperInfo(Vec<super::structs::VirtualMachineNetworkShaperInfo>),
     /// A boxed array of *OpaqueNetworkTargetInfo*. To be used in *Any* placeholders.
-    ArrayOfOpaqueNetworkTargetInfo(Vec<OpaqueNetworkTargetInfo>),
+    ArrayOfOpaqueNetworkTargetInfo(Vec<super::structs::OpaqueNetworkTargetInfo>),
     /// A boxed array of *VirtualMachineParallelInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineParallelInfo(Vec<VirtualMachineParallelInfo>),
+    ArrayOfVirtualMachineParallelInfo(Vec<super::structs::VirtualMachineParallelInfo>),
     /// A boxed array of *VirtualMachinePciPassthroughInfo*. To be used in *Any* placeholders.
     ArrayOfVirtualMachinePciPassthroughInfo(Vec<Box<dyn super::traits::VirtualMachinePciPassthroughInfoTrait>>),
     /// A boxed array of *VirtualMachinePciSharedGpuPassthroughInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachinePciSharedGpuPassthroughInfo(Vec<VirtualMachinePciSharedGpuPassthroughInfo>),
+    ArrayOfVirtualMachinePciSharedGpuPassthroughInfo(Vec<super::structs::VirtualMachinePciSharedGpuPassthroughInfo>),
     /// A boxed array of *VirtualMachinePrecisionClockInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachinePrecisionClockInfo(Vec<VirtualMachinePrecisionClockInfo>),
+    ArrayOfVirtualMachinePrecisionClockInfo(Vec<super::structs::VirtualMachinePrecisionClockInfo>),
     /// A boxed array of *VirtualMachineProfileDetails*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineProfileDetails(Vec<VirtualMachineProfileDetails>),
+    ArrayOfVirtualMachineProfileDetails(Vec<super::structs::VirtualMachineProfileDetails>),
     /// A boxed array of *VirtualMachineProfileDetailsDiskProfileDetails*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineProfileDetailsDiskProfileDetails(Vec<VirtualMachineProfileDetailsDiskProfileDetails>),
+    ArrayOfVirtualMachineProfileDetailsDiskProfileDetails(Vec<super::structs::VirtualMachineProfileDetailsDiskProfileDetails>),
     /// A boxed array of *VirtualMachineProfileRawData*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineProfileRawData(Vec<VirtualMachineProfileRawData>),
+    ArrayOfVirtualMachineProfileRawData(Vec<super::structs::VirtualMachineProfileRawData>),
     /// A boxed array of *VirtualMachineProfileSpec*. To be used in *Any* placeholders.
     ArrayOfVirtualMachineProfileSpec(Vec<Box<dyn super::traits::VirtualMachineProfileSpecTrait>>),
     /// A boxed array of *VirtualMachinePropertyRelation*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachinePropertyRelation(Vec<VirtualMachinePropertyRelation>),
+    ArrayOfVirtualMachinePropertyRelation(Vec<super::structs::VirtualMachinePropertyRelation>),
     /// A boxed array of *VirtualMachineQuestionInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineQuestionInfo(Vec<VirtualMachineQuestionInfo>),
+    ArrayOfVirtualMachineQuestionInfo(Vec<super::structs::VirtualMachineQuestionInfo>),
     /// A boxed array of *VirtualMachineRelocateSpec*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineRelocateSpec(Vec<VirtualMachineRelocateSpec>),
+    ArrayOfVirtualMachineRelocateSpec(Vec<super::structs::VirtualMachineRelocateSpec>),
     /// A boxed array of *VirtualMachineRelocateSpecDiskLocator*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineRelocateSpecDiskLocator(Vec<VirtualMachineRelocateSpecDiskLocator>),
+    ArrayOfVirtualMachineRelocateSpecDiskLocator(Vec<super::structs::VirtualMachineRelocateSpecDiskLocator>),
     /// A boxed array of *VirtualMachineRelocateSpecDiskLocatorBackingSpec*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineRelocateSpecDiskLocatorBackingSpec(Vec<VirtualMachineRelocateSpecDiskLocatorBackingSpec>),
+    ArrayOfVirtualMachineRelocateSpecDiskLocatorBackingSpec(Vec<super::structs::VirtualMachineRelocateSpecDiskLocatorBackingSpec>),
     /// A boxed array of *ReplicationConfigSpec*. To be used in *Any* placeholders.
-    ArrayOfReplicationConfigSpec(Vec<ReplicationConfigSpec>),
+    ArrayOfReplicationConfigSpec(Vec<super::structs::ReplicationConfigSpec>),
     /// A boxed array of *ReplicationInfoDiskSettings*. To be used in *Any* placeholders.
-    ArrayOfReplicationInfoDiskSettings(Vec<ReplicationInfoDiskSettings>),
+    ArrayOfReplicationInfoDiskSettings(Vec<super::structs::ReplicationInfoDiskSettings>),
     /// A boxed array of *VirtualMachineRuntimeInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineRuntimeInfo(Vec<VirtualMachineRuntimeInfo>),
+    ArrayOfVirtualMachineRuntimeInfo(Vec<super::structs::VirtualMachineRuntimeInfo>),
     /// A boxed array of *VirtualMachineRuntimeInfoDasProtectionState*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineRuntimeInfoDasProtectionState(Vec<VirtualMachineRuntimeInfoDasProtectionState>),
+    ArrayOfVirtualMachineRuntimeInfoDasProtectionState(Vec<super::structs::VirtualMachineRuntimeInfoDasProtectionState>),
     /// A boxed array of *ScheduledHardwareUpgradeInfo*. To be used in *Any* placeholders.
-    ArrayOfScheduledHardwareUpgradeInfo(Vec<ScheduledHardwareUpgradeInfo>),
+    ArrayOfScheduledHardwareUpgradeInfo(Vec<super::structs::ScheduledHardwareUpgradeInfo>),
     /// A boxed array of *VirtualMachineScsiDiskDeviceInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineScsiDiskDeviceInfo(Vec<VirtualMachineScsiDiskDeviceInfo>),
+    ArrayOfVirtualMachineScsiDiskDeviceInfo(Vec<super::structs::VirtualMachineScsiDiskDeviceInfo>),
     /// A boxed array of *VirtualMachineScsiPassthroughInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineScsiPassthroughInfo(Vec<VirtualMachineScsiPassthroughInfo>),
+    ArrayOfVirtualMachineScsiPassthroughInfo(Vec<super::structs::VirtualMachineScsiPassthroughInfo>),
     /// A boxed array of *VirtualMachineSerialInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineSerialInfo(Vec<VirtualMachineSerialInfo>),
+    ArrayOfVirtualMachineSerialInfo(Vec<super::structs::VirtualMachineSerialInfo>),
     /// A boxed array of *VirtualMachineSgxInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineSgxInfo(Vec<VirtualMachineSgxInfo>),
+    ArrayOfVirtualMachineSgxInfo(Vec<super::structs::VirtualMachineSgxInfo>),
     /// A boxed array of *VirtualMachineSgxTargetInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineSgxTargetInfo(Vec<VirtualMachineSgxTargetInfo>),
+    ArrayOfVirtualMachineSgxTargetInfo(Vec<super::structs::VirtualMachineSgxTargetInfo>),
     /// A boxed array of *VirtualMachineSnapshotInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineSnapshotInfo(Vec<VirtualMachineSnapshotInfo>),
+    ArrayOfVirtualMachineSnapshotInfo(Vec<super::structs::VirtualMachineSnapshotInfo>),
     /// A boxed array of *VirtualMachineSnapshotTree*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineSnapshotTree(Vec<VirtualMachineSnapshotTree>),
+    ArrayOfVirtualMachineSnapshotTree(Vec<super::structs::VirtualMachineSnapshotTree>),
     /// A boxed array of *VirtualMachineSoundInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineSoundInfo(Vec<VirtualMachineSoundInfo>),
+    ArrayOfVirtualMachineSoundInfo(Vec<super::structs::VirtualMachineSoundInfo>),
     /// A boxed array of *VirtualMachineSriovDevicePoolInfo*. To be used in *Any* placeholders.
     ArrayOfVirtualMachineSriovDevicePoolInfo(Vec<Box<dyn super::traits::VirtualMachineSriovDevicePoolInfoTrait>>),
     /// A boxed array of *VirtualMachineSriovInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineSriovInfo(Vec<VirtualMachineSriovInfo>),
+    ArrayOfVirtualMachineSriovInfo(Vec<super::structs::VirtualMachineSriovInfo>),
     /// A boxed array of *VirtualMachineSriovNetworkDevicePoolInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineSriovNetworkDevicePoolInfo(Vec<VirtualMachineSriovNetworkDevicePoolInfo>),
+    ArrayOfVirtualMachineSriovNetworkDevicePoolInfo(Vec<super::structs::VirtualMachineSriovNetworkDevicePoolInfo>),
     /// A boxed array of *VirtualMachineStorageInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineStorageInfo(Vec<VirtualMachineStorageInfo>),
+    ArrayOfVirtualMachineStorageInfo(Vec<super::structs::VirtualMachineStorageInfo>),
     /// A boxed array of *VirtualMachineUsageOnDatastore*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineUsageOnDatastore(Vec<VirtualMachineUsageOnDatastore>),
+    ArrayOfVirtualMachineUsageOnDatastore(Vec<super::structs::VirtualMachineUsageOnDatastore>),
     /// A boxed array of *VirtualMachineSummary*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineSummary(Vec<VirtualMachineSummary>),
+    ArrayOfVirtualMachineSummary(Vec<super::structs::VirtualMachineSummary>),
     /// A boxed array of *VirtualMachineConfigSummary*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineConfigSummary(Vec<VirtualMachineConfigSummary>),
+    ArrayOfVirtualMachineConfigSummary(Vec<super::structs::VirtualMachineConfigSummary>),
     /// A boxed array of *VirtualMachineGuestSummary*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineGuestSummary(Vec<VirtualMachineGuestSummary>),
+    ArrayOfVirtualMachineGuestSummary(Vec<super::structs::VirtualMachineGuestSummary>),
     /// A boxed array of *VirtualMachineQuickStats*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineQuickStats(Vec<VirtualMachineQuickStats>),
+    ArrayOfVirtualMachineQuickStats(Vec<super::structs::VirtualMachineQuickStats>),
     /// A boxed array of *VirtualMachineQuickStatsMemoryTierStats*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 7.0.3.0
-    ArrayOfVirtualMachineQuickStatsMemoryTierStats(Vec<VirtualMachineQuickStatsMemoryTierStats>),
+    ArrayOfVirtualMachineQuickStatsMemoryTierStats(Vec<super::structs::VirtualMachineQuickStatsMemoryTierStats>),
     /// A boxed array of *VirtualMachineStorageSummary*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineStorageSummary(Vec<VirtualMachineStorageSummary>),
+    ArrayOfVirtualMachineStorageSummary(Vec<super::structs::VirtualMachineStorageSummary>),
     /// A boxed array of *VirtualMachineTargetInfo*. To be used in *Any* placeholders.
     ArrayOfVirtualMachineTargetInfo(Vec<Box<dyn super::traits::VirtualMachineTargetInfoTrait>>),
     /// A boxed array of *ToolsConfigInfo*. To be used in *Any* placeholders.
-    ArrayOfToolsConfigInfo(Vec<ToolsConfigInfo>),
+    ArrayOfToolsConfigInfo(Vec<super::structs::ToolsConfigInfo>),
     /// A boxed array of *ToolsConfigInfoToolsLastInstallInfo*. To be used in *Any* placeholders.
-    ArrayOfToolsConfigInfoToolsLastInstallInfo(Vec<ToolsConfigInfoToolsLastInstallInfo>),
+    ArrayOfToolsConfigInfoToolsLastInstallInfo(Vec<super::structs::ToolsConfigInfoToolsLastInstallInfo>),
     /// A boxed array of *VirtualMachineUsbInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineUsbInfo(Vec<VirtualMachineUsbInfo>),
+    ArrayOfVirtualMachineUsbInfo(Vec<super::structs::VirtualMachineUsbInfo>),
     /// A boxed array of *UsbScanCodeSpec*. To be used in *Any* placeholders.
-    ArrayOfUsbScanCodeSpec(Vec<UsbScanCodeSpec>),
+    ArrayOfUsbScanCodeSpec(Vec<super::structs::UsbScanCodeSpec>),
     /// A boxed array of *UsbScanCodeSpecKeyEvent*. To be used in *Any* placeholders.
-    ArrayOfUsbScanCodeSpecKeyEvent(Vec<UsbScanCodeSpecKeyEvent>),
+    ArrayOfUsbScanCodeSpecKeyEvent(Vec<super::structs::UsbScanCodeSpecKeyEvent>),
     /// A boxed array of *UsbScanCodeSpecModifierType*. To be used in *Any* placeholders.
-    ArrayOfUsbScanCodeSpecModifierType(Vec<UsbScanCodeSpecModifierType>),
+    ArrayOfUsbScanCodeSpecModifierType(Vec<super::structs::UsbScanCodeSpecModifierType>),
     /// A boxed array of *VirtualMachineVFlashModuleInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineVFlashModuleInfo(Vec<VirtualMachineVFlashModuleInfo>),
+    ArrayOfVirtualMachineVFlashModuleInfo(Vec<super::structs::VirtualMachineVFlashModuleInfo>),
     /// A boxed array of *VirtualMachineVMotionStunTimeInfo*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 8.0.2.0
-    ArrayOfVirtualMachineVMotionStunTimeInfo(Vec<VirtualMachineVMotionStunTimeInfo>),
+    ArrayOfVirtualMachineVMotionStunTimeInfo(Vec<super::structs::VirtualMachineVMotionStunTimeInfo>),
     /// A boxed array of *VirtualMachineVcpuConfig*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineVcpuConfig(Vec<VirtualMachineVcpuConfig>),
+    ArrayOfVirtualMachineVcpuConfig(Vec<super::structs::VirtualMachineVcpuConfig>),
     /// A boxed array of *VirtualMachineVendorDeviceGroupInfo*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 8.0.0.1
-    ArrayOfVirtualMachineVendorDeviceGroupInfo(Vec<VirtualMachineVendorDeviceGroupInfo>),
+    ArrayOfVirtualMachineVendorDeviceGroupInfo(Vec<super::structs::VirtualMachineVendorDeviceGroupInfo>),
     /// A boxed array of *VirtualMachineVendorDeviceGroupInfoComponentDeviceInfo*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 8.0.0.1
-    ArrayOfVirtualMachineVendorDeviceGroupInfoComponentDeviceInfo(Vec<VirtualMachineVendorDeviceGroupInfoComponentDeviceInfo>),
+    ArrayOfVirtualMachineVendorDeviceGroupInfoComponentDeviceInfo(Vec<super::structs::VirtualMachineVendorDeviceGroupInfoComponentDeviceInfo>),
     /// A boxed array of *VirtualMachineVgpuDeviceInfo*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 7.0.3.0
-    ArrayOfVirtualMachineVgpuDeviceInfo(Vec<VirtualMachineVgpuDeviceInfo>),
+    ArrayOfVirtualMachineVgpuDeviceInfo(Vec<super::structs::VirtualMachineVgpuDeviceInfo>),
     /// A boxed array of *VirtualMachineVgpuProfileInfo*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 7.0.3.0
-    ArrayOfVirtualMachineVgpuProfileInfo(Vec<VirtualMachineVgpuProfileInfo>),
+    ArrayOfVirtualMachineVgpuProfileInfo(Vec<super::structs::VirtualMachineVgpuProfileInfo>),
     /// A boxed array of *VirtualMachineVirtualDeviceGroups*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 8.0.0.1
-    ArrayOfVirtualMachineVirtualDeviceGroups(Vec<VirtualMachineVirtualDeviceGroups>),
+    ArrayOfVirtualMachineVirtualDeviceGroups(Vec<super::structs::VirtualMachineVirtualDeviceGroups>),
     /// A boxed array of *VirtualMachineVirtualDeviceGroupsDeviceGroup*. To be used in *Any* placeholders.
     ArrayOfVirtualMachineVirtualDeviceGroupsDeviceGroup(Vec<Box<dyn super::traits::VirtualMachineVirtualDeviceGroupsDeviceGroupTrait>>),
     /// A boxed array of *VirtualMachineVirtualDeviceGroupsVendorDeviceGroup*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineVirtualDeviceGroupsVendorDeviceGroup(Vec<VirtualMachineVirtualDeviceGroupsVendorDeviceGroup>),
+    ArrayOfVirtualMachineVirtualDeviceGroupsVendorDeviceGroup(Vec<super::structs::VirtualMachineVirtualDeviceGroupsVendorDeviceGroup>),
     /// A boxed array of *VirtualMachineVirtualDeviceSwap*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 8.0.0.1
-    ArrayOfVirtualMachineVirtualDeviceSwap(Vec<VirtualMachineVirtualDeviceSwap>),
+    ArrayOfVirtualMachineVirtualDeviceSwap(Vec<super::structs::VirtualMachineVirtualDeviceSwap>),
     /// A boxed array of *VirtualMachineVirtualDeviceSwapDeviceSwapInfo*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 8.0.0.1
-    ArrayOfVirtualMachineVirtualDeviceSwapDeviceSwapInfo(Vec<VirtualMachineVirtualDeviceSwapDeviceSwapInfo>),
+    ArrayOfVirtualMachineVirtualDeviceSwapDeviceSwapInfo(Vec<super::structs::VirtualMachineVirtualDeviceSwapDeviceSwapInfo>),
     /// A boxed array of *VirtualHardware*. To be used in *Any* placeholders.
-    ArrayOfVirtualHardware(Vec<VirtualHardware>),
+    ArrayOfVirtualHardware(Vec<super::structs::VirtualHardware>),
     /// A boxed array of *VirtualHardwareOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualHardwareOption(Vec<VirtualHardwareOption>),
+    ArrayOfVirtualHardwareOption(Vec<super::structs::VirtualHardwareOption>),
     /// A boxed array of *VirtualMachineVirtualNuma*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 8.0.0.1
-    ArrayOfVirtualMachineVirtualNuma(Vec<VirtualMachineVirtualNuma>),
+    ArrayOfVirtualMachineVirtualNuma(Vec<super::structs::VirtualMachineVirtualNuma>),
     /// A boxed array of *VirtualMachineVirtualNumaInfo*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 8.0.0.1
-    ArrayOfVirtualMachineVirtualNumaInfo(Vec<VirtualMachineVirtualNumaInfo>),
+    ArrayOfVirtualMachineVirtualNumaInfo(Vec<super::structs::VirtualMachineVirtualNumaInfo>),
     /// A boxed array of *VirtualMachineVirtualPMem*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 7.0.3.0
-    ArrayOfVirtualMachineVirtualPMem(Vec<VirtualMachineVirtualPMem>),
+    ArrayOfVirtualMachineVirtualPMem(Vec<super::structs::VirtualMachineVirtualPMem>),
     /// A boxed array of *VirtualMachineImportSpec*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineImportSpec(Vec<VirtualMachineImportSpec>),
+    ArrayOfVirtualMachineImportSpec(Vec<super::structs::VirtualMachineImportSpec>),
     /// A boxed array of *VirtualMachineWindowsQuiesceSpec*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineWindowsQuiesceSpec(Vec<VirtualMachineWindowsQuiesceSpec>),
+    ArrayOfVirtualMachineWindowsQuiesceSpec(Vec<super::structs::VirtualMachineWindowsQuiesceSpec>),
     /// A boxed array of *CheckResult*. To be used in *Any* placeholders.
-    ArrayOfCheckResult(Vec<CheckResult>),
+    ArrayOfCheckResult(Vec<super::structs::CheckResult>),
     /// A boxed array of *CustomizationAdapterMapping*. To be used in *Any* placeholders.
-    ArrayOfCustomizationAdapterMapping(Vec<CustomizationAdapterMapping>),
+    ArrayOfCustomizationAdapterMapping(Vec<super::structs::CustomizationAdapterMapping>),
     /// A boxed array of *CustomizationAutoIpV6Generator*. To be used in *Any* placeholders.
-    ArrayOfCustomizationAutoIpV6Generator(Vec<CustomizationAutoIpV6Generator>),
+    ArrayOfCustomizationAutoIpV6Generator(Vec<super::structs::CustomizationAutoIpV6Generator>),
     /// A boxed array of *CustomizationCloudinitPrep*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 7.0.3.0
-    ArrayOfCustomizationCloudinitPrep(Vec<CustomizationCloudinitPrep>),
+    ArrayOfCustomizationCloudinitPrep(Vec<super::structs::CustomizationCloudinitPrep>),
     /// A boxed array of *CustomizationCustomIpGenerator*. To be used in *Any* placeholders.
-    ArrayOfCustomizationCustomIpGenerator(Vec<CustomizationCustomIpGenerator>),
+    ArrayOfCustomizationCustomIpGenerator(Vec<super::structs::CustomizationCustomIpGenerator>),
     /// A boxed array of *CustomizationCustomIpV6Generator*. To be used in *Any* placeholders.
-    ArrayOfCustomizationCustomIpV6Generator(Vec<CustomizationCustomIpV6Generator>),
+    ArrayOfCustomizationCustomIpV6Generator(Vec<super::structs::CustomizationCustomIpV6Generator>),
     /// A boxed array of *CustomizationCustomName*. To be used in *Any* placeholders.
-    ArrayOfCustomizationCustomName(Vec<CustomizationCustomName>),
+    ArrayOfCustomizationCustomName(Vec<super::structs::CustomizationCustomName>),
     /// A boxed array of *CustomizationDhcpIpGenerator*. To be used in *Any* placeholders.
-    ArrayOfCustomizationDhcpIpGenerator(Vec<CustomizationDhcpIpGenerator>),
+    ArrayOfCustomizationDhcpIpGenerator(Vec<super::structs::CustomizationDhcpIpGenerator>),
     /// A boxed array of *CustomizationDhcpIpV6Generator*. To be used in *Any* placeholders.
-    ArrayOfCustomizationDhcpIpV6Generator(Vec<CustomizationDhcpIpV6Generator>),
+    ArrayOfCustomizationDhcpIpV6Generator(Vec<super::structs::CustomizationDhcpIpV6Generator>),
     /// A boxed array of *CustomizationFixedIp*. To be used in *Any* placeholders.
-    ArrayOfCustomizationFixedIp(Vec<CustomizationFixedIp>),
+    ArrayOfCustomizationFixedIp(Vec<super::structs::CustomizationFixedIp>),
     /// A boxed array of *CustomizationFixedIpV6*. To be used in *Any* placeholders.
-    ArrayOfCustomizationFixedIpV6(Vec<CustomizationFixedIpV6>),
+    ArrayOfCustomizationFixedIpV6(Vec<super::structs::CustomizationFixedIpV6>),
     /// A boxed array of *CustomizationFixedName*. To be used in *Any* placeholders.
-    ArrayOfCustomizationFixedName(Vec<CustomizationFixedName>),
+    ArrayOfCustomizationFixedName(Vec<super::structs::CustomizationFixedName>),
     /// A boxed array of *CustomizationGlobalIPSettings*. To be used in *Any* placeholders.
-    ArrayOfCustomizationGlobalIpSettings(Vec<CustomizationGlobalIpSettings>),
+    ArrayOfCustomizationGlobalIpSettings(Vec<super::structs::CustomizationGlobalIpSettings>),
     /// A boxed array of *CustomizationGuiRunOnce*. To be used in *Any* placeholders.
-    ArrayOfCustomizationGuiRunOnce(Vec<CustomizationGuiRunOnce>),
+    ArrayOfCustomizationGuiRunOnce(Vec<super::structs::CustomizationGuiRunOnce>),
     /// A boxed array of *CustomizationGuiUnattended*. To be used in *Any* placeholders.
-    ArrayOfCustomizationGuiUnattended(Vec<CustomizationGuiUnattended>),
+    ArrayOfCustomizationGuiUnattended(Vec<super::structs::CustomizationGuiUnattended>),
     /// A boxed array of *CustomizationIPSettings*. To be used in *Any* placeholders.
-    ArrayOfCustomizationIpSettings(Vec<CustomizationIpSettings>),
+    ArrayOfCustomizationIpSettings(Vec<super::structs::CustomizationIpSettings>),
     /// A boxed array of *CustomizationIPSettingsIpV6AddressSpec*. To be used in *Any* placeholders.
-    ArrayOfCustomizationIpSettingsIpV6AddressSpec(Vec<CustomizationIpSettingsIpV6AddressSpec>),
+    ArrayOfCustomizationIpSettingsIpV6AddressSpec(Vec<super::structs::CustomizationIpSettingsIpV6AddressSpec>),
     /// A boxed array of *CustomizationIdentification*. To be used in *Any* placeholders.
-    ArrayOfCustomizationIdentification(Vec<CustomizationIdentification>),
+    ArrayOfCustomizationIdentification(Vec<super::structs::CustomizationIdentification>),
     /// A boxed array of *CustomizationIdentitySettings*. To be used in *Any* placeholders.
     ArrayOfCustomizationIdentitySettings(Vec<Box<dyn super::traits::CustomizationIdentitySettingsTrait>>),
     /// A boxed array of *CustomizationIpGenerator*. To be used in *Any* placeholders.
@@ -5333,83 +5331,83 @@ pub enum ValueElements {
     /// A boxed array of *CustomizationIpV6Generator*. To be used in *Any* placeholders.
     ArrayOfCustomizationIpV6Generator(Vec<Box<dyn super::traits::CustomizationIpV6GeneratorTrait>>),
     /// A boxed array of *CustomizationLicenseFilePrintData*. To be used in *Any* placeholders.
-    ArrayOfCustomizationLicenseFilePrintData(Vec<CustomizationLicenseFilePrintData>),
+    ArrayOfCustomizationLicenseFilePrintData(Vec<super::structs::CustomizationLicenseFilePrintData>),
     /// A boxed array of *CustomizationLinuxOptions*. To be used in *Any* placeholders.
-    ArrayOfCustomizationLinuxOptions(Vec<CustomizationLinuxOptions>),
+    ArrayOfCustomizationLinuxOptions(Vec<super::structs::CustomizationLinuxOptions>),
     /// A boxed array of *CustomizationLinuxPrep*. To be used in *Any* placeholders.
-    ArrayOfCustomizationLinuxPrep(Vec<CustomizationLinuxPrep>),
+    ArrayOfCustomizationLinuxPrep(Vec<super::structs::CustomizationLinuxPrep>),
     /// A boxed array of *CustomizationName*. To be used in *Any* placeholders.
     ArrayOfCustomizationName(Vec<Box<dyn super::traits::CustomizationNameTrait>>),
     /// A boxed array of *CustomizationOptions*. To be used in *Any* placeholders.
     ArrayOfCustomizationOptions(Vec<Box<dyn super::traits::CustomizationOptionsTrait>>),
     /// A boxed array of *CustomizationPassword*. To be used in *Any* placeholders.
-    ArrayOfCustomizationPassword(Vec<CustomizationPassword>),
+    ArrayOfCustomizationPassword(Vec<super::structs::CustomizationPassword>),
     /// A boxed array of *CustomizationPrefixName*. To be used in *Any* placeholders.
-    ArrayOfCustomizationPrefixName(Vec<CustomizationPrefixName>),
+    ArrayOfCustomizationPrefixName(Vec<super::structs::CustomizationPrefixName>),
     /// A boxed array of *CustomizationSpec*. To be used in *Any* placeholders.
-    ArrayOfCustomizationSpec(Vec<CustomizationSpec>),
+    ArrayOfCustomizationSpec(Vec<super::structs::CustomizationSpec>),
     /// A boxed array of *CustomizationStatelessIpV6Generator*. To be used in *Any* placeholders.
-    ArrayOfCustomizationStatelessIpV6Generator(Vec<CustomizationStatelessIpV6Generator>),
+    ArrayOfCustomizationStatelessIpV6Generator(Vec<super::structs::CustomizationStatelessIpV6Generator>),
     /// A boxed array of *CustomizationSysprep*. To be used in *Any* placeholders.
-    ArrayOfCustomizationSysprep(Vec<CustomizationSysprep>),
+    ArrayOfCustomizationSysprep(Vec<super::structs::CustomizationSysprep>),
     /// A boxed array of *CustomizationSysprepText*. To be used in *Any* placeholders.
-    ArrayOfCustomizationSysprepText(Vec<CustomizationSysprepText>),
+    ArrayOfCustomizationSysprepText(Vec<super::structs::CustomizationSysprepText>),
     /// A boxed array of *CustomizationUnknownIpGenerator*. To be used in *Any* placeholders.
-    ArrayOfCustomizationUnknownIpGenerator(Vec<CustomizationUnknownIpGenerator>),
+    ArrayOfCustomizationUnknownIpGenerator(Vec<super::structs::CustomizationUnknownIpGenerator>),
     /// A boxed array of *CustomizationUnknownIpV6Generator*. To be used in *Any* placeholders.
-    ArrayOfCustomizationUnknownIpV6Generator(Vec<CustomizationUnknownIpV6Generator>),
+    ArrayOfCustomizationUnknownIpV6Generator(Vec<super::structs::CustomizationUnknownIpV6Generator>),
     /// A boxed array of *CustomizationUnknownName*. To be used in *Any* placeholders.
-    ArrayOfCustomizationUnknownName(Vec<CustomizationUnknownName>),
+    ArrayOfCustomizationUnknownName(Vec<super::structs::CustomizationUnknownName>),
     /// A boxed array of *CustomizationUserData*. To be used in *Any* placeholders.
-    ArrayOfCustomizationUserData(Vec<CustomizationUserData>),
+    ArrayOfCustomizationUserData(Vec<super::structs::CustomizationUserData>),
     /// A boxed array of *CustomizationVirtualMachineName*. To be used in *Any* placeholders.
-    ArrayOfCustomizationVirtualMachineName(Vec<CustomizationVirtualMachineName>),
+    ArrayOfCustomizationVirtualMachineName(Vec<super::structs::CustomizationVirtualMachineName>),
     /// A boxed array of *CustomizationWinOptions*. To be used in *Any* placeholders.
-    ArrayOfCustomizationWinOptions(Vec<CustomizationWinOptions>),
+    ArrayOfCustomizationWinOptions(Vec<super::structs::CustomizationWinOptions>),
     /// A boxed array of *HostDiskMappingInfo*. To be used in *Any* placeholders.
-    ArrayOfHostDiskMappingInfo(Vec<HostDiskMappingInfo>),
+    ArrayOfHostDiskMappingInfo(Vec<super::structs::HostDiskMappingInfo>),
     /// A boxed array of *HostDiskMappingPartitionInfo*. To be used in *Any* placeholders.
-    ArrayOfHostDiskMappingPartitionInfo(Vec<HostDiskMappingPartitionInfo>),
+    ArrayOfHostDiskMappingPartitionInfo(Vec<super::structs::HostDiskMappingPartitionInfo>),
     /// A boxed array of *HostDiskMappingOption*. To be used in *Any* placeholders.
-    ArrayOfHostDiskMappingOption(Vec<HostDiskMappingOption>),
+    ArrayOfHostDiskMappingOption(Vec<super::structs::HostDiskMappingOption>),
     /// A boxed array of *HostDiskMappingPartitionOption*. To be used in *Any* placeholders.
-    ArrayOfHostDiskMappingPartitionOption(Vec<HostDiskMappingPartitionOption>),
+    ArrayOfHostDiskMappingPartitionOption(Vec<super::structs::HostDiskMappingPartitionOption>),
     /// A boxed array of *ParaVirtualSCSIController*. To be used in *Any* placeholders.
-    ArrayOfParaVirtualScsiController(Vec<ParaVirtualScsiController>),
+    ArrayOfParaVirtualScsiController(Vec<super::structs::ParaVirtualScsiController>),
     /// A boxed array of *ParaVirtualSCSIControllerOption*. To be used in *Any* placeholders.
-    ArrayOfParaVirtualScsiControllerOption(Vec<ParaVirtualScsiControllerOption>),
+    ArrayOfParaVirtualScsiControllerOption(Vec<super::structs::ParaVirtualScsiControllerOption>),
     /// A boxed array of *VirtualAHCIController*. To be used in *Any* placeholders.
-    ArrayOfVirtualAhciController(Vec<VirtualAhciController>),
+    ArrayOfVirtualAhciController(Vec<super::structs::VirtualAhciController>),
     /// A boxed array of *VirtualAHCIControllerOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualAhciControllerOption(Vec<VirtualAhciControllerOption>),
+    ArrayOfVirtualAhciControllerOption(Vec<super::structs::VirtualAhciControllerOption>),
     /// A boxed array of *VirtualBusLogicController*. To be used in *Any* placeholders.
-    ArrayOfVirtualBusLogicController(Vec<VirtualBusLogicController>),
+    ArrayOfVirtualBusLogicController(Vec<super::structs::VirtualBusLogicController>),
     /// A boxed array of *VirtualBusLogicControllerOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualBusLogicControllerOption(Vec<VirtualBusLogicControllerOption>),
+    ArrayOfVirtualBusLogicControllerOption(Vec<super::structs::VirtualBusLogicControllerOption>),
     /// A boxed array of *VirtualCdrom*. To be used in *Any* placeholders.
-    ArrayOfVirtualCdrom(Vec<VirtualCdrom>),
+    ArrayOfVirtualCdrom(Vec<super::structs::VirtualCdrom>),
     /// A boxed array of *VirtualCdromAtapiBackingInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualCdromAtapiBackingInfo(Vec<VirtualCdromAtapiBackingInfo>),
+    ArrayOfVirtualCdromAtapiBackingInfo(Vec<super::structs::VirtualCdromAtapiBackingInfo>),
     /// A boxed array of *VirtualCdromIsoBackingInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualCdromIsoBackingInfo(Vec<VirtualCdromIsoBackingInfo>),
+    ArrayOfVirtualCdromIsoBackingInfo(Vec<super::structs::VirtualCdromIsoBackingInfo>),
     /// A boxed array of *VirtualCdromPassthroughBackingInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualCdromPassthroughBackingInfo(Vec<VirtualCdromPassthroughBackingInfo>),
+    ArrayOfVirtualCdromPassthroughBackingInfo(Vec<super::structs::VirtualCdromPassthroughBackingInfo>),
     /// A boxed array of *VirtualCdromRemoteAtapiBackingInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualCdromRemoteAtapiBackingInfo(Vec<VirtualCdromRemoteAtapiBackingInfo>),
+    ArrayOfVirtualCdromRemoteAtapiBackingInfo(Vec<super::structs::VirtualCdromRemoteAtapiBackingInfo>),
     /// A boxed array of *VirtualCdromRemotePassthroughBackingInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualCdromRemotePassthroughBackingInfo(Vec<VirtualCdromRemotePassthroughBackingInfo>),
+    ArrayOfVirtualCdromRemotePassthroughBackingInfo(Vec<super::structs::VirtualCdromRemotePassthroughBackingInfo>),
     /// A boxed array of *VirtualCdromOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualCdromOption(Vec<VirtualCdromOption>),
+    ArrayOfVirtualCdromOption(Vec<super::structs::VirtualCdromOption>),
     /// A boxed array of *VirtualCdromAtapiBackingOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualCdromAtapiBackingOption(Vec<VirtualCdromAtapiBackingOption>),
+    ArrayOfVirtualCdromAtapiBackingOption(Vec<super::structs::VirtualCdromAtapiBackingOption>),
     /// A boxed array of *VirtualCdromIsoBackingOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualCdromIsoBackingOption(Vec<VirtualCdromIsoBackingOption>),
+    ArrayOfVirtualCdromIsoBackingOption(Vec<super::structs::VirtualCdromIsoBackingOption>),
     /// A boxed array of *VirtualCdromPassthroughBackingOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualCdromPassthroughBackingOption(Vec<VirtualCdromPassthroughBackingOption>),
+    ArrayOfVirtualCdromPassthroughBackingOption(Vec<super::structs::VirtualCdromPassthroughBackingOption>),
     /// A boxed array of *VirtualCdromRemoteAtapiBackingOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualCdromRemoteAtapiBackingOption(Vec<VirtualCdromRemoteAtapiBackingOption>),
+    ArrayOfVirtualCdromRemoteAtapiBackingOption(Vec<super::structs::VirtualCdromRemoteAtapiBackingOption>),
     /// A boxed array of *VirtualCdromRemotePassthroughBackingOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualCdromRemotePassthroughBackingOption(Vec<VirtualCdromRemotePassthroughBackingOption>),
+    ArrayOfVirtualCdromRemotePassthroughBackingOption(Vec<super::structs::VirtualCdromRemotePassthroughBackingOption>),
     /// A boxed array of *VirtualController*. To be used in *Any* placeholders.
     ArrayOfVirtualController(Vec<Box<dyn super::traits::VirtualControllerTrait>>),
     /// A boxed array of *VirtualControllerOption*. To be used in *Any* placeholders.
@@ -5421,13 +5419,13 @@ pub enum ValueElements {
     /// A boxed array of *VirtualDeviceBusSlotInfo*. To be used in *Any* placeholders.
     ArrayOfVirtualDeviceBusSlotInfo(Vec<Box<dyn super::traits::VirtualDeviceBusSlotInfoTrait>>),
     /// A boxed array of *VirtualDeviceConnectInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualDeviceConnectInfo(Vec<VirtualDeviceConnectInfo>),
+    ArrayOfVirtualDeviceConnectInfo(Vec<super::structs::VirtualDeviceConnectInfo>),
     /// A boxed array of *VirtualDeviceDeviceBackingInfo*. To be used in *Any* placeholders.
     ArrayOfVirtualDeviceDeviceBackingInfo(Vec<Box<dyn super::traits::VirtualDeviceDeviceBackingInfoTrait>>),
     /// A boxed array of *VirtualDeviceDeviceGroupInfo*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 8.0.0.1
-    ArrayOfVirtualDeviceDeviceGroupInfo(Vec<VirtualDeviceDeviceGroupInfo>),
+    ArrayOfVirtualDeviceDeviceGroupInfo(Vec<super::structs::VirtualDeviceDeviceGroupInfo>),
     /// A boxed array of *VirtualDeviceFileBackingInfo*. To be used in *Any* placeholders.
     ArrayOfVirtualDeviceFileBackingInfo(Vec<Box<dyn super::traits::VirtualDeviceFileBackingInfoTrait>>),
     /// A boxed array of *VirtualDevicePciBusSlotInfo*. To be used in *Any* placeholders.
@@ -5443,9 +5441,9 @@ pub enum ValueElements {
     /// A boxed array of *VirtualDeviceBackingOption*. To be used in *Any* placeholders.
     ArrayOfVirtualDeviceBackingOption(Vec<Box<dyn super::traits::VirtualDeviceBackingOptionTrait>>),
     /// A boxed array of *VirtualDeviceBusSlotOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualDeviceBusSlotOption(Vec<VirtualDeviceBusSlotOption>),
+    ArrayOfVirtualDeviceBusSlotOption(Vec<super::structs::VirtualDeviceBusSlotOption>),
     /// A boxed array of *VirtualDeviceConnectOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualDeviceConnectOption(Vec<VirtualDeviceConnectOption>),
+    ArrayOfVirtualDeviceConnectOption(Vec<super::structs::VirtualDeviceConnectOption>),
     /// A boxed array of *VirtualDeviceDeviceBackingOption*. To be used in *Any* placeholders.
     ArrayOfVirtualDeviceDeviceBackingOption(Vec<Box<dyn super::traits::VirtualDeviceDeviceBackingOptionTrait>>),
     /// A boxed array of *VirtualDeviceFileBackingOption*. To be used in *Any* placeholders.
@@ -5459,211 +5457,211 @@ pub enum ValueElements {
     /// A boxed array of *VirtualDeviceConfigSpec*. To be used in *Any* placeholders.
     ArrayOfVirtualDeviceConfigSpec(Vec<Box<dyn super::traits::VirtualDeviceConfigSpecTrait>>),
     /// A boxed array of *VirtualDeviceConfigSpecBackingSpec*. To be used in *Any* placeholders.
-    ArrayOfVirtualDeviceConfigSpecBackingSpec(Vec<VirtualDeviceConfigSpecBackingSpec>),
+    ArrayOfVirtualDeviceConfigSpecBackingSpec(Vec<super::structs::VirtualDeviceConfigSpecBackingSpec>),
     /// A boxed array of *VirtualDisk*. To be used in *Any* placeholders.
-    ArrayOfVirtualDisk(Vec<VirtualDisk>),
+    ArrayOfVirtualDisk(Vec<super::structs::VirtualDisk>),
     /// A boxed array of *VirtualDiskFlatVer1BackingInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualDiskFlatVer1BackingInfo(Vec<VirtualDiskFlatVer1BackingInfo>),
+    ArrayOfVirtualDiskFlatVer1BackingInfo(Vec<super::structs::VirtualDiskFlatVer1BackingInfo>),
     /// A boxed array of *VirtualDiskFlatVer2BackingInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualDiskFlatVer2BackingInfo(Vec<VirtualDiskFlatVer2BackingInfo>),
+    ArrayOfVirtualDiskFlatVer2BackingInfo(Vec<super::structs::VirtualDiskFlatVer2BackingInfo>),
     /// A boxed array of *VirtualDiskLocalPMemBackingInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualDiskLocalPMemBackingInfo(Vec<VirtualDiskLocalPMemBackingInfo>),
+    ArrayOfVirtualDiskLocalPMemBackingInfo(Vec<super::structs::VirtualDiskLocalPMemBackingInfo>),
     /// A boxed array of *VirtualDiskPartitionedRawDiskVer2BackingInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualDiskPartitionedRawDiskVer2BackingInfo(Vec<VirtualDiskPartitionedRawDiskVer2BackingInfo>),
+    ArrayOfVirtualDiskPartitionedRawDiskVer2BackingInfo(Vec<super::structs::VirtualDiskPartitionedRawDiskVer2BackingInfo>),
     /// A boxed array of *VirtualDiskRawDiskMappingVer1BackingInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualDiskRawDiskMappingVer1BackingInfo(Vec<VirtualDiskRawDiskMappingVer1BackingInfo>),
+    ArrayOfVirtualDiskRawDiskMappingVer1BackingInfo(Vec<super::structs::VirtualDiskRawDiskMappingVer1BackingInfo>),
     /// A boxed array of *VirtualDiskRawDiskVer2BackingInfo*. To be used in *Any* placeholders.
     ArrayOfVirtualDiskRawDiskVer2BackingInfo(Vec<Box<dyn super::traits::VirtualDiskRawDiskVer2BackingInfoTrait>>),
     /// A boxed array of *VirtualDiskSeSparseBackingInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualDiskSeSparseBackingInfo(Vec<VirtualDiskSeSparseBackingInfo>),
+    ArrayOfVirtualDiskSeSparseBackingInfo(Vec<super::structs::VirtualDiskSeSparseBackingInfo>),
     /// A boxed array of *VirtualDiskSparseVer1BackingInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualDiskSparseVer1BackingInfo(Vec<VirtualDiskSparseVer1BackingInfo>),
+    ArrayOfVirtualDiskSparseVer1BackingInfo(Vec<super::structs::VirtualDiskSparseVer1BackingInfo>),
     /// A boxed array of *VirtualDiskSparseVer2BackingInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualDiskSparseVer2BackingInfo(Vec<VirtualDiskSparseVer2BackingInfo>),
+    ArrayOfVirtualDiskSparseVer2BackingInfo(Vec<super::structs::VirtualDiskSparseVer2BackingInfo>),
     /// A boxed array of *VirtualDiskVFlashCacheConfigInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualDiskVFlashCacheConfigInfo(Vec<VirtualDiskVFlashCacheConfigInfo>),
+    ArrayOfVirtualDiskVFlashCacheConfigInfo(Vec<super::structs::VirtualDiskVFlashCacheConfigInfo>),
     /// A boxed array of *VirtualDiskId*. To be used in *Any* placeholders.
-    ArrayOfVirtualDiskId(Vec<VirtualDiskId>),
+    ArrayOfVirtualDiskId(Vec<super::structs::VirtualDiskId>),
     /// A boxed array of *VirtualDiskOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualDiskOption(Vec<VirtualDiskOption>),
+    ArrayOfVirtualDiskOption(Vec<super::structs::VirtualDiskOption>),
     /// A boxed array of *VirtualDiskDeltaDiskFormatsSupported*. To be used in *Any* placeholders.
-    ArrayOfVirtualDiskDeltaDiskFormatsSupported(Vec<VirtualDiskDeltaDiskFormatsSupported>),
+    ArrayOfVirtualDiskDeltaDiskFormatsSupported(Vec<super::structs::VirtualDiskDeltaDiskFormatsSupported>),
     /// A boxed array of *VirtualDiskFlatVer1BackingOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualDiskFlatVer1BackingOption(Vec<VirtualDiskFlatVer1BackingOption>),
+    ArrayOfVirtualDiskFlatVer1BackingOption(Vec<super::structs::VirtualDiskFlatVer1BackingOption>),
     /// A boxed array of *VirtualDiskFlatVer2BackingOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualDiskFlatVer2BackingOption(Vec<VirtualDiskFlatVer2BackingOption>),
+    ArrayOfVirtualDiskFlatVer2BackingOption(Vec<super::structs::VirtualDiskFlatVer2BackingOption>),
     /// A boxed array of *VirtualDiskLocalPMemBackingOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualDiskLocalPMemBackingOption(Vec<VirtualDiskLocalPMemBackingOption>),
+    ArrayOfVirtualDiskLocalPMemBackingOption(Vec<super::structs::VirtualDiskLocalPMemBackingOption>),
     /// A boxed array of *VirtualDiskPartitionedRawDiskVer2BackingOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualDiskPartitionedRawDiskVer2BackingOption(Vec<VirtualDiskPartitionedRawDiskVer2BackingOption>),
+    ArrayOfVirtualDiskPartitionedRawDiskVer2BackingOption(Vec<super::structs::VirtualDiskPartitionedRawDiskVer2BackingOption>),
     /// A boxed array of *VirtualDiskRawDiskMappingVer1BackingOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualDiskRawDiskMappingVer1BackingOption(Vec<VirtualDiskRawDiskMappingVer1BackingOption>),
+    ArrayOfVirtualDiskRawDiskMappingVer1BackingOption(Vec<super::structs::VirtualDiskRawDiskMappingVer1BackingOption>),
     /// A boxed array of *VirtualDiskRawDiskVer2BackingOption*. To be used in *Any* placeholders.
     ArrayOfVirtualDiskRawDiskVer2BackingOption(Vec<Box<dyn super::traits::VirtualDiskRawDiskVer2BackingOptionTrait>>),
     /// A boxed array of *VirtualDiskSeSparseBackingOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualDiskSeSparseBackingOption(Vec<VirtualDiskSeSparseBackingOption>),
+    ArrayOfVirtualDiskSeSparseBackingOption(Vec<super::structs::VirtualDiskSeSparseBackingOption>),
     /// A boxed array of *VirtualDiskSparseVer1BackingOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualDiskSparseVer1BackingOption(Vec<VirtualDiskSparseVer1BackingOption>),
+    ArrayOfVirtualDiskSparseVer1BackingOption(Vec<super::structs::VirtualDiskSparseVer1BackingOption>),
     /// A boxed array of *VirtualDiskSparseVer2BackingOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualDiskSparseVer2BackingOption(Vec<VirtualDiskSparseVer2BackingOption>),
+    ArrayOfVirtualDiskSparseVer2BackingOption(Vec<super::structs::VirtualDiskSparseVer2BackingOption>),
     /// A boxed array of *VirtualDiskOptionVFlashCacheConfigOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualDiskOptionVFlashCacheConfigOption(Vec<VirtualDiskOptionVFlashCacheConfigOption>),
+    ArrayOfVirtualDiskOptionVFlashCacheConfigOption(Vec<super::structs::VirtualDiskOptionVFlashCacheConfigOption>),
     /// A boxed array of *VirtualDiskConfigSpec*. To be used in *Any* placeholders.
-    ArrayOfVirtualDiskConfigSpec(Vec<VirtualDiskConfigSpec>),
+    ArrayOfVirtualDiskConfigSpec(Vec<super::structs::VirtualDiskConfigSpec>),
     /// A boxed array of *VirtualE1000*. To be used in *Any* placeholders.
-    ArrayOfVirtualE1000(Vec<VirtualE1000>),
+    ArrayOfVirtualE1000(Vec<super::structs::VirtualE1000>),
     /// A boxed array of *VirtualE1000Option*. To be used in *Any* placeholders.
-    ArrayOfVirtualE1000Option(Vec<VirtualE1000Option>),
+    ArrayOfVirtualE1000Option(Vec<super::structs::VirtualE1000Option>),
     /// A boxed array of *VirtualE1000e*. To be used in *Any* placeholders.
-    ArrayOfVirtualE1000E(Vec<VirtualE1000E>),
+    ArrayOfVirtualE1000E(Vec<super::structs::VirtualE1000E>),
     /// A boxed array of *VirtualE1000eOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualE1000EOption(Vec<VirtualE1000EOption>),
+    ArrayOfVirtualE1000EOption(Vec<super::structs::VirtualE1000EOption>),
     /// A boxed array of *VirtualEnsoniq1371*. To be used in *Any* placeholders.
-    ArrayOfVirtualEnsoniq1371(Vec<VirtualEnsoniq1371>),
+    ArrayOfVirtualEnsoniq1371(Vec<super::structs::VirtualEnsoniq1371>),
     /// A boxed array of *VirtualEnsoniq1371Option*. To be used in *Any* placeholders.
-    ArrayOfVirtualEnsoniq1371Option(Vec<VirtualEnsoniq1371Option>),
+    ArrayOfVirtualEnsoniq1371Option(Vec<super::structs::VirtualEnsoniq1371Option>),
     /// A boxed array of *VirtualEthernetCard*. To be used in *Any* placeholders.
     ArrayOfVirtualEthernetCard(Vec<Box<dyn super::traits::VirtualEthernetCardTrait>>),
     /// A boxed array of *VirtualEthernetCardDistributedVirtualPortBackingInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualEthernetCardDistributedVirtualPortBackingInfo(Vec<VirtualEthernetCardDistributedVirtualPortBackingInfo>),
+    ArrayOfVirtualEthernetCardDistributedVirtualPortBackingInfo(Vec<super::structs::VirtualEthernetCardDistributedVirtualPortBackingInfo>),
     /// A boxed array of *VirtualEthernetCardLegacyNetworkBackingInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualEthernetCardLegacyNetworkBackingInfo(Vec<VirtualEthernetCardLegacyNetworkBackingInfo>),
+    ArrayOfVirtualEthernetCardLegacyNetworkBackingInfo(Vec<super::structs::VirtualEthernetCardLegacyNetworkBackingInfo>),
     /// A boxed array of *VirtualEthernetCardNetworkBackingInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualEthernetCardNetworkBackingInfo(Vec<VirtualEthernetCardNetworkBackingInfo>),
+    ArrayOfVirtualEthernetCardNetworkBackingInfo(Vec<super::structs::VirtualEthernetCardNetworkBackingInfo>),
     /// A boxed array of *VirtualEthernetCardOpaqueNetworkBackingInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualEthernetCardOpaqueNetworkBackingInfo(Vec<VirtualEthernetCardOpaqueNetworkBackingInfo>),
+    ArrayOfVirtualEthernetCardOpaqueNetworkBackingInfo(Vec<super::structs::VirtualEthernetCardOpaqueNetworkBackingInfo>),
     /// A boxed array of *VirtualEthernetCardResourceAllocation*. To be used in *Any* placeholders.
-    ArrayOfVirtualEthernetCardResourceAllocation(Vec<VirtualEthernetCardResourceAllocation>),
+    ArrayOfVirtualEthernetCardResourceAllocation(Vec<super::structs::VirtualEthernetCardResourceAllocation>),
     /// A boxed array of *VirtualEthernetCardOption*. To be used in *Any* placeholders.
     ArrayOfVirtualEthernetCardOption(Vec<Box<dyn super::traits::VirtualEthernetCardOptionTrait>>),
     /// A boxed array of *VirtualEthernetCardDVPortBackingOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualEthernetCardDvPortBackingOption(Vec<VirtualEthernetCardDvPortBackingOption>),
+    ArrayOfVirtualEthernetCardDvPortBackingOption(Vec<super::structs::VirtualEthernetCardDvPortBackingOption>),
     /// A boxed array of *VirtualEthernetCardLegacyNetworkBackingOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualEthernetCardLegacyNetworkBackingOption(Vec<VirtualEthernetCardLegacyNetworkBackingOption>),
+    ArrayOfVirtualEthernetCardLegacyNetworkBackingOption(Vec<super::structs::VirtualEthernetCardLegacyNetworkBackingOption>),
     /// A boxed array of *VirtualEthernetCardNetworkBackingOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualEthernetCardNetworkBackingOption(Vec<VirtualEthernetCardNetworkBackingOption>),
+    ArrayOfVirtualEthernetCardNetworkBackingOption(Vec<super::structs::VirtualEthernetCardNetworkBackingOption>),
     /// A boxed array of *VirtualEthernetCardOpaqueNetworkBackingOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualEthernetCardOpaqueNetworkBackingOption(Vec<VirtualEthernetCardOpaqueNetworkBackingOption>),
+    ArrayOfVirtualEthernetCardOpaqueNetworkBackingOption(Vec<super::structs::VirtualEthernetCardOpaqueNetworkBackingOption>),
     /// A boxed array of *VirtualFloppy*. To be used in *Any* placeholders.
-    ArrayOfVirtualFloppy(Vec<VirtualFloppy>),
+    ArrayOfVirtualFloppy(Vec<super::structs::VirtualFloppy>),
     /// A boxed array of *VirtualFloppyDeviceBackingInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualFloppyDeviceBackingInfo(Vec<VirtualFloppyDeviceBackingInfo>),
+    ArrayOfVirtualFloppyDeviceBackingInfo(Vec<super::structs::VirtualFloppyDeviceBackingInfo>),
     /// A boxed array of *VirtualFloppyImageBackingInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualFloppyImageBackingInfo(Vec<VirtualFloppyImageBackingInfo>),
+    ArrayOfVirtualFloppyImageBackingInfo(Vec<super::structs::VirtualFloppyImageBackingInfo>),
     /// A boxed array of *VirtualFloppyRemoteDeviceBackingInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualFloppyRemoteDeviceBackingInfo(Vec<VirtualFloppyRemoteDeviceBackingInfo>),
+    ArrayOfVirtualFloppyRemoteDeviceBackingInfo(Vec<super::structs::VirtualFloppyRemoteDeviceBackingInfo>),
     /// A boxed array of *VirtualFloppyOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualFloppyOption(Vec<VirtualFloppyOption>),
+    ArrayOfVirtualFloppyOption(Vec<super::structs::VirtualFloppyOption>),
     /// A boxed array of *VirtualFloppyDeviceBackingOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualFloppyDeviceBackingOption(Vec<VirtualFloppyDeviceBackingOption>),
+    ArrayOfVirtualFloppyDeviceBackingOption(Vec<super::structs::VirtualFloppyDeviceBackingOption>),
     /// A boxed array of *VirtualFloppyImageBackingOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualFloppyImageBackingOption(Vec<VirtualFloppyImageBackingOption>),
+    ArrayOfVirtualFloppyImageBackingOption(Vec<super::structs::VirtualFloppyImageBackingOption>),
     /// A boxed array of *VirtualFloppyRemoteDeviceBackingOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualFloppyRemoteDeviceBackingOption(Vec<VirtualFloppyRemoteDeviceBackingOption>),
+    ArrayOfVirtualFloppyRemoteDeviceBackingOption(Vec<super::structs::VirtualFloppyRemoteDeviceBackingOption>),
     /// A boxed array of *VirtualHdAudioCard*. To be used in *Any* placeholders.
-    ArrayOfVirtualHdAudioCard(Vec<VirtualHdAudioCard>),
+    ArrayOfVirtualHdAudioCard(Vec<super::structs::VirtualHdAudioCard>),
     /// A boxed array of *VirtualHdAudioCardOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualHdAudioCardOption(Vec<VirtualHdAudioCardOption>),
+    ArrayOfVirtualHdAudioCardOption(Vec<super::structs::VirtualHdAudioCardOption>),
     /// A boxed array of *VirtualIDEController*. To be used in *Any* placeholders.
-    ArrayOfVirtualIdeController(Vec<VirtualIdeController>),
+    ArrayOfVirtualIdeController(Vec<super::structs::VirtualIdeController>),
     /// A boxed array of *VirtualIDEControllerOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualIdeControllerOption(Vec<VirtualIdeControllerOption>),
+    ArrayOfVirtualIdeControllerOption(Vec<super::structs::VirtualIdeControllerOption>),
     /// A boxed array of *VirtualKeyboard*. To be used in *Any* placeholders.
-    ArrayOfVirtualKeyboard(Vec<VirtualKeyboard>),
+    ArrayOfVirtualKeyboard(Vec<super::structs::VirtualKeyboard>),
     /// A boxed array of *VirtualKeyboardOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualKeyboardOption(Vec<VirtualKeyboardOption>),
+    ArrayOfVirtualKeyboardOption(Vec<super::structs::VirtualKeyboardOption>),
     /// A boxed array of *VirtualLsiLogicController*. To be used in *Any* placeholders.
-    ArrayOfVirtualLsiLogicController(Vec<VirtualLsiLogicController>),
+    ArrayOfVirtualLsiLogicController(Vec<super::structs::VirtualLsiLogicController>),
     /// A boxed array of *VirtualLsiLogicControllerOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualLsiLogicControllerOption(Vec<VirtualLsiLogicControllerOption>),
+    ArrayOfVirtualLsiLogicControllerOption(Vec<super::structs::VirtualLsiLogicControllerOption>),
     /// A boxed array of *VirtualLsiLogicSASController*. To be used in *Any* placeholders.
-    ArrayOfVirtualLsiLogicSasController(Vec<VirtualLsiLogicSasController>),
+    ArrayOfVirtualLsiLogicSasController(Vec<super::structs::VirtualLsiLogicSasController>),
     /// A boxed array of *VirtualLsiLogicSASControllerOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualLsiLogicSasControllerOption(Vec<VirtualLsiLogicSasControllerOption>),
+    ArrayOfVirtualLsiLogicSasControllerOption(Vec<super::structs::VirtualLsiLogicSasControllerOption>),
     /// A boxed array of *VirtualNVDIMM*. To be used in *Any* placeholders.
-    ArrayOfVirtualNvdimm(Vec<VirtualNvdimm>),
+    ArrayOfVirtualNvdimm(Vec<super::structs::VirtualNvdimm>),
     /// A boxed array of *VirtualNVDIMMBackingInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualNvdimmBackingInfo(Vec<VirtualNvdimmBackingInfo>),
+    ArrayOfVirtualNvdimmBackingInfo(Vec<super::structs::VirtualNvdimmBackingInfo>),
     /// A boxed array of *VirtualNVDIMMController*. To be used in *Any* placeholders.
-    ArrayOfVirtualNvdimmController(Vec<VirtualNvdimmController>),
+    ArrayOfVirtualNvdimmController(Vec<super::structs::VirtualNvdimmController>),
     /// A boxed array of *VirtualNVDIMMControllerOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualNvdimmControllerOption(Vec<VirtualNvdimmControllerOption>),
+    ArrayOfVirtualNvdimmControllerOption(Vec<super::structs::VirtualNvdimmControllerOption>),
     /// A boxed array of *VirtualNVDIMMOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualNvdimmOption(Vec<VirtualNvdimmOption>),
+    ArrayOfVirtualNvdimmOption(Vec<super::structs::VirtualNvdimmOption>),
     /// A boxed array of *VirtualNVMEController*. To be used in *Any* placeholders.
-    ArrayOfVirtualNvmeController(Vec<VirtualNvmeController>),
+    ArrayOfVirtualNvmeController(Vec<super::structs::VirtualNvmeController>),
     /// A boxed array of *VirtualNVMEControllerOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualNvmeControllerOption(Vec<VirtualNvmeControllerOption>),
+    ArrayOfVirtualNvmeControllerOption(Vec<super::structs::VirtualNvmeControllerOption>),
     /// A boxed array of *VirtualPCIController*. To be used in *Any* placeholders.
-    ArrayOfVirtualPciController(Vec<VirtualPciController>),
+    ArrayOfVirtualPciController(Vec<super::structs::VirtualPciController>),
     /// A boxed array of *VirtualPCIControllerOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualPciControllerOption(Vec<VirtualPciControllerOption>),
+    ArrayOfVirtualPciControllerOption(Vec<super::structs::VirtualPciControllerOption>),
     /// A boxed array of *VirtualPCIPassthrough*. To be used in *Any* placeholders.
-    ArrayOfVirtualPciPassthrough(Vec<VirtualPciPassthrough>),
+    ArrayOfVirtualPciPassthrough(Vec<super::structs::VirtualPciPassthrough>),
     /// A boxed array of *VirtualPCIPassthroughAllowedDevice*. To be used in *Any* placeholders.
-    ArrayOfVirtualPciPassthroughAllowedDevice(Vec<VirtualPciPassthroughAllowedDevice>),
+    ArrayOfVirtualPciPassthroughAllowedDevice(Vec<super::structs::VirtualPciPassthroughAllowedDevice>),
     /// A boxed array of *VirtualPCIPassthroughDeviceBackingInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualPciPassthroughDeviceBackingInfo(Vec<VirtualPciPassthroughDeviceBackingInfo>),
+    ArrayOfVirtualPciPassthroughDeviceBackingInfo(Vec<super::structs::VirtualPciPassthroughDeviceBackingInfo>),
     /// A boxed array of *VirtualPCIPassthroughDvxBackingInfo*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 8.0.0.1
-    ArrayOfVirtualPciPassthroughDvxBackingInfo(Vec<VirtualPciPassthroughDvxBackingInfo>),
+    ArrayOfVirtualPciPassthroughDvxBackingInfo(Vec<super::structs::VirtualPciPassthroughDvxBackingInfo>),
     /// A boxed array of *VirtualPCIPassthroughDynamicBackingInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualPciPassthroughDynamicBackingInfo(Vec<VirtualPciPassthroughDynamicBackingInfo>),
+    ArrayOfVirtualPciPassthroughDynamicBackingInfo(Vec<super::structs::VirtualPciPassthroughDynamicBackingInfo>),
     /// A boxed array of *VirtualPCIPassthroughPluginBackingInfo*. To be used in *Any* placeholders.
     ArrayOfVirtualPciPassthroughPluginBackingInfo(Vec<Box<dyn super::traits::VirtualPciPassthroughPluginBackingInfoTrait>>),
     /// A boxed array of *VirtualPCIPassthroughVmiopBackingInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualPciPassthroughVmiopBackingInfo(Vec<VirtualPciPassthroughVmiopBackingInfo>),
+    ArrayOfVirtualPciPassthroughVmiopBackingInfo(Vec<super::structs::VirtualPciPassthroughVmiopBackingInfo>),
     /// A boxed array of *VirtualPCIPassthroughOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualPciPassthroughOption(Vec<VirtualPciPassthroughOption>),
+    ArrayOfVirtualPciPassthroughOption(Vec<super::structs::VirtualPciPassthroughOption>),
     /// A boxed array of *VirtualPCIPassthroughDeviceBackingOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualPciPassthroughDeviceBackingOption(Vec<VirtualPciPassthroughDeviceBackingOption>),
+    ArrayOfVirtualPciPassthroughDeviceBackingOption(Vec<super::structs::VirtualPciPassthroughDeviceBackingOption>),
     /// A boxed array of *VirtualPCIPassthroughDvxBackingOption*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 8.0.0.1
-    ArrayOfVirtualPciPassthroughDvxBackingOption(Vec<VirtualPciPassthroughDvxBackingOption>),
+    ArrayOfVirtualPciPassthroughDvxBackingOption(Vec<super::structs::VirtualPciPassthroughDvxBackingOption>),
     /// A boxed array of *VirtualPCIPassthroughDynamicBackingOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualPciPassthroughDynamicBackingOption(Vec<VirtualPciPassthroughDynamicBackingOption>),
+    ArrayOfVirtualPciPassthroughDynamicBackingOption(Vec<super::structs::VirtualPciPassthroughDynamicBackingOption>),
     /// A boxed array of *VirtualPCIPassthroughPluginBackingOption*. To be used in *Any* placeholders.
     ArrayOfVirtualPciPassthroughPluginBackingOption(Vec<Box<dyn super::traits::VirtualPciPassthroughPluginBackingOptionTrait>>),
     /// A boxed array of *VirtualPCIPassthroughVmiopBackingOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualPciPassthroughVmiopBackingOption(Vec<VirtualPciPassthroughVmiopBackingOption>),
+    ArrayOfVirtualPciPassthroughVmiopBackingOption(Vec<super::structs::VirtualPciPassthroughVmiopBackingOption>),
     /// A boxed array of *VirtualPCNet32*. To be used in *Any* placeholders.
-    ArrayOfVirtualPcNet32(Vec<VirtualPcNet32>),
+    ArrayOfVirtualPcNet32(Vec<super::structs::VirtualPcNet32>),
     /// A boxed array of *VirtualPCNet32Option*. To be used in *Any* placeholders.
-    ArrayOfVirtualPcNet32Option(Vec<VirtualPcNet32Option>),
+    ArrayOfVirtualPcNet32Option(Vec<super::structs::VirtualPcNet32Option>),
     /// A boxed array of *VirtualPS2Controller*. To be used in *Any* placeholders.
-    ArrayOfVirtualPs2Controller(Vec<VirtualPs2Controller>),
+    ArrayOfVirtualPs2Controller(Vec<super::structs::VirtualPs2Controller>),
     /// A boxed array of *VirtualPS2ControllerOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualPs2ControllerOption(Vec<VirtualPs2ControllerOption>),
+    ArrayOfVirtualPs2ControllerOption(Vec<super::structs::VirtualPs2ControllerOption>),
     /// A boxed array of *VirtualParallelPort*. To be used in *Any* placeholders.
-    ArrayOfVirtualParallelPort(Vec<VirtualParallelPort>),
+    ArrayOfVirtualParallelPort(Vec<super::structs::VirtualParallelPort>),
     /// A boxed array of *VirtualParallelPortDeviceBackingInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualParallelPortDeviceBackingInfo(Vec<VirtualParallelPortDeviceBackingInfo>),
+    ArrayOfVirtualParallelPortDeviceBackingInfo(Vec<super::structs::VirtualParallelPortDeviceBackingInfo>),
     /// A boxed array of *VirtualParallelPortFileBackingInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualParallelPortFileBackingInfo(Vec<VirtualParallelPortFileBackingInfo>),
+    ArrayOfVirtualParallelPortFileBackingInfo(Vec<super::structs::VirtualParallelPortFileBackingInfo>),
     /// A boxed array of *VirtualParallelPortOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualParallelPortOption(Vec<VirtualParallelPortOption>),
+    ArrayOfVirtualParallelPortOption(Vec<super::structs::VirtualParallelPortOption>),
     /// A boxed array of *VirtualParallelPortDeviceBackingOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualParallelPortDeviceBackingOption(Vec<VirtualParallelPortDeviceBackingOption>),
+    ArrayOfVirtualParallelPortDeviceBackingOption(Vec<super::structs::VirtualParallelPortDeviceBackingOption>),
     /// A boxed array of *VirtualParallelPortFileBackingOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualParallelPortFileBackingOption(Vec<VirtualParallelPortFileBackingOption>),
+    ArrayOfVirtualParallelPortFileBackingOption(Vec<super::structs::VirtualParallelPortFileBackingOption>),
     /// A boxed array of *VirtualPointingDevice*. To be used in *Any* placeholders.
-    ArrayOfVirtualPointingDevice(Vec<VirtualPointingDevice>),
+    ArrayOfVirtualPointingDevice(Vec<super::structs::VirtualPointingDevice>),
     /// A boxed array of *VirtualPointingDeviceDeviceBackingInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualPointingDeviceDeviceBackingInfo(Vec<VirtualPointingDeviceDeviceBackingInfo>),
+    ArrayOfVirtualPointingDeviceDeviceBackingInfo(Vec<super::structs::VirtualPointingDeviceDeviceBackingInfo>),
     /// A boxed array of *VirtualPointingDeviceOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualPointingDeviceOption(Vec<VirtualPointingDeviceOption>),
+    ArrayOfVirtualPointingDeviceOption(Vec<super::structs::VirtualPointingDeviceOption>),
     /// A boxed array of *VirtualPointingDeviceBackingOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualPointingDeviceBackingOption(Vec<VirtualPointingDeviceBackingOption>),
+    ArrayOfVirtualPointingDeviceBackingOption(Vec<super::structs::VirtualPointingDeviceBackingOption>),
     /// A boxed array of *VirtualPrecisionClock*. To be used in *Any* placeholders.
-    ArrayOfVirtualPrecisionClock(Vec<VirtualPrecisionClock>),
+    ArrayOfVirtualPrecisionClock(Vec<super::structs::VirtualPrecisionClock>),
     /// A boxed array of *VirtualPrecisionClockSystemClockBackingInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualPrecisionClockSystemClockBackingInfo(Vec<VirtualPrecisionClockSystemClockBackingInfo>),
+    ArrayOfVirtualPrecisionClockSystemClockBackingInfo(Vec<super::structs::VirtualPrecisionClockSystemClockBackingInfo>),
     /// A boxed array of *VirtualPrecisionClockOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualPrecisionClockOption(Vec<VirtualPrecisionClockOption>),
+    ArrayOfVirtualPrecisionClockOption(Vec<super::structs::VirtualPrecisionClockOption>),
     /// A boxed array of *VirtualPrecisionClockSystemClockBackingOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualPrecisionClockSystemClockBackingOption(Vec<VirtualPrecisionClockSystemClockBackingOption>),
+    ArrayOfVirtualPrecisionClockSystemClockBackingOption(Vec<super::structs::VirtualPrecisionClockSystemClockBackingOption>),
     /// A boxed array of *VirtualSATAController*. To be used in *Any* placeholders.
     ArrayOfVirtualSataController(Vec<Box<dyn super::traits::VirtualSataControllerTrait>>),
     /// A boxed array of *VirtualSATAControllerOption*. To be used in *Any* placeholders.
@@ -5673,381 +5671,381 @@ pub enum ValueElements {
     /// A boxed array of *VirtualSCSIControllerOption*. To be used in *Any* placeholders.
     ArrayOfVirtualScsiControllerOption(Vec<Box<dyn super::traits::VirtualScsiControllerOptionTrait>>),
     /// A boxed array of *VirtualSCSIPassthrough*. To be used in *Any* placeholders.
-    ArrayOfVirtualScsiPassthrough(Vec<VirtualScsiPassthrough>),
+    ArrayOfVirtualScsiPassthrough(Vec<super::structs::VirtualScsiPassthrough>),
     /// A boxed array of *VirtualSCSIPassthroughDeviceBackingInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualScsiPassthroughDeviceBackingInfo(Vec<VirtualScsiPassthroughDeviceBackingInfo>),
+    ArrayOfVirtualScsiPassthroughDeviceBackingInfo(Vec<super::structs::VirtualScsiPassthroughDeviceBackingInfo>),
     /// A boxed array of *VirtualSCSIPassthroughOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualScsiPassthroughOption(Vec<VirtualScsiPassthroughOption>),
+    ArrayOfVirtualScsiPassthroughOption(Vec<super::structs::VirtualScsiPassthroughOption>),
     /// A boxed array of *VirtualSCSIPassthroughDeviceBackingOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualScsiPassthroughDeviceBackingOption(Vec<VirtualScsiPassthroughDeviceBackingOption>),
+    ArrayOfVirtualScsiPassthroughDeviceBackingOption(Vec<super::structs::VirtualScsiPassthroughDeviceBackingOption>),
     /// A boxed array of *VirtualSIOController*. To be used in *Any* placeholders.
-    ArrayOfVirtualSioController(Vec<VirtualSioController>),
+    ArrayOfVirtualSioController(Vec<super::structs::VirtualSioController>),
     /// A boxed array of *VirtualSIOControllerOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualSioControllerOption(Vec<VirtualSioControllerOption>),
+    ArrayOfVirtualSioControllerOption(Vec<super::structs::VirtualSioControllerOption>),
     /// A boxed array of *VirtualSerialPort*. To be used in *Any* placeholders.
-    ArrayOfVirtualSerialPort(Vec<VirtualSerialPort>),
+    ArrayOfVirtualSerialPort(Vec<super::structs::VirtualSerialPort>),
     /// A boxed array of *VirtualSerialPortDeviceBackingInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualSerialPortDeviceBackingInfo(Vec<VirtualSerialPortDeviceBackingInfo>),
+    ArrayOfVirtualSerialPortDeviceBackingInfo(Vec<super::structs::VirtualSerialPortDeviceBackingInfo>),
     /// A boxed array of *VirtualSerialPortFileBackingInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualSerialPortFileBackingInfo(Vec<VirtualSerialPortFileBackingInfo>),
+    ArrayOfVirtualSerialPortFileBackingInfo(Vec<super::structs::VirtualSerialPortFileBackingInfo>),
     /// A boxed array of *VirtualSerialPortPipeBackingInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualSerialPortPipeBackingInfo(Vec<VirtualSerialPortPipeBackingInfo>),
+    ArrayOfVirtualSerialPortPipeBackingInfo(Vec<super::structs::VirtualSerialPortPipeBackingInfo>),
     /// A boxed array of *VirtualSerialPortThinPrintBackingInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualSerialPortThinPrintBackingInfo(Vec<VirtualSerialPortThinPrintBackingInfo>),
+    ArrayOfVirtualSerialPortThinPrintBackingInfo(Vec<super::structs::VirtualSerialPortThinPrintBackingInfo>),
     /// A boxed array of *VirtualSerialPortURIBackingInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualSerialPortUriBackingInfo(Vec<VirtualSerialPortUriBackingInfo>),
+    ArrayOfVirtualSerialPortUriBackingInfo(Vec<super::structs::VirtualSerialPortUriBackingInfo>),
     /// A boxed array of *VirtualSerialPortOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualSerialPortOption(Vec<VirtualSerialPortOption>),
+    ArrayOfVirtualSerialPortOption(Vec<super::structs::VirtualSerialPortOption>),
     /// A boxed array of *VirtualSerialPortDeviceBackingOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualSerialPortDeviceBackingOption(Vec<VirtualSerialPortDeviceBackingOption>),
+    ArrayOfVirtualSerialPortDeviceBackingOption(Vec<super::structs::VirtualSerialPortDeviceBackingOption>),
     /// A boxed array of *VirtualSerialPortFileBackingOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualSerialPortFileBackingOption(Vec<VirtualSerialPortFileBackingOption>),
+    ArrayOfVirtualSerialPortFileBackingOption(Vec<super::structs::VirtualSerialPortFileBackingOption>),
     /// A boxed array of *VirtualSerialPortPipeBackingOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualSerialPortPipeBackingOption(Vec<VirtualSerialPortPipeBackingOption>),
+    ArrayOfVirtualSerialPortPipeBackingOption(Vec<super::structs::VirtualSerialPortPipeBackingOption>),
     /// A boxed array of *VirtualSerialPortThinPrintBackingOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualSerialPortThinPrintBackingOption(Vec<VirtualSerialPortThinPrintBackingOption>),
+    ArrayOfVirtualSerialPortThinPrintBackingOption(Vec<super::structs::VirtualSerialPortThinPrintBackingOption>),
     /// A boxed array of *VirtualSerialPortURIBackingOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualSerialPortUriBackingOption(Vec<VirtualSerialPortUriBackingOption>),
+    ArrayOfVirtualSerialPortUriBackingOption(Vec<super::structs::VirtualSerialPortUriBackingOption>),
     /// A boxed array of *VirtualSoundBlaster16*. To be used in *Any* placeholders.
-    ArrayOfVirtualSoundBlaster16(Vec<VirtualSoundBlaster16>),
+    ArrayOfVirtualSoundBlaster16(Vec<super::structs::VirtualSoundBlaster16>),
     /// A boxed array of *VirtualSoundBlaster16Option*. To be used in *Any* placeholders.
-    ArrayOfVirtualSoundBlaster16Option(Vec<VirtualSoundBlaster16Option>),
+    ArrayOfVirtualSoundBlaster16Option(Vec<super::structs::VirtualSoundBlaster16Option>),
     /// A boxed array of *VirtualSoundCard*. To be used in *Any* placeholders.
     ArrayOfVirtualSoundCard(Vec<Box<dyn super::traits::VirtualSoundCardTrait>>),
     /// A boxed array of *VirtualSoundCardDeviceBackingInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualSoundCardDeviceBackingInfo(Vec<VirtualSoundCardDeviceBackingInfo>),
+    ArrayOfVirtualSoundCardDeviceBackingInfo(Vec<super::structs::VirtualSoundCardDeviceBackingInfo>),
     /// A boxed array of *VirtualSoundCardOption*. To be used in *Any* placeholders.
     ArrayOfVirtualSoundCardOption(Vec<Box<dyn super::traits::VirtualSoundCardOptionTrait>>),
     /// A boxed array of *VirtualSoundCardDeviceBackingOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualSoundCardDeviceBackingOption(Vec<VirtualSoundCardDeviceBackingOption>),
+    ArrayOfVirtualSoundCardDeviceBackingOption(Vec<super::structs::VirtualSoundCardDeviceBackingOption>),
     /// A boxed array of *VirtualSriovEthernetCard*. To be used in *Any* placeholders.
-    ArrayOfVirtualSriovEthernetCard(Vec<VirtualSriovEthernetCard>),
+    ArrayOfVirtualSriovEthernetCard(Vec<super::structs::VirtualSriovEthernetCard>),
     /// A boxed array of *VirtualSriovEthernetCardSriovBackingInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualSriovEthernetCardSriovBackingInfo(Vec<VirtualSriovEthernetCardSriovBackingInfo>),
+    ArrayOfVirtualSriovEthernetCardSriovBackingInfo(Vec<super::structs::VirtualSriovEthernetCardSriovBackingInfo>),
     /// A boxed array of *VirtualSriovEthernetCardOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualSriovEthernetCardOption(Vec<VirtualSriovEthernetCardOption>),
+    ArrayOfVirtualSriovEthernetCardOption(Vec<super::structs::VirtualSriovEthernetCardOption>),
     /// A boxed array of *VirtualSriovEthernetCardSriovBackingOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualSriovEthernetCardSriovBackingOption(Vec<VirtualSriovEthernetCardSriovBackingOption>),
+    ArrayOfVirtualSriovEthernetCardSriovBackingOption(Vec<super::structs::VirtualSriovEthernetCardSriovBackingOption>),
     /// A boxed array of *VirtualTPM*. To be used in *Any* placeholders.
-    ArrayOfVirtualTpm(Vec<VirtualTpm>),
+    ArrayOfVirtualTpm(Vec<super::structs::VirtualTpm>),
     /// A boxed array of *VirtualTPMOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualTpmOption(Vec<VirtualTpmOption>),
+    ArrayOfVirtualTpmOption(Vec<super::structs::VirtualTpmOption>),
     /// A boxed array of *VirtualUSB*. To be used in *Any* placeholders.
-    ArrayOfVirtualUsb(Vec<VirtualUsb>),
+    ArrayOfVirtualUsb(Vec<super::structs::VirtualUsb>),
     /// A boxed array of *VirtualUSBRemoteClientBackingInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualUsbRemoteClientBackingInfo(Vec<VirtualUsbRemoteClientBackingInfo>),
+    ArrayOfVirtualUsbRemoteClientBackingInfo(Vec<super::structs::VirtualUsbRemoteClientBackingInfo>),
     /// A boxed array of *VirtualUSBRemoteHostBackingInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualUsbRemoteHostBackingInfo(Vec<VirtualUsbRemoteHostBackingInfo>),
+    ArrayOfVirtualUsbRemoteHostBackingInfo(Vec<super::structs::VirtualUsbRemoteHostBackingInfo>),
     /// A boxed array of *VirtualUSBUSBBackingInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualUsbusbBackingInfo(Vec<VirtualUsbusbBackingInfo>),
+    ArrayOfVirtualUsbusbBackingInfo(Vec<super::structs::VirtualUsbusbBackingInfo>),
     /// A boxed array of *VirtualUSBController*. To be used in *Any* placeholders.
-    ArrayOfVirtualUsbController(Vec<VirtualUsbController>),
+    ArrayOfVirtualUsbController(Vec<super::structs::VirtualUsbController>),
     /// A boxed array of *VirtualUSBControllerPciBusSlotInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualUsbControllerPciBusSlotInfo(Vec<VirtualUsbControllerPciBusSlotInfo>),
+    ArrayOfVirtualUsbControllerPciBusSlotInfo(Vec<super::structs::VirtualUsbControllerPciBusSlotInfo>),
     /// A boxed array of *VirtualUSBControllerOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualUsbControllerOption(Vec<VirtualUsbControllerOption>),
+    ArrayOfVirtualUsbControllerOption(Vec<super::structs::VirtualUsbControllerOption>),
     /// A boxed array of *VirtualUSBOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualUsbOption(Vec<VirtualUsbOption>),
+    ArrayOfVirtualUsbOption(Vec<super::structs::VirtualUsbOption>),
     /// A boxed array of *VirtualUSBRemoteClientBackingOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualUsbRemoteClientBackingOption(Vec<VirtualUsbRemoteClientBackingOption>),
+    ArrayOfVirtualUsbRemoteClientBackingOption(Vec<super::structs::VirtualUsbRemoteClientBackingOption>),
     /// A boxed array of *VirtualUSBRemoteHostBackingOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualUsbRemoteHostBackingOption(Vec<VirtualUsbRemoteHostBackingOption>),
+    ArrayOfVirtualUsbRemoteHostBackingOption(Vec<super::structs::VirtualUsbRemoteHostBackingOption>),
     /// A boxed array of *VirtualUSBUSBBackingOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualUsbusbBackingOption(Vec<VirtualUsbusbBackingOption>),
+    ArrayOfVirtualUsbusbBackingOption(Vec<super::structs::VirtualUsbusbBackingOption>),
     /// A boxed array of *VirtualUSBXHCIController*. To be used in *Any* placeholders.
-    ArrayOfVirtualUsbxhciController(Vec<VirtualUsbxhciController>),
+    ArrayOfVirtualUsbxhciController(Vec<super::structs::VirtualUsbxhciController>),
     /// A boxed array of *VirtualUSBXHCIControllerOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualUsbxhciControllerOption(Vec<VirtualUsbxhciControllerOption>),
+    ArrayOfVirtualUsbxhciControllerOption(Vec<super::structs::VirtualUsbxhciControllerOption>),
     /// A boxed array of *VirtualMachineVMCIDevice*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineVmciDevice(Vec<VirtualMachineVmciDevice>),
+    ArrayOfVirtualMachineVmciDevice(Vec<super::structs::VirtualMachineVmciDevice>),
     /// A boxed array of *VirtualMachineVMCIDeviceFilterInfo*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineVmciDeviceFilterInfo(Vec<VirtualMachineVmciDeviceFilterInfo>),
+    ArrayOfVirtualMachineVmciDeviceFilterInfo(Vec<super::structs::VirtualMachineVmciDeviceFilterInfo>),
     /// A boxed array of *VirtualMachineVMCIDeviceFilterSpec*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineVmciDeviceFilterSpec(Vec<VirtualMachineVmciDeviceFilterSpec>),
+    ArrayOfVirtualMachineVmciDeviceFilterSpec(Vec<super::structs::VirtualMachineVmciDeviceFilterSpec>),
     /// A boxed array of *VirtualMachineVMCIDeviceOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineVmciDeviceOption(Vec<VirtualMachineVmciDeviceOption>),
+    ArrayOfVirtualMachineVmciDeviceOption(Vec<super::structs::VirtualMachineVmciDeviceOption>),
     /// A boxed array of *VirtualMachineVMCIDeviceOptionFilterSpecOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineVmciDeviceOptionFilterSpecOption(Vec<VirtualMachineVmciDeviceOptionFilterSpecOption>),
+    ArrayOfVirtualMachineVmciDeviceOptionFilterSpecOption(Vec<super::structs::VirtualMachineVmciDeviceOptionFilterSpecOption>),
     /// A boxed array of *VirtualMachineVMIROM*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineVmirom(Vec<VirtualMachineVmirom>),
+    ArrayOfVirtualMachineVmirom(Vec<super::structs::VirtualMachineVmirom>),
     /// A boxed array of *VirtualVMIROMOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualVmiromOption(Vec<VirtualVmiromOption>),
+    ArrayOfVirtualVmiromOption(Vec<super::structs::VirtualVmiromOption>),
     /// A boxed array of *VirtualMachineVideoCard*. To be used in *Any* placeholders.
-    ArrayOfVirtualMachineVideoCard(Vec<VirtualMachineVideoCard>),
+    ArrayOfVirtualMachineVideoCard(Vec<super::structs::VirtualMachineVideoCard>),
     /// A boxed array of *VirtualVideoCardOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualVideoCardOption(Vec<VirtualVideoCardOption>),
+    ArrayOfVirtualVideoCardOption(Vec<super::structs::VirtualVideoCardOption>),
     /// A boxed array of *VirtualVmxnet*. To be used in *Any* placeholders.
     ArrayOfVirtualVmxnet(Vec<Box<dyn super::traits::VirtualVmxnetTrait>>),
     /// A boxed array of *VirtualVmxnet2*. To be used in *Any* placeholders.
-    ArrayOfVirtualVmxnet2(Vec<VirtualVmxnet2>),
+    ArrayOfVirtualVmxnet2(Vec<super::structs::VirtualVmxnet2>),
     /// A boxed array of *VirtualVmxnet2Option*. To be used in *Any* placeholders.
-    ArrayOfVirtualVmxnet2Option(Vec<VirtualVmxnet2Option>),
+    ArrayOfVirtualVmxnet2Option(Vec<super::structs::VirtualVmxnet2Option>),
     /// A boxed array of *VirtualVmxnet3*. To be used in *Any* placeholders.
     ArrayOfVirtualVmxnet3(Vec<Box<dyn super::traits::VirtualVmxnet3Trait>>),
     /// A boxed array of *VirtualVmxnet3Option*. To be used in *Any* placeholders.
     ArrayOfVirtualVmxnet3Option(Vec<Box<dyn super::traits::VirtualVmxnet3OptionTrait>>),
     /// A boxed array of *VirtualVmxnet3Vrdma*. To be used in *Any* placeholders.
-    ArrayOfVirtualVmxnet3Vrdma(Vec<VirtualVmxnet3Vrdma>),
+    ArrayOfVirtualVmxnet3Vrdma(Vec<super::structs::VirtualVmxnet3Vrdma>),
     /// A boxed array of *VirtualVmxnet3VrdmaOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualVmxnet3VrdmaOption(Vec<VirtualVmxnet3VrdmaOption>),
+    ArrayOfVirtualVmxnet3VrdmaOption(Vec<super::structs::VirtualVmxnet3VrdmaOption>),
     /// A boxed array of *VirtualVmxnetOption*. To be used in *Any* placeholders.
     ArrayOfVirtualVmxnetOption(Vec<Box<dyn super::traits::VirtualVmxnetOptionTrait>>),
     /// A boxed array of *VirtualWDT*. To be used in *Any* placeholders.
-    ArrayOfVirtualWdt(Vec<VirtualWdt>),
+    ArrayOfVirtualWdt(Vec<super::structs::VirtualWdt>),
     /// A boxed array of *VirtualWDTOption*. To be used in *Any* placeholders.
-    ArrayOfVirtualWdtOption(Vec<VirtualWdtOption>),
+    ArrayOfVirtualWdtOption(Vec<super::structs::VirtualWdtOption>),
     /// A boxed array of *GuestAliases*. To be used in *Any* placeholders.
-    ArrayOfGuestAliases(Vec<GuestAliases>),
+    ArrayOfGuestAliases(Vec<super::structs::GuestAliases>),
     /// A boxed array of *GuestAuthAliasInfo*. To be used in *Any* placeholders.
-    ArrayOfGuestAuthAliasInfo(Vec<GuestAuthAliasInfo>),
+    ArrayOfGuestAuthAliasInfo(Vec<super::structs::GuestAuthAliasInfo>),
     /// A boxed array of *GuestAuthAnySubject*. To be used in *Any* placeholders.
-    ArrayOfGuestAuthAnySubject(Vec<GuestAuthAnySubject>),
+    ArrayOfGuestAuthAnySubject(Vec<super::structs::GuestAuthAnySubject>),
     /// A boxed array of *GuestAuthNamedSubject*. To be used in *Any* placeholders.
-    ArrayOfGuestAuthNamedSubject(Vec<GuestAuthNamedSubject>),
+    ArrayOfGuestAuthNamedSubject(Vec<super::structs::GuestAuthNamedSubject>),
     /// A boxed array of *GuestAuthSubject*. To be used in *Any* placeholders.
     ArrayOfGuestAuthSubject(Vec<Box<dyn super::traits::GuestAuthSubjectTrait>>),
     /// A boxed array of *GuestMappedAliases*. To be used in *Any* placeholders.
-    ArrayOfGuestMappedAliases(Vec<GuestMappedAliases>),
+    ArrayOfGuestMappedAliases(Vec<super::structs::GuestMappedAliases>),
     /// A boxed array of *GuestFileAttributes*. To be used in *Any* placeholders.
     ArrayOfGuestFileAttributes(Vec<Box<dyn super::traits::GuestFileAttributesTrait>>),
     /// A boxed array of *GuestFileInfo*. To be used in *Any* placeholders.
-    ArrayOfGuestFileInfo(Vec<GuestFileInfo>),
+    ArrayOfGuestFileInfo(Vec<super::structs::GuestFileInfo>),
     /// A boxed array of *FileTransferInformation*. To be used in *Any* placeholders.
-    ArrayOfFileTransferInformation(Vec<FileTransferInformation>),
+    ArrayOfFileTransferInformation(Vec<super::structs::FileTransferInformation>),
     /// A boxed array of *GuestListFileInfo*. To be used in *Any* placeholders.
-    ArrayOfGuestListFileInfo(Vec<GuestListFileInfo>),
+    ArrayOfGuestListFileInfo(Vec<super::structs::GuestListFileInfo>),
     /// A boxed array of *GuestPosixFileAttributes*. To be used in *Any* placeholders.
-    ArrayOfGuestPosixFileAttributes(Vec<GuestPosixFileAttributes>),
+    ArrayOfGuestPosixFileAttributes(Vec<super::structs::GuestPosixFileAttributes>),
     /// A boxed array of *GuestWindowsFileAttributes*. To be used in *Any* placeholders.
-    ArrayOfGuestWindowsFileAttributes(Vec<GuestWindowsFileAttributes>),
+    ArrayOfGuestWindowsFileAttributes(Vec<super::structs::GuestWindowsFileAttributes>),
     /// A boxed array of *GuestAuthentication*. To be used in *Any* placeholders.
     ArrayOfGuestAuthentication(Vec<Box<dyn super::traits::GuestAuthenticationTrait>>),
     /// A boxed array of *NamePasswordAuthentication*. To be used in *Any* placeholders.
-    ArrayOfNamePasswordAuthentication(Vec<NamePasswordAuthentication>),
+    ArrayOfNamePasswordAuthentication(Vec<super::structs::NamePasswordAuthentication>),
     /// A boxed array of *GuestProcessInfo*. To be used in *Any* placeholders.
-    ArrayOfGuestProcessInfo(Vec<GuestProcessInfo>),
+    ArrayOfGuestProcessInfo(Vec<super::structs::GuestProcessInfo>),
     /// A boxed array of *GuestProgramSpec*. To be used in *Any* placeholders.
     ArrayOfGuestProgramSpec(Vec<Box<dyn super::traits::GuestProgramSpecTrait>>),
     /// A boxed array of *GuestWindowsProgramSpec*. To be used in *Any* placeholders.
-    ArrayOfGuestWindowsProgramSpec(Vec<GuestWindowsProgramSpec>),
+    ArrayOfGuestWindowsProgramSpec(Vec<super::structs::GuestWindowsProgramSpec>),
     /// A boxed array of *SAMLTokenAuthentication*. To be used in *Any* placeholders.
-    ArrayOfSamlTokenAuthentication(Vec<SamlTokenAuthentication>),
+    ArrayOfSamlTokenAuthentication(Vec<super::structs::SamlTokenAuthentication>),
     /// A boxed array of *SSPIAuthentication*. To be used in *Any* placeholders.
-    ArrayOfSspiAuthentication(Vec<SspiAuthentication>),
+    ArrayOfSspiAuthentication(Vec<super::structs::SspiAuthentication>),
     /// A boxed array of *TicketedSessionAuthentication*. To be used in *Any* placeholders.
-    ArrayOfTicketedSessionAuthentication(Vec<TicketedSessionAuthentication>),
+    ArrayOfTicketedSessionAuthentication(Vec<super::structs::TicketedSessionAuthentication>),
     /// A boxed array of *GuestRegKeySpec*. To be used in *Any* placeholders.
-    ArrayOfGuestRegKeySpec(Vec<GuestRegKeySpec>),
+    ArrayOfGuestRegKeySpec(Vec<super::structs::GuestRegKeySpec>),
     /// A boxed array of *GuestRegKeyNameSpec*. To be used in *Any* placeholders.
-    ArrayOfGuestRegKeyNameSpec(Vec<GuestRegKeyNameSpec>),
+    ArrayOfGuestRegKeyNameSpec(Vec<super::structs::GuestRegKeyNameSpec>),
     /// A boxed array of *GuestRegKeyRecordSpec*. To be used in *Any* placeholders.
-    ArrayOfGuestRegKeyRecordSpec(Vec<GuestRegKeyRecordSpec>),
+    ArrayOfGuestRegKeyRecordSpec(Vec<super::structs::GuestRegKeyRecordSpec>),
     /// A boxed array of *GuestRegValueSpec*. To be used in *Any* placeholders.
-    ArrayOfGuestRegValueSpec(Vec<GuestRegValueSpec>),
+    ArrayOfGuestRegValueSpec(Vec<super::structs::GuestRegValueSpec>),
     /// A boxed array of *GuestRegValueBinarySpec*. To be used in *Any* placeholders.
-    ArrayOfGuestRegValueBinarySpec(Vec<GuestRegValueBinarySpec>),
+    ArrayOfGuestRegValueBinarySpec(Vec<super::structs::GuestRegValueBinarySpec>),
     /// A boxed array of *GuestRegValueDataSpec*. To be used in *Any* placeholders.
     ArrayOfGuestRegValueDataSpec(Vec<Box<dyn super::traits::GuestRegValueDataSpecTrait>>),
     /// A boxed array of *GuestRegValueDwordSpec*. To be used in *Any* placeholders.
-    ArrayOfGuestRegValueDwordSpec(Vec<GuestRegValueDwordSpec>),
+    ArrayOfGuestRegValueDwordSpec(Vec<super::structs::GuestRegValueDwordSpec>),
     /// A boxed array of *GuestRegValueExpandStringSpec*. To be used in *Any* placeholders.
-    ArrayOfGuestRegValueExpandStringSpec(Vec<GuestRegValueExpandStringSpec>),
+    ArrayOfGuestRegValueExpandStringSpec(Vec<super::structs::GuestRegValueExpandStringSpec>),
     /// A boxed array of *GuestRegValueMultiStringSpec*. To be used in *Any* placeholders.
-    ArrayOfGuestRegValueMultiStringSpec(Vec<GuestRegValueMultiStringSpec>),
+    ArrayOfGuestRegValueMultiStringSpec(Vec<super::structs::GuestRegValueMultiStringSpec>),
     /// A boxed array of *GuestRegValueNameSpec*. To be used in *Any* placeholders.
-    ArrayOfGuestRegValueNameSpec(Vec<GuestRegValueNameSpec>),
+    ArrayOfGuestRegValueNameSpec(Vec<super::structs::GuestRegValueNameSpec>),
     /// A boxed array of *GuestRegValueQwordSpec*. To be used in *Any* placeholders.
-    ArrayOfGuestRegValueQwordSpec(Vec<GuestRegValueQwordSpec>),
+    ArrayOfGuestRegValueQwordSpec(Vec<super::structs::GuestRegValueQwordSpec>),
     /// A boxed array of *GuestRegValueStringSpec*. To be used in *Any* placeholders.
-    ArrayOfGuestRegValueStringSpec(Vec<GuestRegValueStringSpec>),
+    ArrayOfGuestRegValueStringSpec(Vec<super::structs::GuestRegValueStringSpec>),
     /// A boxed array of *DeviceGroupId*. To be used in *Any* placeholders.
-    ArrayOfDeviceGroupId(Vec<DeviceGroupId>),
+    ArrayOfDeviceGroupId(Vec<super::structs::DeviceGroupId>),
     /// A boxed array of *FaultDomainId*. To be used in *Any* placeholders.
-    ArrayOfFaultDomainId(Vec<FaultDomainId>),
+    ArrayOfFaultDomainId(Vec<super::structs::FaultDomainId>),
     /// A boxed array of *ReplicationGroupId*. To be used in *Any* placeholders.
-    ArrayOfReplicationGroupId(Vec<ReplicationGroupId>),
+    ArrayOfReplicationGroupId(Vec<super::structs::ReplicationGroupId>),
     /// A boxed array of *ReplicationSpec*. To be used in *Any* placeholders.
-    ArrayOfReplicationSpec(Vec<ReplicationSpec>),
+    ArrayOfReplicationSpec(Vec<super::structs::ReplicationSpec>),
     /// A boxed array of *VsanClusterConfigInfo*. To be used in *Any* placeholders.
-    ArrayOfVsanClusterConfigInfo(Vec<VsanClusterConfigInfo>),
+    ArrayOfVsanClusterConfigInfo(Vec<super::structs::VsanClusterConfigInfo>),
     /// A boxed array of *VsanClusterConfigInfoHostDefaultInfo*. To be used in *Any* placeholders.
-    ArrayOfVsanClusterConfigInfoHostDefaultInfo(Vec<VsanClusterConfigInfoHostDefaultInfo>),
+    ArrayOfVsanClusterConfigInfoHostDefaultInfo(Vec<super::structs::VsanClusterConfigInfoHostDefaultInfo>),
     /// A boxed array of *VsanHostClusterStatus*. To be used in *Any* placeholders.
-    ArrayOfVsanHostClusterStatus(Vec<VsanHostClusterStatus>),
+    ArrayOfVsanHostClusterStatus(Vec<super::structs::VsanHostClusterStatus>),
     /// A boxed array of *VsanHostClusterStatusState*. To be used in *Any* placeholders.
-    ArrayOfVsanHostClusterStatusState(Vec<VsanHostClusterStatusState>),
+    ArrayOfVsanHostClusterStatusState(Vec<super::structs::VsanHostClusterStatusState>),
     /// A boxed array of *VsanHostClusterStatusStateCompletionEstimate*. To be used in *Any* placeholders.
-    ArrayOfVsanHostClusterStatusStateCompletionEstimate(Vec<VsanHostClusterStatusStateCompletionEstimate>),
+    ArrayOfVsanHostClusterStatusStateCompletionEstimate(Vec<super::structs::VsanHostClusterStatusStateCompletionEstimate>),
     /// A boxed array of *VsanHostConfigInfo*. To be used in *Any* placeholders.
-    ArrayOfVsanHostConfigInfo(Vec<VsanHostConfigInfo>),
+    ArrayOfVsanHostConfigInfo(Vec<super::structs::VsanHostConfigInfo>),
     /// A boxed array of *VsanHostConfigInfoClusterInfo*. To be used in *Any* placeholders.
-    ArrayOfVsanHostConfigInfoClusterInfo(Vec<VsanHostConfigInfoClusterInfo>),
+    ArrayOfVsanHostConfigInfoClusterInfo(Vec<super::structs::VsanHostConfigInfoClusterInfo>),
     /// A boxed array of *VsanHostFaultDomainInfo*. To be used in *Any* placeholders.
-    ArrayOfVsanHostFaultDomainInfo(Vec<VsanHostFaultDomainInfo>),
+    ArrayOfVsanHostFaultDomainInfo(Vec<super::structs::VsanHostFaultDomainInfo>),
     /// A boxed array of *VsanHostConfigInfoNetworkInfo*. To be used in *Any* placeholders.
-    ArrayOfVsanHostConfigInfoNetworkInfo(Vec<VsanHostConfigInfoNetworkInfo>),
+    ArrayOfVsanHostConfigInfoNetworkInfo(Vec<super::structs::VsanHostConfigInfoNetworkInfo>),
     /// A boxed array of *VsanHostConfigInfoNetworkInfoPortConfig*. To be used in *Any* placeholders.
-    ArrayOfVsanHostConfigInfoNetworkInfoPortConfig(Vec<VsanHostConfigInfoNetworkInfoPortConfig>),
+    ArrayOfVsanHostConfigInfoNetworkInfoPortConfig(Vec<super::structs::VsanHostConfigInfoNetworkInfoPortConfig>),
     /// A boxed array of *VsanHostConfigInfoStorageInfo*. To be used in *Any* placeholders.
-    ArrayOfVsanHostConfigInfoStorageInfo(Vec<VsanHostConfigInfoStorageInfo>),
+    ArrayOfVsanHostConfigInfoStorageInfo(Vec<super::structs::VsanHostConfigInfoStorageInfo>),
     /// A boxed array of *VsanHostDecommissionMode*. To be used in *Any* placeholders.
-    ArrayOfVsanHostDecommissionMode(Vec<VsanHostDecommissionMode>),
+    ArrayOfVsanHostDecommissionMode(Vec<super::structs::VsanHostDecommissionMode>),
     /// A boxed array of *VsanHostDiskMapInfo*. To be used in *Any* placeholders.
-    ArrayOfVsanHostDiskMapInfo(Vec<VsanHostDiskMapInfo>),
+    ArrayOfVsanHostDiskMapInfo(Vec<super::structs::VsanHostDiskMapInfo>),
     /// A boxed array of *VsanHostDiskMapResult*. To be used in *Any* placeholders.
-    ArrayOfVsanHostDiskMapResult(Vec<VsanHostDiskMapResult>),
+    ArrayOfVsanHostDiskMapResult(Vec<super::structs::VsanHostDiskMapResult>),
     /// A boxed array of *VsanHostDiskMapping*. To be used in *Any* placeholders.
-    ArrayOfVsanHostDiskMapping(Vec<VsanHostDiskMapping>),
+    ArrayOfVsanHostDiskMapping(Vec<super::structs::VsanHostDiskMapping>),
     /// A boxed array of *VsanHostDiskResult*. To be used in *Any* placeholders.
-    ArrayOfVsanHostDiskResult(Vec<VsanHostDiskResult>),
+    ArrayOfVsanHostDiskResult(Vec<super::structs::VsanHostDiskResult>),
     /// A boxed array of *VsanHostIpConfig*. To be used in *Any* placeholders.
-    ArrayOfVsanHostIpConfig(Vec<VsanHostIpConfig>),
+    ArrayOfVsanHostIpConfig(Vec<super::structs::VsanHostIpConfig>),
     /// A boxed array of *VsanHostMembershipInfo*. To be used in *Any* placeholders.
-    ArrayOfVsanHostMembershipInfo(Vec<VsanHostMembershipInfo>),
+    ArrayOfVsanHostMembershipInfo(Vec<super::structs::VsanHostMembershipInfo>),
     /// A boxed array of *VsanHostVsanDiskInfo*. To be used in *Any* placeholders.
-    ArrayOfVsanHostVsanDiskInfo(Vec<VsanHostVsanDiskInfo>),
+    ArrayOfVsanHostVsanDiskInfo(Vec<super::structs::VsanHostVsanDiskInfo>),
     /// A boxed array of *VsanHostRuntimeInfo*. To be used in *Any* placeholders.
-    ArrayOfVsanHostRuntimeInfo(Vec<VsanHostRuntimeInfo>),
+    ArrayOfVsanHostRuntimeInfo(Vec<super::structs::VsanHostRuntimeInfo>),
     /// A boxed array of *VsanHostRuntimeInfoDiskIssue*. To be used in *Any* placeholders.
-    ArrayOfVsanHostRuntimeInfoDiskIssue(Vec<VsanHostRuntimeInfoDiskIssue>),
+    ArrayOfVsanHostRuntimeInfoDiskIssue(Vec<super::structs::VsanHostRuntimeInfoDiskIssue>),
     /// A boxed array of *BaseConfigInfo*. To be used in *Any* placeholders.
     ArrayOfBaseConfigInfo(Vec<Box<dyn super::traits::BaseConfigInfoTrait>>),
     /// A boxed array of *BaseConfigInfoBackingInfo*. To be used in *Any* placeholders.
     ArrayOfBaseConfigInfoBackingInfo(Vec<Box<dyn super::traits::BaseConfigInfoBackingInfoTrait>>),
     /// A boxed array of *BaseConfigInfoDiskFileBackingInfo*. To be used in *Any* placeholders.
-    ArrayOfBaseConfigInfoDiskFileBackingInfo(Vec<BaseConfigInfoDiskFileBackingInfo>),
+    ArrayOfBaseConfigInfoDiskFileBackingInfo(Vec<super::structs::BaseConfigInfoDiskFileBackingInfo>),
     /// A boxed array of *BaseConfigInfoFileBackingInfo*. To be used in *Any* placeholders.
     ArrayOfBaseConfigInfoFileBackingInfo(Vec<Box<dyn super::traits::BaseConfigInfoFileBackingInfoTrait>>),
     /// A boxed array of *BaseConfigInfoRawDiskMappingBackingInfo*. To be used in *Any* placeholders.
-    ArrayOfBaseConfigInfoRawDiskMappingBackingInfo(Vec<BaseConfigInfoRawDiskMappingBackingInfo>),
+    ArrayOfBaseConfigInfoRawDiskMappingBackingInfo(Vec<super::structs::BaseConfigInfoRawDiskMappingBackingInfo>),
     /// A boxed array of *VslmCloneSpec*. To be used in *Any* placeholders.
-    ArrayOfVslmCloneSpec(Vec<VslmCloneSpec>),
+    ArrayOfVslmCloneSpec(Vec<super::structs::VslmCloneSpec>),
     /// A boxed array of *VslmCreateSpec*. To be used in *Any* placeholders.
-    ArrayOfVslmCreateSpec(Vec<VslmCreateSpec>),
+    ArrayOfVslmCreateSpec(Vec<super::structs::VslmCreateSpec>),
     /// A boxed array of *VslmCreateSpecBackingSpec*. To be used in *Any* placeholders.
     ArrayOfVslmCreateSpecBackingSpec(Vec<Box<dyn super::traits::VslmCreateSpecBackingSpecTrait>>),
     /// A boxed array of *VslmCreateSpecDiskFileBackingSpec*. To be used in *Any* placeholders.
-    ArrayOfVslmCreateSpecDiskFileBackingSpec(Vec<VslmCreateSpecDiskFileBackingSpec>),
+    ArrayOfVslmCreateSpecDiskFileBackingSpec(Vec<super::structs::VslmCreateSpecDiskFileBackingSpec>),
     /// A boxed array of *VslmCreateSpecRawDiskMappingBackingSpec*. To be used in *Any* placeholders.
-    ArrayOfVslmCreateSpecRawDiskMappingBackingSpec(Vec<VslmCreateSpecRawDiskMappingBackingSpec>),
+    ArrayOfVslmCreateSpecRawDiskMappingBackingSpec(Vec<super::structs::VslmCreateSpecRawDiskMappingBackingSpec>),
     /// A boxed array of *DiskCryptoSpec*. To be used in *Any* placeholders.
-    ArrayOfDiskCryptoSpec(Vec<DiskCryptoSpec>),
+    ArrayOfDiskCryptoSpec(Vec<super::structs::DiskCryptoSpec>),
     /// A boxed array of *ID*. To be used in *Any* placeholders.
-    ArrayOfId(Vec<Id>),
+    ArrayOfId(Vec<super::structs::Id>),
     /// A boxed array of *vslmInfrastructureObjectPolicy*. To be used in *Any* placeholders.
-    ArrayOfvslmInfrastructureObjectPolicy(Vec<VslmInfrastructureObjectPolicy>),
+    ArrayOfvslmInfrastructureObjectPolicy(Vec<super::structs::VslmInfrastructureObjectPolicy>),
     /// A boxed array of *vslmInfrastructureObjectPolicySpec*. To be used in *Any* placeholders.
-    ArrayOfvslmInfrastructureObjectPolicySpec(Vec<VslmInfrastructureObjectPolicySpec>),
+    ArrayOfvslmInfrastructureObjectPolicySpec(Vec<super::structs::VslmInfrastructureObjectPolicySpec>),
     /// A boxed array of *VslmMigrateSpec*. To be used in *Any* placeholders.
     ArrayOfVslmMigrateSpec(Vec<Box<dyn super::traits::VslmMigrateSpecTrait>>),
     /// A boxed array of *VslmRelocateSpec*. To be used in *Any* placeholders.
-    ArrayOfVslmRelocateSpec(Vec<VslmRelocateSpec>),
+    ArrayOfVslmRelocateSpec(Vec<super::structs::VslmRelocateSpec>),
     /// A boxed array of *VStorageObjectStateInfo*. To be used in *Any* placeholders.
-    ArrayOfVStorageObjectStateInfo(Vec<VStorageObjectStateInfo>),
+    ArrayOfVStorageObjectStateInfo(Vec<super::structs::VStorageObjectStateInfo>),
     /// A boxed array of *VslmTagEntry*. To be used in *Any* placeholders.
-    ArrayOfVslmTagEntry(Vec<VslmTagEntry>),
+    ArrayOfVslmTagEntry(Vec<super::structs::VslmTagEntry>),
     /// A boxed array of *vslmVClockInfo*. To be used in *Any* placeholders.
-    ArrayOfvslmVClockInfo(Vec<VslmVClockInfo>),
+    ArrayOfvslmVClockInfo(Vec<super::structs::VslmVClockInfo>),
     /// A boxed array of *VStorageObject*. To be used in *Any* placeholders.
-    ArrayOfVStorageObject(Vec<VStorageObject>),
+    ArrayOfVStorageObject(Vec<super::structs::VStorageObject>),
     /// A boxed array of *VStorageObjectConfigInfo*. To be used in *Any* placeholders.
-    ArrayOfVStorageObjectConfigInfo(Vec<VStorageObjectConfigInfo>),
+    ArrayOfVStorageObjectConfigInfo(Vec<super::structs::VStorageObjectConfigInfo>),
     /// A boxed array of *VStorageObjectSnapshot*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 8.0.2.0
-    ArrayOfVStorageObjectSnapshot(Vec<VStorageObjectSnapshot>),
+    ArrayOfVStorageObjectSnapshot(Vec<super::structs::VStorageObjectSnapshot>),
     /// A boxed array of *VStorageObjectSnapshotDetails*. To be used in *Any* placeholders.
-    ArrayOfVStorageObjectSnapshotDetails(Vec<VStorageObjectSnapshotDetails>),
+    ArrayOfVStorageObjectSnapshotDetails(Vec<super::structs::VStorageObjectSnapshotDetails>),
     /// A boxed array of *VStorageObjectSnapshotInfo*. To be used in *Any* placeholders.
-    ArrayOfVStorageObjectSnapshotInfo(Vec<VStorageObjectSnapshotInfo>),
+    ArrayOfVStorageObjectSnapshotInfo(Vec<super::structs::VStorageObjectSnapshotInfo>),
     /// A boxed array of *VStorageObjectSnapshotInfoVStorageObjectSnapshot*. To be used in *Any* placeholders.
-    ArrayOfVStorageObjectSnapshotInfoVStorageObjectSnapshot(Vec<VStorageObjectSnapshotInfoVStorageObjectSnapshot>),
+    ArrayOfVStorageObjectSnapshotInfoVStorageObjectSnapshot(Vec<super::structs::VStorageObjectSnapshotInfoVStorageObjectSnapshot>),
     /// A boxed array of *RetrieveVStorageObjSpec*. To be used in *Any* placeholders.
-    ArrayOfRetrieveVStorageObjSpec(Vec<RetrieveVStorageObjSpec>),
+    ArrayOfRetrieveVStorageObjSpec(Vec<super::structs::RetrieveVStorageObjSpec>),
     /// A boxed array of *VStorageObjectAssociations*. To be used in *Any* placeholders.
-    ArrayOfVStorageObjectAssociations(Vec<VStorageObjectAssociations>),
+    ArrayOfVStorageObjectAssociations(Vec<super::structs::VStorageObjectAssociations>),
     /// A boxed array of *VStorageObjectAssociationsVmDiskAssociations*. To be used in *Any* placeholders.
-    ArrayOfVStorageObjectAssociationsVmDiskAssociations(Vec<VStorageObjectAssociationsVmDiskAssociations>),
+    ArrayOfVStorageObjectAssociationsVmDiskAssociations(Vec<super::structs::VStorageObjectAssociationsVmDiskAssociations>),
     /// A boxed array of *DataObject*. To be used in *Any* placeholders.
     ArrayOfDataObject(Vec<Box<dyn super::traits::DataObjectTrait>>),
     /// A boxed array of *DynamicArray*. To be used in *Any* placeholders.
-    ArrayOfDynamicArray(Vec<DynamicArray>),
+    ArrayOfDynamicArray(Vec<super::structs::DynamicArray>),
     /// A boxed array of *DynamicProperty*. To be used in *Any* placeholders.
-    ArrayOfDynamicProperty(Vec<DynamicProperty>),
+    ArrayOfDynamicProperty(Vec<super::structs::DynamicProperty>),
     /// A boxed array of *KeyAnyValue*. To be used in *Any* placeholders.
-    ArrayOfKeyAnyValue(Vec<KeyAnyValue>),
+    ArrayOfKeyAnyValue(Vec<super::structs::KeyAnyValue>),
     /// A boxed array of *LocalizableMessage*. To be used in *Any* placeholders.
-    ArrayOfLocalizableMessage(Vec<LocalizableMessage>),
+    ArrayOfLocalizableMessage(Vec<super::structs::LocalizableMessage>),
     /// A boxed array of *LocalizedMethodFault*. To be used in *Any* placeholders.
-    ArrayOfLocalizedMethodFault(Vec<LocalizedMethodFault>),
+    ArrayOfLocalizedMethodFault(Vec<super::structs::LocalizedMethodFault>),
     /// A boxed array of *MethodFault*. To be used in *Any* placeholders.
-    ArrayOfMethodFault(Vec<MethodFault>),
+    ArrayOfMethodFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *RuntimeFault*. To be used in *Any* placeholders.
-    ArrayOfRuntimeFault(Vec<MethodFault>),
+    ArrayOfRuntimeFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *HostCommunication*. To be used in *Any* placeholders.
-    ArrayOfHostCommunication(Vec<MethodFault>),
+    ArrayOfHostCommunication(Vec<super::structs::MethodFault>),
     /// A boxed array of *HostNotConnected*. To be used in *Any* placeholders.
-    ArrayOfHostNotConnected(Vec<MethodFault>),
+    ArrayOfHostNotConnected(Vec<super::structs::MethodFault>),
     /// A boxed array of *HostNotReachable*. To be used in *Any* placeholders.
-    ArrayOfHostNotReachable(Vec<MethodFault>),
+    ArrayOfHostNotReachable(Vec<super::structs::MethodFault>),
     /// A boxed array of *InvalidArgument*. To be used in *Any* placeholders.
-    ArrayOfInvalidArgument(Vec<MethodFault>),
+    ArrayOfInvalidArgument(Vec<super::structs::MethodFault>),
     /// A boxed array of *InvalidRequest*. To be used in *Any* placeholders.
-    ArrayOfInvalidRequest(Vec<MethodFault>),
+    ArrayOfInvalidRequest(Vec<super::structs::MethodFault>),
     /// A boxed array of *InvalidType*. To be used in *Any* placeholders.
-    ArrayOfInvalidType(Vec<MethodFault>),
+    ArrayOfInvalidType(Vec<super::structs::MethodFault>),
     /// A boxed array of *ManagedObjectNotFound*. To be used in *Any* placeholders.
-    ArrayOfManagedObjectNotFound(Vec<MethodFault>),
+    ArrayOfManagedObjectNotFound(Vec<super::structs::MethodFault>),
     /// A boxed array of *MethodNotFound*. To be used in *Any* placeholders.
-    ArrayOfMethodNotFound(Vec<MethodFault>),
+    ArrayOfMethodNotFound(Vec<super::structs::MethodFault>),
     /// A boxed array of *NotEnoughLicenses*. To be used in *Any* placeholders.
-    ArrayOfNotEnoughLicenses(Vec<MethodFault>),
+    ArrayOfNotEnoughLicenses(Vec<super::structs::MethodFault>),
     /// A boxed array of *NotImplemented*. To be used in *Any* placeholders.
-    ArrayOfNotImplemented(Vec<MethodFault>),
+    ArrayOfNotImplemented(Vec<super::structs::MethodFault>),
     /// A boxed array of *NotSupported*. To be used in *Any* placeholders.
-    ArrayOfNotSupported(Vec<MethodFault>),
+    ArrayOfNotSupported(Vec<super::structs::MethodFault>),
     /// A boxed array of *RequestCanceled*. To be used in *Any* placeholders.
-    ArrayOfRequestCanceled(Vec<MethodFault>),
+    ArrayOfRequestCanceled(Vec<super::structs::MethodFault>),
     /// A boxed array of *SecurityError*. To be used in *Any* placeholders.
-    ArrayOfSecurityError(Vec<MethodFault>),
+    ArrayOfSecurityError(Vec<super::structs::MethodFault>),
     /// A boxed array of *SystemError*. To be used in *Any* placeholders.
-    ArrayOfSystemError(Vec<MethodFault>),
+    ArrayOfSystemError(Vec<super::structs::MethodFault>),
     /// A boxed array of *UnexpectedFault*. To be used in *Any* placeholders.
-    ArrayOfUnexpectedFault(Vec<MethodFault>),
+    ArrayOfUnexpectedFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *InvalidCollectorVersion*. To be used in *Any* placeholders.
-    ArrayOfInvalidCollectorVersion(Vec<MethodFault>),
+    ArrayOfInvalidCollectorVersion(Vec<super::structs::MethodFault>),
     /// A boxed array of *InvalidProperty*. To be used in *Any* placeholders.
-    ArrayOfInvalidProperty(Vec<MethodFault>),
+    ArrayOfInvalidProperty(Vec<super::structs::MethodFault>),
     /// A boxed array of *PropertyChange*. To be used in *Any* placeholders.
-    ArrayOfPropertyChange(Vec<PropertyChange>),
+    ArrayOfPropertyChange(Vec<super::structs::PropertyChange>),
     /// A boxed array of *PropertyFilterSpec*. To be used in *Any* placeholders.
-    ArrayOfPropertyFilterSpec(Vec<PropertyFilterSpec>),
+    ArrayOfPropertyFilterSpec(Vec<super::structs::PropertyFilterSpec>),
     /// A boxed array of *PropertyFilterUpdate*. To be used in *Any* placeholders.
-    ArrayOfPropertyFilterUpdate(Vec<PropertyFilterUpdate>),
+    ArrayOfPropertyFilterUpdate(Vec<super::structs::PropertyFilterUpdate>),
     /// A boxed array of *MissingObject*. To be used in *Any* placeholders.
-    ArrayOfMissingObject(Vec<MissingObject>),
+    ArrayOfMissingObject(Vec<super::structs::MissingObject>),
     /// A boxed array of *MissingProperty*. To be used in *Any* placeholders.
-    ArrayOfMissingProperty(Vec<MissingProperty>),
+    ArrayOfMissingProperty(Vec<super::structs::MissingProperty>),
     /// A boxed array of *ObjectContent*. To be used in *Any* placeholders.
-    ArrayOfObjectContent(Vec<ObjectContent>),
+    ArrayOfObjectContent(Vec<super::structs::ObjectContent>),
     /// A boxed array of *ObjectSpec*. To be used in *Any* placeholders.
-    ArrayOfObjectSpec(Vec<ObjectSpec>),
+    ArrayOfObjectSpec(Vec<super::structs::ObjectSpec>),
     /// A boxed array of *ObjectUpdate*. To be used in *Any* placeholders.
-    ArrayOfObjectUpdate(Vec<ObjectUpdate>),
+    ArrayOfObjectUpdate(Vec<super::structs::ObjectUpdate>),
     /// A boxed array of *PropertySpec*. To be used in *Any* placeholders.
-    ArrayOfPropertySpec(Vec<PropertySpec>),
+    ArrayOfPropertySpec(Vec<super::structs::PropertySpec>),
     /// A boxed array of *RetrieveOptions*. To be used in *Any* placeholders.
-    ArrayOfRetrieveOptions(Vec<RetrieveOptions>),
+    ArrayOfRetrieveOptions(Vec<super::structs::RetrieveOptions>),
     /// A boxed array of *RetrieveResult*. To be used in *Any* placeholders.
-    ArrayOfRetrieveResult(Vec<RetrieveResult>),
+    ArrayOfRetrieveResult(Vec<super::structs::RetrieveResult>),
     /// A boxed array of *SelectionSpec*. To be used in *Any* placeholders.
     ArrayOfSelectionSpec(Vec<Box<dyn super::traits::SelectionSpecTrait>>),
     /// A boxed array of *TraversalSpec*. To be used in *Any* placeholders.
-    ArrayOfTraversalSpec(Vec<TraversalSpec>),
+    ArrayOfTraversalSpec(Vec<super::structs::TraversalSpec>),
     /// A boxed array of *UpdateSet*. To be used in *Any* placeholders.
-    ArrayOfUpdateSet(Vec<UpdateSet>),
+    ArrayOfUpdateSet(Vec<super::structs::UpdateSet>),
     /// A boxed array of *WaitOptions*. To be used in *Any* placeholders.
-    ArrayOfWaitOptions(Vec<WaitOptions>),
+    ArrayOfWaitOptions(Vec<super::structs::WaitOptions>),
     /// A boxed *ComputeResourceHostSPBMLicenseInfoHostSPBMLicenseState_enum*. To be used in *Any* placeholders.
     ComputeResourceHostSpbmLicenseInfoHostSpbmLicenseState(super::enums::ComputeResourceHostSpbmLicenseInfoHostSpbmLicenseStateEnum),
     /// A boxed array of *ComputeResourceHostSPBMLicenseInfoHostSPBMLicenseState_enum*. To be used in *Any* placeholders.

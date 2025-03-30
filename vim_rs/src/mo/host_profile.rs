@@ -1,9 +1,5 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::HostProfileValidationFailureInfo;
-use crate::types::structs::ManagedObjectReference;
-use crate::types::structs::ProfileDeferredPolicyOptionParameter;
-use crate::types::structs::ProfileDescription;
 /// A host profile describes ESX Server configuration.
 /// 
 /// The *HostProfile* managed object provides access to profile data and
@@ -102,6 +98,7 @@ use crate::types::structs::ProfileDescription;
 /// the host configuration implied by the changes that you make. When a subsequent vSphere
 /// version becomes available, you must verify that the new version supports any previous
 /// configuration changes that you have made.
+#[derive(Clone)]
 pub struct HostProfile {
     client: Arc<Client>,
     mo_id: String,
@@ -142,7 +139,7 @@ impl HostProfile {
     /// maintained and the vCenter Server does not perform any action.
     /// 
     /// Refers instances of *ManagedEntity*.
-    pub async fn associate_profile(&self, entity: &[ManagedObjectReference]) -> Result<()> {
+    pub async fn associate_profile(&self, entity: &[crate::types::structs::ManagedObjectReference]) -> Result<()> {
         let input = AssociateProfileRequestType {entity, };
         let path = format!("/HostProfile/{moId}/AssociateProfile", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -168,7 +165,7 @@ impl HostProfile {
     /// operation.
     /// 
     /// Refers instance of *Task*.
-    pub async fn check_profile_compliance_task(&self, entity: Option<&[ManagedObjectReference]>) -> Result<ManagedObjectReference> {
+    pub async fn check_profile_compliance_task(&self, entity: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CheckProfileComplianceRequestType {entity, };
         let path = format!("/HostProfile/{moId}/CheckProfileCompliance_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -197,7 +194,7 @@ impl HostProfile {
     /// the Server does not perform any action.
     /// 
     /// Refers instances of *ManagedEntity*.
-    pub async fn dissociate_profile(&self, entity: Option<&[ManagedObjectReference]>) -> Result<()> {
+    pub async fn dissociate_profile(&self, entity: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<()> {
         let input = DissociateProfileRequestType {entity, };
         let path = format!("/HostProfile/{moId}/DissociateProfile", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -252,7 +249,7 @@ impl HostProfile {
     /// to finish input verification. After successful profile execution, you can pass
     /// the verified required input list to the *HostProfileManager.ApplyHostConfig_Task*
     /// method.
-    pub async fn execute_host_profile(&self, host: &ManagedObjectReference, deferred_param: Option<&[ProfileDeferredPolicyOptionParameter]>) -> Result<Box<dyn crate::types::traits::ProfileExecuteResultTrait>> {
+    pub async fn execute_host_profile(&self, host: &crate::types::structs::ManagedObjectReference, deferred_param: Option<&[crate::types::structs::ProfileDeferredPolicyOptionParameter]>) -> Result<Box<dyn crate::types::traits::ProfileExecuteResultTrait>> {
         let input = ExecuteHostProfileRequestType {host, deferred_param, };
         let path = format!("/HostProfile/{moId}/ExecuteHostProfile", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -282,7 +279,7 @@ impl HostProfile {
     /// ## Returns:
     ///
     /// Profile divided into sections containing element descriptions and messages.
-    pub async fn retrieve_description(&self) -> Result<Option<ProfileDescription>> {
+    pub async fn retrieve_description(&self) -> Result<Option<crate::types::structs::ProfileDescription>> {
         let path = format!("/HostProfile/{moId}/RetrieveDescription", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute_option(req).await
@@ -319,7 +316,7 @@ impl HostProfile {
     /// property is cleared.
     /// 
     /// Refers instance of *HostSystem*.
-    pub async fn update_reference_host(&self, host: Option<&ManagedObjectReference>) -> Result<()> {
+    pub async fn update_reference_host(&self, host: Option<&crate::types::structs::ManagedObjectReference>) -> Result<()> {
         let input = UpdateReferenceHostRequestType {host, };
         let path = format!("/HostProfile/{moId}/UpdateReferenceHost", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -362,7 +359,7 @@ impl HostProfile {
     /// Deprecated as of vSphere API 5.0. use *Profile.RetrieveDescription* instead.
     /// 
     /// Localizable description of the profile
-    pub async fn description(&self) -> Result<Option<ProfileDescription>> {
+    pub async fn description(&self) -> Result<Option<crate::types::structs::ProfileDescription>> {
         let path = format!("/HostProfile/{moId}/description", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -372,7 +369,7 @@ impl HostProfile {
     /// ## Returns:
     ///
     /// Refers instances of *ManagedEntity*.
-    pub async fn entity(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
+    pub async fn entity(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/HostProfile/{moId}/entity", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -400,7 +397,7 @@ impl HostProfile {
     /// ## Returns:
     ///
     /// Refers instance of *HostSystem*.
-    pub async fn reference_host(&self) -> Result<Option<ManagedObjectReference>> {
+    pub async fn reference_host(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let path = format!("/HostProfile/{moId}/referenceHost", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -410,7 +407,7 @@ impl HostProfile {
     /// 
     /// This object captures the most recent validation
     /// result for the host profile object in case of failure.
-    pub async fn validation_failure_info(&self) -> Result<Option<HostProfileValidationFailureInfo>> {
+    pub async fn validation_failure_info(&self) -> Result<Option<crate::types::structs::HostProfileValidationFailureInfo>> {
         let path = format!("/HostProfile/{moId}/validationFailureInfo", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -434,27 +431,27 @@ impl HostProfile {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct AssociateProfileRequestType<'a> {
-    entity: &'a [ManagedObjectReference],
+    entity: &'a [crate::types::structs::ManagedObjectReference],
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct CheckProfileComplianceRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    entity: Option<&'a [ManagedObjectReference]>,
+    entity: Option<&'a [crate::types::structs::ManagedObjectReference]>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct DissociateProfileRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    entity: Option<&'a [ManagedObjectReference]>,
+    entity: Option<&'a [crate::types::structs::ManagedObjectReference]>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct ExecuteHostProfileRequestType<'a> {
-    host: &'a ManagedObjectReference,
+    host: &'a crate::types::structs::ManagedObjectReference,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "deferredParam")]
-    deferred_param: Option<&'a [ProfileDeferredPolicyOptionParameter]>,
+    deferred_param: Option<&'a [crate::types::structs::ProfileDeferredPolicyOptionParameter]>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -465,5 +462,5 @@ struct UpdateHostProfileRequestType<'a> {
 #[serde(tag="_typeName")]
 struct UpdateReferenceHostRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    host: Option<&'a ManagedObjectReference>,
+    host: Option<&'a crate::types::structs::ManagedObjectReference>,
 }

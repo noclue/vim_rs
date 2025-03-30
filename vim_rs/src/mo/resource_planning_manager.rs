@@ -1,7 +1,6 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::DatabaseSizeEstimate;
-use crate::types::structs::DatabaseSizeParam;
+#[derive(Clone)]
 pub struct ResourcePlanningManager {
     client: Arc<Client>,
     mo_id: String,
@@ -34,7 +33,7 @@ impl ResourcePlanningManager {
     /// *DatabaseSizeEstimate*
     /// Returns the size required in MB of the database and the number of database
     /// rows.
-    pub async fn estimate_database_size(&self, db_size_param: &DatabaseSizeParam) -> Result<DatabaseSizeEstimate> {
+    pub async fn estimate_database_size(&self, db_size_param: &crate::types::structs::DatabaseSizeParam) -> Result<crate::types::structs::DatabaseSizeEstimate> {
         let input = EstimateDatabaseSizeRequestType {db_size_param, };
         let path = format!("/ResourcePlanningManager/{moId}/EstimateDatabaseSize", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -45,5 +44,5 @@ impl ResourcePlanningManager {
 #[serde(tag="_typeName")]
 struct EstimateDatabaseSizeRequestType<'a> {
     #[serde(rename = "dbSizeParam")]
-    db_size_param: &'a DatabaseSizeParam,
+    db_size_param: &'a crate::types::structs::DatabaseSizeParam,
 }

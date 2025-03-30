@@ -1,14 +1,11 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::CustomFieldDef;
-use crate::types::structs::HostFirewallDefaultPolicy;
-use crate::types::structs::HostFirewallInfo;
-use crate::types::structs::HostFirewallRulesetRulesetSpec;
 /// The FirewallSystem managed object describes the firewall configuration
 /// of the host.
 /// 
 /// The firewall should be configured first by setting the default policy and
 /// then by making exceptions to the policy to get the desired openness.
+#[derive(Clone)]
 pub struct HostFirewallSystem {
     client: Arc<Client>,
     mo_id: String,
@@ -106,7 +103,7 @@ impl HostFirewallSystem {
     ///
     /// ### default_policy
     /// -
-    pub async fn update_default_policy(&self, default_policy: &HostFirewallDefaultPolicy) -> Result<()> {
+    pub async fn update_default_policy(&self, default_policy: &crate::types::structs::HostFirewallDefaultPolicy) -> Result<()> {
         let input = UpdateDefaultPolicyRequestType {default_policy, };
         let path = format!("/HostFirewallSystem/{moId}/UpdateDefaultPolicy", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -129,7 +126,7 @@ impl HostFirewallSystem {
     /// ***NotFound***: if the ruleset ID is unknown
     /// 
     /// ***HostConfigFault***: if the update of the ruleset failed.
-    pub async fn update_ruleset(&self, id: &str, spec: &HostFirewallRulesetRulesetSpec) -> Result<()> {
+    pub async fn update_ruleset(&self, id: &str, spec: &crate::types::structs::HostFirewallRulesetRulesetSpec) -> Result<()> {
         let input = UpdateRulesetRequestType {id, spec, };
         let path = format!("/HostFirewallSystem/{moId}/UpdateRuleset", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -140,13 +137,13 @@ impl HostFirewallSystem {
     /// The fields are sorted by *CustomFieldDef.name*.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn available_field(&self) -> Result<Option<Vec<CustomFieldDef>>> {
+    pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
         let path = format!("/HostFirewallSystem/{moId}/availableField", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
     }
     /// Firewall configuration.
-    pub async fn firewall_info(&self) -> Result<Option<HostFirewallInfo>> {
+    pub async fn firewall_info(&self) -> Result<Option<crate::types::structs::HostFirewallInfo>> {
         let path = format!("/HostFirewallSystem/{moId}/firewallInfo", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -184,11 +181,11 @@ struct SetCustomValueRequestType<'a> {
 #[serde(tag="_typeName")]
 struct UpdateDefaultPolicyRequestType<'a> {
     #[serde(rename = "defaultPolicy")]
-    default_policy: &'a HostFirewallDefaultPolicy,
+    default_policy: &'a crate::types::structs::HostFirewallDefaultPolicy,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct UpdateRulesetRequestType<'a> {
     id: &'a str,
-    spec: &'a HostFirewallRulesetRulesetSpec,
+    spec: &'a crate::types::structs::HostFirewallRulesetRulesetSpec,
 }

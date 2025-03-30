@@ -1,9 +1,8 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::HostCertificateManagerCertificateInfo;
-use crate::types::structs::HostCertificateManagerCertificateSpec;
 /// CertificateManager provides an interface for managing the SSL
 /// certificates used by the server.
+#[derive(Clone)]
 pub struct HostCertificateManager {
     client: Arc<Client>,
     mo_id: String,
@@ -45,7 +44,7 @@ impl HostCertificateManager {
     /// ## Errors:
     ///
     /// ***HostConfigFault***: if there's a problem generating the CSR.
-    pub async fn generate_certificate_signing_request(&self, use_ip_address_as_common_name: bool, spec: Option<&HostCertificateManagerCertificateSpec>) -> Result<String> {
+    pub async fn generate_certificate_signing_request(&self, use_ip_address_as_common_name: bool, spec: Option<&crate::types::structs::HostCertificateManagerCertificateSpec>) -> Result<String> {
         let input = GenerateCertificateSigningRequestRequestType {use_ip_address_as_common_name, spec, };
         let path = format!("/HostCertificateManager/{moId}/GenerateCertificateSigningRequest", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -76,7 +75,7 @@ impl HostCertificateManager {
     /// ## Errors:
     ///
     /// ***HostConfigFault***: if there's a problem generating the CSR.
-    pub async fn generate_certificate_signing_request_by_dn(&self, distinguished_name: &str, spec: Option<&HostCertificateManagerCertificateSpec>) -> Result<String> {
+    pub async fn generate_certificate_signing_request_by_dn(&self, distinguished_name: &str, spec: Option<&crate::types::structs::HostCertificateManagerCertificateSpec>) -> Result<String> {
         let input = GenerateCertificateSigningRequestByDnRequestType {distinguished_name, spec, };
         let path = format!("/HostCertificateManager/{moId}/GenerateCertificateSigningRequestByDn", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -168,7 +167,7 @@ impl HostCertificateManager {
     /// ***Since:*** vSphere API Release 8.0.1.0
     /// 
     /// ***Required privileges:*** Certificate.Manage
-    pub async fn retrieve_certificate_info_list(&self) -> Result<Option<Vec<HostCertificateManagerCertificateInfo>>> {
+    pub async fn retrieve_certificate_info_list(&self) -> Result<Option<Vec<crate::types::structs::HostCertificateManagerCertificateInfo>>> {
         let path = format!("/HostCertificateManager/{moId}/RetrieveCertificateInfoList", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute_option(req).await
@@ -176,7 +175,7 @@ impl HostCertificateManager {
     /// the CertificateInfo of the Host Certificate.
     /// 
     /// ***Required privileges:*** Certificate.Manage
-    pub async fn certificate_info(&self) -> Result<HostCertificateManagerCertificateInfo> {
+    pub async fn certificate_info(&self) -> Result<crate::types::structs::HostCertificateManagerCertificateInfo> {
         let path = format!("/HostCertificateManager/{moId}/certificateInfo", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute(req).await
@@ -188,7 +187,7 @@ struct GenerateCertificateSigningRequestRequestType<'a> {
     #[serde(rename = "useIpAddressAsCommonName")]
     use_ip_address_as_common_name: bool,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    spec: Option<&'a HostCertificateManagerCertificateSpec>,
+    spec: Option<&'a crate::types::structs::HostCertificateManagerCertificateSpec>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -196,7 +195,7 @@ struct GenerateCertificateSigningRequestByDnRequestType<'a> {
     #[serde(rename = "distinguishedName")]
     distinguished_name: &'a str,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    spec: Option<&'a HostCertificateManagerCertificateSpec>,
+    spec: Option<&'a crate::types::structs::HostCertificateManagerCertificateSpec>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]

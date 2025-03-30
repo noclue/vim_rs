@@ -1,10 +1,9 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::TaskInfo;
-use crate::types::vim_any::VimAny;
 /// TaskHistoryCollector provides a mechanism for
 /// retrieving historical data and updates when the server appends new
 /// tasks.
+#[derive(Clone)]
 pub struct TaskHistoryCollector {
     client: Arc<Client>,
     mo_id: String,
@@ -26,7 +25,7 @@ impl TaskHistoryCollector {
     ///
     /// ### max_count
     /// The maximum number of items in the page.
-    pub async fn read_next_tasks(&self, max_count: i32) -> Result<Option<Vec<TaskInfo>>> {
+    pub async fn read_next_tasks(&self, max_count: i32) -> Result<Option<Vec<crate::types::structs::TaskInfo>>> {
         let input = ReadNextTasksRequestType {max_count, };
         let path = format!("/TaskHistoryCollector/{moId}/ReadNextTasks", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -42,7 +41,7 @@ impl TaskHistoryCollector {
     ///
     /// ### max_count
     /// The maximum number of items in the page.
-    pub async fn read_previous_tasks(&self, max_count: i32) -> Result<Option<Vec<TaskInfo>>> {
+    pub async fn read_previous_tasks(&self, max_count: i32) -> Result<Option<Vec<crate::types::structs::TaskInfo>>> {
         let input = ReadPreviousTasksRequestType {max_count, };
         let path = format!("/TaskHistoryCollector/{moId}/ReadPreviousTasks", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -96,7 +95,7 @@ impl TaskHistoryCollector {
     /// 
     /// The type of the returned filter is determined by the managed object
     /// for which the collector is created.
-    pub async fn filter(&self) -> Result<VimAny> {
+    pub async fn filter(&self) -> Result<crate::types::vim_any::VimAny> {
         let path = format!("/TaskHistoryCollector/{moId}/filter", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute(req).await
@@ -111,7 +110,7 @@ impl TaskHistoryCollector {
     /// 
     /// The "oldest task" is the one with the oldest creation time. The
     /// tasks in the returned page are unordered.
-    pub async fn latest_page(&self) -> Result<Option<Vec<TaskInfo>>> {
+    pub async fn latest_page(&self) -> Result<Option<Vec<crate::types::structs::TaskInfo>>> {
         let path = format!("/TaskHistoryCollector/{moId}/latestPage", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await

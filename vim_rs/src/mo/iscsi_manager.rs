@@ -1,10 +1,8 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::IscsiMigrationDependency;
-use crate::types::structs::IscsiPortInfo;
-use crate::types::structs::IscsiStatus;
 /// This managed object provides interfaces for mapping VMkernel NIC to
 /// iSCSI Host Bus Adapter.
+#[derive(Clone)]
 pub struct IscsiManager {
     client: Arc<Client>,
     mo_id: String,
@@ -75,7 +73,7 @@ impl IscsiManager {
     /// ***IscsiFault***: For any problem that is not handled with a more specific fault.
     /// 
     /// ***NotFound***: If the given HBA is not found
-    pub async fn query_bound_vnics(&self, i_scsi_hba_name: &str) -> Result<Option<Vec<IscsiPortInfo>>> {
+    pub async fn query_bound_vnics(&self, i_scsi_hba_name: &str) -> Result<Option<Vec<crate::types::structs::IscsiPortInfo>>> {
         let input = QueryBoundVnicsRequestType {i_scsi_hba_name, };
         let path = format!("/IscsiManager/{moId}/QueryBoundVnics", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -108,7 +106,7 @@ impl IscsiManager {
     /// ***IscsiFault***: For any problem that is not handled with a more specific fault.
     /// 
     /// ***NotFound***: If the given HBA is not found
-    pub async fn query_candidate_nics(&self, i_scsi_hba_name: &str) -> Result<Option<Vec<IscsiPortInfo>>> {
+    pub async fn query_candidate_nics(&self, i_scsi_hba_name: &str) -> Result<Option<Vec<crate::types::structs::IscsiPortInfo>>> {
         let input = QueryCandidateNicsRequestType {i_scsi_hba_name, };
         let path = format!("/IscsiManager/{moId}/QueryCandidateNics", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -129,7 +127,7 @@ impl IscsiManager {
     /// Dependency table, as described in *IscsiMigrationDependency*,
     /// providing the user of all the Virtual NIC and iSCSI resources
     /// affected.
-    pub async fn query_migration_dependencies(&self, pnic_device: &[String]) -> Result<IscsiMigrationDependency> {
+    pub async fn query_migration_dependencies(&self, pnic_device: &[String]) -> Result<crate::types::structs::IscsiMigrationDependency> {
         let input = QueryMigrationDependenciesRequestType {pnic_device, };
         let path = format!("/IscsiManager/{moId}/QueryMigrationDependencies", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -156,7 +154,7 @@ impl IscsiManager {
     /// ## Errors:
     ///
     /// ***IscsiFault***: For any problem that is not handled with a more specific fault.
-    pub async fn query_pnic_status(&self, pnic_device: &str) -> Result<IscsiStatus> {
+    pub async fn query_pnic_status(&self, pnic_device: &str) -> Result<crate::types::structs::IscsiStatus> {
         let input = QueryPnicStatusRequestType {pnic_device, };
         let path = format!("/IscsiManager/{moId}/QueryPnicStatus", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -189,7 +187,7 @@ impl IscsiManager {
     /// ## Errors:
     ///
     /// ***IscsiFault***: For any problem that is not handled with a more specific fault.
-    pub async fn query_vnic_status(&self, vnic_device: &str) -> Result<IscsiStatus> {
+    pub async fn query_vnic_status(&self, vnic_device: &str) -> Result<crate::types::structs::IscsiStatus> {
         let input = QueryVnicStatusRequestType {vnic_device, };
         let path = format!("/IscsiManager/{moId}/QueryVnicStatus", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);

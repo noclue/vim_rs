@@ -1,6 +1,5 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::ManagedObjectReference;
 /// The *InventoryView* managed object provides a means of browsing the inventory and tracking
 /// changes to open folders.
 /// 
@@ -35,6 +34,7 @@ use crate::types::structs::ManagedObjectReference;
 ///    an *UpdateSet* object that describes
 ///    the changes returned by the *PropertyCollector*.
 /// 4. Call the *InventoryView.OpenInventoryViewFolder* or *method*.
+#[derive(Clone)]
 pub struct InventoryView {
     client: Arc<Client>,
     mo_id: String,
@@ -72,7 +72,7 @@ impl InventoryView {
     /// A list containing any entities in the argument could not be resolved.
     /// 
     /// Refers instances of *ManagedEntity*.
-    pub async fn close_inventory_view_folder(&self, entity: &[ManagedObjectReference]) -> Result<Option<Vec<ManagedObjectReference>>> {
+    pub async fn close_inventory_view_folder(&self, entity: &[crate::types::structs::ManagedObjectReference]) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let input = CloseInventoryViewFolderRequestType {entity, };
         let path = format!("/InventoryView/{moId}/CloseInventoryViewFolder", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -113,14 +113,14 @@ impl InventoryView {
     /// A list containing any entities in the argument could not be resolved.
     /// 
     /// Refers instances of *ManagedEntity*.
-    pub async fn open_inventory_view_folder(&self, entity: &[ManagedObjectReference]) -> Result<Option<Vec<ManagedObjectReference>>> {
+    pub async fn open_inventory_view_folder(&self, entity: &[crate::types::structs::ManagedObjectReference]) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let input = OpenInventoryViewFolderRequestType {entity, };
         let path = format!("/InventoryView/{moId}/OpenInventoryViewFolder", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
         self.client.execute_option(req).await
     }
     /// The list of references to objects mapped by this view.
-    pub async fn view(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
+    pub async fn view(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/InventoryView/{moId}/view", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -129,10 +129,10 @@ impl InventoryView {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct CloseInventoryViewFolderRequestType<'a> {
-    entity: &'a [ManagedObjectReference],
+    entity: &'a [crate::types::structs::ManagedObjectReference],
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct OpenInventoryViewFolderRequestType<'a> {
-    entity: &'a [ManagedObjectReference],
+    entity: &'a [crate::types::structs::ManagedObjectReference],
 }

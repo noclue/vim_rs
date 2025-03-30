@@ -1,8 +1,5 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::CustomFieldDef;
-use crate::types::structs::ManagedObjectReference;
-use crate::types::structs::PrivilegePolicyDef;
 /// The CustomFieldsManager object is used to add and remove custom fields
 /// to managed entities.
 /// 
@@ -12,6 +9,7 @@ use crate::types::structs::PrivilegePolicyDef;
 /// directly through this managed object.
 /// 
 /// This functionality is only available through VirtualCenter.
+#[derive(Clone)]
 pub struct CustomFieldsManager {
     client: Arc<Client>,
     mo_id: String,
@@ -51,7 +49,7 @@ impl CustomFieldsManager {
     /// ***DuplicateName***: if a custom field with the name already exists.
     /// 
     /// ***InvalidPrivilege***: if a specified privilege is not defined.
-    pub async fn add_custom_field_def(&self, name: &str, mo_type: Option<&str>, field_def_policy: Option<&PrivilegePolicyDef>, field_policy: Option<&PrivilegePolicyDef>) -> Result<CustomFieldDef> {
+    pub async fn add_custom_field_def(&self, name: &str, mo_type: Option<&str>, field_def_policy: Option<&crate::types::structs::PrivilegePolicyDef>, field_policy: Option<&crate::types::structs::PrivilegePolicyDef>) -> Result<crate::types::structs::CustomFieldDef> {
         let input = AddCustomFieldDefRequestType {name, mo_type, field_def_policy, field_policy, };
         let path = format!("/CustomFieldsManager/{moId}/AddCustomFieldDef", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -111,7 +109,7 @@ impl CustomFieldsManager {
     ///
     /// ### value
     /// -
-    pub async fn set_field(&self, entity: &ManagedObjectReference, key: i32, value: &str) -> Result<()> {
+    pub async fn set_field(&self, entity: &crate::types::structs::ManagedObjectReference, key: i32, value: &str) -> Result<()> {
         let input = SetFieldRequestType {entity, key, value, };
         let path = format!("/CustomFieldsManager/{moId}/SetField", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -123,7 +121,7 @@ impl CustomFieldsManager {
     /// sorted by name.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn field(&self) -> Result<Option<Vec<CustomFieldDef>>> {
+    pub async fn field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
         let path = format!("/CustomFieldsManager/{moId}/field", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -138,10 +136,10 @@ struct AddCustomFieldDefRequestType<'a> {
     mo_type: Option<&'a str>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "fieldDefPolicy")]
-    field_def_policy: Option<&'a PrivilegePolicyDef>,
+    field_def_policy: Option<&'a crate::types::structs::PrivilegePolicyDef>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "fieldPolicy")]
-    field_policy: Option<&'a PrivilegePolicyDef>,
+    field_policy: Option<&'a crate::types::structs::PrivilegePolicyDef>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -157,7 +155,7 @@ struct RenameCustomFieldDefRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct SetFieldRequestType<'a> {
-    entity: &'a ManagedObjectReference,
+    entity: &'a crate::types::structs::ManagedObjectReference,
     key: i32,
     value: &'a str,
 }

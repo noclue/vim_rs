@@ -1,16 +1,5 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::HostDatastoreSystemCapabilities;
-use crate::types::structs::HostDatastoreSystemVvolDatastoreSpec;
-use crate::types::structs::HostNasVolumeSpec;
-use crate::types::structs::HostScsiDisk;
-use crate::types::structs::HostUnresolvedVmfsResignatureSpec;
-use crate::types::structs::HostUnresolvedVmfsVolume;
-use crate::types::structs::ManagedObjectReference;
-use crate::types::structs::VmfsDatastoreCreateSpec;
-use crate::types::structs::VmfsDatastoreExpandSpec;
-use crate::types::structs::VmfsDatastoreExtendSpec;
-use crate::types::structs::VmfsDatastoreOption;
 /// This managed object creates and removes datastores from the host.
 /// 
 /// To a host, a datastore is a storage abstraction that is backed by one
@@ -53,6 +42,7 @@ use crate::types::structs::VmfsDatastoreOption;
 /// this interface.
 /// 
 /// See also *Datastore*.
+#[derive(Clone)]
 pub struct HostDatastoreSystem {
     client: Arc<Client>,
     mo_id: String,
@@ -136,7 +126,7 @@ impl HostDatastoreSystem {
     /// ***InvalidName***: if name is not valid datastore name
     /// 
     /// ***FileNotFound***: if path doesn't exist
-    pub async fn create_local_datastore(&self, name: &str, path: &str) -> Result<ManagedObjectReference> {
+    pub async fn create_local_datastore(&self, name: &str, path: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateLocalDatastoreRequestType {name, path, };
         let path = format!("/HostDatastoreSystem/{moId}/CreateLocalDatastore", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -172,7 +162,7 @@ impl HostDatastoreSystem {
     /// the remote path is already mounted on the host.
     /// 
     /// ***HostConfigFault***: if unable to mount the NAS volume.
-    pub async fn create_nas_datastore(&self, spec: &HostNasVolumeSpec) -> Result<ManagedObjectReference> {
+    pub async fn create_nas_datastore(&self, spec: &crate::types::structs::HostNasVolumeSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateNasDatastoreRequestType {spec, };
         let path = format!("/HostDatastoreSystem/{moId}/CreateNasDatastore", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -204,7 +194,7 @@ impl HostDatastoreSystem {
     /// 
     /// ***HostConfigFault***: if unable to format the VMFS volume or
     /// gather information about the created volume.
-    pub async fn create_vmfs_datastore(&self, spec: &VmfsDatastoreCreateSpec) -> Result<ManagedObjectReference> {
+    pub async fn create_vmfs_datastore(&self, spec: &crate::types::structs::VmfsDatastoreCreateSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateVmfsDatastoreRequestType {spec, };
         let path = format!("/HostDatastoreSystem/{moId}/CreateVmfsDatastore", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -234,7 +224,7 @@ impl HostDatastoreSystem {
     /// ***HostConfigFault***: if unable to create the datastore on host.
     /// 
     /// ***InvalidName***: if name is not valid datastore name
-    pub async fn create_vvol_datastore(&self, spec: &HostDatastoreSystemVvolDatastoreSpec) -> Result<ManagedObjectReference> {
+    pub async fn create_vvol_datastore(&self, spec: &crate::types::structs::HostDatastoreSystemVvolDatastoreSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateVvolDatastoreRequestType {spec, };
         let path = format!("/HostDatastoreSystem/{moId}/CreateVvolDatastore", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -260,7 +250,7 @@ impl HostDatastoreSystem {
     /// ***NotFound***: if a datastore with the name could not be found.
     /// 
     /// ***HostConfigFault***: if unable to disable clustered vmdk support.
-    pub async fn disable_clustered_vmdk_support(&self, datastore: &ManagedObjectReference) -> Result<()> {
+    pub async fn disable_clustered_vmdk_support(&self, datastore: &crate::types::structs::ManagedObjectReference) -> Result<()> {
         let input = DisableClusteredVmdkSupportRequestType {datastore, };
         let path = format!("/HostDatastoreSystem/{moId}/DisableClusteredVmdkSupport", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -283,7 +273,7 @@ impl HostDatastoreSystem {
     /// ***NotFound***: if a datastore with the name could not be found.
     /// 
     /// ***HostConfigFault***: if unable to enable clustered vmdk support.
-    pub async fn enable_clustered_vmdk_support(&self, datastore: &ManagedObjectReference) -> Result<()> {
+    pub async fn enable_clustered_vmdk_support(&self, datastore: &crate::types::structs::ManagedObjectReference) -> Result<()> {
         let input = EnableClusteredVmdkSupportRequestType {datastore, };
         let path = format!("/HostDatastoreSystem/{moId}/EnableClusteredVmdkSupport", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -318,7 +308,7 @@ impl HostDatastoreSystem {
     /// ***NotSupported***: if the host is not an ESX Server.
     /// 
     /// ***HostConfigFault***: if unable to expand the VMFS volume.
-    pub async fn expand_vmfs_datastore(&self, datastore: &ManagedObjectReference, spec: &VmfsDatastoreExpandSpec) -> Result<ManagedObjectReference> {
+    pub async fn expand_vmfs_datastore(&self, datastore: &crate::types::structs::ManagedObjectReference, spec: &crate::types::structs::VmfsDatastoreExpandSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ExpandVmfsDatastoreRequestType {datastore, spec, };
         let path = format!("/HostDatastoreSystem/{moId}/ExpandVmfsDatastore", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -353,7 +343,7 @@ impl HostDatastoreSystem {
     /// ***NotSupported***: if the host is not an ESX Server.
     /// 
     /// ***HostConfigFault***: if unable to extend the VMFS volume.
-    pub async fn extend_vmfs_datastore(&self, datastore: &ManagedObjectReference, spec: &VmfsDatastoreExtendSpec) -> Result<ManagedObjectReference> {
+    pub async fn extend_vmfs_datastore(&self, datastore: &crate::types::structs::ManagedObjectReference, spec: &crate::types::structs::VmfsDatastoreExtendSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ExtendVmfsDatastoreRequestType {datastore, spec, };
         let path = format!("/HostDatastoreSystem/{moId}/ExtendVmfsDatastore", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -399,7 +389,7 @@ impl HostDatastoreSystem {
     /// ***InvalidArgument***: if named VMFS datastore is not a VMFS datastore.
     /// 
     /// ***HostConfigFault***: if unable to query disk information.
-    pub async fn query_available_disks_for_vmfs(&self, datastore: Option<&ManagedObjectReference>) -> Result<Option<Vec<HostScsiDisk>>> {
+    pub async fn query_available_disks_for_vmfs(&self, datastore: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Option<Vec<crate::types::structs::HostScsiDisk>>> {
         let input = QueryAvailableDisksForVmfsRequestType {datastore, };
         let path = format!("/HostDatastoreSystem/{moId}/QueryAvailableDisksForVmfs", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -421,7 +411,7 @@ impl HostDatastoreSystem {
     /// ## Errors:
     ///
     /// ***NotFound***: if the datastore could not be found.
-    pub async fn query_max_queue_depth(&self, datastore: &ManagedObjectReference) -> Result<i64> {
+    pub async fn query_max_queue_depth(&self, datastore: &crate::types::structs::ManagedObjectReference) -> Result<i64> {
         let input = QueryMaxQueueDepthRequestType {datastore, };
         let path = format!("/HostDatastoreSystem/{moId}/QueryMaxQueueDepth", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -439,7 +429,7 @@ impl HostDatastoreSystem {
     /// ## Returns:
     ///
     /// An array of unbound VMFS datastore
-    pub async fn query_unresolved_vmfs_volumes(&self) -> Result<Option<Vec<HostUnresolvedVmfsVolume>>> {
+    pub async fn query_unresolved_vmfs_volumes(&self) -> Result<Option<Vec<crate::types::structs::HostUnresolvedVmfsVolume>>> {
         let path = format!("/HostDatastoreSystem/{moId}/QueryUnresolvedVmfsVolumes", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute_option(req).await
@@ -476,7 +466,7 @@ impl HostDatastoreSystem {
     /// 
     /// ***HostConfigFault***: if unable to get the current partition information for
     /// the device.
-    pub async fn query_vmfs_datastore_create_options(&self, device_path: &str, vmfs_major_version: Option<i32>) -> Result<Option<Vec<VmfsDatastoreOption>>> {
+    pub async fn query_vmfs_datastore_create_options(&self, device_path: &str, vmfs_major_version: Option<i32>) -> Result<Option<Vec<crate::types::structs::VmfsDatastoreOption>>> {
         let input = QueryVmfsDatastoreCreateOptionsRequestType {device_path, vmfs_major_version, };
         let path = format!("/HostDatastoreSystem/{moId}/QueryVmfsDatastoreCreateOptions", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -507,7 +497,7 @@ impl HostDatastoreSystem {
     /// devices on which the extents reside
     /// 
     /// ***NotSupported***: if the host is not an ESX Server.
-    pub async fn query_vmfs_datastore_expand_options(&self, datastore: &ManagedObjectReference) -> Result<Option<Vec<VmfsDatastoreOption>>> {
+    pub async fn query_vmfs_datastore_expand_options(&self, datastore: &crate::types::structs::ManagedObjectReference) -> Result<Option<Vec<crate::types::structs::VmfsDatastoreOption>>> {
         let input = QueryVmfsDatastoreExpandOptionsRequestType {datastore, };
         let path = format!("/HostDatastoreSystem/{moId}/QueryVmfsDatastoreExpandOptions", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -552,7 +542,7 @@ impl HostDatastoreSystem {
     /// the device.
     /// 
     /// ***NotSupported***: if the host is not an ESX Server.
-    pub async fn query_vmfs_datastore_extend_options(&self, datastore: &ManagedObjectReference, device_path: &str, suppress_expand_candidates: Option<bool>) -> Result<Option<Vec<VmfsDatastoreOption>>> {
+    pub async fn query_vmfs_datastore_extend_options(&self, datastore: &crate::types::structs::ManagedObjectReference, device_path: &str, suppress_expand_candidates: Option<bool>) -> Result<Option<Vec<crate::types::structs::VmfsDatastoreOption>>> {
         let input = QueryVmfsDatastoreExtendOptionsRequestType {datastore, device_path, suppress_expand_candidates, };
         let path = format!("/HostDatastoreSystem/{moId}/QueryVmfsDatastoreExtendOptions", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -581,7 +571,7 @@ impl HostDatastoreSystem {
     /// 
     /// ***ResourceInUse***: for a NFS volume if there is any VM residing on
     /// this datastore and registered on this host.
-    pub async fn remove_datastore(&self, datastore: &ManagedObjectReference) -> Result<()> {
+    pub async fn remove_datastore(&self, datastore: &crate::types::structs::ManagedObjectReference) -> Result<()> {
         let input = RemoveDatastoreRequestType {datastore, };
         let path = format!("/HostDatastoreSystem/{moId}/RemoveDatastore", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -610,7 +600,7 @@ impl HostDatastoreSystem {
     /// ## Errors:
     ///
     /// ***HostConfigFault***: for host configuration failures.
-    pub async fn remove_datastore_ex_task(&self, datastore: &[ManagedObjectReference]) -> Result<ManagedObjectReference> {
+    pub async fn remove_datastore_ex_task(&self, datastore: &[crate::types::structs::ManagedObjectReference]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RemoveDatastoreExRequestType {datastore, };
         let path = format!("/HostDatastoreSystem/{moId}/RemoveDatastoreEx_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -666,7 +656,7 @@ impl HostDatastoreSystem {
     /// each non-head extent is presented to ESX.
     /// 
     /// ***HostConfigFault***: for all other configuration failures.
-    pub async fn resignature_unresolved_vmfs_volume_task(&self, resolution_spec: &HostUnresolvedVmfsResignatureSpec) -> Result<ManagedObjectReference> {
+    pub async fn resignature_unresolved_vmfs_volume_task(&self, resolution_spec: &crate::types::structs::HostUnresolvedVmfsResignatureSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ResignatureUnresolvedVmfsVolumeRequestType {resolution_spec, };
         let path = format!("/HostDatastoreSystem/{moId}/ResignatureUnresolvedVmfsVolume_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -693,7 +683,7 @@ impl HostDatastoreSystem {
     /// ***NotFound***: if the datastore could not be found.
     /// 
     /// ***InvalidArgument***: if max queue depth is not within range.
-    pub async fn set_max_queue_depth(&self, datastore: &ManagedObjectReference, max_qdepth: i64) -> Result<()> {
+    pub async fn set_max_queue_depth(&self, datastore: &crate::types::structs::ManagedObjectReference, max_qdepth: i64) -> Result<()> {
         let input = SetMaxQueueDepthRequestType {datastore, max_qdepth, };
         let path = format!("/HostDatastoreSystem/{moId}/SetMaxQueueDepth", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -731,14 +721,14 @@ impl HostDatastoreSystem {
     /// 
     /// ***DatastoreNotWritableOnHost***: if the datastore argument is set and
     /// the host cannot write to the indicated datastore.
-    pub async fn update_local_swap_datastore(&self, datastore: Option<&ManagedObjectReference>) -> Result<()> {
+    pub async fn update_local_swap_datastore(&self, datastore: Option<&crate::types::structs::ManagedObjectReference>) -> Result<()> {
         let input = UpdateLocalSwapDatastoreRequestType {datastore, };
         let path = format!("/HostDatastoreSystem/{moId}/UpdateLocalSwapDatastore", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
         self.client.execute_void(req).await
     }
     /// Capability vector indicating the available product features.
-    pub async fn capabilities(&self) -> Result<HostDatastoreSystemCapabilities> {
+    pub async fn capabilities(&self) -> Result<crate::types::structs::HostDatastoreSystemCapabilities> {
         let path = format!("/HostDatastoreSystem/{moId}/capabilities", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute(req).await
@@ -750,7 +740,7 @@ impl HostDatastoreSystem {
     /// ## Returns:
     ///
     /// Refers instances of *Datastore*.
-    pub async fn datastore(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
+    pub async fn datastore(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/HostDatastoreSystem/{moId}/datastore", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -773,50 +763,50 @@ struct CreateLocalDatastoreRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct CreateNasDatastoreRequestType<'a> {
-    spec: &'a HostNasVolumeSpec,
+    spec: &'a crate::types::structs::HostNasVolumeSpec,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct CreateVmfsDatastoreRequestType<'a> {
-    spec: &'a VmfsDatastoreCreateSpec,
+    spec: &'a crate::types::structs::VmfsDatastoreCreateSpec,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct CreateVvolDatastoreRequestType<'a> {
-    spec: &'a HostDatastoreSystemVvolDatastoreSpec,
+    spec: &'a crate::types::structs::HostDatastoreSystemVvolDatastoreSpec,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct DisableClusteredVmdkSupportRequestType<'a> {
-    datastore: &'a ManagedObjectReference,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct EnableClusteredVmdkSupportRequestType<'a> {
-    datastore: &'a ManagedObjectReference,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct ExpandVmfsDatastoreRequestType<'a> {
-    datastore: &'a ManagedObjectReference,
-    spec: &'a VmfsDatastoreExpandSpec,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
+    spec: &'a crate::types::structs::VmfsDatastoreExpandSpec,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct ExtendVmfsDatastoreRequestType<'a> {
-    datastore: &'a ManagedObjectReference,
-    spec: &'a VmfsDatastoreExtendSpec,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
+    spec: &'a crate::types::structs::VmfsDatastoreExtendSpec,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct QueryAvailableDisksForVmfsRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    datastore: Option<&'a ManagedObjectReference>,
+    datastore: Option<&'a crate::types::structs::ManagedObjectReference>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct QueryMaxQueueDepthRequestType<'a> {
-    datastore: &'a ManagedObjectReference,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -830,12 +820,12 @@ struct QueryVmfsDatastoreCreateOptionsRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct QueryVmfsDatastoreExpandOptionsRequestType<'a> {
-    datastore: &'a ManagedObjectReference,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct QueryVmfsDatastoreExtendOptionsRequestType<'a> {
-    datastore: &'a ManagedObjectReference,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
     #[serde(rename = "devicePath")]
     device_path: &'a str,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -845,23 +835,23 @@ struct QueryVmfsDatastoreExtendOptionsRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct RemoveDatastoreRequestType<'a> {
-    datastore: &'a ManagedObjectReference,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct RemoveDatastoreExRequestType<'a> {
-    datastore: &'a [ManagedObjectReference],
+    datastore: &'a [crate::types::structs::ManagedObjectReference],
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct ResignatureUnresolvedVmfsVolumeRequestType<'a> {
     #[serde(rename = "resolutionSpec")]
-    resolution_spec: &'a HostUnresolvedVmfsResignatureSpec,
+    resolution_spec: &'a crate::types::structs::HostUnresolvedVmfsResignatureSpec,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct SetMaxQueueDepthRequestType<'a> {
-    datastore: &'a ManagedObjectReference,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
     #[serde(rename = "maxQdepth")]
     max_qdepth: i64,
 }
@@ -869,5 +859,5 @@ struct SetMaxQueueDepthRequestType<'a> {
 #[serde(tag="_typeName")]
 struct UpdateLocalSwapDatastoreRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    datastore: Option<&'a ManagedObjectReference>,
+    datastore: Option<&'a crate::types::structs::ManagedObjectReference>,
 }

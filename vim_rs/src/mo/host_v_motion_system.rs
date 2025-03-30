@@ -1,12 +1,10 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::CustomFieldDef;
-use crate::types::structs::HostIpConfig;
-use crate::types::structs::HostVMotionNetConfig;
 /// Deprecated as of VI API 4.0, use *HostConfigManager.virtualNicManager*.
 /// 
 /// The VMotionSystem managed object describes the VMotion configuration
 /// of the host.
+#[derive(Clone)]
 pub struct HostVMotionSystem {
     client: Arc<Client>,
     mo_id: String,
@@ -86,7 +84,7 @@ impl HostVMotionSystem {
     /// ***InvalidArgument***: if the IpConfig is invalid or cannot be used.
     /// 
     /// ***HostConfigFault***: for any other failure
-    pub async fn update_ip_config(&self, ip_config: &HostIpConfig) -> Result<()> {
+    pub async fn update_ip_config(&self, ip_config: &crate::types::structs::HostIpConfig) -> Result<()> {
         let input = UpdateIpConfigRequestType {ip_config, };
         let path = format!("/HostVMotionSystem/{moId}/UpdateIpConfig", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -97,19 +95,19 @@ impl HostVMotionSystem {
     /// The fields are sorted by *CustomFieldDef.name*.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn available_field(&self) -> Result<Option<Vec<CustomFieldDef>>> {
+    pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
         let path = format!("/HostVMotionSystem/{moId}/availableField", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
     }
     /// IP configuration of the VMotion VirtualNic.
-    pub async fn ip_config(&self) -> Result<Option<HostIpConfig>> {
+    pub async fn ip_config(&self) -> Result<Option<crate::types::structs::HostIpConfig>> {
         let path = format!("/HostVMotionSystem/{moId}/ipConfig", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
     }
     /// VMotion network configuration.
-    pub async fn net_config(&self) -> Result<Option<HostVMotionNetConfig>> {
+    pub async fn net_config(&self) -> Result<Option<crate::types::structs::HostVMotionNetConfig>> {
         let path = format!("/HostVMotionSystem/{moId}/netConfig", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -142,5 +140,5 @@ struct SetCustomValueRequestType<'a> {
 #[serde(tag="_typeName")]
 struct UpdateIpConfigRequestType<'a> {
     #[serde(rename = "ipConfig")]
-    ip_config: &'a HostIpConfig,
+    ip_config: &'a crate::types::structs::HostIpConfig,
 }

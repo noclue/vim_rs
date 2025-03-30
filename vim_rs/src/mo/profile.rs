@@ -1,9 +1,8 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::ManagedObjectReference;
-use crate::types::structs::ProfileDescription;
 /// The <code>Profile</code> managed object is the base class for host and cluster
 /// profiles.
+#[derive(Clone)]
 pub struct Profile {
     client: Arc<Client>,
     mo_id: String,
@@ -31,7 +30,7 @@ impl Profile {
     /// maintained and the vCenter Server does not perform any action.
     /// 
     /// Refers instances of *ManagedEntity*.
-    pub async fn associate_profile(&self, entity: &[ManagedObjectReference]) -> Result<()> {
+    pub async fn associate_profile(&self, entity: &[crate::types::structs::ManagedObjectReference]) -> Result<()> {
         let input = AssociateProfileRequestType {entity, };
         let path = format!("/Profile/{moId}/AssociateProfile", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -57,7 +56,7 @@ impl Profile {
     /// operation.
     /// 
     /// Refers instance of *Task*.
-    pub async fn check_profile_compliance_task(&self, entity: Option<&[ManagedObjectReference]>) -> Result<ManagedObjectReference> {
+    pub async fn check_profile_compliance_task(&self, entity: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CheckProfileComplianceRequestType {entity, };
         let path = format!("/Profile/{moId}/CheckProfileCompliance_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -86,7 +85,7 @@ impl Profile {
     /// the Server does not perform any action.
     /// 
     /// Refers instances of *ManagedEntity*.
-    pub async fn dissociate_profile(&self, entity: Option<&[ManagedObjectReference]>) -> Result<()> {
+    pub async fn dissociate_profile(&self, entity: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<()> {
         let input = DissociateProfileRequestType {entity, };
         let path = format!("/Profile/{moId}/DissociateProfile", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -116,7 +115,7 @@ impl Profile {
     /// ## Returns:
     ///
     /// Profile divided into sections containing element descriptions and messages.
-    pub async fn retrieve_description(&self) -> Result<Option<ProfileDescription>> {
+    pub async fn retrieve_description(&self) -> Result<Option<crate::types::structs::ProfileDescription>> {
         let path = format!("/Profile/{moId}/RetrieveDescription", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute_option(req).await
@@ -150,7 +149,7 @@ impl Profile {
     /// Deprecated as of vSphere API 5.0. use *Profile.RetrieveDescription* instead.
     /// 
     /// Localizable description of the profile
-    pub async fn description(&self) -> Result<Option<ProfileDescription>> {
+    pub async fn description(&self) -> Result<Option<crate::types::structs::ProfileDescription>> {
         let path = format!("/Profile/{moId}/description", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -160,7 +159,7 @@ impl Profile {
     /// ## Returns:
     ///
     /// Refers instances of *ManagedEntity*.
-    pub async fn entity(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
+    pub async fn entity(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/Profile/{moId}/entity", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -181,17 +180,17 @@ impl Profile {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct AssociateProfileRequestType<'a> {
-    entity: &'a [ManagedObjectReference],
+    entity: &'a [crate::types::structs::ManagedObjectReference],
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct CheckProfileComplianceRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    entity: Option<&'a [ManagedObjectReference]>,
+    entity: Option<&'a [crate::types::structs::ManagedObjectReference]>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct DissociateProfileRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    entity: Option<&'a [ManagedObjectReference]>,
+    entity: Option<&'a [crate::types::structs::ManagedObjectReference]>,
 }

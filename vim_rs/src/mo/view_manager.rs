@@ -1,6 +1,5 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::ManagedObjectReference;
 /// The *ViewManager* managed object provides methods to create *ContainerView*,
 /// *InventoryView*, and *ListView* managed objects.
 /// 
@@ -46,6 +45,7 @@ use crate::types::structs::ManagedObjectReference;
 ///      to retrieve the name property from each virtual machine.
 /// 3. Invoke the *PropertyCollector*
 ///    *PropertyCollector.RetrieveProperties* method.
+#[derive(Clone)]
 pub struct ViewManager {
     client: Arc<Client>,
     mo_id: String,
@@ -144,7 +144,7 @@ impl ViewManager {
     /// ## Returns:
     ///
     /// Refers instance of *ContainerView*.
-    pub async fn create_container_view(&self, container: &ManagedObjectReference, r#type: Option<&[String]>, recursive: bool) -> Result<ManagedObjectReference> {
+    pub async fn create_container_view(&self, container: &crate::types::structs::ManagedObjectReference, r#type: Option<&[String]>, recursive: bool) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateContainerViewRequestType {container, r#type, recursive, };
         let path = format!("/ViewManager/{moId}/CreateContainerView", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -157,7 +157,7 @@ impl ViewManager {
     /// ## Returns:
     ///
     /// Refers instance of *InventoryView*.
-    pub async fn create_inventory_view(&self) -> Result<ManagedObjectReference> {
+    pub async fn create_inventory_view(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/ViewManager/{moId}/CreateInventoryView", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute(req).await
@@ -181,7 +181,7 @@ impl ViewManager {
     /// ## Returns:
     ///
     /// Refers instance of *ListView*.
-    pub async fn create_list_view(&self, obj: Option<&[ManagedObjectReference]>) -> Result<ManagedObjectReference> {
+    pub async fn create_list_view(&self, obj: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateListViewRequestType {obj, };
         let path = format!("/ViewManager/{moId}/CreateListView", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -205,7 +205,7 @@ impl ViewManager {
     /// ## Returns:
     ///
     /// Refers instance of *ListView*.
-    pub async fn create_list_view_from_view(&self, view: &ManagedObjectReference) -> Result<ManagedObjectReference> {
+    pub async fn create_list_view_from_view(&self, view: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateListViewFromViewRequestType {view, };
         let path = format!("/ViewManager/{moId}/CreateListViewFromView", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -221,7 +221,7 @@ impl ViewManager {
     /// ## Returns:
     ///
     /// Refers instances of *View*.
-    pub async fn view_list(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
+    pub async fn view_list(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/ViewManager/{moId}/viewList", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -230,7 +230,7 @@ impl ViewManager {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct CreateContainerViewRequestType<'a> {
-    container: &'a ManagedObjectReference,
+    container: &'a crate::types::structs::ManagedObjectReference,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "type")]
     r#type: Option<&'a [String]>,
@@ -240,10 +240,10 @@ struct CreateContainerViewRequestType<'a> {
 #[serde(tag="_typeName")]
 struct CreateListViewRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    obj: Option<&'a [ManagedObjectReference]>,
+    obj: Option<&'a [crate::types::structs::ManagedObjectReference]>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct CreateListViewFromViewRequestType<'a> {
-    view: &'a ManagedObjectReference,
+    view: &'a crate::types::structs::ManagedObjectReference,
 }

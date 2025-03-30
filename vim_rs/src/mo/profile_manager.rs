@@ -1,8 +1,7 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::ManagedObjectReference;
-use crate::types::structs::ProfilePolicyMetadata;
 /// This class is responsible for managing Profiles.
+#[derive(Clone)]
 pub struct ProfileManager {
     client: Arc<Client>,
     mo_id: String,
@@ -37,7 +36,7 @@ impl ProfileManager {
     /// 
     /// ***InvalidProfileReferenceHost***: if the specified reference host is
     /// incompatible or no reference host has been specified.
-    pub async fn create_profile(&self, create_spec: &dyn crate::types::traits::ProfileCreateSpecTrait) -> Result<ManagedObjectReference> {
+    pub async fn create_profile(&self, create_spec: &dyn crate::types::traits::ProfileCreateSpecTrait) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateProfileRequestType {create_spec, };
         let path = format!("/ProfileManager/{moId}/CreateProfile", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -60,7 +59,7 @@ impl ProfileManager {
     /// ## Returns:
     ///
     /// Refers instances of *Profile*.
-    pub async fn find_associated_profile(&self, entity: &ManagedObjectReference) -> Result<Option<Vec<ManagedObjectReference>>> {
+    pub async fn find_associated_profile(&self, entity: &crate::types::structs::ManagedObjectReference) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let input = FindAssociatedProfileRequestType {entity, };
         let path = format!("/ProfileManager/{moId}/FindAssociatedProfile", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -87,7 +86,7 @@ impl ProfileManager {
     /// ## Returns:
     ///
     /// The metadata information for the policy.
-    pub async fn query_policy_metadata(&self, policy_name: Option<&[String]>, profile: Option<&ManagedObjectReference>) -> Result<Option<Vec<ProfilePolicyMetadata>>> {
+    pub async fn query_policy_metadata(&self, policy_name: Option<&[String]>, profile: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Option<Vec<crate::types::structs::ProfilePolicyMetadata>>> {
         let input = QueryPolicyMetadataRequestType {policy_name, profile, };
         let path = format!("/ProfileManager/{moId}/QueryPolicyMetadata", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -100,7 +99,7 @@ impl ProfileManager {
     /// ## Returns:
     ///
     /// Refers instances of *Profile*.
-    pub async fn profile(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
+    pub async fn profile(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/ProfileManager/{moId}/profile", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -115,7 +114,7 @@ struct CreateProfileRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct FindAssociatedProfileRequestType<'a> {
-    entity: &'a ManagedObjectReference,
+    entity: &'a crate::types::structs::ManagedObjectReference,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -124,5 +123,5 @@ struct QueryPolicyMetadataRequestType<'a> {
     #[serde(rename = "policyName")]
     policy_name: Option<&'a [String]>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    profile: Option<&'a ManagedObjectReference>,
+    profile: Option<&'a crate::types::structs::ManagedObjectReference>,
 }

@@ -1,6 +1,5 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::vim_any::VimAny;
 /// This managed object type enables clients to retrieve historical data and
 /// receive updates when the server appends new data to a collection.
 /// 
@@ -38,6 +37,7 @@ use crate::types::vim_any::VimAny;
 ///   *events* depending on the operation.
 /// - *reset* - Moves the "scrollable view" to
 ///   the item immediately preceding the "viewable latest page".
+#[derive(Clone)]
 pub struct HistoryCollector {
     client: Arc<Client>,
     mo_id: String,
@@ -97,7 +97,7 @@ impl HistoryCollector {
     /// 
     /// The type of the returned filter is determined by the managed object
     /// for which the collector is created.
-    pub async fn filter(&self) -> Result<VimAny> {
+    pub async fn filter(&self) -> Result<crate::types::vim_any::VimAny> {
         let path = format!("/HistoryCollector/{moId}/filter", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute(req).await

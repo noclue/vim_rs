@@ -24,9 +24,11 @@ name = "mac_monitor"
 path = "src/mac_monitor.rs"
 
 [dependencies]
-anyhow = "1.0.97"
-chrono = "0.4.40"
-env_logger = "0.11.6"
-log = "0.4.26"
+anyhow = "1.0"
+chrono = "0.4"
+env_logger = "0.11"
+log = "0.4"
+utils = { version = "0.1.0", path = "../utils" }
 tokio = {  version = "1.44", features = ["macros"]}
+vim_macros = { version = "0.1.0", path = "../../vim_macros" }
 vim_rs = { version = "0.1.0", path = "../../vim_rs" }

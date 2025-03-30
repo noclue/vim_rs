@@ -1,7 +1,5 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::CustomFieldDef;
-use crate::types::structs::HostHyperThreadScheduleInfo;
 /// This managed object provides an interface
 /// through which you can gather and configure the host CPU scheduler
 /// policies that affect the performance of running virtual machines.
@@ -9,6 +7,7 @@ use crate::types::structs::HostHyperThreadScheduleInfo;
 /// **Note**: This managed object is useful only on platforms where
 /// resource management controls are available to optimize the running
 /// of virtual machines.
+#[derive(Clone)]
 pub struct HostCpuSchedulerSystem {
     client: Arc<Client>,
     mo_id: String,
@@ -70,7 +69,7 @@ impl HostCpuSchedulerSystem {
     /// The fields are sorted by *CustomFieldDef.name*.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn available_field(&self) -> Result<Option<Vec<CustomFieldDef>>> {
+    pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
         let path = format!("/HostCpuSchedulerSystem/{moId}/availableField", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -80,7 +79,7 @@ impl HostCpuSchedulerSystem {
     /// The
     /// existence of this data object type indicates if the CPU scheduler
     /// is capable of scheduling hyperthreads as resources.
-    pub async fn hyperthread_info(&self) -> Result<Option<HostHyperThreadScheduleInfo>> {
+    pub async fn hyperthread_info(&self) -> Result<Option<crate::types::structs::HostHyperThreadScheduleInfo>> {
         let path = format!("/HostCpuSchedulerSystem/{moId}/hyperthreadInfo", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await

@@ -1,13 +1,5 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::KeyValue;
-use crate::types::structs::LicenseAvailabilityInfo;
-use crate::types::structs::LicenseDiagnostics;
-use crate::types::structs::LicenseFeatureInfo;
-use crate::types::structs::LicenseManagerEvaluationInfo;
-use crate::types::structs::LicenseManagerLicenseInfo;
-use crate::types::structs::LicenseUsageInfo;
-use crate::types::structs::ManagedObjectReference;
 /// This managed object type controls entitlements for a given VMware
 /// platform.
 /// 
@@ -50,6 +42,7 @@ use crate::types::structs::ManagedObjectReference;
 ///        | +-----------+ +-----------+  |   +--------+      |  Host |
 ///        |                  cpuPackage  |   |  VM    |      +-------+
 ///        +------------------------------+   +--------+
+#[derive(Clone)]
 pub struct LicenseManager {
     client: Arc<Client>,
     mo_id: String,
@@ -76,7 +69,7 @@ impl LicenseManager {
     /// ## Returns:
     ///
     /// Returns information about the license specified in licenseKey.
-    pub async fn add_license(&self, license_key: &str, labels: Option<&[KeyValue]>) -> Result<LicenseManagerLicenseInfo> {
+    pub async fn add_license(&self, license_key: &str, labels: Option<&[crate::types::structs::KeyValue]>) -> Result<crate::types::structs::LicenseManagerLicenseInfo> {
         let input = AddLicenseRequestType {license_key, labels, };
         let path = format!("/LicenseManager/{moId}/AddLicense", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -109,7 +102,7 @@ impl LicenseManager {
     /// 
     /// ***InvalidState***: If the feature cannot be supported on the platform,
     /// potentially because the hardware configuration does not support it.
-    pub async fn check_license_feature(&self, host: Option<&ManagedObjectReference>, feature_key: &str) -> Result<bool> {
+    pub async fn check_license_feature(&self, host: Option<&crate::types::structs::ManagedObjectReference>, feature_key: &str) -> Result<bool> {
         let input = CheckLicenseFeatureRequestType {host, feature_key, };
         let path = format!("/LicenseManager/{moId}/CheckLicenseFeature", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -157,7 +150,7 @@ impl LicenseManager {
     /// license file is not valid.
     /// 
     /// ***NotEnoughLicenses***: if the new license source does not have enough licenses.
-    pub async fn configure_license_source(&self, host: Option<&ManagedObjectReference>, license_source: &dyn crate::types::traits::LicenseSourceTrait) -> Result<()> {
+    pub async fn configure_license_source(&self, host: Option<&crate::types::structs::ManagedObjectReference>, license_source: &dyn crate::types::traits::LicenseSourceTrait) -> Result<()> {
         let input = ConfigureLicenseSourceRequestType {host, license_source, };
         let path = format!("/LicenseManager/{moId}/ConfigureLicenseSource", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -175,7 +168,7 @@ impl LicenseManager {
     /// ## Returns:
     ///
     /// Returns information about the license specified in licenseKey.
-    pub async fn decode_license(&self, license_key: &str) -> Result<LicenseManagerLicenseInfo> {
+    pub async fn decode_license(&self, license_key: &str) -> Result<crate::types::structs::LicenseManagerLicenseInfo> {
         let input = DecodeLicenseRequestType {license_key, };
         let path = format!("/LicenseManager/{moId}/DecodeLicense", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -209,7 +202,7 @@ impl LicenseManager {
     /// ***LicenseServerUnavailable***: If the license server is unavailable.
     /// 
     /// ***InvalidState***: If the feature is in use.
-    pub async fn disable_feature(&self, host: Option<&ManagedObjectReference>, feature_key: &str) -> Result<bool> {
+    pub async fn disable_feature(&self, host: Option<&crate::types::structs::ManagedObjectReference>, feature_key: &str) -> Result<bool> {
         let input = DisableFeatureRequestType {host, feature_key, };
         let path = format!("/LicenseManager/{moId}/DisableFeature", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -244,7 +237,7 @@ impl LicenseManager {
     /// 
     /// ***InvalidState***: If the feature cannot be supported on the platform,
     /// potentially because the hardware configuration does not support it.
-    pub async fn enable_feature(&self, host: Option<&ManagedObjectReference>, feature_key: &str) -> Result<bool> {
+    pub async fn enable_feature(&self, host: Option<&crate::types::structs::ManagedObjectReference>, feature_key: &str) -> Result<bool> {
         let input = EnableFeatureRequestType {host, feature_key, };
         let path = format!("/LicenseManager/{moId}/EnableFeature", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -264,7 +257,7 @@ impl LicenseManager {
     /// Use the license source of the specified host.
     /// 
     /// Refers instance of *HostSystem*.
-    pub async fn query_license_source_availability(&self, host: Option<&ManagedObjectReference>) -> Result<Option<Vec<LicenseAvailabilityInfo>>> {
+    pub async fn query_license_source_availability(&self, host: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Option<Vec<crate::types::structs::LicenseAvailabilityInfo>>> {
         let input = QueryLicenseSourceAvailabilityRequestType {host, };
         let path = format!("/LicenseManager/{moId}/QueryLicenseSourceAvailability", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -284,7 +277,7 @@ impl LicenseManager {
     /// Use the license source of the specified host.
     /// 
     /// Refers instance of *HostSystem*.
-    pub async fn query_supported_features(&self, host: Option<&ManagedObjectReference>) -> Result<Option<Vec<LicenseFeatureInfo>>> {
+    pub async fn query_supported_features(&self, host: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Option<Vec<crate::types::structs::LicenseFeatureInfo>>> {
         let input = QuerySupportedFeaturesRequestType {host, };
         let path = format!("/LicenseManager/{moId}/QuerySupportedFeatures", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -312,7 +305,7 @@ impl LicenseManager {
     /// *LicenseManager* is on.
     /// 
     /// Refers instance of *HostSystem*.
-    pub async fn query_license_usage(&self, host: Option<&ManagedObjectReference>) -> Result<LicenseUsageInfo> {
+    pub async fn query_license_usage(&self, host: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::LicenseUsageInfo> {
         let input = QueryLicenseUsageRequestType {host, };
         let path = format!("/LicenseManager/{moId}/QueryLicenseUsage", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -383,7 +376,7 @@ impl LicenseManager {
     /// 
     /// ***InvalidState***: If the feature cannot be supported on the platform,
     /// potentially because the hardware configuration does not support it.
-    pub async fn set_license_edition(&self, host: Option<&ManagedObjectReference>, feature_key: Option<&str>) -> Result<()> {
+    pub async fn set_license_edition(&self, host: Option<&crate::types::structs::ManagedObjectReference>, feature_key: Option<&str>) -> Result<()> {
         let input = SetLicenseEditionRequestType {host, feature_key, };
         let path = format!("/LicenseManager/{moId}/SetLicenseEdition", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -433,7 +426,7 @@ impl LicenseManager {
     /// ## Returns:
     ///
     /// Returns information about the license specified in licenseKey.
-    pub async fn update_license(&self, license_key: &str, labels: Option<&[KeyValue]>) -> Result<LicenseManagerLicenseInfo> {
+    pub async fn update_license(&self, license_key: &str, labels: Option<&[crate::types::structs::KeyValue]>) -> Result<crate::types::structs::LicenseManagerLicenseInfo> {
         let input = UpdateLicenseRequestType {license_key, labels, };
         let path = format!("/LicenseManager/{moId}/UpdateLicense", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -442,13 +435,13 @@ impl LicenseManager {
     /// Deprecated as of vSphere API 4.0, this property is not used by the system.
     /// 
     /// Return current diagnostic information.
-    pub async fn diagnostics(&self) -> Result<Option<LicenseDiagnostics>> {
+    pub async fn diagnostics(&self) -> Result<Option<crate::types::structs::LicenseDiagnostics>> {
         let path = format!("/LicenseManager/{moId}/diagnostics", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
     }
     /// ***Required privileges:*** System.Read
-    pub async fn evaluation(&self) -> Result<LicenseManagerEvaluationInfo> {
+    pub async fn evaluation(&self) -> Result<crate::types::structs::LicenseManagerEvaluationInfo> {
         let path = format!("/LicenseManager/{moId}/evaluation", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute(req).await
@@ -457,7 +450,7 @@ impl LicenseManager {
     /// instead.
     /// 
     /// The list of features that can be licensed.
-    pub async fn feature_info(&self) -> Result<Option<Vec<LicenseFeatureInfo>>> {
+    pub async fn feature_info(&self) -> Result<Option<Vec<crate::types::structs::LicenseFeatureInfo>>> {
         let path = format!("/LicenseManager/{moId}/featureInfo", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -469,7 +462,7 @@ impl LicenseManager {
     /// ## Returns:
     ///
     /// Refers instance of *LicenseAssignmentManager*.
-    pub async fn license_assignment_manager(&self) -> Result<Option<ManagedObjectReference>> {
+    pub async fn license_assignment_manager(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let path = format!("/LicenseManager/{moId}/licenseAssignmentManager", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -490,7 +483,7 @@ impl LicenseManager {
         self.client.execute(req).await
     }
     /// Get information about all the licenses available.
-    pub async fn licenses(&self) -> Result<Vec<LicenseManagerLicenseInfo>> {
+    pub async fn licenses(&self) -> Result<Vec<crate::types::structs::LicenseManagerLicenseInfo>> {
         let path = format!("/LicenseManager/{moId}/licenses", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute(req).await
@@ -522,13 +515,13 @@ struct AddLicenseRequestType<'a> {
     #[serde(rename = "licenseKey")]
     license_key: &'a str,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    labels: Option<&'a [KeyValue]>,
+    labels: Option<&'a [crate::types::structs::KeyValue]>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct CheckLicenseFeatureRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    host: Option<&'a ManagedObjectReference>,
+    host: Option<&'a crate::types::structs::ManagedObjectReference>,
     #[serde(rename = "featureKey")]
     feature_key: &'a str,
 }
@@ -536,7 +529,7 @@ struct CheckLicenseFeatureRequestType<'a> {
 #[serde(tag="_typeName")]
 struct ConfigureLicenseSourceRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    host: Option<&'a ManagedObjectReference>,
+    host: Option<&'a crate::types::structs::ManagedObjectReference>,
     #[serde(rename = "licenseSource")]
     license_source: &'a dyn crate::types::traits::LicenseSourceTrait,
 }
@@ -550,7 +543,7 @@ struct DecodeLicenseRequestType<'a> {
 #[serde(tag="_typeName")]
 struct DisableFeatureRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    host: Option<&'a ManagedObjectReference>,
+    host: Option<&'a crate::types::structs::ManagedObjectReference>,
     #[serde(rename = "featureKey")]
     feature_key: &'a str,
 }
@@ -558,7 +551,7 @@ struct DisableFeatureRequestType<'a> {
 #[serde(tag="_typeName")]
 struct EnableFeatureRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    host: Option<&'a ManagedObjectReference>,
+    host: Option<&'a crate::types::structs::ManagedObjectReference>,
     #[serde(rename = "featureKey")]
     feature_key: &'a str,
 }
@@ -566,19 +559,19 @@ struct EnableFeatureRequestType<'a> {
 #[serde(tag="_typeName")]
 struct QueryLicenseSourceAvailabilityRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    host: Option<&'a ManagedObjectReference>,
+    host: Option<&'a crate::types::structs::ManagedObjectReference>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct QuerySupportedFeaturesRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    host: Option<&'a ManagedObjectReference>,
+    host: Option<&'a crate::types::structs::ManagedObjectReference>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct QueryLicenseUsageRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    host: Option<&'a ManagedObjectReference>,
+    host: Option<&'a crate::types::structs::ManagedObjectReference>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -598,7 +591,7 @@ struct RemoveLicenseRequestType<'a> {
 #[serde(tag="_typeName")]
 struct SetLicenseEditionRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    host: Option<&'a ManagedObjectReference>,
+    host: Option<&'a crate::types::structs::ManagedObjectReference>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "featureKey")]
     feature_key: Option<&'a str>,
@@ -619,5 +612,5 @@ struct UpdateLicenseRequestType<'a> {
     #[serde(rename = "licenseKey")]
     license_key: &'a str,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    labels: Option<&'a [KeyValue]>,
+    labels: Option<&'a [crate::types::structs::KeyValue]>,
 }

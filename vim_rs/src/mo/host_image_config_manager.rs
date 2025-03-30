@@ -1,12 +1,11 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::HostImageProfileSummary;
-use crate::types::structs::SoftwarePackage;
 /// This managed object is the interface for
 /// configuration of the ESX software image, including
 /// properties such as acceptance level.
 /// 
 /// It is currently designed to be host agent specific.
+#[derive(Clone)]
 pub struct HostImageConfigManager {
     client: Arc<Client>,
     mo_id: String,
@@ -24,7 +23,7 @@ impl HostImageConfigManager {
     /// CLI command is: esxcli software vib get
     /// 
     /// ***Required privileges:*** Host.Config.Image
-    pub async fn fetch_software_packages(&self) -> Result<Option<Vec<SoftwarePackage>>> {
+    pub async fn fetch_software_packages(&self) -> Result<Option<Vec<crate::types::structs::SoftwarePackage>>> {
         let path = format!("/HostImageConfigManager/{moId}/fetchSoftwarePackages", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute_option(req).await
@@ -61,7 +60,7 @@ impl HostImageConfigManager {
     /// populate both name and vendor..
     /// 
     /// ***Required privileges:*** System.Read
-    pub async fn host_image_config_get_profile(&self) -> Result<HostImageProfileSummary> {
+    pub async fn host_image_config_get_profile(&self) -> Result<crate::types::structs::HostImageProfileSummary> {
         let path = format!("/HostImageConfigManager/{moId}/HostImageConfigGetProfile", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute(req).await

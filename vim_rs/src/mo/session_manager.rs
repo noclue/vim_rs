@@ -1,11 +1,9 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::SessionManagerGenericServiceTicket;
-use crate::types::structs::SessionManagerLocalTicket;
-use crate::types::structs::UserSession;
 /// This managed object type includes methods for logging on and
 /// logging off clients, determining which clients are currently
 /// logged on, and forcing clients to log off.
+#[derive(Clone)]
 pub struct SessionManager {
     client: Arc<Client>,
     mo_id: String,
@@ -74,7 +72,7 @@ impl SessionManager {
     /// of *SessionManagerGenericServiceTicket.sslThumbprint* or
     /// *SessionManagerGenericServiceTicket.certThumbprintList*, only the CA
     /// certificates will be used to authenticate the host.
-    pub async fn acquire_generic_service_ticket(&self, spec: &dyn crate::types::traits::SessionManagerServiceRequestSpecTrait) -> Result<SessionManagerGenericServiceTicket> {
+    pub async fn acquire_generic_service_ticket(&self, spec: &dyn crate::types::traits::SessionManagerServiceRequestSpecTrait) -> Result<crate::types::structs::SessionManagerGenericServiceTicket> {
         let input = AcquireGenericServiceTicketRequestType {spec, };
         let path = format!("/SessionManager/{moId}/AcquireGenericServiceTicket", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -119,7 +117,7 @@ impl SessionManager {
     /// granted.
     /// 
     /// ***NotSupported***: if the server does not support this operation.
-    pub async fn acquire_local_ticket(&self, user_name: &str) -> Result<SessionManagerLocalTicket> {
+    pub async fn acquire_local_ticket(&self, user_name: &str) -> Result<crate::types::structs::SessionManagerLocalTicket> {
         let input = AcquireLocalTicketRequestType {user_name, };
         let path = format!("/SessionManager/{moId}/AcquireLocalTicket", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -150,7 +148,7 @@ impl SessionManager {
     /// ***InvalidLogin***: if the specified ticket value is not valid.
     /// 
     /// ***NotSupported***: if the server does not support this operation.
-    pub async fn clone_session(&self, clone_ticket: &str) -> Result<UserSession> {
+    pub async fn clone_session(&self, clone_ticket: &str) -> Result<crate::types::structs::UserSession> {
         let input = CloneSessionRequestType {clone_ticket, };
         let path = format!("/SessionManager/{moId}/CloneSession", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -186,7 +184,7 @@ impl SessionManager {
     /// ## Errors:
     ///
     /// Failure
-    pub async fn impersonate_user(&self, user_name: &str, locale: Option<&str>) -> Result<UserSession> {
+    pub async fn impersonate_user(&self, user_name: &str, locale: Option<&str>) -> Result<crate::types::structs::UserSession> {
         let input = ImpersonateUserRequestType {user_name, locale, };
         let path = format!("/SessionManager/{moId}/ImpersonateUser", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -234,7 +232,7 @@ impl SessionManager {
     /// ***NoPermission***: if the user is valid, but has no access granted.
     /// 
     /// ***InvalidLocale***: if the locale is invalid or unknown to the server.
-    pub async fn login(&self, user_name: &str, password: &str, locale: Option<&str>) -> Result<UserSession> {
+    pub async fn login(&self, user_name: &str, password: &str, locale: Option<&str>) -> Result<crate::types::structs::UserSession> {
         let input = LoginRequestType {user_name, password, locale, };
         let path = format!("/SessionManager/{moId}/Login", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -299,7 +297,7 @@ impl SessionManager {
     /// ***InvalidLocale***: if the locale is invalid or unknown to the server.
     /// 
     /// ***NotSupported***: if the service does not support SSPI authentication.
-    pub async fn login_by_sspi(&self, base_64_token: &str, locale: Option<&str>) -> Result<UserSession> {
+    pub async fn login_by_sspi(&self, base_64_token: &str, locale: Option<&str>) -> Result<crate::types::structs::UserSession> {
         let input = LoginBySspiRequestType {base_64_token, locale, };
         let path = format!("/SessionManager/{moId}/LoginBySSPI", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -355,7 +353,7 @@ impl SessionManager {
     /// ***NoPermission***: if the principal is valid, but has no access granted.
     /// 
     /// ***InvalidLocale***: if the locale is invalid or unknown to the server.
-    pub async fn login_by_token(&self, locale: Option<&str>) -> Result<UserSession> {
+    pub async fn login_by_token(&self, locale: Option<&str>) -> Result<crate::types::structs::UserSession> {
         let input = LoginByTokenRequestType {locale, };
         let path = format!("/SessionManager/{moId}/LoginByToken", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -402,7 +400,7 @@ impl SessionManager {
     /// ## Errors:
     ///
     /// Failure
-    pub async fn login_extension(&self, extension_key: &str, base_64_signed_credentials: &str, locale: Option<&str>) -> Result<UserSession> {
+    pub async fn login_extension(&self, extension_key: &str, base_64_signed_credentials: &str, locale: Option<&str>) -> Result<crate::types::structs::UserSession> {
         let input = LoginExtensionRequestType {extension_key, base_64_signed_credentials, locale, };
         let path = format!("/SessionManager/{moId}/LoginExtension", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -450,7 +448,7 @@ impl SessionManager {
     /// ***InvalidLocale***: if the supplied locale is not valid
     /// 
     /// ***NoClientCertificate***: if no certificate was used by the client to connect
-    pub async fn login_extension_by_certificate(&self, extension_key: &str, locale: Option<&str>) -> Result<UserSession> {
+    pub async fn login_extension_by_certificate(&self, extension_key: &str, locale: Option<&str>) -> Result<crate::types::structs::UserSession> {
         let input = LoginExtensionByCertificateRequestType {extension_key, locale, };
         let path = format!("/SessionManager/{moId}/LoginExtensionByCertificate", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -501,7 +499,7 @@ impl SessionManager {
     /// ***NoSubjectName***: if the extension was registered without a subject name
     /// 
     /// ***InvalidClientCertificate***: if the client cerificate fails the verification at the server
-    pub async fn login_extension_by_subject_name(&self, extension_key: &str, locale: Option<&str>) -> Result<UserSession> {
+    pub async fn login_extension_by_subject_name(&self, extension_key: &str, locale: Option<&str>) -> Result<crate::types::structs::UserSession> {
         let input = LoginExtensionBySubjectNameRequestType {extension_key, locale, };
         let path = format!("/SessionManager/{moId}/LoginExtensionBySubjectName", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -612,7 +610,7 @@ impl SessionManager {
     /// If the client is not logged on, the value is null.
     /// 
     /// ***Required privileges:*** System.Anonymous
-    pub async fn current_session(&self) -> Result<Option<UserSession>> {
+    pub async fn current_session(&self) -> Result<Option<crate::types::structs::UserSession>> {
         let path = format!("/SessionManager/{moId}/currentSession", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -644,7 +642,7 @@ impl SessionManager {
     /// The list of currently active sessions.
     /// 
     /// ***Required privileges:*** Sessions.TerminateSession
-    pub async fn session_list(&self) -> Result<Option<Vec<UserSession>>> {
+    pub async fn session_list(&self) -> Result<Option<Vec<crate::types::structs::UserSession>>> {
         let path = format!("/SessionManager/{moId}/sessionList", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await

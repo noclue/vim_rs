@@ -1,16 +1,11 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::Event;
-use crate::types::structs::EventArgDesc;
-use crate::types::structs::EventDescription;
-use crate::types::structs::EventFilterSpec;
-use crate::types::structs::ManagedObjectReference;
-use crate::types::structs::TaskInfo;
 /// This managed object type provides properties and methods for
 /// event management support.
 /// 
 /// Event objects are used to record significant state changes of
 /// managed entities.
+#[derive(Clone)]
 pub struct EventManager {
     client: Arc<Client>,
     mo_id: String,
@@ -36,7 +31,7 @@ impl EventManager {
     /// ## Returns:
     ///
     /// The events matching the filter.
-    pub async fn query_events(&self, filter: &EventFilterSpec) -> Result<Option<Vec<Event>>> {
+    pub async fn query_events(&self, filter: &crate::types::structs::EventFilterSpec) -> Result<Option<Vec<crate::types::structs::Event>>> {
         let input = QueryEventsRequestType {filter, };
         let path = format!("/EventManager/{moId}/QueryEvents", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -69,7 +64,7 @@ impl EventManager {
     /// 
     /// ***InvalidState***: if there are more than the maximum number of
     /// event collectors.
-    pub async fn create_collector_for_events(&self, filter: &EventFilterSpec) -> Result<ManagedObjectReference> {
+    pub async fn create_collector_for_events(&self, filter: &crate::types::structs::EventFilterSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateCollectorForEventsRequestType {filter, };
         let path = format!("/EventManager/{moId}/CreateCollectorForEvents", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -90,7 +85,7 @@ impl EventManager {
     ///
     /// ### msg
     /// The message to be logged.
-    pub async fn log_user_event(&self, entity: &ManagedObjectReference, msg: &str) -> Result<()> {
+    pub async fn log_user_event(&self, entity: &crate::types::structs::ManagedObjectReference, msg: &str) -> Result<()> {
         let input = LogUserEventRequestType {entity, msg, };
         let path = format!("/EventManager/{moId}/LogUserEvent", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -132,7 +127,7 @@ impl EventManager {
     /// - an invalid severity value is passed in an *EventEx*.
     ///   
     /// ***InvalidEvent***: no longer thrown by this API
-    pub async fn post_event(&self, event_to_post: &Event, task_info: Option<&TaskInfo>) -> Result<()> {
+    pub async fn post_event(&self, event_to_post: &crate::types::structs::Event, task_info: Option<&crate::types::structs::TaskInfo>) -> Result<()> {
         let input = PostEventRequestType {event_to_post, task_info, };
         let path = format!("/EventManager/{moId}/PostEvent", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -146,7 +141,7 @@ impl EventManager {
     ///
     /// ### event_type_id
     /// -
-    pub async fn retrieve_argument_description(&self, event_type_id: &str) -> Result<Option<Vec<EventArgDesc>>> {
+    pub async fn retrieve_argument_description(&self, event_type_id: &str) -> Result<Option<Vec<crate::types::structs::EventArgDesc>>> {
         let input = RetrieveArgumentDescriptionRequestType {event_type_id, };
         let path = format!("/EventManager/{moId}/RetrieveArgumentDescription", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -155,7 +150,7 @@ impl EventManager {
     /// Static descriptive strings used in events.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn description(&self) -> Result<EventDescription> {
+    pub async fn description(&self) -> Result<crate::types::structs::EventDescription> {
         let path = format!("/EventManager/{moId}/description", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute(req).await
@@ -163,7 +158,7 @@ impl EventManager {
     /// The latest event that happened on the VirtualCenter server.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn latest_event(&self) -> Result<Option<Event>> {
+    pub async fn latest_event(&self) -> Result<Option<crate::types::structs::Event>> {
         let path = format!("/EventManager/{moId}/latestEvent", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -181,27 +176,27 @@ impl EventManager {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct QueryEventsRequestType<'a> {
-    filter: &'a EventFilterSpec,
+    filter: &'a crate::types::structs::EventFilterSpec,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct CreateCollectorForEventsRequestType<'a> {
-    filter: &'a EventFilterSpec,
+    filter: &'a crate::types::structs::EventFilterSpec,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct LogUserEventRequestType<'a> {
-    entity: &'a ManagedObjectReference,
+    entity: &'a crate::types::structs::ManagedObjectReference,
     msg: &'a str,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct PostEventRequestType<'a> {
     #[serde(rename = "eventToPost")]
-    event_to_post: &'a Event,
+    event_to_post: &'a crate::types::structs::Event,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "taskInfo")]
-    task_info: Option<&'a TaskInfo>,
+    task_info: Option<&'a crate::types::structs::TaskInfo>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]

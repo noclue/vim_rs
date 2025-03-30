@@ -1,12 +1,10 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::ManagedObjectReference;
-use crate::types::structs::VsanUpgradeSystemPreflightCheckResult;
-use crate::types::structs::VsanUpgradeSystemUpgradeStatus;
 /// VSAN Upgrade System.
 /// 
 /// Used to perform and monitor VSAN on-disk format
 /// upgrades.
+#[derive(Clone)]
 pub struct VsanUpgradeSystem {
     client: Arc<Client>,
     mo_id: String,
@@ -97,7 +95,7 @@ impl VsanUpgradeSystem {
     /// ## Errors:
     ///
     /// Failure
-    pub async fn perform_vsan_upgrade_task(&self, cluster: &ManagedObjectReference, perform_object_upgrade: Option<bool>, downgrade_format: Option<bool>, allow_reduced_redundancy: Option<bool>, exclude_hosts: Option<&[ManagedObjectReference]>) -> Result<ManagedObjectReference> {
+    pub async fn perform_vsan_upgrade_task(&self, cluster: &crate::types::structs::ManagedObjectReference, perform_object_upgrade: Option<bool>, downgrade_format: Option<bool>, allow_reduced_redundancy: Option<bool>, exclude_hosts: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = PerformVsanUpgradeRequestType {cluster, perform_object_upgrade, downgrade_format, allow_reduced_redundancy, exclude_hosts, };
         let path = format!("/VsanUpgradeSystem/{moId}/PerformVsanUpgrade_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -125,7 +123,7 @@ impl VsanUpgradeSystem {
     /// ## Errors:
     ///
     /// Failure
-    pub async fn perform_vsan_upgrade_preflight_check(&self, cluster: &ManagedObjectReference, downgrade_format: Option<bool>) -> Result<VsanUpgradeSystemPreflightCheckResult> {
+    pub async fn perform_vsan_upgrade_preflight_check(&self, cluster: &crate::types::structs::ManagedObjectReference, downgrade_format: Option<bool>) -> Result<crate::types::structs::VsanUpgradeSystemPreflightCheckResult> {
         let input = PerformVsanUpgradePreflightCheckRequestType {cluster, downgrade_format, };
         let path = format!("/VsanUpgradeSystem/{moId}/PerformVsanUpgradePreflightCheck", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -153,7 +151,7 @@ impl VsanUpgradeSystem {
     /// ## Errors:
     ///
     /// Failure
-    pub async fn query_vsan_upgrade_status(&self, cluster: &ManagedObjectReference) -> Result<VsanUpgradeSystemUpgradeStatus> {
+    pub async fn query_vsan_upgrade_status(&self, cluster: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::VsanUpgradeSystemUpgradeStatus> {
         let input = QueryVsanUpgradeStatusRequestType {cluster, };
         let path = format!("/VsanUpgradeSystem/{moId}/QueryVsanUpgradeStatus", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -163,7 +161,7 @@ impl VsanUpgradeSystem {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct PerformVsanUpgradeRequestType<'a> {
-    cluster: &'a ManagedObjectReference,
+    cluster: &'a crate::types::structs::ManagedObjectReference,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "performObjectUpgrade")]
     perform_object_upgrade: Option<bool>,
@@ -175,12 +173,12 @@ struct PerformVsanUpgradeRequestType<'a> {
     allow_reduced_redundancy: Option<bool>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "excludeHosts")]
-    exclude_hosts: Option<&'a [ManagedObjectReference]>,
+    exclude_hosts: Option<&'a [crate::types::structs::ManagedObjectReference]>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct PerformVsanUpgradePreflightCheckRequestType<'a> {
-    cluster: &'a ManagedObjectReference,
+    cluster: &'a crate::types::structs::ManagedObjectReference,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "downgradeFormat")]
     downgrade_format: Option<bool>,
@@ -188,5 +186,5 @@ struct PerformVsanUpgradePreflightCheckRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct QueryVsanUpgradeStatusRequestType<'a> {
-    cluster: &'a ManagedObjectReference,
+    cluster: &'a crate::types::structs::ManagedObjectReference,
 }

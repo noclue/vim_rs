@@ -1,13 +1,11 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::CustomFieldDef;
-use crate::types::structs::ManagedObjectReference;
-use crate::types::structs::VirtualMachineConfigInfo;
 /// The Snapshot managed object type specifies the interface to individual snapshots
 /// of a virtual machine.
 /// 
 /// Although these are managed objects, they are subordinate to
 /// their virtual machine.
+#[derive(Clone)]
 pub struct VirtualMachineSnapshot {
     client: Arc<Client>,
     mo_id: String,
@@ -46,7 +44,7 @@ impl VirtualMachineSnapshot {
     /// configuration information is not available.
     /// 
     /// ***FileFault***: if there is an error accessing the virtual machine files.
-    pub async fn export_snapshot(&self) -> Result<ManagedObjectReference> {
+    pub async fn export_snapshot(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/VirtualMachineSnapshot/{moId}/ExportSnapshot", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute(req).await
@@ -74,7 +72,7 @@ impl VirtualMachineSnapshot {
     /// ## Errors:
     ///
     /// ***TaskInProgress***: if the virtual machine is busy.
-    pub async fn remove_snapshot_task(&self, remove_children: bool, consolidate: Option<bool>) -> Result<ManagedObjectReference> {
+    pub async fn remove_snapshot_task(&self, remove_children: bool, consolidate: Option<bool>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RemoveSnapshotRequestType {remove_children, consolidate, };
         let path = format!("/VirtualMachineSnapshot/{moId}/RemoveSnapshot_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -168,7 +166,7 @@ impl VirtualMachineSnapshot {
     /// 
     /// ***FileFault***: if there is a problem accessing the virtual machine on the
     /// filesystem.
-    pub async fn revert_to_snapshot_task(&self, host: Option<&ManagedObjectReference>, suppress_power_on: Option<bool>) -> Result<ManagedObjectReference> {
+    pub async fn revert_to_snapshot_task(&self, host: Option<&crate::types::structs::ManagedObjectReference>, suppress_power_on: Option<bool>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RevertToSnapshotRequestType {host, suppress_power_on, };
         let path = format!("/VirtualMachineSnapshot/{moId}/RevertToSnapshot_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -199,7 +197,7 @@ impl VirtualMachineSnapshot {
     /// The fields are sorted by *CustomFieldDef.name*.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn available_field(&self) -> Result<Option<Vec<CustomFieldDef>>> {
+    pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
         let path = format!("/VirtualMachineSnapshot/{moId}/availableField", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -209,7 +207,7 @@ impl VirtualMachineSnapshot {
     /// ## Returns:
     ///
     /// Refers instances of *VirtualMachineSnapshot*.
-    pub async fn child_snapshot(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
+    pub async fn child_snapshot(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/VirtualMachineSnapshot/{moId}/childSnapshot", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -220,7 +218,7 @@ impl VirtualMachineSnapshot {
     /// The datastore paths for the virtual machine disks point to the head of the disk
     /// chain that represents the disk at this given snapshot. The fileInfo.fileLayout
     /// field is not set.
-    pub async fn config(&self) -> Result<VirtualMachineConfigInfo> {
+    pub async fn config(&self) -> Result<crate::types::structs::VirtualMachineConfigInfo> {
         let path = format!("/VirtualMachineSnapshot/{moId}/config", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute(req).await
@@ -242,7 +240,7 @@ impl VirtualMachineSnapshot {
     /// ## Returns:
     ///
     /// Refers instance of *VirtualMachine*.
-    pub async fn vm(&self) -> Result<ManagedObjectReference> {
+    pub async fn vm(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/VirtualMachineSnapshot/{moId}/vm", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute(req).await
@@ -268,7 +266,7 @@ struct RenameSnapshotRequestType<'a> {
 #[serde(tag="_typeName")]
 struct RevertToSnapshotRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    host: Option<&'a ManagedObjectReference>,
+    host: Option<&'a crate::types::structs::ManagedObjectReference>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "suppressPowerOn")]
     suppress_power_on: Option<bool>,

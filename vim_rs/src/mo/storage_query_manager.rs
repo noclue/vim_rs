@@ -1,8 +1,8 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::ManagedObjectReference;
 /// This managed object is used to query vCenter Server's storage system
 /// entities.
+#[derive(Clone)]
 pub struct StorageQueryManager {
     client: Arc<Client>,
     mo_id: String,
@@ -33,7 +33,7 @@ impl StorageQueryManager {
     /// specified lun in attached state.
     /// 
     /// Refers instances of *HostSystem*.
-    pub async fn query_hosts_with_attached_lun(&self, lun_uuid: &str) -> Result<Option<Vec<ManagedObjectReference>>> {
+    pub async fn query_hosts_with_attached_lun(&self, lun_uuid: &str) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let input = QueryHostsWithAttachedLunRequestType {lun_uuid, };
         let path = format!("/StorageQueryManager/{moId}/QueryHostsWithAttachedLun", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);

@@ -1,13 +1,12 @@
 use std::borrow::Borrow;
 use std::cell::RefCell;
-use std::collections::HashSet;
 
 use super::common::emit_description;
 use super::errors::{Error, Result};
 use super::TypeDefResolver;
 use super::{to_fn_name, to_type_name};
 use crate::printer::Printer;
-use crate::vim_model::{DataType, EmitMode};
+use crate::vim_model::DataType;
 use crate::vim_model::HttpMethod;
 use crate::vim_model::ManagedObject;
 use crate::vim_model::Method;
@@ -48,82 +47,13 @@ impl<'a> ManagedObjectEmitter<'a> {
         self.printer.println("use std::sync::Arc;")?;
         self.printer
             .println("use crate::core::client::{Client, Result};")?;
-        let imported_types = self.get_imported_types()?;
-        for type_name in &imported_types {
-            self.printer
-                .println(&format!("use crate::types::{type_name};"))?;
-        }
         Ok(())
     }
-
-    /// Check for structs referenced to by method return types and members of the *RequestType type.
-    fn get_imported_types(&self) -> Result<Vec<String>> {
-        let mut types: HashSet<String> = HashSet::new();
-        for method in self.mo.methods.iter() {
-            if let Some(output) = &method.output {
-                self.accumulate_type_reference(output, &mut types)?;
-            }
-            let Some(request_type) = get_request_type(method, self.vim_model)? else {
-                continue;
-            };
-            for (_, field) in &request_type.borrow().fields {
-                self.accumulate_type_reference(&field.vim_type, &mut types)?;
-            }
-        }
-        let mut types_vec = Vec::from_iter(types);
-        types_vec.sort();
-        Ok(types_vec)
-    }
-
-    fn accumulate_type_reference(
-        &self,
-        output: &DataType,
-        types: &mut HashSet<String>,
-    ) -> Result<()> {
-        match output {
-            DataType::Reference(ref_name) => {
-                if let Some(type_name) = self.resolve_import_type(ref_name)? {
-                    types.insert(type_name);
-                }
-            }
-            DataType::Array(arr_type) => {
-                if let DataType::Reference(ref_name) = arr_type.as_ref() {
-                    if let Some(type_name) = self.resolve_import_type(ref_name)? {
-                        types.insert(type_name);
-                    }
-                }
-            }
-            _ => {}
-        };
-        Ok(())
-    }
-
-    fn resolve_import_type(&self, ref_name: &str) -> Result<Option<String>> {
-        if ref_name == "Any" {
-            return Ok(Some("vim_any::VimAny".to_string()));
-        }
-        let rust_name = to_type_name(ref_name);
-        if let Some(struct_ref) = self.vim_model.structs.get(ref_name) {
-            if struct_ref.borrow().has_children() && struct_ref.borrow().emit_mode == EmitMode::Emit {
-                Ok(None)
-            } else {
-                let rust_name = if let EmitMode::Skip(ref pruned) = struct_ref.borrow().emit_mode {
-                    to_type_name(pruned)
-                } else {
-                    rust_name
-                };
-                Ok(Some(format!("structs::{rust_name}")))
-            }
-        } else if self.vim_model.enums.contains_key(ref_name) {
-            Ok(None)
-        } else {
-            Err(Error::TypeNotFound(ref_name.to_string()))
-        }
-    }
-
+    
     fn emit_mo_struct(&mut self) -> Result<()> {
         emit_description(self.printer, &self.mo.description)?;
         let struct_name = to_type_name(&self.mo.name);
+        self.printer.println("#[derive(Clone)]")?;
         self.printer
             .println(&format!("pub struct {} {{", struct_name))?;
         self.printer.indent();

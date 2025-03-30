@@ -1,9 +1,5 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::ClusterIoFilterInfo;
-use crate::types::structs::IoFilterQueryIssueResult;
-use crate::types::structs::ManagedObjectReference;
-use crate::types::structs::VirtualDiskId;
 /// Interface to manage IO Filters installed on the ESXi hosts and
 /// IO Filter configurations on virtual disks.
 /// 
@@ -12,6 +8,7 @@ use crate::types::structs::VirtualDiskId;
 /// They can be used to provide data services such as flash caching and
 /// replication.
 /// This interface is only supported on vCenter server.
+#[derive(Clone)]
 pub struct IoFilterManager {
     client: Arc<Client>,
     mo_id: String,
@@ -58,7 +55,7 @@ impl IoFilterManager {
     /// 
     /// ***AlreadyExists***: if another VIB with the same name and vendor has
     /// been installed.
-    pub async fn install_io_filter_task(&self, vib_url: &str, comp_res: &ManagedObjectReference) -> Result<ManagedObjectReference> {
+    pub async fn install_io_filter_task(&self, vib_url: &str, comp_res: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = InstallIoFilterRequestType {vib_url, comp_res, };
         let path = format!("/IoFilterManager/{moId}/InstallIoFilter_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -89,7 +86,7 @@ impl IoFilterManager {
     ///
     /// ***NotFound***: if the filter specified by "filterId" is
     /// not installed on the cluster.
-    pub async fn query_disks_using_filter(&self, filter_id: &str, comp_res: &ManagedObjectReference) -> Result<Vec<VirtualDiskId>> {
+    pub async fn query_disks_using_filter(&self, filter_id: &str, comp_res: &crate::types::structs::ManagedObjectReference) -> Result<Vec<crate::types::structs::VirtualDiskId>> {
         let input = QueryDisksUsingFilterRequestType {filter_id, comp_res, };
         let path = format!("/IoFilterManager/{moId}/QueryDisksUsingFilter", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -112,7 +109,7 @@ impl IoFilterManager {
     /// An array of *ClusterIoFilterInfo* objects
     /// that contain the information for the IO Filters that are installed
     /// on the compute resource.
-    pub async fn query_io_filter_info(&self, comp_res: &ManagedObjectReference) -> Result<Option<Vec<ClusterIoFilterInfo>>> {
+    pub async fn query_io_filter_info(&self, comp_res: &crate::types::structs::ManagedObjectReference) -> Result<Option<Vec<crate::types::structs::ClusterIoFilterInfo>>> {
         let input = QueryIoFilterInfoRequestType {comp_res, };
         let path = format!("/IoFilterManager/{moId}/QueryIoFilterInfo", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -142,7 +139,7 @@ impl IoFilterManager {
     ///
     /// ***NotFound***: if the filter specified by "filterId" is
     /// not installed on the cluster.
-    pub async fn query_io_filter_issues(&self, filter_id: &str, comp_res: &ManagedObjectReference) -> Result<IoFilterQueryIssueResult> {
+    pub async fn query_io_filter_issues(&self, filter_id: &str, comp_res: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::IoFilterQueryIssueResult> {
         let input = QueryIoFilterIssuesRequestType {filter_id, comp_res, };
         let path = format!("/IoFilterManager/{moId}/QueryIoFilterIssues", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -185,7 +182,7 @@ impl IoFilterManager {
     ///
     /// ***NotFound***: if the filter specified by "filterId" is
     /// not installed on the cluster.
-    pub async fn resolve_installation_errors_on_cluster_task(&self, filter_id: &str, cluster: &ManagedObjectReference) -> Result<ManagedObjectReference> {
+    pub async fn resolve_installation_errors_on_cluster_task(&self, filter_id: &str, cluster: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ResolveInstallationErrorsOnClusterRequestType {filter_id, cluster, };
         let path = format!("/IoFilterManager/{moId}/ResolveInstallationErrorsOnCluster_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -228,7 +225,7 @@ impl IoFilterManager {
     ///
     /// ***NotFound***: if the filter specified by "filterId" is
     /// not installed on the cluster.
-    pub async fn resolve_installation_errors_on_host_task(&self, filter_id: &str, host: &ManagedObjectReference) -> Result<ManagedObjectReference> {
+    pub async fn resolve_installation_errors_on_host_task(&self, filter_id: &str, host: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ResolveInstallationErrorsOnHostRequestType {filter_id, host, };
         let path = format!("/IoFilterManager/{moId}/ResolveInstallationErrorsOnHost_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -273,7 +270,7 @@ impl IoFilterManager {
     /// 
     /// ***InvalidState***: if "compRes" is a cluster and DRS is disabled
     /// on the cluster.
-    pub async fn uninstall_io_filter_task(&self, filter_id: &str, comp_res: &ManagedObjectReference) -> Result<ManagedObjectReference> {
+    pub async fn uninstall_io_filter_task(&self, filter_id: &str, comp_res: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = UninstallIoFilterRequestType {filter_id, comp_res, };
         let path = format!("/IoFilterManager/{moId}/UninstallIoFilter_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -321,7 +318,7 @@ impl IoFilterManager {
     /// 
     /// ***InvalidState***: if "compRes" is a cluster and DRS is disabled
     /// on the cluster.
-    pub async fn upgrade_io_filter_task(&self, filter_id: &str, comp_res: &ManagedObjectReference, vib_url: &str) -> Result<ManagedObjectReference> {
+    pub async fn upgrade_io_filter_task(&self, filter_id: &str, comp_res: &crate::types::structs::ManagedObjectReference, vib_url: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = UpgradeIoFilterRequestType {filter_id, comp_res, vib_url, };
         let path = format!("/IoFilterManager/{moId}/UpgradeIoFilter_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -334,7 +331,7 @@ struct InstallIoFilterRequestType<'a> {
     #[serde(rename = "vibUrl")]
     vib_url: &'a str,
     #[serde(rename = "compRes")]
-    comp_res: &'a ManagedObjectReference,
+    comp_res: &'a crate::types::structs::ManagedObjectReference,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -342,13 +339,13 @@ struct QueryDisksUsingFilterRequestType<'a> {
     #[serde(rename = "filterId")]
     filter_id: &'a str,
     #[serde(rename = "compRes")]
-    comp_res: &'a ManagedObjectReference,
+    comp_res: &'a crate::types::structs::ManagedObjectReference,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct QueryIoFilterInfoRequestType<'a> {
     #[serde(rename = "compRes")]
-    comp_res: &'a ManagedObjectReference,
+    comp_res: &'a crate::types::structs::ManagedObjectReference,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -356,21 +353,21 @@ struct QueryIoFilterIssuesRequestType<'a> {
     #[serde(rename = "filterId")]
     filter_id: &'a str,
     #[serde(rename = "compRes")]
-    comp_res: &'a ManagedObjectReference,
+    comp_res: &'a crate::types::structs::ManagedObjectReference,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct ResolveInstallationErrorsOnClusterRequestType<'a> {
     #[serde(rename = "filterId")]
     filter_id: &'a str,
-    cluster: &'a ManagedObjectReference,
+    cluster: &'a crate::types::structs::ManagedObjectReference,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct ResolveInstallationErrorsOnHostRequestType<'a> {
     #[serde(rename = "filterId")]
     filter_id: &'a str,
-    host: &'a ManagedObjectReference,
+    host: &'a crate::types::structs::ManagedObjectReference,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -378,7 +375,7 @@ struct UninstallIoFilterRequestType<'a> {
     #[serde(rename = "filterId")]
     filter_id: &'a str,
     #[serde(rename = "compRes")]
-    comp_res: &'a ManagedObjectReference,
+    comp_res: &'a crate::types::structs::ManagedObjectReference,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -386,7 +383,7 @@ struct UpgradeIoFilterRequestType<'a> {
     #[serde(rename = "filterId")]
     filter_id: &'a str,
     #[serde(rename = "compRes")]
-    comp_res: &'a ManagedObjectReference,
+    comp_res: &'a crate::types::structs::ManagedObjectReference,
     #[serde(rename = "vibUrl")]
     vib_url: &'a str,
 }

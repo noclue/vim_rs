@@ -1,15 +1,12 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::HostDateTimeConfig;
-use crate::types::structs::HostDateTimeInfo;
-use crate::types::structs::HostDateTimeSystemServiceTestResult;
-use crate::types::structs::HostDateTimeSystemTimeZone;
 /// This managed object provides for NTP and date/time related
 /// configuration on a host.
 /// 
 /// Information regarding the running status of the NTP daemon and
 /// functionality to start and stop the daemon is provided by the
 /// *HostServiceSystem* object.
+#[derive(Clone)]
 pub struct HostDateTimeSystem {
     client: Arc<Client>,
     mo_id: String,
@@ -30,7 +27,7 @@ impl HostDateTimeSystem {
     /// ## Returns:
     ///
     /// List of available timezones on the host.
-    pub async fn query_available_time_zones(&self) -> Result<Option<Vec<HostDateTimeSystemTimeZone>>> {
+    pub async fn query_available_time_zones(&self) -> Result<Option<Vec<crate::types::structs::HostDateTimeSystemTimeZone>>> {
         let path = format!("/HostDateTimeSystem/{moId}/QueryAvailableTimeZones", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute_option(req).await
@@ -70,7 +67,7 @@ impl HostDateTimeSystem {
     ///
     /// The status of the time service on this host based on present time
     /// service configuration.
-    pub async fn test_time_service(&self) -> Result<Option<HostDateTimeSystemServiceTestResult>> {
+    pub async fn test_time_service(&self) -> Result<Option<crate::types::structs::HostDateTimeSystemServiceTestResult>> {
         let path = format!("/HostDateTimeSystem/{moId}/TestTimeService", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute_option(req).await
@@ -87,7 +84,7 @@ impl HostDateTimeSystem {
     /// ## Errors:
     ///
     /// ***HostConfigFault***: if an error occurs.
-    pub async fn update_date_time_config(&self, config: &HostDateTimeConfig) -> Result<()> {
+    pub async fn update_date_time_config(&self, config: &crate::types::structs::HostDateTimeConfig) -> Result<()> {
         let input = UpdateDateTimeConfigRequestType {config, };
         let path = format!("/HostDateTimeSystem/{moId}/UpdateDateTimeConfig", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -121,7 +118,7 @@ impl HostDateTimeSystem {
     /// ## Returns:
     ///
     /// DateTime configuration of the host.
-    pub async fn date_time_info(&self) -> Result<HostDateTimeInfo> {
+    pub async fn date_time_info(&self) -> Result<crate::types::structs::HostDateTimeInfo> {
         let path = format!("/HostDateTimeSystem/{moId}/dateTimeInfo", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute(req).await
@@ -130,7 +127,7 @@ impl HostDateTimeSystem {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct UpdateDateTimeConfigRequestType<'a> {
-    config: &'a HostDateTimeConfig,
+    config: &'a crate::types::structs::HostDateTimeConfig,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]

@@ -1,7 +1,5 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::HostDiskDimensionsChs;
-use crate::types::structs::ManagedObjectReference;
 /// Most VirtualDiskManager APIs will be DEPRECATED as of vSphere 6.5.
 /// Please use VStorageObjectManager APIs to manage Virtual disks.
 /// 
@@ -33,6 +31,7 @@ use crate::types::structs::ManagedObjectReference;
 /// a datastore can be obtained from the datastore browser.
 /// 
 /// See also *HostDatastoreBrowser*.
+#[derive(Clone)]
 pub struct VirtualDiskManager {
     client: Arc<Client>,
     mo_id: String,
@@ -108,7 +107,7 @@ impl VirtualDiskManager {
     /// or destination datastore.
     /// 
     /// ***InvalidDiskFormat***: if the destination's format is not supported.
-    pub async fn copy_virtual_disk_task(&self, source_name: &str, source_datacenter: Option<&ManagedObjectReference>, dest_name: &str, dest_datacenter: Option<&ManagedObjectReference>, dest_spec: Option<&dyn crate::types::traits::VirtualDiskSpecTrait>, force: Option<bool>) -> Result<ManagedObjectReference> {
+    pub async fn copy_virtual_disk_task(&self, source_name: &str, source_datacenter: Option<&crate::types::structs::ManagedObjectReference>, dest_name: &str, dest_datacenter: Option<&crate::types::structs::ManagedObjectReference>, dest_spec: Option<&dyn crate::types::traits::VirtualDiskSpecTrait>, force: Option<bool>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CopyVirtualDiskRequestType {source_name, source_datacenter, dest_name, dest_datacenter, dest_spec, force, };
         let path = format!("/VirtualDiskManager/{moId}/CopyVirtualDisk_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -155,7 +154,7 @@ impl VirtualDiskManager {
     /// ***FileFault***: if an error occurs creating the virtual disk.
     /// 
     /// ***InvalidDatastore***: if the operation cannot be performed on the datastore.
-    pub async fn create_virtual_disk_task(&self, name: &str, datacenter: Option<&ManagedObjectReference>, spec: &dyn crate::types::traits::VirtualDiskSpecTrait) -> Result<ManagedObjectReference> {
+    pub async fn create_virtual_disk_task(&self, name: &str, datacenter: Option<&crate::types::structs::ManagedObjectReference>, spec: &dyn crate::types::traits::VirtualDiskSpecTrait) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateVirtualDiskRequestType {name, datacenter, spec, };
         let path = format!("/VirtualDiskManager/{moId}/CreateVirtualDisk_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -203,7 +202,7 @@ impl VirtualDiskManager {
     /// ***FileFault***: if an error occurs defragmenting the virtual disk.
     /// 
     /// ***InvalidDatastore***: if the operation cannot be performed on the datastore.
-    pub async fn defragment_virtual_disk_task(&self, name: &str, datacenter: Option<&ManagedObjectReference>) -> Result<ManagedObjectReference> {
+    pub async fn defragment_virtual_disk_task(&self, name: &str, datacenter: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = DefragmentVirtualDiskRequestType {name, datacenter, };
         let path = format!("/VirtualDiskManager/{moId}/DefragmentVirtualDisk_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -252,7 +251,7 @@ impl VirtualDiskManager {
     /// ***FileFault***: if an error occurs deleting the virtual disk.
     /// 
     /// ***InvalidDatastore***: if the operation cannot be performed on the datastore.
-    pub async fn delete_virtual_disk_task(&self, name: &str, datacenter: Option<&ManagedObjectReference>) -> Result<ManagedObjectReference> {
+    pub async fn delete_virtual_disk_task(&self, name: &str, datacenter: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = DeleteVirtualDiskRequestType {name, datacenter, };
         let path = format!("/VirtualDiskManager/{moId}/DeleteVirtualDisk_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -297,7 +296,7 @@ impl VirtualDiskManager {
     /// ***FileFault***: if an error occurs while eager-zeroing the virtual disk.
     /// 
     /// ***InvalidDatastore***: if the operation cannot be performed on the datastore.
-    pub async fn eager_zero_virtual_disk_task(&self, name: &str, datacenter: Option<&ManagedObjectReference>) -> Result<ManagedObjectReference> {
+    pub async fn eager_zero_virtual_disk_task(&self, name: &str, datacenter: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = EagerZeroVirtualDiskRequestType {name, datacenter, };
         let path = format!("/VirtualDiskManager/{moId}/EagerZeroVirtualDisk_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -358,7 +357,7 @@ impl VirtualDiskManager {
     /// ***FileFault***: if an error occurs extending the virtual disk.
     /// 
     /// ***InvalidDatastore***: if the operation cannot be performed on the datastore.
-    pub async fn extend_virtual_disk_task(&self, name: &str, datacenter: Option<&ManagedObjectReference>, new_capacity_kb: i64, eager_zero: Option<bool>) -> Result<ManagedObjectReference> {
+    pub async fn extend_virtual_disk_task(&self, name: &str, datacenter: Option<&crate::types::structs::ManagedObjectReference>, new_capacity_kb: i64, eager_zero: Option<bool>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ExtendVirtualDiskRequestType {name, datacenter, new_capacity_kb, eager_zero, };
         let path = format!("/VirtualDiskManager/{moId}/ExtendVirtualDisk_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -404,7 +403,7 @@ impl VirtualDiskManager {
     /// 
     /// ***InvalidDatastore***: if the operation cannot be performed on the
     /// datastore.
-    pub async fn import_unmanaged_snapshot(&self, vdisk: &str, datacenter: Option<&ManagedObjectReference>, vvol_id: &str) -> Result<()> {
+    pub async fn import_unmanaged_snapshot(&self, vdisk: &str, datacenter: Option<&crate::types::structs::ManagedObjectReference>, vvol_id: &str) -> Result<()> {
         let input = ImportUnmanagedSnapshotRequestType {vdisk, datacenter, vvol_id, };
         let path = format!("/VirtualDiskManager/{moId}/ImportUnmanagedSnapshot", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -451,7 +450,7 @@ impl VirtualDiskManager {
     /// ***FileFault***: if an error occurs inflating the virtual disk.
     /// 
     /// ***InvalidDatastore***: if the operation cannot be performed on the datastore.
-    pub async fn inflate_virtual_disk_task(&self, name: &str, datacenter: Option<&ManagedObjectReference>) -> Result<ManagedObjectReference> {
+    pub async fn inflate_virtual_disk_task(&self, name: &str, datacenter: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = InflateVirtualDiskRequestType {name, datacenter, };
         let path = format!("/VirtualDiskManager/{moId}/InflateVirtualDisk_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -517,7 +516,7 @@ impl VirtualDiskManager {
     /// 
     /// ***InvalidDatastore***: if the operation cannot be performed on the source
     /// or destination datastore.
-    pub async fn move_virtual_disk_task(&self, source_name: &str, source_datacenter: Option<&ManagedObjectReference>, dest_name: &str, dest_datacenter: Option<&ManagedObjectReference>, force: Option<bool>, profile: Option<&[Box<dyn crate::types::traits::VirtualMachineProfileSpecTrait>]>) -> Result<ManagedObjectReference> {
+    pub async fn move_virtual_disk_task(&self, source_name: &str, source_datacenter: Option<&crate::types::structs::ManagedObjectReference>, dest_name: &str, dest_datacenter: Option<&crate::types::structs::ManagedObjectReference>, force: Option<bool>, profile: Option<&[Box<dyn crate::types::traits::VirtualMachineProfileSpecTrait>]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = MoveVirtualDiskRequestType {source_name, source_datacenter, dest_name, dest_datacenter, force, profile, };
         let path = format!("/VirtualDiskManager/{moId}/MoveVirtualDisk_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -561,7 +560,7 @@ impl VirtualDiskManager {
     /// ***FileFault***: if an error occurs reading the virtual disk.
     /// 
     /// ***InvalidDatastore***: if the operation cannot be performed on the datastore.
-    pub async fn query_virtual_disk_fragmentation(&self, name: &str, datacenter: Option<&ManagedObjectReference>) -> Result<i32> {
+    pub async fn query_virtual_disk_fragmentation(&self, name: &str, datacenter: Option<&crate::types::structs::ManagedObjectReference>) -> Result<i32> {
         let input = QueryVirtualDiskFragmentationRequestType {name, datacenter, };
         let path = format!("/VirtualDiskManager/{moId}/QueryVirtualDiskFragmentation", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -599,7 +598,7 @@ impl VirtualDiskManager {
     /// ***FileFault***: if an error occurs reading the virtual disk.
     /// 
     /// ***InvalidDatastore***: if the operation cannot be performed on the datastore.
-    pub async fn query_virtual_disk_geometry(&self, name: &str, datacenter: Option<&ManagedObjectReference>) -> Result<HostDiskDimensionsChs> {
+    pub async fn query_virtual_disk_geometry(&self, name: &str, datacenter: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::HostDiskDimensionsChs> {
         let input = QueryVirtualDiskGeometryRequestType {name, datacenter, };
         let path = format!("/VirtualDiskManager/{moId}/QueryVirtualDiskGeometry", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -642,7 +641,7 @@ impl VirtualDiskManager {
     /// ***FileFault***: if an error occurs reading the virtual disk.
     /// 
     /// ***InvalidDatastore***: if the operation cannot be performed on the datastore.
-    pub async fn query_virtual_disk_uuid(&self, name: &str, datacenter: Option<&ManagedObjectReference>) -> Result<String> {
+    pub async fn query_virtual_disk_uuid(&self, name: &str, datacenter: Option<&crate::types::structs::ManagedObjectReference>) -> Result<String> {
         let input = QueryVirtualDiskUuidRequestType {name, datacenter, };
         let path = format!("/VirtualDiskManager/{moId}/QueryVirtualDiskUuid", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -672,7 +671,7 @@ impl VirtualDiskManager {
     /// 
     /// ***InvalidDatastore***: if the operation cannot be performed on the
     /// datastore.
-    pub async fn release_managed_snapshot(&self, vdisk: &str, datacenter: Option<&ManagedObjectReference>) -> Result<()> {
+    pub async fn release_managed_snapshot(&self, vdisk: &str, datacenter: Option<&crate::types::structs::ManagedObjectReference>) -> Result<()> {
         let input = ReleaseManagedSnapshotRequestType {vdisk, datacenter, };
         let path = format!("/VirtualDiskManager/{moId}/ReleaseManagedSnapshot", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -714,7 +713,7 @@ impl VirtualDiskManager {
     /// ***FileFault***: if an error occurs updating the virtual disk.
     /// 
     /// ***InvalidDatastore***: if the operation cannot be performed on the datastore.
-    pub async fn set_virtual_disk_uuid(&self, name: &str, datacenter: Option<&ManagedObjectReference>, uuid: &str) -> Result<()> {
+    pub async fn set_virtual_disk_uuid(&self, name: &str, datacenter: Option<&crate::types::structs::ManagedObjectReference>, uuid: &str) -> Result<()> {
         let input = SetVirtualDiskUuidRequestType {name, datacenter, uuid, };
         let path = format!("/VirtualDiskManager/{moId}/SetVirtualDiskUuid", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -769,7 +768,7 @@ impl VirtualDiskManager {
     /// ***FileFault***: if an error occurs shrinking the virtual disk.
     /// 
     /// ***InvalidDatastore***: if the operation cannot be performed on the datastore.
-    pub async fn shrink_virtual_disk_task(&self, name: &str, datacenter: Option<&ManagedObjectReference>, copy: Option<bool>) -> Result<ManagedObjectReference> {
+    pub async fn shrink_virtual_disk_task(&self, name: &str, datacenter: Option<&crate::types::structs::ManagedObjectReference>, copy: Option<bool>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ShrinkVirtualDiskRequestType {name, datacenter, copy, };
         let path = format!("/VirtualDiskManager/{moId}/ShrinkVirtualDisk_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -813,7 +812,7 @@ impl VirtualDiskManager {
     /// ***FileFault***: if an error occurs zero filling the virtual disk.
     /// 
     /// ***InvalidDatastore***: if the operation cannot be performed on the datastore.
-    pub async fn zero_fill_virtual_disk_task(&self, name: &str, datacenter: Option<&ManagedObjectReference>) -> Result<ManagedObjectReference> {
+    pub async fn zero_fill_virtual_disk_task(&self, name: &str, datacenter: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ZeroFillVirtualDiskRequestType {name, datacenter, };
         let path = format!("/VirtualDiskManager/{moId}/ZeroFillVirtualDisk_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -827,12 +826,12 @@ struct CopyVirtualDiskRequestType<'a> {
     source_name: &'a str,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "sourceDatacenter")]
-    source_datacenter: Option<&'a ManagedObjectReference>,
+    source_datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
     #[serde(rename = "destName")]
     dest_name: &'a str,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "destDatacenter")]
-    dest_datacenter: Option<&'a ManagedObjectReference>,
+    dest_datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "destSpec")]
     dest_spec: Option<&'a dyn crate::types::traits::VirtualDiskSpecTrait>,
@@ -844,7 +843,7 @@ struct CopyVirtualDiskRequestType<'a> {
 struct CreateVirtualDiskRequestType<'a> {
     name: &'a str,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    datacenter: Option<&'a ManagedObjectReference>,
+    datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
     spec: &'a dyn crate::types::traits::VirtualDiskSpecTrait,
 }
 #[derive(serde::Serialize)]
@@ -852,28 +851,28 @@ struct CreateVirtualDiskRequestType<'a> {
 struct DefragmentVirtualDiskRequestType<'a> {
     name: &'a str,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    datacenter: Option<&'a ManagedObjectReference>,
+    datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct DeleteVirtualDiskRequestType<'a> {
     name: &'a str,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    datacenter: Option<&'a ManagedObjectReference>,
+    datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct EagerZeroVirtualDiskRequestType<'a> {
     name: &'a str,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    datacenter: Option<&'a ManagedObjectReference>,
+    datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct ExtendVirtualDiskRequestType<'a> {
     name: &'a str,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    datacenter: Option<&'a ManagedObjectReference>,
+    datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
     #[serde(rename = "newCapacityKb")]
     new_capacity_kb: i64,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -885,7 +884,7 @@ struct ExtendVirtualDiskRequestType<'a> {
 struct ImportUnmanagedSnapshotRequestType<'a> {
     vdisk: &'a str,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    datacenter: Option<&'a ManagedObjectReference>,
+    datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
     #[serde(rename = "vvolId")]
     vvol_id: &'a str,
 }
@@ -894,7 +893,7 @@ struct ImportUnmanagedSnapshotRequestType<'a> {
 struct InflateVirtualDiskRequestType<'a> {
     name: &'a str,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    datacenter: Option<&'a ManagedObjectReference>,
+    datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -903,12 +902,12 @@ struct MoveVirtualDiskRequestType<'a> {
     source_name: &'a str,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "sourceDatacenter")]
-    source_datacenter: Option<&'a ManagedObjectReference>,
+    source_datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
     #[serde(rename = "destName")]
     dest_name: &'a str,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "destDatacenter")]
-    dest_datacenter: Option<&'a ManagedObjectReference>,
+    dest_datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     force: Option<bool>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -919,35 +918,35 @@ struct MoveVirtualDiskRequestType<'a> {
 struct QueryVirtualDiskFragmentationRequestType<'a> {
     name: &'a str,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    datacenter: Option<&'a ManagedObjectReference>,
+    datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct QueryVirtualDiskGeometryRequestType<'a> {
     name: &'a str,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    datacenter: Option<&'a ManagedObjectReference>,
+    datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct QueryVirtualDiskUuidRequestType<'a> {
     name: &'a str,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    datacenter: Option<&'a ManagedObjectReference>,
+    datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct ReleaseManagedSnapshotRequestType<'a> {
     vdisk: &'a str,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    datacenter: Option<&'a ManagedObjectReference>,
+    datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct SetVirtualDiskUuidRequestType<'a> {
     name: &'a str,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    datacenter: Option<&'a ManagedObjectReference>,
+    datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
     uuid: &'a str,
 }
 #[derive(serde::Serialize)]
@@ -955,7 +954,7 @@ struct SetVirtualDiskUuidRequestType<'a> {
 struct ShrinkVirtualDiskRequestType<'a> {
     name: &'a str,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    datacenter: Option<&'a ManagedObjectReference>,
+    datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     copy: Option<bool>,
 }
@@ -964,5 +963,5 @@ struct ShrinkVirtualDiskRequestType<'a> {
 struct ZeroFillVirtualDiskRequestType<'a> {
     name: &'a str,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    datacenter: Option<&'a ManagedObjectReference>,
+    datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
 }

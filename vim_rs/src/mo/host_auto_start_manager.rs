@@ -1,6 +1,5 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::HostAutoStartManagerConfig;
 /// The AutoStartManager allows clients to invoke and set up the auto-start/auto-stop
 /// order of virtual machines on a single host.
 /// 
@@ -8,6 +7,7 @@ use crate::types::structs::HostAutoStartManagerConfig;
 /// auto-start are automatically started or stopped when the host is started or shut
 /// down. The AutoStartManager is available when clients connect directly to a host,
 /// such as an ESX Server machine or through VirtualCenter.
+#[derive(Clone)]
 pub struct HostAutoStartManager {
     client: Arc<Client>,
     mo_id: String,
@@ -65,13 +65,13 @@ impl HostAutoStartManager {
     ///
     /// ### spec
     /// List of changes to defaults and auto-start/auto-stop order.
-    pub async fn reconfigure_autostart(&self, spec: &HostAutoStartManagerConfig) -> Result<()> {
+    pub async fn reconfigure_autostart(&self, spec: &crate::types::structs::HostAutoStartManagerConfig) -> Result<()> {
         let input = ReconfigureAutostartRequestType {spec, };
         let path = format!("/HostAutoStartManager/{moId}/ReconfigureAutostart", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
         self.client.execute_void(req).await
     }
-    pub async fn config(&self) -> Result<HostAutoStartManagerConfig> {
+    pub async fn config(&self) -> Result<crate::types::structs::HostAutoStartManagerConfig> {
         let path = format!("/HostAutoStartManager/{moId}/config", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute(req).await
@@ -80,5 +80,5 @@ impl HostAutoStartManager {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct ReconfigureAutostartRequestType<'a> {
-    spec: &'a HostAutoStartManagerConfig,
+    spec: &'a crate::types::structs::HostAutoStartManagerConfig,
 }

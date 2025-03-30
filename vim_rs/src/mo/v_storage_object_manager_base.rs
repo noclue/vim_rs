@@ -1,9 +1,7 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::Id;
-use crate::types::structs::ManagedObjectReference;
-use crate::types::structs::VslmVClockInfo;
 /// Base interface to manage virtual storage object.
+#[derive(Clone)]
 pub struct VStorageObjectManagerBase {
     client: Arc<Client>,
     mo_id: String,
@@ -52,7 +50,7 @@ impl VStorageObjectManagerBase {
     /// ***InvalidState***: If the operation cannot be performed on the disk.
     /// 
     /// ***NotFound***: If specified virtual storage object cannot be found.
-    pub async fn v_storage_object_create_snapshot_ex_task(&self, id: &Id, datastore: &ManagedObjectReference, description: &str) -> Result<ManagedObjectReference> {
+    pub async fn v_storage_object_create_snapshot_ex_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, description: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VStorageObjectCreateSnapshotExRequestType {id, datastore, description, };
         let path = format!("/VStorageObjectManagerBase/{moId}/VStorageObjectCreateSnapshotEx_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -95,7 +93,7 @@ impl VStorageObjectManagerBase {
     /// ***InvalidState***: If the operation cannot be performed on the disk.
     /// 
     /// ***NotFound***: If specified virtual storage object cannot be found.
-    pub async fn v_storage_object_delete_snapshot_ex_task(&self, id: &Id, datastore: &ManagedObjectReference, snapshot_id: &Id) -> Result<ManagedObjectReference> {
+    pub async fn v_storage_object_delete_snapshot_ex_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, snapshot_id: &crate::types::structs::Id) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VStorageObjectDeleteSnapshotExRequestType {id, datastore, snapshot_id, };
         let path = format!("/VStorageObjectManagerBase/{moId}/VStorageObjectDeleteSnapshotEx_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -155,7 +153,7 @@ impl VStorageObjectManagerBase {
     /// The disk may be consumed and cannot be extended.
     /// 
     /// ***TaskInProgress***: If the virtual storage object is busy.
-    pub async fn v_storage_object_extend_disk_ex_task(&self, id: &Id, datastore: &ManagedObjectReference, new_capacity_in_mb: i64) -> Result<ManagedObjectReference> {
+    pub async fn v_storage_object_extend_disk_ex_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, new_capacity_in_mb: i64) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VStorageObjectExtendDiskExRequestType {id, datastore, new_capacity_in_mb, };
         let path = format!("/VStorageObjectManagerBase/{moId}/VStorageObjectExtendDiskEx_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -195,7 +193,7 @@ impl VStorageObjectManagerBase {
     /// 
     /// ***InvalidDatastore***: If the operation cannot be performed on the
     /// datastore.
-    pub async fn rename_v_storage_object_ex(&self, id: &Id, datastore: &ManagedObjectReference, name: &str) -> Result<VslmVClockInfo> {
+    pub async fn rename_v_storage_object_ex(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, name: &str) -> Result<crate::types::structs::VslmVClockInfo> {
         let input = RenameVStorageObjectExRequestType {id, datastore, name, };
         let path = format!("/VStorageObjectManagerBase/{moId}/RenameVStorageObjectEx", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -251,7 +249,7 @@ impl VStorageObjectManagerBase {
     /// ***InvalidState***: If the operation cannot be performed on the disk.
     /// 
     /// ***NotFound***: If specified virtual storage object cannot be found.
-    pub async fn revert_v_storage_object_ex_task(&self, id: &Id, datastore: &ManagedObjectReference, snapshot_id: &Id) -> Result<ManagedObjectReference> {
+    pub async fn revert_v_storage_object_ex_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, snapshot_id: &crate::types::structs::Id) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RevertVStorageObjectExRequestType {id, datastore, snapshot_id, };
         let path = format!("/VStorageObjectManagerBase/{moId}/RevertVStorageObjectEx_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -261,38 +259,38 @@ impl VStorageObjectManagerBase {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct VStorageObjectCreateSnapshotExRequestType<'a> {
-    id: &'a Id,
-    datastore: &'a ManagedObjectReference,
+    id: &'a crate::types::structs::Id,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
     description: &'a str,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct VStorageObjectDeleteSnapshotExRequestType<'a> {
-    id: &'a Id,
-    datastore: &'a ManagedObjectReference,
+    id: &'a crate::types::structs::Id,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
     #[serde(rename = "snapshotId")]
-    snapshot_id: &'a Id,
+    snapshot_id: &'a crate::types::structs::Id,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct VStorageObjectExtendDiskExRequestType<'a> {
-    id: &'a Id,
-    datastore: &'a ManagedObjectReference,
+    id: &'a crate::types::structs::Id,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
     #[serde(rename = "newCapacityInMB")]
     new_capacity_in_mb: i64,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct RenameVStorageObjectExRequestType<'a> {
-    id: &'a Id,
-    datastore: &'a ManagedObjectReference,
+    id: &'a crate::types::structs::Id,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
     name: &'a str,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct RevertVStorageObjectExRequestType<'a> {
-    id: &'a Id,
-    datastore: &'a ManagedObjectReference,
+    id: &'a crate::types::structs::Id,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
     #[serde(rename = "snapshotId")]
-    snapshot_id: &'a Id,
+    snapshot_id: &'a crate::types::structs::Id,
 }

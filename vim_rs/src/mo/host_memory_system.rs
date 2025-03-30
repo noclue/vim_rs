@@ -1,12 +1,9 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::CustomFieldDef;
-use crate::types::structs::ServiceConsoleReservationInfo;
-use crate::types::structs::VirtualMachineMemoryReservationInfo;
-use crate::types::structs::VirtualMachineMemoryReservationSpec;
 /// The MemoryManagerSystem managed object provides an interface through which
 /// the host memory management policies that affect the performance of running
 /// virtual machines can be gathered and configured.
+#[derive(Clone)]
 pub struct HostMemorySystem {
     client: Arc<Client>,
     mo_id: String,
@@ -45,7 +42,7 @@ impl HostMemorySystem {
     ///
     /// ### spec
     /// -
-    pub async fn reconfigure_virtual_machine_reservation(&self, spec: &VirtualMachineMemoryReservationSpec) -> Result<()> {
+    pub async fn reconfigure_virtual_machine_reservation(&self, spec: &crate::types::structs::VirtualMachineMemoryReservationSpec) -> Result<()> {
         let input = ReconfigureVirtualMachineReservationRequestType {spec, };
         let path = format!("/HostMemorySystem/{moId}/ReconfigureVirtualMachineReservation", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -76,7 +73,7 @@ impl HostMemorySystem {
     /// The fields are sorted by *CustomFieldDef.name*.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn available_field(&self) -> Result<Option<Vec<CustomFieldDef>>> {
+    pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
         let path = format!("/HostMemorySystem/{moId}/availableField", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -86,7 +83,7 @@ impl HostMemorySystem {
     /// The
     /// existence of this data object indicates if the service console memory
     /// reservation must be configured for this host.
-    pub async fn console_reservation_info(&self) -> Result<Option<ServiceConsoleReservationInfo>> {
+    pub async fn console_reservation_info(&self) -> Result<Option<crate::types::structs::ServiceConsoleReservationInfo>> {
         let path = format!("/HostMemorySystem/{moId}/consoleReservationInfo", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -108,7 +105,7 @@ impl HostMemorySystem {
     /// The
     /// existence of this data object indicates if the virtual machine memory
     /// reservation must be configured for this host.
-    pub async fn virtual_machine_reservation_info(&self) -> Result<Option<VirtualMachineMemoryReservationInfo>> {
+    pub async fn virtual_machine_reservation_info(&self) -> Result<Option<crate::types::structs::VirtualMachineMemoryReservationInfo>> {
         let path = format!("/HostMemorySystem/{moId}/virtualMachineReservationInfo", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -123,7 +120,7 @@ struct ReconfigureServiceConsoleReservationRequestType {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct ReconfigureVirtualMachineReservationRequestType<'a> {
-    spec: &'a VirtualMachineMemoryReservationSpec,
+    spec: &'a crate::types::structs::VirtualMachineMemoryReservationSpec,
 }
 #[derive(serde::Serialize)]
 #[serde(rename = "setCustomValueRequestType", tag = "_typeName")]

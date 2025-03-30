@@ -1,9 +1,5 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::DiagnosticManagerAuditRecordResult;
-use crate::types::structs::DiagnosticManagerLogDescriptor;
-use crate::types::structs::DiagnosticManagerLogHeader;
-use crate::types::structs::ManagedObjectReference;
 /// Provides an interface for obtaining diagnostic information on a host
 /// (e.g.
 /// 
@@ -11,6 +7,7 @@ use crate::types::structs::ManagedObjectReference;
 /// records).
 /// For VirtualCenter, this includes the log files for the server daemon.
 /// For an ESX Server host, this includes detailed log files for the VMkernel.
+#[derive(Clone)]
 pub struct DiagnosticManager {
     client: Arc<Client>,
     mo_id: String,
@@ -71,7 +68,7 @@ impl DiagnosticManager {
     /// ***SystemError***: One more more errors (on the host) have occurred.
     /// One or more error strings are available to detail
     /// the issues.
-    pub async fn fetch_audit_records(&self, token: Option<&str>) -> Result<DiagnosticManagerAuditRecordResult> {
+    pub async fn fetch_audit_records(&self, token: Option<&str>) -> Result<crate::types::structs::DiagnosticManagerAuditRecordResult> {
         let input = FetchAuditRecordsRequestType {token, };
         let path = format!("/DiagnosticManager/{moId}/FetchAuditRecords", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -125,7 +122,7 @@ impl DiagnosticManager {
     /// 
     /// ***CannotAccessFile***: if the key refers to a file that cannot be
     /// accessed at the present time.
-    pub async fn browse_diagnostic_log(&self, host: Option<&ManagedObjectReference>, key: &str, start: Option<i32>, lines: Option<i32>) -> Result<DiagnosticManagerLogHeader> {
+    pub async fn browse_diagnostic_log(&self, host: Option<&crate::types::structs::ManagedObjectReference>, key: &str, start: Option<i32>, lines: Option<i32>) -> Result<crate::types::structs::DiagnosticManagerLogHeader> {
         let input = BrowseDiagnosticLogRequestType {host, key, start, lines, };
         let path = format!("/DiagnosticManager/{moId}/BrowseDiagnosticLog", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -185,7 +182,7 @@ impl DiagnosticManager {
     /// 
     /// ***TaskInProgress***: if there is a pending request to generate a
     /// support bundle.
-    pub async fn generate_log_bundles_task(&self, include_default: bool, host: Option<&[ManagedObjectReference]>) -> Result<ManagedObjectReference> {
+    pub async fn generate_log_bundles_task(&self, include_default: bool, host: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = GenerateLogBundlesRequestType {include_default, host, };
         let path = format!("/DiagnosticManager/{moId}/GenerateLogBundles_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -205,7 +202,7 @@ impl DiagnosticManager {
     /// not be specified.
     /// 
     /// Refers instance of *HostSystem*.
-    pub async fn query_descriptions(&self, host: Option<&ManagedObjectReference>) -> Result<Option<Vec<DiagnosticManagerLogDescriptor>>> {
+    pub async fn query_descriptions(&self, host: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Option<Vec<crate::types::structs::DiagnosticManagerLogDescriptor>>> {
         let input = QueryDescriptionsRequestType {host, };
         let path = format!("/DiagnosticManager/{moId}/QueryDescriptions", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -227,7 +224,7 @@ struct FetchAuditRecordsRequestType<'a> {
 #[serde(tag="_typeName")]
 struct BrowseDiagnosticLogRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    host: Option<&'a ManagedObjectReference>,
+    host: Option<&'a crate::types::structs::ManagedObjectReference>,
     key: &'a str,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     start: Option<i32>,
@@ -240,11 +237,11 @@ struct GenerateLogBundlesRequestType<'a> {
     #[serde(rename = "includeDefault")]
     include_default: bool,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    host: Option<&'a [ManagedObjectReference]>,
+    host: Option<&'a [crate::types::structs::ManagedObjectReference]>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct QueryDescriptionsRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    host: Option<&'a ManagedObjectReference>,
+    host: Option<&'a crate::types::structs::ManagedObjectReference>,
 }

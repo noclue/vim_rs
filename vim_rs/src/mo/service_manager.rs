@@ -1,6 +1,5 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::ServiceManagerServiceInfo;
 /// The ServiceManager managed object is a singleton object that is used to present
 /// services that are optional and not necessarily formally defined.
 /// 
@@ -9,6 +8,7 @@ use crate::types::structs::ServiceManagerServiceInfo;
 /// is thus represented by a generic ManagedObject. The expectation is that the
 /// client side is knowledgeable of the instance type of the specific service it
 /// is interested in using.
+#[derive(Clone)]
 pub struct ServiceManager {
     client: Arc<Client>,
     mo_id: String,
@@ -37,7 +37,7 @@ impl ServiceManager {
     /// ### location
     /// The list of location information that needs to match for a service to be
     /// considered a match.
-    pub async fn query_service_list(&self, service_name: Option<&str>, location: Option<&[String]>) -> Result<Option<Vec<ServiceManagerServiceInfo>>> {
+    pub async fn query_service_list(&self, service_name: Option<&str>, location: Option<&[String]>) -> Result<Option<Vec<crate::types::structs::ServiceManagerServiceInfo>>> {
         let input = QueryServiceListRequestType {service_name, location, };
         let path = format!("/ServiceManager/{moId}/QueryServiceList", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -46,7 +46,7 @@ impl ServiceManager {
     /// The full list of services available in this directory.
     /// 
     /// ***Required privileges:*** Global.ServiceManagers
-    pub async fn service(&self) -> Result<Option<Vec<ServiceManagerServiceInfo>>> {
+    pub async fn service(&self) -> Result<Option<Vec<crate::types::structs::ServiceManagerServiceInfo>>> {
         let path = format!("/ServiceManager/{moId}/service", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await

@@ -1,15 +1,8 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::ManagedObjectReference;
-use crate::types::structs::MethodFault;
-use crate::types::structs::StorageDrsConfigSpec;
-use crate::types::structs::StorageIormConfigOption;
-use crate::types::structs::StorageIormConfigSpec;
-use crate::types::structs::StoragePerformanceSummary;
-use crate::types::structs::StoragePlacementResult;
-use crate::types::structs::StoragePlacementSpec;
 /// This managed object type provides a way to configure resource usage for
 /// storage resources.
+#[derive(Clone)]
 pub struct StorageResourceManager {
     client: Arc<Client>,
     mo_id: String,
@@ -68,7 +61,7 @@ impl StorageResourceManager {
     /// 
     /// ***InaccessibleDatastore***: if cannot access the datastore from any of the
     /// hosts.
-    pub async fn configure_datastore_iorm_task(&self, datastore: &ManagedObjectReference, spec: &StorageIormConfigSpec) -> Result<ManagedObjectReference> {
+    pub async fn configure_datastore_iorm_task(&self, datastore: &crate::types::structs::ManagedObjectReference, spec: &crate::types::structs::StorageIormConfigSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ConfigureDatastoreIormRequestType {datastore, spec, };
         let path = format!("/StorageResourceManager/{moId}/ConfigureDatastoreIORM_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -90,7 +83,7 @@ impl StorageResourceManager {
     /// ## Returns:
     ///
     /// configuration option object.
-    pub async fn query_iorm_config_option(&self, host: &ManagedObjectReference) -> Result<StorageIormConfigOption> {
+    pub async fn query_iorm_config_option(&self, host: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::StorageIormConfigOption> {
         let input = QueryIormConfigOptionRequestType {host, };
         let path = format!("/StorageResourceManager/{moId}/QueryIORMConfigOption", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -120,7 +113,7 @@ impl StorageResourceManager {
     /// ## Returns:
     ///
     /// Refers instance of *Task*.
-    pub async fn apply_storage_drs_recommendation_task(&self, key: &[String]) -> Result<ManagedObjectReference> {
+    pub async fn apply_storage_drs_recommendation_task(&self, key: &[String]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ApplyStorageDrsRecommendationRequestType {key, };
         let path = format!("/StorageResourceManager/{moId}/ApplyStorageDrsRecommendation_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -154,7 +147,7 @@ impl StorageResourceManager {
     /// ## Returns:
     ///
     /// Refers instance of *Task*.
-    pub async fn apply_storage_drs_recommendation_to_pod_task(&self, pod: &ManagedObjectReference, key: &str) -> Result<ManagedObjectReference> {
+    pub async fn apply_storage_drs_recommendation_to_pod_task(&self, pod: &crate::types::structs::ManagedObjectReference, key: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ApplyStorageDrsRecommendationToPodRequestType {pod, key, };
         let path = format!("/StorageResourceManager/{moId}/ApplyStorageDrsRecommendationToPod_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -207,7 +200,7 @@ impl StorageResourceManager {
     /// the operation.
     /// 
     /// Refers instance of *Task*.
-    pub async fn configure_storage_drs_for_pod_task(&self, pod: &ManagedObjectReference, spec: &StorageDrsConfigSpec, modify: bool) -> Result<ManagedObjectReference> {
+    pub async fn configure_storage_drs_for_pod_task(&self, pod: &crate::types::structs::ManagedObjectReference, spec: &crate::types::structs::StorageDrsConfigSpec, modify: bool) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ConfigureStorageDrsForPodRequestType {pod, spec, modify, };
         let path = format!("/StorageResourceManager/{moId}/ConfigureStorageDrsForPod_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -235,7 +228,7 @@ impl StorageResourceManager {
     /// ## Errors:
     ///
     /// ***NotFound***: if input datastore cannot be found
-    pub async fn query_datastore_performance_summary(&self, datastore: &ManagedObjectReference) -> Result<Option<Vec<StoragePerformanceSummary>>> {
+    pub async fn query_datastore_performance_summary(&self, datastore: &crate::types::structs::ManagedObjectReference) -> Result<Option<Vec<crate::types::structs::StoragePerformanceSummary>>> {
         let input = QueryDatastorePerformanceSummaryRequestType {datastore, };
         let path = format!("/StorageResourceManager/{moId}/QueryDatastorePerformanceSummary", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -307,7 +300,7 @@ impl StorageResourceManager {
     ///
     /// ### storage_spec
     /// -
-    pub async fn recommend_datastores(&self, storage_spec: &StoragePlacementSpec) -> Result<StoragePlacementResult> {
+    pub async fn recommend_datastores(&self, storage_spec: &crate::types::structs::StoragePlacementSpec) -> Result<crate::types::structs::StoragePlacementResult> {
         let input = RecommendDatastoresRequestType {storage_spec, };
         let path = format!("/StorageResourceManager/{moId}/RecommendDatastores", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -329,7 +322,7 @@ impl StorageResourceManager {
     /// *PodStorageDrsEntry.recommendation*.
     /// 
     /// Refers instance of *StoragePod*.
-    pub async fn refresh_storage_drs_recommendation(&self, pod: &ManagedObjectReference) -> Result<()> {
+    pub async fn refresh_storage_drs_recommendation(&self, pod: &crate::types::structs::ManagedObjectReference) -> Result<()> {
         let input = RefreshStorageDrsRecommendationRequestType {pod, };
         let path = format!("/StorageResourceManager/{moId}/RefreshStorageDrsRecommendation", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -356,7 +349,7 @@ impl StorageResourceManager {
     /// ## Errors:
     ///
     /// Failure
-    pub async fn refresh_storage_drs_recommendations_for_pod_task(&self, pod: &ManagedObjectReference) -> Result<ManagedObjectReference> {
+    pub async fn refresh_storage_drs_recommendations_for_pod_task(&self, pod: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RefreshStorageDrsRecommendationsForPodRequestType {pod, };
         let path = format!("/StorageResourceManager/{moId}/RefreshStorageDrsRecommendationsForPod_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -379,7 +372,7 @@ impl StorageResourceManager {
     /// ### spec
     /// A set of storage Drs configuration changes to apply to
     /// the storage pod.
-    pub async fn validate_storage_pod_config(&self, pod: &ManagedObjectReference, spec: &StorageDrsConfigSpec) -> Result<Option<MethodFault>> {
+    pub async fn validate_storage_pod_config(&self, pod: &crate::types::structs::ManagedObjectReference, spec: &crate::types::structs::StorageDrsConfigSpec) -> Result<Option<crate::types::structs::MethodFault>> {
         let input = ValidateStoragePodConfigRequestType {pod, spec, };
         let path = format!("/StorageResourceManager/{moId}/ValidateStoragePodConfig", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -389,13 +382,13 @@ impl StorageResourceManager {
 #[derive(serde::Serialize)]
 #[serde(rename = "ConfigureDatastoreIORMRequestType", tag = "_typeName")]
 struct ConfigureDatastoreIormRequestType<'a> {
-    datastore: &'a ManagedObjectReference,
-    spec: &'a StorageIormConfigSpec,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
+    spec: &'a crate::types::structs::StorageIormConfigSpec,
 }
 #[derive(serde::Serialize)]
 #[serde(rename = "QueryIORMConfigOptionRequestType", tag = "_typeName")]
 struct QueryIormConfigOptionRequestType<'a> {
-    host: &'a ManagedObjectReference,
+    host: &'a crate::types::structs::ManagedObjectReference,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -405,7 +398,7 @@ struct ApplyStorageDrsRecommendationRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct ApplyStorageDrsRecommendationToPodRequestType<'a> {
-    pod: &'a ManagedObjectReference,
+    pod: &'a crate::types::structs::ManagedObjectReference,
     key: &'a str,
 }
 #[derive(serde::Serialize)]
@@ -416,34 +409,34 @@ struct CancelStorageDrsRecommendationRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct ConfigureStorageDrsForPodRequestType<'a> {
-    pod: &'a ManagedObjectReference,
-    spec: &'a StorageDrsConfigSpec,
+    pod: &'a crate::types::structs::ManagedObjectReference,
+    spec: &'a crate::types::structs::StorageDrsConfigSpec,
     modify: bool,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct QueryDatastorePerformanceSummaryRequestType<'a> {
-    datastore: &'a ManagedObjectReference,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct RecommendDatastoresRequestType<'a> {
     #[serde(rename = "storageSpec")]
-    storage_spec: &'a StoragePlacementSpec,
+    storage_spec: &'a crate::types::structs::StoragePlacementSpec,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct RefreshStorageDrsRecommendationRequestType<'a> {
-    pod: &'a ManagedObjectReference,
+    pod: &'a crate::types::structs::ManagedObjectReference,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct RefreshStorageDrsRecommendationsForPodRequestType<'a> {
-    pod: &'a ManagedObjectReference,
+    pod: &'a crate::types::structs::ManagedObjectReference,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct ValidateStoragePodConfigRequestType<'a> {
-    pod: &'a ManagedObjectReference,
-    spec: &'a StorageDrsConfigSpec,
+    pod: &'a crate::types::structs::ManagedObjectReference,
+    spec: &'a crate::types::structs::StorageDrsConfigSpec,
 }

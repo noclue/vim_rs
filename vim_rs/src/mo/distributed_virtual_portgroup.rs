@@ -1,14 +1,5 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::AlarmState;
-use crate::types::structs::CustomFieldDef;
-use crate::types::structs::DvPortgroupConfigInfo;
-use crate::types::structs::DvPortgroupConfigSpec;
-use crate::types::structs::EntityBackupConfig;
-use crate::types::structs::Event;
-use crate::types::structs::ManagedObjectReference;
-use crate::types::structs::Permission;
-use crate::types::structs::Tag;
 /// The *DistributedVirtualPortgroup* managed object
 /// defines how hosts and virtual machines connect to a network.
 /// 
@@ -23,6 +14,7 @@ use crate::types::structs::Tag;
 ///   
 /// When you use a portgroup for network access, the Server will create a port according
 /// to *DistributedVirtualPortgroup.config*.*DVPortgroupConfigInfo.type*.
+#[derive(Clone)]
 pub struct DistributedVirtualPortgroup {
     client: Arc<Client>,
     mo_id: String,
@@ -55,7 +47,7 @@ impl DistributedVirtualPortgroup {
     /// ## Errors:
     ///
     /// Failure
-    pub async fn destroy_task(&self) -> Result<ManagedObjectReference> {
+    pub async fn destroy_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/DistributedVirtualPortgroup/{moId}/Destroy_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute(req).await
@@ -125,7 +117,7 @@ impl DistributedVirtualPortgroup {
     /// ***DvsNotAuthorized***: if login-session's extension key does not match
     /// the switch's configured
     /// *DVSConfigInfo.extensionKey*.
-    pub async fn reconfigure_dv_portgroup_task(&self, spec: &DvPortgroupConfigSpec) -> Result<ManagedObjectReference> {
+    pub async fn reconfigure_dv_portgroup_task(&self, spec: &crate::types::structs::DvPortgroupConfigSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ReconfigureDvPortgroupRequestType {spec, };
         let path = format!("/DistributedVirtualPortgroup/{moId}/ReconfigureDVPortgroup_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -178,7 +170,7 @@ impl DistributedVirtualPortgroup {
     /// ***DuplicateName***: If another object in the same folder has the target name.
     /// 
     /// ***InvalidName***: If the new name is not a valid entity name.
-    pub async fn rename_task(&self, new_name: &str) -> Result<ManagedObjectReference> {
+    pub async fn rename_task(&self, new_name: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RenameRequestType {new_name, };
         let path = format!("/DistributedVirtualPortgroup/{moId}/Rename_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -225,7 +217,7 @@ impl DistributedVirtualPortgroup {
     /// the previous configuration does not exist either
     /// 
     /// ***DvsFault***: if operation fails.
-    pub async fn dv_portgroup_rollback_task(&self, entity_backup: Option<&EntityBackupConfig>) -> Result<ManagedObjectReference> {
+    pub async fn dv_portgroup_rollback_task(&self, entity_backup: Option<&crate::types::structs::EntityBackupConfig>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = DvPortgroupRollbackRequestType {entity_backup, };
         let path = format!("/DistributedVirtualPortgroup/{moId}/DVPortgroupRollback_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -266,13 +258,13 @@ impl DistributedVirtualPortgroup {
     /// The fields are sorted by *CustomFieldDef.name*.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn available_field(&self) -> Result<Option<Vec<CustomFieldDef>>> {
+    pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
         let path = format!("/DistributedVirtualPortgroup/{moId}/availableField", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
     }
     /// Configuration of the portgroup.
-    pub async fn config(&self) -> Result<DvPortgroupConfigInfo> {
+    pub async fn config(&self) -> Result<crate::types::structs::DvPortgroupConfigInfo> {
         let path = format!("/DistributedVirtualPortgroup/{moId}/config", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute(req).await
@@ -284,7 +276,7 @@ impl DistributedVirtualPortgroup {
     /// events as long as they are still current. The
     /// *configStatus* property provides an overall status
     /// based on these events.
-    pub async fn config_issue(&self) -> Result<Option<Vec<Event>>> {
+    pub async fn config_issue(&self) -> Result<Option<Vec<crate::types::structs::Event>>> {
         let path = format!("/DistributedVirtualPortgroup/{moId}/configIssue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -336,7 +328,7 @@ impl DistributedVirtualPortgroup {
     /// This set does not include alarms that are defined on descendants of this entity.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn declared_alarm_state(&self) -> Result<Option<Vec<AlarmState>>> {
+    pub async fn declared_alarm_state(&self) -> Result<Option<Vec<crate::types::structs::AlarmState>>> {
         let path = format!("/DistributedVirtualPortgroup/{moId}/declaredAlarmState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -428,7 +420,7 @@ impl DistributedVirtualPortgroup {
     /// ## Returns:
     ///
     /// Refers instances of *HostSystem*.
-    pub async fn host(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
+    pub async fn host(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/DistributedVirtualPortgroup/{moId}/host", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -489,13 +481,13 @@ impl DistributedVirtualPortgroup {
     /// ## Returns:
     ///
     /// Refers instance of *ManagedEntity*.
-    pub async fn parent(&self) -> Result<Option<ManagedObjectReference>> {
+    pub async fn parent(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let path = format!("/DistributedVirtualPortgroup/{moId}/parent", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
     }
     /// List of permissions defined for this entity.
-    pub async fn permission(&self) -> Result<Option<Vec<Permission>>> {
+    pub async fn permission(&self) -> Result<Option<Vec<crate::types::structs::Permission>>> {
         let path = format!("/DistributedVirtualPortgroup/{moId}/permission", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -531,7 +523,7 @@ impl DistributedVirtualPortgroup {
     /// ## Returns:
     ///
     /// Refers instances of *Task*.
-    pub async fn recent_task(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
+    pub async fn recent_task(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/DistributedVirtualPortgroup/{moId}/recentTask", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -547,7 +539,7 @@ impl DistributedVirtualPortgroup {
     /// Experimental. Subject to change.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn tag(&self) -> Result<Option<Vec<Tag>>> {
+    pub async fn tag(&self) -> Result<Option<Vec<crate::types::structs::Tag>>> {
         let path = format!("/DistributedVirtualPortgroup/{moId}/tag", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -566,7 +558,7 @@ impl DistributedVirtualPortgroup {
     /// produce any property values as no updates are generated.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn triggered_alarm_state(&self) -> Result<Option<Vec<AlarmState>>> {
+    pub async fn triggered_alarm_state(&self) -> Result<Option<Vec<crate::types::structs::AlarmState>>> {
         let path = format!("/DistributedVirtualPortgroup/{moId}/triggeredAlarmState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -588,7 +580,7 @@ impl DistributedVirtualPortgroup {
     /// ## Returns:
     ///
     /// Refers instances of *VirtualMachine*.
-    pub async fn vm(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
+    pub async fn vm(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/DistributedVirtualPortgroup/{moId}/vm", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -597,7 +589,7 @@ impl DistributedVirtualPortgroup {
 #[derive(serde::Serialize)]
 #[serde(rename = "ReconfigureDVPortgroupRequestType", tag = "_typeName")]
 struct ReconfigureDvPortgroupRequestType<'a> {
-    spec: &'a DvPortgroupConfigSpec,
+    spec: &'a crate::types::structs::DvPortgroupConfigSpec,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -610,7 +602,7 @@ struct RenameRequestType<'a> {
 struct DvPortgroupRollbackRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "entityBackup")]
-    entity_backup: Option<&'a EntityBackupConfig>,
+    entity_backup: Option<&'a crate::types::structs::EntityBackupConfig>,
 }
 #[derive(serde::Serialize)]
 #[serde(rename = "setCustomValueRequestType", tag = "_typeName")]

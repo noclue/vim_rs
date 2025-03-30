@@ -1,11 +1,10 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::HostSnmpConfigSpec;
-use crate::types::structs::HostSnmpSystemAgentLimits;
 /// Provision the SNMP Version 1,2c agent.
 /// 
 /// This object is accessed through the
 /// *HostConfigManager* object.
+#[derive(Clone)]
 pub struct HostSnmpSystem {
     client: Arc<Client>,
     mo_id: String,
@@ -27,7 +26,7 @@ impl HostSnmpSystem {
     /// ## Errors:
     ///
     /// Failure
-    pub async fn reconfigure_snmp_agent(&self, spec: &HostSnmpConfigSpec) -> Result<()> {
+    pub async fn reconfigure_snmp_agent(&self, spec: &crate::types::structs::HostSnmpConfigSpec) -> Result<()> {
         let input = ReconfigureSnmpAgentRequestType {spec, };
         let path = format!("/HostSnmpSystem/{moId}/ReconfigureSnmpAgent", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -44,13 +43,13 @@ impl HostSnmpSystem {
         self.client.execute_void(req).await
     }
     /// ***Required privileges:*** Global.Settings
-    pub async fn configuration(&self) -> Result<HostSnmpConfigSpec> {
+    pub async fn configuration(&self) -> Result<crate::types::structs::HostSnmpConfigSpec> {
         let path = format!("/HostSnmpSystem/{moId}/configuration", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute(req).await
     }
     /// ***Required privileges:*** Global.Settings
-    pub async fn limits(&self) -> Result<HostSnmpSystemAgentLimits> {
+    pub async fn limits(&self) -> Result<crate::types::structs::HostSnmpSystemAgentLimits> {
         let path = format!("/HostSnmpSystem/{moId}/limits", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute(req).await
@@ -59,5 +58,5 @@ impl HostSnmpSystem {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct ReconfigureSnmpAgentRequestType<'a> {
-    spec: &'a HostSnmpConfigSpec,
+    spec: &'a crate::types::structs::HostSnmpConfigSpec,
 }

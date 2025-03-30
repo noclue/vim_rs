@@ -1,12 +1,8 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::ManagedObjectReference;
-use crate::types::structs::NvdimmNamespaceCreateSpec;
-use crate::types::structs::NvdimmNamespaceDeleteSpec;
-use crate::types::structs::NvdimmPMemNamespaceCreateSpec;
-use crate::types::structs::NvdimmSystemInfo;
 /// Managed object responsible for reading and configuring
 /// Non-Volatile DIMMs.
+#[derive(Clone)]
 pub struct HostNvdimmSystem {
     client: Arc<Client>,
     mo_id: String,
@@ -65,7 +61,7 @@ impl HostNvdimmSystem {
     /// reason for failure.
     /// 
     /// ***HostConfigFault***: for any other failure.
-    pub async fn create_nvdimm_namespace_task(&self, create_spec: &NvdimmNamespaceCreateSpec) -> Result<ManagedObjectReference> {
+    pub async fn create_nvdimm_namespace_task(&self, create_spec: &crate::types::structs::NvdimmNamespaceCreateSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateNvdimmNamespaceRequestType {create_spec, };
         let path = format!("/HostNvdimmSystem/{moId}/CreateNvdimmNamespace_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -115,7 +111,7 @@ impl HostNvdimmSystem {
     /// reason for failure.
     /// 
     /// ***HostConfigFault***: for any other failure.
-    pub async fn create_nvdimm_p_mem_namespace_task(&self, create_spec: &NvdimmPMemNamespaceCreateSpec) -> Result<ManagedObjectReference> {
+    pub async fn create_nvdimm_p_mem_namespace_task(&self, create_spec: &crate::types::structs::NvdimmPMemNamespaceCreateSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateNvdimmPMemNamespaceRequestType {create_spec, };
         let path = format!("/HostNvdimmSystem/{moId}/CreateNvdimmPMemNamespace_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -158,7 +154,7 @@ impl HostNvdimmSystem {
     /// reason for failure.
     /// 
     /// ***HostConfigFault***: for any other failure.
-    pub async fn delete_nvdimm_block_namespaces_task(&self) -> Result<ManagedObjectReference> {
+    pub async fn delete_nvdimm_block_namespaces_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/HostNvdimmSystem/{moId}/DeleteNvdimmBlockNamespaces_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute(req).await
@@ -201,7 +197,7 @@ impl HostNvdimmSystem {
     /// localized reason for failure.
     /// 
     /// ***HostConfigFault***: for any other failure.
-    pub async fn delete_nvdimm_namespace_task(&self, delete_spec: &NvdimmNamespaceDeleteSpec) -> Result<ManagedObjectReference> {
+    pub async fn delete_nvdimm_namespace_task(&self, delete_spec: &crate::types::structs::NvdimmNamespaceDeleteSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = DeleteNvdimmNamespaceRequestType {delete_spec, };
         let path = format!("/HostNvdimmSystem/{moId}/DeleteNvdimmNamespace_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -222,7 +218,7 @@ impl HostNvdimmSystem {
     /// ## Returns:
     ///
     /// Return set of all NVDIMM related information.
-    pub async fn nvdimm_system_info(&self) -> Result<NvdimmSystemInfo> {
+    pub async fn nvdimm_system_info(&self) -> Result<crate::types::structs::NvdimmSystemInfo> {
         let path = format!("/HostNvdimmSystem/{moId}/nvdimmSystemInfo", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute(req).await
@@ -232,17 +228,17 @@ impl HostNvdimmSystem {
 #[serde(tag="_typeName")]
 struct CreateNvdimmNamespaceRequestType<'a> {
     #[serde(rename = "createSpec")]
-    create_spec: &'a NvdimmNamespaceCreateSpec,
+    create_spec: &'a crate::types::structs::NvdimmNamespaceCreateSpec,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct CreateNvdimmPMemNamespaceRequestType<'a> {
     #[serde(rename = "createSpec")]
-    create_spec: &'a NvdimmPMemNamespaceCreateSpec,
+    create_spec: &'a crate::types::structs::NvdimmPMemNamespaceCreateSpec,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct DeleteNvdimmNamespaceRequestType<'a> {
     #[serde(rename = "deleteSpec")]
-    delete_spec: &'a NvdimmNamespaceDeleteSpec,
+    delete_spec: &'a crate::types::structs::NvdimmNamespaceDeleteSpec,
 }

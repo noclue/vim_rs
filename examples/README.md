@@ -1,5 +1,5 @@
 # vim_rs usage examples
-This folder contains examples of how to use the vim_rs library.
+This workspace contains examples of how to use the vim_rs library.
 
 The examples are arranged in a Rust workspace to facilitate faster build time and thus faster
 development and testing.
@@ -14,7 +14,7 @@ To run the examples you need to set the following environment variables:
 - `VIM_PASSWORD` - Password to authenticate with the vCenter server.
 - `RUST_LOG` - Log level for the examples. Set to `debug` to see all example logs. Set to `trace` 
 to see all communication logs.
-- `COMPUTE_RESOURCE` - name fo a host or cluster to be used in env_browser sample
+- `COMPUTE_RESOURCE` - name of a host or cluster to be used in env_browser sample
 
 To run the examples, run the following command:
 ```bash

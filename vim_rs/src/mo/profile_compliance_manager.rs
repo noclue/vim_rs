@@ -1,9 +1,7 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::ComplianceResult;
-use crate::types::structs::ManagedObjectReference;
-use crate::types::structs::ProfileExpressionMetadata;
 /// Interface handling the Compliance aspects of entities.
+#[derive(Clone)]
 pub struct ProfileComplianceManager {
     client: Arc<Client>,
     mo_id: String,
@@ -62,7 +60,7 @@ impl ProfileComplianceManager {
     /// ## Returns:
     ///
     /// Refers instance of *Task*.
-    pub async fn check_compliance_task(&self, profile: Option<&[ManagedObjectReference]>, entity: Option<&[ManagedObjectReference]>) -> Result<ManagedObjectReference> {
+    pub async fn check_compliance_task(&self, profile: Option<&[crate::types::structs::ManagedObjectReference]>, entity: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CheckComplianceRequestType {profile, entity, };
         let path = format!("/ProfileComplianceManager/{moId}/CheckCompliance_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -84,7 +82,7 @@ impl ProfileComplianceManager {
     /// If profile and entity are not specified, all the ComplianceResults will be cleared.
     /// 
     /// Refers instances of *ManagedEntity*.
-    pub async fn clear_compliance_status(&self, profile: Option<&[ManagedObjectReference]>, entity: Option<&[ManagedObjectReference]>) -> Result<()> {
+    pub async fn clear_compliance_status(&self, profile: Option<&[crate::types::structs::ManagedObjectReference]>, entity: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<()> {
         let input = ClearComplianceStatusRequestType {profile, entity, };
         let path = format!("/ProfileComplianceManager/{moId}/ClearComplianceStatus", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -114,7 +112,7 @@ impl ProfileComplianceManager {
     /// ComplianceResult. ComplianceResult information may not be
     /// available for all the entities. If the ComplianceResult is not available already,
     /// a new ComplianceCheck will not be triggered.
-    pub async fn query_compliance_status(&self, profile: Option<&[ManagedObjectReference]>, entity: Option<&[ManagedObjectReference]>) -> Result<Option<Vec<ComplianceResult>>> {
+    pub async fn query_compliance_status(&self, profile: Option<&[crate::types::structs::ManagedObjectReference]>, entity: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<Option<Vec<crate::types::structs::ComplianceResult>>> {
         let input = QueryComplianceStatusRequestType {profile, entity, };
         let path = format!("/ProfileComplianceManager/{moId}/QueryComplianceStatus", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -134,7 +132,7 @@ impl ProfileComplianceManager {
     /// Base profile whose context needs to be used during the operation
     /// 
     /// Refers instance of *Profile*.
-    pub async fn query_expression_metadata(&self, expression_name: Option<&[String]>, profile: Option<&ManagedObjectReference>) -> Result<Option<Vec<ProfileExpressionMetadata>>> {
+    pub async fn query_expression_metadata(&self, expression_name: Option<&[String]>, profile: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Option<Vec<crate::types::structs::ProfileExpressionMetadata>>> {
         let input = QueryExpressionMetadataRequestType {expression_name, profile, };
         let path = format!("/ProfileComplianceManager/{moId}/QueryExpressionMetadata", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -145,25 +143,25 @@ impl ProfileComplianceManager {
 #[serde(tag="_typeName")]
 struct CheckComplianceRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    profile: Option<&'a [ManagedObjectReference]>,
+    profile: Option<&'a [crate::types::structs::ManagedObjectReference]>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    entity: Option<&'a [ManagedObjectReference]>,
+    entity: Option<&'a [crate::types::structs::ManagedObjectReference]>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct ClearComplianceStatusRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    profile: Option<&'a [ManagedObjectReference]>,
+    profile: Option<&'a [crate::types::structs::ManagedObjectReference]>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    entity: Option<&'a [ManagedObjectReference]>,
+    entity: Option<&'a [crate::types::structs::ManagedObjectReference]>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct QueryComplianceStatusRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    profile: Option<&'a [ManagedObjectReference]>,
+    profile: Option<&'a [crate::types::structs::ManagedObjectReference]>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    entity: Option<&'a [ManagedObjectReference]>,
+    entity: Option<&'a [crate::types::structs::ManagedObjectReference]>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -172,5 +170,5 @@ struct QueryExpressionMetadataRequestType<'a> {
     #[serde(rename = "expressionName")]
     expression_name: Option<&'a [String]>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    profile: Option<&'a ManagedObjectReference>,
+    profile: Option<&'a crate::types::structs::ManagedObjectReference>,
 }

@@ -1,10 +1,8 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::CustomFieldDef;
-use crate::types::structs::HostVirtualNicManagerInfo;
-use crate::types::structs::VirtualNicManagerNetConfig;
 /// The VirtualNicManager managed object describes the special Virtual NIC
 /// configuration of the host.
+#[derive(Clone)]
 pub struct HostVirtualNicManager {
     client: Arc<Client>,
     mo_id: String,
@@ -55,7 +53,7 @@ impl HostVirtualNicManager {
     /// ***InvalidArgument***: if nicType is invalid
     /// 
     /// ***HostConfigFault***: for any other failure.
-    pub async fn query_net_config(&self, nic_type: &str) -> Result<Option<VirtualNicManagerNetConfig>> {
+    pub async fn query_net_config(&self, nic_type: &str) -> Result<Option<crate::types::structs::VirtualNicManagerNetConfig>> {
         let input = QueryNetConfigRequestType {nic_type, };
         let path = format!("/HostVirtualNicManager/{moId}/QueryNetConfig", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -115,13 +113,13 @@ impl HostVirtualNicManager {
     /// The fields are sorted by *CustomFieldDef.name*.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn available_field(&self) -> Result<Option<Vec<CustomFieldDef>>> {
+    pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
         let path = format!("/HostVirtualNicManager/{moId}/availableField", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
     }
     /// Network configuration.
-    pub async fn info(&self) -> Result<HostVirtualNicManagerInfo> {
+    pub async fn info(&self) -> Result<crate::types::structs::HostVirtualNicManagerInfo> {
         let path = format!("/HostVirtualNicManager/{moId}/info", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute(req).await

@@ -1,8 +1,8 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::HostBootDeviceInfo;
 /// The *HostBootDeviceSystem* managed object provides methods to query and update
 /// a host boot device configuration.
+#[derive(Clone)]
 pub struct HostBootDeviceSystem {
     client: Arc<Client>,
     mo_id: String,
@@ -26,7 +26,7 @@ impl HostBootDeviceSystem {
     /// The order of devices in the list is unpredictable.
     /// The returned *HostBootDeviceInfo* data object also contains
     /// the key of the current boot device.
-    pub async fn query_boot_devices(&self) -> Result<Option<HostBootDeviceInfo>> {
+    pub async fn query_boot_devices(&self) -> Result<Option<crate::types::structs::HostBootDeviceInfo>> {
         let path = format!("/HostBootDeviceSystem/{moId}/QueryBootDevices", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute_option(req).await

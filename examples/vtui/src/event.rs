@@ -52,10 +52,14 @@ impl EventHandler {
         let (sender, receiver) = mpsc::unbounded_channel();
         let internal_sender = sender.clone();
         let event_dispatch = tokio::spawn(async move {
-            let mut actor = EventTask::new(internal_sender , monitor);
+            let mut actor = EventTask::new(internal_sender, monitor);
             actor.run().await
         });
-        Self { sender, receiver, event_dispatch: Some(event_dispatch) }
+        Self {
+            sender,
+            receiver,
+            event_dispatch: Some(event_dispatch),
+        }
     }
 
     /// Receives an event from the sender.

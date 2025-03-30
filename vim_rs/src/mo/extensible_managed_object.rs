@@ -1,6 +1,5 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::CustomFieldDef;
 /// *ExtensibleManagedObject* provides methods and properties that provide
 /// access to custom fields that may be associated with a managed object.
 /// 
@@ -10,6 +9,7 @@ use crate::types::structs::CustomFieldDef;
 /// field applies by setting its *CustomFieldDef.managedObjectType*.
 /// (If you do not set a managed object type for a custom field definition,
 /// the field applies to all managed objects.)
+#[derive(Clone)]
 pub struct ExtensibleManagedObject {
     client: Arc<Client>,
     mo_id: String,
@@ -46,7 +46,7 @@ impl ExtensibleManagedObject {
     /// The fields are sorted by *CustomFieldDef.name*.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn available_field(&self) -> Result<Option<Vec<CustomFieldDef>>> {
+    pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
         let path = format!("/ExtensibleManagedObject/{moId}/availableField", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await

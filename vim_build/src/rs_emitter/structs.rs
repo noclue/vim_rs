@@ -34,7 +34,6 @@ impl<'a> TypesEmitter<'a> {
         Ok(())
     }
     fn emit_use_statements(&mut self) -> Result<()> {
-        self.printer.println("use super::vim_any::VimAny;")?;
         self.printer.println("use super::struct_enum;")?;
         self.printer.println("use serde::ser::SerializeMap;")?;
         self.printer.println("use serde::de;")?;

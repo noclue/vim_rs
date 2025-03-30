@@ -1,18 +1,12 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::HostVsanInternalSystemCmmdsQuery;
-use crate::types::structs::HostVsanInternalSystemDeleteVsanObjectsResult;
-use crate::types::structs::HostVsanInternalSystemVsanObjectOperationResult;
-use crate::types::structs::HostVsanInternalSystemVsanPhysicalDiskDiagnosticsResult;
-use crate::types::structs::VsanNewPolicyBatch;
-use crate::types::structs::VsanPolicyChangeBatch;
-use crate::types::structs::VsanPolicySatisfiability;
 /// The VsanInternalSystem exposes low level access to CMMDS, as well as draft
 /// versions of VSAN object and disk management APIs that are subject to change
 /// in future releases.
 /// 
 /// No compatibility is guaranteed on any of the APIs,
 /// including their prototype, behavior or result encoding.
+#[derive(Clone)]
 pub struct HostVsanInternalSystem {
     client: Arc<Client>,
     mo_id: String,
@@ -86,7 +80,7 @@ impl HostVsanInternalSystem {
     /// ## Errors:
     ///
     /// Failure
-    pub async fn can_provision_objects(&self, npbs: &[VsanNewPolicyBatch], ignore_satisfiability: Option<bool>) -> Result<Vec<VsanPolicySatisfiability>> {
+    pub async fn can_provision_objects(&self, npbs: &[crate::types::structs::VsanNewPolicyBatch], ignore_satisfiability: Option<bool>) -> Result<Vec<crate::types::structs::VsanPolicySatisfiability>> {
         let input = CanProvisionObjectsRequestType {npbs, ignore_satisfiability, };
         let path = format!("/HostVsanInternalSystem/{moId}/CanProvisionObjects", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -119,7 +113,7 @@ impl HostVsanInternalSystem {
     /// ## Errors:
     ///
     /// Failure
-    pub async fn delete_vsan_objects(&self, uuids: &[String], force: Option<bool>) -> Result<Vec<HostVsanInternalSystemDeleteVsanObjectsResult>> {
+    pub async fn delete_vsan_objects(&self, uuids: &[String], force: Option<bool>) -> Result<Vec<crate::types::structs::HostVsanInternalSystemDeleteVsanObjectsResult>> {
         let input = DeleteVsanObjectsRequestType {uuids, force, };
         let path = format!("/HostVsanInternalSystem/{moId}/DeleteVsanObjects", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -170,7 +164,7 @@ impl HostVsanInternalSystem {
     /// ## Returns:
     ///
     /// JSON string with the results
-    pub async fn query_cmmds(&self, queries: &[HostVsanInternalSystemCmmdsQuery]) -> Result<String> {
+    pub async fn query_cmmds(&self, queries: &[crate::types::structs::HostVsanInternalSystemCmmdsQuery]) -> Result<String> {
         let input = QueryCmmdsRequestType {queries, };
         let path = format!("/HostVsanInternalSystem/{moId}/QueryCmmds", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -372,7 +366,7 @@ impl HostVsanInternalSystem {
     /// ## Errors:
     ///
     /// Failure
-    pub async fn reconfiguration_satisfiable(&self, pcbs: &[VsanPolicyChangeBatch], ignore_satisfiability: Option<bool>) -> Result<Vec<VsanPolicySatisfiability>> {
+    pub async fn reconfiguration_satisfiable(&self, pcbs: &[crate::types::structs::VsanPolicyChangeBatch], ignore_satisfiability: Option<bool>) -> Result<Vec<crate::types::structs::VsanPolicySatisfiability>> {
         let input = ReconfigurationSatisfiableRequestType {pcbs, ignore_satisfiability, };
         let path = format!("/HostVsanInternalSystem/{moId}/ReconfigurationSatisfiable", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -422,7 +416,7 @@ impl HostVsanInternalSystem {
     /// ## Returns:
     ///
     /// A list of result structures. One per checked disk.
-    pub async fn run_vsan_physical_disk_diagnostics(&self, disks: Option<&[String]>) -> Result<Vec<HostVsanInternalSystemVsanPhysicalDiskDiagnosticsResult>> {
+    pub async fn run_vsan_physical_disk_diagnostics(&self, disks: Option<&[String]>) -> Result<Vec<crate::types::structs::HostVsanInternalSystemVsanPhysicalDiskDiagnosticsResult>> {
         let input = RunVsanPhysicalDiskDiagnosticsRequestType {disks, };
         let path = format!("/HostVsanInternalSystem/{moId}/RunVsanPhysicalDiskDiagnostics", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -454,7 +448,7 @@ impl HostVsanInternalSystem {
     /// ## Errors:
     ///
     /// ***VsanFault***: for any unexpected failures.
-    pub async fn upgrade_vsan_objects(&self, uuids: &[String], new_version: i32) -> Result<Option<Vec<HostVsanInternalSystemVsanObjectOperationResult>>> {
+    pub async fn upgrade_vsan_objects(&self, uuids: &[String], new_version: i32) -> Result<Option<Vec<crate::types::structs::HostVsanInternalSystemVsanObjectOperationResult>>> {
         let input = UpgradeVsanObjectsRequestType {uuids, new_version, };
         let path = format!("/HostVsanInternalSystem/{moId}/UpgradeVsanObjects", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -469,7 +463,7 @@ struct AbdicateDomOwnershipRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct CanProvisionObjectsRequestType<'a> {
-    npbs: &'a [VsanNewPolicyBatch],
+    npbs: &'a [crate::types::structs::VsanNewPolicyBatch],
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "ignoreSatisfiability")]
     ignore_satisfiability: Option<bool>,
@@ -489,7 +483,7 @@ struct GetVsanObjExtAttrsRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct QueryCmmdsRequestType<'a> {
-    queries: &'a [HostVsanInternalSystemCmmdsQuery],
+    queries: &'a [crate::types::structs::HostVsanInternalSystemCmmdsQuery],
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -532,7 +526,7 @@ struct QueryVsanStatisticsRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct ReconfigurationSatisfiableRequestType<'a> {
-    pcbs: &'a [VsanPolicyChangeBatch],
+    pcbs: &'a [crate::types::structs::VsanPolicyChangeBatch],
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "ignoreSatisfiability")]
     ignore_satisfiability: Option<bool>,

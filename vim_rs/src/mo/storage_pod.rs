@@ -1,19 +1,5 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::AlarmState;
-use crate::types::structs::ClusterConfigSpec;
-use crate::types::structs::ClusterConfigSpecEx;
-use crate::types::structs::CustomFieldDef;
-use crate::types::structs::DvsCreateSpec;
-use crate::types::structs::Event;
-use crate::types::structs::FolderNewHostSpec;
-use crate::types::structs::HostConnectSpec;
-use crate::types::structs::ManagedObjectReference;
-use crate::types::structs::Permission;
-use crate::types::structs::PodStorageDrsEntry;
-use crate::types::structs::StoragePodSummary;
-use crate::types::structs::Tag;
-use crate::types::structs::VirtualMachineConfigSpec;
 /// The *StoragePod* data object aggregates the storage
 /// resources of associated *Datastore* objects into a single
 /// storage resource for use by virtual machines.
@@ -24,6 +10,7 @@ use crate::types::structs::VirtualMachineConfigSpec;
 /// 
 /// Use the *Folder*.*Folder.CreateStoragePod* method
 /// to create an instance of this object.
+#[derive(Clone)]
 pub struct StoragePod {
     client: Arc<Client>,
     mo_id: String,
@@ -118,7 +105,7 @@ impl StoragePod {
     /// ***NoPermission***: if there are crypto keys to be sent to the host,
     /// but the user does not have Cryptographer.RegisterHost privilege
     /// on the Folder.
-    pub async fn add_standalone_host_task(&self, spec: &HostConnectSpec, comp_res_spec: Option<&dyn crate::types::traits::ComputeResourceConfigSpecTrait>, add_connected: bool, license: Option<&str>) -> Result<ManagedObjectReference> {
+    pub async fn add_standalone_host_task(&self, spec: &crate::types::structs::HostConnectSpec, comp_res_spec: Option<&dyn crate::types::traits::ComputeResourceConfigSpecTrait>, add_connected: bool, license: Option<&str>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = AddStandaloneHostRequestType {spec, comp_res_spec, add_connected, license, };
         let path = format!("/StoragePod/{moId}/AddStandaloneHost_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -176,7 +163,7 @@ impl StoragePod {
     /// the operation.
     /// 
     /// Refers instance of *Task*.
-    pub async fn batch_add_hosts_to_cluster_task(&self, cluster: &ManagedObjectReference, new_hosts: Option<&[FolderNewHostSpec]>, existing_hosts: Option<&[ManagedObjectReference]>, comp_res_spec: Option<&dyn crate::types::traits::ComputeResourceConfigSpecTrait>, desired_state: Option<&str>) -> Result<ManagedObjectReference> {
+    pub async fn batch_add_hosts_to_cluster_task(&self, cluster: &crate::types::structs::ManagedObjectReference, new_hosts: Option<&[crate::types::structs::FolderNewHostSpec]>, existing_hosts: Option<&[crate::types::structs::ManagedObjectReference]>, comp_res_spec: Option<&dyn crate::types::traits::ComputeResourceConfigSpecTrait>, desired_state: Option<&str>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = BatchAddHostsToClusterRequestType {cluster, new_hosts, existing_hosts, comp_res_spec, desired_state, };
         let path = format!("/StoragePod/{moId}/BatchAddHostsToCluster_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -215,7 +202,7 @@ impl StoragePod {
     /// the operation.
     /// 
     /// Refers instance of *Task*.
-    pub async fn batch_add_standalone_hosts_task(&self, new_hosts: Option<&[FolderNewHostSpec]>, comp_res_spec: Option<&dyn crate::types::traits::ComputeResourceConfigSpecTrait>, add_connected: bool) -> Result<ManagedObjectReference> {
+    pub async fn batch_add_standalone_hosts_task(&self, new_hosts: Option<&[crate::types::structs::FolderNewHostSpec]>, comp_res_spec: Option<&dyn crate::types::traits::ComputeResourceConfigSpecTrait>, add_connected: bool) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = BatchAddStandaloneHostsRequestType {new_hosts, comp_res_spec, add_connected, };
         let path = format!("/StoragePod/{moId}/BatchAddStandaloneHosts_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -257,7 +244,7 @@ impl StoragePod {
     /// ***NotSupported***: if the cluster is being added to a folder whose
     /// *Folder.childType* property value does not contain
     /// "ComputeResource" or "ClusterComputeResource".
-    pub async fn create_cluster(&self, name: &str, spec: &ClusterConfigSpec) -> Result<ManagedObjectReference> {
+    pub async fn create_cluster(&self, name: &str, spec: &crate::types::structs::ClusterConfigSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateClusterRequestType {name, spec, };
         let path = format!("/StoragePod/{moId}/CreateCluster", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -297,7 +284,7 @@ impl StoragePod {
     /// ***NotSupported***: if the cluster is being added to a folder whose
     /// *Folder.childType* property value does not contain
     /// "ComputeResource" or "ClusterComputeResource".
-    pub async fn create_cluster_ex(&self, name: &str, spec: &ClusterConfigSpecEx) -> Result<ManagedObjectReference> {
+    pub async fn create_cluster_ex(&self, name: &str, spec: &crate::types::structs::ClusterConfigSpecEx) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateClusterExRequestType {name, spec, };
         let path = format!("/StoragePod/{moId}/CreateClusterEx", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -334,7 +321,7 @@ impl StoragePod {
     /// ***NotSupported***: if the datacenter is being created within a folder whose
     /// *Folder.childType* property value does not contain
     /// "Datacenter".
-    pub async fn create_datacenter(&self, name: &str) -> Result<ManagedObjectReference> {
+    pub async fn create_datacenter(&self, name: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateDatacenterRequestType {name, };
         let path = format!("/StoragePod/{moId}/CreateDatacenter", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -369,7 +356,7 @@ impl StoragePod {
     /// 
     /// ***DvsNotAuthorized***: if login-session's extension key does not match
     /// (*DVSConfigInfo.extensionKey*).
-    pub async fn create_dvs_task(&self, spec: &DvsCreateSpec) -> Result<ManagedObjectReference> {
+    pub async fn create_dvs_task(&self, spec: &crate::types::structs::DvsCreateSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateDvsRequestType {spec, };
         let path = format!("/StoragePod/{moId}/CreateDVS_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -405,7 +392,7 @@ impl StoragePod {
     /// target name.
     /// 
     /// ***InvalidName***: if the name is not a valid entity name.
-    pub async fn create_folder(&self, name: &str) -> Result<ManagedObjectReference> {
+    pub async fn create_folder(&self, name: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateFolderRequestType {name, };
         let path = format!("/StoragePod/{moId}/CreateFolder", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -439,7 +426,7 @@ impl StoragePod {
     /// ***NotSupported***: if the storage pod is being added to a folder whose
     /// *Folder.childType* property value does not contain
     /// "StoragePod".
-    pub async fn create_storage_pod(&self, name: &str) -> Result<ManagedObjectReference> {
+    pub async fn create_storage_pod(&self, name: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateStoragePodRequestType {name, };
         let path = format!("/StoragePod/{moId}/CreateStoragePod", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -564,7 +551,7 @@ impl StoragePod {
     /// 
     /// ***NoPermission***: if the created virtual machine is encrypted but the
     /// user does not have Cryptographer.EncryptNew on the folder.
-    pub async fn create_vm_task(&self, config: &VirtualMachineConfigSpec, pool: &ManagedObjectReference, host: Option<&ManagedObjectReference>) -> Result<ManagedObjectReference> {
+    pub async fn create_vm_task(&self, config: &crate::types::structs::VirtualMachineConfigSpec, pool: &crate::types::structs::ManagedObjectReference, host: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateVmRequestType {config, pool, host, };
         let path = format!("/StoragePod/{moId}/CreateVM_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -591,7 +578,7 @@ impl StoragePod {
     /// ## Errors:
     ///
     /// Failure
-    pub async fn destroy_task(&self) -> Result<ManagedObjectReference> {
+    pub async fn destroy_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/StoragePod/{moId}/Destroy_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute(req).await
@@ -690,7 +677,7 @@ impl StoragePod {
     /// ***VmAlreadyExistsInDatacenter***: if moving a standalone host between
     /// datacenters, and one or more of the host's virtual machines is
     /// already registered to a host in the destination datacenter.
-    pub async fn move_into_folder_task(&self, list: &[ManagedObjectReference]) -> Result<ManagedObjectReference> {
+    pub async fn move_into_folder_task(&self, list: &[crate::types::structs::ManagedObjectReference]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = MoveIntoFolderRequestType {list, };
         let path = format!("/StoragePod/{moId}/MoveIntoFolder_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -791,7 +778,7 @@ impl StoragePod {
     /// 
     /// ***InvalidState***: if the operation is not allowed in current state of
     /// the entities involved.
-    pub async fn register_vm_task(&self, path: &str, name: Option<&str>, as_template: bool, pool: Option<&ManagedObjectReference>, host: Option<&ManagedObjectReference>) -> Result<ManagedObjectReference> {
+    pub async fn register_vm_task(&self, path: &str, name: Option<&str>, as_template: bool, pool: Option<&crate::types::structs::ManagedObjectReference>, host: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RegisterVmRequestType {path, name, as_template, pool, host, };
         let path = format!("/StoragePod/{moId}/RegisterVM_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -842,7 +829,7 @@ impl StoragePod {
     /// ***DuplicateName***: If another object in the same folder has the target name.
     /// 
     /// ***InvalidName***: If the new name is not a valid entity name.
-    pub async fn rename_task(&self, new_name: &str) -> Result<ManagedObjectReference> {
+    pub async fn rename_task(&self, new_name: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RenameRequestType {new_name, };
         let path = format!("/StoragePod/{moId}/Rename_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -911,7 +898,7 @@ impl StoragePod {
     /// 
     /// ***NotSupported***: if the *Folder.childType* property of the
     /// folder is not set to "VirtualMachine".
-    pub async fn unregister_and_destroy_task(&self) -> Result<ManagedObjectReference> {
+    pub async fn unregister_and_destroy_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/StoragePod/{moId}/UnregisterAndDestroy_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute(req).await
@@ -931,7 +918,7 @@ impl StoragePod {
     /// The fields are sorted by *CustomFieldDef.name*.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn available_field(&self) -> Result<Option<Vec<CustomFieldDef>>> {
+    pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
         let path = format!("/StoragePod/{moId}/availableField", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -945,7 +932,7 @@ impl StoragePod {
     /// ## Returns:
     ///
     /// Refers instances of *ManagedEntity*.
-    pub async fn child_entity(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
+    pub async fn child_entity(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/StoragePod/{moId}/childEntity", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -990,7 +977,7 @@ impl StoragePod {
     /// events as long as they are still current. The
     /// *configStatus* property provides an overall status
     /// based on these events.
-    pub async fn config_issue(&self) -> Result<Option<Vec<Event>>> {
+    pub async fn config_issue(&self) -> Result<Option<Vec<crate::types::structs::Event>>> {
         let path = format!("/StoragePod/{moId}/configIssue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -1042,7 +1029,7 @@ impl StoragePod {
     /// This set does not include alarms that are defined on descendants of this entity.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn declared_alarm_state(&self) -> Result<Option<Vec<AlarmState>>> {
+    pub async fn declared_alarm_state(&self) -> Result<Option<Vec<crate::types::structs::AlarmState>>> {
         let path = format!("/StoragePod/{moId}/declaredAlarmState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -1192,13 +1179,13 @@ impl StoragePod {
     /// ## Returns:
     ///
     /// Refers instance of *ManagedEntity*.
-    pub async fn parent(&self) -> Result<Option<ManagedObjectReference>> {
+    pub async fn parent(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let path = format!("/StoragePod/{moId}/parent", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
     }
     /// List of permissions defined for this entity.
-    pub async fn permission(&self) -> Result<Option<Vec<Permission>>> {
+    pub async fn permission(&self) -> Result<Option<Vec<crate::types::structs::Permission>>> {
         let path = format!("/StoragePod/{moId}/permission", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -1206,7 +1193,7 @@ impl StoragePod {
     /// Storage DRS related attributes of the Storage Pod.
     /// 
     /// ***Required privileges:*** System.Read
-    pub async fn pod_storage_drs_entry(&self) -> Result<Option<PodStorageDrsEntry>> {
+    pub async fn pod_storage_drs_entry(&self) -> Result<Option<crate::types::structs::PodStorageDrsEntry>> {
         let path = format!("/StoragePod/{moId}/podStorageDrsEntry", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -1236,7 +1223,7 @@ impl StoragePod {
     /// ## Returns:
     ///
     /// Refers instances of *Task*.
-    pub async fn recent_task(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
+    pub async fn recent_task(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/StoragePod/{moId}/recentTask", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -1244,7 +1231,7 @@ impl StoragePod {
     /// Storage pod summary.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn summary(&self) -> Result<Option<StoragePodSummary>> {
+    pub async fn summary(&self) -> Result<Option<crate::types::structs::StoragePodSummary>> {
         let path = format!("/StoragePod/{moId}/summary", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -1254,7 +1241,7 @@ impl StoragePod {
     /// Experimental. Subject to change.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn tag(&self) -> Result<Option<Vec<Tag>>> {
+    pub async fn tag(&self) -> Result<Option<Vec<crate::types::structs::Tag>>> {
         let path = format!("/StoragePod/{moId}/tag", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -1273,7 +1260,7 @@ impl StoragePod {
     /// produce any property values as no updates are generated.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn triggered_alarm_state(&self) -> Result<Option<Vec<AlarmState>>> {
+    pub async fn triggered_alarm_state(&self) -> Result<Option<Vec<crate::types::structs::AlarmState>>> {
         let path = format!("/StoragePod/{moId}/triggeredAlarmState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -1294,7 +1281,7 @@ impl StoragePod {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct AddStandaloneHostRequestType<'a> {
-    spec: &'a HostConnectSpec,
+    spec: &'a crate::types::structs::HostConnectSpec,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "compResSpec")]
     comp_res_spec: Option<&'a dyn crate::types::traits::ComputeResourceConfigSpecTrait>,
@@ -1306,13 +1293,13 @@ struct AddStandaloneHostRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct BatchAddHostsToClusterRequestType<'a> {
-    cluster: &'a ManagedObjectReference,
+    cluster: &'a crate::types::structs::ManagedObjectReference,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "newHosts")]
-    new_hosts: Option<&'a [FolderNewHostSpec]>,
+    new_hosts: Option<&'a [crate::types::structs::FolderNewHostSpec]>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "existingHosts")]
-    existing_hosts: Option<&'a [ManagedObjectReference]>,
+    existing_hosts: Option<&'a [crate::types::structs::ManagedObjectReference]>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "compResSpec")]
     comp_res_spec: Option<&'a dyn crate::types::traits::ComputeResourceConfigSpecTrait>,
@@ -1325,7 +1312,7 @@ struct BatchAddHostsToClusterRequestType<'a> {
 struct BatchAddStandaloneHostsRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "newHosts")]
-    new_hosts: Option<&'a [FolderNewHostSpec]>,
+    new_hosts: Option<&'a [crate::types::structs::FolderNewHostSpec]>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "compResSpec")]
     comp_res_spec: Option<&'a dyn crate::types::traits::ComputeResourceConfigSpecTrait>,
@@ -1336,13 +1323,13 @@ struct BatchAddStandaloneHostsRequestType<'a> {
 #[serde(tag="_typeName")]
 struct CreateClusterRequestType<'a> {
     name: &'a str,
-    spec: &'a ClusterConfigSpec,
+    spec: &'a crate::types::structs::ClusterConfigSpec,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct CreateClusterExRequestType<'a> {
     name: &'a str,
-    spec: &'a ClusterConfigSpecEx,
+    spec: &'a crate::types::structs::ClusterConfigSpecEx,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -1352,7 +1339,7 @@ struct CreateDatacenterRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(rename = "CreateDVSRequestType", tag = "_typeName")]
 struct CreateDvsRequestType<'a> {
-    spec: &'a DvsCreateSpec,
+    spec: &'a crate::types::structs::DvsCreateSpec,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -1367,15 +1354,15 @@ struct CreateStoragePodRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(rename = "CreateVMRequestType", tag = "_typeName")]
 struct CreateVmRequestType<'a> {
-    config: &'a VirtualMachineConfigSpec,
-    pool: &'a ManagedObjectReference,
+    config: &'a crate::types::structs::VirtualMachineConfigSpec,
+    pool: &'a crate::types::structs::ManagedObjectReference,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    host: Option<&'a ManagedObjectReference>,
+    host: Option<&'a crate::types::structs::ManagedObjectReference>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct MoveIntoFolderRequestType<'a> {
-    list: &'a [ManagedObjectReference],
+    list: &'a [crate::types::structs::ManagedObjectReference],
 }
 #[derive(serde::Serialize)]
 #[serde(rename = "RegisterVMRequestType", tag = "_typeName")]
@@ -1386,9 +1373,9 @@ struct RegisterVmRequestType<'a> {
     #[serde(rename = "asTemplate")]
     as_template: bool,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pool: Option<&'a ManagedObjectReference>,
+    pool: Option<&'a crate::types::structs::ManagedObjectReference>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    host: Option<&'a ManagedObjectReference>,
+    host: Option<&'a crate::types::structs::ManagedObjectReference>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]

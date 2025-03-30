@@ -1,12 +1,8 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::CustomFieldDef;
-use crate::types::structs::LocalizableMessage;
-use crate::types::structs::MethodFault;
-use crate::types::structs::TaskInfo;
-use crate::types::vim_any::VimAny;
 /// A task is used to monitor and potentially cancel long
 /// running operations.
+#[derive(Clone)]
 pub struct Task {
     client: Arc<Client>,
     mo_id: String,
@@ -26,7 +22,7 @@ impl Task {
     ///
     /// ### description
     /// New description for task
-    pub async fn set_task_description(&self, description: &LocalizableMessage) -> Result<()> {
+    pub async fn set_task_description(&self, description: &crate::types::structs::LocalizableMessage) -> Result<()> {
         let input = SetTaskDescriptionRequestType {description, };
         let path = format!("/Task/{moId}/SetTaskDescription", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -126,7 +122,7 @@ impl Task {
     /// ***InvalidState***: If attempting to change states after
     /// task is completed or in error, or attempting to set the
     /// result or fault incorrectly
-    pub async fn set_task_state(&self, state: crate::types::enums::TaskInfoStateEnum, result: Option<VimAny>, fault: Option<&MethodFault>) -> Result<()> {
+    pub async fn set_task_state(&self, state: crate::types::enums::TaskInfoStateEnum, result: Option<crate::types::vim_any::VimAny>, fault: Option<&crate::types::structs::MethodFault>) -> Result<()> {
         let input = SetTaskStateRequestType {state, result, fault, };
         let path = format!("/Task/{moId}/SetTaskState", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -137,13 +133,13 @@ impl Task {
     /// The fields are sorted by *CustomFieldDef.name*.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn available_field(&self) -> Result<Option<Vec<CustomFieldDef>>> {
+    pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
         let path = format!("/Task/{moId}/availableField", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
     }
     /// Detailed information about this task.
-    pub async fn info(&self) -> Result<TaskInfo> {
+    pub async fn info(&self) -> Result<crate::types::structs::TaskInfo> {
         let path = format!("/Task/{moId}/info", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute(req).await
@@ -164,7 +160,7 @@ impl Task {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct SetTaskDescriptionRequestType<'a> {
-    description: &'a LocalizableMessage,
+    description: &'a crate::types::structs::LocalizableMessage,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -183,7 +179,7 @@ struct SetCustomValueRequestType<'a> {
 struct SetTaskStateRequestType<'a> {
     state: crate::types::enums::TaskInfoStateEnum,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    result: Option<VimAny>,
+    result: Option<crate::types::vim_any::VimAny>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    fault: Option<&'a MethodFault>,
+    fault: Option<&'a crate::types::structs::MethodFault>,
 }

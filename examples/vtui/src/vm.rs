@@ -11,8 +11,3 @@ vim_updatable!(
         power_state = "runtime.power_state",
     }
 );
-
-
-
-
-

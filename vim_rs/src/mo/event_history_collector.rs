@@ -1,10 +1,9 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::Event;
-use crate::types::vim_any::VimAny;
 /// EventHistoryCollector provides a mechanism for
 /// retrieving historical data and updates when the server appends new
 /// events.
+#[derive(Clone)]
 pub struct EventHistoryCollector {
     client: Arc<Client>,
     mo_id: String,
@@ -26,7 +25,7 @@ impl EventHistoryCollector {
     ///
     /// ### max_count
     /// The maximum number of items in the page.
-    pub async fn read_next_events(&self, max_count: i32) -> Result<Option<Vec<Event>>> {
+    pub async fn read_next_events(&self, max_count: i32) -> Result<Option<Vec<crate::types::structs::Event>>> {
         let input = ReadNextEventsRequestType {max_count, };
         let path = format!("/EventHistoryCollector/{moId}/ReadNextEvents", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -42,7 +41,7 @@ impl EventHistoryCollector {
     ///
     /// ### max_count
     /// The maximum number of items in the page.
-    pub async fn read_previous_events(&self, max_count: i32) -> Result<Option<Vec<Event>>> {
+    pub async fn read_previous_events(&self, max_count: i32) -> Result<Option<Vec<crate::types::structs::Event>>> {
         let input = ReadPreviousEventsRequestType {max_count, };
         let path = format!("/EventHistoryCollector/{moId}/ReadPreviousEvents", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -96,7 +95,7 @@ impl EventHistoryCollector {
     /// 
     /// The type of the returned filter is determined by the managed object
     /// for which the collector is created.
-    pub async fn filter(&self) -> Result<VimAny> {
+    pub async fn filter(&self) -> Result<crate::types::vim_any::VimAny> {
         let path = format!("/EventHistoryCollector/{moId}/filter", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute(req).await
@@ -113,7 +112,7 @@ impl EventHistoryCollector {
     /// events in the returned page are unordered.
     /// While `initialized` is `false` this property will remain empty and once the Collector is initialized it will be populated.
     /// While `initialized` is `true` this property is populated immediately.
-    pub async fn latest_page(&self) -> Result<Option<Vec<Event>>> {
+    pub async fn latest_page(&self) -> Result<Option<Vec<crate::types::structs::Event>>> {
         let path = format!("/EventHistoryCollector/{moId}/latestPage", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await

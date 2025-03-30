@@ -1,12 +1,5 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::AuthorizationDescription;
-use crate::types::structs::AuthorizationPrivilege;
-use crate::types::structs::AuthorizationRole;
-use crate::types::structs::EntityPrivilege;
-use crate::types::structs::ManagedObjectReference;
-use crate::types::structs::Permission;
-use crate::types::structs::UserPrivilegeResult;
 /// This managed object provides operations to query and update
 /// roles and permissions.
 /// 
@@ -63,6 +56,7 @@ use crate::types::structs::UserPrivilegeResult;
 /// as the object that defines the permissions. Permissions defined on an FT primary
 /// VM are always applicable on its secondary VMs, but can only be defined or modified
 /// on the primary VM.
+#[derive(Clone)]
 pub struct AuthorizationManager {
     client: Arc<Client>,
     mo_id: String,
@@ -127,7 +121,7 @@ impl AuthorizationManager {
     /// ## Returns:
     ///
     /// the privilege check result for each entity
-    pub async fn fetch_user_privilege_on_entities(&self, entities: &[ManagedObjectReference], user_name: &str) -> Result<Option<Vec<UserPrivilegeResult>>> {
+    pub async fn fetch_user_privilege_on_entities(&self, entities: &[crate::types::structs::ManagedObjectReference], user_name: &str) -> Result<Option<Vec<crate::types::structs::UserPrivilegeResult>>> {
         let input = FetchUserPrivilegeOnEntitiesRequestType {entities, user_name, };
         let path = format!("/AuthorizationManager/{moId}/FetchUserPrivilegeOnEntities", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -161,7 +155,7 @@ impl AuthorizationManager {
     /// ## Returns:
     ///
     /// The privilege check result.
-    pub async fn has_privilege_on_entities(&self, entity: &[ManagedObjectReference], session_id: &str, priv_id: Option<&[String]>) -> Result<Option<Vec<EntityPrivilege>>> {
+    pub async fn has_privilege_on_entities(&self, entity: &[crate::types::structs::ManagedObjectReference], session_id: &str, priv_id: Option<&[String]>) -> Result<Option<Vec<crate::types::structs::EntityPrivilege>>> {
         let input = HasPrivilegeOnEntitiesRequestType {entity, session_id, priv_id, };
         let path = format!("/AuthorizationManager/{moId}/HasPrivilegeOnEntities", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -195,7 +189,7 @@ impl AuthorizationManager {
     ///
     /// a boolean value for each privilege indicating whether the session holds the
     /// privilege.
-    pub async fn has_privilege_on_entity(&self, entity: &ManagedObjectReference, session_id: &str, priv_id: Option<&[String]>) -> Result<Option<Vec<bool>>> {
+    pub async fn has_privilege_on_entity(&self, entity: &crate::types::structs::ManagedObjectReference, session_id: &str, priv_id: Option<&[String]>) -> Result<Option<Vec<bool>>> {
         let input = HasPrivilegeOnEntityRequestType {entity, session_id, priv_id, };
         let path = format!("/AuthorizationManager/{moId}/HasPrivilegeOnEntity", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -230,7 +224,7 @@ impl AuthorizationManager {
     /// ## Returns:
     ///
     /// the privilege check result
-    pub async fn has_user_privilege_on_entities(&self, entities: &[ManagedObjectReference], user_name: &str, priv_id: Option<&[String]>) -> Result<Option<Vec<EntityPrivilege>>> {
+    pub async fn has_user_privilege_on_entities(&self, entities: &[crate::types::structs::ManagedObjectReference], user_name: &str, priv_id: Option<&[String]>) -> Result<Option<Vec<crate::types::structs::EntityPrivilege>>> {
         let input = HasUserPrivilegeOnEntitiesRequestType {entities, user_name, priv_id, };
         let path = format!("/AuthorizationManager/{moId}/HasUserPrivilegeOnEntities", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -314,7 +308,7 @@ impl AuthorizationManager {
     /// in the permission to be removed or
     /// "Authorization.ModifyPermissions" privilege
     /// on the entity.
-    pub async fn remove_entity_permission(&self, entity: &ManagedObjectReference, user: &str, is_group: bool) -> Result<()> {
+    pub async fn remove_entity_permission(&self, entity: &crate::types::structs::ManagedObjectReference, user: &str, is_group: bool) -> Result<()> {
         let input = RemoveEntityPermissionRequestType {entity, user, is_group, };
         let path = format!("/AuthorizationManager/{moId}/RemoveEntityPermission", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -414,7 +408,7 @@ impl AuthorizationManager {
     /// in the updated permission or
     /// "Authorization.ModifyPermissions" privilege on
     /// the entity.
-    pub async fn reset_entity_permissions(&self, entity: &ManagedObjectReference, permission: Option<&[Permission]>) -> Result<()> {
+    pub async fn reset_entity_permissions(&self, entity: &crate::types::structs::ManagedObjectReference, permission: Option<&[crate::types::structs::Permission]>) -> Result<()> {
         let input = ResetEntityPermissionsRequestType {entity, permission, };
         let path = format!("/AuthorizationManager/{moId}/ResetEntityPermissions", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -426,7 +420,7 @@ impl AuthorizationManager {
     /// user making the call.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn retrieve_all_permissions(&self) -> Result<Option<Vec<Permission>>> {
+    pub async fn retrieve_all_permissions(&self) -> Result<Option<Vec<crate::types::structs::Permission>>> {
         let path = format!("/AuthorizationManager/{moId}/RetrieveAllPermissions", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute_option(req).await
@@ -455,7 +449,7 @@ impl AuthorizationManager {
     /// ### inherited
     /// Whether or not to include propagating permissions
     /// defined by parent entities.
-    pub async fn retrieve_entity_permissions(&self, entity: &ManagedObjectReference, inherited: bool) -> Result<Option<Vec<Permission>>> {
+    pub async fn retrieve_entity_permissions(&self, entity: &crate::types::structs::ManagedObjectReference, inherited: bool) -> Result<Option<Vec<crate::types::structs::Permission>>> {
         let input = RetrieveEntityPermissionsRequestType {entity, inherited, };
         let path = format!("/AuthorizationManager/{moId}/RetrieveEntityPermissions", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -476,7 +470,7 @@ impl AuthorizationManager {
     /// ## Errors:
     ///
     /// ***NotFound***: if the role does not exist.
-    pub async fn retrieve_role_permissions(&self, role_id: i32) -> Result<Option<Vec<Permission>>> {
+    pub async fn retrieve_role_permissions(&self, role_id: i32) -> Result<Option<Vec<crate::types::structs::Permission>>> {
         let input = RetrieveRolePermissionsRequestType {role_id, };
         let path = format!("/AuthorizationManager/{moId}/RetrieveRolePermissions", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -537,7 +531,7 @@ impl AuthorizationManager {
     /// in any permission that being set or
     /// "Authorization.ModifyPermissions" privilege on
     /// the entity.
-    pub async fn set_entity_permissions(&self, entity: &ManagedObjectReference, permission: Option<&[Permission]>) -> Result<()> {
+    pub async fn set_entity_permissions(&self, entity: &crate::types::structs::ManagedObjectReference, permission: Option<&[crate::types::structs::Permission]>) -> Result<()> {
         let input = SetEntityPermissionsRequestType {entity, permission, };
         let path = format!("/AuthorizationManager/{moId}/SetEntityPermissions", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -590,7 +584,7 @@ impl AuthorizationManager {
     /// Static, descriptive strings for system roles and privileges.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn description(&self) -> Result<AuthorizationDescription> {
+    pub async fn description(&self) -> Result<crate::types::structs::AuthorizationDescription> {
         let path = format!("/AuthorizationManager/{moId}/description", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute(req).await
@@ -598,7 +592,7 @@ impl AuthorizationManager {
     /// The list of system-defined privileges.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn privilege_list(&self) -> Result<Option<Vec<AuthorizationPrivilege>>> {
+    pub async fn privilege_list(&self) -> Result<Option<Vec<crate::types::structs::AuthorizationPrivilege>>> {
         let path = format!("/AuthorizationManager/{moId}/privilegeList", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -607,7 +601,7 @@ impl AuthorizationManager {
     /// static system-defined roles.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn role_list(&self) -> Result<Option<Vec<AuthorizationRole>>> {
+    pub async fn role_list(&self) -> Result<Option<Vec<crate::types::structs::AuthorizationRole>>> {
         let path = format!("/AuthorizationManager/{moId}/roleList", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -624,14 +618,14 @@ struct AddAuthorizationRoleRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct FetchUserPrivilegeOnEntitiesRequestType<'a> {
-    entities: &'a [ManagedObjectReference],
+    entities: &'a [crate::types::structs::ManagedObjectReference],
     #[serde(rename = "userName")]
     user_name: &'a str,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct HasPrivilegeOnEntitiesRequestType<'a> {
-    entity: &'a [ManagedObjectReference],
+    entity: &'a [crate::types::structs::ManagedObjectReference],
     #[serde(rename = "sessionId")]
     session_id: &'a str,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -641,7 +635,7 @@ struct HasPrivilegeOnEntitiesRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct HasPrivilegeOnEntityRequestType<'a> {
-    entity: &'a ManagedObjectReference,
+    entity: &'a crate::types::structs::ManagedObjectReference,
     #[serde(rename = "sessionId")]
     session_id: &'a str,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -651,7 +645,7 @@ struct HasPrivilegeOnEntityRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct HasUserPrivilegeOnEntitiesRequestType<'a> {
-    entities: &'a [ManagedObjectReference],
+    entities: &'a [crate::types::structs::ManagedObjectReference],
     #[serde(rename = "userName")]
     user_name: &'a str,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -669,7 +663,7 @@ struct MergePermissionsRequestType {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct RemoveEntityPermissionRequestType<'a> {
-    entity: &'a ManagedObjectReference,
+    entity: &'a crate::types::structs::ManagedObjectReference,
     user: &'a str,
     #[serde(rename = "isGroup")]
     is_group: bool,
@@ -685,14 +679,14 @@ struct RemoveAuthorizationRoleRequestType {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct ResetEntityPermissionsRequestType<'a> {
-    entity: &'a ManagedObjectReference,
+    entity: &'a crate::types::structs::ManagedObjectReference,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    permission: Option<&'a [Permission]>,
+    permission: Option<&'a [crate::types::structs::Permission]>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct RetrieveEntityPermissionsRequestType<'a> {
-    entity: &'a ManagedObjectReference,
+    entity: &'a crate::types::structs::ManagedObjectReference,
     inherited: bool,
 }
 #[derive(serde::Serialize)]
@@ -704,9 +698,9 @@ struct RetrieveRolePermissionsRequestType {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct SetEntityPermissionsRequestType<'a> {
-    entity: &'a ManagedObjectReference,
+    entity: &'a crate::types::structs::ManagedObjectReference,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    permission: Option<&'a [Permission]>,
+    permission: Option<&'a [crate::types::structs::Permission]>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]

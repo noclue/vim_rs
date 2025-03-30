@@ -1,9 +1,8 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::CustomizationSpecInfo;
-use crate::types::structs::CustomizationSpecItem;
 /// The CustomizationSpecManager managed object is used to manage
 /// customization specifications stored on the VirtualCenter server.
+#[derive(Clone)]
 pub struct CustomizationSpecManager {
     client: Arc<Client>,
     mo_id: String,
@@ -56,7 +55,7 @@ impl CustomizationSpecManager {
     /// ***AlreadyExists***: 
     /// 
     /// ***CannotDecryptPasswords***:
-    pub async fn create_customization_spec(&self, item: &CustomizationSpecItem) -> Result<()> {
+    pub async fn create_customization_spec(&self, item: &crate::types::structs::CustomizationSpecItem) -> Result<()> {
         let input = CreateCustomizationSpecRequestType {item, };
         let path = format!("/CustomizationSpecManager/{moId}/CreateCustomizationSpec", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -129,7 +128,7 @@ impl CustomizationSpecManager {
     /// ## Errors:
     ///
     /// ***NotFound***:
-    pub async fn get_customization_spec(&self, name: &str) -> Result<CustomizationSpecItem> {
+    pub async fn get_customization_spec(&self, name: &str) -> Result<crate::types::structs::CustomizationSpecItem> {
         let input = GetCustomizationSpecRequestType {name, };
         let path = format!("/CustomizationSpecManager/{moId}/GetCustomizationSpec", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -157,7 +156,7 @@ impl CustomizationSpecManager {
     /// ***ConcurrentAccess***: 
     /// 
     /// ***CannotDecryptPasswords***:
-    pub async fn overwrite_customization_spec(&self, item: &CustomizationSpecItem) -> Result<()> {
+    pub async fn overwrite_customization_spec(&self, item: &crate::types::structs::CustomizationSpecItem) -> Result<()> {
         let input = OverwriteCustomizationSpecRequestType {item, };
         let path = format!("/CustomizationSpecManager/{moId}/OverwriteCustomizationSpec", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -194,7 +193,7 @@ impl CustomizationSpecManager {
     ///
     /// ### item
     /// -
-    pub async fn customization_spec_item_to_xml(&self, item: &CustomizationSpecItem) -> Result<String> {
+    pub async fn customization_spec_item_to_xml(&self, item: &crate::types::structs::CustomizationSpecItem) -> Result<String> {
         let input = CustomizationSpecItemToXmlRequestType {item, };
         let path = format!("/CustomizationSpecManager/{moId}/CustomizationSpecItemToXml", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -212,7 +211,7 @@ impl CustomizationSpecManager {
     /// ## Errors:
     ///
     /// Failure
-    pub async fn xml_to_customization_spec_item(&self, spec_item_xml: &str) -> Result<CustomizationSpecItem> {
+    pub async fn xml_to_customization_spec_item(&self, spec_item_xml: &str) -> Result<crate::types::structs::CustomizationSpecItem> {
         let input = XmlToCustomizationSpecItemRequestType {spec_item_xml, };
         let path = format!("/CustomizationSpecManager/{moId}/XmlToCustomizationSpecItem", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -230,7 +229,7 @@ impl CustomizationSpecManager {
     /// Gets a list of information on available specifications.
     /// 
     /// ***Required privileges:*** VirtualMachine.Provisioning.ReadCustSpecs
-    pub async fn info(&self) -> Result<Option<Vec<CustomizationSpecInfo>>> {
+    pub async fn info(&self) -> Result<Option<Vec<crate::types::structs::CustomizationSpecInfo>>> {
         let path = format!("/CustomizationSpecManager/{moId}/info", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -245,7 +244,7 @@ struct CheckCustomizationResourcesRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct CreateCustomizationSpecRequestType<'a> {
-    item: &'a CustomizationSpecItem,
+    item: &'a crate::types::structs::CustomizationSpecItem,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -272,7 +271,7 @@ struct GetCustomizationSpecRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct OverwriteCustomizationSpecRequestType<'a> {
-    item: &'a CustomizationSpecItem,
+    item: &'a crate::types::structs::CustomizationSpecItem,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -284,7 +283,7 @@ struct RenameCustomizationSpecRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct CustomizationSpecItemToXmlRequestType<'a> {
-    item: &'a CustomizationSpecItem,
+    item: &'a crate::types::structs::CustomizationSpecItem,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]

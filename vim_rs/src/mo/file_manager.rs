@@ -1,7 +1,5 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::FileLockInfoResult;
-use crate::types::structs::ManagedObjectReference;
 /// This managed object type provides a way to manage and manipulate files and
 /// folders on datastores.
 /// 
@@ -32,6 +30,7 @@ use crate::types::structs::ManagedObjectReference;
 /// a datastore can be obtained from the datastore browser.
 /// 
 /// See also *HostDatastoreBrowser*.
+#[derive(Clone)]
 pub struct FileManager {
     client: Arc<Client>,
     mo_id: String,
@@ -63,7 +62,7 @@ impl FileManager {
     /// ## Errors:
     ///
     /// Failure
-    pub async fn change_owner(&self, name: &str, datacenter: Option<&ManagedObjectReference>, owner: &str) -> Result<()> {
+    pub async fn change_owner(&self, name: &str, datacenter: Option<&crate::types::structs::ManagedObjectReference>, owner: &str) -> Result<()> {
         let input = ChangeOwnerRequestType {name, datacenter, owner, };
         let path = format!("/FileManager/{moId}/ChangeOwner", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -169,7 +168,7 @@ impl FileManager {
     /// datastore.
     /// 
     /// ***FileFault***: if there is a generic file error
-    pub async fn copy_datastore_file_task(&self, source_name: &str, source_datacenter: Option<&ManagedObjectReference>, destination_name: &str, destination_datacenter: Option<&ManagedObjectReference>, force: Option<bool>) -> Result<ManagedObjectReference> {
+    pub async fn copy_datastore_file_task(&self, source_name: &str, source_datacenter: Option<&crate::types::structs::ManagedObjectReference>, destination_name: &str, destination_datacenter: Option<&crate::types::structs::ManagedObjectReference>, force: Option<bool>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CopyDatastoreFileRequestType {source_name, source_datacenter, destination_name, destination_datacenter, force, };
         let path = format!("/FileManager/{moId}/CopyDatastoreFile_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -230,7 +229,7 @@ impl FileManager {
     /// in use.
     /// 
     /// ***FileFault***: if there is a generic file error
-    pub async fn delete_datastore_file_task(&self, name: &str, datacenter: Option<&ManagedObjectReference>) -> Result<ManagedObjectReference> {
+    pub async fn delete_datastore_file_task(&self, name: &str, datacenter: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = DeleteDatastoreFileRequestType {name, datacenter, };
         let path = format!("/FileManager/{moId}/DeleteDatastoreFile_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -283,7 +282,7 @@ impl FileManager {
     /// level folder specified by name is not found.
     /// 
     /// ***FileFault***: if there is a generic file error
-    pub async fn make_directory(&self, name: &str, datacenter: Option<&ManagedObjectReference>, create_parent_directories: Option<bool>) -> Result<()> {
+    pub async fn make_directory(&self, name: &str, datacenter: Option<&crate::types::structs::ManagedObjectReference>, create_parent_directories: Option<bool>) -> Result<()> {
         let input = MakeDirectoryRequestType {name, datacenter, create_parent_directories, };
         let path = format!("/FileManager/{moId}/MakeDirectory", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -390,7 +389,7 @@ impl FileManager {
     /// datastore.
     /// 
     /// ***FileFault***: if there is a generic file error
-    pub async fn move_datastore_file_task(&self, source_name: &str, source_datacenter: Option<&ManagedObjectReference>, destination_name: &str, destination_datacenter: Option<&ManagedObjectReference>, force: Option<bool>) -> Result<ManagedObjectReference> {
+    pub async fn move_datastore_file_task(&self, source_name: &str, source_datacenter: Option<&crate::types::structs::ManagedObjectReference>, destination_name: &str, destination_datacenter: Option<&crate::types::structs::ManagedObjectReference>, force: Option<bool>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = MoveDatastoreFileRequestType {source_name, source_datacenter, destination_name, destination_datacenter, force, };
         let path = format!("/FileManager/{moId}/MoveDatastoreFile_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -431,7 +430,7 @@ impl FileManager {
     /// ***InvalidArgument***: If invoked with no host param on vCenter or if
     /// invoked with invalid path. Expected VM file path
     /// would be: /vmfs/volumes/datastore1/vm/vm-flat.vmdk
-    pub async fn query_file_lock_info(&self, path: &str, host: Option<&ManagedObjectReference>) -> Result<FileLockInfoResult> {
+    pub async fn query_file_lock_info(&self, path: &str, host: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::FileLockInfoResult> {
         let input = QueryFileLockInfoRequestType {path, host, };
         let path = format!("/FileManager/{moId}/QueryFileLockInfo", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -443,7 +442,7 @@ impl FileManager {
 struct ChangeOwnerRequestType<'a> {
     name: &'a str,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    datacenter: Option<&'a ManagedObjectReference>,
+    datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
     owner: &'a str,
 }
 #[derive(serde::Serialize)]
@@ -453,12 +452,12 @@ struct CopyDatastoreFileRequestType<'a> {
     source_name: &'a str,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "sourceDatacenter")]
-    source_datacenter: Option<&'a ManagedObjectReference>,
+    source_datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
     #[serde(rename = "destinationName")]
     destination_name: &'a str,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "destinationDatacenter")]
-    destination_datacenter: Option<&'a ManagedObjectReference>,
+    destination_datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     force: Option<bool>,
 }
@@ -467,14 +466,14 @@ struct CopyDatastoreFileRequestType<'a> {
 struct DeleteDatastoreFileRequestType<'a> {
     name: &'a str,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    datacenter: Option<&'a ManagedObjectReference>,
+    datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct MakeDirectoryRequestType<'a> {
     name: &'a str,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    datacenter: Option<&'a ManagedObjectReference>,
+    datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "createParentDirectories")]
     create_parent_directories: Option<bool>,
@@ -486,12 +485,12 @@ struct MoveDatastoreFileRequestType<'a> {
     source_name: &'a str,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "sourceDatacenter")]
-    source_datacenter: Option<&'a ManagedObjectReference>,
+    source_datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
     #[serde(rename = "destinationName")]
     destination_name: &'a str,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "destinationDatacenter")]
-    destination_datacenter: Option<&'a ManagedObjectReference>,
+    destination_datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     force: Option<bool>,
 }
@@ -500,5 +499,5 @@ struct MoveDatastoreFileRequestType<'a> {
 struct QueryFileLockInfoRequestType<'a> {
     path: &'a str,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    host: Option<&'a ManagedObjectReference>,
+    host: Option<&'a crate::types::structs::ManagedObjectReference>,
 }

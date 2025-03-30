@@ -1,13 +1,5 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::HttpNfcLeaseCapabilities;
-use crate::types::structs::HttpNfcLeaseInfo;
-use crate::types::structs::HttpNfcLeaseManifestEntry;
-use crate::types::structs::HttpNfcLeaseProbeResult;
-use crate::types::structs::HttpNfcLeaseSourceFile;
-use crate::types::structs::KeyValue;
-use crate::types::structs::ManagedObjectReference;
-use crate::types::structs::MethodFault;
 /// Represents a lease on a *VirtualMachine* or
 /// a *VirtualApp*, which can be used to import or export
 /// disks for the entity.
@@ -48,6 +40,7 @@ use crate::types::structs::MethodFault;
 /// </dl>
 /// The import/export task corresponding to the lease continues running while
 /// the lease is held.
+#[derive(Clone)]
 pub struct HttpNfcLease {
     client: Arc<Client>,
     mo_id: String,
@@ -80,7 +73,7 @@ impl HttpNfcLease {
     /// ***Timedout***: if the lease has timed out before this call.
     /// 
     /// ***InvalidState***: if the lease has already been aborted.
-    pub async fn http_nfc_lease_abort(&self, fault: Option<&MethodFault>) -> Result<()> {
+    pub async fn http_nfc_lease_abort(&self, fault: Option<&crate::types::structs::MethodFault>) -> Result<()> {
         let input = HttpNfcLeaseAbortRequestType {fault, };
         let path = format!("/HttpNfcLease/{moId}/HttpNfcLeaseAbort", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -112,7 +105,7 @@ impl HttpNfcLease {
     /// ## Errors:
     ///
     /// Failure
-    pub async fn http_nfc_lease_get_manifest(&self) -> Result<Option<Vec<HttpNfcLeaseManifestEntry>>> {
+    pub async fn http_nfc_lease_get_manifest(&self) -> Result<Option<Vec<crate::types::structs::HttpNfcLeaseManifestEntry>>> {
         let path = format!("/HttpNfcLease/{moId}/HttpNfcLeaseGetManifest", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute_option(req).await
@@ -138,7 +131,7 @@ impl HttpNfcLease {
     /// ***InvalidArgument***: if no source files are provided.
     /// 
     /// ***InvalidState***: if the lease has already been aborted.
-    pub async fn http_nfc_lease_probe_urls(&self, files: Option<&[HttpNfcLeaseSourceFile]>, timeout: Option<i32>) -> Result<Option<Vec<HttpNfcLeaseProbeResult>>> {
+    pub async fn http_nfc_lease_probe_urls(&self, files: Option<&[crate::types::structs::HttpNfcLeaseSourceFile]>, timeout: Option<i32>) -> Result<Option<Vec<crate::types::structs::HttpNfcLeaseProbeResult>>> {
         let input = HttpNfcLeaseProbeUrlsRequestType {files, timeout, };
         let path = format!("/HttpNfcLease/{moId}/HttpNfcLeaseProbeUrls", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -184,7 +177,7 @@ impl HttpNfcLease {
     /// ## Errors:
     ///
     /// ***InvalidState***: if the lease has already been aborted.
-    pub async fn http_nfc_lease_pull_from_urls_task(&self, files: Option<&[HttpNfcLeaseSourceFile]>) -> Result<ManagedObjectReference> {
+    pub async fn http_nfc_lease_pull_from_urls_task(&self, files: Option<&[crate::types::structs::HttpNfcLeaseSourceFile]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = HttpNfcLeasePullFromUrlsRequestType {files, };
         let path = format!("/HttpNfcLease/{moId}/HttpNfcLeasePullFromUrls_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -205,7 +198,7 @@ impl HttpNfcLease {
     /// ## Errors:
     ///
     /// Failure
-    pub async fn http_nfc_lease_set_manifest_checksum_type(&self, device_urls_to_checksum_types: Option<&[KeyValue]>) -> Result<()> {
+    pub async fn http_nfc_lease_set_manifest_checksum_type(&self, device_urls_to_checksum_types: Option<&[crate::types::structs::KeyValue]>) -> Result<()> {
         let input = HttpNfcLeaseSetManifestChecksumTypeRequestType {device_urls_to_checksum_types, };
         let path = format!("/HttpNfcLease/{moId}/HttpNfcLeaseSetManifestChecksumType", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -213,14 +206,14 @@ impl HttpNfcLease {
     }
     /// Current supported capabilities by this lease
     /// See *HttpNfcLeaseCapabilities*
-    pub async fn capabilities(&self) -> Result<HttpNfcLeaseCapabilities> {
+    pub async fn capabilities(&self) -> Result<crate::types::structs::HttpNfcLeaseCapabilities> {
         let path = format!("/HttpNfcLease/{moId}/capabilities", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute(req).await
     }
     /// If the lease is in the error state, this property contains the
     /// error that caused the lease to be aborted.
-    pub async fn error(&self) -> Result<Option<MethodFault>> {
+    pub async fn error(&self) -> Result<Option<crate::types::structs::MethodFault>> {
         let path = format!("/HttpNfcLease/{moId}/error", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -229,7 +222,7 @@ impl HttpNfcLease {
     /// 
     /// The
     /// info property is only valid when the lease is in the ready state.
-    pub async fn info(&self) -> Result<Option<HttpNfcLeaseInfo>> {
+    pub async fn info(&self) -> Result<Option<crate::types::structs::HttpNfcLeaseInfo>> {
         let path = format!("/HttpNfcLease/{moId}/info", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -271,13 +264,13 @@ impl HttpNfcLease {
 #[serde(tag="_typeName")]
 struct HttpNfcLeaseAbortRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    fault: Option<&'a MethodFault>,
+    fault: Option<&'a crate::types::structs::MethodFault>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct HttpNfcLeaseProbeUrlsRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    files: Option<&'a [HttpNfcLeaseSourceFile]>,
+    files: Option<&'a [crate::types::structs::HttpNfcLeaseSourceFile]>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     timeout: Option<i32>,
 }
@@ -290,12 +283,12 @@ struct HttpNfcLeaseProgressRequestType {
 #[serde(tag="_typeName")]
 struct HttpNfcLeasePullFromUrlsRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    files: Option<&'a [HttpNfcLeaseSourceFile]>,
+    files: Option<&'a [crate::types::structs::HttpNfcLeaseSourceFile]>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct HttpNfcLeaseSetManifestChecksumTypeRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "deviceUrlsToChecksumTypes")]
-    device_urls_to_checksum_types: Option<&'a [KeyValue]>,
+    device_urls_to_checksum_types: Option<&'a [crate::types::structs::KeyValue]>,
 }

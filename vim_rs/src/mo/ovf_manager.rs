@@ -1,15 +1,5 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::ManagedObjectReference;
-use crate::types::structs::OvfCreateDescriptorParams;
-use crate::types::structs::OvfCreateDescriptorResult;
-use crate::types::structs::OvfCreateImportSpecParams;
-use crate::types::structs::OvfCreateImportSpecResult;
-use crate::types::structs::OvfOptionInfo;
-use crate::types::structs::OvfParseDescriptorParams;
-use crate::types::structs::OvfParseDescriptorResult;
-use crate::types::structs::OvfValidateHostParams;
-use crate::types::structs::OvfValidateHostResult;
 /// Service interface to parse and generate OVF descriptors.
 /// 
 /// The purpose of this interface is to make it easier for callers to import VMs and
@@ -70,6 +60,7 @@ use crate::types::structs::OvfValidateHostResult;
 /// result based on the warnings issued.
 /// 
 /// Errors cause processing to abort by definition.
+#[derive(Clone)]
 pub struct OvfManager {
     client: Arc<Client>,
     mo_id: String,
@@ -132,7 +123,7 @@ impl OvfManager {
     /// ***FileFault***: if there is a generic file error
     /// 
     /// ***InvalidState***: if the operation failed due to the current state of the system.
-    pub async fn create_descriptor(&self, obj: &ManagedObjectReference, cdp: &OvfCreateDescriptorParams) -> Result<OvfCreateDescriptorResult> {
+    pub async fn create_descriptor(&self, obj: &crate::types::structs::ManagedObjectReference, cdp: &crate::types::structs::OvfCreateDescriptorParams) -> Result<crate::types::structs::OvfCreateDescriptorResult> {
         let input = CreateDescriptorRequestType {obj, cdp, };
         let path = format!("/OvfManager/{moId}/CreateDescriptor", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -186,7 +177,7 @@ impl OvfManager {
     /// ***FileFault***: if there is a generic file error
     /// 
     /// ***InvalidState***: if the operation failed due to the current state of the system.
-    pub async fn create_import_spec(&self, ovf_descriptor: &str, resource_pool: &ManagedObjectReference, datastore: &ManagedObjectReference, cisp: &OvfCreateImportSpecParams) -> Result<OvfCreateImportSpecResult> {
+    pub async fn create_import_spec(&self, ovf_descriptor: &str, resource_pool: &crate::types::structs::ManagedObjectReference, datastore: &crate::types::structs::ManagedObjectReference, cisp: &crate::types::structs::OvfCreateImportSpecParams) -> Result<crate::types::structs::OvfCreateImportSpecResult> {
         let input = CreateImportSpecRequestType {ovf_descriptor, resource_pool, datastore, cisp, };
         let path = format!("/OvfManager/{moId}/CreateImportSpec", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -228,7 +219,7 @@ impl OvfManager {
     /// ***FileFault***: if there is a generic file error
     /// 
     /// ***InvalidState***: if the operation failed due to the current state of the system.
-    pub async fn parse_descriptor(&self, ovf_descriptor: &str, pdp: &OvfParseDescriptorParams) -> Result<OvfParseDescriptorResult> {
+    pub async fn parse_descriptor(&self, ovf_descriptor: &str, pdp: &crate::types::structs::OvfParseDescriptorParams) -> Result<crate::types::structs::OvfParseDescriptorResult> {
         let input = ParseDescriptorRequestType {ovf_descriptor, pdp, };
         let path = format!("/OvfManager/{moId}/ParseDescriptor", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -270,7 +261,7 @@ impl OvfManager {
     /// ***FileFault***: if there is a generic file error
     /// 
     /// ***InvalidState***: if the operation failed due to the current state of the system.
-    pub async fn validate_host(&self, ovf_descriptor: &str, host: &ManagedObjectReference, vhp: &OvfValidateHostParams) -> Result<OvfValidateHostResult> {
+    pub async fn validate_host(&self, ovf_descriptor: &str, host: &crate::types::structs::ManagedObjectReference, vhp: &crate::types::structs::OvfValidateHostParams) -> Result<crate::types::structs::OvfValidateHostResult> {
         let input = ValidateHostRequestType {ovf_descriptor, host, vhp, };
         let path = format!("/OvfManager/{moId}/ValidateHost", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -284,7 +275,7 @@ impl OvfManager {
     /// ## Returns:
     ///
     /// An instance of *OvfOptionInfo*
-    pub async fn ovf_export_option(&self) -> Result<Option<Vec<OvfOptionInfo>>> {
+    pub async fn ovf_export_option(&self) -> Result<Option<Vec<crate::types::structs::OvfOptionInfo>>> {
         let path = format!("/OvfManager/{moId}/ovfExportOption", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -297,7 +288,7 @@ impl OvfManager {
     /// ## Returns:
     ///
     /// An instance of *OvfOptionInfo*
-    pub async fn ovf_import_option(&self) -> Result<Option<Vec<OvfOptionInfo>>> {
+    pub async fn ovf_import_option(&self) -> Result<Option<Vec<crate::types::structs::OvfOptionInfo>>> {
         let path = format!("/OvfManager/{moId}/ovfImportOption", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -306,8 +297,8 @@ impl OvfManager {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct CreateDescriptorRequestType<'a> {
-    obj: &'a ManagedObjectReference,
-    cdp: &'a OvfCreateDescriptorParams,
+    obj: &'a crate::types::structs::ManagedObjectReference,
+    cdp: &'a crate::types::structs::OvfCreateDescriptorParams,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -315,22 +306,22 @@ struct CreateImportSpecRequestType<'a> {
     #[serde(rename = "ovfDescriptor")]
     ovf_descriptor: &'a str,
     #[serde(rename = "resourcePool")]
-    resource_pool: &'a ManagedObjectReference,
-    datastore: &'a ManagedObjectReference,
-    cisp: &'a OvfCreateImportSpecParams,
+    resource_pool: &'a crate::types::structs::ManagedObjectReference,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
+    cisp: &'a crate::types::structs::OvfCreateImportSpecParams,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct ParseDescriptorRequestType<'a> {
     #[serde(rename = "ovfDescriptor")]
     ovf_descriptor: &'a str,
-    pdp: &'a OvfParseDescriptorParams,
+    pdp: &'a crate::types::structs::OvfParseDescriptorParams,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct ValidateHostRequestType<'a> {
     #[serde(rename = "ovfDescriptor")]
     ovf_descriptor: &'a str,
-    host: &'a ManagedObjectReference,
-    vhp: &'a OvfValidateHostParams,
+    host: &'a crate::types::structs::ManagedObjectReference,
+    vhp: &'a crate::types::structs::OvfValidateHostParams,
 }

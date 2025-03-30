@@ -1,9 +1,5 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::ClusterEvcManagerEvcState;
-use crate::types::structs::CustomFieldDef;
-use crate::types::structs::HostConnectSpec;
-use crate::types::structs::ManagedObjectReference;
 /// Controls Enhanced vMotion Compatibility mode for a particular cluster given
 /// by *ClusterEVCManager.managedCluster*.
 /// 
@@ -14,6 +10,7 @@ use crate::types::structs::ManagedObjectReference;
 /// cluster.
 /// 
 /// See also *EVCMode*.
+#[derive(Clone)]
 pub struct ClusterEvcManager {
     client: Arc<Client>,
     mo_id: String,
@@ -51,7 +48,7 @@ impl ClusterEvcManager {
     /// 
     /// ***HostConnectFault***: if an error occurred when attempting to connect
     /// to the host. Typically, a more specific subclass is thrown.
-    pub async fn check_add_host_evc_task(&self, cnx_spec: &HostConnectSpec) -> Result<ManagedObjectReference> {
+    pub async fn check_add_host_evc_task(&self, cnx_spec: &crate::types::structs::HostConnectSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CheckAddHostEvcRequestType {cnx_spec, };
         let path = format!("/ClusterEVCManager/{moId}/CheckAddHostEvc_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -78,7 +75,7 @@ impl ClusterEvcManager {
     /// monitor the operation.
     /// 
     /// Refers instance of *Task*.
-    pub async fn check_configure_evc_mode_task(&self, evc_mode_key: &str, evc_graphics_mode_key: Option<&str>) -> Result<ManagedObjectReference> {
+    pub async fn check_configure_evc_mode_task(&self, evc_mode_key: &str, evc_graphics_mode_key: Option<&str>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CheckConfigureEvcModeRequestType {evc_mode_key, evc_graphics_mode_key, };
         let path = format!("/ClusterEVCManager/{moId}/CheckConfigureEvcMode_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -114,7 +111,7 @@ impl ClusterEvcManager {
     ///
     /// ***EVCConfigFault***: if configuring EVC failed. Typically, a more
     /// specific subclass is thrown.
-    pub async fn configure_evc_mode_task(&self, evc_mode_key: &str, evc_graphics_mode_key: Option<&str>) -> Result<ManagedObjectReference> {
+    pub async fn configure_evc_mode_task(&self, evc_mode_key: &str, evc_graphics_mode_key: Option<&str>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ConfigureEvcModeRequestType {evc_mode_key, evc_graphics_mode_key, };
         let path = format!("/ClusterEVCManager/{moId}/ConfigureEvcMode_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -129,7 +126,7 @@ impl ClusterEvcManager {
     /// ## Returns:
     ///
     /// Refers instance of *Task*.
-    pub async fn disable_evc_mode_task(&self) -> Result<ManagedObjectReference> {
+    pub async fn disable_evc_mode_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/ClusterEVCManager/{moId}/DisableEvcMode_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute(req).await
@@ -159,13 +156,13 @@ impl ClusterEvcManager {
     /// The fields are sorted by *CustomFieldDef.name*.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn available_field(&self) -> Result<Option<Vec<CustomFieldDef>>> {
+    pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
         let path = format!("/ClusterEVCManager/{moId}/availableField", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
     }
     /// EVC-related state of the managed cluster.
-    pub async fn evc_state(&self) -> Result<ClusterEvcManagerEvcState> {
+    pub async fn evc_state(&self) -> Result<crate::types::structs::ClusterEvcManagerEvcState> {
         let path = format!("/ClusterEVCManager/{moId}/evcState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute(req).await
@@ -175,7 +172,7 @@ impl ClusterEvcManager {
     /// ## Returns:
     ///
     /// Refers instance of *ClusterComputeResource*.
-    pub async fn managed_cluster(&self) -> Result<ManagedObjectReference> {
+    pub async fn managed_cluster(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/ClusterEVCManager/{moId}/managedCluster", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute(req).await
@@ -197,7 +194,7 @@ impl ClusterEvcManager {
 #[serde(tag="_typeName")]
 struct CheckAddHostEvcRequestType<'a> {
     #[serde(rename = "cnxSpec")]
-    cnx_spec: &'a HostConnectSpec,
+    cnx_spec: &'a crate::types::structs::HostConnectSpec,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]

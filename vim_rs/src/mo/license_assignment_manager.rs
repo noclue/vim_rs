@@ -1,7 +1,6 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::LicenseAssignmentManagerLicenseAssignment;
-use crate::types::structs::LicenseManagerLicenseInfo;
+#[derive(Clone)]
 pub struct LicenseAssignmentManager {
     client: Arc<Client>,
     mo_id: String,
@@ -21,7 +20,7 @@ impl LicenseAssignmentManager {
     ///
     /// ### entity_id
     /// ID of the entity. E.g. HostSystem.
-    pub async fn query_assigned_licenses(&self, entity_id: Option<&str>) -> Result<Option<Vec<LicenseAssignmentManagerLicenseAssignment>>> {
+    pub async fn query_assigned_licenses(&self, entity_id: Option<&str>) -> Result<Option<Vec<crate::types::structs::LicenseAssignmentManagerLicenseAssignment>>> {
         let input = QueryAssignedLicensesRequestType {entity_id, };
         let path = format!("/LicenseAssignmentManager/{moId}/QueryAssignedLicenses", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -67,7 +66,7 @@ impl LicenseAssignmentManager {
     /// ## Errors:
     ///
     /// Failure
-    pub async fn update_assigned_license(&self, entity: &str, license_key: &str, entity_display_name: Option<&str>) -> Result<LicenseManagerLicenseInfo> {
+    pub async fn update_assigned_license(&self, entity: &str, license_key: &str, entity_display_name: Option<&str>) -> Result<crate::types::structs::LicenseManagerLicenseInfo> {
         let input = UpdateAssignedLicenseRequestType {entity, license_key, entity_display_name, };
         let path = format!("/LicenseAssignmentManager/{moId}/UpdateAssignedLicense", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);

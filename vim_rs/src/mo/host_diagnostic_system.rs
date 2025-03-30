@@ -1,10 +1,5 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::HostDiagnosticPartition;
-use crate::types::structs::HostDiagnosticPartitionCreateDescription;
-use crate::types::structs::HostDiagnosticPartitionCreateOption;
-use crate::types::structs::HostDiagnosticPartitionCreateSpec;
-use crate::types::structs::HostScsiDiskPartition;
 /// The DiagnosticSystem managed object is used to configure the diagnostic
 /// mechanisms specific to the host.
 /// 
@@ -14,6 +9,7 @@ use crate::types::structs::HostScsiDiskPartition;
 ///   a set of available partitions.
 /// - Ability to create a diagnostic partition that gets added to the
 ///   list of available partitions and could be made active.
+#[derive(Clone)]
 pub struct HostDiagnosticSystem {
     client: Arc<Client>,
     mo_id: String,
@@ -53,7 +49,7 @@ impl HostDiagnosticSystem {
     /// ***HostConfigFault***: on some internal failure while trying to
     /// create the diagnostic partition or to activate the diagnostic
     /// partition.
-    pub async fn create_diagnostic_partition(&self, spec: &HostDiagnosticPartitionCreateSpec) -> Result<()> {
+    pub async fn create_diagnostic_partition(&self, spec: &crate::types::structs::HostDiagnosticPartitionCreateSpec) -> Result<()> {
         let input = CreateDiagnosticPartitionRequestType {spec, };
         let path = format!("/HostDiagnosticSystem/{moId}/CreateDiagnosticPartition", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -75,7 +71,7 @@ impl HostDiagnosticSystem {
     /// 
     /// ***HostConfigFault***: on some internal failure while setting the
     /// active partition.
-    pub async fn query_available_partition(&self) -> Result<Option<Vec<HostDiagnosticPartition>>> {
+    pub async fn query_available_partition(&self) -> Result<Option<Vec<crate::types::structs::HostDiagnosticPartition>>> {
         let path = format!("/HostDiagnosticSystem/{moId}/QueryAvailablePartition", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute_option(req).await
@@ -110,7 +106,7 @@ impl HostDiagnosticSystem {
     /// 
     /// ***HostConfigFault***: on some internal failure while trying to
     /// query information about the disk.
-    pub async fn query_partition_create_desc(&self, disk_uuid: &str, diagnostic_type: &str) -> Result<HostDiagnosticPartitionCreateDescription> {
+    pub async fn query_partition_create_desc(&self, disk_uuid: &str, diagnostic_type: &str) -> Result<crate::types::structs::HostDiagnosticPartitionCreateDescription> {
         let input = QueryPartitionCreateDescRequestType {disk_uuid, diagnostic_type, };
         let path = format!("/HostDiagnosticSystem/{moId}/QueryPartitionCreateDesc", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -143,7 +139,7 @@ impl HostDiagnosticSystem {
     /// 
     /// ***HostConfigFault***: on some internal failure while querying the
     /// create options.
-    pub async fn query_partition_create_options(&self, storage_type: &str, diagnostic_type: &str) -> Result<Option<Vec<HostDiagnosticPartitionCreateOption>>> {
+    pub async fn query_partition_create_options(&self, storage_type: &str, diagnostic_type: &str) -> Result<Option<Vec<crate::types::structs::HostDiagnosticPartitionCreateOption>>> {
         let input = QueryPartitionCreateOptionsRequestType {storage_type, diagnostic_type, };
         let path = format!("/HostDiagnosticSystem/{moId}/QueryPartitionCreateOptions", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -171,14 +167,14 @@ impl HostDiagnosticSystem {
     /// 
     /// ***HostConfigFault***: on some internal failure while selecting the
     /// active partition.
-    pub async fn select_active_partition(&self, partition: Option<&HostScsiDiskPartition>) -> Result<()> {
+    pub async fn select_active_partition(&self, partition: Option<&crate::types::structs::HostScsiDiskPartition>) -> Result<()> {
         let input = SelectActivePartitionRequestType {partition, };
         let path = format!("/HostDiagnosticSystem/{moId}/SelectActivePartition", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
         self.client.execute_void(req).await
     }
     /// The currently active diagnostic partition.
-    pub async fn active_partition(&self) -> Result<Option<HostDiagnosticPartition>> {
+    pub async fn active_partition(&self) -> Result<Option<crate::types::structs::HostDiagnosticPartition>> {
         let path = format!("/HostDiagnosticSystem/{moId}/activePartition", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -187,7 +183,7 @@ impl HostDiagnosticSystem {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct CreateDiagnosticPartitionRequestType<'a> {
-    spec: &'a HostDiagnosticPartitionCreateSpec,
+    spec: &'a crate::types::structs::HostDiagnosticPartitionCreateSpec,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -209,5 +205,5 @@ struct QueryPartitionCreateOptionsRequestType<'a> {
 #[serde(tag="_typeName")]
 struct SelectActivePartitionRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    partition: Option<&'a HostScsiDiskPartition>,
+    partition: Option<&'a crate::types::structs::HostScsiDiskPartition>,
 }

@@ -1,7 +1,5 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::ManagedObjectReference;
-use crate::types::structs::VchaClusterHealth;
 /// FailoverClusterManager provides operations to manage a vCenter
 /// High Availability Cluster (VCHA Cluster).
 /// 
@@ -36,6 +34,7 @@ use crate::types::structs::VchaClusterHealth;
 /// 3\. Maintenance - All three nodes are part of VCHA Cluster but automatic
 /// failover is disabled while state replication continues. Active node continues
 /// to serve client requests even if Passive and Witness nodes are lost.
+#[derive(Clone)]
 pub struct FailoverClusterManager {
     client: Arc<Client>,
     mo_id: String,
@@ -50,7 +49,7 @@ impl FailoverClusterManager {
     /// Returns last known health of the VCHA Cluster.
     /// 
     /// ***Required privileges:*** System.Read
-    pub async fn get_vcha_cluster_health(&self) -> Result<VchaClusterHealth> {
+    pub async fn get_vcha_cluster_health(&self) -> Result<crate::types::structs::VchaClusterHealth> {
         let path = format!("/FailoverClusterManager/{moId}/GetVchaClusterHealth", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute(req).await
@@ -91,7 +90,7 @@ impl FailoverClusterManager {
     /// ## Returns:
     ///
     /// Refers instance of *Task*.
-    pub async fn initiate_failover_task(&self, planned: bool) -> Result<ManagedObjectReference> {
+    pub async fn initiate_failover_task(&self, planned: bool) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = InitiateFailoverRequestType {planned, };
         let path = format!("/FailoverClusterManager/{moId}/initiateFailover_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -124,7 +123,7 @@ impl FailoverClusterManager {
     /// monitor the progress of the operation.
     /// 
     /// Refers instance of *Task*.
-    pub async fn set_cluster_mode_task(&self, mode: &str) -> Result<ManagedObjectReference> {
+    pub async fn set_cluster_mode_task(&self, mode: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = SetClusterModeRequestType {mode, };
         let path = format!("/FailoverClusterManager/{moId}/setClusterMode_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);

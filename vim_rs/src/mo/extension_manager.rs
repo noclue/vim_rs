@@ -1,8 +1,5 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::Extension;
-use crate::types::structs::ExtensionManagerIpAllocationUsage;
-use crate::types::structs::ManagedObjectReference;
 /// This managed object type provides directory and basic management
 /// services for all registered extensions.
 /// 
@@ -14,6 +11,7 @@ use crate::types::structs::ManagedObjectReference;
 /// servers to use (see *SessionManager*), only one
 /// authentication method is valid for an extension at any given
 /// time.
+#[derive(Clone)]
 pub struct ExtensionManager {
     client: Arc<Client>,
     mo_id: String,
@@ -37,7 +35,7 @@ impl ExtensionManager {
     /// ## Returns:
     ///
     /// Extension that matches given key, if any.
-    pub async fn find_extension(&self, extension_key: &str) -> Result<Option<Extension>> {
+    pub async fn find_extension(&self, extension_key: &str) -> Result<Option<crate::types::structs::Extension>> {
         let input = FindExtensionRequestType {extension_key, };
         let path = format!("/ExtensionManager/{moId}/FindExtension", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -78,7 +76,7 @@ impl ExtensionManager {
     /// ## Returns:
     ///
     /// List of IP allocation usage.
-    pub async fn query_extension_ip_allocation_usage(&self, extension_keys: Option<&[String]>) -> Result<Option<Vec<ExtensionManagerIpAllocationUsage>>> {
+    pub async fn query_extension_ip_allocation_usage(&self, extension_keys: Option<&[String]>) -> Result<Option<Vec<crate::types::structs::ExtensionManagerIpAllocationUsage>>> {
         let input = QueryExtensionIpAllocationUsageRequestType {extension_keys, };
         let path = format!("/ExtensionManager/{moId}/QueryExtensionIpAllocationUsage", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -101,7 +99,7 @@ impl ExtensionManager {
     /// List of entities managed by the extension.
     /// 
     /// Refers instances of *ManagedEntity*.
-    pub async fn query_managed_by(&self, extension_key: &str) -> Result<Option<Vec<ManagedObjectReference>>> {
+    pub async fn query_managed_by(&self, extension_key: &str) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let input = QueryManagedByRequestType {extension_key, };
         let path = format!("/ExtensionManager/{moId}/QueryManagedBy", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -115,7 +113,7 @@ impl ExtensionManager {
     ///
     /// ### extension
     /// Extension description to register.
-    pub async fn register_extension(&self, extension: &Extension) -> Result<()> {
+    pub async fn register_extension(&self, extension: &crate::types::structs::Extension) -> Result<()> {
         let input = RegisterExtensionRequestType {extension, };
         let path = format!("/ExtensionManager/{moId}/RegisterExtension", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -275,7 +273,7 @@ impl ExtensionManager {
     /// ***InvalidArgument***: if the Extension description is incomplete or invalid, or
     /// if the extension is an OVF extension and its section types overlap with other
     /// registered OVF extensions.
-    pub async fn update_extension(&self, extension: &Extension) -> Result<()> {
+    pub async fn update_extension(&self, extension: &crate::types::structs::Extension) -> Result<()> {
         let input = UpdateExtensionRequestType {extension, };
         let path = format!("/ExtensionManager/{moId}/UpdateExtension", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -284,7 +282,7 @@ impl ExtensionManager {
     /// The list of currently registered extensions.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn extension_list(&self) -> Result<Option<Vec<Extension>>> {
+    pub async fn extension_list(&self) -> Result<Option<Vec<crate::types::structs::Extension>>> {
         let path = format!("/ExtensionManager/{moId}/extensionList", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -312,7 +310,7 @@ struct QueryManagedByRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct RegisterExtensionRequestType<'a> {
-    extension: &'a Extension,
+    extension: &'a crate::types::structs::Extension,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -348,5 +346,5 @@ struct UnregisterExtensionRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct UpdateExtensionRequestType<'a> {
-    extension: &'a Extension,
+    extension: &'a crate::types::structs::Extension,
 }

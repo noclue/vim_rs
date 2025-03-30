@@ -1,12 +1,5 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::ManagedObjectReference;
-use crate::types::structs::ObjectContent;
-use crate::types::structs::PropertyFilterSpec;
-use crate::types::structs::RetrieveOptions;
-use crate::types::structs::RetrieveResult;
-use crate::types::structs::UpdateSet;
-use crate::types::structs::WaitOptions;
 /// The *PropertyCollector* managed object retrieves and detects changes
 /// to the properties of other managed objects.
 /// 
@@ -24,6 +17,7 @@ use crate::types::structs::WaitOptions;
 ///   share the same filters, but this is not recommended
 /// - When a session terminates, the associated *PropertyCollector* filters
 ///   are automatically destroyed.
+#[derive(Clone)]
 pub struct PropertyCollector {
     client: Arc<Client>,
     mo_id: String,
@@ -102,7 +96,7 @@ impl PropertyCollector {
     /// ***RequestCanceled***: if *PropertyCollector.CancelWaitForUpdates* has been called or the session was closed
     /// or the *PropertyCollector* was destroyed at some point after the call was
     /// received but before the update calculation was actually started
-    pub async fn check_for_updates(&self, version: Option<&str>) -> Result<Option<UpdateSet>> {
+    pub async fn check_for_updates(&self, version: Option<&str>) -> Result<Option<crate::types::structs::UpdateSet>> {
         let input = CheckForUpdatesRequestType {version, };
         let path = format!("/PropertyCollector/{moId}/CheckForUpdates", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -127,7 +121,7 @@ impl PropertyCollector {
     /// ***InvalidArgument***: If the token does not match the token from the
     /// previous *RetrieveResult* returned on the same
     /// session by the same *PropertyCollector*.
-    pub async fn continue_retrieve_properties_ex(&self, token: &str) -> Result<RetrieveResult> {
+    pub async fn continue_retrieve_properties_ex(&self, token: &str) -> Result<crate::types::structs::RetrieveResult> {
         let input = ContinueRetrievePropertiesExRequestType {token, };
         let path = format!("/PropertyCollector/{moId}/ContinueRetrievePropertiesEx", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -168,7 +162,7 @@ impl PropertyCollector {
     /// does not refer to a known type.
     /// 
     /// ***ManagedObjectNotFound***: See *PropertyFilterSpec.reportMissingObjectsInResults*.
-    pub async fn create_filter(&self, spec: &PropertyFilterSpec, partial_updates: bool) -> Result<ManagedObjectReference> {
+    pub async fn create_filter(&self, spec: &crate::types::structs::PropertyFilterSpec, partial_updates: bool) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateFilterRequestType {spec, partial_updates, };
         let path = format!("/PropertyCollector/{moId}/CreateFilter", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -222,7 +216,7 @@ impl PropertyCollector {
     /// A reference to the new *PropertyCollector*.
     /// 
     /// Refers instance of *PropertyCollector*.
-    pub async fn create_property_collector(&self) -> Result<ManagedObjectReference> {
+    pub async fn create_property_collector(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/PropertyCollector/{moId}/CreatePropertyCollector", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute(req).await
@@ -274,7 +268,7 @@ impl PropertyCollector {
     /// ***InvalidType***: See *PropertyCollector.CreateFilter*
     /// 
     /// ***ManagedObjectNotFound***: See *PropertyCollector.CreateFilter*
-    pub async fn retrieve_properties(&self, spec_set: &[PropertyFilterSpec]) -> Result<Option<Vec<ObjectContent>>> {
+    pub async fn retrieve_properties(&self, spec_set: &[crate::types::structs::PropertyFilterSpec]) -> Result<Option<Vec<crate::types::structs::ObjectContent>>> {
         let input = RetrievePropertiesRequestType {spec_set, };
         let path = format!("/PropertyCollector/{moId}/RetrieveProperties", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -314,7 +308,7 @@ impl PropertyCollector {
     /// ***InvalidType***: See *PropertyCollector.CreateFilter*
     /// 
     /// ***ManagedObjectNotFound***: See *PropertyCollector.CreateFilter*
-    pub async fn retrieve_properties_ex(&self, spec_set: &[PropertyFilterSpec], options: &RetrieveOptions) -> Result<Option<RetrieveResult>> {
+    pub async fn retrieve_properties_ex(&self, spec_set: &[crate::types::structs::PropertyFilterSpec], options: &crate::types::structs::RetrieveOptions) -> Result<Option<crate::types::structs::RetrieveResult>> {
         let input = RetrievePropertiesExRequestType {spec_set, options, };
         let path = format!("/PropertyCollector/{moId}/RetrievePropertiesEx", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -349,7 +343,7 @@ impl PropertyCollector {
     /// ***RequestCanceled***: if *PropertyCollector.CancelWaitForUpdates* has been called or the session was closed
     /// or the *PropertyCollector* was destroyed at some point after the call was
     /// received
-    pub async fn wait_for_updates(&self, version: Option<&str>) -> Result<UpdateSet> {
+    pub async fn wait_for_updates(&self, version: Option<&str>) -> Result<crate::types::structs::UpdateSet> {
         let input = WaitForUpdatesRequestType {version, };
         let path = format!("/PropertyCollector/{moId}/WaitForUpdates", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -397,7 +391,7 @@ impl PropertyCollector {
     /// ***RequestCanceled***: if *PropertyCollector.CancelWaitForUpdates* has been called or the session was closed
     /// or the *PropertyCollector* was destroyed at some point after the call was
     /// received
-    pub async fn wait_for_updates_ex(&self, version: Option<&str>, options: Option<&WaitOptions>) -> Result<Option<UpdateSet>> {
+    pub async fn wait_for_updates_ex(&self, version: Option<&str>, options: Option<&crate::types::structs::WaitOptions>) -> Result<Option<crate::types::structs::UpdateSet>> {
         let input = WaitForUpdatesExRequestType {version, options, };
         let path = format!("/PropertyCollector/{moId}/WaitForUpdatesEx", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -411,7 +405,7 @@ impl PropertyCollector {
     /// ## Returns:
     ///
     /// Refers instances of *PropertyFilter*.
-    pub async fn filter(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
+    pub async fn filter(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/PropertyCollector/{moId}/filter", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -436,7 +430,7 @@ struct ContinueRetrievePropertiesExRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct CreateFilterRequestType<'a> {
-    spec: &'a PropertyFilterSpec,
+    spec: &'a crate::types::structs::PropertyFilterSpec,
     #[serde(rename = "partialUpdates")]
     partial_updates: bool,
 }
@@ -444,14 +438,14 @@ struct CreateFilterRequestType<'a> {
 #[serde(tag="_typeName")]
 struct RetrievePropertiesRequestType<'a> {
     #[serde(rename = "specSet")]
-    spec_set: &'a [PropertyFilterSpec],
+    spec_set: &'a [crate::types::structs::PropertyFilterSpec],
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct RetrievePropertiesExRequestType<'a> {
     #[serde(rename = "specSet")]
-    spec_set: &'a [PropertyFilterSpec],
-    options: &'a RetrieveOptions,
+    spec_set: &'a [crate::types::structs::PropertyFilterSpec],
+    options: &'a crate::types::structs::RetrieveOptions,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -465,5 +459,5 @@ struct WaitForUpdatesExRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     version: Option<&'a str>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    options: Option<&'a WaitOptions>,
+    options: Option<&'a crate::types::structs::WaitOptions>,
 }

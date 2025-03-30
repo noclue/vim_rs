@@ -1,9 +1,9 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::HostEsxAgentHostManagerConfigInfo;
 /// This managed object type is used to configure agent virtual machine resource
 /// configuration, such as what network and datastore to use for agent virtual
 /// machines.
+#[derive(Clone)]
 pub struct HostEsxAgentHostManager {
     client: Arc<Client>,
     mo_id: String,
@@ -30,7 +30,7 @@ impl HostEsxAgentHostManager {
     /// ## Errors:
     ///
     /// ***HostConfigFault***: if an error occurs.
-    pub async fn esx_agent_host_manager_update_config(&self, config_info: &HostEsxAgentHostManagerConfigInfo) -> Result<()> {
+    pub async fn esx_agent_host_manager_update_config(&self, config_info: &crate::types::structs::HostEsxAgentHostManagerConfigInfo) -> Result<()> {
         let input = EsxAgentHostManagerUpdateConfigRequestType {config_info, };
         let path = format!("/HostEsxAgentHostManager/{moId}/EsxAgentHostManagerUpdateConfig", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -39,7 +39,7 @@ impl HostEsxAgentHostManager {
     /// Configuration of agent virtual machine resources
     /// 
     /// ***Required privileges:*** Host.Config.Settings
-    pub async fn config_info(&self) -> Result<HostEsxAgentHostManagerConfigInfo> {
+    pub async fn config_info(&self) -> Result<crate::types::structs::HostEsxAgentHostManagerConfigInfo> {
         let path = format!("/HostEsxAgentHostManager/{moId}/configInfo", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute(req).await
@@ -49,5 +49,5 @@ impl HostEsxAgentHostManager {
 #[serde(tag="_typeName")]
 struct EsxAgentHostManagerUpdateConfigRequestType<'a> {
     #[serde(rename = "configInfo")]
-    config_info: &'a HostEsxAgentHostManagerConfigInfo,
+    config_info: &'a crate::types::structs::HostEsxAgentHostManagerConfigInfo,
 }

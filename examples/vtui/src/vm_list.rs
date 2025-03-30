@@ -1,19 +1,18 @@
-use ratatui::prelude::{Line, StatefulWidget, Style, Stylize, Widget};
-use ratatui::layout::{Constraint, Rect};
+use crate::vm::VirtualMachine;
 use ratatui::buffer::Buffer;
+use ratatui::layout::{Constraint, Rect};
+use ratatui::prelude::{Line, StatefulWidget, Style, Stylize, Widget};
 use ratatui::widgets::{Block, Cell, HighlightSpacing, Row, Table, TableState};
 use std::cell::RefCell;
 use std::ops::DerefMut;
 use std::rc::Rc;
 use vim_rs::core::pc_helpers::ObjectCache;
-use crate::vm::VirtualMachine;
 
 /// A widget that displays a list of virtual machines.
 
 pub struct VmListWidget {
     state: VmListState,
 }
-
 
 struct VmListState {
     vms: Rc<RefCell<ObjectCache<VirtualMachine>>>,
@@ -31,7 +30,7 @@ pub enum LoadingState {
 impl VmListWidget {
     pub(crate) fn new(cache: Rc<RefCell<ObjectCache<VirtualMachine>>>) -> Self {
         Self {
-            state: VmListState{
+            state: VmListState {
                 vms: cache,
                 loading_state: LoadingState::Idle,
                 table_state: RefCell::new(TableState::default()),
@@ -80,11 +79,9 @@ impl Widget for &VmListWidget {
             Constraint::Length(10),
             Constraint::Length(4),
             Constraint::Length(4),
-
             Constraint::Fill(1),
             Constraint::Max(15),
             Constraint::Max(12),
-
             Constraint::Max(12),
             Constraint::Max(12),
         ];

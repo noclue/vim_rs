@@ -1,6 +1,5 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::PropertyFilterSpec;
 /// The *PropertyFilter* managed object type defines a filter
 /// that controls the properties for which a *PropertyCollector* detects
 /// incremental changes.
@@ -9,6 +8,7 @@ use crate::types::structs::PropertyFilterSpec;
 /// is automatically destroyed when the session on which it was created is
 /// closed or the *PropertyCollector* on which it was created is
 /// destroyed.
+#[derive(Clone)]
 pub struct PropertyFilter {
     client: Arc<Client>,
     mo_id: String,
@@ -41,7 +41,7 @@ impl PropertyFilter {
         self.client.execute(req).await
     }
     /// Specifications for this filter.
-    pub async fn spec(&self) -> Result<PropertyFilterSpec> {
+    pub async fn spec(&self) -> Result<crate::types::structs::PropertyFilterSpec> {
         let path = format!("/PropertyFilter/{moId}/spec", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute(req).await

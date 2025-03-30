@@ -1,24 +1,5 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::AlarmState;
-use crate::types::structs::CustomFieldDef;
-use crate::types::structs::DistributedVirtualPort;
-use crate::types::structs::DistributedVirtualSwitchPortCriteria;
-use crate::types::structs::DistributedVirtualSwitchProductSpec;
-use crate::types::structs::DvPortConfigSpec;
-use crate::types::structs::DvPortgroupConfigSpec;
-use crate::types::structs::DvsCapability;
-use crate::types::structs::DvsNetworkResourcePool;
-use crate::types::structs::DvsNetworkResourcePoolConfigSpec;
-use crate::types::structs::DvsRuntimeInfo;
-use crate::types::structs::DvsSummary;
-use crate::types::structs::DvsVmVnicResourcePoolConfigSpec;
-use crate::types::structs::EntityBackupConfig;
-use crate::types::structs::Event;
-use crate::types::structs::ManagedObjectReference;
-use crate::types::structs::Permission;
-use crate::types::structs::Tag;
-use crate::types::structs::VMwareDvsLacpGroupSpec;
 /// The *VmwareDistributedVirtualSwitch* managed object
 /// is the VMware implementation of a distributed virtual switch.
 /// 
@@ -33,6 +14,7 @@ use crate::types::structs::VMwareDvsLacpGroupSpec;
 /// - *DistributedVirtualSwitchManager.DVSManagerImportEntity_Task*
 /// - *DistributedVirtualSwitch.DVSRollback_Task*
 /// - *DistributedVirtualPortgroup.DVPortgroupRollback_Task*
+#[derive(Clone)]
 pub struct VmwareDistributedVirtualSwitch {
     client: Arc<Client>,
     mo_id: String,
@@ -67,7 +49,7 @@ impl VmwareDistributedVirtualSwitch {
     /// ***DvsNotAuthorized***: if login-session's extension key does not match
     /// the switch's configured
     /// *extensionKey*.
-    pub async fn add_network_resource_pool(&self, config_spec: &[DvsNetworkResourcePoolConfigSpec]) -> Result<()> {
+    pub async fn add_network_resource_pool(&self, config_spec: &[crate::types::structs::DvsNetworkResourcePoolConfigSpec]) -> Result<()> {
         let input = AddNetworkResourcePoolRequestType {config_spec, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/AddNetworkResourcePool", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -100,7 +82,7 @@ impl VmwareDistributedVirtualSwitch {
     /// ***DvsFault***: if operation fails on any host or if there are other update failures.
     /// 
     /// ***InvalidName***: if name of the portgroup is invalid
-    pub async fn create_dv_portgroup_task(&self, spec: &DvPortgroupConfigSpec) -> Result<ManagedObjectReference> {
+    pub async fn create_dv_portgroup_task(&self, spec: &crate::types::structs::DvPortgroupConfigSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateDvPortgroupRequestType {spec, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/CreateDVPortgroup_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -135,7 +117,7 @@ impl VmwareDistributedVirtualSwitch {
     /// ***DvsNotAuthorized***: if login-session's extension key does not match
     /// the switch's configured
     /// *extensionKey*.
-    pub async fn add_dv_portgroup_task(&self, spec: &[DvPortgroupConfigSpec]) -> Result<ManagedObjectReference> {
+    pub async fn add_dv_portgroup_task(&self, spec: &[crate::types::structs::DvPortgroupConfigSpec]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = AddDvPortgroupRequestType {spec, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/AddDVPortgroup_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -162,7 +144,7 @@ impl VmwareDistributedVirtualSwitch {
     /// ## Errors:
     ///
     /// Failure
-    pub async fn destroy_task(&self) -> Result<ManagedObjectReference> {
+    pub async fn destroy_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/Destroy_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute(req).await
@@ -205,7 +187,7 @@ impl VmwareDistributedVirtualSwitch {
     /// ### criteria
     /// The port selection criteria. If unset, the operation
     /// returns the keys of all the ports in the switch.
-    pub async fn fetch_dv_port_keys(&self, criteria: Option<&DistributedVirtualSwitchPortCriteria>) -> Result<Option<Vec<String>>> {
+    pub async fn fetch_dv_port_keys(&self, criteria: Option<&crate::types::structs::DistributedVirtualSwitchPortCriteria>) -> Result<Option<Vec<String>>> {
         let input = FetchDvPortKeysRequestType {criteria, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/FetchDVPortKeys", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -220,7 +202,7 @@ impl VmwareDistributedVirtualSwitch {
     /// ### criteria
     /// The port selection criteria. If unset, the operation
     /// returns the keys of all the ports in the portgroup.
-    pub async fn fetch_dv_ports(&self, criteria: Option<&DistributedVirtualSwitchPortCriteria>) -> Result<Option<Vec<DistributedVirtualPort>>> {
+    pub async fn fetch_dv_ports(&self, criteria: Option<&crate::types::structs::DistributedVirtualSwitchPortCriteria>) -> Result<Option<Vec<crate::types::structs::DistributedVirtualPort>>> {
         let input = FetchDvPortsRequestType {criteria, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/FetchDVPorts", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -244,7 +226,7 @@ impl VmwareDistributedVirtualSwitch {
     /// ***NotFound***: If the portgroup for the specified key is not found.
     /// 
     /// ***NotSupported***: If the operation is not supported.
-    pub async fn lookup_dv_port_group(&self, portgroup_key: &str) -> Result<Option<ManagedObjectReference>> {
+    pub async fn lookup_dv_port_group(&self, portgroup_key: &str) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let input = LookupDvPortGroupRequestType {portgroup_key, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/LookupDvPortGroup", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -323,7 +305,7 @@ impl VmwareDistributedVirtualSwitch {
     /// ***DvsNotAuthorized***: if login-session's extension key does not match
     /// the switch's configured
     /// *extensionKey*.
-    pub async fn merge_dvs_task(&self, dvs: &ManagedObjectReference) -> Result<ManagedObjectReference> {
+    pub async fn merge_dvs_task(&self, dvs: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = MergeDvsRequestType {dvs, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/MergeDvs_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -363,7 +345,7 @@ impl VmwareDistributedVirtualSwitch {
     /// ***DvsNotAuthorized***: if login-session's extension key does not match
     /// the switch's configured
     /// *extensionKey*.
-    pub async fn move_dv_port_task(&self, port_key: &[String], destination_portgroup_key: Option<&str>) -> Result<ManagedObjectReference> {
+    pub async fn move_dv_port_task(&self, port_key: &[String], destination_portgroup_key: Option<&str>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = MoveDvPortRequestType {port_key, destination_portgroup_key, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/MoveDVPort_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -400,7 +382,7 @@ impl VmwareDistributedVirtualSwitch {
     /// ***DvsNotAuthorized***: if login-session's extension key does not match
     /// the switch's configured
     /// *extensionKey*.
-    pub async fn perform_dvs_product_spec_operation_task(&self, operation: &str, product_spec: Option<&DistributedVirtualSwitchProductSpec>) -> Result<ManagedObjectReference> {
+    pub async fn perform_dvs_product_spec_operation_task(&self, operation: &str, product_spec: Option<&crate::types::structs::DistributedVirtualSwitchProductSpec>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = PerformDvsProductSpecOperationRequestType {operation, product_spec, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/PerformDvsProductSpecOperation_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -482,7 +464,7 @@ impl VmwareDistributedVirtualSwitch {
     /// ***VspanSameSessionPortConflict***: if a dvPort is used as both the source and destination in the same Distributed Port Mirroring session.
     /// 
     /// ***VspanDestPortConflict***: if a dvPort is used as desination ports in multiple Distributed Port Mirroring sessions.
-    pub async fn reconfigure_dvs_task(&self, spec: &dyn crate::types::traits::DvsConfigSpecTrait) -> Result<ManagedObjectReference> {
+    pub async fn reconfigure_dvs_task(&self, spec: &dyn crate::types::traits::DvsConfigSpecTrait) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ReconfigureDvsRequestType {spec, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/ReconfigureDvs_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -518,7 +500,7 @@ impl VmwareDistributedVirtualSwitch {
     /// ***DvsNotAuthorized***: if login-session's extension key does not match
     /// the switch's configured
     /// *extensionKey*.
-    pub async fn reconfigure_dv_port_task(&self, port: &[DvPortConfigSpec]) -> Result<ManagedObjectReference> {
+    pub async fn reconfigure_dv_port_task(&self, port: &[crate::types::structs::DvPortConfigSpec]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ReconfigureDvPortRequestType {port, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/ReconfigureDVPort_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -561,7 +543,7 @@ impl VmwareDistributedVirtualSwitch {
     /// *extensionKey*.
     /// 
     /// ***ConflictingConfiguration***: if the any property being set is in conflict.
-    pub async fn dvs_reconfigure_vm_vnic_network_resource_pool_task(&self, config_spec: &[DvsVmVnicResourcePoolConfigSpec]) -> Result<ManagedObjectReference> {
+    pub async fn dvs_reconfigure_vm_vnic_network_resource_pool_task(&self, config_spec: &[crate::types::structs::DvsVmVnicResourcePoolConfigSpec]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = DvsReconfigureVmVnicNetworkResourcePoolRequestType {config_spec, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/DvsReconfigureVmVnicNetworkResourcePool_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -590,7 +572,7 @@ impl VmwareDistributedVirtualSwitch {
     /// ## Errors:
     ///
     /// ***DvsFault***: if operation fails on any host or if there are other update failures.
-    pub async fn rectify_dvs_host_task(&self, hosts: Option<&[ManagedObjectReference]>) -> Result<ManagedObjectReference> {
+    pub async fn rectify_dvs_host_task(&self, hosts: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RectifyDvsHostRequestType {hosts, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/RectifyDvsHost_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -697,7 +679,7 @@ impl VmwareDistributedVirtualSwitch {
     /// ***DuplicateName***: If another object in the same folder has the target name.
     /// 
     /// ***InvalidName***: If the new name is not a valid entity name.
-    pub async fn rename_task(&self, new_name: &str) -> Result<ManagedObjectReference> {
+    pub async fn rename_task(&self, new_name: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RenameRequestType {new_name, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/Rename_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -746,7 +728,7 @@ impl VmwareDistributedVirtualSwitch {
     /// the previous configuration does not exist either.
     /// 
     /// ***DvsFault***: if operation fails.
-    pub async fn dvs_rollback_task(&self, entity_backup: Option<&EntityBackupConfig>) -> Result<ManagedObjectReference> {
+    pub async fn dvs_rollback_task(&self, entity_backup: Option<&crate::types::structs::EntityBackupConfig>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = DvsRollbackRequestType {entity_backup, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/DVSRollback_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -791,7 +773,7 @@ impl VmwareDistributedVirtualSwitch {
     /// ***DvsNotAuthorized***: if login-session's extension key does not match
     /// the switch's configured
     /// *extensionKey*.
-    pub async fn update_dvs_capability(&self, capability: &DvsCapability) -> Result<()> {
+    pub async fn update_dvs_capability(&self, capability: &crate::types::structs::DvsCapability) -> Result<()> {
         let input = UpdateDvsCapabilityRequestType {capability, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/UpdateDvsCapability", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -817,7 +799,7 @@ impl VmwareDistributedVirtualSwitch {
     /// ***DvsFault***: if operation fails on any host or if there are other update failures.
     /// 
     /// ***NotSupported***: if health check is not supported on the switch.
-    pub async fn update_dvs_health_check_config_task(&self, health_check_config: &[Box<dyn crate::types::traits::DvsHealthCheckConfigTrait>]) -> Result<ManagedObjectReference> {
+    pub async fn update_dvs_health_check_config_task(&self, health_check_config: &[Box<dyn crate::types::traits::DvsHealthCheckConfigTrait>]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = UpdateDvsHealthCheckConfigRequestType {health_check_config, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/UpdateDVSHealthCheckConfig_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -847,7 +829,7 @@ impl VmwareDistributedVirtualSwitch {
     /// 
     /// ***NotSupported***: if multiple Link Aggregation Control Protocol
     /// is not supported on the switch.
-    pub async fn update_dvs_lacp_group_config_task(&self, lacp_group_spec: &[VMwareDvsLacpGroupSpec]) -> Result<ManagedObjectReference> {
+    pub async fn update_dvs_lacp_group_config_task(&self, lacp_group_spec: &[crate::types::structs::VMwareDvsLacpGroupSpec]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = UpdateDvsLacpGroupConfigRequestType {lacp_group_spec, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/UpdateDVSLacpGroupConfig_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -883,7 +865,7 @@ impl VmwareDistributedVirtualSwitch {
     /// ***DvsNotAuthorized***: if login-session's extension key does not match
     /// the switch's configured
     /// *extensionKey*.
-    pub async fn update_network_resource_pool(&self, config_spec: &[DvsNetworkResourcePoolConfigSpec]) -> Result<()> {
+    pub async fn update_network_resource_pool(&self, config_spec: &[crate::types::structs::DvsNetworkResourcePoolConfigSpec]) -> Result<()> {
         let input = UpdateNetworkResourcePoolRequestType {config_spec, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/UpdateNetworkResourcePool", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -904,7 +886,7 @@ impl VmwareDistributedVirtualSwitch {
     /// The fields are sorted by *CustomFieldDef.name*.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn available_field(&self) -> Result<Option<Vec<CustomFieldDef>>> {
+    pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/availableField", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -916,7 +898,7 @@ impl VmwareDistributedVirtualSwitch {
     /// When you retrieve this property from an ESXi host,
     /// *DistributedVirtualSwitch.capability*.*DVSCapability.dvsOperationSupported*
     /// should always be set to false.
-    pub async fn capability(&self) -> Result<DvsCapability> {
+    pub async fn capability(&self) -> Result<crate::types::structs::DvsCapability> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/capability", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute(req).await
@@ -934,7 +916,7 @@ impl VmwareDistributedVirtualSwitch {
     /// events as long as they are still current. The
     /// *configStatus* property provides an overall status
     /// based on these events.
-    pub async fn config_issue(&self) -> Result<Option<Vec<Event>>> {
+    pub async fn config_issue(&self) -> Result<Option<Vec<crate::types::structs::Event>>> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/configIssue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -986,7 +968,7 @@ impl VmwareDistributedVirtualSwitch {
     /// This set does not include alarms that are defined on descendants of this entity.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn declared_alarm_state(&self) -> Result<Option<Vec<AlarmState>>> {
+    pub async fn declared_alarm_state(&self) -> Result<Option<Vec<crate::types::structs::AlarmState>>> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/declaredAlarmState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -1094,7 +1076,7 @@ impl VmwareDistributedVirtualSwitch {
     /// to get the host infrastructure resource information.
     /// 
     /// Network resource pool information for the switch.
-    pub async fn network_resource_pool(&self) -> Result<Option<Vec<DvsNetworkResourcePool>>> {
+    pub async fn network_resource_pool(&self) -> Result<Option<Vec<crate::types::structs::DvsNetworkResourcePool>>> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/networkResourcePool", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -1135,13 +1117,13 @@ impl VmwareDistributedVirtualSwitch {
     /// ## Returns:
     ///
     /// Refers instance of *ManagedEntity*.
-    pub async fn parent(&self) -> Result<Option<ManagedObjectReference>> {
+    pub async fn parent(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/parent", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
     }
     /// List of permissions defined for this entity.
-    pub async fn permission(&self) -> Result<Option<Vec<Permission>>> {
+    pub async fn permission(&self) -> Result<Option<Vec<crate::types::structs::Permission>>> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/permission", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -1151,7 +1133,7 @@ impl VmwareDistributedVirtualSwitch {
     /// ## Returns:
     ///
     /// Refers instances of *DistributedVirtualPortgroup*.
-    pub async fn portgroup(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
+    pub async fn portgroup(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/portgroup", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -1181,19 +1163,19 @@ impl VmwareDistributedVirtualSwitch {
     /// ## Returns:
     ///
     /// Refers instances of *Task*.
-    pub async fn recent_task(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
+    pub async fn recent_task(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/recentTask", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
     }
     /// Runtime information of the distributed virtual switch.
-    pub async fn runtime(&self) -> Result<Option<DvsRuntimeInfo>> {
+    pub async fn runtime(&self) -> Result<Option<crate::types::structs::DvsRuntimeInfo>> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/runtime", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
     }
     /// Summary of the switch.
-    pub async fn summary(&self) -> Result<DvsSummary> {
+    pub async fn summary(&self) -> Result<crate::types::structs::DvsSummary> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/summary", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute(req).await
@@ -1203,7 +1185,7 @@ impl VmwareDistributedVirtualSwitch {
     /// Experimental. Subject to change.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn tag(&self) -> Result<Option<Vec<Tag>>> {
+    pub async fn tag(&self) -> Result<Option<Vec<crate::types::structs::Tag>>> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/tag", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -1222,7 +1204,7 @@ impl VmwareDistributedVirtualSwitch {
     /// produce any property values as no updates are generated.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn triggered_alarm_state(&self) -> Result<Option<Vec<AlarmState>>> {
+    pub async fn triggered_alarm_state(&self) -> Result<Option<Vec<crate::types::structs::AlarmState>>> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/triggeredAlarmState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -1253,17 +1235,17 @@ impl VmwareDistributedVirtualSwitch {
 #[serde(tag="_typeName")]
 struct AddNetworkResourcePoolRequestType<'a> {
     #[serde(rename = "configSpec")]
-    config_spec: &'a [DvsNetworkResourcePoolConfigSpec],
+    config_spec: &'a [crate::types::structs::DvsNetworkResourcePoolConfigSpec],
 }
 #[derive(serde::Serialize)]
 #[serde(rename = "CreateDVPortgroupRequestType", tag = "_typeName")]
 struct CreateDvPortgroupRequestType<'a> {
-    spec: &'a DvPortgroupConfigSpec,
+    spec: &'a crate::types::structs::DvPortgroupConfigSpec,
 }
 #[derive(serde::Serialize)]
 #[serde(rename = "AddDVPortgroupRequestType", tag = "_typeName")]
 struct AddDvPortgroupRequestType<'a> {
-    spec: &'a [DvPortgroupConfigSpec],
+    spec: &'a [crate::types::structs::DvPortgroupConfigSpec],
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -1274,13 +1256,13 @@ struct EnableNetworkResourceManagementRequestType {
 #[serde(rename = "FetchDVPortKeysRequestType", tag = "_typeName")]
 struct FetchDvPortKeysRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    criteria: Option<&'a DistributedVirtualSwitchPortCriteria>,
+    criteria: Option<&'a crate::types::structs::DistributedVirtualSwitchPortCriteria>,
 }
 #[derive(serde::Serialize)]
 #[serde(rename = "FetchDVPortsRequestType", tag = "_typeName")]
 struct FetchDvPortsRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    criteria: Option<&'a DistributedVirtualSwitchPortCriteria>,
+    criteria: Option<&'a crate::types::structs::DistributedVirtualSwitchPortCriteria>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -1291,7 +1273,7 @@ struct LookupDvPortGroupRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct MergeDvsRequestType<'a> {
-    dvs: &'a ManagedObjectReference,
+    dvs: &'a crate::types::structs::ManagedObjectReference,
 }
 #[derive(serde::Serialize)]
 #[serde(rename = "MoveDVPortRequestType", tag = "_typeName")]
@@ -1308,7 +1290,7 @@ struct PerformDvsProductSpecOperationRequestType<'a> {
     operation: &'a str,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "productSpec")]
-    product_spec: Option<&'a DistributedVirtualSwitchProductSpec>,
+    product_spec: Option<&'a crate::types::structs::DistributedVirtualSwitchProductSpec>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -1318,19 +1300,19 @@ struct ReconfigureDvsRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(rename = "ReconfigureDVPortRequestType", tag = "_typeName")]
 struct ReconfigureDvPortRequestType<'a> {
-    port: &'a [DvPortConfigSpec],
+    port: &'a [crate::types::structs::DvPortConfigSpec],
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct DvsReconfigureVmVnicNetworkResourcePoolRequestType<'a> {
     #[serde(rename = "configSpec")]
-    config_spec: &'a [DvsVmVnicResourcePoolConfigSpec],
+    config_spec: &'a [crate::types::structs::DvsVmVnicResourcePoolConfigSpec],
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct RectifyDvsHostRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    hosts: Option<&'a [ManagedObjectReference]>,
+    hosts: Option<&'a [crate::types::structs::ManagedObjectReference]>,
 }
 #[derive(serde::Serialize)]
 #[serde(rename = "RefreshDVPortStateRequestType", tag = "_typeName")]
@@ -1355,7 +1337,7 @@ struct RenameRequestType<'a> {
 struct DvsRollbackRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "entityBackup")]
-    entity_backup: Option<&'a EntityBackupConfig>,
+    entity_backup: Option<&'a crate::types::structs::EntityBackupConfig>,
 }
 #[derive(serde::Serialize)]
 #[serde(rename = "setCustomValueRequestType", tag = "_typeName")]
@@ -1366,7 +1348,7 @@ struct SetCustomValueRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct UpdateDvsCapabilityRequestType<'a> {
-    capability: &'a DvsCapability,
+    capability: &'a crate::types::structs::DvsCapability,
 }
 #[derive(serde::Serialize)]
 #[serde(rename = "UpdateDVSHealthCheckConfigRequestType", tag = "_typeName")]
@@ -1378,11 +1360,11 @@ struct UpdateDvsHealthCheckConfigRequestType<'a> {
 #[serde(rename = "UpdateDVSLacpGroupConfigRequestType", tag = "_typeName")]
 struct UpdateDvsLacpGroupConfigRequestType<'a> {
     #[serde(rename = "lacpGroupSpec")]
-    lacp_group_spec: &'a [VMwareDvsLacpGroupSpec],
+    lacp_group_spec: &'a [crate::types::structs::VMwareDvsLacpGroupSpec],
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct UpdateNetworkResourcePoolRequestType<'a> {
     #[serde(rename = "configSpec")]
-    config_spec: &'a [DvsNetworkResourcePoolConfigSpec],
+    config_spec: &'a [crate::types::structs::DvsNetworkResourcePoolConfigSpec],
 }

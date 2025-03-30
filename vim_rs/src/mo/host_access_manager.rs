@@ -1,12 +1,12 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::HostAccessControlEntry;
 /// Managed object used to control direct access to the host.
 /// 
 /// This should be used to control users and privileges on the host directly,
 /// which are different from the users and privileges defined in vCenter.
 /// 
 /// See *AuthorizationManager* for more information on permissions.
+#[derive(Clone)]
 pub struct HostAccessManager {
     client: Arc<Client>,
     mo_id: String,
@@ -176,7 +176,7 @@ impl HostAccessManager {
     /// ## Returns:
     ///
     /// a list of AccessEntry objects.
-    pub async fn retrieve_host_access_control_entries(&self) -> Result<Option<Vec<HostAccessControlEntry>>> {
+    pub async fn retrieve_host_access_control_entries(&self) -> Result<Option<Vec<crate::types::structs::HostAccessControlEntry>>> {
         let path = format!("/HostAccessManager/{moId}/RetrieveHostAccessControlEntries", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute_option(req).await

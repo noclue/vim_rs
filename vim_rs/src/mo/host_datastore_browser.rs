@@ -1,7 +1,5 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::HostDatastoreBrowserSearchSpec;
-use crate::types::structs::ManagedObjectReference;
 /// The DatastoreBrowser managed object type provides access to the contents of one or
 /// more datastores.
 /// 
@@ -59,6 +57,7 @@ use crate::types::structs::ManagedObjectReference;
 ///   registered. See *HostMountInfo.accessible*.
 ///   
 /// See also *FileInfo*.
+#[derive(Clone)]
 pub struct HostDatastoreBrowser {
     client: Arc<Client>,
     mo_id: String,
@@ -136,7 +135,7 @@ impl HostDatastoreBrowser {
     /// 
     /// ***FileNotFound***: if the file or folder specified by datastorePath is not
     /// found.
-    pub async fn search_datastore_task(&self, datastore_path: &str, search_spec: Option<&HostDatastoreBrowserSearchSpec>) -> Result<ManagedObjectReference> {
+    pub async fn search_datastore_task(&self, datastore_path: &str, search_spec: Option<&crate::types::structs::HostDatastoreBrowserSearchSpec>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = SearchDatastoreRequestType {datastore_path, search_spec, };
         let path = format!("/HostDatastoreBrowser/{moId}/SearchDatastore_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -175,7 +174,7 @@ impl HostDatastoreBrowser {
     /// 
     /// ***FileNotFound***: if the file or folder specified by datastorePath is not
     /// found.
-    pub async fn search_datastore_sub_folders_task(&self, datastore_path: &str, search_spec: Option<&HostDatastoreBrowserSearchSpec>) -> Result<ManagedObjectReference> {
+    pub async fn search_datastore_sub_folders_task(&self, datastore_path: &str, search_spec: Option<&crate::types::structs::HostDatastoreBrowserSearchSpec>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = SearchDatastoreSubFoldersRequestType {datastore_path, search_spec, };
         let path = format!("/HostDatastoreBrowser/{moId}/SearchDatastoreSubFolders_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -193,7 +192,7 @@ impl HostDatastoreBrowser {
     /// ## Returns:
     ///
     /// Refers instances of *Datastore*.
-    pub async fn datastore(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
+    pub async fn datastore(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/HostDatastoreBrowser/{moId}/datastore", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -231,7 +230,7 @@ struct SearchDatastoreRequestType<'a> {
     datastore_path: &'a str,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "searchSpec")]
-    search_spec: Option<&'a HostDatastoreBrowserSearchSpec>,
+    search_spec: Option<&'a crate::types::structs::HostDatastoreBrowserSearchSpec>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -240,5 +239,5 @@ struct SearchDatastoreSubFoldersRequestType<'a> {
     datastore_path: &'a str,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "searchSpec")]
-    search_spec: Option<&'a HostDatastoreBrowserSearchSpec>,
+    search_spec: Option<&'a crate::types::structs::HostDatastoreBrowserSearchSpec>,
 }

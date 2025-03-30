@@ -1,15 +1,33 @@
+//! # vSphere Event Monitoring Example
+//!
+//! This example demonstrates how to retrieve and process events from a vSphere environment
+//! using the EventManager interface.
+//!
+//! The vSphere event system provides a comprehensive record of actions and state changes
+//! that occur within the virtual infrastructure. Monitoring these events programmatically
+//! allows for auditing, alerting, and tracking system changes over time.
+//!
+//! In this example:
+//! 1. We connect to a vSphere server using credentials from environment variables
+//! 2. We access the EventManager service from the ServiceContent
+//! 3. We create an event filter to retrieve events from the last 30 minutes
+//! 4. We create an EventHistoryCollector to efficiently retrieve batches of events
+//! 5. We process each event, extracting its type ID, timestamp, and message
+//!
+//! The example includes a utility function to determine the event type ID based on
+//! different event class structures, demonstrating how to handle the polymorphic
+//! nature of vSphere events.
+
+use anyhow::{Error, Result};
+use chrono::{Duration as ChronoDuration, Utc};
+use log::info;
 use std::{env, sync::Arc};
 use tokio::time::sleep;
+use utils::connect;
+use vim_rs::core::client::Client;
 use vim_rs::mo::EventManager;
-use vim_rs::types::structs::{EventFilterSpecByTime, EventFilterSpec, Event};
-use vim_rs::core::client::{Client, ClientBuilder};
-use log::info;
-use chrono::{Utc, Duration as ChronoDuration};
-use anyhow::{Result, Error, Context};
 use vim_rs::types::struct_enum::StructType;
-
-const APP_NAME: &str = env!("CARGO_PKG_NAME");
-const APP_VERSION: &str = env!("CARGO_PKG_VERSION");
+use vim_rs::types::structs::{Event, EventFilterSpec, EventFilterSpecByTime};
 
 /// Get the event type ID from an event
 /// The semantics of how eventTypeId matching is done is as follows:
@@ -32,7 +50,6 @@ fn get_event_type_id(event: &Event) -> String {
 // Dump the last 30 minutes of events in vCenter
 async fn dump_events(client: Arc<Client>, event_manager: &EventManager) -> Result<()> {
     let thirty_minutes_ago = Utc::now() - ChronoDuration::minutes(30);
-    
 
     let filter = &EventFilterSpec {
         entity: None,
@@ -60,19 +77,24 @@ async fn dump_events(client: Arc<Client>, event_manager: &EventManager) -> Resul
         match events {
             Some(events) => {
                 for event in &events {
-                    info!("{event_type}: {ts} - {id} - {msg}",
-                        event_type=get_event_type_id(event),
-                        id=event.key,
-                        ts=event.created_time,
-                        msg=event.full_formatted_message.as_deref().unwrap_or("No message"));
+                    info!(
+                        "{event_type}: {ts} - {id} - {msg}",
+                        event_type = get_event_type_id(event),
+                        id = event.key,
+                        ts = event.created_time,
+                        msg = event
+                            .full_formatted_message
+                            .as_deref()
+                            .unwrap_or("No message")
+                    );
                 }
                 if !events.is_empty() {
                     continue; // dump events with no delay
                 }
-            },
+            }
             None => {
                 info!("No events found")
-            },
+            }
         }
         sleep(std::time::Duration::from_secs(5)).await;
     }
@@ -83,25 +105,14 @@ async fn dump_events(client: Arc<Client>, event_manager: &EventManager) -> Resul
 #[tokio::main]
 async fn main() -> Result<()> {
     env_logger::init();
+    let client = connect(env!("CARGO_PKG_NAME"), env!("CARGO_PKG_VERSION")).await?;
 
-    info!("Starting up!");
-
-    let vc_server = env::var("VIM_SERVER").with_context(||"VIM_SERVER env var not set")?;
-    let username = env::var("VIM_USERNAME").with_context(||"VIM_USERNAME env var not set")?;
-    let pwd = env::var("VIM_PASSWORD").with_context(||"VIM_PASSWORD env var not set")?;
-
-    let vim_client = ClientBuilder::new(&vc_server)
-        .insecure(true)
-        .basic_authn(&username, &pwd)
-        .app_details(APP_NAME, APP_VERSION)
-        .build().await?;
-
-    let Some(event_manager_moref) = vim_client.service_content().event_manager.clone() else {
+    let Some(event_manager_moref) = client.service_content().event_manager.clone() else {
         return Err(Error::msg("No event manager found"));
     };
-    let event_manager = EventManager::new(vim_client.clone(), &event_manager_moref.value);
+    let event_manager = EventManager::new(client.clone(), &event_manager_moref.value);
 
-    dump_events(vim_client.clone(), &event_manager).await?;
+    dump_events(client.clone(), &event_manager).await?;
 
     Ok(())
 }

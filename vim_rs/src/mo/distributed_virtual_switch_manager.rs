@@ -1,15 +1,5 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::DistributedVirtualSwitchHostProductSpec;
-use crate::types::structs::DistributedVirtualSwitchManagerCompatibilityResult;
-use crate::types::structs::DistributedVirtualSwitchManagerDvsProductSpec;
-use crate::types::structs::DistributedVirtualSwitchManagerHostContainer;
-use crate::types::structs::DistributedVirtualSwitchNetworkOffloadSpec;
-use crate::types::structs::DistributedVirtualSwitchProductSpec;
-use crate::types::structs::DvsManagerDvsConfigTarget;
-use crate::types::structs::DvsManagerPhysicalNicsList;
-use crate::types::structs::EntityBackupConfig;
-use crate::types::structs::ManagedObjectReference;
 /// The *DistributedVirtualSwitchManager* provides methods
 /// that support the following operations:
 /// - Backup and restore operations for *VmwareDistributedVirtualSwitch*
@@ -17,6 +7,7 @@ use crate::types::structs::ManagedObjectReference;
 /// - Query operations for information about portgroups and distributed
 ///   virtual switches.
 /// - Distributed virtual switch configuration update operations.
+#[derive(Clone)]
 pub struct DistributedVirtualSwitchManager {
     client: Arc<Client>,
     mo_id: String,
@@ -66,7 +57,7 @@ impl DistributedVirtualSwitchManager {
     /// filterSpec and users can use this to specify all hosts in a
     /// container (datacenter, folder, or computeResource), an array
     /// of hosts, or hosts that might or might not be a DVS member.
-    pub async fn query_dvs_check_compatibility(&self, host_container: &DistributedVirtualSwitchManagerHostContainer, dvs_product_spec: Option<&DistributedVirtualSwitchManagerDvsProductSpec>, host_filter_spec: Option<&[Box<dyn crate::types::traits::DistributedVirtualSwitchManagerHostDvsFilterSpecTrait>]>) -> Result<Option<Vec<DistributedVirtualSwitchManagerCompatibilityResult>>> {
+    pub async fn query_dvs_check_compatibility(&self, host_container: &crate::types::structs::DistributedVirtualSwitchManagerHostContainer, dvs_product_spec: Option<&crate::types::structs::DistributedVirtualSwitchManagerDvsProductSpec>, host_filter_spec: Option<&[Box<dyn crate::types::traits::DistributedVirtualSwitchManagerHostDvsFilterSpecTrait>]>) -> Result<Option<Vec<crate::types::structs::DistributedVirtualSwitchManagerCompatibilityResult>>> {
         let input = QueryDvsCheckCompatibilityRequestType {host_container, dvs_product_spec, host_filter_spec, };
         let path = format!("/DistributedVirtualSwitchManager/{moId}/QueryDvsCheckCompatibility", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -104,7 +95,7 @@ impl DistributedVirtualSwitchManager {
     /// ***NotFound***: If entity in selectionSet doesn't exist.
     /// 
     /// ***BackupBlobWriteFailure***: if failed to create backup config blob.
-    pub async fn dvs_manager_export_entity_task(&self, selection_set: &[Box<dyn crate::types::traits::SelectionSetTrait>]) -> Result<ManagedObjectReference> {
+    pub async fn dvs_manager_export_entity_task(&self, selection_set: &[Box<dyn crate::types::traits::SelectionSetTrait>]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = DvsManagerExportEntityRequestType {selection_set, };
         let path = format!("/DistributedVirtualSwitchManager/{moId}/DVSManagerExportEntity_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -142,7 +133,7 @@ impl DistributedVirtualSwitchManager {
     /// ***NotFound***: If entity in *EntityBackupConfig.key* doesn't exist.
     /// 
     /// ***DvsFault***: if operation fails on any host.
-    pub async fn dvs_manager_import_entity_task(&self, entity_backup: &[EntityBackupConfig], import_type: &str) -> Result<ManagedObjectReference> {
+    pub async fn dvs_manager_import_entity_task(&self, entity_backup: &[crate::types::structs::EntityBackupConfig], import_type: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = DvsManagerImportEntityRequestType {entity_backup, import_type, };
         let path = format!("/DistributedVirtualSwitchManager/{moId}/DVSManagerImportEntity_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -171,7 +162,7 @@ impl DistributedVirtualSwitchManager {
     /// ***NotFound***: If the portgroup for the specified inputs was not found.
     /// 
     /// ***NotSupported***: If the operation is not supported.
-    pub async fn dvs_manager_lookup_dv_port_group(&self, switch_uuid: &str, portgroup_key: &str) -> Result<Option<ManagedObjectReference>> {
+    pub async fn dvs_manager_lookup_dv_port_group(&self, switch_uuid: &str, portgroup_key: &str) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let input = DvsManagerLookupDvPortGroupRequestType {switch_uuid, portgroup_key, };
         let path = format!("/DistributedVirtualSwitchManager/{moId}/DVSManagerLookupDvPortGroup", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -209,7 +200,7 @@ impl DistributedVirtualSwitchManager {
     /// ## Returns:
     ///
     /// Refers instances of *HostSystem*.
-    pub async fn query_compatible_host_for_existing_dvs(&self, container: &ManagedObjectReference, recursive: bool, dvs: &ManagedObjectReference) -> Result<Option<Vec<ManagedObjectReference>>> {
+    pub async fn query_compatible_host_for_existing_dvs(&self, container: &crate::types::structs::ManagedObjectReference, recursive: bool, dvs: &crate::types::structs::ManagedObjectReference) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let input = QueryCompatibleHostForExistingDvsRequestType {container, recursive, dvs, };
         let path = format!("/DistributedVirtualSwitchManager/{moId}/QueryCompatibleHostForExistingDvs", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -242,7 +233,7 @@ impl DistributedVirtualSwitchManager {
     /// ## Returns:
     ///
     /// Refers instances of *HostSystem*.
-    pub async fn query_compatible_host_for_new_dvs(&self, container: &ManagedObjectReference, recursive: bool, switch_product_spec: Option<&DistributedVirtualSwitchProductSpec>) -> Result<Option<Vec<ManagedObjectReference>>> {
+    pub async fn query_compatible_host_for_new_dvs(&self, container: &crate::types::structs::ManagedObjectReference, recursive: bool, switch_product_spec: Option<&crate::types::structs::DistributedVirtualSwitchProductSpec>) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let input = QueryCompatibleHostForNewDvsRequestType {container, recursive, switch_product_spec, };
         let path = format!("/DistributedVirtualSwitchManager/{moId}/QueryCompatibleHostForNewDvs", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -260,7 +251,7 @@ impl DistributedVirtualSwitchManager {
     /// The productSpec of a *DistributedVirtualSwitch*.
     /// If not set, it is assumed to be the default one used for
     /// DistributedVirtualSwitch creation.
-    pub async fn query_dvs_compatible_host_spec(&self, switch_product_spec: Option<&DistributedVirtualSwitchProductSpec>) -> Result<Option<Vec<DistributedVirtualSwitchHostProductSpec>>> {
+    pub async fn query_dvs_compatible_host_spec(&self, switch_product_spec: Option<&crate::types::structs::DistributedVirtualSwitchProductSpec>) -> Result<Option<Vec<crate::types::structs::DistributedVirtualSwitchHostProductSpec>>> {
         let input = QueryDvsCompatibleHostSpecRequestType {switch_product_spec, };
         let path = format!("/DistributedVirtualSwitchManager/{moId}/QueryDvsCompatibleHostSpec", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -286,7 +277,7 @@ impl DistributedVirtualSwitchManager {
     /// made.
     /// 
     /// Refers instance of *DistributedVirtualSwitch*.
-    pub async fn query_compatible_vmnics_from_hosts(&self, hosts: Option<&[ManagedObjectReference]>, dvs: &ManagedObjectReference) -> Result<Option<Vec<DvsManagerPhysicalNicsList>>> {
+    pub async fn query_compatible_vmnics_from_hosts(&self, hosts: Option<&[crate::types::structs::ManagedObjectReference]>, dvs: &crate::types::structs::ManagedObjectReference) -> Result<Option<Vec<crate::types::structs::DvsManagerPhysicalNicsList>>> {
         let input = QueryCompatibleVmnicsFromHostsRequestType {hosts, dvs, };
         let path = format!("/DistributedVirtualSwitchManager/{moId}/QueryCompatibleVmnicsFromHosts", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -311,7 +302,7 @@ impl DistributedVirtualSwitchManager {
     /// distributed virtual switches available on the host.
     /// 
     /// Refers instance of *DistributedVirtualSwitch*.
-    pub async fn query_dvs_config_target(&self, host: Option<&ManagedObjectReference>, dvs: Option<&ManagedObjectReference>) -> Result<DvsManagerDvsConfigTarget> {
+    pub async fn query_dvs_config_target(&self, host: Option<&crate::types::structs::ManagedObjectReference>, dvs: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::DvsManagerDvsConfigTarget> {
         let input = QueryDvsConfigTargetRequestType {host, dvs, };
         let path = format!("/DistributedVirtualSwitchManager/{moId}/QueryDvsConfigTarget", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -328,7 +319,7 @@ impl DistributedVirtualSwitchManager {
     /// The productSpec of a *DistributedVirtualSwitch*.
     /// If not set, it is assumed to be the default one used for
     /// DistributedVirtualSwitch creation.
-    pub async fn query_dvs_feature_capability(&self, switch_product_spec: Option<&DistributedVirtualSwitchProductSpec>) -> Result<Option<Box<dyn crate::types::traits::DvsFeatureCapabilityTrait>>> {
+    pub async fn query_dvs_feature_capability(&self, switch_product_spec: Option<&crate::types::structs::DistributedVirtualSwitchProductSpec>) -> Result<Option<Box<dyn crate::types::traits::DvsFeatureCapabilityTrait>>> {
         let input = QueryDvsFeatureCapabilityRequestType {switch_product_spec, };
         let path = format!("/DistributedVirtualSwitchManager/{moId}/QueryDvsFeatureCapability", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -346,7 +337,7 @@ impl DistributedVirtualSwitchManager {
     /// ### switch_product_spec
     /// The productSpec of a
     /// *DistributedVirtualSwitch*.
-    pub async fn query_supported_network_offload_spec(&self, switch_product_spec: &DistributedVirtualSwitchProductSpec) -> Result<Option<Vec<DistributedVirtualSwitchNetworkOffloadSpec>>> {
+    pub async fn query_supported_network_offload_spec(&self, switch_product_spec: &crate::types::structs::DistributedVirtualSwitchProductSpec) -> Result<Option<Vec<crate::types::structs::DistributedVirtualSwitchNetworkOffloadSpec>>> {
         let input = QuerySupportedNetworkOffloadSpecRequestType {switch_product_spec, };
         let path = format!("/DistributedVirtualSwitchManager/{moId}/QuerySupportedNetworkOffloadSpec", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -363,7 +354,7 @@ impl DistributedVirtualSwitchManager {
     /// If set to true, return only the recommended versions.
     /// If set to false, return only the not recommended versions.
     /// If unset, return all supported versions.
-    pub async fn query_available_dvs_spec(&self, recommended: Option<bool>) -> Result<Option<Vec<DistributedVirtualSwitchProductSpec>>> {
+    pub async fn query_available_dvs_spec(&self, recommended: Option<bool>) -> Result<Option<Vec<crate::types::structs::DistributedVirtualSwitchProductSpec>>> {
         let input = QueryAvailableDvsSpecRequestType {recommended, };
         let path = format!("/DistributedVirtualSwitchManager/{moId}/QueryAvailableDvsSpec", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -385,7 +376,7 @@ impl DistributedVirtualSwitchManager {
     /// ## Errors:
     ///
     /// ***NotFound***: If a switch with the UUID doesn't exist.
-    pub async fn query_dvs_by_uuid(&self, uuid: &str) -> Result<Option<ManagedObjectReference>> {
+    pub async fn query_dvs_by_uuid(&self, uuid: &str) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let input = QueryDvsByUuidRequestType {uuid, };
         let path = format!("/DistributedVirtualSwitchManager/{moId}/QueryDvsByUuid", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -412,7 +403,7 @@ impl DistributedVirtualSwitchManager {
     /// ## Errors:
     ///
     /// ***DvsFault***: if operation fails on any host or if there are other update failures.
-    pub async fn rectify_dvs_on_host_task(&self, hosts: &[ManagedObjectReference]) -> Result<ManagedObjectReference> {
+    pub async fn rectify_dvs_on_host_task(&self, hosts: &[crate::types::structs::ManagedObjectReference]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RectifyDvsOnHostRequestType {hosts, };
         let path = format!("/DistributedVirtualSwitchManager/{moId}/RectifyDvsOnHost_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -423,10 +414,10 @@ impl DistributedVirtualSwitchManager {
 #[serde(tag="_typeName")]
 struct QueryDvsCheckCompatibilityRequestType<'a> {
     #[serde(rename = "hostContainer")]
-    host_container: &'a DistributedVirtualSwitchManagerHostContainer,
+    host_container: &'a crate::types::structs::DistributedVirtualSwitchManagerHostContainer,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "dvsProductSpec")]
-    dvs_product_spec: Option<&'a DistributedVirtualSwitchManagerDvsProductSpec>,
+    dvs_product_spec: Option<&'a crate::types::structs::DistributedVirtualSwitchManagerDvsProductSpec>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "hostFilterSpec")]
     host_filter_spec: Option<&'a [Box<dyn crate::types::traits::DistributedVirtualSwitchManagerHostDvsFilterSpecTrait>]>,
@@ -441,7 +432,7 @@ struct DvsManagerExportEntityRequestType<'a> {
 #[serde(rename = "DVSManagerImportEntityRequestType", tag = "_typeName")]
 struct DvsManagerImportEntityRequestType<'a> {
     #[serde(rename = "entityBackup")]
-    entity_backup: &'a [EntityBackupConfig],
+    entity_backup: &'a [crate::types::structs::EntityBackupConfig],
     #[serde(rename = "importType")]
     import_type: &'a str,
 }
@@ -456,53 +447,53 @@ struct DvsManagerLookupDvPortGroupRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct QueryCompatibleHostForExistingDvsRequestType<'a> {
-    container: &'a ManagedObjectReference,
+    container: &'a crate::types::structs::ManagedObjectReference,
     recursive: bool,
-    dvs: &'a ManagedObjectReference,
+    dvs: &'a crate::types::structs::ManagedObjectReference,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct QueryCompatibleHostForNewDvsRequestType<'a> {
-    container: &'a ManagedObjectReference,
+    container: &'a crate::types::structs::ManagedObjectReference,
     recursive: bool,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "switchProductSpec")]
-    switch_product_spec: Option<&'a DistributedVirtualSwitchProductSpec>,
+    switch_product_spec: Option<&'a crate::types::structs::DistributedVirtualSwitchProductSpec>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct QueryDvsCompatibleHostSpecRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "switchProductSpec")]
-    switch_product_spec: Option<&'a DistributedVirtualSwitchProductSpec>,
+    switch_product_spec: Option<&'a crate::types::structs::DistributedVirtualSwitchProductSpec>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct QueryCompatibleVmnicsFromHostsRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    hosts: Option<&'a [ManagedObjectReference]>,
-    dvs: &'a ManagedObjectReference,
+    hosts: Option<&'a [crate::types::structs::ManagedObjectReference]>,
+    dvs: &'a crate::types::structs::ManagedObjectReference,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct QueryDvsConfigTargetRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    host: Option<&'a ManagedObjectReference>,
+    host: Option<&'a crate::types::structs::ManagedObjectReference>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    dvs: Option<&'a ManagedObjectReference>,
+    dvs: Option<&'a crate::types::structs::ManagedObjectReference>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct QueryDvsFeatureCapabilityRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "switchProductSpec")]
-    switch_product_spec: Option<&'a DistributedVirtualSwitchProductSpec>,
+    switch_product_spec: Option<&'a crate::types::structs::DistributedVirtualSwitchProductSpec>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct QuerySupportedNetworkOffloadSpecRequestType<'a> {
     #[serde(rename = "switchProductSpec")]
-    switch_product_spec: &'a DistributedVirtualSwitchProductSpec,
+    switch_product_spec: &'a crate::types::structs::DistributedVirtualSwitchProductSpec,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -518,5 +509,5 @@ struct QueryDvsByUuidRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct RectifyDvsOnHostRequestType<'a> {
-    hosts: &'a [ManagedObjectReference],
+    hosts: &'a [crate::types::structs::ManagedObjectReference],
 }

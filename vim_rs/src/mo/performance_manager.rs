@@ -1,14 +1,5 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::ManagedObjectReference;
-use crate::types::structs::PerfCompositeMetric;
-use crate::types::structs::PerfCounterInfo;
-use crate::types::structs::PerfInterval;
-use crate::types::structs::PerfMetricId;
-use crate::types::structs::PerfProviderSummary;
-use crate::types::structs::PerfQuerySpec;
-use crate::types::structs::PerformanceDescription;
-use crate::types::structs::PerformanceManagerCounterLevelMapping;
 /// This managed object type provides the service interface for obtaining
 /// statistical data about various aspects of system performance, as generated
 /// and maintained by the system's performance providers.
@@ -93,6 +84,7 @@ use crate::types::structs::PerformanceManagerCounterLevelMapping;
 ///   then hourly thereafter&#46;
 ///   
 /// See the Programming Guide for more information about using *PerformanceManager*&#46;
+#[derive(Clone)]
 pub struct PerformanceManager {
     client: Arc<Client>,
     mo_id: String,
@@ -121,7 +113,7 @@ impl PerformanceManager {
     /// A custom interval, specified as the number of seconds to hold data in the
     /// database, a user-specified unique name, and a sampling period (in
     /// seconds).
-    pub async fn create_perf_interval(&self, interval_id: &PerfInterval) -> Result<()> {
+    pub async fn create_perf_interval(&self, interval_id: &crate::types::structs::PerfInterval) -> Result<()> {
         let input = CreatePerfIntervalRequestType {interval_id, };
         let path = format!("/PerformanceManager/{moId}/CreatePerfInterval", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -167,7 +159,7 @@ impl PerformanceManager {
     /// An array of metrics, each of which comprises a
     /// *PerfMetricId.counterId* and an
     /// *name*.
-    pub async fn query_available_perf_metric(&self, entity: &ManagedObjectReference, begin_time: Option<&str>, end_time: Option<&str>, interval_id: Option<i32>) -> Result<Option<Vec<PerfMetricId>>> {
+    pub async fn query_available_perf_metric(&self, entity: &crate::types::structs::ManagedObjectReference, begin_time: Option<&str>, end_time: Option<&str>, interval_id: Option<i32>) -> Result<Option<Vec<crate::types::structs::PerfMetricId>>> {
         let input = QueryAvailablePerfMetricRequestType {entity, begin_time, end_time, interval_id, };
         let path = format!("/PerformanceManager/{moId}/QueryAvailablePerfMetric", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -206,7 +198,7 @@ impl PerformanceManager {
     ///
     /// The metric values for the specified entity and its associated
     /// entities for a single interval.
-    pub async fn query_perf_composite(&self, query_spec: &PerfQuerySpec) -> Result<PerfCompositeMetric> {
+    pub async fn query_perf_composite(&self, query_spec: &crate::types::structs::PerfQuerySpec) -> Result<crate::types::structs::PerfCompositeMetric> {
         let input = QueryPerfCompositeRequestType {query_spec, };
         let path = format!("/PerformanceManager/{moId}/QueryPerfComposite", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -226,7 +218,7 @@ impl PerformanceManager {
     ///
     /// An array consisting of performance counter information for the
     /// specified counterIds.
-    pub async fn query_perf_counter(&self, counter_id: &[i32]) -> Result<Option<Vec<PerfCounterInfo>>> {
+    pub async fn query_perf_counter(&self, counter_id: &[i32]) -> Result<Option<Vec<crate::types::structs::PerfCounterInfo>>> {
         let input = QueryPerfCounterRequestType {counter_id, };
         let path = format!("/PerformanceManager/{moId}/QueryPerfCounter", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -251,7 +243,7 @@ impl PerformanceManager {
     /// An array of *PerfCounterInfo* objects that
     /// define the set of counters having the specified level number available
     /// for the entity.
-    pub async fn query_perf_counter_by_level(&self, level: i32) -> Result<Vec<PerfCounterInfo>> {
+    pub async fn query_perf_counter_by_level(&self, level: i32) -> Result<Vec<crate::types::structs::PerfCounterInfo>> {
         let input = QueryPerfCounterByLevelRequestType {level, };
         let path = format!("/PerformanceManager/{moId}/QueryPerfCounterByLevel", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -276,7 +268,7 @@ impl PerformanceManager {
     /// A data object containing metadata about the entity as a
     /// performance provider, such as the type of metrics (real-time, summary, or
     /// both) it generates and the *PerfProviderSummary.refreshRate*.
-    pub async fn query_perf_provider_summary(&self, entity: &ManagedObjectReference) -> Result<PerfProviderSummary> {
+    pub async fn query_perf_provider_summary(&self, entity: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::PerfProviderSummary> {
         let input = QueryPerfProviderSummaryRequestType {entity, };
         let path = format!("/PerformanceManager/{moId}/QueryPerfProviderSummary", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -316,7 +308,7 @@ impl PerformanceManager {
     /// ## Returns:
     ///
     /// The metric values for the specified entity or entities.
-    pub async fn query_perf(&self, query_spec: &[PerfQuerySpec]) -> Result<Option<Vec<Box<dyn crate::types::traits::PerfEntityMetricBaseTrait>>>> {
+    pub async fn query_perf(&self, query_spec: &[crate::types::structs::PerfQuerySpec]) -> Result<Option<Vec<Box<dyn crate::types::traits::PerfEntityMetricBaseTrait>>>> {
         let input = QueryPerfRequestType {query_spec, };
         let path = format!("/PerformanceManager/{moId}/QueryPerf", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -442,7 +434,7 @@ impl PerformanceManager {
     /// unset then only the aggregateLevel is configured. If there are multiple
     /// entries in the passed in array for the same counterId being updated then
     /// the last entry containing the counterId takes effect.
-    pub async fn update_counter_level_mapping(&self, counter_level_map: &[PerformanceManagerCounterLevelMapping]) -> Result<()> {
+    pub async fn update_counter_level_mapping(&self, counter_level_map: &[crate::types::structs::PerformanceManagerCounterLevelMapping]) -> Result<()> {
         let input = UpdateCounterLevelMappingRequestType {counter_level_map, };
         let path = format!("/PerformanceManager/{moId}/UpdateCounterLevelMapping", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -519,7 +511,7 @@ impl PerformanceManager {
     /// *PerfInterval.length* of time to maintain statistics for this
     /// interval in the database, *PerfInterval.level*, *PerfInterval.name*, and *PerfInterval.samplingPeriod*
     /// properties.
-    pub async fn update_perf_interval(&self, interval: &PerfInterval) -> Result<()> {
+    pub async fn update_perf_interval(&self, interval: &crate::types::structs::PerfInterval) -> Result<()> {
         let input = UpdatePerfIntervalRequestType {interval, };
         let path = format!("/PerformanceManager/{moId}/UpdatePerfInterval", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -528,7 +520,7 @@ impl PerformanceManager {
     /// The static description strings.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn description(&self) -> Result<PerformanceDescription> {
+    pub async fn description(&self) -> Result<crate::types::structs::PerformanceDescription> {
         let path = format!("/PerformanceManager/{moId}/description", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute(req).await
@@ -537,7 +529,7 @@ impl PerformanceManager {
     /// system.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn historical_interval(&self) -> Result<Option<Vec<PerfInterval>>> {
+    pub async fn historical_interval(&self) -> Result<Option<Vec<crate::types::structs::PerfInterval>>> {
         let path = format!("/PerformanceManager/{moId}/historicalInterval", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -545,7 +537,7 @@ impl PerformanceManager {
     /// A list of all supported performance counters in the system.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn perf_counter(&self) -> Result<Option<Vec<PerfCounterInfo>>> {
+    pub async fn perf_counter(&self) -> Result<Option<Vec<crate::types::structs::PerfCounterInfo>>> {
         let path = format!("/PerformanceManager/{moId}/perfCounter", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -555,12 +547,12 @@ impl PerformanceManager {
 #[serde(tag="_typeName")]
 struct CreatePerfIntervalRequestType<'a> {
     #[serde(rename = "intervalId")]
-    interval_id: &'a PerfInterval,
+    interval_id: &'a crate::types::structs::PerfInterval,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct QueryAvailablePerfMetricRequestType<'a> {
-    entity: &'a ManagedObjectReference,
+    entity: &'a crate::types::structs::ManagedObjectReference,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "beginTime")]
     begin_time: Option<&'a str>,
@@ -575,7 +567,7 @@ struct QueryAvailablePerfMetricRequestType<'a> {
 #[serde(tag="_typeName")]
 struct QueryPerfCompositeRequestType<'a> {
     #[serde(rename = "querySpec")]
-    query_spec: &'a PerfQuerySpec,
+    query_spec: &'a crate::types::structs::PerfQuerySpec,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -591,13 +583,13 @@ struct QueryPerfCounterByLevelRequestType {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct QueryPerfProviderSummaryRequestType<'a> {
-    entity: &'a ManagedObjectReference,
+    entity: &'a crate::types::structs::ManagedObjectReference,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct QueryPerfRequestType<'a> {
     #[serde(rename = "querySpec")]
-    query_spec: &'a [PerfQuerySpec],
+    query_spec: &'a [crate::types::structs::PerfQuerySpec],
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -614,10 +606,10 @@ struct ResetCounterLevelMappingRequestType<'a> {
 #[serde(tag="_typeName")]
 struct UpdateCounterLevelMappingRequestType<'a> {
     #[serde(rename = "counterLevelMap")]
-    counter_level_map: &'a [PerformanceManagerCounterLevelMapping],
+    counter_level_map: &'a [crate::types::structs::PerformanceManagerCounterLevelMapping],
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct UpdatePerfIntervalRequestType<'a> {
-    interval: &'a PerfInterval,
+    interval: &'a crate::types::structs::PerfInterval,
 }

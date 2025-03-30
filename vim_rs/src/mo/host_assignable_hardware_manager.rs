@@ -1,10 +1,7 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::HostAssignableHardwareBinding;
-use crate::types::structs::HostAssignableHardwareConfig;
-use crate::types::structs::VirtualMachineDynamicPassthroughInfo;
-use crate::types::structs::VirtualMachineVendorDeviceGroupInfo;
 /// This managed object manages the assignable hardware state of the host.
+#[derive(Clone)]
 pub struct HostAssignableHardwareManager {
     client: Arc<Client>,
     mo_id: String,
@@ -39,7 +36,7 @@ impl HostAssignableHardwareManager {
     /// DirectPath IO device.
     /// 
     /// ***Required privileges:*** System.Read
-    pub async fn retrieve_dynamic_passthrough_info(&self) -> Result<Option<Vec<VirtualMachineDynamicPassthroughInfo>>> {
+    pub async fn retrieve_dynamic_passthrough_info(&self) -> Result<Option<Vec<crate::types::structs::VirtualMachineDynamicPassthroughInfo>>> {
         let path = format!("/HostAssignableHardwareManager/{moId}/RetrieveDynamicPassthroughInfo", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute_option(req).await
@@ -51,7 +48,7 @@ impl HostAssignableHardwareManager {
     /// ***Since:*** vSphere API Release 8.0.0.1
     /// 
     /// ***Required privileges:*** System.Read
-    pub async fn retrieve_vendor_device_group_info(&self) -> Result<Option<Vec<VirtualMachineVendorDeviceGroupInfo>>> {
+    pub async fn retrieve_vendor_device_group_info(&self) -> Result<Option<Vec<crate::types::structs::VirtualMachineVendorDeviceGroupInfo>>> {
         let path = format!("/HostAssignableHardwareManager/{moId}/RetrieveVendorDeviceGroupInfo", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute_option(req).await
@@ -70,7 +67,7 @@ impl HostAssignableHardwareManager {
     /// ## Errors:
     ///
     /// Failure
-    pub async fn update_assignable_hardware_config(&self, config: &HostAssignableHardwareConfig) -> Result<()> {
+    pub async fn update_assignable_hardware_config(&self, config: &crate::types::structs::HostAssignableHardwareConfig) -> Result<()> {
         let input = UpdateAssignableHardwareConfigRequestType {config, };
         let path = format!("/HostAssignableHardwareManager/{moId}/UpdateAssignableHardwareConfig", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -79,7 +76,7 @@ impl HostAssignableHardwareManager {
     /// Assignable Hardware bindings
     /// 
     /// ***Required privileges:*** System.Read
-    pub async fn binding(&self) -> Result<Option<Vec<HostAssignableHardwareBinding>>> {
+    pub async fn binding(&self) -> Result<Option<Vec<crate::types::structs::HostAssignableHardwareBinding>>> {
         let path = format!("/HostAssignableHardwareManager/{moId}/binding", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -87,7 +84,7 @@ impl HostAssignableHardwareManager {
     /// Assignable Hardware configuration
     /// 
     /// ***Required privileges:*** System.Read
-    pub async fn config(&self) -> Result<HostAssignableHardwareConfig> {
+    pub async fn config(&self) -> Result<crate::types::structs::HostAssignableHardwareConfig> {
         let path = format!("/HostAssignableHardwareManager/{moId}/config", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute(req).await
@@ -96,5 +93,5 @@ impl HostAssignableHardwareManager {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct UpdateAssignableHardwareConfigRequestType<'a> {
-    config: &'a HostAssignableHardwareConfig,
+    config: &'a crate::types::structs::HostAssignableHardwareConfig,
 }

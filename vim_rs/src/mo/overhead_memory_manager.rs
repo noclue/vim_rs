@@ -1,8 +1,8 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::ManagedObjectReference;
 /// Provide static VM overhead memory values for (vm, host) pairs in
 /// Virtual Center.
+#[derive(Clone)]
 pub struct OverheadMemoryManager {
     client: Arc<Client>,
     mo_id: String,
@@ -45,7 +45,7 @@ impl OverheadMemoryManager {
     /// ***InvalidArgument***: If any of the MoRefs are NULL.
     /// 
     /// ***ManagedObjectNotFound***: If the inventory objects cannot be found.
-    pub async fn lookup_vm_overhead_memory(&self, vm: &ManagedObjectReference, host: &ManagedObjectReference) -> Result<i64> {
+    pub async fn lookup_vm_overhead_memory(&self, vm: &crate::types::structs::ManagedObjectReference, host: &crate::types::structs::ManagedObjectReference) -> Result<i64> {
         let input = LookupVmOverheadMemoryRequestType {vm, host, };
         let path = format!("/OverheadMemoryManager/{moId}/LookupVmOverheadMemory", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -55,6 +55,6 @@ impl OverheadMemoryManager {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct LookupVmOverheadMemoryRequestType<'a> {
-    vm: &'a ManagedObjectReference,
-    host: &'a ManagedObjectReference,
+    vm: &'a crate::types::structs::ManagedObjectReference,
+    host: &'a crate::types::structs::ManagedObjectReference,
 }

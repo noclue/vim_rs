@@ -1,10 +1,9 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::HealthSystemRuntime;
-use crate::types::structs::SystemEventInfo;
 /// This managed object manages the health state of the host.
 /// 
 /// See also *HostCapability.ipmiSupported*.
+#[derive(Clone)]
 pub struct HostHealthStatusSystem {
     client: Arc<Client>,
     mo_id: String,
@@ -19,7 +18,7 @@ impl HostHealthStatusSystem {
     /// Hardware System Event Log (SEL) information
     /// 
     /// ***Required privileges:*** Host.Config.Settings
-    pub async fn fetch_system_event_log(&self) -> Result<Option<Vec<SystemEventInfo>>> {
+    pub async fn fetch_system_event_log(&self) -> Result<Option<Vec<crate::types::structs::SystemEventInfo>>> {
         let path = format!("/HostHealthStatusSystem/{moId}/FetchSystemEventLog", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute_option(req).await
@@ -53,7 +52,7 @@ impl HostHealthStatusSystem {
         let req = self.client.post_bare(&path);
         self.client.execute_void(req).await
     }
-    pub async fn runtime(&self) -> Result<HealthSystemRuntime> {
+    pub async fn runtime(&self) -> Result<crate::types::structs::HealthSystemRuntime> {
         let path = format!("/HostHealthStatusSystem/{moId}/runtime", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute(req).await

@@ -1,8 +1,8 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::ManagedObjectReference;
 /// CertificateManager provides an interface for managing the SSL
 /// certificates used by the ESX server.
+#[derive(Clone)]
 pub struct CertificateManager {
     client: Arc<Client>,
     mo_id: String,
@@ -30,7 +30,7 @@ impl CertificateManager {
     /// ## Returns:
     ///
     /// Refers instance of *Task*.
-    pub async fn cert_mgr_refresh_ca_certificates_and_cr_ls_task(&self, host: &[ManagedObjectReference]) -> Result<ManagedObjectReference> {
+    pub async fn cert_mgr_refresh_ca_certificates_and_cr_ls_task(&self, host: &[crate::types::structs::ManagedObjectReference]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CertMgrRefreshCaCertificatesAndCrLsRequestType {host, };
         let path = format!("/CertificateManager/{moId}/CertMgrRefreshCACertificatesAndCRLs_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -51,7 +51,7 @@ impl CertificateManager {
     /// ## Returns:
     ///
     /// Refers instance of *Task*.
-    pub async fn cert_mgr_refresh_certificates_task(&self, host: &[ManagedObjectReference]) -> Result<ManagedObjectReference> {
+    pub async fn cert_mgr_refresh_certificates_task(&self, host: &[crate::types::structs::ManagedObjectReference]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CertMgrRefreshCertificatesRequestType {host, };
         let path = format!("/CertificateManager/{moId}/CertMgrRefreshCertificates_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -71,7 +71,7 @@ impl CertificateManager {
     /// ## Returns:
     ///
     /// Refers instance of *Task*.
-    pub async fn cert_mgr_revoke_certificates_task(&self, host: &[ManagedObjectReference]) -> Result<ManagedObjectReference> {
+    pub async fn cert_mgr_revoke_certificates_task(&self, host: &[crate::types::structs::ManagedObjectReference]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CertMgrRevokeCertificatesRequestType {host, };
         let path = format!("/CertificateManager/{moId}/CertMgrRevokeCertificates_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -81,15 +81,15 @@ impl CertificateManager {
 #[derive(serde::Serialize)]
 #[serde(rename = "CertMgrRefreshCACertificatesAndCRLsRequestType", tag = "_typeName")]
 struct CertMgrRefreshCaCertificatesAndCrLsRequestType<'a> {
-    host: &'a [ManagedObjectReference],
+    host: &'a [crate::types::structs::ManagedObjectReference],
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct CertMgrRefreshCertificatesRequestType<'a> {
-    host: &'a [ManagedObjectReference],
+    host: &'a [crate::types::structs::ManagedObjectReference],
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct CertMgrRevokeCertificatesRequestType<'a> {
-    host: &'a [ManagedObjectReference],
+    host: &'a [crate::types::structs::ManagedObjectReference],
 }

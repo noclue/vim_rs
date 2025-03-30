@@ -1,12 +1,12 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::ServiceManagerServiceInfo;
 /// A managed object that wraps the execution of a single arbitrary
 /// command.
 /// 
 /// The specific command executed is assumed to be known from
 /// the service name by the client invoking this command. This object
 /// presents a generic interface for such services.
+#[derive(Clone)]
 pub struct SimpleCommand {
     client: Arc<Client>,
     mo_id: String,
@@ -42,7 +42,7 @@ impl SimpleCommand {
         self.client.execute(req).await
     }
     /// A description of the service.
-    pub async fn entity(&self) -> Result<ServiceManagerServiceInfo> {
+    pub async fn entity(&self) -> Result<crate::types::structs::ServiceManagerServiceInfo> {
         let path = format!("/SimpleCommand/{moId}/entity", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute(req).await

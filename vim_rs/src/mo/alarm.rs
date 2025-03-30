@@ -1,10 +1,9 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::AlarmInfo;
-use crate::types::structs::CustomFieldDef;
 /// This managed object type defines an alarm that is triggered and
 /// an action that occurs due to the triggered alarm when certain conditions
 /// are met on a specific *ManagedEntity* object.
+#[derive(Clone)]
 pub struct Alarm {
     client: Arc<Client>,
     mo_id: String,
@@ -78,7 +77,7 @@ impl Alarm {
     /// The fields are sorted by *CustomFieldDef.name*.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn available_field(&self) -> Result<Option<Vec<CustomFieldDef>>> {
+    pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
         let path = format!("/Alarm/{moId}/availableField", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -86,7 +85,7 @@ impl Alarm {
     /// Information about this alarm.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn info(&self) -> Result<AlarmInfo> {
+    pub async fn info(&self) -> Result<crate::types::structs::AlarmInfo> {
         let path = format!("/Alarm/{moId}/info", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute(req).await

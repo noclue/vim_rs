@@ -1,17 +1,7 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::Id;
-use crate::types::structs::KeyValue;
-use crate::types::structs::ManagedObjectReference;
-use crate::types::structs::VStorageObject;
-use crate::types::structs::VStorageObjectSnapshotInfo;
-use crate::types::structs::VStorageObjectStateInfo;
-use crate::types::structs::VslmCloneSpec;
-use crate::types::structs::VslmCreateSpec;
-use crate::types::structs::VslmInfrastructureObjectPolicy;
-use crate::types::structs::VslmRelocateSpec;
-use crate::types::structs::VslmVClockInfo;
 /// Interface to manage virtual storage object on an ESXi host.
+#[derive(Clone)]
 pub struct HostVStorageObjectManager {
     client: Arc<Client>,
     mo_id: String,
@@ -69,7 +59,7 @@ impl HostVStorageObjectManager {
     /// ***InvalidState***: If the operation cannot be performed on the disk.
     /// 
     /// ***NotFound***: If specified virtual storage object cannot be found.
-    pub async fn host_v_storage_object_revert_task(&self, id: &Id, datastore: &ManagedObjectReference, snapshot_id: &Id) -> Result<ManagedObjectReference> {
+    pub async fn host_v_storage_object_revert_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, snapshot_id: &crate::types::structs::Id) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = HostVStorageObjectRevertRequestType {id, datastore, snapshot_id, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostVStorageObjectRevert_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -110,7 +100,7 @@ impl HostVStorageObjectManager {
     /// 
     /// ***NotFound***: If specified virtual storage object cannot
     /// be found.
-    pub async fn host_clear_v_storage_object_control_flags(&self, id: &Id, datastore: &ManagedObjectReference, control_flags: Option<&[String]>) -> Result<()> {
+    pub async fn host_clear_v_storage_object_control_flags(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, control_flags: Option<&[String]>) -> Result<()> {
         let input = HostClearVStorageObjectControlFlagsRequestType {id, datastore, control_flags, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostClearVStorageObjectControlFlags", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -152,7 +142,7 @@ impl HostVStorageObjectManager {
     /// 
     /// ***NotFound***: If specified virtual storage object cannot be
     /// found.
-    pub async fn host_clone_v_storage_object_task(&self, id: &Id, datastore: &ManagedObjectReference, spec: &VslmCloneSpec) -> Result<ManagedObjectReference> {
+    pub async fn host_clone_v_storage_object_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, spec: &crate::types::structs::VslmCloneSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = HostCloneVStorageObjectRequestType {id, datastore, spec, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostCloneVStorageObject_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -189,7 +179,7 @@ impl HostVStorageObjectManager {
     /// 
     /// ***InvalidDatastore***: If the operation cannot be performed on the
     /// datastore.
-    pub async fn host_create_disk_task(&self, spec: &VslmCreateSpec) -> Result<ManagedObjectReference> {
+    pub async fn host_create_disk_task(&self, spec: &crate::types::structs::VslmCreateSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = HostCreateDiskRequestType {spec, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostCreateDisk_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -251,7 +241,7 @@ impl HostVStorageObjectManager {
     /// ***InvalidState***: If the operation cannot be performed on the disk.
     /// 
     /// ***NotFound***: If specified virtual storage object cannot be found.
-    pub async fn host_v_storage_object_create_disk_from_snapshot_task(&self, id: &Id, datastore: &ManagedObjectReference, snapshot_id: &Id, name: &str, profile: Option<&[Box<dyn crate::types::traits::VirtualMachineProfileSpecTrait>]>, crypto: Option<&dyn crate::types::traits::CryptoSpecTrait>, path: Option<&str>, provisioning_type: Option<&str>) -> Result<ManagedObjectReference> {
+    pub async fn host_v_storage_object_create_disk_from_snapshot_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, snapshot_id: &crate::types::structs::Id, name: &str, profile: Option<&[Box<dyn crate::types::traits::VirtualMachineProfileSpecTrait>]>, crypto: Option<&dyn crate::types::traits::CryptoSpecTrait>, path: Option<&str>, provisioning_type: Option<&str>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = HostVStorageObjectCreateDiskFromSnapshotRequestType {id, datastore, snapshot_id, name, profile, crypto, path, provisioning_type, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostVStorageObjectCreateDiskFromSnapshot_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -290,7 +280,7 @@ impl HostVStorageObjectManager {
     /// ***InvalidState***: If the operation cannot be performed on the disk.
     /// 
     /// ***NotFound***: If specified virtual storage object cannot be found.
-    pub async fn host_v_storage_object_create_snapshot_task(&self, id: &Id, datastore: &ManagedObjectReference, description: &str) -> Result<ManagedObjectReference> {
+    pub async fn host_v_storage_object_create_snapshot_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, description: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = HostVStorageObjectCreateSnapshotRequestType {id, datastore, description, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostVStorageObjectCreateSnapshot_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -333,7 +323,7 @@ impl HostVStorageObjectManager {
     /// ***InvalidState***: If the operation cannot be performed on the disk.
     /// 
     /// ***NotFound***: If specified virtual storage object cannot be found.
-    pub async fn v_storage_object_create_snapshot_ex_task(&self, id: &Id, datastore: &ManagedObjectReference, description: &str) -> Result<ManagedObjectReference> {
+    pub async fn v_storage_object_create_snapshot_ex_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, description: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VStorageObjectCreateSnapshotExRequestType {id, datastore, description, };
         let path = format!("/HostVStorageObjectManager/{moId}/VStorageObjectCreateSnapshotEx_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -372,7 +362,7 @@ impl HostVStorageObjectManager {
     /// ***InvalidState***: If the operation cannot be performed on the disk.
     /// 
     /// ***NotFound***: If specified virtual storage object cannot be found.
-    pub async fn host_v_storage_object_delete_snapshot_task(&self, id: &Id, datastore: &ManagedObjectReference, snapshot_id: &Id) -> Result<ManagedObjectReference> {
+    pub async fn host_v_storage_object_delete_snapshot_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, snapshot_id: &crate::types::structs::Id) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = HostVStorageObjectDeleteSnapshotRequestType {id, datastore, snapshot_id, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostVStorageObjectDeleteSnapshot_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -415,7 +405,7 @@ impl HostVStorageObjectManager {
     /// ***InvalidState***: If the operation cannot be performed on the disk.
     /// 
     /// ***NotFound***: If specified virtual storage object cannot be found.
-    pub async fn v_storage_object_delete_snapshot_ex_task(&self, id: &Id, datastore: &ManagedObjectReference, snapshot_id: &Id) -> Result<ManagedObjectReference> {
+    pub async fn v_storage_object_delete_snapshot_ex_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, snapshot_id: &crate::types::structs::Id) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VStorageObjectDeleteSnapshotExRequestType {id, datastore, snapshot_id, };
         let path = format!("/HostVStorageObjectManager/{moId}/VStorageObjectDeleteSnapshotEx_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -461,7 +451,7 @@ impl HostVStorageObjectManager {
     /// The disk may be consumed and cannot be deleted.
     /// 
     /// ***TaskInProgress***: If the virtual storage object is busy.
-    pub async fn host_delete_v_storage_object_task(&self, id: &Id, datastore: &ManagedObjectReference) -> Result<ManagedObjectReference> {
+    pub async fn host_delete_v_storage_object_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = HostDeleteVStorageObjectRequestType {id, datastore, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostDeleteVStorageObject_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -506,7 +496,7 @@ impl HostVStorageObjectManager {
     /// The disk may be consumed and cannot be deleted.
     /// 
     /// ***TaskInProgress***: If the virtual storage object is busy.
-    pub async fn host_delete_v_storage_object_ex_task(&self, id: &Id, datastore: &ManagedObjectReference) -> Result<ManagedObjectReference> {
+    pub async fn host_delete_v_storage_object_ex_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = HostDeleteVStorageObjectExRequestType {id, datastore, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostDeleteVStorageObjectEx_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -567,7 +557,7 @@ impl HostVStorageObjectManager {
     /// The disk may be consumed and cannot be extended.
     /// 
     /// ***TaskInProgress***: If the virtual storage object is busy.
-    pub async fn host_extend_disk_task(&self, id: &Id, datastore: &ManagedObjectReference, new_capacity_in_mb: i64) -> Result<ManagedObjectReference> {
+    pub async fn host_extend_disk_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, new_capacity_in_mb: i64) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = HostExtendDiskRequestType {id, datastore, new_capacity_in_mb, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostExtendDisk_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -627,7 +617,7 @@ impl HostVStorageObjectManager {
     /// The disk may be consumed and cannot be extended.
     /// 
     /// ***TaskInProgress***: If the virtual storage object is busy.
-    pub async fn v_storage_object_extend_disk_ex_task(&self, id: &Id, datastore: &ManagedObjectReference, new_capacity_in_mb: i64) -> Result<ManagedObjectReference> {
+    pub async fn v_storage_object_extend_disk_ex_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, new_capacity_in_mb: i64) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VStorageObjectExtendDiskExRequestType {id, datastore, new_capacity_in_mb, };
         let path = format!("/HostVStorageObjectManager/{moId}/VStorageObjectExtendDiskEx_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -679,7 +669,7 @@ impl HostVStorageObjectManager {
     /// The disk may be consumed and cannot be extended.
     /// 
     /// ***TaskInProgress***: If the virtual storage object is busy.
-    pub async fn host_inflate_disk_task(&self, id: &Id, datastore: &ManagedObjectReference) -> Result<ManagedObjectReference> {
+    pub async fn host_inflate_disk_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = HostInflateDiskRequestType {id, datastore, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostInflateDisk_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -709,7 +699,7 @@ impl HostVStorageObjectManager {
     /// ***InvalidDatastore***: If the operation cannot be performed on the
     /// datastore, such as datastore cannot be found
     /// or inaccessible.
-    pub async fn host_list_v_storage_object(&self, datastore: &ManagedObjectReference) -> Result<Option<Vec<Id>>> {
+    pub async fn host_list_v_storage_object(&self, datastore: &crate::types::structs::ManagedObjectReference) -> Result<Option<Vec<crate::types::structs::Id>>> {
         let input = HostListVStorageObjectRequestType {datastore, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostListVStorageObject", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -736,7 +726,7 @@ impl HostVStorageObjectManager {
     ///
     /// ***InvalidDatastore***: If the operation cannot be performed on
     /// the datastore.
-    pub async fn host_reconcile_datastore_inventory_task(&self, datastore: &ManagedObjectReference) -> Result<ManagedObjectReference> {
+    pub async fn host_reconcile_datastore_inventory_task(&self, datastore: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = HostReconcileDatastoreInventoryRequestType {datastore, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostReconcileDatastoreInventory_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -777,7 +767,7 @@ impl HostVStorageObjectManager {
     /// 
     /// ***AlreadyExists***: If disk is already registered as a
     /// virtual storage object.
-    pub async fn host_register_disk(&self, path: &str, name: Option<&str>, modify_control_flags: Option<bool>) -> Result<VStorageObject> {
+    pub async fn host_register_disk(&self, path: &str, name: Option<&str>, modify_control_flags: Option<bool>) -> Result<crate::types::structs::VStorageObject> {
         let input = HostRegisterDiskRequestType {path, name, modify_control_flags, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostRegisterDisk", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -822,7 +812,7 @@ impl HostVStorageObjectManager {
     /// 
     /// ***NotFound***: If specified virtual storage object cannot
     /// be found.
-    pub async fn host_relocate_v_storage_object_task(&self, id: &Id, datastore: &ManagedObjectReference, spec: &VslmRelocateSpec) -> Result<ManagedObjectReference> {
+    pub async fn host_relocate_v_storage_object_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, spec: &crate::types::structs::VslmRelocateSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = HostRelocateVStorageObjectRequestType {id, datastore, spec, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostRelocateVStorageObject_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -859,7 +849,7 @@ impl HostVStorageObjectManager {
     /// 
     /// ***InvalidDatastore***: If the operation cannot be performed on the
     /// datastore.
-    pub async fn host_rename_v_storage_object(&self, id: &Id, datastore: &ManagedObjectReference, name: &str) -> Result<()> {
+    pub async fn host_rename_v_storage_object(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, name: &str) -> Result<()> {
         let input = HostRenameVStorageObjectRequestType {id, datastore, name, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostRenameVStorageObject", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -899,7 +889,7 @@ impl HostVStorageObjectManager {
     /// 
     /// ***InvalidDatastore***: If the operation cannot be performed on the
     /// datastore.
-    pub async fn rename_v_storage_object_ex(&self, id: &Id, datastore: &ManagedObjectReference, name: &str) -> Result<VslmVClockInfo> {
+    pub async fn rename_v_storage_object_ex(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, name: &str) -> Result<crate::types::structs::VslmVClockInfo> {
         let input = RenameVStorageObjectExRequestType {id, datastore, name, };
         let path = format!("/HostVStorageObjectManager/{moId}/RenameVStorageObjectEx", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -931,7 +921,7 @@ impl HostVStorageObjectManager {
     /// ***InvalidState***: If the operation cannot be performed on the disk.
     /// 
     /// ***NotFound***: If specified virtual storage object cannot be found.
-    pub async fn host_v_storage_object_retrieve_snapshot_info(&self, id: &Id, datastore: &ManagedObjectReference) -> Result<VStorageObjectSnapshotInfo> {
+    pub async fn host_v_storage_object_retrieve_snapshot_info(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::VStorageObjectSnapshotInfo> {
         let input = HostVStorageObjectRetrieveSnapshotInfoRequestType {id, datastore, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostVStorageObjectRetrieveSnapshotInfo", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -965,7 +955,7 @@ impl HostVStorageObjectManager {
     /// ***InvalidState***: If the operation cannot be performed on the disk.
     /// 
     /// ***NotFound***: If specified virtual storage object cannot be found.
-    pub async fn host_retrieve_v_storage_infrastructure_object_policy(&self, datastore: &ManagedObjectReference) -> Result<Option<Vec<VslmInfrastructureObjectPolicy>>> {
+    pub async fn host_retrieve_v_storage_infrastructure_object_policy(&self, datastore: &crate::types::structs::ManagedObjectReference) -> Result<Option<Vec<crate::types::structs::VslmInfrastructureObjectPolicy>>> {
         let input = HostRetrieveVStorageInfrastructureObjectPolicyRequestType {datastore, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostRetrieveVStorageInfrastructureObjectPolicy", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -1010,7 +1000,7 @@ impl HostVStorageObjectManager {
     /// datastore.
     /// 
     /// ***NotFound***: If specified virtual storage object cannot be found.
-    pub async fn host_retrieve_v_storage_object(&self, id: &Id, datastore: &ManagedObjectReference, disk_info_flags: Option<&[String]>) -> Result<VStorageObject> {
+    pub async fn host_retrieve_v_storage_object(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, disk_info_flags: Option<&[String]>) -> Result<crate::types::structs::VStorageObject> {
         let input = HostRetrieveVStorageObjectRequestType {id, datastore, disk_info_flags, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostRetrieveVStorageObject", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -1052,7 +1042,7 @@ impl HostVStorageObjectManager {
     /// ***InvalidState***: If the operation cannot be performed on the disk.
     /// 
     /// ***NotFound***: If specified virtual storage object cannot be found.
-    pub async fn host_retrieve_v_storage_object_metadata(&self, id: &Id, datastore: &ManagedObjectReference, snapshot_id: Option<&Id>, prefix: Option<&str>) -> Result<Option<Vec<KeyValue>>> {
+    pub async fn host_retrieve_v_storage_object_metadata(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, snapshot_id: Option<&crate::types::structs::Id>, prefix: Option<&str>) -> Result<Option<Vec<crate::types::structs::KeyValue>>> {
         let input = HostRetrieveVStorageObjectMetadataRequestType {id, datastore, snapshot_id, prefix, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostRetrieveVStorageObjectMetadata", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -1096,7 +1086,7 @@ impl HostVStorageObjectManager {
     /// ***NotFound***: If specified virtual storage object cannot be found.
     /// 
     /// ***KeyNotFound***: If specified key cannot be found.
-    pub async fn host_retrieve_v_storage_object_metadata_value(&self, id: &Id, datastore: &ManagedObjectReference, snapshot_id: Option<&Id>, key: &str) -> Result<String> {
+    pub async fn host_retrieve_v_storage_object_metadata_value(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, snapshot_id: Option<&crate::types::structs::Id>, key: &str) -> Result<String> {
         let input = HostRetrieveVStorageObjectMetadataValueRequestType {id, datastore, snapshot_id, key, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostRetrieveVStorageObjectMetadataValue", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -1133,7 +1123,7 @@ impl HostVStorageObjectManager {
     /// datastore.
     /// 
     /// ***NotFound***: If specified virtual storage object cannot be found.
-    pub async fn host_retrieve_v_storage_object_state(&self, id: &Id, datastore: &ManagedObjectReference) -> Result<VStorageObjectStateInfo> {
+    pub async fn host_retrieve_v_storage_object_state(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::VStorageObjectStateInfo> {
         let input = HostRetrieveVStorageObjectStateRequestType {id, datastore, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostRetrieveVStorageObjectState", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -1189,7 +1179,7 @@ impl HostVStorageObjectManager {
     /// ***InvalidState***: If the operation cannot be performed on the disk.
     /// 
     /// ***NotFound***: If specified virtual storage object cannot be found.
-    pub async fn revert_v_storage_object_ex_task(&self, id: &Id, datastore: &ManagedObjectReference, snapshot_id: &Id) -> Result<ManagedObjectReference> {
+    pub async fn revert_v_storage_object_ex_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, snapshot_id: &crate::types::structs::Id) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RevertVStorageObjectExRequestType {id, datastore, snapshot_id, };
         let path = format!("/HostVStorageObjectManager/{moId}/RevertVStorageObjectEx_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -1218,7 +1208,7 @@ impl HostVStorageObjectManager {
     ///
     /// ***InvalidDatastore***: If the operation cannot be performed on
     /// the datastore.
-    pub async fn host_schedule_reconcile_datastore_inventory(&self, datastore: &ManagedObjectReference) -> Result<()> {
+    pub async fn host_schedule_reconcile_datastore_inventory(&self, datastore: &crate::types::structs::ManagedObjectReference) -> Result<()> {
         let input = HostScheduleReconcileDatastoreInventoryRequestType {datastore, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostScheduleReconcileDatastoreInventory", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -1259,7 +1249,7 @@ impl HostVStorageObjectManager {
     /// 
     /// ***NotFound***: If specified virtual storage object cannot
     /// be found.
-    pub async fn host_set_v_storage_object_control_flags(&self, id: &Id, datastore: &ManagedObjectReference, control_flags: Option<&[String]>) -> Result<()> {
+    pub async fn host_set_v_storage_object_control_flags(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, control_flags: Option<&[String]>) -> Result<()> {
         let input = HostSetVStorageObjectControlFlagsRequestType {id, datastore, control_flags, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostSetVStorageObjectControlFlags", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -1309,7 +1299,7 @@ impl HostVStorageObjectManager {
     /// ***InvalidState***: If the operation cannot be performed on the disk.
     /// 
     /// ***NotFound***: If specified virtual storage object cannot be found.
-    pub async fn host_update_v_storage_object_metadata_task(&self, id: &Id, datastore: &ManagedObjectReference, metadata: Option<&[KeyValue]>, delete_keys: Option<&[String]>) -> Result<ManagedObjectReference> {
+    pub async fn host_update_v_storage_object_metadata_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, metadata: Option<&[crate::types::structs::KeyValue]>, delete_keys: Option<&[String]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = HostUpdateVStorageObjectMetadataRequestType {id, datastore, metadata, delete_keys, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostUpdateVStorageObjectMetadata_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -1358,7 +1348,7 @@ impl HostVStorageObjectManager {
     /// ***InvalidState***: If the operation cannot be performed on the disk.
     /// 
     /// ***NotFound***: If specified virtual storage object cannot be found.
-    pub async fn host_update_v_storage_object_metadata_ex_task(&self, id: &Id, datastore: &ManagedObjectReference, metadata: Option<&[KeyValue]>, delete_keys: Option<&[String]>) -> Result<ManagedObjectReference> {
+    pub async fn host_update_v_storage_object_metadata_ex_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, metadata: Option<&[crate::types::structs::KeyValue]>, delete_keys: Option<&[String]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = HostUpdateVStorageObjectMetadataExRequestType {id, datastore, metadata, delete_keys, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostUpdateVStorageObjectMetadataEx_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -1368,16 +1358,16 @@ impl HostVStorageObjectManager {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct HostVStorageObjectRevertRequestType<'a> {
-    id: &'a Id,
-    datastore: &'a ManagedObjectReference,
+    id: &'a crate::types::structs::Id,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
     #[serde(rename = "snapshotId")]
-    snapshot_id: &'a Id,
+    snapshot_id: &'a crate::types::structs::Id,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct HostClearVStorageObjectControlFlagsRequestType<'a> {
-    id: &'a Id,
-    datastore: &'a ManagedObjectReference,
+    id: &'a crate::types::structs::Id,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "controlFlags")]
     control_flags: Option<&'a [String]>,
@@ -1385,22 +1375,22 @@ struct HostClearVStorageObjectControlFlagsRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct HostCloneVStorageObjectRequestType<'a> {
-    id: &'a Id,
-    datastore: &'a ManagedObjectReference,
-    spec: &'a VslmCloneSpec,
+    id: &'a crate::types::structs::Id,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
+    spec: &'a crate::types::structs::VslmCloneSpec,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct HostCreateDiskRequestType<'a> {
-    spec: &'a VslmCreateSpec,
+    spec: &'a crate::types::structs::VslmCreateSpec,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct HostVStorageObjectCreateDiskFromSnapshotRequestType<'a> {
-    id: &'a Id,
-    datastore: &'a ManagedObjectReference,
+    id: &'a crate::types::structs::Id,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
     #[serde(rename = "snapshotId")]
-    snapshot_id: &'a Id,
+    snapshot_id: &'a crate::types::structs::Id,
     name: &'a str,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     profile: Option<&'a [Box<dyn crate::types::traits::VirtualMachineProfileSpecTrait>]>,
@@ -1415,76 +1405,76 @@ struct HostVStorageObjectCreateDiskFromSnapshotRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct HostVStorageObjectCreateSnapshotRequestType<'a> {
-    id: &'a Id,
-    datastore: &'a ManagedObjectReference,
+    id: &'a crate::types::structs::Id,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
     description: &'a str,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct VStorageObjectCreateSnapshotExRequestType<'a> {
-    id: &'a Id,
-    datastore: &'a ManagedObjectReference,
+    id: &'a crate::types::structs::Id,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
     description: &'a str,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct HostVStorageObjectDeleteSnapshotRequestType<'a> {
-    id: &'a Id,
-    datastore: &'a ManagedObjectReference,
+    id: &'a crate::types::structs::Id,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
     #[serde(rename = "snapshotId")]
-    snapshot_id: &'a Id,
+    snapshot_id: &'a crate::types::structs::Id,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct VStorageObjectDeleteSnapshotExRequestType<'a> {
-    id: &'a Id,
-    datastore: &'a ManagedObjectReference,
+    id: &'a crate::types::structs::Id,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
     #[serde(rename = "snapshotId")]
-    snapshot_id: &'a Id,
+    snapshot_id: &'a crate::types::structs::Id,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct HostDeleteVStorageObjectRequestType<'a> {
-    id: &'a Id,
-    datastore: &'a ManagedObjectReference,
+    id: &'a crate::types::structs::Id,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct HostDeleteVStorageObjectExRequestType<'a> {
-    id: &'a Id,
-    datastore: &'a ManagedObjectReference,
+    id: &'a crate::types::structs::Id,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct HostExtendDiskRequestType<'a> {
-    id: &'a Id,
-    datastore: &'a ManagedObjectReference,
+    id: &'a crate::types::structs::Id,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
     #[serde(rename = "newCapacityInMB")]
     new_capacity_in_mb: i64,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct VStorageObjectExtendDiskExRequestType<'a> {
-    id: &'a Id,
-    datastore: &'a ManagedObjectReference,
+    id: &'a crate::types::structs::Id,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
     #[serde(rename = "newCapacityInMB")]
     new_capacity_in_mb: i64,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct HostInflateDiskRequestType<'a> {
-    id: &'a Id,
-    datastore: &'a ManagedObjectReference,
+    id: &'a crate::types::structs::Id,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct HostListVStorageObjectRequestType<'a> {
-    datastore: &'a ManagedObjectReference,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct HostReconcileDatastoreInventoryRequestType<'a> {
-    datastore: &'a ManagedObjectReference,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -1499,40 +1489,40 @@ struct HostRegisterDiskRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct HostRelocateVStorageObjectRequestType<'a> {
-    id: &'a Id,
-    datastore: &'a ManagedObjectReference,
-    spec: &'a VslmRelocateSpec,
+    id: &'a crate::types::structs::Id,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
+    spec: &'a crate::types::structs::VslmRelocateSpec,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct HostRenameVStorageObjectRequestType<'a> {
-    id: &'a Id,
-    datastore: &'a ManagedObjectReference,
+    id: &'a crate::types::structs::Id,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
     name: &'a str,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct RenameVStorageObjectExRequestType<'a> {
-    id: &'a Id,
-    datastore: &'a ManagedObjectReference,
+    id: &'a crate::types::structs::Id,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
     name: &'a str,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct HostVStorageObjectRetrieveSnapshotInfoRequestType<'a> {
-    id: &'a Id,
-    datastore: &'a ManagedObjectReference,
+    id: &'a crate::types::structs::Id,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct HostRetrieveVStorageInfrastructureObjectPolicyRequestType<'a> {
-    datastore: &'a ManagedObjectReference,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct HostRetrieveVStorageObjectRequestType<'a> {
-    id: &'a Id,
-    datastore: &'a ManagedObjectReference,
+    id: &'a crate::types::structs::Id,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "diskInfoFlags")]
     disk_info_flags: Option<&'a [String]>,
@@ -1540,48 +1530,48 @@ struct HostRetrieveVStorageObjectRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct HostRetrieveVStorageObjectMetadataRequestType<'a> {
-    id: &'a Id,
-    datastore: &'a ManagedObjectReference,
+    id: &'a crate::types::structs::Id,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "snapshotId")]
-    snapshot_id: Option<&'a Id>,
+    snapshot_id: Option<&'a crate::types::structs::Id>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     prefix: Option<&'a str>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct HostRetrieveVStorageObjectMetadataValueRequestType<'a> {
-    id: &'a Id,
-    datastore: &'a ManagedObjectReference,
+    id: &'a crate::types::structs::Id,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "snapshotId")]
-    snapshot_id: Option<&'a Id>,
+    snapshot_id: Option<&'a crate::types::structs::Id>,
     key: &'a str,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct HostRetrieveVStorageObjectStateRequestType<'a> {
-    id: &'a Id,
-    datastore: &'a ManagedObjectReference,
+    id: &'a crate::types::structs::Id,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct RevertVStorageObjectExRequestType<'a> {
-    id: &'a Id,
-    datastore: &'a ManagedObjectReference,
+    id: &'a crate::types::structs::Id,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
     #[serde(rename = "snapshotId")]
-    snapshot_id: &'a Id,
+    snapshot_id: &'a crate::types::structs::Id,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct HostScheduleReconcileDatastoreInventoryRequestType<'a> {
-    datastore: &'a ManagedObjectReference,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct HostSetVStorageObjectControlFlagsRequestType<'a> {
-    id: &'a Id,
-    datastore: &'a ManagedObjectReference,
+    id: &'a crate::types::structs::Id,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "controlFlags")]
     control_flags: Option<&'a [String]>,
@@ -1589,10 +1579,10 @@ struct HostSetVStorageObjectControlFlagsRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct HostUpdateVStorageObjectMetadataRequestType<'a> {
-    id: &'a Id,
-    datastore: &'a ManagedObjectReference,
+    id: &'a crate::types::structs::Id,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    metadata: Option<&'a [KeyValue]>,
+    metadata: Option<&'a [crate::types::structs::KeyValue]>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "deleteKeys")]
     delete_keys: Option<&'a [String]>,
@@ -1600,10 +1590,10 @@ struct HostUpdateVStorageObjectMetadataRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct HostUpdateVStorageObjectMetadataExRequestType<'a> {
-    id: &'a Id,
-    datastore: &'a ManagedObjectReference,
+    id: &'a crate::types::structs::Id,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    metadata: Option<&'a [KeyValue]>,
+    metadata: Option<&'a [crate::types::structs::KeyValue]>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "deleteKeys")]
     delete_keys: Option<&'a [String]>,

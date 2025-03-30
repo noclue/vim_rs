@@ -1,18 +1,5 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::AlarmState;
-use crate::types::structs::CustomFieldDef;
-use crate::types::structs::DatastoreCapability;
-use crate::types::structs::DatastoreHostMount;
-use crate::types::structs::DatastoreMountPathDatastorePair;
-use crate::types::structs::DatastoreSummary;
-use crate::types::structs::DatastoreVVolContainerFailoverPair;
-use crate::types::structs::Event;
-use crate::types::structs::ManagedObjectReference;
-use crate::types::structs::Permission;
-use crate::types::structs::StorageIormInfo;
-use crate::types::structs::StoragePlacementResult;
-use crate::types::structs::Tag;
 /// Represents a storage location for virtual machine files.
 /// 
 /// A storage location can be a
@@ -51,6 +38,7 @@ use crate::types::structs::Tag;
 /// Thus, managing datastores is done both at the host level and the datacenter level.
 /// Each host is configured explicitly with the set of datastores it can access. At the
 /// datacenter, a view of the datastores across the datacenter is shown.
+#[derive(Clone)]
 pub struct Datastore {
     client: Arc<Client>,
     mo_id: String,
@@ -83,7 +71,7 @@ impl Datastore {
     /// ## Errors:
     ///
     /// Failure
-    pub async fn destroy_task(&self) -> Result<ManagedObjectReference> {
+    pub async fn destroy_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/Datastore/{moId}/Destroy_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute(req).await
@@ -135,7 +123,7 @@ impl Datastore {
     /// ***InvalidState***: if the datastore is already in maintenance mode.
     /// 
     /// ***RequestCanceled***: if the operation is canceled.
-    pub async fn datastore_enter_maintenance_mode(&self) -> Result<StoragePlacementResult> {
+    pub async fn datastore_enter_maintenance_mode(&self) -> Result<crate::types::structs::StoragePlacementResult> {
         let path = format!("/Datastore/{moId}/DatastoreEnterMaintenanceMode", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute(req).await
@@ -156,7 +144,7 @@ impl Datastore {
     /// ## Errors:
     ///
     /// ***InvalidState***: if the datastore is not in maintenance mode.
-    pub async fn datastore_exit_maintenance_mode_task(&self) -> Result<ManagedObjectReference> {
+    pub async fn datastore_exit_maintenance_mode_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/Datastore/{moId}/DatastoreExitMaintenanceMode_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute(req).await
@@ -252,7 +240,7 @@ impl Datastore {
     /// ***DuplicateName***: If another object in the same folder has the target name.
     /// 
     /// ***InvalidName***: If the new name is not a valid entity name.
-    pub async fn rename_task(&self, new_name: &str) -> Result<ManagedObjectReference> {
+    pub async fn rename_task(&self, new_name: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RenameRequestType {new_name, };
         let path = format!("/Datastore/{moId}/Rename_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -339,7 +327,7 @@ impl Datastore {
     /// 
     /// ***InvalidDatastore***: if the operation cannot be performed due to
     /// some error with the datastore.
-    pub async fn update_v_vol_virtual_machine_files_task(&self, failover_pair: Option<&[DatastoreVVolContainerFailoverPair]>) -> Result<ManagedObjectReference> {
+    pub async fn update_v_vol_virtual_machine_files_task(&self, failover_pair: Option<&[crate::types::structs::DatastoreVVolContainerFailoverPair]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = UpdateVVolVirtualMachineFilesRequestType {failover_pair, };
         let path = format!("/Datastore/{moId}/UpdateVVolVirtualMachineFiles_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -409,7 +397,7 @@ impl Datastore {
     /// ***InvalidDatastore***: if the operation cannot be performed due to some error
     /// with the datastore; typically a specific subclass
     /// of the fault is reported.
-    pub async fn update_virtual_machine_files_task(&self, mount_path_datastore_mapping: &[DatastoreMountPathDatastorePair]) -> Result<ManagedObjectReference> {
+    pub async fn update_virtual_machine_files_task(&self, mount_path_datastore_mapping: &[crate::types::structs::DatastoreMountPathDatastorePair]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = UpdateVirtualMachineFilesRequestType {mount_path_datastore_mapping, };
         let path = format!("/Datastore/{moId}/UpdateVirtualMachineFiles_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -430,7 +418,7 @@ impl Datastore {
     /// The fields are sorted by *CustomFieldDef.name*.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn available_field(&self) -> Result<Option<Vec<CustomFieldDef>>> {
+    pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
         let path = format!("/Datastore/{moId}/availableField", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -440,13 +428,13 @@ impl Datastore {
     /// ## Returns:
     ///
     /// Refers instance of *HostDatastoreBrowser*.
-    pub async fn browser(&self) -> Result<ManagedObjectReference> {
+    pub async fn browser(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/Datastore/{moId}/browser", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute(req).await
     }
     /// Capabilities of this datastore.
-    pub async fn capability(&self) -> Result<DatastoreCapability> {
+    pub async fn capability(&self) -> Result<crate::types::structs::DatastoreCapability> {
         let path = format!("/Datastore/{moId}/capability", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute(req).await
@@ -458,7 +446,7 @@ impl Datastore {
     /// events as long as they are still current. The
     /// *configStatus* property provides an overall status
     /// based on these events.
-    pub async fn config_issue(&self) -> Result<Option<Vec<Event>>> {
+    pub async fn config_issue(&self) -> Result<Option<Vec<crate::types::structs::Event>>> {
         let path = format!("/Datastore/{moId}/configIssue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -510,7 +498,7 @@ impl Datastore {
     /// This set does not include alarms that are defined on descendants of this entity.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn declared_alarm_state(&self) -> Result<Option<Vec<AlarmState>>> {
+    pub async fn declared_alarm_state(&self) -> Result<Option<Vec<crate::types::structs::AlarmState>>> {
         let path = format!("/Datastore/{moId}/declaredAlarmState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -598,7 +586,7 @@ impl Datastore {
         self.client.execute_option(req).await
     }
     /// Hosts attached to this datastore.
-    pub async fn host(&self) -> Result<Option<Vec<DatastoreHostMount>>> {
+    pub async fn host(&self) -> Result<Option<Vec<crate::types::structs::DatastoreHostMount>>> {
         let path = format!("/Datastore/{moId}/host", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -618,7 +606,7 @@ impl Datastore {
     /// from any host, or if the datastore does not have VMFS volume.
     /// The configuration can be modified using the method
     /// *StorageResourceManager.ConfigureDatastoreIORM_Task*
-    pub async fn iorm_configuration(&self) -> Result<Option<StorageIormInfo>> {
+    pub async fn iorm_configuration(&self) -> Result<Option<crate::types::structs::StorageIormInfo>> {
         let path = format!("/Datastore/{moId}/iormConfiguration", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -673,13 +661,13 @@ impl Datastore {
     /// ## Returns:
     ///
     /// Refers instance of *ManagedEntity*.
-    pub async fn parent(&self) -> Result<Option<ManagedObjectReference>> {
+    pub async fn parent(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let path = format!("/Datastore/{moId}/parent", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
     }
     /// List of permissions defined for this entity.
-    pub async fn permission(&self) -> Result<Option<Vec<Permission>>> {
+    pub async fn permission(&self) -> Result<Option<Vec<crate::types::structs::Permission>>> {
         let path = format!("/Datastore/{moId}/permission", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -709,13 +697,13 @@ impl Datastore {
     /// ## Returns:
     ///
     /// Refers instances of *Task*.
-    pub async fn recent_task(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
+    pub async fn recent_task(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/Datastore/{moId}/recentTask", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
     }
     /// Global properties of the datastore.
-    pub async fn summary(&self) -> Result<DatastoreSummary> {
+    pub async fn summary(&self) -> Result<crate::types::structs::DatastoreSummary> {
         let path = format!("/Datastore/{moId}/summary", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute(req).await
@@ -725,7 +713,7 @@ impl Datastore {
     /// Experimental. Subject to change.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn tag(&self) -> Result<Option<Vec<Tag>>> {
+    pub async fn tag(&self) -> Result<Option<Vec<crate::types::structs::Tag>>> {
         let path = format!("/Datastore/{moId}/tag", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -744,7 +732,7 @@ impl Datastore {
     /// produce any property values as no updates are generated.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn triggered_alarm_state(&self) -> Result<Option<Vec<AlarmState>>> {
+    pub async fn triggered_alarm_state(&self) -> Result<Option<Vec<crate::types::structs::AlarmState>>> {
         let path = format!("/Datastore/{moId}/triggeredAlarmState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -766,7 +754,7 @@ impl Datastore {
     /// ## Returns:
     ///
     /// Refers instances of *VirtualMachine*.
-    pub async fn vm(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
+    pub async fn vm(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/Datastore/{moId}/vm", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -795,11 +783,11 @@ struct SetCustomValueRequestType<'a> {
 struct UpdateVVolVirtualMachineFilesRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "failoverPair")]
-    failover_pair: Option<&'a [DatastoreVVolContainerFailoverPair]>,
+    failover_pair: Option<&'a [crate::types::structs::DatastoreVVolContainerFailoverPair]>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct UpdateVirtualMachineFilesRequestType<'a> {
     #[serde(rename = "mountPathDatastoreMapping")]
-    mount_path_datastore_mapping: &'a [DatastoreMountPathDatastorePair],
+    mount_path_datastore_mapping: &'a [crate::types::structs::DatastoreMountPathDatastorePair],
 }

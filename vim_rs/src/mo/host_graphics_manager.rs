@@ -1,12 +1,7 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::CustomFieldDef;
-use crate::types::structs::HostGraphicsConfig;
-use crate::types::structs::HostGraphicsInfo;
-use crate::types::structs::HostSharedGpuCapabilities;
-use crate::types::structs::VirtualMachineVgpuDeviceInfo;
-use crate::types::structs::VirtualMachineVgpuProfileInfo;
 /// This managed object manages the graphics state of the host.
+#[derive(Clone)]
 pub struct HostGraphicsManager {
     client: Arc<Client>,
     mo_id: String,
@@ -37,7 +32,7 @@ impl HostGraphicsManager {
     /// ***Since:*** vSphere API Release 7.0.3.0
     /// 
     /// ***Required privileges:*** System.Read
-    pub async fn retrieve_vgpu_device_info(&self) -> Result<Option<Vec<VirtualMachineVgpuDeviceInfo>>> {
+    pub async fn retrieve_vgpu_device_info(&self) -> Result<Option<Vec<crate::types::structs::VirtualMachineVgpuDeviceInfo>>> {
         let path = format!("/HostGraphicsManager/{moId}/RetrieveVgpuDeviceInfo", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute_option(req).await
@@ -45,7 +40,7 @@ impl HostGraphicsManager {
     /// ***Since:*** vSphere API Release 7.0.3.0
     /// 
     /// ***Required privileges:*** System.Read
-    pub async fn retrieve_vgpu_profile_info(&self) -> Result<Option<Vec<VirtualMachineVgpuProfileInfo>>> {
+    pub async fn retrieve_vgpu_profile_info(&self) -> Result<Option<Vec<crate::types::structs::VirtualMachineVgpuProfileInfo>>> {
         let path = format!("/HostGraphicsManager/{moId}/RetrieveVgpuProfileInfo", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute_option(req).await
@@ -78,7 +73,7 @@ impl HostGraphicsManager {
     ///
     /// ### config
     /// -
-    pub async fn update_graphics_config(&self, config: &HostGraphicsConfig) -> Result<()> {
+    pub async fn update_graphics_config(&self, config: &crate::types::structs::HostGraphicsConfig) -> Result<()> {
         let input = UpdateGraphicsConfigRequestType {config, };
         let path = format!("/HostGraphicsManager/{moId}/UpdateGraphicsConfig", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -89,7 +84,7 @@ impl HostGraphicsManager {
     /// The fields are sorted by *CustomFieldDef.name*.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn available_field(&self) -> Result<Option<Vec<CustomFieldDef>>> {
+    pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
         let path = format!("/HostGraphicsManager/{moId}/availableField", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -97,7 +92,7 @@ impl HostGraphicsManager {
     /// Graphics Configuration
     /// 
     /// ***Required privileges:*** System.Read
-    pub async fn graphics_config(&self) -> Result<Option<HostGraphicsConfig>> {
+    pub async fn graphics_config(&self) -> Result<Option<crate::types::structs::HostGraphicsConfig>> {
         let path = format!("/HostGraphicsManager/{moId}/graphicsConfig", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -105,7 +100,7 @@ impl HostGraphicsManager {
     /// Array of graphics information
     /// 
     /// ***Required privileges:*** System.Read
-    pub async fn graphics_info(&self) -> Result<Option<Vec<HostGraphicsInfo>>> {
+    pub async fn graphics_info(&self) -> Result<Option<Vec<crate::types::structs::HostGraphicsInfo>>> {
         let path = format!("/HostGraphicsManager/{moId}/graphicsInfo", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -115,7 +110,7 @@ impl HostGraphicsManager {
     /// See also *HostSharedGpuCapabilities*.
     /// 
     /// ***Required privileges:*** System.Read
-    pub async fn shared_gpu_capabilities(&self) -> Result<Option<Vec<HostSharedGpuCapabilities>>> {
+    pub async fn shared_gpu_capabilities(&self) -> Result<Option<Vec<crate::types::structs::HostSharedGpuCapabilities>>> {
         let path = format!("/HostGraphicsManager/{moId}/sharedGpuCapabilities", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -154,5 +149,5 @@ struct SetCustomValueRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct UpdateGraphicsConfigRequestType<'a> {
-    config: &'a HostGraphicsConfig,
+    config: &'a crate::types::structs::HostGraphicsConfig,
 }

@@ -1,37 +1,5 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::AlarmState;
-use crate::types::structs::AnswerFileStatusResult;
-use crate::types::structs::ApplyHostProfileConfigurationResult;
-use crate::types::structs::ApplyHostProfileConfigurationSpec;
-use crate::types::structs::ComplianceResult;
-use crate::types::structs::CryptoKeyId;
-use crate::types::structs::CryptoKeyPlain;
-use crate::types::structs::CustomFieldDef;
-use crate::types::structs::Event;
-use crate::types::structs::HostCapability;
-use crate::types::structs::HostConfigInfo;
-use crate::types::structs::HostConfigManager;
-use crate::types::structs::HostConnectInfo;
-use crate::types::structs::HostConnectSpec;
-use crate::types::structs::HostFlagInfo;
-use crate::types::structs::HostHardwareInfo;
-use crate::types::structs::HostIpmiInfo;
-use crate::types::structs::HostLicensableResourceInfo;
-use crate::types::structs::HostListSummary;
-use crate::types::structs::HostMaintenanceSpec;
-use crate::types::structs::HostRuntimeInfo;
-use crate::types::structs::HostServiceTicket;
-use crate::types::structs::HostSystemComplianceCheckState;
-use crate::types::structs::HostSystemReconnectSpec;
-use crate::types::structs::HostSystemRemediationState;
-use crate::types::structs::HostSystemResourceInfo;
-use crate::types::structs::HostSystemSwapConfiguration;
-use crate::types::structs::HostTpmAttestationReport;
-use crate::types::structs::ManagedObjectReference;
-use crate::types::structs::Permission;
-use crate::types::structs::Tag;
-use crate::types::structs::VirtualMachineConfigInfo;
 /// The HostSystem managed object type provides access to a virtualization
 /// host platform.
 /// 
@@ -41,6 +9,7 @@ use crate::types::structs::VirtualMachineConfigInfo;
 /// Invoking destroy on a failover host throws a
 /// *DisallowedOperationOnFailoverHost* fault. See
 /// *ClusterFailoverHostAdmissionControlPolicy*.
+#[derive(Clone)]
 pub struct HostSystem {
     client: Arc<Client>,
     mo_id: String,
@@ -62,7 +31,7 @@ impl HostSystem {
     /// minutes then will expire and is non-renewable.
     /// 
     /// ***Required privileges:*** Host.Cim.CimInteraction
-    pub async fn acquire_cim_services_ticket(&self) -> Result<HostServiceTicket> {
+    pub async fn acquire_cim_services_ticket(&self) -> Result<crate::types::structs::HostServiceTicket> {
         let path = format!("/HostSystem/{moId}/AcquireCimServicesTicket", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute(req).await
@@ -89,7 +58,7 @@ impl HostSystem {
     /// The key to be used for coredump encryption. If unset, uses
     /// existing host or cluster key or new key is generated from
     /// the default KMIP server.
-    pub async fn configure_crypto_key(&self, key_id: Option<&CryptoKeyId>) -> Result<()> {
+    pub async fn configure_crypto_key(&self, key_id: Option<&crate::types::structs::CryptoKeyId>) -> Result<()> {
         let input = ConfigureCryptoKeyRequestType {key_id, };
         let path = format!("/HostSystem/{moId}/ConfigureCryptoKey", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -116,7 +85,7 @@ impl HostSystem {
     /// ## Errors:
     ///
     /// Failure
-    pub async fn destroy_task(&self) -> Result<ManagedObjectReference> {
+    pub async fn destroy_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/HostSystem/{moId}/Destroy_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute(req).await
@@ -131,7 +100,7 @@ impl HostSystem {
     /// operation.
     /// 
     /// Refers instance of *Task*.
-    pub async fn disconnect_host_task(&self) -> Result<ManagedObjectReference> {
+    pub async fn disconnect_host_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/HostSystem/{moId}/DisconnectHost_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute(req).await
@@ -151,7 +120,7 @@ impl HostSystem {
     ///
     /// ***InvalidState***: if the host is in
     /// *incapable* state
-    pub async fn enable_crypto(&self, key_plain: &CryptoKeyPlain) -> Result<()> {
+    pub async fn enable_crypto(&self, key_plain: &crate::types::structs::CryptoKeyPlain) -> Result<()> {
         let input = EnableCryptoRequestType {key_plain, };
         let path = format!("/HostSystem/{moId}/EnableCrypto", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -251,7 +220,7 @@ impl HostSystem {
     /// ***Timedout***: if the operation timed out.
     /// 
     /// ***RequestCanceled***: if the operation is canceled.
-    pub async fn enter_maintenance_mode_task(&self, timeout: i32, evacuate_powered_off_vms: Option<bool>, maintenance_spec: Option<&HostMaintenanceSpec>) -> Result<ManagedObjectReference> {
+    pub async fn enter_maintenance_mode_task(&self, timeout: i32, evacuate_powered_off_vms: Option<bool>, maintenance_spec: Option<&crate::types::structs::HostMaintenanceSpec>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = EnterMaintenanceModeRequestType {timeout, evacuate_powered_off_vms, maintenance_spec, };
         let path = format!("/HostSystem/{moId}/EnterMaintenanceMode_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -323,7 +292,7 @@ impl HostSystem {
     /// ***Timedout***: if the host did not enter standby mode in the given time
     /// 
     /// ***RequestCanceled***: if the operation is canceled.
-    pub async fn power_down_host_to_stand_by_task(&self, timeout_sec: i32, evacuate_powered_off_vms: Option<bool>) -> Result<ManagedObjectReference> {
+    pub async fn power_down_host_to_stand_by_task(&self, timeout_sec: i32, evacuate_powered_off_vms: Option<bool>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = PowerDownHostToStandByRequestType {timeout_sec, evacuate_powered_off_vms, };
         let path = format!("/HostSystem/{moId}/PowerDownHostToStandBy_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -383,7 +352,7 @@ impl HostSystem {
     /// ## Errors:
     ///
     /// ***InvalidState***: if the host is not in maintenance mode.
-    pub async fn exit_maintenance_mode_task(&self, timeout: i32) -> Result<ManagedObjectReference> {
+    pub async fn exit_maintenance_mode_task(&self, timeout: i32) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ExitMaintenanceModeRequestType {timeout, };
         let path = format!("/HostSystem/{moId}/ExitMaintenanceMode_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -433,7 +402,7 @@ impl HostSystem {
     /// ***Timedout***: if the host did not exit standby mode in the given time
     /// 
     /// ***RequestCanceled***: if the operation is canceled.
-    pub async fn power_up_host_from_stand_by_task(&self, timeout_sec: i32) -> Result<ManagedObjectReference> {
+    pub async fn power_up_host_from_stand_by_task(&self, timeout_sec: i32) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = PowerUpHostFromStandByRequestType {timeout_sec, };
         let path = format!("/HostSystem/{moId}/PowerUpHostFromStandBy_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -457,7 +426,7 @@ impl HostSystem {
     /// Connection-oriented information about a host.
     /// 
     /// ***Required privileges:*** System.Read
-    pub async fn query_host_connection_info(&self) -> Result<HostConnectInfo> {
+    pub async fn query_host_connection_info(&self) -> Result<crate::types::structs::HostConnectInfo> {
         let path = format!("/HostSystem/{moId}/QueryHostConnectionInfo", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute(req).await
@@ -515,7 +484,7 @@ impl HostSystem {
     ///
     /// The amount of overhead memory required to power on such a virtual machine,
     /// in bytes.
-    pub async fn query_memory_overhead_ex(&self, vm_config_info: &VirtualMachineConfigInfo) -> Result<i64> {
+    pub async fn query_memory_overhead_ex(&self, vm_config_info: &crate::types::structs::VirtualMachineConfigInfo) -> Result<i64> {
         let input = QueryMemoryOverheadExRequestType {vm_config_info, };
         let path = format!("/HostSystem/{moId}/QueryMemoryOverheadEx", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -543,7 +512,7 @@ impl HostSystem {
     /// Basic information about TPM attestation state of the host.
     /// 
     /// ***Required privileges:*** System.Read
-    pub async fn query_tpm_attestation_report(&self) -> Result<Option<HostTpmAttestationReport>> {
+    pub async fn query_tpm_attestation_report(&self) -> Result<Option<crate::types::structs::HostTpmAttestationReport>> {
         let path = format!("/HostSystem/{moId}/QueryTpmAttestationReport", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute_option(req).await
@@ -580,7 +549,7 @@ impl HostSystem {
     /// ***InvalidState***: if "force" is false and the host is not in maintenance mode.
     /// 
     /// ***NotSupported***: if the host does not support the reboot operation.
-    pub async fn reboot_host_task(&self, force: bool) -> Result<ManagedObjectReference> {
+    pub async fn reboot_host_task(&self, force: bool) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RebootHostRequestType {force, };
         let path = format!("/HostSystem/{moId}/RebootHost_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -608,7 +577,7 @@ impl HostSystem {
     /// ***NotSupported***: if run directly on an ESX Server host.
     /// 
     /// ***DasConfigFault***: if there is a problem reconfiguring the host for HA.
-    pub async fn reconfigure_host_for_das_task(&self) -> Result<ManagedObjectReference> {
+    pub async fn reconfigure_host_for_das_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/HostSystem/{moId}/ReconfigureHostForDAS_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute(req).await
@@ -684,7 +653,7 @@ impl HostSystem {
     /// AlreadyBeingManaged, is thrown.
     /// 
     /// ***SSLVerifyFault***: if the host certificate could not be authenticated.
-    pub async fn reconnect_host_task(&self, cnx_spec: Option<&HostConnectSpec>, reconnect_spec: Option<&HostSystemReconnectSpec>) -> Result<ManagedObjectReference> {
+    pub async fn reconnect_host_task(&self, cnx_spec: Option<&crate::types::structs::HostConnectSpec>, reconnect_spec: Option<&crate::types::structs::HostSystemReconnectSpec>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ReconnectHostRequestType {cnx_spec, reconnect_spec, };
         let path = format!("/HostSystem/{moId}/ReconnectHost_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -735,7 +704,7 @@ impl HostSystem {
     /// ***DuplicateName***: If another object in the same folder has the target name.
     /// 
     /// ***InvalidName***: If the new name is not a valid entity name.
-    pub async fn rename_task(&self, new_name: &str) -> Result<ManagedObjectReference> {
+    pub async fn rename_task(&self, new_name: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RenameRequestType {new_name, };
         let path = format!("/HostSystem/{moId}/Rename_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -813,7 +782,7 @@ impl HostSystem {
     /// maintenance mode.
     /// 
     /// ***NotSupported***: if the host does not support shutdown.
-    pub async fn shutdown_host_task(&self, force: bool) -> Result<ManagedObjectReference> {
+    pub async fn shutdown_host_task(&self, force: bool) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ShutdownHostRequestType {force, };
         let path = format!("/HostSystem/{moId}/ShutdownHost_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -827,7 +796,7 @@ impl HostSystem {
     ///
     /// ### flag_info
     /// -
-    pub async fn update_flags(&self, flag_info: &HostFlagInfo) -> Result<()> {
+    pub async fn update_flags(&self, flag_info: &crate::types::structs::HostFlagInfo) -> Result<()> {
         let input = UpdateFlagsRequestType {flag_info, };
         let path = format!("/HostSystem/{moId}/UpdateFlags", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -847,7 +816,7 @@ impl HostSystem {
     /// ***InvalidIpmiLoginInfo***: if the supplied user ID and/or password is invalid.
     /// 
     /// ***InvalidIpmiMacAddress***: if the supplied MAC address is invalid.
-    pub async fn update_ipmi(&self, ipmi_info: &HostIpmiInfo) -> Result<()> {
+    pub async fn update_ipmi(&self, ipmi_info: &crate::types::structs::HostIpmiInfo) -> Result<()> {
         let input = UpdateIpmiRequestType {ipmi_info, };
         let path = format!("/HostSystem/{moId}/UpdateIpmi", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -895,7 +864,7 @@ impl HostSystem {
     /// VMware Tools repository on the host.
     /// 
     /// ***HostConfigFault***: if the configuration could not be written.
-    pub async fn update_product_locker_location_task(&self, path: &str) -> Result<ManagedObjectReference> {
+    pub async fn update_product_locker_location_task(&self, path: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = UpdateProductLockerLocationRequestType {path, };
         let path = format!("/HostSystem/{moId}/UpdateProductLockerLocation_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -912,7 +881,7 @@ impl HostSystem {
     ///
     /// ### resource_info
     /// -
-    pub async fn update_system_resources(&self, resource_info: &HostSystemResourceInfo) -> Result<()> {
+    pub async fn update_system_resources(&self, resource_info: &crate::types::structs::HostSystemResourceInfo) -> Result<()> {
         let input = UpdateSystemResourcesRequestType {resource_info, };
         let path = format!("/HostSystem/{moId}/UpdateSystemResources", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -929,7 +898,7 @@ impl HostSystem {
     /// ### sys_swap_config
     /// Contains a list of system swap options that
     /// configure the system swap functionality.
-    pub async fn update_system_swap_configuration(&self, sys_swap_config: &HostSystemSwapConfiguration) -> Result<()> {
+    pub async fn update_system_swap_configuration(&self, sys_swap_config: &crate::types::structs::HostSystemSwapConfiguration) -> Result<()> {
         let input = UpdateSystemSwapConfigurationRequestType {sys_swap_config, };
         let path = format!("/HostSystem/{moId}/UpdateSystemSwapConfiguration", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -946,13 +915,13 @@ impl HostSystem {
         self.client.execute_option(req).await
     }
     /// Host answer file validation result.
-    pub async fn answer_file_validation_result(&self) -> Result<Option<AnswerFileStatusResult>> {
+    pub async fn answer_file_validation_result(&self) -> Result<Option<crate::types::structs::AnswerFileStatusResult>> {
         let path = format!("/HostSystem/{moId}/answerFileValidationResult", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
     }
     /// Host answer file validation state.
-    pub async fn answer_file_validation_state(&self) -> Result<Option<AnswerFileStatusResult>> {
+    pub async fn answer_file_validation_state(&self) -> Result<Option<crate::types::structs::AnswerFileStatusResult>> {
         let path = format!("/HostSystem/{moId}/answerFileValidationState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -962,7 +931,7 @@ impl HostSystem {
     /// The fields are sorted by *CustomFieldDef.name*.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn available_field(&self) -> Result<Option<Vec<CustomFieldDef>>> {
+    pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
         let path = format!("/HostSystem/{moId}/availableField", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -971,19 +940,19 @@ impl HostSystem {
     /// 
     /// This might not be available for a
     /// disconnected host.
-    pub async fn capability(&self) -> Result<Option<HostCapability>> {
+    pub async fn capability(&self) -> Result<Option<crate::types::structs::HostCapability>> {
         let path = format!("/HostSystem/{moId}/capability", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
     }
     /// The host profile compliance check result.
-    pub async fn compliance_check_result(&self) -> Result<Option<ComplianceResult>> {
+    pub async fn compliance_check_result(&self) -> Result<Option<crate::types::structs::ComplianceResult>> {
         let path = format!("/HostSystem/{moId}/complianceCheckResult", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
     }
     /// The host profile compliance check state.
-    pub async fn compliance_check_state(&self) -> Result<Option<HostSystemComplianceCheckState>> {
+    pub async fn compliance_check_state(&self) -> Result<Option<crate::types::structs::HostSystemComplianceCheckState>> {
         let path = format!("/HostSystem/{moId}/complianceCheckState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -992,7 +961,7 @@ impl HostSystem {
     /// 
     /// This might not be available for a disconnected
     /// host.
-    pub async fn config(&self) -> Result<Option<HostConfigInfo>> {
+    pub async fn config(&self) -> Result<Option<crate::types::structs::HostConfigInfo>> {
         let path = format!("/HostSystem/{moId}/config", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -1004,7 +973,7 @@ impl HostSystem {
     /// events as long as they are still current. The
     /// *configStatus* property provides an overall status
     /// based on these events.
-    pub async fn config_issue(&self) -> Result<Option<Vec<Event>>> {
+    pub async fn config_issue(&self) -> Result<Option<Vec<crate::types::structs::Event>>> {
         let path = format!("/HostSystem/{moId}/configIssue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -1018,7 +987,7 @@ impl HostSystem {
     /// If you use the PropertyCollector.WaitForUpdatesEx method, specify
     /// an empty string for the version parameter. Any other version value will not
     /// produce any property values as no updates are generated.
-    pub async fn config_manager(&self) -> Result<HostConfigManager> {
+    pub async fn config_manager(&self) -> Result<crate::types::structs::HostConfigManager> {
         let path = format!("/HostSystem/{moId}/configManager", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute(req).await
@@ -1068,7 +1037,7 @@ impl HostSystem {
     /// ## Returns:
     ///
     /// Refers instances of *Datastore*.
-    pub async fn datastore(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
+    pub async fn datastore(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/HostSystem/{moId}/datastore", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -1080,7 +1049,7 @@ impl HostSystem {
     /// ## Returns:
     ///
     /// Refers instance of *HostDatastoreBrowser*.
-    pub async fn datastore_browser(&self) -> Result<ManagedObjectReference> {
+    pub async fn datastore_browser(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/HostSystem/{moId}/datastoreBrowser", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute(req).await
@@ -1095,7 +1064,7 @@ impl HostSystem {
     /// This set does not include alarms that are defined on descendants of this entity.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn declared_alarm_state(&self) -> Result<Option<Vec<AlarmState>>> {
+    pub async fn declared_alarm_state(&self) -> Result<Option<Vec<crate::types::structs::AlarmState>>> {
         let path = format!("/HostSystem/{moId}/declaredAlarmState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -1186,7 +1155,7 @@ impl HostSystem {
     /// 
     /// This might not be available for a
     /// disconnected host.
-    pub async fn hardware(&self) -> Result<Option<HostHardwareInfo>> {
+    pub async fn hardware(&self) -> Result<Option<crate::types::structs::HostHardwareInfo>> {
         let path = format!("/HostSystem/{moId}/hardware", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -1199,7 +1168,7 @@ impl HostSystem {
     /// 
     /// NOTE:
     /// The values in this property may not be accurate for pre-5.0 hosts when returned by vCenter 5.0
-    pub async fn licensable_resource(&self) -> Result<HostLicensableResourceInfo> {
+    pub async fn licensable_resource(&self) -> Result<crate::types::structs::HostLicensableResourceInfo> {
         let path = format!("/HostSystem/{moId}/licensableResource", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute(req).await
@@ -1226,7 +1195,7 @@ impl HostSystem {
     /// ## Returns:
     ///
     /// Refers instances of *Network*.
-    pub async fn network(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
+    pub async fn network(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/HostSystem/{moId}/network", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -1267,19 +1236,19 @@ impl HostSystem {
     /// ## Returns:
     ///
     /// Refers instance of *ManagedEntity*.
-    pub async fn parent(&self) -> Result<Option<ManagedObjectReference>> {
+    pub async fn parent(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let path = format!("/HostSystem/{moId}/parent", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
     }
     /// List of permissions defined for this entity.
-    pub async fn permission(&self) -> Result<Option<Vec<Permission>>> {
+    pub async fn permission(&self) -> Result<Option<Vec<crate::types::structs::Permission>>> {
         let path = format!("/HostSystem/{moId}/permission", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
     }
     /// The host profile precheck-remediation result.
-    pub async fn precheck_remediation_result(&self) -> Result<Option<ApplyHostProfileConfigurationSpec>> {
+    pub async fn precheck_remediation_result(&self) -> Result<Option<crate::types::structs::ApplyHostProfileConfigurationSpec>> {
         let path = format!("/HostSystem/{moId}/precheckRemediationResult", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -1309,38 +1278,38 @@ impl HostSystem {
     /// ## Returns:
     ///
     /// Refers instances of *Task*.
-    pub async fn recent_task(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
+    pub async fn recent_task(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/HostSystem/{moId}/recentTask", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
     }
     /// The host profile remediation result.
-    pub async fn remediation_result(&self) -> Result<Option<ApplyHostProfileConfigurationResult>> {
+    pub async fn remediation_result(&self) -> Result<Option<crate::types::structs::ApplyHostProfileConfigurationResult>> {
         let path = format!("/HostSystem/{moId}/remediationResult", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
     }
     /// The host profile remediation state.
-    pub async fn remediation_state(&self) -> Result<Option<HostSystemRemediationState>> {
+    pub async fn remediation_state(&self) -> Result<Option<crate::types::structs::HostSystemRemediationState>> {
         let path = format!("/HostSystem/{moId}/remediationState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
     }
     /// Runtime state information about the host such as connection state.
-    pub async fn runtime(&self) -> Result<HostRuntimeInfo> {
+    pub async fn runtime(&self) -> Result<crate::types::structs::HostRuntimeInfo> {
         let path = format!("/HostSystem/{moId}/runtime", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute(req).await
     }
     /// Basic information about the host, including connection state.
-    pub async fn summary(&self) -> Result<HostListSummary> {
+    pub async fn summary(&self) -> Result<crate::types::structs::HostListSummary> {
         let path = format!("/HostSystem/{moId}/summary", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute(req).await
     }
     /// Reference for the system resource hierarchy, used for configuring the set of
     /// resources reserved to the system and unavailable to virtual machines.
-    pub async fn system_resources(&self) -> Result<Option<HostSystemResourceInfo>> {
+    pub async fn system_resources(&self) -> Result<Option<crate::types::structs::HostSystemResourceInfo>> {
         let path = format!("/HostSystem/{moId}/systemResources", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -1350,7 +1319,7 @@ impl HostSystem {
     /// Experimental. Subject to change.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn tag(&self) -> Result<Option<Vec<Tag>>> {
+    pub async fn tag(&self) -> Result<Option<Vec<crate::types::structs::Tag>>> {
         let path = format!("/HostSystem/{moId}/tag", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -1369,7 +1338,7 @@ impl HostSystem {
     /// produce any property values as no updates are generated.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn triggered_alarm_state(&self) -> Result<Option<Vec<AlarmState>>> {
+    pub async fn triggered_alarm_state(&self) -> Result<Option<Vec<crate::types::structs::AlarmState>>> {
         let path = format!("/HostSystem/{moId}/triggeredAlarmState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -1391,7 +1360,7 @@ impl HostSystem {
     /// ## Returns:
     ///
     /// Refers instances of *VirtualMachine*.
-    pub async fn vm(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
+    pub async fn vm(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/HostSystem/{moId}/vm", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -1402,13 +1371,13 @@ impl HostSystem {
 struct ConfigureCryptoKeyRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "keyId")]
-    key_id: Option<&'a CryptoKeyId>,
+    key_id: Option<&'a crate::types::structs::CryptoKeyId>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct EnableCryptoRequestType<'a> {
     #[serde(rename = "keyPlain")]
-    key_plain: &'a CryptoKeyPlain,
+    key_plain: &'a crate::types::structs::CryptoKeyPlain,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -1419,7 +1388,7 @@ struct EnterMaintenanceModeRequestType<'a> {
     evacuate_powered_off_vms: Option<bool>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "maintenanceSpec")]
-    maintenance_spec: Option<&'a HostMaintenanceSpec>,
+    maintenance_spec: Option<&'a crate::types::structs::HostMaintenanceSpec>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -1456,7 +1425,7 @@ struct QueryMemoryOverheadRequestType {
 #[serde(tag="_typeName")]
 struct QueryMemoryOverheadExRequestType<'a> {
     #[serde(rename = "vmConfigInfo")]
-    vm_config_info: &'a VirtualMachineConfigInfo,
+    vm_config_info: &'a crate::types::structs::VirtualMachineConfigInfo,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -1468,10 +1437,10 @@ struct RebootHostRequestType {
 struct ReconnectHostRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "cnxSpec")]
-    cnx_spec: Option<&'a HostConnectSpec>,
+    cnx_spec: Option<&'a crate::types::structs::HostConnectSpec>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "reconnectSpec")]
-    reconnect_spec: Option<&'a HostSystemReconnectSpec>,
+    reconnect_spec: Option<&'a crate::types::structs::HostSystemReconnectSpec>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -1494,13 +1463,13 @@ struct ShutdownHostRequestType {
 #[serde(tag="_typeName")]
 struct UpdateFlagsRequestType<'a> {
     #[serde(rename = "flagInfo")]
-    flag_info: &'a HostFlagInfo,
+    flag_info: &'a crate::types::structs::HostFlagInfo,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct UpdateIpmiRequestType<'a> {
     #[serde(rename = "ipmiInfo")]
-    ipmi_info: &'a HostIpmiInfo,
+    ipmi_info: &'a crate::types::structs::HostIpmiInfo,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -1511,11 +1480,11 @@ struct UpdateProductLockerLocationRequestType<'a> {
 #[serde(tag="_typeName")]
 struct UpdateSystemResourcesRequestType<'a> {
     #[serde(rename = "resourceInfo")]
-    resource_info: &'a HostSystemResourceInfo,
+    resource_info: &'a crate::types::structs::HostSystemResourceInfo,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct UpdateSystemSwapConfigurationRequestType<'a> {
     #[serde(rename = "sysSwapConfig")]
-    sys_swap_config: &'a HostSystemSwapConfiguration,
+    sys_swap_config: &'a crate::types::structs::HostSystemSwapConfiguration,
 }

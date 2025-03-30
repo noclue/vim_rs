@@ -1,13 +1,12 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::CustomFieldDef;
-use crate::types::structs::HostServiceInfo;
 /// The *HostServiceSystem* managed object describes the configuration
 /// of host services.
 /// 
 /// This managed object operates in conjunction
 /// with the *HostFirewallSystem*
 /// managed object.
+#[derive(Clone)]
 pub struct HostServiceSystem {
     client: Arc<Client>,
     mo_id: String,
@@ -184,13 +183,13 @@ impl HostServiceSystem {
     /// The fields are sorted by *CustomFieldDef.name*.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn available_field(&self) -> Result<Option<Vec<CustomFieldDef>>> {
+    pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
         let path = format!("/HostServiceSystem/{moId}/availableField", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
     }
     /// Service configuration.
-    pub async fn service_info(&self) -> Result<HostServiceInfo> {
+    pub async fn service_info(&self) -> Result<crate::types::structs::HostServiceInfo> {
         let path = format!("/HostServiceSystem/{moId}/serviceInfo", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute(req).await

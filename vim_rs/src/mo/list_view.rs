@@ -1,6 +1,5 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::ManagedObjectReference;
 /// The *ListView* managed object provides access to updates on a specific set of objects.
 /// 
 /// You can use a *ListView* with a *PropertyCollector* method
@@ -11,6 +10,7 @@ use crate::types::structs::ManagedObjectReference;
 /// a list of objects. The *ManagedObjectView.view* list
 /// always represents the current configuration of the virtual environment
 /// and reflects any subsequent changes that occur.
+#[derive(Clone)]
 pub struct ListView {
     client: Arc<Client>,
     mo_id: String,
@@ -52,7 +52,7 @@ impl ListView {
     /// ## Returns:
     ///
     /// A list containing any objects in 'add' that could not be resolved.
-    pub async fn modify_list_view(&self, add: Option<&[ManagedObjectReference]>, remove: Option<&[ManagedObjectReference]>) -> Result<Option<Vec<ManagedObjectReference>>> {
+    pub async fn modify_list_view(&self, add: Option<&[crate::types::structs::ManagedObjectReference]>, remove: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let input = ModifyListViewRequestType {add, remove, };
         let path = format!("/ListView/{moId}/ModifyListView", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -77,7 +77,7 @@ impl ListView {
     /// ## Returns:
     ///
     /// A list containing any objects in 'obj' that could not be resolved.
-    pub async fn reset_list_view(&self, obj: Option<&[ManagedObjectReference]>) -> Result<Option<Vec<ManagedObjectReference>>> {
+    pub async fn reset_list_view(&self, obj: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let input = ResetListViewRequestType {obj, };
         let path = format!("/ListView/{moId}/ResetListView", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -91,14 +91,14 @@ impl ListView {
     /// The view to copy objects from.
     /// 
     /// Refers instance of *View*.
-    pub async fn reset_list_view_from_view(&self, view: &ManagedObjectReference) -> Result<()> {
+    pub async fn reset_list_view_from_view(&self, view: &crate::types::structs::ManagedObjectReference) -> Result<()> {
         let input = ResetListViewFromViewRequestType {view, };
         let path = format!("/ListView/{moId}/ResetListViewFromView", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
         self.client.execute_void(req).await
     }
     /// The list of references to objects mapped by this view.
-    pub async fn view(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
+    pub async fn view(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/ListView/{moId}/view", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -108,18 +108,18 @@ impl ListView {
 #[serde(tag="_typeName")]
 struct ModifyListViewRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    add: Option<&'a [ManagedObjectReference]>,
+    add: Option<&'a [crate::types::structs::ManagedObjectReference]>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    remove: Option<&'a [ManagedObjectReference]>,
+    remove: Option<&'a [crate::types::structs::ManagedObjectReference]>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct ResetListViewRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    obj: Option<&'a [ManagedObjectReference]>,
+    obj: Option<&'a [crate::types::structs::ManagedObjectReference]>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct ResetListViewFromViewRequestType<'a> {
-    view: &'a ManagedObjectReference,
+    view: &'a crate::types::structs::ManagedObjectReference,
 }

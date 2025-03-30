@@ -1,8 +1,6 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::HealthUpdate;
-use crate::types::structs::HealthUpdateInfo;
-use crate::types::structs::ManagedObjectReference;
+#[derive(Clone)]
 pub struct HealthUpdateManager {
     client: Arc<Client>,
     mo_id: String,
@@ -80,7 +78,7 @@ impl HealthUpdateManager {
     /// \- If the entities list contains an entity of
     /// type other than HostSystem and
     /// ClusterComputeResource.
-    pub async fn add_filter_entities(&self, filter_id: &str, entities: Option<&[ManagedObjectReference]>) -> Result<()> {
+    pub async fn add_filter_entities(&self, filter_id: &str, entities: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<()> {
         let input = AddFilterEntitiesRequestType {filter_id, entities, };
         let path = format!("/HealthUpdateManager/{moId}/AddFilterEntities", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -118,7 +116,7 @@ impl HealthUpdateManager {
     /// entities list.
     /// \- If any of the entities is already monitored by
     /// the specified provider.
-    pub async fn add_monitored_entities(&self, provider_id: &str, entities: Option<&[ManagedObjectReference]>) -> Result<()> {
+    pub async fn add_monitored_entities(&self, provider_id: &str, entities: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<()> {
         let input = AddMonitoredEntitiesRequestType {provider_id, entities, };
         let path = format!("/HealthUpdateManager/{moId}/AddMonitoredEntities", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -149,7 +147,7 @@ impl HealthUpdateManager {
     /// 
     /// ***InvalidArgument***: If the specified entity is not of type
     /// HostSystem.
-    pub async fn has_monitored_entity(&self, provider_id: &str, entity: &ManagedObjectReference) -> Result<bool> {
+    pub async fn has_monitored_entity(&self, provider_id: &str, entity: &crate::types::structs::ManagedObjectReference) -> Result<bool> {
         let input = HasMonitoredEntityRequestType {provider_id, entity, };
         let path = format!("/HealthUpdateManager/{moId}/HasMonitoredEntity", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -204,7 +202,7 @@ impl HealthUpdateManager {
     /// \- If there is a HealthUpdate with green status
     /// and non-empty remediation.
     /// \- If there is a HealthUpdate with gray status.
-    pub async fn post_health_updates(&self, provider_id: &str, updates: Option<&[HealthUpdate]>) -> Result<()> {
+    pub async fn post_health_updates(&self, provider_id: &str, updates: Option<&[crate::types::structs::HealthUpdate]>) -> Result<()> {
         let input = PostHealthUpdatesRequestType {provider_id, updates, };
         let path = format!("/HealthUpdateManager/{moId}/PostHealthUpdates", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -228,7 +226,7 @@ impl HealthUpdateManager {
     /// ## Errors:
     ///
     /// ***NotFound***: If no filter with this id is registered.
-    pub async fn query_filter_entities(&self, filter_id: &str) -> Result<Option<Vec<ManagedObjectReference>>> {
+    pub async fn query_filter_entities(&self, filter_id: &str) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let input = QueryFilterEntitiesRequestType {filter_id, };
         let path = format!("/HealthUpdateManager/{moId}/QueryFilterEntities", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -317,7 +315,7 @@ impl HealthUpdateManager {
     /// ## Errors:
     ///
     /// ***NotFound***: If no provider with this id is registered.
-    pub async fn query_health_update_infos(&self, provider_id: &str) -> Result<Option<Vec<HealthUpdateInfo>>> {
+    pub async fn query_health_update_infos(&self, provider_id: &str) -> Result<Option<Vec<crate::types::structs::HealthUpdateInfo>>> {
         let input = QueryHealthUpdateInfosRequestType {provider_id, };
         let path = format!("/HealthUpdateManager/{moId}/QueryHealthUpdateInfos", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -339,7 +337,7 @@ impl HealthUpdateManager {
     /// ## Errors:
     ///
     /// ***NotFound***: If no provider with this id is registered.
-    pub async fn query_health_updates(&self, provider_id: &str) -> Result<Option<Vec<HealthUpdate>>> {
+    pub async fn query_health_updates(&self, provider_id: &str) -> Result<Option<Vec<crate::types::structs::HealthUpdate>>> {
         let input = QueryHealthUpdatesRequestType {provider_id, };
         let path = format!("/HealthUpdateManager/{moId}/QueryHealthUpdates", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -363,7 +361,7 @@ impl HealthUpdateManager {
     /// ## Errors:
     ///
     /// ***NotFound***: If no provider with this id is registered.
-    pub async fn query_monitored_entities(&self, provider_id: &str) -> Result<Option<Vec<ManagedObjectReference>>> {
+    pub async fn query_monitored_entities(&self, provider_id: &str) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let input = QueryMonitoredEntitiesRequestType {provider_id, };
         let path = format!("/HealthUpdateManager/{moId}/QueryMonitoredEntities", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -428,7 +426,7 @@ impl HealthUpdateManager {
     /// ## Errors:
     ///
     /// ***NotFound***: If no provider with this id is registered.
-    pub async fn query_unmonitored_hosts(&self, provider_id: &str, cluster: &ManagedObjectReference) -> Result<Option<Vec<ManagedObjectReference>>> {
+    pub async fn query_unmonitored_hosts(&self, provider_id: &str, cluster: &crate::types::structs::ManagedObjectReference) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let input = QueryUnmonitoredHostsRequestType {provider_id, cluster, };
         let path = format!("/HealthUpdateManager/{moId}/QueryUnmonitoredHosts", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -453,7 +451,7 @@ impl HealthUpdateManager {
     /// ## Returns:
     ///
     /// The identifier for the registered provider.
-    pub async fn register_health_update_provider(&self, name: &str, health_update_info: Option<&[HealthUpdateInfo]>) -> Result<String> {
+    pub async fn register_health_update_provider(&self, name: &str, health_update_info: Option<&[crate::types::structs::HealthUpdateInfo]>) -> Result<String> {
         let input = RegisterHealthUpdateProviderRequestType {name, health_update_info, };
         let path = format!("/HealthUpdateManager/{moId}/RegisterHealthUpdateProvider", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -501,7 +499,7 @@ impl HealthUpdateManager {
     /// than HostSystem and ClusterComputeResource.
     /// \- If the entities list contains an entity which
     /// is not associated with the specified filter.
-    pub async fn remove_filter_entities(&self, filter_id: &str, entities: Option<&[ManagedObjectReference]>) -> Result<()> {
+    pub async fn remove_filter_entities(&self, filter_id: &str, entities: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<()> {
         let input = RemoveFilterEntitiesRequestType {filter_id, entities, };
         let path = format!("/HealthUpdateManager/{moId}/RemoveFilterEntities", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -540,7 +538,7 @@ impl HealthUpdateManager {
     /// entities list.
     /// \- If any of the entities is already not being
     /// monitored by the specified provider.
-    pub async fn remove_monitored_entities(&self, provider_id: &str, entities: Option<&[ManagedObjectReference]>) -> Result<()> {
+    pub async fn remove_monitored_entities(&self, provider_id: &str, entities: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<()> {
         let input = RemoveMonitoredEntitiesRequestType {provider_id, entities, };
         let path = format!("/HealthUpdateManager/{moId}/RemoveMonitoredEntities", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -588,7 +586,7 @@ struct AddFilterEntitiesRequestType<'a> {
     #[serde(rename = "filterId")]
     filter_id: &'a str,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    entities: Option<&'a [ManagedObjectReference]>,
+    entities: Option<&'a [crate::types::structs::ManagedObjectReference]>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -596,14 +594,14 @@ struct AddMonitoredEntitiesRequestType<'a> {
     #[serde(rename = "providerId")]
     provider_id: &'a str,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    entities: Option<&'a [ManagedObjectReference]>,
+    entities: Option<&'a [crate::types::structs::ManagedObjectReference]>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct HasMonitoredEntityRequestType<'a> {
     #[serde(rename = "providerId")]
     provider_id: &'a str,
-    entity: &'a ManagedObjectReference,
+    entity: &'a crate::types::structs::ManagedObjectReference,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -616,7 +614,7 @@ struct PostHealthUpdatesRequestType<'a> {
     #[serde(rename = "providerId")]
     provider_id: &'a str,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    updates: Option<&'a [HealthUpdate]>,
+    updates: Option<&'a [crate::types::structs::HealthUpdate]>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -670,7 +668,7 @@ struct QueryProviderNameRequestType<'a> {
 struct QueryUnmonitoredHostsRequestType<'a> {
     #[serde(rename = "providerId")]
     provider_id: &'a str,
-    cluster: &'a ManagedObjectReference,
+    cluster: &'a crate::types::structs::ManagedObjectReference,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -678,7 +676,7 @@ struct RegisterHealthUpdateProviderRequestType<'a> {
     name: &'a str,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "healthUpdateInfo")]
-    health_update_info: Option<&'a [HealthUpdateInfo]>,
+    health_update_info: Option<&'a [crate::types::structs::HealthUpdateInfo]>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -692,7 +690,7 @@ struct RemoveFilterEntitiesRequestType<'a> {
     #[serde(rename = "filterId")]
     filter_id: &'a str,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    entities: Option<&'a [ManagedObjectReference]>,
+    entities: Option<&'a [crate::types::structs::ManagedObjectReference]>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -700,7 +698,7 @@ struct RemoveMonitoredEntitiesRequestType<'a> {
     #[serde(rename = "providerId")]
     provider_id: &'a str,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    entities: Option<&'a [ManagedObjectReference]>,
+    entities: Option<&'a [crate::types::structs::ManagedObjectReference]>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]

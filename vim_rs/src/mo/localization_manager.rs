@@ -1,6 +1,5 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::LocalizationManagerMessageCatalog;
 /// *LocalizationManager* provides access to descriptions of
 /// the message catalogs that are available for client-side message
 /// localization.
@@ -32,6 +31,7 @@ use crate::types::structs::LocalizationManagerMessageCatalog;
 ///   (*Profile*.*ProfileDescription*.
 ///   *Profile.description* returned by the
 ///   *Profile*.*Profile.RetrieveDescription* method)
+#[derive(Clone)]
 pub struct LocalizationManager {
     client: Arc<Client>,
     mo_id: String,
@@ -51,7 +51,7 @@ impl LocalizationManager {
     /// ## Returns:
     ///
     /// the message catalogs for the current locale
-    pub async fn catalog(&self) -> Result<Option<Vec<LocalizationManagerMessageCatalog>>> {
+    pub async fn catalog(&self) -> Result<Option<Vec<crate::types::structs::LocalizationManagerMessageCatalog>>> {
         let path = format!("/LocalizationManager/{moId}/catalog", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await

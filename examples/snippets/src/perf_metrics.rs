@@ -1,23 +1,42 @@
+//! # VMware vSphere Performance Metrics Example
+//!
+//! This sample demonstrates how to collect and display performance metrics for virtual machines
+//! running in a VMware vSphere environment. It's a Rust implementation inspired by the PyVmomi
+//! Community Samples project.
+//!
+//! The example demonstrates:
+//
+//! 1. Connecting to a vCenter Server
+//! 2. Creating a mapping between performance counter names and their IDs
+//! 3. Retrieving all VMs in the inventory using ContainerView
+//! 4. For each virtual machine:
+//!    - Fetching available performance metrics
+//!    - Getting the real-time collection interval
+//!    - Querying the last hour of performance statistics
+//!    - Displaying formatted metrics with counter names, instances and values
+//!
+//! This code provides a foundation for building monitoring tools, performance analyzers, or
+//! dashboards that track VM resource utilization in vSphere environments.
+
+// See also https://github.com/vmware/pyvmomi-community-samples/blob/ec890d5286c966ddd8fe48f4eedda2e20620610f/samples/vm_perf_example.py#L66
+
 use std::collections::HashMap;
-// Print all available VM metrics based on example in PyVmomi Community Samples
-// See https://github.com/vmware/pyvmomi-community-samples/blob/ec890d5286c966ddd8fe48f4eedda2e20620610f/samples/vm_perf_example.py#L66
 use std::env;
 use std::ops::Deref;
 use vim_rs::mo::{ContainerView, PerformanceManager, ViewManager};
 
-use vim_rs::core::client::ClientBuilder;
+use anyhow::{Error, Result};
+use chrono::{Duration as ChronoDuration, Utc};
 use log::{debug, info};
-use anyhow::{Result, Error, Context};
+use utils::connect;
 use vim_rs::types::enums::MoTypesEnum;
 use vim_rs::types::structs::{PerfEntityMetric, PerfMetricId, PerfMetricIntSeries, PerfQuerySpec};
-use chrono::{Utc, Duration as ChronoDuration};
-
 
 /// Demonstrates how to fetch performance statistics for virtual machines in a vCenter server.
 /// The sample first creates a mapping from performance counter descriptive names to their counter
 /// ids.
-/// It then fetched list of all VirtualMachine objects using a ContainerView.
-/// Then the sample iterates over all virtual machines and for each one:
+/// It then fetches list of all VirtualMachine objects using a ContainerView.
+/// Lastly the sample iterates over all virtual machines and for each one:
 /// * discovers available performance metrics,
 /// * Discovers the real time collection interval value from the performance provider summary.
 /// * Queries performance statistics for the virtual machine.
@@ -25,19 +44,14 @@ use chrono::{Utc, Duration as ChronoDuration};
 #[tokio::main]
 async fn main() -> Result<()> {
     env_logger::init();
+    let client = connect(env!("CARGO_PKG_NAME"), env!("CARGO_PKG_VERSION")).await?;
 
-    let vc_server = env::var("VIM_SERVER").with_context(||"VIM_SERVER env var not set")?;
-    let username = env::var("VIM_USERNAME").with_context(||"VIM_USERNAME env var not set")?;
-    let pwd = env::var("VIM_PASSWORD").with_context(||"VIM_PASSWORD env var not set")?;
-
-    let vim_client = ClientBuilder::new(&vc_server)
-        .insecure(true)
-        .basic_authn(&username, &pwd)
-        .build().await?;
-    let Some(perf_manager_moref) = vim_client.service_content().perf_manager.clone() else {
-        return Err(Error::msg("Performance manager not found in service content."));
+    let Some(perf_manager_moref) = client.service_content().perf_manager.clone() else {
+        return Err(Error::msg(
+            "Performance manager not found in service content.",
+        ));
     };
-    let perf_manager = PerformanceManager::new(vim_client.clone(), &perf_manager_moref.value.clone());
+    let perf_manager = PerformanceManager::new(client.clone(), &perf_manager_moref.value.clone());
 
     // create a mapping from performance stats to their counter ids
     // counter_info: performance stats -> counter id
@@ -50,21 +64,28 @@ async fn main() -> Result<()> {
     };
     for counter in counters {
         let rollup: &'static str = counter.rollup_type.into();
-        let counter_name = format!("{}.{}.{}", counter.group_info.get_key(), counter.name_info.get_key(), rollup);
+        let counter_name = format!(
+            "{}.{}.{}",
+            counter.group_info.get_key(),
+            counter.name_info.get_key(),
+            rollup
+        );
         counter_info.insert(counter.key, counter_name);
     }
 
     // create a list of VirtualMachine objects so that we can query them for statistics
-    let Some(view_manager_moref) = vim_client.service_content().view_manager.clone() else {
+    let Some(view_manager_moref) = client.service_content().view_manager.clone() else {
         return Err(Error::msg("View manager not found in service content."));
     };
 
-    let view_manager = ViewManager::new(vim_client.clone(), &view_manager_moref.value.clone());
+    let view_manager = ViewManager::new(client.clone(), &view_manager_moref.value.clone());
 
-    let root_fld = vim_client.service_content().root_folder.clone();
+    let root_fld = client.service_content().root_folder.clone();
     let vm_type = Into::<&str>::into(MoTypesEnum::VirtualMachine).to_string();
-    let view_moref = view_manager.create_container_view(&root_fld, Some(&[vm_type]), true).await?;
-    let view = ContainerView::new(vim_client.clone(), &view_moref.value);
+    let view_moref = view_manager
+        .create_container_view(&root_fld, Some(&[vm_type]), true)
+        .await?;
+    let view = ContainerView::new(client.clone(), &view_moref.value);
     let vms = view.view().await?;
     let Some(vms) = vms else {
         return Err(Error::msg("No virtual machines found."));
@@ -75,7 +96,10 @@ async fn main() -> Result<()> {
     let unknown = "<Unknown>".to_string();
     for ref vm in vms {
         debug!("Fetch stats for VM: {}", vm.value);
-        let Some(vm_metrics) = perf_manager.query_available_perf_metric(vm,Some(hour_ago.to_rfc3339().as_str()), None, None).await? else {
+        let Some(vm_metrics) = perf_manager
+            .query_available_perf_metric(vm, Some(hour_ago.to_rfc3339().as_str()), None, None)
+            .await?
+        else {
             debug!("No metrics found for vm: {}", vm.value);
             continue;
         };
@@ -83,14 +107,22 @@ async fn main() -> Result<()> {
         //debug!("VM {} metrics: {:?}", vm.value, vm_metrics.iter().map(|m| (counter_info.get(&m.counter_id).unwrap_or(&unknown), &m.instance) ).collect::<Vec<_>>());
 
         if vm_metrics.len() < 20 {
-            debug!("Skipping. Not enough metrics (<20) found for vm: {}. Likely powered off.", vm.value);
+            debug!(
+                "Skipping. Not enough metrics (<20) found for vm: {}. Likely powered off.",
+                vm.value
+            );
             continue;
         }
 
-        let metric_ids = vm_metrics.iter().map(|metric| PerfMetricId{ counter_id: metric.counter_id, instance: "*".to_string() } ).collect();
+        let metric_ids = vm_metrics
+            .iter()
+            .map(|metric| PerfMetricId {
+                counter_id: metric.counter_id,
+                instance: "*".to_string(),
+            })
+            .collect();
 
-
-        let spec = PerfQuerySpec{
+        let spec = PerfQuerySpec {
             entity: vm.clone(),
             metric_id: Some(metric_ids),
             max_sample: Some(1),
@@ -110,7 +142,10 @@ async fn main() -> Result<()> {
         }
         for stat in stats {
             let Some(stat) = stat.deref().as_any_ref().downcast_ref::<PerfEntityMetric>() else {
-                debug!("Stat not in expected format found for: {}", stat.get_entity().value);
+                debug!(
+                    "Stat not in expected format found for: {}",
+                    stat.get_entity().value
+                );
                 continue;
             };
             let Some(ref stat_value) = stat.value else {
@@ -125,18 +160,24 @@ async fn main() -> Result<()> {
             info!("VM: {}, stats: {} ", stat.entity.value, stat_value.len());
             for series in stat_value {
                 let Some(series) = series.as_any_ref().downcast_ref::<PerfMetricIntSeries>() else {
-                    debug!("Stat series not in expected format found for: {}", stat.entity.value);
+                    debug!(
+                        "Stat series not in expected format found for: {}",
+                        stat.entity.value
+                    );
                     continue;
                 };
                 let counter_name = counter_info.get(&series.id.counter_id).unwrap_or(&unknown);
-                let Some(ref value ) = series.value else {
+                let Some(ref value) = series.value else {
                     debug!("Stat value not found in: {:?}", series);
                     continue;
                 };
                 // Get the first value in the series or 0 if no values are found
                 let value = value.first().unwrap_or(&0);
 
-                info!("VM: {} - {}[{}] - {}", vm.value, counter_name, series.id.instance, value);
+                info!(
+                    "VM: {} - {}[{}] - {}",
+                    vm.value, counter_name, series.id.instance, value
+                );
             }
         }
         //break;

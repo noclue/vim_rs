@@ -1,11 +1,5 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::Capability;
-use crate::types::structs::Event;
-use crate::types::structs::HostVMotionCompatibility;
-use crate::types::structs::ManagedObjectReference;
-use crate::types::structs::ProductComponentInfo;
-use crate::types::structs::ServiceContent;
 /// The *ServiceInstance* managed object is the singleton root object of the inventory
 /// on both vCenter servers and servers running on standalone host agents.
 /// 
@@ -61,6 +55,7 @@ use crate::types::structs::ServiceContent;
 ///   
 /// The host agent hierarchy has the same general form as the vCenter hierarchy,
 /// but most of the objects are limited to one instance:
+#[derive(Clone)]
 pub struct ServiceInstance {
     client: Arc<Client>,
     mo_id: String,
@@ -123,7 +118,7 @@ impl ServiceInstance {
     /// applies to that host. If an input host has never been connected
     /// and therefore has no information available for determining its
     /// compatibility, it is omitted from the return list.
-    pub async fn query_v_motion_compatibility(&self, vm: &ManagedObjectReference, host: &[ManagedObjectReference], compatibility: Option<&[String]>) -> Result<Option<Vec<HostVMotionCompatibility>>> {
+    pub async fn query_v_motion_compatibility(&self, vm: &crate::types::structs::ManagedObjectReference, host: &[crate::types::structs::ManagedObjectReference], compatibility: Option<&[String]>) -> Result<Option<Vec<crate::types::structs::HostVMotionCompatibility>>> {
         let input = QueryVMotionCompatibilityRequestType {vm, host, compatibility, };
         let path = format!("/ServiceInstance/{moId}/QueryVMotionCompatibility", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -137,7 +132,7 @@ impl ServiceInstance {
     ///
     /// The properties belonging to the service instance,
     /// including various object managers.
-    pub async fn retrieve_service_content(&self) -> Result<ServiceContent> {
+    pub async fn retrieve_service_content(&self) -> Result<crate::types::structs::ServiceContent> {
         let path = format!("/ServiceInstance/{moId}/RetrieveServiceContent", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute(req).await
@@ -145,7 +140,7 @@ impl ServiceInstance {
     /// Component information for bundled products
     /// 
     /// ***Required privileges:*** System.Anonymous
-    pub async fn retrieve_product_components(&self) -> Result<Option<Vec<ProductComponentInfo>>> {
+    pub async fn retrieve_product_components(&self) -> Result<Option<Vec<crate::types::structs::ProductComponentInfo>>> {
         let path = format!("/ServiceInstance/{moId}/RetrieveProductComponents", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute_option(req).await
@@ -220,7 +215,7 @@ impl ServiceInstance {
     /// cluster associated with a target pool does not contain at least one
     /// potential target host. A host must be connected and not in maintenance
     /// mode in order to be considered as a potential target host.
-    pub async fn validate_migration(&self, vm: &[ManagedObjectReference], state: Option<crate::types::enums::VirtualMachinePowerStateEnum>, test_type: Option<&[String]>, pool: Option<&ManagedObjectReference>, host: Option<&ManagedObjectReference>) -> Result<Option<Vec<Event>>> {
+    pub async fn validate_migration(&self, vm: &[crate::types::structs::ManagedObjectReference], state: Option<crate::types::enums::VirtualMachinePowerStateEnum>, test_type: Option<&[String]>, pool: Option<&crate::types::structs::ManagedObjectReference>, host: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Option<Vec<crate::types::structs::Event>>> {
         let input = ValidateMigrationRequestType {vm, state, test_type, pool, host, };
         let path = format!("/ServiceInstance/{moId}/ValidateMigration", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -229,7 +224,7 @@ impl ServiceInstance {
     /// API-wide capabilities.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn capability(&self) -> Result<Capability> {
+    pub async fn capability(&self) -> Result<crate::types::structs::Capability> {
         let path = format!("/ServiceInstance/{moId}/capability", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute(req).await
@@ -248,7 +243,7 @@ impl ServiceInstance {
     /// and then invoking a second traversal to continue.)
     /// 
     /// ***Required privileges:*** System.Anonymous
-    pub async fn content(&self) -> Result<ServiceContent> {
+    pub async fn content(&self) -> Result<crate::types::structs::ServiceContent> {
         let path = format!("/ServiceInstance/{moId}/content", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute(req).await
@@ -273,22 +268,22 @@ impl ServiceInstance {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct QueryVMotionCompatibilityRequestType<'a> {
-    vm: &'a ManagedObjectReference,
-    host: &'a [ManagedObjectReference],
+    vm: &'a crate::types::structs::ManagedObjectReference,
+    host: &'a [crate::types::structs::ManagedObjectReference],
     #[serde(default, skip_serializing_if = "Option::is_none")]
     compatibility: Option<&'a [String]>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct ValidateMigrationRequestType<'a> {
-    vm: &'a [ManagedObjectReference],
+    vm: &'a [crate::types::structs::ManagedObjectReference],
     #[serde(default, skip_serializing_if = "Option::is_none")]
     state: Option<crate::types::enums::VirtualMachinePowerStateEnum>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "testType")]
     test_type: Option<&'a [String]>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pool: Option<&'a ManagedObjectReference>,
+    pool: Option<&'a crate::types::structs::ManagedObjectReference>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    host: Option<&'a ManagedObjectReference>,
+    host: Option<&'a crate::types::structs::ManagedObjectReference>,
 }

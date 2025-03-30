@@ -1,8 +1,8 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::KernelModuleInfo;
 /// The KernelModuleSystem managed object controls the configuration
 /// of kernel modules on the host.
+#[derive(Clone)]
 pub struct HostKernelModuleSystem {
     client: Arc<Client>,
     mo_id: String,
@@ -42,7 +42,7 @@ impl HostKernelModuleSystem {
     /// Query the set of modules on the host.
     /// 
     /// ***Required privileges:*** Host.Config.Settings
-    pub async fn query_modules(&self) -> Result<Option<Vec<KernelModuleInfo>>> {
+    pub async fn query_modules(&self) -> Result<Option<Vec<crate::types::structs::KernelModuleInfo>>> {
         let path = format!("/HostKernelModuleSystem/{moId}/QueryModules", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute_option(req).await

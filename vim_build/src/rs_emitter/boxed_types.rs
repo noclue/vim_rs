@@ -52,8 +52,6 @@ impl<'a> BoxedTypesEmitter<'a> {
         self.printer.println("use serde::ser::SerializeStruct;")?;
         self.printer
             .println("use super::deserialize::get_value_deserializer;")?;
-        self.printer.println("use super::vim_any::VimAny;")?;
-        self.printer.println("use super::structs::*;")?;
         self.printer.newline()?;
         Ok(())
     }

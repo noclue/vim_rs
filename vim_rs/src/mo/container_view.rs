@@ -1,6 +1,5 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::ManagedObjectReference;
 /// The *ContainerView* managed object provides a means of monitoring the contents of
 /// a single container and, optionally, other containers.
 /// 
@@ -20,6 +19,7 @@ use crate::types::structs::ManagedObjectReference;
 /// Once you have created the view, the *ManagedObjectView.view* list
 /// always represents the current configuration of the virtual environment and reflects
 /// any subsequent changes that occur.
+#[derive(Clone)]
 pub struct ContainerView {
     client: Arc<Client>,
     mo_id: String,
@@ -45,7 +45,7 @@ impl ContainerView {
     /// ## Returns:
     ///
     /// Refers instance of *ManagedEntity*.
-    pub async fn container(&self) -> Result<ManagedObjectReference> {
+    pub async fn container(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/ContainerView/{moId}/container", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute(req).await
@@ -71,7 +71,7 @@ impl ContainerView {
         self.client.execute_option(req).await
     }
     /// The list of references to objects mapped by this view.
-    pub async fn view(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
+    pub async fn view(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/ContainerView/{moId}/view", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await

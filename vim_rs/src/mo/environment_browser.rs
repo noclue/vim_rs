@@ -1,11 +1,5 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::ConfigTarget;
-use crate::types::structs::EnvironmentBrowserConfigOptionQuerySpec;
-use crate::types::structs::HostCapability;
-use crate::types::structs::ManagedObjectReference;
-use crate::types::structs::VirtualMachineConfigOption;
-use crate::types::structs::VirtualMachineConfigOptionDescriptor;
 /// This managed object type provides access to the environment that a
 /// ComputeResource presents for creating and configuring a virtual machine.
 /// 
@@ -30,6 +24,7 @@ use crate::types::structs::VirtualMachineConfigOptionDescriptor;
 ///   the other data associated with a virtual machine.
 /// - The capabilities supported by the ComputeResource to which the virtual
 ///   machine belongs.
+#[derive(Clone)]
 pub struct EnvironmentBrowser {
     client: Arc<Client>,
     mo_id: String,
@@ -75,7 +70,7 @@ impl EnvironmentBrowser {
     /// Returns the ConfigOption object. If invoked on a cluster with no hosts, or
     /// if the ConfigOption with given key is not found for the given host, null
     /// is returned.
-    pub async fn query_config_option(&self, key: Option<&str>, host: Option<&ManagedObjectReference>) -> Result<Option<VirtualMachineConfigOption>> {
+    pub async fn query_config_option(&self, key: Option<&str>, host: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Option<crate::types::structs::VirtualMachineConfigOption>> {
         let input = QueryConfigOptionRequestType {key, host, };
         let path = format!("/EnvironmentBrowser/{moId}/QueryConfigOption", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -84,7 +79,7 @@ impl EnvironmentBrowser {
     /// The list of ConfigOption keys available on this entity.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn query_config_option_descriptor(&self) -> Result<Option<Vec<VirtualMachineConfigOptionDescriptor>>> {
+    pub async fn query_config_option_descriptor(&self) -> Result<Option<Vec<crate::types::structs::VirtualMachineConfigOptionDescriptor>>> {
         let path = format!("/EnvironmentBrowser/{moId}/QueryConfigOptionDescriptor", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute_option(req).await
@@ -124,7 +119,7 @@ impl EnvironmentBrowser {
     /// Returns the *VirtualMachineConfigOption* object. If invoked on a cluster
     /// with no hosts, or if the *VirtualMachineConfigOption* with given key is
     /// not found for the given host, null is returned.
-    pub async fn query_config_option_ex(&self, spec: Option<&EnvironmentBrowserConfigOptionQuerySpec>) -> Result<Option<VirtualMachineConfigOption>> {
+    pub async fn query_config_option_ex(&self, spec: Option<&crate::types::structs::EnvironmentBrowserConfigOptionQuerySpec>) -> Result<Option<crate::types::structs::VirtualMachineConfigOption>> {
         let input = QueryConfigOptionExRequestType {spec, };
         let path = format!("/EnvironmentBrowser/{moId}/QueryConfigOptionEx", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -160,7 +155,7 @@ impl EnvironmentBrowser {
     ///
     /// Returns the ConfigTarget object. If invoked on a cluster with no hosts,
     /// null is returned.
-    pub async fn query_config_target(&self, host: Option<&ManagedObjectReference>) -> Result<Option<ConfigTarget>> {
+    pub async fn query_config_target(&self, host: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Option<crate::types::structs::ConfigTarget>> {
         let input = QueryConfigTargetRequestType {host, };
         let path = format!("/EnvironmentBrowser/{moId}/QueryConfigTarget", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -194,7 +189,7 @@ impl EnvironmentBrowser {
     /// Returns the set of capabilities supported by the ComputeResource
     /// associated with the EnvironmentBrowser. If invoked on a cluster with
     /// no hosts, null is returned.
-    pub async fn query_target_capabilities(&self, host: Option<&ManagedObjectReference>) -> Result<Option<HostCapability>> {
+    pub async fn query_target_capabilities(&self, host: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Option<crate::types::structs::HostCapability>> {
         let input = QueryTargetCapabilitiesRequestType {host, };
         let path = format!("/EnvironmentBrowser/{moId}/QueryTargetCapabilities", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -207,7 +202,7 @@ impl EnvironmentBrowser {
     /// ## Returns:
     ///
     /// Refers instance of *HostDatastoreBrowser*.
-    pub async fn datastore_browser(&self) -> Result<Option<ManagedObjectReference>> {
+    pub async fn datastore_browser(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let path = format!("/EnvironmentBrowser/{moId}/datastoreBrowser", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -219,23 +214,23 @@ struct QueryConfigOptionRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     key: Option<&'a str>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    host: Option<&'a ManagedObjectReference>,
+    host: Option<&'a crate::types::structs::ManagedObjectReference>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct QueryConfigOptionExRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    spec: Option<&'a EnvironmentBrowserConfigOptionQuerySpec>,
+    spec: Option<&'a crate::types::structs::EnvironmentBrowserConfigOptionQuerySpec>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct QueryConfigTargetRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    host: Option<&'a ManagedObjectReference>,
+    host: Option<&'a crate::types::structs::ManagedObjectReference>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct QueryTargetCapabilitiesRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    host: Option<&'a ManagedObjectReference>,
+    host: Option<&'a crate::types::structs::ManagedObjectReference>,
 }

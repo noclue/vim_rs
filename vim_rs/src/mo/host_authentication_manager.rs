@@ -1,7 +1,5 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::HostAuthenticationManagerInfo;
-use crate::types::structs::ManagedObjectReference;
 /// The *HostAuthenticationManager* managed object provides
 /// access to Active Directory configuration information for an
 /// ESX host.
@@ -48,6 +46,7 @@ use crate::types::structs::ManagedObjectReference;
 /// not assign the role. In this case, you must create the "ESX Admins"
 /// group in the Active Directory. The host will periodically check the domain controller
 /// for the group and will assign the role when the group exists.
+#[derive(Clone)]
 pub struct HostAuthenticationManager {
     client: Arc<Client>,
     mo_id: String,
@@ -60,7 +59,7 @@ impl HostAuthenticationManager {
         }
     }
     /// Information about Active Directory membership.
-    pub async fn info(&self) -> Result<HostAuthenticationManagerInfo> {
+    pub async fn info(&self) -> Result<crate::types::structs::HostAuthenticationManagerInfo> {
         let path = format!("/HostAuthenticationManager/{moId}/info", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute(req).await
@@ -90,7 +89,7 @@ impl HostAuthenticationManager {
     /// ## Returns:
     ///
     /// Refers instances of *HostAuthenticationStore*.
-    pub async fn supported_store(&self) -> Result<Vec<ManagedObjectReference>> {
+    pub async fn supported_store(&self) -> Result<Vec<crate::types::structs::ManagedObjectReference>> {
         let path = format!("/HostAuthenticationManager/{moId}/supportedStore", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute(req).await

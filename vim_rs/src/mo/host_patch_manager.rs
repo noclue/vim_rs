@@ -1,14 +1,12 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::HostPatchManagerLocator;
-use crate::types::structs::HostPatchManagerPatchManagerOperationSpec;
-use crate::types::structs::ManagedObjectReference;
 /// This managed object is the interface for scanning and patching an ESX
 /// server.
 /// 
 /// VMware publishes updates through its external website. A patch update is
 /// synonymous with a bulletin. An update may contain many individual patch
 /// binaries, but its installation and uninstallation are atomic.
+#[derive(Clone)]
 pub struct HostPatchManager {
     client: Arc<Client>,
     mo_id: String,
@@ -61,7 +59,7 @@ impl HostPatchManager {
     /// ***PlatformConfigFault***: if any error occurs during the operation.
     /// More detailed information will be returned within the payload of the
     /// exception as xml string.
-    pub async fn check_host_patch_task(&self, meta_urls: Option<&[String]>, bundle_urls: Option<&[String]>, spec: Option<&HostPatchManagerPatchManagerOperationSpec>) -> Result<ManagedObjectReference> {
+    pub async fn check_host_patch_task(&self, meta_urls: Option<&[String]>, bundle_urls: Option<&[String]>, spec: Option<&crate::types::structs::HostPatchManagerPatchManagerOperationSpec>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CheckHostPatchRequestType {meta_urls, bundle_urls, spec, };
         let path = format!("/HostPatchManager/{moId}/CheckHostPatch_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -137,7 +135,7 @@ impl HostPatchManager {
     /// patch install requires all virtual machines to be powered off.
     /// 
     /// ***TaskInProgress***: if there is already a patch installation in progress.
-    pub async fn install_host_patch_task(&self, repository: &HostPatchManagerLocator, update_id: &str, force: Option<bool>) -> Result<ManagedObjectReference> {
+    pub async fn install_host_patch_task(&self, repository: &crate::types::structs::HostPatchManagerLocator, update_id: &str, force: Option<bool>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = InstallHostPatchRequestType {repository, update_id, force, };
         let path = format!("/HostPatchManager/{moId}/InstallHostPatch_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -185,7 +183,7 @@ impl HostPatchManager {
     /// ***PlatformConfigFault***: if any error occurs during the operation.
     /// More detailed information will be returned within the payload of the
     /// exception as xml string.
-    pub async fn install_host_patch_v_2_task(&self, meta_urls: Option<&[String]>, bundle_urls: Option<&[String]>, vib_urls: Option<&[String]>, spec: Option<&HostPatchManagerPatchManagerOperationSpec>) -> Result<ManagedObjectReference> {
+    pub async fn install_host_patch_v_2_task(&self, meta_urls: Option<&[String]>, bundle_urls: Option<&[String]>, vib_urls: Option<&[String]>, spec: Option<&crate::types::structs::HostPatchManagerPatchManagerOperationSpec>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = InstallHostPatchV2RequestType {meta_urls, bundle_urls, vib_urls, spec, };
         let path = format!("/HostPatchManager/{moId}/InstallHostPatchV2_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -218,7 +216,7 @@ impl HostPatchManager {
     /// ***PlatformConfigFault***: if any error occurs during the operation.
     /// More detailed information will be returned within the payload of the
     /// exception as xml string.
-    pub async fn query_host_patch_task(&self, spec: Option<&HostPatchManagerPatchManagerOperationSpec>) -> Result<ManagedObjectReference> {
+    pub async fn query_host_patch_task(&self, spec: Option<&crate::types::structs::HostPatchManagerPatchManagerOperationSpec>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = QueryHostPatchRequestType {spec, };
         let path = format!("/HostPatchManager/{moId}/QueryHostPatch_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -274,7 +272,7 @@ impl HostPatchManager {
     /// metadata download, repository level integrity check, or reading the
     /// metadata. See *PlatformConfigFault.text* for
     /// specific details.
-    pub async fn scan_host_patch_task(&self, repository: &HostPatchManagerLocator, update_id: Option<&[String]>) -> Result<ManagedObjectReference> {
+    pub async fn scan_host_patch_task(&self, repository: &crate::types::structs::HostPatchManagerLocator, update_id: Option<&[String]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ScanHostPatchRequestType {repository, update_id, };
         let path = format!("/HostPatchManager/{moId}/ScanHostPatch_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -322,7 +320,7 @@ impl HostPatchManager {
     /// metadata download, repository level integrity check, or reading the
     /// metadata. See *PlatformConfigFault.text* for
     /// specific details.
-    pub async fn scan_host_patch_v_2_task(&self, meta_urls: Option<&[String]>, bundle_urls: Option<&[String]>, spec: Option<&HostPatchManagerPatchManagerOperationSpec>) -> Result<ManagedObjectReference> {
+    pub async fn scan_host_patch_v_2_task(&self, meta_urls: Option<&[String]>, bundle_urls: Option<&[String]>, spec: Option<&crate::types::structs::HostPatchManagerPatchManagerOperationSpec>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ScanHostPatchV2RequestType {meta_urls, bundle_urls, spec, };
         let path = format!("/HostPatchManager/{moId}/ScanHostPatchV2_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -368,7 +366,7 @@ impl HostPatchManager {
     /// ***PlatformConfigFault***: if any error occurs during the operation.
     /// More detailed information will be returned within the payload of the
     /// exception as xml string.
-    pub async fn stage_host_patch_task(&self, meta_urls: Option<&[String]>, bundle_urls: Option<&[String]>, vib_urls: Option<&[String]>, spec: Option<&HostPatchManagerPatchManagerOperationSpec>) -> Result<ManagedObjectReference> {
+    pub async fn stage_host_patch_task(&self, meta_urls: Option<&[String]>, bundle_urls: Option<&[String]>, vib_urls: Option<&[String]>, spec: Option<&crate::types::structs::HostPatchManagerPatchManagerOperationSpec>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = StageHostPatchRequestType {meta_urls, bundle_urls, vib_urls, spec, };
         let path = format!("/HostPatchManager/{moId}/StageHostPatch_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -405,7 +403,7 @@ impl HostPatchManager {
     /// ***PlatformConfigFault***: if any error occurs during the operation.
     /// More detailed information will be returned within the payload of the
     /// exception as xml string.
-    pub async fn uninstall_host_patch_task(&self, bulletin_ids: Option<&[String]>, spec: Option<&HostPatchManagerPatchManagerOperationSpec>) -> Result<ManagedObjectReference> {
+    pub async fn uninstall_host_patch_task(&self, bulletin_ids: Option<&[String]>, spec: Option<&crate::types::structs::HostPatchManagerPatchManagerOperationSpec>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = UninstallHostPatchRequestType {bulletin_ids, spec, };
         let path = format!("/HostPatchManager/{moId}/UninstallHostPatch_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -422,12 +420,12 @@ struct CheckHostPatchRequestType<'a> {
     #[serde(rename = "bundleUrls")]
     bundle_urls: Option<&'a [String]>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    spec: Option<&'a HostPatchManagerPatchManagerOperationSpec>,
+    spec: Option<&'a crate::types::structs::HostPatchManagerPatchManagerOperationSpec>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct InstallHostPatchRequestType<'a> {
-    repository: &'a HostPatchManagerLocator,
+    repository: &'a crate::types::structs::HostPatchManagerLocator,
     #[serde(rename = "updateID")]
     update_id: &'a str,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -446,18 +444,18 @@ struct InstallHostPatchV2RequestType<'a> {
     #[serde(rename = "vibUrls")]
     vib_urls: Option<&'a [String]>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    spec: Option<&'a HostPatchManagerPatchManagerOperationSpec>,
+    spec: Option<&'a crate::types::structs::HostPatchManagerPatchManagerOperationSpec>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct QueryHostPatchRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    spec: Option<&'a HostPatchManagerPatchManagerOperationSpec>,
+    spec: Option<&'a crate::types::structs::HostPatchManagerPatchManagerOperationSpec>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct ScanHostPatchRequestType<'a> {
-    repository: &'a HostPatchManagerLocator,
+    repository: &'a crate::types::structs::HostPatchManagerLocator,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "updateID")]
     update_id: Option<&'a [String]>,
@@ -472,7 +470,7 @@ struct ScanHostPatchV2RequestType<'a> {
     #[serde(rename = "bundleUrls")]
     bundle_urls: Option<&'a [String]>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    spec: Option<&'a HostPatchManagerPatchManagerOperationSpec>,
+    spec: Option<&'a crate::types::structs::HostPatchManagerPatchManagerOperationSpec>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -487,7 +485,7 @@ struct StageHostPatchRequestType<'a> {
     #[serde(rename = "vibUrls")]
     vib_urls: Option<&'a [String]>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    spec: Option<&'a HostPatchManagerPatchManagerOperationSpec>,
+    spec: Option<&'a crate::types::structs::HostPatchManagerPatchManagerOperationSpec>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -496,5 +494,5 @@ struct UninstallHostPatchRequestType<'a> {
     #[serde(rename = "bulletinIds")]
     bulletin_ids: Option<&'a [String]>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    spec: Option<&'a HostPatchManagerPatchManagerOperationSpec>,
+    spec: Option<&'a crate::types::structs::HostPatchManagerPatchManagerOperationSpec>,
 }

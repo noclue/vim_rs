@@ -1,19 +1,5 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::AlarmState;
-use crate::types::structs::CustomFieldDef;
-use crate::types::structs::Event;
-use crate::types::structs::ManagedObjectReference;
-use crate::types::structs::Permission;
-use crate::types::structs::ResourceConfigOption;
-use crate::types::structs::ResourceConfigSpec;
-use crate::types::structs::ResourcePoolRuntimeInfo;
-use crate::types::structs::Tag;
-use crate::types::structs::VAppCloneSpec;
-use crate::types::structs::VAppConfigInfo;
-use crate::types::structs::VAppConfigSpec;
-use crate::types::structs::VirtualAppLinkInfo;
-use crate::types::structs::VirtualMachineConfigSpec;
 /// Represents a multi-tiered software solution.
 /// 
 /// A vApp is a collection of
@@ -38,6 +24,7 @@ use crate::types::structs::VirtualMachineConfigSpec;
 /// The VApp.Delete privilege must be held on the vApp as well as the
 /// parent folder of the vApp. Also, the VApp.Delete privilege must
 /// be held on any child vApps that would be destroyed by the operation.
+#[derive(Clone)]
 pub struct VirtualApp {
     client: Arc<Client>,
     mo_id: String,
@@ -113,7 +100,7 @@ impl VirtualApp {
     /// 
     /// ***InsufficientResourcesFault***: if this operation would violate a resource
     /// usage policy.
-    pub async fn clone_v_app_task(&self, name: &str, target: &ManagedObjectReference, spec: &VAppCloneSpec) -> Result<ManagedObjectReference> {
+    pub async fn clone_v_app_task(&self, name: &str, target: &crate::types::structs::ManagedObjectReference, spec: &crate::types::structs::VAppCloneSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CloneVAppRequestType {name, target, spec, };
         let path = format!("/VirtualApp/{moId}/CloneVApp_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -157,7 +144,7 @@ impl VirtualApp {
     /// ***InsufficientResourcesFault***: if the operation would violate a resource
     /// usage policy. Typically, a more specific subclass, such as
     /// InsufficientCpuResourcesFault will be thrown.
-    pub async fn create_resource_pool(&self, name: &str, spec: &ResourceConfigSpec) -> Result<ManagedObjectReference> {
+    pub async fn create_resource_pool(&self, name: &str, spec: &crate::types::structs::ResourceConfigSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateResourcePoolRequestType {name, spec, };
         let path = format!("/VirtualApp/{moId}/CreateResourcePool", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -217,7 +204,7 @@ impl VirtualApp {
     /// 
     /// ***VmConfigFault***: or a more specific subclass, if errors are found in
     /// the supplied in VApp configuration.
-    pub async fn create_v_app(&self, name: &str, res_spec: &ResourceConfigSpec, config_spec: &VAppConfigSpec, vm_folder: Option<&ManagedObjectReference>) -> Result<ManagedObjectReference> {
+    pub async fn create_v_app(&self, name: &str, res_spec: &crate::types::structs::ResourceConfigSpec, config_spec: &crate::types::structs::VAppConfigSpec, vm_folder: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateVAppRequestType {name, res_spec, config_spec, vm_folder, };
         let path = format!("/VirtualApp/{moId}/CreateVApp", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -290,7 +277,7 @@ impl VirtualApp {
     /// 
     /// ***NotSupported***: if this resource pool is not a vApp or is a child
     /// of a vApp.
-    pub async fn create_child_vm_task(&self, config: &VirtualMachineConfigSpec, host: Option<&ManagedObjectReference>) -> Result<ManagedObjectReference> {
+    pub async fn create_child_vm_task(&self, config: &crate::types::structs::VirtualMachineConfigSpec, host: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateChildVmRequestType {config, host, };
         let path = format!("/VirtualApp/{moId}/CreateChildVM_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -317,7 +304,7 @@ impl VirtualApp {
     /// ## Errors:
     ///
     /// Failure
-    pub async fn destroy_task(&self) -> Result<ManagedObjectReference> {
+    pub async fn destroy_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/VirtualApp/{moId}/Destroy_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute(req).await
@@ -371,7 +358,7 @@ impl VirtualApp {
     /// is running or already powering on.
     /// 
     /// ***FileFault***: if there was an error accessing one of the virtual machine files.
-    pub async fn export_v_app(&self) -> Result<ManagedObjectReference> {
+    pub async fn export_v_app(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/VirtualApp/{moId}/ExportVApp", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute(req).await
@@ -471,7 +458,7 @@ impl VirtualApp {
     /// 
     /// ***VmWwnConflict***: if the WWN of the virtual machine has been used by
     /// other virtual machines.
-    pub async fn import_v_app(&self, spec: &dyn crate::types::traits::ImportSpecTrait, folder: Option<&ManagedObjectReference>, host: Option<&ManagedObjectReference>) -> Result<ManagedObjectReference> {
+    pub async fn import_v_app(&self, spec: &dyn crate::types::traits::ImportSpecTrait, folder: Option<&crate::types::structs::ManagedObjectReference>, host: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ImportVAppRequestType {spec, folder, host, };
         let path = format!("/VirtualApp/{moId}/ImportVApp", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -526,7 +513,7 @@ impl VirtualApp {
     /// ***InsufficientResourcesFault***: if the move would violate the resource usage
     /// policy. Typically, a more specific subclass, such as
     /// InsufficientMemoryResourcesFault.
-    pub async fn move_into_resource_pool(&self, list: &[ManagedObjectReference]) -> Result<()> {
+    pub async fn move_into_resource_pool(&self, list: &[crate::types::structs::ManagedObjectReference]) -> Result<()> {
         let input = MoveIntoResourcePoolRequestType {list, };
         let path = format!("/VirtualApp/{moId}/MoveIntoResourcePool", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -567,7 +554,7 @@ impl VirtualApp {
     /// 
     /// ***MissingPowerOffConfiguration***: if no vApp powerOff configuration
     /// has been specified.
-    pub async fn power_off_v_app_task(&self, force: bool) -> Result<ManagedObjectReference> {
+    pub async fn power_off_v_app_task(&self, force: bool) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = PowerOffVAppRequestType {force, };
         let path = format!("/VirtualApp/{moId}/PowerOffVApp_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -624,7 +611,7 @@ impl VirtualApp {
     /// 
     /// ***MissingNetworkIpConfig***: if no network configuration exists for the primary
     /// network for the vApp.
-    pub async fn power_on_v_app_task(&self) -> Result<ManagedObjectReference> {
+    pub async fn power_on_v_app_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/VirtualApp/{moId}/PowerOnVApp_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute(req).await
@@ -640,7 +627,7 @@ impl VirtualApp {
     /// ## Returns:
     ///
     /// *ResourceConfigOption* object.
-    pub async fn query_resource_config_option(&self) -> Result<ResourceConfigOption> {
+    pub async fn query_resource_config_option(&self) -> Result<crate::types::structs::ResourceConfigOption> {
         let path = format!("/VirtualApp/{moId}/QueryResourceConfigOption", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute(req).await
@@ -733,7 +720,7 @@ impl VirtualApp {
     /// 
     /// ***InsufficientResourcesFault***: if this operation would violate a resource
     /// usage policy.
-    pub async fn register_child_vm_task(&self, path: &str, name: Option<&str>, host: Option<&ManagedObjectReference>) -> Result<ManagedObjectReference> {
+    pub async fn register_child_vm_task(&self, path: &str, name: Option<&str>, host: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RegisterChildVmRequestType {path, name, host, };
         let path = format!("/VirtualApp/{moId}/RegisterChildVM_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -786,7 +773,7 @@ impl VirtualApp {
     /// ***DuplicateName***: If another object in the same folder has the target name.
     /// 
     /// ***InvalidName***: If the new name is not a valid entity name.
-    pub async fn rename_task(&self, new_name: &str) -> Result<ManagedObjectReference> {
+    pub async fn rename_task(&self, new_name: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RenameRequestType {new_name, };
         let path = format!("/VirtualApp/{moId}/Rename_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -836,7 +823,7 @@ impl VirtualApp {
     /// ***InvalidState***: if the operation cannot be performed because of the
     /// vApp's current state. For example, if the vApp is in the
     /// process of being started.
-    pub async fn suspend_v_app_task(&self) -> Result<ManagedObjectReference> {
+    pub async fn suspend_v_app_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/VirtualApp/{moId}/SuspendVApp_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute(req).await
@@ -858,7 +845,7 @@ impl VirtualApp {
     /// ## Errors:
     ///
     /// ***InvalidPowerState***: if the vApp is running.
-    pub async fn unregister_v_app_task(&self) -> Result<ManagedObjectReference> {
+    pub async fn unregister_v_app_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/VirtualApp/{moId}/unregisterVApp_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute(req).await
@@ -896,7 +883,7 @@ impl VirtualApp {
     /// ***InsufficientResourcesFault***: if the operation would violate a resource
     /// usage policy. Typically, a more specific subclass, such as
     /// InsufficientMemoryResourcesFault will be thrown.
-    pub async fn update_child_resource_configuration(&self, spec: &[ResourceConfigSpec]) -> Result<()> {
+    pub async fn update_child_resource_configuration(&self, spec: &[crate::types::structs::ResourceConfigSpec]) -> Result<()> {
         let input = UpdateChildResourceConfigurationRequestType {spec, };
         let path = format!("/VirtualApp/{moId}/UpdateChildResourceConfiguration", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -937,7 +924,7 @@ impl VirtualApp {
     /// 
     /// ***ConcurrentAccess***: if the changeVersion does not match the server's
     /// changeVersion for the configuration.
-    pub async fn update_config(&self, name: Option<&str>, config: Option<&ResourceConfigSpec>) -> Result<()> {
+    pub async fn update_config(&self, name: Option<&str>, config: Option<&crate::types::structs::ResourceConfigSpec>) -> Result<()> {
         let input = UpdateConfigRequestType {name, config, };
         let path = format!("/VirtualApp/{moId}/UpdateConfig", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -993,7 +980,7 @@ impl VirtualApp {
     /// ***ConcurrentAccess***: If a concurrent modification happens while adding the link.
     /// 
     /// ***NotSupported***: If the target of the link is not in the same datacenter.
-    pub async fn update_linked_children(&self, add_change_set: Option<&[VirtualAppLinkInfo]>, remove_set: Option<&[ManagedObjectReference]>) -> Result<()> {
+    pub async fn update_linked_children(&self, add_change_set: Option<&[crate::types::structs::VirtualAppLinkInfo]>, remove_set: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<()> {
         let input = UpdateLinkedChildrenRequestType {add_change_set, remove_set, };
         let path = format!("/VirtualApp/{moId}/UpdateLinkedChildren", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -1027,7 +1014,7 @@ impl VirtualApp {
     /// 
     /// ***VmConfigFault***: for bad configuration, such as invalid
     /// property types.
-    pub async fn update_v_app_config(&self, spec: &VAppConfigSpec) -> Result<()> {
+    pub async fn update_v_app_config(&self, spec: &crate::types::structs::VAppConfigSpec) -> Result<()> {
         let input = UpdateVAppConfigRequestType {spec, };
         let path = format!("/VirtualApp/{moId}/UpdateVAppConfig", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -1048,7 +1035,7 @@ impl VirtualApp {
     /// The fields are sorted by *CustomFieldDef.name*.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn available_field(&self) -> Result<Option<Vec<CustomFieldDef>>> {
+    pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
         let path = format!("/VirtualApp/{moId}/availableField", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -1059,7 +1046,7 @@ impl VirtualApp {
     /// Property collector update notifications might not be generated for this
     /// property. To listen for the child configuration change, please create
     /// PropertyCollector filter on the child entities directly.
-    pub async fn child_configuration(&self) -> Result<Option<Vec<ResourceConfigSpec>>> {
+    pub async fn child_configuration(&self) -> Result<Option<Vec<crate::types::structs::ResourceConfigSpec>>> {
         let path = format!("/VirtualApp/{moId}/childConfiguration", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -1067,13 +1054,13 @@ impl VirtualApp {
     /// Deprecated as of vSphere API 5.1.
     /// 
     /// List of linked children.
-    pub async fn child_link(&self) -> Result<Option<Vec<VirtualAppLinkInfo>>> {
+    pub async fn child_link(&self) -> Result<Option<Vec<crate::types::structs::VirtualAppLinkInfo>>> {
         let path = format!("/VirtualApp/{moId}/childLink", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
     }
     /// Configuration of this resource pool.
-    pub async fn config(&self) -> Result<ResourceConfigSpec> {
+    pub async fn config(&self) -> Result<crate::types::structs::ResourceConfigSpec> {
         let path = format!("/VirtualApp/{moId}/config", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute(req).await
@@ -1085,7 +1072,7 @@ impl VirtualApp {
     /// events as long as they are still current. The
     /// *configStatus* property provides an overall status
     /// based on these events.
-    pub async fn config_issue(&self) -> Result<Option<Vec<Event>>> {
+    pub async fn config_issue(&self) -> Result<Option<Vec<crate::types::structs::Event>>> {
         let path = format!("/VirtualApp/{moId}/configIssue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -1135,7 +1122,7 @@ impl VirtualApp {
     /// ## Returns:
     ///
     /// Refers instances of *Datastore*.
-    pub async fn datastore(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
+    pub async fn datastore(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/VirtualApp/{moId}/datastore", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -1150,7 +1137,7 @@ impl VirtualApp {
     /// This set does not include alarms that are defined on descendants of this entity.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn declared_alarm_state(&self) -> Result<Option<Vec<AlarmState>>> {
+    pub async fn declared_alarm_state(&self) -> Result<Option<Vec<crate::types::structs::AlarmState>>> {
         let path = format!("/VirtualApp/{moId}/declaredAlarmState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -1272,7 +1259,7 @@ impl VirtualApp {
     /// ## Returns:
     ///
     /// Refers instances of *Network*.
-    pub async fn network(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
+    pub async fn network(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/VirtualApp/{moId}/network", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -1310,7 +1297,7 @@ impl VirtualApp {
     /// ## Returns:
     ///
     /// Refers instance of *ComputeResource*.
-    pub async fn owner(&self) -> Result<ManagedObjectReference> {
+    pub async fn owner(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/VirtualApp/{moId}/owner", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute(req).await
@@ -1326,7 +1313,7 @@ impl VirtualApp {
     /// ## Returns:
     ///
     /// Refers instance of *ManagedEntity*.
-    pub async fn parent(&self) -> Result<Option<ManagedObjectReference>> {
+    pub async fn parent(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let path = format!("/VirtualApp/{moId}/parent", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -1342,7 +1329,7 @@ impl VirtualApp {
     /// ## Returns:
     ///
     /// Refers instance of *Folder*.
-    pub async fn parent_folder(&self) -> Result<Option<ManagedObjectReference>> {
+    pub async fn parent_folder(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let path = format!("/VirtualApp/{moId}/parentFolder", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -1352,13 +1339,13 @@ impl VirtualApp {
     /// ## Returns:
     ///
     /// Refers instance of *ManagedEntity*.
-    pub async fn parent_v_app(&self) -> Result<Option<ManagedObjectReference>> {
+    pub async fn parent_v_app(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let path = format!("/VirtualApp/{moId}/parentVApp", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
     }
     /// List of permissions defined for this entity.
-    pub async fn permission(&self) -> Result<Option<Vec<Permission>>> {
+    pub async fn permission(&self) -> Result<Option<Vec<crate::types::structs::Permission>>> {
         let path = format!("/VirtualApp/{moId}/permission", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -1388,7 +1375,7 @@ impl VirtualApp {
     /// ## Returns:
     ///
     /// Refers instances of *Task*.
-    pub async fn recent_task(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
+    pub async fn recent_task(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/VirtualApp/{moId}/recentTask", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -1400,7 +1387,7 @@ impl VirtualApp {
     /// ## Returns:
     ///
     /// Refers instances of *ResourcePool*.
-    pub async fn resource_pool(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
+    pub async fn resource_pool(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/VirtualApp/{moId}/resourcePool", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -1418,7 +1405,7 @@ impl VirtualApp {
     /// If you use the PropertyCollector.WaitForUpdatesEx method, specify
     /// an empty string for the version parameter. Any other version value will not
     /// produce any property values as no updates are generated.
-    pub async fn runtime(&self) -> Result<ResourcePoolRuntimeInfo> {
+    pub async fn runtime(&self) -> Result<crate::types::structs::ResourcePoolRuntimeInfo> {
         let path = format!("/VirtualApp/{moId}/runtime", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute(req).await
@@ -1442,7 +1429,7 @@ impl VirtualApp {
     /// Experimental. Subject to change.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn tag(&self) -> Result<Option<Vec<Tag>>> {
+    pub async fn tag(&self) -> Result<Option<Vec<crate::types::structs::Tag>>> {
         let path = format!("/VirtualApp/{moId}/tag", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -1461,7 +1448,7 @@ impl VirtualApp {
     /// produce any property values as no updates are generated.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn triggered_alarm_state(&self) -> Result<Option<Vec<AlarmState>>> {
+    pub async fn triggered_alarm_state(&self) -> Result<Option<Vec<crate::types::structs::AlarmState>>> {
         let path = format!("/VirtualApp/{moId}/triggeredAlarmState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -1469,7 +1456,7 @@ impl VirtualApp {
     /// Configuration of this package.
     /// 
     /// ***Required privileges:*** System.Read
-    pub async fn v_app_config(&self) -> Result<Option<VAppConfigInfo>> {
+    pub async fn v_app_config(&self) -> Result<Option<crate::types::structs::VAppConfigInfo>> {
         let path = format!("/VirtualApp/{moId}/vAppConfig", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -1493,7 +1480,7 @@ impl VirtualApp {
     /// ## Returns:
     ///
     /// Refers instances of *VirtualMachine*.
-    pub async fn vm(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
+    pub async fn vm(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/VirtualApp/{moId}/vm", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -1503,47 +1490,47 @@ impl VirtualApp {
 #[serde(tag="_typeName")]
 struct CloneVAppRequestType<'a> {
     name: &'a str,
-    target: &'a ManagedObjectReference,
-    spec: &'a VAppCloneSpec,
+    target: &'a crate::types::structs::ManagedObjectReference,
+    spec: &'a crate::types::structs::VAppCloneSpec,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct CreateResourcePoolRequestType<'a> {
     name: &'a str,
-    spec: &'a ResourceConfigSpec,
+    spec: &'a crate::types::structs::ResourceConfigSpec,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct CreateVAppRequestType<'a> {
     name: &'a str,
     #[serde(rename = "resSpec")]
-    res_spec: &'a ResourceConfigSpec,
+    res_spec: &'a crate::types::structs::ResourceConfigSpec,
     #[serde(rename = "configSpec")]
-    config_spec: &'a VAppConfigSpec,
+    config_spec: &'a crate::types::structs::VAppConfigSpec,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "vmFolder")]
-    vm_folder: Option<&'a ManagedObjectReference>,
+    vm_folder: Option<&'a crate::types::structs::ManagedObjectReference>,
 }
 #[derive(serde::Serialize)]
 #[serde(rename = "CreateChildVMRequestType", tag = "_typeName")]
 struct CreateChildVmRequestType<'a> {
-    config: &'a VirtualMachineConfigSpec,
+    config: &'a crate::types::structs::VirtualMachineConfigSpec,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    host: Option<&'a ManagedObjectReference>,
+    host: Option<&'a crate::types::structs::ManagedObjectReference>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct ImportVAppRequestType<'a> {
     spec: &'a dyn crate::types::traits::ImportSpecTrait,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    folder: Option<&'a ManagedObjectReference>,
+    folder: Option<&'a crate::types::structs::ManagedObjectReference>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    host: Option<&'a ManagedObjectReference>,
+    host: Option<&'a crate::types::structs::ManagedObjectReference>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct MoveIntoResourcePoolRequestType<'a> {
-    list: &'a [ManagedObjectReference],
+    list: &'a [crate::types::structs::ManagedObjectReference],
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -1557,7 +1544,7 @@ struct RegisterChildVmRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     name: Option<&'a str>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    host: Option<&'a ManagedObjectReference>,
+    host: Option<&'a crate::types::structs::ManagedObjectReference>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -1574,7 +1561,7 @@ struct SetCustomValueRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct UpdateChildResourceConfigurationRequestType<'a> {
-    spec: &'a [ResourceConfigSpec],
+    spec: &'a [crate::types::structs::ResourceConfigSpec],
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -1582,20 +1569,20 @@ struct UpdateConfigRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     name: Option<&'a str>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    config: Option<&'a ResourceConfigSpec>,
+    config: Option<&'a crate::types::structs::ResourceConfigSpec>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct UpdateLinkedChildrenRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "addChangeSet")]
-    add_change_set: Option<&'a [VirtualAppLinkInfo]>,
+    add_change_set: Option<&'a [crate::types::structs::VirtualAppLinkInfo]>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "removeSet")]
-    remove_set: Option<&'a [ManagedObjectReference]>,
+    remove_set: Option<&'a [crate::types::structs::ManagedObjectReference]>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct UpdateVAppConfigRequestType<'a> {
-    spec: &'a VAppConfigSpec,
+    spec: &'a crate::types::structs::VAppConfigSpec,
 }

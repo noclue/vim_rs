@@ -1,9 +1,8 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::CustomizationSpec;
-use crate::types::structs::ManagedObjectReference;
 /// GuestCustomizationManager is a singleton managed object that provides APIs
 /// for guest customization of a running VM.
+#[derive(Clone)]
 pub struct VirtualMachineGuestCustomizationManager {
     client: Arc<Client>,
     mo_id: String,
@@ -65,7 +64,7 @@ impl VirtualMachineGuestCustomizationManager {
     /// is not sufficient to perform the guest customization.
     /// 
     /// ***CustomizationFault***: if a customization error occurs.
-    pub async fn abort_customization_task(&self, vm: &ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait) -> Result<ManagedObjectReference> {
+    pub async fn abort_customization_task(&self, vm: &crate::types::structs::ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = AbortCustomizationRequestType {vm, auth, };
         let path = format!("/VirtualMachineGuestCustomizationManager/{moId}/AbortCustomization_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -123,7 +122,7 @@ impl VirtualMachineGuestCustomizationManager {
     /// is not sufficient to perform the guest customization.
     /// 
     /// ***CustomizationFault***: if a customization error occurs.
-    pub async fn customize_guest_task(&self, vm: &ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait, spec: &CustomizationSpec, config_params: Option<&[Box<dyn crate::types::traits::OptionValueTrait>]>) -> Result<ManagedObjectReference> {
+    pub async fn customize_guest_task(&self, vm: &crate::types::structs::ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait, spec: &crate::types::structs::CustomizationSpec, config_params: Option<&[Box<dyn crate::types::traits::OptionValueTrait>]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CustomizeGuestRequestType {vm, auth, spec, config_params, };
         let path = format!("/VirtualMachineGuestCustomizationManager/{moId}/CustomizeGuest_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -174,7 +173,7 @@ impl VirtualMachineGuestCustomizationManager {
     /// is not sufficient to perform the guest customization.
     /// 
     /// ***CustomizationFault***: if a customization error occurs.
-    pub async fn start_guest_network_task(&self, vm: &ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait) -> Result<ManagedObjectReference> {
+    pub async fn start_guest_network_task(&self, vm: &crate::types::structs::ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = StartGuestNetworkRequestType {vm, auth, };
         let path = format!("/VirtualMachineGuestCustomizationManager/{moId}/StartGuestNetwork_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -184,15 +183,15 @@ impl VirtualMachineGuestCustomizationManager {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct AbortCustomizationRequestType<'a> {
-    vm: &'a ManagedObjectReference,
+    vm: &'a crate::types::structs::ManagedObjectReference,
     auth: &'a dyn crate::types::traits::GuestAuthenticationTrait,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct CustomizeGuestRequestType<'a> {
-    vm: &'a ManagedObjectReference,
+    vm: &'a crate::types::structs::ManagedObjectReference,
     auth: &'a dyn crate::types::traits::GuestAuthenticationTrait,
-    spec: &'a CustomizationSpec,
+    spec: &'a crate::types::structs::CustomizationSpec,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "configParams")]
     config_params: Option<&'a [Box<dyn crate::types::traits::OptionValueTrait>]>,
@@ -200,6 +199,6 @@ struct CustomizeGuestRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct StartGuestNetworkRequestType<'a> {
-    vm: &'a ManagedObjectReference,
+    vm: &'a crate::types::structs::ManagedObjectReference,
     auth: &'a dyn crate::types::traits::GuestAuthenticationTrait,
 }

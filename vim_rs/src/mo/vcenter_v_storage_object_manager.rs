@@ -1,23 +1,5 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::DiskChangeInfo;
-use crate::types::structs::DiskCryptoSpec;
-use crate::types::structs::Id;
-use crate::types::structs::KeyValue;
-use crate::types::structs::ManagedObjectReference;
-use crate::types::structs::RetrieveVStorageObjSpec;
-use crate::types::structs::VStorageObject;
-use crate::types::structs::VStorageObjectAssociations;
-use crate::types::structs::VStorageObjectSnapshotDetails;
-use crate::types::structs::VStorageObjectSnapshotInfo;
-use crate::types::structs::VStorageObjectStateInfo;
-use crate::types::structs::VslmCloneSpec;
-use crate::types::structs::VslmCreateSpec;
-use crate::types::structs::VslmInfrastructureObjectPolicy;
-use crate::types::structs::VslmInfrastructureObjectPolicySpec;
-use crate::types::structs::VslmRelocateSpec;
-use crate::types::structs::VslmTagEntry;
-use crate::types::structs::VslmVClockInfo;
 /// Interface to manage virtual storage object on a vCenter.
 /// 
 /// VStorageObjectManager and SPBM policy support:
@@ -27,6 +9,7 @@ use crate::types::structs::VslmVClockInfo;
 /// down to host. In that case, user operation would succeed but if user checks
 /// SPBM Entity Compliance, it will show "Mismatch" / "Non Compliant" as a
 /// compliance result.
+#[derive(Clone)]
 pub struct VcenterVStorageObjectManager {
     client: Arc<Client>,
     mo_id: String,
@@ -86,7 +69,7 @@ impl VcenterVStorageObjectManager {
     /// ***InvalidState***: If the operation cannot be performed on the disk.
     /// 
     /// ***NotFound***: If specified virtual storage object cannot be found.
-    pub async fn revert_v_storage_object_task(&self, id: &Id, datastore: &ManagedObjectReference, snapshot_id: &Id) -> Result<ManagedObjectReference> {
+    pub async fn revert_v_storage_object_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, snapshot_id: &crate::types::structs::Id) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RevertVStorageObjectRequestType {id, datastore, snapshot_id, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/RevertVStorageObject_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -113,7 +96,7 @@ impl VcenterVStorageObjectManager {
     /// ## Errors:
     ///
     /// ***NotFound***: If the specified category or tag cannot be found.
-    pub async fn attach_tag_to_v_storage_object(&self, id: &Id, category: &str, tag: &str) -> Result<()> {
+    pub async fn attach_tag_to_v_storage_object(&self, id: &crate::types::structs::Id, category: &str, tag: &str) -> Result<()> {
         let input = AttachTagToVStorageObjectRequestType {id, category, tag, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/AttachTagToVStorageObject", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -154,7 +137,7 @@ impl VcenterVStorageObjectManager {
     /// 
     /// ***NotFound***: If specified virtual storage object cannot
     /// be found.
-    pub async fn clear_v_storage_object_control_flags(&self, id: &Id, datastore: &ManagedObjectReference, control_flags: Option<&[String]>) -> Result<()> {
+    pub async fn clear_v_storage_object_control_flags(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, control_flags: Option<&[String]>) -> Result<()> {
         let input = ClearVStorageObjectControlFlagsRequestType {id, datastore, control_flags, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/ClearVStorageObjectControlFlags", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -196,7 +179,7 @@ impl VcenterVStorageObjectManager {
     /// 
     /// ***NotFound***: If specified virtual storage object cannot be
     /// found.
-    pub async fn clone_v_storage_object_task(&self, id: &Id, datastore: &ManagedObjectReference, spec: &VslmCloneSpec) -> Result<ManagedObjectReference> {
+    pub async fn clone_v_storage_object_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, spec: &crate::types::structs::VslmCloneSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CloneVStorageObjectRequestType {id, datastore, spec, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/CloneVStorageObject_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -232,7 +215,7 @@ impl VcenterVStorageObjectManager {
     /// 
     /// ***InvalidDatastore***: If the operation cannot be performed on the
     /// datastore.
-    pub async fn create_disk_task(&self, spec: &VslmCreateSpec) -> Result<ManagedObjectReference> {
+    pub async fn create_disk_task(&self, spec: &crate::types::structs::VslmCreateSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateDiskRequestType {spec, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/CreateDisk_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -304,7 +287,7 @@ impl VcenterVStorageObjectManager {
     /// ***InvalidState***: If the operation cannot be performed on the disk.
     /// 
     /// ***NotFound***: If specified virtual storage object cannot be found.
-    pub async fn create_disk_from_snapshot_task(&self, id: &Id, datastore: &ManagedObjectReference, snapshot_id: &Id, name: &str, profile: Option<&[Box<dyn crate::types::traits::VirtualMachineProfileSpecTrait>]>, crypto: Option<&dyn crate::types::traits::CryptoSpecTrait>, path: Option<&str>) -> Result<ManagedObjectReference> {
+    pub async fn create_disk_from_snapshot_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, snapshot_id: &crate::types::structs::Id, name: &str, profile: Option<&[Box<dyn crate::types::traits::VirtualMachineProfileSpecTrait>]>, crypto: Option<&dyn crate::types::traits::CryptoSpecTrait>, path: Option<&str>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateDiskFromSnapshotRequestType {id, datastore, snapshot_id, name, profile, crypto, path, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/CreateDiskFromSnapshot_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -345,7 +328,7 @@ impl VcenterVStorageObjectManager {
     /// ***InvalidState***: If the operation cannot be performed on the disk.
     /// 
     /// ***NotFound***: If specified virtual storage object cannot be found.
-    pub async fn v_storage_object_create_snapshot_task(&self, id: &Id, datastore: &ManagedObjectReference, description: &str) -> Result<ManagedObjectReference> {
+    pub async fn v_storage_object_create_snapshot_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, description: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VStorageObjectCreateSnapshotRequestType {id, datastore, description, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/VStorageObjectCreateSnapshot_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -388,7 +371,7 @@ impl VcenterVStorageObjectManager {
     /// ***InvalidState***: If the operation cannot be performed on the disk.
     /// 
     /// ***NotFound***: If specified virtual storage object cannot be found.
-    pub async fn v_storage_object_create_snapshot_ex_task(&self, id: &Id, datastore: &ManagedObjectReference, description: &str) -> Result<ManagedObjectReference> {
+    pub async fn v_storage_object_create_snapshot_ex_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, description: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VStorageObjectCreateSnapshotExRequestType {id, datastore, description, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/VStorageObjectCreateSnapshotEx_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -429,7 +412,7 @@ impl VcenterVStorageObjectManager {
     /// ***InvalidState***: If the operation cannot be performed on the disk.
     /// 
     /// ***NotFound***: If specified virtual storage object cannot be found.
-    pub async fn delete_snapshot_task(&self, id: &Id, datastore: &ManagedObjectReference, snapshot_id: &Id) -> Result<ManagedObjectReference> {
+    pub async fn delete_snapshot_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, snapshot_id: &crate::types::structs::Id) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = DeleteSnapshotRequestType {id, datastore, snapshot_id, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/DeleteSnapshot_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -472,7 +455,7 @@ impl VcenterVStorageObjectManager {
     /// ***InvalidState***: If the operation cannot be performed on the disk.
     /// 
     /// ***NotFound***: If specified virtual storage object cannot be found.
-    pub async fn v_storage_object_delete_snapshot_ex_task(&self, id: &Id, datastore: &ManagedObjectReference, snapshot_id: &Id) -> Result<ManagedObjectReference> {
+    pub async fn v_storage_object_delete_snapshot_ex_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, snapshot_id: &crate::types::structs::Id) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VStorageObjectDeleteSnapshotExRequestType {id, datastore, snapshot_id, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/VStorageObjectDeleteSnapshotEx_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -518,7 +501,7 @@ impl VcenterVStorageObjectManager {
     /// The disk may be consumed and cannot be deleted.
     /// 
     /// ***TaskInProgress***: If the virtual storage object is busy.
-    pub async fn delete_v_storage_object_task(&self, id: &Id, datastore: &ManagedObjectReference) -> Result<ManagedObjectReference> {
+    pub async fn delete_v_storage_object_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = DeleteVStorageObjectRequestType {id, datastore, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/DeleteVStorageObject_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -566,7 +549,7 @@ impl VcenterVStorageObjectManager {
     /// The disk may be consumed and cannot be deleted.
     /// 
     /// ***TaskInProgress***: If the virtual storage object is busy.
-    pub async fn delete_v_storage_object_ex_task(&self, id: &Id, datastore: &ManagedObjectReference) -> Result<ManagedObjectReference> {
+    pub async fn delete_v_storage_object_ex_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = DeleteVStorageObjectExRequestType {id, datastore, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/DeleteVStorageObjectEx_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -593,7 +576,7 @@ impl VcenterVStorageObjectManager {
     /// ## Errors:
     ///
     /// ***NotFound***: If the specified category or tag cannot be found.
-    pub async fn detach_tag_from_v_storage_object(&self, id: &Id, category: &str, tag: &str) -> Result<()> {
+    pub async fn detach_tag_from_v_storage_object(&self, id: &crate::types::structs::Id, category: &str, tag: &str) -> Result<()> {
         let input = DetachTagFromVStorageObjectRequestType {id, category, tag, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/DetachTagFromVStorageObject", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -651,7 +634,7 @@ impl VcenterVStorageObjectManager {
     /// The disk may be consumed and cannot be extended.
     /// 
     /// ***TaskInProgress***: If the virtual storage object is busy.
-    pub async fn extend_disk_task(&self, id: &Id, datastore: &ManagedObjectReference, new_capacity_in_mb: i64) -> Result<ManagedObjectReference> {
+    pub async fn extend_disk_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, new_capacity_in_mb: i64) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ExtendDiskRequestType {id, datastore, new_capacity_in_mb, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/ExtendDisk_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -711,7 +694,7 @@ impl VcenterVStorageObjectManager {
     /// The disk may be consumed and cannot be extended.
     /// 
     /// ***TaskInProgress***: If the virtual storage object is busy.
-    pub async fn v_storage_object_extend_disk_ex_task(&self, id: &Id, datastore: &ManagedObjectReference, new_capacity_in_mb: i64) -> Result<ManagedObjectReference> {
+    pub async fn v_storage_object_extend_disk_ex_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, new_capacity_in_mb: i64) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VStorageObjectExtendDiskExRequestType {id, datastore, new_capacity_in_mb, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/VStorageObjectExtendDiskEx_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -763,7 +746,7 @@ impl VcenterVStorageObjectManager {
     /// The disk may be consumed and cannot be extended.
     /// 
     /// ***TaskInProgress***: If the virtual storage object is busy.
-    pub async fn inflate_disk_task(&self, id: &Id, datastore: &ManagedObjectReference) -> Result<ManagedObjectReference> {
+    pub async fn inflate_disk_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = InflateDiskRequestType {id, datastore, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/InflateDisk_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -786,7 +769,7 @@ impl VcenterVStorageObjectManager {
     /// ## Errors:
     ///
     /// ***NotFound***: If the specified category or tag cannot be found.
-    pub async fn list_tags_attached_to_v_storage_object(&self, id: &Id) -> Result<Option<Vec<VslmTagEntry>>> {
+    pub async fn list_tags_attached_to_v_storage_object(&self, id: &crate::types::structs::Id) -> Result<Option<Vec<crate::types::structs::VslmTagEntry>>> {
         let input = ListTagsAttachedToVStorageObjectRequestType {id, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/ListTagsAttachedToVStorageObject", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -816,7 +799,7 @@ impl VcenterVStorageObjectManager {
     /// ***InvalidDatastore***: If the operation cannot be performed on the
     /// datastore, such as datastore cannot be found or
     /// is inaccessible.
-    pub async fn list_v_storage_object(&self, datastore: &ManagedObjectReference) -> Result<Option<Vec<Id>>> {
+    pub async fn list_v_storage_object(&self, datastore: &crate::types::structs::ManagedObjectReference) -> Result<Option<Vec<crate::types::structs::Id>>> {
         let input = ListVStorageObjectRequestType {datastore, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/ListVStorageObject", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -841,7 +824,7 @@ impl VcenterVStorageObjectManager {
     /// ## Errors:
     ///
     /// ***NotFound***: If the specified category or tag cannot be found.
-    pub async fn list_v_storage_objects_attached_to_tag(&self, category: &str, tag: &str) -> Result<Option<Vec<Id>>> {
+    pub async fn list_v_storage_objects_attached_to_tag(&self, category: &str, tag: &str) -> Result<Option<Vec<crate::types::structs::Id>>> {
         let input = ListVStorageObjectsAttachedToTagRequestType {category, tag, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/ListVStorageObjectsAttachedToTag", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -916,7 +899,7 @@ impl VcenterVStorageObjectManager {
     /// 
     /// ***InvalidArgument***: if startOffset is beyond the end of the virtual
     /// disk or changeId is invalid.
-    pub async fn vstorage_object_v_center_query_changed_disk_areas(&self, id: &Id, datastore: &ManagedObjectReference, snapshot_id: &Id, start_offset: i64, change_id: &str) -> Result<DiskChangeInfo> {
+    pub async fn vstorage_object_v_center_query_changed_disk_areas(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, snapshot_id: &crate::types::structs::Id, start_offset: i64, change_id: &str) -> Result<crate::types::structs::DiskChangeInfo> {
         let input = VstorageObjectVCenterQueryChangedDiskAreasRequestType {id, datastore, snapshot_id, start_offset, change_id, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/VstorageObjectVCenterQueryChangedDiskAreas", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -943,7 +926,7 @@ impl VcenterVStorageObjectManager {
     ///
     /// ***InvalidDatastore***: If the operation cannot be performed on
     /// the datastore.
-    pub async fn reconcile_datastore_inventory_task(&self, datastore: &ManagedObjectReference) -> Result<ManagedObjectReference> {
+    pub async fn reconcile_datastore_inventory_task(&self, datastore: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ReconcileDatastoreInventoryRequestType {datastore, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/ReconcileDatastoreInventory_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -979,7 +962,7 @@ impl VcenterVStorageObjectManager {
     /// 
     /// ***AlreadyExists***: If disk is already registered as a
     /// virtual storage object.
-    pub async fn register_disk(&self, path: &str, name: Option<&str>) -> Result<VStorageObject> {
+    pub async fn register_disk(&self, path: &str, name: Option<&str>) -> Result<crate::types::structs::VStorageObject> {
         let input = RegisterDiskRequestType {path, name, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/RegisterDisk", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -1027,7 +1010,7 @@ impl VcenterVStorageObjectManager {
     /// 
     /// ***NotFound***: If specified virtual storage object cannot
     /// be found.
-    pub async fn relocate_v_storage_object_task(&self, id: &Id, datastore: &ManagedObjectReference, spec: &VslmRelocateSpec) -> Result<ManagedObjectReference> {
+    pub async fn relocate_v_storage_object_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, spec: &crate::types::structs::VslmRelocateSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RelocateVStorageObjectRequestType {id, datastore, spec, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/RelocateVStorageObject_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -1061,7 +1044,7 @@ impl VcenterVStorageObjectManager {
     /// 
     /// ***InvalidDatastore***: If the operation cannot be performed on the
     /// datastore.
-    pub async fn rename_v_storage_object(&self, id: &Id, datastore: &ManagedObjectReference, name: &str) -> Result<()> {
+    pub async fn rename_v_storage_object(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, name: &str) -> Result<()> {
         let input = RenameVStorageObjectRequestType {id, datastore, name, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/RenameVStorageObject", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -1101,7 +1084,7 @@ impl VcenterVStorageObjectManager {
     /// 
     /// ***InvalidDatastore***: If the operation cannot be performed on the
     /// datastore.
-    pub async fn rename_v_storage_object_ex(&self, id: &Id, datastore: &ManagedObjectReference, name: &str) -> Result<VslmVClockInfo> {
+    pub async fn rename_v_storage_object_ex(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, name: &str) -> Result<crate::types::structs::VslmVClockInfo> {
         let input = RenameVStorageObjectExRequestType {id, datastore, name, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/RenameVStorageObjectEx", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -1136,7 +1119,7 @@ impl VcenterVStorageObjectManager {
     /// ***InvalidState***: If the operation cannot be performed on the disk.
     /// 
     /// ***NotFound***: If specified virtual storage object cannot be found.
-    pub async fn retrieve_snapshot_details(&self, id: &Id, datastore: &ManagedObjectReference, snapshot_id: &Id) -> Result<VStorageObjectSnapshotDetails> {
+    pub async fn retrieve_snapshot_details(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, snapshot_id: &crate::types::structs::Id) -> Result<crate::types::structs::VStorageObjectSnapshotDetails> {
         let input = RetrieveSnapshotDetailsRequestType {id, datastore, snapshot_id, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/RetrieveSnapshotDetails", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -1170,7 +1153,7 @@ impl VcenterVStorageObjectManager {
     /// ***InvalidState***: If the operation cannot be performed on the disk.
     /// 
     /// ***NotFound***: If specified virtual storage object cannot be found.
-    pub async fn retrieve_snapshot_info(&self, id: &Id, datastore: &ManagedObjectReference) -> Result<VStorageObjectSnapshotInfo> {
+    pub async fn retrieve_snapshot_info(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::VStorageObjectSnapshotInfo> {
         let input = RetrieveSnapshotInfoRequestType {id, datastore, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/RetrieveSnapshotInfo", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -1205,7 +1188,7 @@ impl VcenterVStorageObjectManager {
     /// ***InvalidState***: If the operation cannot be performed on the disk.
     /// 
     /// ***NotFound***: If specified virtual storage object cannot be found.
-    pub async fn retrieve_v_storage_infrastructure_object_policy(&self, datastore: &ManagedObjectReference) -> Result<Option<Vec<VslmInfrastructureObjectPolicy>>> {
+    pub async fn retrieve_v_storage_infrastructure_object_policy(&self, datastore: &crate::types::structs::ManagedObjectReference) -> Result<Option<Vec<crate::types::structs::VslmInfrastructureObjectPolicy>>> {
         let input = RetrieveVStorageInfrastructureObjectPolicyRequestType {datastore, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/RetrieveVStorageInfrastructureObjectPolicy", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -1250,7 +1233,7 @@ impl VcenterVStorageObjectManager {
     /// datastore.
     /// 
     /// ***NotFound***: If specified virtual storage object cannot be found.
-    pub async fn retrieve_v_storage_object(&self, id: &Id, datastore: &ManagedObjectReference, disk_info_flags: Option<&[String]>) -> Result<VStorageObject> {
+    pub async fn retrieve_v_storage_object(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, disk_info_flags: Option<&[String]>) -> Result<crate::types::structs::VStorageObject> {
         let input = RetrieveVStorageObjectRequestType {id, datastore, disk_info_flags, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/RetrieveVStorageObject", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -1269,7 +1252,7 @@ impl VcenterVStorageObjectManager {
     ///
     /// The list of VStorageObjectVmAssociations which provides virtual
     /// storage object id to vm associations mapping.
-    pub async fn retrieve_v_storage_object_associations(&self, ids: Option<&[RetrieveVStorageObjSpec]>) -> Result<Option<Vec<VStorageObjectAssociations>>> {
+    pub async fn retrieve_v_storage_object_associations(&self, ids: Option<&[crate::types::structs::RetrieveVStorageObjSpec]>) -> Result<Option<Vec<crate::types::structs::VStorageObjectAssociations>>> {
         let input = RetrieveVStorageObjectAssociationsRequestType {ids, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/RetrieveVStorageObjectAssociations", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -1306,7 +1289,7 @@ impl VcenterVStorageObjectManager {
     /// datastore.
     /// 
     /// ***NotFound***: If specified virtual storage object cannot be found.
-    pub async fn retrieve_v_storage_object_state(&self, id: &Id, datastore: &ManagedObjectReference) -> Result<VStorageObjectStateInfo> {
+    pub async fn retrieve_v_storage_object_state(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::VStorageObjectStateInfo> {
         let input = RetrieveVStorageObjectStateRequestType {id, datastore, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/RetrieveVStorageObjectState", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -1362,7 +1345,7 @@ impl VcenterVStorageObjectManager {
     /// ***InvalidState***: If the operation cannot be performed on the disk.
     /// 
     /// ***NotFound***: If specified virtual storage object cannot be found.
-    pub async fn revert_v_storage_object_ex_task(&self, id: &Id, datastore: &ManagedObjectReference, snapshot_id: &Id) -> Result<ManagedObjectReference> {
+    pub async fn revert_v_storage_object_ex_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, snapshot_id: &crate::types::structs::Id) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RevertVStorageObjectExRequestType {id, datastore, snapshot_id, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/RevertVStorageObjectEx_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -1392,7 +1375,7 @@ impl VcenterVStorageObjectManager {
     ///
     /// ***InvalidDatastore***: If the operation cannot be performed on
     /// the datastore.
-    pub async fn schedule_reconcile_datastore_inventory(&self, datastore: &ManagedObjectReference) -> Result<()> {
+    pub async fn schedule_reconcile_datastore_inventory(&self, datastore: &crate::types::structs::ManagedObjectReference) -> Result<()> {
         let input = ScheduleReconcileDatastoreInventoryRequestType {datastore, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/ScheduleReconcileDatastoreInventory", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -1433,7 +1416,7 @@ impl VcenterVStorageObjectManager {
     /// 
     /// ***NotFound***: If specified virtual storage object cannot
     /// be found.
-    pub async fn set_v_storage_object_control_flags(&self, id: &Id, datastore: &ManagedObjectReference, control_flags: Option<&[String]>) -> Result<()> {
+    pub async fn set_v_storage_object_control_flags(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, control_flags: Option<&[String]>) -> Result<()> {
         let input = SetVStorageObjectControlFlagsRequestType {id, datastore, control_flags, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/SetVStorageObjectControlFlags", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -1467,7 +1450,7 @@ impl VcenterVStorageObjectManager {
     /// ***InvalidState***: If there is issue with profile spec.
     /// 
     /// ***NotFound***: If specified virtual storage object cannot be found.
-    pub async fn update_v_storage_infrastructure_object_policy_task(&self, spec: &VslmInfrastructureObjectPolicySpec) -> Result<ManagedObjectReference> {
+    pub async fn update_v_storage_infrastructure_object_policy_task(&self, spec: &crate::types::structs::VslmInfrastructureObjectPolicySpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = UpdateVStorageInfrastructureObjectPolicyRequestType {spec, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/UpdateVStorageInfrastructureObjectPolicy_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -1528,7 +1511,7 @@ impl VcenterVStorageObjectManager {
     /// datastore.
     /// 
     /// ***TaskInProgress***: If the virtual storage object is busy.
-    pub async fn update_v_storage_object_crypto_task(&self, id: &Id, datastore: &ManagedObjectReference, profile: Option<&[Box<dyn crate::types::traits::VirtualMachineProfileSpecTrait>]>, disks_crypto: Option<&DiskCryptoSpec>) -> Result<ManagedObjectReference> {
+    pub async fn update_v_storage_object_crypto_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, profile: Option<&[Box<dyn crate::types::traits::VirtualMachineProfileSpecTrait>]>, disks_crypto: Option<&crate::types::structs::DiskCryptoSpec>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = UpdateVStorageObjectCryptoRequestType {id, datastore, profile, disks_crypto, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/UpdateVStorageObjectCrypto_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -1571,7 +1554,7 @@ impl VcenterVStorageObjectManager {
     /// ***InvalidState***: If the operation cannot be performed on the disk.
     /// 
     /// ***NotFound***: If specified virtual storage object cannot be found.
-    pub async fn v_center_update_v_storage_object_metadata_ex_task(&self, id: &Id, datastore: &ManagedObjectReference, metadata: Option<&[KeyValue]>, delete_keys: Option<&[String]>) -> Result<ManagedObjectReference> {
+    pub async fn v_center_update_v_storage_object_metadata_ex_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, metadata: Option<&[crate::types::structs::KeyValue]>, delete_keys: Option<&[String]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VCenterUpdateVStorageObjectMetadataExRequestType {id, datastore, metadata, delete_keys, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/VCenterUpdateVStorageObjectMetadataEx_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -1617,7 +1600,7 @@ impl VcenterVStorageObjectManager {
     /// datastore.
     /// 
     /// ***TaskInProgress***: If the virtual storage object is busy.
-    pub async fn update_v_storage_object_policy_task(&self, id: &Id, datastore: &ManagedObjectReference, profile: Option<&[Box<dyn crate::types::traits::VirtualMachineProfileSpecTrait>]>) -> Result<ManagedObjectReference> {
+    pub async fn update_v_storage_object_policy_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, profile: Option<&[Box<dyn crate::types::traits::VirtualMachineProfileSpecTrait>]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = UpdateVStorageObjectPolicyRequestType {id, datastore, profile, };
         let path = format!("/VcenterVStorageObjectManager/{moId}/UpdateVStorageObjectPolicy_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -1627,23 +1610,23 @@ impl VcenterVStorageObjectManager {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct RevertVStorageObjectRequestType<'a> {
-    id: &'a Id,
-    datastore: &'a ManagedObjectReference,
+    id: &'a crate::types::structs::Id,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
     #[serde(rename = "snapshotId")]
-    snapshot_id: &'a Id,
+    snapshot_id: &'a crate::types::structs::Id,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct AttachTagToVStorageObjectRequestType<'a> {
-    id: &'a Id,
+    id: &'a crate::types::structs::Id,
     category: &'a str,
     tag: &'a str,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct ClearVStorageObjectControlFlagsRequestType<'a> {
-    id: &'a Id,
-    datastore: &'a ManagedObjectReference,
+    id: &'a crate::types::structs::Id,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "controlFlags")]
     control_flags: Option<&'a [String]>,
@@ -1651,22 +1634,22 @@ struct ClearVStorageObjectControlFlagsRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct CloneVStorageObjectRequestType<'a> {
-    id: &'a Id,
-    datastore: &'a ManagedObjectReference,
-    spec: &'a VslmCloneSpec,
+    id: &'a crate::types::structs::Id,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
+    spec: &'a crate::types::structs::VslmCloneSpec,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct CreateDiskRequestType<'a> {
-    spec: &'a VslmCreateSpec,
+    spec: &'a crate::types::structs::VslmCreateSpec,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct CreateDiskFromSnapshotRequestType<'a> {
-    id: &'a Id,
-    datastore: &'a ManagedObjectReference,
+    id: &'a crate::types::structs::Id,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
     #[serde(rename = "snapshotId")]
-    snapshot_id: &'a Id,
+    snapshot_id: &'a crate::types::structs::Id,
     name: &'a str,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     profile: Option<&'a [Box<dyn crate::types::traits::VirtualMachineProfileSpecTrait>]>,
@@ -1678,83 +1661,83 @@ struct CreateDiskFromSnapshotRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct VStorageObjectCreateSnapshotRequestType<'a> {
-    id: &'a Id,
-    datastore: &'a ManagedObjectReference,
+    id: &'a crate::types::structs::Id,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
     description: &'a str,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct VStorageObjectCreateSnapshotExRequestType<'a> {
-    id: &'a Id,
-    datastore: &'a ManagedObjectReference,
+    id: &'a crate::types::structs::Id,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
     description: &'a str,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct DeleteSnapshotRequestType<'a> {
-    id: &'a Id,
-    datastore: &'a ManagedObjectReference,
+    id: &'a crate::types::structs::Id,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
     #[serde(rename = "snapshotId")]
-    snapshot_id: &'a Id,
+    snapshot_id: &'a crate::types::structs::Id,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct VStorageObjectDeleteSnapshotExRequestType<'a> {
-    id: &'a Id,
-    datastore: &'a ManagedObjectReference,
+    id: &'a crate::types::structs::Id,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
     #[serde(rename = "snapshotId")]
-    snapshot_id: &'a Id,
+    snapshot_id: &'a crate::types::structs::Id,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct DeleteVStorageObjectRequestType<'a> {
-    id: &'a Id,
-    datastore: &'a ManagedObjectReference,
+    id: &'a crate::types::structs::Id,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct DeleteVStorageObjectExRequestType<'a> {
-    id: &'a Id,
-    datastore: &'a ManagedObjectReference,
+    id: &'a crate::types::structs::Id,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct DetachTagFromVStorageObjectRequestType<'a> {
-    id: &'a Id,
+    id: &'a crate::types::structs::Id,
     category: &'a str,
     tag: &'a str,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct ExtendDiskRequestType<'a> {
-    id: &'a Id,
-    datastore: &'a ManagedObjectReference,
+    id: &'a crate::types::structs::Id,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
     #[serde(rename = "newCapacityInMB")]
     new_capacity_in_mb: i64,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct VStorageObjectExtendDiskExRequestType<'a> {
-    id: &'a Id,
-    datastore: &'a ManagedObjectReference,
+    id: &'a crate::types::structs::Id,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
     #[serde(rename = "newCapacityInMB")]
     new_capacity_in_mb: i64,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct InflateDiskRequestType<'a> {
-    id: &'a Id,
-    datastore: &'a ManagedObjectReference,
+    id: &'a crate::types::structs::Id,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct ListTagsAttachedToVStorageObjectRequestType<'a> {
-    id: &'a Id,
+    id: &'a crate::types::structs::Id,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct ListVStorageObjectRequestType<'a> {
-    datastore: &'a ManagedObjectReference,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -1765,10 +1748,10 @@ struct ListVStorageObjectsAttachedToTagRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct VstorageObjectVCenterQueryChangedDiskAreasRequestType<'a> {
-    id: &'a Id,
-    datastore: &'a ManagedObjectReference,
+    id: &'a crate::types::structs::Id,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
     #[serde(rename = "snapshotId")]
-    snapshot_id: &'a Id,
+    snapshot_id: &'a crate::types::structs::Id,
     #[serde(rename = "startOffset")]
     start_offset: i64,
     #[serde(rename = "changeId")]
@@ -1777,7 +1760,7 @@ struct VstorageObjectVCenterQueryChangedDiskAreasRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct ReconcileDatastoreInventoryRequestType<'a> {
-    datastore: &'a ManagedObjectReference,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -1789,48 +1772,48 @@ struct RegisterDiskRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct RelocateVStorageObjectRequestType<'a> {
-    id: &'a Id,
-    datastore: &'a ManagedObjectReference,
-    spec: &'a VslmRelocateSpec,
+    id: &'a crate::types::structs::Id,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
+    spec: &'a crate::types::structs::VslmRelocateSpec,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct RenameVStorageObjectRequestType<'a> {
-    id: &'a Id,
-    datastore: &'a ManagedObjectReference,
+    id: &'a crate::types::structs::Id,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
     name: &'a str,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct RenameVStorageObjectExRequestType<'a> {
-    id: &'a Id,
-    datastore: &'a ManagedObjectReference,
+    id: &'a crate::types::structs::Id,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
     name: &'a str,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct RetrieveSnapshotDetailsRequestType<'a> {
-    id: &'a Id,
-    datastore: &'a ManagedObjectReference,
+    id: &'a crate::types::structs::Id,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
     #[serde(rename = "snapshotId")]
-    snapshot_id: &'a Id,
+    snapshot_id: &'a crate::types::structs::Id,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct RetrieveSnapshotInfoRequestType<'a> {
-    id: &'a Id,
-    datastore: &'a ManagedObjectReference,
+    id: &'a crate::types::structs::Id,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct RetrieveVStorageInfrastructureObjectPolicyRequestType<'a> {
-    datastore: &'a ManagedObjectReference,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct RetrieveVStorageObjectRequestType<'a> {
-    id: &'a Id,
-    datastore: &'a ManagedObjectReference,
+    id: &'a crate::types::structs::Id,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "diskInfoFlags")]
     disk_info_flags: Option<&'a [String]>,
@@ -1839,32 +1822,32 @@ struct RetrieveVStorageObjectRequestType<'a> {
 #[serde(tag="_typeName")]
 struct RetrieveVStorageObjectAssociationsRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    ids: Option<&'a [RetrieveVStorageObjSpec]>,
+    ids: Option<&'a [crate::types::structs::RetrieveVStorageObjSpec]>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct RetrieveVStorageObjectStateRequestType<'a> {
-    id: &'a Id,
-    datastore: &'a ManagedObjectReference,
+    id: &'a crate::types::structs::Id,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct RevertVStorageObjectExRequestType<'a> {
-    id: &'a Id,
-    datastore: &'a ManagedObjectReference,
+    id: &'a crate::types::structs::Id,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
     #[serde(rename = "snapshotId")]
-    snapshot_id: &'a Id,
+    snapshot_id: &'a crate::types::structs::Id,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct ScheduleReconcileDatastoreInventoryRequestType<'a> {
-    datastore: &'a ManagedObjectReference,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct SetVStorageObjectControlFlagsRequestType<'a> {
-    id: &'a Id,
-    datastore: &'a ManagedObjectReference,
+    id: &'a crate::types::structs::Id,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "controlFlags")]
     control_flags: Option<&'a [String]>,
@@ -1872,26 +1855,26 @@ struct SetVStorageObjectControlFlagsRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct UpdateVStorageInfrastructureObjectPolicyRequestType<'a> {
-    spec: &'a VslmInfrastructureObjectPolicySpec,
+    spec: &'a crate::types::structs::VslmInfrastructureObjectPolicySpec,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct UpdateVStorageObjectCryptoRequestType<'a> {
-    id: &'a Id,
-    datastore: &'a ManagedObjectReference,
+    id: &'a crate::types::structs::Id,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     profile: Option<&'a [Box<dyn crate::types::traits::VirtualMachineProfileSpecTrait>]>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "disksCrypto")]
-    disks_crypto: Option<&'a DiskCryptoSpec>,
+    disks_crypto: Option<&'a crate::types::structs::DiskCryptoSpec>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct VCenterUpdateVStorageObjectMetadataExRequestType<'a> {
-    id: &'a Id,
-    datastore: &'a ManagedObjectReference,
+    id: &'a crate::types::structs::Id,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    metadata: Option<&'a [KeyValue]>,
+    metadata: Option<&'a [crate::types::structs::KeyValue]>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "deleteKeys")]
     delete_keys: Option<&'a [String]>,
@@ -1899,8 +1882,8 @@ struct VCenterUpdateVStorageObjectMetadataExRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct UpdateVStorageObjectPolicyRequestType<'a> {
-    id: &'a Id,
-    datastore: &'a ManagedObjectReference,
+    id: &'a crate::types::structs::Id,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     profile: Option<&'a [Box<dyn crate::types::traits::VirtualMachineProfileSpecTrait>]>,
 }

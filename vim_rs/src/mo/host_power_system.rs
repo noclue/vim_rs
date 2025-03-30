@@ -1,9 +1,8 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::PowerSystemCapability;
-use crate::types::structs::PowerSystemInfo;
 /// Managed object responsible for getting and setting host
 /// power management policies.
+#[derive(Clone)]
 pub struct HostPowerSystem {
     client: Arc<Client>,
     mo_id: String,
@@ -39,7 +38,7 @@ impl HostPowerSystem {
     /// Power system capabilities object.
     /// 
     /// ***Required privileges:*** System.Read
-    pub async fn capability(&self) -> Result<PowerSystemCapability> {
+    pub async fn capability(&self) -> Result<crate::types::structs::PowerSystemCapability> {
         let path = format!("/HostPowerSystem/{moId}/capability", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute(req).await
@@ -47,7 +46,7 @@ impl HostPowerSystem {
     /// Power system state info object.
     /// 
     /// ***Required privileges:*** System.Read
-    pub async fn info(&self) -> Result<PowerSystemInfo> {
+    pub async fn info(&self) -> Result<crate::types::structs::PowerSystemInfo> {
         let path = format!("/HostPowerSystem/{moId}/info", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute(req).await

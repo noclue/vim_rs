@@ -1,9 +1,9 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::ManagedObjectReference;
 /// The *HostActiveDirectoryAuthentication* managed object
 /// indicates domain membership status and provides methods
 /// for adding a host to and removing a host from a domain.
+#[derive(Clone)]
 pub struct HostActiveDirectoryAuthentication {
     client: Arc<Client>,
     mo_id: String,
@@ -75,7 +75,7 @@ impl HostActiveDirectoryAuthentication {
     /// ***InvalidCAMServer***: if camServer is not a valid IP address
     /// 
     /// ***ActiveDirectoryFault***: for any problem that is not handled with a more specific fault.
-    pub async fn import_certificate_for_cam_task(&self, cert_path: &str, cam_server: &str) -> Result<ManagedObjectReference> {
+    pub async fn import_certificate_for_cam_task(&self, cert_path: &str, cam_server: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ImportCertificateForCamRequestType {cert_path, cam_server, };
         let path = format!("/HostActiveDirectoryAuthentication/{moId}/ImportCertificateForCAM_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -153,7 +153,7 @@ impl HostActiveDirectoryAuthentication {
     /// ***ActiveDirectoryFault***: for any problem that is not handled with a more specific fault.
     /// 
     /// ***TaskInProgress***: if the *HostActiveDirectoryAuthentication* object is busy.
-    pub async fn join_domain_task(&self, domain_name: &str, user_name: &str, password: &str) -> Result<ManagedObjectReference> {
+    pub async fn join_domain_task(&self, domain_name: &str, user_name: &str, password: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = JoinDomainRequestType {domain_name, user_name, password, };
         let path = format!("/HostActiveDirectoryAuthentication/{moId}/JoinDomain_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -213,7 +213,7 @@ impl HostActiveDirectoryAuthentication {
     /// ***ActiveDirectoryFault***: for any problem that is not handled with a more specific fault.
     /// 
     /// ***TaskInProgress***: if the *HostActiveDirectoryAuthentication* object is busy.
-    pub async fn join_domain_with_cam_task(&self, domain_name: &str, cam_server: &str) -> Result<ManagedObjectReference> {
+    pub async fn join_domain_with_cam_task(&self, domain_name: &str, cam_server: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = JoinDomainWithCamRequestType {domain_name, cam_server, };
         let path = format!("/HostActiveDirectoryAuthentication/{moId}/JoinDomainWithCAM_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -248,7 +248,7 @@ impl HostActiveDirectoryAuthentication {
     /// ***ActiveDirectoryFault***: for any problem that is not handled with a specific fault.
     /// 
     /// ***TaskInProgress***: if the ActiveDirectoryAuthentication object is busy.
-    pub async fn leave_current_domain_task(&self, force: bool) -> Result<ManagedObjectReference> {
+    pub async fn leave_current_domain_task(&self, force: bool) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = LeaveCurrentDomainRequestType {force, };
         let path = format!("/HostActiveDirectoryAuthentication/{moId}/LeaveCurrentDomain_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);

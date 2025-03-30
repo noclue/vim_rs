@@ -1,12 +1,5 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::ManagedObjectReference;
-use crate::types::structs::PassiveNodeDeploymentSpec;
-use crate::types::structs::SourceNodeSpec;
-use crate::types::structs::VchaClusterConfigInfo;
-use crate::types::structs::VchaClusterConfigSpec;
-use crate::types::structs::VchaClusterDeploymentSpec;
-use crate::types::structs::VchaClusterNetworkSpec;
 /// FailoverClusterConfigurator provides operations to create and configure
 /// a vCenter High Availability Cluster (VCHA Cluster).
 /// 
@@ -26,6 +19,7 @@ use crate::types::structs::VchaClusterNetworkSpec;
 /// VMs and uses Configuration workflow to configure Active, Passive and
 /// Witness VM to form a VCHA Cluster. Passive and Witness VMs must be
 /// created using the VM-Clone operation with Active VM as the source.
+#[derive(Clone)]
 pub struct FailoverClusterConfigurator {
     client: Arc<Client>,
     mo_id: String,
@@ -61,7 +55,7 @@ impl FailoverClusterConfigurator {
     /// monitor the progress of the operation.
     /// 
     /// Refers instance of *Task*.
-    pub async fn configure_vcha_task(&self, config_spec: &VchaClusterConfigSpec) -> Result<ManagedObjectReference> {
+    pub async fn configure_vcha_task(&self, config_spec: &crate::types::structs::VchaClusterConfigSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ConfigureVchaRequestType {config_spec, };
         let path = format!("/FailoverClusterConfigurator/{moId}/configureVcha_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -89,7 +83,7 @@ impl FailoverClusterConfigurator {
     /// monitor the progress of the operation.
     /// 
     /// Refers instance of *Task*.
-    pub async fn create_passive_node_task(&self, passive_deployment_spec: &PassiveNodeDeploymentSpec, source_vc_spec: &SourceNodeSpec) -> Result<ManagedObjectReference> {
+    pub async fn create_passive_node_task(&self, passive_deployment_spec: &crate::types::structs::PassiveNodeDeploymentSpec, source_vc_spec: &crate::types::structs::SourceNodeSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreatePassiveNodeRequestType {passive_deployment_spec, source_vc_spec, };
         let path = format!("/FailoverClusterConfigurator/{moId}/createPassiveNode_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -117,7 +111,7 @@ impl FailoverClusterConfigurator {
     /// monitor the progress of the operation.
     /// 
     /// Refers instance of *Task*.
-    pub async fn create_witness_node_task(&self, witness_deployment_spec: &dyn crate::types::traits::NodeDeploymentSpecTrait, source_vc_spec: &SourceNodeSpec) -> Result<ManagedObjectReference> {
+    pub async fn create_witness_node_task(&self, witness_deployment_spec: &dyn crate::types::traits::NodeDeploymentSpecTrait, source_vc_spec: &crate::types::structs::SourceNodeSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateWitnessNodeRequestType {witness_deployment_spec, source_vc_spec, };
         let path = format!("/FailoverClusterConfigurator/{moId}/createWitnessNode_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -151,7 +145,7 @@ impl FailoverClusterConfigurator {
     /// monitor the progress of the operation.
     /// 
     /// Refers instance of *Task*.
-    pub async fn deploy_vcha_task(&self, deployment_spec: &VchaClusterDeploymentSpec) -> Result<ManagedObjectReference> {
+    pub async fn deploy_vcha_task(&self, deployment_spec: &crate::types::structs::VchaClusterDeploymentSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = DeployVchaRequestType {deployment_spec, };
         let path = format!("/FailoverClusterConfigurator/{moId}/deployVcha_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -173,7 +167,7 @@ impl FailoverClusterConfigurator {
     /// ## Returns:
     ///
     /// Refers instance of *Task*.
-    pub async fn destroy_vcha_task(&self) -> Result<ManagedObjectReference> {
+    pub async fn destroy_vcha_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/FailoverClusterConfigurator/{moId}/destroyVcha_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute(req).await
@@ -187,7 +181,7 @@ impl FailoverClusterConfigurator {
     ///
     /// Returns a data structure specifying configuration for Active,
     /// Passive and Witness node in the Cluster.
-    pub async fn get_vcha_config(&self) -> Result<VchaClusterConfigInfo> {
+    pub async fn get_vcha_config(&self) -> Result<crate::types::structs::VchaClusterConfigInfo> {
         let path = format!("/FailoverClusterConfigurator/{moId}/getVchaConfig", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute(req).await
@@ -216,7 +210,7 @@ impl FailoverClusterConfigurator {
     /// monitor the progress of the operation.
     /// 
     /// Refers instance of *Task*.
-    pub async fn prepare_vcha_task(&self, network_spec: &VchaClusterNetworkSpec) -> Result<ManagedObjectReference> {
+    pub async fn prepare_vcha_task(&self, network_spec: &crate::types::structs::VchaClusterNetworkSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = PrepareVchaRequestType {network_spec, };
         let path = format!("/FailoverClusterConfigurator/{moId}/prepareVcha_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -245,15 +239,15 @@ impl FailoverClusterConfigurator {
 #[serde(rename = "configureVchaRequestType", tag = "_typeName")]
 struct ConfigureVchaRequestType<'a> {
     #[serde(rename = "configSpec")]
-    config_spec: &'a VchaClusterConfigSpec,
+    config_spec: &'a crate::types::structs::VchaClusterConfigSpec,
 }
 #[derive(serde::Serialize)]
 #[serde(rename = "createPassiveNodeRequestType", tag = "_typeName")]
 struct CreatePassiveNodeRequestType<'a> {
     #[serde(rename = "passiveDeploymentSpec")]
-    passive_deployment_spec: &'a PassiveNodeDeploymentSpec,
+    passive_deployment_spec: &'a crate::types::structs::PassiveNodeDeploymentSpec,
     #[serde(rename = "sourceVcSpec")]
-    source_vc_spec: &'a SourceNodeSpec,
+    source_vc_spec: &'a crate::types::structs::SourceNodeSpec,
 }
 #[derive(serde::Serialize)]
 #[serde(rename = "createWitnessNodeRequestType", tag = "_typeName")]
@@ -261,17 +255,17 @@ struct CreateWitnessNodeRequestType<'a> {
     #[serde(rename = "witnessDeploymentSpec")]
     witness_deployment_spec: &'a dyn crate::types::traits::NodeDeploymentSpecTrait,
     #[serde(rename = "sourceVcSpec")]
-    source_vc_spec: &'a SourceNodeSpec,
+    source_vc_spec: &'a crate::types::structs::SourceNodeSpec,
 }
 #[derive(serde::Serialize)]
 #[serde(rename = "deployVchaRequestType", tag = "_typeName")]
 struct DeployVchaRequestType<'a> {
     #[serde(rename = "deploymentSpec")]
-    deployment_spec: &'a VchaClusterDeploymentSpec,
+    deployment_spec: &'a crate::types::structs::VchaClusterDeploymentSpec,
 }
 #[derive(serde::Serialize)]
 #[serde(rename = "prepareVchaRequestType", tag = "_typeName")]
 struct PrepareVchaRequestType<'a> {
     #[serde(rename = "networkSpec")]
-    network_spec: &'a VchaClusterNetworkSpec,
+    network_spec: &'a crate::types::structs::VchaClusterNetworkSpec,
 }

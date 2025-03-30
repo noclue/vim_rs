@@ -1,11 +1,9 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::IpPool;
-use crate::types::structs::IpPoolManagerIpAllocation;
-use crate::types::structs::ManagedObjectReference;
 /// Singleton Managed Object used to manage IP Pools.
 /// 
 /// IP Pools are used to allocate IPv4 and IPv6 addresses to vApps.
+#[derive(Clone)]
 pub struct IpPoolManager {
     client: Arc<Client>,
     mo_id: String,
@@ -48,7 +46,7 @@ impl IpPoolManager {
     ///
     /// An IPv4 address if the pool has an available IPv4 address in its
     /// address ranges, otherwise the empty string.
-    pub async fn allocate_ipv_4_address(&self, dc: &ManagedObjectReference, pool_id: i32, allocation_id: &str) -> Result<String> {
+    pub async fn allocate_ipv_4_address(&self, dc: &crate::types::structs::ManagedObjectReference, pool_id: i32, allocation_id: &str) -> Result<String> {
         let input = AllocateIpv4AddressRequestType {dc, pool_id, allocation_id, };
         let path = format!("/IpPoolManager/{moId}/AllocateIpv4Address", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -85,7 +83,7 @@ impl IpPoolManager {
     ///
     /// An IPv6 address if the pool has an available IPv6 address in its
     /// address ranges, otherwise the empty string.
-    pub async fn allocate_ipv_6_address(&self, dc: &ManagedObjectReference, pool_id: i32, allocation_id: &str) -> Result<String> {
+    pub async fn allocate_ipv_6_address(&self, dc: &crate::types::structs::ManagedObjectReference, pool_id: i32, allocation_id: &str) -> Result<String> {
         let input = AllocateIpv6AddressRequestType {dc, pool_id, allocation_id, };
         let path = format!("/IpPoolManager/{moId}/AllocateIpv6Address", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -114,7 +112,7 @@ impl IpPoolManager {
     /// ## Returns:
     ///
     /// The generated ID for the pool
-    pub async fn create_ip_pool(&self, dc: &ManagedObjectReference, pool: &IpPool) -> Result<i32> {
+    pub async fn create_ip_pool(&self, dc: &crate::types::structs::ManagedObjectReference, pool: &crate::types::structs::IpPool) -> Result<i32> {
         let input = CreateIpPoolRequestType {dc, pool, };
         let path = format!("/IpPoolManager/{moId}/CreateIpPool", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -143,7 +141,7 @@ impl IpPoolManager {
     /// ## Errors:
     ///
     /// ***InvalidState***: if the pool is in use and the force flag is false
-    pub async fn destroy_ip_pool(&self, dc: &ManagedObjectReference, id: i32, force: bool) -> Result<()> {
+    pub async fn destroy_ip_pool(&self, dc: &crate::types::structs::ManagedObjectReference, id: i32, force: bool) -> Result<()> {
         let input = DestroyIpPoolRequestType {dc, id, force, };
         let path = format!("/IpPoolManager/{moId}/DestroyIpPool", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -169,7 +167,7 @@ impl IpPoolManager {
     /// ## Returns:
     ///
     /// The resulting list of @{link IpAllocation}.
-    pub async fn query_ip_allocations(&self, dc: &ManagedObjectReference, pool_id: i32, extension_key: &str) -> Result<Vec<IpPoolManagerIpAllocation>> {
+    pub async fn query_ip_allocations(&self, dc: &crate::types::structs::ManagedObjectReference, pool_id: i32, extension_key: &str) -> Result<Vec<crate::types::structs::IpPoolManagerIpAllocation>> {
         let input = QueryIpAllocationsRequestType {dc, pool_id, extension_key, };
         let path = format!("/IpPoolManager/{moId}/QueryIPAllocations", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -189,7 +187,7 @@ impl IpPoolManager {
     /// ## Returns:
     ///
     /// The resulting list of pools.
-    pub async fn query_ip_pools(&self, dc: &ManagedObjectReference) -> Result<Option<Vec<IpPool>>> {
+    pub async fn query_ip_pools(&self, dc: &crate::types::structs::ManagedObjectReference) -> Result<Option<Vec<crate::types::structs::IpPool>>> {
         let input = QueryIpPoolsRequestType {dc, };
         let path = format!("/IpPoolManager/{moId}/QueryIpPools", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -218,7 +216,7 @@ impl IpPoolManager {
     ///
     /// ### allocation_id
     /// The unique ID for this allocation
-    pub async fn release_ip_allocation(&self, dc: &ManagedObjectReference, pool_id: i32, allocation_id: &str) -> Result<()> {
+    pub async fn release_ip_allocation(&self, dc: &crate::types::structs::ManagedObjectReference, pool_id: i32, allocation_id: &str) -> Result<()> {
         let input = ReleaseIpAllocationRequestType {dc, pool_id, allocation_id, };
         let path = format!("/IpPoolManager/{moId}/ReleaseIpAllocation", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -242,7 +240,7 @@ impl IpPoolManager {
     ///
     /// ### pool
     /// The IP pool to update on the server
-    pub async fn update_ip_pool(&self, dc: &ManagedObjectReference, pool: &IpPool) -> Result<()> {
+    pub async fn update_ip_pool(&self, dc: &crate::types::structs::ManagedObjectReference, pool: &crate::types::structs::IpPool) -> Result<()> {
         let input = UpdateIpPoolRequestType {dc, pool, };
         let path = format!("/IpPoolManager/{moId}/UpdateIpPool", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -252,7 +250,7 @@ impl IpPoolManager {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct AllocateIpv4AddressRequestType<'a> {
-    dc: &'a ManagedObjectReference,
+    dc: &'a crate::types::structs::ManagedObjectReference,
     #[serde(rename = "poolId")]
     pool_id: i32,
     #[serde(rename = "allocationId")]
@@ -261,7 +259,7 @@ struct AllocateIpv4AddressRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct AllocateIpv6AddressRequestType<'a> {
-    dc: &'a ManagedObjectReference,
+    dc: &'a crate::types::structs::ManagedObjectReference,
     #[serde(rename = "poolId")]
     pool_id: i32,
     #[serde(rename = "allocationId")]
@@ -270,20 +268,20 @@ struct AllocateIpv6AddressRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct CreateIpPoolRequestType<'a> {
-    dc: &'a ManagedObjectReference,
-    pool: &'a IpPool,
+    dc: &'a crate::types::structs::ManagedObjectReference,
+    pool: &'a crate::types::structs::IpPool,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct DestroyIpPoolRequestType<'a> {
-    dc: &'a ManagedObjectReference,
+    dc: &'a crate::types::structs::ManagedObjectReference,
     id: i32,
     force: bool,
 }
 #[derive(serde::Serialize)]
 #[serde(rename = "QueryIPAllocationsRequestType", tag = "_typeName")]
 struct QueryIpAllocationsRequestType<'a> {
-    dc: &'a ManagedObjectReference,
+    dc: &'a crate::types::structs::ManagedObjectReference,
     #[serde(rename = "poolId")]
     pool_id: i32,
     #[serde(rename = "extensionKey")]
@@ -292,12 +290,12 @@ struct QueryIpAllocationsRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct QueryIpPoolsRequestType<'a> {
-    dc: &'a ManagedObjectReference,
+    dc: &'a crate::types::structs::ManagedObjectReference,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct ReleaseIpAllocationRequestType<'a> {
-    dc: &'a ManagedObjectReference,
+    dc: &'a crate::types::structs::ManagedObjectReference,
     #[serde(rename = "poolId")]
     pool_id: i32,
     #[serde(rename = "allocationId")]
@@ -306,6 +304,6 @@ struct ReleaseIpAllocationRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct UpdateIpPoolRequestType<'a> {
-    dc: &'a ManagedObjectReference,
-    pool: &'a IpPool,
+    dc: &'a crate::types::structs::ManagedObjectReference,
+    pool: &'a crate::types::structs::IpPool,
 }

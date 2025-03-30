@@ -132,7 +132,7 @@ impl<'a> FieldDataEmitter<'a> {
         for (class_name, fields) in field_data.iter() {
             let mut field_details = phf_codegen::Map::new();
             for (field_name, field) in fields {
-                let field_decl = self.tdf.to_rust_imported_field_type(&field.data_type)?;
+                let field_decl = self.tdf.to_rust_field_type(&field.data_type)?;
                 let is_optional = if field.is_optional { "true" } else { "false" };
                 let type_name = match &field.data_type {
                     DataType::Reference(type_name) if self.vim_model.structs.contains_key(type_name) => {

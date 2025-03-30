@@ -1,20 +1,9 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::CustomFieldDef;
-use crate::types::structs::HostIpRouteTableConfig;
-use crate::types::structs::HostNetCapabilities;
-use crate::types::structs::HostNetOffloadCapabilities;
-use crate::types::structs::HostNetworkConfig;
-use crate::types::structs::HostNetworkConfigResult;
-use crate::types::structs::HostNetworkInfo;
-use crate::types::structs::HostPortGroupSpec;
-use crate::types::structs::HostVirtualNicSpec;
-use crate::types::structs::HostVirtualSwitchSpec;
-use crate::types::structs::PhysicalNicHintInfo;
-use crate::types::structs::PhysicalNicLinkInfo;
 /// This managed object type describes networking host configuration and
 /// serves as the top level container for relevant networking
 /// data objects.
+#[derive(Clone)]
 pub struct HostNetworkSystem {
     client: Arc<Client>,
     mo_id: String,
@@ -46,7 +35,7 @@ impl HostNetworkSystem {
     /// also thrown if network policy is invalid.
     /// 
     /// ***HostConfigFault***: for all other configuration failures.
-    pub async fn add_port_group(&self, portgrp: &HostPortGroupSpec) -> Result<()> {
+    pub async fn add_port_group(&self, portgrp: &crate::types::structs::HostPortGroupSpec) -> Result<()> {
         let input = AddPortGroupRequestType {portgrp, };
         let path = format!("/HostNetworkSystem/{moId}/AddPortGroup", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -83,7 +72,7 @@ impl HostNetworkSystem {
     /// ***NotSupported***: if the host is not an ESX Server system.
     /// 
     /// ***HostConfigFault***: for all other configuration failures.
-    pub async fn add_service_console_virtual_nic(&self, portgroup: &str, nic: &HostVirtualNicSpec) -> Result<String> {
+    pub async fn add_service_console_virtual_nic(&self, portgroup: &str, nic: &crate::types::structs::HostVirtualNicSpec) -> Result<String> {
         let input = AddServiceConsoleVirtualNicRequestType {portgroup, nic, };
         let path = format!("/HostNetworkSystem/{moId}/AddServiceConsoleVirtualNic", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -126,7 +115,7 @@ impl HostNetworkSystem {
     /// system
     /// 
     /// ***HostConfigFault***: for all other configuration failures.
-    pub async fn add_virtual_nic(&self, portgroup: &str, nic: &HostVirtualNicSpec) -> Result<String> {
+    pub async fn add_virtual_nic(&self, portgroup: &str, nic: &crate::types::structs::HostVirtualNicSpec) -> Result<String> {
         let input = AddVirtualNicRequestType {portgroup, nic, };
         let path = format!("/HostNetworkSystem/{moId}/AddVirtualNic", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -162,7 +151,7 @@ impl HostNetworkSystem {
     /// is already in use.
     /// 
     /// ***HostConfigFault***: for all other configuration failures.
-    pub async fn add_virtual_switch(&self, vswitch_name: &str, spec: Option<&HostVirtualSwitchSpec>) -> Result<()> {
+    pub async fn add_virtual_switch(&self, vswitch_name: &str, spec: Option<&crate::types::structs::HostVirtualSwitchSpec>) -> Result<()> {
         let input = AddVirtualSwitchRequestType {vswitch_name, spec, };
         let path = format!("/HostNetworkSystem/{moId}/AddVirtualSwitch", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -197,7 +186,7 @@ impl HostNetworkSystem {
     /// ***NotSupported***: if the host is not an ESX Server system.
     /// 
     /// ***HostConfigFault***: for all other configuration failures.
-    pub async fn query_network_hint(&self, device: Option<&[String]>) -> Result<Option<Vec<PhysicalNicHintInfo>>> {
+    pub async fn query_network_hint(&self, device: Option<&[String]>) -> Result<Option<Vec<crate::types::structs::PhysicalNicHintInfo>>> {
         let input = QueryNetworkHintRequestType {device, };
         let path = format!("/HostNetworkSystem/{moId}/QueryNetworkHint", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -456,7 +445,7 @@ impl HostNetworkSystem {
     /// ***NotSupported***: if the host is not an ESX Server system.
     /// 
     /// ***HostConfigFault***: for all other configuration failures.
-    pub async fn update_ip_route_table_config(&self, config: &HostIpRouteTableConfig) -> Result<()> {
+    pub async fn update_ip_route_table_config(&self, config: &crate::types::structs::HostIpRouteTableConfig) -> Result<()> {
         let input = UpdateIpRouteTableConfigRequestType {config, };
         let path = format!("/HostNetworkSystem/{moId}/UpdateIpRouteTableConfig", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -538,7 +527,7 @@ impl HostNetworkSystem {
     /// is configured.
     /// 
     /// ***HostConfigFault***: for all other configuration failures.
-    pub async fn update_network_config(&self, config: &HostNetworkConfig, change_mode: &str) -> Result<HostNetworkConfigResult> {
+    pub async fn update_network_config(&self, config: &crate::types::structs::HostNetworkConfig, change_mode: &str) -> Result<crate::types::structs::HostNetworkConfigResult> {
         let input = UpdateNetworkConfigRequestType {config, change_mode, };
         let path = format!("/HostNetworkSystem/{moId}/UpdateNetworkConfig", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -571,7 +560,7 @@ impl HostNetworkSystem {
     /// configurations.
     /// 
     /// ***HostConfigFault***: for all other configuration failures.
-    pub async fn update_physical_nic_link_speed(&self, device: &str, link_speed: Option<&PhysicalNicLinkInfo>) -> Result<()> {
+    pub async fn update_physical_nic_link_speed(&self, device: &str, link_speed: Option<&crate::types::structs::PhysicalNicLinkInfo>) -> Result<()> {
         let input = UpdatePhysicalNicLinkSpeedRequestType {device, link_speed, };
         let path = format!("/HostNetworkSystem/{moId}/UpdatePhysicalNicLinkSpeed", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -601,7 +590,7 @@ impl HostNetworkSystem {
     /// also thrown if network policy is invalid.
     /// 
     /// ***HostConfigFault***: for all other configuration failures.
-    pub async fn update_port_group(&self, pg_name: &str, portgrp: &HostPortGroupSpec) -> Result<()> {
+    pub async fn update_port_group(&self, pg_name: &str, portgrp: &crate::types::structs::HostPortGroupSpec) -> Result<()> {
         let input = UpdatePortGroupRequestType {pg_name, portgrp, };
         let path = format!("/HostNetworkSystem/{moId}/UpdatePortGroup", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -639,7 +628,7 @@ impl HostNetworkSystem {
     /// adapter is currently used by DHCP DNS.
     /// 
     /// ***HostConfigFault***: for all other configuration failures.
-    pub async fn update_service_console_virtual_nic(&self, device: &str, nic: &HostVirtualNicSpec) -> Result<()> {
+    pub async fn update_service_console_virtual_nic(&self, device: &str, nic: &crate::types::structs::HostVirtualNicSpec) -> Result<()> {
         let input = UpdateServiceConsoleVirtualNicRequestType {device, nic, };
         let path = format!("/HostNetworkSystem/{moId}/UpdateServiceConsoleVirtualNic", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -678,7 +667,7 @@ impl HostNetworkSystem {
     /// system
     /// 
     /// ***HostConfigFault***: for all other configuration failures.
-    pub async fn update_virtual_nic(&self, device: &str, nic: &HostVirtualNicSpec) -> Result<()> {
+    pub async fn update_virtual_nic(&self, device: &str, nic: &crate::types::structs::HostVirtualNicSpec) -> Result<()> {
         let input = UpdateVirtualNicRequestType {device, nic, };
         let path = format!("/HostNetworkSystem/{moId}/UpdateVirtualNic", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -726,7 +715,7 @@ impl HostNetworkSystem {
     /// is not supported.
     /// 
     /// ***HostConfigFault***: for all other configuration failures.
-    pub async fn update_virtual_switch(&self, vswitch_name: &str, spec: &HostVirtualSwitchSpec) -> Result<()> {
+    pub async fn update_virtual_switch(&self, vswitch_name: &str, spec: &crate::types::structs::HostVirtualSwitchSpec) -> Result<()> {
         let input = UpdateVirtualSwitchRequestType {vswitch_name, spec, };
         let path = format!("/HostNetworkSystem/{moId}/UpdateVirtualSwitch", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -737,13 +726,13 @@ impl HostNetworkSystem {
     /// The fields are sorted by *CustomFieldDef.name*.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn available_field(&self) -> Result<Option<Vec<CustomFieldDef>>> {
+    pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
         let path = format!("/HostNetworkSystem/{moId}/availableField", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
     }
     /// Capability vector indicating the available product features.
-    pub async fn capabilities(&self) -> Result<Option<HostNetCapabilities>> {
+    pub async fn capabilities(&self) -> Result<Option<crate::types::structs::HostNetCapabilities>> {
         let path = format!("/HostNetworkSystem/{moId}/capabilities", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -784,13 +773,13 @@ impl HostNetworkSystem {
     /// information is a strict subset of the information available in NetworkInfo.
     /// 
     /// See also *HostNetworkInfo*.
-    pub async fn network_config(&self) -> Result<Option<HostNetworkConfig>> {
+    pub async fn network_config(&self) -> Result<Option<crate::types::structs::HostNetworkConfig>> {
         let path = format!("/HostNetworkSystem/{moId}/networkConfig", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
     }
     /// The network configuration and runtime information.
-    pub async fn network_info(&self) -> Result<Option<HostNetworkInfo>> {
+    pub async fn network_info(&self) -> Result<Option<crate::types::structs::HostNetworkInfo>> {
         let path = format!("/HostNetworkSystem/{moId}/networkInfo", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -798,7 +787,7 @@ impl HostNetworkSystem {
     /// Deprecated as of VI API 4.0, the system defaults will be used.
     /// 
     /// The offload capabilities available on this server.
-    pub async fn offload_capabilities(&self) -> Result<Option<HostNetOffloadCapabilities>> {
+    pub async fn offload_capabilities(&self) -> Result<Option<crate::types::structs::HostNetOffloadCapabilities>> {
         let path = format!("/HostNetworkSystem/{moId}/offloadCapabilities", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -819,19 +808,19 @@ impl HostNetworkSystem {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct AddPortGroupRequestType<'a> {
-    portgrp: &'a HostPortGroupSpec,
+    portgrp: &'a crate::types::structs::HostPortGroupSpec,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct AddServiceConsoleVirtualNicRequestType<'a> {
     portgroup: &'a str,
-    nic: &'a HostVirtualNicSpec,
+    nic: &'a crate::types::structs::HostVirtualNicSpec,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct AddVirtualNicRequestType<'a> {
     portgroup: &'a str,
-    nic: &'a HostVirtualNicSpec,
+    nic: &'a crate::types::structs::HostVirtualNicSpec,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -839,7 +828,7 @@ struct AddVirtualSwitchRequestType<'a> {
     #[serde(rename = "vswitchName")]
     vswitch_name: &'a str,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    spec: Option<&'a HostVirtualSwitchSpec>,
+    spec: Option<&'a crate::types::structs::HostVirtualSwitchSpec>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -898,12 +887,12 @@ struct UpdateIpRouteConfigRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct UpdateIpRouteTableConfigRequestType<'a> {
-    config: &'a HostIpRouteTableConfig,
+    config: &'a crate::types::structs::HostIpRouteTableConfig,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct UpdateNetworkConfigRequestType<'a> {
-    config: &'a HostNetworkConfig,
+    config: &'a crate::types::structs::HostNetworkConfig,
     #[serde(rename = "changeMode")]
     change_mode: &'a str,
 }
@@ -913,31 +902,31 @@ struct UpdatePhysicalNicLinkSpeedRequestType<'a> {
     device: &'a str,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "linkSpeed")]
-    link_speed: Option<&'a PhysicalNicLinkInfo>,
+    link_speed: Option<&'a crate::types::structs::PhysicalNicLinkInfo>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct UpdatePortGroupRequestType<'a> {
     #[serde(rename = "pgName")]
     pg_name: &'a str,
-    portgrp: &'a HostPortGroupSpec,
+    portgrp: &'a crate::types::structs::HostPortGroupSpec,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct UpdateServiceConsoleVirtualNicRequestType<'a> {
     device: &'a str,
-    nic: &'a HostVirtualNicSpec,
+    nic: &'a crate::types::structs::HostVirtualNicSpec,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct UpdateVirtualNicRequestType<'a> {
     device: &'a str,
-    nic: &'a HostVirtualNicSpec,
+    nic: &'a crate::types::structs::HostVirtualNicSpec,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct UpdateVirtualSwitchRequestType<'a> {
     #[serde(rename = "vswitchName")]
     vswitch_name: &'a str,
-    spec: &'a HostVirtualSwitchSpec,
+    spec: &'a crate::types::structs::HostVirtualSwitchSpec,
 }

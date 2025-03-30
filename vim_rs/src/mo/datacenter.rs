@@ -1,17 +1,5 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::AlarmState;
-use crate::types::structs::CustomFieldDef;
-use crate::types::structs::DatacenterBasicConnectInfo;
-use crate::types::structs::DatacenterConfigInfo;
-use crate::types::structs::DatacenterConfigSpec;
-use crate::types::structs::Event;
-use crate::types::structs::HostConnectInfo;
-use crate::types::structs::HostConnectSpec;
-use crate::types::structs::ManagedObjectReference;
-use crate::types::structs::Permission;
-use crate::types::structs::Tag;
-use crate::types::structs::VirtualMachineConfigOptionDescriptor;
 /// The *Datacenter* managed object provides the interface to the common container
 /// object for hosts, virtual machines, networks, and datastores.
 /// 
@@ -30,6 +18,7 @@ use crate::types::structs::VirtualMachineConfigOptionDescriptor;
 ///   
 /// For a visual representation of the organization of objects in a vCenter
 /// hierarchy, see the description of the *ServiceInstance* object.
+#[derive(Clone)]
 pub struct Datacenter {
     client: Arc<Client>,
     mo_id: String,
@@ -53,7 +42,7 @@ impl Datacenter {
     ///
     /// ### host_specs
     /// Information about the set of hosts to query.
-    pub async fn batch_query_connect_info(&self, host_specs: Option<&[HostConnectSpec]>) -> Result<Option<Vec<DatacenterBasicConnectInfo>>> {
+    pub async fn batch_query_connect_info(&self, host_specs: Option<&[crate::types::structs::HostConnectSpec]>) -> Result<Option<Vec<crate::types::structs::DatacenterBasicConnectInfo>>> {
         let input = BatchQueryConnectInfoRequestType {host_specs, };
         let path = format!("/Datacenter/{moId}/BatchQueryConnectInfo", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -80,7 +69,7 @@ impl Datacenter {
     /// ## Errors:
     ///
     /// Failure
-    pub async fn destroy_task(&self) -> Result<ManagedObjectReference> {
+    pub async fn destroy_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/Datacenter/{moId}/Destroy_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute(req).await
@@ -129,7 +118,7 @@ impl Datacenter {
     /// the operation, and also a *ClusterPowerOnVmResult* object.
     /// 
     /// Refers instance of *Task*.
-    pub async fn power_on_multi_vm_task(&self, vm: &[ManagedObjectReference], option: Option<&[Box<dyn crate::types::traits::OptionValueTrait>]>) -> Result<ManagedObjectReference> {
+    pub async fn power_on_multi_vm_task(&self, vm: &[crate::types::structs::ManagedObjectReference], option: Option<&[Box<dyn crate::types::traits::OptionValueTrait>]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = PowerOnMultiVmRequestType {vm, option, };
         let path = format!("/Datacenter/{moId}/PowerOnMultiVM_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -142,7 +131,7 @@ impl Datacenter {
     /// *VirtualMachineConfigOptionDescriptor.host* field populated.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn query_datacenter_config_option_descriptor(&self) -> Result<Option<Vec<VirtualMachineConfigOptionDescriptor>>> {
+    pub async fn query_datacenter_config_option_descriptor(&self) -> Result<Option<Vec<crate::types::structs::VirtualMachineConfigOptionDescriptor>>> {
         let path = format!("/Datacenter/{moId}/queryDatacenterConfigOptionDescriptor", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute_option(req).await
@@ -200,7 +189,7 @@ impl Datacenter {
     /// and `sslCertificate` are set, or if only the `sslThumbprint`
     /// argument is set, but the SHA-1 hashing algorithm is currently disabled
     /// for computing certificate thumbprints.
-    pub async fn query_connection_info(&self, hostname: &str, port: i32, username: &str, password: &str, ssl_thumbprint: Option<&str>) -> Result<HostConnectInfo> {
+    pub async fn query_connection_info(&self, hostname: &str, port: i32, username: &str, password: &str, ssl_thumbprint: Option<&str>) -> Result<crate::types::structs::HostConnectInfo> {
         let input = QueryConnectionInfoRequestType {hostname, port, username, password, ssl_thumbprint, };
         let path = format!("/Datacenter/{moId}/QueryConnectionInfo", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -226,7 +215,7 @@ impl Datacenter {
     ///
     /// ***InvalidArgument***: if the spec argument does not provide values for
     /// all needed connection parameters.
-    pub async fn query_connection_info_via_spec(&self, spec: &HostConnectSpec) -> Result<HostConnectInfo> {
+    pub async fn query_connection_info_via_spec(&self, spec: &crate::types::structs::HostConnectSpec) -> Result<crate::types::structs::HostConnectInfo> {
         let input = QueryConnectionInfoViaSpecRequestType {spec, };
         let path = format!("/Datacenter/{moId}/QueryConnectionInfoViaSpec", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -257,7 +246,7 @@ impl Datacenter {
     /// the operation.
     /// 
     /// Refers instance of *Task*.
-    pub async fn reconfigure_datacenter_task(&self, spec: &DatacenterConfigSpec, modify: bool) -> Result<ManagedObjectReference> {
+    pub async fn reconfigure_datacenter_task(&self, spec: &crate::types::structs::DatacenterConfigSpec, modify: bool) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ReconfigureDatacenterRequestType {spec, modify, };
         let path = format!("/Datacenter/{moId}/ReconfigureDatacenter_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -310,7 +299,7 @@ impl Datacenter {
     /// ***DuplicateName***: If another object in the same folder has the target name.
     /// 
     /// ***InvalidName***: If the new name is not a valid entity name.
-    pub async fn rename_task(&self, new_name: &str) -> Result<ManagedObjectReference> {
+    pub async fn rename_task(&self, new_name: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RenameRequestType {new_name, };
         let path = format!("/Datacenter/{moId}/Rename_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -351,7 +340,7 @@ impl Datacenter {
     /// The fields are sorted by *CustomFieldDef.name*.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn available_field(&self) -> Result<Option<Vec<CustomFieldDef>>> {
+    pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
         let path = format!("/Datacenter/{moId}/availableField", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -363,7 +352,7 @@ impl Datacenter {
     /// events as long as they are still current. The
     /// *configStatus* property provides an overall status
     /// based on these events.
-    pub async fn config_issue(&self) -> Result<Option<Vec<Event>>> {
+    pub async fn config_issue(&self) -> Result<Option<Vec<crate::types::structs::Event>>> {
         let path = format!("/Datacenter/{moId}/configIssue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -400,7 +389,7 @@ impl Datacenter {
     /// Configuration of the datacenter.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn configuration(&self) -> Result<DatacenterConfigInfo> {
+    pub async fn configuration(&self) -> Result<crate::types::structs::DatacenterConfigInfo> {
         let path = format!("/Datacenter/{moId}/configuration", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute(req).await
@@ -419,7 +408,7 @@ impl Datacenter {
     /// ## Returns:
     ///
     /// Refers instances of *Datastore*.
-    pub async fn datastore(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
+    pub async fn datastore(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/Datacenter/{moId}/datastore", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -434,7 +423,7 @@ impl Datacenter {
     /// ## Returns:
     ///
     /// Refers instance of *Folder*.
-    pub async fn datastore_folder(&self) -> Result<ManagedObjectReference> {
+    pub async fn datastore_folder(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/Datacenter/{moId}/datastoreFolder", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute(req).await
@@ -449,7 +438,7 @@ impl Datacenter {
     /// This set does not include alarms that are defined on descendants of this entity.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn declared_alarm_state(&self) -> Result<Option<Vec<AlarmState>>> {
+    pub async fn declared_alarm_state(&self) -> Result<Option<Vec<crate::types::structs::AlarmState>>> {
         let path = format!("/Datacenter/{moId}/declaredAlarmState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -546,7 +535,7 @@ impl Datacenter {
     /// ## Returns:
     ///
     /// Refers instance of *Folder*.
-    pub async fn host_folder(&self) -> Result<ManagedObjectReference> {
+    pub async fn host_folder(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/Datacenter/{moId}/hostFolder", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute(req).await
@@ -571,7 +560,7 @@ impl Datacenter {
     /// ## Returns:
     ///
     /// Refers instances of *Network*.
-    pub async fn network(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
+    pub async fn network(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/Datacenter/{moId}/network", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -590,7 +579,7 @@ impl Datacenter {
     /// ## Returns:
     ///
     /// Refers instance of *Folder*.
-    pub async fn network_folder(&self) -> Result<ManagedObjectReference> {
+    pub async fn network_folder(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/Datacenter/{moId}/networkFolder", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute(req).await
@@ -631,13 +620,13 @@ impl Datacenter {
     /// ## Returns:
     ///
     /// Refers instance of *ManagedEntity*.
-    pub async fn parent(&self) -> Result<Option<ManagedObjectReference>> {
+    pub async fn parent(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let path = format!("/Datacenter/{moId}/parent", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
     }
     /// List of permissions defined for this entity.
-    pub async fn permission(&self) -> Result<Option<Vec<Permission>>> {
+    pub async fn permission(&self) -> Result<Option<Vec<crate::types::structs::Permission>>> {
         let path = format!("/Datacenter/{moId}/permission", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -667,7 +656,7 @@ impl Datacenter {
     /// ## Returns:
     ///
     /// Refers instances of *Task*.
-    pub async fn recent_task(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
+    pub async fn recent_task(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/Datacenter/{moId}/recentTask", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -677,7 +666,7 @@ impl Datacenter {
     /// Experimental. Subject to change.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn tag(&self) -> Result<Option<Vec<Tag>>> {
+    pub async fn tag(&self) -> Result<Option<Vec<crate::types::structs::Tag>>> {
         let path = format!("/Datacenter/{moId}/tag", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -696,7 +685,7 @@ impl Datacenter {
     /// produce any property values as no updates are generated.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn triggered_alarm_state(&self) -> Result<Option<Vec<AlarmState>>> {
+    pub async fn triggered_alarm_state(&self) -> Result<Option<Vec<crate::types::structs::AlarmState>>> {
         let path = format!("/Datacenter/{moId}/triggeredAlarmState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -728,7 +717,7 @@ impl Datacenter {
     /// ## Returns:
     ///
     /// Refers instance of *Folder*.
-    pub async fn vm_folder(&self) -> Result<ManagedObjectReference> {
+    pub async fn vm_folder(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/Datacenter/{moId}/vmFolder", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute(req).await
@@ -739,12 +728,12 @@ impl Datacenter {
 struct BatchQueryConnectInfoRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "hostSpecs")]
-    host_specs: Option<&'a [HostConnectSpec]>,
+    host_specs: Option<&'a [crate::types::structs::HostConnectSpec]>,
 }
 #[derive(serde::Serialize)]
 #[serde(rename = "PowerOnMultiVMRequestType", tag = "_typeName")]
 struct PowerOnMultiVmRequestType<'a> {
-    vm: &'a [ManagedObjectReference],
+    vm: &'a [crate::types::structs::ManagedObjectReference],
     #[serde(default, skip_serializing_if = "Option::is_none")]
     option: Option<&'a [Box<dyn crate::types::traits::OptionValueTrait>]>,
 }
@@ -762,12 +751,12 @@ struct QueryConnectionInfoRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct QueryConnectionInfoViaSpecRequestType<'a> {
-    spec: &'a HostConnectSpec,
+    spec: &'a crate::types::structs::HostConnectSpec,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct ReconfigureDatacenterRequestType<'a> {
-    spec: &'a DatacenterConfigSpec,
+    spec: &'a crate::types::structs::DatacenterConfigSpec,
     modify: bool,
 }
 #[derive(serde::Serialize)]

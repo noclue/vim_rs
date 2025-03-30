@@ -1,11 +1,11 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::ManagedObjectReference;
 /// GuestOperationsManager is the managed object that provides APIs
 /// to manipulate the guest operating system files and process.
 /// 
 /// Each class of APIs is separated into its own manager.
 /// Only one guest operation is allowed at a time per virtual machine.
+#[derive(Clone)]
 pub struct GuestOperationsManager {
     client: Arc<Client>,
     mo_id: String,
@@ -25,7 +25,7 @@ impl GuestOperationsManager {
     /// ## Returns:
     ///
     /// Refers instance of *GuestAliasManager*.
-    pub async fn alias_manager(&self) -> Result<Option<ManagedObjectReference>> {
+    pub async fn alias_manager(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let path = format!("/GuestOperationsManager/{moId}/aliasManager", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -38,7 +38,7 @@ impl GuestOperationsManager {
     /// ## Returns:
     ///
     /// Refers instance of *GuestAuthManager*.
-    pub async fn auth_manager(&self) -> Result<Option<ManagedObjectReference>> {
+    pub async fn auth_manager(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let path = format!("/GuestOperationsManager/{moId}/authManager", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -51,7 +51,7 @@ impl GuestOperationsManager {
     /// ## Returns:
     ///
     /// Refers instance of *GuestFileManager*.
-    pub async fn file_manager(&self) -> Result<Option<ManagedObjectReference>> {
+    pub async fn file_manager(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let path = format!("/GuestOperationsManager/{moId}/fileManager", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -64,7 +64,7 @@ impl GuestOperationsManager {
     /// ## Returns:
     ///
     /// Refers instance of *GuestWindowsRegistryManager*.
-    pub async fn guest_windows_registry_manager(&self) -> Result<Option<ManagedObjectReference>> {
+    pub async fn guest_windows_registry_manager(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let path = format!("/GuestOperationsManager/{moId}/guestWindowsRegistryManager", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -77,7 +77,7 @@ impl GuestOperationsManager {
     /// ## Returns:
     ///
     /// Refers instance of *GuestProcessManager*.
-    pub async fn process_manager(&self) -> Result<Option<ManagedObjectReference>> {
+    pub async fn process_manager(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let path = format!("/GuestOperationsManager/{moId}/processManager", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await

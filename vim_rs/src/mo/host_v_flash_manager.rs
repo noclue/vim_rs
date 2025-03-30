@@ -1,12 +1,8 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::HostVFlashManagerVFlashCacheConfigSpec;
-use crate::types::structs::HostVFlashManagerVFlashConfigInfo;
-use crate::types::structs::HostVFlashManagerVFlashResourceConfigSpec;
-use crate::types::structs::ManagedObjectReference;
-use crate::types::structs::VirtualDiskVFlashCacheConfigInfo;
 /// The VFlash Manager object is used to configure vFlash resource
 /// and vFlash cache on the ESX host.
+#[derive(Clone)]
 pub struct HostVFlashManager {
     client: Arc<Client>,
     mo_id: String,
@@ -34,7 +30,7 @@ impl HostVFlashManager {
     /// ***InaccessibleVFlashSource***: vFlash resource is not accessible.
     /// 
     /// ***ResourceInUse***: The contained VFFS volume is being used.
-    pub async fn host_config_v_flash_cache(&self, spec: &HostVFlashManagerVFlashCacheConfigSpec) -> Result<()> {
+    pub async fn host_config_v_flash_cache(&self, spec: &crate::types::structs::HostVFlashManagerVFlashCacheConfigSpec) -> Result<()> {
         let input = HostConfigVFlashCacheRequestType {spec, };
         let path = format!("/HostVFlashManager/{moId}/HostConfigVFlashCache", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -54,7 +50,7 @@ impl HostVFlashManager {
     /// ***HostConfigFault***: If vFlash resource cannot be configured on the host
     /// 
     /// ***ResourceInUse***: The contained VFFS volume is being used.
-    pub async fn host_configure_v_flash_resource(&self, spec: &HostVFlashManagerVFlashResourceConfigSpec) -> Result<()> {
+    pub async fn host_configure_v_flash_resource(&self, spec: &crate::types::structs::HostVFlashManagerVFlashResourceConfigSpec) -> Result<()> {
         let input = HostConfigureVFlashResourceRequestType {spec, };
         let path = format!("/HostVFlashManager/{moId}/HostConfigureVFlashResource", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -94,7 +90,7 @@ impl HostVFlashManager {
     /// Because the returned VFlashResourceConfigurationResult contains the configuration
     /// success or fault for each device, as of vSphere API 5.x, we won't throw fault when
     /// batch operation fails.
-    pub async fn configure_v_flash_resource_ex_task(&self, device_path: Option<&[String]>) -> Result<ManagedObjectReference> {
+    pub async fn configure_v_flash_resource_ex_task(&self, device_path: Option<&[String]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ConfigureVFlashResourceExRequestType {device_path, };
         let path = format!("/HostVFlashManager/{moId}/ConfigureVFlashResourceEx_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -120,7 +116,7 @@ impl HostVFlashManager {
     /// 
     /// ***HostConfigFault***: If the default vFlash module configuration option cannot be
     /// retrieved.
-    pub async fn host_get_v_flash_module_default_config(&self, v_flash_module: &str) -> Result<VirtualDiskVFlashCacheConfigInfo> {
+    pub async fn host_get_v_flash_module_default_config(&self, v_flash_module: &str) -> Result<crate::types::structs::VirtualDiskVFlashCacheConfigInfo> {
         let input = HostGetVFlashModuleDefaultConfigRequestType {v_flash_module, };
         let path = format!("/HostVFlashManager/{moId}/HostGetVFlashModuleDefaultConfig", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -145,7 +141,7 @@ impl HostVFlashManager {
         self.client.execute_void(req).await
     }
     /// Host vFlash configuration information.
-    pub async fn v_flash_config_info(&self) -> Result<Option<HostVFlashManagerVFlashConfigInfo>> {
+    pub async fn v_flash_config_info(&self) -> Result<Option<crate::types::structs::HostVFlashManagerVFlashConfigInfo>> {
         let path = format!("/HostVFlashManager/{moId}/vFlashConfigInfo", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -154,12 +150,12 @@ impl HostVFlashManager {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct HostConfigVFlashCacheRequestType<'a> {
-    spec: &'a HostVFlashManagerVFlashCacheConfigSpec,
+    spec: &'a crate::types::structs::HostVFlashManagerVFlashCacheConfigSpec,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct HostConfigureVFlashResourceRequestType<'a> {
-    spec: &'a HostVFlashManagerVFlashResourceConfigSpec,
+    spec: &'a crate::types::structs::HostVFlashManagerVFlashResourceConfigSpec,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]

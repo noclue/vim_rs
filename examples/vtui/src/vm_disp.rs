@@ -1,7 +1,7 @@
+use crate::vm::VirtualMachine;
+use ratatui::prelude::{Color, Span, Style, Stylize};
 use ratatui::widgets::{Cell, Row};
 use vim_rs::types::enums::{ManagedEntityStatusEnum, VirtualMachinePowerStateEnum};
-use ratatui::prelude::{Color, Span, Style, Stylize};
-use crate::vm::VirtualMachine;
 
 const STATUS: &str = "● ";
 const POWER_ON: &str = "● ";
@@ -20,13 +20,22 @@ impl From<&VirtualMachine> for Row<'_> {
             _ => Style::default(),
         };
         let power_state = match vm.power_state {
-            VirtualMachinePowerStateEnum::PoweredOn => Span::styled(POWER_ON, Style::default().fg(Color::Green)),
-            VirtualMachinePowerStateEnum::PoweredOff => Span::styled(POWER_OFF, Style::default().fg(Color::Red)),
-            VirtualMachinePowerStateEnum::Suspended => Span::styled(SUSPENDED, Style::default().fg(Color::Yellow)),
+            VirtualMachinePowerStateEnum::PoweredOn => {
+                Span::styled(POWER_ON, Style::default().fg(Color::Green))
+            }
+            VirtualMachinePowerStateEnum::PoweredOff => {
+                Span::styled(POWER_OFF, Style::default().fg(Color::Red))
+            }
+            VirtualMachinePowerStateEnum::Suspended => {
+                Span::styled(SUSPENDED, Style::default().fg(Color::Yellow))
+            }
             _ => Span::from("?").gray(),
         };
         let used_space = if let Some(ref storage) = vm.storage {
-            Cell::from(format!("{:.2} GB", storage.committed as f64 / 1024.0 / 1024.0 / 1024.0))
+            Cell::from(format!(
+                "{:.2} GB",
+                storage.committed as f64 / 1024.0 / 1024.0 / 1024.0
+            ))
         } else {
             Cell::default()
         };
@@ -49,11 +58,9 @@ impl From<&VirtualMachine> for Row<'_> {
             Cell::from(vm.id.value.clone()),
             Cell::from(Span::from(STATUS).style(color)),
             Cell::from(power_state),
-
             Cell::from(vm.name.clone()),
             Cell::from(vm.os.clone().unwrap_or("<unknown>".to_string())),
             used_space,
-
             host_cpu,
             host_memory,
         ])

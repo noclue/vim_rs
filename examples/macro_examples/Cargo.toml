@@ -3,10 +3,19 @@ name = "macro_examples"
 version = "0.1.0"
 edition = "2024"
 
+[[bin]]
+name = "retrieve_host_info"
+path = "src/retrieve_host_info.rs"
+
+[[bin]]
+name = "vm_events"
+path = "src/vm_events.rs"
+
 [dependencies]
+anyhow = "1.0"
+env_logger = "0.11"
+tokio = {  version = "1.44", features = ["macros"]}
+utils = { version = "0.1.0", path = "../utils" }
 vim_rs = { version = "0.1.0", path = "../../vim_rs" }
 vim_macros = { version = "0.1.0", path = "../../vim_macros" }
-anyhow = "1.0"
-tokio = {  version = "1.44", features = ["macros"]}
-env_logger = "0.11.6"
-log = "0.4.26"
+log = "0.4.27"

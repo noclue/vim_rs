@@ -81,10 +81,6 @@ impl TypeDefResolver<'_> {
         self.to_rust_type_with_wrapper(vim_type, field_reference(self.root_package.clone()))
     }
 
-    pub fn to_rust_imported_field_type(&self, vim_type: &DataType) -> Result<String> {
-        self.to_rust_type_with_wrapper(vim_type, crate_field_reference(self.root_package.clone()))
-    }
-
     /// Convert a VimType to a Rust param type declaration. Structs and strings are borrowed.
     /// Arrays are borrowed slices.
     pub fn to_rust_param_type(&self, field: &Field, lifecycle: Option<String>) -> Result<String> {
@@ -151,7 +147,7 @@ impl TypeDefResolver<'_> {
         render_struct_ref: StructRefRenderer,
     ) -> Result<String> {
         if ref_name == "Any" {
-            return Ok("VimAny".to_string());
+            return Ok(format!("{}::vim_any::VimAny", self.root_package));
         }
         if let Some(struct_type) = self.vim_model.structs.get(ref_name) {
             let struct_ref = struct_type.borrow();
@@ -175,21 +171,11 @@ fn field_reference(root_package: String) -> StructRefRenderer {
         if struct_ref.has_children() && (struct_ref.emit_mode == EmitMode::Emit) {
             box_type_declaration(&format!("dyn {root_package}::traits::{type_name}Trait"))
         } else {
-            type_name
-        }
-    })
-}
-
-fn crate_field_reference(root_package: String) -> StructRefRenderer {
-    Box::new(move |struct_ref: &Struct, _: &Model| -> String {
-        let type_name = to_type_name(struct_name(struct_ref));
-        if struct_ref.has_children() && (struct_ref.emit_mode == EmitMode::Emit) {
-            box_type_declaration(&format!("dyn {root_package}::traits::{type_name}Trait"))
-        } else {
             format!("{root_package}::structs::{type_name}")
         }
     })
 }
+
 fn param_reference(lifecycle: Option<String>, root_package: String) -> StructRefRenderer {
     Box::new(move |struct_ref: &Struct, _: &Model| -> String {
         let rust_name = to_type_name(struct_name(struct_ref));
@@ -199,7 +185,7 @@ fn param_reference(lifecycle: Option<String>, root_package: String) -> StructRef
                 lifecycle.clone(),
             )
         } else {
-            ref_type_declaration(&rust_name, lifecycle.clone())
+            ref_type_declaration(&format!("{root_package}::structs::{rust_name}"), lifecycle.clone())
         }
     })
 }

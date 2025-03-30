@@ -1,9 +1,8 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::ManagedObjectReference;
-use crate::types::structs::VirtualMachineConfigSpec;
 /// A singleton managed object that can answer questions about compatibility
 /// of a virtual machine with a host.
+#[derive(Clone)]
 pub struct VirtualMachineCompatibilityChecker {
     client: Arc<Client>,
     mo_id: String,
@@ -68,7 +67,7 @@ impl VirtualMachineCompatibilityChecker {
     /// 
     /// ***DatacenterMismatch***: if the provided host and pool do not belong
     /// to the same datacenter.
-    pub async fn check_compatibility_task(&self, vm: &ManagedObjectReference, host: Option<&ManagedObjectReference>, pool: Option<&ManagedObjectReference>, test_type: Option<&[String]>) -> Result<ManagedObjectReference> {
+    pub async fn check_compatibility_task(&self, vm: &crate::types::structs::ManagedObjectReference, host: Option<&crate::types::structs::ManagedObjectReference>, pool: Option<&crate::types::structs::ManagedObjectReference>, test_type: Option<&[String]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CheckCompatibilityRequestType {vm, host, pool, test_type, };
         let path = format!("/VirtualMachineCompatibilityChecker/{moId}/CheckCompatibility_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -121,7 +120,7 @@ impl VirtualMachineCompatibilityChecker {
     /// 
     /// ***DatacenterMismatch***: if the provided host and pool do not belong
     /// to the same datacenter.
-    pub async fn check_power_on_task(&self, vm: &ManagedObjectReference, host: Option<&ManagedObjectReference>, pool: Option<&ManagedObjectReference>, test_type: Option<&[String]>) -> Result<ManagedObjectReference> {
+    pub async fn check_power_on_task(&self, vm: &crate::types::structs::ManagedObjectReference, host: Option<&crate::types::structs::ManagedObjectReference>, pool: Option<&crate::types::structs::ManagedObjectReference>, test_type: Option<&[String]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CheckPowerOnRequestType {vm, host, pool, test_type, };
         let path = format!("/VirtualMachineCompatibilityChecker/{moId}/CheckPowerOn_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -180,7 +179,7 @@ impl VirtualMachineCompatibilityChecker {
     /// 
     /// ***DatacenterMismatch***: if the provided host and pool do not belong
     /// to the same datacenter.
-    pub async fn check_vm_config_task(&self, spec: &VirtualMachineConfigSpec, vm: Option<&ManagedObjectReference>, host: Option<&ManagedObjectReference>, pool: Option<&ManagedObjectReference>, test_type: Option<&[String]>) -> Result<ManagedObjectReference> {
+    pub async fn check_vm_config_task(&self, spec: &crate::types::structs::VirtualMachineConfigSpec, vm: Option<&crate::types::structs::ManagedObjectReference>, host: Option<&crate::types::structs::ManagedObjectReference>, pool: Option<&crate::types::structs::ManagedObjectReference>, test_type: Option<&[String]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CheckVmConfigRequestType {spec, vm, host, pool, test_type, };
         let path = format!("/VirtualMachineCompatibilityChecker/{moId}/CheckVmConfig_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -190,11 +189,11 @@ impl VirtualMachineCompatibilityChecker {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct CheckCompatibilityRequestType<'a> {
-    vm: &'a ManagedObjectReference,
+    vm: &'a crate::types::structs::ManagedObjectReference,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    host: Option<&'a ManagedObjectReference>,
+    host: Option<&'a crate::types::structs::ManagedObjectReference>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pool: Option<&'a ManagedObjectReference>,
+    pool: Option<&'a crate::types::structs::ManagedObjectReference>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "testType")]
     test_type: Option<&'a [String]>,
@@ -202,11 +201,11 @@ struct CheckCompatibilityRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct CheckPowerOnRequestType<'a> {
-    vm: &'a ManagedObjectReference,
+    vm: &'a crate::types::structs::ManagedObjectReference,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    host: Option<&'a ManagedObjectReference>,
+    host: Option<&'a crate::types::structs::ManagedObjectReference>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pool: Option<&'a ManagedObjectReference>,
+    pool: Option<&'a crate::types::structs::ManagedObjectReference>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "testType")]
     test_type: Option<&'a [String]>,
@@ -214,13 +213,13 @@ struct CheckPowerOnRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct CheckVmConfigRequestType<'a> {
-    spec: &'a VirtualMachineConfigSpec,
+    spec: &'a crate::types::structs::VirtualMachineConfigSpec,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    vm: Option<&'a ManagedObjectReference>,
+    vm: Option<&'a crate::types::structs::ManagedObjectReference>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    host: Option<&'a ManagedObjectReference>,
+    host: Option<&'a crate::types::structs::ManagedObjectReference>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pool: Option<&'a ManagedObjectReference>,
+    pool: Option<&'a crate::types::structs::ManagedObjectReference>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "testType")]
     test_type: Option<&'a [String]>,

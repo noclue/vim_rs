@@ -7155,7 +7155,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
 /// Describes the validation results.
 pub trait ClusterComputeResourceValidationResultBaseTrait : super::traits::DataObjectTrait {
     /// Describes the messages relevant to the validation result
-    fn get_info(&self) -> &Option<Vec<LocalizableMessage>>;
+    fn get_info(&self) -> &Option<Vec<super::structs::LocalizableMessage>>;
 }
 impl<'s> serde::Serialize for dyn ClusterComputeResourceValidationResultBaseTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
@@ -7197,13 +7197,13 @@ impl<'de> de::Visitor<'de> for ClusterComputeResourceValidationResultBaseVisitor
 }
 
 impl ClusterComputeResourceValidationResultBaseTrait for ClusterComputeResourceValidationResultBase {
-    fn get_info(&self) -> &Option<Vec<LocalizableMessage>> { &self.info }
+    fn get_info(&self) -> &Option<Vec<super::structs::LocalizableMessage>> { &self.info }
 }
 impl ClusterComputeResourceValidationResultBaseTrait for ClusterComputeResourceDvsConfigurationValidation {
-    fn get_info(&self) -> &Option<Vec<LocalizableMessage>> { &self.info }
+    fn get_info(&self) -> &Option<Vec<super::structs::LocalizableMessage>> { &self.info }
 }
 impl ClusterComputeResourceValidationResultBaseTrait for ClusterComputeResourceHostConfigurationValidation {
-    fn get_info(&self) -> &Option<Vec<LocalizableMessage>> { &self.info }
+    fn get_info(&self) -> &Option<Vec<super::structs::LocalizableMessage>> { &self.info }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn ClusterComputeResourceValidationResultBaseTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -7364,7 +7364,7 @@ pub trait ComputeResourceConfigSpecTrait : super::traits::DataObjectTrait {
     /// 
     /// This
     /// parameter is only supported in vim.Folder#createClusterEx operation.
-    fn get_desired_software_spec(&self) -> &Option<DesiredSoftwareSpec>;
+    fn get_desired_software_spec(&self) -> &Option<super::structs::DesiredSoftwareSpec>;
     /// Key for Maximum Hardware Version to be used on this compute resource
     /// in the format of *VirtualMachineConfigOptionDescriptor.key*.
     /// 
@@ -7429,7 +7429,7 @@ impl ComputeResourceConfigSpecTrait for ComputeResourceConfigSpec {
     fn get_vm_swap_placement(&self) -> &Option<String> { &self.vm_swap_placement }
     fn get_spbm_enabled(&self) -> Option<bool> { self.spbm_enabled }
     fn get_default_hardware_version_key(&self) -> &Option<String> { &self.default_hardware_version_key }
-    fn get_desired_software_spec(&self) -> &Option<DesiredSoftwareSpec> { &self.desired_software_spec }
+    fn get_desired_software_spec(&self) -> &Option<super::structs::DesiredSoftwareSpec> { &self.desired_software_spec }
     fn get_maximum_hardware_version_key(&self) -> &Option<String> { &self.maximum_hardware_version_key }
     fn get_enable_config_manager(&self) -> Option<bool> { self.enable_config_manager }
 }
@@ -7437,7 +7437,7 @@ impl ComputeResourceConfigSpecTrait for ClusterConfigSpecEx {
     fn get_vm_swap_placement(&self) -> &Option<String> { &self.vm_swap_placement }
     fn get_spbm_enabled(&self) -> Option<bool> { self.spbm_enabled }
     fn get_default_hardware_version_key(&self) -> &Option<String> { &self.default_hardware_version_key }
-    fn get_desired_software_spec(&self) -> &Option<DesiredSoftwareSpec> { &self.desired_software_spec }
+    fn get_desired_software_spec(&self) -> &Option<super::structs::DesiredSoftwareSpec> { &self.desired_software_spec }
     fn get_maximum_hardware_version_key(&self) -> &Option<String> { &self.maximum_hardware_version_key }
     fn get_enable_config_manager(&self) -> Option<bool> { self.enable_config_manager }
 }
@@ -8142,32 +8142,32 @@ pub trait DvsConfigInfoTrait : super::traits::DataObjectTrait {
     /// evenly spread among the portgroups.
     /// 
     /// Refers instances of *DistributedVirtualPortgroup*.
-    fn get_uplink_portgroup(&self) -> &Option<Vec<ManagedObjectReference>>;
+    fn get_uplink_portgroup(&self) -> &Option<Vec<super::structs::ManagedObjectReference>>;
     /// Default configuration for the ports in the switch, if the port
     /// does not inherit configuration from the parent portgroup or has
     /// its own configuration.
     fn get_default_port_config(&self) -> &Box<dyn super::traits::DvPortSettingTrait>;
     /// Hosts that join the switch.
-    fn get_host(&self) -> &Option<Vec<DistributedVirtualSwitchHostMember>>;
+    fn get_host(&self) -> &Option<Vec<super::structs::DistributedVirtualSwitchHostMember>>;
     /// Vendor, product, and version information for the implementation
     /// module of the switch.
-    fn get_product_info(&self) -> &DistributedVirtualSwitchProductSpec;
+    fn get_product_info(&self) -> &super::structs::DistributedVirtualSwitchProductSpec;
     /// Intended vendor, product, and version information for the
     /// implementation module of the switch.
-    fn get_target_info(&self) -> &Option<DistributedVirtualSwitchProductSpec>;
+    fn get_target_info(&self) -> &Option<super::structs::DistributedVirtualSwitchProductSpec>;
     /// Key of the extension registered by the remote server that
     /// controls the switch.
     fn get_extension_key(&self) -> &Option<String>;
     /// Opaque binary blob that stores vendor specific configuration.
-    fn get_vendor_specific_config(&self) -> &Option<Vec<DistributedVirtualSwitchKeyedOpaqueBlob>>;
+    fn get_vendor_specific_config(&self) -> &Option<Vec<super::structs::DistributedVirtualSwitchKeyedOpaqueBlob>>;
     /// Usage policy of the switch.
-    fn get_policy(&self) -> &Option<DvsPolicy>;
+    fn get_policy(&self) -> &Option<super::structs::DvsPolicy>;
     /// Description string for the switch.
     fn get_description(&self) -> &Option<String>;
     /// Version string of the configuration.
     fn get_config_version(&self) -> &str;
     /// Human operator contact information.
-    fn get_contact(&self) -> &DvsContactInfo;
+    fn get_contact(&self) -> &super::structs::DvsContactInfo;
     /// IP address for the switch, specified using IPv4 dot notation.
     /// 
     /// The
@@ -8183,16 +8183,16 @@ pub trait DvsConfigInfoTrait : super::traits::DataObjectTrait {
     /// VDS health check configuration.
     fn get_health_check_config(&self) -> &Option<Vec<Box<dyn super::traits::DvsHealthCheckConfigTrait>>>;
     /// Host infrastructure traffic class resource configuration.
-    fn get_infrastructure_traffic_resource_config(&self) -> &Option<Vec<DvsHostInfrastructureTrafficResource>>;
+    fn get_infrastructure_traffic_resource_config(&self) -> &Option<Vec<super::structs::DvsHostInfrastructureTrafficResource>>;
     /// Dynamic Host infrastructure traffic class resource configuration.
-    fn get_net_resource_pool_traffic_resource_config(&self) -> &Option<Vec<DvsHostInfrastructureTrafficResource>>;
+    fn get_net_resource_pool_traffic_resource_config(&self) -> &Option<Vec<super::structs::DvsHostInfrastructureTrafficResource>>;
     /// Network resource control version of the switch.
     /// 
     /// Possible value can be of
     /// *DistributedVirtualSwitchNetworkResourceControlVersion_enum*.
     fn get_network_resource_control_version(&self) -> &Option<String>;
     /// The Virtual NIC network resource pool information for the switch.
-    fn get_vm_vnic_network_resource_pool(&self) -> &Option<Vec<DvsVmVnicNetworkResourcePool>>;
+    fn get_vm_vnic_network_resource_pool(&self) -> &Option<Vec<super::structs::DvsVmVnicNetworkResourcePool>>;
     /// The percentage of physical nic link speed
     /// *PhysicalNicLinkInfo.speedMb*
     /// available for infrastructure traffic reservation.
@@ -8247,26 +8247,26 @@ impl DvsConfigInfoTrait for DvsConfigInfo {
     fn get_num_ports(&self) -> i32 { self.num_ports }
     fn get_max_ports(&self) -> i32 { self.max_ports }
     fn get_uplink_port_policy(&self) -> &Box<dyn super::traits::DvsUplinkPortPolicyTrait> { &self.uplink_port_policy }
-    fn get_uplink_portgroup(&self) -> &Option<Vec<ManagedObjectReference>> { &self.uplink_portgroup }
+    fn get_uplink_portgroup(&self) -> &Option<Vec<super::structs::ManagedObjectReference>> { &self.uplink_portgroup }
     fn get_default_port_config(&self) -> &Box<dyn super::traits::DvPortSettingTrait> { &self.default_port_config }
-    fn get_host(&self) -> &Option<Vec<DistributedVirtualSwitchHostMember>> { &self.host }
-    fn get_product_info(&self) -> &DistributedVirtualSwitchProductSpec { &self.product_info }
-    fn get_target_info(&self) -> &Option<DistributedVirtualSwitchProductSpec> { &self.target_info }
+    fn get_host(&self) -> &Option<Vec<super::structs::DistributedVirtualSwitchHostMember>> { &self.host }
+    fn get_product_info(&self) -> &super::structs::DistributedVirtualSwitchProductSpec { &self.product_info }
+    fn get_target_info(&self) -> &Option<super::structs::DistributedVirtualSwitchProductSpec> { &self.target_info }
     fn get_extension_key(&self) -> &Option<String> { &self.extension_key }
-    fn get_vendor_specific_config(&self) -> &Option<Vec<DistributedVirtualSwitchKeyedOpaqueBlob>> { &self.vendor_specific_config }
-    fn get_policy(&self) -> &Option<DvsPolicy> { &self.policy }
+    fn get_vendor_specific_config(&self) -> &Option<Vec<super::structs::DistributedVirtualSwitchKeyedOpaqueBlob>> { &self.vendor_specific_config }
+    fn get_policy(&self) -> &Option<super::structs::DvsPolicy> { &self.policy }
     fn get_description(&self) -> &Option<String> { &self.description }
     fn get_config_version(&self) -> &str { &self.config_version }
-    fn get_contact(&self) -> &DvsContactInfo { &self.contact }
+    fn get_contact(&self) -> &super::structs::DvsContactInfo { &self.contact }
     fn get_switch_ip_address(&self) -> &Option<String> { &self.switch_ip_address }
     fn get_create_time(&self) -> &str { &self.create_time }
     fn get_network_resource_management_enabled(&self) -> bool { self.network_resource_management_enabled }
     fn get_default_proxy_switch_max_num_ports(&self) -> Option<i32> { self.default_proxy_switch_max_num_ports }
     fn get_health_check_config(&self) -> &Option<Vec<Box<dyn super::traits::DvsHealthCheckConfigTrait>>> { &self.health_check_config }
-    fn get_infrastructure_traffic_resource_config(&self) -> &Option<Vec<DvsHostInfrastructureTrafficResource>> { &self.infrastructure_traffic_resource_config }
-    fn get_net_resource_pool_traffic_resource_config(&self) -> &Option<Vec<DvsHostInfrastructureTrafficResource>> { &self.net_resource_pool_traffic_resource_config }
+    fn get_infrastructure_traffic_resource_config(&self) -> &Option<Vec<super::structs::DvsHostInfrastructureTrafficResource>> { &self.infrastructure_traffic_resource_config }
+    fn get_net_resource_pool_traffic_resource_config(&self) -> &Option<Vec<super::structs::DvsHostInfrastructureTrafficResource>> { &self.net_resource_pool_traffic_resource_config }
     fn get_network_resource_control_version(&self) -> &Option<String> { &self.network_resource_control_version }
-    fn get_vm_vnic_network_resource_pool(&self) -> &Option<Vec<DvsVmVnicNetworkResourcePool>> { &self.vm_vnic_network_resource_pool }
+    fn get_vm_vnic_network_resource_pool(&self) -> &Option<Vec<super::structs::DvsVmVnicNetworkResourcePool>> { &self.vm_vnic_network_resource_pool }
     fn get_pnic_capacity_ratio_for_reservation(&self) -> Option<i32> { self.pnic_capacity_ratio_for_reservation }
 }
 impl DvsConfigInfoTrait for VMwareDvsConfigInfo {
@@ -8276,26 +8276,26 @@ impl DvsConfigInfoTrait for VMwareDvsConfigInfo {
     fn get_num_ports(&self) -> i32 { self.num_ports }
     fn get_max_ports(&self) -> i32 { self.max_ports }
     fn get_uplink_port_policy(&self) -> &Box<dyn super::traits::DvsUplinkPortPolicyTrait> { &self.uplink_port_policy }
-    fn get_uplink_portgroup(&self) -> &Option<Vec<ManagedObjectReference>> { &self.uplink_portgroup }
+    fn get_uplink_portgroup(&self) -> &Option<Vec<super::structs::ManagedObjectReference>> { &self.uplink_portgroup }
     fn get_default_port_config(&self) -> &Box<dyn super::traits::DvPortSettingTrait> { &self.default_port_config }
-    fn get_host(&self) -> &Option<Vec<DistributedVirtualSwitchHostMember>> { &self.host }
-    fn get_product_info(&self) -> &DistributedVirtualSwitchProductSpec { &self.product_info }
-    fn get_target_info(&self) -> &Option<DistributedVirtualSwitchProductSpec> { &self.target_info }
+    fn get_host(&self) -> &Option<Vec<super::structs::DistributedVirtualSwitchHostMember>> { &self.host }
+    fn get_product_info(&self) -> &super::structs::DistributedVirtualSwitchProductSpec { &self.product_info }
+    fn get_target_info(&self) -> &Option<super::structs::DistributedVirtualSwitchProductSpec> { &self.target_info }
     fn get_extension_key(&self) -> &Option<String> { &self.extension_key }
-    fn get_vendor_specific_config(&self) -> &Option<Vec<DistributedVirtualSwitchKeyedOpaqueBlob>> { &self.vendor_specific_config }
-    fn get_policy(&self) -> &Option<DvsPolicy> { &self.policy }
+    fn get_vendor_specific_config(&self) -> &Option<Vec<super::structs::DistributedVirtualSwitchKeyedOpaqueBlob>> { &self.vendor_specific_config }
+    fn get_policy(&self) -> &Option<super::structs::DvsPolicy> { &self.policy }
     fn get_description(&self) -> &Option<String> { &self.description }
     fn get_config_version(&self) -> &str { &self.config_version }
-    fn get_contact(&self) -> &DvsContactInfo { &self.contact }
+    fn get_contact(&self) -> &super::structs::DvsContactInfo { &self.contact }
     fn get_switch_ip_address(&self) -> &Option<String> { &self.switch_ip_address }
     fn get_create_time(&self) -> &str { &self.create_time }
     fn get_network_resource_management_enabled(&self) -> bool { self.network_resource_management_enabled }
     fn get_default_proxy_switch_max_num_ports(&self) -> Option<i32> { self.default_proxy_switch_max_num_ports }
     fn get_health_check_config(&self) -> &Option<Vec<Box<dyn super::traits::DvsHealthCheckConfigTrait>>> { &self.health_check_config }
-    fn get_infrastructure_traffic_resource_config(&self) -> &Option<Vec<DvsHostInfrastructureTrafficResource>> { &self.infrastructure_traffic_resource_config }
-    fn get_net_resource_pool_traffic_resource_config(&self) -> &Option<Vec<DvsHostInfrastructureTrafficResource>> { &self.net_resource_pool_traffic_resource_config }
+    fn get_infrastructure_traffic_resource_config(&self) -> &Option<Vec<super::structs::DvsHostInfrastructureTrafficResource>> { &self.infrastructure_traffic_resource_config }
+    fn get_net_resource_pool_traffic_resource_config(&self) -> &Option<Vec<super::structs::DvsHostInfrastructureTrafficResource>> { &self.net_resource_pool_traffic_resource_config }
     fn get_network_resource_control_version(&self) -> &Option<String> { &self.network_resource_control_version }
-    fn get_vm_vnic_network_resource_pool(&self) -> &Option<Vec<DvsVmVnicNetworkResourcePool>> { &self.vm_vnic_network_resource_pool }
+    fn get_vm_vnic_network_resource_pool(&self) -> &Option<Vec<super::structs::DvsVmVnicNetworkResourcePool>> { &self.vm_vnic_network_resource_pool }
     fn get_pnic_capacity_ratio_for_reservation(&self) -> Option<i32> { self.pnic_capacity_ratio_for_reservation }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DvsConfigInfoTrait {
@@ -8331,7 +8331,7 @@ pub trait DvsConfigSpecTrait : super::traits::DataObjectTrait {
     /// properties of an object that are unknown to a client will be part of this set.
     /// This property is not readonly just in case we want to send such properties
     /// from a client in the future.
-    fn get_dynamic_property(&self) -> &Option<Vec<DynamicProperty>>;
+    fn get_dynamic_property(&self) -> &Option<Vec<super::structs::DynamicProperty>>;
     /// The version string of the configuration that this spec is trying to
     /// change.
     /// 
@@ -8368,7 +8368,7 @@ pub trait DvsConfigSpecTrait : super::traits::DataObjectTrait {
     /// The uplink portgroups.
     /// 
     /// Refers instances of *DistributedVirtualPortgroup*.
-    fn get_uplink_portgroup(&self) -> &Option<Vec<ManagedObjectReference>>;
+    fn get_uplink_portgroup(&self) -> &Option<Vec<super::structs::ManagedObjectReference>>;
     /// The default configuration for ports.
     fn get_default_port_config(&self) -> &Option<Box<dyn super::traits::DvPortSettingTrait>>;
     /// The host member specification.
@@ -8379,18 +8379,18 @@ pub trait DvsConfigSpecTrait : super::traits::DataObjectTrait {
     /// *DistributedVirtualSwitch*. Use
     /// *DistributedVirtualSwitchManager.QueryDvsCheckCompatibility*
     /// to check for compatibility.
-    fn get_host(&self) -> &Option<Vec<DistributedVirtualSwitchHostMemberConfigSpec>>;
+    fn get_host(&self) -> &Option<Vec<super::structs::DistributedVirtualSwitchHostMemberConfigSpec>>;
     /// The key of the extension registered by a remote server that
     /// controls the switch.
     fn get_extension_key(&self) -> &Option<String>;
     /// Set the description string of the switch.
     fn get_description(&self) -> &Option<String>;
     /// The usage policy of the switch.
-    fn get_policy(&self) -> &Option<DvsPolicy>;
+    fn get_policy(&self) -> &Option<super::structs::DvsPolicy>;
     /// Set the opaque blob that stores vendor specific configuration.
-    fn get_vendor_specific_config(&self) -> &Option<Vec<DistributedVirtualSwitchKeyedOpaqueBlob>>;
+    fn get_vendor_specific_config(&self) -> &Option<Vec<super::structs::DistributedVirtualSwitchKeyedOpaqueBlob>>;
     /// Set the human operator contact information.
-    fn get_contact(&self) -> &Option<DvsContactInfo>;
+    fn get_contact(&self) -> &Option<super::structs::DvsContactInfo>;
     /// IP address for the switch, specified using IPv4 dot notation.
     /// 
     /// IPv6 address is not supported for this property.
@@ -8404,10 +8404,10 @@ pub trait DvsConfigSpecTrait : super::traits::DataObjectTrait {
     /// Only the traffic class resource allocations identified in the list
     /// will be updated. The other traffic class resource allocations that are not
     /// specified will not change.
-    fn get_infrastructure_traffic_resource_config(&self) -> &Option<Vec<DvsHostInfrastructureTrafficResource>>;
+    fn get_infrastructure_traffic_resource_config(&self) -> &Option<Vec<super::structs::DvsHostInfrastructureTrafficResource>>;
     /// The dynamic host infrastructure traffic resource allocation
     /// specification.
-    fn get_net_resource_pool_traffic_resource_config(&self) -> &Option<Vec<DvsHostInfrastructureTrafficResource>>;
+    fn get_net_resource_pool_traffic_resource_config(&self) -> &Option<Vec<super::structs::DvsHostInfrastructureTrafficResource>>;
     /// Indicates the Network Resource Control APIs that are supported on the switch.
     /// 
     /// Possible value can be of
@@ -8454,45 +8454,45 @@ impl<'de> de::Visitor<'de> for DvsConfigSpecVisitor {
 }
 
 impl DvsConfigSpecTrait for DvsConfigSpec {
-    fn get_dynamic_property(&self) -> &Option<Vec<DynamicProperty>> { &self.dynamic_property }
+    fn get_dynamic_property(&self) -> &Option<Vec<super::structs::DynamicProperty>> { &self.dynamic_property }
     fn get_config_version(&self) -> &Option<String> { &self.config_version }
     fn get_name(&self) -> &Option<String> { &self.name }
     fn get_num_standalone_ports(&self) -> Option<i32> { self.num_standalone_ports }
     fn get_max_ports(&self) -> Option<i32> { self.max_ports }
     fn get_uplink_port_policy(&self) -> &Option<Box<dyn super::traits::DvsUplinkPortPolicyTrait>> { &self.uplink_port_policy }
-    fn get_uplink_portgroup(&self) -> &Option<Vec<ManagedObjectReference>> { &self.uplink_portgroup }
+    fn get_uplink_portgroup(&self) -> &Option<Vec<super::structs::ManagedObjectReference>> { &self.uplink_portgroup }
     fn get_default_port_config(&self) -> &Option<Box<dyn super::traits::DvPortSettingTrait>> { &self.default_port_config }
-    fn get_host(&self) -> &Option<Vec<DistributedVirtualSwitchHostMemberConfigSpec>> { &self.host }
+    fn get_host(&self) -> &Option<Vec<super::structs::DistributedVirtualSwitchHostMemberConfigSpec>> { &self.host }
     fn get_extension_key(&self) -> &Option<String> { &self.extension_key }
     fn get_description(&self) -> &Option<String> { &self.description }
-    fn get_policy(&self) -> &Option<DvsPolicy> { &self.policy }
-    fn get_vendor_specific_config(&self) -> &Option<Vec<DistributedVirtualSwitchKeyedOpaqueBlob>> { &self.vendor_specific_config }
-    fn get_contact(&self) -> &Option<DvsContactInfo> { &self.contact }
+    fn get_policy(&self) -> &Option<super::structs::DvsPolicy> { &self.policy }
+    fn get_vendor_specific_config(&self) -> &Option<Vec<super::structs::DistributedVirtualSwitchKeyedOpaqueBlob>> { &self.vendor_specific_config }
+    fn get_contact(&self) -> &Option<super::structs::DvsContactInfo> { &self.contact }
     fn get_switch_ip_address(&self) -> &Option<String> { &self.switch_ip_address }
     fn get_default_proxy_switch_max_num_ports(&self) -> Option<i32> { self.default_proxy_switch_max_num_ports }
-    fn get_infrastructure_traffic_resource_config(&self) -> &Option<Vec<DvsHostInfrastructureTrafficResource>> { &self.infrastructure_traffic_resource_config }
-    fn get_net_resource_pool_traffic_resource_config(&self) -> &Option<Vec<DvsHostInfrastructureTrafficResource>> { &self.net_resource_pool_traffic_resource_config }
+    fn get_infrastructure_traffic_resource_config(&self) -> &Option<Vec<super::structs::DvsHostInfrastructureTrafficResource>> { &self.infrastructure_traffic_resource_config }
+    fn get_net_resource_pool_traffic_resource_config(&self) -> &Option<Vec<super::structs::DvsHostInfrastructureTrafficResource>> { &self.net_resource_pool_traffic_resource_config }
     fn get_network_resource_control_version(&self) -> &Option<String> { &self.network_resource_control_version }
 }
 impl DvsConfigSpecTrait for VMwareDvsConfigSpec {
-    fn get_dynamic_property(&self) -> &Option<Vec<DynamicProperty>> { &self.dynamic_property }
+    fn get_dynamic_property(&self) -> &Option<Vec<super::structs::DynamicProperty>> { &self.dynamic_property }
     fn get_config_version(&self) -> &Option<String> { &self.config_version }
     fn get_name(&self) -> &Option<String> { &self.name }
     fn get_num_standalone_ports(&self) -> Option<i32> { self.num_standalone_ports }
     fn get_max_ports(&self) -> Option<i32> { self.max_ports }
     fn get_uplink_port_policy(&self) -> &Option<Box<dyn super::traits::DvsUplinkPortPolicyTrait>> { &self.uplink_port_policy }
-    fn get_uplink_portgroup(&self) -> &Option<Vec<ManagedObjectReference>> { &self.uplink_portgroup }
+    fn get_uplink_portgroup(&self) -> &Option<Vec<super::structs::ManagedObjectReference>> { &self.uplink_portgroup }
     fn get_default_port_config(&self) -> &Option<Box<dyn super::traits::DvPortSettingTrait>> { &self.default_port_config }
-    fn get_host(&self) -> &Option<Vec<DistributedVirtualSwitchHostMemberConfigSpec>> { &self.host }
+    fn get_host(&self) -> &Option<Vec<super::structs::DistributedVirtualSwitchHostMemberConfigSpec>> { &self.host }
     fn get_extension_key(&self) -> &Option<String> { &self.extension_key }
     fn get_description(&self) -> &Option<String> { &self.description }
-    fn get_policy(&self) -> &Option<DvsPolicy> { &self.policy }
-    fn get_vendor_specific_config(&self) -> &Option<Vec<DistributedVirtualSwitchKeyedOpaqueBlob>> { &self.vendor_specific_config }
-    fn get_contact(&self) -> &Option<DvsContactInfo> { &self.contact }
+    fn get_policy(&self) -> &Option<super::structs::DvsPolicy> { &self.policy }
+    fn get_vendor_specific_config(&self) -> &Option<Vec<super::structs::DistributedVirtualSwitchKeyedOpaqueBlob>> { &self.vendor_specific_config }
+    fn get_contact(&self) -> &Option<super::structs::DvsContactInfo> { &self.contact }
     fn get_switch_ip_address(&self) -> &Option<String> { &self.switch_ip_address }
     fn get_default_proxy_switch_max_num_ports(&self) -> Option<i32> { self.default_proxy_switch_max_num_ports }
-    fn get_infrastructure_traffic_resource_config(&self) -> &Option<Vec<DvsHostInfrastructureTrafficResource>> { &self.infrastructure_traffic_resource_config }
-    fn get_net_resource_pool_traffic_resource_config(&self) -> &Option<Vec<DvsHostInfrastructureTrafficResource>> { &self.net_resource_pool_traffic_resource_config }
+    fn get_infrastructure_traffic_resource_config(&self) -> &Option<Vec<super::structs::DvsHostInfrastructureTrafficResource>> { &self.infrastructure_traffic_resource_config }
+    fn get_net_resource_pool_traffic_resource_config(&self) -> &Option<Vec<super::structs::DvsHostInfrastructureTrafficResource>> { &self.net_resource_pool_traffic_resource_config }
     fn get_network_resource_control_version(&self) -> &Option<String> { &self.network_resource_control_version }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DvsConfigSpecTrait {
@@ -8565,14 +8565,14 @@ pub trait DvsFeatureCapabilityTrait : super::traits::DataObjectTrait {
     fn get_network_resource_pool_high_share_value(&self) -> Option<i32>;
     /// Network resource management capabilities supported by a
     /// distributed virtual switch.
-    fn get_network_resource_management_capability(&self) -> &Option<DvsNetworkResourceManagementCapability>;
+    fn get_network_resource_management_capability(&self) -> &Option<super::structs::DvsNetworkResourceManagementCapability>;
     /// Health check capabilities supported by a *VmwareDistributedVirtualSwitch*.
     fn get_health_check_capability(&self) -> &Option<Box<dyn super::traits::DvsHealthCheckCapabilityTrait>>;
     /// Host rollback capability.
     /// 
     /// If <code>rollbackCapability</code>.*DVSRollbackCapability.rollbackSupported*
     /// is true, network operations that disconnect the the host are rolled back.
-    fn get_rollback_capability(&self) -> &Option<DvsRollbackCapability>;
+    fn get_rollback_capability(&self) -> &Option<super::structs::DvsRollbackCapability>;
     /// Backup, restore, and rollback capabilities.
     /// 
     /// Backup and restore
@@ -8587,7 +8587,7 @@ pub trait DvsFeatureCapabilityTrait : super::traits::DataObjectTrait {
     /// *DistributedVirtualSwitch*.*DistributedVirtualSwitch.DVSRollback_Task*
     /// and *DistributedVirtualPortgroup*.*DistributedVirtualPortgroup.DVPortgroupRollback_Task*
     /// methods.
-    fn get_backup_restore_capability(&self) -> &Option<DvsBackupRestoreCapability>;
+    fn get_backup_restore_capability(&self) -> &Option<super::structs::DvsBackupRestoreCapability>;
     /// Indicates whether Network Filter feature is
     /// supported in vSphere Distributed Switch.
     fn get_network_filter_supported(&self) -> Option<bool>;
@@ -8639,10 +8639,10 @@ impl DvsFeatureCapabilityTrait for DvsFeatureCapability {
     fn get_vm_direct_path_gen_2_supported(&self) -> Option<bool> { self.vm_direct_path_gen_2_supported }
     fn get_nic_teaming_policy(&self) -> &Option<Vec<String>> { &self.nic_teaming_policy }
     fn get_network_resource_pool_high_share_value(&self) -> Option<i32> { self.network_resource_pool_high_share_value }
-    fn get_network_resource_management_capability(&self) -> &Option<DvsNetworkResourceManagementCapability> { &self.network_resource_management_capability }
+    fn get_network_resource_management_capability(&self) -> &Option<super::structs::DvsNetworkResourceManagementCapability> { &self.network_resource_management_capability }
     fn get_health_check_capability(&self) -> &Option<Box<dyn super::traits::DvsHealthCheckCapabilityTrait>> { &self.health_check_capability }
-    fn get_rollback_capability(&self) -> &Option<DvsRollbackCapability> { &self.rollback_capability }
-    fn get_backup_restore_capability(&self) -> &Option<DvsBackupRestoreCapability> { &self.backup_restore_capability }
+    fn get_rollback_capability(&self) -> &Option<super::structs::DvsRollbackCapability> { &self.rollback_capability }
+    fn get_backup_restore_capability(&self) -> &Option<super::structs::DvsBackupRestoreCapability> { &self.backup_restore_capability }
     fn get_network_filter_supported(&self) -> Option<bool> { self.network_filter_supported }
     fn get_mac_learning_supported(&self) -> Option<bool> { self.mac_learning_supported }
 }
@@ -8651,10 +8651,10 @@ impl DvsFeatureCapabilityTrait for VMwareDvsFeatureCapability {
     fn get_vm_direct_path_gen_2_supported(&self) -> Option<bool> { self.vm_direct_path_gen_2_supported }
     fn get_nic_teaming_policy(&self) -> &Option<Vec<String>> { &self.nic_teaming_policy }
     fn get_network_resource_pool_high_share_value(&self) -> Option<i32> { self.network_resource_pool_high_share_value }
-    fn get_network_resource_management_capability(&self) -> &Option<DvsNetworkResourceManagementCapability> { &self.network_resource_management_capability }
+    fn get_network_resource_management_capability(&self) -> &Option<super::structs::DvsNetworkResourceManagementCapability> { &self.network_resource_management_capability }
     fn get_health_check_capability(&self) -> &Option<Box<dyn super::traits::DvsHealthCheckCapabilityTrait>> { &self.health_check_capability }
-    fn get_rollback_capability(&self) -> &Option<DvsRollbackCapability> { &self.rollback_capability }
-    fn get_backup_restore_capability(&self) -> &Option<DvsBackupRestoreCapability> { &self.backup_restore_capability }
+    fn get_rollback_capability(&self) -> &Option<super::structs::DvsRollbackCapability> { &self.rollback_capability }
+    fn get_backup_restore_capability(&self) -> &Option<super::structs::DvsBackupRestoreCapability> { &self.backup_restore_capability }
     fn get_network_filter_supported(&self) -> Option<bool> { self.network_filter_supported }
     fn get_mac_learning_supported(&self) -> Option<bool> { self.mac_learning_supported }
 }
@@ -8977,10 +8977,10 @@ pub trait ImportSpecTrait : super::traits::DataObjectTrait {
     /// 
     /// This is used for
     /// sub-entities of a vApp that could be a virtual machine or a vApp.
-    fn get_entity_config(&self) -> &Option<VAppEntityConfigInfo>;
+    fn get_entity_config(&self) -> &Option<super::structs::VAppEntityConfigInfo>;
     /// The instantiation OST (see *OvfConsumer* ) to be consumed by OVF
     /// consumers.
-    fn get_instantiation_ost(&self) -> &Option<OvfConsumerOstNode>;
+    fn get_instantiation_ost(&self) -> &Option<super::structs::OvfConsumerOstNode>;
 }
 impl<'s> serde::Serialize for dyn ImportSpecTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
@@ -9022,16 +9022,16 @@ impl<'de> de::Visitor<'de> for ImportSpecVisitor {
 }
 
 impl ImportSpecTrait for ImportSpec {
-    fn get_entity_config(&self) -> &Option<VAppEntityConfigInfo> { &self.entity_config }
-    fn get_instantiation_ost(&self) -> &Option<OvfConsumerOstNode> { &self.instantiation_ost }
+    fn get_entity_config(&self) -> &Option<super::structs::VAppEntityConfigInfo> { &self.entity_config }
+    fn get_instantiation_ost(&self) -> &Option<super::structs::OvfConsumerOstNode> { &self.instantiation_ost }
 }
 impl ImportSpecTrait for VirtualAppImportSpec {
-    fn get_entity_config(&self) -> &Option<VAppEntityConfigInfo> { &self.entity_config }
-    fn get_instantiation_ost(&self) -> &Option<OvfConsumerOstNode> { &self.instantiation_ost }
+    fn get_entity_config(&self) -> &Option<super::structs::VAppEntityConfigInfo> { &self.entity_config }
+    fn get_instantiation_ost(&self) -> &Option<super::structs::OvfConsumerOstNode> { &self.instantiation_ost }
 }
 impl ImportSpecTrait for VirtualMachineImportSpec {
-    fn get_entity_config(&self) -> &Option<VAppEntityConfigInfo> { &self.entity_config }
-    fn get_instantiation_ost(&self) -> &Option<OvfConsumerOstNode> { &self.instantiation_ost }
+    fn get_entity_config(&self) -> &Option<super::structs::VAppEntityConfigInfo> { &self.entity_config }
+    fn get_instantiation_ost(&self) -> &Option<super::structs::OvfConsumerOstNode> { &self.instantiation_ost }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn ImportSpecTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -9279,7 +9279,7 @@ pub trait DvsFilterConfigTrait : super::traits::InheritablePolicyTrait {
     /// The slot number of the network filter agent.
     fn get_slot_number(&self) -> &Option<String>;
     /// Network Filter Parameter
-    fn get_parameters(&self) -> &Option<DvsFilterParameter>;
+    fn get_parameters(&self) -> &Option<super::structs::DvsFilterParameter>;
     /// This property specifies whether to allow all traffic or to deny all
     /// traffic when a Network Filter fails to configure.
     /// 
@@ -9330,28 +9330,28 @@ impl DvsFilterConfigTrait for DvsFilterConfig {
     fn get_key(&self) -> &Option<String> { &self.key }
     fn get_agent_name(&self) -> &Option<String> { &self.agent_name }
     fn get_slot_number(&self) -> &Option<String> { &self.slot_number }
-    fn get_parameters(&self) -> &Option<DvsFilterParameter> { &self.parameters }
+    fn get_parameters(&self) -> &Option<super::structs::DvsFilterParameter> { &self.parameters }
     fn get_on_failure(&self) -> &Option<String> { &self.on_failure }
 }
 impl DvsFilterConfigTrait for DvsFilterConfigSpec {
     fn get_key(&self) -> &Option<String> { &self.key }
     fn get_agent_name(&self) -> &Option<String> { &self.agent_name }
     fn get_slot_number(&self) -> &Option<String> { &self.slot_number }
-    fn get_parameters(&self) -> &Option<DvsFilterParameter> { &self.parameters }
+    fn get_parameters(&self) -> &Option<super::structs::DvsFilterParameter> { &self.parameters }
     fn get_on_failure(&self) -> &Option<String> { &self.on_failure }
 }
 impl DvsFilterConfigTrait for DvsTrafficFilterConfig {
     fn get_key(&self) -> &Option<String> { &self.key }
     fn get_agent_name(&self) -> &Option<String> { &self.agent_name }
     fn get_slot_number(&self) -> &Option<String> { &self.slot_number }
-    fn get_parameters(&self) -> &Option<DvsFilterParameter> { &self.parameters }
+    fn get_parameters(&self) -> &Option<super::structs::DvsFilterParameter> { &self.parameters }
     fn get_on_failure(&self) -> &Option<String> { &self.on_failure }
 }
 impl DvsFilterConfigTrait for DvsTrafficFilterConfigSpec {
     fn get_key(&self) -> &Option<String> { &self.key }
     fn get_agent_name(&self) -> &Option<String> { &self.agent_name }
     fn get_slot_number(&self) -> &Option<String> { &self.slot_number }
-    fn get_parameters(&self) -> &Option<DvsFilterParameter> { &self.parameters }
+    fn get_parameters(&self) -> &Option<super::structs::DvsFilterParameter> { &self.parameters }
     fn get_on_failure(&self) -> &Option<String> { &self.on_failure }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DvsFilterConfigTrait {
@@ -9408,7 +9408,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DvsFilterCo
 /// </tr>
 pub trait DvsTrafficFilterConfigTrait : super::traits::DvsFilterConfigTrait {
     /// Network Traffic Ruleset
-    fn get_traffic_ruleset(&self) -> &Option<DvsTrafficRuleset>;
+    fn get_traffic_ruleset(&self) -> &Option<super::structs::DvsTrafficRuleset>;
 }
 impl<'s> serde::Serialize for dyn DvsTrafficFilterConfigTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
@@ -9450,10 +9450,10 @@ impl<'de> de::Visitor<'de> for DvsTrafficFilterConfigVisitor {
 }
 
 impl DvsTrafficFilterConfigTrait for DvsTrafficFilterConfig {
-    fn get_traffic_ruleset(&self) -> &Option<DvsTrafficRuleset> { &self.traffic_ruleset }
+    fn get_traffic_ruleset(&self) -> &Option<super::structs::DvsTrafficRuleset> { &self.traffic_ruleset }
 }
 impl DvsTrafficFilterConfigTrait for DvsTrafficFilterConfigSpec {
-    fn get_traffic_ruleset(&self) -> &Option<DvsTrafficRuleset> { &self.traffic_ruleset }
+    fn get_traffic_ruleset(&self) -> &Option<super::structs::DvsTrafficRuleset> { &self.traffic_ruleset }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DvsTrafficFilterConfigTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -10073,7 +10073,7 @@ pub trait NetworkSummaryTrait : super::traits::DataObjectTrait {
     /// Reference to the associated managed object.
     /// 
     /// Refers instance of *Network*.
-    fn get_network(&self) -> &Option<ManagedObjectReference>;
+    fn get_network(&self) -> &Option<super::structs::ManagedObjectReference>;
     /// Name of the network.
     fn get_name(&self) -> &str;
     /// At least one host is configured to provide this network.
@@ -10129,14 +10129,14 @@ impl<'de> de::Visitor<'de> for NetworkSummaryVisitor {
 }
 
 impl NetworkSummaryTrait for NetworkSummary {
-    fn get_network(&self) -> &Option<ManagedObjectReference> { &self.network }
+    fn get_network(&self) -> &Option<super::structs::ManagedObjectReference> { &self.network }
     fn get_name(&self) -> &str { &self.name }
     fn get_accessible(&self) -> bool { self.accessible }
     fn get_ip_pool_name(&self) -> &str { &self.ip_pool_name }
     fn get_ip_pool_id(&self) -> Option<i32> { self.ip_pool_id }
 }
 impl NetworkSummaryTrait for OpaqueNetworkSummary {
-    fn get_network(&self) -> &Option<ManagedObjectReference> { &self.network }
+    fn get_network(&self) -> &Option<super::structs::ManagedObjectReference> { &self.network }
     fn get_name(&self) -> &str { &self.name }
     fn get_accessible(&self) -> bool { self.accessible }
     fn get_ip_pool_name(&self) -> &str { &self.ip_pool_name }
@@ -10185,7 +10185,7 @@ pub trait OvfManagerCommonParamsTrait : super::traits::DataObjectTrait {
     /// bundle (based on locale) and parsing the external string bundle. The
     /// passed in key/value pairs are looked up before any messages
     /// included in the OVF descriptor itself.
-    fn get_msg_bundle(&self) -> &Option<Vec<KeyValue>>;
+    fn get_msg_bundle(&self) -> &Option<Vec<super::structs::KeyValue>>;
     /// An optional argument for modifing the OVF parsing.
     /// 
     /// When the server parses an OVF
@@ -10238,25 +10238,25 @@ impl<'de> de::Visitor<'de> for OvfManagerCommonParamsVisitor {
 impl OvfManagerCommonParamsTrait for OvfManagerCommonParams {
     fn get_locale(&self) -> &str { &self.locale }
     fn get_deployment_option(&self) -> &str { &self.deployment_option }
-    fn get_msg_bundle(&self) -> &Option<Vec<KeyValue>> { &self.msg_bundle }
+    fn get_msg_bundle(&self) -> &Option<Vec<super::structs::KeyValue>> { &self.msg_bundle }
     fn get_import_option(&self) -> &Option<Vec<String>> { &self.import_option }
 }
 impl OvfManagerCommonParamsTrait for OvfCreateImportSpecParams {
     fn get_locale(&self) -> &str { &self.locale }
     fn get_deployment_option(&self) -> &str { &self.deployment_option }
-    fn get_msg_bundle(&self) -> &Option<Vec<KeyValue>> { &self.msg_bundle }
+    fn get_msg_bundle(&self) -> &Option<Vec<super::structs::KeyValue>> { &self.msg_bundle }
     fn get_import_option(&self) -> &Option<Vec<String>> { &self.import_option }
 }
 impl OvfManagerCommonParamsTrait for OvfParseDescriptorParams {
     fn get_locale(&self) -> &str { &self.locale }
     fn get_deployment_option(&self) -> &str { &self.deployment_option }
-    fn get_msg_bundle(&self) -> &Option<Vec<KeyValue>> { &self.msg_bundle }
+    fn get_msg_bundle(&self) -> &Option<Vec<super::structs::KeyValue>> { &self.msg_bundle }
     fn get_import_option(&self) -> &Option<Vec<String>> { &self.import_option }
 }
 impl OvfManagerCommonParamsTrait for OvfValidateHostParams {
     fn get_locale(&self) -> &str { &self.locale }
     fn get_deployment_option(&self) -> &str { &self.deployment_option }
-    fn get_msg_bundle(&self) -> &Option<Vec<KeyValue>> { &self.msg_bundle }
+    fn get_msg_bundle(&self) -> &Option<Vec<super::structs::KeyValue>> { &self.msg_bundle }
     fn get_import_option(&self) -> &Option<Vec<String>> { &self.import_option }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn OvfManagerCommonParamsTrait {
@@ -10286,7 +10286,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn OvfManagerC
 /// encodings.
 pub trait PerfEntityMetricBaseTrait : super::traits::DataObjectTrait {
     /// Performance provider ID.
-    fn get_entity(&self) -> &ManagedObjectReference;
+    fn get_entity(&self) -> &super::structs::ManagedObjectReference;
 }
 impl<'s> serde::Serialize for dyn PerfEntityMetricBaseTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
@@ -10328,13 +10328,13 @@ impl<'de> de::Visitor<'de> for PerfEntityMetricBaseVisitor {
 }
 
 impl PerfEntityMetricBaseTrait for PerfEntityMetricBase {
-    fn get_entity(&self) -> &ManagedObjectReference { &self.entity }
+    fn get_entity(&self) -> &super::structs::ManagedObjectReference { &self.entity }
 }
 impl PerfEntityMetricBaseTrait for PerfEntityMetric {
-    fn get_entity(&self) -> &ManagedObjectReference { &self.entity }
+    fn get_entity(&self) -> &super::structs::ManagedObjectReference { &self.entity }
 }
 impl PerfEntityMetricBaseTrait for PerfEntityMetricCsv {
-    fn get_entity(&self) -> &ManagedObjectReference { &self.entity }
+    fn get_entity(&self) -> &super::structs::ManagedObjectReference { &self.entity }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn PerfEntityMetricBaseTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -10364,7 +10364,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn PerfEntityM
 /// extend this data object (see *PerfMetricIntSeries*).
 pub trait PerfMetricSeriesTrait : super::traits::DataObjectTrait {
     /// An identifier for the performance metric.
-    fn get_id(&self) -> &PerfMetricId;
+    fn get_id(&self) -> &super::structs::PerfMetricId;
 }
 impl<'s> serde::Serialize for dyn PerfMetricSeriesTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
@@ -10406,13 +10406,13 @@ impl<'de> de::Visitor<'de> for PerfMetricSeriesVisitor {
 }
 
 impl PerfMetricSeriesTrait for PerfMetricSeries {
-    fn get_id(&self) -> &PerfMetricId { &self.id }
+    fn get_id(&self) -> &super::structs::PerfMetricId { &self.id }
 }
 impl PerfMetricSeriesTrait for PerfMetricIntSeries {
-    fn get_id(&self) -> &PerfMetricId { &self.id }
+    fn get_id(&self) -> &super::structs::PerfMetricId { &self.id }
 }
 impl PerfMetricSeriesTrait for PerfMetricSeriesCsv {
-    fn get_id(&self) -> &PerfMetricId { &self.id }
+    fn get_id(&self) -> &super::structs::PerfMetricId { &self.id }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn PerfMetricSeriesTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -10441,15 +10441,15 @@ pub trait ResourcePoolSummaryTrait : super::traits::DataObjectTrait {
     /// Name of resource pool.
     fn get_name(&self) -> &str;
     /// Current configuration of the resource pool.
-    fn get_config(&self) -> &ResourceConfigSpec;
+    fn get_config(&self) -> &super::structs::ResourceConfigSpec;
     /// Current runtime state of the resource pool.
-    fn get_runtime(&self) -> &ResourcePoolRuntimeInfo;
+    fn get_runtime(&self) -> &super::structs::ResourcePoolRuntimeInfo;
     /// A set of statistics that are typically updated with near real-time regularity.
     /// 
     /// This data object type does not support notification, for scalability reasons.
     /// Therefore, changes in QuickStats do not generate property collector updates.
     /// To monitor statistics values, use the statistics and alarms modules instead.
-    fn get_quick_stats(&self) -> &Option<ResourcePoolQuickStats>;
+    fn get_quick_stats(&self) -> &Option<super::structs::ResourcePoolQuickStats>;
     /// Total configured memory of all virtual machines in the resource pool, in MB.
     fn get_configured_memory_mb(&self) -> Option<i32>;
 }
@@ -10494,16 +10494,16 @@ impl<'de> de::Visitor<'de> for ResourcePoolSummaryVisitor {
 
 impl ResourcePoolSummaryTrait for ResourcePoolSummary {
     fn get_name(&self) -> &str { &self.name }
-    fn get_config(&self) -> &ResourceConfigSpec { &self.config }
-    fn get_runtime(&self) -> &ResourcePoolRuntimeInfo { &self.runtime }
-    fn get_quick_stats(&self) -> &Option<ResourcePoolQuickStats> { &self.quick_stats }
+    fn get_config(&self) -> &super::structs::ResourceConfigSpec { &self.config }
+    fn get_runtime(&self) -> &super::structs::ResourcePoolRuntimeInfo { &self.runtime }
+    fn get_quick_stats(&self) -> &Option<super::structs::ResourcePoolQuickStats> { &self.quick_stats }
     fn get_configured_memory_mb(&self) -> Option<i32> { self.configured_memory_mb }
 }
 impl ResourcePoolSummaryTrait for VirtualAppSummary {
     fn get_name(&self) -> &str { &self.name }
-    fn get_config(&self) -> &ResourceConfigSpec { &self.config }
-    fn get_runtime(&self) -> &ResourcePoolRuntimeInfo { &self.runtime }
-    fn get_quick_stats(&self) -> &Option<ResourcePoolQuickStats> { &self.quick_stats }
+    fn get_config(&self) -> &super::structs::ResourceConfigSpec { &self.config }
+    fn get_runtime(&self) -> &super::structs::ResourcePoolRuntimeInfo { &self.runtime }
+    fn get_quick_stats(&self) -> &Option<super::structs::ResourcePoolQuickStats> { &self.quick_stats }
     fn get_configured_memory_mb(&self) -> Option<i32> { self.configured_memory_mb }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn ResourcePoolSummaryTrait {
@@ -11291,7 +11291,7 @@ pub trait VsanUpgradeSystemUpgradeHistoryItemTrait : super::traits::DataObjectTr
     /// to no particular host.
     /// 
     /// Refers instance of *HostSystem*.
-    fn get_host(&self) -> &Option<ManagedObjectReference>;
+    fn get_host(&self) -> &Option<super::structs::ManagedObjectReference>;
     /// Description of the history item.
     fn get_message(&self) -> &str;
     /// A task associated with the history item.
@@ -11300,7 +11300,7 @@ pub trait VsanUpgradeSystemUpgradeHistoryItemTrait : super::traits::DataObjectTr
     /// associated.
     /// 
     /// Refers instance of *Task*.
-    fn get_task(&self) -> &Option<ManagedObjectReference>;
+    fn get_task(&self) -> &Option<super::structs::ManagedObjectReference>;
 }
 impl<'s> serde::Serialize for dyn VsanUpgradeSystemUpgradeHistoryItemTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
@@ -11343,21 +11343,21 @@ impl<'de> de::Visitor<'de> for VsanUpgradeSystemUpgradeHistoryItemVisitor {
 
 impl VsanUpgradeSystemUpgradeHistoryItemTrait for VsanUpgradeSystemUpgradeHistoryItem {
     fn get_timestamp(&self) -> &str { &self.timestamp }
-    fn get_host(&self) -> &Option<ManagedObjectReference> { &self.host }
+    fn get_host(&self) -> &Option<super::structs::ManagedObjectReference> { &self.host }
     fn get_message(&self) -> &str { &self.message }
-    fn get_task(&self) -> &Option<ManagedObjectReference> { &self.task }
+    fn get_task(&self) -> &Option<super::structs::ManagedObjectReference> { &self.task }
 }
 impl VsanUpgradeSystemUpgradeHistoryItemTrait for VsanUpgradeSystemUpgradeHistoryDiskGroupOp {
     fn get_timestamp(&self) -> &str { &self.timestamp }
-    fn get_host(&self) -> &Option<ManagedObjectReference> { &self.host }
+    fn get_host(&self) -> &Option<super::structs::ManagedObjectReference> { &self.host }
     fn get_message(&self) -> &str { &self.message }
-    fn get_task(&self) -> &Option<ManagedObjectReference> { &self.task }
+    fn get_task(&self) -> &Option<super::structs::ManagedObjectReference> { &self.task }
 }
 impl VsanUpgradeSystemUpgradeHistoryItemTrait for VsanUpgradeSystemUpgradeHistoryPreflightFail {
     fn get_timestamp(&self) -> &str { &self.timestamp }
-    fn get_host(&self) -> &Option<ManagedObjectReference> { &self.host }
+    fn get_host(&self) -> &Option<super::structs::ManagedObjectReference> { &self.host }
     fn get_message(&self) -> &str { &self.message }
-    fn get_task(&self) -> &Option<ManagedObjectReference> { &self.task }
+    fn get_task(&self) -> &Option<super::structs::ManagedObjectReference> { &self.task }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VsanUpgradeSystemUpgradeHistoryItemTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -11652,7 +11652,7 @@ pub trait AlarmSpecTrait : super::traits::DataObjectTrait {
     /// should repeat when an alarm does not change state.
     fn get_action_frequency(&self) -> Option<i32>;
     /// Tolerance and maximum frequency settings.
-    fn get_setting(&self) -> &Option<AlarmSetting>;
+    fn get_setting(&self) -> &Option<super::structs::AlarmSetting>;
 }
 impl<'s> serde::Serialize for dyn AlarmSpecTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
@@ -11701,7 +11701,7 @@ impl AlarmSpecTrait for AlarmSpec {
     fn get_expression(&self) -> &Box<dyn super::traits::AlarmExpressionTrait> { &self.expression }
     fn get_action(&self) -> &Option<Box<dyn super::traits::AlarmActionTrait>> { &self.action }
     fn get_action_frequency(&self) -> Option<i32> { self.action_frequency }
-    fn get_setting(&self) -> &Option<AlarmSetting> { &self.setting }
+    fn get_setting(&self) -> &Option<super::structs::AlarmSetting> { &self.setting }
 }
 impl AlarmSpecTrait for AlarmInfo {
     fn get_name(&self) -> &str { &self.name }
@@ -11711,7 +11711,7 @@ impl AlarmSpecTrait for AlarmInfo {
     fn get_expression(&self) -> &Box<dyn super::traits::AlarmExpressionTrait> { &self.expression }
     fn get_action(&self) -> &Option<Box<dyn super::traits::AlarmActionTrait>> { &self.action }
     fn get_action_frequency(&self) -> Option<i32> { self.action_frequency }
-    fn get_setting(&self) -> &Option<AlarmSetting> { &self.setting }
+    fn get_setting(&self) -> &Option<super::structs::AlarmSetting> { &self.setting }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn AlarmSpecTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -11745,7 +11745,7 @@ pub trait ClusterActionTrait : super::traits::DataObjectTrait {
     /// instance, a migration action will have a virtual machine as its
     /// target object, while a host power action will have a host as its
     /// target action.
-    fn get_target(&self) -> &Option<ManagedObjectReference>;
+    fn get_target(&self) -> &Option<super::structs::ManagedObjectReference>;
 }
 impl<'s> serde::Serialize for dyn ClusterActionTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
@@ -11788,43 +11788,43 @@ impl<'de> de::Visitor<'de> for ClusterActionVisitor {
 
 impl ClusterActionTrait for ClusterAction {
     fn get_type(&self) -> &str { &self.r#type }
-    fn get_target(&self) -> &Option<ManagedObjectReference> { &self.target }
+    fn get_target(&self) -> &Option<super::structs::ManagedObjectReference> { &self.target }
 }
 impl ClusterActionTrait for ClusterClusterInitialPlacementAction {
     fn get_type(&self) -> &str { &self.r#type }
-    fn get_target(&self) -> &Option<ManagedObjectReference> { &self.target }
+    fn get_target(&self) -> &Option<super::structs::ManagedObjectReference> { &self.target }
 }
 impl ClusterActionTrait for ClusterHostInfraUpdateHaModeAction {
     fn get_type(&self) -> &str { &self.r#type }
-    fn get_target(&self) -> &Option<ManagedObjectReference> { &self.target }
+    fn get_target(&self) -> &Option<super::structs::ManagedObjectReference> { &self.target }
 }
 impl ClusterActionTrait for ClusterHostPowerAction {
     fn get_type(&self) -> &str { &self.r#type }
-    fn get_target(&self) -> &Option<ManagedObjectReference> { &self.target }
+    fn get_target(&self) -> &Option<super::structs::ManagedObjectReference> { &self.target }
 }
 impl ClusterActionTrait for ClusterInitialPlacementAction {
     fn get_type(&self) -> &str { &self.r#type }
-    fn get_target(&self) -> &Option<ManagedObjectReference> { &self.target }
+    fn get_target(&self) -> &Option<super::structs::ManagedObjectReference> { &self.target }
 }
 impl ClusterActionTrait for ClusterMigrationAction {
     fn get_type(&self) -> &str { &self.r#type }
-    fn get_target(&self) -> &Option<ManagedObjectReference> { &self.target }
+    fn get_target(&self) -> &Option<super::structs::ManagedObjectReference> { &self.target }
 }
 impl ClusterActionTrait for PlacementAction {
     fn get_type(&self) -> &str { &self.r#type }
-    fn get_target(&self) -> &Option<ManagedObjectReference> { &self.target }
+    fn get_target(&self) -> &Option<super::structs::ManagedObjectReference> { &self.target }
 }
 impl ClusterActionTrait for HbrDiskMigrationAction {
     fn get_type(&self) -> &str { &self.r#type }
-    fn get_target(&self) -> &Option<ManagedObjectReference> { &self.target }
+    fn get_target(&self) -> &Option<super::structs::ManagedObjectReference> { &self.target }
 }
 impl ClusterActionTrait for StorageMigrationAction {
     fn get_type(&self) -> &str { &self.r#type }
-    fn get_target(&self) -> &Option<ManagedObjectReference> { &self.target }
+    fn get_target(&self) -> &Option<super::structs::ManagedObjectReference> { &self.target }
 }
 impl ClusterActionTrait for StoragePlacementAction {
     fn get_type(&self) -> &str { &self.r#type }
-    fn get_target(&self) -> &Option<ManagedObjectReference> { &self.target }
+    fn get_target(&self) -> &Option<super::structs::ManagedObjectReference> { &self.target }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn ClusterActionTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -12039,10 +12039,10 @@ pub trait ClusterDasAdvancedRuntimeInfoTrait : super::traits::DataObjectTrait {
     /// The information pertaining to the HA agents on the hosts
     fn get_das_host_info(&self) -> &Option<Box<dyn super::traits::ClusterDasHostInfoTrait>>;
     /// Whether HA VM Component Protection can be enabled for the cluster.
-    fn get_vmcp_supported(&self) -> &Option<ClusterDasAdvancedRuntimeInfoVmcpCapabilityInfo>;
+    fn get_vmcp_supported(&self) -> &Option<super::structs::ClusterDasAdvancedRuntimeInfoVmcpCapabilityInfo>;
     /// The map of a datastore to the set of hosts that are using
     /// the datastore for storage heartbeating.
-    fn get_heartbeat_datastore_info(&self) -> &Option<Vec<DasHeartbeatDatastoreInfo>>;
+    fn get_heartbeat_datastore_info(&self) -> &Option<Vec<super::structs::DasHeartbeatDatastoreInfo>>;
 }
 impl<'s> serde::Serialize for dyn ClusterDasAdvancedRuntimeInfoTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
@@ -12085,13 +12085,13 @@ impl<'de> de::Visitor<'de> for ClusterDasAdvancedRuntimeInfoVisitor {
 
 impl ClusterDasAdvancedRuntimeInfoTrait for ClusterDasAdvancedRuntimeInfo {
     fn get_das_host_info(&self) -> &Option<Box<dyn super::traits::ClusterDasHostInfoTrait>> { &self.das_host_info }
-    fn get_vmcp_supported(&self) -> &Option<ClusterDasAdvancedRuntimeInfoVmcpCapabilityInfo> { &self.vmcp_supported }
-    fn get_heartbeat_datastore_info(&self) -> &Option<Vec<DasHeartbeatDatastoreInfo>> { &self.heartbeat_datastore_info }
+    fn get_vmcp_supported(&self) -> &Option<super::structs::ClusterDasAdvancedRuntimeInfoVmcpCapabilityInfo> { &self.vmcp_supported }
+    fn get_heartbeat_datastore_info(&self) -> &Option<Vec<super::structs::DasHeartbeatDatastoreInfo>> { &self.heartbeat_datastore_info }
 }
 impl ClusterDasAdvancedRuntimeInfoTrait for ClusterDasFailoverLevelAdvancedRuntimeInfo {
     fn get_das_host_info(&self) -> &Option<Box<dyn super::traits::ClusterDasHostInfoTrait>> { &self.das_host_info }
-    fn get_vmcp_supported(&self) -> &Option<ClusterDasAdvancedRuntimeInfoVmcpCapabilityInfo> { &self.vmcp_supported }
-    fn get_heartbeat_datastore_info(&self) -> &Option<Vec<DasHeartbeatDatastoreInfo>> { &self.heartbeat_datastore_info }
+    fn get_vmcp_supported(&self) -> &Option<super::structs::ClusterDasAdvancedRuntimeInfoVmcpCapabilityInfo> { &self.vmcp_supported }
+    fn get_heartbeat_datastore_info(&self) -> &Option<Vec<super::structs::DasHeartbeatDatastoreInfo>> { &self.heartbeat_datastore_info }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn ClusterDasAdvancedRuntimeInfoTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -12250,9 +12250,9 @@ pub trait ClusterDrsFaultsFaultsByVmTrait : super::traits::DataObjectTrait {
     /// If this property is NULL, the fault is not associated with a particular VM.
     /// 
     /// Refers instance of *VirtualMachine*.
-    fn get_vm(&self) -> &Option<ManagedObjectReference>;
+    fn get_vm(&self) -> &Option<super::structs::ManagedObjectReference>;
     /// The faults generated by DRS when it was trying to move the given VM.
-    fn get_fault(&self) -> &Vec<MethodFault>;
+    fn get_fault(&self) -> &Vec<super::structs::MethodFault>;
 }
 impl<'s> serde::Serialize for dyn ClusterDrsFaultsFaultsByVmTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
@@ -12294,12 +12294,12 @@ impl<'de> de::Visitor<'de> for ClusterDrsFaultsFaultsByVmVisitor {
 }
 
 impl ClusterDrsFaultsFaultsByVmTrait for ClusterDrsFaultsFaultsByVm {
-    fn get_vm(&self) -> &Option<ManagedObjectReference> { &self.vm }
-    fn get_fault(&self) -> &Vec<MethodFault> { &self.fault }
+    fn get_vm(&self) -> &Option<super::structs::ManagedObjectReference> { &self.vm }
+    fn get_fault(&self) -> &Vec<super::structs::MethodFault> { &self.fault }
 }
 impl ClusterDrsFaultsFaultsByVmTrait for ClusterDrsFaultsFaultsByVirtualDisk {
-    fn get_vm(&self) -> &Option<ManagedObjectReference> { &self.vm }
-    fn get_fault(&self) -> &Vec<MethodFault> { &self.fault }
+    fn get_vm(&self) -> &Option<super::structs::ManagedObjectReference> { &self.vm }
+    fn get_fault(&self) -> &Vec<super::structs::MethodFault> { &self.fault }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn ClusterDrsFaultsFaultsByVmTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -12737,7 +12737,7 @@ pub trait DvPortSettingTrait : super::traits::DataObjectTrait {
     /// 
     /// If a port is blocked,
     /// packet forwarding is stopped.
-    fn get_blocked(&self) -> &Option<BoolPolicy>;
+    fn get_blocked(&self) -> &Option<super::structs::BoolPolicy>;
     /// Deprecated as of vSphere API 8.0. VMDirectPath Gen 2 is no longer supported and
     /// there is no replacement.
     /// 
@@ -12748,13 +12748,13 @@ pub trait DvPortSettingTrait : super::traits::DataObjectTrait {
     /// *DVSFeatureCapability*,
     /// *HostCapability*, *PhysicalNic*,
     /// and *VirtualEthernetCardOption* objects.
-    fn get_vm_direct_path_gen_2_allowed(&self) -> &Option<BoolPolicy>;
+    fn get_vm_direct_path_gen_2_allowed(&self) -> &Option<super::structs::BoolPolicy>;
     /// Network shaping policy for controlling throughput of inbound traffic.
-    fn get_in_shaping_policy(&self) -> &Option<DvsTrafficShapingPolicy>;
+    fn get_in_shaping_policy(&self) -> &Option<super::structs::DvsTrafficShapingPolicy>;
     /// Network shaping policy for controlling throughput of outbound traffic.
-    fn get_out_shaping_policy(&self) -> &Option<DvsTrafficShapingPolicy>;
+    fn get_out_shaping_policy(&self) -> &Option<super::structs::DvsTrafficShapingPolicy>;
     /// Opaque binary blob that stores vendor specific configuration.
-    fn get_vendor_specific_config(&self) -> &Option<DvsVendorSpecificConfig>;
+    fn get_vendor_specific_config(&self) -> &Option<super::structs::DvsVendorSpecificConfig>;
     /// Deprecated as of vSphere API 6.0
     /// Use *DVPortgroupConfigInfo.vmVnicNetworkResourcePoolKey* instead
     /// to reference the virtual NIC network resource pool.
@@ -12763,9 +12763,9 @@ pub trait DvPortSettingTrait : super::traits::DataObjectTrait {
     /// 
     /// The default value for this property is "-1", indicating that
     /// this port is not associated with any network resource pool.
-    fn get_network_resource_pool_key(&self) -> &Option<StringPolicy>;
+    fn get_network_resource_pool_key(&self) -> &Option<super::structs::StringPolicy>;
     /// Configuration for Network Filter Policy.
-    fn get_filter_policy(&self) -> &Option<DvsFilterPolicy>;
+    fn get_filter_policy(&self) -> &Option<super::structs::DvsFilterPolicy>;
 }
 impl<'s> serde::Serialize for dyn DvPortSettingTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
@@ -12807,22 +12807,22 @@ impl<'de> de::Visitor<'de> for DvPortSettingVisitor {
 }
 
 impl DvPortSettingTrait for DvPortSetting {
-    fn get_blocked(&self) -> &Option<BoolPolicy> { &self.blocked }
-    fn get_vm_direct_path_gen_2_allowed(&self) -> &Option<BoolPolicy> { &self.vm_direct_path_gen_2_allowed }
-    fn get_in_shaping_policy(&self) -> &Option<DvsTrafficShapingPolicy> { &self.in_shaping_policy }
-    fn get_out_shaping_policy(&self) -> &Option<DvsTrafficShapingPolicy> { &self.out_shaping_policy }
-    fn get_vendor_specific_config(&self) -> &Option<DvsVendorSpecificConfig> { &self.vendor_specific_config }
-    fn get_network_resource_pool_key(&self) -> &Option<StringPolicy> { &self.network_resource_pool_key }
-    fn get_filter_policy(&self) -> &Option<DvsFilterPolicy> { &self.filter_policy }
+    fn get_blocked(&self) -> &Option<super::structs::BoolPolicy> { &self.blocked }
+    fn get_vm_direct_path_gen_2_allowed(&self) -> &Option<super::structs::BoolPolicy> { &self.vm_direct_path_gen_2_allowed }
+    fn get_in_shaping_policy(&self) -> &Option<super::structs::DvsTrafficShapingPolicy> { &self.in_shaping_policy }
+    fn get_out_shaping_policy(&self) -> &Option<super::structs::DvsTrafficShapingPolicy> { &self.out_shaping_policy }
+    fn get_vendor_specific_config(&self) -> &Option<super::structs::DvsVendorSpecificConfig> { &self.vendor_specific_config }
+    fn get_network_resource_pool_key(&self) -> &Option<super::structs::StringPolicy> { &self.network_resource_pool_key }
+    fn get_filter_policy(&self) -> &Option<super::structs::DvsFilterPolicy> { &self.filter_policy }
 }
 impl DvPortSettingTrait for VMwareDvsPortSetting {
-    fn get_blocked(&self) -> &Option<BoolPolicy> { &self.blocked }
-    fn get_vm_direct_path_gen_2_allowed(&self) -> &Option<BoolPolicy> { &self.vm_direct_path_gen_2_allowed }
-    fn get_in_shaping_policy(&self) -> &Option<DvsTrafficShapingPolicy> { &self.in_shaping_policy }
-    fn get_out_shaping_policy(&self) -> &Option<DvsTrafficShapingPolicy> { &self.out_shaping_policy }
-    fn get_vendor_specific_config(&self) -> &Option<DvsVendorSpecificConfig> { &self.vendor_specific_config }
-    fn get_network_resource_pool_key(&self) -> &Option<StringPolicy> { &self.network_resource_pool_key }
-    fn get_filter_policy(&self) -> &Option<DvsFilterPolicy> { &self.filter_policy }
+    fn get_blocked(&self) -> &Option<super::structs::BoolPolicy> { &self.blocked }
+    fn get_vm_direct_path_gen_2_allowed(&self) -> &Option<super::structs::BoolPolicy> { &self.vm_direct_path_gen_2_allowed }
+    fn get_in_shaping_policy(&self) -> &Option<super::structs::DvsTrafficShapingPolicy> { &self.in_shaping_policy }
+    fn get_out_shaping_policy(&self) -> &Option<super::structs::DvsTrafficShapingPolicy> { &self.out_shaping_policy }
+    fn get_vendor_specific_config(&self) -> &Option<super::structs::DvsVendorSpecificConfig> { &self.vendor_specific_config }
+    fn get_network_resource_pool_key(&self) -> &Option<super::structs::StringPolicy> { &self.network_resource_pool_key }
+    fn get_filter_policy(&self) -> &Option<super::structs::DvsFilterPolicy> { &self.filter_policy }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DvPortSettingTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -13999,7 +13999,7 @@ pub trait HostDatastoreConnectInfoTrait : super::traits::DataObjectTrait {
     /// Basic datastore information.
     /// 
     /// The managed object reference is not set.
-    fn get_summary(&self) -> &DatastoreSummary;
+    fn get_summary(&self) -> &super::structs::DatastoreSummary;
 }
 impl<'s> serde::Serialize for dyn HostDatastoreConnectInfoTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
@@ -14041,13 +14041,13 @@ impl<'de> de::Visitor<'de> for HostDatastoreConnectInfoVisitor {
 }
 
 impl HostDatastoreConnectInfoTrait for HostDatastoreConnectInfo {
-    fn get_summary(&self) -> &DatastoreSummary { &self.summary }
+    fn get_summary(&self) -> &super::structs::DatastoreSummary { &self.summary }
 }
 impl HostDatastoreConnectInfoTrait for HostDatastoreExistsConnectInfo {
-    fn get_summary(&self) -> &DatastoreSummary { &self.summary }
+    fn get_summary(&self) -> &super::structs::DatastoreSummary { &self.summary }
 }
 impl HostDatastoreConnectInfoTrait for HostDatastoreNameConflictConnectInfo {
-    fn get_summary(&self) -> &DatastoreSummary { &self.summary }
+    fn get_summary(&self) -> &super::structs::DatastoreSummary { &self.summary }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn HostDatastoreConnectInfoTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -14386,7 +14386,7 @@ pub trait VmConfigFileInfoTrait : super::traits::FileInfoTrait {
     /// If encryption was selected in VmConfigFileQueryFlags then this
     /// field is always set. Inspect the VmConfigEncryptionInfo to
     /// determine if the virtual machine configuration file is encrypted.
-    fn get_encryption(&self) -> &Option<VmConfigFileEncryptionInfo>;
+    fn get_encryption(&self) -> &Option<super::structs::VmConfigFileEncryptionInfo>;
 }
 impl<'s> serde::Serialize for dyn VmConfigFileInfoTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
@@ -14429,11 +14429,11 @@ impl<'de> de::Visitor<'de> for VmConfigFileInfoVisitor {
 
 impl VmConfigFileInfoTrait for VmConfigFileInfo {
     fn get_config_version(&self) -> Option<i32> { self.config_version }
-    fn get_encryption(&self) -> &Option<VmConfigFileEncryptionInfo> { &self.encryption }
+    fn get_encryption(&self) -> &Option<super::structs::VmConfigFileEncryptionInfo> { &self.encryption }
 }
 impl VmConfigFileInfoTrait for TemplateConfigFileInfo {
     fn get_config_version(&self) -> Option<i32> { self.config_version }
-    fn get_encryption(&self) -> &Option<VmConfigFileEncryptionInfo> { &self.encryption }
+    fn get_encryption(&self) -> &Option<super::structs::VmConfigFileEncryptionInfo> { &self.encryption }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VmConfigFileInfoTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -14560,9 +14560,9 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn FileQueryTr
 /// configuration file.
 pub trait VmConfigFileQueryTrait : super::traits::FileQueryTrait {
     /// The filter specification for the virtual machine configuration file query.
-    fn get_filter(&self) -> &Option<VmConfigFileQueryFilter>;
+    fn get_filter(&self) -> &Option<super::structs::VmConfigFileQueryFilter>;
     /// The details specification for the virtual machine configuration file query.
-    fn get_details(&self) -> &Option<VmConfigFileQueryFlags>;
+    fn get_details(&self) -> &Option<super::structs::VmConfigFileQueryFlags>;
 }
 impl<'s> serde::Serialize for dyn VmConfigFileQueryTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
@@ -14604,12 +14604,12 @@ impl<'de> de::Visitor<'de> for VmConfigFileQueryVisitor {
 }
 
 impl VmConfigFileQueryTrait for VmConfigFileQuery {
-    fn get_filter(&self) -> &Option<VmConfigFileQueryFilter> { &self.filter }
-    fn get_details(&self) -> &Option<VmConfigFileQueryFlags> { &self.details }
+    fn get_filter(&self) -> &Option<super::structs::VmConfigFileQueryFilter> { &self.filter }
+    fn get_details(&self) -> &Option<super::structs::VmConfigFileQueryFlags> { &self.details }
 }
 impl VmConfigFileQueryTrait for TemplateConfigFileQuery {
-    fn get_filter(&self) -> &Option<VmConfigFileQueryFilter> { &self.filter }
-    fn get_details(&self) -> &Option<VmConfigFileQueryFlags> { &self.details }
+    fn get_filter(&self) -> &Option<super::structs::VmConfigFileQueryFilter> { &self.filter }
+    fn get_details(&self) -> &Option<super::structs::VmConfigFileQueryFlags> { &self.details }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VmConfigFileQueryTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -14771,7 +14771,7 @@ pub trait ScsiLunTrait : super::traits::HostDeviceTrait {
     /// only sufficient to identify the ScsiLun within a single host. Each
     /// descriptor contains a quality property that indicates whether or not
     /// the descriptor is suitable for correlation.
-    fn get_descriptor(&self) -> &Option<Vec<ScsiLunDescriptor>>;
+    fn get_descriptor(&self) -> &Option<Vec<super::structs::ScsiLunDescriptor>>;
     /// Canonical name of the SCSI logical unit.
     /// 
     /// Disk partition or extent identifiers refer to this name when
@@ -14814,14 +14814,14 @@ pub trait ScsiLunTrait : super::traits::HostDeviceTrait {
     /// payloads of pages 80h and 83h of the Vital Product Data (VPD) as
     /// defined by the T10 and SMI standards. For devices that do not provide
     /// this information, this property is not defined.
-    fn get_durable_name(&self) -> &Option<ScsiLunDurableName>;
+    fn get_durable_name(&self) -> &Option<super::structs::ScsiLunDurableName>;
     /// Alternate durable names.
     /// 
     /// Records all available durable names derived from page 80h of the Vital
     /// Product Data (VPD) and the Identification Vital Product Data (VPD) page
     /// 83h as defined by the SCSI-3 Primary Commands. For devices that are not
     /// SCSI-3 compliant this property is not defined.
-    fn get_alternate_name(&self) -> &Option<Vec<ScsiLunDurableName>>;
+    fn get_alternate_name(&self) -> &Option<Vec<super::structs::ScsiLunDurableName>>;
     /// Standard Inquiry payload.
     /// 
     /// For a SCSI-3 compliant device this property is derived from the
@@ -14840,7 +14840,7 @@ pub trait ScsiLunTrait : super::traits::HostDeviceTrait {
     /// See also *ScsiLunState_enum*.
     fn get_operational_state(&self) -> &Vec<String>;
     /// Capabilities of SCSI device.
-    fn get_capabilities(&self) -> &Option<ScsiLunCapabilities>;
+    fn get_capabilities(&self) -> &Option<super::structs::ScsiLunCapabilities>;
     /// vStorage hardware acceleration support status.
     /// 
     /// This property
@@ -14929,7 +14929,7 @@ impl<'de> de::Visitor<'de> for ScsiLunVisitor {
 impl ScsiLunTrait for ScsiLun {
     fn get_key(&self) -> &Option<String> { &self.key }
     fn get_uuid(&self) -> &str { &self.uuid }
-    fn get_descriptor(&self) -> &Option<Vec<ScsiLunDescriptor>> { &self.descriptor }
+    fn get_descriptor(&self) -> &Option<Vec<super::structs::ScsiLunDescriptor>> { &self.descriptor }
     fn get_canonical_name(&self) -> &Option<String> { &self.canonical_name }
     fn get_display_name(&self) -> &Option<String> { &self.display_name }
     fn get_lun_type(&self) -> &str { &self.lun_type }
@@ -14938,12 +14938,12 @@ impl ScsiLunTrait for ScsiLun {
     fn get_revision(&self) -> &Option<String> { &self.revision }
     fn get_scsi_level(&self) -> Option<i32> { self.scsi_level }
     fn get_serial_number(&self) -> &Option<String> { &self.serial_number }
-    fn get_durable_name(&self) -> &Option<ScsiLunDurableName> { &self.durable_name }
-    fn get_alternate_name(&self) -> &Option<Vec<ScsiLunDurableName>> { &self.alternate_name }
+    fn get_durable_name(&self) -> &Option<super::structs::ScsiLunDurableName> { &self.durable_name }
+    fn get_alternate_name(&self) -> &Option<Vec<super::structs::ScsiLunDurableName>> { &self.alternate_name }
     fn get_standard_inquiry(&self) -> &Option<Vec<i8>> { &self.standard_inquiry }
     fn get_queue_depth(&self) -> Option<i32> { self.queue_depth }
     fn get_operational_state(&self) -> &Vec<String> { &self.operational_state }
-    fn get_capabilities(&self) -> &Option<ScsiLunCapabilities> { &self.capabilities }
+    fn get_capabilities(&self) -> &Option<super::structs::ScsiLunCapabilities> { &self.capabilities }
     fn get_v_storage_support(&self) -> &Option<String> { &self.v_storage_support }
     fn get_protocol_endpoint(&self) -> Option<bool> { self.protocol_endpoint }
     fn get_perennially_reserved(&self) -> Option<bool> { self.perennially_reserved }
@@ -14954,7 +14954,7 @@ impl ScsiLunTrait for ScsiLun {
 impl ScsiLunTrait for HostScsiDisk {
     fn get_key(&self) -> &Option<String> { &self.key }
     fn get_uuid(&self) -> &str { &self.uuid }
-    fn get_descriptor(&self) -> &Option<Vec<ScsiLunDescriptor>> { &self.descriptor }
+    fn get_descriptor(&self) -> &Option<Vec<super::structs::ScsiLunDescriptor>> { &self.descriptor }
     fn get_canonical_name(&self) -> &Option<String> { &self.canonical_name }
     fn get_display_name(&self) -> &Option<String> { &self.display_name }
     fn get_lun_type(&self) -> &str { &self.lun_type }
@@ -14963,12 +14963,12 @@ impl ScsiLunTrait for HostScsiDisk {
     fn get_revision(&self) -> &Option<String> { &self.revision }
     fn get_scsi_level(&self) -> Option<i32> { self.scsi_level }
     fn get_serial_number(&self) -> &Option<String> { &self.serial_number }
-    fn get_durable_name(&self) -> &Option<ScsiLunDurableName> { &self.durable_name }
-    fn get_alternate_name(&self) -> &Option<Vec<ScsiLunDurableName>> { &self.alternate_name }
+    fn get_durable_name(&self) -> &Option<super::structs::ScsiLunDurableName> { &self.durable_name }
+    fn get_alternate_name(&self) -> &Option<Vec<super::structs::ScsiLunDurableName>> { &self.alternate_name }
     fn get_standard_inquiry(&self) -> &Option<Vec<i8>> { &self.standard_inquiry }
     fn get_queue_depth(&self) -> Option<i32> { self.queue_depth }
     fn get_operational_state(&self) -> &Vec<String> { &self.operational_state }
-    fn get_capabilities(&self) -> &Option<ScsiLunCapabilities> { &self.capabilities }
+    fn get_capabilities(&self) -> &Option<super::structs::ScsiLunCapabilities> { &self.capabilities }
     fn get_v_storage_support(&self) -> &Option<String> { &self.v_storage_support }
     fn get_protocol_endpoint(&self) -> Option<bool> { self.protocol_endpoint }
     fn get_perennially_reserved(&self) -> Option<bool> { self.perennially_reserved }
@@ -17162,7 +17162,7 @@ pub trait VmfsDatastoreBaseOptionTrait : super::traits::DataObjectTrait {
     /// contain values for this property when some other property on the DataObject changes.
     /// If this update is a result of a call to WaitForUpdatesEx with a non-empty
     /// version parameter, the value for this property may not be current.
-    fn get_layout(&self) -> &HostDiskPartitionLayout;
+    fn get_layout(&self) -> &super::structs::HostDiskPartitionLayout;
     /// Indicates whether selecting this option will change the partition
     /// format type on the disk.
     /// 
@@ -17209,19 +17209,19 @@ impl<'de> de::Visitor<'de> for VmfsDatastoreBaseOptionVisitor {
 }
 
 impl VmfsDatastoreBaseOptionTrait for VmfsDatastoreBaseOption {
-    fn get_layout(&self) -> &HostDiskPartitionLayout { &self.layout }
+    fn get_layout(&self) -> &super::structs::HostDiskPartitionLayout { &self.layout }
     fn get_partition_format_change(&self) -> Option<bool> { self.partition_format_change }
 }
 impl VmfsDatastoreBaseOptionTrait for VmfsDatastoreMultipleExtentOption {
-    fn get_layout(&self) -> &HostDiskPartitionLayout { &self.layout }
+    fn get_layout(&self) -> &super::structs::HostDiskPartitionLayout { &self.layout }
     fn get_partition_format_change(&self) -> Option<bool> { self.partition_format_change }
 }
 impl VmfsDatastoreBaseOptionTrait for VmfsDatastoreSingleExtentOption {
-    fn get_layout(&self) -> &HostDiskPartitionLayout { &self.layout }
+    fn get_layout(&self) -> &super::structs::HostDiskPartitionLayout { &self.layout }
     fn get_partition_format_change(&self) -> Option<bool> { self.partition_format_change }
 }
 impl VmfsDatastoreBaseOptionTrait for VmfsDatastoreAllExtentOption {
-    fn get_layout(&self) -> &HostDiskPartitionLayout { &self.layout }
+    fn get_layout(&self) -> &super::structs::HostDiskPartitionLayout { &self.layout }
     fn get_partition_format_change(&self) -> Option<bool> { self.partition_format_change }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VmfsDatastoreBaseOptionTrait {
@@ -17254,7 +17254,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VmfsDatasto
 /// created on the disk for creating or increasing the capacity of a VMFS datastore.
 pub trait VmfsDatastoreSingleExtentOptionTrait : super::traits::VmfsDatastoreBaseOptionTrait {
     /// The block range to be used as an extent in a VMFS datastore.
-    fn get_vmfs_extent(&self) -> &HostDiskPartitionBlockRange;
+    fn get_vmfs_extent(&self) -> &super::structs::HostDiskPartitionBlockRange;
 }
 impl<'s> serde::Serialize for dyn VmfsDatastoreSingleExtentOptionTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
@@ -17296,10 +17296,10 @@ impl<'de> de::Visitor<'de> for VmfsDatastoreSingleExtentOptionVisitor {
 }
 
 impl VmfsDatastoreSingleExtentOptionTrait for VmfsDatastoreSingleExtentOption {
-    fn get_vmfs_extent(&self) -> &HostDiskPartitionBlockRange { &self.vmfs_extent }
+    fn get_vmfs_extent(&self) -> &super::structs::HostDiskPartitionBlockRange { &self.vmfs_extent }
 }
 impl VmfsDatastoreSingleExtentOptionTrait for VmfsDatastoreAllExtentOption {
-    fn get_vmfs_extent(&self) -> &HostDiskPartitionBlockRange { &self.vmfs_extent }
+    fn get_vmfs_extent(&self) -> &super::structs::HostDiskPartitionBlockRange { &self.vmfs_extent }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VmfsDatastoreSingleExtentOptionTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -17498,7 +17498,7 @@ pub trait ArrayUpdateSpecTrait : super::traits::DataObjectTrait {
     /// 
     /// Only used if the operation
     /// is "remove".
-    fn get_remove_key(&self) -> &Option<VimAny>;
+    fn get_remove_key(&self) -> &Option<super::vim_any::VimAny>;
 }
 impl<'s> serde::Serialize for dyn ArrayUpdateSpecTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
@@ -17541,67 +17541,67 @@ impl<'de> de::Visitor<'de> for ArrayUpdateSpecVisitor {
 
 impl ArrayUpdateSpecTrait for ArrayUpdateSpec {
     fn get_operation(&self) -> &super::enums::ArrayUpdateOperationEnum { &self.operation }
-    fn get_remove_key(&self) -> &Option<VimAny> { &self.remove_key }
+    fn get_remove_key(&self) -> &Option<super::vim_any::VimAny> { &self.remove_key }
 }
 impl ArrayUpdateSpecTrait for ClusterDasVmConfigSpec {
     fn get_operation(&self) -> &super::enums::ArrayUpdateOperationEnum { &self.operation }
-    fn get_remove_key(&self) -> &Option<VimAny> { &self.remove_key }
+    fn get_remove_key(&self) -> &Option<super::vim_any::VimAny> { &self.remove_key }
 }
 impl ArrayUpdateSpecTrait for ClusterDatastoreUpdateSpec {
     fn get_operation(&self) -> &super::enums::ArrayUpdateOperationEnum { &self.operation }
-    fn get_remove_key(&self) -> &Option<VimAny> { &self.remove_key }
+    fn get_remove_key(&self) -> &Option<super::vim_any::VimAny> { &self.remove_key }
 }
 impl ArrayUpdateSpecTrait for ClusterDpmHostConfigSpec {
     fn get_operation(&self) -> &super::enums::ArrayUpdateOperationEnum { &self.operation }
-    fn get_remove_key(&self) -> &Option<VimAny> { &self.remove_key }
+    fn get_remove_key(&self) -> &Option<super::vim_any::VimAny> { &self.remove_key }
 }
 impl ArrayUpdateSpecTrait for ClusterDrsVmConfigSpec {
     fn get_operation(&self) -> &super::enums::ArrayUpdateOperationEnum { &self.operation }
-    fn get_remove_key(&self) -> &Option<VimAny> { &self.remove_key }
+    fn get_remove_key(&self) -> &Option<super::vim_any::VimAny> { &self.remove_key }
 }
 impl ArrayUpdateSpecTrait for ClusterGroupSpec {
     fn get_operation(&self) -> &super::enums::ArrayUpdateOperationEnum { &self.operation }
-    fn get_remove_key(&self) -> &Option<VimAny> { &self.remove_key }
+    fn get_remove_key(&self) -> &Option<super::vim_any::VimAny> { &self.remove_key }
 }
 impl ArrayUpdateSpecTrait for ClusterPreemptibleVmPairSpec {
     fn get_operation(&self) -> &super::enums::ArrayUpdateOperationEnum { &self.operation }
-    fn get_remove_key(&self) -> &Option<VimAny> { &self.remove_key }
+    fn get_remove_key(&self) -> &Option<super::vim_any::VimAny> { &self.remove_key }
 }
 impl ArrayUpdateSpecTrait for ClusterRuleSpec {
     fn get_operation(&self) -> &super::enums::ArrayUpdateOperationEnum { &self.operation }
-    fn get_remove_key(&self) -> &Option<VimAny> { &self.remove_key }
+    fn get_remove_key(&self) -> &Option<super::vim_any::VimAny> { &self.remove_key }
 }
 impl ArrayUpdateSpecTrait for ClusterTagCategoryUpdateSpec {
     fn get_operation(&self) -> &super::enums::ArrayUpdateOperationEnum { &self.operation }
-    fn get_remove_key(&self) -> &Option<VimAny> { &self.remove_key }
+    fn get_remove_key(&self) -> &Option<super::vim_any::VimAny> { &self.remove_key }
 }
 impl ArrayUpdateSpecTrait for ClusterVmOrchestrationSpec {
     fn get_operation(&self) -> &super::enums::ArrayUpdateOperationEnum { &self.operation }
-    fn get_remove_key(&self) -> &Option<VimAny> { &self.remove_key }
+    fn get_remove_key(&self) -> &Option<super::vim_any::VimAny> { &self.remove_key }
 }
 impl ArrayUpdateSpecTrait for StorageDrsOptionSpec {
     fn get_operation(&self) -> &super::enums::ArrayUpdateOperationEnum { &self.operation }
-    fn get_remove_key(&self) -> &Option<VimAny> { &self.remove_key }
+    fn get_remove_key(&self) -> &Option<super::vim_any::VimAny> { &self.remove_key }
 }
 impl ArrayUpdateSpecTrait for StorageDrsVmConfigSpec {
     fn get_operation(&self) -> &super::enums::ArrayUpdateOperationEnum { &self.operation }
-    fn get_remove_key(&self) -> &Option<VimAny> { &self.remove_key }
+    fn get_remove_key(&self) -> &Option<super::vim_any::VimAny> { &self.remove_key }
 }
 impl ArrayUpdateSpecTrait for VAppOvfSectionSpec {
     fn get_operation(&self) -> &super::enums::ArrayUpdateOperationEnum { &self.operation }
-    fn get_remove_key(&self) -> &Option<VimAny> { &self.remove_key }
+    fn get_remove_key(&self) -> &Option<super::vim_any::VimAny> { &self.remove_key }
 }
 impl ArrayUpdateSpecTrait for VAppProductSpec {
     fn get_operation(&self) -> &super::enums::ArrayUpdateOperationEnum { &self.operation }
-    fn get_remove_key(&self) -> &Option<VimAny> { &self.remove_key }
+    fn get_remove_key(&self) -> &Option<super::vim_any::VimAny> { &self.remove_key }
 }
 impl ArrayUpdateSpecTrait for VAppPropertySpec {
     fn get_operation(&self) -> &super::enums::ArrayUpdateOperationEnum { &self.operation }
-    fn get_remove_key(&self) -> &Option<VimAny> { &self.remove_key }
+    fn get_remove_key(&self) -> &Option<super::vim_any::VimAny> { &self.remove_key }
 }
 impl ArrayUpdateSpecTrait for VirtualMachineCpuIdInfoSpec {
     fn get_operation(&self) -> &super::enums::ArrayUpdateOperationEnum { &self.operation }
-    fn get_remove_key(&self) -> &Option<VimAny> { &self.remove_key }
+    fn get_remove_key(&self) -> &Option<super::vim_any::VimAny> { &self.remove_key }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn ArrayUpdateSpecTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -17763,7 +17763,7 @@ pub trait OptionValueTrait : super::traits::DataObjectTrait {
     /// The Any data object type enables you to
     /// define any value for the option. Typically, however, the value
     /// of an option is of type String or Integer.
-    fn get_value(&self) -> &Option<VimAny>;
+    fn get_value(&self) -> &Option<super::vim_any::VimAny>;
 }
 impl<'s> serde::Serialize for dyn OptionValueTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
@@ -17806,11 +17806,11 @@ impl<'de> de::Visitor<'de> for OptionValueVisitor {
 
 impl OptionValueTrait for OptionValue {
     fn get_key(&self) -> &str { &self.key }
-    fn get_value(&self) -> &Option<VimAny> { &self.value }
+    fn get_value(&self) -> &Option<super::vim_any::VimAny> { &self.value }
 }
 impl OptionValueTrait for HostInternetScsiHbaParamValue {
     fn get_key(&self) -> &str { &self.key }
-    fn get_value(&self) -> &Option<VimAny> { &self.value }
+    fn get_value(&self) -> &Option<super::vim_any::VimAny> { &self.value }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn OptionValueTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -17846,7 +17846,7 @@ pub trait ApplyProfileTrait : super::traits::DataObjectTrait {
     /// The policy option is one of the configuration options from the
     /// *ProfilePolicyMetadata*.*ProfilePolicyMetadata.possibleOption*
     /// list.
-    fn get_policy(&self) -> &Option<Vec<ProfilePolicy>>;
+    fn get_policy(&self) -> &Option<Vec<super::structs::ProfilePolicy>>;
     /// Identifies the profile type.
     fn get_profile_type_name(&self) -> &Option<String>;
     /// Profile engine version.
@@ -17855,7 +17855,7 @@ pub trait ApplyProfileTrait : super::traits::DataObjectTrait {
     /// 
     /// This list can change depending on which profile plug-ins are available in the system.
     /// Subprofiles can be nested to arbitrary depths to represent host capabilities.
-    fn get_property(&self) -> &Option<Vec<ProfileApplyProfileProperty>>;
+    fn get_property(&self) -> &Option<Vec<super::structs::ProfileApplyProfileProperty>>;
     /// Indicates whether this profile is marked as "favorite".
     fn get_favorite(&self) -> Option<bool>;
     /// Indicates whether this profile is marked as to-be-merged.
@@ -17914,10 +17914,10 @@ impl<'de> de::Visitor<'de> for ApplyProfileVisitor {
 
 impl ApplyProfileTrait for ApplyProfile {
     fn get_enabled(&self) -> bool { self.enabled }
-    fn get_policy(&self) -> &Option<Vec<ProfilePolicy>> { &self.policy }
+    fn get_policy(&self) -> &Option<Vec<super::structs::ProfilePolicy>> { &self.policy }
     fn get_profile_type_name(&self) -> &Option<String> { &self.profile_type_name }
     fn get_profile_version(&self) -> &Option<String> { &self.profile_version }
-    fn get_property(&self) -> &Option<Vec<ProfileApplyProfileProperty>> { &self.property }
+    fn get_property(&self) -> &Option<Vec<super::structs::ProfileApplyProfileProperty>> { &self.property }
     fn get_favorite(&self) -> Option<bool> { self.favorite }
     fn get_to_be_merged(&self) -> Option<bool> { self.to_be_merged }
     fn get_to_replace_with(&self) -> Option<bool> { self.to_replace_with }
@@ -17927,10 +17927,10 @@ impl ApplyProfileTrait for ApplyProfile {
 }
 impl ApplyProfileTrait for ProfileApplyProfileElement {
     fn get_enabled(&self) -> bool { self.enabled }
-    fn get_policy(&self) -> &Option<Vec<ProfilePolicy>> { &self.policy }
+    fn get_policy(&self) -> &Option<Vec<super::structs::ProfilePolicy>> { &self.policy }
     fn get_profile_type_name(&self) -> &Option<String> { &self.profile_type_name }
     fn get_profile_version(&self) -> &Option<String> { &self.profile_version }
-    fn get_property(&self) -> &Option<Vec<ProfileApplyProfileProperty>> { &self.property }
+    fn get_property(&self) -> &Option<Vec<super::structs::ProfileApplyProfileProperty>> { &self.property }
     fn get_favorite(&self) -> Option<bool> { self.favorite }
     fn get_to_be_merged(&self) -> Option<bool> { self.to_be_merged }
     fn get_to_replace_with(&self) -> Option<bool> { self.to_replace_with }
@@ -17940,10 +17940,10 @@ impl ApplyProfileTrait for ProfileApplyProfileElement {
 }
 impl ApplyProfileTrait for ActiveDirectoryProfile {
     fn get_enabled(&self) -> bool { self.enabled }
-    fn get_policy(&self) -> &Option<Vec<ProfilePolicy>> { &self.policy }
+    fn get_policy(&self) -> &Option<Vec<super::structs::ProfilePolicy>> { &self.policy }
     fn get_profile_type_name(&self) -> &Option<String> { &self.profile_type_name }
     fn get_profile_version(&self) -> &Option<String> { &self.profile_version }
-    fn get_property(&self) -> &Option<Vec<ProfileApplyProfileProperty>> { &self.property }
+    fn get_property(&self) -> &Option<Vec<super::structs::ProfileApplyProfileProperty>> { &self.property }
     fn get_favorite(&self) -> Option<bool> { self.favorite }
     fn get_to_be_merged(&self) -> Option<bool> { self.to_be_merged }
     fn get_to_replace_with(&self) -> Option<bool> { self.to_replace_with }
@@ -17953,10 +17953,10 @@ impl ApplyProfileTrait for ActiveDirectoryProfile {
 }
 impl ApplyProfileTrait for AuthenticationProfile {
     fn get_enabled(&self) -> bool { self.enabled }
-    fn get_policy(&self) -> &Option<Vec<ProfilePolicy>> { &self.policy }
+    fn get_policy(&self) -> &Option<Vec<super::structs::ProfilePolicy>> { &self.policy }
     fn get_profile_type_name(&self) -> &Option<String> { &self.profile_type_name }
     fn get_profile_version(&self) -> &Option<String> { &self.profile_version }
-    fn get_property(&self) -> &Option<Vec<ProfileApplyProfileProperty>> { &self.property }
+    fn get_property(&self) -> &Option<Vec<super::structs::ProfileApplyProfileProperty>> { &self.property }
     fn get_favorite(&self) -> Option<bool> { self.favorite }
     fn get_to_be_merged(&self) -> Option<bool> { self.to_be_merged }
     fn get_to_replace_with(&self) -> Option<bool> { self.to_replace_with }
@@ -17966,10 +17966,10 @@ impl ApplyProfileTrait for AuthenticationProfile {
 }
 impl ApplyProfileTrait for DateTimeProfile {
     fn get_enabled(&self) -> bool { self.enabled }
-    fn get_policy(&self) -> &Option<Vec<ProfilePolicy>> { &self.policy }
+    fn get_policy(&self) -> &Option<Vec<super::structs::ProfilePolicy>> { &self.policy }
     fn get_profile_type_name(&self) -> &Option<String> { &self.profile_type_name }
     fn get_profile_version(&self) -> &Option<String> { &self.profile_version }
-    fn get_property(&self) -> &Option<Vec<ProfileApplyProfileProperty>> { &self.property }
+    fn get_property(&self) -> &Option<Vec<super::structs::ProfileApplyProfileProperty>> { &self.property }
     fn get_favorite(&self) -> Option<bool> { self.favorite }
     fn get_to_be_merged(&self) -> Option<bool> { self.to_be_merged }
     fn get_to_replace_with(&self) -> Option<bool> { self.to_replace_with }
@@ -17979,10 +17979,10 @@ impl ApplyProfileTrait for DateTimeProfile {
 }
 impl ApplyProfileTrait for DvsProfile {
     fn get_enabled(&self) -> bool { self.enabled }
-    fn get_policy(&self) -> &Option<Vec<ProfilePolicy>> { &self.policy }
+    fn get_policy(&self) -> &Option<Vec<super::structs::ProfilePolicy>> { &self.policy }
     fn get_profile_type_name(&self) -> &Option<String> { &self.profile_type_name }
     fn get_profile_version(&self) -> &Option<String> { &self.profile_version }
-    fn get_property(&self) -> &Option<Vec<ProfileApplyProfileProperty>> { &self.property }
+    fn get_property(&self) -> &Option<Vec<super::structs::ProfileApplyProfileProperty>> { &self.property }
     fn get_favorite(&self) -> Option<bool> { self.favorite }
     fn get_to_be_merged(&self) -> Option<bool> { self.to_be_merged }
     fn get_to_replace_with(&self) -> Option<bool> { self.to_replace_with }
@@ -17992,10 +17992,10 @@ impl ApplyProfileTrait for DvsProfile {
 }
 impl ApplyProfileTrait for DvsVNicProfile {
     fn get_enabled(&self) -> bool { self.enabled }
-    fn get_policy(&self) -> &Option<Vec<ProfilePolicy>> { &self.policy }
+    fn get_policy(&self) -> &Option<Vec<super::structs::ProfilePolicy>> { &self.policy }
     fn get_profile_type_name(&self) -> &Option<String> { &self.profile_type_name }
     fn get_profile_version(&self) -> &Option<String> { &self.profile_version }
-    fn get_property(&self) -> &Option<Vec<ProfileApplyProfileProperty>> { &self.property }
+    fn get_property(&self) -> &Option<Vec<super::structs::ProfileApplyProfileProperty>> { &self.property }
     fn get_favorite(&self) -> Option<bool> { self.favorite }
     fn get_to_be_merged(&self) -> Option<bool> { self.to_be_merged }
     fn get_to_replace_with(&self) -> Option<bool> { self.to_replace_with }
@@ -18005,10 +18005,10 @@ impl ApplyProfileTrait for DvsVNicProfile {
 }
 impl ApplyProfileTrait for DvsHostVNicProfile {
     fn get_enabled(&self) -> bool { self.enabled }
-    fn get_policy(&self) -> &Option<Vec<ProfilePolicy>> { &self.policy }
+    fn get_policy(&self) -> &Option<Vec<super::structs::ProfilePolicy>> { &self.policy }
     fn get_profile_type_name(&self) -> &Option<String> { &self.profile_type_name }
     fn get_profile_version(&self) -> &Option<String> { &self.profile_version }
-    fn get_property(&self) -> &Option<Vec<ProfileApplyProfileProperty>> { &self.property }
+    fn get_property(&self) -> &Option<Vec<super::structs::ProfileApplyProfileProperty>> { &self.property }
     fn get_favorite(&self) -> Option<bool> { self.favorite }
     fn get_to_be_merged(&self) -> Option<bool> { self.to_be_merged }
     fn get_to_replace_with(&self) -> Option<bool> { self.to_replace_with }
@@ -18018,10 +18018,10 @@ impl ApplyProfileTrait for DvsHostVNicProfile {
 }
 impl ApplyProfileTrait for DvsServiceConsoleVNicProfile {
     fn get_enabled(&self) -> bool { self.enabled }
-    fn get_policy(&self) -> &Option<Vec<ProfilePolicy>> { &self.policy }
+    fn get_policy(&self) -> &Option<Vec<super::structs::ProfilePolicy>> { &self.policy }
     fn get_profile_type_name(&self) -> &Option<String> { &self.profile_type_name }
     fn get_profile_version(&self) -> &Option<String> { &self.profile_version }
-    fn get_property(&self) -> &Option<Vec<ProfileApplyProfileProperty>> { &self.property }
+    fn get_property(&self) -> &Option<Vec<super::structs::ProfileApplyProfileProperty>> { &self.property }
     fn get_favorite(&self) -> Option<bool> { self.favorite }
     fn get_to_be_merged(&self) -> Option<bool> { self.to_be_merged }
     fn get_to_replace_with(&self) -> Option<bool> { self.to_replace_with }
@@ -18031,10 +18031,10 @@ impl ApplyProfileTrait for DvsServiceConsoleVNicProfile {
 }
 impl ApplyProfileTrait for FirewallProfile {
     fn get_enabled(&self) -> bool { self.enabled }
-    fn get_policy(&self) -> &Option<Vec<ProfilePolicy>> { &self.policy }
+    fn get_policy(&self) -> &Option<Vec<super::structs::ProfilePolicy>> { &self.policy }
     fn get_profile_type_name(&self) -> &Option<String> { &self.profile_type_name }
     fn get_profile_version(&self) -> &Option<String> { &self.profile_version }
-    fn get_property(&self) -> &Option<Vec<ProfileApplyProfileProperty>> { &self.property }
+    fn get_property(&self) -> &Option<Vec<super::structs::ProfileApplyProfileProperty>> { &self.property }
     fn get_favorite(&self) -> Option<bool> { self.favorite }
     fn get_to_be_merged(&self) -> Option<bool> { self.to_be_merged }
     fn get_to_replace_with(&self) -> Option<bool> { self.to_replace_with }
@@ -18044,10 +18044,10 @@ impl ApplyProfileTrait for FirewallProfile {
 }
 impl ApplyProfileTrait for FirewallProfileRulesetProfile {
     fn get_enabled(&self) -> bool { self.enabled }
-    fn get_policy(&self) -> &Option<Vec<ProfilePolicy>> { &self.policy }
+    fn get_policy(&self) -> &Option<Vec<super::structs::ProfilePolicy>> { &self.policy }
     fn get_profile_type_name(&self) -> &Option<String> { &self.profile_type_name }
     fn get_profile_version(&self) -> &Option<String> { &self.profile_version }
-    fn get_property(&self) -> &Option<Vec<ProfileApplyProfileProperty>> { &self.property }
+    fn get_property(&self) -> &Option<Vec<super::structs::ProfileApplyProfileProperty>> { &self.property }
     fn get_favorite(&self) -> Option<bool> { self.favorite }
     fn get_to_be_merged(&self) -> Option<bool> { self.to_be_merged }
     fn get_to_replace_with(&self) -> Option<bool> { self.to_replace_with }
@@ -18057,10 +18057,10 @@ impl ApplyProfileTrait for FirewallProfileRulesetProfile {
 }
 impl ApplyProfileTrait for HostApplyProfile {
     fn get_enabled(&self) -> bool { self.enabled }
-    fn get_policy(&self) -> &Option<Vec<ProfilePolicy>> { &self.policy }
+    fn get_policy(&self) -> &Option<Vec<super::structs::ProfilePolicy>> { &self.policy }
     fn get_profile_type_name(&self) -> &Option<String> { &self.profile_type_name }
     fn get_profile_version(&self) -> &Option<String> { &self.profile_version }
-    fn get_property(&self) -> &Option<Vec<ProfileApplyProfileProperty>> { &self.property }
+    fn get_property(&self) -> &Option<Vec<super::structs::ProfileApplyProfileProperty>> { &self.property }
     fn get_favorite(&self) -> Option<bool> { self.favorite }
     fn get_to_be_merged(&self) -> Option<bool> { self.to_be_merged }
     fn get_to_replace_with(&self) -> Option<bool> { self.to_replace_with }
@@ -18070,10 +18070,10 @@ impl ApplyProfileTrait for HostApplyProfile {
 }
 impl ApplyProfileTrait for HostMemoryProfile {
     fn get_enabled(&self) -> bool { self.enabled }
-    fn get_policy(&self) -> &Option<Vec<ProfilePolicy>> { &self.policy }
+    fn get_policy(&self) -> &Option<Vec<super::structs::ProfilePolicy>> { &self.policy }
     fn get_profile_type_name(&self) -> &Option<String> { &self.profile_type_name }
     fn get_profile_version(&self) -> &Option<String> { &self.profile_version }
-    fn get_property(&self) -> &Option<Vec<ProfileApplyProfileProperty>> { &self.property }
+    fn get_property(&self) -> &Option<Vec<super::structs::ProfileApplyProfileProperty>> { &self.property }
     fn get_favorite(&self) -> Option<bool> { self.favorite }
     fn get_to_be_merged(&self) -> Option<bool> { self.to_be_merged }
     fn get_to_replace_with(&self) -> Option<bool> { self.to_replace_with }
@@ -18083,10 +18083,10 @@ impl ApplyProfileTrait for HostMemoryProfile {
 }
 impl ApplyProfileTrait for IpAddressProfile {
     fn get_enabled(&self) -> bool { self.enabled }
-    fn get_policy(&self) -> &Option<Vec<ProfilePolicy>> { &self.policy }
+    fn get_policy(&self) -> &Option<Vec<super::structs::ProfilePolicy>> { &self.policy }
     fn get_profile_type_name(&self) -> &Option<String> { &self.profile_type_name }
     fn get_profile_version(&self) -> &Option<String> { &self.profile_version }
-    fn get_property(&self) -> &Option<Vec<ProfileApplyProfileProperty>> { &self.property }
+    fn get_property(&self) -> &Option<Vec<super::structs::ProfileApplyProfileProperty>> { &self.property }
     fn get_favorite(&self) -> Option<bool> { self.favorite }
     fn get_to_be_merged(&self) -> Option<bool> { self.to_be_merged }
     fn get_to_replace_with(&self) -> Option<bool> { self.to_replace_with }
@@ -18096,10 +18096,10 @@ impl ApplyProfileTrait for IpAddressProfile {
 }
 impl ApplyProfileTrait for IpRouteProfile {
     fn get_enabled(&self) -> bool { self.enabled }
-    fn get_policy(&self) -> &Option<Vec<ProfilePolicy>> { &self.policy }
+    fn get_policy(&self) -> &Option<Vec<super::structs::ProfilePolicy>> { &self.policy }
     fn get_profile_type_name(&self) -> &Option<String> { &self.profile_type_name }
     fn get_profile_version(&self) -> &Option<String> { &self.profile_version }
-    fn get_property(&self) -> &Option<Vec<ProfileApplyProfileProperty>> { &self.property }
+    fn get_property(&self) -> &Option<Vec<super::structs::ProfileApplyProfileProperty>> { &self.property }
     fn get_favorite(&self) -> Option<bool> { self.favorite }
     fn get_to_be_merged(&self) -> Option<bool> { self.to_be_merged }
     fn get_to_replace_with(&self) -> Option<bool> { self.to_replace_with }
@@ -18109,10 +18109,10 @@ impl ApplyProfileTrait for IpRouteProfile {
 }
 impl ApplyProfileTrait for NasStorageProfile {
     fn get_enabled(&self) -> bool { self.enabled }
-    fn get_policy(&self) -> &Option<Vec<ProfilePolicy>> { &self.policy }
+    fn get_policy(&self) -> &Option<Vec<super::structs::ProfilePolicy>> { &self.policy }
     fn get_profile_type_name(&self) -> &Option<String> { &self.profile_type_name }
     fn get_profile_version(&self) -> &Option<String> { &self.profile_version }
-    fn get_property(&self) -> &Option<Vec<ProfileApplyProfileProperty>> { &self.property }
+    fn get_property(&self) -> &Option<Vec<super::structs::ProfileApplyProfileProperty>> { &self.property }
     fn get_favorite(&self) -> Option<bool> { self.favorite }
     fn get_to_be_merged(&self) -> Option<bool> { self.to_be_merged }
     fn get_to_replace_with(&self) -> Option<bool> { self.to_replace_with }
@@ -18122,10 +18122,10 @@ impl ApplyProfileTrait for NasStorageProfile {
 }
 impl ApplyProfileTrait for NetStackInstanceProfile {
     fn get_enabled(&self) -> bool { self.enabled }
-    fn get_policy(&self) -> &Option<Vec<ProfilePolicy>> { &self.policy }
+    fn get_policy(&self) -> &Option<Vec<super::structs::ProfilePolicy>> { &self.policy }
     fn get_profile_type_name(&self) -> &Option<String> { &self.profile_type_name }
     fn get_profile_version(&self) -> &Option<String> { &self.profile_version }
-    fn get_property(&self) -> &Option<Vec<ProfileApplyProfileProperty>> { &self.property }
+    fn get_property(&self) -> &Option<Vec<super::structs::ProfileApplyProfileProperty>> { &self.property }
     fn get_favorite(&self) -> Option<bool> { self.favorite }
     fn get_to_be_merged(&self) -> Option<bool> { self.to_be_merged }
     fn get_to_replace_with(&self) -> Option<bool> { self.to_replace_with }
@@ -18135,10 +18135,10 @@ impl ApplyProfileTrait for NetStackInstanceProfile {
 }
 impl ApplyProfileTrait for NetworkPolicyProfile {
     fn get_enabled(&self) -> bool { self.enabled }
-    fn get_policy(&self) -> &Option<Vec<ProfilePolicy>> { &self.policy }
+    fn get_policy(&self) -> &Option<Vec<super::structs::ProfilePolicy>> { &self.policy }
     fn get_profile_type_name(&self) -> &Option<String> { &self.profile_type_name }
     fn get_profile_version(&self) -> &Option<String> { &self.profile_version }
-    fn get_property(&self) -> &Option<Vec<ProfileApplyProfileProperty>> { &self.property }
+    fn get_property(&self) -> &Option<Vec<super::structs::ProfileApplyProfileProperty>> { &self.property }
     fn get_favorite(&self) -> Option<bool> { self.favorite }
     fn get_to_be_merged(&self) -> Option<bool> { self.to_be_merged }
     fn get_to_replace_with(&self) -> Option<bool> { self.to_replace_with }
@@ -18148,10 +18148,10 @@ impl ApplyProfileTrait for NetworkPolicyProfile {
 }
 impl ApplyProfileTrait for NetworkProfile {
     fn get_enabled(&self) -> bool { self.enabled }
-    fn get_policy(&self) -> &Option<Vec<ProfilePolicy>> { &self.policy }
+    fn get_policy(&self) -> &Option<Vec<super::structs::ProfilePolicy>> { &self.policy }
     fn get_profile_type_name(&self) -> &Option<String> { &self.profile_type_name }
     fn get_profile_version(&self) -> &Option<String> { &self.profile_version }
-    fn get_property(&self) -> &Option<Vec<ProfileApplyProfileProperty>> { &self.property }
+    fn get_property(&self) -> &Option<Vec<super::structs::ProfileApplyProfileProperty>> { &self.property }
     fn get_favorite(&self) -> Option<bool> { self.favorite }
     fn get_to_be_merged(&self) -> Option<bool> { self.to_be_merged }
     fn get_to_replace_with(&self) -> Option<bool> { self.to_replace_with }
@@ -18161,10 +18161,10 @@ impl ApplyProfileTrait for NetworkProfile {
 }
 impl ApplyProfileTrait for NetworkProfileDnsConfigProfile {
     fn get_enabled(&self) -> bool { self.enabled }
-    fn get_policy(&self) -> &Option<Vec<ProfilePolicy>> { &self.policy }
+    fn get_policy(&self) -> &Option<Vec<super::structs::ProfilePolicy>> { &self.policy }
     fn get_profile_type_name(&self) -> &Option<String> { &self.profile_type_name }
     fn get_profile_version(&self) -> &Option<String> { &self.profile_version }
-    fn get_property(&self) -> &Option<Vec<ProfileApplyProfileProperty>> { &self.property }
+    fn get_property(&self) -> &Option<Vec<super::structs::ProfileApplyProfileProperty>> { &self.property }
     fn get_favorite(&self) -> Option<bool> { self.favorite }
     fn get_to_be_merged(&self) -> Option<bool> { self.to_be_merged }
     fn get_to_replace_with(&self) -> Option<bool> { self.to_replace_with }
@@ -18174,10 +18174,10 @@ impl ApplyProfileTrait for NetworkProfileDnsConfigProfile {
 }
 impl ApplyProfileTrait for NsxHostVNicProfile {
     fn get_enabled(&self) -> bool { self.enabled }
-    fn get_policy(&self) -> &Option<Vec<ProfilePolicy>> { &self.policy }
+    fn get_policy(&self) -> &Option<Vec<super::structs::ProfilePolicy>> { &self.policy }
     fn get_profile_type_name(&self) -> &Option<String> { &self.profile_type_name }
     fn get_profile_version(&self) -> &Option<String> { &self.profile_version }
-    fn get_property(&self) -> &Option<Vec<ProfileApplyProfileProperty>> { &self.property }
+    fn get_property(&self) -> &Option<Vec<super::structs::ProfileApplyProfileProperty>> { &self.property }
     fn get_favorite(&self) -> Option<bool> { self.favorite }
     fn get_to_be_merged(&self) -> Option<bool> { self.to_be_merged }
     fn get_to_replace_with(&self) -> Option<bool> { self.to_replace_with }
@@ -18187,10 +18187,10 @@ impl ApplyProfileTrait for NsxHostVNicProfile {
 }
 impl ApplyProfileTrait for OpaqueSwitchProfile {
     fn get_enabled(&self) -> bool { self.enabled }
-    fn get_policy(&self) -> &Option<Vec<ProfilePolicy>> { &self.policy }
+    fn get_policy(&self) -> &Option<Vec<super::structs::ProfilePolicy>> { &self.policy }
     fn get_profile_type_name(&self) -> &Option<String> { &self.profile_type_name }
     fn get_profile_version(&self) -> &Option<String> { &self.profile_version }
-    fn get_property(&self) -> &Option<Vec<ProfileApplyProfileProperty>> { &self.property }
+    fn get_property(&self) -> &Option<Vec<super::structs::ProfileApplyProfileProperty>> { &self.property }
     fn get_favorite(&self) -> Option<bool> { self.favorite }
     fn get_to_be_merged(&self) -> Option<bool> { self.to_be_merged }
     fn get_to_replace_with(&self) -> Option<bool> { self.to_replace_with }
@@ -18200,10 +18200,10 @@ impl ApplyProfileTrait for OpaqueSwitchProfile {
 }
 impl ApplyProfileTrait for OptionProfile {
     fn get_enabled(&self) -> bool { self.enabled }
-    fn get_policy(&self) -> &Option<Vec<ProfilePolicy>> { &self.policy }
+    fn get_policy(&self) -> &Option<Vec<super::structs::ProfilePolicy>> { &self.policy }
     fn get_profile_type_name(&self) -> &Option<String> { &self.profile_type_name }
     fn get_profile_version(&self) -> &Option<String> { &self.profile_version }
-    fn get_property(&self) -> &Option<Vec<ProfileApplyProfileProperty>> { &self.property }
+    fn get_property(&self) -> &Option<Vec<super::structs::ProfileApplyProfileProperty>> { &self.property }
     fn get_favorite(&self) -> Option<bool> { self.favorite }
     fn get_to_be_merged(&self) -> Option<bool> { self.to_be_merged }
     fn get_to_replace_with(&self) -> Option<bool> { self.to_replace_with }
@@ -18213,10 +18213,10 @@ impl ApplyProfileTrait for OptionProfile {
 }
 impl ApplyProfileTrait for PermissionProfile {
     fn get_enabled(&self) -> bool { self.enabled }
-    fn get_policy(&self) -> &Option<Vec<ProfilePolicy>> { &self.policy }
+    fn get_policy(&self) -> &Option<Vec<super::structs::ProfilePolicy>> { &self.policy }
     fn get_profile_type_name(&self) -> &Option<String> { &self.profile_type_name }
     fn get_profile_version(&self) -> &Option<String> { &self.profile_version }
-    fn get_property(&self) -> &Option<Vec<ProfileApplyProfileProperty>> { &self.property }
+    fn get_property(&self) -> &Option<Vec<super::structs::ProfileApplyProfileProperty>> { &self.property }
     fn get_favorite(&self) -> Option<bool> { self.favorite }
     fn get_to_be_merged(&self) -> Option<bool> { self.to_be_merged }
     fn get_to_replace_with(&self) -> Option<bool> { self.to_replace_with }
@@ -18226,10 +18226,10 @@ impl ApplyProfileTrait for PermissionProfile {
 }
 impl ApplyProfileTrait for PhysicalNicProfile {
     fn get_enabled(&self) -> bool { self.enabled }
-    fn get_policy(&self) -> &Option<Vec<ProfilePolicy>> { &self.policy }
+    fn get_policy(&self) -> &Option<Vec<super::structs::ProfilePolicy>> { &self.policy }
     fn get_profile_type_name(&self) -> &Option<String> { &self.profile_type_name }
     fn get_profile_version(&self) -> &Option<String> { &self.profile_version }
-    fn get_property(&self) -> &Option<Vec<ProfileApplyProfileProperty>> { &self.property }
+    fn get_property(&self) -> &Option<Vec<super::structs::ProfileApplyProfileProperty>> { &self.property }
     fn get_favorite(&self) -> Option<bool> { self.favorite }
     fn get_to_be_merged(&self) -> Option<bool> { self.to_be_merged }
     fn get_to_replace_with(&self) -> Option<bool> { self.to_replace_with }
@@ -18239,10 +18239,10 @@ impl ApplyProfileTrait for PhysicalNicProfile {
 }
 impl ApplyProfileTrait for PnicUplinkProfile {
     fn get_enabled(&self) -> bool { self.enabled }
-    fn get_policy(&self) -> &Option<Vec<ProfilePolicy>> { &self.policy }
+    fn get_policy(&self) -> &Option<Vec<super::structs::ProfilePolicy>> { &self.policy }
     fn get_profile_type_name(&self) -> &Option<String> { &self.profile_type_name }
     fn get_profile_version(&self) -> &Option<String> { &self.profile_version }
-    fn get_property(&self) -> &Option<Vec<ProfileApplyProfileProperty>> { &self.property }
+    fn get_property(&self) -> &Option<Vec<super::structs::ProfileApplyProfileProperty>> { &self.property }
     fn get_favorite(&self) -> Option<bool> { self.favorite }
     fn get_to_be_merged(&self) -> Option<bool> { self.to_be_merged }
     fn get_to_replace_with(&self) -> Option<bool> { self.to_replace_with }
@@ -18252,10 +18252,10 @@ impl ApplyProfileTrait for PnicUplinkProfile {
 }
 impl ApplyProfileTrait for PortGroupProfile {
     fn get_enabled(&self) -> bool { self.enabled }
-    fn get_policy(&self) -> &Option<Vec<ProfilePolicy>> { &self.policy }
+    fn get_policy(&self) -> &Option<Vec<super::structs::ProfilePolicy>> { &self.policy }
     fn get_profile_type_name(&self) -> &Option<String> { &self.profile_type_name }
     fn get_profile_version(&self) -> &Option<String> { &self.profile_version }
-    fn get_property(&self) -> &Option<Vec<ProfileApplyProfileProperty>> { &self.property }
+    fn get_property(&self) -> &Option<Vec<super::structs::ProfileApplyProfileProperty>> { &self.property }
     fn get_favorite(&self) -> Option<bool> { self.favorite }
     fn get_to_be_merged(&self) -> Option<bool> { self.to_be_merged }
     fn get_to_replace_with(&self) -> Option<bool> { self.to_replace_with }
@@ -18265,10 +18265,10 @@ impl ApplyProfileTrait for PortGroupProfile {
 }
 impl ApplyProfileTrait for HostPortGroupProfile {
     fn get_enabled(&self) -> bool { self.enabled }
-    fn get_policy(&self) -> &Option<Vec<ProfilePolicy>> { &self.policy }
+    fn get_policy(&self) -> &Option<Vec<super::structs::ProfilePolicy>> { &self.policy }
     fn get_profile_type_name(&self) -> &Option<String> { &self.profile_type_name }
     fn get_profile_version(&self) -> &Option<String> { &self.profile_version }
-    fn get_property(&self) -> &Option<Vec<ProfileApplyProfileProperty>> { &self.property }
+    fn get_property(&self) -> &Option<Vec<super::structs::ProfileApplyProfileProperty>> { &self.property }
     fn get_favorite(&self) -> Option<bool> { self.favorite }
     fn get_to_be_merged(&self) -> Option<bool> { self.to_be_merged }
     fn get_to_replace_with(&self) -> Option<bool> { self.to_replace_with }
@@ -18278,10 +18278,10 @@ impl ApplyProfileTrait for HostPortGroupProfile {
 }
 impl ApplyProfileTrait for ServiceConsolePortGroupProfile {
     fn get_enabled(&self) -> bool { self.enabled }
-    fn get_policy(&self) -> &Option<Vec<ProfilePolicy>> { &self.policy }
+    fn get_policy(&self) -> &Option<Vec<super::structs::ProfilePolicy>> { &self.policy }
     fn get_profile_type_name(&self) -> &Option<String> { &self.profile_type_name }
     fn get_profile_version(&self) -> &Option<String> { &self.profile_version }
-    fn get_property(&self) -> &Option<Vec<ProfileApplyProfileProperty>> { &self.property }
+    fn get_property(&self) -> &Option<Vec<super::structs::ProfileApplyProfileProperty>> { &self.property }
     fn get_favorite(&self) -> Option<bool> { self.favorite }
     fn get_to_be_merged(&self) -> Option<bool> { self.to_be_merged }
     fn get_to_replace_with(&self) -> Option<bool> { self.to_replace_with }
@@ -18291,10 +18291,10 @@ impl ApplyProfileTrait for ServiceConsolePortGroupProfile {
 }
 impl ApplyProfileTrait for VmPortGroupProfile {
     fn get_enabled(&self) -> bool { self.enabled }
-    fn get_policy(&self) -> &Option<Vec<ProfilePolicy>> { &self.policy }
+    fn get_policy(&self) -> &Option<Vec<super::structs::ProfilePolicy>> { &self.policy }
     fn get_profile_type_name(&self) -> &Option<String> { &self.profile_type_name }
     fn get_profile_version(&self) -> &Option<String> { &self.profile_version }
-    fn get_property(&self) -> &Option<Vec<ProfileApplyProfileProperty>> { &self.property }
+    fn get_property(&self) -> &Option<Vec<super::structs::ProfileApplyProfileProperty>> { &self.property }
     fn get_favorite(&self) -> Option<bool> { self.favorite }
     fn get_to_be_merged(&self) -> Option<bool> { self.to_be_merged }
     fn get_to_replace_with(&self) -> Option<bool> { self.to_replace_with }
@@ -18304,10 +18304,10 @@ impl ApplyProfileTrait for VmPortGroupProfile {
 }
 impl ApplyProfileTrait for VirtualSwitchSelectionProfile {
     fn get_enabled(&self) -> bool { self.enabled }
-    fn get_policy(&self) -> &Option<Vec<ProfilePolicy>> { &self.policy }
+    fn get_policy(&self) -> &Option<Vec<super::structs::ProfilePolicy>> { &self.policy }
     fn get_profile_type_name(&self) -> &Option<String> { &self.profile_type_name }
     fn get_profile_version(&self) -> &Option<String> { &self.profile_version }
-    fn get_property(&self) -> &Option<Vec<ProfileApplyProfileProperty>> { &self.property }
+    fn get_property(&self) -> &Option<Vec<super::structs::ProfileApplyProfileProperty>> { &self.property }
     fn get_favorite(&self) -> Option<bool> { self.favorite }
     fn get_to_be_merged(&self) -> Option<bool> { self.to_be_merged }
     fn get_to_replace_with(&self) -> Option<bool> { self.to_replace_with }
@@ -18317,10 +18317,10 @@ impl ApplyProfileTrait for VirtualSwitchSelectionProfile {
 }
 impl ApplyProfileTrait for VlanProfile {
     fn get_enabled(&self) -> bool { self.enabled }
-    fn get_policy(&self) -> &Option<Vec<ProfilePolicy>> { &self.policy }
+    fn get_policy(&self) -> &Option<Vec<super::structs::ProfilePolicy>> { &self.policy }
     fn get_profile_type_name(&self) -> &Option<String> { &self.profile_type_name }
     fn get_profile_version(&self) -> &Option<String> { &self.profile_version }
-    fn get_property(&self) -> &Option<Vec<ProfileApplyProfileProperty>> { &self.property }
+    fn get_property(&self) -> &Option<Vec<super::structs::ProfileApplyProfileProperty>> { &self.property }
     fn get_favorite(&self) -> Option<bool> { self.favorite }
     fn get_to_be_merged(&self) -> Option<bool> { self.to_be_merged }
     fn get_to_replace_with(&self) -> Option<bool> { self.to_replace_with }
@@ -18330,10 +18330,10 @@ impl ApplyProfileTrait for VlanProfile {
 }
 impl ApplyProfileTrait for SecurityProfile {
     fn get_enabled(&self) -> bool { self.enabled }
-    fn get_policy(&self) -> &Option<Vec<ProfilePolicy>> { &self.policy }
+    fn get_policy(&self) -> &Option<Vec<super::structs::ProfilePolicy>> { &self.policy }
     fn get_profile_type_name(&self) -> &Option<String> { &self.profile_type_name }
     fn get_profile_version(&self) -> &Option<String> { &self.profile_version }
-    fn get_property(&self) -> &Option<Vec<ProfileApplyProfileProperty>> { &self.property }
+    fn get_property(&self) -> &Option<Vec<super::structs::ProfileApplyProfileProperty>> { &self.property }
     fn get_favorite(&self) -> Option<bool> { self.favorite }
     fn get_to_be_merged(&self) -> Option<bool> { self.to_be_merged }
     fn get_to_replace_with(&self) -> Option<bool> { self.to_replace_with }
@@ -18343,10 +18343,10 @@ impl ApplyProfileTrait for SecurityProfile {
 }
 impl ApplyProfileTrait for ServiceProfile {
     fn get_enabled(&self) -> bool { self.enabled }
-    fn get_policy(&self) -> &Option<Vec<ProfilePolicy>> { &self.policy }
+    fn get_policy(&self) -> &Option<Vec<super::structs::ProfilePolicy>> { &self.policy }
     fn get_profile_type_name(&self) -> &Option<String> { &self.profile_type_name }
     fn get_profile_version(&self) -> &Option<String> { &self.profile_version }
-    fn get_property(&self) -> &Option<Vec<ProfileApplyProfileProperty>> { &self.property }
+    fn get_property(&self) -> &Option<Vec<super::structs::ProfileApplyProfileProperty>> { &self.property }
     fn get_favorite(&self) -> Option<bool> { self.favorite }
     fn get_to_be_merged(&self) -> Option<bool> { self.to_be_merged }
     fn get_to_replace_with(&self) -> Option<bool> { self.to_replace_with }
@@ -18356,10 +18356,10 @@ impl ApplyProfileTrait for ServiceProfile {
 }
 impl ApplyProfileTrait for StaticRouteProfile {
     fn get_enabled(&self) -> bool { self.enabled }
-    fn get_policy(&self) -> &Option<Vec<ProfilePolicy>> { &self.policy }
+    fn get_policy(&self) -> &Option<Vec<super::structs::ProfilePolicy>> { &self.policy }
     fn get_profile_type_name(&self) -> &Option<String> { &self.profile_type_name }
     fn get_profile_version(&self) -> &Option<String> { &self.profile_version }
-    fn get_property(&self) -> &Option<Vec<ProfileApplyProfileProperty>> { &self.property }
+    fn get_property(&self) -> &Option<Vec<super::structs::ProfileApplyProfileProperty>> { &self.property }
     fn get_favorite(&self) -> Option<bool> { self.favorite }
     fn get_to_be_merged(&self) -> Option<bool> { self.to_be_merged }
     fn get_to_replace_with(&self) -> Option<bool> { self.to_replace_with }
@@ -18369,10 +18369,10 @@ impl ApplyProfileTrait for StaticRouteProfile {
 }
 impl ApplyProfileTrait for StorageProfile {
     fn get_enabled(&self) -> bool { self.enabled }
-    fn get_policy(&self) -> &Option<Vec<ProfilePolicy>> { &self.policy }
+    fn get_policy(&self) -> &Option<Vec<super::structs::ProfilePolicy>> { &self.policy }
     fn get_profile_type_name(&self) -> &Option<String> { &self.profile_type_name }
     fn get_profile_version(&self) -> &Option<String> { &self.profile_version }
-    fn get_property(&self) -> &Option<Vec<ProfileApplyProfileProperty>> { &self.property }
+    fn get_property(&self) -> &Option<Vec<super::structs::ProfileApplyProfileProperty>> { &self.property }
     fn get_favorite(&self) -> Option<bool> { self.favorite }
     fn get_to_be_merged(&self) -> Option<bool> { self.to_be_merged }
     fn get_to_replace_with(&self) -> Option<bool> { self.to_replace_with }
@@ -18382,10 +18382,10 @@ impl ApplyProfileTrait for StorageProfile {
 }
 impl ApplyProfileTrait for UserGroupProfile {
     fn get_enabled(&self) -> bool { self.enabled }
-    fn get_policy(&self) -> &Option<Vec<ProfilePolicy>> { &self.policy }
+    fn get_policy(&self) -> &Option<Vec<super::structs::ProfilePolicy>> { &self.policy }
     fn get_profile_type_name(&self) -> &Option<String> { &self.profile_type_name }
     fn get_profile_version(&self) -> &Option<String> { &self.profile_version }
-    fn get_property(&self) -> &Option<Vec<ProfileApplyProfileProperty>> { &self.property }
+    fn get_property(&self) -> &Option<Vec<super::structs::ProfileApplyProfileProperty>> { &self.property }
     fn get_favorite(&self) -> Option<bool> { self.favorite }
     fn get_to_be_merged(&self) -> Option<bool> { self.to_be_merged }
     fn get_to_replace_with(&self) -> Option<bool> { self.to_replace_with }
@@ -18395,10 +18395,10 @@ impl ApplyProfileTrait for UserGroupProfile {
 }
 impl ApplyProfileTrait for UserProfile {
     fn get_enabled(&self) -> bool { self.enabled }
-    fn get_policy(&self) -> &Option<Vec<ProfilePolicy>> { &self.policy }
+    fn get_policy(&self) -> &Option<Vec<super::structs::ProfilePolicy>> { &self.policy }
     fn get_profile_type_name(&self) -> &Option<String> { &self.profile_type_name }
     fn get_profile_version(&self) -> &Option<String> { &self.profile_version }
-    fn get_property(&self) -> &Option<Vec<ProfileApplyProfileProperty>> { &self.property }
+    fn get_property(&self) -> &Option<Vec<super::structs::ProfileApplyProfileProperty>> { &self.property }
     fn get_favorite(&self) -> Option<bool> { self.favorite }
     fn get_to_be_merged(&self) -> Option<bool> { self.to_be_merged }
     fn get_to_replace_with(&self) -> Option<bool> { self.to_replace_with }
@@ -18408,10 +18408,10 @@ impl ApplyProfileTrait for UserProfile {
 }
 impl ApplyProfileTrait for VirtualSwitchProfile {
     fn get_enabled(&self) -> bool { self.enabled }
-    fn get_policy(&self) -> &Option<Vec<ProfilePolicy>> { &self.policy }
+    fn get_policy(&self) -> &Option<Vec<super::structs::ProfilePolicy>> { &self.policy }
     fn get_profile_type_name(&self) -> &Option<String> { &self.profile_type_name }
     fn get_profile_version(&self) -> &Option<String> { &self.profile_version }
-    fn get_property(&self) -> &Option<Vec<ProfileApplyProfileProperty>> { &self.property }
+    fn get_property(&self) -> &Option<Vec<super::structs::ProfileApplyProfileProperty>> { &self.property }
     fn get_favorite(&self) -> Option<bool> { self.favorite }
     fn get_to_be_merged(&self) -> Option<bool> { self.to_be_merged }
     fn get_to_replace_with(&self) -> Option<bool> { self.to_replace_with }
@@ -18421,10 +18421,10 @@ impl ApplyProfileTrait for VirtualSwitchProfile {
 }
 impl ApplyProfileTrait for LinkProfile {
     fn get_enabled(&self) -> bool { self.enabled }
-    fn get_policy(&self) -> &Option<Vec<ProfilePolicy>> { &self.policy }
+    fn get_policy(&self) -> &Option<Vec<super::structs::ProfilePolicy>> { &self.policy }
     fn get_profile_type_name(&self) -> &Option<String> { &self.profile_type_name }
     fn get_profile_version(&self) -> &Option<String> { &self.profile_version }
-    fn get_property(&self) -> &Option<Vec<ProfileApplyProfileProperty>> { &self.property }
+    fn get_property(&self) -> &Option<Vec<super::structs::ProfileApplyProfileProperty>> { &self.property }
     fn get_favorite(&self) -> Option<bool> { self.favorite }
     fn get_to_be_merged(&self) -> Option<bool> { self.to_be_merged }
     fn get_to_replace_with(&self) -> Option<bool> { self.to_replace_with }
@@ -18434,10 +18434,10 @@ impl ApplyProfileTrait for LinkProfile {
 }
 impl ApplyProfileTrait for NumPortsProfile {
     fn get_enabled(&self) -> bool { self.enabled }
-    fn get_policy(&self) -> &Option<Vec<ProfilePolicy>> { &self.policy }
+    fn get_policy(&self) -> &Option<Vec<super::structs::ProfilePolicy>> { &self.policy }
     fn get_profile_type_name(&self) -> &Option<String> { &self.profile_type_name }
     fn get_profile_version(&self) -> &Option<String> { &self.profile_version }
-    fn get_property(&self) -> &Option<Vec<ProfileApplyProfileProperty>> { &self.property }
+    fn get_property(&self) -> &Option<Vec<super::structs::ProfileApplyProfileProperty>> { &self.property }
     fn get_favorite(&self) -> Option<bool> { self.favorite }
     fn get_to_be_merged(&self) -> Option<bool> { self.to_be_merged }
     fn get_to_replace_with(&self) -> Option<bool> { self.to_replace_with }
@@ -18552,7 +18552,7 @@ pub trait DvsVNicProfileTrait : super::traits::ApplyProfileTrait {
     /// Linkable identifier.
     fn get_key(&self) -> &str;
     /// IP address for the Virtual NIC belonging to a distributed virtual switch.
-    fn get_ip_config(&self) -> &IpAddressProfile;
+    fn get_ip_config(&self) -> &super::structs::IpAddressProfile;
 }
 impl<'s> serde::Serialize for dyn DvsVNicProfileTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
@@ -18595,15 +18595,15 @@ impl<'de> de::Visitor<'de> for DvsVNicProfileVisitor {
 
 impl DvsVNicProfileTrait for DvsVNicProfile {
     fn get_key(&self) -> &str { &self.key }
-    fn get_ip_config(&self) -> &IpAddressProfile { &self.ip_config }
+    fn get_ip_config(&self) -> &super::structs::IpAddressProfile { &self.ip_config }
 }
 impl DvsVNicProfileTrait for DvsHostVNicProfile {
     fn get_key(&self) -> &str { &self.key }
-    fn get_ip_config(&self) -> &IpAddressProfile { &self.ip_config }
+    fn get_ip_config(&self) -> &super::structs::IpAddressProfile { &self.ip_config }
 }
 impl DvsVNicProfileTrait for DvsServiceConsoleVNicProfile {
     fn get_key(&self) -> &str { &self.key }
-    fn get_ip_config(&self) -> &IpAddressProfile { &self.ip_config }
+    fn get_ip_config(&self) -> &super::structs::IpAddressProfile { &self.ip_config }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DvsVNicProfileTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -18634,11 +18634,11 @@ pub trait PortGroupProfileTrait : super::traits::ApplyProfileTrait {
     /// Name of the portgroup.
     fn get_name(&self) -> &str;
     /// VLAN identifier for the port group.
-    fn get_vlan(&self) -> &VlanProfile;
+    fn get_vlan(&self) -> &super::structs::VlanProfile;
     /// Virtual switch to which the port group is connected.
-    fn get_vswitch(&self) -> &VirtualSwitchSelectionProfile;
+    fn get_vswitch(&self) -> &super::structs::VirtualSwitchSelectionProfile;
     /// The network policy/policies applicable on the port group.
-    fn get_network_policy(&self) -> &NetworkPolicyProfile;
+    fn get_network_policy(&self) -> &super::structs::NetworkPolicyProfile;
 }
 impl<'s> serde::Serialize for dyn PortGroupProfileTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
@@ -18682,30 +18682,30 @@ impl<'de> de::Visitor<'de> for PortGroupProfileVisitor {
 impl PortGroupProfileTrait for PortGroupProfile {
     fn get_key(&self) -> &str { &self.key }
     fn get_name(&self) -> &str { &self.name }
-    fn get_vlan(&self) -> &VlanProfile { &self.vlan }
-    fn get_vswitch(&self) -> &VirtualSwitchSelectionProfile { &self.vswitch }
-    fn get_network_policy(&self) -> &NetworkPolicyProfile { &self.network_policy }
+    fn get_vlan(&self) -> &super::structs::VlanProfile { &self.vlan }
+    fn get_vswitch(&self) -> &super::structs::VirtualSwitchSelectionProfile { &self.vswitch }
+    fn get_network_policy(&self) -> &super::structs::NetworkPolicyProfile { &self.network_policy }
 }
 impl PortGroupProfileTrait for HostPortGroupProfile {
     fn get_key(&self) -> &str { &self.key }
     fn get_name(&self) -> &str { &self.name }
-    fn get_vlan(&self) -> &VlanProfile { &self.vlan }
-    fn get_vswitch(&self) -> &VirtualSwitchSelectionProfile { &self.vswitch }
-    fn get_network_policy(&self) -> &NetworkPolicyProfile { &self.network_policy }
+    fn get_vlan(&self) -> &super::structs::VlanProfile { &self.vlan }
+    fn get_vswitch(&self) -> &super::structs::VirtualSwitchSelectionProfile { &self.vswitch }
+    fn get_network_policy(&self) -> &super::structs::NetworkPolicyProfile { &self.network_policy }
 }
 impl PortGroupProfileTrait for ServiceConsolePortGroupProfile {
     fn get_key(&self) -> &str { &self.key }
     fn get_name(&self) -> &str { &self.name }
-    fn get_vlan(&self) -> &VlanProfile { &self.vlan }
-    fn get_vswitch(&self) -> &VirtualSwitchSelectionProfile { &self.vswitch }
-    fn get_network_policy(&self) -> &NetworkPolicyProfile { &self.network_policy }
+    fn get_vlan(&self) -> &super::structs::VlanProfile { &self.vlan }
+    fn get_vswitch(&self) -> &super::structs::VirtualSwitchSelectionProfile { &self.vswitch }
+    fn get_network_policy(&self) -> &super::structs::NetworkPolicyProfile { &self.network_policy }
 }
 impl PortGroupProfileTrait for VmPortGroupProfile {
     fn get_key(&self) -> &str { &self.key }
     fn get_name(&self) -> &str { &self.name }
-    fn get_vlan(&self) -> &VlanProfile { &self.vlan }
-    fn get_vswitch(&self) -> &VirtualSwitchSelectionProfile { &self.vswitch }
-    fn get_network_policy(&self) -> &NetworkPolicyProfile { &self.network_policy }
+    fn get_vlan(&self) -> &super::structs::VlanProfile { &self.vlan }
+    fn get_vswitch(&self) -> &super::structs::VirtualSwitchSelectionProfile { &self.vswitch }
+    fn get_network_policy(&self) -> &super::structs::NetworkPolicyProfile { &self.network_policy }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn PortGroupProfileTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -18837,7 +18837,7 @@ pub trait PolicyOptionTrait : super::traits::DataObjectTrait {
     /// This list must include all parameters that are not marked as optional
     /// in the policy option metadata parameter list
     /// (*ProfilePolicyMetadata*.*ProfilePolicyMetadata.possibleOption*\[\].*ProfilePolicyOptionMetadata.parameter*\[\].*ProfileParameterMetadata.optional*).
-    fn get_parameter(&self) -> &Option<Vec<KeyAnyValue>>;
+    fn get_parameter(&self) -> &Option<Vec<super::structs::KeyAnyValue>>;
 }
 impl<'s> serde::Serialize for dyn PolicyOptionTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
@@ -18880,11 +18880,11 @@ impl<'de> de::Visitor<'de> for PolicyOptionVisitor {
 
 impl PolicyOptionTrait for PolicyOption {
     fn get_id(&self) -> &str { &self.id }
-    fn get_parameter(&self) -> &Option<Vec<KeyAnyValue>> { &self.parameter }
+    fn get_parameter(&self) -> &Option<Vec<super::structs::KeyAnyValue>> { &self.parameter }
 }
 impl PolicyOptionTrait for CompositePolicyOption {
     fn get_id(&self) -> &str { &self.id }
-    fn get_parameter(&self) -> &Option<Vec<KeyAnyValue>> { &self.parameter }
+    fn get_parameter(&self) -> &Option<Vec<super::structs::KeyAnyValue>> { &self.parameter }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn PolicyOptionTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -18920,9 +18920,9 @@ pub trait ProfilePolicyOptionMetadataTrait : super::traits::DataObjectTrait {
     ///   contains a localizable summary of the policy option.
     ///   Summary information can contain embedded variable names which can
     ///   be replaced with values from the <code>parameter</code> property.
-    fn get_id(&self) -> &ExtendedElementDescription;
+    fn get_id(&self) -> &super::structs::ExtendedElementDescription;
     /// Metadata about the parameters for the policy option.
-    fn get_parameter(&self) -> &Option<Vec<ProfileParameterMetadata>>;
+    fn get_parameter(&self) -> &Option<Vec<super::structs::ProfileParameterMetadata>>;
 }
 impl<'s> serde::Serialize for dyn ProfilePolicyOptionMetadataTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
@@ -18964,16 +18964,16 @@ impl<'de> de::Visitor<'de> for ProfilePolicyOptionMetadataVisitor {
 }
 
 impl ProfilePolicyOptionMetadataTrait for ProfilePolicyOptionMetadata {
-    fn get_id(&self) -> &ExtendedElementDescription { &self.id }
-    fn get_parameter(&self) -> &Option<Vec<ProfileParameterMetadata>> { &self.parameter }
+    fn get_id(&self) -> &super::structs::ExtendedElementDescription { &self.id }
+    fn get_parameter(&self) -> &Option<Vec<super::structs::ProfileParameterMetadata>> { &self.parameter }
 }
 impl ProfilePolicyOptionMetadataTrait for ProfileCompositePolicyOptionMetadata {
-    fn get_id(&self) -> &ExtendedElementDescription { &self.id }
-    fn get_parameter(&self) -> &Option<Vec<ProfileParameterMetadata>> { &self.parameter }
+    fn get_id(&self) -> &super::structs::ExtendedElementDescription { &self.id }
+    fn get_parameter(&self) -> &Option<Vec<super::structs::ProfileParameterMetadata>> { &self.parameter }
 }
 impl ProfilePolicyOptionMetadataTrait for UserInputRequiredParameterMetadata {
-    fn get_id(&self) -> &ExtendedElementDescription { &self.id }
-    fn get_parameter(&self) -> &Option<Vec<ProfileParameterMetadata>> { &self.parameter }
+    fn get_id(&self) -> &super::structs::ExtendedElementDescription { &self.id }
+    fn get_parameter(&self) -> &Option<Vec<super::structs::ProfileParameterMetadata>> { &self.parameter }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn ProfilePolicyOptionMetadataTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -19514,7 +19514,7 @@ pub trait ProfileExecuteResultTrait : super::traits::DataObjectTrait {
     /// to a host. See the <code>configSpec</code> parameter to the
     /// *HostProfileManager*.*HostProfileManager.ApplyHostConfig_Task*
     /// method.
-    fn get_config_spec(&self) -> &Option<HostConfigSpec>;
+    fn get_config_spec(&self) -> &Option<super::structs::HostConfigSpec>;
     /// List of property paths.
     /// 
     /// Each path identifies a policy that does not apply
@@ -19559,11 +19559,11 @@ pub trait ProfileExecuteResultTrait : super::traits::DataObjectTrait {
     /// *HostProfileManager*.*HostProfileManager.ApplyHostConfig_Task*
     /// method. The Server will use the list to update the *AnswerFile*
     /// associated with the host.
-    fn get_require_input(&self) -> &Option<Vec<ProfileDeferredPolicyOptionParameter>>;
+    fn get_require_input(&self) -> &Option<Vec<super::structs::ProfileDeferredPolicyOptionParameter>>;
     /// List of errors that were encountered during execute.
     /// 
     /// This field will be set if status is set to error.
-    fn get_error(&self) -> &Option<Vec<ProfileExecuteError>>;
+    fn get_error(&self) -> &Option<Vec<super::structs::ProfileExecuteError>>;
 }
 impl<'s> serde::Serialize for dyn ProfileExecuteResultTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
@@ -19606,17 +19606,17 @@ impl<'de> de::Visitor<'de> for ProfileExecuteResultVisitor {
 
 impl ProfileExecuteResultTrait for ProfileExecuteResult {
     fn get_status(&self) -> &str { &self.status }
-    fn get_config_spec(&self) -> &Option<HostConfigSpec> { &self.config_spec }
+    fn get_config_spec(&self) -> &Option<super::structs::HostConfigSpec> { &self.config_spec }
     fn get_inapplicable_path(&self) -> &Option<Vec<String>> { &self.inapplicable_path }
-    fn get_require_input(&self) -> &Option<Vec<ProfileDeferredPolicyOptionParameter>> { &self.require_input }
-    fn get_error(&self) -> &Option<Vec<ProfileExecuteError>> { &self.error }
+    fn get_require_input(&self) -> &Option<Vec<super::structs::ProfileDeferredPolicyOptionParameter>> { &self.require_input }
+    fn get_error(&self) -> &Option<Vec<super::structs::ProfileExecuteError>> { &self.error }
 }
 impl ProfileExecuteResultTrait for ApplyHostProfileConfigurationSpec {
     fn get_status(&self) -> &str { &self.status }
-    fn get_config_spec(&self) -> &Option<HostConfigSpec> { &self.config_spec }
+    fn get_config_spec(&self) -> &Option<super::structs::HostConfigSpec> { &self.config_spec }
     fn get_inapplicable_path(&self) -> &Option<Vec<String>> { &self.inapplicable_path }
-    fn get_require_input(&self) -> &Option<Vec<ProfileDeferredPolicyOptionParameter>> { &self.require_input }
-    fn get_error(&self) -> &Option<Vec<ProfileExecuteError>> { &self.error }
+    fn get_require_input(&self) -> &Option<Vec<super::structs::ProfileDeferredPolicyOptionParameter>> { &self.require_input }
+    fn get_error(&self) -> &Option<Vec<super::structs::ProfileExecuteError>> { &self.error }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn ProfileExecuteResultTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -20411,15 +20411,15 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn MonthlyTask
 /// VM Configuration.
 pub trait VmConfigInfoTrait : super::traits::DataObjectTrait {
     /// Information about the package content.
-    fn get_product(&self) -> &Option<Vec<VAppProductInfo>>;
+    fn get_product(&self) -> &Option<Vec<super::structs::VAppProductInfo>>;
     /// List of properties
-    fn get_property(&self) -> &Option<Vec<VAppPropertyInfo>>;
+    fn get_property(&self) -> &Option<Vec<super::structs::VAppPropertyInfo>>;
     /// IP assignment policy and DHCP support configuration.
-    fn get_ip_assignment(&self) -> &VAppIpAssignmentInfo;
+    fn get_ip_assignment(&self) -> &super::structs::VAppIpAssignmentInfo;
     /// End User Liceses Agreements.
     fn get_eula(&self) -> &Option<Vec<String>>;
     /// List of uninterpreted OVF meta-data sections.
-    fn get_ovf_section(&self) -> &Option<Vec<VAppOvfSectionInfo>>;
+    fn get_ovf_section(&self) -> &Option<Vec<super::structs::VAppOvfSectionInfo>>;
     /// List the transports to use for properties.
     /// 
     /// Supported values are: iso and
@@ -20482,21 +20482,21 @@ impl<'de> de::Visitor<'de> for VmConfigInfoVisitor {
 }
 
 impl VmConfigInfoTrait for VmConfigInfo {
-    fn get_product(&self) -> &Option<Vec<VAppProductInfo>> { &self.product }
-    fn get_property(&self) -> &Option<Vec<VAppPropertyInfo>> { &self.property }
-    fn get_ip_assignment(&self) -> &VAppIpAssignmentInfo { &self.ip_assignment }
+    fn get_product(&self) -> &Option<Vec<super::structs::VAppProductInfo>> { &self.product }
+    fn get_property(&self) -> &Option<Vec<super::structs::VAppPropertyInfo>> { &self.property }
+    fn get_ip_assignment(&self) -> &super::structs::VAppIpAssignmentInfo { &self.ip_assignment }
     fn get_eula(&self) -> &Option<Vec<String>> { &self.eula }
-    fn get_ovf_section(&self) -> &Option<Vec<VAppOvfSectionInfo>> { &self.ovf_section }
+    fn get_ovf_section(&self) -> &Option<Vec<super::structs::VAppOvfSectionInfo>> { &self.ovf_section }
     fn get_ovf_environment_transport(&self) -> &Option<Vec<String>> { &self.ovf_environment_transport }
     fn get_install_boot_required(&self) -> bool { self.install_boot_required }
     fn get_install_boot_stop_delay(&self) -> i32 { self.install_boot_stop_delay }
 }
 impl VmConfigInfoTrait for VAppConfigInfo {
-    fn get_product(&self) -> &Option<Vec<VAppProductInfo>> { &self.product }
-    fn get_property(&self) -> &Option<Vec<VAppPropertyInfo>> { &self.property }
-    fn get_ip_assignment(&self) -> &VAppIpAssignmentInfo { &self.ip_assignment }
+    fn get_product(&self) -> &Option<Vec<super::structs::VAppProductInfo>> { &self.product }
+    fn get_property(&self) -> &Option<Vec<super::structs::VAppPropertyInfo>> { &self.property }
+    fn get_ip_assignment(&self) -> &super::structs::VAppIpAssignmentInfo { &self.ip_assignment }
     fn get_eula(&self) -> &Option<Vec<String>> { &self.eula }
-    fn get_ovf_section(&self) -> &Option<Vec<VAppOvfSectionInfo>> { &self.ovf_section }
+    fn get_ovf_section(&self) -> &Option<Vec<super::structs::VAppOvfSectionInfo>> { &self.ovf_section }
     fn get_ovf_environment_transport(&self) -> &Option<Vec<String>> { &self.ovf_environment_transport }
     fn get_install_boot_required(&self) -> bool { self.install_boot_required }
     fn get_install_boot_stop_delay(&self) -> i32 { self.install_boot_stop_delay }
@@ -20525,18 +20525,18 @@ pub trait VmConfigSpecTrait : super::traits::DataObjectTrait {
     /// Information about the product.
     /// 
     /// Reconfigure privilege: VApp.ApplicationConfig
-    fn get_product(&self) -> &Option<Vec<VAppProductSpec>>;
+    fn get_product(&self) -> &Option<Vec<super::structs::VAppProductSpec>>;
     /// List of properties.
     /// 
     /// Adding and editing properties requires various privileges depending on which fields
     /// are affected. See *VAppPropertyInfo* for details.
     /// 
     /// Deleting properties requires the privilege VApp.ApplicationConfig.
-    fn get_property(&self) -> &Option<Vec<VAppPropertySpec>>;
+    fn get_property(&self) -> &Option<Vec<super::structs::VAppPropertySpec>>;
     /// IP assignment policy and DHCP support configuration.
     /// 
     /// Reconfigure privilege: See *VAppIPAssignmentInfo*
-    fn get_ip_assignment(&self) -> &Option<VAppIpAssignmentInfo>;
+    fn get_ip_assignment(&self) -> &Option<super::structs::VAppIpAssignmentInfo>;
     /// End User Liceses Agreements.
     /// 
     /// If this list is set, it replaces all exiting licenses. An empty list will not
@@ -20548,7 +20548,7 @@ pub trait VmConfigSpecTrait : super::traits::DataObjectTrait {
     /// List of uninterpreted OVF meta-data sections.
     /// 
     /// Reconfigure privilege: VApp.ApplicationConfig
-    fn get_ovf_section(&self) -> &Option<Vec<VAppOvfSectionSpec>>;
+    fn get_ovf_section(&self) -> &Option<Vec<super::structs::VAppOvfSectionSpec>>;
     /// List the transports to use for properties.
     /// 
     /// Supported values are: iso and
@@ -20616,21 +20616,21 @@ impl<'de> de::Visitor<'de> for VmConfigSpecVisitor {
 }
 
 impl VmConfigSpecTrait for VmConfigSpec {
-    fn get_product(&self) -> &Option<Vec<VAppProductSpec>> { &self.product }
-    fn get_property(&self) -> &Option<Vec<VAppPropertySpec>> { &self.property }
-    fn get_ip_assignment(&self) -> &Option<VAppIpAssignmentInfo> { &self.ip_assignment }
+    fn get_product(&self) -> &Option<Vec<super::structs::VAppProductSpec>> { &self.product }
+    fn get_property(&self) -> &Option<Vec<super::structs::VAppPropertySpec>> { &self.property }
+    fn get_ip_assignment(&self) -> &Option<super::structs::VAppIpAssignmentInfo> { &self.ip_assignment }
     fn get_eula(&self) -> &Option<Vec<String>> { &self.eula }
-    fn get_ovf_section(&self) -> &Option<Vec<VAppOvfSectionSpec>> { &self.ovf_section }
+    fn get_ovf_section(&self) -> &Option<Vec<super::structs::VAppOvfSectionSpec>> { &self.ovf_section }
     fn get_ovf_environment_transport(&self) -> &Option<Vec<String>> { &self.ovf_environment_transport }
     fn get_install_boot_required(&self) -> Option<bool> { self.install_boot_required }
     fn get_install_boot_stop_delay(&self) -> Option<i32> { self.install_boot_stop_delay }
 }
 impl VmConfigSpecTrait for VAppConfigSpec {
-    fn get_product(&self) -> &Option<Vec<VAppProductSpec>> { &self.product }
-    fn get_property(&self) -> &Option<Vec<VAppPropertySpec>> { &self.property }
-    fn get_ip_assignment(&self) -> &Option<VAppIpAssignmentInfo> { &self.ip_assignment }
+    fn get_product(&self) -> &Option<Vec<super::structs::VAppProductSpec>> { &self.product }
+    fn get_property(&self) -> &Option<Vec<super::structs::VAppPropertySpec>> { &self.property }
+    fn get_ip_assignment(&self) -> &Option<super::structs::VAppIpAssignmentInfo> { &self.ip_assignment }
     fn get_eula(&self) -> &Option<Vec<String>> { &self.eula }
-    fn get_ovf_section(&self) -> &Option<Vec<VAppOvfSectionSpec>> { &self.ovf_section }
+    fn get_ovf_section(&self) -> &Option<Vec<super::structs::VAppOvfSectionSpec>> { &self.ovf_section }
     fn get_ovf_environment_transport(&self) -> &Option<Vec<String>> { &self.ovf_environment_transport }
     fn get_install_boot_required(&self) -> Option<bool> { self.install_boot_required }
     fn get_install_boot_stop_delay(&self) -> Option<i32> { self.install_boot_stop_delay }
@@ -20665,7 +20665,7 @@ pub trait NodeDeploymentSpecTrait : super::traits::DataObjectTrait {
     /// See also *VirtualMachineRelocateSpec.host*.
     /// 
     /// Refers instance of *HostSystem*.
-    fn get_esx_host(&self) -> &Option<ManagedObjectReference>;
+    fn get_esx_host(&self) -> &Option<super::structs::ManagedObjectReference>;
     /// Datastore used for deploying the VM.
     /// 
     /// For behavior when a datastore is not specified,
@@ -20673,7 +20673,7 @@ pub trait NodeDeploymentSpecTrait : super::traits::DataObjectTrait {
     /// See also *VirtualMachineRelocateSpec.datastore*.
     /// 
     /// Refers instance of *Datastore*.
-    fn get_datastore(&self) -> &Option<ManagedObjectReference>;
+    fn get_datastore(&self) -> &Option<super::structs::ManagedObjectReference>;
     /// Name of the portgroup that is associated with the public IP address
     /// where clients connect to vCenter Server.
     /// 
@@ -20682,7 +20682,7 @@ pub trait NodeDeploymentSpecTrait : super::traits::DataObjectTrait {
     /// with an assumption that portgroup is present on destination.
     /// 
     /// Refers instance of *Network*.
-    fn get_public_network_port_group(&self) -> &Option<ManagedObjectReference>;
+    fn get_public_network_port_group(&self) -> &Option<super::structs::ManagedObjectReference>;
     /// Name of the portgroup that is associated with the VCHA Cluster IP
     /// address where clients connect to vCenter Server.
     /// 
@@ -20691,23 +20691,23 @@ pub trait NodeDeploymentSpecTrait : super::traits::DataObjectTrait {
     /// with an assumption that portgroup is present on destination.
     /// 
     /// Refers instance of *Network*.
-    fn get_cluster_network_port_group(&self) -> &Option<ManagedObjectReference>;
+    fn get_cluster_network_port_group(&self) -> &Option<super::structs::ManagedObjectReference>;
     /// Folder in which the VM is to be created.
     /// 
     /// Refers instance of *Folder*.
-    fn get_folder(&self) -> &ManagedObjectReference;
+    fn get_folder(&self) -> &super::structs::ManagedObjectReference;
     /// ResourcePool that will be used to deploy this node.
     /// 
     /// If the ResourcePool is not specified, the root resource pool for the
     /// host will be used.
     /// 
     /// Refers instance of *ResourcePool*.
-    fn get_resource_pool(&self) -> &Option<ManagedObjectReference>;
+    fn get_resource_pool(&self) -> &Option<super::structs::ManagedObjectReference>;
     /// Management vCenter Server managing this VM.
     /// 
     /// If the managementVc is not specified, managementVc specified as
     /// part of SourceNodeSpec is used.
-    fn get_management_vc(&self) -> &Option<ServiceLocator>;
+    fn get_management_vc(&self) -> &Option<super::structs::ServiceLocator>;
     /// nodeName here refers to a name that will be assigned to the VM to which
     /// this node will be deployed to.
     fn get_node_name(&self) -> &str;
@@ -20715,7 +20715,7 @@ pub trait NodeDeploymentSpecTrait : super::traits::DataObjectTrait {
     /// 
     /// All cluster communication (state replication, heartbeat,
     /// cluster messages) happens over this network.
-    fn get_ip_settings(&self) -> &CustomizationIpSettings;
+    fn get_ip_settings(&self) -> &super::structs::CustomizationIpSettings;
 }
 impl<'s> serde::Serialize for dyn NodeDeploymentSpecTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
@@ -20757,26 +20757,26 @@ impl<'de> de::Visitor<'de> for NodeDeploymentSpecVisitor {
 }
 
 impl NodeDeploymentSpecTrait for NodeDeploymentSpec {
-    fn get_esx_host(&self) -> &Option<ManagedObjectReference> { &self.esx_host }
-    fn get_datastore(&self) -> &Option<ManagedObjectReference> { &self.datastore }
-    fn get_public_network_port_group(&self) -> &Option<ManagedObjectReference> { &self.public_network_port_group }
-    fn get_cluster_network_port_group(&self) -> &Option<ManagedObjectReference> { &self.cluster_network_port_group }
-    fn get_folder(&self) -> &ManagedObjectReference { &self.folder }
-    fn get_resource_pool(&self) -> &Option<ManagedObjectReference> { &self.resource_pool }
-    fn get_management_vc(&self) -> &Option<ServiceLocator> { &self.management_vc }
+    fn get_esx_host(&self) -> &Option<super::structs::ManagedObjectReference> { &self.esx_host }
+    fn get_datastore(&self) -> &Option<super::structs::ManagedObjectReference> { &self.datastore }
+    fn get_public_network_port_group(&self) -> &Option<super::structs::ManagedObjectReference> { &self.public_network_port_group }
+    fn get_cluster_network_port_group(&self) -> &Option<super::structs::ManagedObjectReference> { &self.cluster_network_port_group }
+    fn get_folder(&self) -> &super::structs::ManagedObjectReference { &self.folder }
+    fn get_resource_pool(&self) -> &Option<super::structs::ManagedObjectReference> { &self.resource_pool }
+    fn get_management_vc(&self) -> &Option<super::structs::ServiceLocator> { &self.management_vc }
     fn get_node_name(&self) -> &str { &self.node_name }
-    fn get_ip_settings(&self) -> &CustomizationIpSettings { &self.ip_settings }
+    fn get_ip_settings(&self) -> &super::structs::CustomizationIpSettings { &self.ip_settings }
 }
 impl NodeDeploymentSpecTrait for PassiveNodeDeploymentSpec {
-    fn get_esx_host(&self) -> &Option<ManagedObjectReference> { &self.esx_host }
-    fn get_datastore(&self) -> &Option<ManagedObjectReference> { &self.datastore }
-    fn get_public_network_port_group(&self) -> &Option<ManagedObjectReference> { &self.public_network_port_group }
-    fn get_cluster_network_port_group(&self) -> &Option<ManagedObjectReference> { &self.cluster_network_port_group }
-    fn get_folder(&self) -> &ManagedObjectReference { &self.folder }
-    fn get_resource_pool(&self) -> &Option<ManagedObjectReference> { &self.resource_pool }
-    fn get_management_vc(&self) -> &Option<ServiceLocator> { &self.management_vc }
+    fn get_esx_host(&self) -> &Option<super::structs::ManagedObjectReference> { &self.esx_host }
+    fn get_datastore(&self) -> &Option<super::structs::ManagedObjectReference> { &self.datastore }
+    fn get_public_network_port_group(&self) -> &Option<super::structs::ManagedObjectReference> { &self.public_network_port_group }
+    fn get_cluster_network_port_group(&self) -> &Option<super::structs::ManagedObjectReference> { &self.cluster_network_port_group }
+    fn get_folder(&self) -> &super::structs::ManagedObjectReference { &self.folder }
+    fn get_resource_pool(&self) -> &Option<super::structs::ManagedObjectReference> { &self.resource_pool }
+    fn get_management_vc(&self) -> &Option<super::structs::ServiceLocator> { &self.management_vc }
     fn get_node_name(&self) -> &str { &self.node_name }
-    fn get_ip_settings(&self) -> &CustomizationIpSettings { &self.ip_settings }
+    fn get_ip_settings(&self) -> &super::structs::CustomizationIpSettings { &self.ip_settings }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn NodeDeploymentSpecTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -20804,7 +20804,7 @@ pub trait NodeNetworkSpecTrait : super::traits::DataObjectTrait {
     /// 
     /// All cluster communication (state replication, heartbeat,
     /// cluster messages) happens over this network.
-    fn get_ip_settings(&self) -> &CustomizationIpSettings;
+    fn get_ip_settings(&self) -> &super::structs::CustomizationIpSettings;
 }
 impl<'s> serde::Serialize for dyn NodeNetworkSpecTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
@@ -20846,10 +20846,10 @@ impl<'de> de::Visitor<'de> for NodeNetworkSpecVisitor {
 }
 
 impl NodeNetworkSpecTrait for NodeNetworkSpec {
-    fn get_ip_settings(&self) -> &CustomizationIpSettings { &self.ip_settings }
+    fn get_ip_settings(&self) -> &super::structs::CustomizationIpSettings { &self.ip_settings }
 }
 impl NodeNetworkSpecTrait for PassiveNodeNetworkSpec {
-    fn get_ip_settings(&self) -> &CustomizationIpSettings { &self.ip_settings }
+    fn get_ip_settings(&self) -> &super::structs::CustomizationIpSettings { &self.ip_settings }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn NodeNetworkSpecTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -21631,7 +21631,7 @@ pub trait VirtualMachineDiskDeviceInfoTrait : super::traits::VirtualMachineTarge
     /// List of known virtual machines using this physical disk as a backing
     /// 
     /// Refers instances of *VirtualMachine*.
-    fn get_vm(&self) -> &Option<Vec<ManagedObjectReference>>;
+    fn get_vm(&self) -> &Option<Vec<super::structs::ManagedObjectReference>>;
 }
 impl<'s> serde::Serialize for dyn VirtualMachineDiskDeviceInfoTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
@@ -21674,15 +21674,15 @@ impl<'de> de::Visitor<'de> for VirtualMachineDiskDeviceInfoVisitor {
 
 impl VirtualMachineDiskDeviceInfoTrait for VirtualMachineDiskDeviceInfo {
     fn get_capacity(&self) -> Option<i64> { self.capacity }
-    fn get_vm(&self) -> &Option<Vec<ManagedObjectReference>> { &self.vm }
+    fn get_vm(&self) -> &Option<Vec<super::structs::ManagedObjectReference>> { &self.vm }
 }
 impl VirtualMachineDiskDeviceInfoTrait for VirtualMachineIdeDiskDeviceInfo {
     fn get_capacity(&self) -> Option<i64> { self.capacity }
-    fn get_vm(&self) -> &Option<Vec<ManagedObjectReference>> { &self.vm }
+    fn get_vm(&self) -> &Option<Vec<super::structs::ManagedObjectReference>> { &self.vm }
 }
 impl VirtualMachineDiskDeviceInfoTrait for VirtualMachineScsiDiskDeviceInfo {
     fn get_capacity(&self) -> Option<i64> { self.capacity }
-    fn get_vm(&self) -> &Option<Vec<ManagedObjectReference>> { &self.vm }
+    fn get_vm(&self) -> &Option<Vec<super::structs::ManagedObjectReference>> { &self.vm }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualMachineDiskDeviceInfoTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -21709,7 +21709,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualMach
 pub trait VirtualMachinePciPassthroughInfoTrait : super::traits::VirtualMachineTargetInfoTrait {
     /// Details of the PCI device, including vendor, class and
     /// device identification information.
-    fn get_pci_device(&self) -> &HostPciDevice;
+    fn get_pci_device(&self) -> &super::structs::HostPciDevice;
     /// The ID of the system the PCI device is attached to.
     fn get_system_id(&self) -> &str;
 }
@@ -21753,11 +21753,11 @@ impl<'de> de::Visitor<'de> for VirtualMachinePciPassthroughInfoVisitor {
 }
 
 impl VirtualMachinePciPassthroughInfoTrait for VirtualMachinePciPassthroughInfo {
-    fn get_pci_device(&self) -> &HostPciDevice { &self.pci_device }
+    fn get_pci_device(&self) -> &super::structs::HostPciDevice { &self.pci_device }
     fn get_system_id(&self) -> &str { &self.system_id }
 }
 impl VirtualMachinePciPassthroughInfoTrait for VirtualMachineSriovInfo {
-    fn get_pci_device(&self) -> &HostPciDevice { &self.pci_device }
+    fn get_pci_device(&self) -> &super::structs::HostPciDevice { &self.pci_device }
     fn get_system_id(&self) -> &str { &self.system_id }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualMachinePciPassthroughInfoTrait {
@@ -22294,7 +22294,7 @@ pub trait VirtualDeviceTrait : super::traits::DataObjectTrait {
     /// 
     /// If the device is not removable, then
     /// this property is null.
-    fn get_connectable(&self) -> &Option<VirtualDeviceConnectInfo>;
+    fn get_connectable(&self) -> &Option<super::structs::VirtualDeviceConnectInfo>;
     /// Information about the bus slot of a device in a virtual machine.
     fn get_slot_info(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBusSlotInfoTrait>>;
     /// Object key for the controller object for this device.
@@ -22331,7 +22331,7 @@ pub trait VirtualDeviceTrait : super::traits::DataObjectTrait {
     /// during device add, it cannot be modified later.
     /// 
     /// ***Since:*** vSphere API Release 8.0.0.1
-    fn get_device_group_info(&self) -> &Option<VirtualDeviceDeviceGroupInfo>;
+    fn get_device_group_info(&self) -> &Option<super::structs::VirtualDeviceDeviceGroupInfo>;
 }
 impl<'s> serde::Serialize for dyn VirtualDeviceTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
@@ -22376,518 +22376,518 @@ impl VirtualDeviceTrait for VirtualDevice {
     fn get_key(&self) -> i32 { self.key }
     fn get_device_info(&self) -> &Option<Box<dyn super::traits::DescriptionTrait>> { &self.device_info }
     fn get_backing(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBackingInfoTrait>> { &self.backing }
-    fn get_connectable(&self) -> &Option<VirtualDeviceConnectInfo> { &self.connectable }
+    fn get_connectable(&self) -> &Option<super::structs::VirtualDeviceConnectInfo> { &self.connectable }
     fn get_slot_info(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBusSlotInfoTrait>> { &self.slot_info }
     fn get_controller_key(&self) -> Option<i32> { self.controller_key }
     fn get_unit_number(&self) -> Option<i32> { self.unit_number }
     fn get_numa_node(&self) -> Option<i32> { self.numa_node }
-    fn get_device_group_info(&self) -> &Option<VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
+    fn get_device_group_info(&self) -> &Option<super::structs::VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
 }
 impl VirtualDeviceTrait for VirtualCdrom {
     fn get_key(&self) -> i32 { self.key }
     fn get_device_info(&self) -> &Option<Box<dyn super::traits::DescriptionTrait>> { &self.device_info }
     fn get_backing(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBackingInfoTrait>> { &self.backing }
-    fn get_connectable(&self) -> &Option<VirtualDeviceConnectInfo> { &self.connectable }
+    fn get_connectable(&self) -> &Option<super::structs::VirtualDeviceConnectInfo> { &self.connectable }
     fn get_slot_info(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBusSlotInfoTrait>> { &self.slot_info }
     fn get_controller_key(&self) -> Option<i32> { self.controller_key }
     fn get_unit_number(&self) -> Option<i32> { self.unit_number }
     fn get_numa_node(&self) -> Option<i32> { self.numa_node }
-    fn get_device_group_info(&self) -> &Option<VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
+    fn get_device_group_info(&self) -> &Option<super::structs::VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
 }
 impl VirtualDeviceTrait for VirtualController {
     fn get_key(&self) -> i32 { self.key }
     fn get_device_info(&self) -> &Option<Box<dyn super::traits::DescriptionTrait>> { &self.device_info }
     fn get_backing(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBackingInfoTrait>> { &self.backing }
-    fn get_connectable(&self) -> &Option<VirtualDeviceConnectInfo> { &self.connectable }
+    fn get_connectable(&self) -> &Option<super::structs::VirtualDeviceConnectInfo> { &self.connectable }
     fn get_slot_info(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBusSlotInfoTrait>> { &self.slot_info }
     fn get_controller_key(&self) -> Option<i32> { self.controller_key }
     fn get_unit_number(&self) -> Option<i32> { self.unit_number }
     fn get_numa_node(&self) -> Option<i32> { self.numa_node }
-    fn get_device_group_info(&self) -> &Option<VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
+    fn get_device_group_info(&self) -> &Option<super::structs::VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
 }
 impl VirtualDeviceTrait for VirtualIdeController {
     fn get_key(&self) -> i32 { self.key }
     fn get_device_info(&self) -> &Option<Box<dyn super::traits::DescriptionTrait>> { &self.device_info }
     fn get_backing(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBackingInfoTrait>> { &self.backing }
-    fn get_connectable(&self) -> &Option<VirtualDeviceConnectInfo> { &self.connectable }
+    fn get_connectable(&self) -> &Option<super::structs::VirtualDeviceConnectInfo> { &self.connectable }
     fn get_slot_info(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBusSlotInfoTrait>> { &self.slot_info }
     fn get_controller_key(&self) -> Option<i32> { self.controller_key }
     fn get_unit_number(&self) -> Option<i32> { self.unit_number }
     fn get_numa_node(&self) -> Option<i32> { self.numa_node }
-    fn get_device_group_info(&self) -> &Option<VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
+    fn get_device_group_info(&self) -> &Option<super::structs::VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
 }
 impl VirtualDeviceTrait for VirtualNvdimmController {
     fn get_key(&self) -> i32 { self.key }
     fn get_device_info(&self) -> &Option<Box<dyn super::traits::DescriptionTrait>> { &self.device_info }
     fn get_backing(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBackingInfoTrait>> { &self.backing }
-    fn get_connectable(&self) -> &Option<VirtualDeviceConnectInfo> { &self.connectable }
+    fn get_connectable(&self) -> &Option<super::structs::VirtualDeviceConnectInfo> { &self.connectable }
     fn get_slot_info(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBusSlotInfoTrait>> { &self.slot_info }
     fn get_controller_key(&self) -> Option<i32> { self.controller_key }
     fn get_unit_number(&self) -> Option<i32> { self.unit_number }
     fn get_numa_node(&self) -> Option<i32> { self.numa_node }
-    fn get_device_group_info(&self) -> &Option<VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
+    fn get_device_group_info(&self) -> &Option<super::structs::VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
 }
 impl VirtualDeviceTrait for VirtualNvmeController {
     fn get_key(&self) -> i32 { self.key }
     fn get_device_info(&self) -> &Option<Box<dyn super::traits::DescriptionTrait>> { &self.device_info }
     fn get_backing(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBackingInfoTrait>> { &self.backing }
-    fn get_connectable(&self) -> &Option<VirtualDeviceConnectInfo> { &self.connectable }
+    fn get_connectable(&self) -> &Option<super::structs::VirtualDeviceConnectInfo> { &self.connectable }
     fn get_slot_info(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBusSlotInfoTrait>> { &self.slot_info }
     fn get_controller_key(&self) -> Option<i32> { self.controller_key }
     fn get_unit_number(&self) -> Option<i32> { self.unit_number }
     fn get_numa_node(&self) -> Option<i32> { self.numa_node }
-    fn get_device_group_info(&self) -> &Option<VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
+    fn get_device_group_info(&self) -> &Option<super::structs::VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
 }
 impl VirtualDeviceTrait for VirtualPciController {
     fn get_key(&self) -> i32 { self.key }
     fn get_device_info(&self) -> &Option<Box<dyn super::traits::DescriptionTrait>> { &self.device_info }
     fn get_backing(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBackingInfoTrait>> { &self.backing }
-    fn get_connectable(&self) -> &Option<VirtualDeviceConnectInfo> { &self.connectable }
+    fn get_connectable(&self) -> &Option<super::structs::VirtualDeviceConnectInfo> { &self.connectable }
     fn get_slot_info(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBusSlotInfoTrait>> { &self.slot_info }
     fn get_controller_key(&self) -> Option<i32> { self.controller_key }
     fn get_unit_number(&self) -> Option<i32> { self.unit_number }
     fn get_numa_node(&self) -> Option<i32> { self.numa_node }
-    fn get_device_group_info(&self) -> &Option<VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
+    fn get_device_group_info(&self) -> &Option<super::structs::VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
 }
 impl VirtualDeviceTrait for VirtualPs2Controller {
     fn get_key(&self) -> i32 { self.key }
     fn get_device_info(&self) -> &Option<Box<dyn super::traits::DescriptionTrait>> { &self.device_info }
     fn get_backing(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBackingInfoTrait>> { &self.backing }
-    fn get_connectable(&self) -> &Option<VirtualDeviceConnectInfo> { &self.connectable }
+    fn get_connectable(&self) -> &Option<super::structs::VirtualDeviceConnectInfo> { &self.connectable }
     fn get_slot_info(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBusSlotInfoTrait>> { &self.slot_info }
     fn get_controller_key(&self) -> Option<i32> { self.controller_key }
     fn get_unit_number(&self) -> Option<i32> { self.unit_number }
     fn get_numa_node(&self) -> Option<i32> { self.numa_node }
-    fn get_device_group_info(&self) -> &Option<VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
+    fn get_device_group_info(&self) -> &Option<super::structs::VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
 }
 impl VirtualDeviceTrait for VirtualSataController {
     fn get_key(&self) -> i32 { self.key }
     fn get_device_info(&self) -> &Option<Box<dyn super::traits::DescriptionTrait>> { &self.device_info }
     fn get_backing(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBackingInfoTrait>> { &self.backing }
-    fn get_connectable(&self) -> &Option<VirtualDeviceConnectInfo> { &self.connectable }
+    fn get_connectable(&self) -> &Option<super::structs::VirtualDeviceConnectInfo> { &self.connectable }
     fn get_slot_info(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBusSlotInfoTrait>> { &self.slot_info }
     fn get_controller_key(&self) -> Option<i32> { self.controller_key }
     fn get_unit_number(&self) -> Option<i32> { self.unit_number }
     fn get_numa_node(&self) -> Option<i32> { self.numa_node }
-    fn get_device_group_info(&self) -> &Option<VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
+    fn get_device_group_info(&self) -> &Option<super::structs::VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
 }
 impl VirtualDeviceTrait for VirtualAhciController {
     fn get_key(&self) -> i32 { self.key }
     fn get_device_info(&self) -> &Option<Box<dyn super::traits::DescriptionTrait>> { &self.device_info }
     fn get_backing(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBackingInfoTrait>> { &self.backing }
-    fn get_connectable(&self) -> &Option<VirtualDeviceConnectInfo> { &self.connectable }
+    fn get_connectable(&self) -> &Option<super::structs::VirtualDeviceConnectInfo> { &self.connectable }
     fn get_slot_info(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBusSlotInfoTrait>> { &self.slot_info }
     fn get_controller_key(&self) -> Option<i32> { self.controller_key }
     fn get_unit_number(&self) -> Option<i32> { self.unit_number }
     fn get_numa_node(&self) -> Option<i32> { self.numa_node }
-    fn get_device_group_info(&self) -> &Option<VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
+    fn get_device_group_info(&self) -> &Option<super::structs::VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
 }
 impl VirtualDeviceTrait for VirtualScsiController {
     fn get_key(&self) -> i32 { self.key }
     fn get_device_info(&self) -> &Option<Box<dyn super::traits::DescriptionTrait>> { &self.device_info }
     fn get_backing(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBackingInfoTrait>> { &self.backing }
-    fn get_connectable(&self) -> &Option<VirtualDeviceConnectInfo> { &self.connectable }
+    fn get_connectable(&self) -> &Option<super::structs::VirtualDeviceConnectInfo> { &self.connectable }
     fn get_slot_info(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBusSlotInfoTrait>> { &self.slot_info }
     fn get_controller_key(&self) -> Option<i32> { self.controller_key }
     fn get_unit_number(&self) -> Option<i32> { self.unit_number }
     fn get_numa_node(&self) -> Option<i32> { self.numa_node }
-    fn get_device_group_info(&self) -> &Option<VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
+    fn get_device_group_info(&self) -> &Option<super::structs::VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
 }
 impl VirtualDeviceTrait for ParaVirtualScsiController {
     fn get_key(&self) -> i32 { self.key }
     fn get_device_info(&self) -> &Option<Box<dyn super::traits::DescriptionTrait>> { &self.device_info }
     fn get_backing(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBackingInfoTrait>> { &self.backing }
-    fn get_connectable(&self) -> &Option<VirtualDeviceConnectInfo> { &self.connectable }
+    fn get_connectable(&self) -> &Option<super::structs::VirtualDeviceConnectInfo> { &self.connectable }
     fn get_slot_info(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBusSlotInfoTrait>> { &self.slot_info }
     fn get_controller_key(&self) -> Option<i32> { self.controller_key }
     fn get_unit_number(&self) -> Option<i32> { self.unit_number }
     fn get_numa_node(&self) -> Option<i32> { self.numa_node }
-    fn get_device_group_info(&self) -> &Option<VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
+    fn get_device_group_info(&self) -> &Option<super::structs::VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
 }
 impl VirtualDeviceTrait for VirtualBusLogicController {
     fn get_key(&self) -> i32 { self.key }
     fn get_device_info(&self) -> &Option<Box<dyn super::traits::DescriptionTrait>> { &self.device_info }
     fn get_backing(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBackingInfoTrait>> { &self.backing }
-    fn get_connectable(&self) -> &Option<VirtualDeviceConnectInfo> { &self.connectable }
+    fn get_connectable(&self) -> &Option<super::structs::VirtualDeviceConnectInfo> { &self.connectable }
     fn get_slot_info(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBusSlotInfoTrait>> { &self.slot_info }
     fn get_controller_key(&self) -> Option<i32> { self.controller_key }
     fn get_unit_number(&self) -> Option<i32> { self.unit_number }
     fn get_numa_node(&self) -> Option<i32> { self.numa_node }
-    fn get_device_group_info(&self) -> &Option<VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
+    fn get_device_group_info(&self) -> &Option<super::structs::VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
 }
 impl VirtualDeviceTrait for VirtualLsiLogicController {
     fn get_key(&self) -> i32 { self.key }
     fn get_device_info(&self) -> &Option<Box<dyn super::traits::DescriptionTrait>> { &self.device_info }
     fn get_backing(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBackingInfoTrait>> { &self.backing }
-    fn get_connectable(&self) -> &Option<VirtualDeviceConnectInfo> { &self.connectable }
+    fn get_connectable(&self) -> &Option<super::structs::VirtualDeviceConnectInfo> { &self.connectable }
     fn get_slot_info(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBusSlotInfoTrait>> { &self.slot_info }
     fn get_controller_key(&self) -> Option<i32> { self.controller_key }
     fn get_unit_number(&self) -> Option<i32> { self.unit_number }
     fn get_numa_node(&self) -> Option<i32> { self.numa_node }
-    fn get_device_group_info(&self) -> &Option<VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
+    fn get_device_group_info(&self) -> &Option<super::structs::VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
 }
 impl VirtualDeviceTrait for VirtualLsiLogicSasController {
     fn get_key(&self) -> i32 { self.key }
     fn get_device_info(&self) -> &Option<Box<dyn super::traits::DescriptionTrait>> { &self.device_info }
     fn get_backing(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBackingInfoTrait>> { &self.backing }
-    fn get_connectable(&self) -> &Option<VirtualDeviceConnectInfo> { &self.connectable }
+    fn get_connectable(&self) -> &Option<super::structs::VirtualDeviceConnectInfo> { &self.connectable }
     fn get_slot_info(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBusSlotInfoTrait>> { &self.slot_info }
     fn get_controller_key(&self) -> Option<i32> { self.controller_key }
     fn get_unit_number(&self) -> Option<i32> { self.unit_number }
     fn get_numa_node(&self) -> Option<i32> { self.numa_node }
-    fn get_device_group_info(&self) -> &Option<VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
+    fn get_device_group_info(&self) -> &Option<super::structs::VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
 }
 impl VirtualDeviceTrait for VirtualSioController {
     fn get_key(&self) -> i32 { self.key }
     fn get_device_info(&self) -> &Option<Box<dyn super::traits::DescriptionTrait>> { &self.device_info }
     fn get_backing(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBackingInfoTrait>> { &self.backing }
-    fn get_connectable(&self) -> &Option<VirtualDeviceConnectInfo> { &self.connectable }
+    fn get_connectable(&self) -> &Option<super::structs::VirtualDeviceConnectInfo> { &self.connectable }
     fn get_slot_info(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBusSlotInfoTrait>> { &self.slot_info }
     fn get_controller_key(&self) -> Option<i32> { self.controller_key }
     fn get_unit_number(&self) -> Option<i32> { self.unit_number }
     fn get_numa_node(&self) -> Option<i32> { self.numa_node }
-    fn get_device_group_info(&self) -> &Option<VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
+    fn get_device_group_info(&self) -> &Option<super::structs::VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
 }
 impl VirtualDeviceTrait for VirtualUsbController {
     fn get_key(&self) -> i32 { self.key }
     fn get_device_info(&self) -> &Option<Box<dyn super::traits::DescriptionTrait>> { &self.device_info }
     fn get_backing(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBackingInfoTrait>> { &self.backing }
-    fn get_connectable(&self) -> &Option<VirtualDeviceConnectInfo> { &self.connectable }
+    fn get_connectable(&self) -> &Option<super::structs::VirtualDeviceConnectInfo> { &self.connectable }
     fn get_slot_info(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBusSlotInfoTrait>> { &self.slot_info }
     fn get_controller_key(&self) -> Option<i32> { self.controller_key }
     fn get_unit_number(&self) -> Option<i32> { self.unit_number }
     fn get_numa_node(&self) -> Option<i32> { self.numa_node }
-    fn get_device_group_info(&self) -> &Option<VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
+    fn get_device_group_info(&self) -> &Option<super::structs::VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
 }
 impl VirtualDeviceTrait for VirtualUsbxhciController {
     fn get_key(&self) -> i32 { self.key }
     fn get_device_info(&self) -> &Option<Box<dyn super::traits::DescriptionTrait>> { &self.device_info }
     fn get_backing(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBackingInfoTrait>> { &self.backing }
-    fn get_connectable(&self) -> &Option<VirtualDeviceConnectInfo> { &self.connectable }
+    fn get_connectable(&self) -> &Option<super::structs::VirtualDeviceConnectInfo> { &self.connectable }
     fn get_slot_info(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBusSlotInfoTrait>> { &self.slot_info }
     fn get_controller_key(&self) -> Option<i32> { self.controller_key }
     fn get_unit_number(&self) -> Option<i32> { self.unit_number }
     fn get_numa_node(&self) -> Option<i32> { self.numa_node }
-    fn get_device_group_info(&self) -> &Option<VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
+    fn get_device_group_info(&self) -> &Option<super::structs::VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
 }
 impl VirtualDeviceTrait for VirtualDisk {
     fn get_key(&self) -> i32 { self.key }
     fn get_device_info(&self) -> &Option<Box<dyn super::traits::DescriptionTrait>> { &self.device_info }
     fn get_backing(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBackingInfoTrait>> { &self.backing }
-    fn get_connectable(&self) -> &Option<VirtualDeviceConnectInfo> { &self.connectable }
+    fn get_connectable(&self) -> &Option<super::structs::VirtualDeviceConnectInfo> { &self.connectable }
     fn get_slot_info(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBusSlotInfoTrait>> { &self.slot_info }
     fn get_controller_key(&self) -> Option<i32> { self.controller_key }
     fn get_unit_number(&self) -> Option<i32> { self.unit_number }
     fn get_numa_node(&self) -> Option<i32> { self.numa_node }
-    fn get_device_group_info(&self) -> &Option<VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
+    fn get_device_group_info(&self) -> &Option<super::structs::VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
 }
 impl VirtualDeviceTrait for VirtualEthernetCard {
     fn get_key(&self) -> i32 { self.key }
     fn get_device_info(&self) -> &Option<Box<dyn super::traits::DescriptionTrait>> { &self.device_info }
     fn get_backing(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBackingInfoTrait>> { &self.backing }
-    fn get_connectable(&self) -> &Option<VirtualDeviceConnectInfo> { &self.connectable }
+    fn get_connectable(&self) -> &Option<super::structs::VirtualDeviceConnectInfo> { &self.connectable }
     fn get_slot_info(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBusSlotInfoTrait>> { &self.slot_info }
     fn get_controller_key(&self) -> Option<i32> { self.controller_key }
     fn get_unit_number(&self) -> Option<i32> { self.unit_number }
     fn get_numa_node(&self) -> Option<i32> { self.numa_node }
-    fn get_device_group_info(&self) -> &Option<VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
+    fn get_device_group_info(&self) -> &Option<super::structs::VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
 }
 impl VirtualDeviceTrait for VirtualE1000 {
     fn get_key(&self) -> i32 { self.key }
     fn get_device_info(&self) -> &Option<Box<dyn super::traits::DescriptionTrait>> { &self.device_info }
     fn get_backing(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBackingInfoTrait>> { &self.backing }
-    fn get_connectable(&self) -> &Option<VirtualDeviceConnectInfo> { &self.connectable }
+    fn get_connectable(&self) -> &Option<super::structs::VirtualDeviceConnectInfo> { &self.connectable }
     fn get_slot_info(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBusSlotInfoTrait>> { &self.slot_info }
     fn get_controller_key(&self) -> Option<i32> { self.controller_key }
     fn get_unit_number(&self) -> Option<i32> { self.unit_number }
     fn get_numa_node(&self) -> Option<i32> { self.numa_node }
-    fn get_device_group_info(&self) -> &Option<VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
+    fn get_device_group_info(&self) -> &Option<super::structs::VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
 }
 impl VirtualDeviceTrait for VirtualE1000E {
     fn get_key(&self) -> i32 { self.key }
     fn get_device_info(&self) -> &Option<Box<dyn super::traits::DescriptionTrait>> { &self.device_info }
     fn get_backing(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBackingInfoTrait>> { &self.backing }
-    fn get_connectable(&self) -> &Option<VirtualDeviceConnectInfo> { &self.connectable }
+    fn get_connectable(&self) -> &Option<super::structs::VirtualDeviceConnectInfo> { &self.connectable }
     fn get_slot_info(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBusSlotInfoTrait>> { &self.slot_info }
     fn get_controller_key(&self) -> Option<i32> { self.controller_key }
     fn get_unit_number(&self) -> Option<i32> { self.unit_number }
     fn get_numa_node(&self) -> Option<i32> { self.numa_node }
-    fn get_device_group_info(&self) -> &Option<VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
+    fn get_device_group_info(&self) -> &Option<super::structs::VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
 }
 impl VirtualDeviceTrait for VirtualPcNet32 {
     fn get_key(&self) -> i32 { self.key }
     fn get_device_info(&self) -> &Option<Box<dyn super::traits::DescriptionTrait>> { &self.device_info }
     fn get_backing(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBackingInfoTrait>> { &self.backing }
-    fn get_connectable(&self) -> &Option<VirtualDeviceConnectInfo> { &self.connectable }
+    fn get_connectable(&self) -> &Option<super::structs::VirtualDeviceConnectInfo> { &self.connectable }
     fn get_slot_info(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBusSlotInfoTrait>> { &self.slot_info }
     fn get_controller_key(&self) -> Option<i32> { self.controller_key }
     fn get_unit_number(&self) -> Option<i32> { self.unit_number }
     fn get_numa_node(&self) -> Option<i32> { self.numa_node }
-    fn get_device_group_info(&self) -> &Option<VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
+    fn get_device_group_info(&self) -> &Option<super::structs::VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
 }
 impl VirtualDeviceTrait for VirtualSriovEthernetCard {
     fn get_key(&self) -> i32 { self.key }
     fn get_device_info(&self) -> &Option<Box<dyn super::traits::DescriptionTrait>> { &self.device_info }
     fn get_backing(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBackingInfoTrait>> { &self.backing }
-    fn get_connectable(&self) -> &Option<VirtualDeviceConnectInfo> { &self.connectable }
+    fn get_connectable(&self) -> &Option<super::structs::VirtualDeviceConnectInfo> { &self.connectable }
     fn get_slot_info(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBusSlotInfoTrait>> { &self.slot_info }
     fn get_controller_key(&self) -> Option<i32> { self.controller_key }
     fn get_unit_number(&self) -> Option<i32> { self.unit_number }
     fn get_numa_node(&self) -> Option<i32> { self.numa_node }
-    fn get_device_group_info(&self) -> &Option<VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
+    fn get_device_group_info(&self) -> &Option<super::structs::VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
 }
 impl VirtualDeviceTrait for VirtualVmxnet {
     fn get_key(&self) -> i32 { self.key }
     fn get_device_info(&self) -> &Option<Box<dyn super::traits::DescriptionTrait>> { &self.device_info }
     fn get_backing(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBackingInfoTrait>> { &self.backing }
-    fn get_connectable(&self) -> &Option<VirtualDeviceConnectInfo> { &self.connectable }
+    fn get_connectable(&self) -> &Option<super::structs::VirtualDeviceConnectInfo> { &self.connectable }
     fn get_slot_info(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBusSlotInfoTrait>> { &self.slot_info }
     fn get_controller_key(&self) -> Option<i32> { self.controller_key }
     fn get_unit_number(&self) -> Option<i32> { self.unit_number }
     fn get_numa_node(&self) -> Option<i32> { self.numa_node }
-    fn get_device_group_info(&self) -> &Option<VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
+    fn get_device_group_info(&self) -> &Option<super::structs::VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
 }
 impl VirtualDeviceTrait for VirtualVmxnet2 {
     fn get_key(&self) -> i32 { self.key }
     fn get_device_info(&self) -> &Option<Box<dyn super::traits::DescriptionTrait>> { &self.device_info }
     fn get_backing(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBackingInfoTrait>> { &self.backing }
-    fn get_connectable(&self) -> &Option<VirtualDeviceConnectInfo> { &self.connectable }
+    fn get_connectable(&self) -> &Option<super::structs::VirtualDeviceConnectInfo> { &self.connectable }
     fn get_slot_info(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBusSlotInfoTrait>> { &self.slot_info }
     fn get_controller_key(&self) -> Option<i32> { self.controller_key }
     fn get_unit_number(&self) -> Option<i32> { self.unit_number }
     fn get_numa_node(&self) -> Option<i32> { self.numa_node }
-    fn get_device_group_info(&self) -> &Option<VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
+    fn get_device_group_info(&self) -> &Option<super::structs::VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
 }
 impl VirtualDeviceTrait for VirtualVmxnet3 {
     fn get_key(&self) -> i32 { self.key }
     fn get_device_info(&self) -> &Option<Box<dyn super::traits::DescriptionTrait>> { &self.device_info }
     fn get_backing(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBackingInfoTrait>> { &self.backing }
-    fn get_connectable(&self) -> &Option<VirtualDeviceConnectInfo> { &self.connectable }
+    fn get_connectable(&self) -> &Option<super::structs::VirtualDeviceConnectInfo> { &self.connectable }
     fn get_slot_info(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBusSlotInfoTrait>> { &self.slot_info }
     fn get_controller_key(&self) -> Option<i32> { self.controller_key }
     fn get_unit_number(&self) -> Option<i32> { self.unit_number }
     fn get_numa_node(&self) -> Option<i32> { self.numa_node }
-    fn get_device_group_info(&self) -> &Option<VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
+    fn get_device_group_info(&self) -> &Option<super::structs::VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
 }
 impl VirtualDeviceTrait for VirtualVmxnet3Vrdma {
     fn get_key(&self) -> i32 { self.key }
     fn get_device_info(&self) -> &Option<Box<dyn super::traits::DescriptionTrait>> { &self.device_info }
     fn get_backing(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBackingInfoTrait>> { &self.backing }
-    fn get_connectable(&self) -> &Option<VirtualDeviceConnectInfo> { &self.connectable }
+    fn get_connectable(&self) -> &Option<super::structs::VirtualDeviceConnectInfo> { &self.connectable }
     fn get_slot_info(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBusSlotInfoTrait>> { &self.slot_info }
     fn get_controller_key(&self) -> Option<i32> { self.controller_key }
     fn get_unit_number(&self) -> Option<i32> { self.unit_number }
     fn get_numa_node(&self) -> Option<i32> { self.numa_node }
-    fn get_device_group_info(&self) -> &Option<VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
+    fn get_device_group_info(&self) -> &Option<super::structs::VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
 }
 impl VirtualDeviceTrait for VirtualFloppy {
     fn get_key(&self) -> i32 { self.key }
     fn get_device_info(&self) -> &Option<Box<dyn super::traits::DescriptionTrait>> { &self.device_info }
     fn get_backing(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBackingInfoTrait>> { &self.backing }
-    fn get_connectable(&self) -> &Option<VirtualDeviceConnectInfo> { &self.connectable }
+    fn get_connectable(&self) -> &Option<super::structs::VirtualDeviceConnectInfo> { &self.connectable }
     fn get_slot_info(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBusSlotInfoTrait>> { &self.slot_info }
     fn get_controller_key(&self) -> Option<i32> { self.controller_key }
     fn get_unit_number(&self) -> Option<i32> { self.unit_number }
     fn get_numa_node(&self) -> Option<i32> { self.numa_node }
-    fn get_device_group_info(&self) -> &Option<VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
+    fn get_device_group_info(&self) -> &Option<super::structs::VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
 }
 impl VirtualDeviceTrait for VirtualKeyboard {
     fn get_key(&self) -> i32 { self.key }
     fn get_device_info(&self) -> &Option<Box<dyn super::traits::DescriptionTrait>> { &self.device_info }
     fn get_backing(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBackingInfoTrait>> { &self.backing }
-    fn get_connectable(&self) -> &Option<VirtualDeviceConnectInfo> { &self.connectable }
+    fn get_connectable(&self) -> &Option<super::structs::VirtualDeviceConnectInfo> { &self.connectable }
     fn get_slot_info(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBusSlotInfoTrait>> { &self.slot_info }
     fn get_controller_key(&self) -> Option<i32> { self.controller_key }
     fn get_unit_number(&self) -> Option<i32> { self.unit_number }
     fn get_numa_node(&self) -> Option<i32> { self.numa_node }
-    fn get_device_group_info(&self) -> &Option<VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
+    fn get_device_group_info(&self) -> &Option<super::structs::VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
 }
 impl VirtualDeviceTrait for VirtualNvdimm {
     fn get_key(&self) -> i32 { self.key }
     fn get_device_info(&self) -> &Option<Box<dyn super::traits::DescriptionTrait>> { &self.device_info }
     fn get_backing(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBackingInfoTrait>> { &self.backing }
-    fn get_connectable(&self) -> &Option<VirtualDeviceConnectInfo> { &self.connectable }
+    fn get_connectable(&self) -> &Option<super::structs::VirtualDeviceConnectInfo> { &self.connectable }
     fn get_slot_info(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBusSlotInfoTrait>> { &self.slot_info }
     fn get_controller_key(&self) -> Option<i32> { self.controller_key }
     fn get_unit_number(&self) -> Option<i32> { self.unit_number }
     fn get_numa_node(&self) -> Option<i32> { self.numa_node }
-    fn get_device_group_info(&self) -> &Option<VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
+    fn get_device_group_info(&self) -> &Option<super::structs::VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
 }
 impl VirtualDeviceTrait for VirtualPciPassthrough {
     fn get_key(&self) -> i32 { self.key }
     fn get_device_info(&self) -> &Option<Box<dyn super::traits::DescriptionTrait>> { &self.device_info }
     fn get_backing(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBackingInfoTrait>> { &self.backing }
-    fn get_connectable(&self) -> &Option<VirtualDeviceConnectInfo> { &self.connectable }
+    fn get_connectable(&self) -> &Option<super::structs::VirtualDeviceConnectInfo> { &self.connectable }
     fn get_slot_info(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBusSlotInfoTrait>> { &self.slot_info }
     fn get_controller_key(&self) -> Option<i32> { self.controller_key }
     fn get_unit_number(&self) -> Option<i32> { self.unit_number }
     fn get_numa_node(&self) -> Option<i32> { self.numa_node }
-    fn get_device_group_info(&self) -> &Option<VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
+    fn get_device_group_info(&self) -> &Option<super::structs::VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
 }
 impl VirtualDeviceTrait for VirtualParallelPort {
     fn get_key(&self) -> i32 { self.key }
     fn get_device_info(&self) -> &Option<Box<dyn super::traits::DescriptionTrait>> { &self.device_info }
     fn get_backing(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBackingInfoTrait>> { &self.backing }
-    fn get_connectable(&self) -> &Option<VirtualDeviceConnectInfo> { &self.connectable }
+    fn get_connectable(&self) -> &Option<super::structs::VirtualDeviceConnectInfo> { &self.connectable }
     fn get_slot_info(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBusSlotInfoTrait>> { &self.slot_info }
     fn get_controller_key(&self) -> Option<i32> { self.controller_key }
     fn get_unit_number(&self) -> Option<i32> { self.unit_number }
     fn get_numa_node(&self) -> Option<i32> { self.numa_node }
-    fn get_device_group_info(&self) -> &Option<VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
+    fn get_device_group_info(&self) -> &Option<super::structs::VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
 }
 impl VirtualDeviceTrait for VirtualPointingDevice {
     fn get_key(&self) -> i32 { self.key }
     fn get_device_info(&self) -> &Option<Box<dyn super::traits::DescriptionTrait>> { &self.device_info }
     fn get_backing(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBackingInfoTrait>> { &self.backing }
-    fn get_connectable(&self) -> &Option<VirtualDeviceConnectInfo> { &self.connectable }
+    fn get_connectable(&self) -> &Option<super::structs::VirtualDeviceConnectInfo> { &self.connectable }
     fn get_slot_info(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBusSlotInfoTrait>> { &self.slot_info }
     fn get_controller_key(&self) -> Option<i32> { self.controller_key }
     fn get_unit_number(&self) -> Option<i32> { self.unit_number }
     fn get_numa_node(&self) -> Option<i32> { self.numa_node }
-    fn get_device_group_info(&self) -> &Option<VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
+    fn get_device_group_info(&self) -> &Option<super::structs::VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
 }
 impl VirtualDeviceTrait for VirtualPrecisionClock {
     fn get_key(&self) -> i32 { self.key }
     fn get_device_info(&self) -> &Option<Box<dyn super::traits::DescriptionTrait>> { &self.device_info }
     fn get_backing(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBackingInfoTrait>> { &self.backing }
-    fn get_connectable(&self) -> &Option<VirtualDeviceConnectInfo> { &self.connectable }
+    fn get_connectable(&self) -> &Option<super::structs::VirtualDeviceConnectInfo> { &self.connectable }
     fn get_slot_info(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBusSlotInfoTrait>> { &self.slot_info }
     fn get_controller_key(&self) -> Option<i32> { self.controller_key }
     fn get_unit_number(&self) -> Option<i32> { self.unit_number }
     fn get_numa_node(&self) -> Option<i32> { self.numa_node }
-    fn get_device_group_info(&self) -> &Option<VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
+    fn get_device_group_info(&self) -> &Option<super::structs::VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
 }
 impl VirtualDeviceTrait for VirtualScsiPassthrough {
     fn get_key(&self) -> i32 { self.key }
     fn get_device_info(&self) -> &Option<Box<dyn super::traits::DescriptionTrait>> { &self.device_info }
     fn get_backing(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBackingInfoTrait>> { &self.backing }
-    fn get_connectable(&self) -> &Option<VirtualDeviceConnectInfo> { &self.connectable }
+    fn get_connectable(&self) -> &Option<super::structs::VirtualDeviceConnectInfo> { &self.connectable }
     fn get_slot_info(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBusSlotInfoTrait>> { &self.slot_info }
     fn get_controller_key(&self) -> Option<i32> { self.controller_key }
     fn get_unit_number(&self) -> Option<i32> { self.unit_number }
     fn get_numa_node(&self) -> Option<i32> { self.numa_node }
-    fn get_device_group_info(&self) -> &Option<VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
+    fn get_device_group_info(&self) -> &Option<super::structs::VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
 }
 impl VirtualDeviceTrait for VirtualSerialPort {
     fn get_key(&self) -> i32 { self.key }
     fn get_device_info(&self) -> &Option<Box<dyn super::traits::DescriptionTrait>> { &self.device_info }
     fn get_backing(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBackingInfoTrait>> { &self.backing }
-    fn get_connectable(&self) -> &Option<VirtualDeviceConnectInfo> { &self.connectable }
+    fn get_connectable(&self) -> &Option<super::structs::VirtualDeviceConnectInfo> { &self.connectable }
     fn get_slot_info(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBusSlotInfoTrait>> { &self.slot_info }
     fn get_controller_key(&self) -> Option<i32> { self.controller_key }
     fn get_unit_number(&self) -> Option<i32> { self.unit_number }
     fn get_numa_node(&self) -> Option<i32> { self.numa_node }
-    fn get_device_group_info(&self) -> &Option<VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
+    fn get_device_group_info(&self) -> &Option<super::structs::VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
 }
 impl VirtualDeviceTrait for VirtualSoundCard {
     fn get_key(&self) -> i32 { self.key }
     fn get_device_info(&self) -> &Option<Box<dyn super::traits::DescriptionTrait>> { &self.device_info }
     fn get_backing(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBackingInfoTrait>> { &self.backing }
-    fn get_connectable(&self) -> &Option<VirtualDeviceConnectInfo> { &self.connectable }
+    fn get_connectable(&self) -> &Option<super::structs::VirtualDeviceConnectInfo> { &self.connectable }
     fn get_slot_info(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBusSlotInfoTrait>> { &self.slot_info }
     fn get_controller_key(&self) -> Option<i32> { self.controller_key }
     fn get_unit_number(&self) -> Option<i32> { self.unit_number }
     fn get_numa_node(&self) -> Option<i32> { self.numa_node }
-    fn get_device_group_info(&self) -> &Option<VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
+    fn get_device_group_info(&self) -> &Option<super::structs::VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
 }
 impl VirtualDeviceTrait for VirtualEnsoniq1371 {
     fn get_key(&self) -> i32 { self.key }
     fn get_device_info(&self) -> &Option<Box<dyn super::traits::DescriptionTrait>> { &self.device_info }
     fn get_backing(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBackingInfoTrait>> { &self.backing }
-    fn get_connectable(&self) -> &Option<VirtualDeviceConnectInfo> { &self.connectable }
+    fn get_connectable(&self) -> &Option<super::structs::VirtualDeviceConnectInfo> { &self.connectable }
     fn get_slot_info(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBusSlotInfoTrait>> { &self.slot_info }
     fn get_controller_key(&self) -> Option<i32> { self.controller_key }
     fn get_unit_number(&self) -> Option<i32> { self.unit_number }
     fn get_numa_node(&self) -> Option<i32> { self.numa_node }
-    fn get_device_group_info(&self) -> &Option<VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
+    fn get_device_group_info(&self) -> &Option<super::structs::VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
 }
 impl VirtualDeviceTrait for VirtualHdAudioCard {
     fn get_key(&self) -> i32 { self.key }
     fn get_device_info(&self) -> &Option<Box<dyn super::traits::DescriptionTrait>> { &self.device_info }
     fn get_backing(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBackingInfoTrait>> { &self.backing }
-    fn get_connectable(&self) -> &Option<VirtualDeviceConnectInfo> { &self.connectable }
+    fn get_connectable(&self) -> &Option<super::structs::VirtualDeviceConnectInfo> { &self.connectable }
     fn get_slot_info(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBusSlotInfoTrait>> { &self.slot_info }
     fn get_controller_key(&self) -> Option<i32> { self.controller_key }
     fn get_unit_number(&self) -> Option<i32> { self.unit_number }
     fn get_numa_node(&self) -> Option<i32> { self.numa_node }
-    fn get_device_group_info(&self) -> &Option<VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
+    fn get_device_group_info(&self) -> &Option<super::structs::VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
 }
 impl VirtualDeviceTrait for VirtualSoundBlaster16 {
     fn get_key(&self) -> i32 { self.key }
     fn get_device_info(&self) -> &Option<Box<dyn super::traits::DescriptionTrait>> { &self.device_info }
     fn get_backing(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBackingInfoTrait>> { &self.backing }
-    fn get_connectable(&self) -> &Option<VirtualDeviceConnectInfo> { &self.connectable }
+    fn get_connectable(&self) -> &Option<super::structs::VirtualDeviceConnectInfo> { &self.connectable }
     fn get_slot_info(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBusSlotInfoTrait>> { &self.slot_info }
     fn get_controller_key(&self) -> Option<i32> { self.controller_key }
     fn get_unit_number(&self) -> Option<i32> { self.unit_number }
     fn get_numa_node(&self) -> Option<i32> { self.numa_node }
-    fn get_device_group_info(&self) -> &Option<VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
+    fn get_device_group_info(&self) -> &Option<super::structs::VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
 }
 impl VirtualDeviceTrait for VirtualTpm {
     fn get_key(&self) -> i32 { self.key }
     fn get_device_info(&self) -> &Option<Box<dyn super::traits::DescriptionTrait>> { &self.device_info }
     fn get_backing(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBackingInfoTrait>> { &self.backing }
-    fn get_connectable(&self) -> &Option<VirtualDeviceConnectInfo> { &self.connectable }
+    fn get_connectable(&self) -> &Option<super::structs::VirtualDeviceConnectInfo> { &self.connectable }
     fn get_slot_info(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBusSlotInfoTrait>> { &self.slot_info }
     fn get_controller_key(&self) -> Option<i32> { self.controller_key }
     fn get_unit_number(&self) -> Option<i32> { self.unit_number }
     fn get_numa_node(&self) -> Option<i32> { self.numa_node }
-    fn get_device_group_info(&self) -> &Option<VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
+    fn get_device_group_info(&self) -> &Option<super::structs::VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
 }
 impl VirtualDeviceTrait for VirtualUsb {
     fn get_key(&self) -> i32 { self.key }
     fn get_device_info(&self) -> &Option<Box<dyn super::traits::DescriptionTrait>> { &self.device_info }
     fn get_backing(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBackingInfoTrait>> { &self.backing }
-    fn get_connectable(&self) -> &Option<VirtualDeviceConnectInfo> { &self.connectable }
+    fn get_connectable(&self) -> &Option<super::structs::VirtualDeviceConnectInfo> { &self.connectable }
     fn get_slot_info(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBusSlotInfoTrait>> { &self.slot_info }
     fn get_controller_key(&self) -> Option<i32> { self.controller_key }
     fn get_unit_number(&self) -> Option<i32> { self.unit_number }
     fn get_numa_node(&self) -> Option<i32> { self.numa_node }
-    fn get_device_group_info(&self) -> &Option<VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
+    fn get_device_group_info(&self) -> &Option<super::structs::VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
 }
 impl VirtualDeviceTrait for VirtualMachineVmciDevice {
     fn get_key(&self) -> i32 { self.key }
     fn get_device_info(&self) -> &Option<Box<dyn super::traits::DescriptionTrait>> { &self.device_info }
     fn get_backing(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBackingInfoTrait>> { &self.backing }
-    fn get_connectable(&self) -> &Option<VirtualDeviceConnectInfo> { &self.connectable }
+    fn get_connectable(&self) -> &Option<super::structs::VirtualDeviceConnectInfo> { &self.connectable }
     fn get_slot_info(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBusSlotInfoTrait>> { &self.slot_info }
     fn get_controller_key(&self) -> Option<i32> { self.controller_key }
     fn get_unit_number(&self) -> Option<i32> { self.unit_number }
     fn get_numa_node(&self) -> Option<i32> { self.numa_node }
-    fn get_device_group_info(&self) -> &Option<VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
+    fn get_device_group_info(&self) -> &Option<super::structs::VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
 }
 impl VirtualDeviceTrait for VirtualMachineVmirom {
     fn get_key(&self) -> i32 { self.key }
     fn get_device_info(&self) -> &Option<Box<dyn super::traits::DescriptionTrait>> { &self.device_info }
     fn get_backing(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBackingInfoTrait>> { &self.backing }
-    fn get_connectable(&self) -> &Option<VirtualDeviceConnectInfo> { &self.connectable }
+    fn get_connectable(&self) -> &Option<super::structs::VirtualDeviceConnectInfo> { &self.connectable }
     fn get_slot_info(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBusSlotInfoTrait>> { &self.slot_info }
     fn get_controller_key(&self) -> Option<i32> { self.controller_key }
     fn get_unit_number(&self) -> Option<i32> { self.unit_number }
     fn get_numa_node(&self) -> Option<i32> { self.numa_node }
-    fn get_device_group_info(&self) -> &Option<VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
+    fn get_device_group_info(&self) -> &Option<super::structs::VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
 }
 impl VirtualDeviceTrait for VirtualMachineVideoCard {
     fn get_key(&self) -> i32 { self.key }
     fn get_device_info(&self) -> &Option<Box<dyn super::traits::DescriptionTrait>> { &self.device_info }
     fn get_backing(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBackingInfoTrait>> { &self.backing }
-    fn get_connectable(&self) -> &Option<VirtualDeviceConnectInfo> { &self.connectable }
+    fn get_connectable(&self) -> &Option<super::structs::VirtualDeviceConnectInfo> { &self.connectable }
     fn get_slot_info(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBusSlotInfoTrait>> { &self.slot_info }
     fn get_controller_key(&self) -> Option<i32> { self.controller_key }
     fn get_unit_number(&self) -> Option<i32> { self.unit_number }
     fn get_numa_node(&self) -> Option<i32> { self.numa_node }
-    fn get_device_group_info(&self) -> &Option<VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
+    fn get_device_group_info(&self) -> &Option<super::structs::VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
 }
 impl VirtualDeviceTrait for VirtualWdt {
     fn get_key(&self) -> i32 { self.key }
     fn get_device_info(&self) -> &Option<Box<dyn super::traits::DescriptionTrait>> { &self.device_info }
     fn get_backing(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBackingInfoTrait>> { &self.backing }
-    fn get_connectable(&self) -> &Option<VirtualDeviceConnectInfo> { &self.connectable }
+    fn get_connectable(&self) -> &Option<super::structs::VirtualDeviceConnectInfo> { &self.connectable }
     fn get_slot_info(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBusSlotInfoTrait>> { &self.slot_info }
     fn get_controller_key(&self) -> Option<i32> { self.controller_key }
     fn get_unit_number(&self) -> Option<i32> { self.unit_number }
     fn get_numa_node(&self) -> Option<i32> { self.numa_node }
-    fn get_device_group_info(&self) -> &Option<VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
+    fn get_device_group_info(&self) -> &Option<super::structs::VirtualDeviceDeviceGroupInfo> { &self.device_group_info }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualDeviceTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -23351,7 +23351,7 @@ pub trait VirtualEthernetCardTrait : super::traits::VirtualDeviceTrait {
     /// properties of an object that are unknown to a client will be part of this set.
     /// This property is not readonly just in case we want to send such properties
     /// from a client in the future.
-    fn get_dynamic_property(&self) -> &Option<Vec<DynamicProperty>>;
+    fn get_dynamic_property(&self) -> &Option<Vec<super::structs::DynamicProperty>>;
     /// MAC address type.
     /// 
     /// Valid values for address type are:
@@ -23377,7 +23377,7 @@ pub trait VirtualEthernetCardTrait : super::traits::VirtualDeviceTrait {
     /// can set this property to selectively enable or disable wake-on-LAN.
     fn get_wake_on_lan_enabled(&self) -> Option<bool>;
     /// Resource requirements of the virtual network adapter
-    fn get_resource_allocation(&self) -> &Option<VirtualEthernetCardResourceAllocation>;
+    fn get_resource_allocation(&self) -> &Option<super::structs::VirtualEthernetCardResourceAllocation>;
     /// An ID assigned to the virtual network adapter by external management plane or
     /// controller.
     /// 
@@ -23438,83 +23438,83 @@ impl<'de> de::Visitor<'de> for VirtualEthernetCardVisitor {
 }
 
 impl VirtualEthernetCardTrait for VirtualEthernetCard {
-    fn get_dynamic_property(&self) -> &Option<Vec<DynamicProperty>> { &self.dynamic_property }
+    fn get_dynamic_property(&self) -> &Option<Vec<super::structs::DynamicProperty>> { &self.dynamic_property }
     fn get_address_type(&self) -> &Option<String> { &self.address_type }
     fn get_mac_address(&self) -> &Option<String> { &self.mac_address }
     fn get_wake_on_lan_enabled(&self) -> Option<bool> { self.wake_on_lan_enabled }
-    fn get_resource_allocation(&self) -> &Option<VirtualEthernetCardResourceAllocation> { &self.resource_allocation }
+    fn get_resource_allocation(&self) -> &Option<super::structs::VirtualEthernetCardResourceAllocation> { &self.resource_allocation }
     fn get_external_id(&self) -> &Option<String> { &self.external_id }
     fn get_upt_compatibility_enabled(&self) -> Option<bool> { self.upt_compatibility_enabled }
 }
 impl VirtualEthernetCardTrait for VirtualE1000 {
-    fn get_dynamic_property(&self) -> &Option<Vec<DynamicProperty>> { &self.dynamic_property }
+    fn get_dynamic_property(&self) -> &Option<Vec<super::structs::DynamicProperty>> { &self.dynamic_property }
     fn get_address_type(&self) -> &Option<String> { &self.address_type }
     fn get_mac_address(&self) -> &Option<String> { &self.mac_address }
     fn get_wake_on_lan_enabled(&self) -> Option<bool> { self.wake_on_lan_enabled }
-    fn get_resource_allocation(&self) -> &Option<VirtualEthernetCardResourceAllocation> { &self.resource_allocation }
+    fn get_resource_allocation(&self) -> &Option<super::structs::VirtualEthernetCardResourceAllocation> { &self.resource_allocation }
     fn get_external_id(&self) -> &Option<String> { &self.external_id }
     fn get_upt_compatibility_enabled(&self) -> Option<bool> { self.upt_compatibility_enabled }
 }
 impl VirtualEthernetCardTrait for VirtualE1000E {
-    fn get_dynamic_property(&self) -> &Option<Vec<DynamicProperty>> { &self.dynamic_property }
+    fn get_dynamic_property(&self) -> &Option<Vec<super::structs::DynamicProperty>> { &self.dynamic_property }
     fn get_address_type(&self) -> &Option<String> { &self.address_type }
     fn get_mac_address(&self) -> &Option<String> { &self.mac_address }
     fn get_wake_on_lan_enabled(&self) -> Option<bool> { self.wake_on_lan_enabled }
-    fn get_resource_allocation(&self) -> &Option<VirtualEthernetCardResourceAllocation> { &self.resource_allocation }
+    fn get_resource_allocation(&self) -> &Option<super::structs::VirtualEthernetCardResourceAllocation> { &self.resource_allocation }
     fn get_external_id(&self) -> &Option<String> { &self.external_id }
     fn get_upt_compatibility_enabled(&self) -> Option<bool> { self.upt_compatibility_enabled }
 }
 impl VirtualEthernetCardTrait for VirtualPcNet32 {
-    fn get_dynamic_property(&self) -> &Option<Vec<DynamicProperty>> { &self.dynamic_property }
+    fn get_dynamic_property(&self) -> &Option<Vec<super::structs::DynamicProperty>> { &self.dynamic_property }
     fn get_address_type(&self) -> &Option<String> { &self.address_type }
     fn get_mac_address(&self) -> &Option<String> { &self.mac_address }
     fn get_wake_on_lan_enabled(&self) -> Option<bool> { self.wake_on_lan_enabled }
-    fn get_resource_allocation(&self) -> &Option<VirtualEthernetCardResourceAllocation> { &self.resource_allocation }
+    fn get_resource_allocation(&self) -> &Option<super::structs::VirtualEthernetCardResourceAllocation> { &self.resource_allocation }
     fn get_external_id(&self) -> &Option<String> { &self.external_id }
     fn get_upt_compatibility_enabled(&self) -> Option<bool> { self.upt_compatibility_enabled }
 }
 impl VirtualEthernetCardTrait for VirtualSriovEthernetCard {
-    fn get_dynamic_property(&self) -> &Option<Vec<DynamicProperty>> { &self.dynamic_property }
+    fn get_dynamic_property(&self) -> &Option<Vec<super::structs::DynamicProperty>> { &self.dynamic_property }
     fn get_address_type(&self) -> &Option<String> { &self.address_type }
     fn get_mac_address(&self) -> &Option<String> { &self.mac_address }
     fn get_wake_on_lan_enabled(&self) -> Option<bool> { self.wake_on_lan_enabled }
-    fn get_resource_allocation(&self) -> &Option<VirtualEthernetCardResourceAllocation> { &self.resource_allocation }
+    fn get_resource_allocation(&self) -> &Option<super::structs::VirtualEthernetCardResourceAllocation> { &self.resource_allocation }
     fn get_external_id(&self) -> &Option<String> { &self.external_id }
     fn get_upt_compatibility_enabled(&self) -> Option<bool> { self.upt_compatibility_enabled }
 }
 impl VirtualEthernetCardTrait for VirtualVmxnet {
-    fn get_dynamic_property(&self) -> &Option<Vec<DynamicProperty>> { &self.dynamic_property }
+    fn get_dynamic_property(&self) -> &Option<Vec<super::structs::DynamicProperty>> { &self.dynamic_property }
     fn get_address_type(&self) -> &Option<String> { &self.address_type }
     fn get_mac_address(&self) -> &Option<String> { &self.mac_address }
     fn get_wake_on_lan_enabled(&self) -> Option<bool> { self.wake_on_lan_enabled }
-    fn get_resource_allocation(&self) -> &Option<VirtualEthernetCardResourceAllocation> { &self.resource_allocation }
+    fn get_resource_allocation(&self) -> &Option<super::structs::VirtualEthernetCardResourceAllocation> { &self.resource_allocation }
     fn get_external_id(&self) -> &Option<String> { &self.external_id }
     fn get_upt_compatibility_enabled(&self) -> Option<bool> { self.upt_compatibility_enabled }
 }
 impl VirtualEthernetCardTrait for VirtualVmxnet2 {
-    fn get_dynamic_property(&self) -> &Option<Vec<DynamicProperty>> { &self.dynamic_property }
+    fn get_dynamic_property(&self) -> &Option<Vec<super::structs::DynamicProperty>> { &self.dynamic_property }
     fn get_address_type(&self) -> &Option<String> { &self.address_type }
     fn get_mac_address(&self) -> &Option<String> { &self.mac_address }
     fn get_wake_on_lan_enabled(&self) -> Option<bool> { self.wake_on_lan_enabled }
-    fn get_resource_allocation(&self) -> &Option<VirtualEthernetCardResourceAllocation> { &self.resource_allocation }
+    fn get_resource_allocation(&self) -> &Option<super::structs::VirtualEthernetCardResourceAllocation> { &self.resource_allocation }
     fn get_external_id(&self) -> &Option<String> { &self.external_id }
     fn get_upt_compatibility_enabled(&self) -> Option<bool> { self.upt_compatibility_enabled }
 }
 impl VirtualEthernetCardTrait for VirtualVmxnet3 {
-    fn get_dynamic_property(&self) -> &Option<Vec<DynamicProperty>> { &self.dynamic_property }
+    fn get_dynamic_property(&self) -> &Option<Vec<super::structs::DynamicProperty>> { &self.dynamic_property }
     fn get_address_type(&self) -> &Option<String> { &self.address_type }
     fn get_mac_address(&self) -> &Option<String> { &self.mac_address }
     fn get_wake_on_lan_enabled(&self) -> Option<bool> { self.wake_on_lan_enabled }
-    fn get_resource_allocation(&self) -> &Option<VirtualEthernetCardResourceAllocation> { &self.resource_allocation }
+    fn get_resource_allocation(&self) -> &Option<super::structs::VirtualEthernetCardResourceAllocation> { &self.resource_allocation }
     fn get_external_id(&self) -> &Option<String> { &self.external_id }
     fn get_upt_compatibility_enabled(&self) -> Option<bool> { self.upt_compatibility_enabled }
 }
 impl VirtualEthernetCardTrait for VirtualVmxnet3Vrdma {
-    fn get_dynamic_property(&self) -> &Option<Vec<DynamicProperty>> { &self.dynamic_property }
+    fn get_dynamic_property(&self) -> &Option<Vec<super::structs::DynamicProperty>> { &self.dynamic_property }
     fn get_address_type(&self) -> &Option<String> { &self.address_type }
     fn get_mac_address(&self) -> &Option<String> { &self.mac_address }
     fn get_wake_on_lan_enabled(&self) -> Option<bool> { self.wake_on_lan_enabled }
-    fn get_resource_allocation(&self) -> &Option<VirtualEthernetCardResourceAllocation> { &self.resource_allocation }
+    fn get_resource_allocation(&self) -> &Option<super::structs::VirtualEthernetCardResourceAllocation> { &self.resource_allocation }
     fn get_external_id(&self) -> &Option<String> { &self.external_id }
     fn get_upt_compatibility_enabled(&self) -> Option<bool> { self.upt_compatibility_enabled }
 }
@@ -24301,7 +24301,7 @@ pub trait VirtualDeviceFileBackingInfoTrait : super::traits::VirtualDeviceBackin
     /// This is not used for configuration.
     /// 
     /// Refers instance of *Datastore*.
-    fn get_datastore(&self) -> &Option<ManagedObjectReference>;
+    fn get_datastore(&self) -> &Option<super::structs::ManagedObjectReference>;
     /// Backing object's durable and unmutable identifier.
     /// 
     /// Each backing object has a unique identifier which is not settable.
@@ -24348,67 +24348,67 @@ impl<'de> de::Visitor<'de> for VirtualDeviceFileBackingInfoVisitor {
 
 impl VirtualDeviceFileBackingInfoTrait for VirtualDeviceFileBackingInfo {
     fn get_file_name(&self) -> &str { &self.file_name }
-    fn get_datastore(&self) -> &Option<ManagedObjectReference> { &self.datastore }
+    fn get_datastore(&self) -> &Option<super::structs::ManagedObjectReference> { &self.datastore }
     fn get_backing_object_id(&self) -> &Option<String> { &self.backing_object_id }
 }
 impl VirtualDeviceFileBackingInfoTrait for VirtualCdromIsoBackingInfo {
     fn get_file_name(&self) -> &str { &self.file_name }
-    fn get_datastore(&self) -> &Option<ManagedObjectReference> { &self.datastore }
+    fn get_datastore(&self) -> &Option<super::structs::ManagedObjectReference> { &self.datastore }
     fn get_backing_object_id(&self) -> &Option<String> { &self.backing_object_id }
 }
 impl VirtualDeviceFileBackingInfoTrait for VirtualDiskFlatVer1BackingInfo {
     fn get_file_name(&self) -> &str { &self.file_name }
-    fn get_datastore(&self) -> &Option<ManagedObjectReference> { &self.datastore }
+    fn get_datastore(&self) -> &Option<super::structs::ManagedObjectReference> { &self.datastore }
     fn get_backing_object_id(&self) -> &Option<String> { &self.backing_object_id }
 }
 impl VirtualDeviceFileBackingInfoTrait for VirtualDiskFlatVer2BackingInfo {
     fn get_file_name(&self) -> &str { &self.file_name }
-    fn get_datastore(&self) -> &Option<ManagedObjectReference> { &self.datastore }
+    fn get_datastore(&self) -> &Option<super::structs::ManagedObjectReference> { &self.datastore }
     fn get_backing_object_id(&self) -> &Option<String> { &self.backing_object_id }
 }
 impl VirtualDeviceFileBackingInfoTrait for VirtualDiskLocalPMemBackingInfo {
     fn get_file_name(&self) -> &str { &self.file_name }
-    fn get_datastore(&self) -> &Option<ManagedObjectReference> { &self.datastore }
+    fn get_datastore(&self) -> &Option<super::structs::ManagedObjectReference> { &self.datastore }
     fn get_backing_object_id(&self) -> &Option<String> { &self.backing_object_id }
 }
 impl VirtualDeviceFileBackingInfoTrait for VirtualDiskRawDiskMappingVer1BackingInfo {
     fn get_file_name(&self) -> &str { &self.file_name }
-    fn get_datastore(&self) -> &Option<ManagedObjectReference> { &self.datastore }
+    fn get_datastore(&self) -> &Option<super::structs::ManagedObjectReference> { &self.datastore }
     fn get_backing_object_id(&self) -> &Option<String> { &self.backing_object_id }
 }
 impl VirtualDeviceFileBackingInfoTrait for VirtualDiskSeSparseBackingInfo {
     fn get_file_name(&self) -> &str { &self.file_name }
-    fn get_datastore(&self) -> &Option<ManagedObjectReference> { &self.datastore }
+    fn get_datastore(&self) -> &Option<super::structs::ManagedObjectReference> { &self.datastore }
     fn get_backing_object_id(&self) -> &Option<String> { &self.backing_object_id }
 }
 impl VirtualDeviceFileBackingInfoTrait for VirtualDiskSparseVer1BackingInfo {
     fn get_file_name(&self) -> &str { &self.file_name }
-    fn get_datastore(&self) -> &Option<ManagedObjectReference> { &self.datastore }
+    fn get_datastore(&self) -> &Option<super::structs::ManagedObjectReference> { &self.datastore }
     fn get_backing_object_id(&self) -> &Option<String> { &self.backing_object_id }
 }
 impl VirtualDeviceFileBackingInfoTrait for VirtualDiskSparseVer2BackingInfo {
     fn get_file_name(&self) -> &str { &self.file_name }
-    fn get_datastore(&self) -> &Option<ManagedObjectReference> { &self.datastore }
+    fn get_datastore(&self) -> &Option<super::structs::ManagedObjectReference> { &self.datastore }
     fn get_backing_object_id(&self) -> &Option<String> { &self.backing_object_id }
 }
 impl VirtualDeviceFileBackingInfoTrait for VirtualFloppyImageBackingInfo {
     fn get_file_name(&self) -> &str { &self.file_name }
-    fn get_datastore(&self) -> &Option<ManagedObjectReference> { &self.datastore }
+    fn get_datastore(&self) -> &Option<super::structs::ManagedObjectReference> { &self.datastore }
     fn get_backing_object_id(&self) -> &Option<String> { &self.backing_object_id }
 }
 impl VirtualDeviceFileBackingInfoTrait for VirtualNvdimmBackingInfo {
     fn get_file_name(&self) -> &str { &self.file_name }
-    fn get_datastore(&self) -> &Option<ManagedObjectReference> { &self.datastore }
+    fn get_datastore(&self) -> &Option<super::structs::ManagedObjectReference> { &self.datastore }
     fn get_backing_object_id(&self) -> &Option<String> { &self.backing_object_id }
 }
 impl VirtualDeviceFileBackingInfoTrait for VirtualParallelPortFileBackingInfo {
     fn get_file_name(&self) -> &str { &self.file_name }
-    fn get_datastore(&self) -> &Option<ManagedObjectReference> { &self.datastore }
+    fn get_datastore(&self) -> &Option<super::structs::ManagedObjectReference> { &self.datastore }
     fn get_backing_object_id(&self) -> &Option<String> { &self.backing_object_id }
 }
 impl VirtualDeviceFileBackingInfoTrait for VirtualSerialPortFileBackingInfo {
     fn get_file_name(&self) -> &str { &self.file_name }
-    fn get_datastore(&self) -> &Option<ManagedObjectReference> { &self.datastore }
+    fn get_datastore(&self) -> &Option<super::structs::ManagedObjectReference> { &self.datastore }
     fn get_backing_object_id(&self) -> &Option<String> { &self.backing_object_id }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualDeviceFileBackingInfoTrait {
@@ -24959,10 +24959,10 @@ pub trait VirtualDeviceOptionTrait : super::traits::DataObjectTrait {
     fn get_type(&self) -> &str;
     /// If the device is connectable, then the connectOption
     /// describes the connect options and defaults.
-    fn get_connect_option(&self) -> &Option<VirtualDeviceConnectOption>;
+    fn get_connect_option(&self) -> &Option<super::structs::VirtualDeviceConnectOption>;
     /// If the device can use a bus slot configuration, then the busSlotOption
     /// describes the bus slot options.
-    fn get_bus_slot_option(&self) -> &Option<VirtualDeviceBusSlotOption>;
+    fn get_bus_slot_option(&self) -> &Option<super::structs::VirtualDeviceBusSlotOption>;
     /// Data object type that denotes the controller option object that is
     /// valid for controlling this device.
     fn get_controller_type(&self) -> &Option<String>;
@@ -24971,7 +24971,7 @@ pub trait VirtualDeviceOptionTrait : super::traits::DataObjectTrait {
     /// 
     /// If this is true, then a client need not explicitly create
     /// the controller that this device will plug into.
-    fn get_auto_assign_controller(&self) -> &Option<BoolOption>;
+    fn get_auto_assign_controller(&self) -> &Option<super::structs::BoolOption>;
     /// A list of backing options that can be used to map the virtual
     /// device to the host.
     /// 
@@ -25043,10 +25043,10 @@ impl<'de> de::Visitor<'de> for VirtualDeviceOptionVisitor {
 
 impl VirtualDeviceOptionTrait for VirtualDeviceOption {
     fn get_type(&self) -> &str { &self.r#type }
-    fn get_connect_option(&self) -> &Option<VirtualDeviceConnectOption> { &self.connect_option }
-    fn get_bus_slot_option(&self) -> &Option<VirtualDeviceBusSlotOption> { &self.bus_slot_option }
+    fn get_connect_option(&self) -> &Option<super::structs::VirtualDeviceConnectOption> { &self.connect_option }
+    fn get_bus_slot_option(&self) -> &Option<super::structs::VirtualDeviceBusSlotOption> { &self.bus_slot_option }
     fn get_controller_type(&self) -> &Option<String> { &self.controller_type }
-    fn get_auto_assign_controller(&self) -> &Option<BoolOption> { &self.auto_assign_controller }
+    fn get_auto_assign_controller(&self) -> &Option<super::structs::BoolOption> { &self.auto_assign_controller }
     fn get_backing_option(&self) -> &Option<Vec<Box<dyn super::traits::VirtualDeviceBackingOptionTrait>>> { &self.backing_option }
     fn get_default_backing_option_index(&self) -> Option<i32> { self.default_backing_option_index }
     fn get_licensing_limit(&self) -> &Option<Vec<String>> { &self.licensing_limit }
@@ -25057,10 +25057,10 @@ impl VirtualDeviceOptionTrait for VirtualDeviceOption {
 }
 impl VirtualDeviceOptionTrait for VirtualCdromOption {
     fn get_type(&self) -> &str { &self.r#type }
-    fn get_connect_option(&self) -> &Option<VirtualDeviceConnectOption> { &self.connect_option }
-    fn get_bus_slot_option(&self) -> &Option<VirtualDeviceBusSlotOption> { &self.bus_slot_option }
+    fn get_connect_option(&self) -> &Option<super::structs::VirtualDeviceConnectOption> { &self.connect_option }
+    fn get_bus_slot_option(&self) -> &Option<super::structs::VirtualDeviceBusSlotOption> { &self.bus_slot_option }
     fn get_controller_type(&self) -> &Option<String> { &self.controller_type }
-    fn get_auto_assign_controller(&self) -> &Option<BoolOption> { &self.auto_assign_controller }
+    fn get_auto_assign_controller(&self) -> &Option<super::structs::BoolOption> { &self.auto_assign_controller }
     fn get_backing_option(&self) -> &Option<Vec<Box<dyn super::traits::VirtualDeviceBackingOptionTrait>>> { &self.backing_option }
     fn get_default_backing_option_index(&self) -> Option<i32> { self.default_backing_option_index }
     fn get_licensing_limit(&self) -> &Option<Vec<String>> { &self.licensing_limit }
@@ -25071,10 +25071,10 @@ impl VirtualDeviceOptionTrait for VirtualCdromOption {
 }
 impl VirtualDeviceOptionTrait for VirtualControllerOption {
     fn get_type(&self) -> &str { &self.r#type }
-    fn get_connect_option(&self) -> &Option<VirtualDeviceConnectOption> { &self.connect_option }
-    fn get_bus_slot_option(&self) -> &Option<VirtualDeviceBusSlotOption> { &self.bus_slot_option }
+    fn get_connect_option(&self) -> &Option<super::structs::VirtualDeviceConnectOption> { &self.connect_option }
+    fn get_bus_slot_option(&self) -> &Option<super::structs::VirtualDeviceBusSlotOption> { &self.bus_slot_option }
     fn get_controller_type(&self) -> &Option<String> { &self.controller_type }
-    fn get_auto_assign_controller(&self) -> &Option<BoolOption> { &self.auto_assign_controller }
+    fn get_auto_assign_controller(&self) -> &Option<super::structs::BoolOption> { &self.auto_assign_controller }
     fn get_backing_option(&self) -> &Option<Vec<Box<dyn super::traits::VirtualDeviceBackingOptionTrait>>> { &self.backing_option }
     fn get_default_backing_option_index(&self) -> Option<i32> { self.default_backing_option_index }
     fn get_licensing_limit(&self) -> &Option<Vec<String>> { &self.licensing_limit }
@@ -25085,10 +25085,10 @@ impl VirtualDeviceOptionTrait for VirtualControllerOption {
 }
 impl VirtualDeviceOptionTrait for VirtualIdeControllerOption {
     fn get_type(&self) -> &str { &self.r#type }
-    fn get_connect_option(&self) -> &Option<VirtualDeviceConnectOption> { &self.connect_option }
-    fn get_bus_slot_option(&self) -> &Option<VirtualDeviceBusSlotOption> { &self.bus_slot_option }
+    fn get_connect_option(&self) -> &Option<super::structs::VirtualDeviceConnectOption> { &self.connect_option }
+    fn get_bus_slot_option(&self) -> &Option<super::structs::VirtualDeviceBusSlotOption> { &self.bus_slot_option }
     fn get_controller_type(&self) -> &Option<String> { &self.controller_type }
-    fn get_auto_assign_controller(&self) -> &Option<BoolOption> { &self.auto_assign_controller }
+    fn get_auto_assign_controller(&self) -> &Option<super::structs::BoolOption> { &self.auto_assign_controller }
     fn get_backing_option(&self) -> &Option<Vec<Box<dyn super::traits::VirtualDeviceBackingOptionTrait>>> { &self.backing_option }
     fn get_default_backing_option_index(&self) -> Option<i32> { self.default_backing_option_index }
     fn get_licensing_limit(&self) -> &Option<Vec<String>> { &self.licensing_limit }
@@ -25099,10 +25099,10 @@ impl VirtualDeviceOptionTrait for VirtualIdeControllerOption {
 }
 impl VirtualDeviceOptionTrait for VirtualNvdimmControllerOption {
     fn get_type(&self) -> &str { &self.r#type }
-    fn get_connect_option(&self) -> &Option<VirtualDeviceConnectOption> { &self.connect_option }
-    fn get_bus_slot_option(&self) -> &Option<VirtualDeviceBusSlotOption> { &self.bus_slot_option }
+    fn get_connect_option(&self) -> &Option<super::structs::VirtualDeviceConnectOption> { &self.connect_option }
+    fn get_bus_slot_option(&self) -> &Option<super::structs::VirtualDeviceBusSlotOption> { &self.bus_slot_option }
     fn get_controller_type(&self) -> &Option<String> { &self.controller_type }
-    fn get_auto_assign_controller(&self) -> &Option<BoolOption> { &self.auto_assign_controller }
+    fn get_auto_assign_controller(&self) -> &Option<super::structs::BoolOption> { &self.auto_assign_controller }
     fn get_backing_option(&self) -> &Option<Vec<Box<dyn super::traits::VirtualDeviceBackingOptionTrait>>> { &self.backing_option }
     fn get_default_backing_option_index(&self) -> Option<i32> { self.default_backing_option_index }
     fn get_licensing_limit(&self) -> &Option<Vec<String>> { &self.licensing_limit }
@@ -25113,10 +25113,10 @@ impl VirtualDeviceOptionTrait for VirtualNvdimmControllerOption {
 }
 impl VirtualDeviceOptionTrait for VirtualNvmeControllerOption {
     fn get_type(&self) -> &str { &self.r#type }
-    fn get_connect_option(&self) -> &Option<VirtualDeviceConnectOption> { &self.connect_option }
-    fn get_bus_slot_option(&self) -> &Option<VirtualDeviceBusSlotOption> { &self.bus_slot_option }
+    fn get_connect_option(&self) -> &Option<super::structs::VirtualDeviceConnectOption> { &self.connect_option }
+    fn get_bus_slot_option(&self) -> &Option<super::structs::VirtualDeviceBusSlotOption> { &self.bus_slot_option }
     fn get_controller_type(&self) -> &Option<String> { &self.controller_type }
-    fn get_auto_assign_controller(&self) -> &Option<BoolOption> { &self.auto_assign_controller }
+    fn get_auto_assign_controller(&self) -> &Option<super::structs::BoolOption> { &self.auto_assign_controller }
     fn get_backing_option(&self) -> &Option<Vec<Box<dyn super::traits::VirtualDeviceBackingOptionTrait>>> { &self.backing_option }
     fn get_default_backing_option_index(&self) -> Option<i32> { self.default_backing_option_index }
     fn get_licensing_limit(&self) -> &Option<Vec<String>> { &self.licensing_limit }
@@ -25127,10 +25127,10 @@ impl VirtualDeviceOptionTrait for VirtualNvmeControllerOption {
 }
 impl VirtualDeviceOptionTrait for VirtualPciControllerOption {
     fn get_type(&self) -> &str { &self.r#type }
-    fn get_connect_option(&self) -> &Option<VirtualDeviceConnectOption> { &self.connect_option }
-    fn get_bus_slot_option(&self) -> &Option<VirtualDeviceBusSlotOption> { &self.bus_slot_option }
+    fn get_connect_option(&self) -> &Option<super::structs::VirtualDeviceConnectOption> { &self.connect_option }
+    fn get_bus_slot_option(&self) -> &Option<super::structs::VirtualDeviceBusSlotOption> { &self.bus_slot_option }
     fn get_controller_type(&self) -> &Option<String> { &self.controller_type }
-    fn get_auto_assign_controller(&self) -> &Option<BoolOption> { &self.auto_assign_controller }
+    fn get_auto_assign_controller(&self) -> &Option<super::structs::BoolOption> { &self.auto_assign_controller }
     fn get_backing_option(&self) -> &Option<Vec<Box<dyn super::traits::VirtualDeviceBackingOptionTrait>>> { &self.backing_option }
     fn get_default_backing_option_index(&self) -> Option<i32> { self.default_backing_option_index }
     fn get_licensing_limit(&self) -> &Option<Vec<String>> { &self.licensing_limit }
@@ -25141,10 +25141,10 @@ impl VirtualDeviceOptionTrait for VirtualPciControllerOption {
 }
 impl VirtualDeviceOptionTrait for VirtualPs2ControllerOption {
     fn get_type(&self) -> &str { &self.r#type }
-    fn get_connect_option(&self) -> &Option<VirtualDeviceConnectOption> { &self.connect_option }
-    fn get_bus_slot_option(&self) -> &Option<VirtualDeviceBusSlotOption> { &self.bus_slot_option }
+    fn get_connect_option(&self) -> &Option<super::structs::VirtualDeviceConnectOption> { &self.connect_option }
+    fn get_bus_slot_option(&self) -> &Option<super::structs::VirtualDeviceBusSlotOption> { &self.bus_slot_option }
     fn get_controller_type(&self) -> &Option<String> { &self.controller_type }
-    fn get_auto_assign_controller(&self) -> &Option<BoolOption> { &self.auto_assign_controller }
+    fn get_auto_assign_controller(&self) -> &Option<super::structs::BoolOption> { &self.auto_assign_controller }
     fn get_backing_option(&self) -> &Option<Vec<Box<dyn super::traits::VirtualDeviceBackingOptionTrait>>> { &self.backing_option }
     fn get_default_backing_option_index(&self) -> Option<i32> { self.default_backing_option_index }
     fn get_licensing_limit(&self) -> &Option<Vec<String>> { &self.licensing_limit }
@@ -25155,10 +25155,10 @@ impl VirtualDeviceOptionTrait for VirtualPs2ControllerOption {
 }
 impl VirtualDeviceOptionTrait for VirtualSataControllerOption {
     fn get_type(&self) -> &str { &self.r#type }
-    fn get_connect_option(&self) -> &Option<VirtualDeviceConnectOption> { &self.connect_option }
-    fn get_bus_slot_option(&self) -> &Option<VirtualDeviceBusSlotOption> { &self.bus_slot_option }
+    fn get_connect_option(&self) -> &Option<super::structs::VirtualDeviceConnectOption> { &self.connect_option }
+    fn get_bus_slot_option(&self) -> &Option<super::structs::VirtualDeviceBusSlotOption> { &self.bus_slot_option }
     fn get_controller_type(&self) -> &Option<String> { &self.controller_type }
-    fn get_auto_assign_controller(&self) -> &Option<BoolOption> { &self.auto_assign_controller }
+    fn get_auto_assign_controller(&self) -> &Option<super::structs::BoolOption> { &self.auto_assign_controller }
     fn get_backing_option(&self) -> &Option<Vec<Box<dyn super::traits::VirtualDeviceBackingOptionTrait>>> { &self.backing_option }
     fn get_default_backing_option_index(&self) -> Option<i32> { self.default_backing_option_index }
     fn get_licensing_limit(&self) -> &Option<Vec<String>> { &self.licensing_limit }
@@ -25169,10 +25169,10 @@ impl VirtualDeviceOptionTrait for VirtualSataControllerOption {
 }
 impl VirtualDeviceOptionTrait for VirtualAhciControllerOption {
     fn get_type(&self) -> &str { &self.r#type }
-    fn get_connect_option(&self) -> &Option<VirtualDeviceConnectOption> { &self.connect_option }
-    fn get_bus_slot_option(&self) -> &Option<VirtualDeviceBusSlotOption> { &self.bus_slot_option }
+    fn get_connect_option(&self) -> &Option<super::structs::VirtualDeviceConnectOption> { &self.connect_option }
+    fn get_bus_slot_option(&self) -> &Option<super::structs::VirtualDeviceBusSlotOption> { &self.bus_slot_option }
     fn get_controller_type(&self) -> &Option<String> { &self.controller_type }
-    fn get_auto_assign_controller(&self) -> &Option<BoolOption> { &self.auto_assign_controller }
+    fn get_auto_assign_controller(&self) -> &Option<super::structs::BoolOption> { &self.auto_assign_controller }
     fn get_backing_option(&self) -> &Option<Vec<Box<dyn super::traits::VirtualDeviceBackingOptionTrait>>> { &self.backing_option }
     fn get_default_backing_option_index(&self) -> Option<i32> { self.default_backing_option_index }
     fn get_licensing_limit(&self) -> &Option<Vec<String>> { &self.licensing_limit }
@@ -25183,10 +25183,10 @@ impl VirtualDeviceOptionTrait for VirtualAhciControllerOption {
 }
 impl VirtualDeviceOptionTrait for VirtualScsiControllerOption {
     fn get_type(&self) -> &str { &self.r#type }
-    fn get_connect_option(&self) -> &Option<VirtualDeviceConnectOption> { &self.connect_option }
-    fn get_bus_slot_option(&self) -> &Option<VirtualDeviceBusSlotOption> { &self.bus_slot_option }
+    fn get_connect_option(&self) -> &Option<super::structs::VirtualDeviceConnectOption> { &self.connect_option }
+    fn get_bus_slot_option(&self) -> &Option<super::structs::VirtualDeviceBusSlotOption> { &self.bus_slot_option }
     fn get_controller_type(&self) -> &Option<String> { &self.controller_type }
-    fn get_auto_assign_controller(&self) -> &Option<BoolOption> { &self.auto_assign_controller }
+    fn get_auto_assign_controller(&self) -> &Option<super::structs::BoolOption> { &self.auto_assign_controller }
     fn get_backing_option(&self) -> &Option<Vec<Box<dyn super::traits::VirtualDeviceBackingOptionTrait>>> { &self.backing_option }
     fn get_default_backing_option_index(&self) -> Option<i32> { self.default_backing_option_index }
     fn get_licensing_limit(&self) -> &Option<Vec<String>> { &self.licensing_limit }
@@ -25197,10 +25197,10 @@ impl VirtualDeviceOptionTrait for VirtualScsiControllerOption {
 }
 impl VirtualDeviceOptionTrait for ParaVirtualScsiControllerOption {
     fn get_type(&self) -> &str { &self.r#type }
-    fn get_connect_option(&self) -> &Option<VirtualDeviceConnectOption> { &self.connect_option }
-    fn get_bus_slot_option(&self) -> &Option<VirtualDeviceBusSlotOption> { &self.bus_slot_option }
+    fn get_connect_option(&self) -> &Option<super::structs::VirtualDeviceConnectOption> { &self.connect_option }
+    fn get_bus_slot_option(&self) -> &Option<super::structs::VirtualDeviceBusSlotOption> { &self.bus_slot_option }
     fn get_controller_type(&self) -> &Option<String> { &self.controller_type }
-    fn get_auto_assign_controller(&self) -> &Option<BoolOption> { &self.auto_assign_controller }
+    fn get_auto_assign_controller(&self) -> &Option<super::structs::BoolOption> { &self.auto_assign_controller }
     fn get_backing_option(&self) -> &Option<Vec<Box<dyn super::traits::VirtualDeviceBackingOptionTrait>>> { &self.backing_option }
     fn get_default_backing_option_index(&self) -> Option<i32> { self.default_backing_option_index }
     fn get_licensing_limit(&self) -> &Option<Vec<String>> { &self.licensing_limit }
@@ -25211,10 +25211,10 @@ impl VirtualDeviceOptionTrait for ParaVirtualScsiControllerOption {
 }
 impl VirtualDeviceOptionTrait for VirtualBusLogicControllerOption {
     fn get_type(&self) -> &str { &self.r#type }
-    fn get_connect_option(&self) -> &Option<VirtualDeviceConnectOption> { &self.connect_option }
-    fn get_bus_slot_option(&self) -> &Option<VirtualDeviceBusSlotOption> { &self.bus_slot_option }
+    fn get_connect_option(&self) -> &Option<super::structs::VirtualDeviceConnectOption> { &self.connect_option }
+    fn get_bus_slot_option(&self) -> &Option<super::structs::VirtualDeviceBusSlotOption> { &self.bus_slot_option }
     fn get_controller_type(&self) -> &Option<String> { &self.controller_type }
-    fn get_auto_assign_controller(&self) -> &Option<BoolOption> { &self.auto_assign_controller }
+    fn get_auto_assign_controller(&self) -> &Option<super::structs::BoolOption> { &self.auto_assign_controller }
     fn get_backing_option(&self) -> &Option<Vec<Box<dyn super::traits::VirtualDeviceBackingOptionTrait>>> { &self.backing_option }
     fn get_default_backing_option_index(&self) -> Option<i32> { self.default_backing_option_index }
     fn get_licensing_limit(&self) -> &Option<Vec<String>> { &self.licensing_limit }
@@ -25225,10 +25225,10 @@ impl VirtualDeviceOptionTrait for VirtualBusLogicControllerOption {
 }
 impl VirtualDeviceOptionTrait for VirtualLsiLogicControllerOption {
     fn get_type(&self) -> &str { &self.r#type }
-    fn get_connect_option(&self) -> &Option<VirtualDeviceConnectOption> { &self.connect_option }
-    fn get_bus_slot_option(&self) -> &Option<VirtualDeviceBusSlotOption> { &self.bus_slot_option }
+    fn get_connect_option(&self) -> &Option<super::structs::VirtualDeviceConnectOption> { &self.connect_option }
+    fn get_bus_slot_option(&self) -> &Option<super::structs::VirtualDeviceBusSlotOption> { &self.bus_slot_option }
     fn get_controller_type(&self) -> &Option<String> { &self.controller_type }
-    fn get_auto_assign_controller(&self) -> &Option<BoolOption> { &self.auto_assign_controller }
+    fn get_auto_assign_controller(&self) -> &Option<super::structs::BoolOption> { &self.auto_assign_controller }
     fn get_backing_option(&self) -> &Option<Vec<Box<dyn super::traits::VirtualDeviceBackingOptionTrait>>> { &self.backing_option }
     fn get_default_backing_option_index(&self) -> Option<i32> { self.default_backing_option_index }
     fn get_licensing_limit(&self) -> &Option<Vec<String>> { &self.licensing_limit }
@@ -25239,10 +25239,10 @@ impl VirtualDeviceOptionTrait for VirtualLsiLogicControllerOption {
 }
 impl VirtualDeviceOptionTrait for VirtualLsiLogicSasControllerOption {
     fn get_type(&self) -> &str { &self.r#type }
-    fn get_connect_option(&self) -> &Option<VirtualDeviceConnectOption> { &self.connect_option }
-    fn get_bus_slot_option(&self) -> &Option<VirtualDeviceBusSlotOption> { &self.bus_slot_option }
+    fn get_connect_option(&self) -> &Option<super::structs::VirtualDeviceConnectOption> { &self.connect_option }
+    fn get_bus_slot_option(&self) -> &Option<super::structs::VirtualDeviceBusSlotOption> { &self.bus_slot_option }
     fn get_controller_type(&self) -> &Option<String> { &self.controller_type }
-    fn get_auto_assign_controller(&self) -> &Option<BoolOption> { &self.auto_assign_controller }
+    fn get_auto_assign_controller(&self) -> &Option<super::structs::BoolOption> { &self.auto_assign_controller }
     fn get_backing_option(&self) -> &Option<Vec<Box<dyn super::traits::VirtualDeviceBackingOptionTrait>>> { &self.backing_option }
     fn get_default_backing_option_index(&self) -> Option<i32> { self.default_backing_option_index }
     fn get_licensing_limit(&self) -> &Option<Vec<String>> { &self.licensing_limit }
@@ -25253,10 +25253,10 @@ impl VirtualDeviceOptionTrait for VirtualLsiLogicSasControllerOption {
 }
 impl VirtualDeviceOptionTrait for VirtualSioControllerOption {
     fn get_type(&self) -> &str { &self.r#type }
-    fn get_connect_option(&self) -> &Option<VirtualDeviceConnectOption> { &self.connect_option }
-    fn get_bus_slot_option(&self) -> &Option<VirtualDeviceBusSlotOption> { &self.bus_slot_option }
+    fn get_connect_option(&self) -> &Option<super::structs::VirtualDeviceConnectOption> { &self.connect_option }
+    fn get_bus_slot_option(&self) -> &Option<super::structs::VirtualDeviceBusSlotOption> { &self.bus_slot_option }
     fn get_controller_type(&self) -> &Option<String> { &self.controller_type }
-    fn get_auto_assign_controller(&self) -> &Option<BoolOption> { &self.auto_assign_controller }
+    fn get_auto_assign_controller(&self) -> &Option<super::structs::BoolOption> { &self.auto_assign_controller }
     fn get_backing_option(&self) -> &Option<Vec<Box<dyn super::traits::VirtualDeviceBackingOptionTrait>>> { &self.backing_option }
     fn get_default_backing_option_index(&self) -> Option<i32> { self.default_backing_option_index }
     fn get_licensing_limit(&self) -> &Option<Vec<String>> { &self.licensing_limit }
@@ -25267,10 +25267,10 @@ impl VirtualDeviceOptionTrait for VirtualSioControllerOption {
 }
 impl VirtualDeviceOptionTrait for VirtualUsbControllerOption {
     fn get_type(&self) -> &str { &self.r#type }
-    fn get_connect_option(&self) -> &Option<VirtualDeviceConnectOption> { &self.connect_option }
-    fn get_bus_slot_option(&self) -> &Option<VirtualDeviceBusSlotOption> { &self.bus_slot_option }
+    fn get_connect_option(&self) -> &Option<super::structs::VirtualDeviceConnectOption> { &self.connect_option }
+    fn get_bus_slot_option(&self) -> &Option<super::structs::VirtualDeviceBusSlotOption> { &self.bus_slot_option }
     fn get_controller_type(&self) -> &Option<String> { &self.controller_type }
-    fn get_auto_assign_controller(&self) -> &Option<BoolOption> { &self.auto_assign_controller }
+    fn get_auto_assign_controller(&self) -> &Option<super::structs::BoolOption> { &self.auto_assign_controller }
     fn get_backing_option(&self) -> &Option<Vec<Box<dyn super::traits::VirtualDeviceBackingOptionTrait>>> { &self.backing_option }
     fn get_default_backing_option_index(&self) -> Option<i32> { self.default_backing_option_index }
     fn get_licensing_limit(&self) -> &Option<Vec<String>> { &self.licensing_limit }
@@ -25281,10 +25281,10 @@ impl VirtualDeviceOptionTrait for VirtualUsbControllerOption {
 }
 impl VirtualDeviceOptionTrait for VirtualUsbxhciControllerOption {
     fn get_type(&self) -> &str { &self.r#type }
-    fn get_connect_option(&self) -> &Option<VirtualDeviceConnectOption> { &self.connect_option }
-    fn get_bus_slot_option(&self) -> &Option<VirtualDeviceBusSlotOption> { &self.bus_slot_option }
+    fn get_connect_option(&self) -> &Option<super::structs::VirtualDeviceConnectOption> { &self.connect_option }
+    fn get_bus_slot_option(&self) -> &Option<super::structs::VirtualDeviceBusSlotOption> { &self.bus_slot_option }
     fn get_controller_type(&self) -> &Option<String> { &self.controller_type }
-    fn get_auto_assign_controller(&self) -> &Option<BoolOption> { &self.auto_assign_controller }
+    fn get_auto_assign_controller(&self) -> &Option<super::structs::BoolOption> { &self.auto_assign_controller }
     fn get_backing_option(&self) -> &Option<Vec<Box<dyn super::traits::VirtualDeviceBackingOptionTrait>>> { &self.backing_option }
     fn get_default_backing_option_index(&self) -> Option<i32> { self.default_backing_option_index }
     fn get_licensing_limit(&self) -> &Option<Vec<String>> { &self.licensing_limit }
@@ -25295,10 +25295,10 @@ impl VirtualDeviceOptionTrait for VirtualUsbxhciControllerOption {
 }
 impl VirtualDeviceOptionTrait for VirtualDiskOption {
     fn get_type(&self) -> &str { &self.r#type }
-    fn get_connect_option(&self) -> &Option<VirtualDeviceConnectOption> { &self.connect_option }
-    fn get_bus_slot_option(&self) -> &Option<VirtualDeviceBusSlotOption> { &self.bus_slot_option }
+    fn get_connect_option(&self) -> &Option<super::structs::VirtualDeviceConnectOption> { &self.connect_option }
+    fn get_bus_slot_option(&self) -> &Option<super::structs::VirtualDeviceBusSlotOption> { &self.bus_slot_option }
     fn get_controller_type(&self) -> &Option<String> { &self.controller_type }
-    fn get_auto_assign_controller(&self) -> &Option<BoolOption> { &self.auto_assign_controller }
+    fn get_auto_assign_controller(&self) -> &Option<super::structs::BoolOption> { &self.auto_assign_controller }
     fn get_backing_option(&self) -> &Option<Vec<Box<dyn super::traits::VirtualDeviceBackingOptionTrait>>> { &self.backing_option }
     fn get_default_backing_option_index(&self) -> Option<i32> { self.default_backing_option_index }
     fn get_licensing_limit(&self) -> &Option<Vec<String>> { &self.licensing_limit }
@@ -25309,10 +25309,10 @@ impl VirtualDeviceOptionTrait for VirtualDiskOption {
 }
 impl VirtualDeviceOptionTrait for VirtualEthernetCardOption {
     fn get_type(&self) -> &str { &self.r#type }
-    fn get_connect_option(&self) -> &Option<VirtualDeviceConnectOption> { &self.connect_option }
-    fn get_bus_slot_option(&self) -> &Option<VirtualDeviceBusSlotOption> { &self.bus_slot_option }
+    fn get_connect_option(&self) -> &Option<super::structs::VirtualDeviceConnectOption> { &self.connect_option }
+    fn get_bus_slot_option(&self) -> &Option<super::structs::VirtualDeviceBusSlotOption> { &self.bus_slot_option }
     fn get_controller_type(&self) -> &Option<String> { &self.controller_type }
-    fn get_auto_assign_controller(&self) -> &Option<BoolOption> { &self.auto_assign_controller }
+    fn get_auto_assign_controller(&self) -> &Option<super::structs::BoolOption> { &self.auto_assign_controller }
     fn get_backing_option(&self) -> &Option<Vec<Box<dyn super::traits::VirtualDeviceBackingOptionTrait>>> { &self.backing_option }
     fn get_default_backing_option_index(&self) -> Option<i32> { self.default_backing_option_index }
     fn get_licensing_limit(&self) -> &Option<Vec<String>> { &self.licensing_limit }
@@ -25323,10 +25323,10 @@ impl VirtualDeviceOptionTrait for VirtualEthernetCardOption {
 }
 impl VirtualDeviceOptionTrait for VirtualE1000Option {
     fn get_type(&self) -> &str { &self.r#type }
-    fn get_connect_option(&self) -> &Option<VirtualDeviceConnectOption> { &self.connect_option }
-    fn get_bus_slot_option(&self) -> &Option<VirtualDeviceBusSlotOption> { &self.bus_slot_option }
+    fn get_connect_option(&self) -> &Option<super::structs::VirtualDeviceConnectOption> { &self.connect_option }
+    fn get_bus_slot_option(&self) -> &Option<super::structs::VirtualDeviceBusSlotOption> { &self.bus_slot_option }
     fn get_controller_type(&self) -> &Option<String> { &self.controller_type }
-    fn get_auto_assign_controller(&self) -> &Option<BoolOption> { &self.auto_assign_controller }
+    fn get_auto_assign_controller(&self) -> &Option<super::structs::BoolOption> { &self.auto_assign_controller }
     fn get_backing_option(&self) -> &Option<Vec<Box<dyn super::traits::VirtualDeviceBackingOptionTrait>>> { &self.backing_option }
     fn get_default_backing_option_index(&self) -> Option<i32> { self.default_backing_option_index }
     fn get_licensing_limit(&self) -> &Option<Vec<String>> { &self.licensing_limit }
@@ -25337,10 +25337,10 @@ impl VirtualDeviceOptionTrait for VirtualE1000Option {
 }
 impl VirtualDeviceOptionTrait for VirtualE1000EOption {
     fn get_type(&self) -> &str { &self.r#type }
-    fn get_connect_option(&self) -> &Option<VirtualDeviceConnectOption> { &self.connect_option }
-    fn get_bus_slot_option(&self) -> &Option<VirtualDeviceBusSlotOption> { &self.bus_slot_option }
+    fn get_connect_option(&self) -> &Option<super::structs::VirtualDeviceConnectOption> { &self.connect_option }
+    fn get_bus_slot_option(&self) -> &Option<super::structs::VirtualDeviceBusSlotOption> { &self.bus_slot_option }
     fn get_controller_type(&self) -> &Option<String> { &self.controller_type }
-    fn get_auto_assign_controller(&self) -> &Option<BoolOption> { &self.auto_assign_controller }
+    fn get_auto_assign_controller(&self) -> &Option<super::structs::BoolOption> { &self.auto_assign_controller }
     fn get_backing_option(&self) -> &Option<Vec<Box<dyn super::traits::VirtualDeviceBackingOptionTrait>>> { &self.backing_option }
     fn get_default_backing_option_index(&self) -> Option<i32> { self.default_backing_option_index }
     fn get_licensing_limit(&self) -> &Option<Vec<String>> { &self.licensing_limit }
@@ -25351,10 +25351,10 @@ impl VirtualDeviceOptionTrait for VirtualE1000EOption {
 }
 impl VirtualDeviceOptionTrait for VirtualPcNet32Option {
     fn get_type(&self) -> &str { &self.r#type }
-    fn get_connect_option(&self) -> &Option<VirtualDeviceConnectOption> { &self.connect_option }
-    fn get_bus_slot_option(&self) -> &Option<VirtualDeviceBusSlotOption> { &self.bus_slot_option }
+    fn get_connect_option(&self) -> &Option<super::structs::VirtualDeviceConnectOption> { &self.connect_option }
+    fn get_bus_slot_option(&self) -> &Option<super::structs::VirtualDeviceBusSlotOption> { &self.bus_slot_option }
     fn get_controller_type(&self) -> &Option<String> { &self.controller_type }
-    fn get_auto_assign_controller(&self) -> &Option<BoolOption> { &self.auto_assign_controller }
+    fn get_auto_assign_controller(&self) -> &Option<super::structs::BoolOption> { &self.auto_assign_controller }
     fn get_backing_option(&self) -> &Option<Vec<Box<dyn super::traits::VirtualDeviceBackingOptionTrait>>> { &self.backing_option }
     fn get_default_backing_option_index(&self) -> Option<i32> { self.default_backing_option_index }
     fn get_licensing_limit(&self) -> &Option<Vec<String>> { &self.licensing_limit }
@@ -25365,10 +25365,10 @@ impl VirtualDeviceOptionTrait for VirtualPcNet32Option {
 }
 impl VirtualDeviceOptionTrait for VirtualSriovEthernetCardOption {
     fn get_type(&self) -> &str { &self.r#type }
-    fn get_connect_option(&self) -> &Option<VirtualDeviceConnectOption> { &self.connect_option }
-    fn get_bus_slot_option(&self) -> &Option<VirtualDeviceBusSlotOption> { &self.bus_slot_option }
+    fn get_connect_option(&self) -> &Option<super::structs::VirtualDeviceConnectOption> { &self.connect_option }
+    fn get_bus_slot_option(&self) -> &Option<super::structs::VirtualDeviceBusSlotOption> { &self.bus_slot_option }
     fn get_controller_type(&self) -> &Option<String> { &self.controller_type }
-    fn get_auto_assign_controller(&self) -> &Option<BoolOption> { &self.auto_assign_controller }
+    fn get_auto_assign_controller(&self) -> &Option<super::structs::BoolOption> { &self.auto_assign_controller }
     fn get_backing_option(&self) -> &Option<Vec<Box<dyn super::traits::VirtualDeviceBackingOptionTrait>>> { &self.backing_option }
     fn get_default_backing_option_index(&self) -> Option<i32> { self.default_backing_option_index }
     fn get_licensing_limit(&self) -> &Option<Vec<String>> { &self.licensing_limit }
@@ -25379,10 +25379,10 @@ impl VirtualDeviceOptionTrait for VirtualSriovEthernetCardOption {
 }
 impl VirtualDeviceOptionTrait for VirtualVmxnetOption {
     fn get_type(&self) -> &str { &self.r#type }
-    fn get_connect_option(&self) -> &Option<VirtualDeviceConnectOption> { &self.connect_option }
-    fn get_bus_slot_option(&self) -> &Option<VirtualDeviceBusSlotOption> { &self.bus_slot_option }
+    fn get_connect_option(&self) -> &Option<super::structs::VirtualDeviceConnectOption> { &self.connect_option }
+    fn get_bus_slot_option(&self) -> &Option<super::structs::VirtualDeviceBusSlotOption> { &self.bus_slot_option }
     fn get_controller_type(&self) -> &Option<String> { &self.controller_type }
-    fn get_auto_assign_controller(&self) -> &Option<BoolOption> { &self.auto_assign_controller }
+    fn get_auto_assign_controller(&self) -> &Option<super::structs::BoolOption> { &self.auto_assign_controller }
     fn get_backing_option(&self) -> &Option<Vec<Box<dyn super::traits::VirtualDeviceBackingOptionTrait>>> { &self.backing_option }
     fn get_default_backing_option_index(&self) -> Option<i32> { self.default_backing_option_index }
     fn get_licensing_limit(&self) -> &Option<Vec<String>> { &self.licensing_limit }
@@ -25393,10 +25393,10 @@ impl VirtualDeviceOptionTrait for VirtualVmxnetOption {
 }
 impl VirtualDeviceOptionTrait for VirtualVmxnet2Option {
     fn get_type(&self) -> &str { &self.r#type }
-    fn get_connect_option(&self) -> &Option<VirtualDeviceConnectOption> { &self.connect_option }
-    fn get_bus_slot_option(&self) -> &Option<VirtualDeviceBusSlotOption> { &self.bus_slot_option }
+    fn get_connect_option(&self) -> &Option<super::structs::VirtualDeviceConnectOption> { &self.connect_option }
+    fn get_bus_slot_option(&self) -> &Option<super::structs::VirtualDeviceBusSlotOption> { &self.bus_slot_option }
     fn get_controller_type(&self) -> &Option<String> { &self.controller_type }
-    fn get_auto_assign_controller(&self) -> &Option<BoolOption> { &self.auto_assign_controller }
+    fn get_auto_assign_controller(&self) -> &Option<super::structs::BoolOption> { &self.auto_assign_controller }
     fn get_backing_option(&self) -> &Option<Vec<Box<dyn super::traits::VirtualDeviceBackingOptionTrait>>> { &self.backing_option }
     fn get_default_backing_option_index(&self) -> Option<i32> { self.default_backing_option_index }
     fn get_licensing_limit(&self) -> &Option<Vec<String>> { &self.licensing_limit }
@@ -25407,10 +25407,10 @@ impl VirtualDeviceOptionTrait for VirtualVmxnet2Option {
 }
 impl VirtualDeviceOptionTrait for VirtualVmxnet3Option {
     fn get_type(&self) -> &str { &self.r#type }
-    fn get_connect_option(&self) -> &Option<VirtualDeviceConnectOption> { &self.connect_option }
-    fn get_bus_slot_option(&self) -> &Option<VirtualDeviceBusSlotOption> { &self.bus_slot_option }
+    fn get_connect_option(&self) -> &Option<super::structs::VirtualDeviceConnectOption> { &self.connect_option }
+    fn get_bus_slot_option(&self) -> &Option<super::structs::VirtualDeviceBusSlotOption> { &self.bus_slot_option }
     fn get_controller_type(&self) -> &Option<String> { &self.controller_type }
-    fn get_auto_assign_controller(&self) -> &Option<BoolOption> { &self.auto_assign_controller }
+    fn get_auto_assign_controller(&self) -> &Option<super::structs::BoolOption> { &self.auto_assign_controller }
     fn get_backing_option(&self) -> &Option<Vec<Box<dyn super::traits::VirtualDeviceBackingOptionTrait>>> { &self.backing_option }
     fn get_default_backing_option_index(&self) -> Option<i32> { self.default_backing_option_index }
     fn get_licensing_limit(&self) -> &Option<Vec<String>> { &self.licensing_limit }
@@ -25421,10 +25421,10 @@ impl VirtualDeviceOptionTrait for VirtualVmxnet3Option {
 }
 impl VirtualDeviceOptionTrait for VirtualVmxnet3VrdmaOption {
     fn get_type(&self) -> &str { &self.r#type }
-    fn get_connect_option(&self) -> &Option<VirtualDeviceConnectOption> { &self.connect_option }
-    fn get_bus_slot_option(&self) -> &Option<VirtualDeviceBusSlotOption> { &self.bus_slot_option }
+    fn get_connect_option(&self) -> &Option<super::structs::VirtualDeviceConnectOption> { &self.connect_option }
+    fn get_bus_slot_option(&self) -> &Option<super::structs::VirtualDeviceBusSlotOption> { &self.bus_slot_option }
     fn get_controller_type(&self) -> &Option<String> { &self.controller_type }
-    fn get_auto_assign_controller(&self) -> &Option<BoolOption> { &self.auto_assign_controller }
+    fn get_auto_assign_controller(&self) -> &Option<super::structs::BoolOption> { &self.auto_assign_controller }
     fn get_backing_option(&self) -> &Option<Vec<Box<dyn super::traits::VirtualDeviceBackingOptionTrait>>> { &self.backing_option }
     fn get_default_backing_option_index(&self) -> Option<i32> { self.default_backing_option_index }
     fn get_licensing_limit(&self) -> &Option<Vec<String>> { &self.licensing_limit }
@@ -25435,10 +25435,10 @@ impl VirtualDeviceOptionTrait for VirtualVmxnet3VrdmaOption {
 }
 impl VirtualDeviceOptionTrait for VirtualFloppyOption {
     fn get_type(&self) -> &str { &self.r#type }
-    fn get_connect_option(&self) -> &Option<VirtualDeviceConnectOption> { &self.connect_option }
-    fn get_bus_slot_option(&self) -> &Option<VirtualDeviceBusSlotOption> { &self.bus_slot_option }
+    fn get_connect_option(&self) -> &Option<super::structs::VirtualDeviceConnectOption> { &self.connect_option }
+    fn get_bus_slot_option(&self) -> &Option<super::structs::VirtualDeviceBusSlotOption> { &self.bus_slot_option }
     fn get_controller_type(&self) -> &Option<String> { &self.controller_type }
-    fn get_auto_assign_controller(&self) -> &Option<BoolOption> { &self.auto_assign_controller }
+    fn get_auto_assign_controller(&self) -> &Option<super::structs::BoolOption> { &self.auto_assign_controller }
     fn get_backing_option(&self) -> &Option<Vec<Box<dyn super::traits::VirtualDeviceBackingOptionTrait>>> { &self.backing_option }
     fn get_default_backing_option_index(&self) -> Option<i32> { self.default_backing_option_index }
     fn get_licensing_limit(&self) -> &Option<Vec<String>> { &self.licensing_limit }
@@ -25449,10 +25449,10 @@ impl VirtualDeviceOptionTrait for VirtualFloppyOption {
 }
 impl VirtualDeviceOptionTrait for VirtualKeyboardOption {
     fn get_type(&self) -> &str { &self.r#type }
-    fn get_connect_option(&self) -> &Option<VirtualDeviceConnectOption> { &self.connect_option }
-    fn get_bus_slot_option(&self) -> &Option<VirtualDeviceBusSlotOption> { &self.bus_slot_option }
+    fn get_connect_option(&self) -> &Option<super::structs::VirtualDeviceConnectOption> { &self.connect_option }
+    fn get_bus_slot_option(&self) -> &Option<super::structs::VirtualDeviceBusSlotOption> { &self.bus_slot_option }
     fn get_controller_type(&self) -> &Option<String> { &self.controller_type }
-    fn get_auto_assign_controller(&self) -> &Option<BoolOption> { &self.auto_assign_controller }
+    fn get_auto_assign_controller(&self) -> &Option<super::structs::BoolOption> { &self.auto_assign_controller }
     fn get_backing_option(&self) -> &Option<Vec<Box<dyn super::traits::VirtualDeviceBackingOptionTrait>>> { &self.backing_option }
     fn get_default_backing_option_index(&self) -> Option<i32> { self.default_backing_option_index }
     fn get_licensing_limit(&self) -> &Option<Vec<String>> { &self.licensing_limit }
@@ -25463,10 +25463,10 @@ impl VirtualDeviceOptionTrait for VirtualKeyboardOption {
 }
 impl VirtualDeviceOptionTrait for VirtualNvdimmOption {
     fn get_type(&self) -> &str { &self.r#type }
-    fn get_connect_option(&self) -> &Option<VirtualDeviceConnectOption> { &self.connect_option }
-    fn get_bus_slot_option(&self) -> &Option<VirtualDeviceBusSlotOption> { &self.bus_slot_option }
+    fn get_connect_option(&self) -> &Option<super::structs::VirtualDeviceConnectOption> { &self.connect_option }
+    fn get_bus_slot_option(&self) -> &Option<super::structs::VirtualDeviceBusSlotOption> { &self.bus_slot_option }
     fn get_controller_type(&self) -> &Option<String> { &self.controller_type }
-    fn get_auto_assign_controller(&self) -> &Option<BoolOption> { &self.auto_assign_controller }
+    fn get_auto_assign_controller(&self) -> &Option<super::structs::BoolOption> { &self.auto_assign_controller }
     fn get_backing_option(&self) -> &Option<Vec<Box<dyn super::traits::VirtualDeviceBackingOptionTrait>>> { &self.backing_option }
     fn get_default_backing_option_index(&self) -> Option<i32> { self.default_backing_option_index }
     fn get_licensing_limit(&self) -> &Option<Vec<String>> { &self.licensing_limit }
@@ -25477,10 +25477,10 @@ impl VirtualDeviceOptionTrait for VirtualNvdimmOption {
 }
 impl VirtualDeviceOptionTrait for VirtualPciPassthroughOption {
     fn get_type(&self) -> &str { &self.r#type }
-    fn get_connect_option(&self) -> &Option<VirtualDeviceConnectOption> { &self.connect_option }
-    fn get_bus_slot_option(&self) -> &Option<VirtualDeviceBusSlotOption> { &self.bus_slot_option }
+    fn get_connect_option(&self) -> &Option<super::structs::VirtualDeviceConnectOption> { &self.connect_option }
+    fn get_bus_slot_option(&self) -> &Option<super::structs::VirtualDeviceBusSlotOption> { &self.bus_slot_option }
     fn get_controller_type(&self) -> &Option<String> { &self.controller_type }
-    fn get_auto_assign_controller(&self) -> &Option<BoolOption> { &self.auto_assign_controller }
+    fn get_auto_assign_controller(&self) -> &Option<super::structs::BoolOption> { &self.auto_assign_controller }
     fn get_backing_option(&self) -> &Option<Vec<Box<dyn super::traits::VirtualDeviceBackingOptionTrait>>> { &self.backing_option }
     fn get_default_backing_option_index(&self) -> Option<i32> { self.default_backing_option_index }
     fn get_licensing_limit(&self) -> &Option<Vec<String>> { &self.licensing_limit }
@@ -25491,10 +25491,10 @@ impl VirtualDeviceOptionTrait for VirtualPciPassthroughOption {
 }
 impl VirtualDeviceOptionTrait for VirtualParallelPortOption {
     fn get_type(&self) -> &str { &self.r#type }
-    fn get_connect_option(&self) -> &Option<VirtualDeviceConnectOption> { &self.connect_option }
-    fn get_bus_slot_option(&self) -> &Option<VirtualDeviceBusSlotOption> { &self.bus_slot_option }
+    fn get_connect_option(&self) -> &Option<super::structs::VirtualDeviceConnectOption> { &self.connect_option }
+    fn get_bus_slot_option(&self) -> &Option<super::structs::VirtualDeviceBusSlotOption> { &self.bus_slot_option }
     fn get_controller_type(&self) -> &Option<String> { &self.controller_type }
-    fn get_auto_assign_controller(&self) -> &Option<BoolOption> { &self.auto_assign_controller }
+    fn get_auto_assign_controller(&self) -> &Option<super::structs::BoolOption> { &self.auto_assign_controller }
     fn get_backing_option(&self) -> &Option<Vec<Box<dyn super::traits::VirtualDeviceBackingOptionTrait>>> { &self.backing_option }
     fn get_default_backing_option_index(&self) -> Option<i32> { self.default_backing_option_index }
     fn get_licensing_limit(&self) -> &Option<Vec<String>> { &self.licensing_limit }
@@ -25505,10 +25505,10 @@ impl VirtualDeviceOptionTrait for VirtualParallelPortOption {
 }
 impl VirtualDeviceOptionTrait for VirtualPointingDeviceOption {
     fn get_type(&self) -> &str { &self.r#type }
-    fn get_connect_option(&self) -> &Option<VirtualDeviceConnectOption> { &self.connect_option }
-    fn get_bus_slot_option(&self) -> &Option<VirtualDeviceBusSlotOption> { &self.bus_slot_option }
+    fn get_connect_option(&self) -> &Option<super::structs::VirtualDeviceConnectOption> { &self.connect_option }
+    fn get_bus_slot_option(&self) -> &Option<super::structs::VirtualDeviceBusSlotOption> { &self.bus_slot_option }
     fn get_controller_type(&self) -> &Option<String> { &self.controller_type }
-    fn get_auto_assign_controller(&self) -> &Option<BoolOption> { &self.auto_assign_controller }
+    fn get_auto_assign_controller(&self) -> &Option<super::structs::BoolOption> { &self.auto_assign_controller }
     fn get_backing_option(&self) -> &Option<Vec<Box<dyn super::traits::VirtualDeviceBackingOptionTrait>>> { &self.backing_option }
     fn get_default_backing_option_index(&self) -> Option<i32> { self.default_backing_option_index }
     fn get_licensing_limit(&self) -> &Option<Vec<String>> { &self.licensing_limit }
@@ -25519,10 +25519,10 @@ impl VirtualDeviceOptionTrait for VirtualPointingDeviceOption {
 }
 impl VirtualDeviceOptionTrait for VirtualPrecisionClockOption {
     fn get_type(&self) -> &str { &self.r#type }
-    fn get_connect_option(&self) -> &Option<VirtualDeviceConnectOption> { &self.connect_option }
-    fn get_bus_slot_option(&self) -> &Option<VirtualDeviceBusSlotOption> { &self.bus_slot_option }
+    fn get_connect_option(&self) -> &Option<super::structs::VirtualDeviceConnectOption> { &self.connect_option }
+    fn get_bus_slot_option(&self) -> &Option<super::structs::VirtualDeviceBusSlotOption> { &self.bus_slot_option }
     fn get_controller_type(&self) -> &Option<String> { &self.controller_type }
-    fn get_auto_assign_controller(&self) -> &Option<BoolOption> { &self.auto_assign_controller }
+    fn get_auto_assign_controller(&self) -> &Option<super::structs::BoolOption> { &self.auto_assign_controller }
     fn get_backing_option(&self) -> &Option<Vec<Box<dyn super::traits::VirtualDeviceBackingOptionTrait>>> { &self.backing_option }
     fn get_default_backing_option_index(&self) -> Option<i32> { self.default_backing_option_index }
     fn get_licensing_limit(&self) -> &Option<Vec<String>> { &self.licensing_limit }
@@ -25533,10 +25533,10 @@ impl VirtualDeviceOptionTrait for VirtualPrecisionClockOption {
 }
 impl VirtualDeviceOptionTrait for VirtualScsiPassthroughOption {
     fn get_type(&self) -> &str { &self.r#type }
-    fn get_connect_option(&self) -> &Option<VirtualDeviceConnectOption> { &self.connect_option }
-    fn get_bus_slot_option(&self) -> &Option<VirtualDeviceBusSlotOption> { &self.bus_slot_option }
+    fn get_connect_option(&self) -> &Option<super::structs::VirtualDeviceConnectOption> { &self.connect_option }
+    fn get_bus_slot_option(&self) -> &Option<super::structs::VirtualDeviceBusSlotOption> { &self.bus_slot_option }
     fn get_controller_type(&self) -> &Option<String> { &self.controller_type }
-    fn get_auto_assign_controller(&self) -> &Option<BoolOption> { &self.auto_assign_controller }
+    fn get_auto_assign_controller(&self) -> &Option<super::structs::BoolOption> { &self.auto_assign_controller }
     fn get_backing_option(&self) -> &Option<Vec<Box<dyn super::traits::VirtualDeviceBackingOptionTrait>>> { &self.backing_option }
     fn get_default_backing_option_index(&self) -> Option<i32> { self.default_backing_option_index }
     fn get_licensing_limit(&self) -> &Option<Vec<String>> { &self.licensing_limit }
@@ -25547,10 +25547,10 @@ impl VirtualDeviceOptionTrait for VirtualScsiPassthroughOption {
 }
 impl VirtualDeviceOptionTrait for VirtualSerialPortOption {
     fn get_type(&self) -> &str { &self.r#type }
-    fn get_connect_option(&self) -> &Option<VirtualDeviceConnectOption> { &self.connect_option }
-    fn get_bus_slot_option(&self) -> &Option<VirtualDeviceBusSlotOption> { &self.bus_slot_option }
+    fn get_connect_option(&self) -> &Option<super::structs::VirtualDeviceConnectOption> { &self.connect_option }
+    fn get_bus_slot_option(&self) -> &Option<super::structs::VirtualDeviceBusSlotOption> { &self.bus_slot_option }
     fn get_controller_type(&self) -> &Option<String> { &self.controller_type }
-    fn get_auto_assign_controller(&self) -> &Option<BoolOption> { &self.auto_assign_controller }
+    fn get_auto_assign_controller(&self) -> &Option<super::structs::BoolOption> { &self.auto_assign_controller }
     fn get_backing_option(&self) -> &Option<Vec<Box<dyn super::traits::VirtualDeviceBackingOptionTrait>>> { &self.backing_option }
     fn get_default_backing_option_index(&self) -> Option<i32> { self.default_backing_option_index }
     fn get_licensing_limit(&self) -> &Option<Vec<String>> { &self.licensing_limit }
@@ -25561,10 +25561,10 @@ impl VirtualDeviceOptionTrait for VirtualSerialPortOption {
 }
 impl VirtualDeviceOptionTrait for VirtualSoundCardOption {
     fn get_type(&self) -> &str { &self.r#type }
-    fn get_connect_option(&self) -> &Option<VirtualDeviceConnectOption> { &self.connect_option }
-    fn get_bus_slot_option(&self) -> &Option<VirtualDeviceBusSlotOption> { &self.bus_slot_option }
+    fn get_connect_option(&self) -> &Option<super::structs::VirtualDeviceConnectOption> { &self.connect_option }
+    fn get_bus_slot_option(&self) -> &Option<super::structs::VirtualDeviceBusSlotOption> { &self.bus_slot_option }
     fn get_controller_type(&self) -> &Option<String> { &self.controller_type }
-    fn get_auto_assign_controller(&self) -> &Option<BoolOption> { &self.auto_assign_controller }
+    fn get_auto_assign_controller(&self) -> &Option<super::structs::BoolOption> { &self.auto_assign_controller }
     fn get_backing_option(&self) -> &Option<Vec<Box<dyn super::traits::VirtualDeviceBackingOptionTrait>>> { &self.backing_option }
     fn get_default_backing_option_index(&self) -> Option<i32> { self.default_backing_option_index }
     fn get_licensing_limit(&self) -> &Option<Vec<String>> { &self.licensing_limit }
@@ -25575,10 +25575,10 @@ impl VirtualDeviceOptionTrait for VirtualSoundCardOption {
 }
 impl VirtualDeviceOptionTrait for VirtualEnsoniq1371Option {
     fn get_type(&self) -> &str { &self.r#type }
-    fn get_connect_option(&self) -> &Option<VirtualDeviceConnectOption> { &self.connect_option }
-    fn get_bus_slot_option(&self) -> &Option<VirtualDeviceBusSlotOption> { &self.bus_slot_option }
+    fn get_connect_option(&self) -> &Option<super::structs::VirtualDeviceConnectOption> { &self.connect_option }
+    fn get_bus_slot_option(&self) -> &Option<super::structs::VirtualDeviceBusSlotOption> { &self.bus_slot_option }
     fn get_controller_type(&self) -> &Option<String> { &self.controller_type }
-    fn get_auto_assign_controller(&self) -> &Option<BoolOption> { &self.auto_assign_controller }
+    fn get_auto_assign_controller(&self) -> &Option<super::structs::BoolOption> { &self.auto_assign_controller }
     fn get_backing_option(&self) -> &Option<Vec<Box<dyn super::traits::VirtualDeviceBackingOptionTrait>>> { &self.backing_option }
     fn get_default_backing_option_index(&self) -> Option<i32> { self.default_backing_option_index }
     fn get_licensing_limit(&self) -> &Option<Vec<String>> { &self.licensing_limit }
@@ -25589,10 +25589,10 @@ impl VirtualDeviceOptionTrait for VirtualEnsoniq1371Option {
 }
 impl VirtualDeviceOptionTrait for VirtualHdAudioCardOption {
     fn get_type(&self) -> &str { &self.r#type }
-    fn get_connect_option(&self) -> &Option<VirtualDeviceConnectOption> { &self.connect_option }
-    fn get_bus_slot_option(&self) -> &Option<VirtualDeviceBusSlotOption> { &self.bus_slot_option }
+    fn get_connect_option(&self) -> &Option<super::structs::VirtualDeviceConnectOption> { &self.connect_option }
+    fn get_bus_slot_option(&self) -> &Option<super::structs::VirtualDeviceBusSlotOption> { &self.bus_slot_option }
     fn get_controller_type(&self) -> &Option<String> { &self.controller_type }
-    fn get_auto_assign_controller(&self) -> &Option<BoolOption> { &self.auto_assign_controller }
+    fn get_auto_assign_controller(&self) -> &Option<super::structs::BoolOption> { &self.auto_assign_controller }
     fn get_backing_option(&self) -> &Option<Vec<Box<dyn super::traits::VirtualDeviceBackingOptionTrait>>> { &self.backing_option }
     fn get_default_backing_option_index(&self) -> Option<i32> { self.default_backing_option_index }
     fn get_licensing_limit(&self) -> &Option<Vec<String>> { &self.licensing_limit }
@@ -25603,10 +25603,10 @@ impl VirtualDeviceOptionTrait for VirtualHdAudioCardOption {
 }
 impl VirtualDeviceOptionTrait for VirtualSoundBlaster16Option {
     fn get_type(&self) -> &str { &self.r#type }
-    fn get_connect_option(&self) -> &Option<VirtualDeviceConnectOption> { &self.connect_option }
-    fn get_bus_slot_option(&self) -> &Option<VirtualDeviceBusSlotOption> { &self.bus_slot_option }
+    fn get_connect_option(&self) -> &Option<super::structs::VirtualDeviceConnectOption> { &self.connect_option }
+    fn get_bus_slot_option(&self) -> &Option<super::structs::VirtualDeviceBusSlotOption> { &self.bus_slot_option }
     fn get_controller_type(&self) -> &Option<String> { &self.controller_type }
-    fn get_auto_assign_controller(&self) -> &Option<BoolOption> { &self.auto_assign_controller }
+    fn get_auto_assign_controller(&self) -> &Option<super::structs::BoolOption> { &self.auto_assign_controller }
     fn get_backing_option(&self) -> &Option<Vec<Box<dyn super::traits::VirtualDeviceBackingOptionTrait>>> { &self.backing_option }
     fn get_default_backing_option_index(&self) -> Option<i32> { self.default_backing_option_index }
     fn get_licensing_limit(&self) -> &Option<Vec<String>> { &self.licensing_limit }
@@ -25617,10 +25617,10 @@ impl VirtualDeviceOptionTrait for VirtualSoundBlaster16Option {
 }
 impl VirtualDeviceOptionTrait for VirtualTpmOption {
     fn get_type(&self) -> &str { &self.r#type }
-    fn get_connect_option(&self) -> &Option<VirtualDeviceConnectOption> { &self.connect_option }
-    fn get_bus_slot_option(&self) -> &Option<VirtualDeviceBusSlotOption> { &self.bus_slot_option }
+    fn get_connect_option(&self) -> &Option<super::structs::VirtualDeviceConnectOption> { &self.connect_option }
+    fn get_bus_slot_option(&self) -> &Option<super::structs::VirtualDeviceBusSlotOption> { &self.bus_slot_option }
     fn get_controller_type(&self) -> &Option<String> { &self.controller_type }
-    fn get_auto_assign_controller(&self) -> &Option<BoolOption> { &self.auto_assign_controller }
+    fn get_auto_assign_controller(&self) -> &Option<super::structs::BoolOption> { &self.auto_assign_controller }
     fn get_backing_option(&self) -> &Option<Vec<Box<dyn super::traits::VirtualDeviceBackingOptionTrait>>> { &self.backing_option }
     fn get_default_backing_option_index(&self) -> Option<i32> { self.default_backing_option_index }
     fn get_licensing_limit(&self) -> &Option<Vec<String>> { &self.licensing_limit }
@@ -25631,10 +25631,10 @@ impl VirtualDeviceOptionTrait for VirtualTpmOption {
 }
 impl VirtualDeviceOptionTrait for VirtualUsbOption {
     fn get_type(&self) -> &str { &self.r#type }
-    fn get_connect_option(&self) -> &Option<VirtualDeviceConnectOption> { &self.connect_option }
-    fn get_bus_slot_option(&self) -> &Option<VirtualDeviceBusSlotOption> { &self.bus_slot_option }
+    fn get_connect_option(&self) -> &Option<super::structs::VirtualDeviceConnectOption> { &self.connect_option }
+    fn get_bus_slot_option(&self) -> &Option<super::structs::VirtualDeviceBusSlotOption> { &self.bus_slot_option }
     fn get_controller_type(&self) -> &Option<String> { &self.controller_type }
-    fn get_auto_assign_controller(&self) -> &Option<BoolOption> { &self.auto_assign_controller }
+    fn get_auto_assign_controller(&self) -> &Option<super::structs::BoolOption> { &self.auto_assign_controller }
     fn get_backing_option(&self) -> &Option<Vec<Box<dyn super::traits::VirtualDeviceBackingOptionTrait>>> { &self.backing_option }
     fn get_default_backing_option_index(&self) -> Option<i32> { self.default_backing_option_index }
     fn get_licensing_limit(&self) -> &Option<Vec<String>> { &self.licensing_limit }
@@ -25645,10 +25645,10 @@ impl VirtualDeviceOptionTrait for VirtualUsbOption {
 }
 impl VirtualDeviceOptionTrait for VirtualMachineVmciDeviceOption {
     fn get_type(&self) -> &str { &self.r#type }
-    fn get_connect_option(&self) -> &Option<VirtualDeviceConnectOption> { &self.connect_option }
-    fn get_bus_slot_option(&self) -> &Option<VirtualDeviceBusSlotOption> { &self.bus_slot_option }
+    fn get_connect_option(&self) -> &Option<super::structs::VirtualDeviceConnectOption> { &self.connect_option }
+    fn get_bus_slot_option(&self) -> &Option<super::structs::VirtualDeviceBusSlotOption> { &self.bus_slot_option }
     fn get_controller_type(&self) -> &Option<String> { &self.controller_type }
-    fn get_auto_assign_controller(&self) -> &Option<BoolOption> { &self.auto_assign_controller }
+    fn get_auto_assign_controller(&self) -> &Option<super::structs::BoolOption> { &self.auto_assign_controller }
     fn get_backing_option(&self) -> &Option<Vec<Box<dyn super::traits::VirtualDeviceBackingOptionTrait>>> { &self.backing_option }
     fn get_default_backing_option_index(&self) -> Option<i32> { self.default_backing_option_index }
     fn get_licensing_limit(&self) -> &Option<Vec<String>> { &self.licensing_limit }
@@ -25659,10 +25659,10 @@ impl VirtualDeviceOptionTrait for VirtualMachineVmciDeviceOption {
 }
 impl VirtualDeviceOptionTrait for VirtualVmiromOption {
     fn get_type(&self) -> &str { &self.r#type }
-    fn get_connect_option(&self) -> &Option<VirtualDeviceConnectOption> { &self.connect_option }
-    fn get_bus_slot_option(&self) -> &Option<VirtualDeviceBusSlotOption> { &self.bus_slot_option }
+    fn get_connect_option(&self) -> &Option<super::structs::VirtualDeviceConnectOption> { &self.connect_option }
+    fn get_bus_slot_option(&self) -> &Option<super::structs::VirtualDeviceBusSlotOption> { &self.bus_slot_option }
     fn get_controller_type(&self) -> &Option<String> { &self.controller_type }
-    fn get_auto_assign_controller(&self) -> &Option<BoolOption> { &self.auto_assign_controller }
+    fn get_auto_assign_controller(&self) -> &Option<super::structs::BoolOption> { &self.auto_assign_controller }
     fn get_backing_option(&self) -> &Option<Vec<Box<dyn super::traits::VirtualDeviceBackingOptionTrait>>> { &self.backing_option }
     fn get_default_backing_option_index(&self) -> Option<i32> { self.default_backing_option_index }
     fn get_licensing_limit(&self) -> &Option<Vec<String>> { &self.licensing_limit }
@@ -25673,10 +25673,10 @@ impl VirtualDeviceOptionTrait for VirtualVmiromOption {
 }
 impl VirtualDeviceOptionTrait for VirtualVideoCardOption {
     fn get_type(&self) -> &str { &self.r#type }
-    fn get_connect_option(&self) -> &Option<VirtualDeviceConnectOption> { &self.connect_option }
-    fn get_bus_slot_option(&self) -> &Option<VirtualDeviceBusSlotOption> { &self.bus_slot_option }
+    fn get_connect_option(&self) -> &Option<super::structs::VirtualDeviceConnectOption> { &self.connect_option }
+    fn get_bus_slot_option(&self) -> &Option<super::structs::VirtualDeviceBusSlotOption> { &self.bus_slot_option }
     fn get_controller_type(&self) -> &Option<String> { &self.controller_type }
-    fn get_auto_assign_controller(&self) -> &Option<BoolOption> { &self.auto_assign_controller }
+    fn get_auto_assign_controller(&self) -> &Option<super::structs::BoolOption> { &self.auto_assign_controller }
     fn get_backing_option(&self) -> &Option<Vec<Box<dyn super::traits::VirtualDeviceBackingOptionTrait>>> { &self.backing_option }
     fn get_default_backing_option_index(&self) -> Option<i32> { self.default_backing_option_index }
     fn get_licensing_limit(&self) -> &Option<Vec<String>> { &self.licensing_limit }
@@ -25687,10 +25687,10 @@ impl VirtualDeviceOptionTrait for VirtualVideoCardOption {
 }
 impl VirtualDeviceOptionTrait for VirtualWdtOption {
     fn get_type(&self) -> &str { &self.r#type }
-    fn get_connect_option(&self) -> &Option<VirtualDeviceConnectOption> { &self.connect_option }
-    fn get_bus_slot_option(&self) -> &Option<VirtualDeviceBusSlotOption> { &self.bus_slot_option }
+    fn get_connect_option(&self) -> &Option<super::structs::VirtualDeviceConnectOption> { &self.connect_option }
+    fn get_bus_slot_option(&self) -> &Option<super::structs::VirtualDeviceBusSlotOption> { &self.bus_slot_option }
     fn get_controller_type(&self) -> &Option<String> { &self.controller_type }
-    fn get_auto_assign_controller(&self) -> &Option<BoolOption> { &self.auto_assign_controller }
+    fn get_auto_assign_controller(&self) -> &Option<super::structs::BoolOption> { &self.auto_assign_controller }
     fn get_backing_option(&self) -> &Option<Vec<Box<dyn super::traits::VirtualDeviceBackingOptionTrait>>> { &self.backing_option }
     fn get_default_backing_option_index(&self) -> Option<i32> { self.default_backing_option_index }
     fn get_licensing_limit(&self) -> &Option<Vec<String>> { &self.licensing_limit }
@@ -25813,7 +25813,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualDevi
 pub trait VirtualControllerOptionTrait : super::traits::VirtualDeviceOptionTrait {
     /// The minimum and maximum number of devices this controller can control
     /// at run time.
-    fn get_devices(&self) -> &IntOption;
+    fn get_devices(&self) -> &super::structs::IntOption;
     /// Array of supported device options for this controller.
     fn get_supported_device(&self) -> &Option<Vec<String>>;
 }
@@ -25857,67 +25857,67 @@ impl<'de> de::Visitor<'de> for VirtualControllerOptionVisitor {
 }
 
 impl VirtualControllerOptionTrait for VirtualControllerOption {
-    fn get_devices(&self) -> &IntOption { &self.devices }
+    fn get_devices(&self) -> &super::structs::IntOption { &self.devices }
     fn get_supported_device(&self) -> &Option<Vec<String>> { &self.supported_device }
 }
 impl VirtualControllerOptionTrait for VirtualIdeControllerOption {
-    fn get_devices(&self) -> &IntOption { &self.devices }
+    fn get_devices(&self) -> &super::structs::IntOption { &self.devices }
     fn get_supported_device(&self) -> &Option<Vec<String>> { &self.supported_device }
 }
 impl VirtualControllerOptionTrait for VirtualNvdimmControllerOption {
-    fn get_devices(&self) -> &IntOption { &self.devices }
+    fn get_devices(&self) -> &super::structs::IntOption { &self.devices }
     fn get_supported_device(&self) -> &Option<Vec<String>> { &self.supported_device }
 }
 impl VirtualControllerOptionTrait for VirtualNvmeControllerOption {
-    fn get_devices(&self) -> &IntOption { &self.devices }
+    fn get_devices(&self) -> &super::structs::IntOption { &self.devices }
     fn get_supported_device(&self) -> &Option<Vec<String>> { &self.supported_device }
 }
 impl VirtualControllerOptionTrait for VirtualPciControllerOption {
-    fn get_devices(&self) -> &IntOption { &self.devices }
+    fn get_devices(&self) -> &super::structs::IntOption { &self.devices }
     fn get_supported_device(&self) -> &Option<Vec<String>> { &self.supported_device }
 }
 impl VirtualControllerOptionTrait for VirtualPs2ControllerOption {
-    fn get_devices(&self) -> &IntOption { &self.devices }
+    fn get_devices(&self) -> &super::structs::IntOption { &self.devices }
     fn get_supported_device(&self) -> &Option<Vec<String>> { &self.supported_device }
 }
 impl VirtualControllerOptionTrait for VirtualSataControllerOption {
-    fn get_devices(&self) -> &IntOption { &self.devices }
+    fn get_devices(&self) -> &super::structs::IntOption { &self.devices }
     fn get_supported_device(&self) -> &Option<Vec<String>> { &self.supported_device }
 }
 impl VirtualControllerOptionTrait for VirtualAhciControllerOption {
-    fn get_devices(&self) -> &IntOption { &self.devices }
+    fn get_devices(&self) -> &super::structs::IntOption { &self.devices }
     fn get_supported_device(&self) -> &Option<Vec<String>> { &self.supported_device }
 }
 impl VirtualControllerOptionTrait for VirtualScsiControllerOption {
-    fn get_devices(&self) -> &IntOption { &self.devices }
+    fn get_devices(&self) -> &super::structs::IntOption { &self.devices }
     fn get_supported_device(&self) -> &Option<Vec<String>> { &self.supported_device }
 }
 impl VirtualControllerOptionTrait for ParaVirtualScsiControllerOption {
-    fn get_devices(&self) -> &IntOption { &self.devices }
+    fn get_devices(&self) -> &super::structs::IntOption { &self.devices }
     fn get_supported_device(&self) -> &Option<Vec<String>> { &self.supported_device }
 }
 impl VirtualControllerOptionTrait for VirtualBusLogicControllerOption {
-    fn get_devices(&self) -> &IntOption { &self.devices }
+    fn get_devices(&self) -> &super::structs::IntOption { &self.devices }
     fn get_supported_device(&self) -> &Option<Vec<String>> { &self.supported_device }
 }
 impl VirtualControllerOptionTrait for VirtualLsiLogicControllerOption {
-    fn get_devices(&self) -> &IntOption { &self.devices }
+    fn get_devices(&self) -> &super::structs::IntOption { &self.devices }
     fn get_supported_device(&self) -> &Option<Vec<String>> { &self.supported_device }
 }
 impl VirtualControllerOptionTrait for VirtualLsiLogicSasControllerOption {
-    fn get_devices(&self) -> &IntOption { &self.devices }
+    fn get_devices(&self) -> &super::structs::IntOption { &self.devices }
     fn get_supported_device(&self) -> &Option<Vec<String>> { &self.supported_device }
 }
 impl VirtualControllerOptionTrait for VirtualSioControllerOption {
-    fn get_devices(&self) -> &IntOption { &self.devices }
+    fn get_devices(&self) -> &super::structs::IntOption { &self.devices }
     fn get_supported_device(&self) -> &Option<Vec<String>> { &self.supported_device }
 }
 impl VirtualControllerOptionTrait for VirtualUsbControllerOption {
-    fn get_devices(&self) -> &IntOption { &self.devices }
+    fn get_devices(&self) -> &super::structs::IntOption { &self.devices }
     fn get_supported_device(&self) -> &Option<Vec<String>> { &self.supported_device }
 }
 impl VirtualControllerOptionTrait for VirtualUsbxhciControllerOption {
-    fn get_devices(&self) -> &IntOption { &self.devices }
+    fn get_devices(&self) -> &super::structs::IntOption { &self.devices }
     fn get_supported_device(&self) -> &Option<Vec<String>> { &self.supported_device }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualControllerOptionTrait {
@@ -25979,7 +25979,7 @@ pub trait VirtualSataControllerOptionTrait : super::traits::VirtualControllerOpt
     /// 
     /// The number of SATA VirtualDisk instances is
     /// also limited by the number of available slots in the SATA controller.
-    fn get_num_sata_disks(&self) -> &IntOption;
+    fn get_num_sata_disks(&self) -> &super::structs::IntOption;
     /// Three properties (numSATACdroms.min, numSATACdroms.max, and
     /// numSATACdroms.defaultValue) define the minimum, maximum, and default
     /// number of SATA VirtualCdrom instances available
@@ -25987,7 +25987,7 @@ pub trait VirtualSataControllerOptionTrait : super::traits::VirtualControllerOpt
     /// 
     /// The number of SATA VirtualCdrom instances is
     /// also limited by the number of available slots in the SATA controller.
-    fn get_num_sata_cdroms(&self) -> &IntOption;
+    fn get_num_sata_cdroms(&self) -> &super::structs::IntOption;
 }
 impl<'s> serde::Serialize for dyn VirtualSataControllerOptionTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
@@ -26029,12 +26029,12 @@ impl<'de> de::Visitor<'de> for VirtualSataControllerOptionVisitor {
 }
 
 impl VirtualSataControllerOptionTrait for VirtualSataControllerOption {
-    fn get_num_sata_disks(&self) -> &IntOption { &self.num_sata_disks }
-    fn get_num_sata_cdroms(&self) -> &IntOption { &self.num_sata_cdroms }
+    fn get_num_sata_disks(&self) -> &super::structs::IntOption { &self.num_sata_disks }
+    fn get_num_sata_cdroms(&self) -> &super::structs::IntOption { &self.num_sata_cdroms }
 }
 impl VirtualSataControllerOptionTrait for VirtualAhciControllerOption {
-    fn get_num_sata_disks(&self) -> &IntOption { &self.num_sata_disks }
-    fn get_num_sata_cdroms(&self) -> &IntOption { &self.num_sata_cdroms }
+    fn get_num_sata_disks(&self) -> &super::structs::IntOption { &self.num_sata_disks }
+    fn get_num_sata_cdroms(&self) -> &super::structs::IntOption { &self.num_sata_cdroms }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualSataControllerOptionTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -26067,7 +26067,7 @@ pub trait VirtualScsiControllerOptionTrait : super::traits::VirtualControllerOpt
     /// 
     /// The number of SCSI VirtualDisk instances is
     /// also limited by the number of available slots in the SCSI controller.
-    fn get_num_scsi_disks(&self) -> &IntOption;
+    fn get_num_scsi_disks(&self) -> &super::structs::IntOption;
     /// Three properties (numSCSICdroms.min, numSCSICdroms.max, and
     /// numSCSICdroms.defaultValue) define the minimum, maximum, and default
     /// number of SCSI VirtualCdrom instances available
@@ -26075,7 +26075,7 @@ pub trait VirtualScsiControllerOptionTrait : super::traits::VirtualControllerOpt
     /// 
     /// The number of SCSI VirtualCdrom instances is
     /// also limited by the number of available slots in the SCSI controller.
-    fn get_num_scsi_cdroms(&self) -> &IntOption;
+    fn get_num_scsi_cdroms(&self) -> &super::structs::IntOption;
     /// Three properties (numSCSIPassthrough.min, numSCSIPassthrough.max, and
     /// numSCSIPassthrough.defaultValue) define the minimum, maximum, and
     /// default number of VirtualSCSIPassthrough instances available
@@ -26084,7 +26084,7 @@ pub trait VirtualScsiControllerOptionTrait : super::traits::VirtualControllerOpt
     /// The number of
     /// VirtualSCSIPassthrough instances is also limited by the number of
     /// available slots in the SCSI controller.
-    fn get_num_scsi_passthrough(&self) -> &IntOption;
+    fn get_num_scsi_passthrough(&self) -> &super::structs::IntOption;
     /// Supported shared bus modes.
     fn get_sharing(&self) -> &Vec<super::enums::VirtualScsiSharingEnum>;
     /// Index into sharing array specifying the default value.
@@ -26095,7 +26095,7 @@ pub trait VirtualScsiControllerOptionTrait : super::traits::VirtualControllerOpt
     /// support can't be toggled in the current implementation. Therefore, this
     /// option is ignored when reconfiguring a SCSI controller and is always set
     /// to "true" when reading an existing configuration.
-    fn get_hot_add_remove(&self) -> &BoolOption;
+    fn get_hot_add_remove(&self) -> &super::structs::BoolOption;
     /// The unit number of the SCSI controller.
     /// 
     /// The SCSI controller sits on its
@@ -26142,48 +26142,48 @@ impl<'de> de::Visitor<'de> for VirtualScsiControllerOptionVisitor {
 }
 
 impl VirtualScsiControllerOptionTrait for VirtualScsiControllerOption {
-    fn get_num_scsi_disks(&self) -> &IntOption { &self.num_scsi_disks }
-    fn get_num_scsi_cdroms(&self) -> &IntOption { &self.num_scsi_cdroms }
-    fn get_num_scsi_passthrough(&self) -> &IntOption { &self.num_scsi_passthrough }
+    fn get_num_scsi_disks(&self) -> &super::structs::IntOption { &self.num_scsi_disks }
+    fn get_num_scsi_cdroms(&self) -> &super::structs::IntOption { &self.num_scsi_cdroms }
+    fn get_num_scsi_passthrough(&self) -> &super::structs::IntOption { &self.num_scsi_passthrough }
     fn get_sharing(&self) -> &Vec<super::enums::VirtualScsiSharingEnum> { &self.sharing }
     fn get_default_shared_index(&self) -> i32 { self.default_shared_index }
-    fn get_hot_add_remove(&self) -> &BoolOption { &self.hot_add_remove }
+    fn get_hot_add_remove(&self) -> &super::structs::BoolOption { &self.hot_add_remove }
     fn get_scsi_ctlr_unit_number(&self) -> i32 { self.scsi_ctlr_unit_number }
 }
 impl VirtualScsiControllerOptionTrait for ParaVirtualScsiControllerOption {
-    fn get_num_scsi_disks(&self) -> &IntOption { &self.num_scsi_disks }
-    fn get_num_scsi_cdroms(&self) -> &IntOption { &self.num_scsi_cdroms }
-    fn get_num_scsi_passthrough(&self) -> &IntOption { &self.num_scsi_passthrough }
+    fn get_num_scsi_disks(&self) -> &super::structs::IntOption { &self.num_scsi_disks }
+    fn get_num_scsi_cdroms(&self) -> &super::structs::IntOption { &self.num_scsi_cdroms }
+    fn get_num_scsi_passthrough(&self) -> &super::structs::IntOption { &self.num_scsi_passthrough }
     fn get_sharing(&self) -> &Vec<super::enums::VirtualScsiSharingEnum> { &self.sharing }
     fn get_default_shared_index(&self) -> i32 { self.default_shared_index }
-    fn get_hot_add_remove(&self) -> &BoolOption { &self.hot_add_remove }
+    fn get_hot_add_remove(&self) -> &super::structs::BoolOption { &self.hot_add_remove }
     fn get_scsi_ctlr_unit_number(&self) -> i32 { self.scsi_ctlr_unit_number }
 }
 impl VirtualScsiControllerOptionTrait for VirtualBusLogicControllerOption {
-    fn get_num_scsi_disks(&self) -> &IntOption { &self.num_scsi_disks }
-    fn get_num_scsi_cdroms(&self) -> &IntOption { &self.num_scsi_cdroms }
-    fn get_num_scsi_passthrough(&self) -> &IntOption { &self.num_scsi_passthrough }
+    fn get_num_scsi_disks(&self) -> &super::structs::IntOption { &self.num_scsi_disks }
+    fn get_num_scsi_cdroms(&self) -> &super::structs::IntOption { &self.num_scsi_cdroms }
+    fn get_num_scsi_passthrough(&self) -> &super::structs::IntOption { &self.num_scsi_passthrough }
     fn get_sharing(&self) -> &Vec<super::enums::VirtualScsiSharingEnum> { &self.sharing }
     fn get_default_shared_index(&self) -> i32 { self.default_shared_index }
-    fn get_hot_add_remove(&self) -> &BoolOption { &self.hot_add_remove }
+    fn get_hot_add_remove(&self) -> &super::structs::BoolOption { &self.hot_add_remove }
     fn get_scsi_ctlr_unit_number(&self) -> i32 { self.scsi_ctlr_unit_number }
 }
 impl VirtualScsiControllerOptionTrait for VirtualLsiLogicControllerOption {
-    fn get_num_scsi_disks(&self) -> &IntOption { &self.num_scsi_disks }
-    fn get_num_scsi_cdroms(&self) -> &IntOption { &self.num_scsi_cdroms }
-    fn get_num_scsi_passthrough(&self) -> &IntOption { &self.num_scsi_passthrough }
+    fn get_num_scsi_disks(&self) -> &super::structs::IntOption { &self.num_scsi_disks }
+    fn get_num_scsi_cdroms(&self) -> &super::structs::IntOption { &self.num_scsi_cdroms }
+    fn get_num_scsi_passthrough(&self) -> &super::structs::IntOption { &self.num_scsi_passthrough }
     fn get_sharing(&self) -> &Vec<super::enums::VirtualScsiSharingEnum> { &self.sharing }
     fn get_default_shared_index(&self) -> i32 { self.default_shared_index }
-    fn get_hot_add_remove(&self) -> &BoolOption { &self.hot_add_remove }
+    fn get_hot_add_remove(&self) -> &super::structs::BoolOption { &self.hot_add_remove }
     fn get_scsi_ctlr_unit_number(&self) -> i32 { self.scsi_ctlr_unit_number }
 }
 impl VirtualScsiControllerOptionTrait for VirtualLsiLogicSasControllerOption {
-    fn get_num_scsi_disks(&self) -> &IntOption { &self.num_scsi_disks }
-    fn get_num_scsi_cdroms(&self) -> &IntOption { &self.num_scsi_cdroms }
-    fn get_num_scsi_passthrough(&self) -> &IntOption { &self.num_scsi_passthrough }
+    fn get_num_scsi_disks(&self) -> &super::structs::IntOption { &self.num_scsi_disks }
+    fn get_num_scsi_cdroms(&self) -> &super::structs::IntOption { &self.num_scsi_cdroms }
+    fn get_num_scsi_passthrough(&self) -> &super::structs::IntOption { &self.num_scsi_passthrough }
     fn get_sharing(&self) -> &Vec<super::enums::VirtualScsiSharingEnum> { &self.sharing }
     fn get_default_shared_index(&self) -> i32 { self.default_shared_index }
-    fn get_hot_add_remove(&self) -> &BoolOption { &self.hot_add_remove }
+    fn get_hot_add_remove(&self) -> &super::structs::BoolOption { &self.hot_add_remove }
     fn get_scsi_ctlr_unit_number(&self) -> i32 { self.scsi_ctlr_unit_number }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualScsiControllerOptionTrait {
@@ -26221,11 +26221,11 @@ pub trait VirtualEthernetCardOptionTrait : super::traits::VirtualDeviceOptionTra
     /// <dt>Supported OUIs for statically assigned MAC addresses:</dt>
     /// <dd>"00:50:56"</dd>
     /// </dl>
-    fn get_supported_oui(&self) -> &ChoiceOption;
+    fn get_supported_oui(&self) -> &super::structs::ChoiceOption;
     /// The supported MAC address types.
-    fn get_mac_type(&self) -> &ChoiceOption;
+    fn get_mac_type(&self) -> &super::structs::ChoiceOption;
     /// Flag to indicate whether or not wake-on-LAN is settable on this device.
-    fn get_wake_on_lan_enabled(&self) -> &BoolOption;
+    fn get_wake_on_lan_enabled(&self) -> &super::structs::BoolOption;
     /// Deprecated as of vSphere API 8.0. VMDirectPath Gen 2 is no longer supported and
     /// there is no replacement.
     /// 
@@ -26235,7 +26235,7 @@ pub trait VirtualEthernetCardOptionTrait : super::traits::VirtualDeviceOptionTra
     /// there is no replacement.
     /// 
     /// Flag to indicate whether Universal Pass-through(UPT) is settable on this device.
-    fn get_upt_compatibility_enabled(&self) -> &Option<BoolOption>;
+    fn get_upt_compatibility_enabled(&self) -> &Option<super::structs::BoolOption>;
 }
 impl<'s> serde::Serialize for dyn VirtualEthernetCardOptionTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
@@ -26277,67 +26277,67 @@ impl<'de> de::Visitor<'de> for VirtualEthernetCardOptionVisitor {
 }
 
 impl VirtualEthernetCardOptionTrait for VirtualEthernetCardOption {
-    fn get_supported_oui(&self) -> &ChoiceOption { &self.supported_oui }
-    fn get_mac_type(&self) -> &ChoiceOption { &self.mac_type }
-    fn get_wake_on_lan_enabled(&self) -> &BoolOption { &self.wake_on_lan_enabled }
+    fn get_supported_oui(&self) -> &super::structs::ChoiceOption { &self.supported_oui }
+    fn get_mac_type(&self) -> &super::structs::ChoiceOption { &self.mac_type }
+    fn get_wake_on_lan_enabled(&self) -> &super::structs::BoolOption { &self.wake_on_lan_enabled }
     fn get_vm_direct_path_gen_2_supported(&self) -> Option<bool> { self.vm_direct_path_gen_2_supported }
-    fn get_upt_compatibility_enabled(&self) -> &Option<BoolOption> { &self.upt_compatibility_enabled }
+    fn get_upt_compatibility_enabled(&self) -> &Option<super::structs::BoolOption> { &self.upt_compatibility_enabled }
 }
 impl VirtualEthernetCardOptionTrait for VirtualE1000Option {
-    fn get_supported_oui(&self) -> &ChoiceOption { &self.supported_oui }
-    fn get_mac_type(&self) -> &ChoiceOption { &self.mac_type }
-    fn get_wake_on_lan_enabled(&self) -> &BoolOption { &self.wake_on_lan_enabled }
+    fn get_supported_oui(&self) -> &super::structs::ChoiceOption { &self.supported_oui }
+    fn get_mac_type(&self) -> &super::structs::ChoiceOption { &self.mac_type }
+    fn get_wake_on_lan_enabled(&self) -> &super::structs::BoolOption { &self.wake_on_lan_enabled }
     fn get_vm_direct_path_gen_2_supported(&self) -> Option<bool> { self.vm_direct_path_gen_2_supported }
-    fn get_upt_compatibility_enabled(&self) -> &Option<BoolOption> { &self.upt_compatibility_enabled }
+    fn get_upt_compatibility_enabled(&self) -> &Option<super::structs::BoolOption> { &self.upt_compatibility_enabled }
 }
 impl VirtualEthernetCardOptionTrait for VirtualE1000EOption {
-    fn get_supported_oui(&self) -> &ChoiceOption { &self.supported_oui }
-    fn get_mac_type(&self) -> &ChoiceOption { &self.mac_type }
-    fn get_wake_on_lan_enabled(&self) -> &BoolOption { &self.wake_on_lan_enabled }
+    fn get_supported_oui(&self) -> &super::structs::ChoiceOption { &self.supported_oui }
+    fn get_mac_type(&self) -> &super::structs::ChoiceOption { &self.mac_type }
+    fn get_wake_on_lan_enabled(&self) -> &super::structs::BoolOption { &self.wake_on_lan_enabled }
     fn get_vm_direct_path_gen_2_supported(&self) -> Option<bool> { self.vm_direct_path_gen_2_supported }
-    fn get_upt_compatibility_enabled(&self) -> &Option<BoolOption> { &self.upt_compatibility_enabled }
+    fn get_upt_compatibility_enabled(&self) -> &Option<super::structs::BoolOption> { &self.upt_compatibility_enabled }
 }
 impl VirtualEthernetCardOptionTrait for VirtualPcNet32Option {
-    fn get_supported_oui(&self) -> &ChoiceOption { &self.supported_oui }
-    fn get_mac_type(&self) -> &ChoiceOption { &self.mac_type }
-    fn get_wake_on_lan_enabled(&self) -> &BoolOption { &self.wake_on_lan_enabled }
+    fn get_supported_oui(&self) -> &super::structs::ChoiceOption { &self.supported_oui }
+    fn get_mac_type(&self) -> &super::structs::ChoiceOption { &self.mac_type }
+    fn get_wake_on_lan_enabled(&self) -> &super::structs::BoolOption { &self.wake_on_lan_enabled }
     fn get_vm_direct_path_gen_2_supported(&self) -> Option<bool> { self.vm_direct_path_gen_2_supported }
-    fn get_upt_compatibility_enabled(&self) -> &Option<BoolOption> { &self.upt_compatibility_enabled }
+    fn get_upt_compatibility_enabled(&self) -> &Option<super::structs::BoolOption> { &self.upt_compatibility_enabled }
 }
 impl VirtualEthernetCardOptionTrait for VirtualSriovEthernetCardOption {
-    fn get_supported_oui(&self) -> &ChoiceOption { &self.supported_oui }
-    fn get_mac_type(&self) -> &ChoiceOption { &self.mac_type }
-    fn get_wake_on_lan_enabled(&self) -> &BoolOption { &self.wake_on_lan_enabled }
+    fn get_supported_oui(&self) -> &super::structs::ChoiceOption { &self.supported_oui }
+    fn get_mac_type(&self) -> &super::structs::ChoiceOption { &self.mac_type }
+    fn get_wake_on_lan_enabled(&self) -> &super::structs::BoolOption { &self.wake_on_lan_enabled }
     fn get_vm_direct_path_gen_2_supported(&self) -> Option<bool> { self.vm_direct_path_gen_2_supported }
-    fn get_upt_compatibility_enabled(&self) -> &Option<BoolOption> { &self.upt_compatibility_enabled }
+    fn get_upt_compatibility_enabled(&self) -> &Option<super::structs::BoolOption> { &self.upt_compatibility_enabled }
 }
 impl VirtualEthernetCardOptionTrait for VirtualVmxnetOption {
-    fn get_supported_oui(&self) -> &ChoiceOption { &self.supported_oui }
-    fn get_mac_type(&self) -> &ChoiceOption { &self.mac_type }
-    fn get_wake_on_lan_enabled(&self) -> &BoolOption { &self.wake_on_lan_enabled }
+    fn get_supported_oui(&self) -> &super::structs::ChoiceOption { &self.supported_oui }
+    fn get_mac_type(&self) -> &super::structs::ChoiceOption { &self.mac_type }
+    fn get_wake_on_lan_enabled(&self) -> &super::structs::BoolOption { &self.wake_on_lan_enabled }
     fn get_vm_direct_path_gen_2_supported(&self) -> Option<bool> { self.vm_direct_path_gen_2_supported }
-    fn get_upt_compatibility_enabled(&self) -> &Option<BoolOption> { &self.upt_compatibility_enabled }
+    fn get_upt_compatibility_enabled(&self) -> &Option<super::structs::BoolOption> { &self.upt_compatibility_enabled }
 }
 impl VirtualEthernetCardOptionTrait for VirtualVmxnet2Option {
-    fn get_supported_oui(&self) -> &ChoiceOption { &self.supported_oui }
-    fn get_mac_type(&self) -> &ChoiceOption { &self.mac_type }
-    fn get_wake_on_lan_enabled(&self) -> &BoolOption { &self.wake_on_lan_enabled }
+    fn get_supported_oui(&self) -> &super::structs::ChoiceOption { &self.supported_oui }
+    fn get_mac_type(&self) -> &super::structs::ChoiceOption { &self.mac_type }
+    fn get_wake_on_lan_enabled(&self) -> &super::structs::BoolOption { &self.wake_on_lan_enabled }
     fn get_vm_direct_path_gen_2_supported(&self) -> Option<bool> { self.vm_direct_path_gen_2_supported }
-    fn get_upt_compatibility_enabled(&self) -> &Option<BoolOption> { &self.upt_compatibility_enabled }
+    fn get_upt_compatibility_enabled(&self) -> &Option<super::structs::BoolOption> { &self.upt_compatibility_enabled }
 }
 impl VirtualEthernetCardOptionTrait for VirtualVmxnet3Option {
-    fn get_supported_oui(&self) -> &ChoiceOption { &self.supported_oui }
-    fn get_mac_type(&self) -> &ChoiceOption { &self.mac_type }
-    fn get_wake_on_lan_enabled(&self) -> &BoolOption { &self.wake_on_lan_enabled }
+    fn get_supported_oui(&self) -> &super::structs::ChoiceOption { &self.supported_oui }
+    fn get_mac_type(&self) -> &super::structs::ChoiceOption { &self.mac_type }
+    fn get_wake_on_lan_enabled(&self) -> &super::structs::BoolOption { &self.wake_on_lan_enabled }
     fn get_vm_direct_path_gen_2_supported(&self) -> Option<bool> { self.vm_direct_path_gen_2_supported }
-    fn get_upt_compatibility_enabled(&self) -> &Option<BoolOption> { &self.upt_compatibility_enabled }
+    fn get_upt_compatibility_enabled(&self) -> &Option<super::structs::BoolOption> { &self.upt_compatibility_enabled }
 }
 impl VirtualEthernetCardOptionTrait for VirtualVmxnet3VrdmaOption {
-    fn get_supported_oui(&self) -> &ChoiceOption { &self.supported_oui }
-    fn get_mac_type(&self) -> &ChoiceOption { &self.mac_type }
-    fn get_wake_on_lan_enabled(&self) -> &BoolOption { &self.wake_on_lan_enabled }
+    fn get_supported_oui(&self) -> &super::structs::ChoiceOption { &self.supported_oui }
+    fn get_mac_type(&self) -> &super::structs::ChoiceOption { &self.mac_type }
+    fn get_wake_on_lan_enabled(&self) -> &super::structs::BoolOption { &self.wake_on_lan_enabled }
     fn get_vm_direct_path_gen_2_supported(&self) -> Option<bool> { self.vm_direct_path_gen_2_supported }
-    fn get_upt_compatibility_enabled(&self) -> &Option<BoolOption> { &self.upt_compatibility_enabled }
+    fn get_upt_compatibility_enabled(&self) -> &Option<super::structs::BoolOption> { &self.upt_compatibility_enabled }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualEthernetCardOptionTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -26453,7 +26453,7 @@ pub trait VirtualVmxnet3OptionTrait : super::traits::VirtualVmxnetOptionTrait {
     /// settable on this device.
     /// 
     /// ***Since:*** vSphere API Release 8.0.0.1
-    fn get_uptv_2_enabled(&self) -> &Option<BoolOption>;
+    fn get_uptv_2_enabled(&self) -> &Option<super::structs::BoolOption>;
 }
 impl<'s> serde::Serialize for dyn VirtualVmxnet3OptionTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
@@ -26495,10 +26495,10 @@ impl<'de> de::Visitor<'de> for VirtualVmxnet3OptionVisitor {
 }
 
 impl VirtualVmxnet3OptionTrait for VirtualVmxnet3Option {
-    fn get_uptv_2_enabled(&self) -> &Option<BoolOption> { &self.uptv_2_enabled }
+    fn get_uptv_2_enabled(&self) -> &Option<super::structs::BoolOption> { &self.uptv_2_enabled }
 }
 impl VirtualVmxnet3OptionTrait for VirtualVmxnet3VrdmaOption {
-    fn get_uptv_2_enabled(&self) -> &Option<BoolOption> { &self.uptv_2_enabled }
+    fn get_uptv_2_enabled(&self) -> &Option<super::structs::BoolOption> { &self.uptv_2_enabled }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualVmxnet3OptionTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -26894,7 +26894,7 @@ pub trait VirtualDeviceDeviceBackingOptionTrait : super::traits::VirtualDeviceBa
     /// Flag to indicate whether the specific instance of this device can
     /// be auto-detected on the host instead of having to specify a
     /// particular physical device.
-    fn get_auto_detect_available(&self) -> &BoolOption;
+    fn get_auto_detect_available(&self) -> &super::structs::BoolOption;
 }
 impl<'s> serde::Serialize for dyn VirtualDeviceDeviceBackingOptionTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
@@ -26936,61 +26936,61 @@ impl<'de> de::Visitor<'de> for VirtualDeviceDeviceBackingOptionVisitor {
 }
 
 impl VirtualDeviceDeviceBackingOptionTrait for VirtualDeviceDeviceBackingOption {
-    fn get_auto_detect_available(&self) -> &BoolOption { &self.auto_detect_available }
+    fn get_auto_detect_available(&self) -> &super::structs::BoolOption { &self.auto_detect_available }
 }
 impl VirtualDeviceDeviceBackingOptionTrait for VirtualCdromAtapiBackingOption {
-    fn get_auto_detect_available(&self) -> &BoolOption { &self.auto_detect_available }
+    fn get_auto_detect_available(&self) -> &super::structs::BoolOption { &self.auto_detect_available }
 }
 impl VirtualDeviceDeviceBackingOptionTrait for VirtualCdromPassthroughBackingOption {
-    fn get_auto_detect_available(&self) -> &BoolOption { &self.auto_detect_available }
+    fn get_auto_detect_available(&self) -> &super::structs::BoolOption { &self.auto_detect_available }
 }
 impl VirtualDeviceDeviceBackingOptionTrait for VirtualCdromRemoteAtapiBackingOption {
-    fn get_auto_detect_available(&self) -> &BoolOption { &self.auto_detect_available }
+    fn get_auto_detect_available(&self) -> &super::structs::BoolOption { &self.auto_detect_available }
 }
 impl VirtualDeviceDeviceBackingOptionTrait for VirtualDiskRawDiskMappingVer1BackingOption {
-    fn get_auto_detect_available(&self) -> &BoolOption { &self.auto_detect_available }
+    fn get_auto_detect_available(&self) -> &super::structs::BoolOption { &self.auto_detect_available }
 }
 impl VirtualDeviceDeviceBackingOptionTrait for VirtualDiskRawDiskVer2BackingOption {
-    fn get_auto_detect_available(&self) -> &BoolOption { &self.auto_detect_available }
+    fn get_auto_detect_available(&self) -> &super::structs::BoolOption { &self.auto_detect_available }
 }
 impl VirtualDeviceDeviceBackingOptionTrait for VirtualDiskPartitionedRawDiskVer2BackingOption {
-    fn get_auto_detect_available(&self) -> &BoolOption { &self.auto_detect_available }
+    fn get_auto_detect_available(&self) -> &super::structs::BoolOption { &self.auto_detect_available }
 }
 impl VirtualDeviceDeviceBackingOptionTrait for VirtualEthernetCardLegacyNetworkBackingOption {
-    fn get_auto_detect_available(&self) -> &BoolOption { &self.auto_detect_available }
+    fn get_auto_detect_available(&self) -> &super::structs::BoolOption { &self.auto_detect_available }
 }
 impl VirtualDeviceDeviceBackingOptionTrait for VirtualEthernetCardNetworkBackingOption {
-    fn get_auto_detect_available(&self) -> &BoolOption { &self.auto_detect_available }
+    fn get_auto_detect_available(&self) -> &super::structs::BoolOption { &self.auto_detect_available }
 }
 impl VirtualDeviceDeviceBackingOptionTrait for VirtualFloppyDeviceBackingOption {
-    fn get_auto_detect_available(&self) -> &BoolOption { &self.auto_detect_available }
+    fn get_auto_detect_available(&self) -> &super::structs::BoolOption { &self.auto_detect_available }
 }
 impl VirtualDeviceDeviceBackingOptionTrait for VirtualPciPassthroughDeviceBackingOption {
-    fn get_auto_detect_available(&self) -> &BoolOption { &self.auto_detect_available }
+    fn get_auto_detect_available(&self) -> &super::structs::BoolOption { &self.auto_detect_available }
 }
 impl VirtualDeviceDeviceBackingOptionTrait for VirtualPciPassthroughDynamicBackingOption {
-    fn get_auto_detect_available(&self) -> &BoolOption { &self.auto_detect_available }
+    fn get_auto_detect_available(&self) -> &super::structs::BoolOption { &self.auto_detect_available }
 }
 impl VirtualDeviceDeviceBackingOptionTrait for VirtualParallelPortDeviceBackingOption {
-    fn get_auto_detect_available(&self) -> &BoolOption { &self.auto_detect_available }
+    fn get_auto_detect_available(&self) -> &super::structs::BoolOption { &self.auto_detect_available }
 }
 impl VirtualDeviceDeviceBackingOptionTrait for VirtualPointingDeviceBackingOption {
-    fn get_auto_detect_available(&self) -> &BoolOption { &self.auto_detect_available }
+    fn get_auto_detect_available(&self) -> &super::structs::BoolOption { &self.auto_detect_available }
 }
 impl VirtualDeviceDeviceBackingOptionTrait for VirtualScsiPassthroughDeviceBackingOption {
-    fn get_auto_detect_available(&self) -> &BoolOption { &self.auto_detect_available }
+    fn get_auto_detect_available(&self) -> &super::structs::BoolOption { &self.auto_detect_available }
 }
 impl VirtualDeviceDeviceBackingOptionTrait for VirtualSerialPortDeviceBackingOption {
-    fn get_auto_detect_available(&self) -> &BoolOption { &self.auto_detect_available }
+    fn get_auto_detect_available(&self) -> &super::structs::BoolOption { &self.auto_detect_available }
 }
 impl VirtualDeviceDeviceBackingOptionTrait for VirtualSoundCardDeviceBackingOption {
-    fn get_auto_detect_available(&self) -> &BoolOption { &self.auto_detect_available }
+    fn get_auto_detect_available(&self) -> &super::structs::BoolOption { &self.auto_detect_available }
 }
 impl VirtualDeviceDeviceBackingOptionTrait for VirtualUsbRemoteHostBackingOption {
-    fn get_auto_detect_available(&self) -> &BoolOption { &self.auto_detect_available }
+    fn get_auto_detect_available(&self) -> &super::structs::BoolOption { &self.auto_detect_available }
 }
 impl VirtualDeviceDeviceBackingOptionTrait for VirtualUsbusbBackingOption {
-    fn get_auto_detect_available(&self) -> &BoolOption { &self.auto_detect_available }
+    fn get_auto_detect_available(&self) -> &super::structs::BoolOption { &self.auto_detect_available }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualDeviceDeviceBackingOptionTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -27051,7 +27051,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualDevi
 pub trait VirtualDiskRawDiskVer2BackingOptionTrait : super::traits::VirtualDeviceDeviceBackingOptionTrait {
     /// Valid extensions for the filename of the raw disk descriptor
     /// file.
-    fn get_descriptor_file_name_extensions(&self) -> &ChoiceOption;
+    fn get_descriptor_file_name_extensions(&self) -> &super::structs::ChoiceOption;
     /// Flag to indicate whether this backing supports disk UUID property.
     fn get_uuid(&self) -> bool;
 }
@@ -27095,11 +27095,11 @@ impl<'de> de::Visitor<'de> for VirtualDiskRawDiskVer2BackingOptionVisitor {
 }
 
 impl VirtualDiskRawDiskVer2BackingOptionTrait for VirtualDiskRawDiskVer2BackingOption {
-    fn get_descriptor_file_name_extensions(&self) -> &ChoiceOption { &self.descriptor_file_name_extensions }
+    fn get_descriptor_file_name_extensions(&self) -> &super::structs::ChoiceOption { &self.descriptor_file_name_extensions }
     fn get_uuid(&self) -> bool { self.uuid }
 }
 impl VirtualDiskRawDiskVer2BackingOptionTrait for VirtualDiskPartitionedRawDiskVer2BackingOption {
-    fn get_descriptor_file_name_extensions(&self) -> &ChoiceOption { &self.descriptor_file_name_extensions }
+    fn get_descriptor_file_name_extensions(&self) -> &super::structs::ChoiceOption { &self.descriptor_file_name_extensions }
     fn get_uuid(&self) -> bool { self.uuid }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualDiskRawDiskVer2BackingOptionTrait {
@@ -27126,7 +27126,7 @@ pub trait VirtualDeviceFileBackingOptionTrait : super::traits::VirtualDeviceBack
     /// Valid filename extension for the filename.
     /// 
     /// If no extensions are present, any file extension is acceptable.
-    fn get_file_name_extensions(&self) -> &Option<ChoiceOption>;
+    fn get_file_name_extensions(&self) -> &Option<super::structs::ChoiceOption>;
 }
 impl<'s> serde::Serialize for dyn VirtualDeviceFileBackingOptionTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
@@ -27168,37 +27168,37 @@ impl<'de> de::Visitor<'de> for VirtualDeviceFileBackingOptionVisitor {
 }
 
 impl VirtualDeviceFileBackingOptionTrait for VirtualDeviceFileBackingOption {
-    fn get_file_name_extensions(&self) -> &Option<ChoiceOption> { &self.file_name_extensions }
+    fn get_file_name_extensions(&self) -> &Option<super::structs::ChoiceOption> { &self.file_name_extensions }
 }
 impl VirtualDeviceFileBackingOptionTrait for VirtualCdromIsoBackingOption {
-    fn get_file_name_extensions(&self) -> &Option<ChoiceOption> { &self.file_name_extensions }
+    fn get_file_name_extensions(&self) -> &Option<super::structs::ChoiceOption> { &self.file_name_extensions }
 }
 impl VirtualDeviceFileBackingOptionTrait for VirtualDiskFlatVer1BackingOption {
-    fn get_file_name_extensions(&self) -> &Option<ChoiceOption> { &self.file_name_extensions }
+    fn get_file_name_extensions(&self) -> &Option<super::structs::ChoiceOption> { &self.file_name_extensions }
 }
 impl VirtualDeviceFileBackingOptionTrait for VirtualDiskFlatVer2BackingOption {
-    fn get_file_name_extensions(&self) -> &Option<ChoiceOption> { &self.file_name_extensions }
+    fn get_file_name_extensions(&self) -> &Option<super::structs::ChoiceOption> { &self.file_name_extensions }
 }
 impl VirtualDeviceFileBackingOptionTrait for VirtualDiskLocalPMemBackingOption {
-    fn get_file_name_extensions(&self) -> &Option<ChoiceOption> { &self.file_name_extensions }
+    fn get_file_name_extensions(&self) -> &Option<super::structs::ChoiceOption> { &self.file_name_extensions }
 }
 impl VirtualDeviceFileBackingOptionTrait for VirtualDiskSeSparseBackingOption {
-    fn get_file_name_extensions(&self) -> &Option<ChoiceOption> { &self.file_name_extensions }
+    fn get_file_name_extensions(&self) -> &Option<super::structs::ChoiceOption> { &self.file_name_extensions }
 }
 impl VirtualDeviceFileBackingOptionTrait for VirtualDiskSparseVer1BackingOption {
-    fn get_file_name_extensions(&self) -> &Option<ChoiceOption> { &self.file_name_extensions }
+    fn get_file_name_extensions(&self) -> &Option<super::structs::ChoiceOption> { &self.file_name_extensions }
 }
 impl VirtualDeviceFileBackingOptionTrait for VirtualDiskSparseVer2BackingOption {
-    fn get_file_name_extensions(&self) -> &Option<ChoiceOption> { &self.file_name_extensions }
+    fn get_file_name_extensions(&self) -> &Option<super::structs::ChoiceOption> { &self.file_name_extensions }
 }
 impl VirtualDeviceFileBackingOptionTrait for VirtualFloppyImageBackingOption {
-    fn get_file_name_extensions(&self) -> &Option<ChoiceOption> { &self.file_name_extensions }
+    fn get_file_name_extensions(&self) -> &Option<super::structs::ChoiceOption> { &self.file_name_extensions }
 }
 impl VirtualDeviceFileBackingOptionTrait for VirtualParallelPortFileBackingOption {
-    fn get_file_name_extensions(&self) -> &Option<ChoiceOption> { &self.file_name_extensions }
+    fn get_file_name_extensions(&self) -> &Option<super::structs::ChoiceOption> { &self.file_name_extensions }
 }
 impl VirtualDeviceFileBackingOptionTrait for VirtualSerialPortFileBackingOption {
-    fn get_file_name_extensions(&self) -> &Option<ChoiceOption> { &self.file_name_extensions }
+    fn get_file_name_extensions(&self) -> &Option<super::structs::ChoiceOption> { &self.file_name_extensions }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualDeviceFileBackingOptionTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -27314,7 +27314,7 @@ pub trait VirtualDeviceRemoteDeviceBackingOptionTrait : super::traits::VirtualDe
     /// Flag to indicate whether the specific instance of this device can
     /// be auto-detected on the host instead of having to specify a
     /// particular physical device.
-    fn get_auto_detect_available(&self) -> &BoolOption;
+    fn get_auto_detect_available(&self) -> &super::structs::BoolOption;
 }
 impl<'s> serde::Serialize for dyn VirtualDeviceRemoteDeviceBackingOptionTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
@@ -27356,16 +27356,16 @@ impl<'de> de::Visitor<'de> for VirtualDeviceRemoteDeviceBackingOptionVisitor {
 }
 
 impl VirtualDeviceRemoteDeviceBackingOptionTrait for VirtualDeviceRemoteDeviceBackingOption {
-    fn get_auto_detect_available(&self) -> &BoolOption { &self.auto_detect_available }
+    fn get_auto_detect_available(&self) -> &super::structs::BoolOption { &self.auto_detect_available }
 }
 impl VirtualDeviceRemoteDeviceBackingOptionTrait for VirtualCdromRemotePassthroughBackingOption {
-    fn get_auto_detect_available(&self) -> &BoolOption { &self.auto_detect_available }
+    fn get_auto_detect_available(&self) -> &super::structs::BoolOption { &self.auto_detect_available }
 }
 impl VirtualDeviceRemoteDeviceBackingOptionTrait for VirtualFloppyRemoteDeviceBackingOption {
-    fn get_auto_detect_available(&self) -> &BoolOption { &self.auto_detect_available }
+    fn get_auto_detect_available(&self) -> &super::structs::BoolOption { &self.auto_detect_available }
 }
 impl VirtualDeviceRemoteDeviceBackingOptionTrait for VirtualUsbRemoteClientBackingOption {
-    fn get_auto_detect_available(&self) -> &BoolOption { &self.auto_detect_available }
+    fn get_auto_detect_available(&self) -> &super::structs::BoolOption { &self.auto_detect_available }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualDeviceRemoteDeviceBackingOptionTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -27403,7 +27403,7 @@ pub trait VirtualDeviceUriBackingOptionTrait : super::traits::VirtualDeviceBacki
     /// Valid directions are:
     /// - *server*
     /// - *client*
-    fn get_directions(&self) -> &ChoiceOption;
+    fn get_directions(&self) -> &super::structs::ChoiceOption;
 }
 impl<'s> serde::Serialize for dyn VirtualDeviceUriBackingOptionTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
@@ -27445,10 +27445,10 @@ impl<'de> de::Visitor<'de> for VirtualDeviceUriBackingOptionVisitor {
 }
 
 impl VirtualDeviceUriBackingOptionTrait for VirtualDeviceUriBackingOption {
-    fn get_directions(&self) -> &ChoiceOption { &self.directions }
+    fn get_directions(&self) -> &super::structs::ChoiceOption { &self.directions }
 }
 impl VirtualDeviceUriBackingOptionTrait for VirtualSerialPortUriBackingOption {
-    fn get_directions(&self) -> &ChoiceOption { &self.directions }
+    fn get_directions(&self) -> &super::structs::ChoiceOption { &self.directions }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualDeviceUriBackingOptionTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -27571,7 +27571,7 @@ pub trait VirtualDeviceConfigSpecTrait : super::traits::DataObjectTrait {
     /// Each BackingSpec corresponds to a BackingInfo object. The member
     /// *VirtualDeviceConfigSpec.backing* refers to the
     /// *VirtualDeviceConfigSpec.device*.*VirtualDevice.backing*.
-    fn get_backing(&self) -> &Option<VirtualDeviceConfigSpecBackingSpec>;
+    fn get_backing(&self) -> &Option<super::structs::VirtualDeviceConfigSpecBackingSpec>;
     /// List of independent filters *VirtualMachineIndependentFilterSpec*
     /// to configure on the virtual device.
     /// 
@@ -27629,7 +27629,7 @@ impl VirtualDeviceConfigSpecTrait for VirtualDeviceConfigSpec {
     fn get_file_operation(&self) -> &Option<super::enums::VirtualDeviceConfigSpecFileOperationEnum> { &self.file_operation }
     fn get_device(&self) -> &Box<dyn super::traits::VirtualDeviceTrait> { &self.device }
     fn get_profile(&self) -> &Option<Vec<Box<dyn super::traits::VirtualMachineProfileSpecTrait>>> { &self.profile }
-    fn get_backing(&self) -> &Option<VirtualDeviceConfigSpecBackingSpec> { &self.backing }
+    fn get_backing(&self) -> &Option<super::structs::VirtualDeviceConfigSpecBackingSpec> { &self.backing }
     fn get_filter_spec(&self) -> &Option<Vec<Box<dyn super::traits::VirtualMachineBaseIndependentFilterSpecTrait>>> { &self.filter_spec }
     fn get_change_mode(&self) -> &Option<String> { &self.change_mode }
 }
@@ -27638,7 +27638,7 @@ impl VirtualDeviceConfigSpecTrait for VirtualDiskConfigSpec {
     fn get_file_operation(&self) -> &Option<super::enums::VirtualDeviceConfigSpecFileOperationEnum> { &self.file_operation }
     fn get_device(&self) -> &Box<dyn super::traits::VirtualDeviceTrait> { &self.device }
     fn get_profile(&self) -> &Option<Vec<Box<dyn super::traits::VirtualMachineProfileSpecTrait>>> { &self.profile }
-    fn get_backing(&self) -> &Option<VirtualDeviceConfigSpecBackingSpec> { &self.backing }
+    fn get_backing(&self) -> &Option<super::structs::VirtualDeviceConfigSpecBackingSpec> { &self.backing }
     fn get_filter_spec(&self) -> &Option<Vec<Box<dyn super::traits::VirtualMachineBaseIndependentFilterSpecTrait>>> { &self.filter_spec }
     fn get_change_mode(&self) -> &Option<String> { &self.change_mode }
 }
@@ -28141,7 +28141,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn GuestRegVal
 /// a virtual storage object or a virtual storage object snapshot.
 pub trait BaseConfigInfoTrait : super::traits::DataObjectTrait {
     /// ID of this object.
-    fn get_id(&self) -> &Id;
+    fn get_id(&self) -> &super::structs::Id;
     /// Descriptive name of this object.
     fn get_name(&self) -> &str;
     /// The date and time this object was created.
@@ -28167,13 +28167,13 @@ pub trait BaseConfigInfoTrait : super::traits::DataObjectTrait {
     /// Metadata associated with the FCD if available.
     /// 
     /// ***Since:*** vSphere API Release 7.0.2.0
-    fn get_metadata(&self) -> &Option<Vec<KeyValue>>;
+    fn get_metadata(&self) -> &Option<Vec<super::structs::KeyValue>>;
     /// VClock associated with the fcd when the operation completed.
     /// 
     /// The files is unset if the operation is a retrieve.
     /// 
     /// ***Since:*** vSphere API Release 7.0.2.0
-    fn get_vclock(&self) -> &Option<VslmVClockInfo>;
+    fn get_vclock(&self) -> &Option<super::structs::VslmVClockInfo>;
     /// IDs of the IO Filters associated with the virtual disk.
     /// 
     /// See *IoFilterInfo.id*.
@@ -28220,7 +28220,7 @@ impl<'de> de::Visitor<'de> for BaseConfigInfoVisitor {
 }
 
 impl BaseConfigInfoTrait for BaseConfigInfo {
-    fn get_id(&self) -> &Id { &self.id }
+    fn get_id(&self) -> &super::structs::Id { &self.id }
     fn get_name(&self) -> &str { &self.name }
     fn get_create_time(&self) -> &str { &self.create_time }
     fn get_keep_after_delete_vm(&self) -> Option<bool> { self.keep_after_delete_vm }
@@ -28228,12 +28228,12 @@ impl BaseConfigInfoTrait for BaseConfigInfo {
     fn get_native_snapshot_supported(&self) -> Option<bool> { self.native_snapshot_supported }
     fn get_changed_block_tracking_enabled(&self) -> Option<bool> { self.changed_block_tracking_enabled }
     fn get_backing(&self) -> &Box<dyn super::traits::BaseConfigInfoBackingInfoTrait> { &self.backing }
-    fn get_metadata(&self) -> &Option<Vec<KeyValue>> { &self.metadata }
-    fn get_vclock(&self) -> &Option<VslmVClockInfo> { &self.vclock }
+    fn get_metadata(&self) -> &Option<Vec<super::structs::KeyValue>> { &self.metadata }
+    fn get_vclock(&self) -> &Option<super::structs::VslmVClockInfo> { &self.vclock }
     fn get_iofilter(&self) -> &Option<Vec<String>> { &self.iofilter }
 }
 impl BaseConfigInfoTrait for VStorageObjectConfigInfo {
-    fn get_id(&self) -> &Id { &self.id }
+    fn get_id(&self) -> &super::structs::Id { &self.id }
     fn get_name(&self) -> &str { &self.name }
     fn get_create_time(&self) -> &str { &self.create_time }
     fn get_keep_after_delete_vm(&self) -> Option<bool> { self.keep_after_delete_vm }
@@ -28241,8 +28241,8 @@ impl BaseConfigInfoTrait for VStorageObjectConfigInfo {
     fn get_native_snapshot_supported(&self) -> Option<bool> { self.native_snapshot_supported }
     fn get_changed_block_tracking_enabled(&self) -> Option<bool> { self.changed_block_tracking_enabled }
     fn get_backing(&self) -> &Box<dyn super::traits::BaseConfigInfoBackingInfoTrait> { &self.backing }
-    fn get_metadata(&self) -> &Option<Vec<KeyValue>> { &self.metadata }
-    fn get_vclock(&self) -> &Option<VslmVClockInfo> { &self.vclock }
+    fn get_metadata(&self) -> &Option<Vec<super::structs::KeyValue>> { &self.metadata }
+    fn get_vclock(&self) -> &Option<super::structs::VslmVClockInfo> { &self.vclock }
     fn get_iofilter(&self) -> &Option<Vec<String>> { &self.iofilter }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn BaseConfigInfoTrait {
@@ -28270,7 +28270,7 @@ pub trait BaseConfigInfoBackingInfoTrait : super::traits::DataObjectTrait {
     /// The datastore managed object where this backing is located.
     /// 
     /// Refers instance of *Datastore*.
-    fn get_datastore(&self) -> &ManagedObjectReference;
+    fn get_datastore(&self) -> &super::structs::ManagedObjectReference;
 }
 impl<'s> serde::Serialize for dyn BaseConfigInfoBackingInfoTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
@@ -28312,16 +28312,16 @@ impl<'de> de::Visitor<'de> for BaseConfigInfoBackingInfoVisitor {
 }
 
 impl BaseConfigInfoBackingInfoTrait for BaseConfigInfoBackingInfo {
-    fn get_datastore(&self) -> &ManagedObjectReference { &self.datastore }
+    fn get_datastore(&self) -> &super::structs::ManagedObjectReference { &self.datastore }
 }
 impl BaseConfigInfoBackingInfoTrait for BaseConfigInfoFileBackingInfo {
-    fn get_datastore(&self) -> &ManagedObjectReference { &self.datastore }
+    fn get_datastore(&self) -> &super::structs::ManagedObjectReference { &self.datastore }
 }
 impl BaseConfigInfoBackingInfoTrait for BaseConfigInfoDiskFileBackingInfo {
-    fn get_datastore(&self) -> &ManagedObjectReference { &self.datastore }
+    fn get_datastore(&self) -> &super::structs::ManagedObjectReference { &self.datastore }
 }
 impl BaseConfigInfoBackingInfoTrait for BaseConfigInfoRawDiskMappingBackingInfo {
-    fn get_datastore(&self) -> &ManagedObjectReference { &self.datastore }
+    fn get_datastore(&self) -> &super::structs::ManagedObjectReference { &self.datastore }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn BaseConfigInfoBackingInfoTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -28375,7 +28375,7 @@ pub trait BaseConfigInfoFileBackingInfoTrait : super::traits::BaseConfigInfoBack
     /// *BaseConfigInfoFileBackingInfo.parent* is set.
     fn get_delta_size_in_mb(&self) -> Option<i64>;
     /// key id used to encrypt the backing disk.
-    fn get_key_id(&self) -> &Option<CryptoKeyId>;
+    fn get_key_id(&self) -> &Option<super::structs::CryptoKeyId>;
 }
 impl<'s> serde::Serialize for dyn BaseConfigInfoFileBackingInfoTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
@@ -28421,21 +28421,21 @@ impl BaseConfigInfoFileBackingInfoTrait for BaseConfigInfoFileBackingInfo {
     fn get_backing_object_id(&self) -> &Option<String> { &self.backing_object_id }
     fn get_parent(&self) -> &Option<Box<dyn super::traits::BaseConfigInfoFileBackingInfoTrait>> { &self.parent }
     fn get_delta_size_in_mb(&self) -> Option<i64> { self.delta_size_in_mb }
-    fn get_key_id(&self) -> &Option<CryptoKeyId> { &self.key_id }
+    fn get_key_id(&self) -> &Option<super::structs::CryptoKeyId> { &self.key_id }
 }
 impl BaseConfigInfoFileBackingInfoTrait for BaseConfigInfoDiskFileBackingInfo {
     fn get_file_path(&self) -> &str { &self.file_path }
     fn get_backing_object_id(&self) -> &Option<String> { &self.backing_object_id }
     fn get_parent(&self) -> &Option<Box<dyn super::traits::BaseConfigInfoFileBackingInfoTrait>> { &self.parent }
     fn get_delta_size_in_mb(&self) -> Option<i64> { self.delta_size_in_mb }
-    fn get_key_id(&self) -> &Option<CryptoKeyId> { &self.key_id }
+    fn get_key_id(&self) -> &Option<super::structs::CryptoKeyId> { &self.key_id }
 }
 impl BaseConfigInfoFileBackingInfoTrait for BaseConfigInfoRawDiskMappingBackingInfo {
     fn get_file_path(&self) -> &str { &self.file_path }
     fn get_backing_object_id(&self) -> &Option<String> { &self.backing_object_id }
     fn get_parent(&self) -> &Option<Box<dyn super::traits::BaseConfigInfoFileBackingInfoTrait>> { &self.parent }
     fn get_delta_size_in_mb(&self) -> Option<i64> { self.delta_size_in_mb }
-    fn get_key_id(&self) -> &Option<CryptoKeyId> { &self.key_id }
+    fn get_key_id(&self) -> &Option<super::structs::CryptoKeyId> { &self.key_id }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn BaseConfigInfoFileBackingInfoTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -28464,7 +28464,7 @@ pub trait VslmCreateSpecBackingSpecTrait : super::traits::DataObjectTrait {
     /// The datastore managed object where this backing is located.
     /// 
     /// Refers instance of *Datastore*.
-    fn get_datastore(&self) -> &ManagedObjectReference;
+    fn get_datastore(&self) -> &super::structs::ManagedObjectReference;
     /// Relative location in the specified datastore where disk needs to be
     /// created.
     /// 
@@ -28512,15 +28512,15 @@ impl<'de> de::Visitor<'de> for VslmCreateSpecBackingSpecVisitor {
 }
 
 impl VslmCreateSpecBackingSpecTrait for VslmCreateSpecBackingSpec {
-    fn get_datastore(&self) -> &ManagedObjectReference { &self.datastore }
+    fn get_datastore(&self) -> &super::structs::ManagedObjectReference { &self.datastore }
     fn get_path(&self) -> &Option<String> { &self.path }
 }
 impl VslmCreateSpecBackingSpecTrait for VslmCreateSpecDiskFileBackingSpec {
-    fn get_datastore(&self) -> &ManagedObjectReference { &self.datastore }
+    fn get_datastore(&self) -> &super::structs::ManagedObjectReference { &self.datastore }
     fn get_path(&self) -> &Option<String> { &self.path }
 }
 impl VslmCreateSpecBackingSpecTrait for VslmCreateSpecRawDiskMappingBackingSpec {
-    fn get_datastore(&self) -> &ManagedObjectReference { &self.datastore }
+    fn get_datastore(&self) -> &super::structs::ManagedObjectReference { &self.datastore }
     fn get_path(&self) -> &Option<String> { &self.path }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VslmCreateSpecBackingSpecTrait {
@@ -28576,7 +28576,7 @@ pub trait VslmMigrateSpecTrait : super::traits::DataObjectTrait {
     /// source VStorageObject is encrypted, then disksCyrpto is treated as
     /// CryptoSpecDecrypt, during migration, the object will be decrypted.
     /// To recrypt the disk during migration, disksCrypto has to be present.
-    fn get_disks_crypto(&self) -> &Option<DiskCryptoSpec>;
+    fn get_disks_crypto(&self) -> &Option<super::structs::DiskCryptoSpec>;
 }
 impl<'s> serde::Serialize for dyn VslmMigrateSpecTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
@@ -28621,19 +28621,19 @@ impl VslmMigrateSpecTrait for VslmMigrateSpec {
     fn get_backing_spec(&self) -> &Box<dyn super::traits::VslmCreateSpecBackingSpecTrait> { &self.backing_spec }
     fn get_profile(&self) -> &Option<Vec<Box<dyn super::traits::VirtualMachineProfileSpecTrait>>> { &self.profile }
     fn get_consolidate(&self) -> Option<bool> { self.consolidate }
-    fn get_disks_crypto(&self) -> &Option<DiskCryptoSpec> { &self.disks_crypto }
+    fn get_disks_crypto(&self) -> &Option<super::structs::DiskCryptoSpec> { &self.disks_crypto }
 }
 impl VslmMigrateSpecTrait for VslmCloneSpec {
     fn get_backing_spec(&self) -> &Box<dyn super::traits::VslmCreateSpecBackingSpecTrait> { &self.backing_spec }
     fn get_profile(&self) -> &Option<Vec<Box<dyn super::traits::VirtualMachineProfileSpecTrait>>> { &self.profile }
     fn get_consolidate(&self) -> Option<bool> { self.consolidate }
-    fn get_disks_crypto(&self) -> &Option<DiskCryptoSpec> { &self.disks_crypto }
+    fn get_disks_crypto(&self) -> &Option<super::structs::DiskCryptoSpec> { &self.disks_crypto }
 }
 impl VslmMigrateSpecTrait for VslmRelocateSpec {
     fn get_backing_spec(&self) -> &Box<dyn super::traits::VslmCreateSpecBackingSpecTrait> { &self.backing_spec }
     fn get_profile(&self) -> &Option<Vec<Box<dyn super::traits::VirtualMachineProfileSpecTrait>>> { &self.profile }
     fn get_consolidate(&self) -> Option<bool> { self.consolidate }
-    fn get_disks_crypto(&self) -> &Option<DiskCryptoSpec> { &self.disks_crypto }
+    fn get_disks_crypto(&self) -> &Option<super::structs::DiskCryptoSpec> { &self.disks_crypto }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VslmMigrateSpecTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {

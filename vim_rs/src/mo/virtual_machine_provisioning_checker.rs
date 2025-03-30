@@ -1,11 +1,8 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::ManagedObjectReference;
-use crate::types::structs::VirtualMachineCloneSpec;
-use crate::types::structs::VirtualMachineInstantCloneSpec;
-use crate::types::structs::VirtualMachineRelocateSpec;
 /// A singleton managed object that can answer questions about
 /// the feasibility of certain provisioning operations.
+#[derive(Clone)]
 pub struct VirtualMachineProvisioningChecker {
     client: Arc<Client>,
     mo_id: String,
@@ -71,7 +68,7 @@ impl VirtualMachineProvisioningChecker {
     /// ***InvalidState***: if the operation cannot be performed because of the
     /// virtual machine's current state. For example, if the virtual machine
     /// configuration information is not available.
-    pub async fn check_clone_task(&self, vm: &ManagedObjectReference, folder: &ManagedObjectReference, name: &str, spec: &VirtualMachineCloneSpec, test_type: Option<&[String]>) -> Result<ManagedObjectReference> {
+    pub async fn check_clone_task(&self, vm: &crate::types::structs::ManagedObjectReference, folder: &crate::types::structs::ManagedObjectReference, name: &str, spec: &crate::types::structs::VirtualMachineCloneSpec, test_type: Option<&[String]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CheckCloneRequestType {vm, folder, name, spec, test_type, };
         let path = format!("/VirtualMachineProvisioningChecker/{moId}/CheckClone_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -116,7 +113,7 @@ impl VirtualMachineProvisioningChecker {
     /// ***InvalidState***: if the operation cannot be performed because of the
     /// virtual machine's current state. For example, if the virtual
     /// machine configuration information is not available.
-    pub async fn check_instant_clone_task(&self, vm: &ManagedObjectReference, spec: &VirtualMachineInstantCloneSpec, test_type: Option<&[String]>) -> Result<ManagedObjectReference> {
+    pub async fn check_instant_clone_task(&self, vm: &crate::types::structs::ManagedObjectReference, spec: &crate::types::structs::VirtualMachineInstantCloneSpec, test_type: Option<&[String]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CheckInstantCloneRequestType {vm, spec, test_type, };
         let path = format!("/VirtualMachineProvisioningChecker/{moId}/CheckInstantClone_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -179,7 +176,7 @@ impl VirtualMachineProvisioningChecker {
     /// 
     /// ***InvalidPowerState***: if the state argument is set and at least one
     /// of the specified virtual machines is not in that power state.
-    pub async fn check_migrate_task(&self, vm: &ManagedObjectReference, host: Option<&ManagedObjectReference>, pool: Option<&ManagedObjectReference>, state: Option<crate::types::enums::VirtualMachinePowerStateEnum>, test_type: Option<&[String]>) -> Result<ManagedObjectReference> {
+    pub async fn check_migrate_task(&self, vm: &crate::types::structs::ManagedObjectReference, host: Option<&crate::types::structs::ManagedObjectReference>, pool: Option<&crate::types::structs::ManagedObjectReference>, state: Option<crate::types::enums::VirtualMachinePowerStateEnum>, test_type: Option<&[String]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CheckMigrateRequestType {vm, host, pool, state, test_type, };
         let path = format!("/VirtualMachineProvisioningChecker/{moId}/CheckMigrate_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -241,7 +238,7 @@ impl VirtualMachineProvisioningChecker {
     /// host or virtual machine's current state. For example, if the host is in
     /// maintenance mode, or if the virtual machine's configuration information
     /// is not available.
-    pub async fn check_relocate_task(&self, vm: &ManagedObjectReference, spec: &VirtualMachineRelocateSpec, test_type: Option<&[String]>) -> Result<ManagedObjectReference> {
+    pub async fn check_relocate_task(&self, vm: &crate::types::structs::ManagedObjectReference, spec: &crate::types::structs::VirtualMachineRelocateSpec, test_type: Option<&[String]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CheckRelocateRequestType {vm, spec, test_type, };
         let path = format!("/VirtualMachineProvisioningChecker/{moId}/CheckRelocate_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -274,7 +271,7 @@ impl VirtualMachineProvisioningChecker {
     /// ## Returns:
     ///
     /// Refers instance of *Task*.
-    pub async fn query_v_motion_compatibility_ex_task(&self, vm: &[ManagedObjectReference], host: &[ManagedObjectReference]) -> Result<ManagedObjectReference> {
+    pub async fn query_v_motion_compatibility_ex_task(&self, vm: &[crate::types::structs::ManagedObjectReference], host: &[crate::types::structs::ManagedObjectReference]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = QueryVMotionCompatibilityExRequestType {vm, host, };
         let path = format!("/VirtualMachineProvisioningChecker/{moId}/QueryVMotionCompatibilityEx_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -284,10 +281,10 @@ impl VirtualMachineProvisioningChecker {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct CheckCloneRequestType<'a> {
-    vm: &'a ManagedObjectReference,
-    folder: &'a ManagedObjectReference,
+    vm: &'a crate::types::structs::ManagedObjectReference,
+    folder: &'a crate::types::structs::ManagedObjectReference,
     name: &'a str,
-    spec: &'a VirtualMachineCloneSpec,
+    spec: &'a crate::types::structs::VirtualMachineCloneSpec,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "testType")]
     test_type: Option<&'a [String]>,
@@ -295,8 +292,8 @@ struct CheckCloneRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct CheckInstantCloneRequestType<'a> {
-    vm: &'a ManagedObjectReference,
-    spec: &'a VirtualMachineInstantCloneSpec,
+    vm: &'a crate::types::structs::ManagedObjectReference,
+    spec: &'a crate::types::structs::VirtualMachineInstantCloneSpec,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "testType")]
     test_type: Option<&'a [String]>,
@@ -304,11 +301,11 @@ struct CheckInstantCloneRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct CheckMigrateRequestType<'a> {
-    vm: &'a ManagedObjectReference,
+    vm: &'a crate::types::structs::ManagedObjectReference,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    host: Option<&'a ManagedObjectReference>,
+    host: Option<&'a crate::types::structs::ManagedObjectReference>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pool: Option<&'a ManagedObjectReference>,
+    pool: Option<&'a crate::types::structs::ManagedObjectReference>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     state: Option<crate::types::enums::VirtualMachinePowerStateEnum>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -318,8 +315,8 @@ struct CheckMigrateRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct CheckRelocateRequestType<'a> {
-    vm: &'a ManagedObjectReference,
-    spec: &'a VirtualMachineRelocateSpec,
+    vm: &'a crate::types::structs::ManagedObjectReference,
+    spec: &'a crate::types::structs::VirtualMachineRelocateSpec,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "testType")]
     test_type: Option<&'a [String]>,
@@ -327,6 +324,6 @@ struct CheckRelocateRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct QueryVMotionCompatibilityExRequestType<'a> {
-    vm: &'a [ManagedObjectReference],
-    host: &'a [ManagedObjectReference],
+    vm: &'a [crate::types::structs::ManagedObjectReference],
+    host: &'a [crate::types::structs::ManagedObjectReference],
 }

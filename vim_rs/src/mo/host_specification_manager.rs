@@ -1,12 +1,10 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::HostSpecification;
-use crate::types::structs::HostSubSpecification;
-use crate::types::structs::ManagedObjectReference;
 /// The *HostSpecificationManager* provides the
 /// functionality to update, restrieve and delete
 /// *HostSpecification* and
 /// *HostSubSpecification*.
+#[derive(Clone)]
 pub struct HostSpecificationManager {
     client: Arc<Client>,
     mo_id: String,
@@ -34,7 +32,7 @@ impl HostSpecificationManager {
     ///
     /// ***HostSpecificationOperationFailed***: If the method fails when delete
     /// the spec.
-    pub async fn delete_host_specification(&self, host: &ManagedObjectReference) -> Result<()> {
+    pub async fn delete_host_specification(&self, host: &crate::types::structs::ManagedObjectReference) -> Result<()> {
         let input = DeleteHostSpecificationRequestType {host, };
         let path = format!("/HostSpecificationManager/{moId}/DeleteHostSpecification", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -60,7 +58,7 @@ impl HostSpecificationManager {
     ///
     /// ***HostSpecificationOperationFailed***: If the method fails when delete
     /// the sub spec.
-    pub async fn delete_host_sub_specification(&self, host: &ManagedObjectReference, sub_spec_name: &str) -> Result<()> {
+    pub async fn delete_host_sub_specification(&self, host: &crate::types::structs::ManagedObjectReference, sub_spec_name: &str) -> Result<()> {
         let input = DeleteHostSubSpecificationRequestType {host, sub_spec_name, };
         let path = format!("/HostSpecificationManager/{moId}/DeleteHostSubSpecification", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -92,7 +90,7 @@ impl HostSpecificationManager {
     /// The queried host list.
     /// 
     /// Refers instances of *HostSystem*.
-    pub async fn host_spec_get_updated_hosts(&self, start_change_id: Option<&str>, end_change_id: Option<&str>) -> Result<Option<Vec<ManagedObjectReference>>> {
+    pub async fn host_spec_get_updated_hosts(&self, start_change_id: Option<&str>, end_change_id: Option<&str>) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let input = HostSpecGetUpdatedHostsRequestType {start_change_id, end_change_id, };
         let path = format!("/HostSpecificationManager/{moId}/HostSpecGetUpdatedHosts", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -127,7 +125,7 @@ impl HostSpecificationManager {
     ///
     /// ***HostSpecificationOperationFailed***: If the method fails when retrieve
     /// from host.
-    pub async fn retrieve_host_specification(&self, host: &ManagedObjectReference, from_host: bool) -> Result<HostSpecification> {
+    pub async fn retrieve_host_specification(&self, host: &crate::types::structs::ManagedObjectReference, from_host: bool) -> Result<crate::types::structs::HostSpecification> {
         let input = RetrieveHostSpecificationRequestType {host, from_host, };
         let path = format!("/HostSpecificationManager/{moId}/RetrieveHostSpecification", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -156,7 +154,7 @@ impl HostSpecificationManager {
     /// ## Errors:
     ///
     /// ***HostSpecificationOperationFailed***: If the method fails.
-    pub async fn update_host_specification(&self, host: &ManagedObjectReference, host_spec: &HostSpecification) -> Result<()> {
+    pub async fn update_host_specification(&self, host: &crate::types::structs::ManagedObjectReference, host_spec: &crate::types::structs::HostSpecification) -> Result<()> {
         let input = UpdateHostSpecificationRequestType {host, host_spec, };
         let path = format!("/HostSpecificationManager/{moId}/UpdateHostSpecification", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -186,7 +184,7 @@ impl HostSpecificationManager {
     /// ## Errors:
     ///
     /// ***HostSpecificationOperationFailed***: If the method fails.
-    pub async fn update_host_sub_specification(&self, host: &ManagedObjectReference, host_sub_spec: &HostSubSpecification) -> Result<()> {
+    pub async fn update_host_sub_specification(&self, host: &crate::types::structs::ManagedObjectReference, host_sub_spec: &crate::types::structs::HostSubSpecification) -> Result<()> {
         let input = UpdateHostSubSpecificationRequestType {host, host_sub_spec, };
         let path = format!("/HostSpecificationManager/{moId}/UpdateHostSubSpecification", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -196,12 +194,12 @@ impl HostSpecificationManager {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct DeleteHostSpecificationRequestType<'a> {
-    host: &'a ManagedObjectReference,
+    host: &'a crate::types::structs::ManagedObjectReference,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct DeleteHostSubSpecificationRequestType<'a> {
-    host: &'a ManagedObjectReference,
+    host: &'a crate::types::structs::ManagedObjectReference,
     #[serde(rename = "subSpecName")]
     sub_spec_name: &'a str,
 }
@@ -218,21 +216,21 @@ struct HostSpecGetUpdatedHostsRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct RetrieveHostSpecificationRequestType<'a> {
-    host: &'a ManagedObjectReference,
+    host: &'a crate::types::structs::ManagedObjectReference,
     #[serde(rename = "fromHost")]
     from_host: bool,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct UpdateHostSpecificationRequestType<'a> {
-    host: &'a ManagedObjectReference,
+    host: &'a crate::types::structs::ManagedObjectReference,
     #[serde(rename = "hostSpec")]
-    host_spec: &'a HostSpecification,
+    host_spec: &'a crate::types::structs::HostSpecification,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct UpdateHostSubSpecificationRequestType<'a> {
-    host: &'a ManagedObjectReference,
+    host: &'a crate::types::structs::ManagedObjectReference,
     #[serde(rename = "hostSubSpec")]
-    host_sub_spec: &'a HostSubSpecification,
+    host_sub_spec: &'a crate::types::structs::HostSubSpecification,
 }

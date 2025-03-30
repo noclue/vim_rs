@@ -1,6 +1,5 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::ManagedObjectReference;
 /// The SearchIndex service allows a client to efficiently query the
 /// inventory for a specific managed entity by attributes such as UUID, IP address, DNS
 /// name, or datastore path.
@@ -12,6 +11,7 @@ use crate::types::structs::ManagedObjectReference;
 /// find operations only search virtual machines and hosts for which the user has
 /// read privileges. If the user does not have sufficient privileges for an object that
 /// matches the search criteria, that object is not returned.
+#[derive(Clone)]
 pub struct SearchIndex {
     client: Arc<Client>,
     mo_id: String,
@@ -53,7 +53,7 @@ impl SearchIndex {
     /// matches, all matching entities are returned.
     /// 
     /// Refers instances of *ManagedEntity*.
-    pub async fn find_all_by_dns_name(&self, datacenter: Option<&ManagedObjectReference>, dns_name: &str, vm_search: bool) -> Result<Vec<ManagedObjectReference>> {
+    pub async fn find_all_by_dns_name(&self, datacenter: Option<&crate::types::structs::ManagedObjectReference>, dns_name: &str, vm_search: bool) -> Result<Vec<crate::types::structs::ManagedObjectReference>> {
         let input = FindAllByDnsNameRequestType {datacenter, dns_name, vm_search, };
         let path = format!("/SearchIndex/{moId}/FindAllByDnsName", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -90,7 +90,7 @@ impl SearchIndex {
     /// are multiple matches, all matching entities are returned.
     /// 
     /// Refers instances of *ManagedEntity*.
-    pub async fn find_all_by_ip(&self, datacenter: Option<&ManagedObjectReference>, ip: &str, vm_search: bool) -> Result<Vec<ManagedObjectReference>> {
+    pub async fn find_all_by_ip(&self, datacenter: Option<&crate::types::structs::ManagedObjectReference>, ip: &str, vm_search: bool) -> Result<Vec<crate::types::structs::ManagedObjectReference>> {
         let input = FindAllByIpRequestType {datacenter, ip, vm_search, };
         let path = format!("/SearchIndex/{moId}/FindAllByIp", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -131,7 +131,7 @@ impl SearchIndex {
     /// are returned.
     /// 
     /// Refers instances of *ManagedEntity*.
-    pub async fn find_all_by_uuid(&self, datacenter: Option<&ManagedObjectReference>, uuid: &str, vm_search: bool, instance_uuid: Option<bool>) -> Result<Vec<ManagedObjectReference>> {
+    pub async fn find_all_by_uuid(&self, datacenter: Option<&crate::types::structs::ManagedObjectReference>, uuid: &str, vm_search: bool, instance_uuid: Option<bool>) -> Result<Vec<crate::types::structs::ManagedObjectReference>> {
         let input = FindAllByUuidRequestType {datacenter, uuid, vm_search, instance_uuid, };
         let path = format!("/SearchIndex/{moId}/FindAllByUuid", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -163,7 +163,7 @@ impl SearchIndex {
     ///
     /// ***InvalidDatastore***: if a datastore has not been specified in the path or if
     /// the specified datastore does not exist on the specified datacenter.
-    pub async fn find_by_datastore_path(&self, datacenter: &ManagedObjectReference, path: &str) -> Result<Option<ManagedObjectReference>> {
+    pub async fn find_by_datastore_path(&self, datacenter: &crate::types::structs::ManagedObjectReference, path: &str) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let input = FindByDatastorePathRequestType {datacenter, path, };
         let path = format!("/SearchIndex/{moId}/FindByDatastorePath", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -199,7 +199,7 @@ impl SearchIndex {
     /// there are multiple matches.
     /// 
     /// Refers instance of *ManagedEntity*.
-    pub async fn find_by_dns_name(&self, datacenter: Option<&ManagedObjectReference>, dns_name: &str, vm_search: bool) -> Result<Option<ManagedObjectReference>> {
+    pub async fn find_by_dns_name(&self, datacenter: Option<&crate::types::structs::ManagedObjectReference>, dns_name: &str, vm_search: bool) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let input = FindByDnsNameRequestType {datacenter, dns_name, vm_search, };
         let path = format!("/SearchIndex/{moId}/FindByDnsName", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -228,7 +228,7 @@ impl SearchIndex {
     /// returned.
     /// 
     /// Refers instance of *ManagedEntity*.
-    pub async fn find_by_inventory_path(&self, inventory_path: &str) -> Result<Option<ManagedObjectReference>> {
+    pub async fn find_by_inventory_path(&self, inventory_path: &str) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let input = FindByInventoryPathRequestType {inventory_path, };
         let path = format!("/SearchIndex/{moId}/FindByInventoryPath", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -267,7 +267,7 @@ impl SearchIndex {
     /// matches any of the Console OS IP addresses.
     /// 
     /// Refers instance of *ManagedEntity*.
-    pub async fn find_by_ip(&self, datacenter: Option<&ManagedObjectReference>, ip: &str, vm_search: bool) -> Result<Option<ManagedObjectReference>> {
+    pub async fn find_by_ip(&self, datacenter: Option<&crate::types::structs::ManagedObjectReference>, ip: &str, vm_search: bool) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let input = FindByIpRequestType {datacenter, ip, vm_search, };
         let path = format!("/SearchIndex/{moId}/FindByIp", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -307,7 +307,7 @@ impl SearchIndex {
     /// returned, even if there are multiple matches.
     /// 
     /// Refers instance of *ManagedEntity*.
-    pub async fn find_by_uuid(&self, datacenter: Option<&ManagedObjectReference>, uuid: &str, vm_search: bool, instance_uuid: Option<bool>) -> Result<Option<ManagedObjectReference>> {
+    pub async fn find_by_uuid(&self, datacenter: Option<&crate::types::structs::ManagedObjectReference>, uuid: &str, vm_search: bool, instance_uuid: Option<bool>) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let input = FindByUuidRequestType {datacenter, uuid, vm_search, instance_uuid, };
         let path = format!("/SearchIndex/{moId}/FindByUuid", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -339,7 +339,7 @@ impl SearchIndex {
     /// The managed entity that is found, or null if no match is found.
     /// 
     /// Refers instance of *ManagedEntity*.
-    pub async fn find_child(&self, entity: &ManagedObjectReference, name: &str) -> Result<Option<ManagedObjectReference>> {
+    pub async fn find_child(&self, entity: &crate::types::structs::ManagedObjectReference, name: &str) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let input = FindChildRequestType {entity, name, };
         let path = format!("/SearchIndex/{moId}/FindChild", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -350,7 +350,7 @@ impl SearchIndex {
 #[serde(tag="_typeName")]
 struct FindAllByDnsNameRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    datacenter: Option<&'a ManagedObjectReference>,
+    datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
     #[serde(rename = "dnsName")]
     dns_name: &'a str,
     #[serde(rename = "vmSearch")]
@@ -360,7 +360,7 @@ struct FindAllByDnsNameRequestType<'a> {
 #[serde(tag="_typeName")]
 struct FindAllByIpRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    datacenter: Option<&'a ManagedObjectReference>,
+    datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
     ip: &'a str,
     #[serde(rename = "vmSearch")]
     vm_search: bool,
@@ -369,7 +369,7 @@ struct FindAllByIpRequestType<'a> {
 #[serde(tag="_typeName")]
 struct FindAllByUuidRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    datacenter: Option<&'a ManagedObjectReference>,
+    datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
     uuid: &'a str,
     #[serde(rename = "vmSearch")]
     vm_search: bool,
@@ -380,14 +380,14 @@ struct FindAllByUuidRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct FindByDatastorePathRequestType<'a> {
-    datacenter: &'a ManagedObjectReference,
+    datacenter: &'a crate::types::structs::ManagedObjectReference,
     path: &'a str,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct FindByDnsNameRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    datacenter: Option<&'a ManagedObjectReference>,
+    datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
     #[serde(rename = "dnsName")]
     dns_name: &'a str,
     #[serde(rename = "vmSearch")]
@@ -403,7 +403,7 @@ struct FindByInventoryPathRequestType<'a> {
 #[serde(tag="_typeName")]
 struct FindByIpRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    datacenter: Option<&'a ManagedObjectReference>,
+    datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
     ip: &'a str,
     #[serde(rename = "vmSearch")]
     vm_search: bool,
@@ -412,7 +412,7 @@ struct FindByIpRequestType<'a> {
 #[serde(tag="_typeName")]
 struct FindByUuidRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    datacenter: Option<&'a ManagedObjectReference>,
+    datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
     uuid: &'a str,
     #[serde(rename = "vmSearch")]
     vm_search: bool,
@@ -423,6 +423,6 @@ struct FindByUuidRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct FindChildRequestType<'a> {
-    entity: &'a ManagedObjectReference,
+    entity: &'a crate::types::structs::ManagedObjectReference,
     name: &'a str,
 }

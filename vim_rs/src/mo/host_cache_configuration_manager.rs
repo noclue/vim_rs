@@ -1,12 +1,10 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::HostCacheConfigurationInfo;
-use crate::types::structs::HostCacheConfigurationSpec;
-use crate::types::structs::ManagedObjectReference;
 /// Solid state drive Cache Configuration Manager.
 /// 
 /// This is a managed object which provides access to ESX performance tuning
 /// features using solid state drive based cache.
+#[derive(Clone)]
 pub struct HostCacheConfigurationManager {
     client: Arc<Client>,
     mo_id: String,
@@ -33,7 +31,7 @@ impl HostCacheConfigurationManager {
     /// monitor the operation.
     /// 
     /// Refers instance of *Task*.
-    pub async fn configure_host_cache_task(&self, spec: &HostCacheConfigurationSpec) -> Result<ManagedObjectReference> {
+    pub async fn configure_host_cache_task(&self, spec: &crate::types::structs::HostCacheConfigurationSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ConfigureHostCacheRequestType {spec, };
         let path = format!("/HostCacheConfigurationManager/{moId}/ConfigureHostCache_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -45,7 +43,7 @@ impl HostCacheConfigurationManager {
     /// configuration information for each datastore enabled for this purpose.
     /// 
     /// ***Required privileges:*** Host.Config.AdvancedConfig
-    pub async fn cache_configuration_info(&self) -> Result<Option<Vec<HostCacheConfigurationInfo>>> {
+    pub async fn cache_configuration_info(&self) -> Result<Option<Vec<crate::types::structs::HostCacheConfigurationInfo>>> {
         let path = format!("/HostCacheConfigurationManager/{moId}/cacheConfigurationInfo", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -54,5 +52,5 @@ impl HostCacheConfigurationManager {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct ConfigureHostCacheRequestType<'a> {
-    spec: &'a HostCacheConfigurationSpec,
+    spec: &'a crate::types::structs::HostCacheConfigurationSpec,
 }

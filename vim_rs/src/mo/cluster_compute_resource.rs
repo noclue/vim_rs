@@ -1,29 +1,5 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::AlarmState;
-use crate::types::structs::ClusterActionHistory;
-use crate::types::structs::ClusterComputeResourceHciConfigInfo;
-use crate::types::structs::ClusterComputeResourceHciConfigSpec;
-use crate::types::structs::ClusterComputeResourceHostConfigurationInput;
-use crate::types::structs::ClusterComputeResourceSummary;
-use crate::types::structs::ClusterConfigInfo;
-use crate::types::structs::ClusterConfigSpec;
-use crate::types::structs::ClusterDrsFaults;
-use crate::types::structs::ClusterDrsMigration;
-use crate::types::structs::ClusterDrsRecommendation;
-use crate::types::structs::ClusterEnterMaintenanceResult;
-use crate::types::structs::ClusterHostRecommendation;
-use crate::types::structs::ClusterRecommendation;
-use crate::types::structs::ClusterResourceUsageSummary;
-use crate::types::structs::CustomFieldDef;
-use crate::types::structs::Event;
-use crate::types::structs::HostConnectSpec;
-use crate::types::structs::ManagedObjectReference;
-use crate::types::structs::Permission;
-use crate::types::structs::PlacementResult;
-use crate::types::structs::PlacementSpec;
-use crate::types::structs::SddcBase;
-use crate::types::structs::Tag;
 /// The *ClusterComputeResource* data object aggregates the compute
 /// resources of associated *HostSystem* objects into a single
 /// compute resource for use by virtual machines.
@@ -35,6 +11,7 @@ use crate::types::structs::Tag;
 /// 
 /// Use the *Folder*.*Folder.CreateClusterEx* method
 /// to create an instance of this object.
+#[derive(Clone)]
 pub struct ClusterComputeResource {
     client: Arc<Client>,
     mo_id: String,
@@ -151,7 +128,7 @@ impl ClusterComputeResource {
     /// ***NoPermission***: if there are crypto keys to be sent to the host,
     /// but the user does not have Cryptographer.RegisterHost privilege
     /// on the Cluster.
-    pub async fn add_host_task(&self, spec: &HostConnectSpec, as_connected: bool, resource_pool: Option<&ManagedObjectReference>, license: Option<&str>) -> Result<ManagedObjectReference> {
+    pub async fn add_host_task(&self, spec: &crate::types::structs::HostConnectSpec, as_connected: bool, resource_pool: Option<&crate::types::structs::ManagedObjectReference>, license: Option<&str>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = AddHostRequestType {spec, as_connected, resource_pool, license, };
         let path = format!("/ClusterComputeResource/{moId}/AddHost_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -235,7 +212,7 @@ impl ClusterComputeResource {
     /// which could not be configured.
     /// 
     /// Refers instance of *Task*.
-    pub async fn configure_hci_task(&self, cluster_spec: &ClusterComputeResourceHciConfigSpec, host_inputs: Option<&[ClusterComputeResourceHostConfigurationInput]>) -> Result<ManagedObjectReference> {
+    pub async fn configure_hci_task(&self, cluster_spec: &crate::types::structs::ClusterComputeResourceHciConfigSpec, host_inputs: Option<&[crate::types::structs::ClusterComputeResourceHostConfigurationInput]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ConfigureHciRequestType {cluster_spec, host_inputs, };
         let path = format!("/ClusterComputeResource/{moId}/ConfigureHCI_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -262,7 +239,7 @@ impl ClusterComputeResource {
     /// ## Errors:
     ///
     /// Failure
-    pub async fn destroy_task(&self) -> Result<ManagedObjectReference> {
+    pub async fn destroy_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/ClusterComputeResource/{moId}/Destroy_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute(req).await
@@ -318,7 +295,7 @@ impl ClusterComputeResource {
     /// which consists of an array of recommendations for hosts that
     /// can be evacuated and an array of faults for hosts that cannot
     /// be evacuated.
-    pub async fn cluster_enter_maintenance_mode(&self, host: &[ManagedObjectReference], option: Option<&[Box<dyn crate::types::traits::OptionValueTrait>]>) -> Result<ClusterEnterMaintenanceResult> {
+    pub async fn cluster_enter_maintenance_mode(&self, host: &[crate::types::structs::ManagedObjectReference], option: Option<&[Box<dyn crate::types::traits::OptionValueTrait>]>) -> Result<crate::types::structs::ClusterEnterMaintenanceResult> {
         let input = ClusterEnterMaintenanceModeRequestType {host, option, };
         let path = format!("/ClusterComputeResource/{moId}/ClusterEnterMaintenanceMode", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -332,7 +309,7 @@ impl ClusterComputeResource {
     /// ## Returns:
     ///
     /// Refers instance of *ClusterEVCManager*.
-    pub async fn evc_manager(&self) -> Result<Option<ManagedObjectReference>> {
+    pub async fn evc_manager(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let path = format!("/ClusterComputeResource/{moId}/EvcManager", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute_option(req).await
@@ -374,7 +351,7 @@ impl ClusterComputeResource {
     /// *ClusterComputeResourceHCIConfigInfo.workflowState* to be "done".
     /// 
     /// Refers instance of *Task*.
-    pub async fn extend_hci_task(&self, host_inputs: Option<&[ClusterComputeResourceHostConfigurationInput]>, v_san_config_spec: Option<&SddcBase>) -> Result<ManagedObjectReference> {
+    pub async fn extend_hci_task(&self, host_inputs: Option<&[crate::types::structs::ClusterComputeResourceHostConfigurationInput]>, v_san_config_spec: Option<&crate::types::structs::SddcBase>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ExtendHciRequestType {host_inputs, v_san_config_spec, };
         let path = format!("/ClusterComputeResource/{moId}/ExtendHCI_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -391,7 +368,7 @@ impl ClusterComputeResource {
     /// The vm whose rules need to be looked up.
     /// 
     /// Refers instance of *VirtualMachine*.
-    pub async fn find_rules_for_vm(&self, vm: &ManagedObjectReference) -> Result<Option<Vec<Box<dyn crate::types::traits::ClusterRuleInfoTrait>>>> {
+    pub async fn find_rules_for_vm(&self, vm: &crate::types::structs::ManagedObjectReference) -> Result<Option<Vec<Box<dyn crate::types::traits::ClusterRuleInfoTrait>>>> {
         let input = FindRulesForVmRequestType {vm, };
         let path = format!("/ClusterComputeResource/{moId}/FindRulesForVm", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -417,7 +394,7 @@ impl ClusterComputeResource {
     ///    in this cluster.
     /// 6. storageUsedMB: Total storage consumed in all the accessible datastores in
     ///    this cluster.
-    pub async fn get_resource_usage(&self) -> Result<ClusterResourceUsageSummary> {
+    pub async fn get_resource_usage(&self) -> Result<crate::types::structs::ClusterResourceUsageSummary> {
         let path = format!("/ClusterComputeResource/{moId}/GetResourceUsage", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute(req).await
@@ -436,7 +413,7 @@ impl ClusterComputeResource {
     /// a list of restricted datastores.
     /// 
     /// Refers instances of *Datastore*.
-    pub async fn get_system_v_ms_restricted_datastores(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
+    pub async fn get_system_v_ms_restricted_datastores(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/ClusterComputeResource/{moId}/GetSystemVMsRestrictedDatastores", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute_option(req).await
@@ -500,7 +477,7 @@ impl ClusterComputeResource {
     /// 
     /// ***InvalidState***: if a host is already part of a cluster and is not in
     /// maintenance mode.
-    pub async fn move_host_into_task(&self, host: &ManagedObjectReference, resource_pool: Option<&ManagedObjectReference>) -> Result<ManagedObjectReference> {
+    pub async fn move_host_into_task(&self, host: &crate::types::structs::ManagedObjectReference, resource_pool: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = MoveHostIntoRequestType {host, resource_pool, };
         let path = format!("/ClusterComputeResource/{moId}/MoveHostInto_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -567,7 +544,7 @@ impl ClusterComputeResource {
     /// ***DisallowedOperationOnFailoverHost***: if the host is being moved
     /// from a cluster and was configured as a failover host in that
     /// cluster. See *ClusterFailoverHostAdmissionControlPolicy*.
-    pub async fn move_into_task(&self, host: &[ManagedObjectReference]) -> Result<ManagedObjectReference> {
+    pub async fn move_into_task(&self, host: &[crate::types::structs::ManagedObjectReference]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = MoveIntoRequestType {host, };
         let path = format!("/ClusterComputeResource/{moId}/MoveInto_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -625,7 +602,7 @@ impl ClusterComputeResource {
     /// - PlacementSpec.datastores is required, if PlacementSpec.relocateSpec.datastore
     ///   is empty; otherwise, the selected datastores in the PlacementResult are
     ///   not guaranteed to be compatible with the incoming virtual machine.
-    pub async fn place_vm(&self, placement_spec: &PlacementSpec) -> Result<PlacementResult> {
+    pub async fn place_vm(&self, placement_spec: &crate::types::structs::PlacementSpec) -> Result<crate::types::structs::PlacementResult> {
         let input = PlaceVmRequestType {placement_spec, };
         let path = format!("/ClusterComputeResource/{moId}/PlaceVm", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -673,7 +650,7 @@ impl ClusterComputeResource {
     /// ## Returns:
     ///
     /// An array of HostRecommendation ordered by their rating.
-    pub async fn recommend_hosts_for_vm(&self, vm: &ManagedObjectReference, pool: Option<&ManagedObjectReference>) -> Result<Option<Vec<ClusterHostRecommendation>>> {
+    pub async fn recommend_hosts_for_vm(&self, vm: &crate::types::structs::ManagedObjectReference, pool: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Option<Vec<crate::types::structs::ClusterHostRecommendation>>> {
         let input = RecommendHostsForVmRequestType {vm, pool, };
         let path = format!("/ClusterComputeResource/{moId}/RecommendHostsForVm", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -706,7 +683,7 @@ impl ClusterComputeResource {
     /// operation.
     /// 
     /// Refers instance of *Task*.
-    pub async fn reconfigure_cluster_task(&self, spec: &ClusterConfigSpec, modify: bool) -> Result<ManagedObjectReference> {
+    pub async fn reconfigure_cluster_task(&self, spec: &crate::types::structs::ClusterConfigSpec, modify: bool) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ReconfigureClusterRequestType {spec, modify, };
         let path = format!("/ClusterComputeResource/{moId}/ReconfigureCluster_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -739,7 +716,7 @@ impl ClusterComputeResource {
     /// the operation.
     /// 
     /// Refers instance of *Task*.
-    pub async fn reconfigure_compute_resource_task(&self, spec: &dyn crate::types::traits::ComputeResourceConfigSpecTrait, modify: bool) -> Result<ManagedObjectReference> {
+    pub async fn reconfigure_compute_resource_task(&self, spec: &dyn crate::types::traits::ComputeResourceConfigSpecTrait, modify: bool) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ReconfigureComputeResourceRequestType {spec, modify, };
         let path = format!("/ClusterComputeResource/{moId}/ReconfigureComputeResource_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -805,7 +782,7 @@ impl ClusterComputeResource {
     /// ***DuplicateName***: If another object in the same folder has the target name.
     /// 
     /// ***InvalidName***: If the new name is not a valid entity name.
-    pub async fn rename_task(&self, new_name: &str) -> Result<ManagedObjectReference> {
+    pub async fn rename_task(&self, new_name: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RenameRequestType {new_name, };
         let path = format!("/ClusterComputeResource/{moId}/Rename_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -879,7 +856,7 @@ impl ClusterComputeResource {
     /// ## Returns:
     ///
     /// Refers instance of *Task*.
-    pub async fn stamp_all_rules_with_uuid_task(&self) -> Result<ManagedObjectReference> {
+    pub async fn stamp_all_rules_with_uuid_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/ClusterComputeResource/{moId}/StampAllRulesWithUuid_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         self.client.execute(req).await
@@ -935,14 +912,14 @@ impl ClusterComputeResource {
     /// ## Errors:
     ///
     /// Failure
-    pub async fn validate_hci_configuration(&self, hci_config_spec: Option<&ClusterComputeResourceHciConfigSpec>, hosts: Option<&[ManagedObjectReference]>) -> Result<Option<Vec<Box<dyn crate::types::traits::ClusterComputeResourceValidationResultBaseTrait>>>> {
+    pub async fn validate_hci_configuration(&self, hci_config_spec: Option<&crate::types::structs::ClusterComputeResourceHciConfigSpec>, hosts: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<Option<Vec<Box<dyn crate::types::traits::ClusterComputeResourceValidationResultBaseTrait>>>> {
         let input = ValidateHciConfigurationRequestType {hci_config_spec, hosts, };
         let path = format!("/ClusterComputeResource/{moId}/ValidateHCIConfiguration", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
         self.client.execute_option(req).await
     }
     /// The set of actions that have been performed recently.
-    pub async fn action_history(&self) -> Result<Option<Vec<ClusterActionHistory>>> {
+    pub async fn action_history(&self) -> Result<Option<Vec<crate::types::structs::ClusterActionHistory>>> {
         let path = format!("/ClusterComputeResource/{moId}/actionHistory", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -962,7 +939,7 @@ impl ClusterComputeResource {
     /// The fields are sorted by *CustomFieldDef.name*.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn available_field(&self) -> Result<Option<Vec<CustomFieldDef>>> {
+    pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
         let path = format!("/ClusterComputeResource/{moId}/availableField", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -974,7 +951,7 @@ impl ClusterComputeResource {
     /// events as long as they are still current. The
     /// *configStatus* property provides an overall status
     /// based on these events.
-    pub async fn config_issue(&self) -> Result<Option<Vec<Event>>> {
+    pub async fn config_issue(&self) -> Result<Option<Vec<crate::types::structs::Event>>> {
         let path = format!("/ClusterComputeResource/{moId}/configIssue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -1026,7 +1003,7 @@ impl ClusterComputeResource {
     /// which is a *ClusterConfigInfoEx* data object..
     /// 
     /// Configuration of the cluster.
-    pub async fn configuration(&self) -> Result<ClusterConfigInfo> {
+    pub async fn configuration(&self) -> Result<crate::types::structs::ClusterConfigInfo> {
         let path = format!("/ClusterComputeResource/{moId}/configuration", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute(req).await
@@ -1060,7 +1037,7 @@ impl ClusterComputeResource {
     /// ## Returns:
     ///
     /// Refers instances of *Datastore*.
-    pub async fn datastore(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
+    pub async fn datastore(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/ClusterComputeResource/{moId}/datastore", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -1075,7 +1052,7 @@ impl ClusterComputeResource {
     /// This set does not include alarms that are defined on descendants of this entity.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn declared_alarm_state(&self) -> Result<Option<Vec<AlarmState>>> {
+    pub async fn declared_alarm_state(&self) -> Result<Option<Vec<crate::types::structs::AlarmState>>> {
         let path = format!("/ClusterComputeResource/{moId}/declaredAlarmState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -1171,7 +1148,7 @@ impl ClusterComputeResource {
     /// produce any property values as no updates are generated.
     /// 
     /// ***Required privileges:*** System.Read
-    pub async fn drs_fault(&self) -> Result<Option<Vec<ClusterDrsFaults>>> {
+    pub async fn drs_fault(&self) -> Result<Option<Vec<crate::types::structs::ClusterDrsFaults>>> {
         let path = format!("/ClusterComputeResource/{moId}/drsFault", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -1183,7 +1160,7 @@ impl ClusterComputeResource {
     /// 
     /// If DRS is enabled, this returns the set of recommended
     /// migrations from the DRS module.
-    pub async fn drs_recommendation(&self) -> Result<Option<Vec<ClusterDrsRecommendation>>> {
+    pub async fn drs_recommendation(&self) -> Result<Option<Vec<crate::types::structs::ClusterDrsRecommendation>>> {
         let path = format!("/ClusterComputeResource/{moId}/drsRecommendation", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -1204,14 +1181,14 @@ impl ClusterComputeResource {
     /// ## Returns:
     ///
     /// Refers instance of *EnvironmentBrowser*.
-    pub async fn environment_browser(&self) -> Result<Option<ManagedObjectReference>> {
+    pub async fn environment_browser(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let path = format!("/ClusterComputeResource/{moId}/environmentBrowser", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
     }
     /// This is applicable to clusters which are configured using the HCI
     /// workflow and contains data related to the workflow and specification.
-    pub async fn hci_config(&self) -> Result<Option<ClusterComputeResourceHciConfigInfo>> {
+    pub async fn hci_config(&self) -> Result<Option<crate::types::structs::ClusterComputeResourceHciConfigInfo>> {
         let path = format!("/ClusterComputeResource/{moId}/hciConfig", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -1226,7 +1203,7 @@ impl ClusterComputeResource {
     /// ## Returns:
     ///
     /// Refers instances of *HostSystem*.
-    pub async fn host(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
+    pub async fn host(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/ClusterComputeResource/{moId}/host", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -1247,7 +1224,7 @@ impl ClusterComputeResource {
     /// The set of migration decisions that have recently been performed.
     /// 
     /// This list is populated only when DRS is in automatic mode.
-    pub async fn migration_history(&self) -> Result<Option<Vec<ClusterDrsMigration>>> {
+    pub async fn migration_history(&self) -> Result<Option<Vec<crate::types::structs::ClusterDrsMigration>>> {
         let path = format!("/ClusterComputeResource/{moId}/migrationHistory", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -1277,7 +1254,7 @@ impl ClusterComputeResource {
     /// ## Returns:
     ///
     /// Refers instances of *Network*.
-    pub async fn network(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
+    pub async fn network(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/ClusterComputeResource/{moId}/network", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -1318,13 +1295,13 @@ impl ClusterComputeResource {
     /// ## Returns:
     ///
     /// Refers instance of *ManagedEntity*.
-    pub async fn parent(&self) -> Result<Option<ManagedObjectReference>> {
+    pub async fn parent(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let path = format!("/ClusterComputeResource/{moId}/parent", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
     }
     /// List of permissions defined for this entity.
-    pub async fn permission(&self) -> Result<Option<Vec<Permission>>> {
+    pub async fn permission(&self) -> Result<Option<Vec<crate::types::structs::Permission>>> {
         let path = format!("/ClusterComputeResource/{moId}/permission", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -1354,7 +1331,7 @@ impl ClusterComputeResource {
     /// ## Returns:
     ///
     /// Refers instances of *Task*.
-    pub async fn recent_task(&self) -> Result<Option<Vec<ManagedObjectReference>>> {
+    pub async fn recent_task(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/ClusterComputeResource/{moId}/recentTask", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -1373,7 +1350,7 @@ impl ClusterComputeResource {
     ///
     /// An array of recommendations, with each of them having
     /// one or more actions.
-    pub async fn recommendation(&self) -> Result<Option<Vec<ClusterRecommendation>>> {
+    pub async fn recommendation(&self) -> Result<Option<Vec<crate::types::structs::ClusterRecommendation>>> {
         let path = format!("/ClusterComputeResource/{moId}/recommendation", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -1385,7 +1362,7 @@ impl ClusterComputeResource {
     /// ## Returns:
     ///
     /// Refers instance of *ResourcePool*.
-    pub async fn resource_pool(&self) -> Result<Option<ManagedObjectReference>> {
+    pub async fn resource_pool(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let path = format!("/ClusterComputeResource/{moId}/resourcePool", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -1406,7 +1383,7 @@ impl ClusterComputeResource {
     /// The cluster summary.
     /// 
     /// ***Since:*** vSphere API Release 7.0.1.1
-    pub async fn summary_ex(&self) -> Result<ClusterComputeResourceSummary> {
+    pub async fn summary_ex(&self) -> Result<crate::types::structs::ClusterComputeResourceSummary> {
         let path = format!("/ClusterComputeResource/{moId}/summaryEx", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute(req).await
@@ -1416,7 +1393,7 @@ impl ClusterComputeResource {
     /// Experimental. Subject to change.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn tag(&self) -> Result<Option<Vec<Tag>>> {
+    pub async fn tag(&self) -> Result<Option<Vec<crate::types::structs::Tag>>> {
         let path = format!("/ClusterComputeResource/{moId}/tag", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -1435,7 +1412,7 @@ impl ClusterComputeResource {
     /// produce any property values as no updates are generated.
     /// 
     /// ***Required privileges:*** System.View
-    pub async fn triggered_alarm_state(&self) -> Result<Option<Vec<AlarmState>>> {
+    pub async fn triggered_alarm_state(&self) -> Result<Option<Vec<crate::types::structs::AlarmState>>> {
         let path = format!("/ClusterComputeResource/{moId}/triggeredAlarmState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -1456,12 +1433,12 @@ impl ClusterComputeResource {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct AddHostRequestType<'a> {
-    spec: &'a HostConnectSpec,
+    spec: &'a crate::types::structs::HostConnectSpec,
     #[serde(rename = "asConnected")]
     as_connected: bool,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "resourcePool")]
-    resource_pool: Option<&'a ManagedObjectReference>,
+    resource_pool: Option<&'a crate::types::structs::ManagedObjectReference>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     license: Option<&'a str>,
 }
@@ -1479,15 +1456,15 @@ struct CancelRecommendationRequestType<'a> {
 #[serde(rename = "ConfigureHCIRequestType", tag = "_typeName")]
 struct ConfigureHciRequestType<'a> {
     #[serde(rename = "clusterSpec")]
-    cluster_spec: &'a ClusterComputeResourceHciConfigSpec,
+    cluster_spec: &'a crate::types::structs::ClusterComputeResourceHciConfigSpec,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "hostInputs")]
-    host_inputs: Option<&'a [ClusterComputeResourceHostConfigurationInput]>,
+    host_inputs: Option<&'a [crate::types::structs::ClusterComputeResourceHostConfigurationInput]>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct ClusterEnterMaintenanceModeRequestType<'a> {
-    host: &'a [ManagedObjectReference],
+    host: &'a [crate::types::structs::ManagedObjectReference],
     #[serde(default, skip_serializing_if = "Option::is_none")]
     option: Option<&'a [Box<dyn crate::types::traits::OptionValueTrait>]>,
 }
@@ -1496,46 +1473,46 @@ struct ClusterEnterMaintenanceModeRequestType<'a> {
 struct ExtendHciRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "hostInputs")]
-    host_inputs: Option<&'a [ClusterComputeResourceHostConfigurationInput]>,
+    host_inputs: Option<&'a [crate::types::structs::ClusterComputeResourceHostConfigurationInput]>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "vSanConfigSpec")]
-    v_san_config_spec: Option<&'a SddcBase>,
+    v_san_config_spec: Option<&'a crate::types::structs::SddcBase>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct FindRulesForVmRequestType<'a> {
-    vm: &'a ManagedObjectReference,
+    vm: &'a crate::types::structs::ManagedObjectReference,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct MoveHostIntoRequestType<'a> {
-    host: &'a ManagedObjectReference,
+    host: &'a crate::types::structs::ManagedObjectReference,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "resourcePool")]
-    resource_pool: Option<&'a ManagedObjectReference>,
+    resource_pool: Option<&'a crate::types::structs::ManagedObjectReference>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct MoveIntoRequestType<'a> {
-    host: &'a [ManagedObjectReference],
+    host: &'a [crate::types::structs::ManagedObjectReference],
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct PlaceVmRequestType<'a> {
     #[serde(rename = "placementSpec")]
-    placement_spec: &'a PlacementSpec,
+    placement_spec: &'a crate::types::structs::PlacementSpec,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct RecommendHostsForVmRequestType<'a> {
-    vm: &'a ManagedObjectReference,
+    vm: &'a crate::types::structs::ManagedObjectReference,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pool: Option<&'a ManagedObjectReference>,
+    pool: Option<&'a crate::types::structs::ManagedObjectReference>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct ReconfigureClusterRequestType<'a> {
-    spec: &'a ClusterConfigSpec,
+    spec: &'a crate::types::structs::ClusterConfigSpec,
     modify: bool,
 }
 #[derive(serde::Serialize)]
@@ -1567,7 +1544,7 @@ struct SetCustomValueRequestType<'a> {
 struct ValidateHciConfigurationRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "hciConfigSpec")]
-    hci_config_spec: Option<&'a ClusterComputeResourceHciConfigSpec>,
+    hci_config_spec: Option<&'a crate::types::structs::ClusterComputeResourceHciConfigSpec>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    hosts: Option<&'a [ManagedObjectReference]>,
+    hosts: Option<&'a [crate::types::structs::ManagedObjectReference]>,
 }

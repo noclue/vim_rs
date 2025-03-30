@@ -1,9 +1,8 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
-use crate::types::structs::GuestProcessInfo;
-use crate::types::structs::ManagedObjectReference;
 /// ProcessManager is the managed object that provides APIs
 /// to manipulate the guest operating system processes.
+#[derive(Clone)]
 pub struct GuestProcessManager {
     client: Arc<Client>,
     mo_id: String,
@@ -72,7 +71,7 @@ impl GuestProcessManager {
     /// 
     /// ***OperationDisabledByGuest***: if the operation is not enabled due to
     /// guest agent configuration.
-    pub async fn list_processes_in_guest(&self, vm: &ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait, pids: Option<&[i64]>) -> Result<Option<Vec<GuestProcessInfo>>> {
+    pub async fn list_processes_in_guest(&self, vm: &crate::types::structs::ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait, pids: Option<&[i64]>) -> Result<Option<Vec<crate::types::structs::GuestProcessInfo>>> {
         let input = ListProcessesInGuestRequestType {vm, auth, pids, };
         let path = format!("/GuestProcessManager/{moId}/ListProcessesInGuest", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -139,7 +138,7 @@ impl GuestProcessManager {
     /// 
     /// ***OperationDisabledByGuest***: if the operation is not enabled due to
     /// guest agent configuration.
-    pub async fn read_environment_variable_in_guest(&self, vm: &ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait, names: Option<&[String]>) -> Result<Option<Vec<String>>> {
+    pub async fn read_environment_variable_in_guest(&self, vm: &crate::types::structs::ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait, names: Option<&[String]>) -> Result<Option<Vec<String>>> {
         let input = ReadEnvironmentVariableInGuestRequestType {vm, auth, names, };
         let path = format!("/GuestProcessManager/{moId}/ReadEnvironmentVariableInGuest", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -210,7 +209,7 @@ impl GuestProcessManager {
     /// 
     /// ***OperationDisabledByGuest***: if the operation is not enabled due to
     /// guest agent configuration.
-    pub async fn start_program_in_guest(&self, vm: &ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait, spec: &dyn crate::types::traits::GuestProgramSpecTrait) -> Result<i64> {
+    pub async fn start_program_in_guest(&self, vm: &crate::types::structs::ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait, spec: &dyn crate::types::traits::GuestProgramSpecTrait) -> Result<i64> {
         let input = StartProgramInGuestRequestType {vm, auth, spec, };
         let path = format!("/GuestProcessManager/{moId}/StartProgramInGuest", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -265,7 +264,7 @@ impl GuestProcessManager {
     /// 
     /// ***OperationDisabledByGuest***: if the operation is not enabled due
     /// to guest agent configuration.
-    pub async fn terminate_process_in_guest(&self, vm: &ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait, pid: i64) -> Result<()> {
+    pub async fn terminate_process_in_guest(&self, vm: &crate::types::structs::ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait, pid: i64) -> Result<()> {
         let input = TerminateProcessInGuestRequestType {vm, auth, pid, };
         let path = format!("/GuestProcessManager/{moId}/TerminateProcessInGuest", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -275,7 +274,7 @@ impl GuestProcessManager {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct ListProcessesInGuestRequestType<'a> {
-    vm: &'a ManagedObjectReference,
+    vm: &'a crate::types::structs::ManagedObjectReference,
     auth: &'a dyn crate::types::traits::GuestAuthenticationTrait,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pids: Option<&'a [i64]>,
@@ -283,7 +282,7 @@ struct ListProcessesInGuestRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct ReadEnvironmentVariableInGuestRequestType<'a> {
-    vm: &'a ManagedObjectReference,
+    vm: &'a crate::types::structs::ManagedObjectReference,
     auth: &'a dyn crate::types::traits::GuestAuthenticationTrait,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     names: Option<&'a [String]>,
@@ -291,14 +290,14 @@ struct ReadEnvironmentVariableInGuestRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct StartProgramInGuestRequestType<'a> {
-    vm: &'a ManagedObjectReference,
+    vm: &'a crate::types::structs::ManagedObjectReference,
     auth: &'a dyn crate::types::traits::GuestAuthenticationTrait,
     spec: &'a dyn crate::types::traits::GuestProgramSpecTrait,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct TerminateProcessInGuestRequestType<'a> {
-    vm: &'a ManagedObjectReference,
+    vm: &'a crate::types::structs::ManagedObjectReference,
     auth: &'a dyn crate::types::traits::GuestAuthenticationTrait,
     pid: i64,
 }

@@ -103,6 +103,35 @@ pub fn vim_retrievable(input: TokenStream) -> TokenStream {
     output.into()
 }
 
+/// A macro to generate a struct and implementation necessary to work with
+/// PropertyCollector::wait_for_updates_ex API. Developers need to select the managed object type
+/// of interest and the properties they need replicated. For example to replicate properties of a
+/// VirtualMachine object, the macro can be used as follows:
+///
+/// ```ignore
+/// vim_updatable!(
+///    struct VM: VirtualMachine {
+///       name = "name",
+///       os = "summary.guest.guest_full_name",
+///       storage = "summary.storage",
+///       host_cpu = "summary.quick_stats.overall_cpu_usage",
+///       host_memory = "summary.quick_stats.host_memory_usage",
+///       status = "summary.overall_status",
+///       power_state = "runtime.power_state",
+///       devices = "config.hardware.device",
+///       ft_info = "config.ft_info",
+///   }
+/// );
+/// ```
+/// The macro will generate a struct `VM` with the specified properties and extract their types from
+/// the vSphere API. The generated struct will implement the `TryFrom<vim_rs::types::structs::ObjectUpdate>`
+/// trait, allowing you to convert the output of the `PropertyCollector::wait_for_updates_ex`
+/// into vector of objects from the generated struct. Subsequently, the generated struct content can
+/// be updated using the `apply_update` method. The generated struct will also implement the
+/// `Queriable` trait, allowing you to use the `prop_spec` method to generate a `PropertySpec` for
+/// the specified properties.
+///
+/// The generated struct is usable with the `ObjectCache` and `CacheManager` utility objects.
 #[proc_macro]
 pub fn vim_updatable(input: TokenStream) -> TokenStream {
     let VimObjectMacro { struct_token: _, struct_name, colon_token: _, object_type: managed_object_type, brace_token: _, fields } =
