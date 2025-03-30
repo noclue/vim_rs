@@ -158,8 +158,8 @@ fn generate_struct_decl(struct_name: &Ident, fields: &Vec<FieldInfo>) -> proc_ma
     let struct_tokens = quote! {
         #[derive(Debug)]
         pub struct #struct_name {
-            id: vim_rs::types::structs::ManagedObjectReference,
-            #(#field_declarations,)*
+            pub id: vim_rs::types::structs::ManagedObjectReference,
+            #(pub #field_declarations,)*
         }
     };
     struct_tokens
@@ -169,8 +169,11 @@ fn generate_retrieve_struct_impl(struct_name: &Ident, managed_object_type: &Iden
     let prop_spec = prop_spec(managed_object_type, fields);
     let id = id();
     quote! {
+        impl vim_rs::core::pc_helpers::Queriable for #struct_name {
+            #prop_spec
+        }
+
         impl #struct_name {
-            pub #prop_spec
             pub #id
         }
     }
@@ -181,8 +184,11 @@ fn generate_updateable_struct_impl(struct_name: &Ident, managed_object_type: &Id
     let id = id();
     let apply_update = generate_apply_update(fields);
     quote! {
-        impl vim_rs::core::pc_helpers::Cacheable for #struct_name {
+        impl vim_rs::core::pc_helpers::Queriable for #struct_name {
             #prop_spec
+        }
+
+        impl vim_rs::core::pc_helpers::Cacheable for #struct_name {
             #id
             #apply_update
         }

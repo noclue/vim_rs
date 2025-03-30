@@ -1,5 +1,4 @@
 use std::cell::RefCell;
-use std::fmt::Display;
 use std::rc::Rc;
 use std::sync::Arc;
 use indexmap::IndexMap;
@@ -8,9 +7,15 @@ use super::super::types::vim_any::VimAny;
 use super::client;
 use thiserror::Error;
 use crate::core::client::Client;
-use crate::mo::{PropertyCollector, PropertyFilter, View, ViewManager};
+use crate::mo::{ContainerView, PropertyCollector, PropertyFilter, View, ViewManager};
 use crate::types::enums::{MoTypesEnum, ObjectUpdateKindEnum};
-use crate::types::structs::{ManagedObjectReference, ObjectSpec, ObjectUpdate, PropertyFilterSpec, PropertyFilterUpdate, PropertySpec, TraversalSpec, WaitOptions};
+use crate::types::structs::{ManagedObjectReference, ObjectContent, ObjectSpec, ObjectUpdate, PropertyFilterSpec, PropertyFilterUpdate, PropertySpec, TraversalSpec, WaitOptions};
+
+/// Trait for errors that can be properly boxed and sent across threads
+pub trait BoxableError: std::error::Error + Send + Sync + 'static {}
+
+// Blanket implementation for all types that satisfy the requirements
+impl<E: std::error::Error + Send + Sync + 'static> BoxableError for E {}
 
 /// Error type for Unmarshalling PropertyCollector data into a Rust struct. This is used whenever
 /// the returned data does not match the expected type.
@@ -28,6 +33,8 @@ pub enum Error {
     RemoteCommunicationError(#[from] client::Error),
     #[error("Unexpected property path = `{0}`")]
     UnexpectedPropertyPath(String),
+    #[error("Generic Erorr '{0}'")]
+    GenericError(#[from] Box<dyn std::error::Error + Send + Sync + 'static>),
 }
 
 pub type Result<T> = std::result::Result<T, Error>;
@@ -47,18 +54,32 @@ pub fn type_name(value :&VimAny) -> String {
     }
 }
 
-
-/// A trait for objects that can be cached and updated from ObjectUpdate messages.
-pub trait Cacheable: TryFrom<ObjectUpdate, Error: Display> {
+/// A trait for objects that can be queried using the PropertyCollector utilities. These objects
+/// provide a `PropertySpec` for the object type.
+pub trait Queriable {
     /// The property spec for this object type.
     fn prop_spec() -> PropertySpec;
+}
 
-    /// The ID of the object.
-    fn id(&self) -> &ManagedObjectReference;
+/// A trait for objects that can be retrieved using the PropertyCollector utilities. In essence they
+/// provide a `PropertySpec` for the object type and implement TryFrom<ObjectContent> to convert
+/// from the `PropertyCollector::retrieve_properties_ex` API response to the object instances.
+pub trait Retrievable: Queriable + TryFrom<ObjectContent>
+where
+    Self::Error: BoxableError
+{}
 
+/// A trait for objects that can be retrieved and continuously updated using the `PropertyCollector`
+/// API.
+pub trait Cacheable: Queriable + TryFrom<ObjectUpdate>
+where
+    Self::Error: BoxableError
+{
     /// The type of the object.
     fn apply_update(&mut self, update: ObjectUpdate) -> Result<()>;
 
+    /// The ID of the object.
+    fn id(&self) -> &ManagedObjectReference;
 }
 
 /// A trait for PropertyCollector caches used by the infrastructure to dispatch updates.
@@ -69,6 +90,9 @@ pub trait Cache {
     /// Apply an update to the cache.
     fn process_update(&mut self, update: Vec<ObjectUpdate>) -> Result<()>;
 }
+
+/// Blanket implementation for Retrievable for all Queriable types that implement TryFrom<ObjectContent>.
+impl<T: Queriable + TryFrom<ObjectContent, Error = E>, E: BoxableError> Retrievable for T {}
 
 /// A proxy for a cache that is shared. This helps to use `Rc<RefCell<T>>` over the cache as it is
 /// not possible to use both dynamic and static dispatch with `Rc<RefCell<T>>`. This proxy implements
@@ -105,11 +129,17 @@ impl<T: Cache> Cache for SharedRefCacheProxy<T> {
 
 /// A cache for objects of type T. This is a simple in-memory cache for property collector result
 /// objects that stores objects by their ID.
-pub struct ObjectCache<T: Cacheable> {
+pub struct ObjectCache<T: Cacheable>
+where
+    T::Error: BoxableError
+{
     cache: IndexMap<String, T>,
 }
 
-impl<T: Cacheable> ObjectCache<T> {
+impl<T: Cacheable> ObjectCache<T>
+where
+    T::Error: BoxableError
+{
     /// Create a new ObjectCache.
     pub fn new() -> Self {
         Self {
@@ -129,7 +159,10 @@ impl<T: Cacheable> ObjectCache<T> {
 
 }
 
-impl<'a, T: Cacheable> IntoIterator for &'a ObjectCache<T> {
+impl<'a, T: Cacheable> IntoIterator for &'a ObjectCache<T>
+where
+    T::Error: BoxableError
+{
     type Item = &'a T;
     type IntoIter = indexmap::map::Values<'a, String, T>;
 
@@ -138,7 +171,11 @@ impl<'a, T: Cacheable> IntoIterator for &'a ObjectCache<T> {
     }
 }
 
-impl<T: Cacheable> Cache for ObjectCache<T> {
+impl<T: Cacheable> Cache for ObjectCache<T>
+where
+    T::Error: BoxableError
+{
+    /// Get the property spec for the objects in this cache.
     fn prop_spec(&self) -> PropertySpec {
         T::prop_spec()
     }
@@ -342,5 +379,91 @@ impl Monitor {
         self.version = update_set.version.clone();
 
         Ok(update_set.filter_set)
+    }
+}
+
+pub struct ObjectRetriever {
+    client: Arc<Client>,
+    property_collector: PropertyCollector,
+    view_manager: ViewManager,
+}
+
+impl ObjectRetriever {
+    pub fn new(client: Arc<Client>) -> Result<Self> {
+        let pc_mo_id = &client.service_content().property_collector.value;
+        let property_collector = PropertyCollector::new(client.clone(), pc_mo_id);
+        let Some(view_manager_moref) = &client.service_content().view_manager else {
+            return Err(Error::InternalError("cannot find view_manager".to_string()));
+        };
+        let view_manager = ViewManager::new(client.clone(), &view_manager_moref.value);
+        Ok(Self {
+            client,
+            property_collector,
+            view_manager,
+        })
+    }
+
+    pub async fn retrieve_objects_from_container<T: Retrievable>(&self, container: &ManagedObjectReference) -> Result<Vec<T>>
+    where
+        <T as TryFrom<crate::types::structs::ObjectContent>>::Error: BoxableError
+    {
+        let view_moref = self.view_manager.create_container_view(
+            container,
+            Some(&[T::prop_spec().r#type]),
+            true,
+        ).await?;
+
+        let view = ContainerView::new(self.client.clone(), &view_moref.value);
+
+        let object_set = vec![ObjectSpec {
+            obj: view_moref.clone(),
+            skip: Some(false),
+            select_set: Some(vec![Box::new(crate::types::structs::TraversalSpec {
+                name: Some("traverseEntities".to_string()),
+                r#type: Into::<&str>::into(MoTypesEnum::ContainerView).to_string(),
+                path: "view".to_string(),
+                skip: Some(false),
+                select_set: None,
+            })]),
+        }];
+
+        let res = self.retrieve_objects(object_set).await;
+
+        view.destroy_view().await?;
+
+        res
+
+    }
+
+    pub async fn retrieve_objects<T: Retrievable>(&self, object_set: Vec<ObjectSpec>) -> Result<Vec<T>>
+    where
+        <T as TryFrom<crate::types::structs::ObjectContent>>::Error: BoxableError
+    {
+        let spec_set = vec![crate::types::structs::PropertyFilterSpec {
+            object_set,
+            prop_set: vec![T::prop_spec()],
+            report_missing_objects_in_results: Some(true),
+        }];
+        let options = crate::types::structs::RetrieveOptions {
+            max_objects: Some(100),
+        };
+
+        let mut vms: Vec<T> = Vec::new();
+
+        let retrieve_result = self.property_collector.retrieve_properties_ex(&spec_set, &options).await?;
+        let Some(mut res) = retrieve_result else {
+            return Ok(Vec::new());
+        };
+        loop {
+            for obj in res.objects {
+                vms.push(obj.try_into().map_err(|e| Error::GenericError(Box::new(e)))?);
+            };
+            // Check for more results
+            let Some(token) = res.token else {
+                break;
+            };
+            res = self.property_collector.continue_retrieve_properties_ex(&token).await?;
+        }
+        Ok(vms)
     }
 }

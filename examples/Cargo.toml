@@ -1,5 +1,5 @@
 [workspace]
-members = [ "macro_example","snippets", "vtui"]
+members = [ "macro_examples","snippets", "vtui"]
 resolver = "2"
 
 [profile.release]

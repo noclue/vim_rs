@@ -952,10 +952,13 @@ dependencies = [
 ]
 
 [[package]]
-name = "macro_example"
+name = "macro_examples"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "env_logger",
+ "log",
+ "tokio",
  "vim_macros",
  "vim_rs",
 ]
@@ -1731,9 +1734,9 @@ dependencies = [
 
 [[package]]
 name = "tokio"
-version = "1.43.0"
+version = "1.44.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3d61fa4ffa3de412bfea335c6ecff681de2b609ba3c77ef3e00e521813a9ed9e"
+checksum = "f382da615b842244d4b8738c82ed1275e6c5dd90c459a30941cd07080b06c91a"
 dependencies = [
  "backtrace",
  "bytes",
@@ -1931,7 +1934,7 @@ dependencies = [
 
 [[package]]
 name = "vim_rs"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "base64",
  "env_logger",
@@ -1954,12 +1957,9 @@ dependencies = [
  "anyhow",
  "crossterm",
  "futures",
- "futures-util",
- "indexmap",
- "log",
  "ratatui",
- "thiserror",
  "tokio",
+ "vim_macros",
  "vim_rs",
 ]
 
