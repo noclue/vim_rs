@@ -74,7 +74,7 @@ In the examples above, `collector` is an instance of `PropertyCollector`, and `v
 
 The `vim_macros` related crate provides two powerful macros to simplify working with vSphere properties:
 
-### One-time Property Retrieval with vim_retrievable
+### One-time Property Retrieval with `vim_retrievable`
 
 Define structures that map to vSphere object properties and retrieve them with a single call:
 
