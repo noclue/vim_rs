@@ -2,13 +2,14 @@
 
 Rust interface to the VMware vSphere Virtual Infrastructure JSON API, allowing you to manage VMware infrastructure programmatically.
 
-
-
+* **Fully Asynchronous**: Built on tokio runtime for efficient non-blocking operations
+* **Type-Safe**: Comprehensive Rust types for the vSphere API objects
+* **Macro System**: Simplify property retrieval and monitoring with vim_retrievable and vim_updatable macros
+* **Hybrid Type System**: Intelligently combines traits and enums to balance type safety with performance
+* **Documented**: The original VIM documentation rendered inline as rustdoc
+* **Examples**: A set of examples demonstrating use of the APIs to get you started quickly
 
 ## Connecting to vCenter
-To work with the API, one needs the `vim_rs` crate from the `vim_rs` folder of this repo.
-
-The `vim_rs` library is fully asynchronous and uses the `tokio` runtime and `reqwest` HTTP library to invoke remote APIs.
 
 To set up a connection, use a statement like the following:
 
