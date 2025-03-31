@@ -1,7 +1,17 @@
 [package]
 name = "vim_macros"
-version = "0.1.0"
-edition = "2024"
+version = "0.2.0"
+edition = "2021"
+authors = ["Kiril Karaatanasov <karaatanasov@gmail.com>"]
+license = "Apache-2.0"
+description = "Rust Binding MAcros for the VMware by Broadcom vCenter VI JSON API"
+readme = "README.md"
+repository = "https://github.com/noclue/vim_rs"
+homepage = "https://github.com/noclue/vim_rs"
+documentation = "https://docs.rs/vim_macros"
+keywords = ["vi-json", "vim", "vcenter", "vmware", "macros"]
+categories = ["api-bindings", "network-programming"]
+exclude = ["target/*", "**/*.rs.bk"]
 
 [lib]
 proc-macro = true

@@ -6,4 +6,4 @@ edition = "2024"
 [dependencies]
 anyhow = "1.0"
 log = "0.4"
-vim_rs = { version = "0.1.0", path = "../../vim_rs" }
+vim_rs = { version = "0.2.0", path = "../../vim_rs" }

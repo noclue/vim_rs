@@ -1,6 +1,9 @@
-# VIM-RS
+# VMware vSphere API Client for Rust
 
-This repository contains Rust crates for working with the VMware by Broadcom Virtual Infrastructure JSON API. The code herein is an example of how to use the VI-JSON OpenAPI specifications found in the [vSphere Management SDK](https://developer.broadcom.com/sdks/vsphere-management-sdk/latest/).
+Rust interface to the VMware vSphere Virtual Infrastructure JSON API, allowing you to manage VMware infrastructure programmatically.
+
+
+
 
 ## Connecting to vCenter
 To work with the API, one needs the `vim_rs` crate from the `vim_rs` folder of this repo.
@@ -10,40 +13,46 @@ The `vim_rs` library is fully asynchronous and uses the `tokio` runtime and `req
 To set up a connection, use a statement like the following:
 
 ```rust
-let vim_client = ClientBuilder::new(&vc_server)
-    .basic_authn(&username, &pwd)
-    .app_details(APP_NAME, APP_VERSION)
-    .build().await?;
-```
+use vsphere::ClientBuilder;
 
-Where `vc_server` is the address of the vCenter server, `username` is your vCenter username, and `pwd` is your vCenter password. `APP_NAME` and `APP_VERSION` describe your application to be able to identify and troubleshoot sessions from the vCenter UI or SessionManager API. An easy way to configure them with your Cargo project settings is as follows:
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    // Create a client with username and password
+    let client = ClientBuilder::new("https://vcenter.example.com")
+        .basic_authn("administrator@vsphere.local", "password")
+        .app_details(env!("CARGO_PKG_NAME"), env!("CARGO_PKG_VERSION")) // For self-signed certs
+        .insecure(true) // For self-signed certs
+        .build()
+        .await?;
 
-```rust
-const APP_NAME: &str = env!("CARGO_PKG_NAME");
-const APP_VERSION: &str = env!("CARGO_PKG_VERSION");
-```
+     // Now you can use the client for API calls
+
+     Ok(())
+}
+``` 
+`.app_details` describes your application as to be able to identify and troubleshoot sessions from the vCenter UI or SessionManager API.
 
 You can add `insecure()` to your builder configuration to bypass TLS checks for both hostname and certificate.
 
-One can set the `reqwest` client through the builder's `http_client` method to reuse the `reqwest` connection and connection settings. The `vim_rs` client abstraction is cheap, but the `reqwest` HTTP client is not.
+One can set the `reqwest` preconfigured client through the builder's `http_client` method to reuse the `reqwest` connection and connection settings. The `vim_rs` client abstraction is cheap, but the `reqwest` HTTP client is not.
 
-The `vim_client` above is an `Arc` around the actual client object. Use `.clone()` to pass it around.
+The `client` above is an `Arc` around the actual client object. Use `.clone()` to pass it around.
 
 If the above goes well, you have a connection to the vCenter server with an initialized session and retrieved service content.
 
 ## Obtaining Stub for the APIs
 The VIM API is a remote object-oriented API. The functionality is organized in methods of managed objects.
 
-To set up a remote proxy to a management object, one needs a connection, an object type, and an object identifier.
+To set up a remote stub to a management object, one needs a connection, an object type, and an object identifier.
 
-For example, to get a handle to the `PropertyCollector` API, the following code does the trick:
+For example, to get a handle to stub for the default `PropertyCollector`, the following code does the trick:
 
 ```rust
 let content = client.service_content();
 let property_collector = PropertyCollector::new(client.clone(), &content.property_collector.value);
 ```
 
-The `service_content` is a structure that contains references to various managed objects in the vCenter server. Note that the `PropertyCollector` is always present in the service content. Other objects may be optional, and a check is to be made if the reference is set.
+The `service_content` is a structure that contains references to the root managed objects in the vCenter server. Note that the `PropertyCollector` is always present in the service content. Other objects may be optional, and a check is to be made if the reference is set.
 
 ## Invoking APIs
 This is simple and intuitive once you have a remote stub from the above step.
@@ -59,6 +68,107 @@ let vms = view.view().await?;
 ```
 
 In the examples above, `collector` is an instance of `PropertyCollector`, and `view` is an instance of a `View` like `ContainerView`.
+
+## Property Retrieval with Macros
+
+The `vim_macros` related crate provides two powerful macros to simplify working with vSphere properties:
+
+### One-time Property Retrieval with vim_retrievable
+
+Define structures that map to vSphere object properties and retrieve them with a single call:
+
+```rust
+use vim_macros::vim_retrievable;
+use vim_rs::core::pc_retrieve::ObjectRetriever;
+
+// Define a struct mapping to HostSystem properties
+vim_retrievable!(
+    struct Host: HostSystem {
+        name = "name",
+        power_state = "runtime.power_state",
+        connected = "runtime.connection_state",
+        cpu_usage = "summary.quick_stats.overall_cpu_usage",
+        memory_usage = "summary.quick_stats.overall_memory_usage",
+        uptime = "summary.quick_stats.uptime",
+    }
+);
+
+async fn print_hosts(client: &Client) -> Result<()> {
+   // Create a retriever using the client
+   let retriever = ObjectRetriever::new(client.clone())?;
+
+   // Retrieve all hosts with their properties in a single API call
+   let hosts: Vec<HostInfo> = retriever
+           .retrieve_objects_from_container(&client.service_content().root_folder)
+           .await?;
+
+   // Work with strongly-typed host objects
+   for host in hosts {
+      println!("Host {} is {:?}", host.name, host.power_state);
+   }
+
+   Ok(())
+}
+```
+### Continuous Property Monitoring with `vim_updatable`
+
+Stay up to date with local inventory replica using `PropertyCollector::wait_for_updates_ex`:
+
+```rust
+vim_updatable!(
+    struct VmDetails: VirtualMachine {
+        name = "name",
+        power_state = "runtime.power_state",
+    }
+);
+
+impl Display for VmDetails {
+   fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+      write!(
+         f,
+         "VM ({}): {} with power state: {:?}", self.id.value, self.name, self.power_state
+      )
+   }
+}
+
+struct ChangeListener {}
+
+impl ObjectCacheListener<VmDetails> for ChangeListener {
+   fn on_new(&mut self, obj: &VmDetails) {
+      info!("New VM: {}", obj);
+   }
+
+   fn on_update(&mut self, obj: &VmDetails) {
+      info!("VM updated: {}", obj);
+   }
+
+   fn on_remove(&mut self, obj: VmDetails) {
+      info!("VM removed: {}", obj);
+   }
+}
+
+async fn monitor_vms(client: &Arc<Client>) -> Result<(), Error> {
+   let cache = Box::new(ObjectCache::new_with_listener(Box::new(ChangeListener {})));
+   let mut manager = CacheManager::new(client.clone())?;
+   let mut monitor = manager.create_monitor()?;
+
+   manager.add_container_cache(cache, &client.service_content().root_folder).await?;
+
+   let start = Instant::now();
+   loop {
+      let updates = monitor.wait_updates(10).await?;
+      if let Some(updates) = updates {
+         manager.apply_updates(updates)?;
+      } 
+      if start.elapsed().as_secs() > 60 {
+         break;
+      }
+   }
+
+   manager.destroy().await?;
+   Ok(())
+}
+```
 
 ## Working with Polymorphic Types
 The VIM API is conceptualized as a classic object-oriented API, much like the Java or C++ standard libraries. It has a root `Any` object from which all other objects descend. There is `DataObject` that is the root for all data structures. There is also `MethodFault` that is the root for all error types.
