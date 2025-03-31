@@ -2,7 +2,7 @@ use anyhow::{Context, Result};
 use futures::{FutureExt, StreamExt};
 use ratatui::crossterm::event::Event as CrosstermEvent;
 use tokio::sync::mpsc;
-use vim_rs::core::pc_helpers::Monitor;
+use vim_rs::core::pc_cache::Monitor;
 use vim_rs::types::structs::PropertyFilterUpdate;
 
 /// Representation of all possible events.

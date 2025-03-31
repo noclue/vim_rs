@@ -6,7 +6,7 @@ use ratatui::prelude::{Line, Stylize};
 use ratatui::{DefaultTerminal, Frame};
 use std::cell::RefCell;
 use std::rc::Rc;
-use vim_rs::core::pc_helpers::CacheManager;
+use vim_rs::core::pc_cache::CacheManager;
 
 pub struct App {
     should_quit: bool,

@@ -217,7 +217,7 @@ fn generate_updateable_struct_impl(struct_name: &Ident, managed_object_type: &Id
             #prop_spec
         }
 
-        impl vim_rs::core::pc_helpers::Cacheable for #struct_name {
+        impl vim_rs::core::pc_cache::Cacheable for #struct_name {
             #id
             #apply_update
         }

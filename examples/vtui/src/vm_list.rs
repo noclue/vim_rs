@@ -6,7 +6,7 @@ use ratatui::widgets::{Block, Cell, HighlightSpacing, Row, Table, TableState};
 use std::cell::RefCell;
 use std::ops::DerefMut;
 use std::rc::Rc;
-use vim_rs::core::pc_helpers::ObjectCache;
+use vim_rs::core::pc_cache::ObjectCache;
 
 /// A widget that displays a list of virtual machines.
 

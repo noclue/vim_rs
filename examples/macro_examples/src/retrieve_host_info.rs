@@ -21,7 +21,7 @@ use anyhow::Result;
 use std::env;
 use utils::connect;
 use vim_macros::vim_retrievable;
-use vim_rs::core::pc_helpers::ObjectRetriever;
+use vim_rs::core::pc_retrieve::ObjectRetriever;
 
 vim_retrievable!(
     struct Host: HostSystem {

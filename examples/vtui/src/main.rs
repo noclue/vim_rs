@@ -6,7 +6,7 @@ use std::cell::RefCell;
 use std::rc::Rc;
 use std::{env, sync::Arc};
 use vim_rs::core::client::{Client, ClientBuilder};
-use vim_rs::core::pc_helpers::{CacheManager, ObjectCache, SharedRefCacheProxy};
+use vim_rs::core::pc_cache::{CacheManager, ObjectCache, SharedRefCacheProxy};
 
 mod app;
 mod event;

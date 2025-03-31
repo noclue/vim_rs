@@ -8,7 +8,7 @@ use std::fmt::{Display, Formatter};
 use std::time::Instant;
 use utils::connect;
 use vim_macros::vim_updatable;
-use vim_rs::core::pc_helpers::{CacheManager, ObjectCache, ObjectCacheListener};
+use vim_rs::core::pc_cache::{CacheManager, ObjectCache, ObjectCacheListener};
 
 vim_updatable!(
     struct VmDetails: VirtualMachine {
