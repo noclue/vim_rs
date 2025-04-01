@@ -68,7 +68,7 @@ static INVENTORY_TYPES: [&str; 14] = [
 struct FieldData {
     data_type: DataType,
     is_optional: bool,
-    //description: Option<String>,
+    description: Option<String>,
 }
 
 pub struct FieldDataEmitter<'a> {
@@ -155,15 +155,15 @@ impl<'a> FieldDataEmitter<'a> {
                     _ => self.lookup_enum_processing_type(&field.data_type)?,
                 };
                 field_details.entry(to_field_name(field_name), &format!(
-                    "NodeData {{ type_decl: \"{}\", type_name: \"{}\", is_optional: {}, processing_type: FieldProcessingType::{}, path_segment: \"{}\", }},",
-                    field_decl, type_name, is_optional, processing_type, field_name));
+                    "NodeData {{ type_decl: \"{}\", type_name: \"{}\", is_optional: {}, processing_type: FieldProcessingType::{}, path_segment: \"{}\", doc: {} }},",
+                    field_decl, type_name, is_optional, processing_type, field_name, esc(&field.description)));
             }
             structs.entry(class_name, &format!("{}", field_details.build()));
         }
         self.printer.println(&format!("static CLASS_FIELDS: phf::Map<&'static str, phf::Map<&'static str, NodeData>> = {};", structs.build()))?;
         Ok(())
     }
-
+    
     fn lookup_enum_processing_type(&self, data_type: &DataType) -> Result<String> {
         for (typename, def) in &self.vim_model.any_value_types {
             if def.property_type == *data_type {
@@ -190,7 +190,7 @@ impl<'a> FieldDataEmitter<'a> {
                 let field_data = FieldData {
                     data_type: data_type.clone(),
                     is_optional: method.optional_response,
-                    //description: method.description.clone(),
+                    description: method.description.clone(),
                 };
                 fields.insert(property_name.clone(), field_data);
             }
@@ -240,7 +240,7 @@ impl<'a> FieldDataEmitter<'a> {
                             fields.insert(field_name.clone(), FieldData {
                                 data_type: field.vim_type.clone(),
                                 is_optional: field.optional,
-                                //description: field.description.clone(),
+                                description: field.description.clone(),
                             });
 
                             // Check if field references another struct
@@ -281,5 +281,13 @@ fn last_segment(path: &str) -> Result<String> {
     path.split('/').last().map(String::from)
         .ok_or(InternalError(format!("Cannot extract property name from path: {}", path)))
 }
- 
+
+// Convert Option<String> to properly escaped string that can be assigned to an 
+// Option<&str> in generated code.
+fn esc(val: &Option<String>) -> String {
+    match val {
+        Some(v) => format!("Some(r#####\"{}\"#####)", v),
+        None => "None".to_string(),
+    }
+}
 

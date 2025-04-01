@@ -36,6 +36,9 @@ pub struct FieldData {
     pub processing_type: FieldProcessingType,
     /// VIM path of the field. This is the field path in VIM syntax as opposed to Rust syntax
     pub vim_path: String,
+    /// Optional documentation string for the field
+    /// This is used for generating documentation in the generated code
+    pub doc: Option<&'static str>,
 }
 
 // Default field data to be used as placeholder in case of errors
@@ -45,6 +48,7 @@ pub fn get_default_field_data() -> FieldData {
         is_optional: false,
         processing_type: FieldProcessingType::Enum("PrimitiveString"),
         vim_path: "name".to_string(),
+        doc: None,
     }
 }
 
@@ -60,6 +64,8 @@ pub(crate) struct NodeData {
     pub processing_type: FieldProcessingType,
     /// The path segment in the VIM model
     pub path_segment: &'static str,
+    /// Optional documentation string for the field
+    pub doc: Option<&'static str>,
 }
 
 pub fn resolve_path(managed_object: &str, path: &str) -> Result<FieldData> {
@@ -67,29 +73,31 @@ pub fn resolve_path(managed_object: &str, path: &str) -> Result<FieldData> {
     let mut obj: &str = managed_object;
     let mut optional = false;
     let mut path = Vec::new();
-    let mut field_data = &NodeData {
+    let mut node_data = &NodeData {
         type_decl: "",
         type_name: "",
         is_optional: false,
         processing_type: FieldProcessingType::Struct,
         path_segment: "",
+        doc: None,
     };
 
     for segment in tail.iter() {
-        if matches!(field_data.processing_type, FieldProcessingType::Enum(_)) {
+        if matches!(node_data.processing_type, FieldProcessingType::Enum(_)) {
             return Err(HierarchyError::NoSubPropertiesAvailable(path.join(".").to_string()));
         }
-        field_data = lookup_field_data(obj, segment)?;
-        obj = field_data.type_name;
-        optional = optional | field_data.is_optional;
-        path.push(field_data.path_segment);
+        node_data = lookup_field_data(obj, segment)?;
+        obj = node_data.type_name;
+        optional = optional | node_data.is_optional;
+        path.push(node_data.path_segment);
     }
 
     Ok(FieldData {
-        data_type: add_optional(&field_data.type_decl, optional),
+        data_type: add_optional(&node_data.type_decl, optional),
         is_optional: optional,
-        processing_type: field_data.processing_type.clone(),
+        processing_type: node_data.processing_type.clone(),
         vim_path: path.join("."),
+        doc: node_data.doc,
     })
 
 }

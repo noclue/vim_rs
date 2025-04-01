@@ -261,14 +261,20 @@ where
     }
 }
 
+/// A record for a cache object. This is used to store the cache object and its associated view ID.
 struct CacheRecord {
-    // The cache object
+    /// The cache object
     cache: Box<dyn Cache>,
-    // Optional view ID if add_container_cache is used
+    /// Optional view ID if add_container_cache is used
     view: Option<String>,
 }
 
-/// A manager for object caches. This is used to manage multiple caches and dispatch updates to them.
+/// A manager for object caches. This is used to manage multiple caches and dispatch updates to
+/// them. The CacheManager is responsible for creating the filters and dispatching updates to the
+/// caches. The CacheManager is also responsible for cleaning up the filters and caches when
+/// no longer needed.
+///
+/// Use the `destroy` method to clean up all caches and filters.
 pub struct CacheManager {
     client: Arc<Client>,
     property_collector: PropertyCollector,
@@ -316,6 +322,7 @@ impl CacheManager {
         })
     }
 
+    /// Create a new Monitor with the same PropertyCollector as the CacheManager.
     pub fn create_monitor(&self) -> pc_helpers::Result<Monitor> {
         Ok(Monitor::new_with_property_collector(self.property_collector.clone())?)
     }
@@ -338,7 +345,8 @@ impl CacheManager {
 
 
 
-    /// Add a cache for a specific type of object.
+    /// Add a cache for a specific type of object. This creates a filter on the server to update
+    /// the cache. The filter is created with the given object set.
     pub async fn add_cache(&mut self, cache: Box<dyn Cache>, object_set: Vec<ObjectSpec>) -> pc_helpers::Result<ManagedObjectReference> {
         let filter_spec = PropertyFilterSpec {
             object_set,
@@ -380,6 +388,7 @@ impl CacheManager {
         Ok(())
     }
 
+    /// Remove all caches. This is used to clean up all caches that are no longer needed.
     pub async fn destroy(&mut self) -> pc_helpers::Result<()> {
         for (filter_id, cache_rec) in self.caches.iter() {
             self.dispose_filter(&filter_id, &cache_rec).await;
@@ -388,6 +397,7 @@ impl CacheManager {
         Ok(())
     }
 
+    /// Dispose of a filter and as needed the associated view.
     async fn dispose_filter(&self, filter_id: &str, cache_rec: &CacheRecord) {
         let filter = PropertyFilter::new(self.client.clone(), &filter_id);
         if let Err(e) = filter.destroy_property_filter().await {
@@ -425,6 +435,16 @@ impl Monitor {
         })
     }
 
+    /// Waits for updates from the PropertyCollector. This is used to get updates from the server.
+    /// It sends a long poll HTTP request to the server.
+    ///
+    /// MAX_OBJECT_UPDATES_PER_CALL is used to limit the number of updates returned in a single call.
+    ///
+    /// **Parameters**
+    /// * `delay_s` - The maximum time to wait for updates in seconds. This is used to limit the
+    /// time the server waits for updates. If no updates are received within this time, the server
+    /// will return an empty response. This should not exceed several 10s of seconds as to avoid TCP
+    /// idle timeouts in network equipment.
     pub async fn wait_updates(&mut self, delay_s: i32) -> pc_helpers::Result<Option<Vec<PropertyFilterUpdate>>>
     {
         let options = WaitOptions {

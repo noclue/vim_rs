@@ -304,20 +304,29 @@ fn resolve_fields<'a>(managed_object_type: &Ident, fields: &'a Punctuated<Proper
     (field_infos, errors)
 }
 
+
+/// Generates a struct declaration based on the provided struct name and fields.
 fn generate_struct_decl(struct_name: &Ident, fields: &Vec<FieldInfo>) -> proc_macro2::TokenStream {
     let mut field_declarations: Vec<proc_macro2::TokenStream> = Vec::with_capacity(fields.len());
+    let mut docs: Vec<&'static str> = Vec::with_capacity(fields.len());
+
     for f in fields {
         let field_name = &f.property_field.name;
         let parsed_field_type: syn::Type = syn::parse_str(&f.field_data.data_type).unwrap();
-        let decl = quote! { #field_name : #parsed_field_type };
+        let decl = quote! {
+            #field_name : #parsed_field_type
+        };
         field_declarations.push(decl);
+        docs.push(f.field_data.doc.unwrap_or(""))
     }
 
     let struct_tokens = quote! {
         #[derive(Debug)]
         pub struct #struct_name {
+            #[doc = "Object identifier"]
             pub id: vim_rs::types::structs::ManagedObjectReference,
-            #(pub #field_declarations,)*
+            #(#[doc = #docs]
+            pub #field_declarations,)*
         }
     };
     struct_tokens

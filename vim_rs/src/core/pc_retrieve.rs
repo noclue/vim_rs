@@ -17,6 +17,9 @@ where
 /// Blanket implementation for Retrievable for all Queriable types that implement TryFrom<ObjectContent>.
 impl<T: Queriable + TryFrom<ObjectContent, Error = E>, E: BoxableError> Retrievable for T {}
 
+/// The ObjectRetriever struct is responsible for retrieving objects from the vSphere API using the
+/// PropertyCollector and ViewManager. It provides methods to retrieve objects from a container or
+/// to retrieve specific objects based on a set of ObjectSpecs.
 pub struct ObjectRetriever {
     client: Arc<Client>,
     property_collector: PropertyCollector,
@@ -24,6 +27,9 @@ pub struct ObjectRetriever {
 }
 
 impl ObjectRetriever {
+    /// Creates a new ObjectRetriever instance. It initializes PropertyCollector and ViewManager
+    /// instances using the provided client. It will fail if the client does not have a
+    /// view manager.
     pub fn new(client: Arc<Client>) -> pc_helpers::Result<Self> {
         let pc_mo_id = &client.service_content().property_collector.value;
         let property_collector = PropertyCollector::new(client.clone(), pc_mo_id);
@@ -38,6 +44,15 @@ impl ObjectRetriever {
         })
     }
 
+    /// Retrieves objects of type T from the specified container. It creates a container view and
+    /// uses the `retrieve_objects` method to get the objects. The view is destroyed after the
+    /// retrieval is complete.
+    ///
+    /// Use the `vim_macros::vim_retrievable` macro to easily map PropertyCollector property
+    /// paths to Rust objects. This macro generates a struct with the specified properties by
+    /// resolving the property paths to the correct Rust types. The macro also generates the
+    /// [`Retrievable`] trait implementation for the struct, allowing it to be used with the
+    /// [`ObjectRetriever`] API.
     pub async fn retrieve_objects_from_container<T: Retrievable>(&self, container: &ManagedObjectReference) -> pc_helpers::Result<Vec<T>>
     where
         <T as TryFrom<crate::types::structs::ObjectContent>>::Error: BoxableError
@@ -70,6 +85,15 @@ impl ObjectRetriever {
 
     }
 
+    /// Retrieves objects of type T based on the provided ObjectSpecs. It uses the
+    /// `PropertyCollector` to retrieve the properties of the specified objects. The method
+    /// handles pagination and continues to retrieve properties until all objects are fetched.
+    ///
+    /// Use the `vim_macros::vim_retrievable` macro to easily map PropertyCollector property
+    /// paths to Rust objects. This macro generates a struct with the specified properties by
+    /// resolving the property paths to the correct Rust types. The macro also generates the
+    /// [`Retrievable`] trait implementation for the struct, allowing it to be used with the
+    /// [`ObjectRetriever`] API.
     pub async fn retrieve_objects<T: Retrievable>(&self, object_set: Vec<ObjectSpec>) -> pc_helpers::Result<Vec<T>>
     where
         <T as TryFrom<crate::types::structs::ObjectContent>>::Error: BoxableError
