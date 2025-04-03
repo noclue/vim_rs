@@ -97,18 +97,18 @@ where
             None => None,
         }
     }
-    fn iter<'a>(&'a mut self) -> impl Iterator<Item=Row<'static>> + 'a {
+    fn iter<'a>(&'a mut self) -> Box<dyn Iterator<Item=Row<'static>> + 'a> {
         self.ensure_indices_updated();
         let Some(indices) = &self.indices else {
             panic!("Internal error: No indices found after ensuring indices updated");
         };
 
-        indices.iter()
+        Box::new(indices.iter()
             .map(|idx| {
                 let cache = self.cache.borrow();
                 let item = &cache[*idx];
                 Row::from(item)
-            })
+            }))
     }
 
     fn is_empty(&mut self) -> bool {

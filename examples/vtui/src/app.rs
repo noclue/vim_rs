@@ -8,15 +8,13 @@ use std::cell::RefCell;
 use std::rc::Rc;
 use ratatui::widgets::TableState;
 use vim_rs::core::pc_cache::CacheManager;
-use crate::indexed_cache::IndexedCache;
 use crate::search::SearchState;
 use crate::tabular_data::TableDataSource;
-use crate::vm::VmData;
 
 pub struct App {
     should_quit: bool,
     cache_mgr: Rc<RefCell<CacheManager>>,
-    vms: IndexedCache<VmData>,
+    resources: Box<dyn TableDataSource>,
     events: EventHandler,
     search_state: SearchState,
     table_state: TableState,
@@ -24,15 +22,15 @@ pub struct App {
 
 impl App {
     pub fn new(
-        event_handler: EventHandler,
+        events: EventHandler,
         cache_mgr: Rc<RefCell<CacheManager>>,
-        vms: IndexedCache<VmData>,
+        resources: Box<dyn TableDataSource>,
     ) -> Self {
         Self {
             should_quit: false,
             cache_mgr,
-            vms,
-            events: event_handler,
+            resources,
+            events,
             search_state: SearchState::new(),
             table_state: TableState::default(),
         }
@@ -53,7 +51,7 @@ impl App {
         match event {
             AppEvent::PropertyCollector(update) => {
                 self.cache_mgr.borrow_mut().apply_updates(update)?;
-                self.vms.invalidate();
+                self.resources.invalidate();
             }
             AppEvent::ErrorMessage(_msg) => {
                 todo!()
@@ -65,19 +63,19 @@ impl App {
             AppEvent::Up => self.table_state.scroll_up_by(1),
             AppEvent::Down => self.table_state.scroll_down_by(1),
             AppEvent::ToggleSearch => self.search_state.activate(),
-            AppEvent::ClearSearch => self.vms.set_filter(None),
+            AppEvent::ClearSearch => self.resources.set_filter(None),
             AppEvent::SearchCharacter(c) => self.search_state.input(c),
             AppEvent::SearchBackspace => self.search_state.delete(),
             AppEvent::SearchConfirm => {
                 if let Some(filter) = self.search_state.deactivate() {
-                    self.vms.set_filter(Some(filter));
+                    self.resources.set_filter(Some(filter));
                 }
             }
             AppEvent::SearchCancel => {
                 self.search_state.cancel();
             }
             AppEvent::SortColumn(column) => {
-                self.vms.set_sort_column(Some(column));
+                self.resources.set_sort_column(Some(column));
             }
         }
         Ok(())
@@ -88,7 +86,7 @@ impl App {
         let title = Line::from("VIM-RS Ratatui example").centered().bold();
         frame.render_widget(title, title_area);
 
-        let table = ResourceTableWidget::new(&mut self.vms);
+        let table = ResourceTableWidget::new(self.resources.as_mut());
 
         frame.render_stateful_widget(table, body_area, &mut self.table_state);
 
@@ -142,7 +140,7 @@ impl App {
                             self.events.send(AppEvent::SortColumn(column_idx));
                         }
                         KeyCode::Char('0') => {
-                            self.vms.set_sort_column(None);
+                            self.resources.set_sort_column(None);
                         }
                         _ => {}
                     }

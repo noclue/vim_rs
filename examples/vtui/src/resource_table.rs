@@ -9,25 +9,22 @@ use crate::tabular_data::TableDataSource;
 
 
 /// A widget that displays a list of virtual machines.
-pub struct ResourceTableWidget<'a, T>
-where
-    T: TableDataSource
+pub struct ResourceTableWidget<'a>
+
 {
-    resources: &'a mut T,
+    resources: &'a mut dyn TableDataSource,
 }
 
-impl<'a, T> ResourceTableWidget<'a, T>
-where
-    T: TableDataSource
+impl<'a> ResourceTableWidget<'a>
 {
-    pub(crate) fn new(resources: &'a mut T) -> Self {
+    pub(crate) fn new(resources: &'a mut dyn TableDataSource) -> Self {
         Self {
             resources,
         }
     }
 }
 
-impl<'a, T: TableDataSource> StatefulWidget for ResourceTableWidget<'a, T> {
+impl<'a> StatefulWidget for ResourceTableWidget<'a> {
     type State = TableState;
     fn render(self, area: Rect, buf: &mut Buffer, state: &mut Self::State) {
 

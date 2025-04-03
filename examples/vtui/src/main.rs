@@ -37,7 +37,7 @@ async fn main() -> Result<()> {
     let monitor = cache_manager.borrow().create_monitor()?;
     let event_handler = EventHandler::new(monitor);
     let terminal = ratatui::init();
-    let app_result = App::new(event_handler, cache_manager.clone(), indexed_cache)
+    let app_result = App::new(event_handler, cache_manager.clone(), Box::new(indexed_cache))
         .run(terminal)
         .await;
     ratatui::restore();
