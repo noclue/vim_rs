@@ -66,6 +66,9 @@ where
     T::Error: BoxableError,
     for<'a> Row<'static>: From<&'a T>
 {
+    fn get_title(&self) -> &'static str {
+        T::get_title()
+    }
     fn set_filter(&mut self, filter: Option<String>) {
         self.filter = filter;
         self.invalidate();

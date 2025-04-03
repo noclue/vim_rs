@@ -4,6 +4,7 @@ use ratatui::crossterm::event::Event as CrosstermEvent;
 use tokio::sync::mpsc;
 use vim_rs::core::pc_cache::Monitor;
 use vim_rs::types::structs::PropertyFilterUpdate;
+use crate::resource_type::ResourceType;
 
 /// Representation of all possible events.
 #[derive(Debug)]
@@ -42,6 +43,14 @@ pub enum AppEvent {
     SearchConfirm,
     SearchCancel,
     SortColumn(usize),
+
+    /// Resource selection events.
+    ResourceSelected(ResourceType),
+    ToggleResourceSelection,
+    ResourceSelectionUp,
+    ResourceSelectionDown,
+    ResourceSelectionConfirm,
+    ResourceSelectionCancel,
 }
 
 /// Terminal event handler.

@@ -87,6 +87,9 @@ pub(crate) fn status_color(status: &ManagedEntityStatusEnum) -> Style {
 }
 
 impl TabularData for VmData {
+    fn get_title() -> &'static str {
+        "Virtual Machines"
+    }
     fn column_sizes() -> Vec<Constraint> {
         vec![
             Constraint::Length(10),

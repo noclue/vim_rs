@@ -45,7 +45,8 @@ impl<'a> StatefulWidget for ResourceTableWidget<'a> {
         };
 
         let title = vec![
-            Span::from("Virtual Machines("),
+            Span::from(self.resources.get_title()),
+            Span::from(" ("),
             filter,
             Span::from(")"),
         ];

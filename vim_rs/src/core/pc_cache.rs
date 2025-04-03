@@ -432,9 +432,9 @@ impl CacheManager {
     }
 
     /// Remove a cache by its ID. This is used to clean up caches that are no longer needed.
-    pub async fn remove_cache(&mut self, filter_id: &str) -> pc_helpers::Result<()> {
-        if let Some(cache_rec) = self.caches.remove(filter_id) {
-            self.dispose_filter(filter_id, &cache_rec).await;
+    pub async fn remove_cache(&mut self, filter: &ManagedObjectReference) -> pc_helpers::Result<()> {
+        if let Some(cache_rec) = self.caches.remove(&filter.value) {
+            self.dispose_filter(&filter.value, &cache_rec).await;
         }
         Ok(())
     }

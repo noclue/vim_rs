@@ -6,34 +6,71 @@ use ratatui::prelude::{Line, Stylize};
 use ratatui::{DefaultTerminal, Frame};
 use std::cell::RefCell;
 use std::rc::Rc;
-use ratatui::widgets::TableState;
-use vim_rs::core::pc_cache::CacheManager;
+use std::sync::Arc;
+use ratatui::widgets::{Row, TableState};
+use vim_rs::core::client::Client;
+use vim_rs::core::pc_cache::{CacheManager, Cacheable, ObjectCache, SharedRefCacheProxy};
+use vim_rs::core::pc_helpers::BoxableError;
+use vim_rs::types::structs::ManagedObjectReference;
+use crate::host::Host;
+use crate::indexed_cache::IndexedCache;
 use crate::search::SearchState;
-use crate::tabular_data::TableDataSource;
+use crate::tabular_data::{TableDataSource, TabularData};
+use crate::vm::VmData;
+use crate::resource_type::{ResourceSelectionState, ResourceType};
 
 pub struct App {
     should_quit: bool,
     cache_mgr: Rc<RefCell<CacheManager>>,
+    client: Arc<Client>,
     resources: Box<dyn TableDataSource>,
+    filter: ManagedObjectReference,
     events: EventHandler,
     search_state: SearchState,
     table_state: TableState,
+    resource_selection_state: ResourceSelectionState,
 }
 
+async fn init_data<T: TabularData + Cacheable + 'static>(
+    cache_mgr: Rc<RefCell<CacheManager>>,
+    container: &ManagedObjectReference,
+) -> anyhow::Result<(Box<dyn TableDataSource>, ManagedObjectReference)>
+where
+    <T as TryFrom<vim_rs::types::structs::ObjectUpdate>>::Error: BoxableError,
+    for<'a> Row<'static>: From<&'a T>
+{
+    let cache = Rc::new(RefCell::new(ObjectCache::<T>::new()));
+    let filter = cache_mgr
+        .borrow_mut()
+        .add_container_cache(
+            Box::new(SharedRefCacheProxy::new(cache.clone())),
+            container
+        )
+        .await?;
+    let indexed_cache= IndexedCache::new(cache.clone());
+    Ok((Box::new(indexed_cache), filter))
+}
+
+
 impl App {
-    pub fn new(
+    pub async fn new(
         events: EventHandler,
         cache_mgr: Rc<RefCell<CacheManager>>,
-        resources: Box<dyn TableDataSource>,
-    ) -> Self {
-        Self {
+        client: Arc<Client>,
+    ) -> anyhow::Result<Self> {
+        let root_folder = client.service_content().root_folder.clone();
+        let (resources, filter) = init_data::<VmData>(cache_mgr.clone(), &root_folder).await?;
+        Ok(Self {
             should_quit: false,
             cache_mgr,
+            client,
             resources,
+            filter,
             events,
             search_state: SearchState::new(),
             table_state: TableState::default(),
-        }
+            resource_selection_state: ResourceSelectionState::new(),
+        })
     }
 
     pub async fn run(mut self, mut terminal: DefaultTerminal) -> anyhow::Result<()> {
@@ -77,7 +114,36 @@ impl App {
             AppEvent::SortColumn(column) => {
                 self.resources.set_sort_column(Some(column));
             }
+            AppEvent::ToggleResourceSelection => self.resource_selection_state.activate(),
+            AppEvent::ResourceSelectionUp => self.resource_selection_state.move_up(),
+            AppEvent::ResourceSelectionDown => self.resource_selection_state.move_down(),
+            AppEvent::ResourceSelectionCancel => self.resource_selection_state.cancel(),
+            AppEvent::ResourceSelectionConfirm => {
+                if let Some(resource_type) = self.resource_selection_state.select() {
+                    self.events.send(AppEvent::ResourceSelected(resource_type));
+                }
+            },
+            AppEvent::ResourceSelected(resource_type) => {
+                self.load_resource_type(resource_type).await?;
+            },
         }
+        Ok(())
+    }
+
+    async fn load_resource_type(&mut self, resource_type: ResourceType) -> anyhow::Result<()> {
+        let root_folder = self.client.service_content().root_folder.clone();
+        let (resources, filter) = match resource_type{
+            ResourceType::VirtualMachine => {
+                init_data::<VmData>(self.cache_mgr.clone(), &root_folder).await?
+            }
+            ResourceType::Host => {
+                init_data::<Host>(self.cache_mgr.clone(), &root_folder).await?
+            }
+        };
+        self.cache_mgr.borrow_mut().remove_cache(&self.filter).await?;
+        self.table_state = TableState::default();
+        self.resources = resources;
+        self.filter = filter;
         Ok(())
     }
     fn draw(&mut self, frame: &mut Frame) {
@@ -111,6 +177,35 @@ impl App {
             frame.render_widget(ratatui::widgets::Clear, popup_area);
             frame.render_widget(input_text, popup_area);
         }
+        if self.resource_selection_state.is_active() {
+            let height = (self.resource_selection_state.options.len() as u16) + 2; // +2 for borders
+            let popup_area = ratatui::layout::Rect {
+                x: frame.area().width / 4,
+                y: frame.area().height / 2 - height / 2,
+                width: frame.area().width / 2,
+                height,
+            };
+
+            let items: Vec<ratatui::widgets::ListItem> = self.resource_selection_state.options
+                .iter()
+                .map(|option| ratatui::widgets::ListItem::new(option.to_string()))
+                .collect();
+
+            let list = ratatui::widgets::List::new(items)
+                .block(ratatui::widgets::Block::default()
+                    .title("Select Resource Type")
+                    .borders(ratatui::widgets::Borders::ALL)
+                    .border_style(ratatui::style::Style::default().fg(ratatui::style::Color::Cyan)))
+                .highlight_style(ratatui::style::Style::default().add_modifier(ratatui::style::Modifier::REVERSED))
+                .highlight_symbol("> ");
+
+            let mut list_state = ratatui::widgets::ListState::default();
+            list_state.select(Some(self.resource_selection_state.selected_index));
+
+            frame.render_widget(ratatui::widgets::Clear, popup_area);
+            frame.render_stateful_widget(list, popup_area, &mut list_state);
+        }
+
     }
 
     fn handle_terminal_event(&mut self, event: &CrosstermEvent) {
@@ -124,6 +219,14 @@ impl App {
                         KeyCode::Char(c) => self.events.send(AppEvent::SearchCharacter(c)),
                         _ => {}                    }
 
+                } else if self.resource_selection_state.is_active() {
+                    match key.code {
+                        KeyCode::Enter => self.events.send(AppEvent::ResourceSelectionConfirm),
+                        KeyCode::Esc => self.events.send(AppEvent::ResourceSelectionCancel),
+                        KeyCode::Char('k') | KeyCode::Up => self.events.send(AppEvent::ResourceSelectionUp),
+                        KeyCode::Char('j') | KeyCode::Down => self.events.send(AppEvent::ResourceSelectionDown),
+                        _ => {}
+                    }
                 } else {
                     match key.code {
                         KeyCode::Char('q') => self.events.send(AppEvent::Quit),
@@ -134,6 +237,7 @@ impl App {
                         KeyCode::Char('j') | KeyCode::Down => self.events.send(AppEvent::Down),
                         KeyCode::Char('k') | KeyCode::Up => self.events.send(AppEvent::Up),
                         KeyCode::Char('/') => self.events.send(AppEvent::ToggleSearch),
+                        KeyCode::Char('r') => self.events.send(AppEvent::ToggleResourceSelection),
                         KeyCode::Char(c) if c.is_ascii_digit() && c != '0' => {
                             // Convert char to column index (0-based)
                             let column_idx = c.to_digit(10).unwrap() as usize - 1;
