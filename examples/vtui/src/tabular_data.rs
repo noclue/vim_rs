@@ -21,6 +21,7 @@ pub trait TabularData {
 
 pub trait TableDataSource {
     fn set_filter(&mut self, filter: Option<String>);
+    fn get_filter(&self) -> Option<String>;
     fn set_sort_column(&mut self, column: Option<usize>);
 
     fn get_sort_setting(&self) -> Option<(usize, bool)>;

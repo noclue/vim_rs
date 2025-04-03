@@ -6,24 +6,27 @@ use ratatui::prelude::{Line, Stylize};
 use ratatui::{DefaultTerminal, Frame};
 use std::cell::RefCell;
 use std::rc::Rc;
+use ratatui::widgets::TableState;
 use vim_rs::core::pc_cache::CacheManager;
 use crate::indexed_cache::IndexedCache;
 use crate::search::SearchState;
+use crate::tabular_data::TableDataSource;
 use crate::vm::VmData;
 
 pub struct App {
     should_quit: bool,
     cache_mgr: Rc<RefCell<CacheManager>>,
-    vms: ResourceTableWidget<IndexedCache<VmData>>,
+    vms: IndexedCache<VmData>,
     events: EventHandler,
     search_state: SearchState,
+    table_state: TableState,
 }
 
 impl App {
     pub fn new(
         event_handler: EventHandler,
         cache_mgr: Rc<RefCell<CacheManager>>,
-        vms: ResourceTableWidget<IndexedCache<VmData>>,
+        vms: IndexedCache<VmData>,
     ) -> Self {
         Self {
             should_quit: false,
@@ -31,6 +34,7 @@ impl App {
             vms,
             events: event_handler,
             search_state: SearchState::new(),
+            table_state: TableState::default(),
         }
     }
 
@@ -58,8 +62,8 @@ impl App {
                 self.events.shutdown().await?;
                 self.should_quit = true
             }
-            AppEvent::Up => self.vms.scroll_up(),
-            AppEvent::Down => self.vms.scroll_down(),
+            AppEvent::Up => self.table_state.scroll_up_by(1),
+            AppEvent::Down => self.table_state.scroll_down_by(1),
             AppEvent::ToggleSearch => self.search_state.activate(),
             AppEvent::ClearSearch => self.vms.set_filter(None),
             AppEvent::SearchCharacter(c) => self.search_state.input(c),
@@ -78,12 +82,15 @@ impl App {
         }
         Ok(())
     }
-    fn draw(&self, frame: &mut Frame) {
+    fn draw(&mut self, frame: &mut Frame) {
         let vertical = Layout::vertical([Constraint::Length(1), Constraint::Fill(1)]);
         let [title_area, body_area] = vertical.areas(frame.area());
         let title = Line::from("VIM-RS Ratatui example").centered().bold();
         frame.render_widget(title, title_area);
-        frame.render_widget(&self.vms, body_area);
+
+        let table = ResourceTableWidget::new(&mut self.vms);
+
+        frame.render_stateful_widget(table, body_area, &mut self.table_state);
 
         // Draw search popup if active
         if self.search_state.is_active() {

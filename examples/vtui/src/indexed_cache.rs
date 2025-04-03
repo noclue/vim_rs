@@ -70,6 +70,11 @@ where
         self.filter = filter;
         self.invalidate();
     }
+
+    fn get_filter(&self) -> Option<String> {
+        self.filter.clone()
+    }
+
     fn set_sort_column(&mut self, column: Option<usize>) {
         // If the column is not sortable, do nothing
         if let Some(sort_column) = column {

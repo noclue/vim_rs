@@ -1,5 +1,4 @@
 use crate::event::EventHandler;
-use crate::resource_table::ResourceTableWidget;
 use anyhow::{Context, Result};
 use app::App;
 use std::cell::RefCell;
@@ -8,6 +7,7 @@ use std::{env, sync::Arc};
 use vim_rs::core::client::{Client, ClientBuilder};
 use vim_rs::core::pc_cache::{CacheManager, ObjectCache, SharedRefCacheProxy};
 use crate::indexed_cache::IndexedCache;
+use crate::vm::VmData;
 
 mod app;
 mod event;
@@ -24,7 +24,7 @@ const APP_VERSION: &str = env!("CARGO_PKG_VERSION");
 #[tokio::main]
 async fn main() -> Result<()> {
     let client = init_vim_client().await?;
-    let cache = Rc::new(RefCell::new(ObjectCache::new()));
+    let cache = Rc::new(RefCell::new(ObjectCache::<VmData>::new()));
     let cache_manager = Rc::new(RefCell::new(CacheManager::new(client.clone())?));
     let _vm_cache_filter = cache_manager
         .borrow_mut()
@@ -34,11 +34,10 @@ async fn main() -> Result<()> {
         )
         .await?;
     let indexed_cache= IndexedCache::new(cache.clone());
-    let widget = ResourceTableWidget::new(indexed_cache);
     let monitor = cache_manager.borrow().create_monitor()?;
     let event_handler = EventHandler::new(monitor);
     let terminal = ratatui::init();
-    let app_result = App::new(event_handler, cache_manager.clone(), widget)
+    let app_result = App::new(event_handler, cache_manager.clone(), indexed_cache)
         .run(terminal)
         .await;
     ratatui::restore();
