@@ -19,15 +19,17 @@
 //! automatically, reducing API calls and improving performance.
 use anyhow::Result;
 use std::env;
+use log::info;
 use utils::connect;
 use vim_macros::vim_retrievable;
 use vim_rs::core::pc_retrieve::ObjectRetriever;
 
 vim_retrievable!(
     struct Host: HostSystem {
+        overall_status = "summary.overall_status",
+        connection_state = "runtime.connection_state",
         name = "name",
-        power_state = "runtime.power_state",
-        connected = "runtime.connection_state",
+        version = "config.product.version",
         cpu_usage = "summary.quick_stats.overall_cpu_usage",
         memory_usage = "summary.quick_stats.overall_memory_usage",
         uptime = "summary.quick_stats.uptime",
@@ -44,7 +46,7 @@ async fn main() -> Result<()> {
         .await?;
 
     for host in hosts {
-        println!("Host: {:?}", host)
+        info!("Host ({}): {}, {:?}, {:?}, {:?}", host.id.value, host.name, host.connection_state, host.overall_status, host.version);
     }
 
     Ok(())

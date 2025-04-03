@@ -33,6 +33,15 @@ pub enum AppEvent {
     PropertyCollector(Vec<PropertyFilterUpdate>),
     /// Error Message
     ErrorMessage(String),
+
+    /// Search events.
+    ToggleSearch,
+    ClearSearch,
+    SearchCharacter(char),
+    SearchBackspace,
+    SearchConfirm,
+    SearchCancel,
+    SortColumn(usize),
 }
 
 /// Terminal event handler.

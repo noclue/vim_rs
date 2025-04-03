@@ -1,5 +1,5 @@
 use crate::event::EventHandler;
-use crate::vm_list::VmListWidget;
+use crate::resource_table::ResourceTableWidget;
 use anyhow::{Context, Result};
 use app::App;
 use std::cell::RefCell;
@@ -7,12 +7,16 @@ use std::rc::Rc;
 use std::{env, sync::Arc};
 use vim_rs::core::client::{Client, ClientBuilder};
 use vim_rs::core::pc_cache::{CacheManager, ObjectCache, SharedRefCacheProxy};
+use crate::indexed_cache::IndexedCache;
 
 mod app;
 mod event;
 mod vm;
-mod vm_disp;
-mod vm_list;
+mod resource_table;
+mod search;
+mod host;
+mod indexed_cache;
+mod tabular_data;
 
 const APP_NAME: &str = env!("CARGO_PKG_NAME");
 const APP_VERSION: &str = env!("CARGO_PKG_VERSION");
@@ -29,7 +33,8 @@ async fn main() -> Result<()> {
             &client.service_content().root_folder,
         )
         .await?;
-    let widget = VmListWidget::new(cache.clone());
+    let indexed_cache= IndexedCache::new(cache.clone());
+    let widget = ResourceTableWidget::new(indexed_cache);
     let monitor = cache_manager.borrow().create_monitor()?;
     let event_handler = EventHandler::new(monitor);
     let terminal = ratatui::init();

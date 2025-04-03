@@ -1,5 +1,6 @@
 use indexmap::IndexMap;
 use std::cell::RefCell;
+use std::ops::Index;
 use std::sync::{Arc, RwLock};
 use log::{debug, error};
 use std::rc::Rc;
@@ -166,6 +167,16 @@ where
         self.cache.values()
     }
 
+    // Add this method
+    pub fn len(&self) -> usize {
+        self.cache.len()
+    }
+
+    // Optionally add this too
+    pub fn is_empty(&self) -> bool {
+        self.cache.is_empty()
+    }
+
     fn notify_new(&self, obj: &T) {
         if let Some(listener) = self.listener.as_ref() {
             listener.borrow_mut().on_new(obj);
@@ -184,6 +195,46 @@ where
         }
     }
 
+}
+
+impl<T: Cacheable> Index<usize> for ObjectCache<T>
+where
+    T::Error: BoxableError
+{
+    type Output = T;
+
+    fn index(&self, index: usize) -> &Self::Output {
+        if let Some((_, value)) = self.cache.get_index(index) {
+            value
+        } else {
+            panic!("Index out of bounds: {}", index)
+        }
+    }
+}
+
+impl<T: Cacheable> Index<&str> for ObjectCache<T>
+where
+    T::Error: BoxableError
+{
+    type Output = T;
+
+    fn index(&self, key: &str) -> &Self::Output {
+        match self.cache.get(key) {
+            Some(value) => value,
+            None => panic!("No entry found for key: {}", key),
+        }
+    }
+}
+
+impl<T: Cacheable> Index<String> for ObjectCache<T>
+where
+    T::Error: BoxableError
+{
+    type Output = T;
+
+    fn index(&self, key: String) -> &Self::Output {
+        self.index(key.as_str())
+    }
 }
 
 impl<'a, T: Cacheable> IntoIterator for &'a ObjectCache<T>
