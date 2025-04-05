@@ -32,6 +32,20 @@ pub struct App {
     resource_selection_state: ResourceSelectionState,
 }
 
+const ASCII_ART: &str = r#"     ╭───────╮
+ ╭─╮╭┴┬─╮ ╭──╯   ▐█▌
+ \ \/ / │ │╔═╗╔═╗╭─╮
+  \  /  │ │║ ╚╝ ║│ │
+   ╰╯   ╰─╯╚════╝╰─╯"#;
+
+const HELP_HINTS: &[&str] = &[
+    "'q' - quit",
+    "'/' - search",
+    "'r' - select resource",
+    "0..9 - sort by column",
+    "↑/↓ - scroll up/down",
+];
+
 async fn init_data<T: TabularData + Cacheable + 'static>(
     cache_mgr: Rc<RefCell<CacheManager>>,
     container: &ManagedObjectReference,
@@ -150,11 +164,78 @@ impl App {
         self.filter = filter;
         Ok(())
     }
+
+    fn build_status_lines(&self) -> Vec<Line> {
+        let mut res = Vec::<Line>::with_capacity(4);
+
+        // Get about information from the service content
+        let about = &self.client.service_content().about;
+
+        // 1. vTUI version
+        res.push(Line::from(vec![
+            "vTUI Version: ".yellow(),
+            env!("CARGO_PKG_VERSION").gray()
+        ]));
+
+        // 2. vSphere full product name
+        res.push(Line::from(vec![
+            "vSphere: ".yellow(),
+            about.full_name.clone().gray()
+        ]));
+
+        // 3. vSphere system UUID
+        if let Some(ref uuid) = about.instance_uuid {
+            res.push(Line::from(vec![
+                "vSphere UUID: ".yellow(),
+                uuid.clone().gray()
+            ]));
+        } else {
+            res.push(Line::from(vec![
+                "vSphere UUID: ".yellow(),
+                "N/A".gray()
+            ]));
+        }
+
+        // 4. Used API version
+        res.push(Line::from(vec![
+            "API Version: ".yellow(),
+            self.client.api_release().gray()
+        ]));
+
+        res
+
+
+    }
+
     fn draw(&mut self, frame: &mut Frame) {
-        let vertical = Layout::vertical([Constraint::Length(1), Constraint::Fill(1)]);
-        let [title_area, body_area] = vertical.areas(frame.area());
-        let title = Line::from("VIM-RS Ratatui example").centered().bold();
-        frame.render_widget(title, title_area);
+
+        let vertical = Layout::vertical([Constraint::Length(5), Constraint::Fill(1)]);
+        let [top_area, body_area] = vertical.areas(frame.area());
+
+        let horizontal = Layout::horizontal([Constraint::Fill(1), Constraint::Length(21)]);
+        let [left_area, right_area] = horizontal.areas(top_area);
+
+        // Split the left area into two columns for statuses and help hints
+        let left_columns = Layout::horizontal([Constraint::Percentage(50), Constraint::Percentage(50)]);
+        let [status_area, help_area] = left_columns.areas(left_area);
+
+        // Render statuses
+        let status_lines: Vec<Line> = self.build_status_lines();
+        let status_paragraph = ratatui::widgets::Paragraph::new(status_lines)
+            .style(ratatui::style::Style::default().fg(ratatui::style::Color::Green));
+        frame.render_widget(status_paragraph, status_area);
+
+        // Render help hints
+        let help_lines: Vec<Line> = HELP_HINTS.iter().map(|&h| Line::from(h).right_aligned()).collect();
+        let help_paragraph = ratatui::widgets::Paragraph::new(help_lines)
+            .style(ratatui::style::Style::default().fg(ratatui::style::Color::Yellow));
+        frame.render_widget(help_paragraph, help_area);
+
+        // Render ASCII art logo
+        let logo_paragraph = ratatui::widgets::Paragraph::new(ASCII_ART)
+            .style(ratatui::style::Style::default().fg(ratatui::style::Color::Cyan))
+            .alignment(ratatui::layout::Alignment::Left);
+        frame.render_widget(logo_paragraph, right_area);
 
         let table = ResourceTableWidget::new(self.resources.as_mut());
 

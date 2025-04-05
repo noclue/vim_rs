@@ -73,7 +73,7 @@ impl TabularData for DatastoreDetails {
             "Ac",
             "Name",
             "FS Type",
-            "Shared",
+            "Shr",
             "Capacity",
             "Free",
         ]
@@ -100,7 +100,6 @@ impl TabularData for DatastoreDetails {
     }
 
     fn matches_filter(&self, filter: &str) -> bool {
-        // Check if the filter matches any of the ID, Name, OS fields
         let filter = filter.to_lowercase();
         self.id.value.to_lowercase().contains(&filter)
             || self.name.to_lowercase().contains(&filter)
