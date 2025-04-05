@@ -12,6 +12,7 @@ use vim_rs::core::client::Client;
 use vim_rs::core::pc_cache::{CacheManager, Cacheable, ObjectCache, SharedRefCacheProxy};
 use vim_rs::core::pc_helpers::BoxableError;
 use vim_rs::types::structs::ManagedObjectReference;
+use crate::datastore::DatastoreDetails;
 use crate::host::Host;
 use crate::indexed_cache::IndexedCache;
 use crate::search::SearchState;
@@ -138,6 +139,9 @@ impl App {
             }
             ResourceType::Host => {
                 init_data::<Host>(self.cache_mgr.clone(), &root_folder).await?
+            }
+            ResourceType::Datastore => {
+                init_data::<DatastoreDetails>(self.cache_mgr.clone(), &root_folder).await?
             }
         };
         self.cache_mgr.borrow_mut().remove_cache(&self.filter).await?;

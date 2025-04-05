@@ -16,6 +16,7 @@ mod host;
 mod indexed_cache;
 mod tabular_data;
 mod resource_type;
+mod datastore;
 
 #[tokio::main]
 async fn main() -> Result<()> {
