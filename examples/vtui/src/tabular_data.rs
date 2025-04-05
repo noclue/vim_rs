@@ -1,7 +1,11 @@
 use ratatui::widgets::Row;
 use ratatui::layout::Constraint;
 
+/// Trait for objects that can be displayed in a table. This exposes the static information
+/// about the table, such as the title, column sizes, and header row. It also provides
+/// methods for sorting and filtering the data.
 pub trait TabularData {
+    // Get the title of the table
     fn get_title() -> &'static str;
     // Column constraints for the table
     fn column_sizes() -> Vec<Constraint>;
@@ -19,7 +23,7 @@ pub trait TabularData {
     fn matches_filter(&self, filter: &str) -> bool;
 }
 
-
+/// Trait for data sources that can be displayed in a table.
 pub trait TableDataSource {
     fn get_title(&self) -> &'static str;
     fn set_filter(&mut self, filter: Option<String>);
@@ -29,6 +33,8 @@ pub trait TableDataSource {
     fn get_sort_setting(&self) -> Option<(usize, bool)>;
     fn iter<'a>(&'a mut self) -> Box<dyn Iterator<Item=Row<'static>> + 'a>;
     fn is_empty(&mut self) -> bool;
+    fn len(&mut self) -> usize;
+    fn total_count(&self) -> usize;
     fn column_sizes(&self) -> Vec<Constraint>;
     fn header_row(&self) -> Vec<&'static str>;
     fn invalidate(&mut self);

@@ -3,8 +3,9 @@
 pub enum ResourceType {
     VirtualMachine,
     Host,
-    // Cluster,
+    Cluster,
     Datastore,
+    Network,
     // Folder,
     // ResourcePool,
 }
@@ -14,8 +15,9 @@ impl std::fmt::Display for ResourceType {
         match self {
             ResourceType::VirtualMachine => write!(f, "Virtual Machine"),
             ResourceType::Host => write!(f, "Host"),
-            // ResourceType::Cluster => write!(f, "Cluster"),
+            ResourceType::Cluster => write!(f, "Cluster"),
             ResourceType::Datastore => write!(f, "Datastore"),
+            ResourceType::Network => write!(f, "Network"),
             // ResourceType::Folder => write!(f, "Folder"),
             // ResourceType::ResourcePool => write!(f, "Resource Pool"),
         }
@@ -35,8 +37,9 @@ impl ResourceSelectionState {
             options: vec![
                 ResourceType::VirtualMachine,
                 ResourceType::Host,
-                // ResourceType::Cluster,
+                ResourceType::Cluster,
                 ResourceType::Datastore,
+                ResourceType::Network,
                 // ResourceType::Folder,
                 // ResourceType::ResourcePool,
             ],

@@ -5,6 +5,17 @@ use vim_rs::core::pc_cache::{Cacheable, ObjectCache};
 use vim_rs::core::pc_helpers::BoxableError;
 use crate::tabular_data::{TableDataSource, TabularData};
 use ratatui::widgets::Row;
+
+/// The IndexedCache struct is a wrapper around an ObjectCache that provides interface to
+/// filter and sort the data. It implements the TableDataSource trait, allowing it to be used
+/// as a data source for tabular views.
+///
+/// It maintains a list of indices that point to the original cache, allowing for efficient
+/// filtering and sorting without needing to copy the data.
+///
+/// The struct is generic over the type T, which must implement the Cacheable and TabularData traits.
+/// It also requires that the error type of T is BoxableError, and that the Ratatui Row type can be
+/// constructed from a reference to T.
 pub struct IndexedCache<T>
 where
     T: Cacheable + TabularData,
@@ -121,6 +132,19 @@ where
         };
         indices.is_empty()
     }
+
+    fn len(&mut self) -> usize {
+        self.ensure_indices_updated();
+        let Some(indices) = &self.indices else {
+            return 0;
+        };
+        indices.len()
+    }
+
+    fn total_count(&self) -> usize {
+        self.cache.borrow().len()
+    }
+
     fn column_sizes(&self) -> Vec<Constraint> {
         T::column_sizes()
     }

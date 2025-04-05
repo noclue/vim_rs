@@ -2,6 +2,7 @@ use vim_rs::types::enums::ManagedEntityStatusEnum;
 use ratatui::prelude::{Color, Style};
 use ratatui::widgets::Cell;
 
+
 pub(crate) const STATUS: &str = "● ";
 
 pub(crate) fn status_color(status: &ManagedEntityStatusEnum) -> Style {

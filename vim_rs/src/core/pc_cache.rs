@@ -150,6 +150,7 @@ where
         }
     }
 
+    /// Create a new ObjectCache with a listener.
     pub fn new_with_listener(listener: Box<dyn ObjectCacheListener<T>>) -> Self {
         Self {
             cache: IndexMap::new(),
@@ -167,12 +168,12 @@ where
         self.cache.values()
     }
 
-    // Add this method
+    /// Return the number of objects in the cache.
     pub fn len(&self) -> usize {
         self.cache.len()
     }
 
-    // Optionally add this too
+    /// Returned true if the cache is empty.
     pub fn is_empty(&self) -> bool {
         self.cache.is_empty()
     }
@@ -203,6 +204,7 @@ where
 {
     type Output = T;
 
+    /// Get an object by its index.
     fn index(&self, index: usize) -> &Self::Output {
         if let Some((_, value)) = self.cache.get_index(index) {
             value
@@ -218,6 +220,7 @@ where
 {
     type Output = T;
 
+    /// Get an object by its ID.
     fn index(&self, key: &str) -> &Self::Output {
         match self.cache.get(key) {
             Some(value) => value,
@@ -232,6 +235,7 @@ where
 {
     type Output = T;
 
+    /// Get an object by its ID.
     fn index(&self, key: String) -> &Self::Output {
         self.index(key.as_str())
     }
@@ -243,7 +247,7 @@ where
 {
     type Item = &'a T;
     type IntoIter = indexmap::map::Values<'a, String, T>;
-
+    /// Create an iterator over the values in the cache.
     fn into_iter(self) -> Self::IntoIter {
         self.cache.values()
     }

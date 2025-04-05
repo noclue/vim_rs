@@ -12,9 +12,11 @@ use vim_rs::core::client::Client;
 use vim_rs::core::pc_cache::{CacheManager, Cacheable, ObjectCache, SharedRefCacheProxy};
 use vim_rs::core::pc_helpers::BoxableError;
 use vim_rs::types::structs::ManagedObjectReference;
+use crate::cluster::ClusterDetails;
 use crate::datastore::DatastoreDetails;
 use crate::host::Host;
 use crate::indexed_cache::IndexedCache;
+use crate::network::NetworkDetails;
 use crate::search::SearchState;
 use crate::tabular_data::{TableDataSource, TabularData};
 use crate::vm::VmData;
@@ -41,9 +43,9 @@ const ASCII_ART: &str = r#"     ╭───────╮
 const HELP_HINTS: &[&str] = &[
     "'q' - quit",
     "'/' - search",
-    "'r' - select resource",
-    "0..9 - sort by column",
-    "↑/↓ - scroll up/down",
+    "'r' - resource",
+    "0..9 - sort",
+    "↑/↓ - scroll",
 ];
 
 async fn init_data<T: TabularData + Cacheable + 'static>(
@@ -156,6 +158,12 @@ impl App {
             }
             ResourceType::Datastore => {
                 init_data::<DatastoreDetails>(self.cache_mgr.clone(), &root_folder).await?
+            }
+            ResourceType::Cluster => {
+                init_data::<ClusterDetails>(self.cache_mgr.clone(), &root_folder).await?
+            }
+            ResourceType::Network => {
+                init_data::<NetworkDetails>(self.cache_mgr.clone(), &root_folder).await?
             }
         };
         self.cache_mgr.borrow_mut().remove_cache(&self.filter).await?;

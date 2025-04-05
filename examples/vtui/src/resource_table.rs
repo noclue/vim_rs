@@ -42,12 +42,21 @@ impl<'a> StatefulWidget for ResourceTableWidget<'a> {
         } else {
             Span::styled("all", Style::default().fg(ratatui::style::Color::Magenta))
         };
+        let len = self.resources.len();
+        let total =self.resources.total_count();
+        let count = if len != total {
+            format!("{} / {}", len, total)
+        } else {
+            format!("{}", len)
+        };
 
         let title = Line::from(vec![
-            Span::from(self.resources.get_title()),
+            Span::styled(self.resources.get_title(), Style::default().fg(ratatui::style::Color::White)),
             Span::from(" ("),
             filter,
-            Span::from(")"),
+            Span::from(")["),
+            Span::styled(count, Style::default().fg(ratatui::style::Color::White)),
+            Span::from("]"),
         ]).alignment(ratatui::layout::Alignment::Center);
 
         let block = Block::bordered()

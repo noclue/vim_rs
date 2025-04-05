@@ -18,6 +18,8 @@ mod tabular_data;
 mod resource_type;
 mod datastore;
 mod formatting;
+mod cluster;
+mod network;
 
 #[tokio::main]
 async fn main() -> Result<()> {

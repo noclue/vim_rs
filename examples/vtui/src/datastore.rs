@@ -55,7 +55,7 @@ impl TabularData for DatastoreDetails {
 
     fn column_sizes() -> Vec<Constraint> {
         vec![
-            Constraint::Length(20),
+            Constraint::Length(10),
             Constraint::Length(4),
             Constraint::Length(4),
             Constraint::Fill(1),
@@ -69,8 +69,8 @@ impl TabularData for DatastoreDetails {
     fn header_row() -> Vec<&'static str> {
         vec![
             "ID",
-            "Sta",
-            "Ac",
+            "S",
+            "A",
             "Name",
             "FS Type",
             "Shr",
@@ -103,5 +103,6 @@ impl TabularData for DatastoreDetails {
         let filter = filter.to_lowercase();
         self.id.value.to_lowercase().contains(&filter)
             || self.name.to_lowercase().contains(&filter)
-            || self.fs_type.to_lowercase().contains(&filter)    }
+            || self.fs_type.to_lowercase().contains(&filter)
+    }
 }

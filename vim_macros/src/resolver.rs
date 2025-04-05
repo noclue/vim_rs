@@ -83,10 +83,17 @@ pub fn resolve_path(managed_object: &str, path: &str) -> Result<FieldData> {
     };
 
     for segment in tail.iter() {
-        if matches!(node_data.processing_type, FieldProcessingType::Enum(_)) {
-            return Err(HierarchyError::NoSubPropertiesAvailable(path.join(".").to_string()));
-        }
-        node_data = lookup_field_data(obj, segment)?;
+        node_data = if let FieldProcessingType::Enum(enum_name) = node_data.processing_type {
+            if enum_name.starts_with("ArrayOf") && "length" == *segment {
+                // Special case for array length
+                &NodeData { type_decl: "i32", type_name: "", is_optional: false, processing_type: FieldProcessingType::Enum("PrimitiveInt"), path_segment: "length", doc: Some("Array length") }
+            } else {
+                // Other than "length" for boxed types we do not support sub properties
+                return Err(HierarchyError::NoSubPropertiesAvailable(path.join(".").to_string()));
+            }
+        } else {
+            lookup_field_data(obj, segment)?
+        };
         obj = node_data.type_name;
         optional = optional | node_data.is_optional;
         path.push(node_data.path_segment);
@@ -155,6 +162,26 @@ mod tests {
     }
 
     #[test]
+    fn test_resolve_array_length() {
+        let path = "config.hardware.device.length";
+        let result = resolve_path("VirtualMachine", path).unwrap();
+        assert_eq!(result.data_type, "Option<i32>".to_string());
+        assert_eq!(result.vim_path, "config.hardware.device.length".to_string());
+        assert_eq!(result.is_optional, true);
+        assert_eq!(result.processing_type, FieldProcessingType::Enum("PrimitiveInt"));
+    }
+
+    #[test]
+    fn test_resolve_array_length_vm() {
+        let path = "vm.length";
+        let result = resolve_path("Network", path).unwrap();
+        assert_eq!(result.data_type, "Option<i32>".to_string());
+        assert_eq!(result.vim_path, "vm.length".to_string());
+        assert_eq!(result.is_optional, true);
+        assert_eq!(result.processing_type, FieldProcessingType::Enum("PrimitiveInt"));
+    }
+
+    #[test]
     fn test_resolve_path_invalid() {
         let path = "summary.guest.guest_full_name.test";
         let result = resolve_path("VirtualMachine", path);
@@ -167,6 +194,14 @@ mod tests {
         let result = resolve_path("VirtualMachine", path);
         assert_eq!(result.unwrap_err(), HierarchyError::UnknownField("VirtualMachineGuestSummary".to_string(), "guest_name".to_string()));
     }
+
+    #[test]
+    fn test_resolve_path_array_length_subprop() {
+        let path = "config.hardware.device.length.name";
+        let result = resolve_path("VirtualMachine", path);
+        assert_eq!(result.unwrap_err(), HierarchyError::NoSubPropertiesAvailable("config.hardware.device.length".to_string()));
+    }
+
 
     #[test]
     fn test_resolve_path_unknown_object() {
