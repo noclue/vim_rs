@@ -3,9 +3,9 @@ use ratatui::layout::Constraint;
 use ratatui::prelude::{Color, Span, Style};
 use ratatui::widgets::{Cell, Row};
 use vim_macros::vim_updatable;
+use crate::formatting;
+use crate::formatting::{status_color, STATUS};
 use crate::tabular_data::TabularData;
-use crate::vm::{status_color, STATUS};
-
 vim_updatable!(
     struct DatastoreDetails: Datastore {
         overall_status = "overall_status",
@@ -28,8 +28,8 @@ impl From<&DatastoreDetails> for Row<'_> {
         } else {
             Cell::from(Cell::from(Span::styled("✗", Style::default().fg(Color::Red))))
         };
-        let capacity = Cell::from(format!("{:.2} GiB", datastore.capacity as f64 / 1024.0 / 1024.0 / 1024.0));
-        let free_space = Cell::from(format!("{:.2} GiB", datastore.free_space as f64 / 1024.0 / 1024.0 / 1024.0));
+        let capacity = formatting::format_byte_size(datastore.capacity);
+        let free_space = formatting::format_byte_size(datastore.free_space);
 
         let shared = match datastore.shared {
             Some(true) => Cell::from(Span::styled("↔", Style::default().fg(Color::Blue))),

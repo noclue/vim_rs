@@ -1,6 +1,6 @@
 use ratatui::buffer::Buffer;
 use ratatui::layout::Rect;
-use ratatui::prelude::{StatefulWidget, Style, Stylize};
+use ratatui::prelude::{Line, StatefulWidget, Style, Stylize};
 use ratatui::widgets::{Block, HighlightSpacing, Row, Cell, Table, TableState};
 use ratatui::text::Span;
 use crate::tabular_data::TableDataSource;
@@ -31,11 +31,10 @@ impl<'a> StatefulWidget for ResourceTableWidget<'a> {
         let filter = self.resources.get_filter();
         let hint = if filter.is_some() {
             vec![
-                Span::from("j/k to scroll, q to quit, / to search, "),
                 Span::styled("Esc clear filter", Style::default().fg(ratatui::style::Color::LightCyan)),
             ]
         } else {
-            vec![Span::from("j/k to scroll, q to quit, / to search")]
+            vec![Span::default()]
         };
 
         let filter = if let Some(filter) = &filter {
@@ -44,15 +43,17 @@ impl<'a> StatefulWidget for ResourceTableWidget<'a> {
             Span::styled("all", Style::default().fg(ratatui::style::Color::Magenta))
         };
 
-        let title = vec![
+        let title = Line::from(vec![
             Span::from(self.resources.get_title()),
             Span::from(" ("),
             filter,
             Span::from(")"),
-        ];
+        ]).alignment(ratatui::layout::Alignment::Center);
+
         let block = Block::bordered()
             .title(title)
-            .title_bottom(hint);
+            .title_bottom(hint)
+            .border_style(Style::default().fg(ratatui::style::Color::Gray));
 
 
         let sort_setting = self.resources.get_sort_setting();
@@ -77,7 +78,8 @@ impl<'a> StatefulWidget for ResourceTableWidget<'a> {
                 header.push(Cell::from(header_row[i]));
             }
         }
-        let header = Row::new(header);
+
+        let header = Row::new(header).style(Style::default().fg(ratatui::style::Color::Cyan));
 
         let widths = self.resources.column_sizes();
 

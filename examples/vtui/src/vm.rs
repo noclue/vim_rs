@@ -2,8 +2,10 @@ use std::cmp::Ordering;
 use ratatui::layout::Constraint;
 use vim_macros::vim_updatable;
 use ratatui::widgets::{Cell, Row};
-use vim_rs::types::enums::{ManagedEntityStatusEnum, VirtualMachinePowerStateEnum};
+use vim_rs::types::enums::VirtualMachinePowerStateEnum;
 use ratatui::prelude::{Color, Span, Style, Stylize};
+use crate::formatting;
+use crate::formatting::{format_byte_size, STATUS};
 use crate::tabular_data::TabularData;
 
 vim_updatable!(
@@ -18,7 +20,6 @@ vim_updatable!(
     }
 );
 
-pub(crate) const STATUS: &str = "● ";
 const POWER_ON: &str = "● ";
 // U+25CF
 const POWER_OFF: &str = "○ ";
@@ -27,7 +28,7 @@ const SUSPENDED: &str = "◐ ";
 
 impl From<&VmData> for Row<'_> {
     fn from(vm: &VmData) -> Self {
-        let color = status_color(&vm.status);
+        let color = formatting::status_color(&vm.status);
         let power_state = match vm.power_state {
             VirtualMachinePowerStateEnum::PoweredOn => {
                 Span::styled(POWER_ON, Style::default().fg(Color::Green))
@@ -41,10 +42,7 @@ impl From<&VmData> for Row<'_> {
             _ => Span::from("?").gray(),
         };
         let used_space = if let Some(ref storage) = vm.storage {
-            Cell::from(format!(
-                "{:.2} GB",
-                storage.committed as f64 / 1024.0 / 1024.0 / 1024.0
-            ))
+            Cell::from(format_byte_size(storage.committed))
         } else {
             Cell::default()
         };
@@ -73,16 +71,6 @@ impl From<&VmData> for Row<'_> {
             host_cpu,
             host_memory,
         ])
-    }
-}
-
-pub(crate) fn status_color(status: &ManagedEntityStatusEnum) -> Style {
-    match status {
-        ManagedEntityStatusEnum::Green => Style::new().fg(Color::Green),
-        ManagedEntityStatusEnum::Yellow => Style::new().fg(Color::Yellow),
-        ManagedEntityStatusEnum::Red => Style::new().fg(Color::Red),
-        ManagedEntityStatusEnum::Gray => Style::new().fg(Color::Gray),
-        _ => Style::default(),
     }
 }
 

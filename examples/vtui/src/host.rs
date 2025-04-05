@@ -4,9 +4,8 @@ use ratatui::prelude::{Span, Style};
 use ratatui::widgets::{Cell, Row};
 use vim_macros::vim_updatable;
 use vim_rs::types::enums::HostSystemConnectionStateEnum;
+use crate::formatting::{status_color, STATUS};
 use crate::tabular_data::TabularData;
-use crate::vm::{status_color, STATUS};
-
 vim_updatable!(
     struct Host: HostSystem {
         overall_status = "summary.overall_status",
