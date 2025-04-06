@@ -4,7 +4,8 @@ use ratatui::prelude::{Color, Span, Style};
 use ratatui::widgets::{Cell, Row};
 use vim_macros::vim_updatable;
 use crate::formatting;
-use crate::formatting::{status_color, STATUS};
+use crate::formatting::{status_color, ID_COLUMN_WIDTH, STATUS, STATUS_COLUMN_WIDTH};
+use crate::resource_type::ResourceType;
 use crate::tabular_data::TabularData;
 vim_updatable!(
     struct DatastoreDetails: Datastore {
@@ -55,8 +56,8 @@ impl TabularData for DatastoreDetails {
 
     fn column_sizes() -> Vec<Constraint> {
         vec![
-            Constraint::Length(10),
-            Constraint::Length(4),
+            Constraint::Length(ID_COLUMN_WIDTH),
+            Constraint::Length(STATUS_COLUMN_WIDTH),
             Constraint::Length(4),
             Constraint::Fill(1),
             Constraint::Max(15),
@@ -105,4 +106,12 @@ impl TabularData for DatastoreDetails {
             || self.name.to_lowercase().contains(&filter)
             || self.fs_type.to_lowercase().contains(&filter)
     }
+
+    fn name(&self) -> String {
+        self.name.clone()
+    }
+    fn resource_type() -> ResourceType {
+        ResourceType::Datastore
+    }
+
 }

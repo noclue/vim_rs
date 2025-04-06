@@ -11,7 +11,8 @@ use ratatui::widgets::{Row, TableState};
 use vim_rs::core::client::Client;
 use vim_rs::core::pc_cache::{CacheManager, Cacheable, ObjectCache, SharedRefCacheProxy};
 use vim_rs::core::pc_helpers::BoxableError;
-use vim_rs::types::structs::ManagedObjectReference;
+use vim_rs::types::enums::MoTypesEnum;
+use vim_rs::types::structs::{ManagedObjectReference, ObjectSpec, TraversalSpec};
 use crate::cluster::ClusterDetails;
 use crate::datastore::DatastoreDetails;
 use crate::host::Host;
@@ -22,15 +23,27 @@ use crate::tabular_data::{TableDataSource, TabularData};
 use crate::vm::VmData;
 use crate::resource_type::{ResourceSelectionState, ResourceType};
 
+/// Main application object.
 pub struct App {
+    /// Flag to indicate if the application should quit.
     should_quit: bool,
+    /// Cache manager for managing object caches.
     cache_mgr: Rc<RefCell<CacheManager>>,
+    /// Client for interacting with the vSphere API.
     client: Arc<Client>,
+    /// Data source for the table view.
     resources: Box<dyn TableDataSource>,
+    /// PropertyCollector filter for the current view
     filter: ManagedObjectReference,
+    /// Event dispatcher for processing events.
     events: EventHandler,
-    search_state: SearchState,
+    /// Ratatui Table state for managing the current selection and scroll position.
     table_state: TableState,
+    /// Parent object reference for the current view when expanding a sub collection e.g. VMs in host.
+    parent: Option<(ManagedObjectReference, String)>,
+    /// Search state for managing the search input and filter.
+    search_state: SearchState,
+    /// State for managing resource selection.
     resource_selection_state: ResourceSelectionState,
 }
 
@@ -47,8 +60,44 @@ const HELP_HINTS: &[&str] = &[
     "0..9 - sort",
     "↑/↓ - scroll",
 ];
+const EXPAND_NETWORK: &str = "'n' - network";
+const EXPAND_DATASTORE: &str = "'d' - datastore";
+const EXPAND_HOST: &str = "'h' - host";
+const EXPAND_VM: &str = "'v' - vm";
+//const EXPAND_CLUSTER: &str = "'c' - cluster";
 
-async fn init_data<T: TabularData + Cacheable + 'static>(
+const CLUSTER_EXPAND_HINTS: &[&str] = &[
+    EXPAND_NETWORK,
+    EXPAND_DATASTORE,
+    EXPAND_HOST,
+    EXPAND_VM,
+];
+const HOST_EXPAND_HINTS: &[&str] = &[
+    EXPAND_NETWORK,
+    EXPAND_DATASTORE,
+    EXPAND_VM,
+];
+const DATASTORE_EXPAND_HINTS: &[&str] = &[
+// TODO Unclear how to traverse the host.key property of a datastore
+//    EXPAND_HOST,
+    EXPAND_VM,
+];
+const NETWORK_EXPAND_HINTS: &[&str] = &[
+    EXPAND_HOST,
+    EXPAND_VM,
+];
+
+fn get_expand_hint(resource_type: ResourceType) -> &'static [&'static str] {
+    match resource_type {
+        ResourceType::Cluster => CLUSTER_EXPAND_HINTS,
+        ResourceType::Host => HOST_EXPAND_HINTS,
+        ResourceType::Datastore => DATASTORE_EXPAND_HINTS,
+        ResourceType::Network => NETWORK_EXPAND_HINTS,
+        _ => &[],
+    }
+}
+
+async fn load_from_container<T: TabularData + Cacheable + 'static>(
     cache_mgr: Rc<RefCell<CacheManager>>,
     container: &ManagedObjectReference,
 ) -> anyhow::Result<(Box<dyn TableDataSource>, ManagedObjectReference)>
@@ -68,6 +117,41 @@ where
     Ok((Box::new(indexed_cache), filter))
 }
 
+type StaticStr = &'static str;
+async fn load_from_property<T: TabularData + Cacheable + 'static>(
+    cache_mgr: Rc<RefCell<CacheManager>>,
+    object: &ManagedObjectReference,
+    property: &str,
+) -> anyhow::Result<(Box<dyn TableDataSource>, ManagedObjectReference)>
+where
+    <T as TryFrom<vim_rs::types::structs::ObjectUpdate>>::Error: BoxableError,
+    for<'a> Row<'static>: From<&'a T>
+{
+    let object_specs = vec![
+        ObjectSpec {
+            obj: object.clone(),
+            skip: Some(false),
+            select_set: Some(vec![Box::new(TraversalSpec {
+                name: Some("expandProperty".to_string()),
+                r#type: StaticStr::from(object.r#type.clone()).to_string(),
+                path: property.to_string(),
+                skip: Some(false),
+                select_set: None,
+            })])
+        }
+    ];
+    let cache = Rc::new(RefCell::new(ObjectCache::<T>::new()));
+    let filter = cache_mgr
+        .borrow_mut()
+        .add_cache(
+            Box::new(SharedRefCacheProxy::new(cache.clone())),
+            object_specs
+        )
+        .await?;
+    let indexed_cache= IndexedCache::new(cache.clone());
+    Ok((Box::new(indexed_cache), filter))
+}
+
 
 impl App {
     pub async fn new(
@@ -76,7 +160,7 @@ impl App {
         client: Arc<Client>,
     ) -> anyhow::Result<Self> {
         let root_folder = client.service_content().root_folder.clone();
-        let (resources, filter) = init_data::<VmData>(cache_mgr.clone(), &root_folder).await?;
+        let (resources, filter) = load_from_container::<VmData>(cache_mgr.clone(), &root_folder).await?;
         Ok(Self {
             should_quit: false,
             cache_mgr,
@@ -84,8 +168,9 @@ impl App {
             resources,
             filter,
             events,
-            search_state: SearchState::new(),
             table_state: TableState::default(),
+            parent: None,
+            search_state: SearchState::new(),
             resource_selection_state: ResourceSelectionState::new(),
         })
     }
@@ -143,29 +228,112 @@ impl App {
             AppEvent::ResourceSelected(resource_type) => {
                 self.load_resource_type(resource_type).await?;
             },
+            AppEvent::ExpandCollection(resource_type) => {
+                self.expand_collection(resource_type).await?;
+            }
         }
+        Ok(())
+    }
+
+    async fn expand_collection(&mut self, resource_type: ResourceType) -> anyhow::Result<()> {
+        // Read the id of the currently selected resource
+        let Some(selected) = self.table_state.selected() else {
+            return Ok(());
+        };
+        let Some((selected_id, selected_name)) = self.resources.item_at_index(selected) else {
+            return Ok(());
+        };
+
+        let (resources, filter) = match resource_type {
+            ResourceType::VirtualMachine => {
+                match selected_id.r#type {
+                    MoTypesEnum::HostSystem | MoTypesEnum::Datastore |
+                    MoTypesEnum::Network | MoTypesEnum::DistributedVirtualPortgroup |
+                    MoTypesEnum::OpaqueNetwork => {
+                        load_from_property::<VmData>(self.cache_mgr.clone(), &selected_id, "vm").await?
+                    }
+                    MoTypesEnum::ClusterComputeResource => {
+                        load_from_container::<VmData>(self.cache_mgr.clone(), &selected_id).await?
+                    }
+                    _ => {
+                        return Ok(()); // Do nothing we cannot expand VMs of a VM
+                    }
+                }
+            }
+            ResourceType::Host => {
+                match selected_id.r#type {
+                    MoTypesEnum::ClusterComputeResource |
+                    MoTypesEnum::Network | MoTypesEnum::DistributedVirtualPortgroup |
+                    MoTypesEnum::OpaqueNetwork => {
+                        load_from_property::<Host>(self.cache_mgr.clone(), &selected_id, "host").await?
+                    }
+                    MoTypesEnum::Datastore => {
+                        return Ok(());
+                        // TODO: How to traverse the host.key property of a datastore? host is an array of mount details with Host MoRef key field!!!
+                        //load_from_property::<Host>(self.cache_mgr.clone(), &selected_id, "host.key").await?
+                    }
+                    _ => {
+                        return Ok(()); // Do nothing we cannot expand Hosts of a Host or VM
+                    }
+                }
+            }
+            ResourceType::Datastore => {
+                match selected_id.r#type {
+                    MoTypesEnum::ClusterComputeResource | MoTypesEnum::HostSystem => {
+                        load_from_property::<DatastoreDetails>(self.cache_mgr.clone(), &selected_id, "datastore").await?
+                    }
+                    _ => {
+                        return Ok(());
+                    }
+                }
+            }
+            ResourceType::Cluster => {
+                return Ok(()); // No sub-collection of clusters for now
+            }
+            ResourceType::Network => {
+                match selected_id.r#type {
+                    MoTypesEnum::ClusterComputeResource | MoTypesEnum::HostSystem => {
+                        load_from_property::<NetworkDetails>(self.cache_mgr.clone(), &selected_id, "network").await?
+                    }
+                    _ => {
+                        return Ok(());
+                    }
+                }
+            }
+        };
+        self.apply_new_table_source(resources, filter).await?;
+        self.parent = Some((selected_id, selected_name));
         Ok(())
     }
 
     async fn load_resource_type(&mut self, resource_type: ResourceType) -> anyhow::Result<()> {
         let root_folder = self.client.service_content().root_folder.clone();
+        self.load_hierarchy(root_folder, resource_type).await?;
+        self.parent = None;
+        Ok(())
+    }
+    async fn load_hierarchy(&mut self, parent: ManagedObjectReference, resource_type: ResourceType) -> anyhow::Result<()> {
         let (resources, filter) = match resource_type{
             ResourceType::VirtualMachine => {
-                init_data::<VmData>(self.cache_mgr.clone(), &root_folder).await?
+                load_from_container::<VmData>(self.cache_mgr.clone(), &parent).await?
             }
             ResourceType::Host => {
-                init_data::<Host>(self.cache_mgr.clone(), &root_folder).await?
+                load_from_container::<Host>(self.cache_mgr.clone(), &parent).await?
             }
             ResourceType::Datastore => {
-                init_data::<DatastoreDetails>(self.cache_mgr.clone(), &root_folder).await?
+                load_from_container::<DatastoreDetails>(self.cache_mgr.clone(), &parent).await?
             }
             ResourceType::Cluster => {
-                init_data::<ClusterDetails>(self.cache_mgr.clone(), &root_folder).await?
+                load_from_container::<ClusterDetails>(self.cache_mgr.clone(), &parent).await?
             }
             ResourceType::Network => {
-                init_data::<NetworkDetails>(self.cache_mgr.clone(), &root_folder).await?
+                load_from_container::<NetworkDetails>(self.cache_mgr.clone(), &parent).await?
             }
         };
+        self.apply_new_table_source(resources, filter).await
+    }
+
+    async fn apply_new_table_source(&mut self, resources: Box<dyn TableDataSource>, filter: ManagedObjectReference) -> anyhow::Result<()> {
         self.cache_mgr.borrow_mut().remove_cache(&self.filter).await?;
         self.table_state = TableState::default();
         self.resources = resources;
@@ -220,12 +388,10 @@ impl App {
         let vertical = Layout::vertical([Constraint::Length(5), Constraint::Fill(1)]);
         let [top_area, body_area] = vertical.areas(frame.area());
 
-        let horizontal = Layout::horizontal([Constraint::Fill(1), Constraint::Length(21)]);
-        let [left_area, right_area] = horizontal.areas(top_area);
+        let horizontal = Layout::horizontal([Constraint::Fill(1), Constraint::Length(21), Constraint::Length(21), Constraint::Length(21)]);
+        let [status_area, expand_area, help_area, right_area] = horizontal.areas(top_area);
 
         // Split the left area into two columns for statuses and help hints
-        let left_columns = Layout::horizontal([Constraint::Percentage(50), Constraint::Percentage(50)]);
-        let [status_area, help_area] = left_columns.areas(left_area);
 
         // Render statuses
         let status_lines: Vec<Line> = self.build_status_lines();
@@ -233,8 +399,14 @@ impl App {
             .style(ratatui::style::Style::default().fg(ratatui::style::Color::Green));
         frame.render_widget(status_paragraph, status_area);
 
+        // Render expand hints
+        let expand_lines: Vec<Line> = get_expand_hint(self.resources.resource_type()).iter().map(|&h| Line::from(h)).collect();
+        let expand_paragraph = ratatui::widgets::Paragraph::new(expand_lines)
+            .style(ratatui::style::Style::default().fg(ratatui::style::Color::Cyan));
+        frame.render_widget(expand_paragraph, expand_area);
+
         // Render help hints
-        let help_lines: Vec<Line> = HELP_HINTS.iter().map(|&h| Line::from(h).right_aligned()).collect();
+        let help_lines: Vec<Line> = HELP_HINTS.iter().map(|&h| Line::from(h)).collect();
         let help_paragraph = ratatui::widgets::Paragraph::new(help_lines)
             .style(ratatui::style::Style::default().fg(ratatui::style::Color::Yellow));
         frame.render_widget(help_paragraph, help_area);
@@ -245,7 +417,7 @@ impl App {
             .alignment(ratatui::layout::Alignment::Left);
         frame.render_widget(logo_paragraph, right_area);
 
-        let table = ResourceTableWidget::new(self.resources.as_mut());
+        let table = ResourceTableWidget::new(self.resources.as_mut(), &self.parent);
 
         frame.render_stateful_widget(table, body_area, &mut self.table_state);
 
@@ -336,9 +508,14 @@ impl App {
                             let column_idx = c.to_digit(10).unwrap() as usize - 1;
                             self.events.send(AppEvent::SortColumn(column_idx));
                         }
-                        KeyCode::Char('0') => {
-                            self.resources.set_sort_column(None);
-                        }
+                        KeyCode::Char('0') => self.resources.set_sort_column(None),
+
+                        // Add shortcut keys to sub-collections - (n)etwork, (d)atastore, (h)ost, (v)m, (c)luster
+                        KeyCode::Char('n') => self.events.send(AppEvent::ExpandCollection(ResourceType::Network)),
+                        KeyCode::Char('d') => self.events.send(AppEvent::ExpandCollection(ResourceType::Datastore)),
+                        KeyCode::Char('h') => self.events.send(AppEvent::ExpandCollection(ResourceType::Host)),
+                        KeyCode::Char('v') => self.events.send(AppEvent::ExpandCollection(ResourceType::VirtualMachine)),
+                        KeyCode::Char('c') => self.events.send(AppEvent::ExpandCollection(ResourceType::Cluster)),
                         _ => {}
                     }
                 }

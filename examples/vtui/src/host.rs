@@ -4,7 +4,8 @@ use ratatui::prelude::{Span, Style};
 use ratatui::widgets::{Cell, Row};
 use vim_macros::vim_updatable;
 use vim_rs::types::enums::HostSystemConnectionStateEnum;
-use crate::formatting::{status_color, STATUS};
+use crate::formatting::{status_color, ID_COLUMN_WIDTH, STATUS, STATUS_COLUMN_WIDTH};
+use crate::resource_type::ResourceType;
 use crate::tabular_data::TabularData;
 vim_updatable!(
     struct Host: HostSystem {
@@ -68,8 +69,8 @@ impl TabularData for Host {
     }
     fn column_sizes() -> Vec<Constraint> {
         vec![
-            Constraint::Length(10),
-            Constraint::Length(4),
+            Constraint::Length(ID_COLUMN_WIDTH),
+            Constraint::Length(STATUS_COLUMN_WIDTH),
             Constraint::Length(4),
             Constraint::Fill(1),
             Constraint::Max(15),
@@ -118,4 +119,11 @@ impl TabularData for Host {
             || self.name.to_lowercase().contains(&filter)
             || self.version.as_ref().unwrap_or(&"".to_string()).to_lowercase().contains(&filter)
     }
+    fn name(&self) -> String {
+        self.name.clone()
+    }
+    fn resource_type() -> ResourceType {
+        ResourceType::Host
+    }
+
 }

@@ -1,10 +1,13 @@
 use std::cell::RefCell;
+use std::ops::Index;
 use std::rc::Rc;
 use ratatui::layout::Constraint;
 use vim_rs::core::pc_cache::{Cacheable, ObjectCache};
 use vim_rs::core::pc_helpers::BoxableError;
 use crate::tabular_data::{TableDataSource, TabularData};
 use ratatui::widgets::Row;
+use vim_rs::types::structs::ManagedObjectReference;
+use crate::resource_type::ResourceType;
 
 /// The IndexedCache struct is a wrapper around an ObjectCache that provides interface to
 /// filter and sort the data. It implements the TableDataSource trait, allowing it to be used
@@ -156,4 +159,16 @@ where
         self.indices = None;
     }
 
+    fn item_at_index(&self, index: usize) -> Option<(ManagedObjectReference, String)> {
+        let cache = self.cache.borrow();
+        if index >= cache.len() {
+            return None;
+        }
+        let item = cache.index(index);
+        Some((item.id().clone(), item.name().clone()))
+    }
+
+    fn resource_type(&self) -> ResourceType {
+        T::resource_type()
+    }
 }

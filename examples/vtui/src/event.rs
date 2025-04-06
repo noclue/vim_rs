@@ -51,6 +51,9 @@ pub enum AppEvent {
     ResourceSelectionDown,
     ResourceSelectionConfirm,
     ResourceSelectionCancel,
+
+    /// Expand sub-collection.
+    ExpandCollection(ResourceType),
 }
 
 /// Terminal event handler.

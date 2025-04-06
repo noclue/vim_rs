@@ -3,7 +3,8 @@ use ratatui::layout::Constraint;
 use ratatui::text::Span;
 use ratatui::widgets::{Cell, Row};
 use vim_macros::vim_updatable;
-use crate::formatting::{status_color, STATUS};
+use crate::formatting::{status_color, STATUS, STATUS_COLUMN_WIDTH};
+use crate::resource_type::ResourceType;
 use crate::tabular_data::TabularData;
 
 vim_updatable!(
@@ -48,8 +49,8 @@ impl TabularData for NetworkDetails {
 
     fn column_sizes() -> Vec<Constraint> {
         vec![
-            Constraint::Length(20),
-            Constraint::Length(4),
+            Constraint::Length(24), // DPVG name is too long for standard width
+            Constraint::Length(STATUS_COLUMN_WIDTH),
             Constraint::Fill(1),
             Constraint::Length(35),
             Constraint::Length(10),
@@ -87,4 +88,11 @@ impl TabularData for NetworkDetails {
             || self.name.to_lowercase().contains(&filter)
             || r#type.contains(&filter)
     }
+    fn name(&self) -> String {
+        self.name.clone()
+    }
+    fn resource_type() -> ResourceType {
+        ResourceType::Network
+    }
+
 }

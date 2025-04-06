@@ -3,6 +3,8 @@ use ratatui::layout::Rect;
 use ratatui::prelude::{Line, StatefulWidget, Style, Stylize};
 use ratatui::widgets::{Block, HighlightSpacing, Row, Cell, Table, TableState};
 use ratatui::text::Span;
+use vim_rs::types::enums::MoTypesEnum;
+use vim_rs::types::structs::ManagedObjectReference;
 use crate::tabular_data::TableDataSource;
 
 
@@ -13,13 +15,15 @@ pub struct ResourceTableWidget<'a>
 
 {
     resources: &'a mut dyn TableDataSource,
+    parent: &'a Option<(ManagedObjectReference, String)>
 }
 
 impl<'a> ResourceTableWidget<'a>
 {
-    pub(crate) fn new(resources: &'a mut dyn TableDataSource) -> Self {
+    pub(crate) fn new(resources: &'a mut dyn TableDataSource, parent: &'a Option<(ManagedObjectReference, String)>) -> Self {
         Self {
             resources,
+            parent
         }
     }
 }
@@ -37,11 +41,16 @@ impl<'a> StatefulWidget for ResourceTableWidget<'a> {
             vec![Span::default()]
         };
 
-        let filter = if let Some(filter) = &filter {
+        let mut title_items = Vec::new();
+        title_items.push(Span::styled(self.resources.get_title(), Style::default().fg(ratatui::style::Color::White)));
+        title_items.push(Span::from(" ("));
+        title_items.push(if let Some(filter) = &filter {
             Span::styled(format!("filter: {}", filter), Style::default().fg(ratatui::style::Color::Magenta))
         } else {
             Span::styled("all", Style::default().fg(ratatui::style::Color::Magenta))
-        };
+        });
+        title_items.push(Span::from(")["));
+
         let len = self.resources.len();
         let total =self.resources.total_count();
         let count = if len != total {
@@ -49,15 +58,16 @@ impl<'a> StatefulWidget for ResourceTableWidget<'a> {
         } else {
             format!("{}", len)
         };
+        title_items.push(Span::styled(count, Style::default().fg(ratatui::style::Color::White)));
+        title_items.push(Span::from("]"));
 
-        let title = Line::from(vec![
-            Span::styled(self.resources.get_title(), Style::default().fg(ratatui::style::Color::White)),
-            Span::from(" ("),
-            filter,
-            Span::from(")["),
-            Span::styled(count, Style::default().fg(ratatui::style::Color::White)),
-            Span::from("]"),
-        ]).alignment(ratatui::layout::Alignment::Center);
+        if let Some((id, name)) = self.parent {
+            title_items.push(Span::from(" - "));
+            title_items.push(Span::styled(object_handle(id, name), Style::default().fg(ratatui::style::Color::Green)));
+        }
+
+
+        let title = Line::from(title_items).alignment(ratatui::layout::Alignment::Center);
 
         let block = Block::bordered()
             .title(title)
@@ -107,4 +117,19 @@ impl<'a> StatefulWidget for ResourceTableWidget<'a> {
 
         StatefulWidget::render(table, area, buf, state);
     }
+}
+
+/// Devises a simple string representation of an object form its type and name.
+fn object_handle(id: &ManagedObjectReference, name: &String) -> String {
+    let type_str = match id.r#type {
+        MoTypesEnum::VirtualMachine => "VM",
+        MoTypesEnum::HostSystem => "Host",
+        MoTypesEnum::Datastore => "Datastore",
+        MoTypesEnum::ClusterComputeResource => "Cluster",
+        MoTypesEnum::Network => "Network",
+        MoTypesEnum::DistributedVirtualPortgroup => "DVPG",
+        MoTypesEnum::OpaqueNetwork => "NSX",
+        _ => "Unknown",
+    };
+    format!("{}: {}", type_str, name)
 }

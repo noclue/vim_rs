@@ -5,7 +5,8 @@ use ratatui::widgets::{Cell, Row};
 use vim_rs::types::enums::VirtualMachinePowerStateEnum;
 use ratatui::prelude::{Color, Span, Style, Stylize};
 use crate::formatting;
-use crate::formatting::{format_byte_size, STATUS};
+use crate::formatting::{format_byte_size, ID_COLUMN_WIDTH, STATUS, STATUS_COLUMN_WIDTH};
+use crate::resource_type::ResourceType;
 use crate::tabular_data::TabularData;
 
 vim_updatable!(
@@ -80,8 +81,8 @@ impl TabularData for VmData {
     }
     fn column_sizes() -> Vec<Constraint> {
         vec![
-            Constraint::Length(10),
-            Constraint::Length(4),
+            Constraint::Length(ID_COLUMN_WIDTH),
+            Constraint::Length(STATUS_COLUMN_WIDTH),
             Constraint::Length(4),
             Constraint::Fill(1),
             Constraint::Max(15),
@@ -132,5 +133,12 @@ impl TabularData for VmData {
         self.id.value.to_lowercase().contains(&filter)
             || self.name.to_lowercase().contains(&filter)
             || self.os.as_ref().unwrap_or(&"".to_string()).to_lowercase().contains(&filter)
+    }
+
+    fn name(&self) -> String {
+        self.name.clone()
+    }
+    fn resource_type() -> ResourceType {
+        ResourceType::VirtualMachine
     }
 }

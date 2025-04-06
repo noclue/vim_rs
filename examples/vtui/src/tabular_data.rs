@@ -1,5 +1,7 @@
 use ratatui::widgets::Row;
 use ratatui::layout::Constraint;
+use vim_rs::types::structs::ManagedObjectReference;
+use crate::resource_type::ResourceType;
 
 /// Trait for objects that can be displayed in a table. This exposes the static information
 /// about the table, such as the title, column sizes, and header row. It also provides
@@ -21,6 +23,11 @@ pub trait TabularData {
 
     // Whether this item matches the given filter string
     fn matches_filter(&self, filter: &str) -> bool;
+
+    // Get a display name for the item e.g. "admin_cluster"
+    fn name(&self) -> String;
+
+    fn resource_type() -> ResourceType;
 }
 
 /// Trait for data sources that can be displayed in a table.
@@ -38,4 +45,7 @@ pub trait TableDataSource {
     fn column_sizes(&self) -> Vec<Constraint>;
     fn header_row(&self) -> Vec<&'static str>;
     fn invalidate(&mut self);
+    // Get the ID and Name of the object at the given index
+    fn item_at_index(&self, index: usize) -> Option<(ManagedObjectReference, String)>;
+    fn resource_type(&self) -> ResourceType;
 }

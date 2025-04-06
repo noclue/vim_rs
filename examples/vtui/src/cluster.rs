@@ -4,7 +4,8 @@ use ratatui::prelude::{Color, Style};
 use ratatui::text::Span;
 use ratatui::widgets::{Cell, Row};
 use vim_macros::vim_updatable;
-use crate::formatting::{status_color, STATUS};
+use crate::formatting::{status_color, ID_COLUMN_WIDTH, STATUS, STATUS_COLUMN_WIDTH};
+use crate::resource_type::ResourceType;
 use crate::tabular_data::TabularData;
 
 vim_updatable!(
@@ -16,8 +17,9 @@ vim_updatable!(
         number_of_hosts = "summary_ex.num_hosts",
         drs = "configuration.drs_config.enabled",
         ha = "configuration.das_config.enabled",
-        cpu_evc = "summary_ex.current_evc_mode_key",
-        gpu_evc = "summary_ex.current_evc_graphics_mode_key",
+        hosts = "host.length",
+        networks = "network.length",
+        datastores = "datastore.length",
     }
 );
 
@@ -40,16 +42,17 @@ impl From<&ClusterDetails> for Row<'_> {
         } else {
             Cell::from(Span::styled("✗", Style::default().fg(Color::Gray)))
         };
-        let cpu_evc = if let Some(cpu_evc) = &cluster.cpu_evc {
-            Cell::from(format!("{cpu_evc}"))
+        let networks = if let Some(networks) = cluster.networks {
+            Cell::from(networks.to_string())
         } else {
-            Cell::from(Span::styled("-", Style::default().fg(Color::Gray)))
+            Cell::default()
         };
-        let gpu_evc = if let Some(gpu_evc) = &cluster.gpu_evc {
-            Cell::from(format!("{gpu_evc}"))
+        let datastores = if let Some(datastores) = cluster.datastores {
+            Cell::from(datastores.to_string())
         } else {
-            Cell::from(Span::styled("-", Style::default().fg(Color::Gray)))
+            Cell::default()
         };
+
         Row::new(vec![
             Cell::from(cluster.id.value.clone()),
             Cell::from(Span::from(STATUS).style(status_color)),
@@ -59,8 +62,8 @@ impl From<&ClusterDetails> for Row<'_> {
             memory,
             drs,
             ha,
-            cpu_evc,
-            gpu_evc,
+            networks,
+            datastores,
         ])
     }
 }
@@ -72,16 +75,16 @@ impl TabularData for ClusterDetails {
 
     fn column_sizes() -> Vec<Constraint> {
         vec![
-            Constraint::Length(10), // ID
-            Constraint::Length(4), // status
+            Constraint::Length(ID_COLUMN_WIDTH),
+            Constraint::Length(STATUS_COLUMN_WIDTH),
             Constraint::Fill(1), // name
             Constraint::Length(8), // number of hosts
             Constraint::Length(12), // available cpu
             Constraint::Length(12), // available memory
             Constraint::Length(4), // drs
             Constraint::Length(4), // ha
-            Constraint::Max(20), // cpu evc
-            Constraint::Max(20), // gpu evc
+            Constraint::Max(10), // networks
+            Constraint::Max(10), // datastores
         ]
     }
 
@@ -95,13 +98,13 @@ impl TabularData for ClusterDetails {
             "Memory",
             "DRS",
             "HA",
-            "CPU EVC",
-            "GPU EVC",
+            "Networks",
+            "Datastores",
         ]
     }
 
     fn sortable_columns() -> Vec<usize> {
-        vec![0, 2, 3, 4, 5]
+        vec![0, 2, 3, 4, 5, 8, 9]
     }
 
     fn sort_by_column(column_idx: usize, descending: bool) -> Option<Box<dyn FnMut(&Self, &Self) -> Ordering>> {
@@ -111,6 +114,8 @@ impl TabularData for ClusterDetails {
             3 => Box::new(|a, b| a.number_of_hosts.cmp(&b.number_of_hosts)),
             4 => Box::new(|a, b| a.available_cpu.cmp(&b.available_cpu)),
             5 => Box::new(|a, b| a.available_memory.cmp(&b.available_memory)),
+            8 => Box::new(|a, b| a.networks.cmp(&b.networks)),
+            9 => Box::new(|a, b| a.datastores.cmp(&b.datastores)),
             _ => return None,
         };
         if descending {
@@ -124,5 +129,13 @@ impl TabularData for ClusterDetails {
         let filter = filter.to_lowercase();
         self.id.value.to_lowercase().contains(&filter)
             || self.name.to_lowercase().contains(&filter)
+    }
+
+    fn name(&self) -> String {
+        self.name.clone()
+    }
+
+    fn resource_type() -> ResourceType {
+        ResourceType::Cluster
     }
 }
