@@ -20,6 +20,8 @@ mod datastore;
 mod formatting;
 mod cluster;
 mod network;
+mod hints;
+mod data_loaders;
 
 #[tokio::main]
 async fn main() -> Result<()> {

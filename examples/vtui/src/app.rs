@@ -7,19 +7,19 @@ use ratatui::{DefaultTerminal, Frame};
 use std::cell::RefCell;
 use std::rc::Rc;
 use std::sync::Arc;
-use ratatui::widgets::{Row, TableState};
+use ratatui::widgets::TableState;
 use vim_rs::core::client::Client;
-use vim_rs::core::pc_cache::{CacheManager, Cacheable, ObjectCache, SharedRefCacheProxy};
-use vim_rs::core::pc_helpers::BoxableError;
+use vim_rs::core::pc_cache::CacheManager;
 use vim_rs::types::enums::MoTypesEnum;
-use vim_rs::types::structs::{ManagedObjectReference, ObjectSpec, TraversalSpec};
+use vim_rs::types::structs::ManagedObjectReference;
 use crate::cluster::ClusterDetails;
 use crate::datastore::{get_datastore_hosts, DatastoreDetails};
+use crate::{data_loaders, hints};
+use crate::hints::HELP_HINTS;
 use crate::host::Host;
-use crate::indexed_cache::IndexedCache;
 use crate::network::NetworkDetails;
 use crate::search::SearchState;
-use crate::tabular_data::{TableDataSource, TabularData};
+use crate::tabular_data::TableDataSource;
 use crate::vm::VmData;
 use crate::resource_type::{ResourceSelectionState, ResourceType};
 
@@ -53,121 +53,6 @@ const ASCII_ART: &str = r#"     ╭───────╮
   \  /  │ │║ ╚╝ ║│ │
    ╰╯   ╰─╯╚════╝╰─╯"#;
 
-const HELP_HINTS: &[&str] = &[
-    "'q' - quit",
-    "'/' - search",
-    "'r' - resource",
-    "0..9 - sort",
-    "↑/↓ - scroll",
-];
-const EXPAND_NETWORK: &str = "'n' - network";
-const EXPAND_DATASTORE: &str = "'d' - datastore";
-const EXPAND_HOST: &str = "'h' - host";
-const EXPAND_VM: &str = "'v' - vm";
-//const EXPAND_CLUSTER: &str = "'c' - cluster";
-
-const CLUSTER_EXPAND_HINTS: &[&str] = &[
-    EXPAND_NETWORK,
-    EXPAND_DATASTORE,
-    EXPAND_HOST,
-    EXPAND_VM,
-];
-const HOST_EXPAND_HINTS: &[&str] = &[
-    EXPAND_NETWORK,
-    EXPAND_DATASTORE,
-    EXPAND_VM,
-];
-const DATASTORE_EXPAND_HINTS: &[&str] = &[
-    EXPAND_HOST,
-    EXPAND_VM,
-];
-const NETWORK_EXPAND_HINTS: &[&str] = &[
-    EXPAND_HOST,
-    EXPAND_VM,
-];
-
-fn get_expand_hint(resource_type: ResourceType) -> &'static [&'static str] {
-    match resource_type {
-        ResourceType::Cluster => CLUSTER_EXPAND_HINTS,
-        ResourceType::Host => HOST_EXPAND_HINTS,
-        ResourceType::Datastore => DATASTORE_EXPAND_HINTS,
-        ResourceType::Network => NETWORK_EXPAND_HINTS,
-        _ => &[],
-    }
-}
-
-async fn load_from_container<T: TabularData + Cacheable + 'static>(
-    cache_mgr: Rc<RefCell<CacheManager>>,
-    container: &ManagedObjectReference,
-) -> anyhow::Result<(Box<dyn TableDataSource>, ManagedObjectReference)>
-where
-    <T as TryFrom<vim_rs::types::structs::ObjectUpdate>>::Error: BoxableError,
-    for<'a> Row<'static>: From<&'a T>
-{
-    let cache = Rc::new(RefCell::new(ObjectCache::<T>::new()));
-    let filter = cache_mgr
-        .borrow_mut()
-        .add_container_cache(
-            Box::new(SharedRefCacheProxy::new(cache.clone())),
-            container
-        )
-        .await?;
-    let indexed_cache= IndexedCache::new(cache.clone());
-    Ok((Box::new(indexed_cache), filter))
-}
-
-type StaticStr = &'static str;
-async fn load_from_property<T: TabularData + Cacheable + 'static>(
-    cache_mgr: Rc<RefCell<CacheManager>>,
-    object: &ManagedObjectReference,
-    property: &str,
-) -> anyhow::Result<(Box<dyn TableDataSource>, ManagedObjectReference)>
-where
-    <T as TryFrom<vim_rs::types::structs::ObjectUpdate>>::Error: BoxableError,
-    for<'a> Row<'static>: From<&'a T>
-{
-    let object_specs = vec![
-        ObjectSpec {
-            obj: object.clone(),
-            skip: Some(false),
-            select_set: Some(vec![Box::new(TraversalSpec {
-                name: Some("expandProperty".to_string()),
-                r#type: StaticStr::from(object.r#type.clone()).to_string(),
-                path: property.to_string(),
-                skip: Some(false),
-                select_set: None,
-            })])
-        }
-    ];
-    let cache = Rc::new(RefCell::new(ObjectCache::<T>::new()));
-    let filter = cache_mgr
-        .borrow_mut()
-        .add_cache(
-            Box::new(SharedRefCacheProxy::new(cache.clone())),
-            object_specs
-        )
-        .await?;
-    let indexed_cache= IndexedCache::new(cache.clone());
-    Ok((Box::new(indexed_cache), filter))
-}
-
-
-async fn load_from_list<T: TabularData + Cacheable + 'static>(
-    cache_mgr: Rc<RefCell<CacheManager>>,
-    objects: &[ManagedObjectReference]
-) -> anyhow::Result<(Box<dyn TableDataSource>, ManagedObjectReference)>
-where
-    <T as TryFrom<vim_rs::types::structs::ObjectUpdate>>::Error: BoxableError,
-    for<'a> Row<'static>: From<&'a T>
-{
-    let cache = Rc::new(RefCell::new(ObjectCache::<T>::new()));
-    let filter = cache_mgr
-        .borrow_mut()
-        .add_list_cache(Box::new(SharedRefCacheProxy::new(cache.clone())), objects)
-        .await?;
-    let indexed_cache= IndexedCache::new(cache.clone());
-    Ok((Box::new(indexed_cache), filter))
-}
 
 impl App {
     pub async fn new(
@@ -176,7 +61,7 @@ impl App {
         client: Arc<Client>,
     ) -> anyhow::Result<Self> {
         let root_folder = client.service_content().root_folder.clone();
-        let (resources, filter) = load_from_container::<VmData>(cache_mgr.clone(), &root_folder).await?;
+        let (resources, filter) = data_loaders::load_from_container::<VmData>(cache_mgr.clone(), &root_folder).await?;
         Ok(Self {
             should_quit: false,
             cache_mgr,
@@ -266,10 +151,10 @@ impl App {
                     MoTypesEnum::HostSystem | MoTypesEnum::Datastore |
                     MoTypesEnum::Network | MoTypesEnum::DistributedVirtualPortgroup |
                     MoTypesEnum::OpaqueNetwork => {
-                        load_from_property::<VmData>(self.cache_mgr.clone(), &selected_id, "vm").await?
+                        data_loaders::load_from_property::<VmData>(self.cache_mgr.clone(), &selected_id, "vm").await?
                     }
                     MoTypesEnum::ClusterComputeResource => {
-                        load_from_container::<VmData>(self.cache_mgr.clone(), &selected_id).await?
+                        data_loaders::load_from_container::<VmData>(self.cache_mgr.clone(), &selected_id).await?
                     }
                     _ => {
                         return Ok(()); // Do nothing we cannot expand VMs of a VM
@@ -281,11 +166,11 @@ impl App {
                     MoTypesEnum::ClusterComputeResource |
                     MoTypesEnum::Network | MoTypesEnum::DistributedVirtualPortgroup |
                     MoTypesEnum::OpaqueNetwork => {
-                        load_from_property::<Host>(self.cache_mgr.clone(), &selected_id, "host").await?
+                        data_loaders::load_from_property::<Host>(self.cache_mgr.clone(), &selected_id, "host").await?
                     }
                     MoTypesEnum::Datastore => {
                         let hosts = get_datastore_hosts(self.client.clone(), &selected_id).await?;
-                        load_from_list::<Host>(self.cache_mgr.clone(), &hosts).await?
+                        data_loaders::load_from_list::<Host>(self.cache_mgr.clone(), &hosts).await?
                     }
                     _ => {
                         return Ok(()); // Do nothing we cannot expand Hosts of a Host or VM
@@ -295,7 +180,7 @@ impl App {
             ResourceType::Datastore => {
                 match selected_id.r#type {
                     MoTypesEnum::ClusterComputeResource | MoTypesEnum::HostSystem => {
-                        load_from_property::<DatastoreDetails>(self.cache_mgr.clone(), &selected_id, "datastore").await?
+                        data_loaders::load_from_property::<DatastoreDetails>(self.cache_mgr.clone(), &selected_id, "datastore").await?
                     }
                     _ => {
                         return Ok(());
@@ -308,7 +193,7 @@ impl App {
             ResourceType::Network => {
                 match selected_id.r#type {
                     MoTypesEnum::ClusterComputeResource | MoTypesEnum::HostSystem => {
-                        load_from_property::<NetworkDetails>(self.cache_mgr.clone(), &selected_id, "network").await?
+                        data_loaders::load_from_property::<NetworkDetails>(self.cache_mgr.clone(), &selected_id, "network").await?
                     }
                     _ => {
                         return Ok(());
@@ -322,27 +207,24 @@ impl App {
     }
 
     async fn load_resource_type(&mut self, resource_type: ResourceType) -> anyhow::Result<()> {
-        let root_folder = self.client.service_content().root_folder.clone();
-        self.load_hierarchy(root_folder, resource_type).await?;
+        let parent = self.client.service_content().root_folder.clone();
         self.parent = None;
-        Ok(())
-    }
-    async fn load_hierarchy(&mut self, parent: ManagedObjectReference, resource_type: ResourceType) -> anyhow::Result<()> {
+
         let (resources, filter) = match resource_type{
             ResourceType::VirtualMachine => {
-                load_from_container::<VmData>(self.cache_mgr.clone(), &parent).await?
+                data_loaders::load_from_container::<VmData>(self.cache_mgr.clone(), &parent).await?
             }
             ResourceType::Host => {
-                load_from_container::<Host>(self.cache_mgr.clone(), &parent).await?
+                data_loaders::load_from_container::<Host>(self.cache_mgr.clone(), &parent).await?
             }
             ResourceType::Datastore => {
-                load_from_container::<DatastoreDetails>(self.cache_mgr.clone(), &parent).await?
+                data_loaders::load_from_container::<DatastoreDetails>(self.cache_mgr.clone(), &parent).await?
             }
             ResourceType::Cluster => {
-                load_from_container::<ClusterDetails>(self.cache_mgr.clone(), &parent).await?
+                data_loaders::load_from_container::<ClusterDetails>(self.cache_mgr.clone(), &parent).await?
             }
             ResourceType::Network => {
-                load_from_container::<NetworkDetails>(self.cache_mgr.clone(), &parent).await?
+                data_loaders::load_from_container::<NetworkDetails>(self.cache_mgr.clone(), &parent).await?
             }
         };
         self.apply_new_table_source(resources, filter).await
@@ -415,13 +297,13 @@ impl App {
         frame.render_widget(status_paragraph, status_area);
 
         // Render expand hints
-        let expand_lines: Vec<Line> = get_expand_hint(self.resources.resource_type()).iter().map(|&h| Line::from(h)).collect();
+        let expand_lines = hints::decorate_hints(hints::get_expand_hint(self.resources.resource_type()));
         let expand_paragraph = ratatui::widgets::Paragraph::new(expand_lines)
             .style(ratatui::style::Style::default().fg(ratatui::style::Color::Cyan));
         frame.render_widget(expand_paragraph, expand_area);
 
         // Render help hints
-        let help_lines: Vec<Line> = HELP_HINTS.iter().map(|&h| Line::from(h)).collect();
+        let help_lines = hints::decorate_hints(HELP_HINTS);
         let help_paragraph = ratatui::widgets::Paragraph::new(help_lines)
             .style(ratatui::style::Style::default().fg(ratatui::style::Color::Yellow));
         frame.render_widget(help_paragraph, help_area);
