@@ -398,6 +398,18 @@ impl CacheManager {
         res
     }
 
+    pub async fn add_list_cache(&mut self, cache: Box<dyn Cache>, obj: &[crate::types::structs::ManagedObjectReference]) -> pc_helpers::Result<ManagedObjectReference> {
+        let view = self.view_manager.create_list_view(Some(obj)).await?;
+
+        let res= self.add_cache(cache, pc_helpers::obj_spec_for_view(view.clone())).await;
+        if let Ok(ref filter) = res {
+            if let Some(record) = self.caches.get_mut(&filter.value) {
+                record.view = Some(view.value.clone());
+            }
+        };
+        res
+    }
+
 
 
     /// Add a cache for a specific type of object. This creates a filter on the server to update

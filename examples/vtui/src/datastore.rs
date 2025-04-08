@@ -1,8 +1,12 @@
 use std::cmp::Ordering;
+use std::sync::Arc;
 use ratatui::layout::Constraint;
 use ratatui::prelude::{Color, Span, Style};
 use ratatui::widgets::{Cell, Row};
 use vim_macros::vim_updatable;
+use vim_rs::core::client::Client;
+use vim_rs::mo::Datastore;
+use vim_rs::types::structs::ManagedObjectReference;
 use crate::formatting;
 use crate::formatting::{status_color, ID_COLUMN_WIDTH, STATUS, STATUS_COLUMN_WIDTH};
 use crate::resource_type::ResourceType;
@@ -18,6 +22,8 @@ vim_updatable!(
         capacity = "summary.capacity",
         // provisioned =
         free_space = "summary.free_space",
+        vms = "vm.length",
+        hosts = "host.length",
     }
 );
 
@@ -36,6 +42,16 @@ impl From<&DatastoreDetails> for Row<'_> {
             Some(true) => Cell::from(Span::styled("↔", Style::default().fg(Color::Blue))),
             _ => Cell::from(Span::styled("⭘", Style::default().fg(Color::Gray)))
         };
+        let vms = if let Some(vms) = datastore.vms {
+            Cell::from(vms.to_string())
+        } else {
+            Cell::default()
+        };
+        let hosts = if let Some(hosts) = datastore.hosts {
+            Cell::from(hosts.to_string())
+        } else {
+            Cell::default()
+        };
         Row::new(vec![
             Cell::from(datastore.id.value.clone()),
             Cell::from(Span::from(STATUS).style(status_color)),
@@ -45,6 +61,8 @@ impl From<&DatastoreDetails> for Row<'_> {
             shared,
             capacity,
             free_space,
+            vms,
+            hosts,
         ])
     }
 }
@@ -64,6 +82,8 @@ impl TabularData for DatastoreDetails {
             Constraint::Length(4),
             Constraint::Max(12),
             Constraint::Max(12),
+            Constraint::Max(8),
+            Constraint::Max(8),
         ]
     }
 
@@ -77,11 +97,13 @@ impl TabularData for DatastoreDetails {
             "Shr",
             "Capacity",
             "Free",
+            "VMs",
+            "Hosts",
         ]
     }
 
     fn sortable_columns() -> Vec<usize> {
-        vec![0, 3, 4, 6, 7]
+        vec![0, 3, 4, 6, 7, 8, 9]
     }
 
     fn sort_by_column(column_idx: usize, descending: bool) -> Option<Box<dyn FnMut(&Self, &Self) -> Ordering>> {
@@ -91,6 +113,8 @@ impl TabularData for DatastoreDetails {
             4 => Box::new(|a, b| a.fs_type.cmp(&b.fs_type)),
             6 => Box::new(|a, b| a.capacity.cmp(&b.capacity)),
             7 => Box::new(|a, b| a.free_space.cmp(&b.free_space)),
+            8 => Box::new(|a, b| a.vms.cmp(&b.vms)),
+            9 => Box::new(|a, b| a.hosts.cmp(&b.hosts)),
             _ => return None,
         };
         if descending {
@@ -114,4 +138,14 @@ impl TabularData for DatastoreDetails {
         ResourceType::Datastore
     }
 
+}
+
+pub async fn get_datastore_hosts(client: Arc<Client>, datastore: &ManagedObjectReference) -> anyhow::Result<Vec<ManagedObjectReference>> {
+    let ds_stor = Datastore::new(client.clone(), &datastore.value.clone());
+    let mount_infos = ds_stor.host().await?;
+    let Some(mount_infos) = mount_infos else {
+        return Ok(Vec::new());
+    };
+
+    Ok(mount_infos.iter().map(|info| { info.key.clone() }).collect())
 }

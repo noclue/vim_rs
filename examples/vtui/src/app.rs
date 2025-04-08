@@ -14,7 +14,7 @@ use vim_rs::core::pc_helpers::BoxableError;
 use vim_rs::types::enums::MoTypesEnum;
 use vim_rs::types::structs::{ManagedObjectReference, ObjectSpec, TraversalSpec};
 use crate::cluster::ClusterDetails;
-use crate::datastore::DatastoreDetails;
+use crate::datastore::{get_datastore_hosts, DatastoreDetails};
 use crate::host::Host;
 use crate::indexed_cache::IndexedCache;
 use crate::network::NetworkDetails;
@@ -78,8 +78,7 @@ const HOST_EXPAND_HINTS: &[&str] = &[
     EXPAND_VM,
 ];
 const DATASTORE_EXPAND_HINTS: &[&str] = &[
-// TODO Unclear how to traverse the host.key property of a datastore
-//    EXPAND_HOST,
+    EXPAND_HOST,
     EXPAND_VM,
 ];
 const NETWORK_EXPAND_HINTS: &[&str] = &[
@@ -152,6 +151,23 @@ where
     Ok((Box::new(indexed_cache), filter))
 }
 
+
+async fn load_from_list<T: TabularData + Cacheable + 'static>(
+    cache_mgr: Rc<RefCell<CacheManager>>,
+    objects: &[ManagedObjectReference]
+) -> anyhow::Result<(Box<dyn TableDataSource>, ManagedObjectReference)>
+where
+    <T as TryFrom<vim_rs::types::structs::ObjectUpdate>>::Error: BoxableError,
+    for<'a> Row<'static>: From<&'a T>
+{
+    let cache = Rc::new(RefCell::new(ObjectCache::<T>::new()));
+    let filter = cache_mgr
+        .borrow_mut()
+        .add_list_cache(Box::new(SharedRefCacheProxy::new(cache.clone())), objects)
+        .await?;
+    let indexed_cache= IndexedCache::new(cache.clone());
+    Ok((Box::new(indexed_cache), filter))
+}
 
 impl App {
     pub async fn new(
@@ -268,9 +284,8 @@ impl App {
                         load_from_property::<Host>(self.cache_mgr.clone(), &selected_id, "host").await?
                     }
                     MoTypesEnum::Datastore => {
-                        return Ok(());
-                        // TODO: How to traverse the host.key property of a datastore? host is an array of mount details with Host MoRef key field!!!
-                        //load_from_property::<Host>(self.cache_mgr.clone(), &selected_id, "host.key").await?
+                        let hosts = get_datastore_hosts(self.client.clone(), &selected_id).await?;
+                        load_from_list::<Host>(self.cache_mgr.clone(), &hosts).await?
                     }
                     _ => {
                         return Ok(()); // Do nothing we cannot expand Hosts of a Host or VM

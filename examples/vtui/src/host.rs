@@ -16,6 +16,9 @@ vim_updatable!(
         cpu_usage = "summary.quick_stats.overall_cpu_usage",
         memory_usage = "summary.quick_stats.overall_memory_usage",
         uptime = "summary.quick_stats.uptime",
+        vms = "vm.length",
+        networks = "network.length",
+        datastores = "datastore.length",
     }
 );
 
@@ -50,6 +53,22 @@ impl From<&Host> for Row<'_> {
             _ => ("?", ratatui::style::Color::Gray),
         };
 
+        let vms = if let Some(vms) = host.vms {
+            Cell::from(vms.to_string())
+        } else {
+            Cell::default()
+        };
+        let networks = if let Some(networks) = host.networks {
+            Cell::from(networks.to_string())
+        } else {
+            Cell::default()
+        };
+        let datastores = if let Some(datastores) = host.datastores {
+            Cell::from(datastores.to_string())
+        } else {
+            Cell::default()
+        };
+
         Row::new(vec![
             Cell::from(host.id.value.clone()),
             Cell::from(Span::from(STATUS).style(color)),
@@ -58,6 +77,9 @@ impl From<&Host> for Row<'_> {
             version,
             host_cpu,
             memory_usage,
+            vms,
+            networks,
+            datastores,
         ])
     }
 }
@@ -76,6 +98,9 @@ impl TabularData for Host {
             Constraint::Max(15),
             Constraint::Max(12),
             Constraint::Max(12),
+            Constraint::Max(8),
+            Constraint::Max(8),
+            Constraint::Max(8),
         ]
     }
 
@@ -88,12 +113,15 @@ impl TabularData for Host {
             "Version ",
             "CPU ",
             "Memory ",
+            "VMs ",
+            "Net ",
+            "DS ",
         ]
     }
 
     fn sortable_columns() -> Vec<usize> {
         // ID, Name, Version, CPU and Memory are sortable
-        vec![0, 3, 4, 5, 6]
+        vec![0, 3, 4, 5, 6, 7, 8]
     }
 
     fn sort_by_column(column_idx: usize, descending: bool) -> Option<Box<dyn FnMut(&Self, &Self) -> Ordering>> {
@@ -101,8 +129,10 @@ impl TabularData for Host {
             0 => Box::new(|a, b| a.id.value.cmp(&b.id.value)),
             3 => Box::new(|a, b| a.name.cmp(&b.name)),
             4 => Box::new(|a, b| a.version.cmp(&b.version)),
-            6 => Box::new(|a, b| a.cpu_usage.cmp(&b.cpu_usage)),
-            7 => Box::new(|a, b| a.memory_usage.cmp(&b.memory_usage)),
+            5 => Box::new(|a, b| a.cpu_usage.cmp(&b.cpu_usage)),
+            6 => Box::new(|a, b| a.memory_usage.cmp(&b.memory_usage)),
+            7 => Box::new(|a, b| a.vms.cmp(&b.vms)),
+            8 => Box::new(|a, b| a.networks.cmp(&b.networks)),
             _ => return None,
         };
         if descending {
