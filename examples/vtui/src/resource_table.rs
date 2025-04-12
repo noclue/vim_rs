@@ -1,6 +1,6 @@
 use ratatui::buffer::Buffer;
 use ratatui::layout::Rect;
-use ratatui::style::{Style, Stylize};
+use ratatui::style::{Color, Style};
 use ratatui::widgets::{Block, HighlightSpacing, Row, Cell, Table, TableState, StatefulWidget};
 use ratatui::text::{Line, Span};
 use vim_rs::types::enums::MoTypesEnum;
@@ -35,19 +35,19 @@ impl<'a> StatefulWidget for ResourceTableWidget<'a> {
         let filter = self.resources.get_filter();
         let hint = if filter.is_some() {
             vec![
-                Span::styled("Esc clear filter", Style::default().fg(ratatui::style::Color::LightCyan)),
+                Span::styled("Esc clear filter", Style::default().fg(Color::LightCyan)),
             ]
         } else {
             vec![Span::default()]
         };
 
         let mut title_items = Vec::new();
-        title_items.push(Span::styled(self.resources.get_title(), Style::default().fg(ratatui::style::Color::White)));
+        title_items.push(Span::styled(self.resources.get_title(), Style::default().fg(Color::White)));
         title_items.push(Span::from(" ("));
         title_items.push(if let Some(filter) = &filter {
-            Span::styled(format!("filter: {}", filter), Style::default().fg(ratatui::style::Color::Magenta))
+            Span::styled(format!("filter: {}", filter), Style::default().fg(Color::Magenta))
         } else {
-            Span::styled("all", Style::default().fg(ratatui::style::Color::Magenta))
+            Span::styled("all", Style::default().fg(Color::Magenta))
         });
         title_items.push(Span::from(")["));
 
@@ -58,12 +58,12 @@ impl<'a> StatefulWidget for ResourceTableWidget<'a> {
         } else {
             format!("{}", len)
         };
-        title_items.push(Span::styled(count, Style::default().fg(ratatui::style::Color::White)));
+        title_items.push(Span::styled(count, Style::default().fg(Color::White)));
         title_items.push(Span::from("]"));
 
         if let Some((id, name)) = self.parent {
             title_items.push(Span::from(" - "));
-            title_items.push(Span::styled(object_handle(id, name), Style::default().fg(ratatui::style::Color::Green)));
+            title_items.push(Span::styled(object_handle(id, name), Style::default().fg(Color::Green)));
         }
 
 
@@ -72,7 +72,7 @@ impl<'a> StatefulWidget for ResourceTableWidget<'a> {
         let block = Block::bordered()
             .title(title)
             .title_bottom(hint)
-            .border_style(Style::default().fg(ratatui::style::Color::Gray));
+            .border_style(Style::default().fg(Color::Gray));
 
 
         let sort_setting = self.resources.get_sort_setting();
@@ -82,9 +82,9 @@ impl<'a> StatefulWidget for ResourceTableWidget<'a> {
             if let Some(sort_setting) = sort_setting {
                 if i == sort_setting.0 {
                     let arrow_span = if sort_setting.1 {
-                        Span::styled("▼", Style::default().fg(ratatui::style::Color::Blue))
+                        Span::styled("▼", Style::default().fg(Color::Blue))
                     } else {
-                        Span::styled("▲", Style::default().fg(ratatui::style::Color::Green))
+                        Span::styled("▲", Style::default().fg(Color::Green))
                     };
                     header.push(Cell::from(ratatui::text::Line::from(vec![
                         Span::from(header_row[i]),
@@ -98,7 +98,7 @@ impl<'a> StatefulWidget for ResourceTableWidget<'a> {
             }
         }
 
-        let header = Row::new(header).style(Style::default().fg(ratatui::style::Color::Cyan));
+        let header = Row::new(header).style(Style::default().fg(Color::Cyan));
 
         let widths = self.resources.column_sizes();
 
@@ -113,7 +113,7 @@ impl<'a> StatefulWidget for ResourceTableWidget<'a> {
             .header(header)
             .highlight_spacing(HighlightSpacing::Always)
             .highlight_symbol("▶ ")
-            .row_highlight_style(Style::default().on_blue());
+            .row_highlight_style(Style::default().bg(Color::Rgb(64,64,64)));
 
         StatefulWidget::render(table, area, buf, state);
     }

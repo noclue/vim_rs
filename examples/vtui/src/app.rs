@@ -6,9 +6,9 @@ use ratatui::{DefaultTerminal, Frame};
 use std::cell::RefCell;
 use std::rc::Rc;
 use std::sync::Arc;
-use ratatui::style::Stylize;
+use ratatui::style::{Color, Modifier, Style, Stylize};
 use ratatui::text::Line;
-use ratatui::widgets::TableState;
+use ratatui::widgets::{Block, BorderType, Borders, Clear, ListState, Paragraph, TableState};
 use vim_rs::core::client::Client;
 use vim_rs::core::pc_cache::CacheManager;
 use vim_rs::types::enums::MoTypesEnum;
@@ -286,7 +286,7 @@ impl App {
         let vertical = Layout::vertical([Constraint::Length(5), Constraint::Fill(1)]);
         let [top_area, body_area] = vertical.areas(frame.area());
 
-        let horizontal = Layout::horizontal([Constraint::Fill(1), Constraint::Length(21), Constraint::Length(21), Constraint::Length(21)]);
+        let horizontal = Layout::horizontal([Constraint::Fill(1), Constraint::Length(16), Constraint::Length(16), Constraint::Length(21)]);
         let [status_area, expand_area, help_area, right_area] = horizontal.areas(top_area);
 
         // Split the left area into two columns for statuses and help hints
@@ -328,16 +328,18 @@ impl App {
                 height: 3,
             };
 
-            let block = ratatui::widgets::Block::default()
+            let block = Block::default()
                 .title("Search")
-                .borders(ratatui::widgets::Borders::ALL)
-                .border_style(ratatui::style::Style::default().fg(ratatui::style::Color::Yellow));
+                .style(Style::default().bg(Color::Rgb(32, 32, 96)))
+                .borders(Borders::ALL)
+                .border_type(BorderType::Rounded)
+                .border_style(Style::default().fg(Color::Yellow));
 
-            let input_text = ratatui::widgets::Paragraph::new(self.search_state.get_input())
+            let input_text = Paragraph::new(self.search_state.get_input())
                 .block(block)
-                .style(ratatui::style::Style::default());
+                .style(Style::default());
 
-            frame.render_widget(ratatui::widgets::Clear, popup_area);
+            frame.render_widget(Clear, popup_area);
             frame.render_widget(input_text, popup_area);
         }
         if self.resource_selection_state.is_active() {
@@ -355,17 +357,19 @@ impl App {
                 .collect();
 
             let list = ratatui::widgets::List::new(items)
-                .block(ratatui::widgets::Block::default()
+                .block(Block::default()
                     .title("Select Resource Type")
-                    .borders(ratatui::widgets::Borders::ALL)
-                    .border_style(ratatui::style::Style::default().fg(ratatui::style::Color::Cyan)))
-                .highlight_style(ratatui::style::Style::default().add_modifier(ratatui::style::Modifier::REVERSED))
+                    .style(Style::default().bg(Color::Rgb(32, 32, 96)))
+                    .borders(Borders::ALL)
+                    .border_type(BorderType::Rounded)
+                    .border_style(Style::default().fg(Color::Yellow)))
+                .highlight_style(Style::default().add_modifier(Modifier::REVERSED))
                 .highlight_symbol("> ");
 
-            let mut list_state = ratatui::widgets::ListState::default();
+            let mut list_state = ListState::default();
             list_state.select(Some(self.resource_selection_state.selected_index));
 
-            frame.render_widget(ratatui::widgets::Clear, popup_area);
+            frame.render_widget(Clear, popup_area);
             frame.render_stateful_widget(list, popup_area, &mut list_state);
         }
 
@@ -374,7 +378,9 @@ impl App {
     fn handle_terminal_event(&mut self, event: &CrosstermEvent) {
         if let CrosstermEvent::Key(key) = event {
             if key.kind == KeyEventKind::Press {
-                if self.search_state.is_active() {
+                if matches!(key.code, KeyCode::Char('c') if key.modifiers == crossterm::event::KeyModifiers::CONTROL) {
+                    self.events.send(AppEvent::Quit)
+                } else if self.search_state.is_active() {
                     match key.code {
                         KeyCode::Enter => self.events.send(AppEvent::SearchConfirm),
                         KeyCode::Esc => self.events.send(AppEvent::SearchCancel),
@@ -393,9 +399,6 @@ impl App {
                 } else {
                     match key.code {
                         KeyCode::Char('q') => self.events.send(AppEvent::Quit),
-                        KeyCode::Char('c') if key.modifiers == crossterm::event::KeyModifiers::CONTROL => {
-                            self.events.send(AppEvent::Quit)
-                        }
                         KeyCode::Esc => self.events.send(AppEvent::ClearSearch),
                         KeyCode::Char('j') | KeyCode::Down => self.events.send(AppEvent::Down),
                         KeyCode::Char('k') | KeyCode::Up => self.events.send(AppEvent::Up),
