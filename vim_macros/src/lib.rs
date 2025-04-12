@@ -23,6 +23,7 @@
 //!         cpu_usage = "summary.quick_stats.overall_cpu_usage",
 //!         memory_usage = "summary.quick_stats.overall_memory_usage",
 //!         uptime = "summary.quick_stats.uptime",
+//!         datastores = "datastore.length",
 //!     }
 //! );
 //!
@@ -43,6 +44,12 @@
 //!    Ok(())
 //! }
 //! ```
+//! 
+//! The `ObjectRetriever` utility class is used to retrieve properties from the vSphere API. It
+//! allows you to retrieve properties from a container (e.g., a datacenter or cluster) or a specific
+//! list of managed objects. The `retrieve_objects_from_container` method retrieves all objects
+//! from the specified container and returns them as a vector of strongly-typed objects. The
+//! `retrieve_objects_from_list` method retrieves a specific list of managed objects.
 //!
 //! ### Continuous Property Monitoring with `vim_updatable`
 //!
@@ -103,7 +110,9 @@
 //!     Ok(())
 //! }
 //! ```
-//!
+//! Note that `CacheManager` also supports `add_list_cache` method to monitor predefined list of
+//! objects.
+//! 
 //! ### How the Macros Work
 //!
 //! Both macros:
@@ -125,7 +134,14 @@
 //!     }
 //! );
 //! ```
-//!
+//! 
+//! Property paths use dot delimited rust field name starting from the managed object property
+//! accessor and going deeper inside the structure. Property paths only support the properties of
+//! the declared field types i.e. properties from child types are not supported. 
+//! 
+//! Array properties support special `length` property to retrieve their length e.g. 
+//! "datastore.length"to obtain the count of datastores attached to a host.
+//! 
 //! The same syntax applies to the `vim_updatable!` macro.
 mod resolver;
 mod field_data;

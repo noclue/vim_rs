@@ -1,26 +1,22 @@
 # vTUI: VMware VM visualization for the terminal
 
-vTUI is a tool that allows you to visualize VMware VMs in the terminal. It is a simple tool that
-uses the VMware API to get the VMs and their status and then displays them in a terminal window.
+vTUI is a tool that allows you to browse the vCenter inventory in the terminal. It is a simple tool
+that uses the VMware API to monitor vCenter inventory and render it in a terminal window.
 
 vTUI's main purpose is to demonstrate how to use the vim_rs library to interact with the VMware API
 in a Text User Interface (TUI) application.
 
-vTUI uses the `PropertyCollector` API to get the VMs and their status from the vCenter server. It
-then displays the VMs in a terminal window using the tui-rs library. The basic steps of using the
-API are as follows:
-
-1. Firstly after login a `View` is created for all VMs in the root folder using `ViewManager`
-2. A filter is created in the `PropertyCollector` for the VMs using the `CreateFilter` method.
-3. The `WaitForUpdates` method is used to get continuous updates about VMs and their status from the vCenter server.
-4. The VMs are displayed in a terminal window using the tui-rs library.
-5. Upon exit, the view, filter and session are destroyed to release server resources.
+vTUI uses the `PropertyCollector` API to retrieve inventory object from the vCenter server. It then
+displays the VMs in a terminal window using the Ratatui library.
 
 ## Features
 
-- Visualize VMware VMs directly in your terminal.
-- Real-time VM status updates using the PropertyCollector API.
-- TUI built with the tui-rs library for a smooth user experience.
+- Visualize vCenter inventory directly in your terminal.
+- Real-time inventory updates using the PropertyCollector API.
+- Search for specific objects using "/"
+- Navigate to related objects using short cuts (v)m, (n)etwork, (h)ost, (d)atastore
+- Browse the Cluster, Host, VM, Network and Datastore inventory
+- TUI built with the Ratatui library for a smooth user experience.
 - Clean and minimalistic design suitable for server environments.
 
 ## Installation
@@ -40,4 +36,5 @@ cargo run --bin vtui
 
 ## Contributing
 
-Contributions are welcome! Please fork the repository and submit a pull request with your improvements.
+Contributions are welcome! Please fork the repository and submit a pull request with your
+improvements.

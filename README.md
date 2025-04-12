@@ -111,6 +111,9 @@ async fn print_hosts(client: &Client) -> Result<()> {
    Ok(())
 }
 ```
+The object retriever also allow sto pull objects from list of identifiers through 
+`retrieve_objects_from_list`.
+
 ### Continuous Property Monitoring with `vim_updatable`
 
 Stay up to date with local inventory replica using `PropertyCollector::wait_for_updates_ex`:
@@ -170,6 +173,7 @@ async fn monitor_vms(client: &Arc<Client>) -> Result<(), Error> {
    Ok(())
 }
 ```
+`CacheManager` provides `add_list_cache` method to monitor a predefined list of objects.
 
 ## Working with Polymorphic Types
 The VIM API is conceptualized as a classic object-oriented API, much like the Java or C++ standard libraries. It has a root `Any` object from which all other objects descend. There is `DataObject` that is the root for all data structures. There is also `MethodFault` that is the root for all error types.
