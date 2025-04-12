@@ -15,6 +15,10 @@ path = "src/retrieve_ds_hosts.rs"
 name = "vm_events"
 path = "src/vm_events.rs"
 
+[[bin]]
+name = "print_vm_addresses"
+path = "src/print_vm_addresses.rs"
+
 [dependencies]
 anyhow = "1.0"
 env_logger = "0.11"
