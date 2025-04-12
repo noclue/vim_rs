@@ -1,6 +1,6 @@
 use std::cmp::Ordering;
 use ratatui::layout::Constraint;
-use ratatui::prelude::{Color, Style};
+use ratatui::style::{Color, Style};
 use ratatui::text::Span;
 use ratatui::widgets::{Cell, Row};
 use vim_macros::vim_updatable;

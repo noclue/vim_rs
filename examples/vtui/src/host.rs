@@ -1,6 +1,7 @@
 use std::cmp::Ordering;
 use ratatui::layout::Constraint;
-use ratatui::prelude::{Span, Style};
+use ratatui::style::Style;
+use ratatui::text::Span;
 use ratatui::widgets::{Cell, Row};
 use vim_macros::vim_updatable;
 use vim_rs::types::enums::HostSystemConnectionStateEnum;

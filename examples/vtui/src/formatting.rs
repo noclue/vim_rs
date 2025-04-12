@@ -1,5 +1,5 @@
+use ratatui::style::{Color, Style};
 use vim_rs::types::enums::ManagedEntityStatusEnum;
-use ratatui::prelude::{Color, Style};
 use ratatui::widgets::Cell;
 
 pub(crate) const ID_COLUMN_WIDTH: u16 = 18;

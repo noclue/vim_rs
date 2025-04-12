@@ -1,8 +1,8 @@
 use ratatui::buffer::Buffer;
 use ratatui::layout::Rect;
-use ratatui::prelude::{Line, StatefulWidget, Style, Stylize};
-use ratatui::widgets::{Block, HighlightSpacing, Row, Cell, Table, TableState};
-use ratatui::text::Span;
+use ratatui::style::{Style, Stylize};
+use ratatui::widgets::{Block, HighlightSpacing, Row, Cell, Table, TableState, StatefulWidget};
+use ratatui::text::{Line, Span};
 use vim_rs::types::enums::MoTypesEnum;
 use vim_rs::types::structs::ManagedObjectReference;
 use crate::tabular_data::TableDataSource;
@@ -113,7 +113,7 @@ impl<'a> StatefulWidget for ResourceTableWidget<'a> {
             .header(header)
             .highlight_spacing(HighlightSpacing::Always)
             .highlight_symbol("▶ ")
-            .row_highlight_style(Style::new().on_blue());
+            .row_highlight_style(Style::default().on_blue());
 
         StatefulWidget::render(table, area, buf, state);
     }

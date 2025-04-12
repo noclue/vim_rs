@@ -1,4 +1,5 @@
-use ratatui::prelude::{Color, Line, Span};
+use ratatui::style::Color;
+use ratatui::text::{Line, Span};
 use crate::resource_type::ResourceType;
 
 pub(crate) const HELP_HINTS: &[&str] = &[

@@ -1,7 +1,8 @@
 use std::cmp::Ordering;
 use std::sync::Arc;
 use ratatui::layout::Constraint;
-use ratatui::prelude::{Color, Span, Style};
+use ratatui::style::{Color, Style};
+use ratatui::text::Span;
 use ratatui::widgets::{Cell, Row};
 use vim_macros::vim_updatable;
 use vim_rs::core::client::Client;

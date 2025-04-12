@@ -1,9 +1,10 @@
 use std::cmp::Ordering;
 use ratatui::layout::Constraint;
+use ratatui::style::{Color, Style, Stylize};
+use ratatui::text::Span;
 use vim_macros::vim_updatable;
 use ratatui::widgets::{Cell, Row};
 use vim_rs::types::enums::VirtualMachinePowerStateEnum;
-use ratatui::prelude::{Color, Span, Style, Stylize};
 use crate::formatting;
 use crate::formatting::{format_byte_size, ID_COLUMN_WIDTH, STATUS, STATUS_COLUMN_WIDTH};
 use crate::resource_type::ResourceType;
