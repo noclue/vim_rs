@@ -1,9 +1,8 @@
 use std::sync::Arc;
 use crate::core::client::Client;
 use crate::core::pc_helpers;
-use crate::core::pc_helpers::{BoxableError, Error, Queriable};
-use crate::mo::{ContainerView, PropertyCollector, ViewManager};
-use crate::types::enums::MoTypesEnum;
+use crate::core::pc_helpers::{obj_spec_for_view, BoxableError, Error, Queriable};
+use crate::mo::{PropertyCollector, View, ViewManager};
 use crate::types::structs::{ManagedObjectReference, ObjectContent, ObjectSpec};
 
 /// A trait for objects that can be retrieved using the PropertyCollector utilities. In essence they
@@ -62,27 +61,37 @@ impl ObjectRetriever {
             Some(&[T::prop_spec().r#type]),
             true,
         ).await?;
+        self.retrieve_object_from_view(&view_moref).await
+    }
 
-        let view = ContainerView::new(self.client.clone(), &view_moref.value);
+    /// Retrieves objects of type T from the specified list of managed object references. It creates
+    /// a list view and uses the `retrieve_objects` method to get the objects. The view is destroyed
+    /// after the retrieval is complete.
+    ///
+    /// Use the `vim_macros::vim_retrievable` macro to easily map PropertyCollector property
+    /// paths to Rust objects. This macro generates a struct with the specified properties by
+    /// resolving the property paths to the correct Rust types. The macro also generates the
+    /// [`Retrievable`] trait implementation for the struct, allowing it to be used with the
+    /// [`ObjectRetriever`] API.
+    pub async fn retrieve_objects_from_list<T: Retrievable>(&self, objs: &[ManagedObjectReference]) -> pc_helpers::Result<Vec<T>>
+    where
+        <T as TryFrom<crate::types::structs::ObjectContent>>::Error: BoxableError
+    {
+        let view_moref = self.view_manager.create_list_view(Some(objs)).await?;
+        self.retrieve_object_from_view(&view_moref).await
+    }
 
-        let object_set = vec![ObjectSpec {
-            obj: view_moref.clone(),
-            skip: Some(false),
-            select_set: Some(vec![Box::new(crate::types::structs::TraversalSpec {
-                name: Some("traverseEntities".to_string()),
-                r#type: Into::<&str>::into(MoTypesEnum::ContainerView).to_string(),
-                path: "view".to_string(),
-                skip: Some(false),
-                select_set: None,
-            })]),
-        }];
-
+    /// Retrieves objects of type T from the specified view. The view is destroyed after the
+    /// retrieval is complete.
+    async fn retrieve_object_from_view<T: Retrievable>(&self, view_moref: &ManagedObjectReference)-> pc_helpers::Result<Vec<T>>
+    where
+        <T as TryFrom<crate::types::structs::ObjectContent>>::Error: BoxableError
+    {
+        let view = View::new(self.client.clone(), &view_moref.value);
+        let object_set = obj_spec_for_view(view_moref.clone());
         let res = self.retrieve_objects(object_set).await;
-
         view.destroy_view().await?;
-
         res
-
     }
 
     /// Retrieves objects of type T based on the provided ObjectSpecs. It uses the

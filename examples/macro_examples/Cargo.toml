@@ -8,6 +8,10 @@ name = "retrieve_host_info"
 path = "src/retrieve_host_info.rs"
 
 [[bin]]
+name = "retrieve_ds_hosts"
+path = "src/retrieve_ds_hosts.rs"
+
+[[bin]]
 name = "vm_events"
 path = "src/vm_events.rs"
 
