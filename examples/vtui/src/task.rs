@@ -10,6 +10,8 @@ use ratatui::style::{Color, Style};
 use ratatui::text::{Line, Span};
 use vim_rs::core::client::Client;
 use vim_rs::mo::TaskManager;
+use vim_rs::types::struct_enum::StructType;
+use vim_rs::types::structs::{TaskReasonAlarm, TaskReasonSchedule, TaskReasonUser};
 use crate::formatting::ID_COLUMN_WIDTH;
 use crate::resource_type::ResourceType;
 use crate::tabular_data::TabularData;
@@ -24,6 +26,7 @@ vim_updatable!(
         progress = "info.progress",
         initiated = "info.queue_time",
         completed = "info.complete_time",
+        reason = "info.reason",
     }
 );
 
@@ -52,6 +55,7 @@ impl From<&TaskInfo> for Row<'_> {
             Cell::from(entity_name),
             Cell::from(initiated),
             task_duration_cell(&task.initiated, &task.completed),
+            Cell::from(get_initiator(task))
         ])
     }
 }
@@ -64,12 +68,13 @@ impl TabularData for TaskInfo {
     fn column_sizes() -> Vec<Constraint> {
         vec![
             Constraint::Length(ID_COLUMN_WIDTH),
-            Constraint::Length(14),
+            Constraint::Length(13),
             Constraint::Fill(1),
-            Constraint::Max(20),
+            Constraint::Max(16),
             Constraint::Max(20),
             Constraint::Max(16),
-            Constraint::Max(12),
+            Constraint::Max(10),
+            Constraint::Max(33),
         ]
     }
 
@@ -82,6 +87,7 @@ impl TabularData for TaskInfo {
             "Entity Name ",
             "Initiated ",
             "Duration ",
+            "Initiator ",
         ]
     }
 
@@ -110,6 +116,7 @@ impl TabularData for TaskInfo {
         self.id.value.to_lowercase().contains(&filter)
             || self.entity.as_ref().map(|x| x.value.to_lowercase()).unwrap_or("".to_string()).contains(&filter)
             || self.entity_name.as_ref().unwrap_or(&"".to_string()).to_lowercase().contains(&filter)
+            || get_initiator(self).to_lowercase().contains(&filter)
     }
 
     fn name(&self) -> String {
@@ -118,6 +125,26 @@ impl TabularData for TaskInfo {
 
     fn resource_type() -> ResourceType {
         ResourceType::Task
+    }
+}
+
+fn get_initiator(task: &TaskInfo) -> String {
+    let reason = &task.reason;
+    match reason.data_type() {
+        StructType::TaskReasonUser => {
+            let user = reason.as_ref().as_any_ref().downcast_ref::<TaskReasonUser>().unwrap();
+            user.user_name.clone()
+        }
+        StructType::TaskReasonAlarm => {
+            let alarm = reason.as_ref().as_any_ref().downcast_ref::<TaskReasonAlarm>(). unwrap();
+            format!("Alarm[{} {}]", alarm.alarm_name, alarm.entity_name)
+        }
+        StructType::TaskReasonSchedule => {
+            let schedule = reason.as_ref().as_any_ref().downcast_ref::<TaskReasonSchedule>().unwrap();
+            format!("Schedule[{}]", schedule.name)
+        }
+        StructType::TaskReasonSystem => "<System>".to_string(),
+        _ => "<Unknown>".to_string(),
     }
 }
 

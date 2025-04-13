@@ -46,6 +46,6 @@ pub trait TableDataSource {
     fn header_row(&self) -> Vec<&'static str>;
     fn invalidate(&mut self);
     // Get the ID and Name of the object at the given index
-    fn item_at_index(&self, index: usize) -> Option<(ManagedObjectReference, String)>;
+    fn item_at_index(&mut self, index: usize) -> Option<(ManagedObjectReference, String)>;
     fn resource_type(&self) -> ResourceType;
 }

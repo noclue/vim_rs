@@ -159,7 +159,15 @@ where
         self.indices = None;
     }
 
-    fn item_at_index(&self, index: usize) -> Option<(ManagedObjectReference, String)> {
+    fn item_at_index(&mut self, index: usize) -> Option<(ManagedObjectReference, String)> {
+        self.ensure_indices_updated();
+        let Some(indices) = &self.indices else {
+            return None;
+        };
+        if index >= indices.len() {
+            return None;
+        }
+        let index = indices[index];
         let cache = self.cache.borrow();
         if index >= cache.len() {
             return None;
