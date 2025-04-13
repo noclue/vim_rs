@@ -8,6 +8,7 @@ pub enum ResourceType {
     Network,
     // Folder,
     // ResourcePool,
+    Task,
 }
 
 impl std::fmt::Display for ResourceType {
@@ -20,6 +21,7 @@ impl std::fmt::Display for ResourceType {
             ResourceType::Network => write!(f, "Network"),
             // ResourceType::Folder => write!(f, "Folder"),
             // ResourceType::ResourcePool => write!(f, "Resource Pool"),
+            ResourceType::Task => write!(f, "Task"),
         }
     }
 }
@@ -42,6 +44,7 @@ impl ResourceSelectionState {
                 ResourceType::Network,
                 // ResourceType::Folder,
                 // ResourceType::ResourcePool,
+                ResourceType::Task,
             ],
             selected_index: 0,
         }

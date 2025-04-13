@@ -23,6 +23,7 @@ use crate::search::SearchState;
 use crate::tabular_data::TableDataSource;
 use crate::vm::VmData;
 use crate::resource_type::{ResourceSelectionState, ResourceType};
+use crate::task::{ensure_task_descriptions_initialized, TaskInfo};
 
 /// Main application object.
 pub struct App {
@@ -201,6 +202,20 @@ impl App {
                     }
                 }
             }
+            ResourceType::Task => {
+                ensure_task_descriptions_initialized(self.client.clone()).await?;
+                match selected_id.r#type {
+                    MoTypesEnum::ClusterComputeResource | MoTypesEnum::HostSystem |
+                    MoTypesEnum::VirtualMachine | MoTypesEnum::Datastore |
+                    MoTypesEnum::Network | MoTypesEnum::DistributedVirtualPortgroup |
+                    MoTypesEnum::OpaqueNetwork => {
+                        data_loaders::load_from_property::<TaskInfo>(self.cache_mgr.clone(), &selected_id, "recentTask").await?
+                    }
+                    _ => {
+                        return Ok(());
+                    }
+                }
+            }
         };
         self.apply_new_table_source(resources, filter).await?;
         self.parent = Some((selected_id, selected_name));
@@ -226,6 +241,15 @@ impl App {
             }
             ResourceType::Network => {
                 data_loaders::load_from_container::<NetworkDetails>(self.cache_mgr.clone(), &parent).await?
+            }
+            ResourceType::Task => {
+                let task_manager = self.client.service_content().task_manager.as_ref();
+                let Some(task_manager) = task_manager else {
+                    return Ok(());
+                };
+                // Initialize task descriptions
+                ensure_task_descriptions_initialized(self.client.clone()).await?;
+                data_loaders::load_from_property::<TaskInfo>(self.cache_mgr.clone(), task_manager, "recentTask").await?
             }
         };
         self.apply_new_table_source(resources, filter).await
@@ -416,7 +440,8 @@ impl App {
                         KeyCode::Char('d') => self.events.send(AppEvent::ExpandCollection(ResourceType::Datastore)),
                         KeyCode::Char('h') => self.events.send(AppEvent::ExpandCollection(ResourceType::Host)),
                         KeyCode::Char('v') => self.events.send(AppEvent::ExpandCollection(ResourceType::VirtualMachine)),
-                        KeyCode::Char('c') => self.events.send(AppEvent::ExpandCollection(ResourceType::Cluster)),
+                        //KeyCode::Char('c') => self.events.send(AppEvent::ExpandCollection(ResourceType::Cluster)),
+                        KeyCode::Char('t') => self.events.send(AppEvent::ExpandCollection(ResourceType::Task)),
                         _ => {}
                     }
                 }

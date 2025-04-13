@@ -28,10 +28,3 @@ fn main() {
     emit_vim_bindings(vi_json_spec_path, root_folder, Some(&PRUNED_TYPES)).unwrap();
     println!("Total time in generation: {:?}", start.elapsed());
 }
-
-// fn generate_to_console(vi_json_spec_path: &Path) -> Result<(), Box<dyn std::error::Error>> {
-//     let model = load_openapi(vi_json_spec_path)?;
-//     let vim_model = vim_model::load_vim_model(&model)?;
-//     let mut printer = printer::StdoutPrinter::new(None, None);
-//     Ok(())
-// }

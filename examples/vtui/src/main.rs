@@ -22,6 +22,7 @@ mod cluster;
 mod network;
 mod hints;
 mod data_loaders;
+mod task;
 
 #[tokio::main]
 async fn main() -> Result<()> {

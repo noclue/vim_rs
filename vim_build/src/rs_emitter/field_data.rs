@@ -47,7 +47,7 @@ use crate::rs_emitter::{to_field_name, TypeDefResolver};
 use crate::vim_model::{DataType, HttpMethod, Model};
 use super::errors::Result;
 
-static INVENTORY_TYPES: [&str; 14] = [
+static INVENTORY_TYPES: &[&str] = &[
     "Folder",
     "VirtualMachine",
     "HostSystem",
@@ -62,6 +62,8 @@ static INVENTORY_TYPES: [&str; 14] = [
     "StoragePod",
     "ComputeResource",
     "VirtualApp",
+    // Add other useful types here
+    "Task",
 ];
 
 #[derive(Clone, Debug)]
@@ -175,7 +177,7 @@ impl<'a> FieldDataEmitter<'a> {
 
     fn extract_managed_props(&mut self, field_data: &mut IndexMap<String, IndexMap<String, FieldData>>) -> Result<()> {
         for mo in INVENTORY_TYPES {
-            let Some(mo_def) = self.vim_model.managed_objects.get(mo) else {
+            let Some(mo_def) = self.vim_model.managed_objects.get(*mo) else {
                 return Err(super::errors::Error::TypeNotFound(mo.to_string()));
             };
             let mut fields: IndexMap<String, FieldData> = IndexMap::new();
