@@ -10,7 +10,7 @@ The library provides two powerful macros to simplify property retrieval and moni
 
 The `vim_retrievable` macro creates structs for efficient, one-time property retrieval:
 
-```ignore
+```rust,ignore
 use vim_macros::vim_retrievable;
 use vim_rs::core::pc_retrieve::ObjectRetriever;
 
@@ -48,7 +48,7 @@ async fn print_hosts(client: &Client) -> Result<()> {
 
 The `vim_updatable` macro creates structs for continuous property monitoring:
 
-```ignore
+```rust,ignore
 vim_updatable!(
     struct VmDetails: VirtualMachine {
         name = "name",
@@ -117,7 +117,7 @@ while `vim_rs::core::pc_cache` provides infrastructure for continuous property m
 
 ### Macro Syntax
 
-```ignore
+```rust,ignore
 vim_retrievable!(
     struct StructName: ManagedObjectType {
         field_name = "property.path",
