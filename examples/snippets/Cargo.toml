@@ -23,6 +23,10 @@ path = "src/perf_metrics.rs"
 name = "mac_monitor"
 path = "src/mac_monitor.rs"
 
+[[bin]]
+name = "dynamic_property_fetch"
+path = "src/dynamic_property_fetch.rs"
+
 [dependencies]
 anyhow = "1.0"
 chrono = "0.4"
@@ -32,3 +36,4 @@ utils = { version = "0.1.0", path = "../utils" }
 tokio = {  version = "1.44", features = ["macros"]}
 vim_macros = { version = "0.2.0", path = "../../vim_macros" }
 vim_rs = { version = "0.2.0", path = "../../vim_rs" }
+serde_json = "1.0"

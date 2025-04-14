@@ -1580,6 +1580,7 @@ dependencies = [
  "chrono",
  "env_logger",
  "log",
+ "serde_json",
  "tokio",
  "utils",
  "vim_macros",

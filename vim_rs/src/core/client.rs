@@ -7,7 +7,7 @@ use log::Level::Trace;
 
 use std::ffi::OsStr;
 use crate::mo;
-use crate::types::structs::ServiceContent;
+use crate::types::structs::{ManagedObjectReference, ServiceContent};
 
 const LIB_NAME: &str = env!("CARGO_PKG_NAME");
 const LIB_VERSION: &str = env!("CARGO_PKG_VERSION");
@@ -255,8 +255,22 @@ impl Client {
         self.api_release.clone()
     }
 
+    /// Fetch a managed object property by name into user provided type. This method can be used
+    /// with ['serde_json::Value'] to fetch the property as a dynamic JSON value. This enables
+    /// lightweight albeit unsafe approach to explore the API and extract relevant pieces of data.
+    pub async fn fetch_property<T>(&self, obj: ManagedObjectReference, property: &str) -> Result<T>
+    where
+        T: serde::de::DeserializeOwned
+    {
+        let type_name: &str = obj.r#type.into();
+        let id = &obj.value;
+        let path = format!("/{type_name}/{id}/{property}");
+        let req = self.get_request(&path);
+        self.execute(req).await
+    }
+
     /// Prepare GET request
-    pub fn get_request(&self, path: &str) -> reqwest::RequestBuilder
+    pub(crate) fn get_request(&self, path: &str) -> reqwest::RequestBuilder
     {
         debug!("GET request: {}", path);
         let url = format!("{}{}", self.base_url, path);
@@ -264,7 +278,7 @@ impl Client {
     }
 
     /// Prepare POST request with a body
-    pub fn post_request<B>(&self, path: &str, payload: &B) -> reqwest::RequestBuilder
+    pub(crate) fn post_request<B>(&self, path: &str, payload: &B) -> reqwest::RequestBuilder
     where
         B: serde::Serialize,
     {
@@ -275,7 +289,7 @@ impl Client {
     }
 
     /// Prepare POST request without a body
-    pub fn post_bare(&self, path: &str) -> reqwest::RequestBuilder
+    pub(crate) fn post_bare(&self, path: &str) -> reqwest::RequestBuilder
     {
         debug!("POST request (void): {}", path);
         let url = format!("{}{}", self.base_url, path);
@@ -283,7 +297,7 @@ impl Client {
     }
 
     /// Execute a request that returns a response body
-    pub async fn execute<T>(&self, mut req: reqwest::RequestBuilder) -> Result<T> 
+    pub(crate) async fn execute<T>(&self, mut req: reqwest::RequestBuilder) -> Result<T>
     where T: serde::de::DeserializeOwned 
     {
         req = self.prepare(req).await;
@@ -294,7 +308,7 @@ impl Client {
     }
 
     /// Execute a request that optionally returns a response body
-    pub async fn execute_option<T>(&self, mut req: reqwest::RequestBuilder) -> Result<Option<T>> 
+    pub(crate) async fn execute_option<T>(&self, mut req: reqwest::RequestBuilder) -> Result<Option<T>>
     where T: serde::de::DeserializeOwned 
     {
         req = self.prepare(req).await;
@@ -319,7 +333,7 @@ impl Client {
     }
 
     /// Execute a request that does not return a response body
-    pub async fn execute_void(&self, mut req: reqwest::RequestBuilder) -> Result<()> 
+    pub(crate) async fn execute_void(&self, mut req: reqwest::RequestBuilder) -> Result<()>
     {
         req = self.prepare(req).await;
         let res = req.send().await?;
