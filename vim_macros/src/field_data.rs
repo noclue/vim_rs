@@ -884,7 +884,7 @@ offloading is supported.
         ("counter", NodeData { type_decl: "i32", type_name: "", is_optional: false, processing_type: FieldProcessingType::Enum("PrimitiveInt"), path_segment: "counter", doc: Some(r#####"Number of attempts that have been made to upgrade the version of tools
 installed on this virtual machine.
 "#####) },),
-        ("fault", NodeData { type_decl: "vim_rs::types::structs::MethodFault", type_name: "MethodFault", is_optional: true, processing_type: FieldProcessingType::Trait, path_segment: "fault", doc: Some(r#####"Error that happened, if any, during last attempt to upgrade tools.
+        ("fault", NodeData { type_decl: "vim_rs::types::structs::MethodFault", type_name: "MethodFault", is_optional: true, processing_type: FieldProcessingType::Struct, path_segment: "fault", doc: Some(r#####"Error that happened, if any, during last attempt to upgrade tools.
 "#####) },),
     ],
 }),
@@ -4037,7 +4037,7 @@ that started the chain of tasks.
 "#####) },),
         ("progress_details", NodeData { type_decl: "Vec<vim_rs::types::structs::KeyAnyValue>", type_name: "", is_optional: true, processing_type: FieldProcessingType::Enum("ArrayOfKeyAnyValue"), path_segment: "progressDetails", doc: Some(r#####"***Since:*** vSphere API Release 8.0.1.0
 "#####) },),
-        ("error", NodeData { type_decl: "vim_rs::types::structs::MethodFault", type_name: "MethodFault", is_optional: true, processing_type: FieldProcessingType::Trait, path_segment: "error", doc: Some(r#####"If the task state is "error", then this property contains the fault code.
+        ("error", NodeData { type_decl: "vim_rs::types::structs::MethodFault", type_name: "MethodFault", is_optional: true, processing_type: FieldProcessingType::Struct, path_segment: "error", doc: Some(r#####"If the task state is "error", then this property contains the fault code.
 "#####) },),
         ("cancelled", NodeData { type_decl: "bool", type_name: "", is_optional: false, processing_type: FieldProcessingType::Enum("PrimitiveBoolean"), path_segment: "cancelled", doc: Some(r#####"Flag to indicate whether or not the client requested
 cancellation of the task.
@@ -5852,7 +5852,7 @@ See also *ScheduledHardwareUpgradeInfoHardwareUpgradePolicy_enum*.
         ("version_key", NodeData { type_decl: "String", type_name: "", is_optional: true, processing_type: FieldProcessingType::Enum("PrimitiveString"), path_segment: "versionKey", doc: Some(r#####"Key for target hardware version to be used on next scheduled upgrade
 in the format of *VirtualMachineConfigOptionDescriptor.key*.
 "#####) },),
-        ("fault", NodeData { type_decl: "vim_rs::types::structs::MethodFault", type_name: "MethodFault", is_optional: true, processing_type: FieldProcessingType::Trait, path_segment: "fault", doc: Some(r#####"Contains information about the failure of last attempt to run
+        ("fault", NodeData { type_decl: "vim_rs::types::structs::MethodFault", type_name: "MethodFault", is_optional: true, processing_type: FieldProcessingType::Struct, path_segment: "fault", doc: Some(r#####"Contains information about the failure of last attempt to run
 scheduled hardware upgrade.
 "#####) },),
     ],
@@ -7938,7 +7938,7 @@ For stateless host, this variable takes effect only when
 the variable <code>rebootStateless</code> above is
 <code>false</code>.
 "#####) },),
-        ("fault_data", NodeData { type_decl: "vim_rs::types::structs::MethodFault", type_name: "MethodFault", is_optional: true, processing_type: FieldProcessingType::Trait, path_segment: "faultData", doc: Some(r#####"This contains the error details.
+        ("fault_data", NodeData { type_decl: "vim_rs::types::structs::MethodFault", type_name: "MethodFault", is_optional: true, processing_type: FieldProcessingType::Struct, path_segment: "faultData", doc: Some(r#####"This contains the error details.
 "#####) },),
         ("task_list_requirement", NodeData { type_decl: "Vec<String>", type_name: "", is_optional: true, processing_type: FieldProcessingType::Enum("ArrayOfString"), path_segment: "taskListRequirement", doc: Some(r#####"The task requirements from the results of
 *HostProfileManager.GenerateConfigTaskList* method
@@ -8143,7 +8143,7 @@ Units in Mbits/s.
 Message can also contain a key to message catalog which
 can be used to generate better localized messages.
 "#####) },),
-        ("fault_cause", NodeData { type_decl: "vim_rs::types::structs::MethodFault", type_name: "MethodFault", is_optional: true, processing_type: FieldProcessingType::Trait, path_segment: "faultCause", doc: Some(r#####"Fault which is the cause of this fault.
+        ("fault_cause", NodeData { type_decl: "vim_rs::types::structs::MethodFault", type_name: "MethodFault", is_optional: true, processing_type: FieldProcessingType::Struct, path_segment: "faultCause", doc: Some(r#####"Fault which is the cause of this fault.
 "#####) },),
     ],
 }),

@@ -19,6 +19,10 @@ path = "src/vm_events.rs"
 name = "print_vm_addresses"
 path = "src/print_vm_addresses.rs"
 
+[[bin]]
+name = "retrieve_recent_task"
+path = "src/retrieve_recent_task.rs"
+
 [dependencies]
 anyhow = "1.0"
 env_logger = "0.11"

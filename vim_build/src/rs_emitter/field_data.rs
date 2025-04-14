@@ -44,7 +44,7 @@ use indexmap::{IndexMap, IndexSet};
 use crate::printer::Printer;
 use crate::rs_emitter::Error::InternalError;
 use crate::rs_emitter::{to_field_name, TypeDefResolver};
-use crate::vim_model::{DataType, HttpMethod, Model};
+use crate::vim_model::{DataType, EmitMode, HttpMethod, Model};
 use super::errors::Result;
 
 static INVENTORY_TYPES: &[&str] = &[
@@ -148,7 +148,7 @@ impl<'a> FieldDataEmitter<'a> {
                             return Err(InternalError("Struct lookup failed!".to_string()));
                         };
                         let struct_ref = struct_ref.borrow();
-                        if struct_ref.has_children() {
+                        if struct_ref.has_children()  && (struct_ref.emit_mode == EmitMode::Emit) {
                             "Trait".to_string()
                         } else {
                             "Struct".to_string()
