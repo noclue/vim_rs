@@ -354,7 +354,7 @@ impl App {
 
             let block = Block::default()
                 .title("Search")
-                .style(Style::default().bg(Color::Rgb(32, 32, 96)))
+                .style(Style::default().bg(Color::Blue))
                 .borders(Borders::ALL)
                 .border_type(BorderType::Rounded)
                 .border_style(Style::default().fg(Color::Yellow));
@@ -383,7 +383,7 @@ impl App {
             let list = ratatui::widgets::List::new(items)
                 .block(Block::default()
                     .title("Select Resource Type")
-                    .style(Style::default().bg(Color::Rgb(32, 32, 96)))
+                    .style(Style::default().bg(Color::Blue))
                     .borders(Borders::ALL)
                     .border_type(BorderType::Rounded)
                     .border_style(Style::default().fg(Color::Yellow)))

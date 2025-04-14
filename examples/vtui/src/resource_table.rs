@@ -66,7 +66,6 @@ impl<'a> StatefulWidget for ResourceTableWidget<'a> {
             title_items.push(Span::styled(object_handle(id, name), Style::default().fg(Color::Green)));
         }
 
-
         let title = Line::from(title_items).alignment(ratatui::layout::Alignment::Center);
 
         let block = Block::bordered()
@@ -113,7 +112,7 @@ impl<'a> StatefulWidget for ResourceTableWidget<'a> {
             .header(header)
             .highlight_spacing(HighlightSpacing::Always)
             .highlight_symbol("▶ ")
-            .row_highlight_style(Style::default().bg(Color::Rgb(64,64,64)));
+            .row_highlight_style(Style::default().bg(Color::DarkGray));
 
         StatefulWidget::render(table, area, buf, state);
     }
