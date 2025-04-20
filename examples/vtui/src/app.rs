@@ -1,7 +1,7 @@
 use crate::event::{AppEvent, Event, EventHandler};
 use crate::resource_table::ResourceTableWidget;
 use crossterm::event::{Event as CrosstermEvent, KeyCode, KeyEventKind};
-use ratatui::layout::{Constraint, Layout};
+use ratatui::layout::{Constraint, Layout, Rect};
 use ratatui::{DefaultTerminal, Frame};
 use std::cell::RefCell;
 use std::rc::Rc;
@@ -310,34 +310,7 @@ impl App {
         let vertical = Layout::vertical([Constraint::Length(5), Constraint::Fill(1)]);
         let [top_area, body_area] = vertical.areas(frame.area());
 
-        let horizontal = Layout::horizontal([Constraint::Fill(1), Constraint::Length(16), Constraint::Length(16), Constraint::Length(21)]);
-        let [status_area, expand_area, help_area, right_area] = horizontal.areas(top_area);
-
-        // Split the left area into two columns for statuses and help hints
-
-        // Render statuses
-        let status_lines: Vec<Line> = self.build_status_lines();
-        let status_paragraph = ratatui::widgets::Paragraph::new(status_lines)
-            .style(ratatui::style::Style::default().fg(ratatui::style::Color::Green));
-        frame.render_widget(status_paragraph, status_area);
-
-        // Render expand hints
-        let expand_lines = hints::decorate_hints(hints::get_expand_hint(self.resources.resource_type()));
-        let expand_paragraph = ratatui::widgets::Paragraph::new(expand_lines)
-            .style(ratatui::style::Style::default().fg(ratatui::style::Color::Cyan));
-        frame.render_widget(expand_paragraph, expand_area);
-
-        // Render help hints
-        let help_lines = hints::decorate_hints(HELP_HINTS);
-        let help_paragraph = ratatui::widgets::Paragraph::new(help_lines)
-            .style(ratatui::style::Style::default().fg(ratatui::style::Color::Yellow));
-        frame.render_widget(help_paragraph, help_area);
-
-        // Render ASCII art logo
-        let logo_paragraph = ratatui::widgets::Paragraph::new(ASCII_ART)
-            .style(ratatui::style::Style::default().fg(ratatui::style::Color::Cyan))
-            .alignment(ratatui::layout::Alignment::Left);
-        frame.render_widget(logo_paragraph, right_area);
+        self.render_header(frame, top_area);
 
         let table = ResourceTableWidget::new(self.resources.as_mut(), &self.parent);
 
@@ -397,6 +370,37 @@ impl App {
             frame.render_stateful_widget(list, popup_area, &mut list_state);
         }
 
+    }
+
+    fn render_header(&mut self, frame: &mut Frame, top_area: Rect) {
+        let horizontal = Layout::horizontal([Constraint::Fill(1), Constraint::Length(16), Constraint::Length(16), Constraint::Length(21)]);
+        let [status_area, expand_area, help_area, right_area] = horizontal.areas(top_area);
+
+        // Split the left area into two columns for statuses and help hints
+
+        // Render statuses
+        let status_lines: Vec<Line> = self.build_status_lines();
+        let status_paragraph = ratatui::widgets::Paragraph::new(status_lines)
+            .style(ratatui::style::Style::default().fg(ratatui::style::Color::Green));
+        frame.render_widget(status_paragraph, status_area);
+
+        // Render expand hints
+        let expand_lines = hints::decorate_hints(hints::get_expand_hint(self.resources.resource_type()));
+        let expand_paragraph = ratatui::widgets::Paragraph::new(expand_lines)
+            .style(ratatui::style::Style::default().fg(ratatui::style::Color::Cyan));
+        frame.render_widget(expand_paragraph, expand_area);
+
+        // Render help hints
+        let help_lines = hints::decorate_hints(HELP_HINTS);
+        let help_paragraph = ratatui::widgets::Paragraph::new(help_lines)
+            .style(ratatui::style::Style::default().fg(ratatui::style::Color::Yellow));
+        frame.render_widget(help_paragraph, help_area);
+
+        // Render ASCII art logo
+        let logo_paragraph = ratatui::widgets::Paragraph::new(ASCII_ART)
+            .style(ratatui::style::Style::default().fg(ratatui::style::Color::Cyan))
+            .alignment(ratatui::layout::Alignment::Left);
+        frame.render_widget(logo_paragraph, right_area);
     }
 
     fn handle_terminal_event(&mut self, event: &CrosstermEvent) {
