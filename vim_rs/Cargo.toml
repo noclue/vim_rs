@@ -1,6 +1,6 @@
 [package]
 name = "vim_rs"
-version = "0.2.1"
+version = "0.2.2"
 edition = "2021"
 authors = ["Kiril Karaatanasov <karaatanasov@gmail.com>"]
 license = "Apache-2.0"
@@ -16,7 +16,7 @@ exclude = ["target/*", "**/*.rs.bk"]
 [dependencies]
 base64 = "0.22"
 env_logger = "0.11"
-indexmap = "2.7"
+indexmap = "2.9"
 log = "0.4"
 reqwest = { version = "0.12", features = ["json"] }
 serde = { version = "1.0", features = ["derive"] }
