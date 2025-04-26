@@ -163143,7 +163143,7 @@
             "description": "The set of physical network adapters associated with this switch.\n",
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/PhysicalNic"
+              "type": "string"
             }
           },
           "spec": {
@@ -166622,7 +166622,7 @@
           },
           "lun": {
             "description": "SCSI device corresponding to logical unit.\n",
-            "$ref": "#/components/schemas/ScsiLun"
+            "type": "string"
           },
           "path": {
             "description": "Array of paths available to access this LogicalUnit.\n",
@@ -166776,11 +166776,11 @@
           },
           "adapter": {
             "description": "The host bus adapter at one endpoint of this path.\n",
-            "$ref": "#/components/schemas/HostHostBusAdapter"
+            "type": "string"
           },
           "lun": {
             "description": "The logical unit at one endpoint of this path.\n",
-            "$ref": "#/components/schemas/HostMultipathInfoLogicalUnit"
+            "type": "string"
           },
           "transport": {
             "description": "Transport information for the target end of the path.\n",
@@ -169551,7 +169551,7 @@
           },
           "associatedAdapter": {
             "description": "Associated NVME over Fabrics host bus adapter.\n\nA controller is associated with exactly one host at a time through\nan NVME over Fabrics host bus adapter.\n",
-            "$ref": "#/components/schemas/HostHostBusAdapter"
+            "type": "string"
           },
           "transportType": {
             "description": "The transport type supported by the controller.\n\nThe set of possible values is described in *HostNvmeTransportType_enum*.\nFor details, see:\n- \"NVM Express over Fabrics 1.0\", Section 1.5.1,\n  \"Fabrics and Transports\".\n",
@@ -170189,7 +170189,7 @@
           },
           "adapter": {
             "description": "The link to data for the NVME interface.\n",
-            "$ref": "#/components/schemas/HostHostBusAdapter"
+            "type": "string"
           },
           "connectedController": {
             "description": "The list of connected NVME controllers.\n\nThis list can be empty if am NVME interface is not connected\nto any controllers. Each NvmeController object contains\na list of its attached NVME namespaces in\n*HostNvmeController.attachedNamespace*.\n",
@@ -170354,7 +170354,7 @@
             "description": "The set of physical network adapters associated with this switch.\n",
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/PhysicalNic"
+              "type": "string"
             }
           },
           "pnicZone": {
@@ -171329,7 +171329,7 @@
           },
           "rdmaDevice": {
             "description": "Associated RDMA device, if any.\n",
-            "$ref": "#/components/schemas/HostRdmaDevice"
+            "type": "string"
           },
           "dpuId": {
             "description": "The identifier of the DPU by which the physical NIC is backed.\n\nWhen physical NIC is not backed by DPU, dpuId will be unset.\n\n***Since:*** vSphere API Release 8.0.0.1\n",
@@ -171989,13 +171989,13 @@
           },
           "adapter": {
             "description": "The link to the host bus adapter for this inebtrface.\n",
-            "$ref": "#/components/schemas/HostHostBusAdapter"
+            "type": "string"
           },
           "path": {
             "description": "The list of paths to which the host bus adapter is associated.\n",
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/HostPlugStoreTopologyPath"
+              "type": "string"
             }
           }
         },
@@ -172039,13 +172039,13 @@
           },
           "lun": {
             "description": "The SCSI device corresponding to logical unit.\n",
-            "$ref": "#/components/schemas/ScsiLun"
+            "type": "string"
           },
           "path": {
             "description": "The array of paths available to access this LogicalUnit.\n",
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/HostPlugStoreTopologyPath"
+              "type": "string"
             }
           }
         },
@@ -172108,15 +172108,15 @@
           },
           "adapter": {
             "description": "The adapter that provided the Path.\n",
-            "$ref": "#/components/schemas/HostPlugStoreTopologyAdapter"
+            "type": "string"
           },
           "target": {
             "description": "The target of the Path if any.\n",
-            "$ref": "#/components/schemas/HostPlugStoreTopologyTarget"
+            "type": "string"
           },
           "device": {
             "description": "The device that claimed the Path if any.\n",
-            "$ref": "#/components/schemas/HostPlugStoreTopologyDevice"
+            "type": "string"
           }
         },
         "required": [
@@ -172165,14 +172165,14 @@
             "description": "The set of devices formed by this plugin.\n",
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/HostPlugStoreTopologyDevice"
+              "type": "string"
             }
           },
           "claimedPath": {
             "description": "The set of paths claimed by this plugin.\n\nNot every claimed path\nwill necessarily appear as part of a Device. Claimed paths will\nonly appear under Devices if the device identifier of the path\nmatches up with the device identifier exposed by the Device.\n",
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/HostPlugStoreTopologyPath"
+              "type": "string"
             }
           }
         },
@@ -172265,7 +172265,7 @@
           },
           "vswitch": {
             "description": "The virtual switch that contains this port group.\n",
-            "$ref": "#/components/schemas/HostVirtualSwitch"
+            "type": "string"
           },
           "computedPolicy": {
             "description": "Computed network policies that are applicable for a port group.\n\nThe\ninheritance scheme for PortGroup requires knowledge about the\nNetworkPolicy for a port group and its parent virtual switch as well as\nthe logic for computing the results. This information is provided as\na convenience so that callers need not duplicate the inheritance logic\nto determine the proper values for a network policy.\n\nSee the description of the\n*NetworkPolicy* data object type\nfor more information.\n",
@@ -173003,7 +173003,7 @@
         "properties": {
           "pairedUplink": {
             "description": "The associated physical NIC\n",
-            "$ref": "#/components/schemas/PhysicalNic"
+            "type": "string"
           }
         },
         "required": [
@@ -174291,7 +174291,7 @@
           },
           "adapter": {
             "description": "The link to data for this SCSI interface.\n",
-            "$ref": "#/components/schemas/HostHostBusAdapter"
+            "type": "string"
           },
           "target": {
             "description": "The list of targets to which the SCSI interface is associated.\n",
@@ -174346,7 +174346,7 @@
           },
           "scsiLun": {
             "description": "The link to data for this SCSI logical unit.\n",
-            "$ref": "#/components/schemas/ScsiLun"
+            "type": "string"
           }
         },
         "required": [
@@ -178354,7 +178354,7 @@
           },
           "selectedVnic": {
             "description": "VirtualNic that is selected for use in VMotion operations.\n",
-            "$ref": "#/components/schemas/HostVirtualNic"
+            "type": "string"
           }
         },
         "allOf": [
@@ -178544,7 +178544,7 @@
           },
           "port": {
             "description": "Port(*HostPortGroup.port*) on the port group that the virtual\nNIC is using when it is enabled.\n\nIf the Virtual NIC is connected to\nDistributedVirtualSwitch or opaque network, this property is unset.\n",
-            "$ref": "#/components/schemas/HostPortGroupPort"
+            "type": "string"
           }
         },
         "required": [
@@ -178864,7 +178864,7 @@
             "description": "List of VirtualNic objects that are selected for use.\n",
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/HostVirtualNic"
+              "type": "string"
             }
           }
         },
@@ -179011,14 +179011,14 @@
             "description": "The list of port groups configured for this virtual switch.\n",
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/HostPortGroup"
+              "type": "string"
             }
           },
           "pnic": {
             "description": "The set of physical network adapters associated with this bridge.\n",
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/PhysicalNic"
+              "type": "string"
             }
           },
           "spec": {

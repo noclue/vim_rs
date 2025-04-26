@@ -86049,7 +86049,7 @@ pub struct HostProxySwitch {
     /// in bytes.
     pub mtu: Option<i32>,
     /// The set of physical network adapters associated with this switch.
-    pub pnic: Option<Vec<super::structs::PhysicalNic>>,
+    pub pnic: Option<Vec<String>>,
     /// The specification of the switch.
     pub spec: super::structs::HostProxySwitchSpec,
     /// The Link Aggregation Control Protocol group and
@@ -86178,7 +86178,7 @@ impl<'de> de::Visitor<'de> for __HostProxySwitchVisitor {
         let mut field6: Option<i32> = None; // num_ports_available
         let mut field7: Option<Vec<super::structs::KeyValue>> = None; // uplink_port
         let mut field8: Option<i32> = None; // mtu
-        let mut field9: Option<Vec<super::structs::PhysicalNic>> = None; // pnic
+        let mut field9: Option<Vec<String>> = None; // pnic
         let mut field10: Option<super::structs::HostProxySwitchSpec> = None; // spec
         let mut field11: Option<Vec<super::structs::HostProxySwitchHostLagConfig>> = None; // host_lag
         let mut field12: Option<bool> = None; // network_reservation_supported
@@ -92350,7 +92350,7 @@ pub struct HostMultipathInfoLogicalUnit {
     /// Use this id to configure LogicalUnit multipathing policy using *HostStorageSystem.SetMultipathLunPolicy*.
     pub id: String,
     /// SCSI device corresponding to logical unit.
-    pub lun: Box<dyn super::traits::ScsiLunTrait>,
+    pub lun: String,
     /// Array of paths available to access this LogicalUnit.
     pub path: Vec<super::structs::HostMultipathInfoPath>,
     /// Policy that the logical unit should use when selecting a path.
@@ -92407,7 +92407,7 @@ impl<'de> de::Visitor<'de> for __HostMultipathInfoLogicalUnitVisitor {
     {
         let mut field1: Option<String> = None; // key
         let mut field2: Option<String> = None; // id
-        let mut field3: Option<Box<dyn super::traits::ScsiLunTrait>> = None; // lun
+        let mut field3: Option<String> = None; // lun
         let mut field4: Option<Vec<super::structs::HostMultipathInfoPath>> = None; // path
         let mut field5: Option<Box<dyn super::traits::HostMultipathInfoLogicalUnitPolicyTrait>> = None; // policy
         let mut field6: Option<super::structs::HostMultipathInfoLogicalUnitStorageArrayTypePolicy> = None; // storage_array_type_policy
@@ -92931,9 +92931,9 @@ pub struct HostMultipathInfoPath {
     /// path for performing I/O in the near future.
     pub is_working_path: Option<bool>,
     /// The host bus adapter at one endpoint of this path.
-    pub adapter: Box<dyn super::traits::HostHostBusAdapterTrait>,
+    pub adapter: String,
     /// The logical unit at one endpoint of this path.
-    pub lun: super::structs::HostMultipathInfoLogicalUnit,
+    pub lun: String,
     /// Transport information for the target end of the path.
     pub transport: Option<Box<dyn super::traits::HostTargetTransportTrait>>,
 }
@@ -92992,8 +92992,8 @@ impl<'de> de::Visitor<'de> for __HostMultipathInfoPathVisitor {
         let mut field3: Option<String> = None; // path_state
         let mut field4: Option<String> = None; // state
         let mut field5: Option<bool> = None; // is_working_path
-        let mut field6: Option<Box<dyn super::traits::HostHostBusAdapterTrait>> = None; // adapter
-        let mut field7: Option<super::structs::HostMultipathInfoLogicalUnit> = None; // lun
+        let mut field6: Option<String> = None; // adapter
+        let mut field7: Option<String> = None; // lun
         let mut field8: Option<Box<dyn super::traits::HostTargetTransportTrait>> = None; // transport
 
         while let Some(key) = map.next_key::<String>()? {
@@ -98095,7 +98095,7 @@ pub struct HostNvmeController {
     /// 
     /// A controller is associated with exactly one host at a time through
     /// an NVME over Fabrics host bus adapter.
-    pub associated_adapter: Box<dyn super::traits::HostHostBusAdapterTrait>,
+    pub associated_adapter: String,
     /// The transport type supported by the controller.
     /// 
     /// The set of possible values is described in *HostNvmeTransportType_enum*.
@@ -98199,7 +98199,7 @@ impl<'de> de::Visitor<'de> for __HostNvmeControllerVisitor {
         let mut field2: Option<i32> = None; // controller_number
         let mut field3: Option<String> = None; // subnqn
         let mut field4: Option<String> = None; // name
-        let mut field5: Option<Box<dyn super::traits::HostHostBusAdapterTrait>> = None; // associated_adapter
+        let mut field5: Option<String> = None; // associated_adapter
         let mut field6: Option<String> = None; // transport_type
         let mut field7: Option<bool> = None; // fused_operation_supported
         let mut field8: Option<i32> = None; // number_of_queues
@@ -99208,7 +99208,7 @@ pub struct HostNvmeTopologyInterface {
     /// The identifier for the NVME interface.
     pub key: String,
     /// The link to data for the NVME interface.
-    pub adapter: Box<dyn super::traits::HostHostBusAdapterTrait>,
+    pub adapter: String,
     /// The list of connected NVME controllers.
     /// 
     /// This list can be empty if am NVME interface is not connected
@@ -99259,7 +99259,7 @@ impl<'de> de::Visitor<'de> for __HostNvmeTopologyInterfaceVisitor {
         A: de::MapAccess<'de>,
     {
         let mut field1: Option<String> = None; // key
-        let mut field2: Option<Box<dyn super::traits::HostHostBusAdapterTrait>> = None; // adapter
+        let mut field2: Option<String> = None; // adapter
         let mut field3: Option<Vec<super::structs::HostNvmeController>> = None; // connected_controller
 
         while let Some(key) = map.next_key::<String>()? {
@@ -99899,7 +99899,7 @@ pub struct HostOpaqueSwitch {
     /// The opaque switch name.
     pub name: Option<String>,
     /// The set of physical network adapters associated with this switch.
-    pub pnic: Option<Vec<super::structs::PhysicalNic>>,
+    pub pnic: Option<Vec<String>>,
     /// The IDs of networking zones associated with this switch.
     pub pnic_zone: Option<Vec<super::structs::HostOpaqueSwitchPhysicalNicZone>>,
     /// Opaque switch status.
@@ -99978,7 +99978,7 @@ impl<'de> de::Visitor<'de> for __HostOpaqueSwitchVisitor {
         let mut field1: Option<Vec<super::structs::DynamicProperty>> = None; // dynamic_property
         let mut field2: Option<String> = None; // key
         let mut field3: Option<String> = None; // name
-        let mut field4: Option<Vec<super::structs::PhysicalNic>> = None; // pnic
+        let mut field4: Option<Vec<String>> = None; // pnic
         let mut field5: Option<Vec<super::structs::HostOpaqueSwitchPhysicalNicZone>> = None; // pnic_zone
         let mut field6: Option<String> = None; // status
         let mut field7: Option<Vec<super::structs::HostVirtualNic>> = None; // vtep
@@ -101589,7 +101589,7 @@ pub struct PhysicalNic {
     /// Networking Stack interrupt mode
     pub ens_interrupt_supported: Option<bool>,
     /// Associated RDMA device, if any.
-    pub rdma_device: Option<super::structs::HostRdmaDevice>,
+    pub rdma_device: Option<String>,
     /// The identifier of the DPU by which the physical NIC is backed.
     /// 
     /// When physical NIC is not backed by DPU, dpuId will be unset.
@@ -101705,7 +101705,7 @@ impl<'de> de::Visitor<'de> for __PhysicalNicVisitor {
         let mut field17: Option<bool> = None; // auto_negotiate_supported
         let mut field18: Option<bool> = None; // enhanced_networking_stack_supported
         let mut field19: Option<bool> = None; // ens_interrupt_supported
-        let mut field20: Option<super::structs::HostRdmaDevice> = None; // rdma_device
+        let mut field20: Option<String> = None; // rdma_device
         let mut field21: Option<String> = None; // dpu_id
 
         while let Some(key) = map.next_key::<String>()? {
@@ -103130,9 +103130,9 @@ pub struct HostPlugStoreTopologyAdapter {
     /// The identifier for the host bus adapter.
     pub key: String,
     /// The link to the host bus adapter for this inebtrface.
-    pub adapter: Box<dyn super::traits::HostHostBusAdapterTrait>,
+    pub adapter: String,
     /// The list of paths to which the host bus adapter is associated.
-    pub path: Option<Vec<super::structs::HostPlugStoreTopologyPath>>,
+    pub path: Option<Vec<String>>,
 }
 impl std::fmt::Debug for HostPlugStoreTopologyAdapter {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -103176,8 +103176,8 @@ impl<'de> de::Visitor<'de> for __HostPlugStoreTopologyAdapterVisitor {
         A: de::MapAccess<'de>,
     {
         let mut field1: Option<String> = None; // key
-        let mut field2: Option<Box<dyn super::traits::HostHostBusAdapterTrait>> = None; // adapter
-        let mut field3: Option<Vec<super::structs::HostPlugStoreTopologyPath>> = None; // path
+        let mut field2: Option<String> = None; // adapter
+        let mut field3: Option<Vec<String>> = None; // path
 
         while let Some(key) = map.next_key::<String>()? {
             match key.as_str() {
@@ -103218,9 +103218,9 @@ pub struct HostPlugStoreTopologyDevice {
     /// Linkable identifier.
     pub key: String,
     /// The SCSI device corresponding to logical unit.
-    pub lun: Box<dyn super::traits::ScsiLunTrait>,
+    pub lun: String,
     /// The array of paths available to access this LogicalUnit.
-    pub path: Option<Vec<super::structs::HostPlugStoreTopologyPath>>,
+    pub path: Option<Vec<String>>,
 }
 impl std::fmt::Debug for HostPlugStoreTopologyDevice {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -103264,8 +103264,8 @@ impl<'de> de::Visitor<'de> for __HostPlugStoreTopologyDeviceVisitor {
         A: de::MapAccess<'de>,
     {
         let mut field1: Option<String> = None; // key
-        let mut field2: Option<Box<dyn super::traits::ScsiLunTrait>> = None; // lun
-        let mut field3: Option<Vec<super::structs::HostPlugStoreTopologyPath>> = None; // path
+        let mut field2: Option<String> = None; // lun
+        let mut field3: Option<Vec<String>> = None; // path
 
         while let Some(key) = map.next_key::<String>()? {
             match key.as_str() {
@@ -103324,11 +103324,11 @@ pub struct HostPlugStoreTopologyPath {
     /// The LUN number for a path if applicable.
     pub lun_number: Option<i32>,
     /// The adapter that provided the Path.
-    pub adapter: Option<super::structs::HostPlugStoreTopologyAdapter>,
+    pub adapter: Option<String>,
     /// The target of the Path if any.
-    pub target: Option<super::structs::HostPlugStoreTopologyTarget>,
+    pub target: Option<String>,
     /// The device that claimed the Path if any.
-    pub device: Option<super::structs::HostPlugStoreTopologyDevice>,
+    pub device: Option<String>,
 }
 impl std::fmt::Debug for HostPlugStoreTopologyPath {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -103391,9 +103391,9 @@ impl<'de> de::Visitor<'de> for __HostPlugStoreTopologyPathVisitor {
         let mut field3: Option<i32> = None; // channel_number
         let mut field4: Option<i32> = None; // target_number
         let mut field5: Option<i32> = None; // lun_number
-        let mut field6: Option<super::structs::HostPlugStoreTopologyAdapter> = None; // adapter
-        let mut field7: Option<super::structs::HostPlugStoreTopologyTarget> = None; // target
-        let mut field8: Option<super::structs::HostPlugStoreTopologyDevice> = None; // device
+        let mut field6: Option<String> = None; // adapter
+        let mut field7: Option<String> = None; // target
+        let mut field8: Option<String> = None; // device
 
         while let Some(key) = map.next_key::<String>()? {
             match key.as_str() {
@@ -103454,14 +103454,14 @@ pub struct HostPlugStoreTopologyPlugin {
     /// The name of the plugin.
     pub name: String,
     /// The set of devices formed by this plugin.
-    pub device: Option<Vec<super::structs::HostPlugStoreTopologyDevice>>,
+    pub device: Option<Vec<String>>,
     /// The set of paths claimed by this plugin.
     /// 
     /// Not every claimed path
     /// will necessarily appear as part of a Device. Claimed paths will
     /// only appear under Devices if the device identifier of the path
     /// matches up with the device identifier exposed by the Device.
-    pub claimed_path: Option<Vec<super::structs::HostPlugStoreTopologyPath>>,
+    pub claimed_path: Option<Vec<String>>,
 }
 impl std::fmt::Debug for HostPlugStoreTopologyPlugin {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -103509,8 +103509,8 @@ impl<'de> de::Visitor<'de> for __HostPlugStoreTopologyPluginVisitor {
     {
         let mut field1: Option<String> = None; // key
         let mut field2: Option<String> = None; // name
-        let mut field3: Option<Vec<super::structs::HostPlugStoreTopologyDevice>> = None; // device
-        let mut field4: Option<Vec<super::structs::HostPlugStoreTopologyPath>> = None; // claimed_path
+        let mut field3: Option<Vec<String>> = None; // device
+        let mut field4: Option<Vec<String>> = None; // claimed_path
 
         while let Some(key) = map.next_key::<String>()? {
             match key.as_str() {
@@ -103635,7 +103635,7 @@ pub struct HostPortGroup {
     /// The ports that currently exist and are used on this port group.
     pub port: Option<Vec<super::structs::HostPortGroupPort>>,
     /// The virtual switch that contains this port group.
-    pub vswitch: Option<super::structs::HostVirtualSwitch>,
+    pub vswitch: Option<String>,
     /// Computed network policies that are applicable for a port group.
     /// 
     /// The
@@ -103701,7 +103701,7 @@ impl<'de> de::Visitor<'de> for __HostPortGroupVisitor {
     {
         let mut field1: Option<String> = None; // key
         let mut field2: Option<Vec<super::structs::HostPortGroupPort>> = None; // port
-        let mut field3: Option<super::structs::HostVirtualSwitch> = None; // vswitch
+        let mut field3: Option<String> = None; // vswitch
         let mut field4: Option<super::structs::HostNetworkPolicy> = None; // computed_policy
         let mut field5: Option<super::structs::HostPortGroupSpec> = None; // spec
 
@@ -104924,7 +104924,7 @@ impl<'de> de::Visitor<'de> for __HostRdmaDeviceBackingVisitor {
 pub struct HostRdmaDevicePnicBacking {
     // Fields of HostRdmaDevicePnicBacking
     /// The associated physical NIC
-    pub paired_uplink: super::structs::PhysicalNic,
+    pub paired_uplink: String,
 }
 impl std::fmt::Debug for HostRdmaDevicePnicBacking {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -104963,7 +104963,7 @@ impl<'de> de::Visitor<'de> for __HostRdmaDevicePnicBackingVisitor {
     where
         A: de::MapAccess<'de>,
     {
-        let mut field1: Option<super::structs::PhysicalNic> = None; // paired_uplink
+        let mut field1: Option<String> = None; // paired_uplink
 
         while let Some(key) = map.next_key::<String>()? {
             match key.as_str() {
@@ -107044,7 +107044,7 @@ pub struct HostScsiTopologyInterface {
     /// The identifier for the SCSI interface
     pub key: String,
     /// The link to data for this SCSI interface.
-    pub adapter: Box<dyn super::traits::HostHostBusAdapterTrait>,
+    pub adapter: String,
     /// The list of targets to which the SCSI interface is associated.
     pub target: Option<Vec<super::structs::HostScsiTopologyTarget>>,
 }
@@ -107090,7 +107090,7 @@ impl<'de> de::Visitor<'de> for __HostScsiTopologyInterfaceVisitor {
         A: de::MapAccess<'de>,
     {
         let mut field1: Option<String> = None; // key
-        let mut field2: Option<Box<dyn super::traits::HostHostBusAdapterTrait>> = None; // adapter
+        let mut field2: Option<String> = None; // adapter
         let mut field3: Option<Vec<super::structs::HostScsiTopologyTarget>> = None; // target
 
         while let Some(key) = map.next_key::<String>()? {
@@ -107130,7 +107130,7 @@ pub struct HostScsiTopologyLun {
     /// The logical unit number of the SCSI logical unit.
     pub lun: i32,
     /// The link to data for this SCSI logical unit.
-    pub scsi_lun: Box<dyn super::traits::ScsiLunTrait>,
+    pub scsi_lun: String,
 }
 impl std::fmt::Debug for HostScsiTopologyLun {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -107173,7 +107173,7 @@ impl<'de> de::Visitor<'de> for __HostScsiTopologyLunVisitor {
     {
         let mut field1: Option<String> = None; // key
         let mut field2: Option<i32> = None; // lun
-        let mut field3: Option<Box<dyn super::traits::ScsiLunTrait>> = None; // scsi_lun
+        let mut field3: Option<String> = None; // scsi_lun
 
         while let Some(key) = map.next_key::<String>()? {
             match key.as_str() {
@@ -115052,7 +115052,7 @@ pub struct HostVMotionNetConfig {
     /// *HostNetworkInfo.vnic*.
     pub candidate_vnic: Option<Vec<super::structs::HostVirtualNic>>,
     /// VirtualNic that is selected for use in VMotion operations.
-    pub selected_vnic: Option<super::structs::HostVirtualNic>,
+    pub selected_vnic: Option<String>,
 }
 impl std::fmt::Debug for HostVMotionNetConfig {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -115097,7 +115097,7 @@ impl<'de> de::Visitor<'de> for __HostVMotionNetConfigVisitor {
         A: de::MapAccess<'de>,
     {
         let mut field1: Option<Vec<super::structs::HostVirtualNic>> = None; // candidate_vnic
-        let mut field2: Option<super::structs::HostVirtualNic> = None; // selected_vnic
+        let mut field2: Option<String> = None; // selected_vnic
 
         while let Some(key) = map.next_key::<String>()? {
             match key.as_str() {
@@ -115255,7 +115255,7 @@ pub struct HostVirtualNic {
     /// 
     /// If the Virtual NIC is connected to
     /// DistributedVirtualSwitch or opaque network, this property is unset.
-    pub port: Option<super::structs::HostPortGroupPort>,
+    pub port: Option<String>,
 }
 impl std::fmt::Debug for HostVirtualNic {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -115304,7 +115304,7 @@ impl<'de> de::Visitor<'de> for __HostVirtualNicVisitor {
         let mut field2: Option<String> = None; // key
         let mut field3: Option<String> = None; // portgroup
         let mut field4: Option<super::structs::HostVirtualNicSpec> = None; // spec
-        let mut field5: Option<super::structs::HostPortGroupPort> = None; // port
+        let mut field5: Option<String> = None; // port
 
         while let Some(key) = map.next_key::<String>()? {
             match key.as_str() {
@@ -115980,7 +115980,7 @@ pub struct VirtualNicManagerNetConfig {
     /// *HostNetworkInfo.vnic*.
     pub candidate_vnic: Option<Vec<super::structs::HostVirtualNic>>,
     /// List of VirtualNic objects that are selected for use.
-    pub selected_vnic: Option<Vec<super::structs::HostVirtualNic>>,
+    pub selected_vnic: Option<Vec<String>>,
 }
 impl std::fmt::Debug for VirtualNicManagerNetConfig {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -116029,7 +116029,7 @@ impl<'de> de::Visitor<'de> for __VirtualNicManagerNetConfigVisitor {
         let mut field1: Option<String> = None; // nic_type
         let mut field2: Option<bool> = None; // multi_select_allowed
         let mut field3: Option<Vec<super::structs::HostVirtualNic>> = None; // candidate_vnic
-        let mut field4: Option<Vec<super::structs::HostVirtualNic>> = None; // selected_vnic
+        let mut field4: Option<Vec<String>> = None; // selected_vnic
 
         while let Some(key) = map.next_key::<String>()? {
             match key.as_str() {
@@ -116240,9 +116240,9 @@ pub struct HostVirtualSwitch {
     /// in bytes.
     pub mtu: Option<i32>,
     /// The list of port groups configured for this virtual switch.
-    pub portgroup: Option<Vec<super::structs::HostPortGroup>>,
+    pub portgroup: Option<Vec<String>>,
     /// The set of physical network adapters associated with this bridge.
-    pub pnic: Option<Vec<super::structs::PhysicalNic>>,
+    pub pnic: Option<Vec<String>>,
     /// The specification of this virtual switch.
     pub spec: super::structs::HostVirtualSwitchSpec,
 }
@@ -116301,8 +116301,8 @@ impl<'de> de::Visitor<'de> for __HostVirtualSwitchVisitor {
         let mut field3: Option<i32> = None; // num_ports
         let mut field4: Option<i32> = None; // num_ports_available
         let mut field5: Option<i32> = None; // mtu
-        let mut field6: Option<Vec<super::structs::HostPortGroup>> = None; // portgroup
-        let mut field7: Option<Vec<super::structs::PhysicalNic>> = None; // pnic
+        let mut field6: Option<Vec<String>> = None; // portgroup
+        let mut field7: Option<Vec<String>> = None; // pnic
         let mut field8: Option<super::structs::HostVirtualSwitchSpec> = None; // spec
 
         while let Some(key) = map.next_key::<String>()? {
