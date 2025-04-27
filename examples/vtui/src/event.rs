@@ -22,10 +22,6 @@ pub enum Event {
 /// Application events.
 #[derive(Debug)]
 pub enum AppEvent {
-    /// Move up.
-    Up,
-    /// Move down.
-    Down,
     /// Quit the application.
     Quit,
     /// Property collector events.
@@ -36,24 +32,12 @@ pub enum AppEvent {
     ErrorMessage(String),
 
     /// Search events.
-    ToggleSearch,
-    ClearSearch,
-    SearchCharacter(char),
-    SearchBackspace,
-    SearchConfirm,
-    SearchCancel,
-    SortColumn(usize),
+    OpenSearch,
+    SearchCompleted(String),
 
     /// Resource selection events.
     ResourceSelected(ResourceType),
-    ToggleResourceSelection,
-    ResourceSelectionUp,
-    ResourceSelectionDown,
-    ResourceSelectionConfirm,
-    ResourceSelectionCancel,
-
-    /// Expand sub-collection.
-    ExpandCollection(ResourceType),
+    OpenResourceSelection,
 }
 
 /// Terminal event handler.

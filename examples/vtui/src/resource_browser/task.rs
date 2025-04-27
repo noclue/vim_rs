@@ -12,9 +12,9 @@ use vim_rs::core::client::Client;
 use vim_rs::mo::TaskManager;
 use vim_rs::types::struct_enum::StructType;
 use vim_rs::types::structs::{TaskReasonAlarm, TaskReasonSchedule, TaskReasonUser};
-use crate::formatting::ID_COLUMN_WIDTH;
+use crate::resource_browser::formatting::ID_COLUMN_WIDTH;
 use crate::resource_type::ResourceType;
-use crate::tabular_data::TabularData;
+use crate::resource_browser::tabular_data::TabularData;
 
 vim_updatable!(
     struct TaskInfo: Task {
@@ -41,7 +41,7 @@ impl From<&TaskInfo> for Row<'_> {
     /// - Initiated time or "-" if not available
     /// - Duration between initiated and completed time or "-" if either is not available
     fn from(task: &TaskInfo) -> Self {
-        let description = task_desc(&task);
+        let description = task_desc(task);
         let entity = task.entity.clone().map(|x| x.value.clone()).unwrap_or("-".to_string());
         let entity_name = task.entity_name.clone().unwrap_or("-".to_string());
         let initiated = format_datetime(&task.initiated);
@@ -53,7 +53,7 @@ impl From<&TaskInfo> for Row<'_> {
             Cell::from(description),
             Cell::from(entity),
             Cell::from(entity_name),
-            Cell::from(initiated),
+            initiated,
             task_duration_cell(&task.initiated, &task.completed),
             Cell::from(get_initiator(task))
         ])
@@ -169,7 +169,7 @@ fn task_duration_cell<'a, 'b, 'c>(initiated: &'a String, completed: &'b Option<S
 }
 
 fn task_duration(initiated: &String, completed: &Option<String>) -> Option<TimeDelta> {
-    let Ok(initiated) = DateTime::parse_from_rfc3339(&initiated) else {
+    let Ok(initiated) = DateTime::parse_from_rfc3339(initiated) else {
         return None;
     };
     let completed = completed.clone().map(|x| {
@@ -292,6 +292,6 @@ pub async fn ensure_task_descriptions_initialized(client: Arc<Client>) -> anyhow
 // Function to look up a description
 fn get_task_description(id: &str) -> Option<String> {
     TASK_DESCRIPTIONS.get()
-        .and_then(|map| Some(map.get(id).cloned()))
-        .unwrap_or_else(|| None)
+        .map(|map| map.get(id).cloned())
+        .unwrap_or(None)
 }

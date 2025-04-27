@@ -5,10 +5,10 @@ use ratatui::text::Span;
 use vim_macros::vim_updatable;
 use ratatui::widgets::{Cell, Row};
 use vim_rs::types::enums::VirtualMachinePowerStateEnum;
-use crate::formatting;
-use crate::formatting::{format_byte_size, ID_COLUMN_WIDTH, STATUS, STATUS_COLUMN_WIDTH};
+use crate::resource_browser::formatting;
+use crate::resource_browser::formatting::{format_byte_size, ID_COLUMN_WIDTH, STATUS, STATUS_COLUMN_WIDTH};
 use crate::resource_type::ResourceType;
-use crate::tabular_data::TabularData;
+use crate::resource_browser::tabular_data::TabularData;
 
 vim_updatable!(
     struct VmData: VirtualMachine {

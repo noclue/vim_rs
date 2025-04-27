@@ -3,9 +3,9 @@ use ratatui::layout::Constraint;
 use ratatui::text::Span;
 use ratatui::widgets::{Cell, Row};
 use vim_macros::vim_updatable;
-use crate::formatting::{status_color, STATUS, STATUS_COLUMN_WIDTH};
+use crate::resource_browser::formatting::{status_color, STATUS, STATUS_COLUMN_WIDTH};
 use crate::resource_type::ResourceType;
-use crate::tabular_data::TabularData;
+use crate::resource_browser::tabular_data::TabularData;
 
 vim_updatable!(
     struct NetworkDetails: Network {

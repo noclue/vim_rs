@@ -1,29 +1,19 @@
 use crate::event::{AppEvent, Event, EventHandler};
-use crate::resource_table::ResourceTableWidget;
 use crossterm::event::{Event as CrosstermEvent, KeyCode, KeyEventKind};
 use ratatui::layout::{Constraint, Layout, Rect};
 use ratatui::{DefaultTerminal, Frame};
 use std::cell::RefCell;
 use std::rc::Rc;
 use std::sync::Arc;
-use ratatui::style::{Color, Modifier, Style, Stylize};
+use ratatui::style::Stylize;
 use ratatui::text::Line;
-use ratatui::widgets::{Block, BorderType, Borders, Clear, ListState, Paragraph, TableState};
 use vim_rs::core::client::Client;
 use vim_rs::core::pc_cache::CacheManager;
-use vim_rs::types::enums::MoTypesEnum;
-use vim_rs::types::structs::ManagedObjectReference;
-use crate::cluster::ClusterDetails;
-use crate::datastore::{get_datastore_hosts, DatastoreDetails};
-use crate::{data_loaders, hints};
+use crate::hints;
 use crate::hints::HELP_HINTS;
-use crate::host::Host;
-use crate::network::NetworkDetails;
+use crate::resource_browser::ResourceManager;
 use crate::search::SearchState;
-use crate::tabular_data::TableDataSource;
-use crate::vm::VmData;
-use crate::resource_type::{ResourceSelectionState, ResourceType};
-use crate::task::{ensure_task_descriptions_initialized, TaskInfo};
+use crate::resource_type::ResourceSelectionState;
 
 /// Main application object.
 pub struct App {
@@ -33,16 +23,10 @@ pub struct App {
     cache_mgr: Rc<RefCell<CacheManager>>,
     /// Client for interacting with the vSphere API.
     client: Arc<Client>,
-    /// Data source for the table view.
-    resources: Box<dyn TableDataSource>,
-    /// PropertyCollector filter for the current view
-    filter: ManagedObjectReference,
+    /// Resource manager for managing table resource exploration.
+    resource_mgr: ResourceManager,
     /// Event dispatcher for processing events.
     events: EventHandler,
-    /// Ratatui Table state for managing the current selection and scroll position.
-    table_state: TableState,
-    /// Parent object reference for the current view when expanding a sub collection e.g. VMs in host.
-    parent: Option<(ManagedObjectReference, String)>,
     /// Search state for managing the search input and filter.
     search_state: SearchState,
     /// State for managing resource selection.
@@ -62,17 +46,20 @@ impl App {
         cache_mgr: Rc<RefCell<CacheManager>>,
         client: Arc<Client>,
     ) -> anyhow::Result<Self> {
-        let root_folder = client.service_content().root_folder.clone();
-        let (resources, filter) = data_loaders::load_from_container::<VmData>(cache_mgr.clone(), &root_folder).await?;
+        // Create a new ResourceManager instance
+        let resource_mgr = ResourceManager::new(client.clone(), cache_mgr.clone()).await?;
+        //let root_folder = client.service_content().root_folder.clone();
+        //let (resources, filter) = data_loaders::load_from_container::<VmData>(cache_mgr.clone(), &root_folder).await?;
         Ok(Self {
             should_quit: false,
             cache_mgr,
             client,
-            resources,
-            filter,
+            resource_mgr,
+            //resources,
+            //filter,
             events,
-            table_state: TableState::default(),
-            parent: None,
+            //table_state: TableState::default(),
+            //parent: None,
             search_state: SearchState::new(),
             resource_selection_state: ResourceSelectionState::new(),
         })
@@ -82,7 +69,7 @@ impl App {
         while !self.should_quit {
             terminal.draw(|frame| self.draw(frame))?;
             match self.events.next().await? {
-                Event::Crossterm(event) => self.handle_terminal_event(&event),
+                Event::Crossterm(event) => self.handle_terminal_event(&event).await?,
                 Event::App(app_event) => self.handle_app_event(app_event).await?,
             }
         }
@@ -93,7 +80,7 @@ impl App {
         match event {
             AppEvent::PropertyCollector(update) => {
                 self.cache_mgr.borrow_mut().apply_updates(update)?;
-                self.resources.invalidate();
+                self.resource_mgr.invalidate();
             }
             AppEvent::ErrorMessage(_msg) => {
                 todo!()
@@ -102,164 +89,15 @@ impl App {
                 self.events.shutdown().await?;
                 self.should_quit = true
             }
-            AppEvent::Up => self.table_state.scroll_up_by(1),
-            AppEvent::Down => self.table_state.scroll_down_by(1),
-            AppEvent::ToggleSearch => self.search_state.activate(),
-            AppEvent::ClearSearch => self.resources.set_filter(None),
-            AppEvent::SearchCharacter(c) => self.search_state.input(c),
-            AppEvent::SearchBackspace => self.search_state.delete(),
-            AppEvent::SearchConfirm => {
-                if let Some(filter) = self.search_state.deactivate() {
-                    self.resources.set_filter(Some(filter));
-                }
+            AppEvent::OpenSearch => self.search_state.activate(),
+            AppEvent::SearchCompleted(filter) => {
+                self.resource_mgr.set_filter(Some(filter));
             }
-            AppEvent::SearchCancel => {
-                self.search_state.cancel();
-            }
-            AppEvent::SortColumn(column) => {
-                self.resources.set_sort_column(Some(column));
-            }
-            AppEvent::ToggleResourceSelection => self.resource_selection_state.activate(),
-            AppEvent::ResourceSelectionUp => self.resource_selection_state.move_up(),
-            AppEvent::ResourceSelectionDown => self.resource_selection_state.move_down(),
-            AppEvent::ResourceSelectionCancel => self.resource_selection_state.cancel(),
-            AppEvent::ResourceSelectionConfirm => {
-                if let Some(resource_type) = self.resource_selection_state.select() {
-                    self.events.send(AppEvent::ResourceSelected(resource_type));
-                }
-            },
+            AppEvent::OpenResourceSelection => self.resource_selection_state.activate(),
             AppEvent::ResourceSelected(resource_type) => {
-                self.load_resource_type(resource_type).await?;
+                self.resource_mgr.load_resource_type(resource_type).await?;
             },
-            AppEvent::ExpandCollection(resource_type) => {
-                self.expand_collection(resource_type).await?;
-            }
         }
-        Ok(())
-    }
-
-    async fn expand_collection(&mut self, resource_type: ResourceType) -> anyhow::Result<()> {
-        // Read the id of the currently selected resource
-        let Some(selected) = self.table_state.selected() else {
-            return Ok(());
-        };
-        let Some((selected_id, selected_name)) = self.resources.item_at_index(selected) else {
-            return Ok(());
-        };
-
-        let (resources, filter) = match resource_type {
-            ResourceType::VirtualMachine => {
-                match selected_id.r#type {
-                    MoTypesEnum::HostSystem | MoTypesEnum::Datastore |
-                    MoTypesEnum::Network | MoTypesEnum::DistributedVirtualPortgroup |
-                    MoTypesEnum::OpaqueNetwork => {
-                        data_loaders::load_from_property::<VmData>(self.cache_mgr.clone(), &selected_id, "vm").await?
-                    }
-                    MoTypesEnum::ClusterComputeResource => {
-                        data_loaders::load_from_container::<VmData>(self.cache_mgr.clone(), &selected_id).await?
-                    }
-                    _ => {
-                        return Ok(()); // Do nothing we cannot expand VMs of a VM
-                    }
-                }
-            }
-            ResourceType::Host => {
-                match selected_id.r#type {
-                    MoTypesEnum::ClusterComputeResource |
-                    MoTypesEnum::Network | MoTypesEnum::DistributedVirtualPortgroup |
-                    MoTypesEnum::OpaqueNetwork => {
-                        data_loaders::load_from_property::<Host>(self.cache_mgr.clone(), &selected_id, "host").await?
-                    }
-                    MoTypesEnum::Datastore => {
-                        let hosts = get_datastore_hosts(self.client.clone(), &selected_id).await?;
-                        data_loaders::load_from_list::<Host>(self.cache_mgr.clone(), &hosts).await?
-                    }
-                    _ => {
-                        return Ok(()); // Do nothing we cannot expand Hosts of a Host or VM
-                    }
-                }
-            }
-            ResourceType::Datastore => {
-                match selected_id.r#type {
-                    MoTypesEnum::ClusterComputeResource | MoTypesEnum::HostSystem => {
-                        data_loaders::load_from_property::<DatastoreDetails>(self.cache_mgr.clone(), &selected_id, "datastore").await?
-                    }
-                    _ => {
-                        return Ok(());
-                    }
-                }
-            }
-            ResourceType::Cluster => {
-                return Ok(()); // No sub-collection of clusters for now
-            }
-            ResourceType::Network => {
-                match selected_id.r#type {
-                    MoTypesEnum::ClusterComputeResource | MoTypesEnum::HostSystem => {
-                        data_loaders::load_from_property::<NetworkDetails>(self.cache_mgr.clone(), &selected_id, "network").await?
-                    }
-                    _ => {
-                        return Ok(());
-                    }
-                }
-            }
-            ResourceType::Task => {
-                ensure_task_descriptions_initialized(self.client.clone()).await?;
-                match selected_id.r#type {
-                    MoTypesEnum::ClusterComputeResource | MoTypesEnum::HostSystem |
-                    MoTypesEnum::VirtualMachine | MoTypesEnum::Datastore |
-                    MoTypesEnum::Network | MoTypesEnum::DistributedVirtualPortgroup |
-                    MoTypesEnum::OpaqueNetwork => {
-                        data_loaders::load_from_property::<TaskInfo>(self.cache_mgr.clone(), &selected_id, "recentTask").await?
-                    }
-                    _ => {
-                        return Ok(());
-                    }
-                }
-            }
-        };
-        self.apply_new_table_source(resources, filter).await?;
-        self.parent = Some((selected_id, selected_name));
-        Ok(())
-    }
-
-    async fn load_resource_type(&mut self, resource_type: ResourceType) -> anyhow::Result<()> {
-        let parent = self.client.service_content().root_folder.clone();
-        self.parent = None;
-
-        let (resources, filter) = match resource_type{
-            ResourceType::VirtualMachine => {
-                data_loaders::load_from_container::<VmData>(self.cache_mgr.clone(), &parent).await?
-            }
-            ResourceType::Host => {
-                data_loaders::load_from_container::<Host>(self.cache_mgr.clone(), &parent).await?
-            }
-            ResourceType::Datastore => {
-                data_loaders::load_from_container::<DatastoreDetails>(self.cache_mgr.clone(), &parent).await?
-            }
-            ResourceType::Cluster => {
-                data_loaders::load_from_container::<ClusterDetails>(self.cache_mgr.clone(), &parent).await?
-            }
-            ResourceType::Network => {
-                data_loaders::load_from_container::<NetworkDetails>(self.cache_mgr.clone(), &parent).await?
-            }
-            ResourceType::Task => {
-                let task_manager = self.client.service_content().task_manager.as_ref();
-                let Some(task_manager) = task_manager else {
-                    return Ok(());
-                };
-                // Initialize task descriptions
-                ensure_task_descriptions_initialized(self.client.clone()).await?;
-                data_loaders::load_from_property::<TaskInfo>(self.cache_mgr.clone(), task_manager, "recentTask").await?
-            }
-        };
-        self.apply_new_table_source(resources, filter).await
-    }
-
-    async fn apply_new_table_source(&mut self, resources: Box<dyn TableDataSource>, filter: ManagedObjectReference) -> anyhow::Result<()> {
-        self.cache_mgr.borrow_mut().remove_cache(&self.filter).await?;
-        self.table_state = TableState::default();
-        self.resources = resources;
-        self.filter = filter;
         Ok(())
     }
 
@@ -312,62 +150,17 @@ impl App {
 
         self.render_header(frame, top_area);
 
-        let table = ResourceTableWidget::new(self.resources.as_mut(), &self.parent);
+        self.resource_mgr.render(frame, body_area);
 
-        frame.render_stateful_widget(table, body_area, &mut self.table_state);
+        // let table = ResourceTableWidget::new(self.resources.as_mut(), &self.parent);
+        // frame.render_stateful_widget(table, body_area, &mut self.table_state);
 
         // Draw search popup if active
         if self.search_state.is_active() {
-            let popup_area = ratatui::layout::Rect {
-                x: frame.area().width / 4,
-                y: frame.area().height / 2 - 1,
-                width: frame.area().width / 2,
-                height: 3,
-            };
-
-            let block = Block::default()
-                .title("Search")
-                .style(Style::default().bg(Color::Blue))
-                .borders(Borders::ALL)
-                .border_type(BorderType::Rounded)
-                .border_style(Style::default().fg(Color::Yellow));
-
-            let input_text = Paragraph::new(self.search_state.get_input())
-                .block(block)
-                .style(Style::default());
-
-            frame.render_widget(Clear, popup_area);
-            frame.render_widget(input_text, popup_area);
+            self.search_state.render(frame);
         }
         if self.resource_selection_state.is_active() {
-            let height = (self.resource_selection_state.options.len() as u16) + 2; // +2 for borders
-            let popup_area = ratatui::layout::Rect {
-                x: frame.area().width / 4,
-                y: frame.area().height / 2 - height / 2,
-                width: frame.area().width / 2,
-                height,
-            };
-
-            let items: Vec<ratatui::widgets::ListItem> = self.resource_selection_state.options
-                .iter()
-                .map(|option| ratatui::widgets::ListItem::new(option.to_string()))
-                .collect();
-
-            let list = ratatui::widgets::List::new(items)
-                .block(Block::default()
-                    .title("Select Resource Type")
-                    .style(Style::default().bg(Color::Blue))
-                    .borders(Borders::ALL)
-                    .border_type(BorderType::Rounded)
-                    .border_style(Style::default().fg(Color::Yellow)))
-                .highlight_style(Style::default().add_modifier(Modifier::REVERSED))
-                .highlight_symbol("> ");
-
-            let mut list_state = ListState::default();
-            list_state.select(Some(self.resource_selection_state.selected_index));
-
-            frame.render_widget(Clear, popup_area);
-            frame.render_stateful_widget(list, popup_area, &mut list_state);
+            self.resource_selection_state.render(frame);
         }
 
     }
@@ -385,7 +178,7 @@ impl App {
         frame.render_widget(status_paragraph, status_area);
 
         // Render expand hints
-        let expand_lines = hints::decorate_hints(hints::get_expand_hint(self.resources.resource_type()));
+        let expand_lines = hints::decorate_hints(hints::get_expand_hint(self.resource_mgr.resource_type()));
         let expand_paragraph = ratatui::widgets::Paragraph::new(expand_lines)
             .style(ratatui::style::Style::default().fg(ratatui::style::Color::Cyan));
         frame.render_widget(expand_paragraph, expand_area);
@@ -403,53 +196,33 @@ impl App {
         frame.render_widget(logo_paragraph, right_area);
     }
 
-    fn handle_terminal_event(&mut self, event: &CrosstermEvent) {
+    async fn handle_terminal_event(&mut self, event: &CrosstermEvent) -> anyhow::Result<()>{
         if let CrosstermEvent::Key(key) = event {
             if key.kind == KeyEventKind::Press {
-                if matches!(key.code, KeyCode::Char('c') if key.modifiers == crossterm::event::KeyModifiers::CONTROL) {
-                    self.events.send(AppEvent::Quit)
-                } else if self.search_state.is_active() {
-                    match key.code {
-                        KeyCode::Enter => self.events.send(AppEvent::SearchConfirm),
-                        KeyCode::Esc => self.events.send(AppEvent::SearchCancel),
-                        KeyCode::Backspace => self.events.send(AppEvent::SearchBackspace),
-                        KeyCode::Char(c) => self.events.send(AppEvent::SearchCharacter(c)),
-                        _ => {}                    }
+                if matches!(key.code, KeyCode::Char('c') if key.modifiers == crossterm::event::KeyModifiers::CONTROL)  {
+                    self.events.send(AppEvent::Quit);
+                    return Ok(());
+                }
 
-                } else if self.resource_selection_state.is_active() {
-                    match key.code {
-                        KeyCode::Enter => self.events.send(AppEvent::ResourceSelectionConfirm),
-                        KeyCode::Esc => self.events.send(AppEvent::ResourceSelectionCancel),
-                        KeyCode::Char('k') | KeyCode::Up => self.events.send(AppEvent::ResourceSelectionUp),
-                        KeyCode::Char('j') | KeyCode::Down => self.events.send(AppEvent::ResourceSelectionDown),
-                        _ => {}
-                    }
-                } else {
-                    match key.code {
-                        KeyCode::Char('q') => self.events.send(AppEvent::Quit),
-                        KeyCode::Esc => self.events.send(AppEvent::ClearSearch),
-                        KeyCode::Char('j') | KeyCode::Down => self.events.send(AppEvent::Down),
-                        KeyCode::Char('k') | KeyCode::Up => self.events.send(AppEvent::Up),
-                        KeyCode::Char('/') => self.events.send(AppEvent::ToggleSearch),
-                        KeyCode::Char('r') => self.events.send(AppEvent::ToggleResourceSelection),
-                        KeyCode::Char(c) if c.is_ascii_digit() && c != '0' => {
-                            // Convert char to column index (0-based)
-                            let column_idx = c.to_digit(10).unwrap() as usize - 1;
-                            self.events.send(AppEvent::SortColumn(column_idx));
-                        }
-                        KeyCode::Char('0') => self.resources.set_sort_column(None),
+                if self.search_state.is_active() && self.search_state.handle_key(key, &mut self.events) {
+                    return Ok(());
+                }
 
-                        // Add shortcut keys to sub-collections - (n)etwork, (d)atastore, (h)ost, (v)m, (c)luster
-                        KeyCode::Char('n') => self.events.send(AppEvent::ExpandCollection(ResourceType::Network)),
-                        KeyCode::Char('d') => self.events.send(AppEvent::ExpandCollection(ResourceType::Datastore)),
-                        KeyCode::Char('h') => self.events.send(AppEvent::ExpandCollection(ResourceType::Host)),
-                        KeyCode::Char('v') => self.events.send(AppEvent::ExpandCollection(ResourceType::VirtualMachine)),
-                        //KeyCode::Char('c') => self.events.send(AppEvent::ExpandCollection(ResourceType::Cluster)),
-                        KeyCode::Char('t') => self.events.send(AppEvent::ExpandCollection(ResourceType::Task)),
-                        _ => {}
-                    }
+                if self.resource_selection_state.is_active() && self.resource_selection_state.handle_key(key, &mut self.events) {
+                    return Ok(());
+                }
+
+                if self.resource_mgr.handle_key(key, &mut self.events).await? {
+                    return Ok(());
+                }
+
+                match key.code {
+                    KeyCode::Char('q') => self.events.send(AppEvent::Quit),
+                    KeyCode::Char('r') => self.events.send(AppEvent::OpenResourceSelection),
+                    _ => {}
                 }
             }
         }
+        Ok(())
     }
 }

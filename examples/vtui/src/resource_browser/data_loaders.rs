@@ -4,8 +4,8 @@ use std::cell::RefCell;
 use vim_rs::types::structs::{ManagedObjectReference, ObjectSpec, TraversalSpec};
 use vim_rs::core::pc_helpers::BoxableError;
 use ratatui::widgets::Row;
-use crate::indexed_cache::IndexedCache;
-use crate::tabular_data::{TableDataSource, TabularData};
+use crate::resource_browser::indexed_cache::IndexedCache;
+use crate::resource_browser::tabular_data::{TableDataSource, TabularData};
 
 pub(crate) async fn load_from_container<T: TabularData + Cacheable + 'static>(
     cache_mgr: Rc<RefCell<CacheManager>>,

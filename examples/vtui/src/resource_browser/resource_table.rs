@@ -5,7 +5,7 @@ use ratatui::widgets::{Block, HighlightSpacing, Row, Cell, Table, TableState, St
 use ratatui::text::{Line, Span};
 use vim_rs::types::enums::MoTypesEnum;
 use vim_rs::types::structs::ManagedObjectReference;
-use crate::tabular_data::TableDataSource;
+use crate::resource_browser::tabular_data::TableDataSource;
 
 
 

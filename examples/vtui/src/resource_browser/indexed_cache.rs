@@ -4,7 +4,7 @@ use std::rc::Rc;
 use ratatui::layout::Constraint;
 use vim_rs::core::pc_cache::{Cacheable, ObjectCache};
 use vim_rs::core::pc_helpers::BoxableError;
-use crate::tabular_data::{TableDataSource, TabularData};
+use crate::resource_browser::tabular_data::{TableDataSource, TabularData};
 use ratatui::widgets::Row;
 use vim_rs::types::structs::ManagedObjectReference;
 use crate::resource_type::ResourceType;

@@ -1,3 +1,9 @@
+use crossterm::event::{KeyCode, KeyEvent};
+use ratatui::Frame;
+use ratatui::prelude::{Color, Modifier, Style};
+use ratatui::widgets::{Block, BorderType, Borders, Clear, ListState};
+use crate::event::{AppEvent, EventHandler};
+
 // Add at the top of app.rs
 #[derive(Debug, Clone, Copy)]
 pub enum ResourceType {
@@ -48,6 +54,54 @@ impl ResourceSelectionState {
             ],
             selected_index: 0,
         }
+    }
+
+    pub fn render(&mut self, frame: &mut Frame) {
+        let height = (self.options.len() as u16) + 2; // +2 for borders
+        let popup_area = ratatui::layout::Rect {
+            x: frame.area().width / 4,
+            y: frame.area().height / 2 - height / 2,
+            width: frame.area().width / 2,
+            height,
+        };
+
+        let items: Vec<ratatui::widgets::ListItem> = self.options
+            .iter()
+            .map(|option| ratatui::widgets::ListItem::new(option.to_string()))
+            .collect();
+
+        let list = ratatui::widgets::List::new(items)
+            .block(Block::default()
+                .title("Select Resource Type")
+                .style(Style::default().bg(Color::Blue))
+                .borders(Borders::ALL)
+                .border_type(BorderType::Rounded)
+                .border_style(Style::default().fg(Color::Yellow)))
+            .highlight_style(Style::default().add_modifier(Modifier::REVERSED))
+            .highlight_symbol("> ");
+
+        let mut list_state = ListState::default();
+        list_state.select(Some(self.selected_index));
+
+        frame.render_widget(Clear, popup_area);
+        frame.render_stateful_widget(list, popup_area, &mut list_state);
+    }
+
+    pub fn handle_key(&mut self, key_event: &KeyEvent, events: &mut EventHandler) -> bool {
+        match key_event.code {
+            KeyCode::Up => self.move_up(),
+            KeyCode::Down => self.move_down(),
+            KeyCode::Esc => self.cancel(),
+            KeyCode::Enter => {
+                if let Some(selected) = self.select() {
+                    events.send(AppEvent::ResourceSelected(selected));
+                }
+            }
+            _ => {
+                return false;
+            }
+        }
+        true
     }
 
     pub fn activate(&mut self) {

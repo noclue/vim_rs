@@ -9,20 +9,10 @@ use vim_rs::core::pc_cache::CacheManager;
 
 mod app;
 mod event;
-mod vm;
-mod resource_table;
 mod search;
-mod host;
-mod indexed_cache;
-mod tabular_data;
 mod resource_type;
-mod datastore;
-mod formatting;
-mod cluster;
-mod network;
 mod hints;
-mod data_loaders;
-mod task;
+mod resource_browser;
 
 #[tokio::main]
 async fn main() -> Result<()> {
