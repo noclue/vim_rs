@@ -3,14 +3,17 @@ mod event;
 mod app;
 mod prop_browser;
 
+use std::cell::RefCell;
 use std::env;
 use std::fs::File;
 use std::path::Path;
+use std::rc::Rc;
 use std::sync::Arc;
 use anyhow::Context;
 use log::{info, LevelFilter};
 use simplelog::{Config, WriteLogger};
 use vim_rs::core::client::{Client, ClientBuilder};
+use vim_rs::core::pc_cache::CacheManager;
 use crate::app::App;
 use crate::event::EventHandler;
 
@@ -28,13 +31,16 @@ async fn main() -> anyhow::Result<()> {
             return Err(err.into());
         }
     };
-    let event_handler = EventHandler::new();
+    let cache_manager = Rc::new(RefCell::new(CacheManager::new(client.clone())?));
+    let monitor = cache_manager.borrow().create_monitor()?;
+    let event_handler = EventHandler::new(monitor);
     let terminal = ratatui::init();
 
-    let app_result = App::new(event_handler, client.clone()).await?
+    let app_result = App::new(event_handler, cache_manager.clone(), client.clone()).await?
         .run(terminal)
         .await;
     ratatui::restore();
+    cache_manager.borrow_mut().destroy().await?;
     app_result
 }
 

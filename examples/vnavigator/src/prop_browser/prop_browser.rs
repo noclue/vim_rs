@@ -1,6 +1,6 @@
-use std::collections::VecDeque;
-use std::mem;
-use std::sync::Arc;
+use super::json_to_tree::{get_type_name, property_to_tree_item};
+use super::prop_utils::to_json_value;
+
 use indexmap::IndexMap;
 use log::{debug, warn};
 use ratatui::buffer::Buffer;
@@ -10,18 +10,16 @@ use ratatui::style::{Color, Modifier, Style};
 use ratatui::text::{Line, Span};
 use ratatui::widgets::{Block, Scrollbar, ScrollbarOrientation, StatefulWidget};
 use serde_json::Value;
+use std::mem;
 use tui_tree_widget::{Tree, TreeItem, TreeState};
-use vim_rs::core::client::Client;
 use vim_rs::core::pc_cache::Cache;
 use vim_rs::core::pc_helpers::Error;
 use vim_rs::types::enums::{ObjectUpdateKindEnum, PropertyChangeOpEnum};
-use vim_rs::types::structs::{ManagedObjectReference, ObjectUpdate, PropertyChange, PropertySpec};
-use super::json_to_tree::get_type_name;
-use super::prop_utils::{load_props, map_to_tree, props_to_map, to_json_value};
+use vim_rs::types::structs::{
+    ManagedObjectReference, ObjectUpdate, PropertyChange, PropertySpec,
+};
 
 pub struct PropertyBrowserState {
-    /// Client for interacting with the vSphere API.
-    client: Arc<Client>,
     /// PropertyCollector filter for the current view
     obj: ManagedObjectReference,
     /// Properties of the current view.
@@ -30,63 +28,34 @@ pub struct PropertyBrowserState {
     items: Vec<TreeItem<'static, String>>,
     /// Tree state for managing the current selection and scroll position.
     state: TreeState<String>,
-    /// History of previous states for back navigation
-    history: VecDeque<HistoryEntry>,
-    /// Maximum history entries to keep
-    max_history: usize,
-}
-struct HistoryEntry {
-    obj: ManagedObjectReference,
-    state: TreeState<String>,
 }
 
 impl PropertyBrowserState {
-    pub async fn new(client: Arc<Client>, obj: ManagedObjectReference) -> anyhow::Result<Self> {
-        let properties = load_props(client.clone(), &obj).await?;
-        let properties = props_to_map(&properties)?;
-        let items = map_to_tree(&properties);
-
-        let state = Self::clean_state(&properties);
-
-        Ok(Self {
-            client,
+    pub async fn new(obj: ManagedObjectReference) -> anyhow::Result<Self> {
+        let res = Self {
             obj,
-            properties,
-            items,
-            state,
-            history: VecDeque::new(),
-            max_history: 10,
-        })
+            properties: IndexMap::new(),
+            items: Vec::new(),
+            state: TreeState::default(),
+        };
+        Ok(res)
     }
 
-    // Navigate back to previous state
-    pub async fn back(&mut self) -> anyhow::Result<bool> {
-        if let Some(entry) = self.history.pop_back() {
-            self.obj = entry.obj;
-            self.state = entry.state;
-            self.refresh().await?;
-            Ok(true)
-        } else {
-            Ok(false)
-        }
+    pub fn set_obj(
+        &mut self,
+        obj: ManagedObjectReference,
+        new_tree_state: Option<TreeState<String>>,
+    ) -> anyhow::Result<TreeState<String>> {
+        self.obj = obj;
+        self.items = Vec::new();
+        self.properties = IndexMap::new();
+        let tree_state = new_tree_state.unwrap_or_else(|| TreeState::default());
+        Ok(mem::replace(&mut self.state, tree_state))
     }
 
-    pub async fn refresh(&mut self) -> anyhow::Result<bool> {
-        // Reload properties for current object
-        let properties = load_props(self.client.clone(), &self.obj).await?;
-        let properties = props_to_map(&properties)?;
-        let items = map_to_tree(&properties);
-
-        // Update properties and items, but keep the state intact
-        self.properties = properties;
-        self.items = items;
-
-        Ok(true)
-    }
-
-    fn clean_state(properties: &IndexMap<String, Value>) -> TreeState<String> {
+    fn clean_state(&self) -> TreeState<String> {
         let mut state = TreeState::default();
-        if let Some(first_key) = properties.keys().next() {
+        if let Some(first_key) = self.properties.keys().next() {
             state.select(vec![first_key.clone()]);
         }
         state
@@ -108,60 +77,41 @@ impl PropertyBrowserState {
         self.state.key_right();
     }
 
-    /// Expands the currently selected node in the tree. Returns true if the
-    /// node was expanded, false otherwise. Returns errors if loading properties
-    /// fails e.g. communication failures or unexpected result.
-    pub async fn enter(&mut self) -> anyhow::Result<bool> {
-        let Some(Value::Object(props)) = self.get_selected() else {
-            return Ok(false);
+    /// Get the ManagedObjectReference of the selected object in the tree if an object is selected.
+    pub fn get_selected_object(&self) -> Option<ManagedObjectReference> {
+        let Some(Value::Object(props)) = self.get_selected_node() else {
+            return None;
         };
 
         let Some(type_name) = get_type_name(&props) else {
-            return Ok(false);
+            return None;
         };
 
         if type_name != "ManagedObjectReference" {
-            return Ok(false);
+            return None;
         }
 
         let (Some(Value::String(motype)), Some(Value::String(value))) =
-            (props.get("type"), props.get("value")) else {
-            return Ok(false);
+            (props.get("type"), props.get("value"))
+        else {
+            return None;
         };
 
         let Ok(motype) = serde_json::from_str(&format!("\"{}\"", motype)) else {
-            return Ok(false);
+            warn!(
+                "PropertyBrowserState: Failed to parse type name: {}",
+                motype
+            );
+            return None;
         };
 
-        let mo_ref = ManagedObjectReference {
+        Some(ManagedObjectReference {
             r#type: motype,
             value: value.clone(),
-        };
-
-        let properties = load_props(self.client.clone(), &mo_ref).await?;
-        let properties = props_to_map(&properties)?;
-
-        let old_state = mem::replace(&mut self.state, Self::clean_state(&properties));
-        self.add_history(self.obj.clone(), old_state);
-        self.items = map_to_tree(&properties);
-        self.properties = properties;
-        self.obj = mo_ref;
-
-        Ok(true)
+        })
     }
 
-    fn add_history(&mut self, selected_object: ManagedObjectReference, tree_state: TreeState<String>) {
-        let entry = HistoryEntry {
-            obj: selected_object,
-            state: tree_state,
-        };
-        self.history.push_back(entry);
-        if self.history.len() > self.max_history {
-            self.history.pop_front();
-        }
-    }
-
-    pub fn get_selected(&self) -> Option<Value> {
+    fn get_selected_node(&self) -> Option<Value> {
         let selected = self.state.selected();
         if selected.is_empty() {
             return None;
@@ -192,31 +142,72 @@ impl PropertyBrowserState {
 
         Some(value.clone())
     }
-    pub fn current_object(&self) -> &ManagedObjectReference {
-        &self.obj
-    }
 
     fn apply_update(&mut self, changes: Vec<PropertyChange>) -> anyhow::Result<()> {
+        let was_empty = self.items.is_empty();
         for change in changes {
             let name = change.name;
             match change.op {
                 PropertyChangeOpEnum::Assign => {
                     if let Some(value) = change.val {
-                        self.properties.insert(name.clone(), to_json_value(&value, &name)?);
+                        let json_value = to_json_value(&value, &name)?;
+                        self.update_item(&name, &json_value);
+                        self.properties.insert(name.clone(), json_value);
                     } else {
-                        debug!("PropertyBrowserState: Assign operation with no value for property: {}", name);
+                        debug!(
+                            "PropertyBrowserState: Assign operation with no value for property: {}",
+                            name
+                        );
                     }
                 }
                 PropertyChangeOpEnum::IndirectRemove => {
                     self.properties.shift_remove_entry(name.as_str());
+                    self.remove_item(&name)?;
                 }
                 _ => {
-                    warn!("PropertyBrowserState: Unsupported property change operation: {:?}", change.op);
+                    warn!(
+                        "PropertyBrowserState: Unsupported property change operation: {:?}",
+                        change.op
+                    );
                     continue;
                 }
             }
         }
+        //self.items = map_to_tree(&self.properties);
+
+        if was_empty && !self.items.is_empty() && self.state.selected().is_empty() {
+            self.state = self.clean_state();
+        }
         Ok(())
+    }
+
+    fn remove_item(&mut self, name: &str) -> anyhow::Result<()> {
+        if let Some(pos) = self.items.iter().position(|item| item.identifier() == name) {
+            self.items.remove(pos);
+        } else {
+            warn!(
+                "PropertyBrowserState::remove_item: Item not found in tree: {}",
+                name
+            );
+        }
+        Ok(())
+    }
+
+    fn update_item(&mut self, name: &String, value: &Value) {
+        let tree_item = property_to_tree_item(name.clone(), value);
+
+        let item_name = name.clone();
+
+        // If item with item.identifier == name already exists, update it else push new item at the end
+        if let Some(pos) = self
+            .items
+            .iter()
+            .position(|item| item.identifier() == &item_name)
+        {
+            self.items[pos] = tree_item;
+        } else {
+            self.items.push(tree_item);
+        }
     }
 
     fn get_object_name(&self) -> Option<String> {
@@ -231,19 +222,21 @@ impl PropertyBrowserState {
 impl Cache for PropertyBrowserState {
     fn prop_spec(&self) -> vim_rs::core::pc_helpers::Result<PropertySpec> {
         let s: &'static str = From::from(&self.obj.r#type);
-        Ok(PropertySpec{
+        Ok(PropertySpec {
             r#type: s.to_string(),
             all: Some(true),
             path_set: None,
         })
     }
 
-    fn process_update(&mut self, update: Vec<ObjectUpdate>) -> vim_rs::core::pc_helpers::Result<()> {
+    fn process_update(
+        &mut self,
+        update: Vec<ObjectUpdate>,
+    ) -> vim_rs::core::pc_helpers::Result<()> {
         if update.is_empty() {
             return Ok(());
         };
         for update in update {
-
             if update.obj.value == self.obj.value {
                 match update.kind {
                     ObjectUpdateKindEnum::Enter | ObjectUpdateKindEnum::Modify => {
@@ -251,7 +244,8 @@ impl Cache for PropertyBrowserState {
                             continue;
                         };
                         debug!("object {:?} update", update.obj);
-                        self.apply_update(changes).map_err(|e| Error::InternalError(e.to_string()))?;
+                        self.apply_update(changes)
+                            .map_err(|e| Error::InternalError(e.to_string()))?;
                         continue;
                     }
                     ObjectUpdateKindEnum::Leave => {
@@ -268,28 +262,27 @@ impl Cache for PropertyBrowserState {
                     }
                 }
             } else {
-                warn!("PropertyBrowserState: update for different object: {}", update.obj.value);
+                warn!(
+                    "PropertyBrowserState: update for different object: {}",
+                    update.obj.value
+                );
                 // Ignore updates for other objects
                 continue;
             }
-        };
+        }
         Ok(())
     }
 }
 
-
-
 pub struct PropertyBrowser<'a> {
-    title: &'a str,
     highlight_style: Style,
     highlight_symbol: &'a str,
     with_scrollbar: bool,
 }
 
 impl<'a> PropertyBrowser<'a> {
-    pub fn new(title: &'a str) -> Self {
+    pub fn new() -> Self {
         Self {
-            title,
             highlight_style: Style::new()
                 .fg(Color::Black)
                 .bg(Color::Blue)
@@ -297,21 +290,6 @@ impl<'a> PropertyBrowser<'a> {
             highlight_symbol: "> ",
             with_scrollbar: true,
         }
-    }
-
-    pub fn highlight_style(mut self, style: Style) -> Self {
-        self.highlight_style = style;
-        self
-    }
-
-    pub fn highlight_symbol(mut self, symbol: &'a str) -> Self {
-        self.highlight_symbol = symbol;
-        self
-    }
-
-    pub fn with_scrollbar(mut self, enable: bool) -> Self {
-        self.with_scrollbar = enable;
-        self
     }
 }
 
@@ -343,7 +321,11 @@ impl StatefulWidget for PropertyBrowser<'_> {
 
         let mut widget = Tree::new(&state.items)
             .expect("all item identifiers are unique")
-            .block(Block::bordered().title(title).title_alignment(Alignment::Center))
+            .block(
+                Block::bordered()
+                    .title(title)
+                    .title_alignment(Alignment::Center),
+            )
             .highlight_style(self.highlight_style)
             .highlight_symbol(self.highlight_symbol);
 
@@ -352,11 +334,10 @@ impl StatefulWidget for PropertyBrowser<'_> {
                 Scrollbar::new(ScrollbarOrientation::VerticalRight)
                     .begin_symbol(None)
                     .track_symbol(None)
-                    .end_symbol(None)
+                    .end_symbol(None),
             ));
         }
 
         widget.render(area, buf, &mut state.state);
     }
 }
-

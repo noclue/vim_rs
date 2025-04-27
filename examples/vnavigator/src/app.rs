@@ -1,3 +1,5 @@
+use std::cell::RefCell;
+use std::rc::Rc;
 use crate::event::{AppEvent, Event, EventHandler};
 use crossterm::event::{Event as CrosstermEvent, KeyCode, KeyEventKind};
 use ratatui::layout::{Constraint, Layout, Rect};
@@ -6,7 +8,8 @@ use std::sync::Arc;
 use ratatui::style::Stylize;
 use ratatui::text::Line;
 use vim_rs::core::client::Client;
-use crate::prop_browser::{PropertyBrowser, PropertyBrowserState};
+use vim_rs::core::pc_cache::CacheManager;
+use crate::prop_browser::PropertyBrowserManager;
 
 /// Main application object.
 pub struct App {
@@ -17,7 +20,10 @@ pub struct App {
 
     client: Arc<Client>,
 
-    property_browser: PropertyBrowserState,
+    /// Cache manager for managing property collector cache.
+    cache_manager: Rc<RefCell<CacheManager>>,
+
+    property_browser: PropertyBrowserManager,
 }
 
 const ASCII_ART: &str = r#"     ╭───────╮
@@ -30,15 +36,17 @@ const ASCII_ART: &str = r#"     ╭───────╮
 impl App {
     pub async fn new(
         events: EventHandler,
+        cache_manager: Rc<RefCell<CacheManager>>,
         client: Arc<Client>,
     ) -> anyhow::Result<Self> {
         let root_folder = &client.service_content().root_folder;
-        let property_browser = PropertyBrowserState::new(client.clone(), root_folder.clone()).await?;
+        let property_browser = PropertyBrowserManager::new(cache_manager.clone(), root_folder.clone()).await?;
 
         Ok(Self {
             should_quit: false,
             events,
             client,
+            cache_manager,
             property_browser,
         })
     }
@@ -47,7 +55,7 @@ impl App {
         while !self.should_quit {
             terminal.draw(|frame| self.draw(frame))?;
             match self.events.next().await? {
-                Event::Crossterm(event) => self.handle_terminal_event(&event).await,
+                Event::Crossterm(event) => self.handle_terminal_event(&event).await?,
                 Event::App(app_event) => self.handle_app_event(app_event).await?,
             }
         }
@@ -59,6 +67,9 @@ impl App {
             AppEvent::Quit => {
                 self.events.shutdown().await?;
                 self.should_quit = true
+            }
+            AppEvent::PropertyCollector(updates) => {
+                self.cache_manager.borrow_mut().apply_updates(updates)?;
             }
         }
         Ok(())
@@ -113,9 +124,7 @@ impl App {
 
         self.render_header(frame, top_area);
 
-
-        let props = PropertyBrowser::new("Tree Widget");
-        frame.render_stateful_widget(props, body_area, &mut self.property_browser);
+        self.property_browser.render(frame, body_area);
     }
 
     fn render_header(&mut self, frame: &mut Frame, top_area: Rect) {
@@ -149,31 +158,25 @@ impl App {
         frame.render_widget(logo_paragraph, right_area);
     }
 
-    async fn handle_terminal_event(&mut self, event: &CrosstermEvent) {
+    async fn handle_terminal_event(&mut self, event: &CrosstermEvent) -> anyhow::Result<()> {
         if let CrosstermEvent::Key(key) = event {
             if key.kind == KeyEventKind::Press {
                 if matches!(key.code, KeyCode::Char('c') if key.modifiers == crossterm::event::KeyModifiers::CONTROL) {
-                    self.events.send(AppEvent::Quit)
+                    self.events.send(AppEvent::Quit);
+                    return Ok(());
                 } else {
                     match key.code {
-                        KeyCode::Char('q') | KeyCode::Esc => self.events.send(AppEvent::Quit),
-                        KeyCode::Char('w') | KeyCode::Up => { self.property_browser.up(); },
-                        KeyCode::Char('s') | KeyCode::Down => { self.property_browser.down(); },
-                        KeyCode::Char('a') | KeyCode::Left => { self.property_browser.left(); },
-                        KeyCode::Char('d') | KeyCode::Right => { self.property_browser.right(); },
-                        KeyCode::Enter => {
-                            let _ = self.property_browser.enter().await;
-                        }
-                        KeyCode::Backspace => {
-                            let _ = self.property_browser.back().await;
-                        }
-                        KeyCode::F(5) => {
-                            let _ = self.property_browser.refresh().await;
+                        KeyCode::Char('q') | KeyCode::Esc => {
+                            self.events.send(AppEvent::Quit);
+                            return Ok(());
                         },
                         _ => {}
                     }
                 }
             }
         }
+        // delegate to the property browser
+        self.property_browser.handle_terminal_event(event).await?;
+        Ok(())
     }
 }

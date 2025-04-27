@@ -1,7 +1,10 @@
 use anyhow::{Context, Result};
 use futures::{FutureExt, StreamExt};
+use log::error;
 use ratatui::crossterm::event::Event as CrosstermEvent;
 use tokio::sync::mpsc;
+use vim_rs::core::pc_cache::Monitor;
+use vim_rs::types::structs::PropertyFilterUpdate;
 
 /// Representation of all possible events.
 #[derive(Debug)]
@@ -20,6 +23,7 @@ pub enum Event {
 #[derive(Debug)]
 pub enum AppEvent {
     Quit,
+    PropertyCollector(Vec<PropertyFilterUpdate>),
 }
 
 /// Terminal event handler.
@@ -35,11 +39,11 @@ pub struct EventHandler {
 
 impl EventHandler {
     /// Constructs a new instance of [`EventHandler`] and spawns a new thread to handle events.
-    pub fn new() -> Self {
+    pub fn new(monitor: Monitor) -> Self {
         let (sender, receiver) = mpsc::unbounded_channel();
         let internal_sender = sender.clone();
         let event_dispatch = tokio::spawn(async move {
-            let mut actor = EventTask::new(internal_sender);
+            let mut actor = EventTask::new(internal_sender, monitor);
             actor.run().await
         });
         Self {
@@ -90,12 +94,14 @@ impl EventHandler {
 struct EventTask {
     /// Event sender channel.
     sender: mpsc::UnboundedSender<Event>,
+    /// vCenter event monitor
+    monitor: Monitor,
 }
 
 impl EventTask {
     /// Constructs a new instance of [`EventThread`].
-    fn new(sender: mpsc::UnboundedSender<Event>) -> Self {
-        Self { sender }
+    fn new(sender: mpsc::UnboundedSender<Event>, monitor: Monitor) -> Self {
+        Self { sender, monitor }
     }
 
     /// Runs the event thread.
@@ -104,8 +110,8 @@ impl EventTask {
     async fn run(&mut self) -> Result<()> {
         let mut reader = crossterm::event::EventStream::new();
         loop {
-            // let tick_delay = tick.tick();
             let crossterm_event = reader.next().fuse();
+            let updates = self.monitor.wait_updates(100).fuse();
             tokio::select! {
                 _ = self.sender.closed() => {
                     break;
@@ -113,6 +119,20 @@ impl EventTask {
                 Some(Ok(evt)) = crossterm_event => {
                     self.send(Event::Crossterm(evt));
                 }
+                updates_result = updates => {
+                    match updates_result {
+                        Ok(None) => {
+                            continue;
+                        }
+                        Err(e) => {
+                            error!("Error while waiting for updates: {e}");
+                        }
+                        Ok(Some(updates)) => {
+                            self.send(Event::App(AppEvent::PropertyCollector(updates)));
+                        }
+                    }
+                }
+
             }
         }
         Ok(())
