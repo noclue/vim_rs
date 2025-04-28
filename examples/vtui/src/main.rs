@@ -13,6 +13,8 @@ mod search;
 mod resource_type;
 mod hints;
 mod resource_browser;
+mod prop_browser;
+mod body_pane;
 
 #[tokio::main]
 async fn main() -> Result<()> {

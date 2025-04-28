@@ -9,11 +9,13 @@ use ratatui::style::Stylize;
 use ratatui::text::Line;
 use vim_rs::core::client::Client;
 use vim_rs::core::pc_cache::CacheManager;
+use crate::body_pane::BodyPane;
 use crate::hints;
 use crate::hints::HELP_HINTS;
+use crate::prop_browser::PropertyBrowserManager;
 use crate::resource_browser::ResourceManager;
 use crate::search::SearchState;
-use crate::resource_type::ResourceSelectionState;
+use crate::resource_type::{ResourceSelectionState, ResourceType};
 
 /// Main application object.
 pub struct App {
@@ -23,8 +25,8 @@ pub struct App {
     cache_mgr: Rc<RefCell<CacheManager>>,
     /// Client for interacting with the vSphere API.
     client: Arc<Client>,
-    /// Resource manager for managing table resource exploration.
-    resource_mgr: ResourceManager,
+    /// Body pane.
+    body_pane: BodyPane,
     /// Event dispatcher for processing events.
     events: EventHandler,
     /// Search state for managing the search input and filter.
@@ -52,7 +54,7 @@ impl App {
             should_quit: false,
             cache_mgr,
             client,
-            resource_mgr,
+            body_pane: BodyPane::ResourceBrowser(resource_mgr),
             events,
             search_state: SearchState::new(),
             resource_selection_state: ResourceSelectionState::new(),
@@ -74,7 +76,9 @@ impl App {
         match event {
             AppEvent::PropertyCollector(update) => {
                 self.cache_mgr.borrow_mut().apply_updates(update)?;
-                self.resource_mgr.invalidate();
+                if let BodyPane::ResourceBrowser(ref mut resource_mgr) = self.body_pane {
+                    resource_mgr.invalidate();
+                }
             }
             AppEvent::ErrorMessage(_msg) => {
                 todo!()
@@ -85,12 +89,19 @@ impl App {
             }
             AppEvent::OpenSearch => self.search_state.activate(),
             AppEvent::SearchCompleted(filter) => {
-                self.resource_mgr.set_filter(Some(filter));
+                if let BodyPane::ResourceBrowser(ref mut resource_mgr) = self.body_pane {
+                    resource_mgr.set_filter(Some(filter));
+                }
             }
             AppEvent::OpenResourceSelection => self.resource_selection_state.activate(),
             AppEvent::ResourceSelected(resource_type) => {
-                self.resource_mgr.load_resource_type(resource_type).await?;
+                if let BodyPane::ResourceBrowser(ref mut resource_mgr) = self.body_pane {
+                    resource_mgr.load_resource_type(resource_type).await?;
+                }
             },
+            AppEvent::LoadProperties(moref) => {
+                self.body_pane = BodyPane::PropertyBrowser(PropertyBrowserManager::new(self.cache_mgr.clone(), moref).await?)
+            }
         }
         Ok(())
     }
@@ -142,9 +153,12 @@ impl App {
         let vertical = Layout::vertical([Constraint::Length(5), Constraint::Fill(1)]);
         let [top_area, body_area] = vertical.areas(frame.area());
 
-        self.render_header(frame, top_area);
+        if let BodyPane::ResourceBrowser(ref resource_mgr) = self.body_pane {
+            let res_type = resource_mgr.resource_type();
+            self.render_header(frame, top_area, res_type);
+        }
 
-        self.resource_mgr.render(frame, body_area);
+        self.body_pane.render(frame, body_area);
         
         // Draw search popup if active
         if self.search_state.is_active() {
@@ -156,7 +170,7 @@ impl App {
 
     }
 
-    fn render_header(&mut self, frame: &mut Frame, top_area: Rect) {
+    fn render_header(&mut self, frame: &mut Frame, top_area: Rect, resource_type: ResourceType) {
         let horizontal = Layout::horizontal([Constraint::Fill(1), Constraint::Length(16), Constraint::Length(16), Constraint::Length(21)]);
         let [status_area, expand_area, help_area, right_area] = horizontal.areas(top_area);
 
@@ -169,7 +183,7 @@ impl App {
         frame.render_widget(status_paragraph, status_area);
 
         // Render expand hints
-        let expand_lines = hints::decorate_hints(hints::get_expand_hint(self.resource_mgr.resource_type()));
+        let expand_lines = hints::decorate_hints(hints::get_expand_hint(resource_type));
         let expand_paragraph = ratatui::widgets::Paragraph::new(expand_lines)
             .style(ratatui::style::Style::default().fg(ratatui::style::Color::Cyan));
         frame.render_widget(expand_paragraph, expand_area);
@@ -203,7 +217,7 @@ impl App {
                     return Ok(());
                 }
 
-                if self.resource_mgr.handle_key(key, &mut self.events).await? {
+                if self.body_pane.handle_key(key, &mut self.events).await? {
                     return Ok(());
                 }
 

@@ -12,6 +12,7 @@ use crate::resource_browser::data_loaders;
 use crate::resource_browser::tabular_data::TableDataSource;
 use crate::resource_browser::vm::VmData;
 use crossterm::event::{KeyCode, KeyEvent};
+use log::{debug, warn};
 use vim_rs::types::enums::MoTypesEnum;
 use crate::event::{AppEvent, EventHandler};
 use crate::resource_browser::cluster::ClusterDetails;
@@ -140,11 +141,21 @@ impl ResourceManager {
             KeyCode::Char('/') => events.send(AppEvent::OpenSearch),
             KeyCode::Backspace => self.navigate_back().await?,
             KeyCode::Esc => self.set_filter(None),
+            KeyCode::Enter => {
+                if let Some((selected_id, _)) = self.selected_item() {
+                    events.send(AppEvent::LoadProperties(selected_id))
+                }
+            },
             _ => {
                 return Ok(false);
             }
         }
         Ok(true)
+    }
+    pub(crate) async fn load_resource_type(&mut self, resource_type: ResourceType) -> anyhow::Result<()> {
+        // Save the current navigation state
+        self.save_navigation_state();
+        self.load_resource_type_int(resource_type).await
     }
 
     fn save_navigation_state(&mut self) {
@@ -159,14 +170,21 @@ impl ResourceManager {
         // Save the current navigation state
         self.save_navigation_state();
         // Read the id of the currently selected resource
-        let Some(selected) = self.table_state.selected() else {
-            return Ok(());
-        };
-        let Some((selected_id, selected_name)) = self.resources.item_at_index(selected) else {
+        let Some((selected_id, selected_name)) = self.selected_item() else {
             return Ok(());
         };
 
         self.expand_parent_collection(resource_type, &selected_id, selected_name).await
+    }
+
+    fn selected_item(&mut self) -> Option<(ManagedObjectReference, String)> {
+        let Some(selected) = self.table_state.selected() else {
+            return None;
+        };
+        let Some((selected_id, selected_name)) = self.resources.item_at_index(selected) else {
+            return None;
+        };
+        Some((selected_id, selected_name))
     }
 
     async fn expand_parent_collection(&mut self, resource_type: ResourceType, parent_id: &ManagedObjectReference, parent_name: String) -> anyhow::Result<()> {
@@ -245,11 +263,7 @@ impl ResourceManager {
         Ok(())
     }
 
-    pub(crate) async fn load_resource_type(&mut self, resource_type: ResourceType) -> anyhow::Result<()> {
-        // Save the current navigation state
-        self.save_navigation_state();
-        self.load_resource_type_int(resource_type).await
-    }
+
     async fn load_resource_type_int(&mut self, resource_type: ResourceType) -> anyhow::Result<()> {
         let parent = self.client.service_content().root_folder.clone();
         self.parent = None;
@@ -315,7 +329,20 @@ impl ResourceManager {
 
         Ok(())
     }
+}
 
-
-
+impl Drop for ResourceManager {
+    fn drop(&mut self) {
+        let cache_mgr = self.cache_mgr.clone();
+        let filter = self.filter.clone();
+        // Schedule task to remove the cache
+        tokio::task::block_in_place(|| {
+            tokio::runtime::Handle::current().block_on(async move {
+                debug!("Terminating ResourceManager. Releasing filter");
+                cache_mgr.borrow_mut().remove_cache(&filter).await.unwrap_or_else(|e| {
+                    warn!("Failed to remove ResourceManager filter: {:?}, {}", filter, e);
+                });
+            });
+        });
+    }
 }

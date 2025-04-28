@@ -11,4 +11,9 @@ tokio = {  version = "1.44", features = ["macros"]}
 ratatui = {  version = "0.29" , features = ["crossterm"]}
 vim_rs = { version = "0.2", path = "../../vim_rs" }
 vim_macros = { version = "0.2", path = "../../vim_macros" }
-chrono = "0.4.40"
+chrono = "0.4"
+tui-tree-widget = "0.23"
+serde_json = "1.0"
+log = "0.4"
+simplelog = "0.12"
+indexmap = "2.9"

@@ -2103,8 +2103,13 @@ dependencies = [
  "chrono",
  "crossterm",
  "futures",
+ "indexmap",
+ "log",
  "ratatui",
+ "serde_json",
+ "simplelog",
  "tokio",
+ "tui-tree-widget",
  "vim_macros",
  "vim_rs",
 ]

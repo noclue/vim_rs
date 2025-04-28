@@ -3,7 +3,7 @@ use futures::{FutureExt, StreamExt};
 use ratatui::crossterm::event::Event as CrosstermEvent;
 use tokio::sync::mpsc;
 use vim_rs::core::pc_cache::Monitor;
-use vim_rs::types::structs::PropertyFilterUpdate;
+use vim_rs::types::structs::{ManagedObjectReference, PropertyFilterUpdate};
 use crate::resource_type::ResourceType;
 
 /// Representation of all possible events.
@@ -38,6 +38,9 @@ pub enum AppEvent {
     /// Resource selection events.
     ResourceSelected(ResourceType),
     OpenResourceSelection,
+    
+    /// Load object properties.
+    LoadProperties(ManagedObjectReference),
 }
 
 /// Terminal event handler.
