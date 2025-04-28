@@ -48,18 +48,12 @@ impl App {
     ) -> anyhow::Result<Self> {
         // Create a new ResourceManager instance
         let resource_mgr = ResourceManager::new(client.clone(), cache_mgr.clone()).await?;
-        //let root_folder = client.service_content().root_folder.clone();
-        //let (resources, filter) = data_loaders::load_from_container::<VmData>(cache_mgr.clone(), &root_folder).await?;
         Ok(Self {
             should_quit: false,
             cache_mgr,
             client,
             resource_mgr,
-            //resources,
-            //filter,
             events,
-            //table_state: TableState::default(),
-            //parent: None,
             search_state: SearchState::new(),
             resource_selection_state: ResourceSelectionState::new(),
         })
@@ -151,10 +145,7 @@ impl App {
         self.render_header(frame, top_area);
 
         self.resource_mgr.render(frame, body_area);
-
-        // let table = ResourceTableWidget::new(self.resources.as_mut(), &self.parent);
-        // frame.render_stateful_widget(table, body_area, &mut self.table_state);
-
+        
         // Draw search popup if active
         if self.search_state.is_active() {
             self.search_state.render(frame);

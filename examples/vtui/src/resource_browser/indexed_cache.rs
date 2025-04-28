@@ -109,10 +109,15 @@ where
     }
 
     fn get_sort_setting(&self) -> Option<(usize, bool)> {
-        match self.sort_column {
-            Some(column) => Some((column, self.sort_descending)),
-            None => None,
+        self.sort_column.map(|column| (column, self.sort_descending))
+    }
+    fn set_sort_setting(&mut self, column: usize, descending: bool) {
+        if !T::sortable_columns().contains(&column) {
+            return;
         }
+        self.sort_column = Some(column);
+        self.sort_descending = descending;
+        self.invalidate();
     }
     fn iter<'a>(&'a mut self) -> Box<dyn Iterator<Item=Row<'static>> + 'a> {
         self.ensure_indices_updated();

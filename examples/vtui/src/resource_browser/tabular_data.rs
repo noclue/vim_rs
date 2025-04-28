@@ -38,6 +38,7 @@ pub trait TableDataSource {
     fn set_sort_column(&mut self, column: Option<usize>);
 
     fn get_sort_setting(&self) -> Option<(usize, bool)>;
+    fn set_sort_setting(&mut self, column: usize, descending: bool);
     fn iter<'a>(&'a mut self) -> Box<dyn Iterator<Item=Row<'static>> + 'a>;
     fn is_empty(&mut self) -> bool;
     fn len(&mut self) -> usize;
