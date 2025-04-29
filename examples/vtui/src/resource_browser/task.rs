@@ -265,7 +265,9 @@ fn task_desc(task: &TaskInfo) -> String {
 // Global static for storing task descriptions
 static TASK_DESCRIPTIONS: OnceLock<HashMap<String, String>> = OnceLock::new();
 
-
+/// Function to ensure task descriptions are initialized. The VIM API uses a predefined set of task
+/// descriptions. To display tasks we need to ensure those descriptions are first cached into a 
+/// globally accessible maps
 pub async fn ensure_task_descriptions_initialized(client: Arc<Client>) -> anyhow::Result<()> {
     if TASK_DESCRIPTIONS.get().is_some() {
         return Ok(());

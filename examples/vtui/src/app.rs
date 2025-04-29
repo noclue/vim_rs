@@ -49,7 +49,9 @@ impl App {
         client: Arc<Client>,
     ) -> anyhow::Result<Self> {
         // Create a new ResourceManager instance
-        let resource_mgr = ResourceManager::new(client.clone(), cache_mgr.clone()).await?;
+        let resource_mgr = ResourceManager::new(client.clone(),
+                                                cache_mgr.clone(),
+                                                ResourceType::VirtualMachine).await?;
         Ok(Self {
             should_quit: false,
             cache_mgr,
@@ -95,6 +97,15 @@ impl App {
             }
             AppEvent::OpenResourceSelection => self.resource_selection_state.activate(),
             AppEvent::ResourceSelected(resource_type) => {
+                match self.body_pane {
+                    BodyPane::ResourceBrowser(ref mut resource_mgr) => {
+                        resource_mgr.load_resource_type(resource_type).await?;
+                    },
+                    BodyPane::PropertyBrowser(_) => {
+                        let res_mgr = ResourceManager::new(self.client.clone(), self.cache_mgr.clone(), resource_type).await?;
+                        self.body_pane = BodyPane::ResourceBrowser(res_mgr);
+                    }
+                }
                 if let BodyPane::ResourceBrowser(ref mut resource_mgr) = self.body_pane {
                     resource_mgr.load_resource_type(resource_type).await?;
                 }

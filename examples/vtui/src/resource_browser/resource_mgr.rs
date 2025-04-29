@@ -2,6 +2,7 @@ use std::cell::RefCell;
 use std::collections::VecDeque;
 use std::rc::Rc;
 use std::sync::Arc;
+use anyhow::anyhow;
 use ratatui::Frame;
 use ratatui::layout::Rect;
 use ratatui::widgets::TableState;
@@ -78,9 +79,9 @@ impl ResourceManager {
     pub async fn new(
         client: Arc<Client>,
         cache_mgr: Rc<RefCell<CacheManager>>,
+        resource_type: ResourceType,
     ) -> anyhow::Result<Self> {
-        let root_folder = client.service_content().root_folder.clone();
-        let (resources, filter) = data_loaders::load_from_container::<VmData>(cache_mgr.clone(), &root_folder).await?;
+        let (resources, filter) = Self::load_from_container(resource_type, cache_mgr.clone(), &client).await?;
 
         Ok(Self {
             cache_mgr,
@@ -265,36 +266,43 @@ impl ResourceManager {
 
 
     async fn load_resource_type_int(&mut self, resource_type: ResourceType) -> anyhow::Result<()> {
-        let parent = self.client.service_content().root_folder.clone();
         self.parent = None;
+        let cache_mgr = self.cache_mgr.clone();
+        let client = &self.client;
 
+        let (resources, filter) = Self::load_from_container(resource_type, cache_mgr, client).await?;
+        self.apply_new_table_source(resources, filter).await
+    }
+
+    async fn load_from_container(resource_type: ResourceType, cache_mgr: Rc<RefCell<CacheManager>>, client: &Arc<Client>) -> anyhow::Result<(Box<dyn TableDataSource>, ManagedObjectReference)> {
+        let parent = client.service_content().root_folder.clone();
         let (resources, filter) = match resource_type {
             ResourceType::VirtualMachine => {
-                data_loaders::load_from_container::<VmData>(self.cache_mgr.clone(), &parent).await?
+                data_loaders::load_from_container::<VmData>(cache_mgr, &parent).await?
             }
             ResourceType::Host => {
-                data_loaders::load_from_container::<Host>(self.cache_mgr.clone(), &parent).await?
+                data_loaders::load_from_container::<Host>(cache_mgr, &parent).await?
             }
             ResourceType::Datastore => {
-                data_loaders::load_from_container::<DatastoreDetails>(self.cache_mgr.clone(), &parent).await?
+                data_loaders::load_from_container::<DatastoreDetails>(cache_mgr, &parent).await?
             }
             ResourceType::Cluster => {
-                data_loaders::load_from_container::<ClusterDetails>(self.cache_mgr.clone(), &parent).await?
+                data_loaders::load_from_container::<ClusterDetails>(cache_mgr, &parent).await?
             }
             ResourceType::Network => {
-                data_loaders::load_from_container::<NetworkDetails>(self.cache_mgr.clone(), &parent).await?
+                data_loaders::load_from_container::<NetworkDetails>(cache_mgr, &parent).await?
             }
             ResourceType::Task => {
-                let task_manager = self.client.service_content().task_manager.as_ref();
+                let task_manager = client.service_content().task_manager.as_ref();
                 let Some(task_manager) = task_manager else {
-                    return Ok(());
+                    return Err(anyhow!("Task manager not available"));
                 };
                 // Initialize task descriptions
-                ensure_task_descriptions_initialized(self.client.clone()).await?;
-                data_loaders::load_from_property::<TaskInfo>(self.cache_mgr.clone(), task_manager, "recentTask").await?
+                ensure_task_descriptions_initialized(client.clone()).await?;
+                data_loaders::load_from_property::<TaskInfo>(cache_mgr, task_manager, "recentTask").await?
             }
         };
-        self.apply_new_table_source(resources, filter).await
+        Ok((resources, filter))
     }
 
     async fn apply_new_table_source(&mut self, resources: Box<dyn TableDataSource>, filter: ManagedObjectReference) -> anyhow::Result<()> {
