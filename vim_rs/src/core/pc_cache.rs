@@ -2,7 +2,7 @@ use indexmap::IndexMap;
 use std::cell::RefCell;
 use std::ops::Index;
 use std::sync::{Arc, RwLock};
-use log::{debug, error};
+use log::{debug, error, warn};
 use std::rc::Rc;
 use crate::core::client::Client;
 use crate::core::pc_helpers;
@@ -441,7 +441,7 @@ impl CacheManager {
                     debug!("No object updates found for filter '{}'", filter_id);
                 }
             } else {
-                error!("Update received for unknown filter '{}'", filter_id);
+                warn!("Update received for unknown filter '{}'", filter_id);
             }
         }
         Ok(())

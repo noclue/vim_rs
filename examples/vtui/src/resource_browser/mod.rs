@@ -11,4 +11,4 @@ mod data_loaders;
 mod task;
 mod resource_mgr;
 
-pub use resource_mgr::ResourceManager;
+pub use resource_mgr::{ResourceManager, HistoryRecord};

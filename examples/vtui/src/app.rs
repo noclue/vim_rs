@@ -5,6 +5,7 @@ use ratatui::{DefaultTerminal, Frame};
 use std::cell::RefCell;
 use std::rc::Rc;
 use std::sync::Arc;
+use log::{debug, info, warn};
 use ratatui::style::Stylize;
 use ratatui::text::Line;
 use vim_rs::core::client::Client;
@@ -12,6 +13,7 @@ use vim_rs::core::pc_cache::CacheManager;
 use crate::body_pane::BodyPane;
 use crate::hints;
 use crate::hints::HELP_HINTS;
+use crate::history::{History, HistoryManager};
 use crate::prop_browser::PropertyBrowserManager;
 use crate::resource_browser::ResourceManager;
 use crate::search::SearchState;
@@ -33,6 +35,8 @@ pub struct App {
     search_state: SearchState,
     /// State for managing resource selection.
     resource_selection_state: ResourceSelectionState,
+    /// History of previous states for back navigation.
+    history: HistoryManager,
 }
 
 const ASCII_ART: &str = r#"     ╭───────╮
@@ -60,6 +64,7 @@ impl App {
             events,
             search_state: SearchState::new(),
             resource_selection_state: ResourceSelectionState::new(),
+            history: HistoryManager::new(20), // TODO: Make this configurable
         })
     }
 
@@ -77,42 +82,55 @@ impl App {
     async fn handle_app_event(&mut self, event: AppEvent) -> anyhow::Result<()> {
         match event {
             AppEvent::PropertyCollector(update) => {
+                debug!("PropertyCollector update. length: {:?}", update.len());
                 self.cache_mgr.borrow_mut().apply_updates(update)?;
                 if let BodyPane::ResourceBrowser(ref mut resource_mgr) = self.body_pane {
                     resource_mgr.invalidate();
                 }
             }
-            AppEvent::ErrorMessage(_msg) => {
-                todo!()
+            AppEvent::ErrorMessage(msg) => {
+                warn!("Error from update loop: {}", msg);
             }
             AppEvent::Quit => {
+                info!("Quitting...");
                 self.events.shutdown().await?;
                 self.should_quit = true
             }
             AppEvent::OpenSearch => self.search_state.activate(),
             AppEvent::SearchCompleted(filter) => {
+                debug!("SearchCompleted. filter: {:?}", filter);
                 if let BodyPane::ResourceBrowser(ref mut resource_mgr) = self.body_pane {
                     resource_mgr.set_filter(Some(filter));
                 }
             }
             AppEvent::OpenResourceSelection => self.resource_selection_state.activate(),
             AppEvent::ResourceSelected(resource_type) => {
+                info!("Resource Type Selected. resource_type: {:?}", resource_type);
                 match self.body_pane {
                     BodyPane::ResourceBrowser(ref mut resource_mgr) => {
-                        resource_mgr.load_resource_type(resource_type).await?;
+                        resource_mgr.load_resource_type(resource_type, &mut self.events).await?;
                     },
-                    BodyPane::PropertyBrowser(_) => {
+                    BodyPane::PropertyBrowser(ref mut prop_mgr) => {
+                        prop_mgr.save_state(&mut self.events);
                         let res_mgr = ResourceManager::new(self.client.clone(), self.cache_mgr.clone(), resource_type).await?;
                         self.body_pane = BodyPane::ResourceBrowser(res_mgr);
                     }
                 }
                 if let BodyPane::ResourceBrowser(ref mut resource_mgr) = self.body_pane {
-                    resource_mgr.load_resource_type(resource_type).await?;
+                    resource_mgr.load_resource_type(resource_type, &mut self.events).await?;
                 }
             },
             AppEvent::LoadProperties(moref) => {
+                info!("LoadProperties. moref: {:?}", moref);
                 self.body_pane = BodyPane::PropertyBrowser(PropertyBrowserManager::new(self.cache_mgr.clone(), moref).await?)
             }
+            AppEvent::ResourceManagerHistory(history) => {
+                self.history.add_resource_entry(history);
+            }
+            AppEvent::PropertyManagerHistory(history) => {
+                self.history.add_property_entry(history);
+            }
+            
         }
         Ok(())
     }
@@ -235,7 +253,36 @@ impl App {
                 match key.code {
                     KeyCode::Char('q') => self.events.send(AppEvent::Quit),
                     KeyCode::Char('r') => self.events.send(AppEvent::OpenResourceSelection),
+                    KeyCode::Backspace => self.back().await?,
                     _ => {}
+                }
+            }
+        }
+        Ok(())
+    }
+
+    async fn back(&mut self) -> anyhow::Result<()> {
+        if let Some(entry) = self.history.pop() {
+            match entry {
+                History::Resource(record) => {
+                    match self.body_pane {
+                        BodyPane::ResourceBrowser(ref mut resource_mgr) => {
+                            resource_mgr.load_history_record(record).await?;
+                        },
+                        BodyPane::PropertyBrowser(_) => {
+                            self.body_pane = BodyPane::ResourceBrowser(ResourceManager::from_history_record(record, self.client.clone(), self.cache_mgr.clone()).await?);
+                        }
+                    }
+                }
+                History::Property(record) => {
+                    match self.body_pane {
+                        BodyPane::ResourceBrowser(_) => {
+                            self.body_pane = BodyPane::PropertyBrowser(PropertyBrowserManager::from_history_record(record, self.cache_mgr.clone()).await?);
+                        },
+                        BodyPane::PropertyBrowser(ref mut property_mgr) => {
+                            property_mgr.load_history_record(record).await?;
+                        }
+                    }
                 }
             }
         }

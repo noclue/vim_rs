@@ -3,4 +3,4 @@ mod prop_browser;
 mod prop_utils;
 mod prop_mgr;
 
-pub use prop_mgr::PropertyBrowserManager;
+pub use prop_mgr::{PropertyBrowserManager, HistoryRecord};

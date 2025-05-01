@@ -1,5 +1,4 @@
 use std::cell::RefCell;
-use std::collections::VecDeque;
 use std::rc::Rc;
 use std::sync::Arc;
 use anyhow::anyhow;
@@ -13,7 +12,7 @@ use crate::resource_browser::data_loaders;
 use crate::resource_browser::tabular_data::TableDataSource;
 use crate::resource_browser::vm::VmData;
 use crossterm::event::{KeyCode, KeyEvent};
-use log::{debug, warn};
+use log::{debug, info, warn};
 use vim_rs::types::enums::MoTypesEnum;
 use crate::event::{AppEvent, EventHandler};
 use crate::resource_browser::cluster::ClusterDetails;
@@ -37,15 +36,12 @@ pub struct ResourceManager {
     table_state: TableState,
     /// Parent object reference for the current view when expanding a sub collection e.g. VMs in host.
     parent: Option<(ManagedObjectReference, String)>,
-
-    navigation_history: VecDeque<NavigationRecord>,
-
-    max_history_size: usize,
-
+    /// Table state to apply after data is loaded.
     pending_table_state: Option<(usize, Option<usize>)>, // (offset, selected_index)
 }
 
-struct NavigationRecord {
+#[derive(Debug)]
+pub struct HistoryRecord {
     resource_type: ResourceType,
     parent: Option<(ManagedObjectReference, String)>,
     selected_index: Option<usize>,
@@ -54,7 +50,7 @@ struct NavigationRecord {
     sort: Option<(usize, bool)>,
 }
 
-impl NavigationRecord {
+impl HistoryRecord {
     fn from_current_state(resource_mgr: &ResourceManager) -> Self {
         Self {
             resource_type: resource_mgr.resource_type(),
@@ -81,6 +77,7 @@ impl ResourceManager {
         cache_mgr: Rc<RefCell<CacheManager>>,
         resource_type: ResourceType,
     ) -> anyhow::Result<Self> {
+        debug!("Creating resource manager for resource type: {}", resource_type);
         let (resources, filter) = Self::load_from_container(resource_type, cache_mgr.clone(), &client).await?;
 
         Ok(Self {
@@ -90,12 +87,69 @@ impl ResourceManager {
             filter,
             table_state: TableState::default(),
             parent: None,
-            navigation_history: VecDeque::new(),
-            max_history_size: 10,
             pending_table_state: None,
         })
     }
 
+    pub async fn from_history_record(
+        record: HistoryRecord,
+        client: Arc<Client>,
+        cache_mgr: Rc<RefCell<CacheManager>>,
+    ) -> anyhow::Result<Self> {
+        debug!("Creating resource manager from history record. Resource type: {}", record.resource_type);
+        let (mut resources, filter) = if let Some(ref parent) = record.parent {
+             Self::load_parent_collection(record.resource_type, &parent.0, cache_mgr.clone(), &client).await?
+        } else {
+            Self::load_from_container(record.resource_type, cache_mgr.clone(), &client).await?
+        };
+
+        // Apply text filter and sort settings
+        resources.set_filter(record.search_filter);
+        if let Some((column, descending)) = record.sort {
+            resources.set_sort_setting(column, descending);
+        } else {
+            resources.set_sort_column(None);
+        }
+
+        // Make sure the data reflects our settings
+        resources.invalidate();
+        
+        Ok(Self {
+            cache_mgr,
+            client,
+            resources,
+            filter,
+            table_state: TableState::default(),
+            parent: record.parent,
+            pending_table_state: Some((record.offset, record.selected_index)),
+        })
+    }
+
+    pub async fn load_history_record(& mut self, previous_state: HistoryRecord) -> anyhow::Result<()> {
+        if let Some(parent) = previous_state.parent {
+            self.expand_parent_collection(previous_state.resource_type, &parent.0, parent.1).await?;
+        } else {
+            self.parent = None;
+            self.load_resource_type_int(previous_state.resource_type).await?;
+        }
+
+        // Store the table state to be applied after data is loaded
+        self.pending_table_state = Some((previous_state.offset, previous_state.selected_index));
+
+        self.resources.set_filter(previous_state.search_filter);
+        if let Some((column, descending)) = previous_state.sort {
+            self.resources.set_sort_setting(column, descending);
+        } else {
+            self.resources.set_sort_column(None);
+        }
+        self.resources.invalidate();
+
+        Ok(())
+    }
+    pub fn save_state(&mut self, events: &mut EventHandler) {
+        let record = HistoryRecord::from_current_state(self);
+        events.send(AppEvent::ResourceManagerHistory(record));
+    }
     pub fn set_filter(&mut self, filter: Option<String>) {
         self.resources.set_filter(filter)
     }
@@ -133,17 +187,17 @@ impl ResourceManager {
             KeyCode::Char('0') => self.resources.set_sort_column(None),
 
             // Add shortcut keys to sub-collections - (n)etwork, (d)atastore, (h)ost, (v)m, (c)luster
-            KeyCode::Char('n') => self.expand_collection(ResourceType::Network).await?,
-            KeyCode::Char('d') => self.expand_collection(ResourceType::Datastore).await?,
-            KeyCode::Char('h') => self.expand_collection(ResourceType::Host).await?,
-            KeyCode::Char('v') => self.expand_collection(ResourceType::VirtualMachine).await?,
+            KeyCode::Char('n') => self.expand_collection(ResourceType::Network, events).await?,
+            KeyCode::Char('d') => self.expand_collection(ResourceType::Datastore, events).await?,
+            KeyCode::Char('h') => self.expand_collection(ResourceType::Host, events).await?,
+            KeyCode::Char('v') => self.expand_collection(ResourceType::VirtualMachine, events).await?,
             //KeyCode::Char('c') => self.events.send(AppEvent::ExpandCollection(ResourceType::Cluster)),
-            KeyCode::Char('t') => self.expand_collection(ResourceType::Task).await?,
+            KeyCode::Char('t') => self.expand_collection(ResourceType::Task, events).await?,
             KeyCode::Char('/') => events.send(AppEvent::OpenSearch),
-            KeyCode::Backspace => self.navigate_back().await?,
             KeyCode::Esc => self.set_filter(None),
             KeyCode::Enter => {
                 if let Some((selected_id, _)) = self.selected_item() {
+                    self.save_state(events);
                     events.send(AppEvent::LoadProperties(selected_id))
                 }
             },
@@ -153,23 +207,14 @@ impl ResourceManager {
         }
         Ok(true)
     }
-    pub(crate) async fn load_resource_type(&mut self, resource_type: ResourceType) -> anyhow::Result<()> {
+    pub(crate) async fn load_resource_type(&mut self, resource_type: ResourceType, events: &mut EventHandler) -> anyhow::Result<()> {
         // Save the current navigation state
-        self.save_navigation_state();
+        self.save_state(events);
         self.load_resource_type_int(resource_type).await
     }
-
-    fn save_navigation_state(&mut self) {
-        let record = NavigationRecord::from_current_state(self);
-        if self.navigation_history.len() == self.max_history_size {
-            self.navigation_history.pop_front();
-        }
-        self.navigation_history.push_back(record);
-    }
-
-    async fn expand_collection(&mut self, resource_type: ResourceType) -> anyhow::Result<()> {
+    async fn expand_collection(&mut self, resource_type: ResourceType, events: &mut EventHandler) -> anyhow::Result<()> {
         // Save the current navigation state
-        self.save_navigation_state();
+        self.save_state(events);
         // Read the id of the currently selected resource
         let Some((selected_id, selected_name)) = self.selected_item() else {
             return Ok(());
@@ -189,19 +234,50 @@ impl ResourceManager {
     }
 
     async fn expand_parent_collection(&mut self, resource_type: ResourceType, parent_id: &ManagedObjectReference, parent_name: String) -> anyhow::Result<()> {
-        let (resources, filter) = match resource_type {
+        let cache_mgr = self.cache_mgr.clone();
+        let client = &self.client;
+        
+        info!("Expanding collection: resource: {}, parent: {} [{:?}]", resource_type, parent_name, parent_id);
+        let res = Self::load_parent_collection(resource_type, &parent_id, cache_mgr, client).await;
+
+        match res {
+            Ok((resources, filter)) => {
+                self.apply_new_table_source(resources, filter).await?;
+                self.parent = Some((parent_id.clone(), parent_name));
+                Ok(())
+            }
+            Err(err) => {
+                // Check if it's our specific error type
+                if let Some(ResourceError::UnsupportedExpansion { resource_type, parent_type }) = err.downcast_ref::<ResourceError>() {
+                    debug!("Ignoring unsupported expansion: resource: {}, prent: {}", resource_type, parent_type);
+                    Ok(())
+                } else {
+                    // Unknown/network errors - propagate up
+                    warn!("Failed to expand collection: resource: {}, parent: {} [{:?}]: {}", resource_type, parent_name, parent_id, err);
+                    Err(err)
+                }
+            }
+        }
+    }
+
+    async fn load_parent_collection(resource_type: ResourceType, parent_id: &ManagedObjectReference, cache_mgr: Rc<RefCell<CacheManager>>, client: &Arc<Client>) -> anyhow::Result<(Box<dyn TableDataSource>, ManagedObjectReference)> {
+        match resource_type {
             ResourceType::VirtualMachine => {
                 match parent_id.r#type {
                     MoTypesEnum::HostSystem | MoTypesEnum::Datastore |
                     MoTypesEnum::Network | MoTypesEnum::DistributedVirtualPortgroup |
                     MoTypesEnum::OpaqueNetwork => {
-                        data_loaders::load_from_property::<VmData>(self.cache_mgr.clone(), &parent_id, "vm").await?
+                        Ok(data_loaders::load_from_property::<VmData>(cache_mgr, &parent_id, "vm").await?)
                     }
                     MoTypesEnum::ClusterComputeResource => {
-                        data_loaders::load_from_container::<VmData>(self.cache_mgr.clone(), &parent_id).await?
+                        Ok(data_loaders::load_from_container::<VmData>(cache_mgr, &parent_id).await?)
                     }
                     _ => {
-                        return Ok(()); // Do nothing we cannot expand VMs of a VM
+                        let r#type: &'static str = From::from(&parent_id.r#type);
+                        Err(ResourceError::UnsupportedExpansion {
+                            resource_type,
+                            parent_type: r#type.to_string(),
+                        }.into())
                     }
                 }
             }
@@ -210,60 +286,76 @@ impl ResourceManager {
                     MoTypesEnum::ClusterComputeResource |
                     MoTypesEnum::Network | MoTypesEnum::DistributedVirtualPortgroup |
                     MoTypesEnum::OpaqueNetwork => {
-                        data_loaders::load_from_property::<Host>(self.cache_mgr.clone(), &parent_id, "host").await?
+                        Ok(data_loaders::load_from_property::<Host>(cache_mgr, &parent_id, "host").await?)
                     }
                     MoTypesEnum::Datastore => {
-                        let hosts = get_datastore_hosts(self.client.clone(), &parent_id).await?;
-                        data_loaders::load_from_list::<Host>(self.cache_mgr.clone(), &hosts).await?
+                        let hosts = get_datastore_hosts(client.clone(), &parent_id).await?;
+                        Ok(data_loaders::load_from_list::<Host>(cache_mgr, &hosts).await?)
                     }
                     _ => {
-                        return Ok(()); // Do nothing we cannot expand Hosts of a Host or VM
+                        let r#type: &'static str = From::from(&parent_id.r#type);
+                        Err(ResourceError::UnsupportedExpansion {
+                            resource_type,
+                            parent_type: r#type.to_string(),
+                        }.into())
                     }
                 }
             }
             ResourceType::Datastore => {
                 match parent_id.r#type {
                     MoTypesEnum::ClusterComputeResource | MoTypesEnum::HostSystem => {
-                        data_loaders::load_from_property::<DatastoreDetails>(self.cache_mgr.clone(), &parent_id, "datastore").await?
+                        Ok(data_loaders::load_from_property::<DatastoreDetails>(cache_mgr, &parent_id, "datastore").await?)
                     }
                     _ => {
-                        return Ok(());
+                        let r#type: &'static str = From::from(&parent_id.r#type);
+                        Err(ResourceError::UnsupportedExpansion {
+                            resource_type,
+                            parent_type: r#type.to_string(),
+                        }.into())
                     }
                 }
             }
             ResourceType::Cluster => {
-                return Ok(()); // No sub-collection of clusters for now
+                let r#type: &'static str = From::from(&parent_id.r#type);
+                Err(ResourceError::UnsupportedExpansion {
+                    resource_type,
+                    parent_type: r#type.to_string(),
+                }.into())
             }
             ResourceType::Network => {
                 match parent_id.r#type {
                     MoTypesEnum::ClusterComputeResource | MoTypesEnum::HostSystem => {
-                        data_loaders::load_from_property::<NetworkDetails>(self.cache_mgr.clone(), &parent_id, "network").await?
+                        Ok(data_loaders::load_from_property::<NetworkDetails>(cache_mgr, &parent_id, "network").await?)
                     }
                     _ => {
-                        return Ok(());
+                        let r#type: &'static str = From::from(&parent_id.r#type);
+                        Err(ResourceError::UnsupportedExpansion {
+                            resource_type,
+                            parent_type: r#type.to_string(),
+                        }.into())
                     }
                 }
             }
             ResourceType::Task => {
-                ensure_task_descriptions_initialized(self.client.clone()).await?;
+                ensure_task_descriptions_initialized(client.clone()).await?;
                 match parent_id.r#type {
                     MoTypesEnum::ClusterComputeResource | MoTypesEnum::HostSystem |
                     MoTypesEnum::VirtualMachine | MoTypesEnum::Datastore |
                     MoTypesEnum::Network | MoTypesEnum::DistributedVirtualPortgroup |
                     MoTypesEnum::OpaqueNetwork => {
-                        data_loaders::load_from_property::<TaskInfo>(self.cache_mgr.clone(), &parent_id, "recentTask").await?
+                        Ok(data_loaders::load_from_property::<TaskInfo>(cache_mgr, &parent_id, "recentTask").await?)
                     }
                     _ => {
-                        return Ok(());
+                        let r#type: &'static str = From::from(&parent_id.r#type);
+                        Err(ResourceError::UnsupportedExpansion {
+                            resource_type,
+                            parent_type: r#type.to_string(),
+                        }.into())
                     }
                 }
             }
-        };
-        self.apply_new_table_source(resources, filter).await?;
-        self.parent = Some((parent_id.clone(), parent_name));
-        Ok(())
+        }
     }
-
 
     async fn load_resource_type_int(&mut self, resource_type: ResourceType) -> anyhow::Result<()> {
         self.parent = None;
@@ -313,30 +405,6 @@ impl ResourceManager {
         Ok(())
     }
 
-    async fn navigate_back(&mut self) -> anyhow::Result<()> {
-        let Some(previous_state) = self.navigation_history.pop_back() else {
-            return Ok(());
-        };
-        if let Some(parent) = previous_state.parent {
-            self.expand_parent_collection(previous_state.resource_type, &parent.0, parent.1).await?;
-        } else {
-            self.parent = None;
-            self.load_resource_type_int(previous_state.resource_type).await?;
-        }
-
-        // Store the table state to be applied after data is loaded
-        self.pending_table_state = Some((previous_state.offset, previous_state.selected_index));
-
-        self.resources.set_filter(previous_state.search_filter);
-        if let Some((column, descending)) = previous_state.sort {
-            self.resources.set_sort_setting(column, descending);
-        } else {
-            self.resources.set_sort_column(None);
-        }
-        self.resources.invalidate();
-
-        Ok(())
-    }
 }
 
 impl Drop for ResourceManager {
@@ -353,4 +421,16 @@ impl Drop for ResourceManager {
             });
         });
     }
+}
+
+#[derive(Debug, thiserror::Error)]
+pub enum ResourceError {
+    #[error("Cannot expand {resource_type} from parent type {parent_type}")]
+    UnsupportedExpansion {
+        resource_type: ResourceType,
+        parent_type: String,
+    },
+
+    #[error(transparent)]
+    Other(#[from] anyhow::Error),
 }

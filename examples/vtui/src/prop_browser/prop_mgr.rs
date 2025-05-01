@@ -3,13 +3,12 @@ use tui_tree_widget::TreeState;
 use std::rc::Rc;
 use std::cell::RefCell;
 use vim_rs::core::pc_cache::{CacheManager, SharedRefCacheProxy};
-use std::collections::VecDeque;
 use ratatui::Frame;
 use ratatui::layout::Rect;
 use crossterm::event::{KeyCode, KeyEvent};
 use std::ops::DerefMut;
 use log::{debug, warn};
-use crate::event::EventHandler;
+use crate::event::{AppEvent, EventHandler};
 use crate::prop_browser::prop_browser::{PropertyBrowser, PropertyBrowserState};
 
 pub struct PropertyBrowserManager {
@@ -21,10 +20,6 @@ pub struct PropertyBrowserManager {
     browser_state: Rc<RefCell<PropertyBrowserState>>,
     /// Object reference for the current view
     obj: ManagedObjectReference,
-    /// History of previous states for back navigation
-    history: VecDeque<HistoryEntry>,
-    /// Maximum history entries to keep
-    max_history: usize,
 }
 
 impl PropertyBrowserManager {
@@ -32,7 +27,7 @@ impl PropertyBrowserManager {
         cache_mgr: Rc<RefCell<CacheManager>>,
         obj: ManagedObjectReference,
     ) -> anyhow::Result<Self> {
-        let browser_state = Rc::new(RefCell::new(PropertyBrowserState::new(obj.clone()).await?));
+        let browser_state = Rc::new(RefCell::new(PropertyBrowserState::new(obj.clone(), None).await?));
 
         let filter = cache_mgr
             .borrow_mut()
@@ -51,9 +46,49 @@ impl PropertyBrowserManager {
             filter,
             browser_state,
             obj,
-            history: VecDeque::new(),
-            max_history: 10,
         })
+    }
+
+    pub async fn from_history_record(
+        record: HistoryRecord,
+        cache_mgr: Rc<RefCell<CacheManager>>,
+    ) -> anyhow::Result<Self> {
+        let browser_state = Rc::new(RefCell::new(PropertyBrowserState::new(record.obj.clone(), Some(record.state)).await?));
+
+        let filter = cache_mgr
+            .borrow_mut()
+            .add_cache(
+                Box::new(SharedRefCacheProxy::new(browser_state.clone())),
+                vec![ObjectSpec {
+                    obj: record.obj.clone(),
+                    skip: Some(false),
+                    select_set: None,
+                }],
+            )
+            .await?;
+
+        let mgr = Self {
+            cache_mgr,
+            filter,
+            browser_state,
+            obj: record.obj,
+        };
+
+        Ok(mgr)
+    }
+    
+    pub async fn load_history_record(&mut self, entry: HistoryRecord) -> anyhow::Result<()> {
+        let _ = self.load_int(entry.obj, Some(entry.state)).await?;
+        Ok(())
+    }
+
+    pub fn save_state(&mut self, events: &mut EventHandler) {
+        let tree_state = self.browser_state.borrow_mut().replace_tree_state(None);
+        let entry = HistoryRecord {
+            obj: self.obj.clone(),
+            state: tree_state,
+        };
+        events.send(AppEvent::PropertyManagerHistory(entry));
     }
 
     pub fn render(&mut self, frame: &mut Frame, body_area: Rect) {
@@ -65,7 +100,7 @@ impl PropertyBrowserManager {
         );
     }
 
-    pub async fn handle_key(&mut self, key: &KeyEvent, _events: &mut EventHandler) -> anyhow::Result<bool> {
+    pub async fn handle_key(&mut self, key: &KeyEvent, events: &mut EventHandler) -> anyhow::Result<bool> {
         match key.code {
             KeyCode::Char('w') | KeyCode::Up => {
                 self.browser_state.borrow_mut().up();
@@ -80,10 +115,7 @@ impl PropertyBrowserManager {
                 self.browser_state.borrow_mut().right();
             }
             KeyCode::Enter => {
-                self.enter().await?;
-            }
-            KeyCode::Backspace => {
-                self.back().await?;
+                self.enter(events).await?;
             }
             _ => {
                 return Ok(false);
@@ -92,14 +124,14 @@ impl PropertyBrowserManager {
         Ok(true)
     }
 
-    pub async fn load(&mut self, obj: ManagedObjectReference) -> anyhow::Result<bool> {
+    pub async fn load(&mut self, obj: ManagedObjectReference, events: &mut EventHandler) -> anyhow::Result<bool> {
         // Check if the object is already loaded
         if self.obj.value == obj.value {
             return Ok(false);
         }
         let old_obj = self.obj.clone();
         let res = self.load_int(obj, None).await?;
-        self.add_history(old_obj, res);
+        self.add_history(old_obj, res, events);
         Ok(true)
     }
     async fn load_int(
@@ -134,37 +166,26 @@ impl PropertyBrowserManager {
         Ok(tree_state)
     }
 
-    async fn enter(&mut self) -> anyhow::Result<bool> {
+    async fn enter(&mut self, events: &mut EventHandler) -> anyhow::Result<bool> {
         let Some(selected) = self.browser_state.borrow().get_selected_object() else {
             return Ok(false);
         };
 
-        self.load(selected).await?;
+        self.load(selected, events).await?;
         Ok(true)
-    }
-
-    async fn back(&mut self) -> anyhow::Result<bool> {
-        if let Some(entry) = self.history.pop_back() {
-            let _ = self.load_int(entry.obj, Some(entry.state)).await?;
-            Ok(true)
-        } else {
-            Ok(false)
-        }
     }
 
     fn add_history(
         &mut self,
         selected_object: ManagedObjectReference,
         tree_state: TreeState<String>,
+        events: &mut EventHandler,
     ) {
-        let entry = HistoryEntry {
+        let entry = HistoryRecord {
             obj: selected_object,
             state: tree_state,
         };
-        self.history.push_back(entry);
-        if self.history.len() > self.max_history {
-            self.history.pop_front();
-        }
+        events.send(AppEvent::PropertyManagerHistory(entry));
     }
 }
 
@@ -184,7 +205,8 @@ impl Drop for PropertyBrowserManager {
     }
 }
 
-struct HistoryEntry {
+#[derive(Debug)]
+pub struct HistoryRecord {
     obj: ManagedObjectReference,
     state: TreeState<String>,
 }

@@ -4,6 +4,8 @@ use ratatui::crossterm::event::Event as CrosstermEvent;
 use tokio::sync::mpsc;
 use vim_rs::core::pc_cache::Monitor;
 use vim_rs::types::structs::{ManagedObjectReference, PropertyFilterUpdate};
+use crate::resource_browser::HistoryRecord as ResourceHistoryRecord;
+use crate::prop_browser::HistoryRecord as PropertyHistoryRecord;
 use crate::resource_type::ResourceType;
 
 /// Representation of all possible events.
@@ -41,6 +43,10 @@ pub enum AppEvent {
     
     /// Load object properties.
     LoadProperties(ManagedObjectReference),
+
+    ResourceManagerHistory(ResourceHistoryRecord),
+    PropertyManagerHistory(PropertyHistoryRecord),
+    
 }
 
 /// Terminal event handler.

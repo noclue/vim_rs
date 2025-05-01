@@ -2077,25 +2077,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "vnavigator"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "chrono",
- "crossterm",
- "futures",
- "indexmap",
- "log",
- "ratatui",
- "serde_json",
- "simplelog",
- "tokio",
- "tui-tree-widget",
- "vim_macros",
- "vim_rs",
-]
-
-[[package]]
 name = "vtui"
 version = "0.1.1"
 dependencies = [
@@ -2108,6 +2089,7 @@ dependencies = [
  "ratatui",
  "serde_json",
  "simplelog",
+ "thiserror",
  "tokio",
  "tui-tree-widget",
  "vim_macros",

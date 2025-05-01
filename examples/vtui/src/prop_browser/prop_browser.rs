@@ -31,12 +31,12 @@ pub struct PropertyBrowserState {
 }
 
 impl PropertyBrowserState {
-    pub async fn new(obj: ManagedObjectReference) -> anyhow::Result<Self> {
+    pub async fn new(obj: ManagedObjectReference, tree_state: Option<TreeState<String>>) -> anyhow::Result<Self> {
         let res = Self {
             obj,
             properties: IndexMap::new(),
             items: Vec::new(),
-            state: TreeState::default(),
+            state: tree_state.unwrap_or_else(|| TreeState::default()),
         };
         Ok(res)
     }
@@ -49,8 +49,12 @@ impl PropertyBrowserState {
         self.obj = obj;
         self.items = Vec::new();
         self.properties = IndexMap::new();
+        Ok(self.replace_tree_state(new_tree_state))
+    }
+
+    pub fn replace_tree_state(&mut self, new_tree_state: Option<TreeState<String>>) -> TreeState<String> {
         let tree_state = new_tree_state.unwrap_or_else(|| TreeState::default());
-        Ok(mem::replace(&mut self.state, tree_state))
+        mem::replace(&mut self.state, tree_state)
     }
 
     fn clean_state(&self) -> TreeState<String> {

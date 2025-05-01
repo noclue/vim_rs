@@ -4,6 +4,10 @@ use app::App;
 use std::cell::RefCell;
 use std::rc::Rc;
 use std::{env, sync::Arc};
+use std::fs::File;
+use std::path::Path;
+use log::{info, LevelFilter};
+use simplelog::{Config, WriteLogger};
 use vim_rs::core::client::{Client, ClientBuilder};
 use vim_rs::core::pc_cache::CacheManager;
 
@@ -15,9 +19,14 @@ mod hints;
 mod resource_browser;
 mod prop_browser;
 mod body_pane;
+mod history;
 
 #[tokio::main]
 async fn main() -> Result<()> {
+    setup_logging()?;
+    
+    info!("Starting vtui application!");
+    
     let client = match init_vim_client().await {
         Ok(client) => client,
         Err(err) => {
@@ -61,4 +70,35 @@ fn print_usage() {
     println!("VIM_USERNAME: The username to connect to the vSphere instance");
     println!("VIM_PASSWORD: The password to connect to the vSphere instance");
     println!("VIM_INSECURE: Flag to allow insecure connections (default: false)");
+    println!("LOG_LEVEL: The log level (trace, debug, info, warn, error off) (default: info). Use 'trace' for wire logging.");
+}
+
+
+fn setup_logging() -> anyhow::Result<()> {
+    // Create logs directory if it doesn't exist
+    std::fs::create_dir_all("logs")?;
+
+    let log_file_path = Path::new("logs/vtui.log");
+
+
+    WriteLogger::init(
+        log_level(),
+        Config::default(),
+        File::create(log_file_path)?,
+    ).map_err(|e| anyhow::anyhow!("Failed to initialize logger: {}", e))?;
+
+    info!("Logging system initialized");
+    Ok(())
+}
+
+fn log_level() -> LevelFilter {
+    match env::var("LOG_LEVEL").as_deref() {
+        Ok("trace") => LevelFilter::Trace,
+        Ok("debug") => LevelFilter::Debug,
+        Ok("info") => LevelFilter::Info,
+        Ok("warn") => LevelFilter::Warn,
+        Ok("error") => LevelFilter::Error,
+        Ok("off") => LevelFilter::Off,
+        _ => LevelFilter::Info, // Default log level
+    }
 }
