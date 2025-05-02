@@ -32,4 +32,10 @@ impl BodyPane {
             }
         }
     }
+    pub fn get_hints(&self) -> (&'static [&'static str], &'static [&'static str]) {
+        match self {
+            BodyPane::ResourceBrowser(resource_manager) => resource_manager.get_hints(),
+            BodyPane::PropertyBrowser(property_browser) => property_browser.get_hints(),
+        }
+    }
 }

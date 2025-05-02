@@ -12,7 +12,6 @@ use vim_rs::core::client::Client;
 use vim_rs::core::pc_cache::CacheManager;
 use crate::body_pane::BodyPane;
 use crate::hints;
-use crate::hints::HELP_HINTS;
 use crate::history::{History, HistoryManager};
 use crate::prop_browser::PropertyBrowserManager;
 use crate::resource_browser::ResourceManager;
@@ -130,7 +129,7 @@ impl App {
             AppEvent::PropertyManagerHistory(history) => {
                 self.history.add_property_entry(history);
             }
-            
+
         }
         Ok(())
     }
@@ -182,10 +181,7 @@ impl App {
         let vertical = Layout::vertical([Constraint::Length(5), Constraint::Fill(1)]);
         let [top_area, body_area] = vertical.areas(frame.area());
 
-        if let BodyPane::ResourceBrowser(ref resource_mgr) = self.body_pane {
-            let res_type = resource_mgr.resource_type();
-            self.render_header(frame, top_area, res_type);
-        }
+        self.render_header(frame, top_area);
 
         self.body_pane.render(frame, body_area);
         
@@ -199,26 +195,25 @@ impl App {
 
     }
 
-    fn render_header(&mut self, frame: &mut Frame, top_area: Rect, resource_type: ResourceType) {
+    fn render_header(&mut self, frame: &mut Frame, top_area: Rect) {
         let horizontal = Layout::horizontal([Constraint::Fill(1), Constraint::Length(16), Constraint::Length(16), Constraint::Length(21)]);
-        let [status_area, expand_area, help_area, right_area] = horizontal.areas(top_area);
-
-        // Split the left area into two columns for statuses and help hints
-
+        let [status_area, expand_area, help_area, logo_area] = horizontal.areas(top_area);
+        
         // Render statuses
         let status_lines: Vec<Line> = self.build_status_lines();
         let status_paragraph = ratatui::widgets::Paragraph::new(status_lines)
             .style(ratatui::style::Style::default().fg(ratatui::style::Color::Green));
         frame.render_widget(status_paragraph, status_area);
 
+        let (expand_hints, help_hints) = self.body_pane.get_hints();
         // Render expand hints
-        let expand_lines = hints::decorate_hints(hints::get_expand_hint(resource_type));
+        let expand_lines = hints::decorate_hints(expand_hints);
         let expand_paragraph = ratatui::widgets::Paragraph::new(expand_lines)
             .style(ratatui::style::Style::default().fg(ratatui::style::Color::Cyan));
         frame.render_widget(expand_paragraph, expand_area);
 
         // Render help hints
-        let help_lines = hints::decorate_hints(HELP_HINTS);
+        let help_lines = hints::decorate_hints(help_hints);
         let help_paragraph = ratatui::widgets::Paragraph::new(help_lines)
             .style(ratatui::style::Style::default().fg(ratatui::style::Color::Yellow));
         frame.render_widget(help_paragraph, help_area);
@@ -227,7 +222,7 @@ impl App {
         let logo_paragraph = ratatui::widgets::Paragraph::new(ASCII_ART)
             .style(ratatui::style::Style::default().fg(ratatui::style::Color::Cyan))
             .alignment(ratatui::layout::Alignment::Left);
-        frame.render_widget(logo_paragraph, right_area);
+        frame.render_widget(logo_paragraph, logo_area);
     }
 
     async fn handle_terminal_event(&mut self, event: &CrosstermEvent) -> anyhow::Result<()>{

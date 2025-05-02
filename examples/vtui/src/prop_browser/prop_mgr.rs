@@ -76,7 +76,7 @@ impl PropertyBrowserManager {
 
         Ok(mgr)
     }
-    
+
     pub async fn load_history_record(&mut self, entry: HistoryRecord) -> anyhow::Result<()> {
         let _ = self.load_int(entry.obj, Some(entry.state)).await?;
         Ok(())
@@ -117,6 +117,9 @@ impl PropertyBrowserManager {
             KeyCode::Enter => {
                 self.enter(events).await?;
             }
+            KeyCode::Char('j') => {
+                self.browser_state.borrow().dump_to_json()?;
+            }
             _ => {
                 return Ok(false);
             }
@@ -134,6 +137,13 @@ impl PropertyBrowserManager {
         self.add_history(old_obj, res, events);
         Ok(true)
     }
+    pub fn get_hints(&self) -> (&'static [&'static str], &'static [&'static str]) {
+        (
+            &[],
+            &["q quit", "r resource", "j dump json", "Enter open"],
+        )
+    }
+
     async fn load_int(
         &mut self,
         obj: ManagedObjectReference,

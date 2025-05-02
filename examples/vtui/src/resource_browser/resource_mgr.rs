@@ -17,6 +17,7 @@ use vim_rs::types::enums::MoTypesEnum;
 use crate::event::{AppEvent, EventHandler};
 use crate::resource_browser::cluster::ClusterDetails;
 use crate::resource_browser::datastore::{get_datastore_hosts, DatastoreDetails};
+use crate::resource_browser::hints::{get_expand_hint, HELP_HINTS};
 use crate::resource_browser::host::Host;
 use crate::resource_browser::network::NetworkDetails;
 use crate::resource_browser::resource_table::ResourceTableWidget;
@@ -212,6 +213,13 @@ impl ResourceManager {
         self.save_state(events);
         self.load_resource_type_int(resource_type).await
     }
+    
+    /// Returns hints tuple for the current resource type. First element are the left column hints,
+    /// second element are the right column hints.
+    pub fn get_hints(&self) -> (&'static [&'static str], &'static [&'static str]) {
+        (get_expand_hint(self.resource_type()),HELP_HINTS)
+    }
+    
     async fn expand_collection(&mut self, resource_type: ResourceType, events: &mut EventHandler) -> anyhow::Result<()> {
         // Save the current navigation state
         self.save_state(events);

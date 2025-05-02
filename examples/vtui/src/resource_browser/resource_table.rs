@@ -1,58 +1,60 @@
+use crate::resource_browser::tabular_data::TableDataSource;
 use ratatui::buffer::Buffer;
-use ratatui::layout::Rect;
+use ratatui::layout::{Margin, Rect};
 use ratatui::style::{Color, Style};
-use ratatui::widgets::{Block, HighlightSpacing, Row, Cell, Table, TableState, StatefulWidget};
 use ratatui::text::{Line, Span};
+use ratatui::widgets::{
+    Block, Cell, HighlightSpacing, Row, Scrollbar, ScrollbarOrientation, ScrollbarState,
+    StatefulWidget, Table, TableState,
+};
 use vim_rs::types::enums::MoTypesEnum;
 use vim_rs::types::structs::ManagedObjectReference;
-use crate::resource_browser::tabular_data::TableDataSource;
-
-
-
 
 /// A widget that displays a list of virtual machines.
-pub struct ResourceTableWidget<'a>
-
-{
+pub struct ResourceTableWidget<'a> {
     resources: &'a mut dyn TableDataSource,
-    parent: &'a Option<(ManagedObjectReference, String)>
+    parent: &'a Option<(ManagedObjectReference, String)>,
 }
 
-impl<'a> ResourceTableWidget<'a>
-{
-    pub(crate) fn new(resources: &'a mut dyn TableDataSource, parent: &'a Option<(ManagedObjectReference, String)>) -> Self {
-        Self {
-            resources,
-            parent
-        }
+impl<'a> ResourceTableWidget<'a> {
+    pub(crate) fn new(
+        resources: &'a mut dyn TableDataSource,
+        parent: &'a Option<(ManagedObjectReference, String)>,
+    ) -> Self {
+        Self { resources, parent }
     }
 }
 
 impl<'a> StatefulWidget for ResourceTableWidget<'a> {
     type State = TableState;
     fn render(self, area: Rect, buf: &mut Buffer, state: &mut Self::State) {
-
         let filter = self.resources.get_filter();
+        let hint_style: Style = Style::default().fg(Color::LightCyan);
+
         let hint = if filter.is_some() {
-            vec![
-                Span::styled("Esc clear filter", Style::default().fg(Color::LightCyan)),
-            ]
+            vec![Span::styled("Esc - clear filter", hint_style)]
         } else {
             vec![Span::default()]
         };
 
         let mut title_items = Vec::new();
-        title_items.push(Span::styled(self.resources.get_title(), Style::default().fg(Color::White)));
+        title_items.push(Span::styled(
+            self.resources.get_title(),
+            Style::default().fg(Color::White),
+        ));
         title_items.push(Span::from(" ("));
         title_items.push(if let Some(filter) = &filter {
-            Span::styled(format!("filter: {}", filter), Style::default().fg(Color::Magenta))
+            Span::styled(
+                format!("filter: {}", filter),
+                Style::default().fg(Color::Magenta),
+            )
         } else {
             Span::styled("all", Style::default().fg(Color::Magenta))
         });
         title_items.push(Span::from(")["));
 
         let len = self.resources.len();
-        let total =self.resources.total_count();
+        let total = self.resources.total_count();
         let count = if len != total {
             format!("{} / {}", len, total)
         } else {
@@ -63,16 +65,22 @@ impl<'a> StatefulWidget for ResourceTableWidget<'a> {
 
         if let Some((id, name)) = self.parent {
             title_items.push(Span::from(" - "));
-            title_items.push(Span::styled(object_handle(id, name), Style::default().fg(Color::Green)));
+            title_items.push(Span::styled(
+                object_handle(id, name),
+                Style::default().fg(Color::Green),
+            ));
         }
 
         let title = Line::from(title_items).alignment(ratatui::layout::Alignment::Center);
 
         let block = Block::bordered()
             .title(title)
+            .title_bottom(
+                Line::styled("↑↓ - scroll", hint_style)
+                    .alignment(ratatui::layout::Alignment::Right),
+            )
             .title_bottom(hint)
             .border_style(Style::default().fg(Color::Gray));
-
 
         let sort_setting = self.resources.get_sort_setting();
         let header_row = self.resources.header_row();
@@ -87,7 +95,7 @@ impl<'a> StatefulWidget for ResourceTableWidget<'a> {
                     };
                     header.push(Cell::from(ratatui::text::Line::from(vec![
                         Span::from(header_row[i]),
-                        arrow_span
+                        arrow_span,
                     ])));
                 } else {
                     header.push(Cell::from(header_row[i]));
@@ -101,9 +109,14 @@ impl<'a> StatefulWidget for ResourceTableWidget<'a> {
 
         let widths = self.resources.column_sizes();
 
-        if state.selected().is_none() && !self.resources.is_empty(){
+        if state.selected().is_none() && !self.resources.is_empty() {
             state.select(Some(0));
         }
+
+        let mut sb_state =
+            ScrollbarState::new(self.resources.len())
+                .position(state.selected().unwrap_or(0))
+                .viewport_content_length(area.height as usize);
 
         let rows = self.resources.iter();
 
@@ -115,6 +128,20 @@ impl<'a> StatefulWidget for ResourceTableWidget<'a> {
             .row_highlight_style(Style::default().bg(Color::DarkGray));
 
         StatefulWidget::render(table, area, buf, state);
+
+        let sb = Scrollbar::new(ScrollbarOrientation::VerticalRight)
+            .begin_symbol(None)
+            .end_symbol(None);
+
+        StatefulWidget::render(
+            sb,
+            area.inner(Margin {
+                vertical: 1,
+                horizontal: 0,
+            }),
+            buf,
+            &mut sb_state,
+        );
     }
 }
 

@@ -10,5 +10,6 @@ mod network;
 mod data_loaders;
 mod task;
 mod resource_mgr;
+mod hints;
 
 pub use resource_mgr::{ResourceManager, HistoryRecord};

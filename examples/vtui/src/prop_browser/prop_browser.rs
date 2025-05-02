@@ -1,3 +1,4 @@
+use std::fs::File;
 use super::json_to_tree::{get_type_name, property_to_tree_item};
 use super::prop_utils::to_json_value;
 
@@ -10,7 +11,10 @@ use ratatui::style::{Color, Modifier, Style};
 use ratatui::text::{Line, Span};
 use ratatui::widgets::{Block, Scrollbar, ScrollbarOrientation, StatefulWidget};
 use serde_json::Value;
+use std::io::Write;
 use std::mem;
+use std::path::PathBuf;
+use chrono::{Local, SecondsFormat};
 use tui_tree_widget::{Tree, TreeItem, TreeState};
 use vim_rs::core::pc_cache::Cache;
 use vim_rs::core::pc_helpers::Error;
@@ -221,6 +225,65 @@ impl PropertyBrowserState {
             None
         }
     }
+
+    pub fn dump_to_json(&self) -> anyhow::Result<()> {
+        // Get the properties from the browser state
+        let properties = &self.properties;
+
+        // Serialize the properties to pretty-printed JSON
+        let json_content = serde_json::to_string_pretty(properties)?;
+
+        // Generate filename
+        let filename = self.generate_json_filename()?;
+        let path = PathBuf::from(&filename);
+
+        // Write to file
+        let mut file = File::create(path)?;
+        file.write_all(json_content.as_bytes())?;
+
+        Ok(())
+    }
+
+    fn generate_json_filename(&self) -> anyhow::Result<String> {
+        // Get object name if available
+        let name_prefix = self
+            .get_object_name()
+            .map(|name| {
+                // Replace characters that aren't suitable for filenames
+                name.replace(['/', '\\', ':', '*', '?', '"', '<', '>', '|'], "_")
+            })
+            .unwrap_or_default();
+
+        // Get object type and ID
+        let object_type: &'static str = From::from(&self.obj.r#type);
+        let object_id = &self.obj.value;
+
+        // Get current datetime in RFC 3339 format
+        let timestamp = Local::now().to_rfc3339_opts(SecondsFormat::Secs, true)
+            .replace([':', '-'], ""); // Remove characters not suitable for filenames
+
+        // Build filename
+        let mut filename = String::new();
+
+        // Add name prefix if available
+        if !name_prefix.is_empty() {
+            filename.push_str(&name_prefix);
+            filename.push('_');
+        }
+
+        // Add object type and ID
+        filename.push_str(object_type);
+        filename.push('_');
+        filename.push_str(object_id);
+        filename.push('_');
+
+        // Add timestamp and extension
+        filename.push_str(&timestamp);
+        filename.push_str(".json");
+
+        Ok(filename)
+    }
+
 }
 
 impl Cache for PropertyBrowserState {
@@ -328,7 +391,9 @@ impl StatefulWidget for PropertyBrowser<'_> {
             .block(
                 Block::bordered()
                     .title(title)
-                    .title_alignment(Alignment::Center),
+                    .title_alignment(Alignment::Center)
+                    .title_bottom(Line::styled("→ - expand, ← - collapse, ↑↓ - scroll", Style::default().fg(Color::Cyan)).alignment(Alignment::Right)),
+
             )
             .highlight_style(self.highlight_style)
             .highlight_symbol(self.highlight_symbol);
