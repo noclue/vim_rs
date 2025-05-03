@@ -14,10 +14,14 @@ displays the VMs in a terminal window using the Ratatui library.
 - Visualize vCenter inventory directly in your terminal.
 - Real-time inventory updates using the PropertyCollector API.
 - Search for specific objects using "/"
-- Navigate to related objects using short cuts (v)m, (n)etwork, (h)ost, (d)atastore
+- Navigate to related objects using shortcuts (v)m, (n)etwork, (h)ost, (d)atastore
+- Dive into the details of a VM, Host etc.
+- Save an object details to a file
+- Go back to the previous view using Backspace
 - Browse the Cluster, Host, VM, Network and Datastore inventory
 - TUI built with the Ratatui library for a smooth user experience.
 - Clean and minimalistic design suitable for server environments.
+- Logging support for debugging and monitoring.
 
 ## Installation
 
@@ -25,6 +29,8 @@ Ensure you have Rust 1.85 installed. Then set the following environment variable
 - `VIM_SERVER` - FQDN of a vCenter server (version 8.0.2 or later).
 - `VIM_USERNAME` - Username for vCenter authentication.
 - `VIM_PASSWORD` - Password for vCenter authentication.
+- `VIM_INSECURE` - Set to `true` to ignore SSL certificate validation (not recommended for production).
+- `LOG_LEVEL` - Set to `debug` or `trace` for verbose logging (optional).
 
 ## Usage
 
