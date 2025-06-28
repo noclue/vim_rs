@@ -241,7 +241,9 @@ pub struct Client {
 /// the client is dropped.
 impl Client {
 
-    /// Get the service instance content
+    /// Get the VIM service instance content. This is the main part of the VI JSON API that contains
+    /// the core virtualization objects and services. There are additional storage APIs under VSAN,
+    /// PBM, VSLM and SMS. There is also ESX Agent Manager API for managing agent virtual machines.
     pub fn service_content(&self) -> &ServiceContent {
         // Safe to unwrap as the service_content is set during construction
         self.service_content.as_ref().unwrap()
