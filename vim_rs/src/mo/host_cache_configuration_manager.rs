@@ -1,5 +1,9 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
+/// Deprecated as of vSphere API 9.0 with no direct replacement. Still,
+/// you may consider using Memory Tiering APIs
+/// *NVMe*.
+/// 
 /// Solid state drive Cache Configuration Manager.
 /// 
 /// This is a managed object which provides access to ESX performance tuning

@@ -1015,9 +1015,9 @@ impl HostStorageSystem {
     /// 
     /// ***HostConfigFault***: if the host does not support removing the given
     /// HBA.
-    pub async fn mark_for_removal(&self, hba_name: &str, remove: bool) -> Result<()> {
-        let input = MarkForRemovalRequestType {hba_name, remove, };
-        let path = format!("/HostStorageSystem/{moId}/MarkForRemoval", moId = &self.mo_id);
+    pub async fn host_storage_system_mark_for_removal(&self, hba_name: &str, remove: bool) -> Result<()> {
+        let input = HostStorageSystemMarkForRemovalRequestType {hba_name, remove, };
+        let path = format!("/HostStorageSystem/{moId}/HostStorageSystem_MarkForRemoval", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
         self.client.execute_void(req).await
     }
@@ -2612,8 +2612,8 @@ struct MarkAsSsdRequestType<'a> {
     scsi_disk_uuid: &'a str,
 }
 #[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
-struct MarkForRemovalRequestType<'a> {
+#[serde(rename = "HostStorageSystem_MarkForRemovalRequestType", tag = "_typeName")]
+struct HostStorageSystemMarkForRemovalRequestType<'a> {
     #[serde(rename = "hbaName")]
     hba_name: &'a str,
     remove: bool,

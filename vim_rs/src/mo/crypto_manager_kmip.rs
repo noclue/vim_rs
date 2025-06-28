@@ -127,11 +127,18 @@ impl CryptoManagerKmip {
     /// 
     /// ***Since:*** vSphere API Release 8.0.1.0
     ///
+    /// ### key_spec
+    /// \[in\] The keySpec that contains key generation options.
+    /// If unset, key will be generated with default settings
+    /// of the key provider.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    ///
     /// ## Returns:
     ///
     /// the generated key.
-    pub async fn generate_key(&self, key_provider: Option<&crate::types::structs::KeyProviderId>, spec: Option<&crate::types::structs::CryptoManagerKmipCustomAttributeSpec>) -> Result<crate::types::structs::CryptoKeyResult> {
-        let input = GenerateKeyRequestType {key_provider, spec, };
+    pub async fn generate_key(&self, key_provider: Option<&crate::types::structs::KeyProviderId>, spec: Option<&crate::types::structs::CryptoManagerKmipCustomAttributeSpec>, key_spec: Option<&crate::types::structs::CryptoManagerKmipGenerateKeySpec>) -> Result<crate::types::structs::CryptoKeyResult> {
+        let input = GenerateKeyRequestType {key_provider, spec, key_spec, };
         let path = format!("/CryptoManagerKmip/{moId}/GenerateKey", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
         self.client.execute(req).await
@@ -332,6 +339,10 @@ impl CryptoManagerKmip {
     ///
     /// ### server
     /// \[in\] KMIP server connection information.
+    /// When register a new KMIP server to the key provider,
+    /// the *KmipServerSpec.defaultKeyType* and
+    /// *KmipServerSpecWrappingKeyIdKeySpec* must match
+    /// existing servers.
     pub async fn register_kmip_server(&self, server: &crate::types::structs::KmipServerSpec) -> Result<()> {
         let input = RegisterKmipServerRequestType {server, };
         let path = format!("/CryptoManagerKmip/{moId}/RegisterKmipServer", moId = &self.mo_id);
@@ -593,6 +604,10 @@ impl CryptoManagerKmip {
     ///
     /// ### server
     /// \[in\] KMIP server connection information.
+    /// When update a KMIP server settings, changes to
+    /// *KmipServerSpec.defaultKeyType* and
+    /// *KmipServerSpecWrappingKeyIdKeySpec*
+    /// will apply to all servers.
     pub async fn update_kmip_server(&self, server: &crate::types::structs::KmipServerSpec) -> Result<()> {
         let input = UpdateKmipServerRequestType {server, };
         let path = format!("/CryptoManagerKmip/{moId}/UpdateKmipServer", moId = &self.mo_id);
@@ -734,6 +749,9 @@ struct GenerateKeyRequestType<'a> {
     key_provider: Option<&'a crate::types::structs::KeyProviderId>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     spec: Option<&'a crate::types::structs::CryptoManagerKmipCustomAttributeSpec>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "keySpec")]
+    key_spec: Option<&'a crate::types::structs::CryptoManagerKmipGenerateKeySpec>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]

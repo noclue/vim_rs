@@ -166,7 +166,7 @@ impl IpPoolManager {
     ///
     /// ## Returns:
     ///
-    /// The resulting list of @{link IpAllocation}.
+    /// The resulting list of *IpPoolManagerIpAllocation*.
     pub async fn query_ip_allocations(&self, dc: &crate::types::structs::ManagedObjectReference, pool_id: i32, extension_key: &str) -> Result<Vec<crate::types::structs::IpPoolManagerIpAllocation>> {
         let input = QueryIpAllocationsRequestType {dc, pool_id, extension_key, };
         let path = format!("/IpPoolManager/{moId}/QueryIPAllocations", moId = &self.mo_id);

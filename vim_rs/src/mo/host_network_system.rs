@@ -35,6 +35,9 @@ impl HostNetworkSystem {
     /// also thrown if network policy is invalid.
     /// 
     /// ***HostConfigFault***: for all other configuration failures.
+    /// 
+    /// ***MethodDisabled***: if the host's current flavor of partial
+    /// maintenance mode has been configured to block this operation.
     pub async fn add_port_group(&self, portgrp: &crate::types::structs::HostPortGroupSpec) -> Result<()> {
         let input = AddPortGroupRequestType {portgrp, };
         let path = format!("/HostNetworkSystem/{moId}/AddPortGroup", moId = &self.mo_id);
@@ -72,6 +75,9 @@ impl HostNetworkSystem {
     /// ***NotSupported***: if the host is not an ESX Server system.
     /// 
     /// ***HostConfigFault***: for all other configuration failures.
+    /// 
+    /// ***MethodDisabled***: if the host's current flavor of partial
+    /// maintenance mode has been configured to block this operation.
     pub async fn add_service_console_virtual_nic(&self, portgroup: &str, nic: &crate::types::structs::HostVirtualNicSpec) -> Result<String> {
         let input = AddServiceConsoleVirtualNicRequestType {portgroup, nic, };
         let path = format!("/HostNetworkSystem/{moId}/AddServiceConsoleVirtualNic", moId = &self.mo_id);
@@ -115,6 +121,9 @@ impl HostNetworkSystem {
     /// system
     /// 
     /// ***HostConfigFault***: for all other configuration failures.
+    /// 
+    /// ***MethodDisabled***: if the host's current flavor of partial
+    /// maintenance mode has been configured to block this operation.
     pub async fn add_virtual_nic(&self, portgroup: &str, nic: &crate::types::structs::HostVirtualNicSpec) -> Result<String> {
         let input = AddVirtualNicRequestType {portgroup, nic, };
         let path = format!("/HostNetworkSystem/{moId}/AddVirtualNic", moId = &self.mo_id);
@@ -151,6 +160,9 @@ impl HostNetworkSystem {
     /// is already in use.
     /// 
     /// ***HostConfigFault***: for all other configuration failures.
+    /// 
+    /// ***MethodDisabled***: if the host's current flavor of partial
+    /// maintenance mode has been configured to block this operation.
     pub async fn add_virtual_switch(&self, vswitch_name: &str, spec: Option<&crate::types::structs::HostVirtualSwitchSpec>) -> Result<()> {
         let input = AddVirtualSwitchRequestType {vswitch_name, spec, };
         let path = format!("/HostNetworkSystem/{moId}/AddVirtualSwitch", moId = &self.mo_id);
@@ -218,6 +230,9 @@ impl HostNetworkSystem {
     /// are virtual network adapters associated with it.
     /// 
     /// ***HostConfigFault***: for all other configuration failures.
+    /// 
+    /// ***MethodDisabled***: if the host's current flavor of partial
+    /// maintenance mode has been configured to block this operation.
     pub async fn remove_port_group(&self, pg_name: &str) -> Result<()> {
         let input = RemovePortGroupRequestType {pg_name, };
         let path = format!("/HostNetworkSystem/{moId}/RemovePortGroup", moId = &self.mo_id);
@@ -245,6 +260,9 @@ impl HostNetworkSystem {
     /// by DHCP DNS.
     /// 
     /// ***HostConfigFault***: for all other configuration failures.
+    /// 
+    /// ***MethodDisabled***: if the host's current flavor of partial
+    /// maintenance mode has been configured to block this operation.
     pub async fn remove_service_console_virtual_nic(&self, device: &str) -> Result<()> {
         let input = RemoveServiceConsoleVirtualNicRequestType {device, };
         let path = format!("/HostNetworkSystem/{moId}/RemoveServiceConsoleVirtualNic", moId = &self.mo_id);
@@ -265,6 +283,9 @@ impl HostNetworkSystem {
     /// ***NotFound***: if the virtual network adapter cannot be found.
     /// 
     /// ***HostConfigFault***: for all other configuration failures.
+    /// 
+    /// ***MethodDisabled***: if the host's current flavor of partial
+    /// maintenance mode has been configured to block this operation.
     pub async fn remove_virtual_nic(&self, device: &str) -> Result<()> {
         let input = RemoveVirtualNicRequestType {device, };
         let path = format!("/HostNetworkSystem/{moId}/RemoveVirtualNic", moId = &self.mo_id);
@@ -288,6 +309,9 @@ impl HostNetworkSystem {
     /// with the virtual switch.
     /// 
     /// ***HostConfigFault***: for all other configuration failures.
+    /// 
+    /// ***MethodDisabled***: if the host's current flavor of partial
+    /// maintenance mode has been configured to block this operation.
     pub async fn remove_virtual_switch(&self, vswitch_name: &str) -> Result<()> {
         let input = RemoveVirtualSwitchRequestType {vswitch_name, };
         let path = format!("/HostNetworkSystem/{moId}/RemoveVirtualSwitch", moId = &self.mo_id);
@@ -317,6 +341,9 @@ impl HostNetworkSystem {
     /// ***NotSupported***: if the host is not an ESX Server system.
     /// 
     /// ***HostConfigFault***: for all other configuration failures.
+    /// 
+    /// ***MethodDisabled***: if the host's current flavor of partial
+    /// maintenance mode has been configured to block this operation.
     pub async fn restart_service_console_virtual_nic(&self, device: &str) -> Result<()> {
         let input = RestartServiceConsoleVirtualNicRequestType {device, };
         let path = format!("/HostNetworkSystem/{moId}/RestartServiceConsoleVirtualNic", moId = &self.mo_id);
@@ -343,6 +370,36 @@ impl HostNetworkSystem {
         let req = self.client.post_request(&path, &input);
         self.client.execute_void(req).await
     }
+    /// Launch DPU(Data Processing Unit) failover for a given distributed virtual switch.
+    /// 
+    /// ***Since:*** vSphere API Release 8.0.3.0
+    /// 
+    /// ***Required privileges:*** Host.Config.Network
+    ///
+    /// ## Parameters:
+    ///
+    /// ### dvs_name
+    /// The name of the distributed virtual switch.
+    ///
+    /// ### target_dpu_alias
+    /// The alias of the DPU to failover to.
+    /// If not set, it will be determined by the system.
+    /// At least one vmnic backed by the DPU needs to be associated to the
+    /// standby uplink of the distributed virtual switch.
+    ///
+    /// ## Errors:
+    ///
+    /// ***InvalidArgument***: if the given distributed virtual switch is not configured
+    /// in network offloading mode or the standby DPU is not available.
+    /// 
+    /// ***MethodDisabled***: if the host's current flavor of partial
+    /// maintenance mode has been configured to block this operation.
+    pub async fn start_dpu_failover(&self, dvs_name: &str, target_dpu_alias: Option<&str>) -> Result<()> {
+        let input = StartDpuFailoverRequestType {dvs_name, target_dpu_alias, };
+        let path = format!("/HostNetworkSystem/{moId}/startDpuFailover", moId = &self.mo_id);
+        let req = self.client.post_request(&path, &input);
+        self.client.execute_void(req).await
+    }
     /// Applies the IP route configuration for the service console.
     /// 
     /// ***Required privileges:*** Host.Config.Network
@@ -359,6 +416,9 @@ impl HostNetworkSystem {
     /// ***NotSupported***: if the host is not an ESX Server system.
     /// 
     /// ***HostConfigFault***: for all other configuration failures.
+    /// 
+    /// ***MethodDisabled***: if the host's current flavor of partial
+    /// maintenance mode has been configured to block this operation.
     pub async fn update_console_ip_route_config(&self, config: &dyn crate::types::traits::HostIpRouteConfigTrait) -> Result<()> {
         let input = UpdateConsoleIpRouteConfigRequestType {config, };
         let path = format!("/HostNetworkSystem/{moId}/UpdateConsoleIpRouteConfig", moId = &self.mo_id);
@@ -527,6 +587,9 @@ impl HostNetworkSystem {
     /// is configured.
     /// 
     /// ***HostConfigFault***: for all other configuration failures.
+    /// 
+    /// ***MethodDisabled***: if the host's current flavor of partial
+    /// maintenance mode has been configured to block this operation.
     pub async fn update_network_config(&self, config: &crate::types::structs::HostNetworkConfig, change_mode: &str) -> Result<crate::types::structs::HostNetworkConfigResult> {
         let input = UpdateNetworkConfigRequestType {config, change_mode, };
         let path = format!("/HostNetworkSystem/{moId}/UpdateNetworkConfig", moId = &self.mo_id);
@@ -560,6 +623,9 @@ impl HostNetworkSystem {
     /// configurations.
     /// 
     /// ***HostConfigFault***: for all other configuration failures.
+    /// 
+    /// ***MethodDisabled***: if the host's current flavor of partial
+    /// maintenance mode has been configured to block this operation.
     pub async fn update_physical_nic_link_speed(&self, device: &str, link_speed: Option<&crate::types::structs::PhysicalNicLinkInfo>) -> Result<()> {
         let input = UpdatePhysicalNicLinkSpeedRequestType {device, link_speed, };
         let path = format!("/HostNetworkSystem/{moId}/UpdatePhysicalNicLinkSpeed", moId = &self.mo_id);
@@ -590,6 +656,9 @@ impl HostNetworkSystem {
     /// also thrown if network policy is invalid.
     /// 
     /// ***HostConfigFault***: for all other configuration failures.
+    /// 
+    /// ***MethodDisabled***: if the host's current flavor of partial
+    /// maintenance mode has been configured to block this operation.
     pub async fn update_port_group(&self, pg_name: &str, portgrp: &crate::types::structs::HostPortGroupSpec) -> Result<()> {
         let input = UpdatePortGroupRequestType {pg_name, portgrp, };
         let path = format!("/HostNetworkSystem/{moId}/UpdatePortGroup", moId = &self.mo_id);
@@ -628,6 +697,9 @@ impl HostNetworkSystem {
     /// adapter is currently used by DHCP DNS.
     /// 
     /// ***HostConfigFault***: for all other configuration failures.
+    /// 
+    /// ***MethodDisabled***: if the host's current flavor of partial
+    /// maintenance mode has been configured to block this operation.
     pub async fn update_service_console_virtual_nic(&self, device: &str, nic: &crate::types::structs::HostVirtualNicSpec) -> Result<()> {
         let input = UpdateServiceConsoleVirtualNicRequestType {device, nic, };
         let path = format!("/HostNetworkSystem/{moId}/UpdateServiceConsoleVirtualNic", moId = &self.mo_id);
@@ -667,6 +739,9 @@ impl HostNetworkSystem {
     /// system
     /// 
     /// ***HostConfigFault***: for all other configuration failures.
+    /// 
+    /// ***MethodDisabled***: if the host's current flavor of partial
+    /// maintenance mode has been configured to block this operation.
     pub async fn update_virtual_nic(&self, device: &str, nic: &crate::types::structs::HostVirtualNicSpec) -> Result<()> {
         let input = UpdateVirtualNicRequestType {device, nic, };
         let path = format!("/HostNetworkSystem/{moId}/UpdateVirtualNic", moId = &self.mo_id);
@@ -715,6 +790,9 @@ impl HostNetworkSystem {
     /// is not supported.
     /// 
     /// ***HostConfigFault***: for all other configuration failures.
+    /// 
+    /// ***MethodDisabled***: if the host's current flavor of partial
+    /// maintenance mode has been configured to block this operation.
     pub async fn update_virtual_switch(&self, vswitch_name: &str, spec: &crate::types::structs::HostVirtualSwitchSpec) -> Result<()> {
         let input = UpdateVirtualSwitchRequestType {vswitch_name, spec, };
         let path = format!("/HostNetworkSystem/{moId}/UpdateVirtualSwitch", moId = &self.mo_id);
@@ -868,6 +946,15 @@ struct RestartServiceConsoleVirtualNicRequestType<'a> {
 struct SetCustomValueRequestType<'a> {
     key: &'a str,
     value: &'a str,
+}
+#[derive(serde::Serialize)]
+#[serde(rename = "startDpuFailoverRequestType", tag = "_typeName")]
+struct StartDpuFailoverRequestType<'a> {
+    #[serde(rename = "dvsName")]
+    dvs_name: &'a str,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "targetDpuAlias")]
+    target_dpu_alias: Option<&'a str>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]

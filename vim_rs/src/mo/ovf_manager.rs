@@ -177,7 +177,7 @@ impl OvfManager {
     /// ***FileFault***: if there is a generic file error
     /// 
     /// ***InvalidState***: if the operation failed due to the current state of the system.
-    pub async fn create_import_spec(&self, ovf_descriptor: &str, resource_pool: &crate::types::structs::ManagedObjectReference, datastore: &crate::types::structs::ManagedObjectReference, cisp: &crate::types::structs::OvfCreateImportSpecParams) -> Result<crate::types::structs::OvfCreateImportSpecResult> {
+    pub async fn create_import_spec(&self, ovf_descriptor: &str, resource_pool: &crate::types::structs::ManagedObjectReference, datastore: &crate::types::structs::ManagedObjectReference, cisp: &dyn crate::types::traits::OvfCreateImportSpecParamsTrait) -> Result<crate::types::structs::OvfCreateImportSpecResult> {
         let input = CreateImportSpecRequestType {ovf_descriptor, resource_pool, datastore, cisp, };
         let path = format!("/OvfManager/{moId}/CreateImportSpec", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -308,7 +308,7 @@ struct CreateImportSpecRequestType<'a> {
     #[serde(rename = "resourcePool")]
     resource_pool: &'a crate::types::structs::ManagedObjectReference,
     datastore: &'a crate::types::structs::ManagedObjectReference,
-    cisp: &'a crate::types::structs::OvfCreateImportSpecParams,
+    cisp: &'a dyn crate::types::traits::OvfCreateImportSpecParamsTrait,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]

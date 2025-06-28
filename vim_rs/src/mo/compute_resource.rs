@@ -48,6 +48,56 @@ impl ComputeResource {
         let req = self.client.post_bare(&path);
         self.client.execute(req).await
     }
+    /// Disable network boot support for this compute resource.
+    /// 
+    /// This configuration can be modified only when the compute resource is
+    /// empty i.e. there are no hosts in it.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    /// 
+    /// ***Required privileges:*** Host.Inventory.EditCluster
+    ///
+    /// ## Returns:
+    ///
+    /// This method returns a *Task* object with which to monitor
+    /// the operation progress and result.
+    /// 
+    /// Refers instance of *Task*.
+    pub async fn disable_network_boot_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
+        let path = format!("/ComputeResource/{moId}/DisableNetworkBoot_Task", moId = &self.mo_id);
+        let req = self.client.post_bare(&path);
+        self.client.execute(req).await
+    }
+    /// Enable network boot in the specified mode for this compute resource.
+    /// 
+    /// Supported values are enumerated in
+    /// *ComputeResourceNetworkBootMode_enum*. This configuration can be
+    /// modified only when the compute resource is empty i.e. there are no hosts
+    /// in it or during compute resource creation. In addition transition to some
+    /// network boot mode(s) may be restricted depending on the current state of
+    /// the compute resource.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    /// 
+    /// ***Required privileges:*** Host.Inventory.EditCluster
+    ///
+    /// ## Parameters:
+    ///
+    /// ### network_boot_mode
+    /// -
+    ///
+    /// ## Returns:
+    ///
+    /// This method returns a *Task* object with which to monitor
+    /// the operation progress and result.
+    /// 
+    /// Refers instance of *Task*.
+    pub async fn enable_network_boot_task(&self, network_boot_mode: &str) -> Result<crate::types::structs::ManagedObjectReference> {
+        let input = EnableNetworkBootRequestType {network_boot_mode, };
+        let path = format!("/ComputeResource/{moId}/EnableNetworkBoot_Task", moId = &self.mo_id);
+        let req = self.client.post_request(&path, &input);
+        self.client.execute(req).await
+    }
     /// Change the compute resource configuration.
     /// 
     /// ***Required privileges:*** Host.Inventory.EditCluster
@@ -429,6 +479,24 @@ impl ComputeResource {
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
     }
+    /// Managed property indicating whether and what kind of netwoork boot mode
+    /// is configured for this compute resource.
+    /// 
+    /// Supported values are enumerated
+    /// in *ComputeResourceNetworkBootMode_enum*.
+    /// This property can be configured via the
+    /// *ComputeResource.EnableNetworkBoot_Task* method or during compute
+    /// resource creation through the
+    /// *ComputeResource.networkBootMode* property.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    /// 
+    /// ***Required privileges:*** System.View
+    pub async fn network_boot_mode(&self) -> Result<Option<String>> {
+        let path = format!("/ComputeResource/{moId}/networkBootMode", moId = &self.mo_id);
+        let req = self.client.get_request(&path);
+        self.client.execute_option(req).await
+    }
     /// General health of this managed entity.
     /// 
     /// The overall status of the managed entity is computed as the worst status
@@ -568,6 +636,12 @@ impl ComputeResource {
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
     }
+}
+#[derive(serde::Serialize)]
+#[serde(tag="_typeName")]
+struct EnableNetworkBootRequestType<'a> {
+    #[serde(rename = "networkBootMode")]
+    network_boot_mode: &'a str,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]

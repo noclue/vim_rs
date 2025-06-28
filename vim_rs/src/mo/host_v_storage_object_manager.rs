@@ -217,7 +217,7 @@ impl HostVStorageObjectManager {
     /// ### path
     /// Relative location in the specified datastore where disk needs
     /// to be created. If not specified disk gets created at defualt
-    /// VStorageObject location on the specified datastore
+    /// VStorageObject location on the specified datastore.
     ///
     /// ### provisioning_type
     /// Provisioining type of the disk as specified in above
@@ -408,6 +408,47 @@ impl HostVStorageObjectManager {
     pub async fn v_storage_object_delete_snapshot_ex_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, snapshot_id: &crate::types::structs::Id) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VStorageObjectDeleteSnapshotExRequestType {id, datastore, snapshot_id, };
         let path = format!("/HostVStorageObjectManager/{moId}/VStorageObjectDeleteSnapshotEx_Task", moId = &self.mo_id);
+        let req = self.client.post_request(&path, &input);
+        self.client.execute(req).await
+    }
+    /// Deletes a given snapshot of a VStorageObject.
+    /// 
+    /// Requires Datastore.FileManagement privilege.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    ///
+    /// ## Parameters:
+    ///
+    /// ### id
+    /// The ID of the virtual storage object.
+    ///
+    /// ### datastore
+    /// The datastore where the source virtual storage object
+    /// is located.
+    /// 
+    /// Refers instance of *Datastore*.
+    ///
+    /// ### snapshot_id
+    /// The ID of the snapshot of a virtual storage object.
+    ///
+    /// ## Returns:
+    ///
+    /// Refers instance of *Task*.
+    ///
+    /// ## Errors:
+    ///
+    /// ***FileFault***: If an error occurs while snapshotting the virtual
+    /// storage object.
+    /// 
+    /// ***InvalidDatastore***: If the operation cannot be performed on the
+    /// datastore.
+    /// 
+    /// ***InvalidState***: If the operation cannot be performed on the disk.
+    /// 
+    /// ***NotFound***: If specified virtual storage object or snapshot cannot be found.
+    pub async fn v_storage_object_delete_snapshot_ex_2_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, snapshot_id: &crate::types::structs::Id) -> Result<crate::types::structs::ManagedObjectReference> {
+        let input = VStorageObjectDeleteSnapshotEx2RequestType {id, datastore, snapshot_id, };
+        let path = format!("/HostVStorageObjectManager/{moId}/VStorageObjectDeleteSnapshotEx2_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
         self.client.execute(req).await
     }
@@ -705,6 +746,51 @@ impl HostVStorageObjectManager {
         let req = self.client.post_request(&path, &input);
         self.client.execute_option(req).await
     }
+    /// Get the virtual disk UUID.
+    /// 
+    /// ***Since:*** vSphere API Release 8.0.3.0
+    /// 
+    /// ***Required privileges:*** System.View
+    ///
+    /// ## Parameters:
+    ///
+    /// ### name
+    /// The name of the disk, either a datastore path or a URL
+    /// referring to the virtual disk whose uuid for the DDB entry needs to be queried.
+    /// A URL has the form
+    /// > _scheme_://_authority_/folder/_path_?dsName=_dsName_
+    /// 
+    /// where
+    /// - _scheme_ is <code>http</code> or <code>https</code>.
+    /// - _authority_ specifies the hostname or IP address of the VirtualCenter or
+    ///   ESX server and optionally the port.
+    /// - _dsName_ is the name of the Datastore.
+    /// - _path_ is a slash-delimited path from the root of the datastore.
+    /// 
+    /// A datastore path has the form
+    /// > \[_datastore_\] _path_
+    /// 
+    /// where
+    /// - _datastore_ is the datastore name.
+    /// - _path_ is a slash-delimited path from the root of the datastore.
+    /// 
+    /// An example datastore path is "\[storage\] path/to/file.extension".
+    ///
+    /// ## Returns:
+    ///
+    /// The hex representation of the unique ID for this virtual disk.
+    ///
+    /// ## Errors:
+    ///
+    /// ***FileFault***: if an error occurs reading the virtual disk.
+    /// 
+    /// ***InvalidDatastore***: if the operation cannot be performed on the datastore.
+    pub async fn host_query_virtual_disk_uuid(&self, name: &str) -> Result<String> {
+        let input = HostQueryVirtualDiskUuidRequestType {name, };
+        let path = format!("/HostVStorageObjectManager/{moId}/HostQueryVirtualDiskUuid", moId = &self.mo_id);
+        let req = self.client.post_request(&path, &input);
+        self.client.execute(req).await
+    }
     /// Reconcile the datastore inventory info of virtual storage objects.
     /// 
     /// Requires Datastore.FileManagement privilege.
@@ -718,6 +804,14 @@ impl HostVStorageObjectManager {
     /// 
     /// Refers instance of *Datastore*.
     ///
+    /// ### deep_cleansing
+    /// If set true, the reconcile task will check for the
+    /// extent files and the disk descriptor file content
+    /// as part of reconciliation. Note that this is a time
+    /// consuming process.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    ///
     /// ## Returns:
     ///
     /// Refers instance of *Task*.
@@ -726,8 +820,8 @@ impl HostVStorageObjectManager {
     ///
     /// ***InvalidDatastore***: If the operation cannot be performed on
     /// the datastore.
-    pub async fn host_reconcile_datastore_inventory_task(&self, datastore: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ManagedObjectReference> {
-        let input = HostReconcileDatastoreInventoryRequestType {datastore, };
+    pub async fn host_reconcile_datastore_inventory_task(&self, datastore: &crate::types::structs::ManagedObjectReference, deep_cleansing: Option<bool>) -> Result<crate::types::structs::ManagedObjectReference> {
+        let input = HostReconcileDatastoreInventoryRequestType {datastore, deep_cleansing, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostReconcileDatastoreInventory_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
         self.client.execute(req).await
@@ -1204,12 +1298,20 @@ impl HostVStorageObjectManager {
     /// 
     /// Refers instance of *Datastore*.
     ///
+    /// ### deep_cleansing
+    /// If set true, the reconcile task will check for the
+    /// extent files and the disk descriptor file content
+    /// as part of reconciliation. Note that this is a time
+    /// consuming process.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    ///
     /// ## Errors:
     ///
     /// ***InvalidDatastore***: If the operation cannot be performed on
     /// the datastore.
-    pub async fn host_schedule_reconcile_datastore_inventory(&self, datastore: &crate::types::structs::ManagedObjectReference) -> Result<()> {
-        let input = HostScheduleReconcileDatastoreInventoryRequestType {datastore, };
+    pub async fn host_schedule_reconcile_datastore_inventory(&self, datastore: &crate::types::structs::ManagedObjectReference, deep_cleansing: Option<bool>) -> Result<()> {
+        let input = HostScheduleReconcileDatastoreInventoryRequestType {datastore, deep_cleansing, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostScheduleReconcileDatastoreInventory", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
         self.client.execute_void(req).await
@@ -1254,6 +1356,55 @@ impl HostVStorageObjectManager {
         let path = format!("/HostVStorageObjectManager/{moId}/HostSetVStorageObjectControlFlags", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
         self.client.execute_void(req).await
+    }
+    /// Set the virtual disk Uuid.
+    /// 
+    /// ***Since:*** vSphere API Release 8.0.3.0
+    /// 
+    /// ***Required privileges:*** System.View
+    ///
+    /// ## Parameters:
+    ///
+    /// ### name
+    /// The name of the disk, either a datastore path or a URL
+    /// referring to the virtual disk whose uuid for the DDB entry needs to be set.
+    /// A URL has the form
+    /// > _scheme_://_authority_/folder/_path_?dsName=_dsName_
+    /// 
+    /// where
+    /// - _scheme_ is <code>http</code> or <code>https</code>.
+    /// - _authority_ specifies the hostname or IP address of the VirtualCenter or
+    ///   ESX server and optionally the port.
+    /// - _dsName_ is the name of the Datastore.
+    /// - _path_ is a slash-delimited path from the root of the datastore.
+    /// 
+    /// A datastore path has the form
+    /// > \[_datastore_\] _path_
+    /// 
+    /// where
+    /// - _datastore_ is the datastore name.
+    /// - _path_ is a slash-delimited path from the root of the datastore.
+    /// 
+    /// An example datastore path is "\[storage\] path/to/file.extension".
+    ///
+    /// ### uuid
+    /// The hex representation of the unique ID for this virtual disk. If uuid is not set or missing,
+    /// a random UUID is generated and assigned.
+    ///
+    /// ## Returns:
+    ///
+    /// Refers instance of *Task*.
+    ///
+    /// ## Errors:
+    ///
+    /// ***FileFault***: if an error occurs updating the virtual disk.
+    /// 
+    /// ***InvalidDatastore***: if the operation cannot be performed on the datastore.
+    pub async fn host_set_virtual_disk_uuid_task(&self, name: &str, uuid: Option<&str>) -> Result<crate::types::structs::ManagedObjectReference> {
+        let input = HostSetVirtualDiskUuidRequestType {name, uuid, };
+        let path = format!("/HostVStorageObjectManager/{moId}/HostSetVirtualDiskUuid_Task", moId = &self.mo_id);
+        let req = self.client.post_request(&path, &input);
+        self.client.execute(req).await
     }
     /// Update metadata KV pairs to a virtual storage object.
     /// 
@@ -1434,6 +1585,14 @@ struct VStorageObjectDeleteSnapshotExRequestType<'a> {
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
+struct VStorageObjectDeleteSnapshotEx2RequestType<'a> {
+    id: &'a crate::types::structs::Id,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
+    #[serde(rename = "snapshotId")]
+    snapshot_id: &'a crate::types::structs::Id,
+}
+#[derive(serde::Serialize)]
+#[serde(tag="_typeName")]
 struct HostDeleteVStorageObjectRequestType<'a> {
     id: &'a crate::types::structs::Id,
     datastore: &'a crate::types::structs::ManagedObjectReference,
@@ -1473,8 +1632,16 @@ struct HostListVStorageObjectRequestType<'a> {
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
+struct HostQueryVirtualDiskUuidRequestType<'a> {
+    name: &'a str,
+}
+#[derive(serde::Serialize)]
+#[serde(tag="_typeName")]
 struct HostReconcileDatastoreInventoryRequestType<'a> {
     datastore: &'a crate::types::structs::ManagedObjectReference,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "deepCleansing")]
+    deep_cleansing: Option<bool>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -1566,6 +1733,9 @@ struct RevertVStorageObjectExRequestType<'a> {
 #[serde(tag="_typeName")]
 struct HostScheduleReconcileDatastoreInventoryRequestType<'a> {
     datastore: &'a crate::types::structs::ManagedObjectReference,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "deepCleansing")]
+    deep_cleansing: Option<bool>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -1575,6 +1745,13 @@ struct HostSetVStorageObjectControlFlagsRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "controlFlags")]
     control_flags: Option<&'a [String]>,
+}
+#[derive(serde::Serialize)]
+#[serde(tag="_typeName")]
+struct HostSetVirtualDiskUuidRequestType<'a> {
+    name: &'a str,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    uuid: Option<&'a str>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]

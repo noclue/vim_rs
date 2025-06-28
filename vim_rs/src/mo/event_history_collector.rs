@@ -100,6 +100,17 @@ impl EventHistoryCollector {
         let req = self.client.get_request(&path);
         self.client.execute(req).await
     }
+    /// Indicates whether the *EventHistoryCollector.latestPage* is initialized.
+    /// 
+    /// If the
+    /// *EventFilterSpec.delayedInit* is `false` or unset this property is always true.
+    /// 
+    /// ***Since:*** vSphere API Release 8.0.3.0
+    pub async fn initialized(&self) -> Result<Option<bool>> {
+        let path = format!("/EventHistoryCollector/{moId}/initialized", moId = &self.mo_id);
+        let req = self.client.get_request(&path);
+        self.client.execute_option(req).await
+    }
     /// The items in the 'viewable latest page'.
     /// 
     /// As new events that match the

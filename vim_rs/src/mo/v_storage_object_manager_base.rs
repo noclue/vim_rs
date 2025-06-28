@@ -99,6 +99,47 @@ impl VStorageObjectManagerBase {
         let req = self.client.post_request(&path, &input);
         self.client.execute(req).await
     }
+    /// Deletes a given snapshot of a VStorageObject.
+    /// 
+    /// Requires Datastore.FileManagement privilege.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    ///
+    /// ## Parameters:
+    ///
+    /// ### id
+    /// The ID of the virtual storage object.
+    ///
+    /// ### datastore
+    /// The datastore where the source virtual storage object
+    /// is located.
+    /// 
+    /// Refers instance of *Datastore*.
+    ///
+    /// ### snapshot_id
+    /// The ID of the snapshot of a virtual storage object.
+    ///
+    /// ## Returns:
+    ///
+    /// Refers instance of *Task*.
+    ///
+    /// ## Errors:
+    ///
+    /// ***FileFault***: If an error occurs while snapshotting the virtual
+    /// storage object.
+    /// 
+    /// ***InvalidDatastore***: If the operation cannot be performed on the
+    /// datastore.
+    /// 
+    /// ***InvalidState***: If the operation cannot be performed on the disk.
+    /// 
+    /// ***NotFound***: If specified virtual storage object or snapshot cannot be found.
+    pub async fn v_storage_object_delete_snapshot_ex_2_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, snapshot_id: &crate::types::structs::Id) -> Result<crate::types::structs::ManagedObjectReference> {
+        let input = VStorageObjectDeleteSnapshotEx2RequestType {id, datastore, snapshot_id, };
+        let path = format!("/VStorageObjectManagerBase/{moId}/VStorageObjectDeleteSnapshotEx2_Task", moId = &self.mo_id);
+        let req = self.client.post_request(&path, &input);
+        self.client.execute(req).await
+    }
     /// Expand the capacity of a virtual disk, which is a storage object with
     /// *disk*, to the new
     /// capacity.
@@ -266,6 +307,14 @@ struct VStorageObjectCreateSnapshotExRequestType<'a> {
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
 struct VStorageObjectDeleteSnapshotExRequestType<'a> {
+    id: &'a crate::types::structs::Id,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
+    #[serde(rename = "snapshotId")]
+    snapshot_id: &'a crate::types::structs::Id,
+}
+#[derive(serde::Serialize)]
+#[serde(tag="_typeName")]
+struct VStorageObjectDeleteSnapshotEx2RequestType<'a> {
     id: &'a crate::types::structs::Id,
     datastore: &'a crate::types::structs::ManagedObjectReference,
     #[serde(rename = "snapshotId")]

@@ -19,6 +19,7 @@
 /// - `Datastore`
 /// - `DatastoreNamespaceManager`
 /// - `DiagnosticManager`
+/// - `DirectPathProfileManager`: ***Since:*** vSphere API Release 9.0.0.0
 /// - `DistributedVirtualPortgroup`
 /// - `DistributedVirtualSwitch`
 /// - `DistributedVirtualSwitchManager`
@@ -80,6 +81,7 @@
 /// - `HostVMotionSystem`
 /// - `HostVStorageObjectManager`
 /// - `HostVirtualNicManager`
+/// - `HostVsanHealthSystem`
 /// - `HostVsanInternalSystem`
 /// - `HostVsanSystem`
 /// - `HttpNfcLease`
@@ -92,7 +94,6 @@
 /// - `ListView`
 /// - `LocalizationManager`
 /// - `ManagedEntity`
-/// - `ManagedObject`
 /// - `ManagedObjectView`
 /// - `MessageBusProxy`
 /// - `Network`
@@ -128,6 +129,8 @@
 /// - `VcenterVStorageObjectManager`
 /// - `View`
 /// - `ViewManager`
+/// - `VimClusterVsanVcDiskManagementSystem`
+/// - `VimClusterVsanVcStretchedClusterSystem`
 /// - `VirtualApp`
 /// - `VirtualDiskManager`
 /// - `VirtualMachine`
@@ -137,7 +140,60 @@
 /// - `VirtualMachineSnapshot`
 /// - `VirtualizationManager`
 /// - `VmwareDistributedVirtualSwitch`
+/// - `VsanCapabilitySystem`
+/// - `VsanClusterHealthSystem`
+/// - `VsanClusterMgmtInternalSystem`
+/// - `VsanIscsiTargetSystem`
+/// - `VsanObjectSystem`
+/// - `VsanPerformanceManager`
+/// - `VsanSpaceReportSystem`
+/// - `VsanSystemEx`
 /// - `VsanUpgradeSystem`
+/// - `VsanUpgradeSystemEx`
+/// - `VsanVcClusterConfigSystem`
+/// - `VsanVcClusterHealthSystem`
+/// - `VsanVcsaDeployerSystem`
+/// - `Agency`
+/// - `Agent`
+/// - `EamObject`
+/// - `EamTask`
+/// - `EsxAgentManager`
+/// - `PbmCapabilityMetadataManager`
+/// - `PbmComplianceManager`
+/// - `PbmPlacementSolver`
+/// - `PbmProfileProfileManager`
+/// - `PbmProvider`
+/// - `PbmReplicationManager`
+/// - `PbmServiceInstance`
+/// - `PbmSessionManager`
+/// - `SmsProvider`
+/// - `SmsServiceInstance`
+/// - `SmsSessionManager`
+/// - `SmsStorageManager`
+/// - `SmsTask`
+/// - `VasaProvider`
+/// - `ManagedObject`
+/// - `CnsVolumeManager`
+/// - `HostSpbm`
+/// - `VsanClusterPowerSystem`
+/// - `VsanDiagnosticsSystem`
+/// - `VsanFileServiceSystem`
+/// - `VsanHostVdsSystem`
+/// - `VsanIoInsightManager`
+/// - `VsanMassCollector`
+/// - `VsanObjectManager`: ***Since:*** 8.0.0.4
+/// - `VsanPhoneHomeSystem`
+/// - `VsanPolicyManager`
+/// - `VsanRemoteDatastoreSystem`
+/// - `VsanResourceCheckSystem`
+/// - `VsanUpdateManager`
+/// - `VsanVdsSystem`
+/// - `VsanVumSystem`
+/// - `VslmServiceInstance`
+/// - `VslmSessionManager`
+/// - `VslmStorageLifecycleManager`
+/// - `VslmTask`
+/// - `VslmVStorageObjectManager`
 #[derive(Clone, Debug, PartialEq, Eq, Hash, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum MoTypesEnum {
     Alarm,
@@ -164,6 +220,7 @@ pub enum MoTypesEnum {
     Datastore,
     DatastoreNamespaceManager,
     DiagnosticManager,
+    DirectPathProfileManager,
     DistributedVirtualPortgroup,
     DistributedVirtualSwitch,
     DistributedVirtualSwitchManager,
@@ -225,6 +282,7 @@ pub enum MoTypesEnum {
     HostVMotionSystem,
     HostVStorageObjectManager,
     HostVirtualNicManager,
+    HostVsanHealthSystem,
     HostVsanInternalSystem,
     HostVsanSystem,
     HttpNfcLease,
@@ -237,7 +295,6 @@ pub enum MoTypesEnum {
     ListView,
     LocalizationManager,
     ManagedEntity,
-    ManagedObject,
     ManagedObjectView,
     MessageBusProxy,
     Network,
@@ -273,6 +330,8 @@ pub enum MoTypesEnum {
     VcenterVStorageObjectManager,
     View,
     ViewManager,
+    VimClusterVsanVcDiskManagementSystem,
+    VimClusterVsanVcStretchedClusterSystem,
     VirtualApp,
     VirtualDiskManager,
     VirtualMachine,
@@ -282,7 +341,2082 @@ pub enum MoTypesEnum {
     VirtualMachineSnapshot,
     VirtualizationManager,
     VmwareDistributedVirtualSwitch,
+    VsanCapabilitySystem,
+    VsanClusterHealthSystem,
+    VsanClusterMgmtInternalSystem,
+    VsanIscsiTargetSystem,
+    VsanObjectSystem,
+    VsanPerformanceManager,
+    VsanSpaceReportSystem,
+    VsanSystemEx,
     VsanUpgradeSystem,
+    VsanUpgradeSystemEx,
+    VsanVcClusterConfigSystem,
+    VsanVcClusterHealthSystem,
+    VsanVcsaDeployerSystem,
+    Agency,
+    Agent,
+    EamObject,
+    EamTask,
+    EsxAgentManager,
+    PbmCapabilityMetadataManager,
+    PbmComplianceManager,
+    PbmPlacementSolver,
+    PbmProfileProfileManager,
+    PbmProvider,
+    PbmReplicationManager,
+    PbmServiceInstance,
+    PbmSessionManager,
+    SmsProvider,
+    SmsServiceInstance,
+    SmsSessionManager,
+    SmsStorageManager,
+    SmsTask,
+    VasaProvider,
+    ManagedObject,
+    CnsVolumeManager,
+    HostSpbm,
+    VsanClusterPowerSystem,
+    VsanDiagnosticsSystem,
+    VsanFileServiceSystem,
+    VsanHostVdsSystem,
+    VsanIoInsightManager,
+    VsanMassCollector,
+    VsanObjectManager,
+    VsanPhoneHomeSystem,
+    VsanPolicyManager,
+    VsanRemoteDatastoreSystem,
+    VsanResourceCheckSystem,
+    VsanUpdateManager,
+    VsanVdsSystem,
+    VsanVumSystem,
+    VslmServiceInstance,
+    VslmSessionManager,
+    VslmStorageLifecycleManager,
+    VslmTask,
+    VslmVStorageObjectManager,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Enumeration of reason codes representing the invalid data protection states.
+/// 
+/// Possible values:
+/// - `protectionDegraded`: Data protection of one or more disks associated with the protected entity is degraded.
+///   
+///   The data protection must be disabled and re-enabled in order to have data protection supported.
+/// - `notProtected`
+/// - `invalidProtectionReasonUnknown`: A fallback value used when a client sees an unknown InvalidProtectionReason.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum DpInvalidProtectionReasonEnum {
+    #[serde(rename = "protectionDegraded")]
+    #[strum(serialize = "protectionDegraded")]
+    ProtectionDegraded,
+    #[serde(rename = "notProtected")]
+    #[strum(serialize = "notProtected")]
+    NotProtected,
+    #[serde(rename = "invalidProtectionReasonUnknown")]
+    #[strum(serialize = "invalidProtectionReasonUnknown")]
+    InvalidProtectionReasonUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Indicates the type of migration that is in progress for a
+/// *DpProtectedEntity*.
+/// 
+/// Possible values:
+/// - `coldMigration`: A cold migration is in progress.
+/// - `hotMigration`: A hot migration is in progress.
+/// - `migrationTypeUnknown`: The value to be used when the older version client cannot recognize the enum value.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum DpMigrationTypeEnum {
+    #[serde(rename = "coldMigration")]
+    #[strum(serialize = "coldMigration")]
+    ColdMigration,
+    #[serde(rename = "hotMigration")]
+    #[strum(serialize = "hotMigration")]
+    HotMigration,
+    #[serde(rename = "migrationTypeUnknown")]
+    #[strum(serialize = "migrationTypeUnknown")]
+    MigrationTypeUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Indicates the protection status for the *DpProtectedEntity*.
+/// 
+/// Possible values:
+/// - `pe_protected`: The ProtectedEntity is protected by vSphere Data Protection.
+/// - `pe_unprotected`: The ProtectedEntity is not protected by vSphere Data Protection.
+/// - `pe_partially_protected`: Only some elements of the ProtectedEntity are protected by vSphere Data Protection.
+///   
+///   For example, if only some disks of a *DpVirtualMachineProtectedEntity* are protected.
+/// - `ProtectionStatusType_unknown`: Represents value when the lower version client cannot recognize the enum value.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum DpProtectionStatusTypeEnum {
+    #[serde(rename = "pe_protected")]
+    #[strum(serialize = "pe_protected")]
+    PeProtected,
+    #[serde(rename = "pe_unprotected")]
+    #[strum(serialize = "pe_unprotected")]
+    PeUnprotected,
+    #[serde(rename = "pe_partially_protected")]
+    #[strum(serialize = "pe_partially_protected")]
+    PePartiallyProtected,
+    #[serde(rename = "ProtectionStatusType_unknown")]
+    #[strum(serialize = "ProtectionStatusType_unknown")]
+    ProtectionStatusTypeUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Indicates if the cluster supports vSphere Data Protection.
+/// 
+/// Possible values:
+/// - `supported`: The LWD VAIO filter is installed on all hosts in the cluster.
+///   
+///   The cluster supports data protection.
+/// - `partially_supported`: The LWD VAIO filter is installed on some hosts in the cluster.
+///   
+///   If protection in enabled on an entity, it cannot migrate to other nodes in the cluster until all the nodes have the filter installed.
+/// - `not_supported`: The LWD VAIO filter is not installed on any of the hosts in the cluster.
+///   
+///   Entities cannot be protected in this cluster.
+/// - `ProtectionSupportType_unknown`: Represents value when the lower version client cannot recognize the enum value.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum DpProtectionSupportTypeEnum {
+    #[serde(rename = "supported")]
+    #[strum(serialize = "supported")]
+    Supported,
+    #[serde(rename = "partially_supported")]
+    #[strum(serialize = "partially_supported")]
+    PartiallySupported,
+    #[serde(rename = "not_supported")]
+    #[strum(serialize = "not_supported")]
+    NotSupported,
+    #[serde(rename = "ProtectionSupportType_unknown")]
+    #[strum(serialize = "ProtectionSupportType_unknown")]
+    ProtectionSupportTypeUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Indicates the type of snapshot taken on a given protected entity.
+/// 
+/// Possible values:
+/// - `crashConsistent`: Crash Consistent snapshot.
+/// - `applicationConsistent`: Application Consistent snapshot.
+///   
+///   Generally used for linux GOS to run pre-freeze and post-thaw scripts.
+/// - `vssAppConsistentFull`: 
+///   
+///   Deprecated as of vSphere API 8.0 release. There is no replacement as this value is unused. VSS Application Consistent Snapshot whereby a full backup is requested regardless of whether files have been marked as backed up or not. Correlates to VSS\_BT\_FULL. Applicable only for windows VMs.
+///   
+///   This is deprecated.
+/// - `vssAppConsistentCopy`: 
+///   
+///   Deprecated as of vSphere API 8.0 release. There is no replacement as this value is unused. VSS Application Consistent Snapshot whereby files on disk will be copied regardless of the state of each file's backup history, and the backup history will not be updated. Correlates to VSS\_BT\_COPY. Applicable only for windows VMs.
+///   
+///   This is deprecated.
+/// - `metadataOnly`: Metadata only snapshot is similar to a crash consistent snapshot, with the exception that COW operation is not performed on snapshot extents of a 'metadataOnly' snapshot.
+///   
+///   It is generally used for restore operations like 'In-place' restore and 'Failback'.
+/// - `vssAppConsistent`
+/// - `snapshotTypeUnknown`: The value to be used when the older version client cannot recognize the enum value.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum DpSnapshotTypeEnum {
+    #[serde(rename = "crashConsistent")]
+    #[strum(serialize = "crashConsistent")]
+    CrashConsistent,
+    #[serde(rename = "applicationConsistent")]
+    #[strum(serialize = "applicationConsistent")]
+    ApplicationConsistent,
+    #[serde(rename = "vssAppConsistentFull")]
+    #[strum(serialize = "vssAppConsistentFull")]
+    VssAppConsistentFull,
+    #[serde(rename = "vssAppConsistentCopy")]
+    #[strum(serialize = "vssAppConsistentCopy")]
+    VssAppConsistentCopy,
+    #[serde(rename = "metadataOnly")]
+    #[strum(serialize = "metadataOnly")]
+    MetadataOnly,
+    #[serde(rename = "vssAppConsistent")]
+    #[strum(serialize = "vssAppConsistent")]
+    VssAppConsistent,
+    #[serde(rename = "snapshotTypeUnknown")]
+    #[strum(serialize = "snapshotTypeUnknown")]
+    SnapshotTypeUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Indicates the type of sync operation to perform on a given protected entity.
+/// 
+/// Possible values:
+/// - `fullSync`: Full sync.
+///   
+///   Transfer all allocated data.
+/// - `deltaSync`: Delta sync.
+///   
+///   Transfer changed blocks since the last sync operation.
+/// - `syncTypeUnknown`: The value to be used when the older version client cannot recognize the enum value.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum DpSyncTypeEnum {
+    #[serde(rename = "fullSync")]
+    #[strum(serialize = "fullSync")]
+    FullSync,
+    #[serde(rename = "deltaSync")]
+    #[strum(serialize = "deltaSync")]
+    DeltaSync,
+    #[serde(rename = "syncTypeUnknown")]
+    #[strum(serialize = "syncTypeUnknown")]
+    SyncTypeUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Enumeration of vSphere Data Protection capabilities (features).
+/// 
+/// Possible values:
+/// - `QueryPeInfo`: Support for QueryProtectedEntityInfo API.
+///   
+///   Required minimal ESX vmodl version: '7.0.3.0'.
+/// - `PerDiskBaseSnapshotId`: Support for specifying per-disk base-snapshot ID when taking a vSphere Data Protection snapshot.
+///   
+///   Required minimal ESX vmodl version: '8.0.0.1'.
+/// - `QuiescedSnapshot`: Support for vSphere Data Protection application consistent and quiesced snapshots.
+///   
+///   Required minimal ESX vmodl version: '8.0.1.0'.
+/// - `RuntimeStats`: Support for querying DPD runtime stats with the QueryProtectedEntityInfo API.
+///   
+///   Required minimal ESX vmodl version: '8.0.1.0'.
+/// - `PreservedExtents`: Support for DataIntegrity specific params (v1) when taking vSphere Data Protection snapshots.
+///   
+///   Required minimal ESX vmodl version: '8.0.1.0', and ESX version of '8.0.1' and patch level of at least '0.25'.
+/// - `MultiPe`: Support for multi-PE consistency groups.
+///   
+///   Required minimal ESX vmodl version: '8.0.2.0'.
+/// - `VsanNativeSnapshot`: Support for VSAN native snapshots.
+///   
+///   Required minimal ESX vmodl version: '8.0.3.0'.
+/// - `SparseDiskEnhancement`: Enhancement for vSphere Data Protection operations over sparse disks.
+///   
+///   Required minimal ESX vmodl version: '8.0.3.0'.
+/// - `VSphereDpCapabilities_Unknown`: Fallback value for an unknown VSphereDataProtectionCapabilities seen by a client.
+///   
+/// ***Since:*** 8.0.0.4
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum DpVSphereDataProtectionCapabilitiesEnum {
+    QueryPeInfo,
+    PerDiskBaseSnapshotId,
+    QuiescedSnapshot,
+    RuntimeStats,
+    PreservedExtents,
+    MultiPe,
+    VsanNativeSnapshot,
+    SparseDiskEnhancement,
+    #[serde(rename = "VSphereDpCapabilities_Unknown")]
+    #[strum(serialize = "VSphereDpCapabilities_Unknown")]
+    VSphereDpCapabilitiesUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Indicates the backup context to be used for a VSS snapshot.
+/// 
+/// Applicable only
+/// for windows VMs. Refer to `VSS_SNAPSHOT_CONTEXT` enumeration on MSDN.
+/// 
+/// Possible values:
+/// - `vssBackupContextAuto`: This option lets the guest automatically select the right backup context among the values below.
+/// - `vssBackupContextBackup`: This correlates to `VSS_CTX_BACKUP`.
+///   
+///   It specifies that a shadow copy should be created by involving VSS writers to quiesce their respective application's data. A shadow copy created under this context has auto-release, non-persistent attributes: in other words, it is deleted upon the termination of a backup operation.
+/// - `vssBackupContextFileShareBackup`: This correlates to `VSS_CTX_FILE_SHARE_BACKUP`.
+///   
+///   It specifies that a shadow copy should be created without involving any VSS writer. A shadow copy created under this context has auto-release, non-persistent attributes: in other words, it is deleted upon the termination of a backup operation.
+/// - `vssBackupContextUnknown`: The value to be used when the older version client cannot recognize the enum value.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum DpVssBackupContextEnum {
+    #[serde(rename = "vssBackupContextAuto")]
+    #[strum(serialize = "vssBackupContextAuto")]
+    VssBackupContextAuto,
+    #[serde(rename = "vssBackupContextBackup")]
+    #[strum(serialize = "vssBackupContextBackup")]
+    VssBackupContextBackup,
+    #[serde(rename = "vssBackupContextFileShareBackup")]
+    #[strum(serialize = "vssBackupContextFileShareBackup")]
+    VssBackupContextFileShareBackup,
+    #[serde(rename = "vssBackupContextUnknown")]
+    #[strum(serialize = "vssBackupContextUnknown")]
+    VssBackupContextUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Indicates the backup type for a VSS snapshot.
+/// 
+/// Applicable only for windows
+/// VMs. Refer to `VSS_BACKUP_TYPE` enumeration on MSDN.
+/// 
+/// Possible values:
+/// - `vssBackupTypeFull`: This correlates to `VSS_BT_FULL`, whereby a full backup is requested, regardless of whether files have been marked as backed up or not.
+/// - `vssBackupTypeCopy`: This correlates to `VSS_BT_COPY`, whereby files on disk will be copied, regardless of the state of each file's backup history, and the backup history will not be updated.
+/// - `vssBackupTypeUnknown`: The value to be used when the older version client cannot recognize the enum value.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum DpVssBackupTypeEnum {
+    #[serde(rename = "vssBackupTypeFull")]
+    #[strum(serialize = "vssBackupTypeFull")]
+    VssBackupTypeFull,
+    #[serde(rename = "vssBackupTypeCopy")]
+    #[strum(serialize = "vssBackupTypeCopy")]
+    VssBackupTypeCopy,
+    #[serde(rename = "vssBackupTypeUnknown")]
+    #[strum(serialize = "vssBackupTypeUnknown")]
+    VssBackupTypeUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Enumeration of the support level for a cluster in terms of vSphere Data
+/// Protection capabilities.
+/// 
+/// Possible values:
+/// - `supported`: The capability is supported on all hosts in the cluster.
+/// - `partially_supported`: The capability is supported on only some but not all of the hosts in the cluster.
+/// - `not_supported`: The capability is not supported on any of the hosts in the cluster.
+/// - `CapabilitySupportLevel_unknown`: Fallback value for an unknown CapabilitySupportLevel seen by a client.
+///   
+/// ***Since:*** 8.0.0.4
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum DpCapabilitySupportLevelEnum {
+    #[serde(rename = "supported")]
+    #[strum(serialize = "supported")]
+    Supported,
+    #[serde(rename = "partially_supported")]
+    #[strum(serialize = "partially_supported")]
+    PartiallySupported,
+    #[serde(rename = "not_supported")]
+    #[strum(serialize = "not_supported")]
+    NotSupported,
+    #[serde(rename = "CapabilitySupportLevel_unknown")]
+    #[strum(serialize = "CapabilitySupportLevel_unknown")]
+    CapabilitySupportLevelUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Enumeration of type of SRM workflow.
+/// 
+/// Possible values:
+/// - `test_failover`: A test failover workflow.
+/// - `cleanup_test`: Clean up after a test failover.
+/// - `failover`: A failover workflow.
+/// - `reprotect`: A reprotect workflow.
+/// - `srmWorkflowUnknown`: A fallback value used when a client sees an unknown SrmWorkflow.
+///   
+/// ***Since:*** 8.0.0.4
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum DpDrSrmWorkflowEnum {
+    #[serde(rename = "test_failover")]
+    #[strum(serialize = "test_failover")]
+    TestFailover,
+    #[serde(rename = "cleanup_test")]
+    #[strum(serialize = "cleanup_test")]
+    CleanupTest,
+    #[serde(rename = "failover")]
+    #[strum(serialize = "failover")]
+    Failover,
+    #[serde(rename = "reprotect")]
+    #[strum(serialize = "reprotect")]
+    Reprotect,
+    #[serde(rename = "srmWorkflowUnknown")]
+    #[strum(serialize = "srmWorkflowUnknown")]
+    SrmWorkflowUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Deprecated as of vSphere 9.0. Please refer to vLCM System VMs APIs.
+/// 
+/// Defines if the deployed VMs needs to run on different hosts.
+/// 
+/// Possible values:
+/// - `none`: Denotes no specific VM anti-affinity policy.
+/// - `soft`: Best effort is made the VMs to run on different hosts as long as
+///   this does not impact the ability of the host to satisfy current CPU
+///   or memory requirements for virtual machines on the system.
+///   
+///   NOTE: Currently not supported - i.e. the agency configuration is
+///   considered as invalid.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum AgencyVmPlacementPolicyVmAntiAffinityEnum {
+    #[serde(rename = "none")]
+    #[strum(serialize = "none")]
+    None,
+    #[serde(rename = "soft")]
+    #[strum(serialize = "soft")]
+    Soft,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Deprecated as of vSphere 9.0. Please refer to vLCM System VMs APIs.
+/// 
+/// Defines if the deployed VM is affinied to run on the same host it is
+/// deployed on.
+/// 
+/// Possible values:
+/// - `none`: Denotes no specific VM data affinity policy.
+/// - `soft`: Best effort is made the VM to run on the same host it is deployed on
+///   as long as this does not impact the ability of the host to satisfy
+///   current CPU or memory requirements for virtual machines on the
+///   system.
+///   
+///   NOTE: Currently not supported - i.e. the agency configuration is
+///   considered as invalid.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum AgencyVmPlacementPolicyVmDataAffinityEnum {
+    #[serde(rename = "none")]
+    #[strum(serialize = "none")]
+    None,
+    #[serde(rename = "soft")]
+    #[strum(serialize = "soft")]
+    Soft,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Deprecated as of vSphere 9.0. Please refer to vLCM APIs.
+/// 
+/// Supported authentication schemes used to access an OVF URL.
+/// 
+/// Possible values:
+/// - `NONE`: Accessing the OVF URL doesn't require authentication.
+/// - `VMWARE_SESSION_ID`: Accessing the OVF URL requires Vmware client sessionID.
+///   
+/// ***Since:*** vEAM API 9.0
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum AgentConfigInfoAuthenticationSchemeEnum {
+    #[serde(rename = "NONE")]
+    #[strum(serialize = "NONE")]
+    None,
+    #[serde(rename = "VMWARE_SESSION_ID")]
+    #[strum(serialize = "VMWARE_SESSION_ID")]
+    VmwareSessionId,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Deprecated as of vSphere 9.0. Please refer to vLCM APIs.
+/// 
+/// Defines the type of disk provisioning for the target Agent VMs.
+/// 
+/// Possible values:
+/// - `none`: Denotes no specific type for disk provisioning.
+///   
+///   Disks will be
+///   provisioned as defaulted by vSphere.
+/// - `thin`: Disks will be provisioned with only used space allocated.
+/// - `thick`: Disks will be provisioned with full size allocated.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum AgentConfigInfoOvfDiskProvisioningEnum {
+    #[serde(rename = "none")]
+    #[strum(serialize = "none")]
+    None,
+    #[serde(rename = "thin")]
+    #[strum(serialize = "thin")]
+    Thin,
+    #[serde(rename = "thick")]
+    #[strum(serialize = "thick")]
+    Thick,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Represents the state of the VM lifecycle.
+/// 
+/// Possible values:
+/// - `provisioned`: The VM is provisioned and not powered-on.
+/// - `poweredOn`: The VM is powered on.
+/// - `prePowerOn`: The VM is about to be powered on as part of a VM upgrade workflow.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum AgentVmHookVmStateEnum {
+    #[serde(rename = "provisioned")]
+    #[strum(serialize = "provisioned")]
+    Provisioned,
+    #[serde(rename = "poweredOn")]
+    #[strum(serialize = "poweredOn")]
+    PoweredOn,
+    #[serde(rename = "prePowerOn")]
+    #[strum(serialize = "prePowerOn")]
+    PrePowerOn,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Deprecated as of vSphere 9.0. Please refer to vLCM APIs.
+/// 
+/// The <code>GoalState</code> enumeration defines the goal of the entity.
+/// 
+/// Possible values:
+/// - `enabled`: The entity should be fully deployed and active.
+///   
+///   If the entity is an
+///   *Agency*, it should install VIBs and deploy and power on all agent
+///   virtual machines. If the entity is an *Agent*, its VIB should be installed and its
+///   agent virtual machine should be deployed and powered on.
+/// - `disabled`: The entity should be fully deployed but inactive.
+///   
+///   f the entity is an
+///   *Agency*, the behavior is similar to the <code>enabled</code> goal state, but
+///   agents are not powered on (if they have been powered on they are powered
+///   off).
+/// - `uninstalled`: The entity should be completely removed from the vCenter Server.
+///   
+///   If the entity is an
+///   *Agency*, no more VIBs or agent virtual machines are deployed. All installed VIBs
+///   installed by the *Agency* are uninstalled and any deployed agent virtual machines
+///   are powered off (if they have been powered on) and deleted.
+///   If the entity is an *Agent*, its VIB is uninstalled and the virtual machine is
+///   powered off and deleted.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum EamObjectRuntimeInfoGoalStateEnum {
+    #[serde(rename = "enabled")]
+    #[strum(serialize = "enabled")]
+    Enabled,
+    #[serde(rename = "disabled")]
+    #[strum(serialize = "disabled")]
+    Disabled,
+    #[serde(rename = "uninstalled")]
+    #[strum(serialize = "uninstalled")]
+    Uninstalled,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Deprecated as of vSphere 9.0. Please refer to vLCM APIs.
+/// 
+/// <code>Status</code> defines a health value that denotes how well the entity
+/// conforms to the goal state.
+/// 
+/// Possible values:
+/// - `green`: The entity is in perfect compliance with the goal state.
+/// - `yellow`: The entity is actively working to reach the desired goal state.
+/// - `red`: The entity has reached an issue which prevents it from reaching the desired goal
+///   state.
+///   
+///   To remediate any offending issues, look at *EamObjectRuntimeInfo.issue*
+///   and use either *EamObject.Resolve* or
+///   *EamObject.ResolveAll*.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum EamObjectRuntimeInfoStatusEnum {
+    #[serde(rename = "green")]
+    #[strum(serialize = "green")]
+    Green,
+    #[serde(rename = "yellow")]
+    #[strum(serialize = "yellow")]
+    Yellow,
+    #[serde(rename = "red")]
+    #[strum(serialize = "red")]
+    Red,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Deprecated as of vSphere 9.0. Please refer to vLCM Image APIs.
+/// 
+/// <code>MaintenanceModePolicy</code> defines how ESX Agent Manager is going
+/// to put into maintenance mode hosts which are part of a cluster not managed
+/// by vSphere Lifecycle Manager.
+/// 
+/// Possible values:
+/// - `singleHost`: Only a single host at a time will be put into maintenance mode.
+/// - `multipleHosts`: Hosts will be put into maintenance mode simultaneously.
+///   
+///   If vSphere DRS
+///   is enabled, its recommendations will be used. Otherwise, it will be
+///   attempted to put in maintenance mode simultaneously as many host as
+///   possible.
+/// 
+/// ***Since:*** vEAM API 7.4
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum EsxAgentManagerMaintenanceModePolicyEnum {
+    #[serde(rename = "singleHost")]
+    #[strum(serialize = "singleHost")]
+    SingleHost,
+    #[serde(rename = "multipleHosts")]
+    #[strum(serialize = "multipleHosts")]
+    MultipleHosts,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Supported types of hooks for agents.
+/// 
+/// Possible values:
+/// - `POST_PROVISIONING`: Hook raised for an agent immediately after a Virtual Machine was
+///   created.
+/// - `POST_POWER_ON`: Hook raised for an agent immediately after a Virtual Machine was
+///   powered on.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum HooksHookTypeEnum {
+    #[serde(rename = "POST_PROVISIONING")]
+    #[strum(serialize = "POST_PROVISIONING")]
+    PostProvisioning,
+    #[serde(rename = "POST_POWER_ON")]
+    #[strum(serialize = "POST_POWER_ON")]
+    PostPowerOn,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Reasons solution is not valid for application.
+/// 
+/// Possible values:
+/// - `INVALID_OVF_DESCRIPTOR`: The OVF descriptor provided in the VM source is invalid.
+/// - `INACCESSBLE_VM_SOURCE`: The provided VM source is inaccessible from ESX Agent Manager.
+/// - `INVALID_NETWORKS`: The provided networks are not suitable for application purposes.
+/// - `INVALID_DATASTORES`: The provided datastores are not suitable for application purposes.
+/// - `INVALID_RESOURCE_POOL`: The provided resource pool is not accessible or part of the cluster.
+/// - `INVALID_FOLDER`: The provided folder is inaccessible or not part of the same datacenter
+///   with the cluster.
+/// - `INVALID_PROPERTIES`: The provided OVF properties are insufficient to satisfy the required
+///   user configurable properties in the VM described in the vmSource.
+/// - `INVALID_TRANSITION`: The legacy agency requested for transition is not valid/cannot be
+///   mapped to systm Virtual Machines solution.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum SolutionsInvalidReasonEnum {
+    #[serde(rename = "INVALID_OVF_DESCRIPTOR")]
+    #[strum(serialize = "INVALID_OVF_DESCRIPTOR")]
+    InvalidOvfDescriptor,
+    #[serde(rename = "INACCESSBLE_VM_SOURCE")]
+    #[strum(serialize = "INACCESSBLE_VM_SOURCE")]
+    InaccessbleVmSource,
+    #[serde(rename = "INVALID_NETWORKS")]
+    #[strum(serialize = "INVALID_NETWORKS")]
+    InvalidNetworks,
+    #[serde(rename = "INVALID_DATASTORES")]
+    #[strum(serialize = "INVALID_DATASTORES")]
+    InvalidDatastores,
+    #[serde(rename = "INVALID_RESOURCE_POOL")]
+    #[strum(serialize = "INVALID_RESOURCE_POOL")]
+    InvalidResourcePool,
+    #[serde(rename = "INVALID_FOLDER")]
+    #[strum(serialize = "INVALID_FOLDER")]
+    InvalidFolder,
+    #[serde(rename = "INVALID_PROPERTIES")]
+    #[strum(serialize = "INVALID_PROPERTIES")]
+    InvalidProperties,
+    #[serde(rename = "INVALID_TRANSITION")]
+    #[strum(serialize = "INVALID_TRANSITION")]
+    InvalidTransition,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Describes possible reasons a solution is non compliant.
+/// 
+/// Possible values:
+/// - `WORKING`: There is ongoing work to acheive the desired state.
+/// - `ISSUE`: ESX Agent Manager has ecnountered am issue attempting to acheive the
+///   desired state.
+/// - `IN_HOOK`: ESX Agent Manager is awaiting user input to continue attempting to
+///   acheive the desired state.
+/// - `OBSOLETE_SPEC`: An obsoleted spec is currently in application for this solution.
+///   
+///   This state should take precedence over:
+///   - *WORKING*
+///   - *ISSUE*
+///   - *IN_HOOK*
+/// - `NO_SPEC`: Application for this solutiona has never been requested with
+///   *Solutions.Apply*.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum SolutionsNonComplianceReasonEnum {
+    #[serde(rename = "WORKING")]
+    #[strum(serialize = "WORKING")]
+    Working,
+    #[serde(rename = "ISSUE")]
+    #[strum(serialize = "ISSUE")]
+    Issue,
+    #[serde(rename = "IN_HOOK")]
+    #[strum(serialize = "IN_HOOK")]
+    InHook,
+    #[serde(rename = "OBSOLETE_SPEC")]
+    #[strum(serialize = "OBSOLETE_SPEC")]
+    ObsoleteSpec,
+    #[serde(rename = "NO_SPEC")]
+    #[strum(serialize = "NO_SPEC")]
+    NoSpec,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Virtual Machine deployment optimization strategies.
+/// 
+/// Possible values:
+/// - `ALL_CLONES`: Utilizes all cloning methods available, will create initial snapshots
+///   on the Virtual Machines.
+/// - `FULL_CLONES_ONLY`: Utilize only full copy cloning menthods, will create initial snapshots
+///   on the Virtual Machines.
+/// - `NO_CLONES`: Virtual Machiness will not be cloned from pre-existing deployment.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum SolutionsVmDeploymentOptimizationEnum {
+    #[serde(rename = "ALL_CLONES")]
+    #[strum(serialize = "ALL_CLONES")]
+    AllClones,
+    #[serde(rename = "FULL_CLONES_ONLY")]
+    #[strum(serialize = "FULL_CLONES_ONLY")]
+    FullClonesOnly,
+    #[serde(rename = "NO_CLONES")]
+    #[strum(serialize = "NO_CLONES")]
+    NoClones,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Provisioning types for system Virtual Machines.
+/// 
+/// Possible values:
+/// - `THIN`: Disks will be provisioned with only used space allocated.
+/// - `THICK`: Disks will be provisioned with full size allocated.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum SolutionsVmDiskProvisioningEnum {
+    #[serde(rename = "THIN")]
+    #[strum(serialize = "THIN")]
+    Thin,
+    #[serde(rename = "THICK")]
+    #[strum(serialize = "THICK")]
+    Thick,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Defines the DRS placement policies applied on the VMs.
+/// 
+/// Possible values:
+/// - `VM_VM_ANTI_AFFINITY`: VMs are anti-affined to each other.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum SolutionsVmPlacementPolicyEnum {
+    #[serde(rename = "VM_VM_ANTI_AFFINITY")]
+    #[strum(serialize = "VM_VM_ANTI_AFFINITY")]
+    VmVmAntiAffinity,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// This enum corresponds to the different packages whose logging
+/// is configured independently by sps service.
+/// 
+/// Possible values:
+/// - `pbm`: Modifies logging level of com.vmware.pbm package.
+/// - `vslm`: Modifies logging level of com.vmware.vslm package.
+/// - `sms`: Modifies logging level of com.vmware.vim.sms package.
+/// - `spbm`: Modifies logging level of com.vmware.spbm package.
+/// - `sps`: Modifies logging level of com.vmware.sps package.
+/// - `httpclient_header`: Modifies logging level of httpclient wire header.
+/// - `httpclient_content`: Modifies logging level of httpclient wire content.
+/// - `vmomi`: Modifies logging level of com.vmware.vim.vmomi package.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum PbmLoggingConfigurationComponentEnum {
+    #[serde(rename = "pbm")]
+    #[strum(serialize = "pbm")]
+    Pbm,
+    #[serde(rename = "vslm")]
+    #[strum(serialize = "vslm")]
+    Vslm,
+    #[serde(rename = "sms")]
+    #[strum(serialize = "sms")]
+    Sms,
+    #[serde(rename = "spbm")]
+    #[strum(serialize = "spbm")]
+    Spbm,
+    #[serde(rename = "sps")]
+    #[strum(serialize = "sps")]
+    Sps,
+    #[serde(rename = "httpclient_header")]
+    #[strum(serialize = "httpclient_header")]
+    HttpclientHeader,
+    #[serde(rename = "httpclient_content")]
+    #[strum(serialize = "httpclient_content")]
+    HttpclientContent,
+    #[serde(rename = "vmomi")]
+    #[strum(serialize = "vmomi")]
+    Vmomi,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// This enum corresponds to the different log levels supported
+/// by sps service.
+/// 
+/// Possible values:
+/// - `INFO`: Refers to INFO level logging
+/// - `DEBUG`: Refers to DEBUG level logging.
+/// - `TRACE`: Refers to TRACE level logging.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum PbmLoggingConfigurationLogLevelEnum {
+    #[serde(rename = "INFO")]
+    #[strum(serialize = "INFO")]
+    Info,
+    #[serde(rename = "DEBUG")]
+    #[strum(serialize = "DEBUG")]
+    Debug,
+    #[serde(rename = "TRACE")]
+    #[strum(serialize = "TRACE")]
+    Trace,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// This enum corresponds to the keystores used by
+/// sps.
+/// 
+/// Possible values:
+/// - `SMS`: Refers to SMS keystore
+/// - `TRUSTED_ROOTS`: Refers to TRUSTED\_ROOTS keystore.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum PbmDebugManagerKeystoreNameEnum {
+    #[serde(rename = "SMS")]
+    #[strum(serialize = "SMS")]
+    Sms,
+    #[serde(rename = "TRUSTED_ROOTS")]
+    #[strum(serialize = "TRUSTED_ROOTS")]
+    TrustedRoots,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// The *PbmObjectType_enum* enumerated type
+/// defines vSphere Server object types that are known
+/// to the Storage Policy Server.
+/// 
+/// See *PbmServerObjectRef*.*PbmServerObjectRef.objectType*.
+/// 
+/// Possible values:
+/// - `virtualMachine`: Indicates a virtual machine, not including the disks, identified by the virtual machine
+///   identifier _virtual-machine-mor_.
+/// - `virtualMachineAndDisks`: Indicates the virtual machine and all its disks, identified by the virtual machine
+///   identifier _virtual-machine-mor_.
+/// - `virtualDiskId`: Indicates a virtual disk, identified by disk key
+///   (_virtual-machine-mor_:_disk-key_).
+/// - `virtualDiskUUID`: Indicates a virtual disk, identified by UUID - for First Class Storage Object support.
+/// - `datastore`: Indicates a datastore.
+/// - `vsanObjectId`: Indicates a VSAN object
+/// - `fileShareId`: Indicates a file service
+/// - `unknown`: Unknown object type.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum PbmObjectTypeEnum {
+    #[serde(rename = "virtualMachine")]
+    #[strum(serialize = "virtualMachine")]
+    VirtualMachine,
+    #[serde(rename = "virtualMachineAndDisks")]
+    #[strum(serialize = "virtualMachineAndDisks")]
+    VirtualMachineAndDisks,
+    #[serde(rename = "virtualDiskId")]
+    #[strum(serialize = "virtualDiskId")]
+    VirtualDiskId,
+    #[serde(rename = "virtualDiskUUID")]
+    #[strum(serialize = "virtualDiskUUID")]
+    VirtualDiskUuid,
+    #[serde(rename = "datastore")]
+    #[strum(serialize = "datastore")]
+    Datastore,
+    #[serde(rename = "vsanObjectId")]
+    #[strum(serialize = "vsanObjectId")]
+    VsanObjectId,
+    #[serde(rename = "fileShareId")]
+    #[strum(serialize = "fileShareId")]
+    FileShareId,
+    #[serde(rename = "unknown")]
+    #[strum(serialize = "unknown")]
+    Unknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// The *PbmVvolType_enum* enumeration type
+/// defines VVOL types.
+/// 
+/// VvolType's are referenced to specify which objectType
+/// to fetch for default capability.
+/// 
+/// Possible values:
+/// - `Config`: meta-data volume
+/// - `Data`: vmdk volume
+/// - `Swap`: swap volume
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum PbmVvolTypeEnum {
+    Config,
+    Data,
+    Swap,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// List of operators that are supported for constructing policy.
+/// 
+/// Currently only tag based properties can use this operator.
+/// Other operators can be added as required.
+/// 
+/// Possible values:
+/// - `NOT`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum PbmCapabilityOperatorEnum {
+    #[serde(rename = "NOT")]
+    #[strum(serialize = "NOT")]
+    Not,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Capability category type constants.
+/// 
+/// Possible values:
+/// - `common`: Common and identical in all sub-profiles.
+/// - `datastoreSpecific`: Part of a single sub-profile.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum PbmCapabilitySchemaCapabilityCategoryEnum {
+    #[serde(rename = "common")]
+    #[strum(serialize = "common")]
+    Common,
+    #[serde(rename = "datastoreSpecific")]
+    #[strum(serialize = "datastoreSpecific")]
+    DatastoreSpecific,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Denotes the line of service of a schema.
+/// 
+/// Possible values:
+/// - `INSPECTION`
+/// - `COMPRESSION`
+/// - `ENCRYPTION`
+/// - `REPLICATION`
+/// - `CACHING`
+/// - `PERSISTENCE`
+/// - `DATA_PROVIDER`
+/// - `DATASTORE_IO_CONTROL`
+/// - `DATA_PROTECTION`
+/// - `STRETCHED_CLUSTER`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum PbmLineOfServiceInfoLineOfServiceEnumEnum {
+    #[serde(rename = "INSPECTION")]
+    #[strum(serialize = "INSPECTION")]
+    Inspection,
+    #[serde(rename = "COMPRESSION")]
+    #[strum(serialize = "COMPRESSION")]
+    Compression,
+    #[serde(rename = "ENCRYPTION")]
+    #[strum(serialize = "ENCRYPTION")]
+    Encryption,
+    #[serde(rename = "REPLICATION")]
+    #[strum(serialize = "REPLICATION")]
+    Replication,
+    #[serde(rename = "CACHING")]
+    #[strum(serialize = "CACHING")]
+    Caching,
+    #[serde(rename = "PERSISTENCE")]
+    #[strum(serialize = "PERSISTENCE")]
+    Persistence,
+    #[serde(rename = "DATA_PROVIDER")]
+    #[strum(serialize = "DATA_PROVIDER")]
+    DataProvider,
+    #[serde(rename = "DATASTORE_IO_CONTROL")]
+    #[strum(serialize = "DATASTORE_IO_CONTROL")]
+    DatastoreIoControl,
+    #[serde(rename = "DATA_PROTECTION")]
+    #[strum(serialize = "DATA_PROTECTION")]
+    DataProtection,
+    #[serde(rename = "STRETCHED_CLUSTER")]
+    #[strum(serialize = "STRETCHED_CLUSTER")]
+    StretchedCluster,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// The *PbmBuiltinGenericType_enum* enumerated type defines the list
+/// of builtin generic datatypes.
+/// 
+/// See
+/// *PbmCapabilityGenericTypeInfo*.*PbmCapabilityGenericTypeInfo.genericTypeName*.
+/// 
+/// A generic datatype indicates how to interpret a collection of values
+/// of a specific datatype (*PbmCapabilityTypeInfo.typeName*).
+/// 
+/// Possible values:
+/// - `VMW_RANGE`: Indicates a full or partial range of values (*PbmCapabilityRange*).
+///   
+///   A full range specifies both <code>min</code> and <code>max</code> values.
+///   A partial range specifies one or the other, <code>min</code> or <code>max</code>.
+/// - `VMW_SET`: Indicates a single value or a discrete set of values
+///   (*PbmCapabilityDiscreteSet*).
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum PbmBuiltinGenericTypeEnum {
+    #[serde(rename = "VMW_RANGE")]
+    #[strum(serialize = "VMW_RANGE")]
+    VmwRange,
+    #[serde(rename = "VMW_SET")]
+    #[strum(serialize = "VMW_SET")]
+    VmwSet,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// The *PbmBuiltinType_enum* enumerated type defines datatypes
+/// for storage profiles.
+/// 
+/// Property metadata
+/// (*PbmCapabilityPropertyMetadata*) uses the builtin types
+/// to define data types for storage capabilities and requirements.
+/// It may also specify the semantics that are applied to a collection
+/// of builtin type values. See *PbmCapabilityTypeInfo*.
+/// These semantics are specified as a generic builtin type.
+/// See *PbmCapabilityGenericTypeInfo*.
+/// The type information determines how capability constraints are interpreted
+/// *PbmCapabilityPropertyInstance.value*).
+/// 
+/// Possible values:
+/// - `XSD_LONG`: Unsigned long value.
+///   
+///   This datatype supports the following constraint values.
+///   - Single value
+///   - Full or partial range of values (*PbmCapabilityRange*)
+///   - Discrete set of values (*PbmCapabilityDiscreteSet*)
+/// - `XSD_SHORT`: Datatype not supported.
+/// - `XSD_INTEGER`: Datatype not supported.
+///   
+///   Use XSD\_INT instead.
+/// - `XSD_INT`: Integer value.
+///   
+///   This datatype supports the following constraint values.
+///   - Single value
+///   - Full or partial range of values (*PbmCapabilityRange*)
+///   - Discrete set of values (*PbmCapabilityDiscreteSet*)
+/// - `XSD_STRING`: String value.
+///   
+///   This datatype supports a single value
+///   or a discrete set of values (*PbmCapabilityDiscreteSet*).
+/// - `XSD_BOOLEAN`: Boolean value.
+/// - `XSD_DOUBLE`: Double precision floating point value.
+///   
+///   This datatype supports the following
+///   constraint values.
+///   - Single value
+///   - Full or partial range of values (*PbmCapabilityRange*)
+///   - Discrete set of values (*PbmCapabilityDiscreteSet*)
+/// - `XSD_DATETIME`: Date and time value.
+/// - `VMW_TIMESPAN`: Timespan value (*PbmCapabilityTimeSpan*).
+///   
+///   This datatype supports
+///   the following constraint values.
+///   - Single value
+///   - Full or partial range of values (*PbmCapabilityRange*)
+///   - Discrete set of values (*PbmCapabilityDiscreteSet*)
+/// - `VMW_POLICY`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum PbmBuiltinTypeEnum {
+    #[serde(rename = "XSD_LONG")]
+    #[strum(serialize = "XSD_LONG")]
+    XsdLong,
+    #[serde(rename = "XSD_SHORT")]
+    #[strum(serialize = "XSD_SHORT")]
+    XsdShort,
+    #[serde(rename = "XSD_INTEGER")]
+    #[strum(serialize = "XSD_INTEGER")]
+    XsdInteger,
+    #[serde(rename = "XSD_INT")]
+    #[strum(serialize = "XSD_INT")]
+    XsdInt,
+    #[serde(rename = "XSD_STRING")]
+    #[strum(serialize = "XSD_STRING")]
+    XsdString,
+    #[serde(rename = "XSD_BOOLEAN")]
+    #[strum(serialize = "XSD_BOOLEAN")]
+    XsdBoolean,
+    #[serde(rename = "XSD_DOUBLE")]
+    #[strum(serialize = "XSD_DOUBLE")]
+    XsdDouble,
+    #[serde(rename = "XSD_DATETIME")]
+    #[strum(serialize = "XSD_DATETIME")]
+    XsdDatetime,
+    #[serde(rename = "VMW_TIMESPAN")]
+    #[strum(serialize = "VMW_TIMESPAN")]
+    VmwTimespan,
+    #[serde(rename = "VMW_POLICY")]
+    #[strum(serialize = "VMW_POLICY")]
+    VmwPolicy,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// The *PbmCapabilityTimeUnitType_enum* enumeration type
+/// defines the supported list of time units for profiles that specify
+/// time span capabilities and constraints.
+/// 
+/// See *PbmCapabilityTimeSpan*.
+/// 
+/// Possible values:
+/// - `SECONDS`: Constraints and capabilities expressed in units of seconds.
+/// - `MINUTES`: Constraints and capabilities expressed in units of minutes.
+/// - `HOURS`: Constraints and capabilities expressed in units of hours.
+/// - `DAYS`: Constraints and capabilities expressed in units of days.
+/// - `WEEKS`: Constraints and capabilities expressed in units of weeks.
+/// - `MONTHS`: Constraints and capabilities expressed in units of months.
+/// - `YEARS`: Constraints and capabilities expressed in units of years.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum PbmCapabilityTimeUnitTypeEnum {
+    #[serde(rename = "SECONDS")]
+    #[strum(serialize = "SECONDS")]
+    Seconds,
+    #[serde(rename = "MINUTES")]
+    #[strum(serialize = "MINUTES")]
+    Minutes,
+    #[serde(rename = "HOURS")]
+    #[strum(serialize = "HOURS")]
+    Hours,
+    #[serde(rename = "DAYS")]
+    #[strum(serialize = "DAYS")]
+    Days,
+    #[serde(rename = "WEEKS")]
+    #[strum(serialize = "WEEKS")]
+    Weeks,
+    #[serde(rename = "MONTHS")]
+    #[strum(serialize = "MONTHS")]
+    Months,
+    #[serde(rename = "YEARS")]
+    #[strum(serialize = "YEARS")]
+    Years,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// The *PbmComplianceStatus_enum*
+/// enumeration type defines the set of status values
+/// for compliance operations.
+/// 
+/// See *PbmComplianceResult* and
+/// *PbmRollupComplianceResult*.
+/// 
+/// Possible values:
+/// - `compliant`: Entity is in compliance.
+/// - `nonCompliant`: Entity is out of compliance.
+/// - `unknown`: Compliance status of the entity is not known.
+/// - `notApplicable`: Compliance computation is not applicable for this entity,
+///   because it does not have any storage requirements that
+///   apply to the object-based datastore on which this entity is placed.
+/// - `outOfDate`: This is the same as *PbmComplianceResult.mismatch*
+///   variable.
+///   
+///   Compliance status becomes out-of-date when the profile
+///   associated with the entity is edited and not applied. The compliance
+///   status will remain in out-of-date compliance status until the latest
+///   policy is applied to the entity.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum PbmComplianceStatusEnum {
+    #[serde(rename = "compliant")]
+    #[strum(serialize = "compliant")]
+    Compliant,
+    #[serde(rename = "nonCompliant")]
+    #[strum(serialize = "nonCompliant")]
+    NonCompliant,
+    #[serde(rename = "unknown")]
+    #[strum(serialize = "unknown")]
+    Unknown,
+    #[serde(rename = "notApplicable")]
+    #[strum(serialize = "notApplicable")]
+    NotApplicable,
+    #[serde(rename = "outOfDate")]
+    #[strum(serialize = "outOfDate")]
+    OutOfDate,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// The *PbmComplianceResultComplianceTaskStatus_enum*
+/// enumeration type defines the set of task status for compliance
+/// operations.
+/// 
+/// See *PbmComplianceResult* and
+/// *PbmRollupComplianceResult*.
+/// 
+/// Possible values:
+/// - `inProgress`: Compliance calculation is in progress.
+/// - `success`: Compliance calculation has succeeded.
+/// - `failed`: Compliance calculation failed due to some exception.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum PbmComplianceResultComplianceTaskStatusEnum {
+    #[serde(rename = "inProgress")]
+    #[strum(serialize = "inProgress")]
+    InProgress,
+    #[serde(rename = "success")]
+    #[strum(serialize = "success")]
+    Success,
+    #[serde(rename = "failed")]
+    #[strum(serialize = "failed")]
+    Failed,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// The enumeration type defines the set of health status values for an entity
+/// that is part of entity health operation.
+/// 
+/// Possible values:
+/// - `red`: For file share: 'red' if the file server for this file share is in error
+///   state or any of its backing vSAN objects are degraded.
+///   
+///   For FCD: 'red' if the datastore on which the FCD resides is not
+///   accessible from any of the hosts it is mounted.
+/// - `yellow`: For file share: 'yellow' if some backing objects are repairing, i.e.
+///   
+///   warning state.
+///   For FCD: 'yellow' if the datastore on which the entity resides is
+///   accessible only from some of the hosts it is mounted but not all.
+/// - `green`: For file share: 'green' if the file server for this file share is
+///   running properly and all its backing vSAN objects are healthy.
+///   
+///   For FCD: 'green' if the datastore on which the entity resides
+///   is accessible from all the hosts it is mounted.
+/// - `unknown`: If the health status of a file share is unknown, not valid for FCD.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum PbmHealthStatusForEntityEnum {
+    #[serde(rename = "red")]
+    #[strum(serialize = "red")]
+    Red,
+    #[serde(rename = "yellow")]
+    #[strum(serialize = "yellow")]
+    Yellow,
+    #[serde(rename = "green")]
+    #[strum(serialize = "green")]
+    Green,
+    #[serde(rename = "unknown")]
+    #[strum(serialize = "unknown")]
+    Unknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Possible values:
+/// - `success`: Policy applied successfully.
+/// - `failed`: Policy cannot be applied
+/// - `invalid`: Policy cannot be applied
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum PbmAssociateAndApplyPolicyStatusPolicyStatusEnum {
+    #[serde(rename = "success")]
+    #[strum(serialize = "success")]
+    Success,
+    #[serde(rename = "failed")]
+    #[strum(serialize = "failed")]
+    Failed,
+    #[serde(rename = "invalid")]
+    #[strum(serialize = "invalid")]
+    Invalid,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// The *PbmProfileCategoryEnum_enum*
+/// enumerated type defines the profile categories for a capability-based
+/// storage profile.
+/// 
+/// See
+/// *PbmCapabilityProfile*.
+/// 
+/// Possible values:
+/// - `REQUIREMENT`: Indicates a storage requirement.
+///   
+///   Requirements are based on
+///   storage capabilities.
+/// - `RESOURCE`: Indicates a storage capability.
+///   
+///   Storage capabilities
+///   are defined by storage providers.
+/// - `DATA_SERVICE_POLICY`: Indicates a data service policy that can be embedded into
+///   another storage policy.
+///   
+///   Policies of this type can't be assigned to
+///   Virtual Machines or Virtual Disks.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum PbmProfileCategoryEnumEnum {
+    #[serde(rename = "REQUIREMENT")]
+    #[strum(serialize = "REQUIREMENT")]
+    Requirement,
+    #[serde(rename = "RESOURCE")]
+    #[strum(serialize = "RESOURCE")]
+    Resource,
+    #[serde(rename = "DATA_SERVICE_POLICY")]
+    #[strum(serialize = "DATA_SERVICE_POLICY")]
+    DataServicePolicy,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// System pre-created profile types.
+/// 
+/// Possible values:
+/// - `VsanDefaultProfile`: Indicates the system pre-created editable VSAN default profile.
+/// - `VVolDefaultProfile`: Indicates the system pre-created non-editable default profile
+///   for VVOL datastores.
+/// - `PmemDefaultProfile`: 
+///   
+///   Deprecated as of vSphere 9.0 APIs with no replacement.
+///   
+///   Indicates the system pre-created non-editable default profile
+///   for PMem datastores
+/// - `VmcManagementProfile`: Indicates the system pre-created non-editable VMC default profile.
+/// - `VsanMaxDefaultProfile`: Indicates the system pre-created non-editable VSANMAX default profile.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum PbmSystemCreatedProfileTypeEnum {
+    VsanDefaultProfile,
+    VVolDefaultProfile,
+    PmemDefaultProfile,
+    VmcManagementProfile,
+    VsanMaxDefaultProfile,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// The *PbmOperation_enum* enumerated type
+/// defines the provisioning operation being performed on the entity like FCD, virtual machine.
+/// 
+/// Possible values:
+/// - `CREATE`: Indicates create operation of an entity.
+/// - `REGISTER`: Indicates register operation of an entity.
+/// - `RECONFIGURE`: Indicates reconfigure operation of an entity.
+/// - `MIGRATE`: Indicates migrate operation of an entity.
+/// - `CLONE`: Indicates clone operation of an entity.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum PbmOperationEnum {
+    #[serde(rename = "CREATE")]
+    #[strum(serialize = "CREATE")]
+    Create,
+    #[serde(rename = "REGISTER")]
+    #[strum(serialize = "REGISTER")]
+    Register,
+    #[serde(rename = "RECONFIGURE")]
+    #[strum(serialize = "RECONFIGURE")]
+    Reconfigure,
+    #[serde(rename = "MIGRATE")]
+    #[strum(serialize = "MIGRATE")]
+    Migrate,
+    #[serde(rename = "CLONE")]
+    #[strum(serialize = "CLONE")]
+    Clone,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Recognized types of an IO Filter.
+/// 
+/// String constant used in `IofilterInfo#filterType`.
+/// These should match(upper case) the IO Filter classes as defined by IO Filter framework.
+/// See https://opengrok.eng.vmware.com/source/xref/vmcore-main.perforce.1666/bora/scons/apps/esx/iofilterApps.sc#33
+/// 
+/// Possible values:
+/// - `INSPECTION`
+/// - `COMPRESSION`
+/// - `ENCRYPTION`
+/// - `REPLICATION`
+/// - `CACHE`
+/// - `DATAPROVIDER`
+/// - `DATASTOREIOCONTROL`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum PbmIofilterInfoFilterTypeEnum {
+    #[serde(rename = "INSPECTION")]
+    #[strum(serialize = "INSPECTION")]
+    Inspection,
+    #[serde(rename = "COMPRESSION")]
+    #[strum(serialize = "COMPRESSION")]
+    Compression,
+    #[serde(rename = "ENCRYPTION")]
+    #[strum(serialize = "ENCRYPTION")]
+    Encryption,
+    #[serde(rename = "REPLICATION")]
+    #[strum(serialize = "REPLICATION")]
+    Replication,
+    #[serde(rename = "CACHE")]
+    #[strum(serialize = "CACHE")]
+    Cache,
+    #[serde(rename = "DATAPROVIDER")]
+    #[strum(serialize = "DATAPROVIDER")]
+    Dataprovider,
+    #[serde(rename = "DATASTOREIOCONTROL")]
+    #[strum(serialize = "DATASTOREIOCONTROL")]
+    Datastoreiocontrol,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Volume allocation type constants.
+/// 
+/// Possible values:
+/// - `FullyInitialized`: Space required is fully allocated and initialized.
+///   
+///   It is wiped clean of any previous content on the
+///   physical media. Gives faster runtime IO performance.
+/// - `ReserveSpace`: Space required is fully allocated.
+///   
+///   It may contain
+///   stale data on the physical media.
+/// - `ConserveSpaceWhenPossible`: Space required is allocated and zeroed on demand
+///   as the space is used.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum PbmPolicyAssociationVolumeAllocationTypeEnum {
+    FullyInitialized,
+    ReserveSpace,
+    ConserveSpaceWhenPossible,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// The *PbmProfileResourceTypeEnum_enum* enumerated type defines the set of resource
+/// types that are supported for profile management.
+/// 
+/// See *PbmProfileResourceType*.
+/// 
+/// Possible values:
+/// - `STORAGE`: Indicates resources that support storage profiles.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum PbmProfileResourceTypeEnumEnum {
+    #[serde(rename = "STORAGE")]
+    #[strum(serialize = "STORAGE")]
+    Storage,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// The *PbmVmOperation_enum* enumerated type
+/// defines the provisioning operation being performed on the virtual machine.
+/// 
+/// Possible values:
+/// - `CREATE`: Indicates create operation of a virtual machine.
+/// - `RECONFIGURE`: Indicates reconfigure operation of a virtual machine.
+/// - `MIGRATE`: Indicates migrate operation of a virtual machine.
+/// - `CLONE`: Indicates clone operation of a virtual machine.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum PbmVmOperationEnum {
+    #[serde(rename = "CREATE")]
+    #[strum(serialize = "CREATE")]
+    Create,
+    #[serde(rename = "RECONFIGURE")]
+    #[strum(serialize = "RECONFIGURE")]
+    Reconfigure,
+    #[serde(rename = "MIGRATE")]
+    #[strum(serialize = "MIGRATE")]
+    Migrate,
+    #[serde(rename = "CLONE")]
+    #[strum(serialize = "CLONE")]
+    Clone,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Types of entities supported by the service.
+/// 
+/// Possible values:
+/// - `datacenter`
+/// - `resourcePool`
+/// - `storagePod`
+/// - `cluster`
+/// - `vm`
+/// - `datastore`
+/// - `host`
+/// - `vmFile`
+/// - `scsiPath`
+/// - `scsiTarget`
+/// - `scsiVolume`
+/// - `scsiAdapter`
+/// - `nasMount`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum EntityReferenceEntityTypeEnum {
+    #[serde(rename = "datacenter")]
+    #[strum(serialize = "datacenter")]
+    Datacenter,
+    #[serde(rename = "resourcePool")]
+    #[strum(serialize = "resourcePool")]
+    ResourcePool,
+    #[serde(rename = "storagePod")]
+    #[strum(serialize = "storagePod")]
+    StoragePod,
+    #[serde(rename = "cluster")]
+    #[strum(serialize = "cluster")]
+    Cluster,
+    #[serde(rename = "vm")]
+    #[strum(serialize = "vm")]
+    Vm,
+    #[serde(rename = "datastore")]
+    #[strum(serialize = "datastore")]
+    Datastore,
+    #[serde(rename = "host")]
+    #[strum(serialize = "host")]
+    Host,
+    #[serde(rename = "vmFile")]
+    #[strum(serialize = "vmFile")]
+    VmFile,
+    #[serde(rename = "scsiPath")]
+    #[strum(serialize = "scsiPath")]
+    ScsiPath,
+    #[serde(rename = "scsiTarget")]
+    #[strum(serialize = "scsiTarget")]
+    ScsiTarget,
+    #[serde(rename = "scsiVolume")]
+    #[strum(serialize = "scsiVolume")]
+    ScsiVolume,
+    #[serde(rename = "scsiAdapter")]
+    #[strum(serialize = "scsiAdapter")]
+    ScsiAdapter,
+    #[serde(rename = "nasMount")]
+    #[strum(serialize = "nasMount")]
+    NasMount,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// List of possible states of a task.
+/// 
+/// Possible values:
+/// - `queued`: Task is put in the queue.
+/// - `running`: Task is currently running.
+/// - `success`: Task has completed.
+/// - `error`: Task has encountered an error or has been canceled.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum SmsTaskStateEnum {
+    #[serde(rename = "queued")]
+    #[strum(serialize = "queued")]
+    Queued,
+    #[serde(rename = "running")]
+    #[strum(serialize = "running")]
+    Running,
+    #[serde(rename = "success")]
+    #[strum(serialize = "success")]
+    Success,
+    #[serde(rename = "error")]
+    #[strum(serialize = "error")]
+    Error,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// A Category to indicate whether provider is of internal or external category.
+/// 
+/// This classification can help selectively enable few administrative functions
+/// such as say unregistration of a provider.
+/// 
+/// Possible values:
+/// - `internal`: An internal provider category indicates the set of providers such as IOFILTERS and VSAN.
+/// - `external`: An external provider category indicates the set of providers are external and not belong
+///   to say either of IOFILTERS or VSAN category.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VpCategoryEnum {
+    #[serde(rename = "internal")]
+    #[strum(serialize = "internal")]
+    Internal,
+    #[serde(rename = "external")]
+    #[strum(serialize = "external")]
+    External,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// The status of the provider certificate
+/// 
+/// Possible values:
+/// - `valid`: Provider certificate is valid.
+/// - `expirySoftLimitReached`: Provider certificate is within the soft limit threshold.
+/// - `expiryHardLimitReached`: Provider certificate is within the hard limit threshold.
+/// - `expired`: Provider certificate has expired.
+/// - `invalid`: Provider certificate is revoked, malformed or missing.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VasaProviderCertificateStatusEnum {
+    #[serde(rename = "valid")]
+    #[strum(serialize = "valid")]
+    Valid,
+    #[serde(rename = "expirySoftLimitReached")]
+    #[strum(serialize = "expirySoftLimitReached")]
+    ExpirySoftLimitReached,
+    #[serde(rename = "expiryHardLimitReached")]
+    #[strum(serialize = "expiryHardLimitReached")]
+    ExpiryHardLimitReached,
+    #[serde(rename = "expired")]
+    #[strum(serialize = "expired")]
+    Expired,
+    #[serde(rename = "invalid")]
+    #[strum(serialize = "invalid")]
+    Invalid,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Profiles supported by VASA Provider.
+/// 
+/// Possible values:
+/// - `ProfileBasedManagement`: PBM profile
+/// - `Replication`: Replication profile
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum ProviderProfileEnum {
+    ProfileBasedManagement,
+    Replication,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// VASA Provider type.
+/// 
+/// Possible values:
+/// - `PERSISTENCE`: Persistence provider.
+/// - `DATASERVICE`: DataService provider.
+///   
+///   No storage supported for this type of provider.
+/// - `UNKNOWN`: Type is unknown.
+///   
+///   VASA provider type can be UNKNOWN when it is undergoing sync operation.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VpTypeEnum {
+    #[serde(rename = "PERSISTENCE")]
+    #[strum(serialize = "PERSISTENCE")]
+    Persistence,
+    #[serde(rename = "DATASERVICE")]
+    #[strum(serialize = "DATASERVICE")]
+    Dataservice,
+    #[serde(rename = "UNKNOWN")]
+    #[strum(serialize = "UNKNOWN")]
+    Unknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Deprecated as of SMS API 3.0, use *VasaProfile_enum*.
+/// 
+/// Profiles supported by VASA Provider.
+/// 
+/// Possible values:
+/// - `blockDevice`: Block device profile
+/// - `fileSystem`: File system profile
+/// - `capability`: Storage capability profile
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VasaProviderProfileEnum {
+    #[serde(rename = "blockDevice")]
+    #[strum(serialize = "blockDevice")]
+    BlockDevice,
+    #[serde(rename = "fileSystem")]
+    #[strum(serialize = "fileSystem")]
+    FileSystem,
+    #[serde(rename = "capability")]
+    #[strum(serialize = "capability")]
+    Capability,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// The operational state of VASA Provider.
+/// 
+/// Possible values:
+/// - `online`: VASA Provider is operating correctly.
+/// - `offline`: VASA Provider is not responding, e.g.
+///   
+///   communication error due to temporary
+///   network outage. SMS keeps polling the provider in this state.
+/// - `syncError`: VASA Provider is connected, but sync operation failed.
+/// - `unknown`: 
+///   
+///   Deprecated as of SMS API 4.0, this status is deprecated.
+///   
+///   VASA Provider is unreachable.
+/// - `connected`: VASA Provider is connected, but has not triggered sync operation.
+/// - `disconnected`: VASA Provider is disconnected, e.g.
+///   
+///   failed to establish a valid
+///   SSL connection to the provider. SMS stops communication with the
+///   provider in this state. The user can reconnect to the provider by invoking
+///   *VasaProvider.VasaProviderReconnect_Task*.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VasaProviderStatusEnum {
+    #[serde(rename = "online")]
+    #[strum(serialize = "online")]
+    Online,
+    #[serde(rename = "offline")]
+    #[strum(serialize = "offline")]
+    Offline,
+    #[serde(rename = "syncError")]
+    #[strum(serialize = "syncError")]
+    SyncError,
+    #[serde(rename = "unknown")]
+    #[strum(serialize = "unknown")]
+    Unknown,
+    #[serde(rename = "connected")]
+    #[strum(serialize = "connected")]
+    Connected,
+    #[serde(rename = "disconnected")]
+    #[strum(serialize = "disconnected")]
+    Disconnected,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// VASA provider authentication type.
+/// 
+/// Possible values:
+/// - `LoginByToken`: Login using SAML token.
+/// - `UseSessionId`: Use id of an existing session that has logged-in from somewhere else.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VasaAuthenticationTypeEnum {
+    LoginByToken,
+    UseSessionId,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Enumeration of the supported Alarm Status values
+/// 
+/// Possible values:
+/// - `Red`
+/// - `Green`
+/// - `Yellow`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum SmsAlarmStatusEnum {
+    Red,
+    Green,
+    Yellow,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Possible values:
+/// - `SpaceCapacityAlarm`
+/// - `CapabilityAlarm`
+/// - `StorageObjectAlarm`
+/// - `ObjectAlarm`
+/// - `ComplianceAlarm`
+/// - `ManageabilityAlarm`
+/// - `ReplicationAlarm`
+/// - `CertificateAlarm`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum AlarmTypeEnum {
+    SpaceCapacityAlarm,
+    CapabilityAlarm,
+    StorageObjectAlarm,
+    ObjectAlarm,
+    ComplianceAlarm,
+    ManageabilityAlarm,
+    ReplicationAlarm,
+    CertificateAlarm,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// List of possible BackingStoragePool types
+/// 
+/// Possible values:
+/// - `thinProvisioningPool`
+/// - `deduplicationPool`
+/// - `thinAndDeduplicationCombinedPool`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum BackingStoragePoolTypeEnum {
+    #[serde(rename = "thinProvisioningPool")]
+    #[strum(serialize = "thinProvisioningPool")]
+    ThinProvisioningPool,
+    #[serde(rename = "deduplicationPool")]
+    #[strum(serialize = "deduplicationPool")]
+    DeduplicationPool,
+    #[serde(rename = "thinAndDeduplicationCombinedPool")]
+    #[strum(serialize = "thinAndDeduplicationCombinedPool")]
+    ThinAndDeduplicationCombinedPool,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Enumeration of the supported Entity Type values.
+/// 
+/// Possible values:
+/// - `StorageArrayEntity`
+/// - `StorageProcessorEntity`
+/// - `StoragePortEntity`
+/// - `StorageLunEntity`
+/// - `StorageFileSystemEntity`
+/// - `StorageCapabilityEntity`
+/// - `CapabilitySchemaEntity`
+/// - `CapabilityProfileEntity`
+/// - `DefaultProfileEntity`
+/// - `ResourceAssociationEntity`
+/// - `StorageContainerEntity`
+/// - `StorageObjectEntity`
+/// - `MessageCatalogEntity`
+/// - `ProtocolEndpointEntity`
+/// - `VirtualVolumeInfoEntity`
+/// - `BackingStoragePoolEntity`
+/// - `FaultDomainEntity`
+/// - `ReplicationGroupEntity`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum SmsEntityTypeEnum {
+    StorageArrayEntity,
+    StorageProcessorEntity,
+    StoragePortEntity,
+    StorageLunEntity,
+    StorageFileSystemEntity,
+    StorageCapabilityEntity,
+    CapabilitySchemaEntity,
+    CapabilityProfileEntity,
+    DefaultProfileEntity,
+    ResourceAssociationEntity,
+    StorageContainerEntity,
+    StorageObjectEntity,
+    MessageCatalogEntity,
+    ProtocolEndpointEntity,
+    VirtualVolumeInfoEntity,
+    BackingStoragePoolEntity,
+    FaultDomainEntity,
+    ReplicationGroupEntity,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// List of possible block device interfaces
+/// 
+/// Possible values:
+/// - `fc`
+/// - `iscsi`
+/// - `fcoe`
+/// - `otherBlock`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum BlockDeviceInterfaceEnum {
+    #[serde(rename = "fc")]
+    #[strum(serialize = "fc")]
+    Fc,
+    #[serde(rename = "iscsi")]
+    #[strum(serialize = "iscsi")]
+    Iscsi,
+    #[serde(rename = "fcoe")]
+    #[strum(serialize = "fcoe")]
+    Fcoe,
+    #[serde(rename = "otherBlock")]
+    #[strum(serialize = "otherBlock")]
+    OtherBlock,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// List of possible file system interfaces
+/// 
+/// Possible values:
+/// - `nfs`
+/// - `otherFileSystem`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum FileSystemInterfaceEnum {
+    #[serde(rename = "nfs")]
+    #[strum(serialize = "nfs")]
+    Nfs,
+    #[serde(rename = "otherFileSystem")]
+    #[strum(serialize = "otherFileSystem")]
+    OtherFileSystem,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// List of possible VASA profiles supported by Storage Array
+/// 
+/// Possible values:
+/// - `blockDevice`: Block device profile
+/// - `fileSystem`: File system profile
+/// - `capability`: Storage capability profile
+/// - `policy`: Policy profile
+/// - `object`: Object based storage profile
+/// - `statistics`: IO Statistics profile
+/// - `storageDrsBlockDevice`: Storage DRS specific block device profile
+/// - `storageDrsFileSystem`: Storage DRS specific file system profile
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VasaProfileEnum {
+    #[serde(rename = "blockDevice")]
+    #[strum(serialize = "blockDevice")]
+    BlockDevice,
+    #[serde(rename = "fileSystem")]
+    #[strum(serialize = "fileSystem")]
+    FileSystem,
+    #[serde(rename = "capability")]
+    #[strum(serialize = "capability")]
+    Capability,
+    #[serde(rename = "policy")]
+    #[strum(serialize = "policy")]
+    Policy,
+    #[serde(rename = "object")]
+    #[strum(serialize = "object")]
+    Object,
+    #[serde(rename = "statistics")]
+    #[strum(serialize = "statistics")]
+    Statistics,
+    #[serde(rename = "storageDrsBlockDevice")]
+    #[strum(serialize = "storageDrsBlockDevice")]
+    StorageDrsBlockDevice,
+    #[serde(rename = "storageDrsFileSystem")]
+    #[strum(serialize = "storageDrsFileSystem")]
+    StorageDrsFileSystem,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// List of supported VVOL Container types
+/// 
+/// Possible values:
+/// - `NFS`
+/// - `NFS4x`
+/// - `SCSI`
+/// - `NVMe`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum StorageContainerVvolContainerTypeEnumEnum {
+    #[serde(rename = "NFS")]
+    #[strum(serialize = "NFS")]
+    Nfs,
+    #[serde(rename = "NFS4x")]
+    #[strum(serialize = "NFS4x")]
+    Nfs4X,
+    #[serde(rename = "SCSI")]
+    #[strum(serialize = "SCSI")]
+    Scsi,
+    #[serde(rename = "NVMe")]
+    #[strum(serialize = "NVMe")]
+    NvMe,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Possible values:
+/// - `NFSV3_0`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum FileSystemInterfaceVersionEnum {
+    #[serde(rename = "NFSV3_0")]
+    #[strum(serialize = "NFSV3_0")]
+    Nfsv30,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// List of possible values for thin provisioning status alarm.
+/// 
+/// Possible values:
+/// - `RED`
+/// - `YELLOW`
+/// - `GREEN`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum ThinProvisioningStatusEnum {
+    #[serde(rename = "RED")]
+    #[strum(serialize = "RED")]
+    Red,
+    #[serde(rename = "YELLOW")]
+    #[strum(serialize = "YELLOW")]
+    Yellow,
+    #[serde(rename = "GREEN")]
+    #[strum(serialize = "GREEN")]
+    Green,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// State of the replication group at the site of the query.
+/// 
+/// A replication group
+/// may be in different states at the source site and each of the target sites.
+/// Note that this state does not capture the health of the replication link. If
+/// necessary, that can be an additional attribute.
+/// 
+/// Possible values:
+/// - `SOURCE`: Replication Source
+/// - `TARGET`: Replication target
+/// - `FAILEDOVER`: The group failed over at this site of the query.
+///   
+///   It has not yet been made
+///   as a source of replication.
+/// - `INTEST`: The group is InTest.
+///   
+///   The testFailover devices list will be available from
+///   the *TargetGroupMemberInfo*
+/// - `REMOTE_FAILEDOVER`: Remote group was failed over, and this site is neither the source nor the
+///   target.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum ReplicationReplicationStateEnum {
+    #[serde(rename = "SOURCE")]
+    #[strum(serialize = "SOURCE")]
+    Source,
+    #[serde(rename = "TARGET")]
+    #[strum(serialize = "TARGET")]
+    Target,
+    #[serde(rename = "FAILEDOVER")]
+    #[strum(serialize = "FAILEDOVER")]
+    Failedover,
+    #[serde(rename = "INTEST")]
+    #[strum(serialize = "INTEST")]
+    Intest,
+    #[serde(rename = "REMOTE_FAILEDOVER")]
+    #[strum(serialize = "REMOTE_FAILEDOVER")]
+    RemoteFailedover,
     /// This variant handles values not known at compile time.
     #[serde(untagged)]
     #[strum(serialize = "__OTHER__")]
@@ -333,6 +2467,12 @@ pub enum ClusterComputeResourceHciWorkflowStateEnum {
     #[strum(serialize = "__OTHER__")]
     Other_(String),
 }
+/// Deprecated as of vSphere 9.0 with no replacement. In a future release
+/// of vSphere, the vCLS functionality will be disabled, vCLS
+/// system VMs will be deleted, and vCLS APIs will be removed.
+/// 
+/// Do not use.
+/// 
 /// Possible values:
 /// - `healthy`: Indicates vCS health status is normal.
 /// - `degraded`: Indicates only vCS is unhealthy.
@@ -378,6 +2518,24 @@ pub enum ComputeResourceHostSpbmLicenseInfoHostSpbmLicenseStateEnum {
     #[strum(serialize = "__OTHER__")]
     Other_(String),
 }
+/// Possible values:
+/// - `bootstrap`
+/// - `stateless`
+/// 
+/// ***Since:*** vSphere API Release 9.0.0.0
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum ComputeResourceNetworkBootModeEnum {
+    #[serde(rename = "bootstrap")]
+    #[strum(serialize = "bootstrap")]
+    Bootstrap,
+    #[serde(rename = "stateless")]
+    #[strum(serialize = "stateless")]
+    Stateless,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
 /// Config spec operation type.
 /// 
 /// Possible values:
@@ -407,6 +2565,31 @@ pub enum ConfigSpecOperationEnum {
 pub enum DatastoreAccessibleEnum {
     True,
     False,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// The type of the sector size, such as, datastore and virtual disk,
+/// for the 4k native disk/array support.
+/// 
+/// Possible values:
+/// - `native_512`: 512 native sector size disk.
+/// - `emulated_512`: 4K sector size disk in 512 emulation mode.
+/// - `native_4k`: 4K native sector size disk.
+///   
+/// ***Since:*** vSphere API Release 9.0.0.0
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum DatastoreSectorFormatEnum {
+    #[serde(rename = "native_512")]
+    #[strum(serialize = "native_512")]
+    Native512,
+    #[serde(rename = "emulated_512")]
+    #[strum(serialize = "emulated_512")]
+    Emulated512,
+    #[serde(rename = "native_4k")]
+    #[strum(serialize = "native_4k")]
+    Native4K,
     /// This variant handles values not known at compile time.
     #[serde(untagged)]
     #[strum(serialize = "__OTHER__")]
@@ -509,6 +2692,9 @@ pub enum DiagnosticManagerLogFormatEnum {
 /// - `nvmetcp`: vSphere NVMETCP Traffic
 ///   
 ///   ***Since:*** vSphere API Release 7.0.3.0
+/// - `provisioning`: vSphere Provisioning Traffic
+///   
+///   ***Since:*** vSphere API Release 9.0.0.0
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum DistributedVirtualSwitchHostInfrastructureTrafficClassEnum {
     #[serde(rename = "management")]
@@ -544,6 +2730,9 @@ pub enum DistributedVirtualSwitchHostInfrastructureTrafficClassEnum {
     #[serde(rename = "nvmetcp")]
     #[strum(serialize = "nvmetcp")]
     Nvmetcp,
+    #[serde(rename = "provisioning")]
+    #[strum(serialize = "provisioning")]
+    Provisioning,
     /// This variant handles values not known at compile time.
     #[serde(untagged)]
     #[strum(serialize = "__OTHER__")]
@@ -691,6 +2880,90 @@ pub enum FolderDesiredHostStateEnum {
     #[serde(rename = "non_maintenance")]
     #[strum(serialize = "non_maintenance")]
     NonMaintenance,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Supported types of externally managed folder.
+/// 
+/// NSX Virtual Private Clouds(VPCs) is an abstraction layer that simplifies
+/// setting up self-contained virtual private cloud networks within an NSX
+/// project to consume networking and security services in a self-service
+/// consumption model. It contains multiple subnets which represents an
+/// independent layer 2 broadcast domain.
+/// vCenter users can manage (create, update, delete) VPC and subnet under
+/// *VPC_ROOT* folder. Requests are forwarded to NSX, and the VPCs
+/// and subnets in NSX are realized as *VPC* and *SUBNET* folder
+/// in vCenter.
+/// A project in NSX is analogous to a tenant. NSX user can create VPC, segment,
+/// and subnet within a project. These objects are represented as
+/// *PROJECT*, *VPC*, *SEGMENT*, and *SUBNET* folder
+/// under *PROJECT_ROOT* folder.
+/// 
+/// Possible values:
+/// - `PROJECT_ROOT`: The root folder of *PROJECT* folders.
+///   
+///   It is a child of the network folder of a data center and
+///   may contain multiple *PROJECT* folders.
+/// - `PROJECT`: The folder representing a project in NSX.
+///   
+///   It is a child of the *PROJECT_ROOT* folder.
+///   A project folder can contain multiple *VPC*,
+///   and *SEGMENT* folders.
+/// - `VPC_ROOT`: The folder containing VPC and subnet that can be managed by vCenter.
+///   
+///   It is a child of the network folder of a data center.
+///   It may contain multiple *VPC* folders.
+/// - `VPC`: The folder representing a VPC in NSX.
+///   
+///   It is a child of the *VPC_ROOT* folder or the *PROJECT*
+///   folder.
+///   It may contain multiple *SUBNET* folders.
+/// - `SUBNET`: The folder representing a subnet in NSX.
+///   
+///   It is a child of the *VPC* folder.
+/// - `SEGMENT`: The folder representing a segment in NSX.
+///   
+///   It is a child of the *PROJECT* folder.
+/// - `SUPERVISOR`: The folder representing a vSphere IaaS Control Plane Supervisor.
+///   
+///   It is a VM\_TYPE folder and child of vSphere Namespaces Root folder.
+///   It may contain multiple namespace associated folder, i.e., folder with
+///   *Folder.namespace* property set and vSphere IaaS Control Plane
+///   Virtual Machines.
+/// - `VSPHERE_POD`: The folder containing vSphere Pods.
+///   
+///   It is a child of namespace associated folder, i.e., folder with
+///   *Folder.namespace* property set and may contain vSphere Pods.
+/// 
+/// ***Since:*** vSphere API Release 9.0.0.0
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum FolderExternallyManagedFolderTypeEnum {
+    #[serde(rename = "PROJECT_ROOT")]
+    #[strum(serialize = "PROJECT_ROOT")]
+    ProjectRoot,
+    #[serde(rename = "PROJECT")]
+    #[strum(serialize = "PROJECT")]
+    Project,
+    #[serde(rename = "VPC_ROOT")]
+    #[strum(serialize = "VPC_ROOT")]
+    VpcRoot,
+    #[serde(rename = "VPC")]
+    #[strum(serialize = "VPC")]
+    Vpc,
+    #[serde(rename = "SUBNET")]
+    #[strum(serialize = "SUBNET")]
+    Subnet,
+    #[serde(rename = "SEGMENT")]
+    #[strum(serialize = "SEGMENT")]
+    Segment,
+    #[serde(rename = "SUPERVISOR")]
+    #[strum(serialize = "SUPERVISOR")]
+    Supervisor,
+    #[serde(rename = "VSPHERE_POD")]
+    #[strum(serialize = "VSPHERE_POD")]
+    VspherePod,
     /// This variant handles values not known at compile time.
     #[serde(untagged)]
     #[strum(serialize = "__OTHER__")]
@@ -1230,6 +3503,9 @@ pub enum LicenseFeatureInfoStateEnum {
 /// - `memoryForVms`: Total size of memory configured for VMs on this host, measured in kilobytes.
 /// - `numVmsStarted`: Number of VMs already running on this host.
 /// - `numVmsStarting`: Number of VMs that are currently powering-on, immigrating, etc.
+/// - `vsanCapacity`: vSAN capacity in TiB on this host.
+///   
+///   ***Since:*** vSphere API Release 8.0.3.0
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostLicensableResourceKeyEnum {
     #[serde(rename = "numCpuPackages")]
@@ -1250,6 +3526,9 @@ pub enum HostLicensableResourceKeyEnum {
     #[serde(rename = "numVmsStarting")]
     #[strum(serialize = "numVmsStarting")]
     NumVmsStarting,
+    #[serde(rename = "vsanCapacity")]
+    #[strum(serialize = "vsanCapacity")]
+    VsanCapacity,
     /// This variant handles values not known at compile time.
     #[serde(untagged)]
     #[strum(serialize = "__OTHER__")]
@@ -1747,6 +4026,30 @@ pub enum PerfFormatEnum {
     #[strum(serialize = "__OTHER__")]
     Other_(String),
 }
+/// Defines the type of placement
+/// 
+/// Possible values:
+/// - `createAndPowerOn`: Create a new VM that should be powered-on in the near future.
+/// - `reconfigure`: Reconfigure a powered-off or a powered-on VM.
+/// - `relocate`: Relocate a powered-off or a powered-on VM.
+///   
+/// ***Since:*** vSphere API Release 9.0.0.0
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum PlaceVmsXClusterSpecPlacementTypeEnum {
+    #[serde(rename = "createAndPowerOn")]
+    #[strum(serialize = "createAndPowerOn")]
+    CreateAndPowerOn,
+    #[serde(rename = "reconfigure")]
+    #[strum(serialize = "reconfigure")]
+    Reconfigure,
+    #[serde(rename = "relocate")]
+    #[strum(serialize = "relocate")]
+    Relocate,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
 /// Possible values:
 /// - `disabled`: Do not scale shares
 /// - `scaleCpuAndMemoryShares`: Scale both CPU and memory shares
@@ -1957,6 +4260,8 @@ pub enum SimpleCommandEncodingEnum {
     #[strum(serialize = "__OTHER__")]
     Other_(String),
 }
+/// Deprecated as of vSphere8.0 U3, and there is no replacement for it.
+/// 
 /// User specification of congestion threshold mode on a given datastore
 /// 
 /// For more information, see
@@ -2590,6 +4895,129 @@ pub enum VirtualMachineTicketTypeEnum {
     #[strum(serialize = "__OTHER__")]
     Other_(String),
 }
+/// Defines the set operators that can be used to join the sets identified by nested
+/// constraints in a *VsanCompositeConstraint* instance.
+/// 
+/// Possible values:
+/// - `AND`: joins multiple VsanResourceConstraint with AND
+/// - `OR`: joins multiple VsanResourceConstraint with OR
+/// - `EXCEPT`: negate with multiple VsanResourceConstraint
+/// - `VsanCompositeConstraintConjoinerEnum_Unknown`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanCompositeConstraintConjoinerEnumEnum {
+    #[serde(rename = "AND")]
+    #[strum(serialize = "AND")]
+    And,
+    #[serde(rename = "OR")]
+    #[strum(serialize = "OR")]
+    Or,
+    #[serde(rename = "EXCEPT")]
+    #[strum(serialize = "EXCEPT")]
+    Except,
+    #[serde(rename = "VsanCompositeConstraintConjoinerEnum_Unknown")]
+    #[strum(serialize = "VsanCompositeConstraintConjoinerEnum_Unknown")]
+    VsanCompositeConstraintConjoinerEnumUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Enumerate the choice for specify the target ManagedObject.
+/// 
+/// It can be one of
+/// the following:
+/// 
+/// Possible values:
+/// - `ALL_HOSTS`: Retrieve properties for all HostSystem objects
+/// - `ALL_VSAN_ENABLED_HOSTS`: Retrieve properties for all vSAN enabled HostSystem objects
+/// - `ALL_CLUSTERS`: Retrieve properties for all ClusterComputeResource objects
+/// - `ALL_VSAN_ENABLED_CLUSTERS`: Retrieve properties for all vSAN enabled ClusterComputeResource objects
+/// - `VCENTER`: Retrieve properties for vCenter level objects like tasks, events etc
+/// - `SERVICE_INSTANCE`: Retrieve properties for service content, such as vCenter instanceUuid, build number etc
+/// - `ALL_VSAN_ENABLED_HOSTS_EXCEPT_WITNESS`: Retrieve properties for all vSAN enabled HostSystem objects except witness hosts
+/// - `ALL_DATASTORES`
+/// - `ALL_VSAN_DATASTORES`
+/// - `ALL_VMFS_DATASTORES`
+/// - `VsanMassCollectorObjectCollectionEnum_Unknown`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanMassCollectorObjectCollectionEnumEnum {
+    #[serde(rename = "ALL_HOSTS")]
+    #[strum(serialize = "ALL_HOSTS")]
+    AllHosts,
+    #[serde(rename = "ALL_VSAN_ENABLED_HOSTS")]
+    #[strum(serialize = "ALL_VSAN_ENABLED_HOSTS")]
+    AllVsanEnabledHosts,
+    #[serde(rename = "ALL_CLUSTERS")]
+    #[strum(serialize = "ALL_CLUSTERS")]
+    AllClusters,
+    #[serde(rename = "ALL_VSAN_ENABLED_CLUSTERS")]
+    #[strum(serialize = "ALL_VSAN_ENABLED_CLUSTERS")]
+    AllVsanEnabledClusters,
+    #[serde(rename = "VCENTER")]
+    #[strum(serialize = "VCENTER")]
+    Vcenter,
+    #[serde(rename = "SERVICE_INSTANCE")]
+    #[strum(serialize = "SERVICE_INSTANCE")]
+    ServiceInstance,
+    #[serde(rename = "ALL_VSAN_ENABLED_HOSTS_EXCEPT_WITNESS")]
+    #[strum(serialize = "ALL_VSAN_ENABLED_HOSTS_EXCEPT_WITNESS")]
+    AllVsanEnabledHostsExceptWitness,
+    #[serde(rename = "ALL_DATASTORES")]
+    #[strum(serialize = "ALL_DATASTORES")]
+    AllDatastores,
+    #[serde(rename = "ALL_VSAN_DATASTORES")]
+    #[strum(serialize = "ALL_VSAN_DATASTORES")]
+    AllVsanDatastores,
+    #[serde(rename = "ALL_VMFS_DATASTORES")]
+    #[strum(serialize = "ALL_VMFS_DATASTORES")]
+    AllVmfsDatastores,
+    #[serde(rename = "VsanMassCollectorObjectCollectionEnum_Unknown")]
+    #[strum(serialize = "VsanMassCollectorObjectCollectionEnum_Unknown")]
+    VsanMassCollectorObjectCollectionEnumUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Defines the possible operators to use for comparison of the resource
+/// model properties.
+/// 
+/// Possible values:
+/// - `EQUALS`: Check for equality of values
+/// - `GREATER`: Filters values if greater than specified constraint value.
+/// - `SMALLER`: Filters values if smaller than specified constraint value.
+/// - `POP`
+/// - `CONTAINS`: Matches value to check if it contains the specified constraint value.
+/// - `TEXTUALLY_MATCHES`: Uses Python regex re.match() function.
+/// - `VsanPropertyConstraintComparatorEnum_Unknown`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanPropertyConstraintComparatorEnumEnum {
+    #[serde(rename = "EQUALS")]
+    #[strum(serialize = "EQUALS")]
+    Equals,
+    #[serde(rename = "GREATER")]
+    #[strum(serialize = "GREATER")]
+    Greater,
+    #[serde(rename = "SMALLER")]
+    #[strum(serialize = "SMALLER")]
+    Smaller,
+    #[serde(rename = "POP")]
+    #[strum(serialize = "POP")]
+    Pop,
+    #[serde(rename = "CONTAINS")]
+    #[strum(serialize = "CONTAINS")]
+    Contains,
+    #[serde(rename = "TEXTUALLY_MATCHES")]
+    #[strum(serialize = "TEXTUALLY_MATCHES")]
+    TextuallyMatches,
+    #[serde(rename = "VsanPropertyConstraintComparatorEnum_Unknown")]
+    #[strum(serialize = "VsanPropertyConstraintComparatorEnum_Unknown")]
+    VsanPropertyConstraintComparatorEnumUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
 /// Type of disk group operation performed.
 /// 
 /// Possible values:
@@ -2802,6 +5230,92 @@ pub enum ActionTypeEnum {
     StoragePlacementV1,
     PlacementV1,
     HostInfraUpdateHaV1,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Defines the detailed cluster wide power action.
+/// 
+/// Possible values:
+/// - `clusterPoweredOn`: indicate the cluster is in running state.
+/// - `haDisabled`: vSphere HA is disabled.
+/// - `supportedVMsPoweredOff`: the supported system VMs are powered off.
+/// - `vcVMPoweredOff`: power off the VC VM if the VC VM is on vSAN.
+/// - `vsanMemberShipUpdateDisabled`: vSAN membership updates is disabled.
+/// - `vsanDOMPauseAllCCPsSet`: DOMPauseAllCCPs is set.
+/// - `hostsInMM`: all hosts are in maintenance mode.
+/// - `hostsPoweredOff`: power-off operations have been triggered on all hosts.
+/// - `clusterPoweredOff`: indicate the cluster is in shutdown state.
+/// - `hostsOutOfMM`: all hosts are out of maintenance mode.
+/// - `vsanMemberShipUpdateEnabled`: vSAN membership updates is enabled.
+/// - `vsanDOMPauseAllCCPsUnset`: DOMPauseAllCCPs is unset.
+/// - `vcVMPoweredOn`: power on the VC VMs if it the VC VM is on vSAN.
+/// - `supportedVMsPoweredOn`: the supported system VMs are powered on.
+/// - `haEnabled`: vSphere HA is enabled.
+/// - `infraVMsRecorded`
+/// - `hostsInfraVMsPoweredoff`
+/// - `hostsInfraVMsPoweredon`
+/// - `ClusterPowerStatus_Unknown`: represent the value when the lower version client cannot recognize the enum value.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum ClusterPowerStatusEnum {
+    #[serde(rename = "clusterPoweredOn")]
+    #[strum(serialize = "clusterPoweredOn")]
+    ClusterPoweredOn,
+    #[serde(rename = "haDisabled")]
+    #[strum(serialize = "haDisabled")]
+    HaDisabled,
+    #[serde(rename = "supportedVMsPoweredOff")]
+    #[strum(serialize = "supportedVMsPoweredOff")]
+    SupportedVMsPoweredOff,
+    #[serde(rename = "vcVMPoweredOff")]
+    #[strum(serialize = "vcVMPoweredOff")]
+    VcVmPoweredOff,
+    #[serde(rename = "vsanMemberShipUpdateDisabled")]
+    #[strum(serialize = "vsanMemberShipUpdateDisabled")]
+    VsanMemberShipUpdateDisabled,
+    #[serde(rename = "vsanDOMPauseAllCCPsSet")]
+    #[strum(serialize = "vsanDOMPauseAllCCPsSet")]
+    VsanDomPauseAllCcPsSet,
+    #[serde(rename = "hostsInMM")]
+    #[strum(serialize = "hostsInMM")]
+    HostsInMm,
+    #[serde(rename = "hostsPoweredOff")]
+    #[strum(serialize = "hostsPoweredOff")]
+    HostsPoweredOff,
+    #[serde(rename = "clusterPoweredOff")]
+    #[strum(serialize = "clusterPoweredOff")]
+    ClusterPoweredOff,
+    #[serde(rename = "hostsOutOfMM")]
+    #[strum(serialize = "hostsOutOfMM")]
+    HostsOutOfMm,
+    #[serde(rename = "vsanMemberShipUpdateEnabled")]
+    #[strum(serialize = "vsanMemberShipUpdateEnabled")]
+    VsanMemberShipUpdateEnabled,
+    #[serde(rename = "vsanDOMPauseAllCCPsUnset")]
+    #[strum(serialize = "vsanDOMPauseAllCCPsUnset")]
+    VsanDomPauseAllCcPsUnset,
+    #[serde(rename = "vcVMPoweredOn")]
+    #[strum(serialize = "vcVMPoweredOn")]
+    VcVmPoweredOn,
+    #[serde(rename = "supportedVMsPoweredOn")]
+    #[strum(serialize = "supportedVMsPoweredOn")]
+    SupportedVMsPoweredOn,
+    #[serde(rename = "haEnabled")]
+    #[strum(serialize = "haEnabled")]
+    HaEnabled,
+    #[serde(rename = "infraVMsRecorded")]
+    #[strum(serialize = "infraVMsRecorded")]
+    InfraVMsRecorded,
+    #[serde(rename = "hostsInfraVMsPoweredoff")]
+    #[strum(serialize = "hostsInfraVMsPoweredoff")]
+    HostsInfraVMsPoweredoff,
+    #[serde(rename = "hostsInfraVMsPoweredon")]
+    #[strum(serialize = "hostsInfraVMsPoweredon")]
+    HostsInfraVMsPoweredon,
+    #[serde(rename = "ClusterPowerStatus_Unknown")]
+    #[strum(serialize = "ClusterPowerStatus_Unknown")]
+    ClusterPowerStatusUnknown,
     /// This variant handles values not known at compile time.
     #[serde(untagged)]
     #[strum(serialize = "__OTHER__")]
@@ -3515,14 +6029,26 @@ pub enum ClusterPowerOnVmOptionEnum {
 /// - `vmHostHardAffinity`: Fix hard VM/host affinity rule violation
 /// - `vmHostSoftAffinity`: Fix soft VM/host affinity rule violation
 /// - `balanceDatastoreSpaceUsage`: Balance datastore space usage.
-/// - `balanceDatastoreIOLoad`: Balance datastore I/O workload.
-/// - `balanceDatastoreIOPSReservation`: Balance datastore IOPS reservation
+/// - `balanceDatastoreIOLoad`: 
+///   
+///   Deprecated as of vSphere8.0 U3, and there is no replacement for it.
+///   
+///   Balance datastore I/O workload.
+/// - `balanceDatastoreIOPSReservation`: 
+///   
+///   Deprecated as of vSphere8.0 U3, and there is no replacement for it.
+///   
+///   Balance datastore IOPS reservation
 /// - `datastoreMaint`: Datastore entering maintenance mode.
 /// - `virtualDiskJointAffin`: Fix virtual disk affinity rule violation.
 /// - `virtualDiskAntiAffin`: Fix virtual disk anti-affinity rule violation.
 /// - `datastoreSpaceOutage`: Fix the issue that a datastore run out of space.
 /// - `storagePlacement`: Satisfy storage initial placement requests.
-/// - `iolbDisabledInternal`: IO load balancing was disabled internally.
+/// - `iolbDisabledInternal`: 
+///   
+///   Deprecated as of vSphere8.0 U3, and there is no replacement for it.
+///   
+///   IO load balancing was disabled internally.
 /// - `xvmotionPlacement`: Satisfy unified vmotion placement requests.
 /// - `networkBandwidthReservation`: Fix network bandwidth reservation violation
 /// - `hostInDegradation`: Host is partially degraded.
@@ -3536,6 +6062,9 @@ pub enum ClusterPowerOnVmOptionEnum {
 /// - `ahPlacementOptimization`: Optimize assignable hardware resource orchestration
 ///   
 ///   ***Since:*** vSphere API Release 8.0.2.0
+/// - `vmxUpgrade`: Upgrade virtual machine to new vmx binary
+///   
+///   ***Since:*** vSphere API Release 8.0.3.0
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum RecommendationReasonCodeEnum {
     #[serde(rename = "fairnessCpuAvg")]
@@ -3643,6 +6172,9 @@ pub enum RecommendationReasonCodeEnum {
     #[serde(rename = "ahPlacementOptimization")]
     #[strum(serialize = "ahPlacementOptimization")]
     AhPlacementOptimization,
+    #[serde(rename = "vmxUpgrade")]
+    #[strum(serialize = "vmxUpgrade")]
+    VmxUpgrade,
     /// This variant handles values not known at compile time.
     #[serde(untagged)]
     #[strum(serialize = "__OTHER__")]
@@ -3663,6 +6195,32 @@ pub enum RecommendationTypeEnum {
     #[strum(serialize = "__OTHER__")]
     Other_(String),
 }
+/// Defines the set of status values for compliance operations.
+/// 
+/// Possible values:
+/// - `compliant`: Entity is compliant.
+/// - `nonCompliant`: Entity is not compliant.
+/// - `unknown`: Compliance status of the entity is unknown.
+/// - `notApplicable`: Compliance computation is not applicable for this entity, because it does not have any storage policy requirement for the datastore where the entity is placed.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanStorageComplianceStatusEnum {
+    #[serde(rename = "compliant")]
+    #[strum(serialize = "compliant")]
+    Compliant,
+    #[serde(rename = "nonCompliant")]
+    #[strum(serialize = "nonCompliant")]
+    NonCompliant,
+    #[serde(rename = "unknown")]
+    #[strum(serialize = "unknown")]
+    Unknown,
+    #[serde(rename = "notApplicable")]
+    #[strum(serialize = "notApplicable")]
+    NotApplicable,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
 /// Possible values:
 /// - `SYSTEM_MANAGED`: System VMs are fully managed by the system.
 /// - `ABSENT`: System VMs are absent on the managed entity.
@@ -3676,6 +6234,44 @@ pub enum ClusterSystemVMsConfigInfoDeploymentModeEnum {
     #[serde(rename = "ABSENT")]
     #[strum(serialize = "ABSENT")]
     Absent,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Possible values:
+/// - `ClusterWithoutOneWitnessHost`
+/// - `ClusterWithoutTwoDataFaultDomains`
+/// - `ClusterWithMultipleUnicastAgents`
+/// - `WitnessPreferredFaultDomainInvalid`
+/// - `WitnessPreferredFaultDomainNotExist`
+/// - `WitnessInsideVcCluster`
+/// - `WitnessFaultDomainInvalid`
+/// - `HostUnicastAgentUnset`
+/// - `WitnessWithNoDiskMapping`
+/// - `HostWithNoStretchedClusterSupport`
+/// - `HostWithInvalidUnicastAgent`
+/// - `SharedWitnessClusterDataHostNumExceed`
+/// - `SharedWitnessComponentLimitScaledDown`
+/// - `VSANStretchedClusterConfigIssueEnum_Unknown`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VimClusterVsanStretchedClusterConfigIssueEnumEnum {
+    ClusterWithoutOneWitnessHost,
+    ClusterWithoutTwoDataFaultDomains,
+    ClusterWithMultipleUnicastAgents,
+    WitnessPreferredFaultDomainInvalid,
+    WitnessPreferredFaultDomainNotExist,
+    WitnessInsideVcCluster,
+    WitnessFaultDomainInvalid,
+    HostUnicastAgentUnset,
+    WitnessWithNoDiskMapping,
+    HostWithNoStretchedClusterSupport,
+    HostWithInvalidUnicastAgent,
+    SharedWitnessClusterDataHostNumExceed,
+    SharedWitnessComponentLimitScaledDown,
+    #[serde(rename = "VSANStretchedClusterConfigIssueEnum_Unknown")]
+    #[strum(serialize = "VSANStretchedClusterConfigIssueEnum_Unknown")]
+    VsanStretchedClusterConfigIssueEnumUnknown,
     /// This variant handles values not known at compile time.
     #[serde(untagged)]
     #[strum(serialize = "__OTHER__")]
@@ -3802,6 +6398,1658 @@ pub enum ClusterVmReadinessReadyConditionEnum {
     #[serde(rename = "useClusterDefault")]
     #[strum(serialize = "useClusterDefault")]
     UseClusterDefault,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Represents various baseline preference types.
+/// 
+/// Any patch or update release is considered part of the same "release family",
+/// while both updates to the major version number (e.g. 7.0) or to the minor
+/// version number (e.g. 7.1) would be considered different "release families".
+/// 
+/// Possible values:
+/// - `latestRelease`: recommend latest release compatible with cluster hardware, it could be either new major release or update release in current release family.
+///   
+///   (eg. Consider ESXi 6.8 is released and current installed version is ESXi 6.7, then ESXi 6.8 would be recommended under this mode if hardware is compatible.)
+/// - `latestPatch`: latest patch contains all bug fixes and updates for the current release family.
+///   
+///   In this mode recommendation engine wouldn't jump to other release family. (eg. Consider ESXi 6.8 is released and current installed version is ESXi 6.7, then ESXi 6.7 U1 instead of ESXi 6.8 would be recommended under this mode if hardware is compatible.)
+/// - `noRecommendation`: do not generate baseline recommendation for current vSAN cluster.
+/// - `VsanBaselinePreferenceType_Unknown`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanBaselinePreferenceTypeEnum {
+    #[serde(rename = "latestRelease")]
+    #[strum(serialize = "latestRelease")]
+    LatestRelease,
+    #[serde(rename = "latestPatch")]
+    #[strum(serialize = "latestPatch")]
+    LatestPatch,
+    #[serde(rename = "noRecommendation")]
+    #[strum(serialize = "noRecommendation")]
+    NoRecommendation,
+    #[serde(rename = "VsanBaselinePreferenceType_Unknown")]
+    #[strum(serialize = "VsanBaselinePreferenceType_Unknown")]
+    VsanBaselinePreferenceTypeUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Represents a condition that an object is in when retrieving capability on
+/// it.
+/// 
+/// A host can be in multiple conditions at the same time. Currently we
+/// have the following ones.
+/// 
+/// Possible values:
+/// - `unknown`: Not able to get/calculate the host's capabilities, thus empty capability list returned.
+/// - `oldversion`: Host version is before ESXi 6.0 U1.
+/// - `disconnected`: Host is in disconnected state.
+/// - `calculated`: Capabilities are not retrieved from the host but are calculated based on host's version.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanCapabilityStatusEnum {
+    #[serde(rename = "unknown")]
+    #[strum(serialize = "unknown")]
+    Unknown,
+    #[serde(rename = "oldversion")]
+    #[strum(serialize = "oldversion")]
+    Oldversion,
+    #[serde(rename = "disconnected")]
+    #[strum(serialize = "disconnected")]
+    Disconnected,
+    #[serde(rename = "calculated")]
+    #[strum(serialize = "calculated")]
+    Calculated,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Represents a feature capability (for 8.x and previous releases).
+/// 
+/// Possible values:
+/// - `capability`: The current feature for retrieving Capabilities.
+/// - `allflash`: Creating AllFlash disk groups.
+/// - `stretchedcluster`: Creating a stretched cluster, adding and removing witness host.
+/// - `dataefficiency`: Enabling/disabling Deduplication and Compression.
+/// - `clusterconfig`: Create/Configure a vSAN cluster and related features with a single call.
+/// - `upgrade`: Upgrade disk groups to a higher version.
+/// - `objectidentities`: Retrieve a greater set of virtual objects.
+/// - `iscsitargets`: iscsi feature provides iSCSI protocol on top of vSAN.
+/// - `witnessmanagement`: The enable/disable vSAN operation and changing claiming policy.
+/// - `perfsvcverbosemode`: Allow users to configure performance service to run in verbose mode, in which extra stats are collected for support cases and dev debugging.
+/// - `encryption`: Software data at rest encryption for vSAN.
+/// - `decomwhatif`: Query what-if result for decommissioning host or disk.
+/// - `throttleresync`: Improve throttling options &amp; resumable resync.
+/// - `unicastmode`: Enforce unicast mode in vSAN.
+/// - `device4ksupport`: 4k disks supporting status in vSAN
+/// - `nestedfd`: Nested fault domains for stretched clusters.
+/// - `complianceprecheck`: Calculate required additional capacity to make all vms compliant.
+/// - `vumintegration`: vSAN upgrades through VUM integration.
+/// - `firmwareupdate`: vSAN firmware/driver update feature that allow users to remediate outdated driver or firmware in an automated and simple fashion for supported hardware.
+/// - `fullStackFw`: (deprecated since vSphere 8.0) allows users to update full stack of firmware for vSAN hosts.
+/// - `configassist`: Configuration Assist UI provided in vSphere Web Client to help vSAN deployment.
+/// - `umap`: TRIM/UNMAP for space reclamation on vSAN.
+/// - `localdataprotection`: Support for data protection on a vSAN cluster.
+/// - `archivaldataprotection`: Support for data protection to NFS datastores.
+/// - `pr1741414fixed`: GetPreferredfaultDomain on stretched cluster and VmdkLoadTest work correctly operation are automatically performed by the VsanVcClusterConfig API.
+/// - `cloudhealth`: Enable/Disable Cloud Connected Analytics
+/// - `perfanalysis`: Enable/Disable Performance Analytics
+/// - `fcd`: Enable/Disable First Class Disk Support in vSAN
+/// - `healthcheck2018q2`: Enable/Disable suites of health group checks on 2018q2 releases
+/// - `enhancedresyncapi`: Support *VsanSystemEx.VsanQuerySyncingVsanObjects*.
+/// - `genericnestedfd`: Nested fault domain for non-stretched cluster.
+/// - `hostaffinity`: Support for Host Affinity
+/// - `perfsvcautoconfig`: The capability of enable/disable vSAN performance service automatically when configure vSAN.
+/// - `unicasttest`: For unicast performance test capability.
+///   
+///   (Obsoleted, DO NOT USE)
+/// - `vsanrdma`
+/// - `vumbaselinerecommendation`
+/// - `supportinsight`
+/// - `netperftest`: For network performance test capability.
+/// - `masspropertycollector`: For vSAN mass property collector capability by extending property collector to collect multiple properties and APIs execution result as a batch mode
+/// - `whatifcapacity`: For vSAN datastore What-If capacity report capability.
+/// - `historicalcapacity`: For vSAN datastore historical capacity report capability.
+/// - `policyassociation`: Support SPBM to use vSAN as source of truth for policy association.
+/// - `policyhostapi`
+/// - `diagnosticmode`: For vSAN diagnostic mode capability.
+/// - `purgeinaccessiblevmswapobjects`: Support for purging inaccessible VM swap objects
+/// - `recreatediskgroup`: Support for recreating disk groups
+/// - `repairtimerinresyncstats`: Support for retrieving repair time runtime information
+/// - `clusteradvancedoptions`: Support for cluster advanced options
+/// - `updatevumreleasecatalogoffline`: Support for VUM release catalog offline update
+/// - `performanceforsupport`: Capability of performance metrics collection for vSAN support
+/// - `gethcllastupdateonvc`: Indicates if the cluster parameter is optional in the *VsanVcClusterHealthSystem.VsanVcClusterGetHclInfo* method.
+/// - `automaticrebalance`
+/// - `verbosemodeconfiguration`
+/// - `resyncetaimprovement`
+/// - `fileservices`
+/// - `fileservicekerberos`
+/// - `fileservicesmb`
+/// - `fileservicenfsv3`
+/// - `fileservicesc`
+/// - `fileservicesnapshot`
+/// - `fileserviceowe`
+/// - `fileservice80`
+/// - `fileservicescale`
+/// - `resourceprecheck`
+/// - `upgraderesourceprecheck`
+/// - `vitonlineresize`
+/// - `vitstretchedcluster`
+/// - `largecapacitydrive`
+/// - `nondatamovementdfc`
+/// - `cnsvolumes`
+/// - `filevolumes`
+/// - `diagnosticsfeedback`
+/// - `hostreservedcapacity`
+/// - `vmlevelcapacity`
+/// - `improvedcapacityscreen`
+/// - `slackspacecapacity`
+/// - `sharedwitness`
+/// - `VsanCapabilityType_Unknown`
+/// - `supportApiVersion`
+/// - `vsanmetadatanode`
+/// - `pmanintegration`
+/// - `wcpappplatform`
+/// - `diskresourceprecheck`
+/// - `metricsconfig`
+/// - `ioinsight`
+/// - `apidevversionenabled`
+/// - `nativelargeclustersupport`
+/// - `historicalhealth`
+/// - `dataintransitencryption`
+/// - `perfsvctwoyaxisgraph`
+/// - `compressiononly`
+/// - `remotedatastore`
+/// - `vsanmanagedvmfs`
+/// - `capacityreservation`
+/// - `securewipe`
+/// - `validateconfigspec`
+/// - `vsananalyticsevents`
+/// - `vsandefaultgatewaysupported`
+/// - `pspairgap`
+/// - `vsanmanagedpmem`
+/// - `capacityevaluationonvc`
+/// - `readlocalitytodrs`
+/// - `vsanencrkmx`
+/// - `vsan2encr`
+/// - `dit4sw`
+/// - `vsanclient`
+/// - `capacityoversubscription`
+/// - `vsandiagnostics`
+/// - `capacitycustomizablethresholds`
+/// - `hcimeshpolicy`
+/// - `topcontributors`
+/// - `vsandirectdiskdecom`
+/// - `diskmgmtredesign`
+/// - `datapersistresourcecheck`
+/// - `clusterpoweraction`
+/// - `clusterpowerselfcontain`
+/// - `duplicatepciidfix`
+/// - `healthcorrelation`
+/// - `volumerelocation`
+/// - `iodiagnostics`
+/// - `vsanrebuildtrim`
+/// - `elasticpolicy`
+/// - `vsanEsaConfigure`
+/// - `hdcsintegration`
+/// - `vsanesasingletier`
+/// - `vsanperfhighresolution`
+/// - `cnsreconfigpolicy`
+/// - `vsanhostdomlatencysort`
+/// - `sha256thumbprint`
+/// - `minrebalancethreshold`
+/// - `vsan2hcimesh`
+/// - `dfcobjectsmanagement`
+/// - `healthremediation`
+/// - `hcimeshstretchedcluster`
+/// - `vsanxvchcimesh`
+/// - `vsan2deeprekey`
+/// - `vsandsdefaultpolicy`
+/// - `vsanperfsvc80u2`
+/// - `vsankeyexpiration`
+/// - `vsanxvchcimeshv2`
+/// - `dhci`
+/// - `snapservice`: ***Since:*** 8.0.0.4
+/// - `vsan2disableencryption`: ***Since:*** 8.0.0.4
+/// - `iodiagmultiplevms`: ***Since:*** 8.0.0.4
+/// - `vsanxvchcimeshv3`: ***Since:*** 8.0.0.4
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanCapabilityTypeEnum {
+    #[serde(rename = "capability")]
+    #[strum(serialize = "capability")]
+    Capability,
+    #[serde(rename = "allflash")]
+    #[strum(serialize = "allflash")]
+    Allflash,
+    #[serde(rename = "stretchedcluster")]
+    #[strum(serialize = "stretchedcluster")]
+    Stretchedcluster,
+    #[serde(rename = "dataefficiency")]
+    #[strum(serialize = "dataefficiency")]
+    Dataefficiency,
+    #[serde(rename = "clusterconfig")]
+    #[strum(serialize = "clusterconfig")]
+    Clusterconfig,
+    #[serde(rename = "upgrade")]
+    #[strum(serialize = "upgrade")]
+    Upgrade,
+    #[serde(rename = "objectidentities")]
+    #[strum(serialize = "objectidentities")]
+    Objectidentities,
+    #[serde(rename = "iscsitargets")]
+    #[strum(serialize = "iscsitargets")]
+    Iscsitargets,
+    #[serde(rename = "witnessmanagement")]
+    #[strum(serialize = "witnessmanagement")]
+    Witnessmanagement,
+    #[serde(rename = "perfsvcverbosemode")]
+    #[strum(serialize = "perfsvcverbosemode")]
+    Perfsvcverbosemode,
+    #[serde(rename = "encryption")]
+    #[strum(serialize = "encryption")]
+    Encryption,
+    #[serde(rename = "decomwhatif")]
+    #[strum(serialize = "decomwhatif")]
+    Decomwhatif,
+    #[serde(rename = "throttleresync")]
+    #[strum(serialize = "throttleresync")]
+    Throttleresync,
+    #[serde(rename = "unicastmode")]
+    #[strum(serialize = "unicastmode")]
+    Unicastmode,
+    #[serde(rename = "device4ksupport")]
+    #[strum(serialize = "device4ksupport")]
+    Device4Ksupport,
+    #[serde(rename = "nestedfd")]
+    #[strum(serialize = "nestedfd")]
+    Nestedfd,
+    #[serde(rename = "complianceprecheck")]
+    #[strum(serialize = "complianceprecheck")]
+    Complianceprecheck,
+    #[serde(rename = "vumintegration")]
+    #[strum(serialize = "vumintegration")]
+    Vumintegration,
+    #[serde(rename = "firmwareupdate")]
+    #[strum(serialize = "firmwareupdate")]
+    Firmwareupdate,
+    #[serde(rename = "fullStackFw")]
+    #[strum(serialize = "fullStackFw")]
+    FullStackFw,
+    #[serde(rename = "configassist")]
+    #[strum(serialize = "configassist")]
+    Configassist,
+    #[serde(rename = "umap")]
+    #[strum(serialize = "umap")]
+    Umap,
+    #[serde(rename = "localdataprotection")]
+    #[strum(serialize = "localdataprotection")]
+    Localdataprotection,
+    #[serde(rename = "archivaldataprotection")]
+    #[strum(serialize = "archivaldataprotection")]
+    Archivaldataprotection,
+    #[serde(rename = "pr1741414fixed")]
+    #[strum(serialize = "pr1741414fixed")]
+    Pr1741414Fixed,
+    #[serde(rename = "cloudhealth")]
+    #[strum(serialize = "cloudhealth")]
+    Cloudhealth,
+    #[serde(rename = "perfanalysis")]
+    #[strum(serialize = "perfanalysis")]
+    Perfanalysis,
+    #[serde(rename = "fcd")]
+    #[strum(serialize = "fcd")]
+    Fcd,
+    #[serde(rename = "healthcheck2018q2")]
+    #[strum(serialize = "healthcheck2018q2")]
+    Healthcheck2018Q2,
+    #[serde(rename = "enhancedresyncapi")]
+    #[strum(serialize = "enhancedresyncapi")]
+    Enhancedresyncapi,
+    #[serde(rename = "genericnestedfd")]
+    #[strum(serialize = "genericnestedfd")]
+    Genericnestedfd,
+    #[serde(rename = "hostaffinity")]
+    #[strum(serialize = "hostaffinity")]
+    Hostaffinity,
+    #[serde(rename = "perfsvcautoconfig")]
+    #[strum(serialize = "perfsvcautoconfig")]
+    Perfsvcautoconfig,
+    #[serde(rename = "unicasttest")]
+    #[strum(serialize = "unicasttest")]
+    Unicasttest,
+    #[serde(rename = "vsanrdma")]
+    #[strum(serialize = "vsanrdma")]
+    Vsanrdma,
+    #[serde(rename = "vumbaselinerecommendation")]
+    #[strum(serialize = "vumbaselinerecommendation")]
+    Vumbaselinerecommendation,
+    #[serde(rename = "supportinsight")]
+    #[strum(serialize = "supportinsight")]
+    Supportinsight,
+    #[serde(rename = "netperftest")]
+    #[strum(serialize = "netperftest")]
+    Netperftest,
+    #[serde(rename = "masspropertycollector")]
+    #[strum(serialize = "masspropertycollector")]
+    Masspropertycollector,
+    #[serde(rename = "whatifcapacity")]
+    #[strum(serialize = "whatifcapacity")]
+    Whatifcapacity,
+    #[serde(rename = "historicalcapacity")]
+    #[strum(serialize = "historicalcapacity")]
+    Historicalcapacity,
+    #[serde(rename = "policyassociation")]
+    #[strum(serialize = "policyassociation")]
+    Policyassociation,
+    #[serde(rename = "policyhostapi")]
+    #[strum(serialize = "policyhostapi")]
+    Policyhostapi,
+    #[serde(rename = "diagnosticmode")]
+    #[strum(serialize = "diagnosticmode")]
+    Diagnosticmode,
+    #[serde(rename = "purgeinaccessiblevmswapobjects")]
+    #[strum(serialize = "purgeinaccessiblevmswapobjects")]
+    Purgeinaccessiblevmswapobjects,
+    #[serde(rename = "recreatediskgroup")]
+    #[strum(serialize = "recreatediskgroup")]
+    Recreatediskgroup,
+    #[serde(rename = "repairtimerinresyncstats")]
+    #[strum(serialize = "repairtimerinresyncstats")]
+    Repairtimerinresyncstats,
+    #[serde(rename = "clusteradvancedoptions")]
+    #[strum(serialize = "clusteradvancedoptions")]
+    Clusteradvancedoptions,
+    #[serde(rename = "updatevumreleasecatalogoffline")]
+    #[strum(serialize = "updatevumreleasecatalogoffline")]
+    Updatevumreleasecatalogoffline,
+    #[serde(rename = "performanceforsupport")]
+    #[strum(serialize = "performanceforsupport")]
+    Performanceforsupport,
+    #[serde(rename = "gethcllastupdateonvc")]
+    #[strum(serialize = "gethcllastupdateonvc")]
+    Gethcllastupdateonvc,
+    #[serde(rename = "automaticrebalance")]
+    #[strum(serialize = "automaticrebalance")]
+    Automaticrebalance,
+    #[serde(rename = "verbosemodeconfiguration")]
+    #[strum(serialize = "verbosemodeconfiguration")]
+    Verbosemodeconfiguration,
+    #[serde(rename = "resyncetaimprovement")]
+    #[strum(serialize = "resyncetaimprovement")]
+    Resyncetaimprovement,
+    #[serde(rename = "fileservices")]
+    #[strum(serialize = "fileservices")]
+    Fileservices,
+    #[serde(rename = "fileservicekerberos")]
+    #[strum(serialize = "fileservicekerberos")]
+    Fileservicekerberos,
+    #[serde(rename = "fileservicesmb")]
+    #[strum(serialize = "fileservicesmb")]
+    Fileservicesmb,
+    #[serde(rename = "fileservicenfsv3")]
+    #[strum(serialize = "fileservicenfsv3")]
+    Fileservicenfsv3,
+    #[serde(rename = "fileservicesc")]
+    #[strum(serialize = "fileservicesc")]
+    Fileservicesc,
+    #[serde(rename = "fileservicesnapshot")]
+    #[strum(serialize = "fileservicesnapshot")]
+    Fileservicesnapshot,
+    #[serde(rename = "fileserviceowe")]
+    #[strum(serialize = "fileserviceowe")]
+    Fileserviceowe,
+    #[serde(rename = "fileservice80")]
+    #[strum(serialize = "fileservice80")]
+    Fileservice80,
+    #[serde(rename = "fileservicescale")]
+    #[strum(serialize = "fileservicescale")]
+    Fileservicescale,
+    #[serde(rename = "resourceprecheck")]
+    #[strum(serialize = "resourceprecheck")]
+    Resourceprecheck,
+    #[serde(rename = "upgraderesourceprecheck")]
+    #[strum(serialize = "upgraderesourceprecheck")]
+    Upgraderesourceprecheck,
+    #[serde(rename = "vitonlineresize")]
+    #[strum(serialize = "vitonlineresize")]
+    Vitonlineresize,
+    #[serde(rename = "vitstretchedcluster")]
+    #[strum(serialize = "vitstretchedcluster")]
+    Vitstretchedcluster,
+    #[serde(rename = "largecapacitydrive")]
+    #[strum(serialize = "largecapacitydrive")]
+    Largecapacitydrive,
+    #[serde(rename = "nondatamovementdfc")]
+    #[strum(serialize = "nondatamovementdfc")]
+    Nondatamovementdfc,
+    #[serde(rename = "cnsvolumes")]
+    #[strum(serialize = "cnsvolumes")]
+    Cnsvolumes,
+    #[serde(rename = "filevolumes")]
+    #[strum(serialize = "filevolumes")]
+    Filevolumes,
+    #[serde(rename = "diagnosticsfeedback")]
+    #[strum(serialize = "diagnosticsfeedback")]
+    Diagnosticsfeedback,
+    #[serde(rename = "hostreservedcapacity")]
+    #[strum(serialize = "hostreservedcapacity")]
+    Hostreservedcapacity,
+    #[serde(rename = "vmlevelcapacity")]
+    #[strum(serialize = "vmlevelcapacity")]
+    Vmlevelcapacity,
+    #[serde(rename = "improvedcapacityscreen")]
+    #[strum(serialize = "improvedcapacityscreen")]
+    Improvedcapacityscreen,
+    #[serde(rename = "slackspacecapacity")]
+    #[strum(serialize = "slackspacecapacity")]
+    Slackspacecapacity,
+    #[serde(rename = "sharedwitness")]
+    #[strum(serialize = "sharedwitness")]
+    Sharedwitness,
+    #[serde(rename = "VsanCapabilityType_Unknown")]
+    #[strum(serialize = "VsanCapabilityType_Unknown")]
+    VsanCapabilityTypeUnknown,
+    #[serde(rename = "supportApiVersion")]
+    #[strum(serialize = "supportApiVersion")]
+    SupportApiVersion,
+    #[serde(rename = "vsanmetadatanode")]
+    #[strum(serialize = "vsanmetadatanode")]
+    Vsanmetadatanode,
+    #[serde(rename = "pmanintegration")]
+    #[strum(serialize = "pmanintegration")]
+    Pmanintegration,
+    #[serde(rename = "wcpappplatform")]
+    #[strum(serialize = "wcpappplatform")]
+    Wcpappplatform,
+    #[serde(rename = "diskresourceprecheck")]
+    #[strum(serialize = "diskresourceprecheck")]
+    Diskresourceprecheck,
+    #[serde(rename = "metricsconfig")]
+    #[strum(serialize = "metricsconfig")]
+    Metricsconfig,
+    #[serde(rename = "ioinsight")]
+    #[strum(serialize = "ioinsight")]
+    Ioinsight,
+    #[serde(rename = "apidevversionenabled")]
+    #[strum(serialize = "apidevversionenabled")]
+    Apidevversionenabled,
+    #[serde(rename = "nativelargeclustersupport")]
+    #[strum(serialize = "nativelargeclustersupport")]
+    Nativelargeclustersupport,
+    #[serde(rename = "historicalhealth")]
+    #[strum(serialize = "historicalhealth")]
+    Historicalhealth,
+    #[serde(rename = "dataintransitencryption")]
+    #[strum(serialize = "dataintransitencryption")]
+    Dataintransitencryption,
+    #[serde(rename = "perfsvctwoyaxisgraph")]
+    #[strum(serialize = "perfsvctwoyaxisgraph")]
+    Perfsvctwoyaxisgraph,
+    #[serde(rename = "compressiononly")]
+    #[strum(serialize = "compressiononly")]
+    Compressiononly,
+    #[serde(rename = "remotedatastore")]
+    #[strum(serialize = "remotedatastore")]
+    Remotedatastore,
+    #[serde(rename = "vsanmanagedvmfs")]
+    #[strum(serialize = "vsanmanagedvmfs")]
+    Vsanmanagedvmfs,
+    #[serde(rename = "capacityreservation")]
+    #[strum(serialize = "capacityreservation")]
+    Capacityreservation,
+    #[serde(rename = "securewipe")]
+    #[strum(serialize = "securewipe")]
+    Securewipe,
+    #[serde(rename = "validateconfigspec")]
+    #[strum(serialize = "validateconfigspec")]
+    Validateconfigspec,
+    #[serde(rename = "vsananalyticsevents")]
+    #[strum(serialize = "vsananalyticsevents")]
+    Vsananalyticsevents,
+    #[serde(rename = "vsandefaultgatewaysupported")]
+    #[strum(serialize = "vsandefaultgatewaysupported")]
+    Vsandefaultgatewaysupported,
+    #[serde(rename = "pspairgap")]
+    #[strum(serialize = "pspairgap")]
+    Pspairgap,
+    #[serde(rename = "vsanmanagedpmem")]
+    #[strum(serialize = "vsanmanagedpmem")]
+    Vsanmanagedpmem,
+    #[serde(rename = "capacityevaluationonvc")]
+    #[strum(serialize = "capacityevaluationonvc")]
+    Capacityevaluationonvc,
+    #[serde(rename = "readlocalitytodrs")]
+    #[strum(serialize = "readlocalitytodrs")]
+    Readlocalitytodrs,
+    #[serde(rename = "vsanencrkmx")]
+    #[strum(serialize = "vsanencrkmx")]
+    Vsanencrkmx,
+    #[serde(rename = "vsan2encr")]
+    #[strum(serialize = "vsan2encr")]
+    Vsan2Encr,
+    #[serde(rename = "dit4sw")]
+    #[strum(serialize = "dit4sw")]
+    Dit4Sw,
+    #[serde(rename = "vsanclient")]
+    #[strum(serialize = "vsanclient")]
+    Vsanclient,
+    #[serde(rename = "capacityoversubscription")]
+    #[strum(serialize = "capacityoversubscription")]
+    Capacityoversubscription,
+    #[serde(rename = "vsandiagnostics")]
+    #[strum(serialize = "vsandiagnostics")]
+    Vsandiagnostics,
+    #[serde(rename = "capacitycustomizablethresholds")]
+    #[strum(serialize = "capacitycustomizablethresholds")]
+    Capacitycustomizablethresholds,
+    #[serde(rename = "hcimeshpolicy")]
+    #[strum(serialize = "hcimeshpolicy")]
+    Hcimeshpolicy,
+    #[serde(rename = "topcontributors")]
+    #[strum(serialize = "topcontributors")]
+    Topcontributors,
+    #[serde(rename = "vsandirectdiskdecom")]
+    #[strum(serialize = "vsandirectdiskdecom")]
+    Vsandirectdiskdecom,
+    #[serde(rename = "diskmgmtredesign")]
+    #[strum(serialize = "diskmgmtredesign")]
+    Diskmgmtredesign,
+    #[serde(rename = "datapersistresourcecheck")]
+    #[strum(serialize = "datapersistresourcecheck")]
+    Datapersistresourcecheck,
+    #[serde(rename = "clusterpoweraction")]
+    #[strum(serialize = "clusterpoweraction")]
+    Clusterpoweraction,
+    #[serde(rename = "clusterpowerselfcontain")]
+    #[strum(serialize = "clusterpowerselfcontain")]
+    Clusterpowerselfcontain,
+    #[serde(rename = "duplicatepciidfix")]
+    #[strum(serialize = "duplicatepciidfix")]
+    Duplicatepciidfix,
+    #[serde(rename = "healthcorrelation")]
+    #[strum(serialize = "healthcorrelation")]
+    Healthcorrelation,
+    #[serde(rename = "volumerelocation")]
+    #[strum(serialize = "volumerelocation")]
+    Volumerelocation,
+    #[serde(rename = "iodiagnostics")]
+    #[strum(serialize = "iodiagnostics")]
+    Iodiagnostics,
+    #[serde(rename = "vsanrebuildtrim")]
+    #[strum(serialize = "vsanrebuildtrim")]
+    Vsanrebuildtrim,
+    #[serde(rename = "elasticpolicy")]
+    #[strum(serialize = "elasticpolicy")]
+    Elasticpolicy,
+    #[serde(rename = "vsanEsaConfigure")]
+    #[strum(serialize = "vsanEsaConfigure")]
+    VsanEsaConfigure,
+    #[serde(rename = "hdcsintegration")]
+    #[strum(serialize = "hdcsintegration")]
+    Hdcsintegration,
+    #[serde(rename = "vsanesasingletier")]
+    #[strum(serialize = "vsanesasingletier")]
+    Vsanesasingletier,
+    #[serde(rename = "vsanperfhighresolution")]
+    #[strum(serialize = "vsanperfhighresolution")]
+    Vsanperfhighresolution,
+    #[serde(rename = "cnsreconfigpolicy")]
+    #[strum(serialize = "cnsreconfigpolicy")]
+    Cnsreconfigpolicy,
+    #[serde(rename = "vsanhostdomlatencysort")]
+    #[strum(serialize = "vsanhostdomlatencysort")]
+    Vsanhostdomlatencysort,
+    #[serde(rename = "sha256thumbprint")]
+    #[strum(serialize = "sha256thumbprint")]
+    Sha256Thumbprint,
+    #[serde(rename = "minrebalancethreshold")]
+    #[strum(serialize = "minrebalancethreshold")]
+    Minrebalancethreshold,
+    #[serde(rename = "vsan2hcimesh")]
+    #[strum(serialize = "vsan2hcimesh")]
+    Vsan2Hcimesh,
+    #[serde(rename = "dfcobjectsmanagement")]
+    #[strum(serialize = "dfcobjectsmanagement")]
+    Dfcobjectsmanagement,
+    #[serde(rename = "healthremediation")]
+    #[strum(serialize = "healthremediation")]
+    Healthremediation,
+    #[serde(rename = "hcimeshstretchedcluster")]
+    #[strum(serialize = "hcimeshstretchedcluster")]
+    Hcimeshstretchedcluster,
+    #[serde(rename = "vsanxvchcimesh")]
+    #[strum(serialize = "vsanxvchcimesh")]
+    Vsanxvchcimesh,
+    #[serde(rename = "vsan2deeprekey")]
+    #[strum(serialize = "vsan2deeprekey")]
+    Vsan2Deeprekey,
+    #[serde(rename = "vsandsdefaultpolicy")]
+    #[strum(serialize = "vsandsdefaultpolicy")]
+    Vsandsdefaultpolicy,
+    #[serde(rename = "vsanperfsvc80u2")]
+    #[strum(serialize = "vsanperfsvc80u2")]
+    Vsanperfsvc80U2,
+    #[serde(rename = "vsankeyexpiration")]
+    #[strum(serialize = "vsankeyexpiration")]
+    Vsankeyexpiration,
+    #[serde(rename = "vsanxvchcimeshv2")]
+    #[strum(serialize = "vsanxvchcimeshv2")]
+    Vsanxvchcimeshv2,
+    #[serde(rename = "dhci")]
+    #[strum(serialize = "dhci")]
+    Dhci,
+    #[serde(rename = "snapservice")]
+    #[strum(serialize = "snapservice")]
+    Snapservice,
+    #[serde(rename = "vsan2disableencryption")]
+    #[strum(serialize = "vsan2disableencryption")]
+    Vsan2Disableencryption,
+    #[serde(rename = "iodiagmultiplevms")]
+    #[strum(serialize = "iodiagmultiplevms")]
+    Iodiagmultiplevms,
+    #[serde(rename = "vsanxvchcimeshv3")]
+    #[strum(serialize = "vsanxvchcimeshv3")]
+    Vsanxvchcimeshv3,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Represents a feature capability for 9.0 release.
+/// 
+/// Possible values:
+/// - `vsanreplication`
+/// - `vsandedicatedvmknic`
+/// - `globaldedup`
+/// - `vsanstretchedclient`
+/// - `vsaniscsivip`
+/// - `vsansitemaintenance`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanCapabilityType90Enum {
+    #[serde(rename = "vsanreplication")]
+    #[strum(serialize = "vsanreplication")]
+    Vsanreplication,
+    #[serde(rename = "vsandedicatedvmknic")]
+    #[strum(serialize = "vsandedicatedvmknic")]
+    Vsandedicatedvmknic,
+    #[serde(rename = "globaldedup")]
+    #[strum(serialize = "globaldedup")]
+    Globaldedup,
+    #[serde(rename = "vsanstretchedclient")]
+    #[strum(serialize = "vsanstretchedclient")]
+    Vsanstretchedclient,
+    #[serde(rename = "vsaniscsivip")]
+    #[strum(serialize = "vsaniscsivip")]
+    Vsaniscsivip,
+    #[serde(rename = "vsansitemaintenance")]
+    #[strum(serialize = "vsansitemaintenance")]
+    Vsansitemaintenance,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// The vSAN cluster health action ID enumeration.
+/// 
+/// Actions are remediation operations user can take to resolve health issues.
+/// Each action is identified by ID. The user performs the action by calling the
+/// associated first-class API. But it's not always appropriate to trigger such
+/// operation and user need to use judgment of the situation to decide. This is
+/// why the action is not automatically executed, as it may be the wrong choice
+/// in some situations.
+/// Some actions don't directly correspond to an API, but rather a workflow, in
+/// the case of the UI a wizard.
+/// 
+/// Possible values:
+/// - `RepairClusterObjectsAction`: Mapped to *VsanVcClusterHealthSystem.VsanHealthRepairClusterObjectsImmediate* API.
+/// - `UploadHclDb`: Mapped to *VsanVcClusterHealthSystem.VsanVcUploadHclDb* API.
+/// - `UpdateHclDbFromInternet`: Mapped to *VsanVcClusterHealthSystem.VsanVcUpdateHclDbFromWeb* API.
+/// - `EnableHealthService`: Deprecated.
+/// - `DiskBalance`: Mapped to *VsanVcClusterHealthSystem.VsanRebalanceCluster* API.
+/// - `StopDiskBalance`: Mapped to *VsanVcClusterHealthSystem.VsanStopRebalanceCluster* API.
+/// - `RemediateDedup`: Mapped to *VsanUpgradeSystemEx.PerformVsanUpgradeEx* API.
+/// - `UpgradeVsanDiskFormat`: Mapped to *VsanUpgradeSystemEx.PerformVsanUpgradeEx* API.
+/// - `CreateDVS`: Mapped to UI workflow "Create VDS".
+/// - `ConfigureHA`: Mapped to UI workflow "Configure HA".
+/// - `ConfigureDRS`: Mapped to UI workflow "Configure DRS".
+/// - `ConfigureVSAN`: Mapped to UI workflow "Configure vSAN".
+/// - `ClaimVSANDisks`: Mapped to UI workflow "Claim vSAN Disks".
+/// - `ClusterUpgrade`: Mapped to UI workflow "vSAN On-click Upgrade Wizard".
+/// - `CreateVMKnic`: Mapped to UI workflow "Create vmknic Wizard".
+/// - `CreateVMKnicWithVMotion`: Mapped to UI workflow "Create vmknic with vMotion Wizard".
+/// - `RunBurnInTest`: Mapped to UI workflow "Run Storage performance test".
+/// - `EnableIscsiTargetService`: Mapped to UI workflow "Enable vSAN iSCSI service".
+/// - `EnablePerformanceServiceAction`: Mapped to *VsanPerformanceManager.VsanPerfCreateStatsObjectTask* API.
+/// - `RemediateClusterConfig`: Mapped to UI workflow "Remediate inconsistent configuration".
+/// - `EnableCeip`: Mapped to UI workflow "Customer Experience Improvement Program (CEIP) page".
+/// - `LoginVumIsoDepot`: Mapped to *VsanVumSystem.FetchIsoDepotCookie* API.
+/// - `PurgeInaccessSwapObjs`: Mapped to UI workflow "Purge Inaccessible VM Swap Objects".
+/// - `UploadReleaseCatalog`: Mapped to UI workflow "Update release catalog from file".
+/// - `ConfigureAutomaticRebalance`
+/// - `RemediateFileService`
+/// - `RelayoutVsanObjects`
+/// - `RemediateFileServiceImbalance`
+/// - `SelectNvme`
+/// - `CreateFileServiceDomain`
+/// - `RemediateIscsiLunsRuntimeStatus`
+/// - `ShallowRekey`
+/// - `VsanClusterHealthActionIdEnum_Unknown`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanClusterHealthActionIdEnumEnum {
+    RepairClusterObjectsAction,
+    UploadHclDb,
+    UpdateHclDbFromInternet,
+    EnableHealthService,
+    DiskBalance,
+    StopDiskBalance,
+    RemediateDedup,
+    UpgradeVsanDiskFormat,
+    #[serde(rename = "CreateDVS")]
+    #[strum(serialize = "CreateDVS")]
+    CreateDvs,
+    #[serde(rename = "ConfigureHA")]
+    #[strum(serialize = "ConfigureHA")]
+    ConfigureHa,
+    #[serde(rename = "ConfigureDRS")]
+    #[strum(serialize = "ConfigureDRS")]
+    ConfigureDrs,
+    #[serde(rename = "ConfigureVSAN")]
+    #[strum(serialize = "ConfigureVSAN")]
+    ConfigureVsan,
+    #[serde(rename = "ClaimVSANDisks")]
+    #[strum(serialize = "ClaimVSANDisks")]
+    ClaimVsanDisks,
+    ClusterUpgrade,
+    #[serde(rename = "CreateVMKnic")]
+    #[strum(serialize = "CreateVMKnic")]
+    CreateVmKnic,
+    #[serde(rename = "CreateVMKnicWithVMotion")]
+    #[strum(serialize = "CreateVMKnicWithVMotion")]
+    CreateVmKnicWithVMotion,
+    RunBurnInTest,
+    EnableIscsiTargetService,
+    EnablePerformanceServiceAction,
+    RemediateClusterConfig,
+    EnableCeip,
+    LoginVumIsoDepot,
+    PurgeInaccessSwapObjs,
+    UploadReleaseCatalog,
+    ConfigureAutomaticRebalance,
+    RemediateFileService,
+    RelayoutVsanObjects,
+    RemediateFileServiceImbalance,
+    SelectNvme,
+    CreateFileServiceDomain,
+    RemediateIscsiLunsRuntimeStatus,
+    ShallowRekey,
+    #[serde(rename = "VsanClusterHealthActionIdEnum_Unknown")]
+    #[strum(serialize = "VsanClusterHealthActionIdEnum_Unknown")]
+    VsanClusterHealthActionIdEnumUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// The vSAN cluster health category enumeration.
+/// 
+/// Each of non-green health check belongs to a specific category
+/// according to its actual user impact. The health score can be
+/// calculated based on it.
+/// 
+/// Possible values:
+/// - `DataAvailability`: The health category which impacts the vSAN object data availability and need user immediate action to avoid possible data loss.
+/// - `InfraAvailability`: The health category which impacts the vSAN cluster infrastructure availability like host/network/disk health.
+///   
+///   Notice it may impact data availability eventually.
+/// - `DataPerformance`: The health category which impacts the vSAN object data performance like congestion health.
+/// - `InfraPerformance`: The health category which impacts the vSAN cluster infrastructure performance like network latency health.
+///   
+///   Notice it may impact user data performance eventually.
+/// - `CapacityUtilization`: The health category which impacts the vSAN cluster capacity utilization.
+/// - `SoftResourceUtilization`: The health category which impacts the vSAN software resource utilization like component health.
+/// - `Compliance`: The health category of which health warning is not compliant with vSAN cluster requirement or recommendation.
+///   
+///   Notice the health warnings in this category have no immediate impact for the current vSAN cluster but it may have potential risk with unpredictable impact in future.
+/// - `VsanClusterHealthCategoryEnum_Unknown`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanClusterHealthCategoryEnumEnum {
+    DataAvailability,
+    InfraAvailability,
+    DataPerformance,
+    InfraPerformance,
+    CapacityUtilization,
+    SoftResourceUtilization,
+    Compliance,
+    #[serde(rename = "VsanClusterHealthCategoryEnum_Unknown")]
+    #[strum(serialize = "VsanClusterHealthCategoryEnum_Unknown")]
+    VsanClusterHealthCategoryEnumUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// The vSAN Datastore type.
+/// 
+/// It can be used in
+/// *QueryVsanManagedStorageSpaceUsageSpec*.
+/// 
+/// Possible values:
+/// - `vsan`: The vSAN storage type.
+/// - `vsandirect`: The vSAN direct storage type.
+/// - `pmem`: 
+///   
+///   Deprecated as of vSphere 9.0 APIs with no replacement.
+///   
+///   Do not use.
+/// - `VsanDatastoreType_Unknown`: represent the value when the lower version client cannot recognize the
+///   enum value.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanDatastoreTypeEnum {
+    #[serde(rename = "vsan")]
+    #[strum(serialize = "vsan")]
+    Vsan,
+    #[serde(rename = "vsandirect")]
+    #[strum(serialize = "vsandirect")]
+    Vsandirect,
+    #[serde(rename = "pmem")]
+    #[strum(serialize = "pmem")]
+    Pmem,
+    #[serde(rename = "VsanDatastoreType_Unknown")]
+    #[strum(serialize = "VsanDatastoreType_Unknown")]
+    VsanDatastoreTypeUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// The type of the disk group to created.
+/// 
+/// Possible values:
+/// - `allflash`
+/// - `hybrid`
+/// - `vsandirect`
+/// - `pmem`: 
+///   
+///   Deprecated as of vSphere 9.0 APIs with no replacement.
+///   
+///   Do not use.
+/// - `VsanDiskGroupCreationType_Unknown`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VimClusterVsanDiskGroupCreationTypeEnum {
+    #[serde(rename = "allflash")]
+    #[strum(serialize = "allflash")]
+    Allflash,
+    #[serde(rename = "hybrid")]
+    #[strum(serialize = "hybrid")]
+    Hybrid,
+    #[serde(rename = "vsandirect")]
+    #[strum(serialize = "vsandirect")]
+    Vsandirect,
+    #[serde(rename = "pmem")]
+    #[strum(serialize = "pmem")]
+    Pmem,
+    #[serde(rename = "VsanDiskGroupCreationType_Unknown")]
+    #[strum(serialize = "VsanDiskGroupCreationType_Unknown")]
+    VsanDiskGroupCreationTypeUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Type of ioinsight instance, which can be either running or completed.
+/// 
+/// Possible values:
+/// - `running`: Indicate the query is only for ioinsight instance which is still running.
+/// - `completed`: Query is for ioinsight instance which has stopped successfully.
+/// - `crashed`: Indicate an ioinsight instance is crashed for some unexpected reason.
+/// - `VsanIoInsightInstanceState_unknown`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanIoInsightInstanceStateEnum {
+    #[serde(rename = "running")]
+    #[strum(serialize = "running")]
+    Running,
+    #[serde(rename = "completed")]
+    #[strum(serialize = "completed")]
+    Completed,
+    #[serde(rename = "crashed")]
+    #[strum(serialize = "crashed")]
+    Crashed,
+    #[serde(rename = "VsanIoInsightInstanceState_unknown")]
+    #[strum(serialize = "VsanIoInsightInstanceState_unknown")]
+    VsanIoInsightInstanceStateUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Defines iSCSI LUN status, supported values are Online, Offline.
+/// 
+/// Possible values:
+/// - `Online`: LUN is a configuration status, which is a desired state.
+///   
+///   If LUN is online, initiators can discover the LUN after login to the target.
+/// - `Offline`: LUN is a configuration status, which is a desired state.
+///   
+///   If LUN is offline, initiators can not discover the LUN after login to the target, all existing connections are closed.
+/// - `VsanIscsiLUNStatus_Unknown`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanIscsiLunStatusEnum {
+    Online,
+    Offline,
+    #[serde(rename = "VsanIscsiLUNStatus_Unknown")]
+    #[strum(serialize = "VsanIscsiLUNStatus_Unknown")]
+    VsanIscsiLunStatusUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Defines iSCSI LUN runtime status type for iSCSI target service.
+/// 
+/// Possible values:
+/// - `Online`: LUN is loaded by vSAN iSCSI service successfully, if LUN runtime status is online, initiators can discover it after login to the target and it can provide IO service.
+/// - `Offline`: LUN is not loaded in kernel.
+///   
+///   If LUN runtime status is offline, initiators can't discover it after login to the target.
+/// - `VsanIscsiLUNRuntimeStatusType_Unknown`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanIscsiLunRuntimeStatusTypeEnum {
+    Online,
+    Offline,
+    #[serde(rename = "VsanIscsiLUNRuntimeStatusType_Unknown")]
+    #[strum(serialize = "VsanIscsiLUNRuntimeStatusType_Unknown")]
+    VsanIscsiLunRuntimeStatusTypeUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Defines iSCSI authentication type.
+/// 
+/// Possible values:
+/// - `NoAuth`: No authentication is used, the target can be connected by any initiator.
+/// - `CHAP`: The Challenge-Handshake Authentication Protocol (CHAP), user name and secret attached to the target is needed to provide for any initiator to authenticate to this target.
+/// - `CHAP_Mutual`: The Challenge-Handshake Authentication Protocol (CHAP) with Mutual option enabled, not only user name and secret attached to the target is needed to provide for any initiator to authenticate to this target, but also user name and secret attached to the initiator is needed to provide for one initiator to authenticate to any target.
+/// - `VsanIscsiTargetAuthType_Unknown`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanIscsiTargetAuthTypeEnum {
+    NoAuth,
+    #[serde(rename = "CHAP")]
+    #[strum(serialize = "CHAP")]
+    Chap,
+    #[serde(rename = "CHAP_Mutual")]
+    #[strum(serialize = "CHAP_Mutual")]
+    ChapMutual,
+    #[serde(rename = "VsanIscsiTargetAuthType_Unknown")]
+    #[strum(serialize = "VsanIscsiTargetAuthType_Unknown")]
+    VsanIscsiTargetAuthTypeUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Defines iSCSI target service process status.
+/// 
+/// Possible values:
+/// - `Running`: Process is running.
+/// - `Stopped`: Process is stopped.
+/// - `VsanIscsiTargetServiceProcessStatus_Unknown`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanIscsiTargetServiceProcessStatusEnum {
+    Running,
+    Stopped,
+    #[serde(rename = "VsanIscsiTargetServiceProcessStatus_Unknown")]
+    #[strum(serialize = "VsanIscsiTargetServiceProcessStatus_Unknown")]
+    VsanIscsiTargetServiceProcessStatusUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Defines the possible types for the vSAN objects in 8.x and previous
+/// releases.
+/// 
+/// Possible values:
+/// - `vmswap`: The VM swap files.
+/// - `vdisk`: The virtual disks.
+/// - `namespace`: The VM home objects.
+/// - `vmem`: The VM snapshot memory files.
+/// - `statsdb`: The vSAN performance management objects.
+/// - `iscsiTarget`: The vSAN iSCSI home and target objects.
+/// - `iscsiLun`: The vSAN iSCSI LUNs.
+/// - `other`: Other vSAN objects.
+/// - `fileSystemOverhead`: vSAN File system overhead.
+/// - `dedupOverhead`: Deduplication and compression overhead.
+/// - `spaceUnderDedupConsideration`
+/// - `checksumOverhead`: Checksum overhead.
+/// - `improvedVirtualDisk`: First Class Disks.
+/// - `transientSpace`
+/// - `slackSpaceCapRequiredForHost`
+/// - `resynPauseThresholdForHost`
+/// - `minSpaceRequiredForVsanOp`
+/// - `hostRebuildCapacity`
+/// - `physicalTransientSpace`
+/// - `haMetadataObject`
+/// - `fileServiceRoot`
+/// - `attachedCnsVolBlock`
+/// - `detachedCnsVolBlock`
+/// - `attachedCnsVolFile`
+/// - `detachedCnsVolFile`
+/// - `cnsVolFile`
+/// - `fileShare`
+/// - `extension`
+/// - `hbrDisk`
+/// - `hbrCfg`
+/// - `hbrPersist`
+/// - `traceobject`
+/// - `esaObjectOverhead`
+/// - `VsanObjectTypeEnum_Unknown`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanObjectTypeEnumEnum {
+    #[serde(rename = "vmswap")]
+    #[strum(serialize = "vmswap")]
+    Vmswap,
+    #[serde(rename = "vdisk")]
+    #[strum(serialize = "vdisk")]
+    Vdisk,
+    #[serde(rename = "namespace")]
+    #[strum(serialize = "namespace")]
+    Namespace,
+    #[serde(rename = "vmem")]
+    #[strum(serialize = "vmem")]
+    Vmem,
+    #[serde(rename = "statsdb")]
+    #[strum(serialize = "statsdb")]
+    Statsdb,
+    #[serde(rename = "iscsiTarget")]
+    #[strum(serialize = "iscsiTarget")]
+    IscsiTarget,
+    #[serde(rename = "iscsiLun")]
+    #[strum(serialize = "iscsiLun")]
+    IscsiLun,
+    #[serde(rename = "other")]
+    #[strum(serialize = "other")]
+    Other,
+    #[serde(rename = "fileSystemOverhead")]
+    #[strum(serialize = "fileSystemOverhead")]
+    FileSystemOverhead,
+    #[serde(rename = "dedupOverhead")]
+    #[strum(serialize = "dedupOverhead")]
+    DedupOverhead,
+    #[serde(rename = "spaceUnderDedupConsideration")]
+    #[strum(serialize = "spaceUnderDedupConsideration")]
+    SpaceUnderDedupConsideration,
+    #[serde(rename = "checksumOverhead")]
+    #[strum(serialize = "checksumOverhead")]
+    ChecksumOverhead,
+    #[serde(rename = "improvedVirtualDisk")]
+    #[strum(serialize = "improvedVirtualDisk")]
+    ImprovedVirtualDisk,
+    #[serde(rename = "transientSpace")]
+    #[strum(serialize = "transientSpace")]
+    TransientSpace,
+    #[serde(rename = "slackSpaceCapRequiredForHost")]
+    #[strum(serialize = "slackSpaceCapRequiredForHost")]
+    SlackSpaceCapRequiredForHost,
+    #[serde(rename = "resynPauseThresholdForHost")]
+    #[strum(serialize = "resynPauseThresholdForHost")]
+    ResynPauseThresholdForHost,
+    #[serde(rename = "minSpaceRequiredForVsanOp")]
+    #[strum(serialize = "minSpaceRequiredForVsanOp")]
+    MinSpaceRequiredForVsanOp,
+    #[serde(rename = "hostRebuildCapacity")]
+    #[strum(serialize = "hostRebuildCapacity")]
+    HostRebuildCapacity,
+    #[serde(rename = "physicalTransientSpace")]
+    #[strum(serialize = "physicalTransientSpace")]
+    PhysicalTransientSpace,
+    #[serde(rename = "haMetadataObject")]
+    #[strum(serialize = "haMetadataObject")]
+    HaMetadataObject,
+    #[serde(rename = "fileServiceRoot")]
+    #[strum(serialize = "fileServiceRoot")]
+    FileServiceRoot,
+    #[serde(rename = "attachedCnsVolBlock")]
+    #[strum(serialize = "attachedCnsVolBlock")]
+    AttachedCnsVolBlock,
+    #[serde(rename = "detachedCnsVolBlock")]
+    #[strum(serialize = "detachedCnsVolBlock")]
+    DetachedCnsVolBlock,
+    #[serde(rename = "attachedCnsVolFile")]
+    #[strum(serialize = "attachedCnsVolFile")]
+    AttachedCnsVolFile,
+    #[serde(rename = "detachedCnsVolFile")]
+    #[strum(serialize = "detachedCnsVolFile")]
+    DetachedCnsVolFile,
+    #[serde(rename = "cnsVolFile")]
+    #[strum(serialize = "cnsVolFile")]
+    CnsVolFile,
+    #[serde(rename = "fileShare")]
+    #[strum(serialize = "fileShare")]
+    FileShare,
+    #[serde(rename = "extension")]
+    #[strum(serialize = "extension")]
+    Extension,
+    #[serde(rename = "hbrDisk")]
+    #[strum(serialize = "hbrDisk")]
+    HbrDisk,
+    #[serde(rename = "hbrCfg")]
+    #[strum(serialize = "hbrCfg")]
+    HbrCfg,
+    #[serde(rename = "hbrPersist")]
+    #[strum(serialize = "hbrPersist")]
+    HbrPersist,
+    #[serde(rename = "traceobject")]
+    #[strum(serialize = "traceobject")]
+    Traceobject,
+    #[serde(rename = "esaObjectOverhead")]
+    #[strum(serialize = "esaObjectOverhead")]
+    EsaObjectOverhead,
+    #[serde(rename = "VsanObjectTypeEnum_Unknown")]
+    #[strum(serialize = "VsanObjectTypeEnum_Unknown")]
+    VsanObjectTypeEnumUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Defines the possible types for the vSAN objects in 9.0 release.
+/// 
+/// Possible values:
+/// - `dedupSharedUserData`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanObjectTypeEnum90Enum {
+    #[serde(rename = "dedupSharedUserData")]
+    #[strum(serialize = "dedupSharedUserData")]
+    DedupSharedUserData,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// The query type indicating the goal of the vSAN performance diagnostic
+/// query, with the following values.
+/// 
+/// Possible values:
+/// - `tput`: This query type is for a benchmarking test diagnosing if the best throughput was achieved on the vSAN cluster.
+/// - `iops`: This query type is for a benchmarking test diagnosing if the best IOPS was achieved on the vSAN cluster.
+/// - `lat`: This query type is for a benchmarking test diagnosing if the best latency was achieved on the vSAN cluster.
+/// - `eval`: This query type is for general evaluation of the cluster.
+///   
+///   This mode is available for experiments only and not certified for production use.
+/// - `VsanPerfDiagnosticQueryType_Unknown`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanPerfDiagnosticQueryTypeEnum {
+    #[serde(rename = "tput")]
+    #[strum(serialize = "tput")]
+    Tput,
+    #[serde(rename = "iops")]
+    #[strum(serialize = "iops")]
+    Iops,
+    #[serde(rename = "lat")]
+    #[strum(serialize = "lat")]
+    Lat,
+    #[serde(rename = "eval")]
+    #[strum(serialize = "eval")]
+    Eval,
+    #[serde(rename = "VsanPerfDiagnosticQueryType_Unknown")]
+    #[strum(serialize = "VsanPerfDiagnosticQueryType_Unknown")]
+    VsanPerfDiagnosticQueryTypeUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Stats unit types indicate the unit display for UI
+/// Valid types are:
+/// 
+/// Possible values:
+/// - `number`: a number (int) without unit, like IOPS.
+/// - `time_ms`: a time unit (int) measured by milliseconds.
+/// - `percentage`: a number (int) between 0 and 100, representing the percentage.
+/// - `size_bytes`: a unit for the size measured by bytes.
+/// - `rate_bytes`: a rate unit for bytes per second.
+/// - `permille`: a number (int) between 0 and 1000, representing the permille.
+/// - `time_s`
+/// - `time_us`
+/// - `time_ns`
+/// - `VsanPerfStatsUnitType_Unknown`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanPerfStatsUnitTypeEnum {
+    #[serde(rename = "number")]
+    #[strum(serialize = "number")]
+    Number,
+    #[serde(rename = "time_ms")]
+    #[strum(serialize = "time_ms")]
+    TimeMs,
+    #[serde(rename = "percentage")]
+    #[strum(serialize = "percentage")]
+    Percentage,
+    #[serde(rename = "size_bytes")]
+    #[strum(serialize = "size_bytes")]
+    SizeBytes,
+    #[serde(rename = "rate_bytes")]
+    #[strum(serialize = "rate_bytes")]
+    RateBytes,
+    #[serde(rename = "permille")]
+    #[strum(serialize = "permille")]
+    Permille,
+    #[serde(rename = "time_s")]
+    #[strum(serialize = "time_s")]
+    TimeS,
+    #[serde(rename = "time_us")]
+    #[strum(serialize = "time_us")]
+    TimeUs,
+    #[serde(rename = "time_ns")]
+    #[strum(serialize = "time_ns")]
+    TimeNs,
+    #[serde(rename = "VsanPerfStatsUnitType_Unknown")]
+    #[strum(serialize = "VsanPerfStatsUnitType_Unknown")]
+    VsanPerfStatsUnitTypeUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// The type of statistical measurement that a metric value represents.
+/// 
+/// Valid types are:
+/// 
+/// Possible values:
+/// - `absolute`: Represents an actual value, level, or state of the counter.
+///   
+///   For example, the capacity metric represents the actual configured size of the specified disk. In other words, number of samples, samplingPeriod, and intervals have no bearing on an absolute metric value.
+/// - `delta`: Represents an amount of change for the metric during the sampling period as compared to the previous interval.
+/// - `rate`: Represents a value that has been normalized over the sampling period, enabling values for the same counter type to be compared, regardless of interval.
+///   
+///   For example, the number of reads per second.
+/// - `VsanPerfStatsType_Unknown`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanPerfStatsTypeEnum {
+    #[serde(rename = "absolute")]
+    #[strum(serialize = "absolute")]
+    Absolute,
+    #[serde(rename = "delta")]
+    #[strum(serialize = "delta")]
+    Delta,
+    #[serde(rename = "rate")]
+    #[strum(serialize = "rate")]
+    Rate,
+    #[serde(rename = "VsanPerfStatsType_Unknown")]
+    #[strum(serialize = "VsanPerfStatsType_Unknown")]
+    VsanPerfStatsTypeUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Stats summarization types indicate how multiple samples of a specific metric
+/// are transformed or aggregated into a single statistical value.
+/// 
+/// Valid types are:
+/// 
+/// Possible values:
+/// - `average`: The actual value collected or the average of all values collected during the summary period.
+/// - `maximum`: The maximum value of the performance metric value over the summarization period.
+/// - `minimum`: The minimum value of the performance metric value over the summarization period.
+/// - `latest`: The most recent value of the performance metric over the summarization period.
+/// - `summation`: The sum of all the values of the performance metric over the summarization period.
+/// - `none`: The counter is never rolled up.
+/// - `VsanPerfSummaryType_Unknown`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanPerfSummaryTypeEnum {
+    #[serde(rename = "average")]
+    #[strum(serialize = "average")]
+    Average,
+    #[serde(rename = "maximum")]
+    #[strum(serialize = "maximum")]
+    Maximum,
+    #[serde(rename = "minimum")]
+    #[strum(serialize = "minimum")]
+    Minimum,
+    #[serde(rename = "latest")]
+    #[strum(serialize = "latest")]
+    Latest,
+    #[serde(rename = "summation")]
+    #[strum(serialize = "summation")]
+    Summation,
+    #[serde(rename = "none")]
+    #[strum(serialize = "none")]
+    None,
+    #[serde(rename = "VsanPerfSummaryType_Unknown")]
+    #[strum(serialize = "VsanPerfSummaryType_Unknown")]
+    VsanPerfSummaryTypeUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// The direction of threshold value indicates whether it is upper limit or
+/// lower limit.
+/// 
+/// Possible values:
+/// - `upper`: The threshold is an upper limit.
+///   
+///   When the performance metric value exceeds the threshold, it will display warnings in graph.
+/// - `lower`: The threshold is a lower limit.
+///   
+///   When the performance metric value is lower than the threshold, it will display warnings in graph.
+/// - `VsanPerfThresholdDirectionType_Unknown`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanPerfThresholdDirectionTypeEnum {
+    #[serde(rename = "upper")]
+    #[strum(serialize = "upper")]
+    Upper,
+    #[serde(rename = "lower")]
+    #[strum(serialize = "lower")]
+    Lower,
+    #[serde(rename = "VsanPerfThresholdDirectionType_Unknown")]
+    #[strum(serialize = "VsanPerfThresholdDirectionType_Unknown")]
+    VsanPerfThresholdDirectionTypeUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Defines the error code of *VsanObjectSystem.RelayoutObjects*.
+/// 
+/// Possible values:
+/// - `outOfResources`: indicates resources are not enough.
+/// - `generic`: indicates all failures not covered by the errors defined above.
+/// - `VsanRelayoutObjectsErrorCode_Unknown`: represent the value when the lower version client cannot recognize the enum value.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanRelayoutObjectsErrorCodeEnum {
+    #[serde(rename = "outOfResources")]
+    #[strum(serialize = "outOfResources")]
+    OutOfResources,
+    #[serde(rename = "generic")]
+    #[strum(serialize = "generic")]
+    Generic,
+    #[serde(rename = "VsanRelayoutObjectsErrorCode_Unknown")]
+    #[strum(serialize = "VsanRelayoutObjectsErrorCode_Unknown")]
+    VsanRelayoutObjectsErrorCodeUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// The vSAN Entity type.
+/// 
+/// An Entity may include vSAN objects like
+/// virtual machine or fault domain.
+/// 
+/// Possible values:
+/// - `VM`: The virtual machine which may contain the vSAN objects like VMDK, swap etc
+/// - `FileShare`: The file share which may be backed by one or more vSAN objects
+/// - `Host`: The host which may contain the vSAN objects
+/// - `FaultDomain`: The fault domain which may contain the vSAN objects
+/// - `VsanSpaceReportingEntityType_Unknown`: represent the value when the lower version client cannot recognize the enum value.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanSpaceReportingEntityTypeEnum {
+    #[serde(rename = "VM")]
+    #[strum(serialize = "VM")]
+    Vm,
+    FileShare,
+    Host,
+    FaultDomain,
+    #[serde(rename = "VsanSpaceReportingEntityType_Unknown")]
+    #[strum(serialize = "VsanSpaceReportingEntityType_Unknown")]
+    VsanSpaceReportingEntityTypeUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// The supported vSAN health log level enumeration for Storage Infrastructure / vSAN
+/// 
+/// Possible values:
+/// - `INFO`
+/// - `WARNING`
+/// - `ERROR`
+/// - `DEBUG`
+/// - `CRITICAL`
+/// - `VsanHealthLogLevelEnum_Unknown`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanHealthLogLevelEnumEnum {
+    #[serde(rename = "INFO")]
+    #[strum(serialize = "INFO")]
+    Info,
+    #[serde(rename = "WARNING")]
+    #[strum(serialize = "WARNING")]
+    Warning,
+    #[serde(rename = "ERROR")]
+    #[strum(serialize = "ERROR")]
+    Error,
+    #[serde(rename = "DEBUG")]
+    #[strum(serialize = "DEBUG")]
+    Debug,
+    #[serde(rename = "CRITICAL")]
+    #[strum(serialize = "CRITICAL")]
+    Critical,
+    #[serde(rename = "VsanHealthLogLevelEnum_Unknown")]
+    #[strum(serialize = "VsanHealthLogLevelEnum_Unknown")]
+    VsanHealthLogLevelEnumUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Enumerates flavors of container orchestrator cluster for which
+/// volume operations are being performed.
+/// 
+/// Possible values:
+/// - `VANILLA`: represents vanilla flavor of container cluster.
+/// - `WORKLOAD`: represents WCP or supervisor container cluster.
+/// - `GUEST_CLUSTER`: represents container cluster deployed as a guest cluster within a WCP or supervisor cluster.
+/// - `ClusterFlavor_Unknown`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum CnsClusterFlavorEnum {
+    #[serde(rename = "VANILLA")]
+    #[strum(serialize = "VANILLA")]
+    Vanilla,
+    #[serde(rename = "WORKLOAD")]
+    #[strum(serialize = "WORKLOAD")]
+    Workload,
+    #[serde(rename = "GUEST_CLUSTER")]
+    #[strum(serialize = "GUEST_CLUSTER")]
+    GuestCluster,
+    #[serde(rename = "ClusterFlavor_Unknown")]
+    #[strum(serialize = "ClusterFlavor_Unknown")]
+    ClusterFlavorUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Enumerates types of container orchestrator cluster for which volume operations
+/// are being performed.
+/// 
+///   
+/// This is a list of supported container orchestrator cluster types. Also the
+/// ClusterType value can be used to list all the volumes that exist for the
+/// specified type of container orchestrator.
+/// 
+/// Possible values:
+/// - `KUBERNETES`: for container orchestrator cluster of type Kubernetes.
+/// - `ClusterType_Unknown`: represent the value when the lower version client cannot recognize the enum value.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum CnsClusterTypeEnum {
+    #[serde(rename = "KUBERNETES")]
+    #[strum(serialize = "KUBERNETES")]
+    Kubernetes,
+    #[serde(rename = "ClusterType_Unknown")]
+    #[strum(serialize = "ClusterType_Unknown")]
+    ClusterTypeUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Enumerates types of Kubernetes entities for which CNS would be storing metadata for.
+/// 
+/// Possible values:
+/// - `PERSISTENT_VOLUME`: represents persistent volume entity in Kubernetes
+/// - `PERSISTENT_VOLUME_CLAIM`: represents persistent volume claim entity in Kubernetes
+/// - `POD`: represents pod entity in Kubernetes
+/// - `KubernetesEntityType_Unknown`: represent the value when the lower version client cannot recognize the enum value
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum CnsKubernetesEntityTypeEnum {
+    #[serde(rename = "PERSISTENT_VOLUME")]
+    #[strum(serialize = "PERSISTENT_VOLUME")]
+    PersistentVolume,
+    #[serde(rename = "PERSISTENT_VOLUME_CLAIM")]
+    #[strum(serialize = "PERSISTENT_VOLUME_CLAIM")]
+    PersistentVolumeClaim,
+    #[serde(rename = "POD")]
+    #[strum(serialize = "POD")]
+    Pod,
+    #[serde(rename = "KubernetesEntityType_Unknown")]
+    #[strum(serialize = "KubernetesEntityType_Unknown")]
+    KubernetesEntityTypeUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Enumerates the metrics output format.
+/// 
+/// Possible values:
+/// - `PROMETHEUS`: metrics are returned in Prometheus format
+/// - `WAVEFRONT`: metrics are returned in Wavefront format
+/// - `MetricFormat_Unknown`: represent the value when the lower version client cannot recognize the enum value
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum MetricFormatEnum {
+    #[serde(rename = "PROMETHEUS")]
+    #[strum(serialize = "PROMETHEUS")]
+    Prometheus,
+    #[serde(rename = "WAVEFRONT")]
+    #[strum(serialize = "WAVEFRONT")]
+    Wavefront,
+    #[serde(rename = "MetricFormat_Unknown")]
+    #[strum(serialize = "MetricFormat_Unknown")]
+    MetricFormatUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Enumerates types of metrics for 8.x and previous releases.
+/// 
+/// Possible values:
+/// - `VOLUME`: represents volume metrics
+/// - `DATASTORE`: represents datastore metrics
+/// - `CLUSTER`: represents cluster metrics *CnsClusterType_enum*
+/// - `DISTRIBUTION`
+/// - `STORAGE_POLICY`
+/// - `OP_STATS`: represents operation statistics
+/// - `SAAS_METRICS`
+/// - `MetricType_Unknown`: represent the value when the lower version client cannot recognize the enum value
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum MetricTypeEnum {
+    #[serde(rename = "VOLUME")]
+    #[strum(serialize = "VOLUME")]
+    Volume,
+    #[serde(rename = "DATASTORE")]
+    #[strum(serialize = "DATASTORE")]
+    Datastore,
+    #[serde(rename = "CLUSTER")]
+    #[strum(serialize = "CLUSTER")]
+    Cluster,
+    #[serde(rename = "DISTRIBUTION")]
+    #[strum(serialize = "DISTRIBUTION")]
+    Distribution,
+    #[serde(rename = "STORAGE_POLICY")]
+    #[strum(serialize = "STORAGE_POLICY")]
+    StoragePolicy,
+    #[serde(rename = "OP_STATS")]
+    #[strum(serialize = "OP_STATS")]
+    OpStats,
+    #[serde(rename = "SAAS_METRICS")]
+    #[strum(serialize = "SAAS_METRICS")]
+    SaasMetrics,
+    #[serde(rename = "MetricType_Unknown")]
+    #[strum(serialize = "MetricType_Unknown")]
+    MetricTypeUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Enumerates types of query selection name.
+/// 
+/// This is a reflection of the
+/// attributes in *CnsVolume*.
+/// 
+/// Possible values:
+/// - `VOLUME_METADATA`
+/// - `DATASTORE_URL`
+/// - `POLICY_ID`
+/// - `VOLUME_TYPE`: Select *CnsVolume.volumeType*.
+/// - `VOLUME_NAME`: Select *CnsVolume.name*.
+/// - `BACKING_OBJECT_DETAILS`: Select *CnsVolume.backingObjectDetails*.
+/// - `COMPLIANCE_STATUS`: Select *CnsVolume.complianceStatus*
+/// - `DATASTORE_ACCESSIBILITY_STATUS`: Select *CnsVolume.datastoreAccessibilityStatus*
+/// - `HEALTH_STATUS`
+/// - `QuerySelectionNameType_Unknown`: represent the value when the lower version client cannot recognize the enum value
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum QuerySelectionNameTypeEnum {
+    #[serde(rename = "VOLUME_METADATA")]
+    #[strum(serialize = "VOLUME_METADATA")]
+    VolumeMetadata,
+    #[serde(rename = "DATASTORE_URL")]
+    #[strum(serialize = "DATASTORE_URL")]
+    DatastoreUrl,
+    #[serde(rename = "POLICY_ID")]
+    #[strum(serialize = "POLICY_ID")]
+    PolicyId,
+    #[serde(rename = "VOLUME_TYPE")]
+    #[strum(serialize = "VOLUME_TYPE")]
+    VolumeType,
+    #[serde(rename = "VOLUME_NAME")]
+    #[strum(serialize = "VOLUME_NAME")]
+    VolumeName,
+    #[serde(rename = "BACKING_OBJECT_DETAILS")]
+    #[strum(serialize = "BACKING_OBJECT_DETAILS")]
+    BackingObjectDetails,
+    #[serde(rename = "COMPLIANCE_STATUS")]
+    #[strum(serialize = "COMPLIANCE_STATUS")]
+    ComplianceStatus,
+    #[serde(rename = "DATASTORE_ACCESSIBILITY_STATUS")]
+    #[strum(serialize = "DATASTORE_ACCESSIBILITY_STATUS")]
+    DatastoreAccessibilityStatus,
+    #[serde(rename = "HEALTH_STATUS")]
+    #[strum(serialize = "HEALTH_STATUS")]
+    HealthStatus,
+    #[serde(rename = "QuerySelectionNameType_Unknown")]
+    #[strum(serialize = "QuerySelectionNameType_Unknown")]
+    QuerySelectionNameTypeUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Enumerate types of container volume based on the type of backing for the
+/// volume.
+/// 
+/// Possible values:
+/// - `BLOCK`: for volume backed by a block device.
+/// - `FILE`
+/// - `VolumeType_Unknown`: represent the value when the older version client cannot recognize the enum value.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum CnsVolumeTypeEnum {
+    #[serde(rename = "BLOCK")]
+    #[strum(serialize = "BLOCK")]
+    Block,
+    #[serde(rename = "FILE")]
+    #[strum(serialize = "FILE")]
+    File,
+    #[serde(rename = "VolumeType_Unknown")]
+    #[strum(serialize = "VolumeType_Unknown")]
+    VolumeTypeUnknown,
     /// This variant handles values not known at compile time.
     #[serde(untagged)]
     #[strum(serialize = "__OTHER__")]
@@ -4064,6 +8312,38 @@ pub enum EntityImportTypeEnum {
     #[strum(serialize = "__OTHER__")]
     Other_(String),
 }
+/// Possible values:
+/// - `blocked`: The port link state: blocked.
+/// - `unblocked`: The port link state: unblocked.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum DvsFilterSpecLinkConfigEnum {
+    #[serde(rename = "blocked")]
+    #[strum(serialize = "blocked")]
+    Blocked,
+    #[serde(rename = "unblocked")]
+    #[strum(serialize = "unblocked")]
+    Unblocked,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Possible values:
+/// - `down`: The port link state: down.
+/// - `up`: The port link state: up.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum DvsFilterSpecLinkStateEnum {
+    #[serde(rename = "down")]
+    #[strum(serialize = "down")]
+    Down,
+    #[serde(rename = "up")]
+    #[strum(serialize = "up")]
+    Up,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
 /// The enum defines the distributed virtual switch mode.
 /// 
 /// Possible values:
@@ -4079,6 +8359,46 @@ pub enum HostDvsConfigSpecSwitchModeEnum {
     #[serde(rename = "mux")]
     #[strum(serialize = "mux")]
     Mux,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// The reason for DPU failover.
+/// 
+/// Possible values:
+/// - `crash`: The failover is caused by DPU crash.
+/// - `linkDown`: The failover is caused by DPU's vmnic(s) link down.
+/// - `userInitiated`: The failover is triggered by the user.
+///   
+/// ***Since:*** vSphere API Release 8.0.3.0
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum HostDistributedVirtualSwitchManagerFailoverReasonEnum {
+    #[serde(rename = "crash")]
+    #[strum(serialize = "crash")]
+    Crash,
+    #[serde(rename = "linkDown")]
+    #[strum(serialize = "linkDown")]
+    LinkDown,
+    #[serde(rename = "userInitiated")]
+    #[strum(serialize = "userInitiated")]
+    UserInitiated,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// The stage of DPU failover.
+/// 
+/// Possible values:
+/// - `STAGE_1`
+/// 
+/// ***Since:*** vSphere API Release 8.0.3.0
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum HostDistributedVirtualSwitchManagerFailoverStageEnum {
+    #[serde(rename = "STAGE_1")]
+    #[strum(serialize = "STAGE_1")]
+    Stage1,
     /// This variant handles values not known at compile time.
     #[serde(untagged)]
     #[strum(serialize = "__OTHER__")]
@@ -4114,6 +8434,24 @@ pub enum DistributedVirtualSwitchHostMemberHostComponentStateEnum {
     #[serde(rename = "down")]
     #[strum(serialize = "down")]
     Down,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Describe the runtime state of the uplink.
+/// 
+/// Possible values:
+/// - `active`
+/// - `standby`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum DistributedVirtualSwitchHostMemberHostUplinkStateStateEnum {
+    #[serde(rename = "active")]
+    #[strum(serialize = "active")]
+    Active,
+    #[serde(rename = "standby")]
+    #[strum(serialize = "standby")]
+    Standby,
     /// This variant handles values not known at compile time.
     #[serde(untagged)]
     #[strum(serialize = "__OTHER__")]
@@ -4544,6 +8882,18 @@ pub enum CryptoManagerHostKeyManagementTypeEnum {
 /// - `KeyStateMissingInKMS`: Key not found in KMS
 /// - `KeyStateNotActiveOrEnabled`: Key not active or enabled
 /// - `KeyStateManagedByTrustAuthority`: Key is managed by Trust Authority
+/// - `KeyStateManagedByNKP`: Key is managed by Native Key Provider
+///   
+///   ***Since:*** vSphere API Release 8.0.3.0
+/// - `NoPermissionToAccessKeyProvider`: No permission to access key provider
+///   
+///   ***Since:*** vSphere API Release 8.0.3.0
+/// - `WrappingKeyMissingInKMS`: Wrapping Key not found in KMS
+///   
+///   ***Since:*** vSphere API Release 9.0.0.0
+/// - `WrappingKeyNotActiveOrEnabled`: Wrapping Key not active or enabled
+///   
+///   ***Since:*** vSphere API Release 9.0.0.0
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum CryptoManagerKmipCryptoKeyStatusKeyUnavailableReasonEnum {
     KeyStateMissingInCache,
@@ -4554,6 +8904,39 @@ pub enum CryptoManagerKmipCryptoKeyStatusKeyUnavailableReasonEnum {
     KeyStateMissingInKms,
     KeyStateNotActiveOrEnabled,
     KeyStateManagedByTrustAuthority,
+    #[serde(rename = "KeyStateManagedByNKP")]
+    #[strum(serialize = "KeyStateManagedByNKP")]
+    KeyStateManagedByNkp,
+    NoPermissionToAccessKeyProvider,
+    #[serde(rename = "WrappingKeyMissingInKMS")]
+    #[strum(serialize = "WrappingKeyMissingInKMS")]
+    WrappingKeyMissingInKms,
+    WrappingKeyNotActiveOrEnabled,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Key type.
+/// 
+/// Possible values:
+/// - `rawKey`: Key is fetched directly from KMS.
+/// - `wrappedKey`: Key is wrapped by a wrapping key from KMS.
+///   
+///   The wrapping key details are specified in
+///   *KmipClusterInfoWrappingKeyIdKeyInfo*
+///   or
+///   *KmipClusterInfoWrappingRotationIntervalKeyInfo*.
+/// 
+/// ***Since:*** vSphere API Release 9.0.0.0
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum KmipClusterInfoKeyTypeEnum {
+    #[serde(rename = "rawKey")]
+    #[strum(serialize = "rawKey")]
+    RawKey,
+    #[serde(rename = "wrappedKey")]
+    #[strum(serialize = "wrappedKey")]
+    WrappedKey,
     /// This variant handles values not known at compile time.
     #[serde(untagged)]
     #[strum(serialize = "__OTHER__")]
@@ -4979,6 +9362,9 @@ pub enum CannotPowerOffVmInClusterOperationEnum {
 /// - `VMotionToUnsupportedNetworkType`: VMotion to unsupported destination network type
 /// - `NetworkUnderMaintenance`: The network is under maintenance
 /// - `MismatchedEnsMode`: Source and destination networks do not have same ENS(Enhanced Network Stack) mode
+/// - `MismatchedRealTimeDvs`: Source and destination networks do not have the same real-time flag
+///   
+///   ***Since:*** vSphere API Release 8.0.3.1
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum CannotUseNetworkReasonEnum {
     NetworkReservationNotSupported,
@@ -4987,6 +9373,7 @@ pub enum CannotUseNetworkReasonEnum {
     VMotionToUnsupportedNetworkType,
     NetworkUnderMaintenance,
     MismatchedEnsMode,
+    MismatchedRealTimeDvs,
     /// This variant handles values not known at compile time.
     #[serde(untagged)]
     #[strum(serialize = "__OTHER__")]
@@ -5032,6 +9419,10 @@ pub enum DasConfigFaultDasConfigFaultReasonEnum {
 /// - `host`: The host does not support this virtual device at all.
 /// - `guest`: The device is supported by the host in general, but not for
 ///   the specific guest OS the virtual machine is using.
+/// - `ft`: The device is supported by the host and guest OS, but not for
+///   the vSphere Fault Tolerance.
+///   
+///   ***Since:*** vSphere API Release 8.0.3.0
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum DeviceNotSupportedReasonEnum {
     #[serde(rename = "host")]
@@ -5040,6 +9431,9 @@ pub enum DeviceNotSupportedReasonEnum {
     #[serde(rename = "guest")]
     #[strum(serialize = "guest")]
     Guest,
+    #[serde(rename = "ft")]
+    #[strum(serialize = "ft")]
+    Ft,
     /// This variant handles values not known at compile time.
     #[serde(untagged)]
     #[strum(serialize = "__OTHER__")]
@@ -5515,7 +9909,7 @@ pub enum VFlashModuleNotSupportedReasonEnum {
 /// - `hasLocalDisk`: The virtual machine has one or more disks on local datastore
 /// - `esxAgentVm`: The virtual machine is an ESX agent VM
 /// - `video3dEnabled`: The virtual machine video device has 3D enabled
-/// - `hasUnsupportedDisk`: The virtual machine has a virtual disk with unsupported backing type
+/// - `hasUnsupportedDisk`
 /// - `insufficientBandwidth`: FT logging nic does not have desired bandwidth
 /// - `hasNestedHVConfiguration`: The host does not support fault tolerant VM with nested HV or VBS
 ///   enabled.
@@ -5532,9 +9926,35 @@ pub enum VFlashModuleNotSupportedReasonEnum {
 ///   with the specified number of virtual CPUs.
 /// - `tooMuchMemory`: The host does not support fault tolerance virtual machines
 ///   with the specified amount of memory.
+/// - `vMotionNotLicensed`: No VMotion license
+///   
+///   ***Since:*** vSphere API Release 8.0.3.0
+/// - `ftNotLicensed`: Host does not have proper FT license
+///   
+///   ***Since:*** vSphere API Release 8.0.3.0
+/// - `haAgentIssue`: Host does not have HA agent running properly
+///   
+///   ***Since:*** vSphere API Release 8.0.3.0
+/// - `unsupportedSPBM`: The VM has unsupported storage policy
+///   
+///   ***Since:*** vSphere API Release 8.0.3.0
+/// - `hasLinkedCloneDisk`: The virtual machine has virtual disk in linked-clone mode
+///   
+///   ***Since:*** vSphere API Release 8.0.3.0
 /// - `unsupportedPMemHAFailOver`: Virtual Machine with Pmem HA Failover is not supported
 ///   
 ///   ***Since:*** vSphere API Release 7.0.2.0
+/// - `unsupportedEncryptedDisk`: Virtual Machine with encrypted virtual disk is not supported.
+///   
+///   ***Since:*** vSphere API Release 8.0.3.0
+/// - `ftMetroClusterNotEditable`: The virtual machine does not allow to enable or disable FT Metro
+///   Cluster while FT is turned on.
+///   
+///   ***Since:*** vSphere API Release 8.0.3.0
+/// - `noHostGroupConfigured`: Cannot turn on vSphere Fault Tolerance on a FT Metro Cluster enabled VM
+///   with no Host Group configured.
+///   
+///   ***Since:*** vSphere API Release 8.0.3.0
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VmFaultToleranceConfigIssueReasonForIssueEnum {
     #[serde(rename = "haNotEnabled")]
@@ -5627,9 +10047,33 @@ pub enum VmFaultToleranceConfigIssueReasonForIssueEnum {
     #[serde(rename = "tooMuchMemory")]
     #[strum(serialize = "tooMuchMemory")]
     TooMuchMemory,
+    #[serde(rename = "vMotionNotLicensed")]
+    #[strum(serialize = "vMotionNotLicensed")]
+    VMotionNotLicensed,
+    #[serde(rename = "ftNotLicensed")]
+    #[strum(serialize = "ftNotLicensed")]
+    FtNotLicensed,
+    #[serde(rename = "haAgentIssue")]
+    #[strum(serialize = "haAgentIssue")]
+    HaAgentIssue,
+    #[serde(rename = "unsupportedSPBM")]
+    #[strum(serialize = "unsupportedSPBM")]
+    UnsupportedSpbm,
+    #[serde(rename = "hasLinkedCloneDisk")]
+    #[strum(serialize = "hasLinkedCloneDisk")]
+    HasLinkedCloneDisk,
     #[serde(rename = "unsupportedPMemHAFailOver")]
     #[strum(serialize = "unsupportedPMemHAFailOver")]
     UnsupportedPMemHaFailOver,
+    #[serde(rename = "unsupportedEncryptedDisk")]
+    #[strum(serialize = "unsupportedEncryptedDisk")]
+    UnsupportedEncryptedDisk,
+    #[serde(rename = "ftMetroClusterNotEditable")]
+    #[strum(serialize = "ftMetroClusterNotEditable")]
+    FtMetroClusterNotEditable,
+    #[serde(rename = "noHostGroupConfigured")]
+    #[strum(serialize = "noHostGroupConfigured")]
+    NoHostGroupConfigured,
     /// This variant handles values not known at compile time.
     #[serde(untagged)]
     #[strum(serialize = "__OTHER__")]
@@ -6100,6 +10544,26 @@ pub enum HostConfigChangeOperationEnum {
     #[strum(serialize = "__OTHER__")]
     Other_(String),
 }
+/// This list indicates the owner of an entity.
+/// 
+/// Possible values:
+/// - `NSX`: The owner is NSX (Network Virtualization and Security).
+/// - `VSAN`: The owner is vSAN (VMware Virtual Storage Area Network).
+///   
+/// ***Since:*** vSphere API Release 9.0.0.0
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum HostConfigChangeOwnerEnum {
+    #[serde(rename = "NSX")]
+    #[strum(serialize = "NSX")]
+    Nsx,
+    #[serde(rename = "VSAN")]
+    #[strum(serialize = "VSAN")]
+    Vsan,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
 /// Possible values:
 /// - `unknown`
 /// - `intel`
@@ -6141,6 +10605,31 @@ pub enum HostCpuPowerManagementInfoPolicyTypeEnum {
     #[serde(rename = "dynamicPolicy")]
     #[strum(serialize = "dynamicPolicy")]
     DynamicPolicy,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Possible values:
+/// - `systemDefault`: The CPU scheduler on this host is running without any modifications
+///   or mitigations.
+/// - `scav1`: The CPU scheduler on this host is using only one hyperthread per
+///   core to mitigate a security vulnerability.
+/// - `scav2`: The CPU scheduler on this host is using hyperthreads, with
+///   Side-Channel aware scheduling to mitigate a security vulnerability.
+///   
+/// ***Since:*** vSphere API Release 8.0.3.0
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum HostCpuSchedulerInfoCpuSchedulerPolicyInfoEnum {
+    #[serde(rename = "systemDefault")]
+    #[strum(serialize = "systemDefault")]
+    SystemDefault,
+    #[serde(rename = "scav1")]
+    #[strum(serialize = "scav1")]
+    Scav1,
+    #[serde(rename = "scav2")]
+    #[strum(serialize = "scav2")]
+    Scav2,
     /// This variant handles values not known at compile time.
     #[serde(untagged)]
     #[strum(serialize = "__OTHER__")]
@@ -6458,7 +10947,11 @@ pub enum FileSystemMountInfoVStorageSupportStatusEnum {
 ///   
 ///   If this is set, the type of the file system volume is VFFS.
 /// - `VVOL`: vvol File System (ESX Server only).
-/// - `PMEM`: Persistent Memory File System (ESX Server only).
+/// - `PMEM`: 
+///   
+///   Deprecated as of vSphere 9.0 APIs with no replacement.
+///   
+///   Persistent Memory File System (ESX Server only).
 /// - `vsanD`: VSAN direct file system.
 ///   
 ///   ***Since:*** vSphere API Release 7.0.1.0
@@ -6569,7 +11062,7 @@ pub enum HostFruFruTypeEnum {
     #[strum(serialize = "__OTHER__")]
     Other_(String),
 }
-/// Possible values for graphics type.
+/// Supported values for graphics type.
 /// 
 /// Possible values:
 /// - `shared`: Shared graphics (ex.
@@ -6591,7 +11084,7 @@ pub enum HostGraphicsConfigGraphicsTypeEnum {
     #[strum(serialize = "__OTHER__")]
     Other_(String),
 }
-/// Possible values for shared passthrough assignment policy
+/// Supported values for shared passthrough assignment policy
 /// 
 /// Possible values:
 /// - `performance`: Performance policy: assign VM to GPU with fewest VMs.
@@ -6604,6 +11097,26 @@ pub enum HostGraphicsConfigSharedPassthruAssignmentPolicyEnum {
     #[serde(rename = "consolidation")]
     #[strum(serialize = "consolidation")]
     Consolidation,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Supported values for vGPU mode.
+/// 
+/// Possible values:
+/// - `sameSize`: vGPU time-sliced same size.
+/// - `mixedSize`: vGPU time-sliced mixed size.
+///   
+/// ***Since:*** vSphere API Release 8.0.3.0
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum HostGraphicsConfigVgpuModeEnum {
+    #[serde(rename = "sameSize")]
+    #[strum(serialize = "sameSize")]
+    SameSize,
+    #[serde(rename = "mixedSize")]
+    #[strum(serialize = "mixedSize")]
+    MixedSize,
     /// This variant handles values not known at compile time.
     #[serde(untagged)]
     #[strum(serialize = "__OTHER__")]
@@ -6636,6 +11149,34 @@ pub enum HostGraphicsInfoGraphicsTypeEnum {
     #[serde(rename = "sharedDirect")]
     #[strum(serialize = "sharedDirect")]
     SharedDirect,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Possible values for vGPU mode.
+/// 
+/// Possible values:
+/// - `none`: vGPU mode not applicable.
+/// - `sameSize`: vGPU time-sliced same size.
+/// - `mixedSize`: vGPU time-sliced mixed size.
+/// - `multiInstanceGpu`: vGPU multi-instance GPU.
+///   
+/// ***Since:*** vSphere API Release 8.0.3.0
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum HostGraphicsInfoVgpuModeEnum {
+    #[serde(rename = "none")]
+    #[strum(serialize = "none")]
+    None,
+    #[serde(rename = "sameSize")]
+    #[strum(serialize = "sameSize")]
+    SameSize,
+    #[serde(rename = "mixedSize")]
+    #[strum(serialize = "mixedSize")]
+    MixedSize,
+    #[serde(rename = "multiInstanceGpu")]
+    #[strum(serialize = "multiInstanceGpu")]
+    MultiInstanceGpu,
     /// This variant handles values not known at compile time.
     #[serde(untagged)]
     #[strum(serialize = "__OTHER__")]
@@ -7250,12 +11791,17 @@ pub enum VirtualMachineMemoryAllocationPolicyEnum {
 /// Possible values:
 /// - `memoryTier`: Flag indicating that the tier is the primary memory tier visible from the
 ///   host.
-/// - `persistentTier`: Flag indicating that the tier is used as non-volatile storage, e.g.
+/// - `persistentTier`: 
+///   
+///   Deprecated as of vSphere 9.0 APIs with no replacement.
+///   
+///   Flag indicating that the tier is used as non-volatile storage, e.g.
 ///   
 ///   PMem in
 ///   App Direct mode.
 /// - `cachingTier`: Flag indicating that the tier is a cache for main memory.
-///   
+/// - `unmappableTier`: ***Since:*** vSphere API Release 8.0.3.0
+/// 
 /// ***Since:*** vSphere API Release 7.0.3.0
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostMemoryTierFlagsEnum {
@@ -7268,6 +11814,9 @@ pub enum HostMemoryTierFlagsEnum {
     #[serde(rename = "cachingTier")]
     #[strum(serialize = "cachingTier")]
     CachingTier,
+    #[serde(rename = "unmappableTier")]
+    #[strum(serialize = "unmappableTier")]
+    UnmappableTier,
     /// This variant handles values not known at compile time.
     #[serde(untagged)]
     #[strum(serialize = "__OTHER__")]
@@ -7277,8 +11826,15 @@ pub enum HostMemoryTierFlagsEnum {
 /// 
 /// Possible values:
 /// - `DRAM`: Dynamic random-access memory.
-/// - `PMem`: Persistent memory.
+/// - `PMem`: 
 ///   
+///   Deprecated as of vSphere 9.0 APIs with no replacement.
+///   
+///   Persistent memory.
+/// - `NVMe`: NVMe memory.
+///   
+///   ***Since:*** vSphere API Release 8.0.3.0
+/// 
 /// ***Since:*** vSphere API Release 7.0.3.0
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostMemoryTierTypeEnum {
@@ -7286,6 +11842,9 @@ pub enum HostMemoryTierTypeEnum {
     #[strum(serialize = "DRAM")]
     Dram,
     PMem,
+    #[serde(rename = "NVMe")]
+    #[strum(serialize = "NVMe")]
+    NvMe,
     /// This variant handles values not known at compile time.
     #[serde(untagged)]
     #[strum(serialize = "__OTHER__")]
@@ -7299,6 +11858,9 @@ pub enum HostMemoryTierTypeEnum {
 ///   applications, e.g.
 ///   
 ///   Intel's Memory Mode.
+/// - `softwareTiering`: The memory configuration where all memory tiers are managed by software (ESX).
+///   
+///   ***Since:*** vSphere API Release 8.0.3.0
 /// 
 /// ***Since:*** vSphere API Release 7.0.3.0
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
@@ -7309,6 +11871,9 @@ pub enum HostMemoryTieringTypeEnum {
     #[serde(rename = "hardwareTiering")]
     #[strum(serialize = "hardwareTiering")]
     HardwareTiering,
+    #[serde(rename = "softwareTiering")]
+    #[strum(serialize = "softwareTiering")]
+    SoftwareTiering,
     /// This variant handles values not known at compile time.
     #[serde(untagged)]
     #[strum(serialize = "__OTHER__")]
@@ -7484,6 +12049,14 @@ pub enum MultipathStateEnum {
 ///   
 ///   This
 ///   ensures the integrity of the NFS file data.
+/// - `SEC_KRB5P`: Extends *SEC_KRB5I* to send and receive encrypted NFS packets over
+///   the wire.
+///   
+///   *SEC_KRB5P* provides data privacy in addition to data
+///   integrity for NFS files. To date, SEC\_KRB5P provides the highest form of
+///   security for NFS payload.
+///   
+///   ***Since:*** vSphere API Release 9.0.0.0
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostNasVolumeSecurityTypeEnum {
     #[serde(rename = "AUTH_SYS")]
@@ -7495,6 +12068,9 @@ pub enum HostNasVolumeSecurityTypeEnum {
     #[serde(rename = "SEC_KRB5I")]
     #[strum(serialize = "SEC_KRB5I")]
     SecKrb5I,
+    #[serde(rename = "SEC_KRB5P")]
+    #[strum(serialize = "SEC_KRB5P")]
+    SecKrb5P,
     /// This variant handles values not known at compile time.
     #[serde(untagged)]
     #[strum(serialize = "__OTHER__")]
@@ -8005,6 +12581,63 @@ pub enum HostOpaqueSwitchOpaqueSwitchStateEnum {
     #[strum(serialize = "__OTHER__")]
     Other_(String),
 }
+/// The following enum describes some common kinds of partial maintenance modes,
+/// as well as their special semantics.
+/// 
+/// Possible values:
+/// - `quickPatchPartialMM`: When the host is in the quick patch partial maintenance mode, it is safe to
+///   perform a quick patch.
+///   
+///   When the host is in this partial maintenance mode, any virtual machines
+///   and/or pods placed on it will continue to run but operations which may
+///   lead to new workloads starting on the host such as power on or incoming
+///   vmotions may be blocked.
+///   It is generally unsafe to reboot the host in this state.
+///   
+///   ***Since:*** vSphere API Release 8.0.3.0
+/// 
+/// ***Since:*** vSphere API Release 8.0.3.0
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum HostPartialMaintenanceModeIdEnum {
+    #[serde(rename = "quickPatchPartialMM")]
+    #[strum(serialize = "quickPatchPartialMM")]
+    QuickPatchPartialMm,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// The following enum contains the list of possible statuses associated
+/// with each partial maintenance mode.
+/// 
+/// Possible values:
+/// - `notInPartialMM`: The host is not in the particular partial maintenance mode.
+/// - `enteringPartialMM`: The host is in the process of entering the particular partial maintenance
+///   mode.
+/// - `exitingPartialMM`: The host is in the process of exiting the particular partial maintenance
+///   mode.
+/// - `inPartialMM`: The host is in the particular partial maintenance mode.
+///   
+/// ***Since:*** vSphere API Release 8.0.3.0
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum HostPartialMaintenanceModeStatusEnum {
+    #[serde(rename = "notInPartialMM")]
+    #[strum(serialize = "notInPartialMM")]
+    NotInPartialMm,
+    #[serde(rename = "enteringPartialMM")]
+    #[strum(serialize = "enteringPartialMM")]
+    EnteringPartialMm,
+    #[serde(rename = "exitingPartialMM")]
+    #[strum(serialize = "exitingPartialMM")]
+    ExitingPartialMm,
+    #[serde(rename = "inPartialMM")]
+    #[strum(serialize = "inPartialMM")]
+    InPartialMm,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
 /// The installation state if the update is installed on the server.
 /// 
 /// Possible values:
@@ -8318,6 +12951,18 @@ pub enum HostRdmaDeviceConnectionStateEnum {
     #[strum(serialize = "__OTHER__")]
     Other_(String),
 }
+/// Enumeration of network protocols supported by RDMA capable NIC.
+/// 
+/// Possible values:
+/// - `RoCEv2`: Supported protocol is RDMA over Converged Ethernet (RoCEv2) version 2.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum RdmaProtocolEnum {
+    RoCEv2,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
 /// Enumeration of port directions.
 /// 
 /// Possible values:
@@ -8520,6 +13165,32 @@ pub enum DeviceProtocolEnum {
     #[serde(rename = "SCSI")]
     #[strum(serialize = "SCSI")]
     Scsi,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Possible values:
+/// - `LUN_RESERVED_UNKNOWN`
+/// - `LUN_RESERVED_YES`
+/// - `LUN_RESERVED_NO`
+/// - `LUN_RESERVED_NOT_SUPPORTED`
+/// 
+/// ***Since:*** vSphere API Release 8.0.3.0
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum ScsiLunLunReservationStatusEnum {
+    #[serde(rename = "LUN_RESERVED_UNKNOWN")]
+    #[strum(serialize = "LUN_RESERVED_UNKNOWN")]
+    LunReservedUnknown,
+    #[serde(rename = "LUN_RESERVED_YES")]
+    #[strum(serialize = "LUN_RESERVED_YES")]
+    LunReservedYes,
+    #[serde(rename = "LUN_RESERVED_NO")]
+    #[strum(serialize = "LUN_RESERVED_NO")]
+    LunReservedNo,
+    #[serde(rename = "LUN_RESERVED_NOT_SUPPORTED")]
+    #[strum(serialize = "LUN_RESERVED_NOT_SUPPORTED")]
+    LunReservedNotSupported,
     /// This variant handles values not known at compile time.
     #[serde(untagged)]
     #[strum(serialize = "__OTHER__")]
@@ -8939,6 +13610,32 @@ pub enum HostSystemIdentificationInfoIdentifierEnum {
     #[strum(serialize = "__OTHER__")]
     Other_(String),
 }
+/// Possible values:
+/// - `initializing`
+/// - `initialized`
+/// - `configured`
+/// - `ready`
+/// 
+/// ***Since:*** vSphere API Release 9.0.0.0
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum HostTdxInfoTdxStateEnum {
+    #[serde(rename = "initializing")]
+    #[strum(serialize = "initializing")]
+    Initializing,
+    #[serde(rename = "initialized")]
+    #[strum(serialize = "initialized")]
+    Initialized,
+    #[serde(rename = "configured")]
+    #[strum(serialize = "configured")]
+    Configured,
+    #[serde(rename = "ready")]
+    #[strum(serialize = "ready")]
+    Ready,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
 /// Status constants of TPM attestation.
 /// 
 /// Possible values:
@@ -9048,8 +13745,8 @@ pub enum HostUnresolvedVmfsResolutionSpecVmfsUuidResolutionEnum {
 ///   (i.e.
 ///   
 ///   the NFC traffic between ESX hosts as a part of a VC initiated
-///   provisioning operations like cold-migrations, clones, storage vmotion
-///   with snapshots etc).
+///   provisioning operations like cold-migrations, clones, snapshot and
+///   cold data in hot migration).
 /// - `vsanWitness`: The VirtualNic is used for Virtual SAN witness traffic.
 ///   
 ///   Witness traffic vmknic is required for Virtual SAN stretched cluster,
@@ -9070,6 +13767,9 @@ pub enum HostUnresolvedVmfsResolutionSpecVmfsUuidResolutionEnum {
 /// - `nvmeRdma`: The VirtualNic is used for NVMe over RDMA traffic.
 ///   
 ///   ***Since:*** vSphere API Release 7.0.3.0
+/// - `vsanExternal`: The VirtualNic is used for external vSAN traffic.
+///   
+///   ***Since:*** vSphere API Release 9.0.0.0
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostVirtualNicManagerNicTypeEnum {
     #[serde(rename = "vmotion")]
@@ -9108,6 +13808,9 @@ pub enum HostVirtualNicManagerNicTypeEnum {
     #[serde(rename = "nvmeRdma")]
     #[strum(serialize = "nvmeRdma")]
     NvmeRdma,
+    #[serde(rename = "vsanExternal")]
+    #[strum(serialize = "vsanExternal")]
+    VsanExternal,
     /// This variant handles values not known at compile time.
     #[serde(untagged)]
     #[strum(serialize = "__OTHER__")]
@@ -9172,6 +13875,474 @@ pub enum HostVmfsVolumeUnmapPriorityEnum {
     #[serde(rename = "low")]
     #[strum(serialize = "low")]
     Low,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Enumeration indicates the vSAN disk controller type.
+/// 
+/// Possible values:
+/// - `NVMe`: The controller is an NVMe controller.
+/// - `SCSI`: The controller is a SCSI controller.
+/// - `VsanControllerType_Unknown`: Represent the value when the lower version client cannot recognize the enum value.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanControllerTypeEnum {
+    #[serde(rename = "NVMe")]
+    #[strum(serialize = "NVMe")]
+    NvMe,
+    #[serde(rename = "SCSI")]
+    #[strum(serialize = "SCSI")]
+    Scsi,
+    #[serde(rename = "VsanControllerType_Unknown")]
+    #[strum(serialize = "VsanControllerType_Unknown")]
+    VsanControllerTypeUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// The vSAN disk balance state enumeration.
+/// 
+/// Possible values:
+/// - `rebalanceoff`: Rebalancing needed but is turned off.
+/// - `rebalanceentitydecom`: Disk/diskgroup or related node is decommissioning or rebalancing temporarily disabled.
+/// - `rebalancediskunhealthy`: Disk that needs rebalancing is unhealthy.
+/// - `imbalancewithintolerance`: Imbalance is within reactive/proactive tolerance.
+/// - `reactiverebalanceinprogress`: Reactive rebalancing in progress.
+/// - `reactiverebalancefailed`: Reactive rebalancing needed but failed due to lack of resources or failing to find components that can be moved due to policy restrictions.
+/// - `proactiveneededbutdisabled`: Proactive rebalancing needed but disabled.
+/// - `proactiverebalanceinprogress`: Proactive rebalancing in progress.
+/// - `proactiverebalancefailed`: Proactive rebalancing needed but failed due to lack of resources or failing to find components that can be moved due to policy restrictions.
+/// - `proactivenotmustdo`: Proactive rebalancing can be activated but it's not a must do like due to no enough resource
+/// - `VsanDiskBalanceState_Unknown`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanDiskBalanceStateEnum {
+    #[serde(rename = "rebalanceoff")]
+    #[strum(serialize = "rebalanceoff")]
+    Rebalanceoff,
+    #[serde(rename = "rebalanceentitydecom")]
+    #[strum(serialize = "rebalanceentitydecom")]
+    Rebalanceentitydecom,
+    #[serde(rename = "rebalancediskunhealthy")]
+    #[strum(serialize = "rebalancediskunhealthy")]
+    Rebalancediskunhealthy,
+    #[serde(rename = "imbalancewithintolerance")]
+    #[strum(serialize = "imbalancewithintolerance")]
+    Imbalancewithintolerance,
+    #[serde(rename = "reactiverebalanceinprogress")]
+    #[strum(serialize = "reactiverebalanceinprogress")]
+    Reactiverebalanceinprogress,
+    #[serde(rename = "reactiverebalancefailed")]
+    #[strum(serialize = "reactiverebalancefailed")]
+    Reactiverebalancefailed,
+    #[serde(rename = "proactiveneededbutdisabled")]
+    #[strum(serialize = "proactiveneededbutdisabled")]
+    Proactiveneededbutdisabled,
+    #[serde(rename = "proactiverebalanceinprogress")]
+    #[strum(serialize = "proactiverebalanceinprogress")]
+    Proactiverebalanceinprogress,
+    #[serde(rename = "proactiverebalancefailed")]
+    #[strum(serialize = "proactiverebalancefailed")]
+    Proactiverebalancefailed,
+    #[serde(rename = "proactivenotmustdo")]
+    #[strum(serialize = "proactivenotmustdo")]
+    Proactivenotmustdo,
+    #[serde(rename = "VsanDiskBalanceState_Unknown")]
+    #[strum(serialize = "VsanDiskBalanceState_Unknown")]
+    VsanDiskBalanceStateUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// The vSAN encryption issue enumeration.
+/// 
+/// Possible values:
+/// - `enabledwhenclusterdisabled`: Encryption is enabled on the host/disk when the cluster has encryption disabled.
+/// - `disabledwhenclusterenabled`: Encryption is disabled on the host/disk when the cluster has encryption enabled.
+/// - `keyencryptionkeyinconsistent`: The Encryption Key on the host/disk is inconsistent with the cluster encryption configuration.
+/// - `dataencryptionkeyinconsistent`: The Data Encryption Key generation number on the host/disk is inconsistent with the cluster encryption configuration but may be consistent with the cluster old Data Encryption Key.
+/// - `kmsinfoinconsistent`: The Key Management Servers information on the host/disk is inconsistent with the cluster encryption configuration.
+/// - `servercertificatesinconsistent`: The server certifications on the host is inconsistent with the cluster encryption configuration.
+/// - `clientcertificateinconsistent`: The client certification on the host is inconsistent with the cluster encryption configuration.
+/// - `clientkeyinconsistent`: The client private key on the host is inconsistent with the cluster encryption configuration.
+/// - `hostkeyinconsistent`: The host key for host core dump encryption is inconsistent with the cluster encryption configuration.
+/// - `erasedisksbeforeuseinconsistent`: The configuration of erasing disks before use on the host is inconsistent with the cluster encryption configuration.
+/// - `cmknotinenabledstate`
+/// - `cmkcannotretrieve`
+/// - `hostkeynotavailable`
+/// - `keknotavailable`
+/// - `hostencryptiondekidinconsistent`
+/// - `objectencryptioninconsistent`
+/// - `keyencryptionkeyverifierinconsistent`
+/// - `dataencryptionkeyverifierinconsistent`
+/// - `olddataencryptionkeyinconsistent`
+/// - `hosthaswrongdekid`
+/// - `hosthaswrongolddekid`
+/// - `hosthaspendingdeeprekey`
+/// - `diskhaswrongdekid`
+/// - `diskhaswrongpendingdekid`
+/// - `diskhaspendingdeeprekey`
+/// - `dataencryptionkeyverifierofdiskmetainconsistent`
+/// - `changingstateinconsistent`: ***Since:*** 8.0.0.4
+/// - `changingstatenotfinished`: ***Since:*** 8.0.0.4
+/// - `VsanEncryptionIssue_Unknown`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanEncryptionIssueEnum {
+    #[serde(rename = "enabledwhenclusterdisabled")]
+    #[strum(serialize = "enabledwhenclusterdisabled")]
+    Enabledwhenclusterdisabled,
+    #[serde(rename = "disabledwhenclusterenabled")]
+    #[strum(serialize = "disabledwhenclusterenabled")]
+    Disabledwhenclusterenabled,
+    #[serde(rename = "keyencryptionkeyinconsistent")]
+    #[strum(serialize = "keyencryptionkeyinconsistent")]
+    Keyencryptionkeyinconsistent,
+    #[serde(rename = "dataencryptionkeyinconsistent")]
+    #[strum(serialize = "dataencryptionkeyinconsistent")]
+    Dataencryptionkeyinconsistent,
+    #[serde(rename = "kmsinfoinconsistent")]
+    #[strum(serialize = "kmsinfoinconsistent")]
+    Kmsinfoinconsistent,
+    #[serde(rename = "servercertificatesinconsistent")]
+    #[strum(serialize = "servercertificatesinconsistent")]
+    Servercertificatesinconsistent,
+    #[serde(rename = "clientcertificateinconsistent")]
+    #[strum(serialize = "clientcertificateinconsistent")]
+    Clientcertificateinconsistent,
+    #[serde(rename = "clientkeyinconsistent")]
+    #[strum(serialize = "clientkeyinconsistent")]
+    Clientkeyinconsistent,
+    #[serde(rename = "hostkeyinconsistent")]
+    #[strum(serialize = "hostkeyinconsistent")]
+    Hostkeyinconsistent,
+    #[serde(rename = "erasedisksbeforeuseinconsistent")]
+    #[strum(serialize = "erasedisksbeforeuseinconsistent")]
+    Erasedisksbeforeuseinconsistent,
+    #[serde(rename = "cmknotinenabledstate")]
+    #[strum(serialize = "cmknotinenabledstate")]
+    Cmknotinenabledstate,
+    #[serde(rename = "cmkcannotretrieve")]
+    #[strum(serialize = "cmkcannotretrieve")]
+    Cmkcannotretrieve,
+    #[serde(rename = "hostkeynotavailable")]
+    #[strum(serialize = "hostkeynotavailable")]
+    Hostkeynotavailable,
+    #[serde(rename = "keknotavailable")]
+    #[strum(serialize = "keknotavailable")]
+    Keknotavailable,
+    #[serde(rename = "hostencryptiondekidinconsistent")]
+    #[strum(serialize = "hostencryptiondekidinconsistent")]
+    Hostencryptiondekidinconsistent,
+    #[serde(rename = "objectencryptioninconsistent")]
+    #[strum(serialize = "objectencryptioninconsistent")]
+    Objectencryptioninconsistent,
+    #[serde(rename = "keyencryptionkeyverifierinconsistent")]
+    #[strum(serialize = "keyencryptionkeyverifierinconsistent")]
+    Keyencryptionkeyverifierinconsistent,
+    #[serde(rename = "dataencryptionkeyverifierinconsistent")]
+    #[strum(serialize = "dataencryptionkeyverifierinconsistent")]
+    Dataencryptionkeyverifierinconsistent,
+    #[serde(rename = "olddataencryptionkeyinconsistent")]
+    #[strum(serialize = "olddataencryptionkeyinconsistent")]
+    Olddataencryptionkeyinconsistent,
+    #[serde(rename = "hosthaswrongdekid")]
+    #[strum(serialize = "hosthaswrongdekid")]
+    Hosthaswrongdekid,
+    #[serde(rename = "hosthaswrongolddekid")]
+    #[strum(serialize = "hosthaswrongolddekid")]
+    Hosthaswrongolddekid,
+    #[serde(rename = "hosthaspendingdeeprekey")]
+    #[strum(serialize = "hosthaspendingdeeprekey")]
+    Hosthaspendingdeeprekey,
+    #[serde(rename = "diskhaswrongdekid")]
+    #[strum(serialize = "diskhaswrongdekid")]
+    Diskhaswrongdekid,
+    #[serde(rename = "diskhaswrongpendingdekid")]
+    #[strum(serialize = "diskhaswrongpendingdekid")]
+    Diskhaswrongpendingdekid,
+    #[serde(rename = "diskhaspendingdeeprekey")]
+    #[strum(serialize = "diskhaspendingdeeprekey")]
+    Diskhaspendingdeeprekey,
+    #[serde(rename = "dataencryptionkeyverifierofdiskmetainconsistent")]
+    #[strum(serialize = "dataencryptionkeyverifierofdiskmetainconsistent")]
+    Dataencryptionkeyverifierofdiskmetainconsistent,
+    #[serde(rename = "changingstateinconsistent")]
+    #[strum(serialize = "changingstateinconsistent")]
+    Changingstateinconsistent,
+    #[serde(rename = "changingstatenotfinished")]
+    #[strum(serialize = "changingstatenotfinished")]
+    Changingstatenotfinished,
+    #[serde(rename = "VsanEncryptionIssue_Unknown")]
+    #[strum(serialize = "VsanEncryptionIssue_Unknown")]
+    VsanEncryptionIssueUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// The vSAN host QueryCheckLimits option type.
+/// 
+/// it is used to query more detailed
+/// data aggregated at host level from disks or disk groups.
+/// 
+/// Possible values:
+/// - `logicalCapacity`: The logical capacity at host level
+/// - `logicalCapacityUsed`: The logical capacity used at host level
+/// - `diskTransientCapacityUsed`: The disk transient capacity used at host level
+/// - `dgTransientCapacityUsed`: The disk group transient capacity used at host level
+/// - `dedupMetadata`: The dedup metadata size
+/// - `VsanHostQueryCheckLimitsOptionType_Unknown`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanHostQueryCheckLimitsOptionTypeEnum {
+    #[serde(rename = "logicalCapacity")]
+    #[strum(serialize = "logicalCapacity")]
+    LogicalCapacity,
+    #[serde(rename = "logicalCapacityUsed")]
+    #[strum(serialize = "logicalCapacityUsed")]
+    LogicalCapacityUsed,
+    #[serde(rename = "diskTransientCapacityUsed")]
+    #[strum(serialize = "diskTransientCapacityUsed")]
+    DiskTransientCapacityUsed,
+    #[serde(rename = "dgTransientCapacityUsed")]
+    #[strum(serialize = "dgTransientCapacityUsed")]
+    DgTransientCapacityUsed,
+    #[serde(rename = "dedupMetadata")]
+    #[strum(serialize = "dedupMetadata")]
+    DedupMetadata,
+    #[serde(rename = "VsanHostQueryCheckLimitsOptionType_Unknown")]
+    #[strum(serialize = "VsanHostQueryCheckLimitsOptionType_Unknown")]
+    VsanHostQueryCheckLimitsOptionTypeUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// State of ioinsight tool on ESXi host, which is designed to monitor and
+/// collect all virtual disks I/O performance metrics of target virtual
+/// machines.
+/// 
+/// Currently ioinsight state includes the following values, and
+/// running/stopped are normal state.
+/// 
+/// Possible values:
+/// - `running`: ioinsight is in running for VMDKs I/O performance metrics monitor.
+/// - `stopped`: ioinsight is stopped and doesn't monitor any VMDK.
+/// - `notFound`: ioinsight binary is not found on this host.
+/// - `VsanIoInsightState_unknown`: represent the value when the lower version client cannot recognize the enum value
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanIoInsightStateEnum {
+    #[serde(rename = "running")]
+    #[strum(serialize = "running")]
+    Running,
+    #[serde(rename = "stopped")]
+    #[strum(serialize = "stopped")]
+    Stopped,
+    #[serde(rename = "notFound")]
+    #[strum(serialize = "notFound")]
+    NotFound,
+    #[serde(rename = "VsanIoInsightState_unknown")]
+    #[strum(serialize = "VsanIoInsightState_unknown")]
+    VsanIoInsightStateUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// The vSAN object health state enumeration.
+/// 
+/// Possible values:
+/// - `inaccessible`: An object has suffered more failures (permanent or temporary) than it was configured to tolerate, and is currently unavailable and inaccessible.
+/// - `reducedavailabilitywithnorebuild`: The object has suffered a failure or its policy was recently changed to have higher availability requirement but vSAN was able to tolerate it.
+///   
+///   The object is accessible and I/O is flowing.
+/// - `reducedavailabilitywithnorebuilddelaytimer`: The object has suffered a failure, but vSAN was able to tolerate it.
+///   
+///   However, vSAN is not yet working on re-protecting the object, as it is waiting for the 60-minute (default) delay timer to expire before issuing the re-protect.
+/// - `reducedavailabilitywithactiverebuild`: The object has suffered a failure, but it was configured to be able to tolerate the failure.
+/// - `datamove`: Objects in this state are fully compliant with their policy and are healthy, but vSAN is actively rebuilding them.
+/// - `nonavailabilityrelatedreconfig`: The object is fully in compliance with the NumberOfFailuresToTolerate policy and the data movement is to satisfy another policy change.
+/// - `nonavailabilityrelatedincompliance`: This is a catch all state when none of the other states apply.
+///   
+///   An object with this state is not compliant with its current policy, but is meeting the availablity (NumberOfFailuresToTolerate) policy. The object might be in this state because vSAN is not able to meet a non-availability related policy such as NumberOfDiskStripesPerObject because of lack of available resources. User need check the vSAN system resources like the number of fault domains and hosts, free capacity to make it compliant.
+/// - `healthy`: The object is in perfect condition, exactly aligned with its policy, and is not currently being moved or otherwise worked on.
+/// - `reducedavailabilitywithpolicypending`
+/// - `reducedavailabilitywithpolicypendingfailed`
+/// - `reducedavailabilitywithpausedrebuild`
+/// - `nonavailabilityrelatedincompliancewithpolicypending`
+/// - `nonavailabilityrelatedincompliancewithpolicypendingfailed`
+/// - `nonavailabilityrelatedincompliancewithpausedrebuild`
+/// - `remoteAccessible`
+/// - `VsanObjectHealthState_Unknown`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanObjectHealthStateEnum {
+    #[serde(rename = "inaccessible")]
+    #[strum(serialize = "inaccessible")]
+    Inaccessible,
+    #[serde(rename = "reducedavailabilitywithnorebuild")]
+    #[strum(serialize = "reducedavailabilitywithnorebuild")]
+    Reducedavailabilitywithnorebuild,
+    #[serde(rename = "reducedavailabilitywithnorebuilddelaytimer")]
+    #[strum(serialize = "reducedavailabilitywithnorebuilddelaytimer")]
+    Reducedavailabilitywithnorebuilddelaytimer,
+    #[serde(rename = "reducedavailabilitywithactiverebuild")]
+    #[strum(serialize = "reducedavailabilitywithactiverebuild")]
+    Reducedavailabilitywithactiverebuild,
+    #[serde(rename = "datamove")]
+    #[strum(serialize = "datamove")]
+    Datamove,
+    #[serde(rename = "nonavailabilityrelatedreconfig")]
+    #[strum(serialize = "nonavailabilityrelatedreconfig")]
+    Nonavailabilityrelatedreconfig,
+    #[serde(rename = "nonavailabilityrelatedincompliance")]
+    #[strum(serialize = "nonavailabilityrelatedincompliance")]
+    Nonavailabilityrelatedincompliance,
+    #[serde(rename = "healthy")]
+    #[strum(serialize = "healthy")]
+    Healthy,
+    #[serde(rename = "reducedavailabilitywithpolicypending")]
+    #[strum(serialize = "reducedavailabilitywithpolicypending")]
+    Reducedavailabilitywithpolicypending,
+    #[serde(rename = "reducedavailabilitywithpolicypendingfailed")]
+    #[strum(serialize = "reducedavailabilitywithpolicypendingfailed")]
+    Reducedavailabilitywithpolicypendingfailed,
+    #[serde(rename = "reducedavailabilitywithpausedrebuild")]
+    #[strum(serialize = "reducedavailabilitywithpausedrebuild")]
+    Reducedavailabilitywithpausedrebuild,
+    #[serde(rename = "nonavailabilityrelatedincompliancewithpolicypending")]
+    #[strum(serialize = "nonavailabilityrelatedincompliancewithpolicypending")]
+    Nonavailabilityrelatedincompliancewithpolicypending,
+    #[serde(rename = "nonavailabilityrelatedincompliancewithpolicypendingfailed")]
+    #[strum(serialize = "nonavailabilityrelatedincompliancewithpolicypendingfailed")]
+    Nonavailabilityrelatedincompliancewithpolicypendingfailed,
+    #[serde(rename = "nonavailabilityrelatedincompliancewithpausedrebuild")]
+    #[strum(serialize = "nonavailabilityrelatedincompliancewithpausedrebuild")]
+    Nonavailabilityrelatedincompliancewithpausedrebuild,
+    #[serde(rename = "remoteAccessible")]
+    #[strum(serialize = "remoteAccessible")]
+    RemoteAccessible,
+    #[serde(rename = "VsanObjectHealthState_Unknown")]
+    #[strum(serialize = "VsanObjectHealthState_Unknown")]
+    VsanObjectHealthStateUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// The vSAN interhost connectivity health state.
+/// 
+/// Possible values:
+/// - `STATE_GOOD`: connection to peer is healthy.
+/// - `STATE_SSL_ERROR`: connection to peer failed with ssl error.
+/// - `STATE_CONNECTION_REFUSED_ERROR`: connection to peer failed with connection refused error.
+/// - `STATE_SOCKET_TIMEOUT`: connection to peer failed with socket timeout error.
+/// - `STATE_HTTP_EXCEPTION`: connection to peer failed with http exception.
+/// - `STATE_MEMORY_ERROR`: connection to peer failed with memory error.
+/// - `STATE_SYSTEM_ERROR`: connection to peer failed with system rrror.
+/// - `STATE_OS_ERROR`: connection to peer failed with os error.
+/// - `STATE_GENERAL_EXCEPTION`: connection to peer failed with general exception.
+/// - `STATE_UNKNOWN`: connectino to peer failed with unknown issue.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanPeerHostConnectivityHealthStateEnum {
+    #[serde(rename = "STATE_GOOD")]
+    #[strum(serialize = "STATE_GOOD")]
+    StateGood,
+    #[serde(rename = "STATE_SSL_ERROR")]
+    #[strum(serialize = "STATE_SSL_ERROR")]
+    StateSslError,
+    #[serde(rename = "STATE_CONNECTION_REFUSED_ERROR")]
+    #[strum(serialize = "STATE_CONNECTION_REFUSED_ERROR")]
+    StateConnectionRefusedError,
+    #[serde(rename = "STATE_SOCKET_TIMEOUT")]
+    #[strum(serialize = "STATE_SOCKET_TIMEOUT")]
+    StateSocketTimeout,
+    #[serde(rename = "STATE_HTTP_EXCEPTION")]
+    #[strum(serialize = "STATE_HTTP_EXCEPTION")]
+    StateHttpException,
+    #[serde(rename = "STATE_MEMORY_ERROR")]
+    #[strum(serialize = "STATE_MEMORY_ERROR")]
+    StateMemoryError,
+    #[serde(rename = "STATE_SYSTEM_ERROR")]
+    #[strum(serialize = "STATE_SYSTEM_ERROR")]
+    StateSystemError,
+    #[serde(rename = "STATE_OS_ERROR")]
+    #[strum(serialize = "STATE_OS_ERROR")]
+    StateOsError,
+    #[serde(rename = "STATE_GENERAL_EXCEPTION")]
+    #[strum(serialize = "STATE_GENERAL_EXCEPTION")]
+    StateGeneralException,
+    #[serde(rename = "STATE_UNKNOWN")]
+    #[strum(serialize = "STATE_UNKNOWN")]
+    StateUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// The vSAN S.M.A.R.T.
+/// 
+/// parameter enumeration.
+/// 
+/// Possible values:
+/// - `smarthealthstatus`: Health Status.
+/// - `smartmediawearoutindicator`: Media Wearout Indicator.
+/// - `smartwriteerrorcount`: Write Error Count.
+/// - `smartreaderrorcount`: Read Error Count.
+/// - `smartpoweronhours`: Power-on Hours.
+/// - `smartpowercyclecount`: Power Cycle Count.
+/// - `smartreallocatedsectorct`: Reallocated Sector Count.
+/// - `smartrawreaderrorrate`: Raw Read Error Rate.
+/// - `smartdrivetemperature`: Drive Temperature.
+/// - `smartdriveratedmaxtemperature`: Driver Rated Max Temperature.
+/// - `smartwritesectorstotct`: Write Sectors TOT Count.
+/// - `smartreadsectorstotct`: Read Sectors TOT Count.
+/// - `smartinitialbadblockcount`: Initial Bad Block Count.
+/// - `VsanSmartParameterType_Unknown`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanSmartParameterTypeEnum {
+    #[serde(rename = "smarthealthstatus")]
+    #[strum(serialize = "smarthealthstatus")]
+    Smarthealthstatus,
+    #[serde(rename = "smartmediawearoutindicator")]
+    #[strum(serialize = "smartmediawearoutindicator")]
+    Smartmediawearoutindicator,
+    #[serde(rename = "smartwriteerrorcount")]
+    #[strum(serialize = "smartwriteerrorcount")]
+    Smartwriteerrorcount,
+    #[serde(rename = "smartreaderrorcount")]
+    #[strum(serialize = "smartreaderrorcount")]
+    Smartreaderrorcount,
+    #[serde(rename = "smartpoweronhours")]
+    #[strum(serialize = "smartpoweronhours")]
+    Smartpoweronhours,
+    #[serde(rename = "smartpowercyclecount")]
+    #[strum(serialize = "smartpowercyclecount")]
+    Smartpowercyclecount,
+    #[serde(rename = "smartreallocatedsectorct")]
+    #[strum(serialize = "smartreallocatedsectorct")]
+    Smartreallocatedsectorct,
+    #[serde(rename = "smartrawreaderrorrate")]
+    #[strum(serialize = "smartrawreaderrorrate")]
+    Smartrawreaderrorrate,
+    #[serde(rename = "smartdrivetemperature")]
+    #[strum(serialize = "smartdrivetemperature")]
+    Smartdrivetemperature,
+    #[serde(rename = "smartdriveratedmaxtemperature")]
+    #[strum(serialize = "smartdriveratedmaxtemperature")]
+    Smartdriveratedmaxtemperature,
+    #[serde(rename = "smartwritesectorstotct")]
+    #[strum(serialize = "smartwritesectorstotct")]
+    Smartwritesectorstotct,
+    #[serde(rename = "smartreadsectorstotct")]
+    #[strum(serialize = "smartreadsectorstotct")]
+    Smartreadsectorstotct,
+    #[serde(rename = "smartinitialbadblockcount")]
+    #[strum(serialize = "smartinitialbadblockcount")]
+    Smartinitialbadblockcount,
+    #[serde(rename = "VsanSmartParameterType_Unknown")]
+    #[strum(serialize = "VsanSmartParameterType_Unknown")]
+    VsanSmartParameterTypeUnknown,
     /// This variant handles values not known at compile time.
     #[serde(untagged)]
     #[strum(serialize = "__OTHER__")]
@@ -11229,6 +16400,12 @@ pub enum VirtualMachineGuestOsFamilyEnum {
 /// - `freebsd14_64Guest`: FreeBSD 14 x64
 ///   
 ///   ***Since:*** vSphere API Release 8.0.0.1
+/// - `freebsd15Guest`: FreeBSD 15
+///   
+///   ***Since:*** vSphere API Release 9.0.0.0
+/// - `freebsd15_64Guest`: FreeBSD 15 x64
+///   
+///   ***Since:*** vSphere API Release 9.0.0.0
 /// - `redhatGuest`: Red Hat Linux 2.1
 /// - `rhel2Guest`: Red Hat Enterprise Linux 2
 /// - `rhel3Guest`: Red Hat Enterprise Linux 3
@@ -11245,6 +16422,9 @@ pub enum VirtualMachineGuestOsFamilyEnum {
 /// - `rhel9_64Guest`: Red Hat Enterprise Linux 9 (64 bit)
 ///   
 ///   ***Since:*** vSphere API Release 7.0.1.0
+/// - `rhel10_64Guest`: Red Hat Enterprise Linux 10 (64 bit)
+///   
+///   ***Since:*** vSphere API Release 9.0.0.0
 /// - `centosGuest`: CentOS 4/5
 /// - `centos64Guest`: CentOS 4/5 (64-bit)
 /// - `centos6Guest`: CentOS 6
@@ -11265,6 +16445,9 @@ pub enum VirtualMachineGuestOsFamilyEnum {
 /// - `oracleLinux9_64Guest`: Oracle 9 (64-bit)
 ///   
 ///   ***Since:*** vSphere API Release 7.0.1.0
+/// - `oracleLinux10_64Guest`: Oracle 10 (64-bit)
+///   
+///   ***Since:*** vSphere API Release 9.0.0.0
 /// - `suseGuest`: Suse Linux
 /// - `suse64Guest`: Suse Linux (64 bit)
 /// - `slesGuest`: Suse Linux Enterprise Server 9
@@ -11311,6 +16494,12 @@ pub enum VirtualMachineGuestOsFamilyEnum {
 /// - `debian12_64Guest`: Debian GNU/Linux 12 (64 bit)
 ///   
 ///   ***Since:*** vSphere API Release 8.0.0.1
+/// - `debian13Guest`: Debian GNU/Linux 13
+///   
+///   ***Since:*** vSphere API Release 9.0.0.0
+/// - `debian13_64Guest`: Debian GNU/Linux 13 (64 bit)
+///   
+///   ***Since:*** vSphere API Release 9.0.0.0
 /// - `asianux3Guest`: Asianux Server 3
 /// - `asianux3_64Guest`: Asianux Server 3 (64 bit)
 /// - `asianux4Guest`: Asianux Server 4
@@ -11321,6 +16510,12 @@ pub enum VirtualMachineGuestOsFamilyEnum {
 /// - `asianux9_64Guest`: Asianux Server 9 (64 bit)
 ///   
 ///   ***Since:*** vSphere API Release 7.0.1.0
+/// - `miraclelinux_64Guest`: MIRACLE LINUX (64-bit)
+///   
+///   ***Since:*** vSphere API Release 9.0.0.0
+/// - `pardus_64Guest`: Pardus (64-bit)
+///   
+///   ***Since:*** vSphere API Release 9.0.0.0
 /// - `opensuseGuest`: OpenSUSE Linux
 /// - `opensuse64Guest`: OpenSUSE Linux (64 bit)
 /// - `fedoraGuest`: Fedora Linux
@@ -11338,6 +16533,9 @@ pub enum VirtualMachineGuestOsFamilyEnum {
 /// - `other6xLinuxGuest`: Linux 6.x Kernel
 ///   
 ///   ***Since:*** vSphere API Release 8.0.0.1
+/// - `other7xLinuxGuest`: Linux 7.x Kernel
+///   
+///   ***Since:*** vSphere API Release 9.0.0.0
 /// - `genericLinuxGuest`: Other Linux
 /// - `other24xLinux64Guest`: Linux 2.4.x Kernel (64 bit)
 /// - `other26xLinux64Guest`: Linux 2.6.x Kernel (64 bit)
@@ -11349,6 +16547,9 @@ pub enum VirtualMachineGuestOsFamilyEnum {
 /// - `other6xLinux64Guest`: Linux 6.x Kernel (64 bit)
 ///   
 ///   ***Since:*** vSphere API Release 8.0.0.1
+/// - `other7xLinux64Guest`: Linux 7.x Kernel (64 bit)
+///   
+///   ***Since:*** vSphere API Release 9.0.0.0
 /// - `otherLinux64Guest`: Linux (64 bit)
 /// - `solaris6Guest`: Solaris 6
 /// - `solaris7Guest`: Solaris 7
@@ -11357,6 +16558,15 @@ pub enum VirtualMachineGuestOsFamilyEnum {
 /// - `solaris10Guest`: Solaris 10 (32 bit)
 /// - `solaris10_64Guest`: Solaris 10 (64 bit)
 /// - `solaris11_64Guest`: Solaris 11 (64 bit)
+/// - `fusionos_64Guest`: FusionOS (64 bit)
+///   
+///   ***Since:*** vSphere API Release 9.0.0.0
+/// - `prolinux_64Guest`: ProLinux (64 bit)
+///   
+///   ***Since:*** vSphere API Release 9.0.0.0
+/// - `kylinlinux_64Guest`: Kylinlinux (64 bit)
+///   
+///   ***Since:*** vSphere API Release 9.0.0.0
 /// - `os2Guest`: OS/2
 /// - `eComStationGuest`: eComStation 1.x
 /// - `eComStation2Guest`: eComStation 2.0
@@ -11400,11 +16610,17 @@ pub enum VirtualMachineGuestOsFamilyEnum {
 /// - `vmkernel8Guest`: VMware ESX 8
 ///   
 ///   ***Since:*** vSphere API Release 8.0.0.1
+/// - `vmkernel9Guest`: VMware ESX 9
+///   
+///   ***Since:*** vSphere API Release 9.0.0.0
 /// - `amazonlinux2_64Guest`: Amazon Linux 2 (64 bit)
 /// - `amazonlinux3_64Guest`: Amazon Linux 3 (64 bit)
 ///   
 ///   ***Since:*** vSphere API Release 7.0.1.0
 /// - `crxPod1Guest`: CRX Pod 1
+/// - `crxSys1Guest`: CRX Sys 1
+///   
+///   ***Since:*** vSphere API Release 8.0.3.0
 /// - `rockylinux_64Guest`: Rocky Linux (64-bit)
 ///   
 ///   ***Since:*** vSphere API Release 8.0.0.1
@@ -11562,6 +16778,12 @@ pub enum VirtualMachineGuestOsIdentifierEnum {
     #[serde(rename = "freebsd14_64Guest")]
     #[strum(serialize = "freebsd14_64Guest")]
     Freebsd1464Guest,
+    #[serde(rename = "freebsd15Guest")]
+    #[strum(serialize = "freebsd15Guest")]
+    Freebsd15Guest,
+    #[serde(rename = "freebsd15_64Guest")]
+    #[strum(serialize = "freebsd15_64Guest")]
+    Freebsd1564Guest,
     #[serde(rename = "redhatGuest")]
     #[strum(serialize = "redhatGuest")]
     RedhatGuest,
@@ -11604,6 +16826,9 @@ pub enum VirtualMachineGuestOsIdentifierEnum {
     #[serde(rename = "rhel9_64Guest")]
     #[strum(serialize = "rhel9_64Guest")]
     Rhel964Guest,
+    #[serde(rename = "rhel10_64Guest")]
+    #[strum(serialize = "rhel10_64Guest")]
+    Rhel1064Guest,
     #[serde(rename = "centosGuest")]
     #[strum(serialize = "centosGuest")]
     CentosGuest,
@@ -11652,6 +16877,9 @@ pub enum VirtualMachineGuestOsIdentifierEnum {
     #[serde(rename = "oracleLinux9_64Guest")]
     #[strum(serialize = "oracleLinux9_64Guest")]
     OracleLinux964Guest,
+    #[serde(rename = "oracleLinux10_64Guest")]
+    #[strum(serialize = "oracleLinux10_64Guest")]
+    OracleLinux1064Guest,
     #[serde(rename = "suseGuest")]
     #[strum(serialize = "suseGuest")]
     SuseGuest,
@@ -11772,6 +17000,12 @@ pub enum VirtualMachineGuestOsIdentifierEnum {
     #[serde(rename = "debian12_64Guest")]
     #[strum(serialize = "debian12_64Guest")]
     Debian1264Guest,
+    #[serde(rename = "debian13Guest")]
+    #[strum(serialize = "debian13Guest")]
+    Debian13Guest,
+    #[serde(rename = "debian13_64Guest")]
+    #[strum(serialize = "debian13_64Guest")]
+    Debian1364Guest,
     #[serde(rename = "asianux3Guest")]
     #[strum(serialize = "asianux3Guest")]
     Asianux3Guest,
@@ -11796,6 +17030,12 @@ pub enum VirtualMachineGuestOsIdentifierEnum {
     #[serde(rename = "asianux9_64Guest")]
     #[strum(serialize = "asianux9_64Guest")]
     Asianux964Guest,
+    #[serde(rename = "miraclelinux_64Guest")]
+    #[strum(serialize = "miraclelinux_64Guest")]
+    Miraclelinux64Guest,
+    #[serde(rename = "pardus_64Guest")]
+    #[strum(serialize = "pardus_64Guest")]
+    Pardus64Guest,
     #[serde(rename = "opensuseGuest")]
     #[strum(serialize = "opensuseGuest")]
     OpensuseGuest,
@@ -11835,6 +17075,9 @@ pub enum VirtualMachineGuestOsIdentifierEnum {
     #[serde(rename = "other6xLinuxGuest")]
     #[strum(serialize = "other6xLinuxGuest")]
     Other6XLinuxGuest,
+    #[serde(rename = "other7xLinuxGuest")]
+    #[strum(serialize = "other7xLinuxGuest")]
+    Other7XLinuxGuest,
     #[serde(rename = "genericLinuxGuest")]
     #[strum(serialize = "genericLinuxGuest")]
     GenericLinuxGuest,
@@ -11856,6 +17099,9 @@ pub enum VirtualMachineGuestOsIdentifierEnum {
     #[serde(rename = "other6xLinux64Guest")]
     #[strum(serialize = "other6xLinux64Guest")]
     Other6XLinux64Guest,
+    #[serde(rename = "other7xLinux64Guest")]
+    #[strum(serialize = "other7xLinux64Guest")]
+    Other7XLinux64Guest,
     #[serde(rename = "otherLinux64Guest")]
     #[strum(serialize = "otherLinux64Guest")]
     OtherLinux64Guest,
@@ -11880,6 +17126,15 @@ pub enum VirtualMachineGuestOsIdentifierEnum {
     #[serde(rename = "solaris11_64Guest")]
     #[strum(serialize = "solaris11_64Guest")]
     Solaris1164Guest,
+    #[serde(rename = "fusionos_64Guest")]
+    #[strum(serialize = "fusionos_64Guest")]
+    Fusionos64Guest,
+    #[serde(rename = "prolinux_64Guest")]
+    #[strum(serialize = "prolinux_64Guest")]
+    Prolinux64Guest,
+    #[serde(rename = "kylinlinux_64Guest")]
+    #[strum(serialize = "kylinlinux_64Guest")]
+    Kylinlinux64Guest,
     #[serde(rename = "os2Guest")]
     #[strum(serialize = "os2Guest")]
     Os2Guest,
@@ -11979,6 +17234,9 @@ pub enum VirtualMachineGuestOsIdentifierEnum {
     #[serde(rename = "vmkernel8Guest")]
     #[strum(serialize = "vmkernel8Guest")]
     Vmkernel8Guest,
+    #[serde(rename = "vmkernel9Guest")]
+    #[strum(serialize = "vmkernel9Guest")]
+    Vmkernel9Guest,
     #[serde(rename = "amazonlinux2_64Guest")]
     #[strum(serialize = "amazonlinux2_64Guest")]
     Amazonlinux264Guest,
@@ -11988,6 +17246,9 @@ pub enum VirtualMachineGuestOsIdentifierEnum {
     #[serde(rename = "crxPod1Guest")]
     #[strum(serialize = "crxPod1Guest")]
     CrxPod1Guest,
+    #[serde(rename = "crxSys1Guest")]
+    #[strum(serialize = "crxSys1Guest")]
+    CrxSys1Guest,
     #[serde(rename = "rockylinux_64Guest")]
     #[strum(serialize = "rockylinux_64Guest")]
     Rockylinux64Guest,
@@ -13452,6 +18713,40 @@ pub enum VirtualMachineVideoCardUse3DRendererEnum {
     #[strum(serialize = "__OTHER__")]
     Other_(String),
 }
+/// TSO (TCP Segmentation Offload) and LRO (Large Receive Offload)
+/// are both offloading techniques that improve network performance
+/// by reducing CPU overhead associated with packet segmentation
+/// and aggregation, respectively.
+/// 
+/// They are commonly used in modern
+/// networking environments to optimize data transmission and
+/// reception processes. This is the type of disable offload on a
+/// network adapter.
+/// 
+/// Possible values:
+/// - `NONE`: Do not disable.
+/// - `TSO`: Disable TCP Segmentation Offload (TSO).
+/// - `LRO`: Disable Large Receive Offload (LRO).
+/// - `TSO_LRO`: Disable both TSO and LRO.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VirtualVmxnet3StrictLatencyConfigDisableOffloadEnum {
+    #[serde(rename = "NONE")]
+    #[strum(serialize = "NONE")]
+    None,
+    #[serde(rename = "TSO")]
+    #[strum(serialize = "TSO")]
+    Tso,
+    #[serde(rename = "LRO")]
+    #[strum(serialize = "LRO")]
+    Lro,
+    #[serde(rename = "TSO_LRO")]
+    #[strum(serialize = "TSO_LRO")]
+    TsoLro,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
 /// The enumeration of all known valid VRDMA device protocols.
 /// 
 /// Possible values:
@@ -13522,6 +18817,1924 @@ pub enum GuestRegKeyWowSpecEnum {
     #[strum(serialize = "__OTHER__")]
     Other_(String),
 }
+/// Capacity reservation state.
+/// 
+/// Possible values:
+/// - `State_Unknown`: Represent the value when the lower version client cannot recognize the enum value.
+/// - `Enforced`: Capacity reservation threshold is reported and enforced.
+/// - `Reported`: Capacity reservation threshold is reported but is not enforced.
+/// - `Disabled`: Capacity reservation threshold is not reported and is not enforced.
+/// - `Unsupported`: Capacity reservation is not supported.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanCapacityReservationStateEnum {
+    #[serde(rename = "State_Unknown")]
+    #[strum(serialize = "State_Unknown")]
+    StateUnknown,
+    Enforced,
+    Reported,
+    Disabled,
+    Unsupported,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Enumeration of the allowed access type.
+/// 
+/// Possible values:
+/// - `CleanAffinityLocation`: clean site affinity if the cluster is converted from a stretched cluster to a standard cluster.
+/// - `FileServiceConfigOpType_Unknown`: indicates the value cannot be recognized.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanFileServiceConfigOpTypeEnum {
+    CleanAffinityLocation,
+    #[serde(rename = "FileServiceConfigOpType_Unknown")]
+    #[strum(serialize = "FileServiceConfigOpType_Unknown")]
+    FileServiceConfigOpTypeUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Enumeration of preflight check scope.
+/// 
+/// Possible values:
+/// - `basic`: Scope indicates preflight check covers:
+///   - Network partition check
+///   - vSAN datastore presence to each host
+///   - The versions of the ESXi hosts match in this cluster
+///   - NTP configuration check in ESXi hosts if vSAN file service version is 8.0 or newer
+///   - Domain configuration format check
+///   - Running OVF information check
+///   - If a DVS portgroup is passed as network, it checks if DVS version is older than 6.6
+/// - `advanced`: Scope indicates preflight check covers:
+///   - Checks covered in 'basic' scope
+///   - File server domain configuration validation in live environment when vSAN file service has been enabled
+/// - `FileServicePreflightCheckScope_Unknown`: represents the value when the lower version client cannot recognize the enum value.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanFileServicePreflightCheckScopeEnum {
+    #[serde(rename = "basic")]
+    #[strum(serialize = "basic")]
+    Basic,
+    #[serde(rename = "advanced")]
+    #[strum(serialize = "advanced")]
+    Advanced,
+    #[serde(rename = "FileServicePreflightCheckScope_Unknown")]
+    #[strum(serialize = "FileServicePreflightCheckScope_Unknown")]
+    FileServicePreflightCheckScopeUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Enumeration of the allowed access type.
+/// 
+/// Possible values:
+/// - `running`: File service VM is up and running
+/// - `upgrading`: File service VM is in process of upgrading
+/// - `FileServiceVMStatus_Unknown`: represent the value when the lower version client cannot recognize the enum value.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanFileServiceVmStatusEnum {
+    #[serde(rename = "running")]
+    #[strum(serialize = "running")]
+    Running,
+    #[serde(rename = "upgrading")]
+    #[strum(serialize = "upgrading")]
+    Upgrading,
+    #[serde(rename = "FileServiceVMStatus_Unknown")]
+    #[strum(serialize = "FileServiceVMStatus_Unknown")]
+    FileServiceVmStatusUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Enumeration of the allowed access type.
+/// 
+/// Possible values:
+/// - `READ_ONLY`: Allows only read operations.
+/// - `READ_WRITE`: Allows both read and write operations.
+/// - `NO_ACCESS`: Does not allow any operations
+/// - `FileShareAccessType_Unknown`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanFileShareAccessTypeEnum {
+    #[serde(rename = "READ_ONLY")]
+    #[strum(serialize = "READ_ONLY")]
+    ReadOnly,
+    #[serde(rename = "READ_WRITE")]
+    #[strum(serialize = "READ_WRITE")]
+    ReadWrite,
+    #[serde(rename = "NO_ACCESS")]
+    #[strum(serialize = "NO_ACCESS")]
+    NoAccess,
+    #[serde(rename = "FileShareAccessType_Unknown")]
+    #[strum(serialize = "FileShareAccessType_Unknown")]
+    FileShareAccessTypeUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Enumeration of the file share owner type.
+/// 
+/// Possible values:
+/// - `cns`
+/// - `user`
+/// - `FileShareManagingEntity_Unknown`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanFileShareManagingEntityEnum {
+    #[serde(rename = "cns")]
+    #[strum(serialize = "cns")]
+    Cns,
+    #[serde(rename = "user")]
+    #[strum(serialize = "user")]
+    User,
+    #[serde(rename = "FileShareManagingEntity_Unknown")]
+    #[strum(serialize = "FileShareManagingEntity_Unknown")]
+    FileShareManagingEntityUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Enumeration of the allowed NFS share security type.
+/// 
+/// This field is not applicable for SMB file share.
+/// Kerberos security types is based on following RFC:
+/// https://tools.ietf.org/html/rfc2203.
+/// 
+/// Possible values:
+/// - `SYS`: AUTH\_SYS or unmanaged authentication from server.
+///   
+///   Where server trust the uid/gid sent from clients and make no attemp to validate the same.
+/// - `KRB5`: RPCSEC\_GSS None (Only Authentication)
+/// - `KRB5I`: RPCSEC\_GSS Integrity (With checksum)
+/// - `KRB5P`: RPCSEC\_GSS Privacy (With Encryption)
+/// - `FileShareNfsSecType_Unknown`: represent the value when the lower version client cannot recognize the enum value
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanFileShareNfsSecTypeEnum {
+    #[serde(rename = "SYS")]
+    #[strum(serialize = "SYS")]
+    Sys,
+    #[serde(rename = "KRB5")]
+    #[strum(serialize = "KRB5")]
+    Krb5,
+    #[serde(rename = "KRB5I")]
+    #[strum(serialize = "KRB5I")]
+    Krb5I,
+    #[serde(rename = "KRB5P")]
+    #[strum(serialize = "KRB5P")]
+    Krb5P,
+    #[serde(rename = "FileShareNfsSecType_Unknown")]
+    #[strum(serialize = "FileShareNfsSecType_Unknown")]
+    FileShareNfsSecTypeUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Enumeration of the allowed file share protocol.
+/// 
+/// Possible values:
+/// - `NFSv3`: NFSv3 protocol
+/// - `NFSv4`: NFSv4.0 and NFSv4.1 protocol
+/// - `SMB`: SMB2/SMB3 protocol.
+/// - `FileShareProtocol_Unknown`: represent the value when the lower version client cannot recognize the enum value
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanFileProtocolEnum {
+    #[serde(rename = "NFSv3")]
+    #[strum(serialize = "NFSv3")]
+    NfSv3,
+    #[serde(rename = "NFSv4")]
+    #[strum(serialize = "NFSv4")]
+    NfSv4,
+    #[serde(rename = "SMB")]
+    #[strum(serialize = "SMB")]
+    Smb,
+    #[serde(rename = "FileShareProtocol_Unknown")]
+    #[strum(serialize = "FileShareProtocol_Unknown")]
+    FileShareProtocolUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Enumeration of the SMB file share encryption type.
+/// 
+/// Possible values:
+/// - `disabled`: Disable the encryption for a share
+/// - `mandatory`: Traffic to a share must be encrypted.
+///   
+///   Clients that do not support encryption will be denied on accessing the share
+/// - `FileShareSmbEncryptionType_Unknown`: represent the value when the lower version client cannot recognize the enum value
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanFileShareSmbEncryptionTypeEnum {
+    #[serde(rename = "disabled")]
+    #[strum(serialize = "disabled")]
+    Disabled,
+    #[serde(rename = "mandatory")]
+    #[strum(serialize = "mandatory")]
+    Mandatory,
+    #[serde(rename = "FileShareSmbEncryptionType_Unknown")]
+    #[strum(serialize = "FileShareSmbEncryptionType_Unknown")]
+    FileShareSmbEncryptionTypeUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// The operation type to update Hci Mesh client info.
+/// 
+/// Possible values:
+/// - `dryrunDs`: Dry run for precheck Datastore Source for a remote vCenter.
+/// - `updateDs`: Create or update Datastore Source for a remote vCenter.
+/// - `destroyDs`: Destroy Datastore Source for a remote vCenter.
+/// - `dryrun`: Dry run.
+/// - `mount`: Mount clients to server cluster.
+/// - `update`: Update clients to server cluster.
+/// - `unmount`: Unmount clients from server cluster.
+/// - `HciMeshClientOperation_unknown`: Unknown operation type.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum HciMeshClientOperationEnum {
+    #[serde(rename = "dryrunDs")]
+    #[strum(serialize = "dryrunDs")]
+    DryrunDs,
+    #[serde(rename = "updateDs")]
+    #[strum(serialize = "updateDs")]
+    UpdateDs,
+    #[serde(rename = "destroyDs")]
+    #[strum(serialize = "destroyDs")]
+    DestroyDs,
+    #[serde(rename = "dryrun")]
+    #[strum(serialize = "dryrun")]
+    Dryrun,
+    #[serde(rename = "mount")]
+    #[strum(serialize = "mount")]
+    Mount,
+    #[serde(rename = "update")]
+    #[strum(serialize = "update")]
+    Update,
+    #[serde(rename = "unmount")]
+    #[strum(serialize = "unmount")]
+    Unmount,
+    #[serde(rename = "HciMeshClientOperation_unknown")]
+    #[strum(serialize = "HciMeshClientOperation_unknown")]
+    HciMeshClientOperationUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// This list defines the types of vSAN IO diagnostics failed checks
+/// in 8.x and previous releases.
+/// 
+/// Possible values:
+/// - `perfsvcdisabled`: means the vSAN performance service is not enabled.
+/// - `vsandisabled`: means vSAN is not enabled.
+/// - `runninginstance`: means that there is already a running instance.
+/// - `stretchedcluster`: means the vSAN stretched cluster is not supported.
+/// - `nestedfaultdomain`: means the vSAN nested fault domain is not supported.
+/// - `computeonlycluster`: means the vSAN HCI mesh compute-only cluster is not supported.
+/// - `networkpartition`
+/// - `vmnotpoweredon`: means the target virtual machine is not powered on.
+/// - `vsanobjectinremotedatastore`: means the target virtual machine is in the remote datastore.
+/// - `invalidtarget`: means the target is not valid.
+/// - `invalidobjuuid`: means the object UUID is not valid.
+/// - `invalidduration`: means the duration is not valid.
+/// - `runninginstanceontarget`: ***Since:*** 8.0.0.4
+/// - `toomanytargets`: ***Since:*** 8.0.0.4
+/// - `toomanyobjects`: ***Since:*** 8.0.0.4
+/// - `VsanIODiagnosticsFailedCheckType_Unknown`: represents the value when the lower version client cannot recognize the enum value.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanIoDiagnosticsFailedCheckTypeEnum {
+    #[serde(rename = "perfsvcdisabled")]
+    #[strum(serialize = "perfsvcdisabled")]
+    Perfsvcdisabled,
+    #[serde(rename = "vsandisabled")]
+    #[strum(serialize = "vsandisabled")]
+    Vsandisabled,
+    #[serde(rename = "runninginstance")]
+    #[strum(serialize = "runninginstance")]
+    Runninginstance,
+    #[serde(rename = "stretchedcluster")]
+    #[strum(serialize = "stretchedcluster")]
+    Stretchedcluster,
+    #[serde(rename = "nestedfaultdomain")]
+    #[strum(serialize = "nestedfaultdomain")]
+    Nestedfaultdomain,
+    #[serde(rename = "computeonlycluster")]
+    #[strum(serialize = "computeonlycluster")]
+    Computeonlycluster,
+    #[serde(rename = "networkpartition")]
+    #[strum(serialize = "networkpartition")]
+    Networkpartition,
+    #[serde(rename = "vmnotpoweredon")]
+    #[strum(serialize = "vmnotpoweredon")]
+    Vmnotpoweredon,
+    #[serde(rename = "vsanobjectinremotedatastore")]
+    #[strum(serialize = "vsanobjectinremotedatastore")]
+    Vsanobjectinremotedatastore,
+    #[serde(rename = "invalidtarget")]
+    #[strum(serialize = "invalidtarget")]
+    Invalidtarget,
+    #[serde(rename = "invalidobjuuid")]
+    #[strum(serialize = "invalidobjuuid")]
+    Invalidobjuuid,
+    #[serde(rename = "invalidduration")]
+    #[strum(serialize = "invalidduration")]
+    Invalidduration,
+    #[serde(rename = "runninginstanceontarget")]
+    #[strum(serialize = "runninginstanceontarget")]
+    Runninginstanceontarget,
+    #[serde(rename = "toomanytargets")]
+    #[strum(serialize = "toomanytargets")]
+    Toomanytargets,
+    #[serde(rename = "toomanyobjects")]
+    #[strum(serialize = "toomanyobjects")]
+    Toomanyobjects,
+    #[serde(rename = "VsanIODiagnosticsFailedCheckType_Unknown")]
+    #[strum(serialize = "VsanIODiagnosticsFailedCheckType_Unknown")]
+    VsanIoDiagnosticsFailedCheckTypeUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// This list defines the type of event which happens in the vSAN IO
+/// diagnostics instance for 8.x and previous releases.
+/// 
+/// Possible values:
+/// - `objectOwnerTransfer`: represents the object Owner transfer event.
+/// - `primaryHostTransfer`: represents the primary host transfer event.
+/// - `vsanmgmtdRestart`: represents the vsanmgmt daemon restart event.
+/// - `objectComponentsLayoutChange`: represents the components layout change event.
+/// - `objectProxyOwnerTransfer`
+/// - `objectRemoval`: ***Since:*** 8.0.0.4
+/// - `VsanIODiagnosticsInstanceEventType_Unknown`: represents the value when the lower version client cannot recognize the enum value.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanIoDiagnosticsInstanceEventTypeEnum {
+    #[serde(rename = "objectOwnerTransfer")]
+    #[strum(serialize = "objectOwnerTransfer")]
+    ObjectOwnerTransfer,
+    #[serde(rename = "primaryHostTransfer")]
+    #[strum(serialize = "primaryHostTransfer")]
+    PrimaryHostTransfer,
+    #[serde(rename = "vsanmgmtdRestart")]
+    #[strum(serialize = "vsanmgmtdRestart")]
+    VsanmgmtdRestart,
+    #[serde(rename = "objectComponentsLayoutChange")]
+    #[strum(serialize = "objectComponentsLayoutChange")]
+    ObjectComponentsLayoutChange,
+    #[serde(rename = "objectProxyOwnerTransfer")]
+    #[strum(serialize = "objectProxyOwnerTransfer")]
+    ObjectProxyOwnerTransfer,
+    #[serde(rename = "objectRemoval")]
+    #[strum(serialize = "objectRemoval")]
+    ObjectRemoval,
+    #[serde(rename = "VsanIODiagnosticsInstanceEventType_Unknown")]
+    #[strum(serialize = "VsanIODiagnosticsInstanceEventType_Unknown")]
+    VsanIoDiagnosticsInstanceEventTypeUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// This data object defines the state of vSAN IO diagnostics instance.
+/// 
+/// Valid types are:
+/// 
+/// Possible values:
+/// - `VsanIODiagnosticsInstanceCompleted`: represents the completed instance.
+/// - `VsanIODiagnosticsInstanceRunning`: represents the running instance.
+/// - `VsanIODiagnosticsInstanceState_Unknown`: represents the value when the lower version client cannot recognize the enum value.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanIoDiagnosticsInstanceStateEnum {
+    #[serde(rename = "VsanIODiagnosticsInstanceCompleted")]
+    #[strum(serialize = "VsanIODiagnosticsInstanceCompleted")]
+    VsanIoDiagnosticsInstanceCompleted,
+    #[serde(rename = "VsanIODiagnosticsInstanceRunning")]
+    #[strum(serialize = "VsanIODiagnosticsInstanceRunning")]
+    VsanIoDiagnosticsInstanceRunning,
+    #[serde(rename = "VsanIODiagnosticsInstanceState_Unknown")]
+    #[strum(serialize = "VsanIODiagnosticsInstanceState_Unknown")]
+    VsanIoDiagnosticsInstanceStateUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// This data object defines the types that support vSAN IO diagnostics.
+/// 
+/// Valid types are:
+/// 
+/// Possible values:
+/// - `VirtualMachine`: with this type IO diagnostics task will be run against the vmdks associated with the virtual machine.
+/// - `VsanIODiagnosticsTargetType_Unknown`: represents the value when the lower version client cannot recognize the enum value.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanIoDiagnosticsTargetTypeEnum {
+    VirtualMachine,
+    #[serde(rename = "VsanIODiagnosticsTargetType_Unknown")]
+    #[strum(serialize = "VsanIODiagnosticsTargetType_Unknown")]
+    VsanIoDiagnosticsTargetTypeUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// This data object defines the type of the vSAN IO latency in the whole vSAN IO
+/// stack from DOM owner to the DOM component manager and LSOM.
+/// 
+/// Possible values:
+/// - `DomOwnerLatency`: Defines the latency spent at DOM owner layer.
+/// - `NetworkLatency`: Defines the latency spent over the network.
+/// - `LsomLatency`: Defines the latency spent at LSOM layer.
+/// - `VsanIOLatencyType_Unknown`: The fallback version for an unknown vSAN IO latency type.
+/// - `ZdomLatency`
+/// - `PerfDomOwnerLatency`
+/// - `CapacityDomOwnerLatency`
+/// - `PerfNetworkLatency`
+/// - `CapacityNetworkLatency`
+/// - `PerfLsomLatency`
+/// - `CapacityLsomLatency`
+/// - `CrossSiteNetworkLatency`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanIoLatencyTypeEnum {
+    DomOwnerLatency,
+    NetworkLatency,
+    LsomLatency,
+    #[serde(rename = "VsanIOLatencyType_Unknown")]
+    #[strum(serialize = "VsanIOLatencyType_Unknown")]
+    VsanIoLatencyTypeUnknown,
+    ZdomLatency,
+    PerfDomOwnerLatency,
+    CapacityDomOwnerLatency,
+    PerfNetworkLatency,
+    CapacityNetworkLatency,
+    PerfLsomLatency,
+    CapacityLsomLatency,
+    CrossSiteNetworkLatency,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// The lifecycle operation types required by lifecycle manager/vLCM.
+/// 
+/// Possible values:
+/// - `noChecks`: No checks, only return configuration details.
+/// - `LifecycleCheckOperation_unknown`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VimVsanLifecycleCheckOperationEnum {
+    #[serde(rename = "noChecks")]
+    #[strum(serialize = "noChecks")]
+    NoChecks,
+    #[serde(rename = "LifecycleCheckOperation_unknown")]
+    #[strum(serialize = "LifecycleCheckOperation_unknown")]
+    LifecycleCheckOperationUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// The lifecycle cluster types required by lifecycle manager/vLCM.
+/// 
+/// Possible values:
+/// - `single`: Single site cluster.
+/// - `stretched`: Stretched cluster.
+/// - `metadata`: Metadata mode cluster.
+/// - `LifecycleClusterType_unknown`: Unknown cluster type.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VimVsanLifecycleClusterTypeEnum {
+    #[serde(rename = "single")]
+    #[strum(serialize = "single")]
+    Single,
+    #[serde(rename = "stretched")]
+    #[strum(serialize = "stretched")]
+    Stretched,
+    #[serde(rename = "metadata")]
+    #[strum(serialize = "metadata")]
+    Metadata,
+    #[serde(rename = "LifecycleClusterType_unknown")]
+    #[strum(serialize = "LifecycleClusterType_unknown")]
+    LifecycleClusterTypeUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// The lifecycle check types required by lifecycle manager/vLCM.
+/// 
+/// Possible values:
+/// - `supportedWitnessVersion`: Check to cover that the witness host software version is 7.0 or higher.
+/// - `virtualWitnessHost`: Check to cover that the witness host is a virtual host and not a physical host.
+/// - `sharedWitnessHost`: Check to cover that the witness host is not shared.
+/// - `PreCheckType_unknown`: Unknown precheck type.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VimVsanLifecyclePreCheckTypeEnum {
+    #[serde(rename = "supportedWitnessVersion")]
+    #[strum(serialize = "supportedWitnessVersion")]
+    SupportedWitnessVersion,
+    #[serde(rename = "virtualWitnessHost")]
+    #[strum(serialize = "virtualWitnessHost")]
+    VirtualWitnessHost,
+    #[serde(rename = "sharedWitnessHost")]
+    #[strum(serialize = "sharedWitnessHost")]
+    SharedWitnessHost,
+    #[serde(rename = "PreCheckType_unknown")]
+    #[strum(serialize = "PreCheckType_unknown")]
+    PreCheckTypeUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Mode for the vSAN cluster.
+/// 
+/// If mode is not specified, then vSAN is running
+/// in default vSAN mode.
+/// 
+/// Possible values:
+/// - `Mode_None`: Represents the value for vSAN mode not being set.
+///   
+///   Any mode can be disabled by setting this value.
+/// - `Mode_Compute`: Compute mode for vSAN.
+///   
+///   This mode can only be set if vSAN is not enabled on the cluster. To disable this mode, the mode value needs to be set to 'Mode\_None'. This mode allows the cluster to mount any remote vSAN datastore on this cluster. This cluster acts as a client cluster for the mounted vSAN datastore
+/// - `Mode_Storage`
+/// - `Mode_Unknown`: Represents the value when the lower version client cannot recognize the enum value
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanModeEnum {
+    #[serde(rename = "Mode_None")]
+    #[strum(serialize = "Mode_None")]
+    ModeNone,
+    #[serde(rename = "Mode_Compute")]
+    #[strum(serialize = "Mode_Compute")]
+    ModeCompute,
+    #[serde(rename = "Mode_Storage")]
+    #[strum(serialize = "Mode_Storage")]
+    ModeStorage,
+    #[serde(rename = "Mode_Unknown")]
+    #[strum(serialize = "Mode_Unknown")]
+    ModeUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// This indicates the precheck type when mounting a remote vSAN datastore
+/// (for 8.x and previous releases).
+/// 
+/// Possible values:
+/// - `supportedConfiguration`: General checks to cover following items, 1.
+///   
+///   vSAN is enabled on client cluster and server cluster. 2. Neither of client cluster nor server cluster is stretched/ROBO cluster. 3. Server cluster have only one vsan vmknics. 4. Data in transit encryption is off. 5. Client and server vSAN clusters should be same type (both OSA or ESA). 6: Compute only client cluster should mount only the same type (OSA or ESA) of the server clusters.
+/// - `localVsanDatastore`: Check if given datastore is local vSAN datastore.
+/// - `datastoreType`: Check if remote datastore is a vSAN datastore.
+/// - `datacenter`: Check if given datastore and cluster are from different datacenters.
+/// - `vsanFormatVersion`: Check vSAN format version can support mounting remote vSAN datastore.
+/// - `serverClusterHealth`: Check if the cluster which owns given vSAN datastore is healthy.
+/// - `datastorePolicy`: Check if given datastore can provision objects using default datastore policy.
+/// - `remoteDatastoreLimit`: Check number of remote vSAN datastores which are mounted by a client cluster doesn't exceed limit.
+/// - `clientClusterLimit`: Check number of client clusters which mount to a server cluster doesn't exceed limit.
+/// - `serverClusterLimit`: Check number of server clusters which a client cluster mounts to doesn't exceed limit.
+/// - `connectivity`: Check network connectivity between client hosts and server hosts.
+/// - `networkLatency`: Check network latency between client hosts and server hosts.
+/// - `license`: Check if all client hosts and server hosts have remote datastore license.
+/// - `precheck_unknown`: Unknown precheck type.
+/// - `serverVersionForComputeMode`
+/// - `remoteVcConnection`
+/// - `datastoreExists`
+/// - `serverVcenterLimit`
+/// - `clientVcenterLimit`
+/// - `vcApiVersion`
+/// - `vcenterIdValid`
+/// - `checkServerVcenter`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VimVsanMountPrecheckTypeEnum {
+    #[serde(rename = "supportedConfiguration")]
+    #[strum(serialize = "supportedConfiguration")]
+    SupportedConfiguration,
+    #[serde(rename = "localVsanDatastore")]
+    #[strum(serialize = "localVsanDatastore")]
+    LocalVsanDatastore,
+    #[serde(rename = "datastoreType")]
+    #[strum(serialize = "datastoreType")]
+    DatastoreType,
+    #[serde(rename = "datacenter")]
+    #[strum(serialize = "datacenter")]
+    Datacenter,
+    #[serde(rename = "vsanFormatVersion")]
+    #[strum(serialize = "vsanFormatVersion")]
+    VsanFormatVersion,
+    #[serde(rename = "serverClusterHealth")]
+    #[strum(serialize = "serverClusterHealth")]
+    ServerClusterHealth,
+    #[serde(rename = "datastorePolicy")]
+    #[strum(serialize = "datastorePolicy")]
+    DatastorePolicy,
+    #[serde(rename = "remoteDatastoreLimit")]
+    #[strum(serialize = "remoteDatastoreLimit")]
+    RemoteDatastoreLimit,
+    #[serde(rename = "clientClusterLimit")]
+    #[strum(serialize = "clientClusterLimit")]
+    ClientClusterLimit,
+    #[serde(rename = "serverClusterLimit")]
+    #[strum(serialize = "serverClusterLimit")]
+    ServerClusterLimit,
+    #[serde(rename = "connectivity")]
+    #[strum(serialize = "connectivity")]
+    Connectivity,
+    #[serde(rename = "networkLatency")]
+    #[strum(serialize = "networkLatency")]
+    NetworkLatency,
+    #[serde(rename = "license")]
+    #[strum(serialize = "license")]
+    License,
+    #[serde(rename = "precheck_unknown")]
+    #[strum(serialize = "precheck_unknown")]
+    PrecheckUnknown,
+    #[serde(rename = "serverVersionForComputeMode")]
+    #[strum(serialize = "serverVersionForComputeMode")]
+    ServerVersionForComputeMode,
+    #[serde(rename = "remoteVcConnection")]
+    #[strum(serialize = "remoteVcConnection")]
+    RemoteVcConnection,
+    #[serde(rename = "datastoreExists")]
+    #[strum(serialize = "datastoreExists")]
+    DatastoreExists,
+    #[serde(rename = "serverVcenterLimit")]
+    #[strum(serialize = "serverVcenterLimit")]
+    ServerVcenterLimit,
+    #[serde(rename = "clientVcenterLimit")]
+    #[strum(serialize = "clientVcenterLimit")]
+    ClientVcenterLimit,
+    #[serde(rename = "vcApiVersion")]
+    #[strum(serialize = "vcApiVersion")]
+    VcApiVersion,
+    #[serde(rename = "vcenterIdValid")]
+    #[strum(serialize = "vcenterIdValid")]
+    VcenterIdValid,
+    #[serde(rename = "checkServerVcenter")]
+    #[strum(serialize = "checkServerVcenter")]
+    CheckServerVcenter,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Remediate action type.
+/// 
+/// When vSAN cluster remediate, vSAN will check the performance service configuration and
+/// performance service status. If the vSAN performance service configuration is enable but
+/// the vSAN performance service is not running, it will return "enable" to remediate vSAN
+/// performance service. If the vSAN performance service configuration is disable but the
+/// vSAN performance service is not running, it will return "disable" to remediate vSAN
+/// performance service. If the vSAN performance service configuration is enable, the vSAN
+/// performance service is running, but the profile of performance service is not match
+/// the configuration, it will return "update\_profile" to remediate vSAN performance service.
+/// Others will return "no\_action" which means no need to remediate vSAN performance service.
+/// Valid types are:
+/// 
+/// Possible values:
+/// - `enable`: remediate action is create stats object.
+/// - `disable`: remediate action is delete stats object.
+/// - `update_profile`: remediate action is update stats object policy.
+/// - `no_action`: remediate action will do no action.
+/// - `PerfsvcRemediateAction_Unknown`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanPerfsvcRemediateActionEnum {
+    #[serde(rename = "enable")]
+    #[strum(serialize = "enable")]
+    Enable,
+    #[serde(rename = "disable")]
+    #[strum(serialize = "disable")]
+    Disable,
+    #[serde(rename = "update_profile")]
+    #[strum(serialize = "update_profile")]
+    UpdateProfile,
+    #[serde(rename = "no_action")]
+    #[strum(serialize = "no_action")]
+    NoAction,
+    #[serde(rename = "PerfsvcRemediateAction_Unknown")]
+    #[strum(serialize = "PerfsvcRemediateAction_Unknown")]
+    PerfsvcRemediateActionUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Related operations for PrecheckDatastoreSource.
+/// 
+/// Possible values:
+/// - `checkCreateDs`: Run precheck for creating Datastore Source.
+/// - `checkUpdateDs`: Run precheck for updating Datastore Source.
+/// - `checkDestroyDs`: Run precheck for destroying Datastore Source.
+/// - `PrecheckDatastoreSourceOperation_unknown`: Unknown operation type.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum PrecheckDatastoreSourceOperationEnum {
+    #[serde(rename = "checkCreateDs")]
+    #[strum(serialize = "checkCreateDs")]
+    CheckCreateDs,
+    #[serde(rename = "checkUpdateDs")]
+    #[strum(serialize = "checkUpdateDs")]
+    CheckUpdateDs,
+    #[serde(rename = "checkDestroyDs")]
+    #[strum(serialize = "checkDestroyDs")]
+    CheckDestroyDs,
+    #[serde(rename = "PrecheckDatastoreSourceOperation_unknown")]
+    #[strum(serialize = "PrecheckDatastoreSourceOperation_unknown")]
+    PrecheckDatastoreSourceOperationUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// The link type of a remote vCenter.
+/// 
+/// Possible values:
+/// - `standalone`: Remote vCenter is standalone.
+/// - `VsanRemoteVcLinkType_unknown`: Unsupported link type.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanRemoteVcLinkTypeEnum {
+    #[serde(rename = "standalone")]
+    #[strum(serialize = "standalone")]
+    Standalone,
+    #[serde(rename = "VsanRemoteVcLinkType_unknown")]
+    #[strum(serialize = "VsanRemoteVcLinkType_unknown")]
+    VsanRemoteVcLinkTypeUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Network topology between the client and server cluster in a HCI Mesh
+/// configuration.
+/// 
+/// Possible values:
+/// - `Topology_Unknown`: Represent the value when the lower version client cannot recognize the enum value.
+/// - `Symmetric`: Hosts in client and server clusters have homogenous network connectivity with similar network properties like bandwidth and latency.
+/// - `Asymmetric`: Hosts in the client cluster have asymmetric network connectivity with different server cluster sites, such that hosts in a client site have a high bandwidth low latency link to one server site and a low bandwidth high lantency link to the other server site.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum RemoteVsanNetworkTopologyEnum {
+    #[serde(rename = "Topology_Unknown")]
+    #[strum(serialize = "Topology_Unknown")]
+    TopologyUnknown,
+    Symmetric,
+    Asymmetric,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Enumeration of the types for resource check component result.
+/// 
+/// Possible values:
+/// - `vSAN`: The resource check result for regular vSAN.
+/// - `DataPersistence`: The resource check result for vSphere data persistence platform.
+/// - `ResourceCheckComponentType_Unknown`: represent the value when the lower version client cannot recognize the enum value.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanResourceCheckComponentTypeEnum {
+    #[serde(rename = "vSAN")]
+    #[strum(serialize = "vSAN")]
+    VSan,
+    DataPersistence,
+    #[serde(rename = "ResourceCheckComponentType_Unknown")]
+    #[strum(serialize = "ResourceCheckComponentType_Unknown")]
+    ResourceCheckComponentTypeUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// \* The dedup store health category enumeration used in resource check.
+/// 
+/// Possible values:
+/// - `Inaccessible`: The dedup store is inaccessible which means the dedup store
+///   has inaccessible sub objects.
+/// - `Noncompliant`: The dedup store is noncompliant which means the dedup store
+///   has no inaccessible sub objects but has noncompliant sub objects.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum ResourceCheckDedupStoreHealthStateEnum {
+    Inaccessible,
+    Noncompliant,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Enumeration of the types for resource check status.
+/// 
+/// Possible values:
+/// - `resourceCheckUninitialized`: The resource check has never run yet, or it just starts but the task has not been launched yet (i.e.
+///   
+///   still in initialization stage).
+/// - `resourceCheckRunning`: The resource check is currently running.
+/// - `resourceCheckFailed`: The resource check has failed.
+/// - `resourceCheckCancelled`: The resource check has been cancelled by user.
+/// - `resourceCheckCompleted`: The resource check has completed successfully.
+/// - `resourceCheckNoRecentValue`: The last resource check completed successfully but then it has not run again for a while (e.g.
+///   
+///   60 min) and the result of the last check becomes stale.
+/// - `resourceCheckNotSupported`: The resource check is not supported by one or more host in cluster.
+/// - `ResourceCheckStatusType_Unknown`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanResourceCheckStatusTypeEnum {
+    #[serde(rename = "resourceCheckUninitialized")]
+    #[strum(serialize = "resourceCheckUninitialized")]
+    ResourceCheckUninitialized,
+    #[serde(rename = "resourceCheckRunning")]
+    #[strum(serialize = "resourceCheckRunning")]
+    ResourceCheckRunning,
+    #[serde(rename = "resourceCheckFailed")]
+    #[strum(serialize = "resourceCheckFailed")]
+    ResourceCheckFailed,
+    #[serde(rename = "resourceCheckCancelled")]
+    #[strum(serialize = "resourceCheckCancelled")]
+    ResourceCheckCancelled,
+    #[serde(rename = "resourceCheckCompleted")]
+    #[strum(serialize = "resourceCheckCompleted")]
+    ResourceCheckCompleted,
+    #[serde(rename = "resourceCheckNoRecentValue")]
+    #[strum(serialize = "resourceCheckNoRecentValue")]
+    ResourceCheckNoRecentValue,
+    #[serde(rename = "resourceCheckNotSupported")]
+    #[strum(serialize = "resourceCheckNotSupported")]
+    ResourceCheckNotSupported,
+    #[serde(rename = "ResourceCheckStatusType_Unknown")]
+    #[strum(serialize = "ResourceCheckStatusType_Unknown")]
+    ResourceCheckStatusTypeUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// The creator of snapshot.
+/// 
+/// Possible values:
+/// - `SnapService`: Snapshot is created by Snapshot Service.
+/// - `SnapshotCreator_Unknown`: Represent the value when the lower version client cannot recognize the enum value.
+///   
+/// ***Since:*** 8.0.0.4
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanSnapshotCreatorEnum {
+    SnapService,
+    #[serde(rename = "SnapshotCreator_Unknown")]
+    #[strum(serialize = "SnapshotCreator_Unknown")]
+    SnapshotCreatorUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// The type of snapshot.
+/// 
+/// Possible values:
+/// - `Managed`: Snapshot is a managed snapshot.
+/// - `Unmanaged`: Snapshot is an unmanaged snapshot.
+/// - `SnapshotType_Unknown`: Represent the value when the lower version client cannot recognize the enum value.
+///   
+/// ***Since:*** 8.0.0.4
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanSnapshotTypeEnum {
+    Managed,
+    Unmanaged,
+    #[serde(rename = "SnapshotType_Unknown")]
+    #[strum(serialize = "SnapshotType_Unknown")]
+    SnapshotTypeUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Enumeration type for associating event with managed object
+///   
+/// This is a list of supported locations to associate an event.
+/// 
+/// The event
+/// could be related to disk, hosts or cluster.
+/// 
+/// Possible values:
+/// - `CLUSTER`
+/// - `HOST`
+/// - `DISK`
+/// - `EVENT_LOCATION_UNKNOWN`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanAnalyticsEventLocationTypeEnum {
+    #[serde(rename = "CLUSTER")]
+    #[strum(serialize = "CLUSTER")]
+    Cluster,
+    #[serde(rename = "HOST")]
+    #[strum(serialize = "HOST")]
+    Host,
+    #[serde(rename = "DISK")]
+    #[strum(serialize = "DISK")]
+    Disk,
+    #[serde(rename = "EVENT_LOCATION_UNKNOWN")]
+    #[strum(serialize = "EVENT_LOCATION_UNKNOWN")]
+    EventLocationUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Enumeration type for snapshot types
+///   
+/// This is a list of supported snapshot types.
+/// 
+/// Possible values:
+/// - `OBJECT_SNAPSHOT`
+/// - `HOST_SNAPSHOT`
+/// - `DISK_SNAPSHOT`
+/// - `POLICY_SNAPSHOT`
+/// - `SNAPSHOT_TYPE_UNKNOWN`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanAnalyticsEventSnapshotTypeEnum {
+    #[serde(rename = "OBJECT_SNAPSHOT")]
+    #[strum(serialize = "OBJECT_SNAPSHOT")]
+    ObjectSnapshot,
+    #[serde(rename = "HOST_SNAPSHOT")]
+    #[strum(serialize = "HOST_SNAPSHOT")]
+    HostSnapshot,
+    #[serde(rename = "DISK_SNAPSHOT")]
+    #[strum(serialize = "DISK_SNAPSHOT")]
+    DiskSnapshot,
+    #[serde(rename = "POLICY_SNAPSHOT")]
+    #[strum(serialize = "POLICY_SNAPSHOT")]
+    PolicySnapshot,
+    #[serde(rename = "SNAPSHOT_TYPE_UNKNOWN")]
+    #[strum(serialize = "SNAPSHOT_TYPE_UNKNOWN")]
+    SnapshotTypeUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Enumeration type for events currently subscribed.
+/// 
+///   
+/// This is a list of supported supported events vSAN analytics will collect.
+/// 
+/// Possible values:
+/// - `STORAGE_OBJECT_UNAVAILABLE`
+/// - `STORAGE_OBJECT_AVAILABLE`
+/// - `STORAGE_OBJECT_REPL_CHANGE`
+/// - `STORAGE_OBJECT_LOST`
+/// - `STORAGE_OBJECT_CREATED`
+/// - `STORAGE_OBJECT_DELETED`
+/// - `STORAGE_DOM_OBJECT_CHANGE`
+/// - `REPAIR_START`
+/// - `REPAIR_END`
+/// - `REBUILD_START`
+/// - `REBUILD_END`
+/// - `RESYNC_IN_PROGRESS`
+/// - `RESYNC_END`
+/// - `PATCH_START`
+/// - `PATCH_END`
+/// - `DG_DECOM_START`
+/// - `DG_DECOM_END`
+/// - `HOST_DECOM_START`
+/// - `HOST_DECOM_FAIL`
+/// - `HOST_DECOM_END`
+/// - `CLUSTER_CREATED`
+/// - `CLUSTER_DELETED`
+/// - `SDDC_CREATED`
+/// - `SDDC_DELETED`
+/// - `HOST_CREATED`
+/// - `HOST_DELETED`
+/// - `CLUSTER_MEMBERSHIP_CHANGED`
+/// - `DEVICE_FAILURE`
+/// - `DEVICE_NORMAL`
+/// - `DEVICE_OFFLINE`
+/// - `DEVICE_ERROR`
+/// - `HOST_FAILURE`
+/// - `HOST_NORMAL`
+/// - `EVENT_TYPE_UNKNOWN`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanAnalyticsEventTypeEnum {
+    #[serde(rename = "STORAGE_OBJECT_UNAVAILABLE")]
+    #[strum(serialize = "STORAGE_OBJECT_UNAVAILABLE")]
+    StorageObjectUnavailable,
+    #[serde(rename = "STORAGE_OBJECT_AVAILABLE")]
+    #[strum(serialize = "STORAGE_OBJECT_AVAILABLE")]
+    StorageObjectAvailable,
+    #[serde(rename = "STORAGE_OBJECT_REPL_CHANGE")]
+    #[strum(serialize = "STORAGE_OBJECT_REPL_CHANGE")]
+    StorageObjectReplChange,
+    #[serde(rename = "STORAGE_OBJECT_LOST")]
+    #[strum(serialize = "STORAGE_OBJECT_LOST")]
+    StorageObjectLost,
+    #[serde(rename = "STORAGE_OBJECT_CREATED")]
+    #[strum(serialize = "STORAGE_OBJECT_CREATED")]
+    StorageObjectCreated,
+    #[serde(rename = "STORAGE_OBJECT_DELETED")]
+    #[strum(serialize = "STORAGE_OBJECT_DELETED")]
+    StorageObjectDeleted,
+    #[serde(rename = "STORAGE_DOM_OBJECT_CHANGE")]
+    #[strum(serialize = "STORAGE_DOM_OBJECT_CHANGE")]
+    StorageDomObjectChange,
+    #[serde(rename = "REPAIR_START")]
+    #[strum(serialize = "REPAIR_START")]
+    RepairStart,
+    #[serde(rename = "REPAIR_END")]
+    #[strum(serialize = "REPAIR_END")]
+    RepairEnd,
+    #[serde(rename = "REBUILD_START")]
+    #[strum(serialize = "REBUILD_START")]
+    RebuildStart,
+    #[serde(rename = "REBUILD_END")]
+    #[strum(serialize = "REBUILD_END")]
+    RebuildEnd,
+    #[serde(rename = "RESYNC_IN_PROGRESS")]
+    #[strum(serialize = "RESYNC_IN_PROGRESS")]
+    ResyncInProgress,
+    #[serde(rename = "RESYNC_END")]
+    #[strum(serialize = "RESYNC_END")]
+    ResyncEnd,
+    #[serde(rename = "PATCH_START")]
+    #[strum(serialize = "PATCH_START")]
+    PatchStart,
+    #[serde(rename = "PATCH_END")]
+    #[strum(serialize = "PATCH_END")]
+    PatchEnd,
+    #[serde(rename = "DG_DECOM_START")]
+    #[strum(serialize = "DG_DECOM_START")]
+    DgDecomStart,
+    #[serde(rename = "DG_DECOM_END")]
+    #[strum(serialize = "DG_DECOM_END")]
+    DgDecomEnd,
+    #[serde(rename = "HOST_DECOM_START")]
+    #[strum(serialize = "HOST_DECOM_START")]
+    HostDecomStart,
+    #[serde(rename = "HOST_DECOM_FAIL")]
+    #[strum(serialize = "HOST_DECOM_FAIL")]
+    HostDecomFail,
+    #[serde(rename = "HOST_DECOM_END")]
+    #[strum(serialize = "HOST_DECOM_END")]
+    HostDecomEnd,
+    #[serde(rename = "CLUSTER_CREATED")]
+    #[strum(serialize = "CLUSTER_CREATED")]
+    ClusterCreated,
+    #[serde(rename = "CLUSTER_DELETED")]
+    #[strum(serialize = "CLUSTER_DELETED")]
+    ClusterDeleted,
+    #[serde(rename = "SDDC_CREATED")]
+    #[strum(serialize = "SDDC_CREATED")]
+    SddcCreated,
+    #[serde(rename = "SDDC_DELETED")]
+    #[strum(serialize = "SDDC_DELETED")]
+    SddcDeleted,
+    #[serde(rename = "HOST_CREATED")]
+    #[strum(serialize = "HOST_CREATED")]
+    HostCreated,
+    #[serde(rename = "HOST_DELETED")]
+    #[strum(serialize = "HOST_DELETED")]
+    HostDeleted,
+    #[serde(rename = "CLUSTER_MEMBERSHIP_CHANGED")]
+    #[strum(serialize = "CLUSTER_MEMBERSHIP_CHANGED")]
+    ClusterMembershipChanged,
+    #[serde(rename = "DEVICE_FAILURE")]
+    #[strum(serialize = "DEVICE_FAILURE")]
+    DeviceFailure,
+    #[serde(rename = "DEVICE_NORMAL")]
+    #[strum(serialize = "DEVICE_NORMAL")]
+    DeviceNormal,
+    #[serde(rename = "DEVICE_OFFLINE")]
+    #[strum(serialize = "DEVICE_OFFLINE")]
+    DeviceOffline,
+    #[serde(rename = "DEVICE_ERROR")]
+    #[strum(serialize = "DEVICE_ERROR")]
+    DeviceError,
+    #[serde(rename = "HOST_FAILURE")]
+    #[strum(serialize = "HOST_FAILURE")]
+    HostFailure,
+    #[serde(rename = "HOST_NORMAL")]
+    #[strum(serialize = "HOST_NORMAL")]
+    HostNormal,
+    #[serde(rename = "EVENT_TYPE_UNKNOWN")]
+    #[strum(serialize = "EVENT_TYPE_UNKNOWN")]
+    EventTypeUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// It's used to declare the vSAN configuration types that the hardware
+/// components like CPU, memory, disk and physical NIC is compatible with.
+/// 
+/// Possible values:
+/// - `vsan`: represent the regular vSAN.
+/// - `vsanEsa`: represent vSAN ESA.
+/// - `VsanConfigType_Unknown`: represent the value when the lower version client cannot recognize the enum value.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanConfigTypeEnum {
+    #[serde(rename = "vsan")]
+    #[strum(serialize = "vsan")]
+    Vsan,
+    #[serde(rename = "vsanEsa")]
+    #[strum(serialize = "vsanEsa")]
+    VsanEsa,
+    #[serde(rename = "VsanConfigType_Unknown")]
+    #[strum(serialize = "VsanConfigType_Unknown")]
+    VsanConfigTypeUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Values indicate the vSAN storage types that the disk is compatible with.
+/// 
+/// Possible values:
+/// - `diskGroup`: represent disk group for regular vSAN.
+/// - `singleTier`: represent vSAN ESA storage pool.
+/// - `VsanDiskCompatibilityType_Unknown`: represent the value when the lower version client cannot recognize the enum value.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanDiskCompatibilityTypeEnum {
+    #[serde(rename = "diskGroup")]
+    #[strum(serialize = "diskGroup")]
+    DiskGroup,
+    #[serde(rename = "singleTier")]
+    #[strum(serialize = "singleTier")]
+    SingleTier,
+    #[serde(rename = "VsanDiskCompatibilityType_Unknown")]
+    #[strum(serialize = "VsanDiskCompatibilityType_Unknown")]
+    VsanDiskCompatibilityTypeUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// The total amount of health checks is split into multiple different
+/// perspectives.
+/// 
+/// This list defines sets labels for sets of health checks
+/// in 8.x and previous releases.
+/// 
+/// Possible values:
+/// - `defaultView`: The default set, core "health checks".
+/// - `deployAssist`: Health checks to aid the user in configuring all aspects of vSphere required for production vSAN clusters, including vDS, DRS, HA, etc.
+///   
+///   The checks represent best practices, and so ignoring failures is generally acceptable.
+/// - `CreateExtendClusterView`: Health checks during creating/extending vSAN cluster which only include HCL check.
+/// - `beforeConfigureHost`: Health checks before configuring host which includes the advanced config option consistent check, software version compatibility check, HCL check, etc.
+/// - `upgradePreCheck`: Health checks before upgrade which includes some tests from HCL, network and physical disks checks.
+/// - `vsanUpgradePreCheck`: Health checks before vsan upgrade which includes some tests from HCL, network and physical disks checks.
+/// - `upgradeBeforeExitMM`: Health checks before exiting maintenance mode during upgrading which includes HCL, network and physical disk checks.
+/// - `upgradeAfterExitMM`: Health checks after exiting maintenance mode during upgrading which includes HCL, network and physical disk checks.
+/// - `vsanUpgradeBeforeExitMM`: Health checks before exiting maintenance mode during performing vSAN recommended upgrade which includes some tests in HCL, network and physical disk checks.
+/// - `vsanUpgradeAfterExitMM`: Health checks after exiting maintenance mode during performing vSAN recommended upgrade which includes some tests in HCL, network and physical disk checks.
+/// - `vmcUpgradePreChecks`: Health checks during POD upgrade
+/// - `upgradePreCheckPman`
+/// - `upgradeBeforeExitMMPman`
+/// - `upgradeAfterExitMMPman`
+/// - `inPlaceUpgradeServiceMode`
+/// - `upgradePreCheckPmanForVMC`
+/// - `upgradeBeforeExitMMPmanForVMC`
+/// - `upgradeAfterExitMMPmanForVMC`
+/// - `clusterPowerOffPrecheck`
+/// - `VsanEsaPreChecks`
+/// - `vcsaInstallerForVsanEsa`
+/// - `upgradePreCheckForVCF`
+/// - `VsanHealthPerspective_Unknown`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanHealthPerspectiveEnum {
+    #[serde(rename = "defaultView")]
+    #[strum(serialize = "defaultView")]
+    DefaultView,
+    #[serde(rename = "deployAssist")]
+    #[strum(serialize = "deployAssist")]
+    DeployAssist,
+    CreateExtendClusterView,
+    #[serde(rename = "beforeConfigureHost")]
+    #[strum(serialize = "beforeConfigureHost")]
+    BeforeConfigureHost,
+    #[serde(rename = "upgradePreCheck")]
+    #[strum(serialize = "upgradePreCheck")]
+    UpgradePreCheck,
+    #[serde(rename = "vsanUpgradePreCheck")]
+    #[strum(serialize = "vsanUpgradePreCheck")]
+    VsanUpgradePreCheck,
+    #[serde(rename = "upgradeBeforeExitMM")]
+    #[strum(serialize = "upgradeBeforeExitMM")]
+    UpgradeBeforeExitMm,
+    #[serde(rename = "upgradeAfterExitMM")]
+    #[strum(serialize = "upgradeAfterExitMM")]
+    UpgradeAfterExitMm,
+    #[serde(rename = "vsanUpgradeBeforeExitMM")]
+    #[strum(serialize = "vsanUpgradeBeforeExitMM")]
+    VsanUpgradeBeforeExitMm,
+    #[serde(rename = "vsanUpgradeAfterExitMM")]
+    #[strum(serialize = "vsanUpgradeAfterExitMM")]
+    VsanUpgradeAfterExitMm,
+    #[serde(rename = "vmcUpgradePreChecks")]
+    #[strum(serialize = "vmcUpgradePreChecks")]
+    VmcUpgradePreChecks,
+    #[serde(rename = "upgradePreCheckPman")]
+    #[strum(serialize = "upgradePreCheckPman")]
+    UpgradePreCheckPman,
+    #[serde(rename = "upgradeBeforeExitMMPman")]
+    #[strum(serialize = "upgradeBeforeExitMMPman")]
+    UpgradeBeforeExitMmPman,
+    #[serde(rename = "upgradeAfterExitMMPman")]
+    #[strum(serialize = "upgradeAfterExitMMPman")]
+    UpgradeAfterExitMmPman,
+    #[serde(rename = "inPlaceUpgradeServiceMode")]
+    #[strum(serialize = "inPlaceUpgradeServiceMode")]
+    InPlaceUpgradeServiceMode,
+    #[serde(rename = "upgradePreCheckPmanForVMC")]
+    #[strum(serialize = "upgradePreCheckPmanForVMC")]
+    UpgradePreCheckPmanForVmc,
+    #[serde(rename = "upgradeBeforeExitMMPmanForVMC")]
+    #[strum(serialize = "upgradeBeforeExitMMPmanForVMC")]
+    UpgradeBeforeExitMmPmanForVmc,
+    #[serde(rename = "upgradeAfterExitMMPmanForVMC")]
+    #[strum(serialize = "upgradeAfterExitMMPmanForVMC")]
+    UpgradeAfterExitMmPmanForVmc,
+    #[serde(rename = "clusterPowerOffPrecheck")]
+    #[strum(serialize = "clusterPowerOffPrecheck")]
+    ClusterPowerOffPrecheck,
+    VsanEsaPreChecks,
+    #[serde(rename = "vcsaInstallerForVsanEsa")]
+    #[strum(serialize = "vcsaInstallerForVsanEsa")]
+    VcsaInstallerForVsanEsa,
+    #[serde(rename = "upgradePreCheckForVCF")]
+    #[strum(serialize = "upgradePreCheckForVCF")]
+    UpgradePreCheckForVcf,
+    #[serde(rename = "VsanHealthPerspective_Unknown")]
+    #[strum(serialize = "VsanHealthPerspective_Unknown")]
+    VsanHealthPerspectiveUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// This list defines sets labels of multiple different perspectives
+/// for sets of health checks in 9.0 release.
+/// 
+/// Possible values:
+/// - `siteEnterMaintenance`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanHealthPerspective90Enum {
+    #[serde(rename = "siteEnterMaintenance")]
+    #[strum(serialize = "siteEnterMaintenance")]
+    SiteEnterMaintenance,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Defines health status states applicable to various vSAN system entities.
+/// 
+/// An entity in vSAN health system can have one of the following state.
+/// Each state represent the health status of entity in terms of vSAN health
+/// perspective.
+/// Each system can define its notion of each health status. For example, status
+/// 'red' for capacity means cluster is running very close to datastore full but
+/// status 'red' for for an object mean it is already 'inaccessible'.
+/// 
+/// Possible values:
+/// - `unknown`: Health status in not known for the entity.
+///   
+///   This might imply that : 1. Underlying entity do not support the mechanism to calculate the health status. 2. Status is not yet calculated.
+/// - `yellow`: Shows a warning status for the entity.
+///   
+///   This might imply that : 1. Entity is currently available but running in degraded mode so some of the functionalities might not be available. 2. Potential configuration issue of recommendation which need user action to be resolved.
+/// - `red`: Shows an alert for the system.
+///   
+///   This might imply that: 1. Entity is currently running in error state. 2. Potentially harm the cluster status is not fixed soon.
+/// - `green`: Shows entity is in healthy state and no issues found.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanHealthStatusTypeEnum {
+    #[serde(rename = "unknown")]
+    #[strum(serialize = "unknown")]
+    Unknown,
+    #[serde(rename = "yellow")]
+    #[strum(serialize = "yellow")]
+    Yellow,
+    #[serde(rename = "red")]
+    #[strum(serialize = "red")]
+    Red,
+    #[serde(rename = "green")]
+    #[strum(serialize = "green")]
+    Green,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// The vSAN threshold target type.
+/// 
+/// it is used in
+/// *VsanHealthThreshold*, to indicate the thresholds are applied
+/// on which target. A target could be a part of one health check, or just one
+/// entire health check.
+/// For below targets, a valid threshold should be a percentage, e.g., an
+/// integer value which is in range \[0, 100\].
+/// 
+/// Possible values:
+/// - `diskspace_vsan_datastore`: The vSAN datastore part of "Disk space"
+/// - `diskspace_vsan_direct`: The vSAN direct part of "Disk space"
+/// - `diskspace_vsan_pmem`
+/// - `VsanHealthThresholdTarget_Unknown`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanHealthThresholdTargetEnum {
+    #[serde(rename = "diskspace_vsan_datastore")]
+    #[strum(serialize = "diskspace_vsan_datastore")]
+    DiskspaceVsanDatastore,
+    #[serde(rename = "diskspace_vsan_direct")]
+    #[strum(serialize = "diskspace_vsan_direct")]
+    DiskspaceVsanDirect,
+    #[serde(rename = "diskspace_vsan_pmem")]
+    #[strum(serialize = "diskspace_vsan_pmem")]
+    DiskspaceVsanPmem,
+    #[serde(rename = "VsanHealthThresholdTarget_Unknown")]
+    #[strum(serialize = "VsanHealthThresholdTarget_Unknown")]
+    VsanHealthThresholdTargetUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// The vSAN IO trip analyzer scheduler recurrence status type.
+/// 
+/// Possible values:
+/// - `recurrenceEnabled`: The scheduler recurrence is enabled.
+///   
+///   Tasks will be triggered based on the settings.
+/// - `recurrenceDisabled`: The scheduler recurrence is disabled.
+///   
+///   No task will be triggered.
+/// - `VsanIOTripAnalyzerRecurrenceStatus_Unknown`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanIoTripAnalyzerRecurrenceStatusEnum {
+    #[serde(rename = "recurrenceEnabled")]
+    #[strum(serialize = "recurrenceEnabled")]
+    RecurrenceEnabled,
+    #[serde(rename = "recurrenceDisabled")]
+    #[strum(serialize = "recurrenceDisabled")]
+    RecurrenceDisabled,
+    #[serde(rename = "VsanIOTripAnalyzerRecurrenceStatus_Unknown")]
+    #[strum(serialize = "VsanIOTripAnalyzerRecurrenceStatus_Unknown")]
+    VsanIoTripAnalyzerRecurrenceStatusUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// vSAN policy regulation check operators.
+/// 
+/// Possible values:
+/// - `equal`: Equals to.
+/// - `greater`: Greater than.
+/// - `nogreater`: No greater than.
+/// - `less`: Less than.
+/// - `noless`: No less than.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanPolicyRegulationCheckOpEnumEnum {
+    #[serde(rename = "equal")]
+    #[strum(serialize = "equal")]
+    Equal,
+    #[serde(rename = "greater")]
+    #[strum(serialize = "greater")]
+    Greater,
+    #[serde(rename = "nogreater")]
+    #[strum(serialize = "nogreater")]
+    Nogreater,
+    #[serde(rename = "less")]
+    #[strum(serialize = "less")]
+    Less,
+    #[serde(rename = "noless")]
+    #[strum(serialize = "noless")]
+    Noless,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// The Issue Type:
+/// BROKEN\_CHAIN - The object is part of a snapshot chain that can't be
+/// opened
+/// LEAKED\_OBJECT - The object has no descriptor file
+/// UNKNOWN - An unknown issue was detected trying to identify this object
+/// 
+/// Possible values:
+/// - `BROKEN_CHAIN`
+/// - `LEAKED_OBJECT`
+/// - `UNKNOWN`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VimVsanVsanScanObjectsIssueTypeEnum {
+    #[serde(rename = "BROKEN_CHAIN")]
+    #[strum(serialize = "BROKEN_CHAIN")]
+    BrokenChain,
+    #[serde(rename = "LEAKED_OBJECT")]
+    #[strum(serialize = "LEAKED_OBJECT")]
+    LeakedObject,
+    #[serde(rename = "UNKNOWN")]
+    #[strum(serialize = "UNKNOWN")]
+    Unknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Defines the status of vSAN service.
+/// 
+/// Possible values:
+/// - `started`: Stands for vSAN service is started.
+/// - `stopped`: Stands for vSAN service is stopped.
+/// - `VsanServiceStatus_Unknown`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanServiceStatusEnum {
+    #[serde(rename = "started")]
+    #[strum(serialize = "started")]
+    Started,
+    #[serde(rename = "stopped")]
+    #[strum(serialize = "stopped")]
+    Stopped,
+    #[serde(rename = "VsanServiceStatus_Unknown")]
+    #[strum(serialize = "VsanServiceStatus_Unknown")]
+    VsanServiceStatusUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Defines vSAN site location type.
+/// 
+/// Possible values:
+/// - `None`: No specific site location in stretched cluster.
+/// - `Preferred`: Identify the preferred site in stretched cluster.
+/// - `NonPreferred`: Identify the non-preferred site of stretched cluster.
+/// - `VsanSiteLocationType_Unknown`: represent the value when the lower version client cannot recognize the enum value
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanSiteLocationTypeEnum {
+    None,
+    Preferred,
+    NonPreferred,
+    #[serde(rename = "VsanSiteLocationType_Unknown")]
+    #[strum(serialize = "VsanSiteLocationType_Unknown")]
+    VsanSiteLocationTypeUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// It's used to declare the health types of the received stats from the
+/// vSAN SnapService Appliance.
+/// 
+/// Possible values:
+/// - `applianceHealth`: represent the health stats of the data protection appliance.
+/// - `pgSnapshotsHealth`: represent the snapshot health stats of the protection groups.
+/// - `vmSnapshotsHealth`: represent the snapshot health stats of the virtual machines.
+/// - `vmMembershipChanges`: represent the stats of VM membership changes.
+/// - `VsanSnapHealthType_Unknown`: represent the value when the lower version client cannot recognize the enum value.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanSnapHealthTypeEnum {
+    #[serde(rename = "applianceHealth")]
+    #[strum(serialize = "applianceHealth")]
+    ApplianceHealth,
+    #[serde(rename = "pgSnapshotsHealth")]
+    #[strum(serialize = "pgSnapshotsHealth")]
+    PgSnapshotsHealth,
+    #[serde(rename = "vmSnapshotsHealth")]
+    #[strum(serialize = "vmSnapshotsHealth")]
+    VmSnapshotsHealth,
+    #[serde(rename = "vmMembershipChanges")]
+    #[strum(serialize = "vmMembershipChanges")]
+    VmMembershipChanges,
+    #[serde(rename = "VsanSnapHealthType_Unknown")]
+    #[strum(serialize = "VsanSnapHealthType_Unknown")]
+    VsanSnapHealthTypeUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// It's used to declare the expiration types of the received stats from the
+/// vSAN SnapService Appliance.
+/// 
+/// Possible values:
+/// - `afterSet`: represent the stats will expire once the new value has been set.
+/// - `afterGet`: represent the stats will expire once it has been queried.
+/// - `afterTtl`: represent the stats will expire after a specific TTL.
+/// - `never`: represent the stats will never expire.
+/// - `VsanSnapStatsExpirationType_Unknown`: represent the value when the lower version client cannot recognize the enum value.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanSnapStatsExpirationTypeEnum {
+    #[serde(rename = "afterSet")]
+    #[strum(serialize = "afterSet")]
+    AfterSet,
+    #[serde(rename = "afterGet")]
+    #[strum(serialize = "afterGet")]
+    AfterGet,
+    #[serde(rename = "afterTtl")]
+    #[strum(serialize = "afterTtl")]
+    AfterTtl,
+    #[serde(rename = "never")]
+    #[strum(serialize = "never")]
+    Never,
+    #[serde(rename = "VsanSnapStatsExpirationType_Unknown")]
+    #[strum(serialize = "VsanSnapStatsExpirationType_Unknown")]
+    VsanSnapStatsExpirationTypeUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// It's used to declare the virtual machine membership change status.
+/// 
+/// Possible values:
+/// - `added`: represent the virtual machine is newly added to the protection group.
+/// - `removed`: represent the virtual machine has been removed from the protection group.
+/// - `VsanSnapVmMembershipChangeStatus_Unknown`: represent the value when the lower version client cannot recognize the enum value.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanSnapVmMembershipChangeStatusEnum {
+    #[serde(rename = "added")]
+    #[strum(serialize = "added")]
+    Added,
+    #[serde(rename = "removed")]
+    #[strum(serialize = "removed")]
+    Removed,
+    #[serde(rename = "VsanSnapVmMembershipChangeStatus_Unknown")]
+    #[strum(serialize = "VsanSnapVmMembershipChangeStatus_Unknown")]
+    VsanSnapVmMembershipChangeStatusUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// The reasons why a vSAN component went into syncing state.
+/// 
+/// Possible values:
+/// - `repair`: The component is created and resyncing to repair a bad component.
+/// - `evacuate`: The component is created and resyncing after evacuate disk group or host to ensure accessibility and full data evacuation.
+/// - `rebalance`: The component is created and resyncing for rebalancing.
+/// - `reconfigure`: The component is created and resyncing after vSAN object was resized or its policy was changed.
+/// - `dying_evacuate`: The component is being moved out when a disk is going to die.
+/// - `stale`: The component is syncing because it was stale.
+/// - `merge_concat`: The component is created and resyncing to merge concatenations.
+/// - `object_format_change`
+/// - `VsanSyncReason_Unknown`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanSyncReasonEnum {
+    #[serde(rename = "repair")]
+    #[strum(serialize = "repair")]
+    Repair,
+    #[serde(rename = "evacuate")]
+    #[strum(serialize = "evacuate")]
+    Evacuate,
+    #[serde(rename = "rebalance")]
+    #[strum(serialize = "rebalance")]
+    Rebalance,
+    #[serde(rename = "reconfigure")]
+    #[strum(serialize = "reconfigure")]
+    Reconfigure,
+    #[serde(rename = "dying_evacuate")]
+    #[strum(serialize = "dying_evacuate")]
+    DyingEvacuate,
+    #[serde(rename = "stale")]
+    #[strum(serialize = "stale")]
+    Stale,
+    #[serde(rename = "merge_concat")]
+    #[strum(serialize = "merge_concat")]
+    MergeConcat,
+    #[serde(rename = "object_format_change")]
+    #[strum(serialize = "object_format_change")]
+    ObjectFormatChange,
+    #[serde(rename = "VsanSyncReason_Unknown")]
+    #[strum(serialize = "VsanSyncReason_Unknown")]
+    VsanSyncReasonUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// The status of syncing vSAN component.
+/// 
+/// Components which need recovery
+/// can be in one of the three status.
+/// 
+/// Possible values:
+/// - `active`: The component which is actively syncing.
+/// - `queued`: The component which is in queue for sync to start.
+///   
+///   Status change from queue to active could be due to reasons like availability of space in the cluster.
+/// - `suspended`: The component which is in suspended state.
+///   
+///   This implies that once this component was actively syncing but now the sync is stopped by the cluster. Suspended state can be due to the disk on which component resides is close to full.
+/// - `VsanSyncStatus_Unknown`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanSyncStatusEnum {
+    #[serde(rename = "active")]
+    #[strum(serialize = "active")]
+    Active,
+    #[serde(rename = "queued")]
+    #[strum(serialize = "queued")]
+    Queued,
+    #[serde(rename = "suspended")]
+    #[strum(serialize = "suspended")]
+    Suspended,
+    #[serde(rename = "VsanSyncStatus_Unknown")]
+    #[strum(serialize = "VsanSyncStatus_Unknown")]
+    VsanSyncStatusUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Lists the impact on the node after applying update item.
+/// 
+/// Possible values:
+/// - `reboot`: Host needs a reboot for this updateItem which also implies that it will enter maintenance mode before a reboot.
+/// - `VsanUpdateItemImpactType_Unknown`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanUpdateItemImpactTypeEnum {
+    #[serde(rename = "reboot")]
+    #[strum(serialize = "reboot")]
+    Reboot,
+    #[serde(rename = "VsanUpdateItemImpactType_Unknown")]
+    #[strum(serialize = "VsanUpdateItemImpactType_Unknown")]
+    VsanUpdateItemImpactTypeUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Type of VsanUpdateItem.
+/// 
+/// Possible values:
+/// - `vib`: A ESX VIB.
+/// - `offlinebundle`: A ESX Offline Bundle containing ESXi VIB(s).
+/// - `vmhbaFirmware`: Firmware of a SCSI/RAID controller.
+/// - `fullStackFirmware`: (Deprecated since vSphere 8.0) Firmware of various components on host.
+/// - `VsanUpdateItemType_Unknown`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanUpdateItemTypeEnum {
+    #[serde(rename = "vib")]
+    #[strum(serialize = "vib")]
+    Vib,
+    #[serde(rename = "offlinebundle")]
+    #[strum(serialize = "offlinebundle")]
+    Offlinebundle,
+    #[serde(rename = "vmhbaFirmware")]
+    #[strum(serialize = "vmhbaFirmware")]
+    VmhbaFirmware,
+    #[serde(rename = "fullStackFirmware")]
+    #[strum(serialize = "fullStackFirmware")]
+    FullStackFirmware,
+    #[serde(rename = "VsanUpdateItemType_Unknown")]
+    #[strum(serialize = "VsanUpdateItemType_Unknown")]
+    VsanUpdateItemTypeUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Phase of deployment.
+/// 
+/// Possible values:
+/// - `initializing`: Deployment just started.
+/// - `validation`: Deployment spec is being validated.
+/// - `vsanbootstrap`: 1-Node vSAN cluster is being created.
+/// - `ovaunpack`: VCSA OVA is being verified and unpacked.
+/// - `vcsadeploy`: VCSA is being deployed (booted and configured).
+/// - `vcconfig`: Post-install configuration of vCenter, like creation of datacenter, cluster objects and configuration of DRS, HA, vSAN and other features.
+/// - `done`: deployment completed successfully.
+/// - `failed`: Deployment failed.
+/// - `VsanVcsaDeploymentPhase_Unknown`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VimVsanVsanVcsaDeploymentPhaseEnum {
+    #[serde(rename = "initializing")]
+    #[strum(serialize = "initializing")]
+    Initializing,
+    #[serde(rename = "validation")]
+    #[strum(serialize = "validation")]
+    Validation,
+    #[serde(rename = "vsanbootstrap")]
+    #[strum(serialize = "vsanbootstrap")]
+    Vsanbootstrap,
+    #[serde(rename = "ovaunpack")]
+    #[strum(serialize = "ovaunpack")]
+    Ovaunpack,
+    #[serde(rename = "vcsadeploy")]
+    #[strum(serialize = "vcsadeploy")]
+    Vcsadeploy,
+    #[serde(rename = "vcconfig")]
+    #[strum(serialize = "vcconfig")]
+    Vcconfig,
+    #[serde(rename = "done")]
+    #[strum(serialize = "done")]
+    Done,
+    #[serde(rename = "failed")]
+    #[strum(serialize = "failed")]
+    Failed,
+    #[serde(rename = "VsanVcsaDeploymentPhase_Unknown")]
+    #[strum(serialize = "VsanVcsaDeploymentPhase_Unknown")]
+    VsanVcsaDeploymentPhaseUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Type of VsanVibSpec.
+/// 
+/// Possible values:
+/// - `tool`: A management tool.
+/// - `driver`: A management driver.
+/// - `VsanVibType_Unknown`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanVibTypeEnum {
+    #[serde(rename = "tool")]
+    #[strum(serialize = "tool")]
+    Tool,
+    #[serde(rename = "driver")]
+    #[strum(serialize = "driver")]
+    Driver,
+    #[serde(rename = "VsanVibType_Unknown")]
+    #[strum(serialize = "VsanVibType_Unknown")]
+    VsanVibTypeUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Defines the possible operators to use when comparing the values of
+/// individual property.
+/// 
+/// Possible values:
+/// - `Equal`: Equality operator.
+/// - `NotEqual`: Inequality operator.
+/// - `Greater`: Greater than operator.
+/// - `GreaterOrEqual`: Greater than or equal to operator.
+/// - `Less`: Less than operator.
+/// - `LessOrEqual`: Less than or equal to operator.
+/// - `In`: Checks for equality with at least one of a list of values.
+/// - `NotIn`: Checks for inequality with all values in a list.
+/// - `Like`: Pattern matching operator applicable to string properties.
+/// - `NotLike`: Opposite of operator Like.
+/// - `Unset`: Used in conjunction with comparableValue to see if a property is set or not.
+/// - `VsanXvcQueryCriteriaOperator_unknown`: Unknown operation type.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanXvcQueryCriteriaOperatorEnum {
+    Equal,
+    NotEqual,
+    Greater,
+    GreaterOrEqual,
+    Less,
+    LessOrEqual,
+    In,
+    NotIn,
+    Like,
+    NotLike,
+    Unset,
+    #[serde(rename = "VsanXvcQueryCriteriaOperator_unknown")]
+    #[strum(serialize = "VsanXvcQueryCriteriaOperator_unknown")]
+    VsanXvcQueryCriteriaOperatorUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Defines operator types for query filter.
+/// 
+/// Possible values:
+/// - `And`: The operator is evaluated to true only if all its operands are true.
+/// - `Or`: The operator is evaluated to true if at least one of its operands is true.
+/// - `Op_unknown`: Unknown operator.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanXvcQueryFilterOperatorEnum {
+    And,
+    Or,
+    #[serde(rename = "Op_unknown")]
+    #[strum(serialize = "Op_unknown")]
+    OpUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Defines the type of status for the Compliance Resource Check Query.
+/// 
+/// The status is one of the four inProgress/aborted/completed/uninitialized.
+/// 
+/// Possible values:
+/// - `inProgress`: The Compliance Resource Check Query task is in progress.
+/// - `aborted`: The Compliance Resource Check Query task is aborted due to some error etc.
+/// - `completed`: The Compliance Resource Check Query is completed and data can be fetchd.
+/// - `uninitialized`: The Compliance Resource Check Query is never called and the result cannot be get.
+/// - `ComplianceResourceCheckStatusType_Unknown`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VimVsanClusterComplianceResourceCheckStatusTypeEnum {
+    #[serde(rename = "inProgress")]
+    #[strum(serialize = "inProgress")]
+    InProgress,
+    #[serde(rename = "aborted")]
+    #[strum(serialize = "aborted")]
+    Aborted,
+    #[serde(rename = "completed")]
+    #[strum(serialize = "completed")]
+    Completed,
+    #[serde(rename = "uninitialized")]
+    #[strum(serialize = "uninitialized")]
+    Uninitialized,
+    #[serde(rename = "ComplianceResourceCheckStatusType_Unknown")]
+    #[strum(serialize = "ComplianceResourceCheckStatusType_Unknown")]
+    ComplianceResourceCheckStatusTypeUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// vSAN managed storage types.
+/// 
+/// Possible values:
+/// - `vsandirect`: Represents vSAN direct datastore managed by vSAN
+/// - `pmem`: 
+///   
+///   Deprecated as of vSphere 9.0 APIs with no replacement.
+///   
+///   Represents PMem datastore managed by vSAN.
+/// - `VsanManagedStorageType_Unknown`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VimVsanClusterVsanManagedStorageTypeEnum {
+    #[serde(rename = "vsandirect")]
+    #[strum(serialize = "vsandirect")]
+    Vsandirect,
+    #[serde(rename = "pmem")]
+    #[strum(serialize = "pmem")]
+    Pmem,
+    #[serde(rename = "VsanManagedStorageType_Unknown")]
+    #[strum(serialize = "VsanManagedStorageType_Unknown")]
+    VsanManagedStorageTypeUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Defines the high level cluster power state..
+/// 
+/// Possible values:
+/// - `poweredOn`: indicates the cluster is powered on.
+/// - `poweredOff`: indicates the cluster is powered off.
+/// - `poweringOn`: indicates the cluster is in the progress of powering on.
+/// - `poweringOff`: indicates the cluster is in the progress of powering off.
+/// - `ClusterPowerState_Unknown`: represent the value when the lower version client cannot recognize the enum value.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum ClusterPowerStateEnum {
+    #[serde(rename = "poweredOn")]
+    #[strum(serialize = "poweredOn")]
+    PoweredOn,
+    #[serde(rename = "poweredOff")]
+    #[strum(serialize = "poweredOff")]
+    PoweredOff,
+    #[serde(rename = "poweringOn")]
+    #[strum(serialize = "poweringOn")]
+    PoweringOn,
+    #[serde(rename = "poweringOff")]
+    #[strum(serialize = "poweringOff")]
+    PoweringOff,
+    #[serde(rename = "ClusterPowerState_Unknown")]
+    #[strum(serialize = "ClusterPowerState_Unknown")]
+    ClusterPowerStateUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Defines the set of status values for compliance operations.
+/// 
+/// Possible values:
+/// - `compliant`: Entity is compliant.
+/// - `nonCompliant`: Entity is not compliant.
+/// - `unknown`: Compliance status of the entity is unknown.
+/// - `notApplicable`: Compliance computation is not applicable for this entity, because it does not have any storage policy requirement for the datastore where the entity is placed.
+/// - `outOfDate`: Compliance status of the entity is out of date when the policy associated with the entity is edited and not applied.
+///   
+///   The compliance status will remain in out-of-date status until the latest policy is applied to the entity.
+/// - `ComplianceStatus_Unknown`: Represent the value when the lower version client cannot recognize the enum value.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanComplianceStatusEnum {
+    #[serde(rename = "compliant")]
+    #[strum(serialize = "compliant")]
+    Compliant,
+    #[serde(rename = "nonCompliant")]
+    #[strum(serialize = "nonCompliant")]
+    NonCompliant,
+    #[serde(rename = "unknown")]
+    #[strum(serialize = "unknown")]
+    Unknown,
+    #[serde(rename = "notApplicable")]
+    #[strum(serialize = "notApplicable")]
+    NotApplicable,
+    #[serde(rename = "outOfDate")]
+    #[strum(serialize = "outOfDate")]
+    OutOfDate,
+    #[serde(rename = "ComplianceStatus_Unknown")]
+    #[strum(serialize = "ComplianceStatus_Unknown")]
+    ComplianceStatusUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
 /// The action to take with regard to storage objects upon decommissioning
 /// a host from use with the VSAN service.
 /// 
@@ -13542,6 +20755,42 @@ pub enum VsanHostDecommissionModeObjectActionEnum {
     #[serde(rename = "evacuateAllData")]
     #[strum(serialize = "evacuateAllData")]
     EvacuateAllData,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Disk group types to create.
+/// 
+/// Possible values:
+/// - `hybrid`: Consumes SSD as cache tier, and HDD as capacity tier.
+/// - `allFlash`: Uses SSD for both cache tier and capacity tier.
+///   
+///   vSAN optimizes the on-disk format on all flash disk group, to support more features, such as deduplication and compression, etc.
+/// - `vsandirect`
+/// - `pmem`: 
+///   
+///   Deprecated as of vSphere 9.0 APIs with no replacement.
+///   
+///   Do not use.
+/// - `DiskMappingCreationType_Unknown`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VimVsanHostDiskMappingCreationTypeEnum {
+    #[serde(rename = "hybrid")]
+    #[strum(serialize = "hybrid")]
+    Hybrid,
+    #[serde(rename = "allFlash")]
+    #[strum(serialize = "allFlash")]
+    AllFlash,
+    #[serde(rename = "vsandirect")]
+    #[strum(serialize = "vsandirect")]
+    Vsandirect,
+    #[serde(rename = "pmem")]
+    #[strum(serialize = "pmem")]
+    Pmem,
+    #[serde(rename = "DiskMappingCreationType_Unknown")]
+    #[strum(serialize = "DiskMappingCreationType_Unknown")]
+    DiskMappingCreationTypeUnknown,
     /// This variant handles values not known at compile time.
     #[serde(untagged)]
     #[strum(serialize = "__OTHER__")]
@@ -13577,6 +20826,73 @@ pub enum VsanHostDiskResultStateEnum {
     #[serde(rename = "ineligible")]
     #[strum(serialize = "ineligible")]
     Ineligible,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// The rekey operation type of vSAN2 encryption.
+/// 
+/// Possible values:
+/// - `enablement`: Enable encryption.
+/// - `shallowRekey`: Only replace KEK and keep DEK not changed.
+/// - `deepRekey`: Replace both KEK and DEK.
+/// - `disablement`
+/// - `EncryptionOperation_Unknown`: Represent the value when the lower version client cannot recognize the enum value.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanEncryptionOperationEnum {
+    #[serde(rename = "enablement")]
+    #[strum(serialize = "enablement")]
+    Enablement,
+    #[serde(rename = "shallowRekey")]
+    #[strum(serialize = "shallowRekey")]
+    ShallowRekey,
+    #[serde(rename = "deepRekey")]
+    #[strum(serialize = "deepRekey")]
+    DeepRekey,
+    #[serde(rename = "disablement")]
+    #[strum(serialize = "disablement")]
+    Disablement,
+    #[serde(rename = "EncryptionOperation_Unknown")]
+    #[strum(serialize = "EncryptionOperation_Unknown")]
+    EncryptionOperationUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// The state of host during data-in-transit encryption configuration
+/// change for a vSAN cluster.
+/// 
+/// The final configuration whether to
+/// turn on or turn off encryption for the cluster is defined in
+/// *VsanHostConfigInfoEx.dataInTransitEncryptionInfo*.
+/// 
+/// Possible values:
+/// - `settled`: Stable state.
+///   
+///   Host enforces all sessions to be encrypted or non-encrypted according to the encryption configuration.
+/// - `preparing`: Host accepts both encrypted and non-encrypted messages.
+///   
+///   For enable process, host transfers non-encrypted messages; for disable process, host transfers encrypted messages.
+/// - `prepared`: Host accepts both encrypted and non-encrypted messages.
+///   
+///   For enable process, host transfers encrypted messages; for disable process, host transfers non-encrypted messages.
+/// - `EncryptionTransitionState_Unknown`: Represent the value when the lower version client cannot recognize the enum value.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanEncryptionTransitionStateEnum {
+    #[serde(rename = "settled")]
+    #[strum(serialize = "settled")]
+    Settled,
+    #[serde(rename = "preparing")]
+    #[strum(serialize = "preparing")]
+    Preparing,
+    #[serde(rename = "prepared")]
+    #[strum(serialize = "prepared")]
+    Prepared,
+    #[serde(rename = "EncryptionTransitionState_Unknown")]
+    #[strum(serialize = "EncryptionTransitionState_Unknown")]
+    EncryptionTransitionStateUnknown,
     /// This variant handles values not known at compile time.
     #[serde(untagged)]
     #[strum(serialize = "__OTHER__")]
@@ -13670,6 +20986,248 @@ pub enum VsanHostNodeStateEnum {
     #[strum(serialize = "__OTHER__")]
     Other_(String),
 }
+/// Network transmission type of vSAN traffic through
+/// a virtual network adapter for 8.x and previous releases.
+/// 
+/// Possible values:
+/// - `vsan`: This vmknic is used for general vSAN data transmission.
+///   
+///   If no vSAN vmknic configured with 'witness' traffic type, witness data transmission will be handled by vmknic with 'vsan' traffic type.
+/// - `witness`: This vmknic is dedicated for vSAN witness data transmission.
+///   
+///   For vSAN stretched cluster, this traffic type is recommended for vSAN vmknics to be used for witness transmission.
+/// - `TrafficType_Unknown`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VimVsanHostTrafficTypeEnum {
+    #[serde(rename = "vsan")]
+    #[strum(serialize = "vsan")]
+    Vsan,
+    #[serde(rename = "witness")]
+    #[strum(serialize = "witness")]
+    Witness,
+    #[serde(rename = "TrafficType_Unknown")]
+    #[strum(serialize = "TrafficType_Unknown")]
+    TrafficTypeUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Network transmission type of vSAN traffic through
+/// a virtual network adapter for 9.0 release
+/// 
+/// Possible values:
+/// - `vsanExternal`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VimVsanHostTrafficType90Enum {
+    #[serde(rename = "vsanExternal")]
+    #[strum(serialize = "vsanExternal")]
+    VsanExternal,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Remote server node type
+/// 
+/// Possible values:
+/// - `NodeType_Unknown`: Represent the value when the lower version client cannot recognize the enum value.
+/// - `REMOTE_NODE`: remote server is a normal data node
+/// - `REMOTE_WITNESS_NODE`: remote server is a witness node
+/// - `REMOTE_METADATA_NODE`: remote server is a metadata node
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum ServerNodeTypeEnum {
+    #[serde(rename = "NodeType_Unknown")]
+    #[strum(serialize = "NodeType_Unknown")]
+    NodeTypeUnknown,
+    #[serde(rename = "REMOTE_NODE")]
+    #[strum(serialize = "REMOTE_NODE")]
+    RemoteNode,
+    #[serde(rename = "REMOTE_WITNESS_NODE")]
+    #[strum(serialize = "REMOTE_WITNESS_NODE")]
+    RemoteWitnessNode,
+    #[serde(rename = "REMOTE_METADATA_NODE")]
+    #[strum(serialize = "REMOTE_METADATA_NODE")]
+    RemoteMetadataNode,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Declaration of all supported vSAN runtime stats types.
+/// 
+/// It is used
+/// to retrieve vSAN runtime stats through
+/// *VsanSystemEx.VsanHostGetRuntimeStats*
+/// 
+/// Possible values:
+/// - `resyncIopsInfo`
+/// - `configGeneration`
+/// - `supportedClusterSize`
+/// - `repairTimerInfo`
+/// - `componentLimitPerCluster`
+/// - `maxWitnessClusters`
+/// - `StatsType_Unknown`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanHostStatsTypeEnum {
+    #[serde(rename = "resyncIopsInfo")]
+    #[strum(serialize = "resyncIopsInfo")]
+    ResyncIopsInfo,
+    #[serde(rename = "configGeneration")]
+    #[strum(serialize = "configGeneration")]
+    ConfigGeneration,
+    #[serde(rename = "supportedClusterSize")]
+    #[strum(serialize = "supportedClusterSize")]
+    SupportedClusterSize,
+    #[serde(rename = "repairTimerInfo")]
+    #[strum(serialize = "repairTimerInfo")]
+    RepairTimerInfo,
+    #[serde(rename = "componentLimitPerCluster")]
+    #[strum(serialize = "componentLimitPerCluster")]
+    ComponentLimitPerCluster,
+    #[serde(rename = "maxWitnessClusters")]
+    #[strum(serialize = "maxWitnessClusters")]
+    MaxWitnessClusters,
+    #[serde(rename = "StatsType_Unknown")]
+    #[strum(serialize = "StatsType_Unknown")]
+    StatsTypeUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Represents type of disk in storage pool.
+/// 
+/// Possible values:
+/// - `singleTier`: Represents devices belonging to single tier storage pool.
+/// - `StoragePoolDiskType_Unknown`: Represents the value when lower version client cannot recognize the enum value.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum StoragePoolDiskTypeEnum {
+    #[serde(rename = "singleTier")]
+    #[strum(serialize = "singleTier")]
+    SingleTier,
+    #[serde(rename = "StoragePoolDiskType_Unknown")]
+    #[strum(serialize = "StoragePoolDiskType_Unknown")]
+    StoragePoolDiskTypeUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// This class represents a disk type in trimming.
+/// 
+/// Possible values:
+/// - `cacheDisk`: means the disk is performed as a cache disk.
+/// - `capacityDisk`: means the disk is performed as a capacity disk.
+/// - `TrimDiskType_Unknown`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum TrimDiskTypeEnum {
+    #[serde(rename = "cacheDisk")]
+    #[strum(serialize = "cacheDisk")]
+    CacheDisk,
+    #[serde(rename = "capacityDisk")]
+    #[strum(serialize = "capacityDisk")]
+    CapacityDisk,
+    #[serde(rename = "TrimDiskType_Unknown")]
+    #[strum(serialize = "TrimDiskType_Unknown")]
+    TrimDiskTypeUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Disk evacuation reason
+/// 
+/// Possible values:
+/// - `User`: Evacuated by user
+/// - `Ure`: Unrecoverable error
+/// - `SmartDiskFailures`: Smart disk failures
+/// - `Latency`: I/O Latency
+/// - `Congestion`: I/O congestion
+/// - `TransientDeviceError`: Disk transient device error
+/// - `VsanDiskEvacReason_Unknow`: represents the value when the lower version client cannot recognize the enum value.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanDiskEvacReasonEnum {
+    User,
+    Ure,
+    SmartDiskFailures,
+    Latency,
+    Congestion,
+    TransientDeviceError,
+    #[serde(rename = "VsanDiskEvacReason_Unknow")]
+    #[strum(serialize = "VsanDiskEvacReason_Unknow")]
+    VsanDiskEvacReasonUnknow,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// This class represents a list of supported vSAN disk trim options.
+/// 
+/// Possible values:
+/// - `metaDataOnly`: means only the metadata area on disk will be trimmed.
+/// - `fullDisk`: means the full disk will be trimmed.
+/// - `VsanDiskTrimOption_Unknown`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanDiskTrimOptionEnum {
+    #[serde(rename = "metaDataOnly")]
+    #[strum(serialize = "metaDataOnly")]
+    MetaDataOnly,
+    #[serde(rename = "fullDisk")]
+    #[strum(serialize = "fullDisk")]
+    FullDisk,
+    #[serde(rename = "VsanDiskTrimOption_Unknown")]
+    #[strum(serialize = "VsanDiskTrimOption_Unknown")]
+    VsanDiskTrimOptionUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// vSAN disk types.
+/// 
+/// Possible values:
+/// - `diskGroup`: Represents disk belonging to disk group model.
+/// - `storagePool`: Represents disk belonging to storage pool model.
+/// - `directDisk`: Represents disk belonging to vSAN direct disks.
+/// - `VsanDiskType_Unknown`: Represents the value when lower version client cannot recognize the enum value.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanDiskTypeEnum {
+    #[serde(rename = "diskGroup")]
+    #[strum(serialize = "diskGroup")]
+    DiskGroup,
+    #[serde(rename = "storagePool")]
+    #[strum(serialize = "storagePool")]
+    StoragePool,
+    #[serde(rename = "directDisk")]
+    #[strum(serialize = "directDisk")]
+    DirectDisk,
+    #[serde(rename = "VsanDiskType_Unknown")]
+    #[strum(serialize = "VsanDiskType_Unknown")]
+    VsanDiskTypeUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// This class represents a list of supported vSAN diskgroup capability types.
+/// 
+/// Possible values:
+/// - `supportLargerThan16TB`: Stands for diskgroups supporting large capacity drives, i.e., any capacity disk will be formatted to support larger than 16TB logical space.
+/// - `VsanDiskgroupCapability_Unknown`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanDiskgroupCapabilityEnum {
+    #[serde(rename = "supportLargerThan16TB")]
+    #[strum(serialize = "supportLargerThan16TB")]
+    SupportLargerThan16Tb,
+    #[serde(rename = "VsanDiskgroupCapability_Unknown")]
+    #[strum(serialize = "VsanDiskgroupCapability_Unknown")]
+    VsanDiskgroupCapabilityUnknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
 /// The list of disk issues.
 /// 
 /// Possible values:
@@ -13687,6 +21245,48 @@ pub enum VsanDiskIssueTypeEnum {
     #[serde(rename = "unknown")]
     #[strum(serialize = "unknown")]
     Unknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Wipe disk eligible.
+/// 
+/// Possible values:
+/// - `WipeDiskEligible_Unknown`: Represent the value when the lower version client cannot recognize the enum value.
+/// - `Yes`: This disk is eligible for wipe.
+/// - `No`: This disk is ineligible for wipe.
+/// - `Unknown`: Whether the disk is eligible for wipe is unknown.
+///   
+///   Because whether the disk support wipe or not is unknown.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanHostWipeDiskEligibleEnum {
+    #[serde(rename = "WipeDiskEligible_Unknown")]
+    #[strum(serialize = "WipeDiskEligible_Unknown")]
+    WipeDiskEligibleUnknown,
+    Yes,
+    No,
+    Unknown,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Wipe disk state.
+/// 
+/// Possible values:
+/// - `WipeDiskState_Unknown`: Represent the value when the lower version client cannot recognize the enum value.
+/// - `Wiping`: This disk is being wiped.
+/// - `Success`: This disk has been wiped successfully.
+/// - `Failure`: This disk has failed to wipe.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VsanHostWipeDiskStateEnum {
+    #[serde(rename = "WipeDiskState_Unknown")]
+    #[strum(serialize = "WipeDiskState_Unknown")]
+    WipeDiskStateUnknown,
+    Wiping,
+    Success,
+    Failure,
     /// This variant handles values not known at compile time.
     #[serde(untagged)]
     #[strum(serialize = "__OTHER__")]
@@ -13749,7 +21349,10 @@ pub enum BaseConfigInfoDiskFileBackingInfoProvisioningTypeEnum {
 /// - `keyProviderId`: Crypto key provider ID used to encrypt the virtual storage object.
 /// - `nativeSnapshotSupported`: If virtual storage object supports native snapshot.
 /// - `cbtEnabled`: If virtual storage object has changed block tracking enabled.
+/// - `virtualDiskFormat`: The type of VirtualDisk for 4k native disk/array support.
 ///   
+///   ***Since:*** vSphere API Release 9.0.0.0
+/// 
 /// ***Since:*** vSphere API Release 8.0.0.1
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VslmDiskInfoFlagEnum {
@@ -13816,6 +21419,9 @@ pub enum VslmDiskInfoFlagEnum {
     #[serde(rename = "cbtEnabled")]
     #[strum(serialize = "cbtEnabled")]
     CbtEnabled,
+    #[serde(rename = "virtualDiskFormat")]
+    #[strum(serialize = "virtualDiskFormat")]
+    VirtualDiskFormat,
     /// This variant handles values not known at compile time.
     #[serde(untagged)]
     #[strum(serialize = "__OTHER__")]
@@ -13913,6 +21519,165 @@ pub enum ObjectUpdateKindEnum {
     #[serde(rename = "leave")]
     #[strum(serialize = "leave")]
     Leave,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// List of possible states of a task.
+/// 
+/// Possible values:
+/// - `queued`: When there are too many tasks for threads to handle.
+/// - `running`: When the busy thread is freed from its current task by
+///   finishing the task, it picks a queued task to run.
+///   
+///   Then the queued tasks are marked as running.
+/// - `success`: When a running task has completed.
+/// - `error`: When a running task has encountered an error.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VslmTaskInfoStateEnum {
+    #[serde(rename = "queued")]
+    #[strum(serialize = "queued")]
+    Queued,
+    #[serde(rename = "running")]
+    #[strum(serialize = "running")]
+    Running,
+    #[serde(rename = "success")]
+    #[strum(serialize = "success")]
+    Success,
+    #[serde(rename = "error")]
+    #[strum(serialize = "error")]
+    Error,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// Possible values:
+/// - `preFcdMigrateEvent`: Event type used to notify that FCD is going to be relocated.
+/// - `postFcdMigrateEvent`: Event type used to notify FCD has been relocated.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VslmEventTypeEnum {
+    #[serde(rename = "preFcdMigrateEvent")]
+    #[strum(serialize = "preFcdMigrateEvent")]
+    PreFcdMigrateEvent,
+    #[serde(rename = "postFcdMigrateEvent")]
+    #[strum(serialize = "postFcdMigrateEvent")]
+    PostFcdMigrateEvent,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// The possible states of the vlsm event processing.
+/// 
+/// Possible values:
+/// - `success`: When the event has been successfully processed.
+/// - `error`: When there is error while processing the event.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VslmEventVslmEventInfoStateEnum {
+    #[serde(rename = "success")]
+    #[strum(serialize = "success")]
+    Success,
+    #[serde(rename = "error")]
+    #[strum(serialize = "error")]
+    Error,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// The *VslmVsoVStorageObjectQuerySpecQueryFieldEnum_enum* enumerated
+/// type defines the searchable fields.
+/// 
+/// Possible values:
+/// - `id`: Indicates *BaseConfigInfo.id* as the searchable field.
+/// - `name`: Indicates *BaseConfigInfo.name* as the searchable
+///   field.
+/// - `capacity`: Indicates *VStorageObjectConfigInfo.capacityInMB* as the
+///   searchable field.
+/// - `createTime`: Indicates *BaseConfigInfo.createTime* as the searchable
+///   field.
+/// - `backingObjectId`: Indicates
+///   *BaseConfigInfoFileBackingInfo.backingObjectId* as the
+///   searchable field.
+/// - `datastoreMoId`: Indicates *BaseConfigInfoBackingInfo.datastore* as the
+///   searchable field.
+/// - `metadataKey`: Indicates it as the searchable field.
+/// - `metadataValue`: Indicates it as the searchable field.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VslmVsoVStorageObjectQuerySpecQueryFieldEnumEnum {
+    #[serde(rename = "id")]
+    #[strum(serialize = "id")]
+    Id,
+    #[serde(rename = "name")]
+    #[strum(serialize = "name")]
+    Name,
+    #[serde(rename = "capacity")]
+    #[strum(serialize = "capacity")]
+    Capacity,
+    #[serde(rename = "createTime")]
+    #[strum(serialize = "createTime")]
+    CreateTime,
+    #[serde(rename = "backingObjectId")]
+    #[strum(serialize = "backingObjectId")]
+    BackingObjectId,
+    #[serde(rename = "datastoreMoId")]
+    #[strum(serialize = "datastoreMoId")]
+    DatastoreMoId,
+    #[serde(rename = "metadataKey")]
+    #[strum(serialize = "metadataKey")]
+    MetadataKey,
+    #[serde(rename = "metadataValue")]
+    #[strum(serialize = "metadataValue")]
+    MetadataValue,
+    /// This variant handles values not known at compile time.
+    #[serde(untagged)]
+    #[strum(serialize = "__OTHER__")]
+    Other_(String),
+}
+/// The *VslmVsoVStorageObjectQuerySpecQueryOperatorEnum_enum* enumerated
+/// type defines the operators to use for constructing the query criteria.
+/// 
+/// Possible values:
+/// - `equals`
+/// - `notEquals`
+/// - `lessThan`
+/// - `greaterThan`
+/// - `lessThanOrEqual`
+/// - `greaterThanOrEqual`
+/// - `contains`
+/// - `startsWith`
+/// - `endsWith`
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
+pub enum VslmVsoVStorageObjectQuerySpecQueryOperatorEnumEnum {
+    #[serde(rename = "equals")]
+    #[strum(serialize = "equals")]
+    Equals,
+    #[serde(rename = "notEquals")]
+    #[strum(serialize = "notEquals")]
+    NotEquals,
+    #[serde(rename = "lessThan")]
+    #[strum(serialize = "lessThan")]
+    LessThan,
+    #[serde(rename = "greaterThan")]
+    #[strum(serialize = "greaterThan")]
+    GreaterThan,
+    #[serde(rename = "lessThanOrEqual")]
+    #[strum(serialize = "lessThanOrEqual")]
+    LessThanOrEqual,
+    #[serde(rename = "greaterThanOrEqual")]
+    #[strum(serialize = "greaterThanOrEqual")]
+    GreaterThanOrEqual,
+    #[serde(rename = "contains")]
+    #[strum(serialize = "contains")]
+    Contains,
+    #[serde(rename = "startsWith")]
+    #[strum(serialize = "startsWith")]
+    StartsWith,
+    #[serde(rename = "endsWith")]
+    #[strum(serialize = "endsWith")]
+    EndsWith,
     /// This variant handles values not known at compile time.
     #[serde(untagged)]
     #[strum(serialize = "__OTHER__")]

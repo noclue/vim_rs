@@ -18,6 +18,8 @@ impl HostPatchManager {
             mo_id: mo_id.to_string(),
         }
     }
+    /// Deprecated as of vSphere 8.0u3, and there is no replacement available.
+    /// 
     /// Check the list of metadata and returns the dependency, obsolete and conflict information
     /// The operation is cancelable through the returned *Task* object.
     /// 
@@ -141,6 +143,8 @@ impl HostPatchManager {
         let req = self.client.post_request(&path, &input);
         self.client.execute(req).await
     }
+    /// Deprecated as of vSphere 8.0u3, and there is no replacement available.
+    /// 
     /// Patch the host.
     /// 
     /// The operation is not cancelable. If the
@@ -189,6 +193,8 @@ impl HostPatchManager {
         let req = self.client.post_request(&path, &input);
         self.client.execute(req).await
     }
+    /// Deprecated as of vSphere 8.0u3, and there is no replacement available.
+    /// 
     /// Query the host for installed bulletins.
     /// 
     /// ***Required privileges:*** System.Read
@@ -278,6 +284,8 @@ impl HostPatchManager {
         let req = self.client.post_request(&path, &input);
         self.client.execute(req).await
     }
+    /// Deprecated as of vSphere 8.0u3, and there is no replacement available.
+    /// 
     /// Scan the host for the patch status.
     /// 
     /// The operation is cancelable
@@ -326,6 +334,8 @@ impl HostPatchManager {
         let req = self.client.post_request(&path, &input);
         self.client.execute(req).await
     }
+    /// Deprecated as of vSphere 8.0u3, and there is no replacement available.
+    /// 
     /// Stage the vib files to esx local location and possibly do some run time check.
     /// 
     /// ***Required privileges:*** Host.Config.Patch
@@ -372,6 +382,8 @@ impl HostPatchManager {
         let req = self.client.post_request(&path, &input);
         self.client.execute(req).await
     }
+    /// Deprecated as of vSphere 8.0u3, and there is no replacement available.
+    /// 
     /// Uninstall patch from the host.
     /// 
     /// The operation is not cancelable.

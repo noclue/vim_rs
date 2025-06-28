@@ -20,6 +20,38 @@ impl IoFilterManager {
             mo_id: mo_id.to_string(),
         }
     }
+    /// Initiates iofilter manager transition from EAM managed APIs to
+    /// vLCM managed APIs on a vLCM cluster.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    ///
+    /// ## Parameters:
+    ///
+    /// ### cluster
+    /// The cluster.
+    /// 
+    /// Refers instance of *ClusterComputeResource*.
+    ///
+    /// ## Returns:
+    ///
+    /// This method returns a *Task* object with which to monitor
+    /// the operation. The operation succeeds if transition of all iofilters
+    /// is successful from EAM managed APIs to vLCM APIs on the cluster.
+    /// 
+    /// The user must have Host.Config.Maintenance and Host.Config.Patch
+    /// privilege for all the hosts on the compute resource.
+    /// 
+    /// Refers instance of *Task*.
+    ///
+    /// ## Errors:
+    ///
+    /// ***InvalidArgument***: if cluster is not a vLCM cluster.
+    pub async fn initiate_transition_to_vlcm_task(&self, cluster: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ManagedObjectReference> {
+        let input = InitiateTransitionToVlcmRequestType {cluster, };
+        let path = format!("/IoFilterManager/{moId}/InitiateTransitionToVLCM_Task", moId = &self.mo_id);
+        let req = self.client.post_request(&path, &input);
+        self.client.execute(req).await
+    }
     /// Install an IO Filter on a compute resource.
     /// 
     /// IO Filters can only be installed on a cluster.
@@ -34,6 +66,13 @@ impl IoFilterManager {
     /// "compRes" must be a cluster.
     /// 
     /// Refers instance of *ComputeResource*.
+    ///
+    /// ### vib_ssl_trust
+    /// This specifies SSL trust policy *IoFilterManagerSslTrust*
+    /// for the given VIB URL. If unset, the server certificate is
+    /// validated against the trusted root certificates.
+    /// 
+    /// ***Since:*** vSphere API Release 8.0.3.0
     ///
     /// ## Returns:
     ///
@@ -55,8 +94,8 @@ impl IoFilterManager {
     /// 
     /// ***AlreadyExists***: if another VIB with the same name and vendor has
     /// been installed.
-    pub async fn install_io_filter_task(&self, vib_url: &str, comp_res: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ManagedObjectReference> {
-        let input = InstallIoFilterRequestType {vib_url, comp_res, };
+    pub async fn install_io_filter_task(&self, vib_url: &str, comp_res: &crate::types::structs::ManagedObjectReference, vib_ssl_trust: Option<&dyn crate::types::traits::IoFilterManagerSslTrustTrait>) -> Result<crate::types::structs::ManagedObjectReference> {
+        let input = InstallIoFilterRequestType {vib_url, comp_res, vib_ssl_trust, };
         let path = format!("/IoFilterManager/{moId}/InstallIoFilter_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
         self.client.execute(req).await
@@ -292,6 +331,13 @@ impl IoFilterManager {
     /// ### vib_url
     /// The URL that points to the new IO Filter VIB package.
     ///
+    /// ### vib_ssl_trust
+    /// This specifies SSL trust policy *IoFilterManagerSslTrust*
+    /// for the given VIB URL. If unset, the server certificate is
+    /// validated against the trusted root certificates.
+    /// 
+    /// ***Since:*** vSphere API Release 8.0.3.0
+    ///
     /// ## Returns:
     ///
     /// This method returns a *Task* object with which to monitor
@@ -318,12 +364,17 @@ impl IoFilterManager {
     /// 
     /// ***InvalidState***: if "compRes" is a cluster and DRS is disabled
     /// on the cluster.
-    pub async fn upgrade_io_filter_task(&self, filter_id: &str, comp_res: &crate::types::structs::ManagedObjectReference, vib_url: &str) -> Result<crate::types::structs::ManagedObjectReference> {
-        let input = UpgradeIoFilterRequestType {filter_id, comp_res, vib_url, };
+    pub async fn upgrade_io_filter_task(&self, filter_id: &str, comp_res: &crate::types::structs::ManagedObjectReference, vib_url: &str, vib_ssl_trust: Option<&dyn crate::types::traits::IoFilterManagerSslTrustTrait>) -> Result<crate::types::structs::ManagedObjectReference> {
+        let input = UpgradeIoFilterRequestType {filter_id, comp_res, vib_url, vib_ssl_trust, };
         let path = format!("/IoFilterManager/{moId}/UpgradeIoFilter_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
         self.client.execute(req).await
     }
+}
+#[derive(serde::Serialize)]
+#[serde(rename = "InitiateTransitionToVLCMRequestType", tag = "_typeName")]
+struct InitiateTransitionToVlcmRequestType<'a> {
+    cluster: &'a crate::types::structs::ManagedObjectReference,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -332,6 +383,9 @@ struct InstallIoFilterRequestType<'a> {
     vib_url: &'a str,
     #[serde(rename = "compRes")]
     comp_res: &'a crate::types::structs::ManagedObjectReference,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "vibSslTrust")]
+    vib_ssl_trust: Option<&'a dyn crate::types::traits::IoFilterManagerSslTrustTrait>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -386,4 +440,7 @@ struct UpgradeIoFilterRequestType<'a> {
     comp_res: &'a crate::types::structs::ManagedObjectReference,
     #[serde(rename = "vibUrl")]
     vib_url: &'a str,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "vibSslTrust")]
+    vib_ssl_trust: Option<&'a dyn crate::types::traits::IoFilterManagerSslTrustTrait>,
 }

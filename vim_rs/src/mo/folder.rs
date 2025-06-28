@@ -659,6 +659,14 @@ impl Folder {
     /// into the folder. If there are virtual machines that should not be moved
     /// with the host, then migrate them from the host before initiating this operation.
     /// 
+    /// vSphere Lifecycle Manager baselines (previously called vSphere Update
+    /// Manager VUM) is
+    /// <a href="https://kb.vmware.com/s/article/89519">deprecated</a> in vCenter 8.0.
+    /// You can instead manage the lifecycle of the
+    /// hosts in your environment by using vSphere Lifecycle Manager images (vLCM).
+    /// A Host moved from image managed cluster to datacenter/host folder will become
+    /// baseline managed stand-alone host.
+    /// 
     /// For a HostSystem move, the privileges required are Host.Inventory.EditCluster
     /// on the source ClusterComputeResource, Host.Inventory.MoveHost on the HostSystem,
     /// and Host.Inventory.AddStandaloneHost on the target Folder.
@@ -1157,6 +1165,16 @@ impl Folder {
     /// ***Required privileges:*** System.View
     pub async fn effective_role(&self) -> Result<Option<Vec<i32>>> {
         let path = format!("/Folder/{moId}/effectiveRole", moId = &self.mo_id);
+        let req = self.client.get_request(&path);
+        self.client.execute_option(req).await
+    }
+    /// The information of externally managed folder.
+    /// 
+    /// This property is only set for the externally managed folder.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    pub async fn externally_managed_folder_info(&self) -> Result<Option<crate::types::structs::FolderExternallyManagedFolderInfo>> {
+        let path = format!("/Folder/{moId}/externallyManagedFolderInfo", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
     }
