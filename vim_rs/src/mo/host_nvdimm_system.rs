@@ -1,5 +1,7 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
+/// Deprecated as of vSphere 9.0 APIs with no replacement.
+/// 
 /// Managed object responsible for reading and configuring
 /// Non-Volatile DIMMs.
 #[derive(Clone)]

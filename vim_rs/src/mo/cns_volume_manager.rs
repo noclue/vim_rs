@@ -1,0 +1,842 @@
+use std::sync::Arc;
+use crate::core::client::{Client, Result};
+/// This is the interface for managing the lifecycle of volumes that are consumed
+/// by containers or pods, in case of Kubernetes.
+/// 
+/// This managed interface can be
+/// accessed through MOID of cns-volume-manager, through vSAN service in vCenter.
+///   
+/// Lifecycle of a container volume includes creation, update, query, attach,
+/// detach and delete operations. This interface and its related classes are the entry
+/// point for Cloud Native Storage (abbreviated to CNS) service.
+///   
+/// These requests could come from different container orchestrator clusters running
+/// on same vSphere as associated with this VolumeManager. VolumeManager is not
+/// aware of presence and topology of container orchestrator clusters, except
+/// for the weak association via *CnsContainerCluster*. This is a weak
+/// association because it's client's responsibility to provide unique identity
+/// for this container orchestrator cluster. VolumeManager will not impose any
+/// uniqueness verification on cluster identification.
+///   
+/// Provisioning APIs of this interface return vim.Task which is vCenter Task
+/// object to track the progress of operation. In case of either partial or
+/// complete success, the state of the task would be set to success. In case
+/// of complete failure of the task when the individual specs couldn't be scheduled,
+/// the task status would be set to error. The corresponding fault, if any, will be
+/// set in the fault field. For a successfully scheduled task, result of this
+/// operation will be a list of *CnsVolumeOperationResult* instances.
+/// The client needs to go through the result and check the successful and failed
+/// instances.
+///   
+/// The Task returned by provisioning APIs is a vim.Task object. Client needs to
+/// connect to vim endpoint on vCenter using the latest VSAN VMODL version
+/// (not latest VIM version) to monitor task status. After the task is complete,
+/// clients can refer to *CnsVolumeOperationResult* set as result field in
+/// task's *TaskInfo* field.
+///   
+/// Please refer to the required privileges in the individual API documentation and ignore
+/// the **Required Privileges** section which is not used.
+#[derive(Clone)]
+pub struct CnsVolumeManager {
+    client: Arc<Client>,
+    mo_id: String,
+}
+impl CnsVolumeManager {
+    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+        Self {
+            client,
+            mo_id: mo_id.to_string(),
+        }
+    }
+    /// Attaches volumes(block volumes only) to specified VM instances, to make
+    /// volumes ready for mount and consumption by respective containers.
+    /// 
+    ///   
+    /// For each volume in input, this API will attach block backing for this volume
+    /// to the VirtualMachine specified in input, via one of the available slots on
+    /// SCSI controller. This API will transparently add new SCSI controller to the
+    /// VirtualMachine, if needed.
+    ///   
+    /// Following privileges will be required on specified entities, to perform
+    /// this operation:
+    /// - Datastore.FileManagement on datastores specified in input, required for
+    ///   block volume only
+    /// - VirtualMachine.Config.AddExistingDisk on VM specified in the input
+    /// - VirtualMachine.Config.AddRemoveDevice on VM specified in the input
+    ///   
+    /// Faults that can be set in individual result entry, corresponding to each
+    /// VolumeAttachDetachSpec instance in input:
+    /// - vmodl.fault.InvalidArgument set in case of invalid input arguments, like
+    ///   empty strings, invalid formats, invalid
+    ///   combination of inputs.
+    /// - vmodl.fault.ManagedObjectNotFound set in case of the VM can not be
+    ///   found.
+    /// - vim.fault.NotFound set in case of the volume can not be
+    ///   found.
+    /// - vim.fault.ResourceInUse set when volume has been attached to a VM
+    ///   and is in use, client needs to first detach
+    ///   the volume from that VM and then retry this
+    ///   operation.
+    /// - vim.fault.CnsMissingControllerFault set if the virtual machine has no
+    ///   available controller when controllerKey is
+    ///   unset, it is inherited from
+    ///   vim.fault.CnsFault.
+    /// - vim.fault.CnsFault set in case of any other failure
+    ///   scenario.
+    ///
+    /// ## Parameters:
+    ///
+    /// ### attach_specs
+    /// Specification for attach operation
+    ///
+    /// ## Returns:
+    ///
+    /// *Task* to track the progress and overall state of this
+    /// operation.
+    /// 
+    /// Refers instance of *Task*.
+    ///
+    /// ## Errors:
+    ///
+    /// ***InvalidArgument***: This API supports input size of 1 only. If
+    /// more or less than one entries are passed as
+    /// input, this exception will be thrown and
+    /// operation will fail. This fault will occur in
+    /// cases where the volume ID is empty, VM
+    /// is not present, volume type is FILE etc.
+    /// 
+    /// ***ManagedObjectNotFound***: if the VM can not be found.
+    /// 
+    /// ***NotFound***: if the volume can not be found.
+    /// 
+    /// ***ResourceInUse***: if the volume has been attached a VM and is in
+    /// use, client needs to first detach the volume
+    /// from that VM and then retry this operation.
+    /// 
+    /// ***CnsFault***: Thrown for all other failure scenario.
+    pub async fn cns_attach_volume(&self, attach_specs: &[crate::types::structs::CnsVolumeAttachDetachSpec]) -> Result<crate::types::structs::ManagedObjectReference> {
+        let input = CnsAttachVolumeRequestType {attach_specs, };
+        let path = format!("/vsan/CnsVolumeManager/{moId}/CnsAttachVolume", moId = &self.mo_id);
+        let req = self.client.post_request(&path, &input);
+        self.client.execute(req).await
+    }
+    /// Modify the ACL configurations for existing volumes.
+    /// 
+    /// Multiple requests
+    /// configuring the same volume at the same time will be serialized in CNS.
+    ///   
+    /// Note that this API is currently supported for file volumes only.
+    ///   
+    /// Following privileges will be required on file volumes, to perform
+    /// this operation:
+    /// - Host.Config.Storage on vSAN file service enabled vSAN cluster,
+    ///   required for file volume only
+    ///   
+    /// Faults that can be set in individual result entry, corresponding to each
+    /// *CnsVolumeACLConfigureSpec* instance in input:
+    /// - vmodl.fault.InvalidArgument Set if the input spec has invlid field.
+    /// - vim.fault.NotFound Set in case of the volume can not be found.
+    /// - vim.fault.CnsFault Set in case of any other failure scenarios.
+    ///
+    /// ## Parameters:
+    ///
+    /// ### acl_config_specs
+    /// Specifications for volumes ACL configuration.
+    ///
+    /// ## Returns:
+    ///
+    /// *Task* to track the progress and overall state of this
+    /// operation.
+    /// 
+    /// Refers instance of *Task*.
+    ///
+    /// ## Errors:
+    ///
+    /// ***InvalidArgument***: Thrown if: 1) two or more ACLConfigSpec instances
+    /// are passed; 2) the volume ID is empty; 3) file
+    /// service reports the invalid inputs.
+    /// 
+    /// ***NotFound***: Thrown if the volume or cluster can not be found
+    /// by CNS.
+    /// 
+    /// ***CnsFault***: Thrown for any other authorization failure scenrios.
+    pub async fn cns_configure_volume_ac_ls(&self, acl_config_specs: &[crate::types::structs::CnsVolumeAclConfigureSpec]) -> Result<crate::types::structs::ManagedObjectReference> {
+        let input = CnsConfigureVolumeAcLsRequestType {acl_config_specs, };
+        let path = format!("/vsan/CnsVolumeManager/{moId}/CnsConfigureVolumeACLs", moId = &self.mo_id);
+        let req = self.client.post_request(&path, &input);
+        self.client.execute(req).await
+    }
+    /// Creates container volume with given specifications.
+    /// 
+    ///   
+    /// Following privileges will be required on specified entities, to perform
+    /// this operation. For dynamic provisioning, the datastores that does not
+    /// have the necessary privileges will be ignored and other datastores that
+    /// have the necessary privileges will be considered for volume placement.
+    /// - Datastore.FileManagement on datastores specified in input, required for
+    ///   block volume only
+    /// - Host.Config.Storage on vSAN file service enabled vSAN cluster,
+    ///   required for file volume only
+    /// - StorageProfile.View on RootFolder to access storage policy specified in input
+    ///   
+    /// Faults that can be set in individual result entry, corresponding to each
+    /// VolumeCreateSpec instance in input:
+    /// - vmodl.fault.InvalidArgument set in case of invalid input arguments,
+    ///   invalid formats, invalid combination of
+    ///   inputs.
+    /// - vim.fault.NotFound set in case the existing disk that should
+    ///   be used to back the container volume cannot be found.
+    /// - vim.fault.CnsFault set in case of any other failure scenario.
+    /// - vim.fault.CnsAlreadyRegisteredFault
+    ///   set in case where the backing disk (either specified with
+    ///   URL path for VMDK volume or disk id for FCD volume) is
+    ///   already registered as CNS volume.
+    ///
+    /// ## Parameters:
+    ///
+    /// ### create_specs
+    /// Specifications for volumes to be created.
+    ///
+    /// ## Returns:
+    ///
+    /// *Task* to track the progress and overall state of this
+    /// operation.
+    /// 
+    /// Refers instance of *Task*.
+    ///
+    /// ## Errors:
+    ///
+    /// ***InvalidArgument***: For block volume, if the input spec is invalid like
+    /// createSpecs size is not equal to 1, backing disk ID
+    /// in backing object details is empty and datastores is
+    /// empty, volume metadata in input spec is invalid,
+    /// backing disk ID in backing object details is not
+    /// present, datastore is invalid, entityMetadata
+    /// containing duplicate entity types, profile size
+    /// is not equal to 1 etc.
+    ///   
+    /// For file volume, if the input spec is invalid like
+    /// createSpecs size is not equal to 1, volume metadata
+    /// in input spec is invalid, backing disk ID in backing
+    /// object details is not present, entityMetadata
+    /// containing duplicate entity types, profile size
+    /// is not equal to 1 etc.
+    /// 
+    /// ***NotFound***: if the volume can not be found.
+    /// 
+    /// ***CnsFault***: Thrown for all other failure scenario.
+    pub async fn cns_create_volume(&self, create_specs: &[crate::types::structs::CnsVolumeCreateSpec]) -> Result<crate::types::structs::ManagedObjectReference> {
+        let input = CnsCreateVolumeRequestType {create_specs, };
+        let path = format!("/vsan/CnsVolumeManager/{moId}/CnsCreateVolume", moId = &self.mo_id);
+        let req = self.client.post_request(&path, &input);
+        self.client.execute(req).await
+    }
+    /// Create snapshots of given volumes
+    ///   
+    /// A volume with snapshot created on it, is considered in use
+    /// and cannot be deleted.
+    /// 
+    /// Create snapshot operation should be called by providing at least one SnapshotCreateSpec.
+    /// If an array of empty spec is passed, the operation will fail.
+    /// Return a task that tracks the status and result of snapshot
+    /// operation.
+    /// Following privileges will be required on specified entities, to perform
+    /// this operation:
+    /// - Datastore.FileManagement on all involved Datastores
+    ///
+    /// ## Parameters:
+    ///
+    /// ### snapshot_specs
+    /// -
+    ///
+    /// ## Returns:
+    ///
+    /// *Task* to track the progress and result
+    /// of this operation.
+    /// 
+    /// Refers instance of *Task*.
+    ///
+    /// ## Errors:
+    ///
+    /// ***InvalidArgument***: This API supports input size of 1 only. If
+    /// more or less than one entries are passed as
+    /// input, this exception will be thrown and
+    /// operation will fail.
+    /// This exception will be thrown when invalid
+    /// format for VolumeId *CnsVolumeId.id*
+    /// is passed, or volume IDs are empty etc.
+    /// 
+    /// ***NotFound***: if the volume can not be found.
+    /// 
+    /// ***CnsSnapshotCreatedFault***: If the snapshot is created but CNS
+    /// failed to persist it into DB. Clean-up using
+    /// lower layer api is advised
+    /// 
+    /// ***CnsFault***: Thrown for all other failure scenario.
+    pub async fn cns_create_snapshots(&self, snapshot_specs: &[crate::types::structs::CnsSnapshotCreateSpec]) -> Result<crate::types::structs::ManagedObjectReference> {
+        let input = CnsCreateSnapshotsRequestType {snapshot_specs, };
+        let path = format!("/vsan/CnsVolumeManager/{moId}/CnsCreateSnapshots", moId = &self.mo_id);
+        let req = self.client.post_request(&path, &input);
+        self.client.execute(req).await
+    }
+    /// Deletes given container volumes.
+    /// 
+    ///   
+    /// Multiple requests for a volume, when deletion is already in progress, will
+    /// not return any fault. This operation will make the volume unavailable for
+    /// any attach, update and query operation.
+    ///   
+    /// Following privileges will be required on specified entities, to perform
+    /// this operation:
+    /// - Datastore.FileManagement on all involved Datastores, required for block
+    ///   volume only
+    /// - Host.Config.Storage on vSAN file service enabled vSAN cluster,
+    ///   required for file volume only
+    ///   
+    /// Faults that can be set in individual result entry, corresponding to each
+    /// volume ID instance in input:
+    /// - vmodl.fault.InvalidArgument set in case of empty volume ID
+    /// - vim.fault.NotFound set in case of the volume can not be found.
+    /// - vim.fault.ResourceInUse set when volume has been attached to a VM
+    ///   and is in use, client needs to first detach
+    ///   the volume from that VM and then retry this
+    ///   operation.
+    /// - vim.fault.CnsFault set in case of any other failure scenario.
+    ///
+    /// ## Parameters:
+    ///
+    /// ### volume_ids
+    /// List of *CnsVolumeId* for the volumes to be
+    /// deleted.
+    ///
+    /// ### delete_disk
+    /// Disk is the backing object for each container volume
+    /// specified in volumeIds list. If set to true, the backing
+    /// objects specified in volumeIds list will be deleted. If
+    /// set to false, the backing objects specified in volumeIds
+    /// list will not be deleted but will no longer be a
+    /// container volume.
+    ///
+    /// ## Returns:
+    ///
+    /// *Task* to track the progress and overall state of this
+    /// operation.
+    /// 
+    /// Refers instance of *Task*.
+    ///
+    /// ## Errors:
+    ///
+    /// ***InvalidArgument***: This API supports input size of 1 only. If
+    /// more or less than one entries are passed as
+    /// input, this exception will be thrown and
+    /// operation will fail.  
+    /// This exception will be thrown when invalid
+    /// format for VolumeId *CnsVolumeId.id*
+    /// is passed, or volume IDs are empty.
+    /// 
+    /// ***NotFound***: if the volume can not be found.
+    /// 
+    /// ***ResourceInUse***: if the volume has been attached to a VM and is in
+    /// use, client needs to first detach the volume
+    /// from that VM and then retry this operation.
+    /// 
+    /// ***CnsFault***: Thrown for all other failure scenario.
+    pub async fn cns_delete_volume(&self, volume_ids: &[crate::types::structs::CnsVolumeId], delete_disk: bool) -> Result<crate::types::structs::ManagedObjectReference> {
+        let input = CnsDeleteVolumeRequestType {volume_ids, delete_disk, };
+        let path = format!("/vsan/CnsVolumeManager/{moId}/CnsDeleteVolume", moId = &self.mo_id);
+        let req = self.client.post_request(&path, &input);
+        self.client.execute(req).await
+    }
+    /// Delete snapshots with given volumeIds and snapshotIds.
+    /// 
+    ///   
+    /// Delete snapshot operation should be called by providing at least one SnapshotDeleteSpec
+    /// If an array of empty spec is passed, the operation will fail.
+    /// Return a task that tracks the status and result of delete operation
+    /// per given volume.
+    /// Following privileges will be required on specified entities, to perform
+    /// this operation:
+    /// - Datastore.FileManagement on all involved Datastores
+    ///
+    /// ## Parameters:
+    ///
+    /// ### snapshot_delete_specs
+    /// -
+    ///
+    /// ## Returns:
+    ///
+    /// *Task* to track the progress and result
+    /// of this operation.
+    /// 
+    /// Refers instance of *Task*.
+    ///
+    /// ## Errors:
+    ///
+    /// ***InvalidArgument***: This API supports input size of 1 only. If
+    /// more or less than one entries are passed as
+    /// input, this exception will be thrown and
+    /// operation will fail.  
+    /// This exception will be thrown when invalid
+    /// format for VolumeId *CnsVolumeId.id*
+    /// is passed, or volume IDs is empty etc.
+    /// 
+    /// ***NotFound***: if the volume or snapshot can not be found.
+    /// 
+    /// ***CnsFault***: Thrown for all other failure scenario.
+    pub async fn cns_delete_snapshots(&self, snapshot_delete_specs: &[crate::types::structs::CnsSnapshotDeleteSpec]) -> Result<crate::types::structs::ManagedObjectReference> {
+        let input = CnsDeleteSnapshotsRequestType {snapshot_delete_specs, };
+        let path = format!("/vsan/CnsVolumeManager/{moId}/CnsDeleteSnapshots", moId = &self.mo_id);
+        let req = self.client.post_request(&path, &input);
+        self.client.execute(req).await
+    }
+    /// Detaches volumes(block volumes only) and makes those volumes unavailable
+    /// for consumption.
+    /// 
+    /// If a volume is already detached, this operation will pass,
+    /// without any failure for that volume.
+    ///   
+    /// Following privileges will be required on specified entities, to perform
+    /// this operation:
+    /// - Datastore.FileManagement on datastores specified in input, required for
+    ///   block volume only
+    /// - VirtualMachine.Config.RemoveDisk on VM specified in the input
+    ///   
+    /// Faults that can be set in individual result entry, corresponding to each
+    /// VolumeAttachDetachSpec instance in input:
+    /// - vmodl.fault.InvalidArgument set in case of invalid input arguments, like
+    ///   empty strings, invalid formats, invalid
+    ///   combination of inputs, such as the volume is
+    ///   not attached to any VM, or the volume is not
+    ///   attached to the VM specfied, volume type if
+    ///   FILE etc.
+    /// - vmodl.fault.ManagedObjectNotFound set in case of the VM can not be
+    ///   found.
+    /// - vim.fault.NotFound set in case of the volume can not be found.
+    /// - vim.fault.CnsFault set in case of any other failure scenario.
+    ///
+    /// ## Parameters:
+    ///
+    /// ### detach_specs
+    /// Specification for detach operation
+    ///
+    /// ## Returns:
+    ///
+    /// *Task* to track the progress and overall state of this
+    /// operation.
+    /// 
+    /// Refers instance of *Task*.
+    ///
+    /// ## Errors:
+    ///
+    /// ***InvalidArgument***: This API supports input size of 1 only. If
+    /// more or less than one entries are passed as
+    /// input, this exception will be thrown and
+    /// operation will fail. This fault will occur
+    /// when the volume is not attached to any VM or
+    /// the volume is not attached to the VM specified
+    /// or the volume ID is empty etc.
+    /// 
+    /// ***ManagedObjectNotFound***: if the VM can not be found.
+    /// 
+    /// ***NotFound***: if the volume can not be found.
+    /// 
+    /// ***CnsFault***: Thrown for all other failure scenario.
+    pub async fn cns_detach_volume(&self, detach_specs: &[crate::types::structs::CnsVolumeAttachDetachSpec]) -> Result<crate::types::structs::ManagedObjectReference> {
+        let input = CnsDetachVolumeRequestType {detach_specs, };
+        let path = format!("/vsan/CnsVolumeManager/{moId}/CnsDetachVolume", moId = &self.mo_id);
+        let req = self.client.post_request(&path, &input);
+        self.client.execute(req).await
+    }
+    /// Extend the capacity for the container volumes.
+    /// 
+    ///   
+    /// Following privileges will be required on specified entities, to perform
+    /// this operation:
+    /// - Datastore.FileManagement on datastore where the volume is placed,
+    ///   required for block volume only
+    /// - Host.Config.Storage on vSAN file service enabled vSAN cluster,
+    ///   required for file volume only
+    ///   
+    /// Faults that can be set in individual result entry, corresponding to each
+    /// VolumeExtendSpec instance in input:
+    /// - vmodl.fault.InvalidArgument set in case of invalid input arguments,
+    ///   like empty strings, invalid formats,
+    ///   invalid combination of inputs.
+    /// - vim.fault.NotFound set in case of the volume can not be found.
+    /// - vim.fault.CnsFault set in case of any other failure scenario.
+    ///
+    /// ## Parameters:
+    ///
+    /// ### extend_specs
+    /// Specifications for volumes to be extended.
+    ///
+    /// ## Returns:
+    ///
+    /// *Task* to track the progress and overall state of this
+    /// operation.
+    /// 
+    /// Refers instance of *Task*.
+    ///
+    /// ## Errors:
+    ///
+    /// ***InvalidArgument***: This API supports input size of 1 only. If
+    /// more or less than one entries are passed as
+    /// input, this exception will be thrown and
+    /// operation will fail.
+    /// This API requires the new capacity of the
+    /// volume specified in ExtendSpec is bigger
+    /// than 0, this exception will be thrown and
+    /// operation will fail.
+    /// 
+    /// ***NotFound***: if the volume can not be found.
+    /// 
+    /// ***CnsFault***: Thrown for all other failure scenario.
+    pub async fn cns_extend_volume(&self, extend_specs: &[crate::types::structs::CnsVolumeExtendSpec]) -> Result<crate::types::structs::ManagedObjectReference> {
+        let input = CnsExtendVolumeRequestType {extend_specs, };
+        let path = format!("/vsan/CnsVolumeManager/{moId}/CnsExtendVolume", moId = &self.mo_id);
+        let req = self.client.post_request(&path, &input);
+        self.client.execute(req).await
+    }
+    /// Returns container volumes matching criteria set in the filter.
+    /// 
+    ///   
+    /// This API will not return partial result in case of invalid input, like empty
+    /// volume ID, volume name fields and so on. In case of valid inputs, e.g.
+    /// non-empty volume ID, if the output doesn't contain information for that
+    /// volume that would mean that CNS is not aware of the existence of that volume.
+    /// Note that there could be duplicate volumes or missing volumes across
+    /// multiple pages returned by this API when there are parallel volume
+    /// provisioning operations like create, delete are in progress.
+    ///   
+    /// Following privileges will be required on specified entities, to perform
+    /// this operation:
+    /// - Cns.Searchable on RootFolder to search over all container volumes
+    ///   
+    /// ***Required privileges:*** Cns.Searchable
+    ///
+    /// ## Parameters:
+    ///
+    /// ### filter
+    /// All container volumes matching the criteria set in the filter
+    /// will be returned. A maximum of 1000 volume ids can be provided.
+    /// See *CnsQueryFilter*
+    ///
+    /// ### selection
+    /// Selection spec for the query entities to return.
+    /// This is an optional parameter. All volume fields would be returned
+    /// if the parameter is not specified. See *CnsQuerySelection*
+    ///
+    /// ## Returns:
+    ///
+    /// array of *CnsVolume* matching the input criteria
+    ///
+    /// ## Errors:
+    ///
+    /// ***InvalidArgument***: Thrown in case of invalid input arguments, like empty
+    /// strings, invalid formats, invalid combination of
+    /// inputs
+    /// 
+    /// ***CnsFault***: Thrown for all other failure scenarios
+    pub async fn cns_query_volume(&self, filter: &dyn crate::types::traits::CnsQueryFilterTrait, selection: Option<&crate::types::structs::CnsQuerySelection>) -> Result<crate::types::structs::CnsQueryResult> {
+        let input = CnsQueryVolumeRequestType {filter, selection, };
+        let path = format!("/vsan/CnsVolumeManager/{moId}/CnsQueryVolume", moId = &self.mo_id);
+        let req = self.client.post_request(&path, &input);
+        self.client.execute(req).await
+    }
+    /// Returns container volumes matching criteria set in the filter.
+    /// 
+    ///   
+    /// This API will not return partial result in case of invalid input, like empty
+    /// volume ID, volume name fields and so on. In case of valid inputs, e.g.
+    /// non-empty volume ID, if the output doesn't contain information for that
+    /// volume that would mean that CNS is not aware of the existence of that volume.
+    /// Note that there could be duplicate volumes or missing volumes across
+    /// multiple pages returned by this API when there are parallel volume
+    /// provisioning operations like create, delete are in progress.
+    ///   
+    /// Following privileges will be required on specified entities, to perform
+    /// this operation:
+    /// - Cns.Searchable on RootFolder to search over all container volumes
+    ///   
+    /// ***Required privileges:*** Cns.Searchable
+    ///
+    /// ## Parameters:
+    ///
+    /// ### filter
+    /// All container volumes matching the criteria set in the filter
+    /// will be returned. A maximum of 1000 volume ids can be provided.
+    /// See *CnsQueryFilter*
+    ///
+    /// ### selection
+    /// Selection spec for the query entities to return.
+    /// This is an optional parameter. All volume fields would be returned
+    /// if the parameter is not specified. See *CnsQuerySelection*
+    ///
+    /// ## Returns:
+    ///
+    /// *Task* to track the progress and result of this operation.
+    /// For result type in task, see *CnsAsyncQueryResult*
+    /// 
+    /// Refers instance of *Task*.
+    ///
+    /// ## Errors:
+    ///
+    /// ***InvalidArgument***: Thrown in case of invalid input arguments, like empty
+    /// strings, invalid formats, invalid combination of
+    /// inputs
+    /// 
+    /// ***CnsFault***: Thrown for all other failure scenarios
+    pub async fn cns_query_async(&self, filter: &dyn crate::types::traits::CnsQueryFilterTrait, selection: Option<&crate::types::structs::CnsQuerySelection>) -> Result<crate::types::structs::ManagedObjectReference> {
+        let input = CnsQueryAsyncRequestType {filter, selection, };
+        let path = format!("/vsan/CnsVolumeManager/{moId}/CnsQueryAsync", moId = &self.mo_id);
+        let req = self.client.post_request(&path, &input);
+        self.client.execute(req).await
+    }
+    /// Reconfigures the volume with the storage policy.
+    /// 
+    /// Currently the API is supported for only block volumes and only supports applying
+    /// the currently associated policy.
+    ///   
+    /// Following privileges will be required on specified entities, to perform
+    /// this operation:
+    /// - Datastore.FileManagement on datastores specified in input, required for
+    ///   block volume only
+    /// - StoragePolicy.View on policy in the spec
+    ///
+    /// ## Parameters:
+    ///
+    /// ### volume_policy_reconfig_specs
+    /// An array of spec ,
+    /// currently only array of size 1 is supported.
+    ///
+    /// ## Returns:
+    ///
+    /// *Task* vCenter Task to track the progress and overall state
+    /// of this operation.
+    /// 
+    /// Refers instance of *Task*.
+    ///
+    /// ## Errors:
+    ///
+    /// ***InvalidArgument***: if:
+    /// - Input size is not equal to 1
+    /// - Volume id in input spec is empty.
+    /// - Policy string is empty.
+    ///   
+    /// ***NotFound***: if the volume can not be found.
+    /// 
+    /// ***CnsFault***: Thrown for all other failure scenario.
+    pub async fn cns_reconfig_volume_policy(&self, volume_policy_reconfig_specs: Option<&[crate::types::structs::CnsVolumePolicyReconfigSpec]>) -> Result<crate::types::structs::ManagedObjectReference> {
+        let input = CnsReconfigVolumePolicyRequestType {volume_policy_reconfig_specs, };
+        let path = format!("/vsan/CnsVolumeManager/{moId}/CnsReconfigVolumePolicy", moId = &self.mo_id);
+        let req = self.client.post_request(&path, &input);
+        self.client.execute(req).await
+    }
+    /// Relocate container volume from the current source datastore to another
+    /// destination datastore.
+    /// 
+    /// Currently, it supports for a single block volume only.
+    ///   
+    /// This API comes with the following limitations:
+    /// - Any CNS control operations like attach, detach, update, expand, etc on a
+    ///   volume being relocated or any other volume attached
+    ///   to the same VM as the volume being relocated will
+    ///   fail with CnsFault, see *CnsFault*.
+    /// - VMC is not fully supported for this API.
+    /// - Please see <a href="https://kb.vmware.com/s/article/90607">guidelines and
+    ///   limitations of CNS relocate on vSphere</a>.
+    ///   
+    ///   
+    /// If an array of empty spec is passed or the size of the input spec is not
+    /// equal to 1, the operation will fail.
+    ///   
+    /// Following privileges will be required on specified entities, to perform
+    /// this operation.
+    /// - Datastore.FileManagement on both the source datastore, and the
+    ///   destination datastore specified in input,
+    ///   which is required for block volume only
+    /// - Resource.ColdMigrate on the virtual machine that volume is attached to,
+    ///   which is required for attached block volume only.
+    /// - Datastore.AllocateSpace on the target datastore
+    /// - Resource.HotMigrate on the virtual machine that volume is attached to,
+    ///   if the vm is powered on, which is required for
+    ///   attached block volume only
+    ///   
+    /// Faults that can be set in individual result entry, corresponding to each
+    /// VolumeRelocateSpec instance in input:
+    /// - vmodl.fault.InvalidArgument set in case of invalid input arguments,
+    ///   invalid formats.
+    /// - vim.fault.NotFound set in case the volume or datastore in the spec
+    ///   can not be found.
+    /// - vim.fault.CnsFault set in case of any other failure scenarios.
+    ///
+    /// ## Parameters:
+    ///
+    /// ### relocate_specs
+    /// Specifications for volumes to be relocated. Block volume
+    /// relocation should use the child class spec, see
+    /// *CnsBlockVolumeRelocateSpec*.
+    ///
+    /// ## Returns:
+    ///
+    /// *Task* to track the progress and overall state of this
+    /// operation.
+    /// 
+    /// Refers instance of *Task*.
+    ///
+    /// ## Errors:
+    ///
+    /// ***AlreadyExists***: Thrown in case volume is already migrated to the
+    /// specified destination datastore.
+    /// 
+    /// ***InvalidArgument***: Thrown in case of invalid input arguments, such as
+    /// invalid volume or datastore format, or empty volume
+    /// IDs
+    /// 
+    /// ***NotFound***: if the volume or datastore can not be found.
+    /// 
+    /// ***CnsFault***: Thrown for all other failure scenario.
+    pub async fn cns_relocate_volume(&self, relocate_specs: &[Box<dyn crate::types::traits::CnsVolumeRelocateSpecTrait>]) -> Result<crate::types::structs::ManagedObjectReference> {
+        let input = CnsRelocateVolumeRequestType {relocate_specs, };
+        let path = format!("/vsan/CnsVolumeManager/{moId}/CnsRelocateVolume", moId = &self.mo_id);
+        let req = self.client.post_request(&path, &input);
+        self.client.execute(req).await
+    }
+    /// Updates volume metadata, namely labels and container cluster information for the
+    /// container volumes.
+    /// 
+    ///   
+    /// Following privileges will be required on specified entities, to perform
+    /// this operation:
+    /// - Datastore.FileManagement on datastores specified in input, required for
+    ///   block volume only
+    /// - Host.Config.Storage on vSAN file service enabled vSAN cluster, required
+    ///   for file volume only
+    ///   
+    /// Faults that can be set in individual result entry, corresponding to each
+    /// VolumeMetadataUpdateSpec instance in input:
+    /// - vmodl.fault.InvalidArgument set in case of invalid but non-empty
+    ///   volume id.
+    /// - vim.fault.NotFound set in case of the volume can not be found.
+    /// - vim.fault.CnsFault set in case of any other failure scenario.
+    ///
+    /// ## Parameters:
+    ///
+    /// ### update_specs
+    /// Specifications for volumes to be updated.
+    ///
+    /// ## Returns:
+    ///
+    /// *Task* vCenter Task to track the progress and overall state
+    /// of this operation.
+    /// 
+    /// Refers instance of *Task*.
+    ///
+    /// ## Errors:
+    ///
+    /// ***InvalidArgument***: if:
+    /// - Input size is not equal to 1
+    /// - Volume id in input spec is empty.
+    /// - Volume metadata in input spec has empty
+    ///   cluster info.
+    /// - Entity objects in volume metadata has empty or
+    ///   invalid attributes.
+    /// - EntityMetadata in volume metadata contains
+    ///   duplicate entity types.
+    ///   
+    /// ***NotFound***: if the volume can not be found.
+    /// 
+    /// ***CnsNotRegisteredFault***: if the volume exists in VC but not registered as CNS
+    /// volume.
+    /// 
+    /// ***CnsFault***: Thrown for all other failure scenario.
+    pub async fn cns_update_volume_metadata(&self, update_specs: &[crate::types::structs::CnsVolumeMetadataUpdateSpec]) -> Result<crate::types::structs::ManagedObjectReference> {
+        let input = CnsUpdateVolumeMetadataRequestType {update_specs, };
+        let path = format!("/vsan/CnsVolumeManager/{moId}/CnsUpdateVolumeMetadata", moId = &self.mo_id);
+        let req = self.client.post_request(&path, &input);
+        self.client.execute(req).await
+    }
+}
+#[derive(serde::Serialize)]
+#[serde(tag="_typeName")]
+struct CnsAttachVolumeRequestType<'a> {
+    #[serde(rename = "attachSpecs")]
+    attach_specs: &'a [crate::types::structs::CnsVolumeAttachDetachSpec],
+}
+#[derive(serde::Serialize)]
+#[serde(rename = "CnsConfigureVolumeACLsRequestType", tag = "_typeName")]
+struct CnsConfigureVolumeAcLsRequestType<'a> {
+    #[serde(rename = "ACLConfigSpecs")]
+    acl_config_specs: &'a [crate::types::structs::CnsVolumeAclConfigureSpec],
+}
+#[derive(serde::Serialize)]
+#[serde(tag="_typeName")]
+struct CnsCreateVolumeRequestType<'a> {
+    #[serde(rename = "createSpecs")]
+    create_specs: &'a [crate::types::structs::CnsVolumeCreateSpec],
+}
+#[derive(serde::Serialize)]
+#[serde(tag="_typeName")]
+struct CnsCreateSnapshotsRequestType<'a> {
+    #[serde(rename = "snapshotSpecs")]
+    snapshot_specs: &'a [crate::types::structs::CnsSnapshotCreateSpec],
+}
+#[derive(serde::Serialize)]
+#[serde(tag="_typeName")]
+struct CnsDeleteVolumeRequestType<'a> {
+    #[serde(rename = "volumeIds")]
+    volume_ids: &'a [crate::types::structs::CnsVolumeId],
+    #[serde(rename = "deleteDisk")]
+    delete_disk: bool,
+}
+#[derive(serde::Serialize)]
+#[serde(tag="_typeName")]
+struct CnsDeleteSnapshotsRequestType<'a> {
+    #[serde(rename = "snapshotDeleteSpecs")]
+    snapshot_delete_specs: &'a [crate::types::structs::CnsSnapshotDeleteSpec],
+}
+#[derive(serde::Serialize)]
+#[serde(tag="_typeName")]
+struct CnsDetachVolumeRequestType<'a> {
+    #[serde(rename = "detachSpecs")]
+    detach_specs: &'a [crate::types::structs::CnsVolumeAttachDetachSpec],
+}
+#[derive(serde::Serialize)]
+#[serde(tag="_typeName")]
+struct CnsExtendVolumeRequestType<'a> {
+    #[serde(rename = "extendSpecs")]
+    extend_specs: &'a [crate::types::structs::CnsVolumeExtendSpec],
+}
+#[derive(serde::Serialize)]
+#[serde(tag="_typeName")]
+struct CnsQueryVolumeRequestType<'a> {
+    filter: &'a dyn crate::types::traits::CnsQueryFilterTrait,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    selection: Option<&'a crate::types::structs::CnsQuerySelection>,
+}
+#[derive(serde::Serialize)]
+#[serde(tag="_typeName")]
+struct CnsQueryAsyncRequestType<'a> {
+    filter: &'a dyn crate::types::traits::CnsQueryFilterTrait,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    selection: Option<&'a crate::types::structs::CnsQuerySelection>,
+}
+#[derive(serde::Serialize)]
+#[serde(tag="_typeName")]
+struct CnsReconfigVolumePolicyRequestType<'a> {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "volumePolicyReconfigSpecs")]
+    volume_policy_reconfig_specs: Option<&'a [crate::types::structs::CnsVolumePolicyReconfigSpec]>,
+}
+#[derive(serde::Serialize)]
+#[serde(tag="_typeName")]
+struct CnsRelocateVolumeRequestType<'a> {
+    #[serde(rename = "relocateSpecs")]
+    relocate_specs: &'a [Box<dyn crate::types::traits::CnsVolumeRelocateSpecTrait>],
+}
+#[derive(serde::Serialize)]
+#[serde(tag="_typeName")]
+struct CnsUpdateVolumeMetadataRequestType<'a> {
+    #[serde(rename = "updateSpecs")]
+    update_specs: &'a [crate::types::structs::CnsVolumeMetadataUpdateSpec],
+}

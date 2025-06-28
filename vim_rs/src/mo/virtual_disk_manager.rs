@@ -1,6 +1,7 @@
 use std::sync::Arc;
 use crate::core::client::{Client, Result};
 /// Most VirtualDiskManager APIs will be DEPRECATED as of vSphere 6.5.
+/// 
 /// Please use VStorageObjectManager APIs to manage Virtual disks.
 /// 
 /// This managed object type provides a way to manage and manipulate virtual disks

@@ -15,6 +15,8 @@ impl HostActiveDirectoryAuthentication {
             mo_id: mo_id.to_string(),
         }
     }
+    /// Deprecated as of vSphere API 8.0U3, and there is no replacement for it.
+    /// 
     /// Disables console authentication using a local smart card and reader.
     /// 
     /// ***Required privileges:*** Host.Config.AuthenticationStore
@@ -31,6 +33,8 @@ impl HostActiveDirectoryAuthentication {
         let req = self.client.post_bare(&path);
         self.client.execute_void(req).await
     }
+    /// Deprecated as of vSphere API 8.0U3, and there is no replacement for it.
+    /// 
     /// Enables console authentication using a local smart card and reader.
     /// 
     /// To take effect this feature requires an active domain membership to a
@@ -81,6 +85,8 @@ impl HostActiveDirectoryAuthentication {
         let req = self.client.post_request(&path, &input);
         self.client.execute(req).await
     }
+    /// Deprecated as of vSphere API 8.0U3, and there is no replacement for it.
+    /// 
     /// Install a trust anchor certificate for smart card authentication.
     /// 
     /// ***Required privileges:*** Host.Config.AuthenticationStore
@@ -254,6 +260,8 @@ impl HostActiveDirectoryAuthentication {
         let req = self.client.post_request(&path, &input);
         self.client.execute(req).await
     }
+    /// Deprecated as of vSphere API 8.0U3, and there is no replacement for it.
+    /// 
     /// Lists installed trust anchor certificates for smart card authentication.
     /// 
     /// ***Required privileges:*** Host.Config.AuthenticationStore
@@ -295,6 +303,8 @@ impl HostActiveDirectoryAuthentication {
         let req = self.client.post_request(&path, &input);
         self.client.execute_void(req).await
     }
+    /// Deprecated as of vSphere API 8.0U3, and there is no replacement for it.
+    /// 
     /// Remove a smart card trust anchor certificate from the system by
     /// fingerprint.
     /// 
@@ -319,6 +329,29 @@ impl HostActiveDirectoryAuthentication {
         let req = self.client.post_request(&path, &input);
         self.client.execute_void(req).await
     }
+    /// Remove a smart card trust anchor certificate from the system
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    /// 
+    /// ***Required privileges:*** Host.Config.AuthenticationStore
+    ///
+    /// ## Parameters:
+    ///
+    /// ### certificate
+    /// PEM encoded certificate to remove
+    ///
+    /// ## Errors:
+    ///
+    /// ***HostConfigFault***: if the host configuration prevents the
+    /// certificate from being removed.
+    pub async fn remove_smart_card_trust_anchor_certificate(&self, certificate: &str) -> Result<()> {
+        let input = RemoveSmartCardTrustAnchorCertificateRequestType {certificate, };
+        let path = format!("/HostActiveDirectoryAuthentication/{moId}/RemoveSmartCardTrustAnchorCertificate", moId = &self.mo_id);
+        let req = self.client.post_request(&path, &input);
+        self.client.execute_void(req).await
+    }
+    /// Deprecated as of vSphere API 8.0U3, and there is no replacement for it.
+    /// 
     /// Replace the trust anchor certificates for smart card authentication.
     /// 
     /// ***Required privileges:*** Host.Config.AuthenticationStore
@@ -387,6 +420,11 @@ struct RemoveSmartCardTrustAnchorRequestType<'a> {
 struct RemoveSmartCardTrustAnchorByFingerprintRequestType<'a> {
     fingerprint: &'a str,
     digest: &'a str,
+}
+#[derive(serde::Serialize)]
+#[serde(tag="_typeName")]
+struct RemoveSmartCardTrustAnchorCertificateRequestType<'a> {
+    certificate: &'a str,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]

@@ -74,6 +74,16 @@ impl HostCpuSchedulerSystem {
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
     }
+    /// Information about the current CPU scheduler of the host.
+    /// 
+    /// Populates *HostCpuSchedulerInfo.policy* with the active *CPU Scheduling Policy*.
+    /// 
+    /// ***Since:*** vSphere API Release 8.0.3.0
+    pub async fn cpu_scheduler_info(&self) -> Result<Option<crate::types::structs::HostCpuSchedulerInfo>> {
+        let path = format!("/HostCpuSchedulerSystem/{moId}/cpuSchedulerInfo", moId = &self.mo_id);
+        let req = self.client.get_request(&path);
+        self.client.execute_option(req).await
+    }
     /// The hyperthread configuration for the CpuSchedulerSystem.
     /// 
     /// The

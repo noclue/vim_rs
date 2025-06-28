@@ -641,33 +641,6 @@ impl HostProfileManager {
         let req = self.client.post_request(&path, &input);
         self.client.execute(req).await
     }
-    /// This is the batch version of
-    /// vim.profile.host.ProfileManager@updateAnswerFile.
-    /// 
-    /// ***Required privileges:*** Profile.Edit
-    ///
-    /// ## Parameters:
-    ///
-    /// ### host_to_config_spec_map
-    /// A map that contains the hosts with which
-    /// the answer files are associated and the corresponding
-    /// host-specific configuration data. If the configuration
-    /// specification does not contain any host-specific user input
-    /// (<code>configSpec</code>.*AnswerFileOptionsCreateSpec.userInput*),
-    /// the method does not perform any operation on the answer file.
-    ///
-    /// ## Returns:
-    ///
-    /// This method returns a *Task* object with which to monitor
-    /// the operation with a result of *AnswerFileValidationResultMap* array.
-    /// 
-    /// Refers instance of *Task*.
-    pub async fn update_host_customizations_task(&self, host_to_config_spec_map: Option<&[crate::types::structs::HostProfileManagerHostToConfigSpecMap]>) -> Result<crate::types::structs::ManagedObjectReference> {
-        let input = UpdateHostCustomizationsRequestType {host_to_config_spec_map, };
-        let path = format!("/HostProfileManager/{moId}/UpdateHostCustomizations_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
-    }
     /// Validates the proposed host profile composition.
     /// 
     /// ***Required privileges:*** Profile.Edit
@@ -916,13 +889,6 @@ struct UpdateAnswerFileRequestType<'a> {
     host: &'a crate::types::structs::ManagedObjectReference,
     #[serde(rename = "configSpec")]
     config_spec: &'a dyn crate::types::traits::AnswerFileCreateSpecTrait,
-}
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
-struct UpdateHostCustomizationsRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "hostToConfigSpecMap")]
-    host_to_config_spec_map: Option<&'a [crate::types::structs::HostProfileManagerHostToConfigSpecMap]>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]

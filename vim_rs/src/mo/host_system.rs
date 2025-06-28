@@ -26,8 +26,8 @@ impl HostSystem {
     /// 
     /// Valid only
     /// when ESXi wbem authentication mode is set to password.
-    /// The ticket provides the port for the service and sslThumbprint should
-    /// be used by client to validate ssl connection. This ticket is valid for 2
+    /// The ticket provides the port for the service and sslThumbprint/sslCertificate
+    /// should be used by client to validate ssl connection. This ticket is valid for 2
     /// minutes then will expire and is non-renewable.
     /// 
     /// ***Required privileges:*** Host.Cim.CimInteraction
@@ -686,6 +686,8 @@ impl HostSystem {
     /// this name parameter.
     /// 
     /// See also *ManagedEntity.name*.
+    /// 
+    /// ***Required privileges:*** Host.Config.Settings
     ///
     /// ## Parameters:
     ///

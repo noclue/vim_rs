@@ -244,6 +244,56 @@ impl ClusterComputeResource {
         let req = self.client.post_bare(&path);
         self.client.execute(req).await
     }
+    /// Disable network boot support for this compute resource.
+    /// 
+    /// This configuration can be modified only when the compute resource is
+    /// empty i.e. there are no hosts in it.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    /// 
+    /// ***Required privileges:*** Host.Inventory.EditCluster
+    ///
+    /// ## Returns:
+    ///
+    /// This method returns a *Task* object with which to monitor
+    /// the operation progress and result.
+    /// 
+    /// Refers instance of *Task*.
+    pub async fn disable_network_boot_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
+        let path = format!("/ClusterComputeResource/{moId}/DisableNetworkBoot_Task", moId = &self.mo_id);
+        let req = self.client.post_bare(&path);
+        self.client.execute(req).await
+    }
+    /// Enable network boot in the specified mode for this compute resource.
+    /// 
+    /// Supported values are enumerated in
+    /// *ComputeResourceNetworkBootMode_enum*. This configuration can be
+    /// modified only when the compute resource is empty i.e. there are no hosts
+    /// in it or during compute resource creation. In addition transition to some
+    /// network boot mode(s) may be restricted depending on the current state of
+    /// the compute resource.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    /// 
+    /// ***Required privileges:*** Host.Inventory.EditCluster
+    ///
+    /// ## Parameters:
+    ///
+    /// ### network_boot_mode
+    /// -
+    ///
+    /// ## Returns:
+    ///
+    /// This method returns a *Task* object with which to monitor
+    /// the operation progress and result.
+    /// 
+    /// Refers instance of *Task*.
+    pub async fn enable_network_boot_task(&self, network_boot_mode: &str) -> Result<crate::types::structs::ManagedObjectReference> {
+        let input = EnableNetworkBootRequestType {network_boot_mode, };
+        let path = format!("/ClusterComputeResource/{moId}/EnableNetworkBoot_Task", moId = &self.mo_id);
+        let req = self.client.post_request(&path, &input);
+        self.client.execute(req).await
+    }
     /// The API takes a list of hosts in the cluster as input, and
     /// returns a list of hosts in "ClusterMaintenanceResult" that the
     /// server can successfully evacuate given the existing
@@ -289,14 +339,17 @@ impl ClusterComputeResource {
     /// options for this query. The specified options override the
     /// advanced options in *ClusterDrsConfigInfo*.
     ///
+    /// ### info
+    /// ***Since:*** vSphere API Release 8.0.3.0
+    ///
     /// ## Returns:
     ///
     /// A *ClusterEnterMaintenanceResult* object,
     /// which consists of an array of recommendations for hosts that
     /// can be evacuated and an array of faults for hosts that cannot
     /// be evacuated.
-    pub async fn cluster_enter_maintenance_mode(&self, host: &[crate::types::structs::ManagedObjectReference], option: Option<&[Box<dyn crate::types::traits::OptionValueTrait>]>) -> Result<crate::types::structs::ClusterEnterMaintenanceResult> {
-        let input = ClusterEnterMaintenanceModeRequestType {host, option, };
+    pub async fn cluster_enter_maintenance_mode(&self, host: &[crate::types::structs::ManagedObjectReference], option: Option<&[Box<dyn crate::types::traits::OptionValueTrait>]>, info: Option<&crate::types::structs::ClusterComputeResourceMaintenanceInfo>) -> Result<crate::types::structs::ClusterEnterMaintenanceResult> {
+        let input = ClusterEnterMaintenanceModeRequestType {host, option, info, };
         let path = format!("/ClusterComputeResource/{moId}/ClusterEnterMaintenanceMode", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
         self.client.execute(req).await
@@ -351,7 +404,7 @@ impl ClusterComputeResource {
     /// *ClusterComputeResourceHCIConfigInfo.workflowState* to be "done".
     /// 
     /// Refers instance of *Task*.
-    pub async fn extend_hci_task(&self, host_inputs: Option<&[crate::types::structs::ClusterComputeResourceHostConfigurationInput]>, v_san_config_spec: Option<&crate::types::structs::SddcBase>) -> Result<crate::types::structs::ManagedObjectReference> {
+    pub async fn extend_hci_task(&self, host_inputs: Option<&[crate::types::structs::ClusterComputeResourceHostConfigurationInput]>, v_san_config_spec: Option<&dyn crate::types::traits::SddcBaseTrait>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ExtendHciRequestType {host_inputs, v_san_config_spec, };
         let path = format!("/ClusterComputeResource/{moId}/ExtendHCI_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -399,6 +452,10 @@ impl ClusterComputeResource {
         let req = self.client.post_bare(&path);
         self.client.execute(req).await
     }
+    /// Deprecated as of vSphere 9.0 with no replacement. In a future release
+    /// of vSphere, the vCLS functionality will be disabled, vCLS
+    /// system VMs will be deleted, and vCLS APIs will be removed.
+    /// 
     /// Retrieve all the datastores that are either listed in
     /// *ClusterSystemVMsConfigInfo.notAllowedDatastores* or are
     /// tagged with a category from
@@ -438,6 +495,13 @@ impl ClusterComputeResource {
     /// host resource hierarchy is imported into the new nested resource pool. If the
     /// cluster does not support nested resource pools or the resourcePool argument is not
     /// specified, then the stand-alone host resource hierarchy is ignored.
+    /// 
+    /// vSphere Lifecycle Manager baselines (previously called vSphere Update
+    /// Manager VUM) is
+    /// <a href="https://kb.vmware.com/s/article/89519">deprecated</a> in vCenter 8.0.
+    /// You can instead manage the lifecycle of the hosts in your environment by using vSphere
+    /// Lifecycle Manager images (vLCM). A host moved from image managed cluster to baseline
+    /// managed cluster will become baseline managed.
     /// 
     /// ***Required privileges:*** Host.Inventory.EditCluster
     ///
@@ -504,6 +568,13 @@ impl ClusterComputeResource {
     /// committed, one at a time. If a failure is detected, then the method terminates
     /// with an exception. Since hosts are moved one at a time, if this operation fails
     /// while in the process of moving multiple hosts, some hosts are left unmoved.
+    /// 
+    /// vSphere Lifecycle Manager baselines (previously called vSphere Update
+    /// Manager VUM) is
+    /// <a href="https://kb.vmware.com/s/article/89519">deprecated</a> in vCenter 8.0.
+    /// You can instead manage the lifecycle of the hosts in your environment by using vSphere
+    /// Lifecycle Manager images (vLCM). A host moved from image managed cluster to baseline
+    /// managed cluster will become baseline managed.
     /// 
     /// In addition to the privileges mentioned, the user must also hold
     /// Host.Inventory.EditCluster on the host's source ComputeResource object.
@@ -815,13 +886,20 @@ impl ClusterComputeResource {
     /// input and will be interpreted as
     /// *onDemand*.
     ///
+    /// ### policy
+    /// The encryption mode policy for the cluster. When no policy
+    /// is specified, host keys will be automcatically generated
+    /// using the current default key provider.
+    /// 
+    /// ***Since:*** vSphere API Release 8.0.3.0
+    ///
     /// ## Errors:
     ///
     /// ***InvalidRequest***: if the interface is not implemented.
     /// 
     /// ***InvalidArgument***: if one of the parameters is invalid.
-    pub async fn set_crypto_mode(&self, crypto_mode: &str) -> Result<()> {
-        let input = SetCryptoModeRequestType {crypto_mode, };
+    pub async fn set_crypto_mode(&self, crypto_mode: &str, policy: Option<&crate::types::structs::ClusterComputeResourceCryptoModePolicy>) -> Result<()> {
+        let input = SetCryptoModeRequestType {crypto_mode, policy, };
         let path = format!("/ClusterComputeResource/{moId}/SetCryptoMode", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
         self.client.execute_void(req).await
@@ -1259,6 +1337,24 @@ impl ClusterComputeResource {
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
     }
+    /// Managed property indicating whether and what kind of netwoork boot mode
+    /// is configured for this compute resource.
+    /// 
+    /// Supported values are enumerated
+    /// in *ComputeResourceNetworkBootMode_enum*.
+    /// This property can be configured via the
+    /// *ComputeResource.EnableNetworkBoot_Task* method or during compute
+    /// resource creation through the
+    /// *ComputeResource.networkBootMode* property.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    /// 
+    /// ***Required privileges:*** System.View
+    pub async fn network_boot_mode(&self) -> Result<Option<String>> {
+        let path = format!("/ClusterComputeResource/{moId}/networkBootMode", moId = &self.mo_id);
+        let req = self.client.get_request(&path);
+        self.client.execute_option(req).await
+    }
     /// General health of this managed entity.
     /// 
     /// The overall status of the managed entity is computed as the worst status
@@ -1463,10 +1559,18 @@ struct ConfigureHciRequestType<'a> {
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
+struct EnableNetworkBootRequestType<'a> {
+    #[serde(rename = "networkBootMode")]
+    network_boot_mode: &'a str,
+}
+#[derive(serde::Serialize)]
+#[serde(tag="_typeName")]
 struct ClusterEnterMaintenanceModeRequestType<'a> {
     host: &'a [crate::types::structs::ManagedObjectReference],
     #[serde(default, skip_serializing_if = "Option::is_none")]
     option: Option<&'a [Box<dyn crate::types::traits::OptionValueTrait>]>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    info: Option<&'a crate::types::structs::ClusterComputeResourceMaintenanceInfo>,
 }
 #[derive(serde::Serialize)]
 #[serde(rename = "ExtendHCIRequestType", tag = "_typeName")]
@@ -1476,7 +1580,7 @@ struct ExtendHciRequestType<'a> {
     host_inputs: Option<&'a [crate::types::structs::ClusterComputeResourceHostConfigurationInput]>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "vSanConfigSpec")]
-    v_san_config_spec: Option<&'a crate::types::structs::SddcBase>,
+    v_san_config_spec: Option<&'a dyn crate::types::traits::SddcBaseTrait>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
@@ -1532,6 +1636,8 @@ struct RenameRequestType<'a> {
 struct SetCryptoModeRequestType<'a> {
     #[serde(rename = "cryptoMode")]
     crypto_mode: &'a str,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    policy: Option<&'a crate::types::structs::ClusterComputeResourceCryptoModePolicy>,
 }
 #[derive(serde::Serialize)]
 #[serde(rename = "setCustomValueRequestType", tag = "_typeName")]

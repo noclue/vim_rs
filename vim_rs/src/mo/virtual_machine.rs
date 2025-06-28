@@ -2165,6 +2165,13 @@ impl VirtualMachine {
     /// (optional) If set to true, the virtual disks of the deleted
     /// snapshot will be merged with other disk if possible. Default to true.
     ///
+    /// ### spec
+    /// (optional) When provided, only snapshots satisfying the
+    /// criteria described by the spec will be removed. If unset, all snapshots
+    /// will be removed.
+    /// 
+    /// ***Since:*** vSphere API Release 8.0.3.0
+    ///
     /// ## Returns:
     ///
     /// This method returns a *Task* object with which to monitor the
@@ -2188,8 +2195,8 @@ impl VirtualMachine {
     /// ***InvalidState***: if the operation cannot be performed because of the
     /// virtual machine's current state. For example, if the virtual machine
     /// configuration information is not available.
-    pub async fn remove_all_snapshots_task(&self, consolidate: Option<bool>) -> Result<crate::types::structs::ManagedObjectReference> {
-        let input = RemoveAllSnapshotsRequestType {consolidate, };
+    pub async fn remove_all_snapshots_task(&self, consolidate: Option<bool>, spec: Option<&crate::types::structs::SnapshotSelectionSpec>) -> Result<crate::types::structs::ManagedObjectReference> {
+        let input = RemoveAllSnapshotsRequestType {consolidate, spec, };
         let path = format!("/VirtualMachine/{moId}/RemoveAllSnapshots_Task", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
         self.client.execute(req).await
@@ -3694,9 +3701,11 @@ struct RelocateVmRequestType<'a> {
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
-struct RemoveAllSnapshotsRequestType {
+struct RemoveAllSnapshotsRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     consolidate: Option<bool>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    spec: Option<&'a crate::types::structs::SnapshotSelectionSpec>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]

@@ -18,6 +18,1122 @@ where
             p.as_any_ref().downcast_ref::<DataObject>().unwrap(),
             serializer,
         ),
+        StructType::AgencyConfigInfo => AgencyConfigInfo::serialize(
+            p.as_any_ref().downcast_ref::<AgencyConfigInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::AgencyScope => AgencyScope::serialize(
+            p.as_any_ref().downcast_ref::<AgencyScope>().unwrap(),
+            serializer,
+        ),
+        StructType::AgencyComputeResourceScope => AgencyComputeResourceScope::serialize(
+            p.as_any_ref().downcast_ref::<AgencyComputeResourceScope>().unwrap(),
+            serializer,
+        ),
+        StructType::AgencyVmFolder => AgencyVmFolder::serialize(
+            p.as_any_ref().downcast_ref::<AgencyVmFolder>().unwrap(),
+            serializer,
+        ),
+        StructType::AgencyVmResourcePool => AgencyVmResourcePool::serialize(
+            p.as_any_ref().downcast_ref::<AgencyVmResourcePool>().unwrap(),
+            serializer,
+        ),
+        StructType::AgentConfigInfo => AgentConfigInfo::serialize(
+            p.as_any_ref().downcast_ref::<AgentConfigInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::AgentOvfEnvironmentInfo => AgentOvfEnvironmentInfo::serialize(
+            p.as_any_ref().downcast_ref::<AgentOvfEnvironmentInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::AgentOvfEnvironmentInfoOvfProperty => AgentOvfEnvironmentInfoOvfProperty::serialize(
+            p.as_any_ref().downcast_ref::<AgentOvfEnvironmentInfoOvfProperty>().unwrap(),
+            serializer,
+        ),
+        StructType::AgentSslTrust => AgentSslTrust::serialize(
+            p.as_any_ref().downcast_ref::<AgentSslTrust>().unwrap(),
+            serializer,
+        ),
+        StructType::AgentAnyCertificate => AgentAnyCertificate::serialize(
+            p.as_any_ref().downcast_ref::<AgentAnyCertificate>().unwrap(),
+            serializer,
+        ),
+        StructType::AgentPinnedPemCertificate => AgentPinnedPemCertificate::serialize(
+            p.as_any_ref().downcast_ref::<AgentPinnedPemCertificate>().unwrap(),
+            serializer,
+        ),
+        StructType::AgentStoragePolicy => AgentStoragePolicy::serialize(
+            p.as_any_ref().downcast_ref::<AgentStoragePolicy>().unwrap(),
+            serializer,
+        ),
+        StructType::AgentVsanStoragePolicy => AgentVsanStoragePolicy::serialize(
+            p.as_any_ref().downcast_ref::<AgentVsanStoragePolicy>().unwrap(),
+            serializer,
+        ),
+        StructType::AgentVibMatchingRule => AgentVibMatchingRule::serialize(
+            p.as_any_ref().downcast_ref::<AgentVibMatchingRule>().unwrap(),
+            serializer,
+        ),
+        StructType::AgentVmHook => AgentVmHook::serialize(
+            p.as_any_ref().downcast_ref::<AgentVmHook>().unwrap(),
+            serializer,
+        ),
+        StructType::EamObjectRuntimeInfo => EamObjectRuntimeInfo::serialize(
+            p.as_any_ref().downcast_ref::<EamObjectRuntimeInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::AgentRuntimeInfo => AgentRuntimeInfo::serialize(
+            p.as_any_ref().downcast_ref::<AgentRuntimeInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::Issue => Issue::serialize(
+            p.as_any_ref().downcast_ref::<Issue>().unwrap(),
+            serializer,
+        ),
+        StructType::AgencyIssue => AgencyIssue::serialize(
+            p.as_any_ref().downcast_ref::<AgencyIssue>().unwrap(),
+            serializer,
+        ),
+        StructType::AgencyDisabled => AgencyDisabled::serialize(
+            p.as_any_ref().downcast_ref::<AgencyDisabled>().unwrap(),
+            serializer,
+        ),
+        StructType::AgentIssue => AgentIssue::serialize(
+            p.as_any_ref().downcast_ref::<AgentIssue>().unwrap(),
+            serializer,
+        ),
+        StructType::EamCertificateNotTrusted => EamCertificateNotTrusted::serialize(
+            p.as_any_ref().downcast_ref::<EamCertificateNotTrusted>().unwrap(),
+            serializer,
+        ),
+        StructType::HostInPartialMaintenanceMode => HostInPartialMaintenanceMode::serialize(
+            p.as_any_ref().downcast_ref::<HostInPartialMaintenanceMode>().unwrap(),
+            serializer,
+        ),
+        StructType::ManagedHostNotReachable => ManagedHostNotReachable::serialize(
+            p.as_any_ref().downcast_ref::<ManagedHostNotReachable>().unwrap(),
+            serializer,
+        ),
+        StructType::MissingDvFilterSwitch => MissingDvFilterSwitch::serialize(
+            p.as_any_ref().downcast_ref::<MissingDvFilterSwitch>().unwrap(),
+            serializer,
+        ),
+        StructType::OvfInvalidProperty => OvfInvalidProperty::serialize(
+            p.as_any_ref().downcast_ref::<OvfInvalidProperty>().unwrap(),
+            serializer,
+        ),
+        StructType::TransitionFailed => TransitionFailed::serialize(
+            p.as_any_ref().downcast_ref::<TransitionFailed>().unwrap(),
+            serializer,
+        ),
+        StructType::VibIssue => VibIssue::serialize(
+            p.as_any_ref().downcast_ref::<VibIssue>().unwrap(),
+            serializer,
+        ),
+        StructType::ImmediateHostRebootRequired => ImmediateHostRebootRequired::serialize(
+            p.as_any_ref().downcast_ref::<ImmediateHostRebootRequired>().unwrap(),
+            serializer,
+        ),
+        StructType::VibCannotPutHostInMaintenanceMode => VibCannotPutHostInMaintenanceMode::serialize(
+            p.as_any_ref().downcast_ref::<VibCannotPutHostInMaintenanceMode>().unwrap(),
+            serializer,
+        ),
+        StructType::VibCannotPutHostOutOfMaintenanceMode => VibCannotPutHostOutOfMaintenanceMode::serialize(
+            p.as_any_ref().downcast_ref::<VibCannotPutHostOutOfMaintenanceMode>().unwrap(),
+            serializer,
+        ),
+        StructType::VibNotInstalled => VibNotInstalled::serialize(
+            p.as_any_ref().downcast_ref::<VibNotInstalled>().unwrap(),
+            serializer,
+        ),
+        StructType::CannotAccessAgentVib => CannotAccessAgentVib::serialize(
+            p.as_any_ref().downcast_ref::<CannotAccessAgentVib>().unwrap(),
+            serializer,
+        ),
+        StructType::VibDependenciesNotMetByHost => VibDependenciesNotMetByHost::serialize(
+            p.as_any_ref().downcast_ref::<VibDependenciesNotMetByHost>().unwrap(),
+            serializer,
+        ),
+        StructType::VibInvalidFormat => VibInvalidFormat::serialize(
+            p.as_any_ref().downcast_ref::<VibInvalidFormat>().unwrap(),
+            serializer,
+        ),
+        StructType::VibRequirementsNotMetByHost => VibRequirementsNotMetByHost::serialize(
+            p.as_any_ref().downcast_ref::<VibRequirementsNotMetByHost>().unwrap(),
+            serializer,
+        ),
+        StructType::VibRequiresHostInMaintenanceMode => VibRequiresHostInMaintenanceMode::serialize(
+            p.as_any_ref().downcast_ref::<VibRequiresHostInMaintenanceMode>().unwrap(),
+            serializer,
+        ),
+        StructType::VibRequiresHostReboot => VibRequiresHostReboot::serialize(
+            p.as_any_ref().downcast_ref::<VibRequiresHostReboot>().unwrap(),
+            serializer,
+        ),
+        StructType::VibRequiresManualInstallation => VibRequiresManualInstallation::serialize(
+            p.as_any_ref().downcast_ref::<VibRequiresManualInstallation>().unwrap(),
+            serializer,
+        ),
+        StructType::VibRequiresManualUninstallation => VibRequiresManualUninstallation::serialize(
+            p.as_any_ref().downcast_ref::<VibRequiresManualUninstallation>().unwrap(),
+            serializer,
+        ),
+        StructType::VmIssue => VmIssue::serialize(
+            p.as_any_ref().downcast_ref::<VmIssue>().unwrap(),
+            serializer,
+        ),
+        StructType::InvalidConfig => InvalidConfig::serialize(
+            p.as_any_ref().downcast_ref::<InvalidConfig>().unwrap(),
+            serializer,
+        ),
+        StructType::VmCorrupted => VmCorrupted::serialize(
+            p.as_any_ref().downcast_ref::<VmCorrupted>().unwrap(),
+            serializer,
+        ),
+        StructType::VmDeployed => VmDeployed::serialize(
+            p.as_any_ref().downcast_ref::<VmDeployed>().unwrap(),
+            serializer,
+        ),
+        StructType::HostInMaintenanceMode => HostInMaintenanceMode::serialize(
+            p.as_any_ref().downcast_ref::<HostInMaintenanceMode>().unwrap(),
+            serializer,
+        ),
+        StructType::HostInStandbyMode => HostInStandbyMode::serialize(
+            p.as_any_ref().downcast_ref::<HostInStandbyMode>().unwrap(),
+            serializer,
+        ),
+        StructType::HostPoweredOff => HostPoweredOff::serialize(
+            p.as_any_ref().downcast_ref::<HostPoweredOff>().unwrap(),
+            serializer,
+        ),
+        StructType::VmHookFailed => VmHookFailed::serialize(
+            p.as_any_ref().downcast_ref::<VmHookFailed>().unwrap(),
+            serializer,
+        ),
+        StructType::VmHookTimedout => VmHookTimedout::serialize(
+            p.as_any_ref().downcast_ref::<VmHookTimedout>().unwrap(),
+            serializer,
+        ),
+        StructType::VmInaccessible => VmInaccessible::serialize(
+            p.as_any_ref().downcast_ref::<VmInaccessible>().unwrap(),
+            serializer,
+        ),
+        StructType::VmMarkedAsTemplate => VmMarkedAsTemplate::serialize(
+            p.as_any_ref().downcast_ref::<VmMarkedAsTemplate>().unwrap(),
+            serializer,
+        ),
+        StructType::VmOrphaned => VmOrphaned::serialize(
+            p.as_any_ref().downcast_ref::<VmOrphaned>().unwrap(),
+            serializer,
+        ),
+        StructType::VmPoweredOff => VmPoweredOff::serialize(
+            p.as_any_ref().downcast_ref::<VmPoweredOff>().unwrap(),
+            serializer,
+        ),
+        StructType::InsufficientIpAddresses => InsufficientIpAddresses::serialize(
+            p.as_any_ref().downcast_ref::<InsufficientIpAddresses>().unwrap(),
+            serializer,
+        ),
+        StructType::MissingAgentIpPool => MissingAgentIpPool::serialize(
+            p.as_any_ref().downcast_ref::<MissingAgentIpPool>().unwrap(),
+            serializer,
+        ),
+        StructType::VmPoweredOn => VmPoweredOn::serialize(
+            p.as_any_ref().downcast_ref::<VmPoweredOn>().unwrap(),
+            serializer,
+        ),
+        StructType::VmProtected => VmProtected::serialize(
+            p.as_any_ref().downcast_ref::<VmProtected>().unwrap(),
+            serializer,
+        ),
+        StructType::VmSuspended => VmSuspended::serialize(
+            p.as_any_ref().downcast_ref::<VmSuspended>().unwrap(),
+            serializer,
+        ),
+        StructType::VmWrongFolder => VmWrongFolder::serialize(
+            p.as_any_ref().downcast_ref::<VmWrongFolder>().unwrap(),
+            serializer,
+        ),
+        StructType::VmWrongResourcePool => VmWrongResourcePool::serialize(
+            p.as_any_ref().downcast_ref::<VmWrongResourcePool>().unwrap(),
+            serializer,
+        ),
+        StructType::VmNotDeployed => VmNotDeployed::serialize(
+            p.as_any_ref().downcast_ref::<VmNotDeployed>().unwrap(),
+            serializer,
+        ),
+        StructType::CannotAccessAgentOvf => CannotAccessAgentOvf::serialize(
+            p.as_any_ref().downcast_ref::<CannotAccessAgentOvf>().unwrap(),
+            serializer,
+        ),
+        StructType::IncompatibleHostVersion => IncompatibleHostVersion::serialize(
+            p.as_any_ref().downcast_ref::<IncompatibleHostVersion>().unwrap(),
+            serializer,
+        ),
+        StructType::InsufficientResources => InsufficientResources::serialize(
+            p.as_any_ref().downcast_ref::<InsufficientResources>().unwrap(),
+            serializer,
+        ),
+        StructType::InsufficientSpace => InsufficientSpace::serialize(
+            p.as_any_ref().downcast_ref::<InsufficientSpace>().unwrap(),
+            serializer,
+        ),
+        StructType::NoAgentVmDatastore => NoAgentVmDatastore::serialize(
+            p.as_any_ref().downcast_ref::<NoAgentVmDatastore>().unwrap(),
+            serializer,
+        ),
+        StructType::NoCustomAgentVmDatastore => NoCustomAgentVmDatastore::serialize(
+            p.as_any_ref().downcast_ref::<NoCustomAgentVmDatastore>().unwrap(),
+            serializer,
+        ),
+        StructType::NoAgentVmNetwork => NoAgentVmNetwork::serialize(
+            p.as_any_ref().downcast_ref::<NoAgentVmNetwork>().unwrap(),
+            serializer,
+        ),
+        StructType::NoCustomAgentVmNetwork => NoCustomAgentVmNetwork::serialize(
+            p.as_any_ref().downcast_ref::<NoCustomAgentVmNetwork>().unwrap(),
+            serializer,
+        ),
+        StructType::NoDiscoverableAgentVmDatastore => NoDiscoverableAgentVmDatastore::serialize(
+            p.as_any_ref().downcast_ref::<NoDiscoverableAgentVmDatastore>().unwrap(),
+            serializer,
+        ),
+        StructType::NoDiscoverableAgentVmNetwork => NoDiscoverableAgentVmNetwork::serialize(
+            p.as_any_ref().downcast_ref::<NoDiscoverableAgentVmNetwork>().unwrap(),
+            serializer,
+        ),
+        StructType::OvfInvalidFormat => OvfInvalidFormat::serialize(
+            p.as_any_ref().downcast_ref::<OvfInvalidFormat>().unwrap(),
+            serializer,
+        ),
+        StructType::VmRequiresHostOutOfMaintenanceMode => VmRequiresHostOutOfMaintenanceMode::serialize(
+            p.as_any_ref().downcast_ref::<VmRequiresHostOutOfMaintenanceMode>().unwrap(),
+            serializer,
+        ),
+        StructType::PersonalityAgentPmIssue => PersonalityAgentPmIssue::serialize(
+            p.as_any_ref().downcast_ref::<PersonalityAgentPmIssue>().unwrap(),
+            serializer,
+        ),
+        StructType::PersonalityAgentAwaitingPmRemediation => PersonalityAgentAwaitingPmRemediation::serialize(
+            p.as_any_ref().downcast_ref::<PersonalityAgentAwaitingPmRemediation>().unwrap(),
+            serializer,
+        ),
+        StructType::PersonalityAgentBlockedByAgencyOperation => PersonalityAgentBlockedByAgencyOperation::serialize(
+            p.as_any_ref().downcast_ref::<PersonalityAgentBlockedByAgencyOperation>().unwrap(),
+            serializer,
+        ),
+        StructType::OrphanedAgency => OrphanedAgency::serialize(
+            p.as_any_ref().downcast_ref::<OrphanedAgency>().unwrap(),
+            serializer,
+        ),
+        StructType::ClusterAgentAgentIssue => ClusterAgentAgentIssue::serialize(
+            p.as_any_ref().downcast_ref::<ClusterAgentAgentIssue>().unwrap(),
+            serializer,
+        ),
+        StructType::ClusterAgentOvfInvalidProperty => ClusterAgentOvfInvalidProperty::serialize(
+            p.as_any_ref().downcast_ref::<ClusterAgentOvfInvalidProperty>().unwrap(),
+            serializer,
+        ),
+        StructType::ClusterAgentTransitionFailed => ClusterAgentTransitionFailed::serialize(
+            p.as_any_ref().downcast_ref::<ClusterAgentTransitionFailed>().unwrap(),
+            serializer,
+        ),
+        StructType::ClusterAgentVmIssue => ClusterAgentVmIssue::serialize(
+            p.as_any_ref().downcast_ref::<ClusterAgentVmIssue>().unwrap(),
+            serializer,
+        ),
+        StructType::ClusterAgentHostInMaintenanceMode => ClusterAgentHostInMaintenanceMode::serialize(
+            p.as_any_ref().downcast_ref::<ClusterAgentHostInMaintenanceMode>().unwrap(),
+            serializer,
+        ),
+        StructType::ClusterAgentHostInPartialMaintenanceMode => ClusterAgentHostInPartialMaintenanceMode::serialize(
+            p.as_any_ref().downcast_ref::<ClusterAgentHostInPartialMaintenanceMode>().unwrap(),
+            serializer,
+        ),
+        StructType::ClusterAgentInvalidConfig => ClusterAgentInvalidConfig::serialize(
+            p.as_any_ref().downcast_ref::<ClusterAgentInvalidConfig>().unwrap(),
+            serializer,
+        ),
+        StructType::ClusterAgentVmHookFailed => ClusterAgentVmHookFailed::serialize(
+            p.as_any_ref().downcast_ref::<ClusterAgentVmHookFailed>().unwrap(),
+            serializer,
+        ),
+        StructType::ClusterAgentVmHookTimedout => ClusterAgentVmHookTimedout::serialize(
+            p.as_any_ref().downcast_ref::<ClusterAgentVmHookTimedout>().unwrap(),
+            serializer,
+        ),
+        StructType::ClusterAgentVmInaccessible => ClusterAgentVmInaccessible::serialize(
+            p.as_any_ref().downcast_ref::<ClusterAgentVmInaccessible>().unwrap(),
+            serializer,
+        ),
+        StructType::ClusterAgentVmNotRemoved => ClusterAgentVmNotRemoved::serialize(
+            p.as_any_ref().downcast_ref::<ClusterAgentVmNotRemoved>().unwrap(),
+            serializer,
+        ),
+        StructType::ClusterAgentVmPoweredOff => ClusterAgentVmPoweredOff::serialize(
+            p.as_any_ref().downcast_ref::<ClusterAgentVmPoweredOff>().unwrap(),
+            serializer,
+        ),
+        StructType::ClusterAgentInsufficientClusterResources => ClusterAgentInsufficientClusterResources::serialize(
+            p.as_any_ref().downcast_ref::<ClusterAgentInsufficientClusterResources>().unwrap(),
+            serializer,
+        ),
+        StructType::ClusterAgentVmPoweredOn => ClusterAgentVmPoweredOn::serialize(
+            p.as_any_ref().downcast_ref::<ClusterAgentVmPoweredOn>().unwrap(),
+            serializer,
+        ),
+        StructType::ClusterAgentVmProtected => ClusterAgentVmProtected::serialize(
+            p.as_any_ref().downcast_ref::<ClusterAgentVmProtected>().unwrap(),
+            serializer,
+        ),
+        StructType::ClusterAgentVmSuspended => ClusterAgentVmSuspended::serialize(
+            p.as_any_ref().downcast_ref::<ClusterAgentVmSuspended>().unwrap(),
+            serializer,
+        ),
+        StructType::ClusterAgentVmNotDeployed => ClusterAgentVmNotDeployed::serialize(
+            p.as_any_ref().downcast_ref::<ClusterAgentVmNotDeployed>().unwrap(),
+            serializer,
+        ),
+        StructType::ClusterAgentCertificateNotTrusted => ClusterAgentCertificateNotTrusted::serialize(
+            p.as_any_ref().downcast_ref::<ClusterAgentCertificateNotTrusted>().unwrap(),
+            serializer,
+        ),
+        StructType::ClusterAgentInsufficientClusterSpace => ClusterAgentInsufficientClusterSpace::serialize(
+            p.as_any_ref().downcast_ref::<ClusterAgentInsufficientClusterSpace>().unwrap(),
+            serializer,
+        ),
+        StructType::ClusterAgentMissingClusterVmDatastore => ClusterAgentMissingClusterVmDatastore::serialize(
+            p.as_any_ref().downcast_ref::<ClusterAgentMissingClusterVmDatastore>().unwrap(),
+            serializer,
+        ),
+        StructType::ClusterAgentMissingClusterVmNetwork => ClusterAgentMissingClusterVmNetwork::serialize(
+            p.as_any_ref().downcast_ref::<ClusterAgentMissingClusterVmNetwork>().unwrap(),
+            serializer,
+        ),
+        StructType::IntegrityAgencyVumIssue => IntegrityAgencyVumIssue::serialize(
+            p.as_any_ref().downcast_ref::<IntegrityAgencyVumIssue>().unwrap(),
+            serializer,
+        ),
+        StructType::IntegrityAgencyCannotDeleteSoftware => IntegrityAgencyCannotDeleteSoftware::serialize(
+            p.as_any_ref().downcast_ref::<IntegrityAgencyCannotDeleteSoftware>().unwrap(),
+            serializer,
+        ),
+        StructType::IntegrityAgencyCannotStageSoftware => IntegrityAgencyCannotStageSoftware::serialize(
+            p.as_any_ref().downcast_ref::<IntegrityAgencyCannotStageSoftware>().unwrap(),
+            serializer,
+        ),
+        StructType::IntegrityAgencyVumUnavailable => IntegrityAgencyVumUnavailable::serialize(
+            p.as_any_ref().downcast_ref::<IntegrityAgencyVumUnavailable>().unwrap(),
+            serializer,
+        ),
+        StructType::PersonalityAgencyPmIssue => PersonalityAgencyPmIssue::serialize(
+            p.as_any_ref().downcast_ref::<PersonalityAgencyPmIssue>().unwrap(),
+            serializer,
+        ),
+        StructType::PersonalityAgencyCannotConfigureSolutions => PersonalityAgencyCannotConfigureSolutions::serialize(
+            p.as_any_ref().downcast_ref::<PersonalityAgencyCannotConfigureSolutions>().unwrap(),
+            serializer,
+        ),
+        StructType::PersonalityAgencyDepotIssue => PersonalityAgencyDepotIssue::serialize(
+            p.as_any_ref().downcast_ref::<PersonalityAgencyDepotIssue>().unwrap(),
+            serializer,
+        ),
+        StructType::PersonalityAgencyCannotUploadDepot => PersonalityAgencyCannotUploadDepot::serialize(
+            p.as_any_ref().downcast_ref::<PersonalityAgencyCannotUploadDepot>().unwrap(),
+            serializer,
+        ),
+        StructType::PersonalityAgencyInaccessibleDepot => PersonalityAgencyInaccessibleDepot::serialize(
+            p.as_any_ref().downcast_ref::<PersonalityAgencyInaccessibleDepot>().unwrap(),
+            serializer,
+        ),
+        StructType::PersonalityAgencyInvalidDepot => PersonalityAgencyInvalidDepot::serialize(
+            p.as_any_ref().downcast_ref::<PersonalityAgencyInvalidDepot>().unwrap(),
+            serializer,
+        ),
+        StructType::PersonalityAgencyPmUnavailable => PersonalityAgencyPmUnavailable::serialize(
+            p.as_any_ref().downcast_ref::<PersonalityAgencyPmUnavailable>().unwrap(),
+            serializer,
+        ),
+        StructType::ExtensibleIssue => ExtensibleIssue::serialize(
+            p.as_any_ref().downcast_ref::<ExtensibleIssue>().unwrap(),
+            serializer,
+        ),
+        StructType::HostIssue => HostIssue::serialize(
+            p.as_any_ref().downcast_ref::<HostIssue>().unwrap(),
+            serializer,
+        ),
+        StructType::OrphanedDvFilterSwitch => OrphanedDvFilterSwitch::serialize(
+            p.as_any_ref().downcast_ref::<OrphanedDvFilterSwitch>().unwrap(),
+            serializer,
+        ),
+        StructType::UnknownAgentVm => UnknownAgentVm::serialize(
+            p.as_any_ref().downcast_ref::<UnknownAgentVm>().unwrap(),
+            serializer,
+        ),
+        StructType::HooksHookListSpec => HooksHookListSpec::serialize(
+            p.as_any_ref().downcast_ref::<HooksHookListSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::HooksMarkAsProcessedSpec => HooksMarkAsProcessedSpec::serialize(
+            p.as_any_ref().downcast_ref::<HooksMarkAsProcessedSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::SolutionsApplySpec => SolutionsApplySpec::serialize(
+            p.as_any_ref().downcast_ref::<SolutionsApplySpec>().unwrap(),
+            serializer,
+        ),
+        StructType::SolutionsClusterSolutionComplianceResult => SolutionsClusterSolutionComplianceResult::serialize(
+            p.as_any_ref().downcast_ref::<SolutionsClusterSolutionComplianceResult>().unwrap(),
+            serializer,
+        ),
+        StructType::SolutionsComplianceResult => SolutionsComplianceResult::serialize(
+            p.as_any_ref().downcast_ref::<SolutionsComplianceResult>().unwrap(),
+            serializer,
+        ),
+        StructType::SolutionsComplianceSpec => SolutionsComplianceSpec::serialize(
+            p.as_any_ref().downcast_ref::<SolutionsComplianceSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::SolutionsDeploymentUnitComplianceResult => SolutionsDeploymentUnitComplianceResult::serialize(
+            p.as_any_ref().downcast_ref::<SolutionsDeploymentUnitComplianceResult>().unwrap(),
+            serializer,
+        ),
+        StructType::SolutionsHookAcknowledgeConfig => SolutionsHookAcknowledgeConfig::serialize(
+            p.as_any_ref().downcast_ref::<SolutionsHookAcknowledgeConfig>().unwrap(),
+            serializer,
+        ),
+        StructType::SolutionsInteractiveHookAcknowledgeConfig => SolutionsInteractiveHookAcknowledgeConfig::serialize(
+            p.as_any_ref().downcast_ref::<SolutionsInteractiveHookAcknowledgeConfig>().unwrap(),
+            serializer,
+        ),
+        StructType::SolutionsHookConfig => SolutionsHookConfig::serialize(
+            p.as_any_ref().downcast_ref::<SolutionsHookConfig>().unwrap(),
+            serializer,
+        ),
+        StructType::SolutionsHookInfo => SolutionsHookInfo::serialize(
+            p.as_any_ref().downcast_ref::<SolutionsHookInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::SolutionsHostComplianceResult => SolutionsHostComplianceResult::serialize(
+            p.as_any_ref().downcast_ref::<SolutionsHostComplianceResult>().unwrap(),
+            serializer,
+        ),
+        StructType::SolutionsOvfProperty => SolutionsOvfProperty::serialize(
+            p.as_any_ref().downcast_ref::<SolutionsOvfProperty>().unwrap(),
+            serializer,
+        ),
+        StructType::SolutionsSolutionComplianceResult => SolutionsSolutionComplianceResult::serialize(
+            p.as_any_ref().downcast_ref::<SolutionsSolutionComplianceResult>().unwrap(),
+            serializer,
+        ),
+        StructType::SolutionsSolutionConfig => SolutionsSolutionConfig::serialize(
+            p.as_any_ref().downcast_ref::<SolutionsSolutionConfig>().unwrap(),
+            serializer,
+        ),
+        StructType::SolutionsSolutionValidationResult => SolutionsSolutionValidationResult::serialize(
+            p.as_any_ref().downcast_ref::<SolutionsSolutionValidationResult>().unwrap(),
+            serializer,
+        ),
+        StructType::SolutionsStoragePolicy => SolutionsStoragePolicy::serialize(
+            p.as_any_ref().downcast_ref::<SolutionsStoragePolicy>().unwrap(),
+            serializer,
+        ),
+        StructType::SolutionsProfileIdStoragePolicy => SolutionsProfileIdStoragePolicy::serialize(
+            p.as_any_ref().downcast_ref::<SolutionsProfileIdStoragePolicy>().unwrap(),
+            serializer,
+        ),
+        StructType::SolutionsTransitionSpec => SolutionsTransitionSpec::serialize(
+            p.as_any_ref().downcast_ref::<SolutionsTransitionSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::SolutionsTypeSpecificSolutionConfig => SolutionsTypeSpecificSolutionConfig::serialize(
+            p.as_any_ref().downcast_ref::<SolutionsTypeSpecificSolutionConfig>().unwrap(),
+            serializer,
+        ),
+        StructType::SolutionsClusterBoundSolutionConfig => SolutionsClusterBoundSolutionConfig::serialize(
+            p.as_any_ref().downcast_ref::<SolutionsClusterBoundSolutionConfig>().unwrap(),
+            serializer,
+        ),
+        StructType::SolutionsHostBoundSolutionConfig => SolutionsHostBoundSolutionConfig::serialize(
+            p.as_any_ref().downcast_ref::<SolutionsHostBoundSolutionConfig>().unwrap(),
+            serializer,
+        ),
+        StructType::SolutionsVmNetworkMapping => SolutionsVmNetworkMapping::serialize(
+            p.as_any_ref().downcast_ref::<SolutionsVmNetworkMapping>().unwrap(),
+            serializer,
+        ),
+        StructType::SolutionsVmSource => SolutionsVmSource::serialize(
+            p.as_any_ref().downcast_ref::<SolutionsVmSource>().unwrap(),
+            serializer,
+        ),
+        StructType::SolutionsUrlVmSource => SolutionsUrlVmSource::serialize(
+            p.as_any_ref().downcast_ref::<SolutionsUrlVmSource>().unwrap(),
+            serializer,
+        ),
+        StructType::SolutionsValidateSpec => SolutionsValidateSpec::serialize(
+            p.as_any_ref().downcast_ref::<SolutionsValidateSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::SolutionsValidationResult => SolutionsValidationResult::serialize(
+            p.as_any_ref().downcast_ref::<SolutionsValidationResult>().unwrap(),
+            serializer,
+        ),
+        StructType::SolutionsVmResourceSpec => SolutionsVmResourceSpec::serialize(
+            p.as_any_ref().downcast_ref::<SolutionsVmResourceSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VibVibInfo => VibVibInfo::serialize(
+            p.as_any_ref().downcast_ref::<VibVibInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::VibVibInfoSoftwareTags => VibVibInfoSoftwareTags::serialize(
+            p.as_any_ref().downcast_ref::<VibVibInfoSoftwareTags>().unwrap(),
+            serializer,
+        ),
+        StructType::VibVibServicesSslTrust => VibVibServicesSslTrust::serialize(
+            p.as_any_ref().downcast_ref::<VibVibServicesSslTrust>().unwrap(),
+            serializer,
+        ),
+        StructType::VibVibServicesAnyCertificate => VibVibServicesAnyCertificate::serialize(
+            p.as_any_ref().downcast_ref::<VibVibServicesAnyCertificate>().unwrap(),
+            serializer,
+        ),
+        StructType::VibVibServicesPinnedPemCertificate => VibVibServicesPinnedPemCertificate::serialize(
+            p.as_any_ref().downcast_ref::<VibVibServicesPinnedPemCertificate>().unwrap(),
+            serializer,
+        ),
+        StructType::PbmAboutInfo => PbmAboutInfo::serialize(
+            p.as_any_ref().downcast_ref::<PbmAboutInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::PbmExtendedElementDescription => PbmExtendedElementDescription::serialize(
+            p.as_any_ref().downcast_ref::<PbmExtendedElementDescription>().unwrap(),
+            serializer,
+        ),
+        StructType::PbmLoggingConfiguration => PbmLoggingConfiguration::serialize(
+            p.as_any_ref().downcast_ref::<PbmLoggingConfiguration>().unwrap(),
+            serializer,
+        ),
+        StructType::PbmServerObjectRef => PbmServerObjectRef::serialize(
+            p.as_any_ref().downcast_ref::<PbmServerObjectRef>().unwrap(),
+            serializer,
+        ),
+        StructType::PbmServiceInstanceContent => PbmServiceInstanceContent::serialize(
+            p.as_any_ref().downcast_ref::<PbmServiceInstanceContent>().unwrap(),
+            serializer,
+        ),
+        StructType::PbmCapabilityInstance => PbmCapabilityInstance::serialize(
+            p.as_any_ref().downcast_ref::<PbmCapabilityInstance>().unwrap(),
+            serializer,
+        ),
+        StructType::PbmCapabilityMetadata => PbmCapabilityMetadata::serialize(
+            p.as_any_ref().downcast_ref::<PbmCapabilityMetadata>().unwrap(),
+            serializer,
+        ),
+        StructType::PbmCapabilityMetadataUniqueId => PbmCapabilityMetadataUniqueId::serialize(
+            p.as_any_ref().downcast_ref::<PbmCapabilityMetadataUniqueId>().unwrap(),
+            serializer,
+        ),
+        StructType::PbmCapabilityConstraintInstance => PbmCapabilityConstraintInstance::serialize(
+            p.as_any_ref().downcast_ref::<PbmCapabilityConstraintInstance>().unwrap(),
+            serializer,
+        ),
+        StructType::PbmCapabilityPropertyInstance => PbmCapabilityPropertyInstance::serialize(
+            p.as_any_ref().downcast_ref::<PbmCapabilityPropertyInstance>().unwrap(),
+            serializer,
+        ),
+        StructType::PbmCapabilityPropertyMetadata => PbmCapabilityPropertyMetadata::serialize(
+            p.as_any_ref().downcast_ref::<PbmCapabilityPropertyMetadata>().unwrap(),
+            serializer,
+        ),
+        StructType::PbmCapabilityTypeInfo => PbmCapabilityTypeInfo::serialize(
+            p.as_any_ref().downcast_ref::<PbmCapabilityTypeInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::PbmCapabilityGenericTypeInfo => PbmCapabilityGenericTypeInfo::serialize(
+            p.as_any_ref().downcast_ref::<PbmCapabilityGenericTypeInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::PbmCapabilityMetadataPerCategory => PbmCapabilityMetadataPerCategory::serialize(
+            p.as_any_ref().downcast_ref::<PbmCapabilityMetadataPerCategory>().unwrap(),
+            serializer,
+        ),
+        StructType::PbmCapabilitySchema => PbmCapabilitySchema::serialize(
+            p.as_any_ref().downcast_ref::<PbmCapabilitySchema>().unwrap(),
+            serializer,
+        ),
+        StructType::PbmCapabilityNamespaceInfo => PbmCapabilityNamespaceInfo::serialize(
+            p.as_any_ref().downcast_ref::<PbmCapabilityNamespaceInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::PbmCapabilitySchemaVendorInfo => PbmCapabilitySchemaVendorInfo::serialize(
+            p.as_any_ref().downcast_ref::<PbmCapabilitySchemaVendorInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::PbmCapabilityVendorNamespaceInfo => PbmCapabilityVendorNamespaceInfo::serialize(
+            p.as_any_ref().downcast_ref::<PbmCapabilityVendorNamespaceInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::PbmCapabilityVendorResourceTypeInfo => PbmCapabilityVendorResourceTypeInfo::serialize(
+            p.as_any_ref().downcast_ref::<PbmCapabilityVendorResourceTypeInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::PbmLineOfServiceInfo => PbmLineOfServiceInfo::serialize(
+            p.as_any_ref().downcast_ref::<PbmLineOfServiceInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::PbmPersistenceBasedDataServiceInfo => PbmPersistenceBasedDataServiceInfo::serialize(
+            p.as_any_ref().downcast_ref::<PbmPersistenceBasedDataServiceInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::PbmVaioDataServiceInfo => PbmVaioDataServiceInfo::serialize(
+            p.as_any_ref().downcast_ref::<PbmVaioDataServiceInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::PbmCapabilityDescription => PbmCapabilityDescription::serialize(
+            p.as_any_ref().downcast_ref::<PbmCapabilityDescription>().unwrap(),
+            serializer,
+        ),
+        StructType::PbmCapabilityDiscreteSet => PbmCapabilityDiscreteSet::serialize(
+            p.as_any_ref().downcast_ref::<PbmCapabilityDiscreteSet>().unwrap(),
+            serializer,
+        ),
+        StructType::PbmCapabilityRange => PbmCapabilityRange::serialize(
+            p.as_any_ref().downcast_ref::<PbmCapabilityRange>().unwrap(),
+            serializer,
+        ),
+        StructType::PbmCapabilityTimeSpan => PbmCapabilityTimeSpan::serialize(
+            p.as_any_ref().downcast_ref::<PbmCapabilityTimeSpan>().unwrap(),
+            serializer,
+        ),
+        StructType::PbmComplianceResult => PbmComplianceResult::serialize(
+            p.as_any_ref().downcast_ref::<PbmComplianceResult>().unwrap(),
+            serializer,
+        ),
+        StructType::PbmFetchEntityHealthStatusSpec => PbmFetchEntityHealthStatusSpec::serialize(
+            p.as_any_ref().downcast_ref::<PbmFetchEntityHealthStatusSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::PbmComplianceOperationalStatus => PbmComplianceOperationalStatus::serialize(
+            p.as_any_ref().downcast_ref::<PbmComplianceOperationalStatus>().unwrap(),
+            serializer,
+        ),
+        StructType::PbmCompliancePolicyStatus => PbmCompliancePolicyStatus::serialize(
+            p.as_any_ref().downcast_ref::<PbmCompliancePolicyStatus>().unwrap(),
+            serializer,
+        ),
+        StructType::PbmRollupComplianceResult => PbmRollupComplianceResult::serialize(
+            p.as_any_ref().downcast_ref::<PbmRollupComplianceResult>().unwrap(),
+            serializer,
+        ),
+        StructType::PbmFaultNoPermissionEntityPrivileges => PbmFaultNoPermissionEntityPrivileges::serialize(
+            p.as_any_ref().downcast_ref::<PbmFaultNoPermissionEntityPrivileges>().unwrap(),
+            serializer,
+        ),
+        StructType::PbmPlacementCompatibilityResult => PbmPlacementCompatibilityResult::serialize(
+            p.as_any_ref().downcast_ref::<PbmPlacementCompatibilityResult>().unwrap(),
+            serializer,
+        ),
+        StructType::PbmPlacementMatchingResources => PbmPlacementMatchingResources::serialize(
+            p.as_any_ref().downcast_ref::<PbmPlacementMatchingResources>().unwrap(),
+            serializer,
+        ),
+        StructType::PbmPlacementMatchingReplicationResources => PbmPlacementMatchingReplicationResources::serialize(
+            p.as_any_ref().downcast_ref::<PbmPlacementMatchingReplicationResources>().unwrap(),
+            serializer,
+        ),
+        StructType::PbmPlacementHub => PbmPlacementHub::serialize(
+            p.as_any_ref().downcast_ref::<PbmPlacementHub>().unwrap(),
+            serializer,
+        ),
+        StructType::PbmPlacementRequirement => PbmPlacementRequirement::serialize(
+            p.as_any_ref().downcast_ref::<PbmPlacementRequirement>().unwrap(),
+            serializer,
+        ),
+        StructType::PbmPlacementCapabilityConstraintsRequirement => PbmPlacementCapabilityConstraintsRequirement::serialize(
+            p.as_any_ref().downcast_ref::<PbmPlacementCapabilityConstraintsRequirement>().unwrap(),
+            serializer,
+        ),
+        StructType::PbmPlacementCapabilityProfileRequirement => PbmPlacementCapabilityProfileRequirement::serialize(
+            p.as_any_ref().downcast_ref::<PbmPlacementCapabilityProfileRequirement>().unwrap(),
+            serializer,
+        ),
+        StructType::PbmPlacementResourceUtilization => PbmPlacementResourceUtilization::serialize(
+            p.as_any_ref().downcast_ref::<PbmPlacementResourceUtilization>().unwrap(),
+            serializer,
+        ),
+        StructType::PbmCapabilityProfileCreateSpec => PbmCapabilityProfileCreateSpec::serialize(
+            p.as_any_ref().downcast_ref::<PbmCapabilityProfileCreateSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::PbmCapabilityProfileUpdateSpec => PbmCapabilityProfileUpdateSpec::serialize(
+            p.as_any_ref().downcast_ref::<PbmCapabilityProfileUpdateSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::PbmCapabilityConstraints => PbmCapabilityConstraints::serialize(
+            p.as_any_ref().downcast_ref::<PbmCapabilityConstraints>().unwrap(),
+            serializer,
+        ),
+        StructType::PbmCapabilitySubProfileConstraints => PbmCapabilitySubProfileConstraints::serialize(
+            p.as_any_ref().downcast_ref::<PbmCapabilitySubProfileConstraints>().unwrap(),
+            serializer,
+        ),
+        StructType::PbmDataServiceToPoliciesMap => PbmDataServiceToPoliciesMap::serialize(
+            p.as_any_ref().downcast_ref::<PbmDataServiceToPoliciesMap>().unwrap(),
+            serializer,
+        ),
+        StructType::PbmDefaultProfileInfo => PbmDefaultProfileInfo::serialize(
+            p.as_any_ref().downcast_ref::<PbmDefaultProfileInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::PbmProfile => PbmProfile::serialize(
+            p.as_any_ref().downcast_ref::<PbmProfile>().unwrap(),
+            serializer,
+        ),
+        StructType::PbmCapabilityProfile => PbmCapabilityProfile::serialize(
+            p.as_any_ref().downcast_ref::<PbmCapabilityProfile>().unwrap(),
+            serializer,
+        ),
+        StructType::PbmDefaultCapabilityProfile => PbmDefaultCapabilityProfile::serialize(
+            p.as_any_ref().downcast_ref::<PbmDefaultCapabilityProfile>().unwrap(),
+            serializer,
+        ),
+        StructType::PbmProfileId => PbmProfileId::serialize(
+            p.as_any_ref().downcast_ref::<PbmProfileId>().unwrap(),
+            serializer,
+        ),
+        StructType::PbmProfileOperationOutcome => PbmProfileOperationOutcome::serialize(
+            p.as_any_ref().downcast_ref::<PbmProfileOperationOutcome>().unwrap(),
+            serializer,
+        ),
+        StructType::PbmProfileType => PbmProfileType::serialize(
+            p.as_any_ref().downcast_ref::<PbmProfileType>().unwrap(),
+            serializer,
+        ),
+        StructType::PbmQueryProfileResult => PbmQueryProfileResult::serialize(
+            p.as_any_ref().downcast_ref::<PbmQueryProfileResult>().unwrap(),
+            serializer,
+        ),
+        StructType::PbmProfileResourceType => PbmProfileResourceType::serialize(
+            p.as_any_ref().downcast_ref::<PbmProfileResourceType>().unwrap(),
+            serializer,
+        ),
+        StructType::PbmCapabilitySubProfile => PbmCapabilitySubProfile::serialize(
+            p.as_any_ref().downcast_ref::<PbmCapabilitySubProfile>().unwrap(),
+            serializer,
+        ),
+        StructType::PbmDatastoreSpaceStatistics => PbmDatastoreSpaceStatistics::serialize(
+            p.as_any_ref().downcast_ref::<PbmDatastoreSpaceStatistics>().unwrap(),
+            serializer,
+        ),
+        StructType::PbmQueryReplicationGroupResult => PbmQueryReplicationGroupResult::serialize(
+            p.as_any_ref().downcast_ref::<PbmQueryReplicationGroupResult>().unwrap(),
+            serializer,
+        ),
+        StructType::SmsAboutInfo => SmsAboutInfo::serialize(
+            p.as_any_ref().downcast_ref::<SmsAboutInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::EntityReference => EntityReference::serialize(
+            p.as_any_ref().downcast_ref::<EntityReference>().unwrap(),
+            serializer,
+        ),
+        StructType::FaultDomainFilter => FaultDomainFilter::serialize(
+            p.as_any_ref().downcast_ref::<FaultDomainFilter>().unwrap(),
+            serializer,
+        ),
+        StructType::ReplicationGroupFilter => ReplicationGroupFilter::serialize(
+            p.as_any_ref().downcast_ref::<ReplicationGroupFilter>().unwrap(),
+            serializer,
+        ),
+        StructType::SmsTaskInfo => SmsTaskInfo::serialize(
+            p.as_any_ref().downcast_ref::<SmsTaskInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::AlarmFilter => AlarmFilter::serialize(
+            p.as_any_ref().downcast_ref::<AlarmFilter>().unwrap(),
+            serializer,
+        ),
+        StructType::AlarmResult => AlarmResult::serialize(
+            p.as_any_ref().downcast_ref::<AlarmResult>().unwrap(),
+            serializer,
+        ),
+        StructType::SmsProviderInfo => SmsProviderInfo::serialize(
+            p.as_any_ref().downcast_ref::<SmsProviderInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::VasaProviderInfo => VasaProviderInfo::serialize(
+            p.as_any_ref().downcast_ref::<VasaProviderInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::SmsProviderSpec => SmsProviderSpec::serialize(
+            p.as_any_ref().downcast_ref::<SmsProviderSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VasaProviderSpec => VasaProviderSpec::serialize(
+            p.as_any_ref().downcast_ref::<VasaProviderSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VasaProviderUpgradeSpec => VasaProviderUpgradeSpec::serialize(
+            p.as_any_ref().downcast_ref::<VasaProviderUpgradeSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::RelatedStorageArray => RelatedStorageArray::serialize(
+            p.as_any_ref().downcast_ref::<RelatedStorageArray>().unwrap(),
+            serializer,
+        ),
+        StructType::SupportedVendorModelMapping => SupportedVendorModelMapping::serialize(
+            p.as_any_ref().downcast_ref::<SupportedVendorModelMapping>().unwrap(),
+            serializer,
+        ),
+        StructType::BackingConfig => BackingConfig::serialize(
+            p.as_any_ref().downcast_ref::<BackingConfig>().unwrap(),
+            serializer,
+        ),
+        StructType::BackingStoragePool => BackingStoragePool::serialize(
+            p.as_any_ref().downcast_ref::<BackingStoragePool>().unwrap(),
+            serializer,
+        ),
+        StructType::DatastoreBackingPoolMapping => DatastoreBackingPoolMapping::serialize(
+            p.as_any_ref().downcast_ref::<DatastoreBackingPoolMapping>().unwrap(),
+            serializer,
+        ),
+        StructType::DatastorePair => DatastorePair::serialize(
+            p.as_any_ref().downcast_ref::<DatastorePair>().unwrap(),
+            serializer,
+        ),
+        StructType::DrsMigrationCapabilityResult => DrsMigrationCapabilityResult::serialize(
+            p.as_any_ref().downcast_ref::<DrsMigrationCapabilityResult>().unwrap(),
+            serializer,
+        ),
+        StructType::FaultDomainProviderMapping => FaultDomainProviderMapping::serialize(
+            p.as_any_ref().downcast_ref::<FaultDomainProviderMapping>().unwrap(),
+            serializer,
+        ),
+        StructType::StorageFileSystemInfo => StorageFileSystemInfo::serialize(
+            p.as_any_ref().downcast_ref::<StorageFileSystemInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::LunHbaAssociation => LunHbaAssociation::serialize(
+            p.as_any_ref().downcast_ref::<LunHbaAssociation>().unwrap(),
+            serializer,
+        ),
+        StructType::NameValuePair => NameValuePair::serialize(
+            p.as_any_ref().downcast_ref::<NameValuePair>().unwrap(),
+            serializer,
+        ),
+        StructType::StorageAlarm => StorageAlarm::serialize(
+            p.as_any_ref().downcast_ref::<StorageAlarm>().unwrap(),
+            serializer,
+        ),
+        StructType::StorageArray => StorageArray::serialize(
+            p.as_any_ref().downcast_ref::<StorageArray>().unwrap(),
+            serializer,
+        ),
+        StructType::StorageCapability => StorageCapability::serialize(
+            p.as_any_ref().downcast_ref::<StorageCapability>().unwrap(),
+            serializer,
+        ),
+        StructType::StorageContainer => StorageContainer::serialize(
+            p.as_any_ref().downcast_ref::<StorageContainer>().unwrap(),
+            serializer,
+        ),
+        StructType::StorageContainerResult => StorageContainerResult::serialize(
+            p.as_any_ref().downcast_ref::<StorageContainerResult>().unwrap(),
+            serializer,
+        ),
+        StructType::StorageContainerSpec => StorageContainerSpec::serialize(
+            p.as_any_ref().downcast_ref::<StorageContainerSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::StorageFileSystem => StorageFileSystem::serialize(
+            p.as_any_ref().downcast_ref::<StorageFileSystem>().unwrap(),
+            serializer,
+        ),
+        StructType::StorageLun => StorageLun::serialize(
+            p.as_any_ref().downcast_ref::<StorageLun>().unwrap(),
+            serializer,
+        ),
+        StructType::StoragePort => StoragePort::serialize(
+            p.as_any_ref().downcast_ref::<StoragePort>().unwrap(),
+            serializer,
+        ),
+        StructType::FcStoragePort => FcStoragePort::serialize(
+            p.as_any_ref().downcast_ref::<FcStoragePort>().unwrap(),
+            serializer,
+        ),
+        StructType::FcoeStoragePort => FcoeStoragePort::serialize(
+            p.as_any_ref().downcast_ref::<FcoeStoragePort>().unwrap(),
+            serializer,
+        ),
+        StructType::IscsiStoragePort => IscsiStoragePort::serialize(
+            p.as_any_ref().downcast_ref::<IscsiStoragePort>().unwrap(),
+            serializer,
+        ),
+        StructType::StorageProcessor => StorageProcessor::serialize(
+            p.as_any_ref().downcast_ref::<StorageProcessor>().unwrap(),
+            serializer,
+        ),
+        StructType::DeviceId => DeviceId::serialize(
+            p.as_any_ref().downcast_ref::<DeviceId>().unwrap(),
+            serializer,
+        ),
+        StructType::VVolId => VVolId::serialize(
+            p.as_any_ref().downcast_ref::<VVolId>().unwrap(),
+            serializer,
+        ),
+        StructType::VasaVirtualDiskId => VasaVirtualDiskId::serialize(
+            p.as_any_ref().downcast_ref::<VasaVirtualDiskId>().unwrap(),
+            serializer,
+        ),
+        StructType::VirtualDiskKey => VirtualDiskKey::serialize(
+            p.as_any_ref().downcast_ref::<VirtualDiskKey>().unwrap(),
+            serializer,
+        ),
+        StructType::VirtualDiskMoId => VirtualDiskMoId::serialize(
+            p.as_any_ref().downcast_ref::<VirtualDiskMoId>().unwrap(),
+            serializer,
+        ),
+        StructType::VirtualMachineId => VirtualMachineId::serialize(
+            p.as_any_ref().downcast_ref::<VirtualMachineId>().unwrap(),
+            serializer,
+        ),
+        StructType::VirtualMachineFilePath => VirtualMachineFilePath::serialize(
+            p.as_any_ref().downcast_ref::<VirtualMachineFilePath>().unwrap(),
+            serializer,
+        ),
+        StructType::VirtualMachineMoId => VirtualMachineMoId::serialize(
+            p.as_any_ref().downcast_ref::<VirtualMachineMoId>().unwrap(),
+            serializer,
+        ),
+        StructType::VirtualMachineUuid => VirtualMachineUuid::serialize(
+            p.as_any_ref().downcast_ref::<VirtualMachineUuid>().unwrap(),
+            serializer,
+        ),
+        StructType::FailoverParam => FailoverParam::serialize(
+            p.as_any_ref().downcast_ref::<FailoverParam>().unwrap(),
+            serializer,
+        ),
+        StructType::TestFailoverParam => TestFailoverParam::serialize(
+            p.as_any_ref().downcast_ref::<TestFailoverParam>().unwrap(),
+            serializer,
+        ),
+        StructType::PolicyAssociation => PolicyAssociation::serialize(
+            p.as_any_ref().downcast_ref::<PolicyAssociation>().unwrap(),
+            serializer,
+        ),
+        StructType::ReplicationGroupData => ReplicationGroupData::serialize(
+            p.as_any_ref().downcast_ref::<ReplicationGroupData>().unwrap(),
+            serializer,
+        ),
+        StructType::RecoveredDevice => RecoveredDevice::serialize(
+            p.as_any_ref().downcast_ref::<RecoveredDevice>().unwrap(),
+            serializer,
+        ),
+        StructType::RecoveredDiskInfo => RecoveredDiskInfo::serialize(
+            p.as_any_ref().downcast_ref::<RecoveredDiskInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::GroupInfo => GroupInfo::serialize(
+            p.as_any_ref().downcast_ref::<GroupInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::SourceGroupInfo => SourceGroupInfo::serialize(
+            p.as_any_ref().downcast_ref::<SourceGroupInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::TargetGroupInfo => TargetGroupInfo::serialize(
+            p.as_any_ref().downcast_ref::<TargetGroupInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::GroupOperationResult => GroupOperationResult::serialize(
+            p.as_any_ref().downcast_ref::<GroupOperationResult>().unwrap(),
+            serializer,
+        ),
+        StructType::FailoverSuccessResult => FailoverSuccessResult::serialize(
+            p.as_any_ref().downcast_ref::<FailoverSuccessResult>().unwrap(),
+            serializer,
+        ),
+        StructType::GroupErrorResult => GroupErrorResult::serialize(
+            p.as_any_ref().downcast_ref::<GroupErrorResult>().unwrap(),
+            serializer,
+        ),
+        StructType::QueryPointInTimeReplicaSuccessResult => QueryPointInTimeReplicaSuccessResult::serialize(
+            p.as_any_ref().downcast_ref::<QueryPointInTimeReplicaSuccessResult>().unwrap(),
+            serializer,
+        ),
+        StructType::QueryPointInTimeReplicaSummaryResult => QueryPointInTimeReplicaSummaryResult::serialize(
+            p.as_any_ref().downcast_ref::<QueryPointInTimeReplicaSummaryResult>().unwrap(),
+            serializer,
+        ),
+        StructType::QueryReplicationGroupSuccessResult => QueryReplicationGroupSuccessResult::serialize(
+            p.as_any_ref().downcast_ref::<QueryReplicationGroupSuccessResult>().unwrap(),
+            serializer,
+        ),
+        StructType::ReverseReplicationSuccessResult => ReverseReplicationSuccessResult::serialize(
+            p.as_any_ref().downcast_ref::<ReverseReplicationSuccessResult>().unwrap(),
+            serializer,
+        ),
+        StructType::SyncReplicationGroupSuccessResult => SyncReplicationGroupSuccessResult::serialize(
+            p.as_any_ref().downcast_ref::<SyncReplicationGroupSuccessResult>().unwrap(),
+            serializer,
+        ),
+        StructType::PointInTimeReplicaId => PointInTimeReplicaId::serialize(
+            p.as_any_ref().downcast_ref::<PointInTimeReplicaId>().unwrap(),
+            serializer,
+        ),
+        StructType::PromoteParam => PromoteParam::serialize(
+            p.as_any_ref().downcast_ref::<PromoteParam>().unwrap(),
+            serializer,
+        ),
+        StructType::QueryPointInTimeReplicaParam => QueryPointInTimeReplicaParam::serialize(
+            p.as_any_ref().downcast_ref::<QueryPointInTimeReplicaParam>().unwrap(),
+            serializer,
+        ),
+        StructType::ReplicaQueryIntervalParam => ReplicaQueryIntervalParam::serialize(
+            p.as_any_ref().downcast_ref::<ReplicaQueryIntervalParam>().unwrap(),
+            serializer,
+        ),
+        StructType::PointInTimeReplicaInfo => PointInTimeReplicaInfo::serialize(
+            p.as_any_ref().downcast_ref::<PointInTimeReplicaInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::ReplicaIntervalQueryResult => ReplicaIntervalQueryResult::serialize(
+            p.as_any_ref().downcast_ref::<ReplicaIntervalQueryResult>().unwrap(),
+            serializer,
+        ),
+        StructType::QueryReplicationPeerResult => QueryReplicationPeerResult::serialize(
+            p.as_any_ref().downcast_ref::<QueryReplicationPeerResult>().unwrap(),
+            serializer,
+        ),
+        StructType::ReplicaId => ReplicaId::serialize(
+            p.as_any_ref().downcast_ref::<ReplicaId>().unwrap(),
+            serializer,
+        ),
+        StructType::ReplicationTargetInfo => ReplicationTargetInfo::serialize(
+            p.as_any_ref().downcast_ref::<ReplicationTargetInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::SourceGroupMemberInfo => SourceGroupMemberInfo::serialize(
+            p.as_any_ref().downcast_ref::<SourceGroupMemberInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::TargetDeviceId => TargetDeviceId::serialize(
+            p.as_any_ref().downcast_ref::<TargetDeviceId>().unwrap(),
+            serializer,
+        ),
+        StructType::TargetToSourceInfo => TargetToSourceInfo::serialize(
+            p.as_any_ref().downcast_ref::<TargetToSourceInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::TargetGroupMemberInfo => TargetGroupMemberInfo::serialize(
+            p.as_any_ref().downcast_ref::<TargetGroupMemberInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::RecoveredTargetGroupMemberInfo => RecoveredTargetGroupMemberInfo::serialize(
+            p.as_any_ref().downcast_ref::<RecoveredTargetGroupMemberInfo>().unwrap(),
+            serializer,
+        ),
         StructType::AboutInfo => AboutInfo::serialize(
             p.as_any_ref().downcast_ref::<AboutInfo>().unwrap(),
             serializer,
@@ -62,6 +1178,10 @@ where
             p.as_any_ref().downcast_ref::<ClusterComputeResourceClusterConfigResult>().unwrap(),
             serializer,
         ),
+        StructType::ClusterComputeResourceCryptoModePolicy => ClusterComputeResourceCryptoModePolicy::serialize(
+            p.as_any_ref().downcast_ref::<ClusterComputeResourceCryptoModePolicy>().unwrap(),
+            serializer,
+        ),
         StructType::ClusterComputeResourceDvsSetting => ClusterComputeResourceDvsSetting::serialize(
             p.as_any_ref().downcast_ref::<ClusterComputeResourceDvsSetting>().unwrap(),
             serializer,
@@ -94,8 +1214,16 @@ where
             p.as_any_ref().downcast_ref::<ClusterComputeResourceHostConfigurationProfile>().unwrap(),
             serializer,
         ),
+        StructType::ClusterComputeResourceHostEvacuationInfo => ClusterComputeResourceHostEvacuationInfo::serialize(
+            p.as_any_ref().downcast_ref::<ClusterComputeResourceHostEvacuationInfo>().unwrap(),
+            serializer,
+        ),
         StructType::ClusterComputeResourceHostVmkNicInfo => ClusterComputeResourceHostVmkNicInfo::serialize(
             p.as_any_ref().downcast_ref::<ClusterComputeResourceHostVmkNicInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::ClusterComputeResourceMaintenanceInfo => ClusterComputeResourceMaintenanceInfo::serialize(
+            p.as_any_ref().downcast_ref::<ClusterComputeResourceMaintenanceInfo>().unwrap(),
             serializer,
         ),
         StructType::ClusterComputeResourceVcProfile => ClusterComputeResourceVcProfile::serialize(
@@ -112,6 +1240,10 @@ where
         ),
         StructType::ClusterComputeResourceHostConfigurationValidation => ClusterComputeResourceHostConfigurationValidation::serialize(
             p.as_any_ref().downcast_ref::<ClusterComputeResourceHostConfigurationValidation>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanClusterConfigPrecheckItem => VsanClusterConfigPrecheckItem::serialize(
+            p.as_any_ref().downcast_ref::<VsanClusterConfigPrecheckItem>().unwrap(),
             serializer,
         ),
         StructType::ClusterComputeResourceVcsSlots => ClusterComputeResourceVcsSlots::serialize(
@@ -136,6 +1268,14 @@ where
         ),
         StructType::ComputeResourceHostSpbmLicenseInfo => ComputeResourceHostSpbmLicenseInfo::serialize(
             p.as_any_ref().downcast_ref::<ComputeResourceHostSpbmLicenseInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::ComputeResourceHostSeedSpec => ComputeResourceHostSeedSpec::serialize(
+            p.as_any_ref().downcast_ref::<ComputeResourceHostSeedSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::ComputeResourceHostSeedSpecSingleHostSpec => ComputeResourceHostSeedSpecSingleHostSpec::serialize(
+            p.as_any_ref().downcast_ref::<ComputeResourceHostSeedSpecSingleHostSpec>().unwrap(),
             serializer,
         ),
         StructType::ComputeResourceSummary => ComputeResourceSummary::serialize(
@@ -300,6 +1440,82 @@ where
         ),
         StructType::DiagnosticManagerLogHeader => DiagnosticManagerLogHeader::serialize(
             p.as_any_ref().downcast_ref::<DiagnosticManagerLogHeader>().unwrap(),
+            serializer,
+        ),
+        StructType::DirectPathProfileManagerCapacityQuerySpec => DirectPathProfileManagerCapacityQuerySpec::serialize(
+            p.as_any_ref().downcast_ref::<DirectPathProfileManagerCapacityQuerySpec>().unwrap(),
+            serializer,
+        ),
+        StructType::DirectPathProfileManagerCapacityQueryByDeviceConfig => DirectPathProfileManagerCapacityQueryByDeviceConfig::serialize(
+            p.as_any_ref().downcast_ref::<DirectPathProfileManagerCapacityQueryByDeviceConfig>().unwrap(),
+            serializer,
+        ),
+        StructType::DirectPathProfileManagerCapacityQueryById => DirectPathProfileManagerCapacityQueryById::serialize(
+            p.as_any_ref().downcast_ref::<DirectPathProfileManagerCapacityQueryById>().unwrap(),
+            serializer,
+        ),
+        StructType::DirectPathProfileManagerCapacityQueryByName => DirectPathProfileManagerCapacityQueryByName::serialize(
+            p.as_any_ref().downcast_ref::<DirectPathProfileManagerCapacityQueryByName>().unwrap(),
+            serializer,
+        ),
+        StructType::DirectPathProfileManagerCapacityResult => DirectPathProfileManagerCapacityResult::serialize(
+            p.as_any_ref().downcast_ref::<DirectPathProfileManagerCapacityResult>().unwrap(),
+            serializer,
+        ),
+        StructType::DirectPathProfileManagerCapacityInfo => DirectPathProfileManagerCapacityInfo::serialize(
+            p.as_any_ref().downcast_ref::<DirectPathProfileManagerCapacityInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::DirectPathProfileManagerCapacityUnknown => DirectPathProfileManagerCapacityUnknown::serialize(
+            p.as_any_ref().downcast_ref::<DirectPathProfileManagerCapacityUnknown>().unwrap(),
+            serializer,
+        ),
+        StructType::DirectPathProfileManagerCreateSpec => DirectPathProfileManagerCreateSpec::serialize(
+            p.as_any_ref().downcast_ref::<DirectPathProfileManagerCreateSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::DirectPathProfileManagerDirectPathConfig => DirectPathProfileManagerDirectPathConfig::serialize(
+            p.as_any_ref().downcast_ref::<DirectPathProfileManagerDirectPathConfig>().unwrap(),
+            serializer,
+        ),
+        StructType::DirectPathProfileManagerDvxDirectPathConfig => DirectPathProfileManagerDvxDirectPathConfig::serialize(
+            p.as_any_ref().downcast_ref::<DirectPathProfileManagerDvxDirectPathConfig>().unwrap(),
+            serializer,
+        ),
+        StructType::DirectPathProfileManagerDynamicDirectPathConfig => DirectPathProfileManagerDynamicDirectPathConfig::serialize(
+            p.as_any_ref().downcast_ref::<DirectPathProfileManagerDynamicDirectPathConfig>().unwrap(),
+            serializer,
+        ),
+        StructType::DirectPathProfileManagerVirtualDeviceGroupDirectPathConfig => DirectPathProfileManagerVirtualDeviceGroupDirectPathConfig::serialize(
+            p.as_any_ref().downcast_ref::<DirectPathProfileManagerVirtualDeviceGroupDirectPathConfig>().unwrap(),
+            serializer,
+        ),
+        StructType::DirectPathProfileManagerVmiopDirectPathConfig => DirectPathProfileManagerVmiopDirectPathConfig::serialize(
+            p.as_any_ref().downcast_ref::<DirectPathProfileManagerVmiopDirectPathConfig>().unwrap(),
+            serializer,
+        ),
+        StructType::DirectPathProfileInfo => DirectPathProfileInfo::serialize(
+            p.as_any_ref().downcast_ref::<DirectPathProfileInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::DirectPathProfileManagerFilterSpec => DirectPathProfileManagerFilterSpec::serialize(
+            p.as_any_ref().downcast_ref::<DirectPathProfileManagerFilterSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::DirectPathProfileManagerTargetEntity => DirectPathProfileManagerTargetEntity::serialize(
+            p.as_any_ref().downcast_ref::<DirectPathProfileManagerTargetEntity>().unwrap(),
+            serializer,
+        ),
+        StructType::DirectPathProfileManagerTargetCluster => DirectPathProfileManagerTargetCluster::serialize(
+            p.as_any_ref().downcast_ref::<DirectPathProfileManagerTargetCluster>().unwrap(),
+            serializer,
+        ),
+        StructType::DirectPathProfileManagerTargetHost => DirectPathProfileManagerTargetHost::serialize(
+            p.as_any_ref().downcast_ref::<DirectPathProfileManagerTargetHost>().unwrap(),
+            serializer,
+        ),
+        StructType::DirectPathProfileManagerUpdateSpec => DirectPathProfileManagerUpdateSpec::serialize(
+            p.as_any_ref().downcast_ref::<DirectPathProfileManagerUpdateSpec>().unwrap(),
             serializer,
         ),
         StructType::DvsBackupRestoreCapability => DvsBackupRestoreCapability::serialize(
@@ -482,6 +1698,10 @@ where
             p.as_any_ref().downcast_ref::<FolderBatchAddStandaloneHostsResult>().unwrap(),
             serializer,
         ),
+        StructType::FolderExternallyManagedFolderInfo => FolderExternallyManagedFolderInfo::serialize(
+            p.as_any_ref().downcast_ref::<FolderExternallyManagedFolderInfo>().unwrap(),
+            serializer,
+        ),
         StructType::FolderFailedHostResult => FolderFailedHostResult::serialize(
             p.as_any_ref().downcast_ref::<FolderFailedHostResult>().unwrap(),
             serializer,
@@ -500,6 +1720,18 @@ where
         ),
         StructType::HbrManagerVmReplicationCapability => HbrManagerVmReplicationCapability::serialize(
             p.as_any_ref().downcast_ref::<HbrManagerVmReplicationCapability>().unwrap(),
+            serializer,
+        ),
+        StructType::HbrReplicationTargetSpec => HbrReplicationTargetSpec::serialize(
+            p.as_any_ref().downcast_ref::<HbrReplicationTargetSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::HbrTargetSpecReplacement => HbrTargetSpecReplacement::serialize(
+            p.as_any_ref().downcast_ref::<HbrTargetSpecReplacement>().unwrap(),
+            serializer,
+        ),
+        StructType::HbrTargetSpec => HbrTargetSpec::serialize(
+            p.as_any_ref().downcast_ref::<HbrTargetSpec>().unwrap(),
             serializer,
         ),
         StructType::HealthUpdate => HealthUpdate::serialize(
@@ -686,6 +1918,18 @@ where
             p.as_any_ref().downcast_ref::<IoFilterHostIssue>().unwrap(),
             serializer,
         ),
+        StructType::IoFilterManagerSslTrust => IoFilterManagerSslTrust::serialize(
+            p.as_any_ref().downcast_ref::<IoFilterManagerSslTrust>().unwrap(),
+            serializer,
+        ),
+        StructType::PinnedCertificate => PinnedCertificate::serialize(
+            p.as_any_ref().downcast_ref::<PinnedCertificate>().unwrap(),
+            serializer,
+        ),
+        StructType::UntrustedCertificate => UntrustedCertificate::serialize(
+            p.as_any_ref().downcast_ref::<UntrustedCertificate>().unwrap(),
+            serializer,
+        ),
         StructType::IpPoolManagerIpAllocation => IpPoolManagerIpAllocation::serialize(
             p.as_any_ref().downcast_ref::<IpPoolManagerIpAllocation>().unwrap(),
             serializer,
@@ -834,6 +2078,10 @@ where
             p.as_any_ref().downcast_ref::<OvfCreateImportSpecParams>().unwrap(),
             serializer,
         ),
+        StructType::OvfImportParams => OvfImportParams::serialize(
+            p.as_any_ref().downcast_ref::<OvfImportParams>().unwrap(),
+            serializer,
+        ),
         StructType::OvfParseDescriptorParams => OvfParseDescriptorParams::serialize(
             p.as_any_ref().downcast_ref::<OvfParseDescriptorParams>().unwrap(),
             serializer,
@@ -852,6 +2100,10 @@ where
         ),
         StructType::OvfCreateImportSpecResult => OvfCreateImportSpecResult::serialize(
             p.as_any_ref().downcast_ref::<OvfCreateImportSpecResult>().unwrap(),
+            serializer,
+        ),
+        StructType::OvfDatastoreMapping => OvfDatastoreMapping::serialize(
+            p.as_any_ref().downcast_ref::<OvfDatastoreMapping>().unwrap(),
             serializer,
         ),
         StructType::OvfDeploymentOption => OvfDeploymentOption::serialize(
@@ -884,6 +2136,10 @@ where
         ),
         StructType::OvfResourceMap => OvfResourceMap::serialize(
             p.as_any_ref().downcast_ref::<OvfResourceMap>().unwrap(),
+            serializer,
+        ),
+        StructType::OvfStorageProfileMapping => OvfStorageProfileMapping::serialize(
+            p.as_any_ref().downcast_ref::<OvfStorageProfileMapping>().unwrap(),
             serializer,
         ),
         StructType::OvfValidateHostResult => OvfValidateHostResult::serialize(
@@ -1008,6 +2264,10 @@ where
         ),
         StructType::SddcBase => SddcBase::serialize(
             p.as_any_ref().downcast_ref::<SddcBase>().unwrap(),
+            serializer,
+        ),
+        StructType::VimVsanReconfigSpec => VimVsanReconfigSpec::serialize(
+            p.as_any_ref().downcast_ref::<VimVsanReconfigSpec>().unwrap(),
             serializer,
         ),
         StructType::SelectionSet => SelectionSet::serialize(
@@ -1150,6 +2410,22 @@ where
             p.as_any_ref().downcast_ref::<TaskInfo>().unwrap(),
             serializer,
         ),
+        StructType::TaskInfoFilterSpec => TaskInfoFilterSpec::serialize(
+            p.as_any_ref().downcast_ref::<TaskInfoFilterSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::TaskInfoFilterSpecFilterTaskResults => TaskInfoFilterSpecFilterTaskResults::serialize(
+            p.as_any_ref().downcast_ref::<TaskInfoFilterSpecFilterTaskResults>().unwrap(),
+            serializer,
+        ),
+        StructType::TaskManagerTaskViewSpec => TaskManagerTaskViewSpec::serialize(
+            p.as_any_ref().downcast_ref::<TaskManagerTaskViewSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::TaskManagerViewByStartId => TaskManagerViewByStartId::serialize(
+            p.as_any_ref().downcast_ref::<TaskManagerViewByStartId>().unwrap(),
+            serializer,
+        ),
         StructType::TaskReason => TaskReason::serialize(
             p.as_any_ref().downcast_ref::<TaskReason>().unwrap(),
             serializer,
@@ -1290,6 +2566,54 @@ where
             p.as_any_ref().downcast_ref::<VirtualMachineWipeResult>().unwrap(),
             serializer,
         ),
+        StructType::VsanComparator => VsanComparator::serialize(
+            p.as_any_ref().downcast_ref::<VsanComparator>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanJsonComparator => VsanJsonComparator::serialize(
+            p.as_any_ref().downcast_ref::<VsanJsonComparator>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanNestJsonComparator => VsanNestJsonComparator::serialize(
+            p.as_any_ref().downcast_ref::<VsanNestJsonComparator>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanDataObfuscationRule => VsanDataObfuscationRule::serialize(
+            p.as_any_ref().downcast_ref::<VsanDataObfuscationRule>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanJsonFilterRule => VsanJsonFilterRule::serialize(
+            p.as_any_ref().downcast_ref::<VsanJsonFilterRule>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanMassCollectorPropertyParams => VsanMassCollectorPropertyParams::serialize(
+            p.as_any_ref().downcast_ref::<VsanMassCollectorPropertyParams>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanMassCollectorSpec => VsanMassCollectorSpec::serialize(
+            p.as_any_ref().downcast_ref::<VsanMassCollectorSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanObjectTypeRule => VsanObjectTypeRule::serialize(
+            p.as_any_ref().downcast_ref::<VsanObjectTypeRule>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanRegexBasedRule => VsanRegexBasedRule::serialize(
+            p.as_any_ref().downcast_ref::<VsanRegexBasedRule>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanResourceConstraint => VsanResourceConstraint::serialize(
+            p.as_any_ref().downcast_ref::<VsanResourceConstraint>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanCompositeConstraint => VsanCompositeConstraint::serialize(
+            p.as_any_ref().downcast_ref::<VsanCompositeConstraint>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanPropertyConstraint => VsanPropertyConstraint::serialize(
+            p.as_any_ref().downcast_ref::<VsanPropertyConstraint>().unwrap(),
+            serializer,
+        ),
         StructType::VsanUpgradeSystemNetworkPartitionInfo => VsanUpgradeSystemNetworkPartitionInfo::serialize(
             p.as_any_ref().downcast_ref::<VsanUpgradeSystemNetworkPartitionInfo>().unwrap(),
             serializer,
@@ -1334,8 +2658,72 @@ where
             p.as_any_ref().downcast_ref::<VsanUpgradeSystemWrongEsxVersionIssue>().unwrap(),
             serializer,
         ),
+        StructType::VsanBrokenDiskChainIssue => VsanBrokenDiskChainIssue::serialize(
+            p.as_any_ref().downcast_ref::<VsanBrokenDiskChainIssue>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanDisallowDataMovementIssue => VsanDisallowDataMovementIssue::serialize(
+            p.as_any_ref().downcast_ref::<VsanDisallowDataMovementIssue>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanDisallowEvacuateDataIssue => VsanDisallowEvacuateDataIssue::serialize(
+            p.as_any_ref().downcast_ref::<VsanDisallowEvacuateDataIssue>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanDiskUnhealthIssue => VsanDiskUnhealthIssue::serialize(
+            p.as_any_ref().downcast_ref::<VsanDiskUnhealthIssue>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHigherObjectsPresentDuringDowngradeIssue => VsanHigherObjectsPresentDuringDowngradeIssue::serialize(
+            p.as_any_ref().downcast_ref::<VsanHigherObjectsPresentDuringDowngradeIssue>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHostPropertyRetrieveIssue => VsanHostPropertyRetrieveIssue::serialize(
+            p.as_any_ref().downcast_ref::<VsanHostPropertyRetrieveIssue>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHostWithHybridDiskgroupIssue => VsanHostWithHybridDiskgroupIssue::serialize(
+            p.as_any_ref().downcast_ref::<VsanHostWithHybridDiskgroupIssue>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHostsCompressionOnlyNotSupported => VsanHostsCompressionOnlyNotSupported::serialize(
+            p.as_any_ref().downcast_ref::<VsanHostsCompressionOnlyNotSupported>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanMixedEsxVersionInClientIssue => VsanMixedEsxVersionInClientIssue::serialize(
+            p.as_any_ref().downcast_ref::<VsanMixedEsxVersionInClientIssue>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanMixedEsxVersionIssue => VsanMixedEsxVersionIssue::serialize(
+            p.as_any_ref().downcast_ref::<VsanMixedEsxVersionIssue>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanObjectInaccessibleIssue => VsanObjectInaccessibleIssue::serialize(
+            p.as_any_ref().downcast_ref::<VsanObjectInaccessibleIssue>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanObjectPolicyIssue => VsanObjectPolicyIssue::serialize(
+            p.as_any_ref().downcast_ref::<VsanObjectPolicyIssue>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanRemoteClusterNotCompatible => VsanRemoteClusterNotCompatible::serialize(
+            p.as_any_ref().downcast_ref::<VsanRemoteClusterNotCompatible>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanUnknownScanIssue => VsanUnknownScanIssue::serialize(
+            p.as_any_ref().downcast_ref::<VsanUnknownScanIssue>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanUnsupportedHighDiskVersionIssue => VsanUnsupportedHighDiskVersionIssue::serialize(
+            p.as_any_ref().downcast_ref::<VsanUnsupportedHighDiskVersionIssue>().unwrap(),
+            serializer,
+        ),
         StructType::VsanUpgradeSystemPreflightCheckResult => VsanUpgradeSystemPreflightCheckResult::serialize(
             p.as_any_ref().downcast_ref::<VsanUpgradeSystemPreflightCheckResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanDiskFormatConversionCheckResult => VsanDiskFormatConversionCheckResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanDiskFormatConversionCheckResult>().unwrap(),
             serializer,
         ),
         StructType::VsanUpgradeSystemUpgradeHistoryItem => VsanUpgradeSystemUpgradeHistoryItem::serialize(
@@ -1350,8 +2738,16 @@ where
             p.as_any_ref().downcast_ref::<VsanUpgradeSystemUpgradeHistoryPreflightFail>().unwrap(),
             serializer,
         ),
+        StructType::VsanUpgradeSystemUpgradeHistoryStoragePoolOp => VsanUpgradeSystemUpgradeHistoryStoragePoolOp::serialize(
+            p.as_any_ref().downcast_ref::<VsanUpgradeSystemUpgradeHistoryStoragePoolOp>().unwrap(),
+            serializer,
+        ),
         StructType::VsanUpgradeSystemUpgradeStatus => VsanUpgradeSystemUpgradeStatus::serialize(
             p.as_any_ref().downcast_ref::<VsanUpgradeSystemUpgradeStatus>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanUpgradeStatusEx => VsanUpgradeStatusEx::serialize(
+            p.as_any_ref().downcast_ref::<VsanUpgradeStatusEx>().unwrap(),
             serializer,
         ),
         StructType::Action => Action::serialize(
@@ -1496,6 +2892,10 @@ where
         ),
         StructType::ClusterAttemptedVmInfo => ClusterAttemptedVmInfo::serialize(
             p.as_any_ref().downcast_ref::<ClusterAttemptedVmInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::ClusterPowerContext => ClusterPowerContext::serialize(
+            p.as_any_ref().downcast_ref::<ClusterPowerContext>().unwrap(),
             serializer,
         ),
         StructType::ClusterConfigInfo => ClusterConfigInfo::serialize(
@@ -1690,6 +3090,10 @@ where
             p.as_any_ref().downcast_ref::<ClusterOrchestrationInfo>().unwrap(),
             serializer,
         ),
+        StructType::PerformClusterPowerActionSpec => PerformClusterPowerActionSpec::serialize(
+            p.as_any_ref().downcast_ref::<PerformClusterPowerActionSpec>().unwrap(),
+            serializer,
+        ),
         StructType::PlacementResult => PlacementResult::serialize(
             p.as_any_ref().downcast_ref::<PlacementResult>().unwrap(),
             serializer,
@@ -1708,6 +3112,10 @@ where
         ),
         StructType::ClusterProactiveDrsConfigInfo => ClusterProactiveDrsConfigInfo::serialize(
             p.as_any_ref().downcast_ref::<ClusterProactiveDrsConfigInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::QueryVsanManagedStorageSpaceUsageSpec => QueryVsanManagedStorageSpaceUsageSpec::serialize(
+            p.as_any_ref().downcast_ref::<QueryVsanManagedStorageSpaceUsageSpec>().unwrap(),
             serializer,
         ),
         StructType::ClusterRecommendation => ClusterRecommendation::serialize(
@@ -1734,6 +3142,10 @@ where
             p.as_any_ref().downcast_ref::<ClusterDependencyRuleInfo>().unwrap(),
             serializer,
         ),
+        StructType::ClusterFtVmHostRuleInfo => ClusterFtVmHostRuleInfo::serialize(
+            p.as_any_ref().downcast_ref::<ClusterFtVmHostRuleInfo>().unwrap(),
+            serializer,
+        ),
         StructType::ClusterVmHostRuleInfo => ClusterVmHostRuleInfo::serialize(
             p.as_any_ref().downcast_ref::<ClusterVmHostRuleInfo>().unwrap(),
             serializer,
@@ -1746,12 +3158,32 @@ where
             p.as_any_ref().downcast_ref::<VirtualDiskRuleSpec>().unwrap(),
             serializer,
         ),
+        StructType::VsanSiteFaultDomain => VsanSiteFaultDomain::serialize(
+            p.as_any_ref().downcast_ref::<VsanSiteFaultDomain>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanSiteFaultDomainConfig => VsanSiteFaultDomainConfig::serialize(
+            p.as_any_ref().downcast_ref::<VsanSiteFaultDomainConfig>().unwrap(),
+            serializer,
+        ),
         StructType::ClusterSlotPolicy => ClusterSlotPolicy::serialize(
             p.as_any_ref().downcast_ref::<ClusterSlotPolicy>().unwrap(),
             serializer,
         ),
         StructType::ClusterFixedSizeSlotPolicy => ClusterFixedSizeSlotPolicy::serialize(
             p.as_any_ref().downcast_ref::<ClusterFixedSizeSlotPolicy>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanStorageComplianceResult => VsanStorageComplianceResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanStorageComplianceResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanStorageOperationalStatus => VsanStorageOperationalStatus::serialize(
+            p.as_any_ref().downcast_ref::<VsanStorageOperationalStatus>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanStoragePolicyStatus => VsanStoragePolicyStatus::serialize(
+            p.as_any_ref().downcast_ref::<VsanStoragePolicyStatus>().unwrap(),
             serializer,
         ),
         StructType::ClusterSystemVMsConfigInfo => ClusterSystemVMsConfigInfo::serialize(
@@ -1764,6 +3196,26 @@ where
         ),
         StructType::ClusterUsageSummary => ClusterUsageSummary::serialize(
             p.as_any_ref().downcast_ref::<ClusterUsageSummary>().unwrap(),
+            serializer,
+        ),
+        StructType::VimClusterVsanPreferredFaultDomainInfo => VimClusterVsanPreferredFaultDomainInfo::serialize(
+            p.as_any_ref().downcast_ref::<VimClusterVsanPreferredFaultDomainInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::VimClusterVsanStretchedClusterCapability => VimClusterVsanStretchedClusterCapability::serialize(
+            p.as_any_ref().downcast_ref::<VimClusterVsanStretchedClusterCapability>().unwrap(),
+            serializer,
+        ),
+        StructType::VimClusterVsanStretchedClusterFaultDomainConfig => VimClusterVsanStretchedClusterFaultDomainConfig::serialize(
+            p.as_any_ref().downcast_ref::<VimClusterVsanStretchedClusterFaultDomainConfig>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanStretchedClusterHostVirtualApplianceStatus => VsanStretchedClusterHostVirtualApplianceStatus::serialize(
+            p.as_any_ref().downcast_ref::<VsanStretchedClusterHostVirtualApplianceStatus>().unwrap(),
+            serializer,
+        ),
+        StructType::VimClusterVsanWitnessHostInfo => VimClusterVsanWitnessHostInfo::serialize(
+            p.as_any_ref().downcast_ref::<VimClusterVsanWitnessHostInfo>().unwrap(),
             serializer,
         ),
         StructType::ClusterVmComponentProtectionSettings => ClusterVmComponentProtectionSettings::serialize(
@@ -1780,6 +3232,694 @@ where
         ),
         StructType::ClusterVmToolsMonitoringSettings => ClusterVmToolsMonitoringSettings::serialize(
             p.as_any_ref().downcast_ref::<ClusterVmToolsMonitoringSettings>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanAttachToSrOperation => VsanAttachToSrOperation::serialize(
+            p.as_any_ref().downcast_ref::<VsanAttachToSrOperation>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanCapability => VsanCapability::serialize(
+            p.as_any_ref().downcast_ref::<VsanCapability>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanClusterAdvCfgSyncHostResult => VsanClusterAdvCfgSyncHostResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanClusterAdvCfgSyncHostResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanClusterAdvCfgSyncResult => VsanClusterAdvCfgSyncResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanClusterAdvCfgSyncResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanClusterBalancePerDiskInfo => VsanClusterBalancePerDiskInfo::serialize(
+            p.as_any_ref().downcast_ref::<VsanClusterBalancePerDiskInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanClusterBalanceSummary => VsanClusterBalanceSummary::serialize(
+            p.as_any_ref().downcast_ref::<VsanClusterBalanceSummary>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanClusterClomdLivenessResult => VsanClusterClomdLivenessResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanClusterClomdLivenessResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanClusterConfig => VsanClusterConfig::serialize(
+            p.as_any_ref().downcast_ref::<VsanClusterConfig>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanClusterCreateVmHealthTestResult => VsanClusterCreateVmHealthTestResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanClusterCreateVmHealthTestResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanClusterDitEncryptionHealthSummary => VsanClusterDitEncryptionHealthSummary::serialize(
+            p.as_any_ref().downcast_ref::<VsanClusterDitEncryptionHealthSummary>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanClusterEncryptionHealthSummary => VsanClusterEncryptionHealthSummary::serialize(
+            p.as_any_ref().downcast_ref::<VsanClusterEncryptionHealthSummary>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanClusterFileServiceHealthSummary => VsanClusterFileServiceHealthSummary::serialize(
+            p.as_any_ref().downcast_ref::<VsanClusterFileServiceHealthSummary>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanClusterGlobalDedupHealthSummary => VsanClusterGlobalDedupHealthSummary::serialize(
+            p.as_any_ref().downcast_ref::<VsanClusterGlobalDedupHealthSummary>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanClusterHclInfo => VsanClusterHclInfo::serialize(
+            p.as_any_ref().downcast_ref::<VsanClusterHclInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanClusterHealthAction => VsanClusterHealthAction::serialize(
+            p.as_any_ref().downcast_ref::<VsanClusterHealthAction>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanClusterHealthCheckInfo => VsanClusterHealthCheckInfo::serialize(
+            p.as_any_ref().downcast_ref::<VsanClusterHealthCheckInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanClusterHealthConfigs => VsanClusterHealthConfigs::serialize(
+            p.as_any_ref().downcast_ref::<VsanClusterHealthConfigs>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanClusterHealthGroup => VsanClusterHealthGroup::serialize(
+            p.as_any_ref().downcast_ref::<VsanClusterHealthGroup>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanClusterHealthLinkBase => VsanClusterHealthLinkBase::serialize(
+            p.as_any_ref().downcast_ref::<VsanClusterHealthLinkBase>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanClusterHealthLink => VsanClusterHealthLink::serialize(
+            p.as_any_ref().downcast_ref::<VsanClusterHealthLink>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanClusterHealthQuerySpec => VsanClusterHealthQuerySpec::serialize(
+            p.as_any_ref().downcast_ref::<VsanClusterHealthQuerySpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanClusterHealthResultBase => VsanClusterHealthResultBase::serialize(
+            p.as_any_ref().downcast_ref::<VsanClusterHealthResultBase>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanClusterHealthResultTable => VsanClusterHealthResultTable::serialize(
+            p.as_any_ref().downcast_ref::<VsanClusterHealthResultTable>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanClusterHealthResultWithRemediation => VsanClusterHealthResultWithRemediation::serialize(
+            p.as_any_ref().downcast_ref::<VsanClusterHealthResultWithRemediation>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanClusterHealthResultColumnInfo => VsanClusterHealthResultColumnInfo::serialize(
+            p.as_any_ref().downcast_ref::<VsanClusterHealthResultColumnInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanClusterHealthResultKeyValuePair => VsanClusterHealthResultKeyValuePair::serialize(
+            p.as_any_ref().downcast_ref::<VsanClusterHealthResultKeyValuePair>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanClusterHealthResultRow => VsanClusterHealthResultRow::serialize(
+            p.as_any_ref().downcast_ref::<VsanClusterHealthResultRow>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanClusterHealthSummary => VsanClusterHealthSummary::serialize(
+            p.as_any_ref().downcast_ref::<VsanClusterHealthSummary>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanClusterHealthSystemObjectsRepairResult => VsanClusterHealthSystemObjectsRepairResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanClusterHealthSystemObjectsRepairResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanClusterHealthSystemStatusResult => VsanClusterHealthSystemStatusResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanClusterHealthSystemStatusResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanClusterHealthSystemVersionResult => VsanClusterHealthSystemVersionResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanClusterHealthSystemVersionResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanClusterHealthTest => VsanClusterHealthTest::serialize(
+            p.as_any_ref().downcast_ref::<VsanClusterHealthTest>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanClusterHostVmknicMapping => VsanClusterHostVmknicMapping::serialize(
+            p.as_any_ref().downcast_ref::<VsanClusterHostVmknicMapping>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanClusterLimitHealthResult => VsanClusterLimitHealthResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanClusterLimitHealthResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanClusterNetworkHealthResult => VsanClusterNetworkHealthResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanClusterNetworkHealthResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanClusterNetworkLoadTestResult => VsanClusterNetworkLoadTestResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanClusterNetworkLoadTestResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanClusterNetworkPartitionInfo => VsanClusterNetworkPartitionInfo::serialize(
+            p.as_any_ref().downcast_ref::<VsanClusterNetworkPartitionInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanClusterNetworkPerfTaskSpec => VsanClusterNetworkPerfTaskSpec::serialize(
+            p.as_any_ref().downcast_ref::<VsanClusterNetworkPerfTaskSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanClusterProactiveTestResult => VsanClusterProactiveTestResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanClusterProactiveTestResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanClusterTelemetryProxyConfig => VsanClusterTelemetryProxyConfig::serialize(
+            p.as_any_ref().downcast_ref::<VsanClusterTelemetryProxyConfig>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanClusterVMsHealthOverallResult => VsanClusterVMsHealthOverallResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanClusterVMsHealthOverallResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanClusterVMsHealthSummaryResult => VsanClusterVMsHealthSummaryResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanClusterVMsHealthSummaryResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanClusterVmdkLoadTestResult => VsanClusterVmdkLoadTestResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanClusterVmdkLoadTestResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanClusterWhatifHostFailuresResult => VsanClusterWhatifHostFailuresResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanClusterWhatifHostFailuresResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanConfigGeneration => VsanConfigGeneration::serialize(
+            p.as_any_ref().downcast_ref::<VsanConfigGeneration>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanDataDrivenApiAction => VsanDataDrivenApiAction::serialize(
+            p.as_any_ref().downcast_ref::<VsanDataDrivenApiAction>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanDiagnosticsThreshold => VsanDiagnosticsThreshold::serialize(
+            p.as_any_ref().downcast_ref::<VsanDiagnosticsThreshold>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanDiskFormatConversionSpec => VsanDiskFormatConversionSpec::serialize(
+            p.as_any_ref().downcast_ref::<VsanDiskFormatConversionSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VimClusterVsanDiskMappingsConfigSpec => VimClusterVsanDiskMappingsConfigSpec::serialize(
+            p.as_any_ref().downcast_ref::<VimClusterVsanDiskMappingsConfigSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanEntitySpaceUsage => VsanEntitySpaceUsage::serialize(
+            p.as_any_ref().downcast_ref::<VsanEntitySpaceUsage>().unwrap(),
+            serializer,
+        ),
+        StructType::VimClusterVsanFaultDomainSpec => VimClusterVsanFaultDomainSpec::serialize(
+            p.as_any_ref().downcast_ref::<VimClusterVsanFaultDomainSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanFaultDomainDestroySpec => VsanFaultDomainDestroySpec::serialize(
+            p.as_any_ref().downcast_ref::<VsanFaultDomainDestroySpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanFaultDomainUpdateSpec => VsanFaultDomainUpdateSpec::serialize(
+            p.as_any_ref().downcast_ref::<VsanFaultDomainUpdateSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VimClusterVsanFaultDomainsConfigSpec => VimClusterVsanFaultDomainsConfigSpec::serialize(
+            p.as_any_ref().downcast_ref::<VimClusterVsanFaultDomainsConfigSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHealthActionBase => VsanHealthActionBase::serialize(
+            p.as_any_ref().downcast_ref::<VsanHealthActionBase>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHealthActionSteps => VsanHealthActionSteps::serialize(
+            p.as_any_ref().downcast_ref::<VsanHealthActionSteps>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHealthApiBasedAction => VsanHealthApiBasedAction::serialize(
+            p.as_any_ref().downcast_ref::<VsanHealthApiBasedAction>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHealthCmdBasedAction => VsanHealthCmdBasedAction::serialize(
+            p.as_any_ref().downcast_ref::<VsanHealthCmdBasedAction>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHealthDataDrivenAction => VsanHealthDataDrivenAction::serialize(
+            p.as_any_ref().downcast_ref::<VsanHealthDataDrivenAction>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHealthTxtBasedAction => VsanHealthTxtBasedAction::serialize(
+            p.as_any_ref().downcast_ref::<VsanHealthTxtBasedAction>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHealthConfirmationDialog => VsanHealthConfirmationDialog::serialize(
+            p.as_any_ref().downcast_ref::<VsanHealthConfirmationDialog>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHealthCorrelation => VsanHealthCorrelation::serialize(
+            p.as_any_ref().downcast_ref::<VsanHealthCorrelation>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHealthExtMgmtPreCheckResult => VsanHealthExtMgmtPreCheckResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanHealthExtMgmtPreCheckResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHealthTroubleshooting => VsanHealthTroubleshooting::serialize(
+            p.as_any_ref().downcast_ref::<VsanHealthTroubleshooting>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHistoricalHealthQuerySpec => VsanHistoricalHealthQuerySpec::serialize(
+            p.as_any_ref().downcast_ref::<VsanHistoricalHealthQuerySpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHistoricalHealthTest => VsanHistoricalHealthTest::serialize(
+            p.as_any_ref().downcast_ref::<VsanHistoricalHealthTest>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHostClomdLivenessResult => VsanHostClomdLivenessResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanHostClomdLivenessResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHostCreateVmHealthTestResult => VsanHostCreateVmHealthTestResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanHostCreateVmHealthTestResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VimClusterVsanHostDiskMapping => VimClusterVsanHostDiskMapping::serialize(
+            p.as_any_ref().downcast_ref::<VimClusterVsanHostDiskMapping>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHostHealthSystemVersionResult => VsanHostHealthSystemVersionResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanHostHealthSystemVersionResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanIoInsightInstance => VsanIoInsightInstance::serialize(
+            p.as_any_ref().downcast_ref::<VsanIoInsightInstance>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanIoInsightInstanceQuerySpec => VsanIoInsightInstanceQuerySpec::serialize(
+            p.as_any_ref().downcast_ref::<VsanIoInsightInstanceQuerySpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanIscsiHomeObjectSpec => VsanIscsiHomeObjectSpec::serialize(
+            p.as_any_ref().downcast_ref::<VsanIscsiHomeObjectSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanIscsiInitiatorGroup => VsanIscsiInitiatorGroup::serialize(
+            p.as_any_ref().downcast_ref::<VsanIscsiInitiatorGroup>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanIscsiLunCommonInfo => VsanIscsiLunCommonInfo::serialize(
+            p.as_any_ref().downcast_ref::<VsanIscsiLunCommonInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanIscsiLun => VsanIscsiLun::serialize(
+            p.as_any_ref().downcast_ref::<VsanIscsiLun>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanIscsiLunSpec => VsanIscsiLunSpec::serialize(
+            p.as_any_ref().downcast_ref::<VsanIscsiLunSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanIscsiTargetAuthSpec => VsanIscsiTargetAuthSpec::serialize(
+            p.as_any_ref().downcast_ref::<VsanIscsiTargetAuthSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanIscsiTargetBasicInfo => VsanIscsiTargetBasicInfo::serialize(
+            p.as_any_ref().downcast_ref::<VsanIscsiTargetBasicInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanIscsiTargetCommonInfo => VsanIscsiTargetCommonInfo::serialize(
+            p.as_any_ref().downcast_ref::<VsanIscsiTargetCommonInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanIscsiTarget => VsanIscsiTarget::serialize(
+            p.as_any_ref().downcast_ref::<VsanIscsiTarget>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanIscsiTargetSpec => VsanIscsiTargetSpec::serialize(
+            p.as_any_ref().downcast_ref::<VsanIscsiTargetSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanIscsiTargetServiceConfig => VsanIscsiTargetServiceConfig::serialize(
+            p.as_any_ref().downcast_ref::<VsanIscsiTargetServiceConfig>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanIscsiTargetServiceSpec => VsanIscsiTargetServiceSpec::serialize(
+            p.as_any_ref().downcast_ref::<VsanIscsiTargetServiceSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanIscsiTargetServiceDefaultConfigSpec => VsanIscsiTargetServiceDefaultConfigSpec::serialize(
+            p.as_any_ref().downcast_ref::<VsanIscsiTargetServiceDefaultConfigSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanNetworkDiagnostics => VsanNetworkDiagnostics::serialize(
+            p.as_any_ref().downcast_ref::<VsanNetworkDiagnostics>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanObjIdentityQuerySpec => VsanObjIdentityQuerySpec::serialize(
+            p.as_any_ref().downcast_ref::<VsanObjIdentityQuerySpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanClusterObjectExtAttrs => VsanClusterObjectExtAttrs::serialize(
+            p.as_any_ref().downcast_ref::<VsanClusterObjectExtAttrs>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanObjectExtraAttributes => VsanObjectExtraAttributes::serialize(
+            p.as_any_ref().downcast_ref::<VsanObjectExtraAttributes>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanObjectIdentity => VsanObjectIdentity::serialize(
+            p.as_any_ref().downcast_ref::<VsanObjectIdentity>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanObjectIdentityAndHealth => VsanObjectIdentityAndHealth::serialize(
+            p.as_any_ref().downcast_ref::<VsanObjectIdentityAndHealth>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanObjectInformation => VsanObjectInformation::serialize(
+            p.as_any_ref().downcast_ref::<VsanObjectInformation>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanObjectQuerySpec => VsanObjectQuerySpec::serialize(
+            p.as_any_ref().downcast_ref::<VsanObjectQuerySpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanObjectSpaceSummary => VsanObjectSpaceSummary::serialize(
+            p.as_any_ref().downcast_ref::<VsanObjectSpaceSummary>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanPerfDiagnoseQuerySpec => VsanPerfDiagnoseQuerySpec::serialize(
+            p.as_any_ref().downcast_ref::<VsanPerfDiagnoseQuerySpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanPerfDiagnosticException => VsanPerfDiagnosticException::serialize(
+            p.as_any_ref().downcast_ref::<VsanPerfDiagnosticException>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanPerfDiagnosticResult => VsanPerfDiagnosticResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanPerfDiagnosticResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanPerfEntityMetricCsv => VsanPerfEntityMetricCsv::serialize(
+            p.as_any_ref().downcast_ref::<VsanPerfEntityMetricCsv>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanPerfEntityType => VsanPerfEntityType::serialize(
+            p.as_any_ref().downcast_ref::<VsanPerfEntityType>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanPerfGraph => VsanPerfGraph::serialize(
+            p.as_any_ref().downcast_ref::<VsanPerfGraph>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanPerfHotspotEntitiesMetrics => VsanPerfHotspotEntitiesMetrics::serialize(
+            p.as_any_ref().downcast_ref::<VsanPerfHotspotEntitiesMetrics>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanPerfHotspotQuerySpec => VsanPerfHotspotQuerySpec::serialize(
+            p.as_any_ref().downcast_ref::<VsanPerfHotspotQuerySpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanPerfMasterInformation => VsanPerfMasterInformation::serialize(
+            p.as_any_ref().downcast_ref::<VsanPerfMasterInformation>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanPerfMemberInfo => VsanPerfMemberInfo::serialize(
+            p.as_any_ref().downcast_ref::<VsanPerfMemberInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanPerfMetricId => VsanPerfMetricId::serialize(
+            p.as_any_ref().downcast_ref::<VsanPerfMetricId>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanPerfMetricSeriesCsv => VsanPerfMetricSeriesCsv::serialize(
+            p.as_any_ref().downcast_ref::<VsanPerfMetricSeriesCsv>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanPerfNodeInformation => VsanPerfNodeInformation::serialize(
+            p.as_any_ref().downcast_ref::<VsanPerfNodeInformation>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanPerfQuerySpec => VsanPerfQuerySpec::serialize(
+            p.as_any_ref().downcast_ref::<VsanPerfQuerySpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanPerfThreshold => VsanPerfThreshold::serialize(
+            p.as_any_ref().downcast_ref::<VsanPerfThreshold>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanPerfTimeRange => VsanPerfTimeRange::serialize(
+            p.as_any_ref().downcast_ref::<VsanPerfTimeRange>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanPerfTimeRangeQuerySpec => VsanPerfTimeRangeQuerySpec::serialize(
+            p.as_any_ref().downcast_ref::<VsanPerfTimeRangeQuerySpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanPerfTopEntities => VsanPerfTopEntities::serialize(
+            p.as_any_ref().downcast_ref::<VsanPerfTopEntities>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanPerfTopEntity => VsanPerfTopEntity::serialize(
+            p.as_any_ref().downcast_ref::<VsanPerfTopEntity>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanPerfTopQuerySpec => VsanPerfTopQuerySpec::serialize(
+            p.as_any_ref().downcast_ref::<VsanPerfTopQuerySpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanPerfsvcConfig => VsanPerfsvcConfig::serialize(
+            p.as_any_ref().downcast_ref::<VsanPerfsvcConfig>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanRemoteClusterQuerySpec => VsanRemoteClusterQuerySpec::serialize(
+            p.as_any_ref().downcast_ref::<VsanRemoteClusterQuerySpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanSpaceQuerySpec => VsanSpaceQuerySpec::serialize(
+            p.as_any_ref().downcast_ref::<VsanSpaceQuerySpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanSpaceUsage => VsanSpaceUsage::serialize(
+            p.as_any_ref().downcast_ref::<VsanSpaceUsage>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanSpaceUsageDetailResult => VsanSpaceUsageDetailResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanSpaceUsageDetailResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanSpaceUsageWithDatastoreType => VsanSpaceUsageWithDatastoreType::serialize(
+            p.as_any_ref().downcast_ref::<VsanSpaceUsageWithDatastoreType>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanStorageWorkloadType => VsanStorageWorkloadType::serialize(
+            p.as_any_ref().downcast_ref::<VsanStorageWorkloadType>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanStretchedClusterConfig => VsanStretchedClusterConfig::serialize(
+            p.as_any_ref().downcast_ref::<VsanStretchedClusterConfig>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanSyncingObjectFilter => VsanSyncingObjectFilter::serialize(
+            p.as_any_ref().downcast_ref::<VsanSyncingObjectFilter>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanUnicastAddressInfo => VsanUnicastAddressInfo::serialize(
+            p.as_any_ref().downcast_ref::<VsanUnicastAddressInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanVcKmipServersHealth => VsanVcKmipServersHealth::serialize(
+            p.as_any_ref().downcast_ref::<VsanVcKmipServersHealth>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanVcLifecycleCheckResult => VsanVcLifecycleCheckResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanVcLifecycleCheckResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanVcLifecycleCheckSpec => VsanVcLifecycleCheckSpec::serialize(
+            p.as_any_ref().downcast_ref::<VsanVcLifecycleCheckSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanVsanClusterPcapGroup => VsanVsanClusterPcapGroup::serialize(
+            p.as_any_ref().downcast_ref::<VsanVsanClusterPcapGroup>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanVsanClusterPcapResult => VsanVsanClusterPcapResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanVsanClusterPcapResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanVumSystemConfig => VsanVumSystemConfig::serialize(
+            p.as_any_ref().downcast_ref::<VsanVumSystemConfig>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanWhatifCapacity => VsanWhatifCapacity::serialize(
+            p.as_any_ref().downcast_ref::<VsanWhatifCapacity>().unwrap(),
+            serializer,
+        ),
+        StructType::VimClusterVsanWitnessSpec => VimClusterVsanWitnessSpec::serialize(
+            p.as_any_ref().downcast_ref::<VimClusterVsanWitnessSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::CnsAccessControlSpec => CnsAccessControlSpec::serialize(
+            p.as_any_ref().downcast_ref::<CnsAccessControlSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::CnsNfsAccessControlSpec => CnsNfsAccessControlSpec::serialize(
+            p.as_any_ref().downcast_ref::<CnsNfsAccessControlSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::CnsBackingObjectDetails => CnsBackingObjectDetails::serialize(
+            p.as_any_ref().downcast_ref::<CnsBackingObjectDetails>().unwrap(),
+            serializer,
+        ),
+        StructType::CnsBlockBackingDetails => CnsBlockBackingDetails::serialize(
+            p.as_any_ref().downcast_ref::<CnsBlockBackingDetails>().unwrap(),
+            serializer,
+        ),
+        StructType::CnsFileBackingDetails => CnsFileBackingDetails::serialize(
+            p.as_any_ref().downcast_ref::<CnsFileBackingDetails>().unwrap(),
+            serializer,
+        ),
+        StructType::CnsVsanFileShareBackingDetails => CnsVsanFileShareBackingDetails::serialize(
+            p.as_any_ref().downcast_ref::<CnsVsanFileShareBackingDetails>().unwrap(),
+            serializer,
+        ),
+        StructType::CnsBaseCreateSpec => CnsBaseCreateSpec::serialize(
+            p.as_any_ref().downcast_ref::<CnsBaseCreateSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::CnsFileCreateSpec => CnsFileCreateSpec::serialize(
+            p.as_any_ref().downcast_ref::<CnsFileCreateSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::CnsVsanFileCreateSpec => CnsVsanFileCreateSpec::serialize(
+            p.as_any_ref().downcast_ref::<CnsVsanFileCreateSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::CnsContainerCluster => CnsContainerCluster::serialize(
+            p.as_any_ref().downcast_ref::<CnsContainerCluster>().unwrap(),
+            serializer,
+        ),
+        StructType::CnsCursor => CnsCursor::serialize(
+            p.as_any_ref().downcast_ref::<CnsCursor>().unwrap(),
+            serializer,
+        ),
+        StructType::CnsEntityMetadata => CnsEntityMetadata::serialize(
+            p.as_any_ref().downcast_ref::<CnsEntityMetadata>().unwrap(),
+            serializer,
+        ),
+        StructType::CnsKubernetesEntityMetadata => CnsKubernetesEntityMetadata::serialize(
+            p.as_any_ref().downcast_ref::<CnsKubernetesEntityMetadata>().unwrap(),
+            serializer,
+        ),
+        StructType::CnsKubernetesEntityReference => CnsKubernetesEntityReference::serialize(
+            p.as_any_ref().downcast_ref::<CnsKubernetesEntityReference>().unwrap(),
+            serializer,
+        ),
+        StructType::CnsPlacementResult => CnsPlacementResult::serialize(
+            p.as_any_ref().downcast_ref::<CnsPlacementResult>().unwrap(),
+            serializer,
+        ),
+        StructType::CnsQueryFilter => CnsQueryFilter::serialize(
+            p.as_any_ref().downcast_ref::<CnsQueryFilter>().unwrap(),
+            serializer,
+        ),
+        StructType::CnsKubernetesQueryFilter => CnsKubernetesQueryFilter::serialize(
+            p.as_any_ref().downcast_ref::<CnsKubernetesQueryFilter>().unwrap(),
+            serializer,
+        ),
+        StructType::CnsQueryResult => CnsQueryResult::serialize(
+            p.as_any_ref().downcast_ref::<CnsQueryResult>().unwrap(),
+            serializer,
+        ),
+        StructType::CnsQuerySelection => CnsQuerySelection::serialize(
+            p.as_any_ref().downcast_ref::<CnsQuerySelection>().unwrap(),
+            serializer,
+        ),
+        StructType::CnsSnapshotCreateSpec => CnsSnapshotCreateSpec::serialize(
+            p.as_any_ref().downcast_ref::<CnsSnapshotCreateSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::CnsSnapshotDeleteSpec => CnsSnapshotDeleteSpec::serialize(
+            p.as_any_ref().downcast_ref::<CnsSnapshotDeleteSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::CnsSnapshotId => CnsSnapshotId::serialize(
+            p.as_any_ref().downcast_ref::<CnsSnapshotId>().unwrap(),
+            serializer,
+        ),
+        StructType::CnsVolume => CnsVolume::serialize(
+            p.as_any_ref().downcast_ref::<CnsVolume>().unwrap(),
+            serializer,
+        ),
+        StructType::CnsVolumeAclConfigureSpec => CnsVolumeAclConfigureSpec::serialize(
+            p.as_any_ref().downcast_ref::<CnsVolumeAclConfigureSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::CnsVolumeAttachDetachSpec => CnsVolumeAttachDetachSpec::serialize(
+            p.as_any_ref().downcast_ref::<CnsVolumeAttachDetachSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::CnsVolumeCreateSpec => CnsVolumeCreateSpec::serialize(
+            p.as_any_ref().downcast_ref::<CnsVolumeCreateSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::CnsVolumeExtendSpec => CnsVolumeExtendSpec::serialize(
+            p.as_any_ref().downcast_ref::<CnsVolumeExtendSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::CnsVolumeId => CnsVolumeId::serialize(
+            p.as_any_ref().downcast_ref::<CnsVolumeId>().unwrap(),
+            serializer,
+        ),
+        StructType::CnsVolumeMetadata => CnsVolumeMetadata::serialize(
+            p.as_any_ref().downcast_ref::<CnsVolumeMetadata>().unwrap(),
+            serializer,
+        ),
+        StructType::CnsVolumeMetadataUpdateSpec => CnsVolumeMetadataUpdateSpec::serialize(
+            p.as_any_ref().downcast_ref::<CnsVolumeMetadataUpdateSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::CnsVolumeOperationBatchResult => CnsVolumeOperationBatchResult::serialize(
+            p.as_any_ref().downcast_ref::<CnsVolumeOperationBatchResult>().unwrap(),
+            serializer,
+        ),
+        StructType::CnsVolumeOperationResult => CnsVolumeOperationResult::serialize(
+            p.as_any_ref().downcast_ref::<CnsVolumeOperationResult>().unwrap(),
+            serializer,
+        ),
+        StructType::CnsAsyncQueryResult => CnsAsyncQueryResult::serialize(
+            p.as_any_ref().downcast_ref::<CnsAsyncQueryResult>().unwrap(),
+            serializer,
+        ),
+        StructType::CnsVolumeAttachResult => CnsVolumeAttachResult::serialize(
+            p.as_any_ref().downcast_ref::<CnsVolumeAttachResult>().unwrap(),
+            serializer,
+        ),
+        StructType::CnsVolumeCreateResult => CnsVolumeCreateResult::serialize(
+            p.as_any_ref().downcast_ref::<CnsVolumeCreateResult>().unwrap(),
+            serializer,
+        ),
+        StructType::CnsVolumePolicyReconfigSpec => CnsVolumePolicyReconfigSpec::serialize(
+            p.as_any_ref().downcast_ref::<CnsVolumePolicyReconfigSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::CnsVolumeRelocateSpec => CnsVolumeRelocateSpec::serialize(
+            p.as_any_ref().downcast_ref::<CnsVolumeRelocateSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::CnsBlockVolumeRelocateSpec => CnsBlockVolumeRelocateSpec::serialize(
+            p.as_any_ref().downcast_ref::<CnsBlockVolumeRelocateSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::CnsVolumeSource => CnsVolumeSource::serialize(
+            p.as_any_ref().downcast_ref::<CnsVolumeSource>().unwrap(),
+            serializer,
+        ),
+        StructType::CnsSnapshotVolumeSource => CnsSnapshotVolumeSource::serialize(
+            p.as_any_ref().downcast_ref::<CnsSnapshotVolumeSource>().unwrap(),
             serializer,
         ),
         StructType::DistributedVirtualPort => DistributedVirtualPort::serialize(
@@ -1898,6 +4038,38 @@ where
             p.as_any_ref().downcast_ref::<EntityBackupConfig>().unwrap(),
             serializer,
         ),
+        StructType::DvsFilterSpecConnecteeSpec => DvsFilterSpecConnecteeSpec::serialize(
+            p.as_any_ref().downcast_ref::<DvsFilterSpecConnecteeSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::DvsFilterSpecPnicConnecteeSpec => DvsFilterSpecPnicConnecteeSpec::serialize(
+            p.as_any_ref().downcast_ref::<DvsFilterSpecPnicConnecteeSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::DvsFilterSpecVmConnecteeSpec => DvsFilterSpecVmConnecteeSpec::serialize(
+            p.as_any_ref().downcast_ref::<DvsFilterSpecVmConnecteeSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::DvsFilterSpecVmknicConnecteeSpec => DvsFilterSpecVmknicConnecteeSpec::serialize(
+            p.as_any_ref().downcast_ref::<DvsFilterSpecVmknicConnecteeSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::DvsFilterSpecVlanSpec => DvsFilterSpecVlanSpec::serialize(
+            p.as_any_ref().downcast_ref::<DvsFilterSpecVlanSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::DvsFilterSpecPvlanSpec => DvsFilterSpecPvlanSpec::serialize(
+            p.as_any_ref().downcast_ref::<DvsFilterSpecPvlanSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::DvsFilterSpecTrunkVlanSpec => DvsFilterSpecTrunkVlanSpec::serialize(
+            p.as_any_ref().downcast_ref::<DvsFilterSpecTrunkVlanSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::DvsFilterSpecVlanIdSpec => DvsFilterSpecVlanIdSpec::serialize(
+            p.as_any_ref().downcast_ref::<DvsFilterSpecVlanIdSpec>().unwrap(),
+            serializer,
+        ),
         StructType::DistributedVirtualSwitchHostMember => DistributedVirtualSwitchHostMember::serialize(
             p.as_any_ref().downcast_ref::<DistributedVirtualSwitchHostMember>().unwrap(),
             serializer,
@@ -1936,6 +4108,10 @@ where
         ),
         StructType::VMwareDvsTeamingHealthCheckResult => VMwareDvsTeamingHealthCheckResult::serialize(
             p.as_any_ref().downcast_ref::<VMwareDvsTeamingHealthCheckResult>().unwrap(),
+            serializer,
+        ),
+        StructType::DistributedVirtualSwitchHostMemberHostUplinkState => DistributedVirtualSwitchHostMemberHostUplinkState::serialize(
+            p.as_any_ref().downcast_ref::<DistributedVirtualSwitchHostMemberHostUplinkState>().unwrap(),
             serializer,
         ),
         StructType::DistributedVirtualSwitchHostMemberPnicSpec => DistributedVirtualSwitchHostMemberPnicSpec::serialize(
@@ -2082,6 +4258,10 @@ where
             p.as_any_ref().downcast_ref::<DvsVnicAllocatedResource>().unwrap(),
             serializer,
         ),
+        StructType::VmwareDistributedVirtualSwitchDpuFailoverPolicy => VmwareDistributedVirtualSwitchDpuFailoverPolicy::serialize(
+            p.as_any_ref().downcast_ref::<VmwareDistributedVirtualSwitchDpuFailoverPolicy>().unwrap(),
+            serializer,
+        ),
         StructType::VMwareDvsDpuCapability => VMwareDvsDpuCapability::serialize(
             p.as_any_ref().downcast_ref::<VMwareDvsDpuCapability>().unwrap(),
             serializer,
@@ -2118,12 +4298,24 @@ where
             p.as_any_ref().downcast_ref::<VMwareDvsMtuCapability>().unwrap(),
             serializer,
         ),
+        StructType::VmwareDistributedVirtualSwitchNetworkOffloadConfig => VmwareDistributedVirtualSwitchNetworkOffloadConfig::serialize(
+            p.as_any_ref().downcast_ref::<VmwareDistributedVirtualSwitchNetworkOffloadConfig>().unwrap(),
+            serializer,
+        ),
         StructType::VMwareDvsPvlanConfigSpec => VMwareDvsPvlanConfigSpec::serialize(
             p.as_any_ref().downcast_ref::<VMwareDvsPvlanConfigSpec>().unwrap(),
             serializer,
         ),
         StructType::VMwareDvsPvlanMapEntry => VMwareDvsPvlanMapEntry::serialize(
             p.as_any_ref().downcast_ref::<VMwareDvsPvlanMapEntry>().unwrap(),
+            serializer,
+        ),
+        StructType::VmwareDistributedVirtualSwitchRealTimeConfig => VmwareDistributedVirtualSwitchRealTimeConfig::serialize(
+            p.as_any_ref().downcast_ref::<VmwareDistributedVirtualSwitchRealTimeConfig>().unwrap(),
+            serializer,
+        ),
+        StructType::VmwareDistributedVirtualSwitchRealTimeLanAnnotation => VmwareDistributedVirtualSwitchRealTimeLanAnnotation::serialize(
+            p.as_any_ref().downcast_ref::<VmwareDistributedVirtualSwitchRealTimeLanAnnotation>().unwrap(),
             serializer,
         ),
         StructType::VMwareDvsVspanConfigSpec => VMwareDvsVspanConfigSpec::serialize(
@@ -2174,8 +4366,24 @@ where
             p.as_any_ref().downcast_ref::<CryptoManagerKmipCryptoKeyStatus>().unwrap(),
             serializer,
         ),
+        StructType::CryptoManagerKmipCryptoKeyStatusKeyInfo => CryptoManagerKmipCryptoKeyStatusKeyInfo::serialize(
+            p.as_any_ref().downcast_ref::<CryptoManagerKmipCryptoKeyStatusKeyInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::CryptoManagerKmipCryptoKeyStatusWrappingKeyIdKeyInfo => CryptoManagerKmipCryptoKeyStatusWrappingKeyIdKeyInfo::serialize(
+            p.as_any_ref().downcast_ref::<CryptoManagerKmipCryptoKeyStatusWrappingKeyIdKeyInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::CryptoManagerKmipCryptoKeyStatusWrappingRotationIntervalKeyInfo => CryptoManagerKmipCryptoKeyStatusWrappingRotationIntervalKeyInfo::serialize(
+            p.as_any_ref().downcast_ref::<CryptoManagerKmipCryptoKeyStatusWrappingRotationIntervalKeyInfo>().unwrap(),
+            serializer,
+        ),
         StructType::CryptoManagerKmipCustomAttributeSpec => CryptoManagerKmipCustomAttributeSpec::serialize(
             p.as_any_ref().downcast_ref::<CryptoManagerKmipCustomAttributeSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::CryptoManagerKmipGenerateKeySpec => CryptoManagerKmipGenerateKeySpec::serialize(
+            p.as_any_ref().downcast_ref::<CryptoManagerKmipGenerateKeySpec>().unwrap(),
             serializer,
         ),
         StructType::CryptoManagerKmipServerCertInfo => CryptoManagerKmipServerCertInfo::serialize(
@@ -2222,12 +4430,36 @@ where
             p.as_any_ref().downcast_ref::<KmipClusterInfo>().unwrap(),
             serializer,
         ),
+        StructType::KmipClusterInfoKeyInfo => KmipClusterInfoKeyInfo::serialize(
+            p.as_any_ref().downcast_ref::<KmipClusterInfoKeyInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::KmipClusterInfoWrappingKeyIdKeyInfo => KmipClusterInfoWrappingKeyIdKeyInfo::serialize(
+            p.as_any_ref().downcast_ref::<KmipClusterInfoWrappingKeyIdKeyInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::KmipClusterInfoWrappingRotationIntervalKeyInfo => KmipClusterInfoWrappingRotationIntervalKeyInfo::serialize(
+            p.as_any_ref().downcast_ref::<KmipClusterInfoWrappingRotationIntervalKeyInfo>().unwrap(),
+            serializer,
+        ),
         StructType::KmipServerInfo => KmipServerInfo::serialize(
             p.as_any_ref().downcast_ref::<KmipServerInfo>().unwrap(),
             serializer,
         ),
         StructType::KmipServerSpec => KmipServerSpec::serialize(
             p.as_any_ref().downcast_ref::<KmipServerSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::KmipServerSpecKeySpec => KmipServerSpecKeySpec::serialize(
+            p.as_any_ref().downcast_ref::<KmipServerSpecKeySpec>().unwrap(),
+            serializer,
+        ),
+        StructType::KmipServerSpecWrappingKeyIdKeySpec => KmipServerSpecWrappingKeyIdKeySpec::serialize(
+            p.as_any_ref().downcast_ref::<KmipServerSpecWrappingKeyIdKeySpec>().unwrap(),
+            serializer,
+        ),
+        StructType::KmipServerSpecWrappingRotationIntervalKeySpec => KmipServerSpecWrappingRotationIntervalKeySpec::serialize(
+            p.as_any_ref().downcast_ref::<KmipServerSpecWrappingRotationIntervalKeySpec>().unwrap(),
             serializer,
         ),
         StructType::KmipServerStatus => KmipServerStatus::serialize(
@@ -2338,6 +4570,14 @@ where
             p.as_any_ref().downcast_ref::<EventFilterSpecByUsername>().unwrap(),
             serializer,
         ),
+        StructType::EventManagerEventViewSpec => EventManagerEventViewSpec::serialize(
+            p.as_any_ref().downcast_ref::<EventManagerEventViewSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::EventManagerViewByStartId => EventManagerViewByStartId::serialize(
+            p.as_any_ref().downcast_ref::<EventManagerViewByStartId>().unwrap(),
+            serializer,
+        ),
         StructType::ExtendedEventPair => ExtendedEventPair::serialize(
             p.as_any_ref().downcast_ref::<ExtendedEventPair>().unwrap(),
             serializer,
@@ -2420,6 +4660,10 @@ where
         ),
         StructType::HostAssignableHardwareConfigAttributeOverride => HostAssignableHardwareConfigAttributeOverride::serialize(
             p.as_any_ref().downcast_ref::<HostAssignableHardwareConfigAttributeOverride>().unwrap(),
+            serializer,
+        ),
+        StructType::HostAuthenticationInfo => HostAuthenticationInfo::serialize(
+            p.as_any_ref().downcast_ref::<HostAuthenticationInfo>().unwrap(),
             serializer,
         ),
         StructType::HostAuthenticationManagerInfo => HostAuthenticationManagerInfo::serialize(
@@ -2548,6 +4792,10 @@ where
         ),
         StructType::HostCpuPowerManagementInfo => HostCpuPowerManagementInfo::serialize(
             p.as_any_ref().downcast_ref::<HostCpuPowerManagementInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::HostCpuSchedulerInfo => HostCpuSchedulerInfo::serialize(
+            p.as_any_ref().downcast_ref::<HostCpuSchedulerInfo>().unwrap(),
             serializer,
         ),
         StructType::HostHyperThreadScheduleInfo => HostHyperThreadScheduleInfo::serialize(
@@ -2720,6 +4968,10 @@ where
         ),
         StructType::HostScsiDisk => HostScsiDisk::serialize(
             p.as_any_ref().downcast_ref::<HostScsiDisk>().unwrap(),
+            serializer,
+        ),
+        StructType::DevicePciId => DevicePciId::serialize(
+            p.as_any_ref().downcast_ref::<DevicePciId>().unwrap(),
             serializer,
         ),
         StructType::HostDhcpService => HostDhcpService::serialize(
@@ -3046,6 +5298,22 @@ where
             p.as_any_ref().downcast_ref::<HostProxySwitchSpec>().unwrap(),
             serializer,
         ),
+        StructType::HostSpbmDatastoreInfo => HostSpbmDatastoreInfo::serialize(
+            p.as_any_ref().downcast_ref::<HostSpbmDatastoreInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::HostSpbmHashInfo => HostSpbmHashInfo::serialize(
+            p.as_any_ref().downcast_ref::<HostSpbmHashInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::HostSpbmPolicyBlobInfo => HostSpbmPolicyBlobInfo::serialize(
+            p.as_any_ref().downcast_ref::<HostSpbmPolicyBlobInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::HostSpbmPolicyInfo => HostSpbmPolicyInfo::serialize(
+            p.as_any_ref().downcast_ref::<HostSpbmPolicyInfo>().unwrap(),
+            serializer,
+        ),
         StructType::HostImageProfileSummary => HostImageProfileSummary::serialize(
             p.as_any_ref().downcast_ref::<HostImageProfileSummary>().unwrap(),
             serializer,
@@ -3106,6 +5374,10 @@ where
             p.as_any_ref().downcast_ref::<HostIpConfig>().unwrap(),
             serializer,
         ),
+        StructType::VsanFileServiceIpConfig => VsanFileServiceIpConfig::serialize(
+            p.as_any_ref().downcast_ref::<VsanFileServiceIpConfig>().unwrap(),
+            serializer,
+        ),
         StructType::HostIpConfigIpV6Address => HostIpConfigIpV6Address::serialize(
             p.as_any_ref().downcast_ref::<HostIpConfigIpV6Address>().unwrap(),
             serializer,
@@ -3164,6 +5436,18 @@ where
         ),
         StructType::KernelModuleSectionInfo => KernelModuleSectionInfo::serialize(
             p.as_any_ref().downcast_ref::<KernelModuleSectionInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::LacpInfo => LacpInfo::serialize(
+            p.as_any_ref().downcast_ref::<LacpInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::LagInfo => LagInfo::serialize(
+            p.as_any_ref().downcast_ref::<LagInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::LagUplinkInfo => LagUplinkInfo::serialize(
+            p.as_any_ref().downcast_ref::<LagUplinkInfo>().unwrap(),
             serializer,
         ),
         StructType::HostLicenseSpec => HostLicenseSpec::serialize(
@@ -3502,6 +5786,10 @@ where
             p.as_any_ref().downcast_ref::<HostOpaqueSwitchPhysicalNicZone>().unwrap(),
             serializer,
         ),
+        StructType::HostPartialMaintenanceModeRuntimeInfo => HostPartialMaintenanceModeRuntimeInfo::serialize(
+            p.as_any_ref().downcast_ref::<HostPartialMaintenanceModeRuntimeInfo>().unwrap(),
+            serializer,
+        ),
         StructType::HostPatchManagerLocator => HostPatchManagerLocator::serialize(
             p.as_any_ref().downcast_ref::<HostPatchManagerLocator>().unwrap(),
             serializer,
@@ -3616,6 +5904,10 @@ where
         ),
         StructType::HostPlugStoreTopologyTarget => HostPlugStoreTopologyTarget::serialize(
             p.as_any_ref().downcast_ref::<HostPlugStoreTopologyTarget>().unwrap(),
+            serializer,
+        ),
+        StructType::PnicTsoInfo => PnicTsoInfo::serialize(
+            p.as_any_ref().downcast_ref::<PnicTsoInfo>().unwrap(),
             serializer,
         ),
         StructType::HostPortGroup => HostPortGroup::serialize(
@@ -3966,6 +6258,10 @@ where
             p.as_any_ref().downcast_ref::<HostTcpTargetTransport>().unwrap(),
             serializer,
         ),
+        StructType::HostTdxInfo => HostTdxInfo::serialize(
+            p.as_any_ref().downcast_ref::<HostTdxInfo>().unwrap(),
+            serializer,
+        ),
         StructType::HostTpmAttestationInfo => HostTpmAttestationInfo::serialize(
             p.as_any_ref().downcast_ref::<HostTpmAttestationInfo>().unwrap(),
             serializer,
@@ -4092,6 +6388,10 @@ where
         ),
         StructType::HostVMotionNetConfig => HostVMotionNetConfig::serialize(
             p.as_any_ref().downcast_ref::<HostVMotionNetConfig>().unwrap(),
+            serializer,
+        ),
+        StructType::VimHostVsanStretchedClusterHostCapability => VimHostVsanStretchedClusterHostCapability::serialize(
+            p.as_any_ref().downcast_ref::<VimHostVsanStretchedClusterHostCapability>().unwrap(),
             serializer,
         ),
         StructType::HostVffsSpec => HostVffsSpec::serialize(
@@ -4222,6 +6522,146 @@ where
             p.as_any_ref().downcast_ref::<VmfsUnmapBandwidthSpec>().unwrap(),
             serializer,
         ),
+        StructType::VsanBasicDeviceInfo => VsanBasicDeviceInfo::serialize(
+            p.as_any_ref().downcast_ref::<VsanBasicDeviceInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanClusterMembershipInfo => VsanClusterMembershipInfo::serialize(
+            p.as_any_ref().downcast_ref::<VsanClusterMembershipInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanDaemonHealth => VsanDaemonHealth::serialize(
+            p.as_any_ref().downcast_ref::<VsanDaemonHealth>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanDiskEncryptionHealth => VsanDiskEncryptionHealth::serialize(
+            p.as_any_ref().downcast_ref::<VsanDiskEncryptionHealth>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanDiskRebalanceResult => VsanDiskRebalanceResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanDiskRebalanceResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanDitEncryptionHealthSummary => VsanDitEncryptionHealthSummary::serialize(
+            p.as_any_ref().downcast_ref::<VsanDitEncryptionHealthSummary>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanEncryptionHealthSummary => VsanEncryptionHealthSummary::serialize(
+            p.as_any_ref().downcast_ref::<VsanEncryptionHealthSummary>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanFailedRepairObjectResult => VsanFailedRepairObjectResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanFailedRepairObjectResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanFileServerHealthSummary => VsanFileServerHealthSummary::serialize(
+            p.as_any_ref().downcast_ref::<VsanFileServerHealthSummary>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanFileServiceBalanceHealth => VsanFileServiceBalanceHealth::serialize(
+            p.as_any_ref().downcast_ref::<VsanFileServiceBalanceHealth>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanFileServiceHealthSummary => VsanFileServiceHealthSummary::serialize(
+            p.as_any_ref().downcast_ref::<VsanFileServiceHealthSummary>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanFileServiceRootFsHealth => VsanFileServiceRootFsHealth::serialize(
+            p.as_any_ref().downcast_ref::<VsanFileServiceRootFsHealth>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanFileServiceShareHealthSummary => VsanFileServiceShareHealthSummary::serialize(
+            p.as_any_ref().downcast_ref::<VsanFileServiceShareHealthSummary>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHclCommonDeviceInfo => VsanHclCommonDeviceInfo::serialize(
+            p.as_any_ref().downcast_ref::<VsanHclCommonDeviceInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHclNicInfo => VsanHclNicInfo::serialize(
+            p.as_any_ref().downcast_ref::<VsanHclNicInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHclComputeResource => VsanHclComputeResource::serialize(
+            p.as_any_ref().downcast_ref::<VsanHclComputeResource>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHclControllerInfo => VsanHclControllerInfo::serialize(
+            p.as_any_ref().downcast_ref::<VsanHclControllerInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHclDiskInfo => VsanHclDiskInfo::serialize(
+            p.as_any_ref().downcast_ref::<VsanHclDiskInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHclFirmwareFile => VsanHclFirmwareFile::serialize(
+            p.as_any_ref().downcast_ref::<VsanHclFirmwareFile>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHclFirmwareUpdateSpec => VsanHclFirmwareUpdateSpec::serialize(
+            p.as_any_ref().downcast_ref::<VsanHclFirmwareUpdateSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHclMemInfo => VsanHclMemInfo::serialize(
+            p.as_any_ref().downcast_ref::<VsanHclMemInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHealthQuerySpec => VsanHealthQuerySpec::serialize(
+            p.as_any_ref().downcast_ref::<VsanHealthQuerySpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHostCimProviderInfo => VsanHostCimProviderInfo::serialize(
+            p.as_any_ref().downcast_ref::<VsanHostCimProviderInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHostEmmSummary => VsanHostEmmSummary::serialize(
+            p.as_any_ref().downcast_ref::<VsanHostEmmSummary>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHostFwComponent => VsanHostFwComponent::serialize(
+            p.as_any_ref().downcast_ref::<VsanHostFwComponent>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHostGlobalDedupConfigHealthSummary => VsanHostGlobalDedupConfigHealthSummary::serialize(
+            p.as_any_ref().downcast_ref::<VsanHostGlobalDedupConfigHealthSummary>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHostHclInfo => VsanHostHclInfo::serialize(
+            p.as_any_ref().downcast_ref::<VsanHostHclInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHostHealthSystemStatusResult => VsanHostHealthSystemStatusResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanHostHealthSystemStatusResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHostHwDeviceId => VsanHostHwDeviceId::serialize(
+            p.as_any_ref().downcast_ref::<VsanHostHwDeviceId>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHostIoInsightInfo => VsanHostIoInsightInfo::serialize(
+            p.as_any_ref().downcast_ref::<VsanHostIoInsightInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHostQueryCheckLimitsSpec => VsanHostQueryCheckLimitsSpec::serialize(
+            p.as_any_ref().downcast_ref::<VsanHostQueryCheckLimitsSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHostReference => VsanHostReference::serialize(
+            p.as_any_ref().downcast_ref::<VsanHostReference>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHostVirtualApplianceInfo => VsanHostVirtualApplianceInfo::serialize(
+            p.as_any_ref().downcast_ref::<VsanHostVirtualApplianceInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHostVmdkLoadTestResult => VsanHostVmdkLoadTestResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanHostVmdkLoadTestResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHwToVcgInfoMapping => VsanHwToVcgInfoMapping::serialize(
+            p.as_any_ref().downcast_ref::<VsanHwToVcgInfoMapping>().unwrap(),
+            serializer,
+        ),
         StructType::HostVsanInternalSystemCmmdsQuery => HostVsanInternalSystemCmmdsQuery::serialize(
             p.as_any_ref().downcast_ref::<HostVsanInternalSystemCmmdsQuery>().unwrap(),
             serializer,
@@ -4252,6 +6692,110 @@ where
         ),
         StructType::HostVsanInternalSystemVsanPhysicalDiskDiagnosticsResult => HostVsanInternalSystemVsanPhysicalDiskDiagnosticsResult::serialize(
             p.as_any_ref().downcast_ref::<HostVsanInternalSystemVsanPhysicalDiskDiagnosticsResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanIoInsightInfo => VsanIoInsightInfo::serialize(
+            p.as_any_ref().downcast_ref::<VsanIoInsightInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanIperfClientSpec => VsanIperfClientSpec::serialize(
+            p.as_any_ref().downcast_ref::<VsanIperfClientSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanKmsHealth => VsanKmsHealth::serialize(
+            p.as_any_ref().downcast_ref::<VsanKmsHealth>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanLimitHealthResult => VsanLimitHealthResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanLimitHealthResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanNetworkDiagnosticsHealthInfo => VsanNetworkDiagnosticsHealthInfo::serialize(
+            p.as_any_ref().downcast_ref::<VsanNetworkDiagnosticsHealthInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanNetworkHealthResult => VsanNetworkHealthResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanNetworkHealthResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanNetworkLoadTestResult => VsanNetworkLoadTestResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanNetworkLoadTestResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanNetworkPeerHealthResult => VsanNetworkPeerHealthResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanNetworkPeerHealthResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanNicRdmaInfo => VsanNicRdmaInfo::serialize(
+            p.as_any_ref().downcast_ref::<VsanNicRdmaInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanObjectHealth => VsanObjectHealth::serialize(
+            p.as_any_ref().downcast_ref::<VsanObjectHealth>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanObjectOverallHealth => VsanObjectOverallHealth::serialize(
+            p.as_any_ref().downcast_ref::<VsanObjectOverallHealth>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanPhysicalDiskHealth => VsanPhysicalDiskHealth::serialize(
+            p.as_any_ref().downcast_ref::<VsanPhysicalDiskHealth>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanPhysicalDiskHealthSummary => VsanPhysicalDiskHealthSummary::serialize(
+            p.as_any_ref().downcast_ref::<VsanPhysicalDiskHealthSummary>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanProactiveRebalanceInfoEx => VsanProactiveRebalanceInfoEx::serialize(
+            p.as_any_ref().downcast_ref::<VsanProactiveRebalanceInfoEx>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanQueryResultHostInfo => VsanQueryResultHostInfo::serialize(
+            p.as_any_ref().downcast_ref::<VsanQueryResultHostInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanRepairObjectsResult => VsanRepairObjectsResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanRepairObjectsResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanResourceHealth => VsanResourceHealth::serialize(
+            p.as_any_ref().downcast_ref::<VsanResourceHealth>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanServerClusterInfo => VsanServerClusterInfo::serialize(
+            p.as_any_ref().downcast_ref::<VsanServerClusterInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanSmartDiskStats => VsanSmartDiskStats::serialize(
+            p.as_any_ref().downcast_ref::<VsanSmartDiskStats>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanSmartParameter => VsanSmartParameter::serialize(
+            p.as_any_ref().downcast_ref::<VsanSmartParameter>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanSmartStatsHostSummary => VsanSmartStatsHostSummary::serialize(
+            p.as_any_ref().downcast_ref::<VsanSmartStatsHostSummary>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanVcgDeviceInfo => VsanVcgDeviceInfo::serialize(
+            p.as_any_ref().downcast_ref::<VsanVcgDeviceInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanVmdkIoLoadSpec => VsanVmdkIoLoadSpec::serialize(
+            p.as_any_ref().downcast_ref::<VsanVmdkIoLoadSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanVmdkLoadTestResult => VsanVmdkLoadTestResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanVmdkLoadTestResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanVmdkLoadTestSpec => VsanVmdkLoadTestSpec::serialize(
+            p.as_any_ref().downcast_ref::<VsanVmdkLoadTestSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanVsanPcapResult => VsanVsanPcapResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanVsanPcapResult>().unwrap(),
             serializer,
         ),
         StructType::HostVvolNqn => HostVvolNqn::serialize(
@@ -5470,6 +8014,10 @@ where
             p.as_any_ref().downcast_ref::<VirtualMachineSnapshotInfo>().unwrap(),
             serializer,
         ),
+        StructType::SnapshotSelectionSpec => SnapshotSelectionSpec::serialize(
+            p.as_any_ref().downcast_ref::<SnapshotSelectionSpec>().unwrap(),
+            serializer,
+        ),
         StructType::VirtualMachineSnapshotTree => VirtualMachineSnapshotTree::serialize(
             p.as_any_ref().downcast_ref::<VirtualMachineSnapshotTree>().unwrap(),
             serializer,
@@ -5488,6 +8036,10 @@ where
         ),
         StructType::VirtualMachineUsageOnDatastore => VirtualMachineUsageOnDatastore::serialize(
             p.as_any_ref().downcast_ref::<VirtualMachineUsageOnDatastore>().unwrap(),
+            serializer,
+        ),
+        StructType::SubnetInfoFolderInfo => SubnetInfoFolderInfo::serialize(
+            p.as_any_ref().downcast_ref::<SubnetInfoFolderInfo>().unwrap(),
             serializer,
         ),
         StructType::VirtualMachineSummary => VirtualMachineSummary::serialize(
@@ -5588,6 +8140,10 @@ where
         ),
         StructType::VirtualMachineSoundInfo => VirtualMachineSoundInfo::serialize(
             p.as_any_ref().downcast_ref::<VirtualMachineSoundInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::SubnetInfo => SubnetInfo::serialize(
+            p.as_any_ref().downcast_ref::<SubnetInfo>().unwrap(),
             serializer,
         ),
         StructType::VirtualMachineUsbInfo => VirtualMachineUsbInfo::serialize(
@@ -6682,6 +9238,14 @@ where
             p.as_any_ref().downcast_ref::<VirtualMachineVmciDeviceOptionFilterSpecOption>().unwrap(),
             serializer,
         ),
+        StructType::VirtualVmxnet3StrictLatencyConfig => VirtualVmxnet3StrictLatencyConfig::serialize(
+            p.as_any_ref().downcast_ref::<VirtualVmxnet3StrictLatencyConfig>().unwrap(),
+            serializer,
+        ),
+        StructType::VirtualVmxnet3OptionStrictLatencyConfigOption => VirtualVmxnet3OptionStrictLatencyConfigOption::serialize(
+            p.as_any_ref().downcast_ref::<VirtualVmxnet3OptionStrictLatencyConfigOption>().unwrap(),
+            serializer,
+        ),
         StructType::GuestAliases => GuestAliases::serialize(
             p.as_any_ref().downcast_ref::<GuestAliases>().unwrap(),
             serializer,
@@ -6818,6 +9382,10 @@ where
             p.as_any_ref().downcast_ref::<FaultDomainId>().unwrap(),
             serializer,
         ),
+        StructType::FaultDomainInfo => FaultDomainInfo::serialize(
+            p.as_any_ref().downcast_ref::<FaultDomainInfo>().unwrap(),
+            serializer,
+        ),
         StructType::ReplicationGroupId => ReplicationGroupId::serialize(
             p.as_any_ref().downcast_ref::<ReplicationGroupId>().unwrap(),
             serializer,
@@ -6826,12 +9394,756 @@ where
             p.as_any_ref().downcast_ref::<ReplicationSpec>().unwrap(),
             serializer,
         ),
+        StructType::VsanCapacityReservationInfo => VsanCapacityReservationInfo::serialize(
+            p.as_any_ref().downcast_ref::<VsanCapacityReservationInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::ClusterRuntimeInfo => ClusterRuntimeInfo::serialize(
+            p.as_any_ref().downcast_ref::<ClusterRuntimeInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanCompatibilityCheckResult => VsanCompatibilityCheckResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanCompatibilityCheckResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VimVsanDataEfficiencyCapacityState => VimVsanDataEfficiencyCapacityState::serialize(
+            p.as_any_ref().downcast_ref::<VimVsanDataEfficiencyCapacityState>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanDataEfficiencyConfig => VsanDataEfficiencyConfig::serialize(
+            p.as_any_ref().downcast_ref::<VsanDataEfficiencyConfig>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanDataEfficiencyConfigEx => VsanDataEfficiencyConfigEx::serialize(
+            p.as_any_ref().downcast_ref::<VsanDataEfficiencyConfigEx>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanDataEncryptionConfig => VsanDataEncryptionConfig::serialize(
+            p.as_any_ref().downcast_ref::<VsanDataEncryptionConfig>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanDataInTransitEncryptionConfig => VsanDataInTransitEncryptionConfig::serialize(
+            p.as_any_ref().downcast_ref::<VsanDataInTransitEncryptionConfig>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanDatastoreConfig => VsanDatastoreConfig::serialize(
+            p.as_any_ref().downcast_ref::<VsanDatastoreConfig>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanAdvancedDatastoreConfig => VsanAdvancedDatastoreConfig::serialize(
+            p.as_any_ref().downcast_ref::<VsanAdvancedDatastoreConfig>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanDatastoreSpec => VsanDatastoreSpec::serialize(
+            p.as_any_ref().downcast_ref::<VsanDatastoreSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanClientDatastoreConfig => VsanClientDatastoreConfig::serialize(
+            p.as_any_ref().downcast_ref::<VsanClientDatastoreConfig>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanXvcClientConfig => VsanXvcClientConfig::serialize(
+            p.as_any_ref().downcast_ref::<VsanXvcClientConfig>().unwrap(),
+            serializer,
+        ),
+        StructType::DefaultDatastorePolicySelectionInfo => DefaultDatastorePolicySelectionInfo::serialize(
+            p.as_any_ref().downcast_ref::<DefaultDatastorePolicySelectionInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanDirectoryServerConfig => VsanDirectoryServerConfig::serialize(
+            p.as_any_ref().downcast_ref::<VsanDirectoryServerConfig>().unwrap(),
+            serializer,
+        ),
+        StructType::ActiveVsanDirectoryServerConfig => ActiveVsanDirectoryServerConfig::serialize(
+            p.as_any_ref().downcast_ref::<ActiveVsanDirectoryServerConfig>().unwrap(),
+            serializer,
+        ),
+        StructType::DiskClaimConfiguration => DiskClaimConfiguration::serialize(
+            p.as_any_ref().downcast_ref::<DiskClaimConfiguration>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanEntityCompatibilityResult => VsanEntityCompatibilityResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanEntityCompatibilityResult>().unwrap(),
+            serializer,
+        ),
+        StructType::EntityResourceCheckDetails => EntityResourceCheckDetails::serialize(
+            p.as_any_ref().downcast_ref::<EntityResourceCheckDetails>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanDiskGroupResourceCheckResult => VsanDiskGroupResourceCheckResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanDiskGroupResourceCheckResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanDiskResourceCheckResult => VsanDiskResourceCheckResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanDiskResourceCheckResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanStoragePoolDiskResourceCheckResult => VsanStoragePoolDiskResourceCheckResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanStoragePoolDiskResourceCheckResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanFaultDomainResourceCheckResult => VsanFaultDomainResourceCheckResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanFaultDomainResourceCheckResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHostResourceCheckResult => VsanHostResourceCheckResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanHostResourceCheckResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanResourceCheckResult => VsanResourceCheckResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanResourceCheckResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanResourceCheckComponentResult => VsanResourceCheckComponentResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanResourceCheckComponentResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanResourceCheckDataPersistenceResult => VsanResourceCheckDataPersistenceResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanResourceCheckDataPersistenceResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanResourceCheckVsanResult => VsanResourceCheckVsanResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanResourceCheckVsanResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanStoragePoolResourceCheckResult => VsanStoragePoolResourceCheckResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanStoragePoolResourceCheckResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanFileServiceConfig => VsanFileServiceConfig::serialize(
+            p.as_any_ref().downcast_ref::<VsanFileServiceConfig>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanFileServiceDomain => VsanFileServiceDomain::serialize(
+            p.as_any_ref().downcast_ref::<VsanFileServiceDomain>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanFileServiceDomainConfig => VsanFileServiceDomainConfig::serialize(
+            p.as_any_ref().downcast_ref::<VsanFileServiceDomainConfig>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanFileServiceDomainQuerySpec => VsanFileServiceDomainQuerySpec::serialize(
+            p.as_any_ref().downcast_ref::<VsanFileServiceDomainQuerySpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanFileShare => VsanFileShare::serialize(
+            p.as_any_ref().downcast_ref::<VsanFileShare>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanFileShareConfig => VsanFileShareConfig::serialize(
+            p.as_any_ref().downcast_ref::<VsanFileShareConfig>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanFileShareNetPermission => VsanFileShareNetPermission::serialize(
+            p.as_any_ref().downcast_ref::<VsanFileShareNetPermission>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanFileShareQueryProperties => VsanFileShareQueryProperties::serialize(
+            p.as_any_ref().downcast_ref::<VsanFileShareQueryProperties>().unwrap(),
+            serializer,
+        ),
+        StructType::FileShareQueryResult => FileShareQueryResult::serialize(
+            p.as_any_ref().downcast_ref::<FileShareQueryResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanFileShareQuerySpec => VsanFileShareQuerySpec::serialize(
+            p.as_any_ref().downcast_ref::<VsanFileShareQuerySpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanFileShareRuntimeInfo => VsanFileShareRuntimeInfo::serialize(
+            p.as_any_ref().downcast_ref::<VsanFileShareRuntimeInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanFileShareSmbOptions => VsanFileShareSmbOptions::serialize(
+            p.as_any_ref().downcast_ref::<VsanFileShareSmbOptions>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanFileShareSnapshot => VsanFileShareSnapshot::serialize(
+            p.as_any_ref().downcast_ref::<VsanFileShareSnapshot>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanFileShareSnapshotConfig => VsanFileShareSnapshotConfig::serialize(
+            p.as_any_ref().downcast_ref::<VsanFileShareSnapshotConfig>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanFileShareSnapshotQueryResult => VsanFileShareSnapshotQueryResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanFileShareSnapshotQueryResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanFileShareSnapshotQuerySpec => VsanFileShareSnapshotQuerySpec::serialize(
+            p.as_any_ref().downcast_ref::<VsanFileShareSnapshotQuerySpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHciMeshDatastoreSource => VsanHciMeshDatastoreSource::serialize(
+            p.as_any_ref().downcast_ref::<VsanHciMeshDatastoreSource>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanIoDiagnosticsFailedCheck => VsanIoDiagnosticsFailedCheck::serialize(
+            p.as_any_ref().downcast_ref::<VsanIoDiagnosticsFailedCheck>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanIoDiagnosticsInstance => VsanIoDiagnosticsInstance::serialize(
+            p.as_any_ref().downcast_ref::<VsanIoDiagnosticsInstance>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanIoDiagnosticsInstanceEvent => VsanIoDiagnosticsInstanceEvent::serialize(
+            p.as_any_ref().downcast_ref::<VsanIoDiagnosticsInstanceEvent>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanIoDiagnosticsInstanceQuerySpec => VsanIoDiagnosticsInstanceQuerySpec::serialize(
+            p.as_any_ref().downcast_ref::<VsanIoDiagnosticsInstanceQuerySpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanIoDiagnosticsObjectLayout => VsanIoDiagnosticsObjectLayout::serialize(
+            p.as_any_ref().downcast_ref::<VsanIoDiagnosticsObjectLayout>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanIoDiagnosticsPrecheckResult => VsanIoDiagnosticsPrecheckResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanIoDiagnosticsPrecheckResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanIoDiagnosticsStats => VsanIoDiagnosticsStats::serialize(
+            p.as_any_ref().downcast_ref::<VsanIoDiagnosticsStats>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanIoDiagnosticsTarget => VsanIoDiagnosticsTarget::serialize(
+            p.as_any_ref().downcast_ref::<VsanIoDiagnosticsTarget>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanIoDiagnosticsTargetStats => VsanIoDiagnosticsTargetStats::serialize(
+            p.as_any_ref().downcast_ref::<VsanIoDiagnosticsTargetStats>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanIoLatency => VsanIoLatency::serialize(
+            p.as_any_ref().downcast_ref::<VsanIoLatency>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanIoLatencyMetrics => VsanIoLatencyMetrics::serialize(
+            p.as_any_ref().downcast_ref::<VsanIoLatencyMetrics>().unwrap(),
+            serializer,
+        ),
+        StructType::LifecycleConfigDetails => LifecycleConfigDetails::serialize(
+            p.as_any_ref().downcast_ref::<LifecycleConfigDetails>().unwrap(),
+            serializer,
+        ),
+        StructType::LifecycleFaultDomainDetails => LifecycleFaultDomainDetails::serialize(
+            p.as_any_ref().downcast_ref::<LifecycleFaultDomainDetails>().unwrap(),
+            serializer,
+        ),
+        StructType::LifecyclePreCheckResult => LifecyclePreCheckResult::serialize(
+            p.as_any_ref().downcast_ref::<LifecyclePreCheckResult>().unwrap(),
+            serializer,
+        ),
+        StructType::LifecycleWitnessDetails => LifecycleWitnessDetails::serialize(
+            p.as_any_ref().downcast_ref::<LifecycleWitnessDetails>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanMetricProfile => VsanMetricProfile::serialize(
+            p.as_any_ref().downcast_ref::<VsanMetricProfile>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanMetricsConfig => VsanMetricsConfig::serialize(
+            p.as_any_ref().downcast_ref::<VsanMetricsConfig>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanMountPrecheckItem => VsanMountPrecheckItem::serialize(
+            p.as_any_ref().downcast_ref::<VsanMountPrecheckItem>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanDatastoreSourcePrecheckItem => VsanDatastoreSourcePrecheckItem::serialize(
+            p.as_any_ref().downcast_ref::<VsanDatastoreSourcePrecheckItem>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanMountPrecheckNetworkConnectivityResult => VsanMountPrecheckNetworkConnectivityResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanMountPrecheckNetworkConnectivityResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanMountPrecheckNetworkLatencyResult => VsanMountPrecheckNetworkLatencyResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanMountPrecheckNetworkLatencyResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanMountPrecheckNetworkConnectivity => VsanMountPrecheckNetworkConnectivity::serialize(
+            p.as_any_ref().downcast_ref::<VsanMountPrecheckNetworkConnectivity>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanMountPrecheckNetworkConnectivityDetail => VsanMountPrecheckNetworkConnectivityDetail::serialize(
+            p.as_any_ref().downcast_ref::<VsanMountPrecheckNetworkConnectivityDetail>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanMountPrecheckNetworkLatency => VsanMountPrecheckNetworkLatency::serialize(
+            p.as_any_ref().downcast_ref::<VsanMountPrecheckNetworkLatency>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanMountPrecheckNetworkLatencyDetail => VsanMountPrecheckNetworkLatencyDetail::serialize(
+            p.as_any_ref().downcast_ref::<VsanMountPrecheckNetworkLatencyDetail>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanMountPrecheckResult => VsanMountPrecheckResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanMountPrecheckResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanDatastoreSourcePrecheckResult => VsanDatastoreSourcePrecheckResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanDatastoreSourcePrecheckResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanObjectHealthTelemetrySummary => VsanObjectHealthTelemetrySummary::serialize(
+            p.as_any_ref().downcast_ref::<VsanObjectHealthTelemetrySummary>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanObjectIoStats => VsanObjectIoStats::serialize(
+            p.as_any_ref().downcast_ref::<VsanObjectIoStats>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanProactiveRebalanceInfo => VsanProactiveRebalanceInfo::serialize(
+            p.as_any_ref().downcast_ref::<VsanProactiveRebalanceInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanRdmaConfig => VsanRdmaConfig::serialize(
+            p.as_any_ref().downcast_ref::<VsanRdmaConfig>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanRemoteVcInfo => VsanRemoteVcInfo::serialize(
+            p.as_any_ref().downcast_ref::<VsanRemoteVcInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanRemoteVcInfoStandalone => VsanRemoteVcInfoStandalone::serialize(
+            p.as_any_ref().downcast_ref::<VsanRemoteVcInfoStandalone>().unwrap(),
+            serializer,
+        ),
+        StructType::RemoteVsanSite => RemoteVsanSite::serialize(
+            p.as_any_ref().downcast_ref::<RemoteVsanSite>().unwrap(),
+            serializer,
+        ),
+        StructType::RemoteVsanSiteAffinity => RemoteVsanSiteAffinity::serialize(
+            p.as_any_ref().downcast_ref::<RemoteVsanSiteAffinity>().unwrap(),
+            serializer,
+        ),
+        StructType::RepairTimerInfo => RepairTimerInfo::serialize(
+            p.as_any_ref().downcast_ref::<RepairTimerInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanResourceCheckSpec => VsanResourceCheckSpec::serialize(
+            p.as_any_ref().downcast_ref::<VsanResourceCheckSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanResourceCheckStatus => VsanResourceCheckStatus::serialize(
+            p.as_any_ref().downcast_ref::<VsanResourceCheckStatus>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanResourceCheckTaskDetails => VsanResourceCheckTaskDetails::serialize(
+            p.as_any_ref().downcast_ref::<VsanResourceCheckTaskDetails>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanDiskDataEvacuationResourceCheckTaskDetails => VsanDiskDataEvacuationResourceCheckTaskDetails::serialize(
+            p.as_any_ref().downcast_ref::<VsanDiskDataEvacuationResourceCheckTaskDetails>().unwrap(),
+            serializer,
+        ),
+        StructType::ResyncIopsInfo => ResyncIopsInfo::serialize(
+            p.as_any_ref().downcast_ref::<ResyncIopsInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanRuntimeStatsHostMap => VsanRuntimeStatsHostMap::serialize(
+            p.as_any_ref().downcast_ref::<VsanRuntimeStatsHostMap>().unwrap(),
+            serializer,
+        ),
+        StructType::SsdEnduranceThresholdSpec => SsdEnduranceThresholdSpec::serialize(
+            p.as_any_ref().downcast_ref::<SsdEnduranceThresholdSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanServerHostUnicastInfo => VsanServerHostUnicastInfo::serialize(
+            p.as_any_ref().downcast_ref::<VsanServerHostUnicastInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanSharedWitnessCompatibilityResult => VsanSharedWitnessCompatibilityResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanSharedWitnessCompatibilityResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanSnapServiceConfig => VsanSnapServiceConfig::serialize(
+            p.as_any_ref().downcast_ref::<VsanSnapServiceConfig>().unwrap(),
+            serializer,
+        ),
+        StructType::VcRemoteVsanServerClusterConfig => VcRemoteVsanServerClusterConfig::serialize(
+            p.as_any_ref().downcast_ref::<VcRemoteVsanServerClusterConfig>().unwrap(),
+            serializer,
+        ),
+        StructType::VcRemoteVsanServerClusterInfo => VcRemoteVsanServerClusterInfo::serialize(
+            p.as_any_ref().downcast_ref::<VcRemoteVsanServerClusterInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanIscsiVipConfigSpec => VsanIscsiVipConfigSpec::serialize(
+            p.as_any_ref().downcast_ref::<VsanIscsiVipConfigSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanIscsiVipConfig => VsanIscsiVipConfig::serialize(
+            p.as_any_ref().downcast_ref::<VsanIscsiVipConfig>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanIscsiVipDVswitchConfig => VsanIscsiVipDVswitchConfig::serialize(
+            p.as_any_ref().downcast_ref::<VsanIscsiVipDVswitchConfig>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanVipNetworkConfig => VsanVipNetworkConfig::serialize(
+            p.as_any_ref().downcast_ref::<VsanVipNetworkConfig>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanIscsiVipVswitchConfig => VsanIscsiVipVswitchConfig::serialize(
+            p.as_any_ref().downcast_ref::<VsanIscsiVipVswitchConfig>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanBurnInTest => VsanBurnInTest::serialize(
+            p.as_any_ref().downcast_ref::<VsanBurnInTest>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanBurnInTestCheckResult => VsanBurnInTestCheckResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanBurnInTestCheckResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanCloudHealthStatus => VsanCloudHealthStatus::serialize(
+            p.as_any_ref().downcast_ref::<VsanCloudHealthStatus>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanClusterBurnInTestResultList => VsanClusterBurnInTestResultList::serialize(
+            p.as_any_ref().downcast_ref::<VsanClusterBurnInTestResultList>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanCompliantDriver => VsanCompliantDriver::serialize(
+            p.as_any_ref().downcast_ref::<VsanCompliantDriver>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanCompliantFirmware => VsanCompliantFirmware::serialize(
+            p.as_any_ref().downcast_ref::<VsanCompliantFirmware>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanConfigBaseIssue => VsanConfigBaseIssue::serialize(
+            p.as_any_ref().downcast_ref::<VsanConfigBaseIssue>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanConfigNotAllDisksClaimedIssue => VsanConfigNotAllDisksClaimedIssue::serialize(
+            p.as_any_ref().downcast_ref::<VsanConfigNotAllDisksClaimedIssue>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanConfigCheckResult => VsanConfigCheckResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanConfigCheckResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanDatastoreDefaultPolicySelectionConfig => VsanDatastoreDefaultPolicySelectionConfig::serialize(
+            p.as_any_ref().downcast_ref::<VsanDatastoreDefaultPolicySelectionConfig>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanDeconvergedNetConfig => VsanDeconvergedNetConfig::serialize(
+            p.as_any_ref().downcast_ref::<VsanDeconvergedNetConfig>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanDiskModelInfo => VsanDiskModelInfo::serialize(
+            p.as_any_ref().downcast_ref::<VsanDiskModelInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanDownloadItem => VsanDownloadItem::serialize(
+            p.as_any_ref().downcast_ref::<VsanDownloadItem>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanEsaConfig => VsanEsaConfig::serialize(
+            p.as_any_ref().downcast_ref::<VsanEsaConfig>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanEsaConfigInfo => VsanEsaConfigInfo::serialize(
+            p.as_any_ref().downcast_ref::<VsanEsaConfigInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanEsaDiskConfiguration => VsanEsaDiskConfiguration::serialize(
+            p.as_any_ref().downcast_ref::<VsanEsaDiskConfiguration>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanExtendedConfig => VsanExtendedConfig::serialize(
+            p.as_any_ref().downcast_ref::<VsanExtendedConfig>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanFileServiceOvfSpec => VsanFileServiceOvfSpec::serialize(
+            p.as_any_ref().downcast_ref::<VsanFileServiceOvfSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanFileServicePreflightCheckResult => VsanFileServicePreflightCheckResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanFileServicePreflightCheckResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanGenericClusterBaseIssue => VsanGenericClusterBaseIssue::serialize(
+            p.as_any_ref().downcast_ref::<VsanGenericClusterBaseIssue>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanGenericClusterBestPracticeHealth => VsanGenericClusterBestPracticeHealth::serialize(
+            p.as_any_ref().downcast_ref::<VsanGenericClusterBestPracticeHealth>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHclDeviceConstraint => VsanHclDeviceConstraint::serialize(
+            p.as_any_ref().downcast_ref::<VsanHclDeviceConstraint>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHclDiskConstraint => VsanHclDiskConstraint::serialize(
+            p.as_any_ref().downcast_ref::<VsanHclDiskConstraint>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHclDriverInfo => VsanHclDriverInfo::serialize(
+            p.as_any_ref().downcast_ref::<VsanHclDriverInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHclMinFwConstraint => VsanHclMinFwConstraint::serialize(
+            p.as_any_ref().downcast_ref::<VsanHclMinFwConstraint>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHclQuerySpec => VsanHclQuerySpec::serialize(
+            p.as_any_ref().downcast_ref::<VsanHclQuerySpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHclReleaseConstraint => VsanHclReleaseConstraint::serialize(
+            p.as_any_ref().downcast_ref::<VsanHclReleaseConstraint>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHealthConfigSpec => VsanHealthConfigSpec::serialize(
+            p.as_any_ref().downcast_ref::<VsanHealthConfigSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHealthCustomizationSpec => VsanHealthCustomizationSpec::serialize(
+            p.as_any_ref().downcast_ref::<VsanHealthCustomizationSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHealthThreshold => VsanHealthThreshold::serialize(
+            p.as_any_ref().downcast_ref::<VsanHealthThreshold>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHistoricalHealthConfig => VsanHistoricalHealthConfig::serialize(
+            p.as_any_ref().downcast_ref::<VsanHistoricalHealthConfig>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHostDeviceInfo => VsanHostDeviceInfo::serialize(
+            p.as_any_ref().downcast_ref::<VsanHostDeviceInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHwToVcgInfoMappingSpec => VsanHwToVcgInfoMappingSpec::serialize(
+            p.as_any_ref().downcast_ref::<VsanHwToVcgInfoMappingSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanIoTripAnalyzerConfig => VsanIoTripAnalyzerConfig::serialize(
+            p.as_any_ref().downcast_ref::<VsanIoTripAnalyzerConfig>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanIoTripAnalyzerRecurrence => VsanIoTripAnalyzerRecurrence::serialize(
+            p.as_any_ref().downcast_ref::<VsanIoTripAnalyzerRecurrence>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanInternalExtendedConfig => VsanInternalExtendedConfig::serialize(
+            p.as_any_ref().downcast_ref::<VsanInternalExtendedConfig>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanNetworkConfigBaseIssue => VsanNetworkConfigBaseIssue::serialize(
+            p.as_any_ref().downcast_ref::<VsanNetworkConfigBaseIssue>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanNetworkConfigPnicSpeedInconsistencyIssue => VsanNetworkConfigPnicSpeedInconsistencyIssue::serialize(
+            p.as_any_ref().downcast_ref::<VsanNetworkConfigPnicSpeedInconsistencyIssue>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanNetworkConfigPortgroupWithNoRedundancyIssue => VsanNetworkConfigPortgroupWithNoRedundancyIssue::serialize(
+            p.as_any_ref().downcast_ref::<VsanNetworkConfigPortgroupWithNoRedundancyIssue>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanNetworkConfigVdsScopeIssue => VsanNetworkConfigVdsScopeIssue::serialize(
+            p.as_any_ref().downcast_ref::<VsanNetworkConfigVdsScopeIssue>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanNetworkConfigVsanNotOnVdsIssue => VsanNetworkConfigVsanNotOnVdsIssue::serialize(
+            p.as_any_ref().downcast_ref::<VsanNetworkConfigVsanNotOnVdsIssue>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanNetworkConfigVswitchWithNoRedundancyIssue => VsanNetworkConfigVswitchWithNoRedundancyIssue::serialize(
+            p.as_any_ref().downcast_ref::<VsanNetworkConfigVswitchWithNoRedundancyIssue>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanNetworkVMotionVmknicNotFountIssue => VsanNetworkVMotionVmknicNotFountIssue::serialize(
+            p.as_any_ref().downcast_ref::<VsanNetworkVMotionVmknicNotFountIssue>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanNetworkConfigBestPracticeHealth => VsanNetworkConfigBestPracticeHealth::serialize(
+            p.as_any_ref().downcast_ref::<VsanNetworkConfigBestPracticeHealth>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanObjSnapParams => VsanObjSnapParams::serialize(
+            p.as_any_ref().downcast_ref::<VsanObjSnapParams>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanObjectDetail => VsanObjectDetail::serialize(
+            p.as_any_ref().downcast_ref::<VsanObjectDetail>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanObjectSnapshotId => VsanObjectSnapshotId::serialize(
+            p.as_any_ref().downcast_ref::<VsanObjectSnapshotId>().unwrap(),
+            serializer,
+        ),
+        StructType::VimVsanVsanPMemConfig => VimVsanVsanPMemConfig::serialize(
+            p.as_any_ref().downcast_ref::<VimVsanVsanPMemConfig>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanPerfsvcHealthResult => VsanPerfsvcHealthResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanPerfsvcHealthResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanPrepareVsanForVcsaSpec => VsanPrepareVsanForVcsaSpec::serialize(
+            p.as_any_ref().downcast_ref::<VsanPrepareVsanForVcsaSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanSnapshotDetail => VsanSnapshotDetail::serialize(
+            p.as_any_ref().downcast_ref::<VsanSnapshotDetail>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanSnapshotQueryResult => VsanSnapshotQueryResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanSnapshotQueryResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanSnapshotQuerySpec => VsanSnapshotQuerySpec::serialize(
+            p.as_any_ref().downcast_ref::<VsanSnapshotQuerySpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanSpaceEfficiencyMetadataSize => VsanSpaceEfficiencyMetadataSize::serialize(
+            p.as_any_ref().downcast_ref::<VsanSpaceEfficiencyMetadataSize>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanSpaceEfficiencyRatio => VsanSpaceEfficiencyRatio::serialize(
+            p.as_any_ref().downcast_ref::<VsanSpaceEfficiencyRatio>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanUnmapConfig => VsanUnmapConfig::serialize(
+            p.as_any_ref().downcast_ref::<VsanUnmapConfig>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanUpdateItem => VsanUpdateItem::serialize(
+            p.as_any_ref().downcast_ref::<VsanUpdateItem>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanVcPostDeployConfigSpec => VsanVcPostDeployConfigSpec::serialize(
+            p.as_any_ref().downcast_ref::<VsanVcPostDeployConfigSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanVcStretchedClusterConfigSpec => VsanVcStretchedClusterConfigSpec::serialize(
+            p.as_any_ref().downcast_ref::<VsanVcStretchedClusterConfigSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanVcsaDeploymentProgress => VsanVcsaDeploymentProgress::serialize(
+            p.as_any_ref().downcast_ref::<VsanVcsaDeploymentProgress>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanVdsMigrationPlan => VsanVdsMigrationPlan::serialize(
+            p.as_any_ref().downcast_ref::<VsanVdsMigrationPlan>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanVdsPgMigrationHostInfo => VsanVdsPgMigrationHostInfo::serialize(
+            p.as_any_ref().downcast_ref::<VsanVdsPgMigrationHostInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanVdsPgMigrationSpec => VsanVdsPgMigrationSpec::serialize(
+            p.as_any_ref().downcast_ref::<VsanVdsPgMigrationSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanVdsPgMigrationVmInfo => VsanVdsPgMigrationVmInfo::serialize(
+            p.as_any_ref().downcast_ref::<VsanVdsPgMigrationVmInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanVibInstallPreflightStatus => VsanVibInstallPreflightStatus::serialize(
+            p.as_any_ref().downcast_ref::<VsanVibInstallPreflightStatus>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanVibScanResult => VsanVibScanResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanVibScanResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanVibSpec => VsanVibSpec::serialize(
+            p.as_any_ref().downcast_ref::<VsanVibSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanVmVdsMigrationSpec => VsanVmVdsMigrationSpec::serialize(
+            p.as_any_ref().downcast_ref::<VsanVmVdsMigrationSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanVnicVdsMigrationSpec => VsanVnicVdsMigrationSpec::serialize(
+            p.as_any_ref().downcast_ref::<VsanVnicVdsMigrationSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanVumConfig => VsanVumConfig::serialize(
+            p.as_any_ref().downcast_ref::<VsanVumConfig>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanWitnessHostConfig => VsanWitnessHostConfig::serialize(
+            p.as_any_ref().downcast_ref::<VsanWitnessHostConfig>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanXvcClientInfo => VsanXvcClientInfo::serialize(
+            p.as_any_ref().downcast_ref::<VsanXvcClientInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanXvcDatastoreConfig => VsanXvcDatastoreConfig::serialize(
+            p.as_any_ref().downcast_ref::<VsanXvcDatastoreConfig>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanXvcDatastoreInfo => VsanXvcDatastoreInfo::serialize(
+            p.as_any_ref().downcast_ref::<VsanXvcDatastoreInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanXvcClientInfoSpec => VsanXvcClientInfoSpec::serialize(
+            p.as_any_ref().downcast_ref::<VsanXvcClientInfoSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanXvcQueryCriteria => VsanXvcQueryCriteria::serialize(
+            p.as_any_ref().downcast_ref::<VsanXvcQueryCriteria>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanXvcQueryFilter => VsanXvcQueryFilter::serialize(
+            p.as_any_ref().downcast_ref::<VsanXvcQueryFilter>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanXvcQueryPropertyValue => VsanXvcQueryPropertyValue::serialize(
+            p.as_any_ref().downcast_ref::<VsanXvcQueryPropertyValue>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanXvcQueryResultSet => VsanXvcQueryResultSet::serialize(
+            p.as_any_ref().downcast_ref::<VsanXvcQueryResultSet>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanXvcQuerySpec => VsanXvcQuerySpec::serialize(
+            p.as_any_ref().downcast_ref::<VsanXvcQuerySpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanXvcResultItem => VsanXvcResultItem::serialize(
+            p.as_any_ref().downcast_ref::<VsanXvcResultItem>().unwrap(),
+            serializer,
+        ),
         StructType::VsanClusterConfigInfo => VsanClusterConfigInfo::serialize(
             p.as_any_ref().downcast_ref::<VsanClusterConfigInfo>().unwrap(),
             serializer,
         ),
+        StructType::VsanConfigInfoEx => VsanConfigInfoEx::serialize(
+            p.as_any_ref().downcast_ref::<VsanConfigInfoEx>().unwrap(),
+            serializer,
+        ),
         StructType::VsanClusterConfigInfoHostDefaultInfo => VsanClusterConfigInfoHostDefaultInfo::serialize(
             p.as_any_ref().downcast_ref::<VsanClusterConfigInfoHostDefaultInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanClusterCoreConfig => VsanClusterCoreConfig::serialize(
+            p.as_any_ref().downcast_ref::<VsanClusterCoreConfig>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanClusterCoreConfigSpec => VsanClusterCoreConfigSpec::serialize(
+            p.as_any_ref().downcast_ref::<VsanClusterCoreConfigSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHostAbortWipeDiskStatus => VsanHostAbortWipeDiskStatus::serialize(
+            p.as_any_ref().downcast_ref::<VsanHostAbortWipeDiskStatus>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHostAboutInfoEx => VsanHostAboutInfoEx::serialize(
+            p.as_any_ref().downcast_ref::<VsanHostAboutInfoEx>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanAddStoragePoolDiskSpec => VsanAddStoragePoolDiskSpec::serialize(
+            p.as_any_ref().downcast_ref::<VsanAddStoragePoolDiskSpec>().unwrap(),
             serializer,
         ),
         StructType::VsanHostClusterStatus => VsanHostClusterStatus::serialize(
@@ -6846,8 +10158,20 @@ where
             p.as_any_ref().downcast_ref::<VsanHostClusterStatusStateCompletionEstimate>().unwrap(),
             serializer,
         ),
+        StructType::VsanComplianceDetail => VsanComplianceDetail::serialize(
+            p.as_any_ref().downcast_ref::<VsanComplianceDetail>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanComplianceResult => VsanComplianceResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanComplianceResult>().unwrap(),
+            serializer,
+        ),
         StructType::VsanHostConfigInfo => VsanHostConfigInfo::serialize(
             p.as_any_ref().downcast_ref::<VsanHostConfigInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHostConfigInfoEx => VsanHostConfigInfoEx::serialize(
+            p.as_any_ref().downcast_ref::<VsanHostConfigInfoEx>().unwrap(),
             serializer,
         ),
         StructType::VsanHostConfigInfoClusterInfo => VsanHostConfigInfoClusterInfo::serialize(
@@ -6866,16 +10190,36 @@ where
             p.as_any_ref().downcast_ref::<VsanHostConfigInfoNetworkInfoPortConfig>().unwrap(),
             serializer,
         ),
+        StructType::VsanHostPortConfigEx => VsanHostPortConfigEx::serialize(
+            p.as_any_ref().downcast_ref::<VsanHostPortConfigEx>().unwrap(),
+            serializer,
+        ),
         StructType::VsanHostConfigInfoStorageInfo => VsanHostConfigInfoStorageInfo::serialize(
             p.as_any_ref().downcast_ref::<VsanHostConfigInfoStorageInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHostCreateNativeKeyProviderSpec => VsanHostCreateNativeKeyProviderSpec::serialize(
+            p.as_any_ref().downcast_ref::<VsanHostCreateNativeKeyProviderSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanInTransitEncryptionInfo => VsanInTransitEncryptionInfo::serialize(
+            p.as_any_ref().downcast_ref::<VsanInTransitEncryptionInfo>().unwrap(),
             serializer,
         ),
         StructType::VsanHostDecommissionMode => VsanHostDecommissionMode::serialize(
             p.as_any_ref().downcast_ref::<VsanHostDecommissionMode>().unwrap(),
             serializer,
         ),
+        StructType::VsanDeleteStoragePoolDiskSpec => VsanDeleteStoragePoolDiskSpec::serialize(
+            p.as_any_ref().downcast_ref::<VsanDeleteStoragePoolDiskSpec>().unwrap(),
+            serializer,
+        ),
         StructType::VsanHostDiskMapInfo => VsanHostDiskMapInfo::serialize(
             p.as_any_ref().downcast_ref::<VsanHostDiskMapInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::VimVsanHostDiskMapInfoEx => VimVsanHostDiskMapInfoEx::serialize(
+            p.as_any_ref().downcast_ref::<VimVsanHostDiskMapInfoEx>().unwrap(),
             serializer,
         ),
         StructType::VsanHostDiskMapResult => VsanHostDiskMapResult::serialize(
@@ -6886,20 +10230,136 @@ where
             p.as_any_ref().downcast_ref::<VsanHostDiskMapping>().unwrap(),
             serializer,
         ),
+        StructType::VimVsanHostDiskMappingCreationSpec => VimVsanHostDiskMappingCreationSpec::serialize(
+            p.as_any_ref().downcast_ref::<VimVsanHostDiskMappingCreationSpec>().unwrap(),
+            serializer,
+        ),
         StructType::VsanHostDiskResult => VsanHostDiskResult::serialize(
             p.as_any_ref().downcast_ref::<VsanHostDiskResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VimVsanHostDiskResultEx => VimVsanHostDiskResultEx::serialize(
+            p.as_any_ref().downcast_ref::<VimVsanHostDiskResultEx>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHostDrsStats => VsanHostDrsStats::serialize(
+            p.as_any_ref().downcast_ref::<VsanHostDrsStats>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHostEncryptionInfo => VsanHostEncryptionInfo::serialize(
+            p.as_any_ref().downcast_ref::<VsanHostEncryptionInfo>().unwrap(),
             serializer,
         ),
         StructType::VsanHostIpConfig => VsanHostIpConfig::serialize(
             p.as_any_ref().downcast_ref::<VsanHostIpConfig>().unwrap(),
             serializer,
         ),
+        StructType::VsanHostIpConfigEx => VsanHostIpConfigEx::serialize(
+            p.as_any_ref().downcast_ref::<VsanHostIpConfigEx>().unwrap(),
+            serializer,
+        ),
         StructType::VsanHostMembershipInfo => VsanHostMembershipInfo::serialize(
             p.as_any_ref().downcast_ref::<VsanHostMembershipInfo>().unwrap(),
             serializer,
         ),
+        StructType::VsanPolicyStatus => VsanPolicyStatus::serialize(
+            p.as_any_ref().downcast_ref::<VsanPolicyStatus>().unwrap(),
+            serializer,
+        ),
+        StructType::VimVsanHostQueryVsanDisksSpec => VimVsanHostQueryVsanDisksSpec::serialize(
+            p.as_any_ref().downcast_ref::<VimVsanHostQueryVsanDisksSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::RemoteVsanServerClusterConfig => RemoteVsanServerClusterConfig::serialize(
+            p.as_any_ref().downcast_ref::<RemoteVsanServerClusterConfig>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHostRuntimeStats => VsanHostRuntimeStats::serialize(
+            p.as_any_ref().downcast_ref::<VsanHostRuntimeStats>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHostServerClusterUnicastConfig => VsanHostServerClusterUnicastConfig::serialize(
+            p.as_any_ref().downcast_ref::<VsanHostServerClusterUnicastConfig>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHostServerClusterUnicastInfo => VsanHostServerClusterUnicastInfo::serialize(
+            p.as_any_ref().downcast_ref::<VsanHostServerClusterUnicastInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::SiteAffinityInfo => SiteAffinityInfo::serialize(
+            p.as_any_ref().downcast_ref::<SiteAffinityInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanStoragePoolDisk => VsanStoragePoolDisk::serialize(
+            p.as_any_ref().downcast_ref::<VsanStoragePoolDisk>().unwrap(),
+            serializer,
+        ),
+        StructType::VimVsanHostStoragePoolDiskInfo => VimVsanHostStoragePoolDiskInfo::serialize(
+            p.as_any_ref().downcast_ref::<VimVsanHostStoragePoolDiskInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::VimVsanHostStoragePoolInfo => VimVsanHostStoragePoolInfo::serialize(
+            p.as_any_ref().downcast_ref::<VimVsanHostStoragePoolInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::VimVsanHostTrimDiskEntry => VimVsanHostTrimDiskEntry::serialize(
+            p.as_any_ref().downcast_ref::<VimVsanHostTrimDiskEntry>().unwrap(),
+            serializer,
+        ),
+        StructType::VimVsanHostTrimDiskSpec => VimVsanHostTrimDiskSpec::serialize(
+            p.as_any_ref().downcast_ref::<VimVsanHostTrimDiskSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VimVsanHostUpdateStoragePoolDiskSpec => VimVsanHostUpdateStoragePoolDiskSpec::serialize(
+            p.as_any_ref().downcast_ref::<VimVsanHostUpdateStoragePoolDiskSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHostAssociatedObjects => VsanHostAssociatedObjects::serialize(
+            p.as_any_ref().downcast_ref::<VsanHostAssociatedObjects>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHostAssociatedObjectsResult => VsanHostAssociatedObjectsResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanHostAssociatedObjectsResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanComplianceQuerySpec => VsanComplianceQuerySpec::serialize(
+            p.as_any_ref().downcast_ref::<VsanComplianceQuerySpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHostComponentSyncState => VsanHostComponentSyncState::serialize(
+            p.as_any_ref().downcast_ref::<VsanHostComponentSyncState>().unwrap(),
+            serializer,
+        ),
+        StructType::VimVsanHostVsanDirectStorage => VimVsanHostVsanDirectStorage::serialize(
+            p.as_any_ref().downcast_ref::<VimVsanHostVsanDirectStorage>().unwrap(),
+            serializer,
+        ),
         StructType::VsanHostVsanDiskInfo => VsanHostVsanDiskInfo::serialize(
             p.as_any_ref().downcast_ref::<VsanHostVsanDiskInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::VimVsanHostVsanDiskManagementSystemCapability => VimVsanHostVsanDiskManagementSystemCapability::serialize(
+            p.as_any_ref().downcast_ref::<VimVsanHostVsanDiskManagementSystemCapability>().unwrap(),
+            serializer,
+        ),
+        StructType::VimVsanHostVsanHostCapability => VimVsanHostVsanHostCapability::serialize(
+            p.as_any_ref().downcast_ref::<VimVsanHostVsanHostCapability>().unwrap(),
+            serializer,
+        ),
+        StructType::VimVsanHostVsanManagedDisksInfo => VimVsanHostVsanManagedDisksInfo::serialize(
+            p.as_any_ref().downcast_ref::<VimVsanHostVsanManagedDisksInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::VimVsanHostVsanManagedPMemInfo => VimVsanHostVsanManagedPMemInfo::serialize(
+            p.as_any_ref().downcast_ref::<VimVsanHostVsanManagedPMemInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanObjectProfileInfo => VsanObjectProfileInfo::serialize(
+            p.as_any_ref().downcast_ref::<VsanObjectProfileInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHostVsanObjectSyncState => VsanHostVsanObjectSyncState::serialize(
+            p.as_any_ref().downcast_ref::<VsanHostVsanObjectSyncState>().unwrap(),
             serializer,
         ),
         StructType::VsanHostRuntimeInfo => VsanHostRuntimeInfo::serialize(
@@ -6908,6 +10368,30 @@ where
         ),
         StructType::VsanHostRuntimeInfoDiskIssue => VsanHostRuntimeInfoDiskIssue::serialize(
             p.as_any_ref().downcast_ref::<VsanHostRuntimeInfoDiskIssue>().unwrap(),
+            serializer,
+        ),
+        StructType::VimVsanHostVsanScsiDisk => VimVsanHostVsanScsiDisk::serialize(
+            p.as_any_ref().downcast_ref::<VimVsanHostVsanScsiDisk>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHostVsanObjectSyncQueryResult => VsanHostVsanObjectSyncQueryResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanHostVsanObjectSyncQueryResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanSyncingObjectRecoveryDetails => VsanSyncingObjectRecoveryDetails::serialize(
+            p.as_any_ref().downcast_ref::<VsanSyncingObjectRecoveryDetails>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanWhatIfEvacDetail => VsanWhatIfEvacDetail::serialize(
+            p.as_any_ref().downcast_ref::<VsanWhatIfEvacDetail>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanWhatIfEvacResult => VsanWhatIfEvacResult::serialize(
+            p.as_any_ref().downcast_ref::<VsanWhatIfEvacResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VsanHostWipeDiskStatus => VsanHostWipeDiskStatus::serialize(
+            p.as_any_ref().downcast_ref::<VsanHostWipeDiskStatus>().unwrap(),
             serializer,
         ),
         StructType::BaseConfigInfo => BaseConfigInfo::serialize(
@@ -6976,6 +10460,22 @@ where
         ),
         StructType::VslmRelocateSpec => VslmRelocateSpec::serialize(
             p.as_any_ref().downcast_ref::<VslmRelocateSpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VStorageObjectReconcileResult => VStorageObjectReconcileResult::serialize(
+            p.as_any_ref().downcast_ref::<VStorageObjectReconcileResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VStorageObjectReconcileResultInvalidDiskPath => VStorageObjectReconcileResultInvalidDiskPath::serialize(
+            p.as_any_ref().downcast_ref::<VStorageObjectReconcileResultInvalidDiskPath>().unwrap(),
+            serializer,
+        ),
+        StructType::VStorageObjectReconcileResultReconcileDetail => VStorageObjectReconcileResultReconcileDetail::serialize(
+            p.as_any_ref().downcast_ref::<VStorageObjectReconcileResultReconcileDetail>().unwrap(),
+            serializer,
+        ),
+        StructType::VStorageObjectReconcileSpec => VStorageObjectReconcileSpec::serialize(
+            p.as_any_ref().downcast_ref::<VStorageObjectReconcileSpec>().unwrap(),
             serializer,
         ),
         StructType::VStorageObjectStateInfo => VStorageObjectStateInfo::serialize(
@@ -7100,6 +10600,70 @@ where
         ),
         StructType::WaitOptions => WaitOptions::serialize(
             p.as_any_ref().downcast_ref::<WaitOptions>().unwrap(),
+            serializer,
+        ),
+        StructType::VslmAboutInfo => VslmAboutInfo::serialize(
+            p.as_any_ref().downcast_ref::<VslmAboutInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::VslmQueryDatastoreInfoResult => VslmQueryDatastoreInfoResult::serialize(
+            p.as_any_ref().downcast_ref::<VslmQueryDatastoreInfoResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VslmServiceInstanceContent => VslmServiceInstanceContent::serialize(
+            p.as_any_ref().downcast_ref::<VslmServiceInstanceContent>().unwrap(),
+            serializer,
+        ),
+        StructType::VslmTaskInfo => VslmTaskInfo::serialize(
+            p.as_any_ref().downcast_ref::<VslmTaskInfo>().unwrap(),
+            serializer,
+        ),
+        StructType::VslmTaskReason => VslmTaskReason::serialize(
+            p.as_any_ref().downcast_ref::<VslmTaskReason>().unwrap(),
+            serializer,
+        ),
+        StructType::VslmTaskReasonAlarm => VslmTaskReasonAlarm::serialize(
+            p.as_any_ref().downcast_ref::<VslmTaskReasonAlarm>().unwrap(),
+            serializer,
+        ),
+        StructType::VslmTaskReasonSchedule => VslmTaskReasonSchedule::serialize(
+            p.as_any_ref().downcast_ref::<VslmTaskReasonSchedule>().unwrap(),
+            serializer,
+        ),
+        StructType::VslmTaskReasonSystem => VslmTaskReasonSystem::serialize(
+            p.as_any_ref().downcast_ref::<VslmTaskReasonSystem>().unwrap(),
+            serializer,
+        ),
+        StructType::VslmTaskReasonUser => VslmTaskReasonUser::serialize(
+            p.as_any_ref().downcast_ref::<VslmTaskReasonUser>().unwrap(),
+            serializer,
+        ),
+        StructType::VslmDatastoreSyncStatus => VslmDatastoreSyncStatus::serialize(
+            p.as_any_ref().downcast_ref::<VslmDatastoreSyncStatus>().unwrap(),
+            serializer,
+        ),
+        StructType::VslmVsoVStorageObjectAssociations => VslmVsoVStorageObjectAssociations::serialize(
+            p.as_any_ref().downcast_ref::<VslmVsoVStorageObjectAssociations>().unwrap(),
+            serializer,
+        ),
+        StructType::VslmVsoVStorageObjectAssociationsVmDiskAssociation => VslmVsoVStorageObjectAssociationsVmDiskAssociation::serialize(
+            p.as_any_ref().downcast_ref::<VslmVsoVStorageObjectAssociationsVmDiskAssociation>().unwrap(),
+            serializer,
+        ),
+        StructType::VslmVsoVStorageObjectQueryResult => VslmVsoVStorageObjectQueryResult::serialize(
+            p.as_any_ref().downcast_ref::<VslmVsoVStorageObjectQueryResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VslmVsoVStorageObjectQuerySpec => VslmVsoVStorageObjectQuerySpec::serialize(
+            p.as_any_ref().downcast_ref::<VslmVsoVStorageObjectQuerySpec>().unwrap(),
+            serializer,
+        ),
+        StructType::VslmVsoVStorageObjectResult => VslmVsoVStorageObjectResult::serialize(
+            p.as_any_ref().downcast_ref::<VslmVsoVStorageObjectResult>().unwrap(),
+            serializer,
+        ),
+        StructType::VslmVsoVStorageObjectSnapshotResult => VslmVsoVStorageObjectSnapshotResult::serialize(
+            p.as_any_ref().downcast_ref::<VslmVsoVStorageObjectSnapshotResult>().unwrap(),
             serializer,
         ),
         StructType::MethodFault => MethodFault::serialize(

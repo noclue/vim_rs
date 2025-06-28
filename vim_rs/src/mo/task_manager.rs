@@ -19,6 +19,38 @@ impl TaskManager {
             mo_id: mo_id.to_string(),
         }
     }
+    /// Returns *TaskInfo* data objects
+    /// based on the specified *TaskManagerTaskViewSpec*, *TaskFilterSpec* and
+    /// *TaskInfoFilterSpec* parameters.
+    /// 
+    /// Returns an empty array when there
+    /// are no tasks matching the filtering parameters.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    /// 
+    /// ***Required privileges:*** System.View
+    ///
+    /// ## Parameters:
+    ///
+    /// ### view_spec
+    /// The view parameters for the tasks query.
+    ///
+    /// ### filter_spec
+    /// The specification for the task query filter.
+    ///
+    /// ### info_filter_spec
+    /// The specification for the task info filter.
+    ///
+    /// ## Returns:
+    ///
+    /// *TaskInfo* data objects matching the filtering
+    /// parameters.
+    pub async fn read_next_tasks_by_view_spec(&self, view_spec: &dyn crate::types::traits::TaskManagerTaskViewSpecTrait, filter_spec: &crate::types::structs::TaskFilterSpec, info_filter_spec: Option<&crate::types::structs::TaskInfoFilterSpec>) -> Result<Option<Vec<crate::types::structs::TaskInfo>>> {
+        let input = ReadNextTasksByViewSpecRequestType {view_spec, filter_spec, info_filter_spec, };
+        let path = format!("/TaskManager/{moId}/ReadNextTasksByViewSpec", moId = &self.mo_id);
+        let req = self.client.post_request(&path, &input);
+        self.client.execute_option(req).await
+    }
     /// Creates a *TaskHistoryCollector*, a
     /// specialized *HistoryCollector* that gathers
     /// *TaskInfo* data objects.
@@ -50,6 +82,45 @@ impl TaskManager {
     pub async fn create_collector_for_tasks(&self, filter: &crate::types::structs::TaskFilterSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateCollectorForTasksRequestType {filter, };
         let path = format!("/TaskManager/{moId}/CreateCollectorForTasks", moId = &self.mo_id);
+        let req = self.client.post_request(&path, &input);
+        self.client.execute(req).await
+    }
+    /// Creates a *TaskHistoryCollector*, a
+    /// specialized *HistoryCollector* that gathers
+    /// *TaskInfo* data objects.
+    /// 
+    /// A *TaskHistoryCollector* does not persist
+    /// beyond the current client session.
+    /// 
+    /// ***Since:*** vSphere API Release 8.0.3.0
+    /// 
+    /// ***Required privileges:*** System.View
+    ///
+    /// ## Parameters:
+    ///
+    /// ### filter
+    /// The specification for the task query filter.
+    ///
+    /// ### info_filter
+    /// The specification for the task info filter.
+    ///
+    /// ## Returns:
+    ///
+    /// The task collector based on the filter.
+    /// 
+    /// Refers instance of *TaskHistoryCollector*.
+    ///
+    /// ## Errors:
+    ///
+    /// ***InvalidArgument***: if the filter is null or unknown.
+    /// 
+    /// ***InvalidState***: if there are more than the maximum number of
+    /// task collectors.
+    /// 
+    /// ***NotSupported***: if called directly on a host.
+    pub async fn create_collector_with_info_filter_for_tasks(&self, filter: &crate::types::structs::TaskFilterSpec, info_filter: Option<&crate::types::structs::TaskInfoFilterSpec>) -> Result<crate::types::structs::ManagedObjectReference> {
+        let input = CreateCollectorWithInfoFilterForTasksRequestType {filter, info_filter, };
+        let path = format!("/TaskManager/{moId}/CreateCollectorWithInfoFilterForTasks", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
         self.client.execute(req).await
     }
@@ -151,8 +222,27 @@ impl TaskManager {
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
+struct ReadNextTasksByViewSpecRequestType<'a> {
+    #[serde(rename = "viewSpec")]
+    view_spec: &'a dyn crate::types::traits::TaskManagerTaskViewSpecTrait,
+    #[serde(rename = "filterSpec")]
+    filter_spec: &'a crate::types::structs::TaskFilterSpec,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "infoFilterSpec")]
+    info_filter_spec: Option<&'a crate::types::structs::TaskInfoFilterSpec>,
+}
+#[derive(serde::Serialize)]
+#[serde(tag="_typeName")]
 struct CreateCollectorForTasksRequestType<'a> {
     filter: &'a crate::types::structs::TaskFilterSpec,
+}
+#[derive(serde::Serialize)]
+#[serde(tag="_typeName")]
+struct CreateCollectorWithInfoFilterForTasksRequestType<'a> {
+    filter: &'a crate::types::structs::TaskFilterSpec,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "infoFilter")]
+    info_filter: Option<&'a crate::types::structs::TaskInfoFilterSpec>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]
