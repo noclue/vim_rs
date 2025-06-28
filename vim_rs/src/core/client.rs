@@ -15,10 +15,10 @@ const LIB_VERSION: &str = env!("CARGO_PKG_VERSION");
 const RUSTC_VERSION: &str = env!("RUSTC_VERSION");
 
 /// Compatible API releases i.e. current and older API releases that can be negotiated with a server
-pub const COMPATIBLE_API_RELEASES: [&str; 2] = ["8.0.2.0", "8.0.1.0"];
+pub const COMPATIBLE_API_RELEASES: [&str; 4] = ["9.0.0.0", "8.0.3.0", "8.0.2.0", "8.0.1.0"];
 
 /// The default API version found in the OpenAPI specification
-pub const API_RELEASE: &str = "8.0.2.0";
+pub const API_RELEASE: &str = "9.0.0.0";
 
 /// The header key for the session key
 const AUTHN_HEADER: &str = "vmware-api-session-id";
@@ -241,7 +241,9 @@ pub struct Client {
 /// the client is dropped.
 impl Client {
 
-    /// Get the service instance content
+    /// Get the VIM service instance content. This is the main part of the VI JSON API that contains
+    /// the core virtualization objects and services. There are additional storage APIs under VSAN,
+    /// PBM, VSLM and SMS. There is also ESX Agent Manager API for managing agent virtual machines.
     pub fn service_content(&self) -> &ServiceContent {
         // Safe to unwrap as the service_content is set during construction
         self.service_content.as_ref().unwrap()

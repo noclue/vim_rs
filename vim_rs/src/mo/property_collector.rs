@@ -31,7 +31,7 @@ impl PropertyCollector {
     }
     /// Discards remaining results from a retrieval started by *PropertyCollector.RetrievePropertiesEx* on the same session on the same *PropertyCollector*.
     /// 
-    /// ***Required privileges:*** System.Read
+    /// ***Required privileges:*** System.View
     ///
     /// ## Parameters:
     ///
@@ -104,7 +104,7 @@ impl PropertyCollector {
     }
     /// Retrieves additional results from a retrieval started by *PropertyCollector.RetrievePropertiesEx* on the same session on the same *PropertyCollector*.
     /// 
-    /// ***Required privileges:*** System.Read
+    /// ***Required privileges:*** System.View
     ///
     /// ## Parameters:
     ///
@@ -246,6 +246,12 @@ impl PropertyCollector {
     /// the output blends the results from all the filters and reports a given
     /// managed object at most once no matter how many filters apply.
     /// 
+    /// The method isn't requiring any privilege, because it's used to
+    /// access properties that are publicly available, without authenticated
+    /// session. That isn't sequrity isse, because the property collector is
+    /// doing another explicit access evaluation and it's returning data only
+    /// from objects to which the user has access.
+    /// 
     /// The filter creation step can throw all of the same faults as *PropertyCollector.CreateFilter*.
     /// 
     /// ***Required privileges:*** System.Anonymous
@@ -280,6 +286,12 @@ impl PropertyCollector {
     /// property values, and destroying the filters. The main difference is that
     /// the output blends the results from all the filters and reports a given
     /// managed object at most once no matter how many filters apply.
+    /// 
+    /// The method isn't requiring any privilege, because it's used to
+    /// access properties that are publicly available, without authenticated
+    /// session. That isn't sequrity isse, because the property collector is
+    /// doing another explicit access evaluation and it's returning data only
+    /// from objects to which the user has access.
     /// 
     /// The filter creation step can throw all of the same faults as *PropertyCollector.CreateFilter*.
     /// 

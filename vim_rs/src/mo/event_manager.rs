@@ -17,22 +17,41 @@ impl EventManager {
             mo_id: mo_id.to_string(),
         }
     }
-    /// Returns the events in specified filter.
+    /// Returns events based on the specified *EventFilterSpec* and
+    /// *EventManagerEventViewSpec* parameters.
     /// 
-    /// Returns empty array when there are not any events qualified.
+    /// Returns an empty array when there are
+    /// no events matching the filtering parameters.
     /// 
     /// ***Required privileges:*** System.View
     ///
     /// ## Parameters:
     ///
     /// ### filter
-    /// The events qualified.
+    /// Defines a filtering criteria for the event query.
+    ///
+    /// ### event_view_spec
+    /// Defines the view parameters for the event query.
+    /// 
+    /// To retrieve the newest events in the system, use 2147480000
+    /// (or the value of "config.vpxd.event.maxEventId" advanced vCenter
+    /// configuration option) as *EventManagerViewByStartId.startEventId* and
+    /// set *EventManagerViewByStartId.isForward* to false. To retrieve subsequent
+    /// pages of results with older events, use the smallest event ID
+    /// from the previous response as the *EventManagerViewByStartId.startEventId*
+    /// and set*EventManagerViewByStartId.isForward* to false in the next query.
+    /// To retrieve subsequent pages of results with newer events, use
+    /// the biggest event ID from the previous page as the
+    /// *EventManagerViewByStartId.startEventId* and set
+    /// *EventManagerViewByStartId.isForward* to true in the next query.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
     ///
     /// ## Returns:
     ///
-    /// The events matching the filter.
-    pub async fn query_events(&self, filter: &crate::types::structs::EventFilterSpec) -> Result<Option<Vec<crate::types::structs::Event>>> {
-        let input = QueryEventsRequestType {filter, };
+    /// The events matching the filters.
+    pub async fn query_events(&self, filter: &crate::types::structs::EventFilterSpec, event_view_spec: Option<&dyn crate::types::traits::EventManagerEventViewSpecTrait>) -> Result<Option<Vec<crate::types::structs::Event>>> {
+        let input = QueryEventsRequestType {filter, event_view_spec, };
         let path = format!("/EventManager/{moId}/QueryEvents", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
         self.client.execute_option(req).await
@@ -177,6 +196,9 @@ impl EventManager {
 #[serde(tag="_typeName")]
 struct QueryEventsRequestType<'a> {
     filter: &'a crate::types::structs::EventFilterSpec,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "eventViewSpec")]
+    event_view_spec: Option<&'a dyn crate::types::traits::EventManagerEventViewSpecTrait>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]

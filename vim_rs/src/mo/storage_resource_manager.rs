@@ -14,6 +14,8 @@ impl StorageResourceManager {
             mo_id: mo_id.to_string(),
         }
     }
+    /// Deprecated as of vSphere8.0 U3, and there is no replacement for it.
+    /// 
     /// Changes configuration of storage I/O resource management for a given datastore.
     /// 
     /// The changes are applied to all the backing storage devices for the datastore.
@@ -67,6 +69,8 @@ impl StorageResourceManager {
         let req = self.client.post_request(&path, &input);
         self.client.execute(req).await
     }
+    /// Deprecated as of vSphere8.0 U3, and there is no replacement for it.
+    /// 
     /// Query configuration options for storage I/O resource management.
     /// 
     /// ***Required privileges:*** Datastore.Config
@@ -206,6 +210,8 @@ impl StorageResourceManager {
         let req = self.client.post_request(&path, &input);
         self.client.execute(req).await
     }
+    /// Deprecated as of vSphere8.0 U3, and there is no replacement for it.
+    /// 
     /// Returns datastore summary performance statistics.
     /// 
     /// This is an experimental interface that is not intended for
@@ -235,6 +241,7 @@ impl StorageResourceManager {
         self.client.execute_option(req).await
     }
     /// This method returns a *StoragePlacementResult* object.
+    /// 
     /// This API is intended to replace the following existing APIs for
     /// SDRS-enabled pods:
     /// CreateVm: StoragePlacementSpec::type == create =

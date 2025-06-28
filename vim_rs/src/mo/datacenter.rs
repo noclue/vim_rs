@@ -165,6 +165,16 @@ impl Datacenter {
     /// ### ssl_thumbprint
     /// The expected SSL thumbprint of the host's certificate.
     ///
+    /// ### ssl_certificate
+    /// The expected SSL certificate of the host in PEM format.
+    /// This parameter is a fallback to be used when the certificate provided
+    /// by the host can not be verified via a trusted CA. A replacement of
+    /// `sslThumbprint`.
+    /// Note: `sslThumbprint` and `sslCertificate` parameters are
+    /// mutually exclusive, and should never be used simultaneously.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    ///
     /// ## Errors:
     ///
     /// ***NotSupported***: if called directly on a host.
@@ -189,8 +199,8 @@ impl Datacenter {
     /// and `sslCertificate` are set, or if only the `sslThumbprint`
     /// argument is set, but the SHA-1 hashing algorithm is currently disabled
     /// for computing certificate thumbprints.
-    pub async fn query_connection_info(&self, hostname: &str, port: i32, username: &str, password: &str, ssl_thumbprint: Option<&str>) -> Result<crate::types::structs::HostConnectInfo> {
-        let input = QueryConnectionInfoRequestType {hostname, port, username, password, ssl_thumbprint, };
+    pub async fn query_connection_info(&self, hostname: &str, port: i32, username: &str, password: &str, ssl_thumbprint: Option<&str>, ssl_certificate: Option<&str>) -> Result<crate::types::structs::HostConnectInfo> {
+        let input = QueryConnectionInfoRequestType {hostname, port, username, password, ssl_thumbprint, ssl_certificate, };
         let path = format!("/Datacenter/{moId}/QueryConnectionInfo", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
         self.client.execute(req).await
@@ -747,6 +757,9 @@ struct QueryConnectionInfoRequestType<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[serde(rename = "sslThumbprint")]
     ssl_thumbprint: Option<&'a str>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "sslCertificate")]
+    ssl_certificate: Option<&'a str>,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]

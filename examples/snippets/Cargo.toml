@@ -27,6 +27,11 @@ path = "src/mac_monitor.rs"
 name = "dynamic_property_fetch"
 path = "src/dynamic_property_fetch.rs"
 
+[[bin]]
+name = "root_objects"
+path = "src/root_objects.rs"
+
+
 [dependencies]
 anyhow = "1.0"
 chrono = "0.4"

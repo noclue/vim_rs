@@ -181,5 +181,6 @@ fn create_virtual_e1000() -> VirtualE1000 {
         device_info: None,
         connectable: None,
         dynamic_property: None,
+        subnet_id: None,
     }
 }

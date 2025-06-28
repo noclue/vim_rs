@@ -14,6 +14,8 @@ impl CustomizationSpecManager {
             mo_id: mo_id.to_string(),
         }
     }
+    /// Deprecated as of vSphere 9.0, and there is no replacement for it.
+    /// 
     /// Validate that required resources are available on the server to customize a
     /// particular guest operating system.
     /// 
@@ -131,6 +133,23 @@ impl CustomizationSpecManager {
     pub async fn get_customization_spec(&self, name: &str) -> Result<crate::types::structs::CustomizationSpecItem> {
         let input = GetCustomizationSpecRequestType {name, };
         let path = format!("/CustomizationSpecManager/{moId}/GetCustomizationSpec", moId = &self.mo_id);
+        let req = self.client.post_request(&path, &input);
+        self.client.execute(req).await
+    }
+    /// Whether or not the guest OS is customizable.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    /// 
+    /// ***Required privileges:*** System.View
+    ///
+    /// ## Parameters:
+    ///
+    /// ### guest_id
+    /// Short name from the guest OS descriptor list describing the
+    /// OS we intend to check.
+    pub async fn is_guest_os_customizable(&self, guest_id: &str) -> Result<bool> {
+        let input = IsGuestOsCustomizableRequestType {guest_id, };
+        let path = format!("/CustomizationSpecManager/{moId}/IsGuestOsCustomizable", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
         self.client.execute(req).await
     }
@@ -267,6 +286,12 @@ struct DoesCustomizationSpecExistRequestType<'a> {
 #[serde(tag="_typeName")]
 struct GetCustomizationSpecRequestType<'a> {
     name: &'a str,
+}
+#[derive(serde::Serialize)]
+#[serde(tag="_typeName")]
+struct IsGuestOsCustomizableRequestType<'a> {
+    #[serde(rename = "guestId")]
+    guest_id: &'a str,
 }
 #[derive(serde::Serialize)]
 #[serde(tag="_typeName")]

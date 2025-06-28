@@ -64,6 +64,1468 @@ pub enum ValueElements {
     PrimitiveMethodName(String),
     /// A boxed array of *PrimitiveMethodName*. To be used in *Any* placeholders.
     ArrayOfMethodName(Vec<String>),
+    /// A boxed array of *AgencyComputeResourceScope*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfAgencyComputeResourceScope(Vec<super::structs::AgencyComputeResourceScope>),
+    /// A boxed array of *AgencyConfigInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfAgencyConfigInfo(Vec<super::structs::AgencyConfigInfo>),
+    /// A boxed array of *AgencyScope*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfAgencyScope(Vec<Box<dyn super::traits::AgencyScopeTrait>>),
+    /// A boxed array of *AgencyVMFolder*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfAgencyVmFolder(Vec<super::structs::AgencyVmFolder>),
+    /// A boxed array of *AgencyVMResourcePool*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfAgencyVmResourcePool(Vec<super::structs::AgencyVmResourcePool>),
+    /// A boxed array of *AgentAnyCertificate*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    /// 
+    /// ***Since:*** vEAM API 8.2
+    ArrayOfAgentAnyCertificate(Vec<super::structs::AgentAnyCertificate>),
+    /// A boxed array of *AgentConfigInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfAgentConfigInfo(Vec<super::structs::AgentConfigInfo>),
+    /// A boxed array of *AgentOvfEnvironmentInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfAgentOvfEnvironmentInfo(Vec<super::structs::AgentOvfEnvironmentInfo>),
+    /// A boxed array of *AgentOvfEnvironmentInfoOvfProperty*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfAgentOvfEnvironmentInfoOvfProperty(Vec<super::structs::AgentOvfEnvironmentInfoOvfProperty>),
+    /// A boxed array of *AgentPinnedPemCertificate*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    /// 
+    /// ***Since:*** vEAM API 8.2
+    ArrayOfAgentPinnedPemCertificate(Vec<super::structs::AgentPinnedPemCertificate>),
+    /// A boxed array of *AgentRuntimeInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfAgentRuntimeInfo(Vec<super::structs::AgentRuntimeInfo>),
+    /// A boxed array of *AgentSslTrust*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    /// 
+    /// ***Since:*** vEAM API 8.2
+    ArrayOfAgentSslTrust(Vec<Box<dyn super::traits::AgentSslTrustTrait>>),
+    /// A boxed array of *AgentStoragePolicy*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfAgentStoragePolicy(Vec<Box<dyn super::traits::AgentStoragePolicyTrait>>),
+    /// A boxed array of *AgentVibMatchingRule*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfAgentVibMatchingRule(Vec<super::structs::AgentVibMatchingRule>),
+    /// A boxed array of *AgentVmHook*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfAgentVmHook(Vec<super::structs::AgentVmHook>),
+    /// A boxed array of *AgentVsanStoragePolicy*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfAgentVsanStoragePolicy(Vec<super::structs::AgentVsanStoragePolicy>),
+    /// A boxed array of *EamObjectRuntimeInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfEamObjectRuntimeInfo(Vec<Box<dyn super::traits::EamObjectRuntimeInfoTrait>>),
+    /// A boxed array of *CertificateNotTrustedFault*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    /// 
+    /// ***Since:*** vEAM API 8.2
+    ArrayOfCertificateNotTrustedFault(Vec<super::structs::MethodFault>),
+    /// A boxed array of *DisabledClusterFault*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    /// 
+    /// ***Since:*** vEAM API 7.6
+    ArrayOfDisabledClusterFault(Vec<super::structs::MethodFault>),
+    /// A boxed array of *EamAppFault*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfEamAppFault(Vec<super::structs::MethodFault>),
+    /// A boxed array of *EamFault*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfEamFault(Vec<super::structs::MethodFault>),
+    /// A boxed array of *EamIOFault*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfEamIoFault(Vec<super::structs::MethodFault>),
+    /// A boxed array of *EamRuntimeFault*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfEamRuntimeFault(Vec<super::structs::MethodFault>),
+    /// A boxed array of *EamServiceNotInitialized*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfEamServiceNotInitialized(Vec<super::structs::MethodFault>),
+    /// A boxed array of *EamSystemFault*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfEamSystemFault(Vec<super::structs::MethodFault>),
+    /// A boxed array of *InvalidAgencyScope*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfInvalidAgencyScope(Vec<super::structs::MethodFault>),
+    /// A boxed array of *InvalidAgentConfiguration*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfInvalidAgentConfiguration(Vec<super::structs::MethodFault>),
+    /// A boxed array of *EamInvalidLogin*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfEamInvalidLogin(Vec<super::structs::MethodFault>),
+    /// A boxed array of *EamInvalidState*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfEamInvalidState(Vec<super::structs::MethodFault>),
+    /// A boxed array of *EamInvalidUrl*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfEamInvalidUrl(Vec<super::structs::MethodFault>),
+    /// A boxed array of *EamInvalidVibPackage*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfEamInvalidVibPackage(Vec<super::structs::MethodFault>),
+    /// A boxed array of *NoConnectionToVCenter*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfNoConnectionToVCenter(Vec<super::structs::MethodFault>),
+    /// A boxed array of *NotAuthorized*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfNotAuthorized(Vec<super::structs::MethodFault>),
+    /// A boxed array of *AgencyDisabled*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    /// 
+    /// ***Since:*** vEAM API 7.6
+    ArrayOfAgencyDisabled(Vec<super::structs::AgencyDisabled>),
+    /// A boxed array of *AgencyIssue*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfAgencyIssue(Vec<Box<dyn super::traits::AgencyIssueTrait>>),
+    /// A boxed array of *AgentIssue*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfAgentIssue(Vec<Box<dyn super::traits::AgentIssueTrait>>),
+    /// A boxed array of *CannotAccessAgentOVF*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfCannotAccessAgentOvf(Vec<super::structs::CannotAccessAgentOvf>),
+    /// A boxed array of *CannotAccessAgentVib*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfCannotAccessAgentVib(Vec<super::structs::CannotAccessAgentVib>),
+    /// A boxed array of *EamCertificateNotTrusted*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    /// 
+    /// ***Since:*** vEAM API 8.2
+    ArrayOfEamCertificateNotTrusted(Vec<super::structs::EamCertificateNotTrusted>),
+    /// A boxed array of *ExtensibleIssue*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfExtensibleIssue(Vec<super::structs::ExtensibleIssue>),
+    /// A boxed array of *HostInMaintenanceMode*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfHostInMaintenanceMode(Vec<super::structs::HostInMaintenanceMode>),
+    /// A boxed array of *HostInPartialMaintenanceMode*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    /// 
+    /// ***Since:*** vEAM API 8.3
+    ArrayOfHostInPartialMaintenanceMode(Vec<super::structs::HostInPartialMaintenanceMode>),
+    /// A boxed array of *HostInStandbyMode*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfHostInStandbyMode(Vec<super::structs::HostInStandbyMode>),
+    /// A boxed array of *HostIssue*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfHostIssue(Vec<Box<dyn super::traits::HostIssueTrait>>),
+    /// A boxed array of *ManagedHostNotReachable*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfManagedHostNotReachable(Vec<super::structs::ManagedHostNotReachable>),
+    /// A boxed array of *HostPoweredOff*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfHostPoweredOff(Vec<super::structs::HostPoweredOff>),
+    /// A boxed array of *ImmediateHostRebootRequired*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfImmediateHostRebootRequired(Vec<super::structs::ImmediateHostRebootRequired>),
+    /// A boxed array of *IncompatibleHostVersion*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfIncompatibleHostVersion(Vec<super::structs::IncompatibleHostVersion>),
+    /// A boxed array of *InsufficientIpAddresses*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfInsufficientIpAddresses(Vec<super::structs::InsufficientIpAddresses>),
+    /// A boxed array of *InsufficientResources*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfInsufficientResources(Vec<super::structs::InsufficientResources>),
+    /// A boxed array of *InsufficientSpace*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfInsufficientSpace(Vec<super::structs::InsufficientSpace>),
+    /// A boxed array of *InvalidConfig*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfInvalidConfig(Vec<super::structs::InvalidConfig>),
+    /// A boxed array of *Issue*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfIssue(Vec<Box<dyn super::traits::IssueTrait>>),
+    /// A boxed array of *MissingAgentIpPool*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfMissingAgentIpPool(Vec<super::structs::MissingAgentIpPool>),
+    /// A boxed array of *MissingDvFilterSwitch*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfMissingDvFilterSwitch(Vec<super::structs::MissingDvFilterSwitch>),
+    /// A boxed array of *NoAgentVmDatastore*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfNoAgentVmDatastore(Vec<Box<dyn super::traits::NoAgentVmDatastoreTrait>>),
+    /// A boxed array of *NoAgentVmNetwork*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfNoAgentVmNetwork(Vec<Box<dyn super::traits::NoAgentVmNetworkTrait>>),
+    /// A boxed array of *NoCustomAgentVmDatastore*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfNoCustomAgentVmDatastore(Vec<super::structs::NoCustomAgentVmDatastore>),
+    /// A boxed array of *NoCustomAgentVmNetwork*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfNoCustomAgentVmNetwork(Vec<super::structs::NoCustomAgentVmNetwork>),
+    /// A boxed array of *NoDiscoverableAgentVmDatastore*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfNoDiscoverableAgentVmDatastore(Vec<super::structs::NoDiscoverableAgentVmDatastore>),
+    /// A boxed array of *NoDiscoverableAgentVmNetwork*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfNoDiscoverableAgentVmNetwork(Vec<super::structs::NoDiscoverableAgentVmNetwork>),
+    /// A boxed array of *OrphanedAgency*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfOrphanedAgency(Vec<super::structs::OrphanedAgency>),
+    /// A boxed array of *OrphanedDvFilterSwitch*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfOrphanedDvFilterSwitch(Vec<super::structs::OrphanedDvFilterSwitch>),
+    /// A boxed array of *OvfInvalidFormat*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfOvfInvalidFormat(Vec<super::structs::OvfInvalidFormat>),
+    /// A boxed array of *OvfInvalidProperty*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfOvfInvalidProperty(Vec<super::structs::OvfInvalidProperty>),
+    /// A boxed array of *TransitionFailed*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    /// 
+    /// ***Since:*** vEAM API 9.0
+    ArrayOfTransitionFailed(Vec<super::structs::TransitionFailed>),
+    /// A boxed array of *UnknownAgentVm*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfUnknownAgentVm(Vec<super::structs::UnknownAgentVm>),
+    /// A boxed array of *VibCannotPutHostInMaintenanceMode*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfVibCannotPutHostInMaintenanceMode(Vec<super::structs::VibCannotPutHostInMaintenanceMode>),
+    /// A boxed array of *VibCannotPutHostOutOfMaintenanceMode*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfVibCannotPutHostOutOfMaintenanceMode(Vec<super::structs::VibCannotPutHostOutOfMaintenanceMode>),
+    /// A boxed array of *VibDependenciesNotMetByHost*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfVibDependenciesNotMetByHost(Vec<super::structs::VibDependenciesNotMetByHost>),
+    /// A boxed array of *VibInvalidFormat*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfVibInvalidFormat(Vec<super::structs::VibInvalidFormat>),
+    /// A boxed array of *VibIssue*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfVibIssue(Vec<Box<dyn super::traits::VibIssueTrait>>),
+    /// A boxed array of *VibNotInstalled*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfVibNotInstalled(Vec<Box<dyn super::traits::VibNotInstalledTrait>>),
+    /// A boxed array of *VibRequirementsNotMetByHost*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfVibRequirementsNotMetByHost(Vec<super::structs::VibRequirementsNotMetByHost>),
+    /// A boxed array of *VibRequiresHostInMaintenanceMode*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfVibRequiresHostInMaintenanceMode(Vec<super::structs::VibRequiresHostInMaintenanceMode>),
+    /// A boxed array of *VibRequiresHostReboot*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfVibRequiresHostReboot(Vec<super::structs::VibRequiresHostReboot>),
+    /// A boxed array of *VibRequiresManualInstallation*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfVibRequiresManualInstallation(Vec<super::structs::VibRequiresManualInstallation>),
+    /// A boxed array of *VibRequiresManualUninstallation*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfVibRequiresManualUninstallation(Vec<super::structs::VibRequiresManualUninstallation>),
+    /// A boxed array of *VmCorrupted*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfVmCorrupted(Vec<super::structs::VmCorrupted>),
+    /// A boxed array of *VmDeployed*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfVmDeployed(Vec<Box<dyn super::traits::VmDeployedTrait>>),
+    /// A boxed array of *VmHookFailed*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    /// 
+    /// ***Since:*** vEAM API 9.0
+    ArrayOfVmHookFailed(Vec<super::structs::VmHookFailed>),
+    /// A boxed array of *VmHookTimedout*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    /// 
+    /// ***Since:*** vEAM API 9.0
+    ArrayOfVmHookTimedout(Vec<super::structs::VmHookTimedout>),
+    /// A boxed array of *VmInaccessible*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    /// 
+    /// ***Since:*** vEAM API 8.3
+    ArrayOfVmInaccessible(Vec<super::structs::VmInaccessible>),
+    /// A boxed array of *VmIssue*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfVmIssue(Vec<Box<dyn super::traits::VmIssueTrait>>),
+    /// A boxed array of *VmMarkedAsTemplate*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfVmMarkedAsTemplate(Vec<super::structs::VmMarkedAsTemplate>),
+    /// A boxed array of *VmNotDeployed*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfVmNotDeployed(Vec<Box<dyn super::traits::VmNotDeployedTrait>>),
+    /// A boxed array of *VmOrphaned*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfVmOrphaned(Vec<super::structs::VmOrphaned>),
+    /// A boxed array of *VmPoweredOff*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfVmPoweredOff(Vec<Box<dyn super::traits::VmPoweredOffTrait>>),
+    /// A boxed array of *VmPoweredOn*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfVmPoweredOn(Vec<super::structs::VmPoweredOn>),
+    /// A boxed array of *VmProtected*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    /// 
+    /// ***Since:*** vEAM API 9.0
+    ArrayOfVmProtected(Vec<super::structs::VmProtected>),
+    /// A boxed array of *VmRequiresHostOutOfMaintenanceMode*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    /// 
+    /// ***Since:*** vEAM API 7.2
+    ArrayOfVmRequiresHostOutOfMaintenanceMode(Vec<super::structs::VmRequiresHostOutOfMaintenanceMode>),
+    /// A boxed array of *VmSuspended*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfVmSuspended(Vec<super::structs::VmSuspended>),
+    /// A boxed array of *VmWrongFolder*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfVmWrongFolder(Vec<super::structs::VmWrongFolder>),
+    /// A boxed array of *VmWrongResourcePool*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfVmWrongResourcePool(Vec<super::structs::VmWrongResourcePool>),
+    /// A boxed array of *ClusterAgentAgentIssue*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfClusterAgentAgentIssue(Vec<Box<dyn super::traits::ClusterAgentAgentIssueTrait>>),
+    /// A boxed array of *ClusterAgentCertificateNotTrusted*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    /// 
+    /// ***Since:*** vEAM API 8.2
+    ArrayOfClusterAgentCertificateNotTrusted(Vec<super::structs::ClusterAgentCertificateNotTrusted>),
+    /// A boxed array of *ClusterAgentHostInMaintenanceMode*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    /// 
+    /// ***Since:*** vEAM API 8.3
+    ArrayOfClusterAgentHostInMaintenanceMode(Vec<super::structs::ClusterAgentHostInMaintenanceMode>),
+    /// A boxed array of *ClusterAgentHostInPartialMaintenanceMode*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    /// 
+    /// ***Since:*** vEAM API 8.3
+    ArrayOfClusterAgentHostInPartialMaintenanceMode(Vec<super::structs::ClusterAgentHostInPartialMaintenanceMode>),
+    /// A boxed array of *ClusterAgentInsufficientClusterResources*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfClusterAgentInsufficientClusterResources(Vec<super::structs::ClusterAgentInsufficientClusterResources>),
+    /// A boxed array of *ClusterAgentInsufficientClusterSpace*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfClusterAgentInsufficientClusterSpace(Vec<super::structs::ClusterAgentInsufficientClusterSpace>),
+    /// A boxed array of *ClusterAgentInvalidConfig*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfClusterAgentInvalidConfig(Vec<super::structs::ClusterAgentInvalidConfig>),
+    /// A boxed array of *ClusterAgentMissingClusterVmDatastore*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfClusterAgentMissingClusterVmDatastore(Vec<super::structs::ClusterAgentMissingClusterVmDatastore>),
+    /// A boxed array of *ClusterAgentMissingClusterVmNetwork*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfClusterAgentMissingClusterVmNetwork(Vec<super::structs::ClusterAgentMissingClusterVmNetwork>),
+    /// A boxed array of *ClusterAgentOvfInvalidProperty*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfClusterAgentOvfInvalidProperty(Vec<super::structs::ClusterAgentOvfInvalidProperty>),
+    /// A boxed array of *ClusterAgentTransitionFailed*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    /// 
+    /// ***Since:*** vEAM API 9.0
+    ArrayOfClusterAgentTransitionFailed(Vec<super::structs::ClusterAgentTransitionFailed>),
+    /// A boxed array of *ClusterAgentVmHookFailed*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    /// 
+    /// ***Since:*** vEAM API 9.0
+    ArrayOfClusterAgentVmHookFailed(Vec<super::structs::ClusterAgentVmHookFailed>),
+    /// A boxed array of *ClusterAgentVmHookTimedout*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    /// 
+    /// ***Since:*** vEAM API 9.0
+    ArrayOfClusterAgentVmHookTimedout(Vec<super::structs::ClusterAgentVmHookTimedout>),
+    /// A boxed array of *ClusterAgentVmInaccessible*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    /// 
+    /// ***Since:*** vEAM API 8.3
+    ArrayOfClusterAgentVmInaccessible(Vec<super::structs::ClusterAgentVmInaccessible>),
+    /// A boxed array of *ClusterAgentVmIssue*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfClusterAgentVmIssue(Vec<Box<dyn super::traits::ClusterAgentVmIssueTrait>>),
+    /// A boxed array of *ClusterAgentVmNotDeployed*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfClusterAgentVmNotDeployed(Vec<Box<dyn super::traits::ClusterAgentVmNotDeployedTrait>>),
+    /// A boxed array of *ClusterAgentVmNotRemoved*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfClusterAgentVmNotRemoved(Vec<super::structs::ClusterAgentVmNotRemoved>),
+    /// A boxed array of *ClusterAgentVmPoweredOff*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfClusterAgentVmPoweredOff(Vec<Box<dyn super::traits::ClusterAgentVmPoweredOffTrait>>),
+    /// A boxed array of *ClusterAgentVmPoweredOn*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfClusterAgentVmPoweredOn(Vec<super::structs::ClusterAgentVmPoweredOn>),
+    /// A boxed array of *ClusterAgentVmProtected*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    /// 
+    /// ***Since:*** vEAM API 9.0
+    ArrayOfClusterAgentVmProtected(Vec<super::structs::ClusterAgentVmProtected>),
+    /// A boxed array of *ClusterAgentVmSuspended*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfClusterAgentVmSuspended(Vec<super::structs::ClusterAgentVmSuspended>),
+    /// A boxed array of *IntegrityAgencyCannotDeleteSoftware*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfIntegrityAgencyCannotDeleteSoftware(Vec<super::structs::IntegrityAgencyCannotDeleteSoftware>),
+    /// A boxed array of *IntegrityAgencyCannotStageSoftware*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfIntegrityAgencyCannotStageSoftware(Vec<super::structs::IntegrityAgencyCannotStageSoftware>),
+    /// A boxed array of *IntegrityAgencyVUMIssue*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfIntegrityAgencyVumIssue(Vec<Box<dyn super::traits::IntegrityAgencyVumIssueTrait>>),
+    /// A boxed array of *IntegrityAgencyVUMUnavailable*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfIntegrityAgencyVumUnavailable(Vec<super::structs::IntegrityAgencyVumUnavailable>),
+    /// A boxed array of *PersonalityAgencyCannotConfigureSolutions*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfPersonalityAgencyCannotConfigureSolutions(Vec<super::structs::PersonalityAgencyCannotConfigureSolutions>),
+    /// A boxed array of *PersonalityAgencyCannotUploadDepot*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfPersonalityAgencyCannotUploadDepot(Vec<super::structs::PersonalityAgencyCannotUploadDepot>),
+    /// A boxed array of *PersonalityAgencyDepotIssue*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfPersonalityAgencyDepotIssue(Vec<Box<dyn super::traits::PersonalityAgencyDepotIssueTrait>>),
+    /// A boxed array of *PersonalityAgencyInaccessibleDepot*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfPersonalityAgencyInaccessibleDepot(Vec<super::structs::PersonalityAgencyInaccessibleDepot>),
+    /// A boxed array of *PersonalityAgencyInvalidDepot*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfPersonalityAgencyInvalidDepot(Vec<super::structs::PersonalityAgencyInvalidDepot>),
+    /// A boxed array of *PersonalityAgencyPMIssue*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfPersonalityAgencyPmIssue(Vec<Box<dyn super::traits::PersonalityAgencyPmIssueTrait>>),
+    /// A boxed array of *PersonalityAgencyPMUnavailable*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfPersonalityAgencyPmUnavailable(Vec<super::structs::PersonalityAgencyPmUnavailable>),
+    /// A boxed array of *PersonalityAgentAwaitingPMRemediation*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfPersonalityAgentAwaitingPmRemediation(Vec<super::structs::PersonalityAgentAwaitingPmRemediation>),
+    /// A boxed array of *PersonalityAgentBlockedByAgencyOperation*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfPersonalityAgentBlockedByAgencyOperation(Vec<super::structs::PersonalityAgentBlockedByAgencyOperation>),
+    /// A boxed array of *PersonalityAgentPMIssue*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfPersonalityAgentPmIssue(Vec<Box<dyn super::traits::PersonalityAgentPmIssueTrait>>),
+    /// A boxed array of *HooksHookListSpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfHooksHookListSpec(Vec<super::structs::HooksHookListSpec>),
+    /// A boxed array of *HooksMarkAsProcessedSpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfHooksMarkAsProcessedSpec(Vec<super::structs::HooksMarkAsProcessedSpec>),
+    /// A boxed array of *SolutionsApplySpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfSolutionsApplySpec(Vec<super::structs::SolutionsApplySpec>),
+    /// A boxed array of *SolutionsClusterBoundSolutionConfig*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfSolutionsClusterBoundSolutionConfig(Vec<super::structs::SolutionsClusterBoundSolutionConfig>),
+    /// A boxed array of *SolutionsClusterSolutionComplianceResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfSolutionsClusterSolutionComplianceResult(Vec<super::structs::SolutionsClusterSolutionComplianceResult>),
+    /// A boxed array of *SolutionsComplianceResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfSolutionsComplianceResult(Vec<super::structs::SolutionsComplianceResult>),
+    /// A boxed array of *SolutionsComplianceSpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfSolutionsComplianceSpec(Vec<super::structs::SolutionsComplianceSpec>),
+    /// A boxed array of *SolutionsDeploymentUnitComplianceResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfSolutionsDeploymentUnitComplianceResult(Vec<super::structs::SolutionsDeploymentUnitComplianceResult>),
+    /// A boxed array of *SolutionsHookAcknowledgeConfig*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfSolutionsHookAcknowledgeConfig(Vec<Box<dyn super::traits::SolutionsHookAcknowledgeConfigTrait>>),
+    /// A boxed array of *SolutionsHookConfig*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfSolutionsHookConfig(Vec<super::structs::SolutionsHookConfig>),
+    /// A boxed array of *SolutionsHookInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfSolutionsHookInfo(Vec<super::structs::SolutionsHookInfo>),
+    /// A boxed array of *SolutionsHostBoundSolutionConfig*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfSolutionsHostBoundSolutionConfig(Vec<super::structs::SolutionsHostBoundSolutionConfig>),
+    /// A boxed array of *SolutionsHostComplianceResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfSolutionsHostComplianceResult(Vec<super::structs::SolutionsHostComplianceResult>),
+    /// A boxed array of *SolutionsInteractiveHookAcknowledgeConfig*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfSolutionsInteractiveHookAcknowledgeConfig(Vec<super::structs::SolutionsInteractiveHookAcknowledgeConfig>),
+    /// A boxed array of *SolutionsOvfProperty*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfSolutionsOvfProperty(Vec<super::structs::SolutionsOvfProperty>),
+    /// A boxed array of *SolutionsProfileIdStoragePolicy*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfSolutionsProfileIdStoragePolicy(Vec<super::structs::SolutionsProfileIdStoragePolicy>),
+    /// A boxed array of *SolutionsSolutionComplianceResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfSolutionsSolutionComplianceResult(Vec<super::structs::SolutionsSolutionComplianceResult>),
+    /// A boxed array of *SolutionsSolutionConfig*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfSolutionsSolutionConfig(Vec<super::structs::SolutionsSolutionConfig>),
+    /// A boxed array of *SolutionsSolutionValidationResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfSolutionsSolutionValidationResult(Vec<super::structs::SolutionsSolutionValidationResult>),
+    /// A boxed array of *SolutionsStoragePolicy*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfSolutionsStoragePolicy(Vec<Box<dyn super::traits::SolutionsStoragePolicyTrait>>),
+    /// A boxed array of *SolutionsTransitionSpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfSolutionsTransitionSpec(Vec<super::structs::SolutionsTransitionSpec>),
+    /// A boxed array of *SolutionsTypeSpecificSolutionConfig*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfSolutionsTypeSpecificSolutionConfig(Vec<Box<dyn super::traits::SolutionsTypeSpecificSolutionConfigTrait>>),
+    /// A boxed array of *SolutionsUrlVMSource*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfSolutionsUrlVmSource(Vec<super::structs::SolutionsUrlVmSource>),
+    /// A boxed array of *SolutionsVMNetworkMapping*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfSolutionsVmNetworkMapping(Vec<super::structs::SolutionsVmNetworkMapping>),
+    /// A boxed array of *SolutionsVMSource*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfSolutionsVmSource(Vec<Box<dyn super::traits::SolutionsVmSourceTrait>>),
+    /// A boxed array of *SolutionsValidateSpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfSolutionsValidateSpec(Vec<super::structs::SolutionsValidateSpec>),
+    /// A boxed array of *SolutionsValidationResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfSolutionsValidationResult(Vec<super::structs::SolutionsValidationResult>),
+    /// A boxed array of *SolutionsVmResourceSpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfSolutionsVmResourceSpec(Vec<super::structs::SolutionsVmResourceSpec>),
+    /// A boxed array of *VibVibInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfVibVibInfo(Vec<super::structs::VibVibInfo>),
+    /// A boxed array of *VibVibInfoSoftwareTags*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    ArrayOfVibVibInfoSoftwareTags(Vec<super::structs::VibVibInfoSoftwareTags>),
+    /// A boxed array of *VibVibServicesAnyCertificate*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    /// 
+    /// ***Since:*** vEAM API 8.2
+    ArrayOfVibVibServicesAnyCertificate(Vec<super::structs::VibVibServicesAnyCertificate>),
+    /// A boxed array of *VibVibServicesPinnedPemCertificate*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    /// 
+    /// ***Since:*** vEAM API 8.2
+    ArrayOfVibVibServicesPinnedPemCertificate(Vec<super::structs::VibVibServicesPinnedPemCertificate>),
+    /// A boxed array of *VibVibServicesSslTrust*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/eam`.
+    /// 
+    /// ***Since:*** vEAM API 8.2
+    ArrayOfVibVibServicesSslTrust(Vec<Box<dyn super::traits::VibVibServicesSslTrustTrait>>),
+    /// A boxed array of *PbmAboutInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmAboutInfo(Vec<super::structs::PbmAboutInfo>),
+    /// A boxed array of *PbmExtendedElementDescription*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmExtendedElementDescription(Vec<super::structs::PbmExtendedElementDescription>),
+    /// A boxed array of *PbmLoggingConfiguration*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmLoggingConfiguration(Vec<super::structs::PbmLoggingConfiguration>),
+    /// A boxed array of *PbmServerObjectRef*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmServerObjectRef(Vec<super::structs::PbmServerObjectRef>),
+    /// A boxed array of *PbmServiceInstanceContent*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmServiceInstanceContent(Vec<super::structs::PbmServiceInstanceContent>),
+    /// A boxed array of *PbmCapabilityInstance*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmCapabilityInstance(Vec<super::structs::PbmCapabilityInstance>),
+    /// A boxed array of *PbmCapabilityMetadata*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmCapabilityMetadata(Vec<super::structs::PbmCapabilityMetadata>),
+    /// A boxed array of *PbmCapabilityMetadataUniqueId*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmCapabilityMetadataUniqueId(Vec<super::structs::PbmCapabilityMetadataUniqueId>),
+    /// A boxed array of *PbmCapabilityConstraintInstance*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmCapabilityConstraintInstance(Vec<super::structs::PbmCapabilityConstraintInstance>),
+    /// A boxed array of *PbmCapabilityGenericTypeInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmCapabilityGenericTypeInfo(Vec<super::structs::PbmCapabilityGenericTypeInfo>),
+    /// A boxed array of *PbmCapabilityPropertyInstance*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmCapabilityPropertyInstance(Vec<super::structs::PbmCapabilityPropertyInstance>),
+    /// A boxed array of *PbmCapabilityPropertyMetadata*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmCapabilityPropertyMetadata(Vec<super::structs::PbmCapabilityPropertyMetadata>),
+    /// A boxed array of *PbmCapabilityTypeInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmCapabilityTypeInfo(Vec<Box<dyn super::traits::PbmCapabilityTypeInfoTrait>>),
+    /// A boxed array of *PbmCapabilityMetadataPerCategory*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmCapabilityMetadataPerCategory(Vec<super::structs::PbmCapabilityMetadataPerCategory>),
+    /// A boxed array of *PbmCapabilitySchema*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmCapabilitySchema(Vec<super::structs::PbmCapabilitySchema>),
+    /// A boxed array of *PbmCapabilityNamespaceInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmCapabilityNamespaceInfo(Vec<super::structs::PbmCapabilityNamespaceInfo>),
+    /// A boxed array of *PbmCapabilitySchemaVendorInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmCapabilitySchemaVendorInfo(Vec<super::structs::PbmCapabilitySchemaVendorInfo>),
+    /// A boxed array of *PbmCapabilityVendorNamespaceInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmCapabilityVendorNamespaceInfo(Vec<super::structs::PbmCapabilityVendorNamespaceInfo>),
+    /// A boxed array of *PbmCapabilityVendorResourceTypeInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmCapabilityVendorResourceTypeInfo(Vec<super::structs::PbmCapabilityVendorResourceTypeInfo>),
+    /// A boxed array of *PbmLineOfServiceInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmLineOfServiceInfo(Vec<Box<dyn super::traits::PbmLineOfServiceInfoTrait>>),
+    /// A boxed array of *PbmPersistenceBasedDataServiceInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmPersistenceBasedDataServiceInfo(Vec<super::structs::PbmPersistenceBasedDataServiceInfo>),
+    /// A boxed array of *PbmVaioDataServiceInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmVaioDataServiceInfo(Vec<super::structs::PbmVaioDataServiceInfo>),
+    /// A boxed array of *PbmCapabilityDescription*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmCapabilityDescription(Vec<super::structs::PbmCapabilityDescription>),
+    /// A boxed array of *PbmCapabilityDiscreteSet*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmCapabilityDiscreteSet(Vec<super::structs::PbmCapabilityDiscreteSet>),
+    /// A boxed array of *PbmCapabilityRange*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmCapabilityRange(Vec<super::structs::PbmCapabilityRange>),
+    /// A boxed array of *PbmCapabilityTimeSpan*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmCapabilityTimeSpan(Vec<super::structs::PbmCapabilityTimeSpan>),
+    /// A boxed array of *PbmComplianceResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmComplianceResult(Vec<super::structs::PbmComplianceResult>),
+    /// A boxed array of *PbmFetchEntityHealthStatusSpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmFetchEntityHealthStatusSpec(Vec<super::structs::PbmFetchEntityHealthStatusSpec>),
+    /// A boxed array of *PbmComplianceOperationalStatus*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmComplianceOperationalStatus(Vec<super::structs::PbmComplianceOperationalStatus>),
+    /// A boxed array of *PbmCompliancePolicyStatus*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmCompliancePolicyStatus(Vec<super::structs::PbmCompliancePolicyStatus>),
+    /// A boxed array of *PbmRollupComplianceResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmRollupComplianceResult(Vec<super::structs::PbmRollupComplianceResult>),
+    /// A boxed array of *PbmAlreadyExists*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmAlreadyExists(Vec<super::structs::MethodFault>),
+    /// A boxed array of *PbmCapabilityProfilePropertyMismatchFault*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmCapabilityProfilePropertyMismatchFault(Vec<super::structs::MethodFault>),
+    /// A boxed array of *PbmCompatibilityCheckFault*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmCompatibilityCheckFault(Vec<super::structs::MethodFault>),
+    /// A boxed array of *PbmDefaultProfileAppliesFault*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmDefaultProfileAppliesFault(Vec<super::structs::MethodFault>),
+    /// A boxed array of *PbmDuplicateName*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmDuplicateName(Vec<super::structs::MethodFault>),
+    /// A boxed array of *PbmIncompatibleVendorSpecificRuleSet*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmIncompatibleVendorSpecificRuleSet(Vec<super::structs::MethodFault>),
+    /// A boxed array of *PbmFaultInvalidLogin*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmFaultInvalidLogin(Vec<super::structs::MethodFault>),
+    /// A boxed array of *PbmLegacyHubsNotSupported*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmLegacyHubsNotSupported(Vec<super::structs::MethodFault>),
+    /// A boxed array of *PbmFaultNoPermission*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmFaultNoPermission(Vec<super::structs::MethodFault>),
+    /// A boxed array of *PbmFaultNoPermissionEntityPrivileges*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmFaultNoPermissionEntityPrivileges(Vec<super::structs::PbmFaultNoPermissionEntityPrivileges>),
+    /// A boxed array of *PbmNonExistentHubs*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmNonExistentHubs(Vec<super::structs::MethodFault>),
+    /// A boxed array of *PbmFaultNotFound*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmFaultNotFound(Vec<super::structs::MethodFault>),
+    /// A boxed array of *PbmFault*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmFault(Vec<super::structs::MethodFault>),
+    /// A boxed array of *PbmFaultProfileStorageFault*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmFaultProfileStorageFault(Vec<super::structs::MethodFault>),
+    /// A boxed array of *PbmPropertyMismatchFault*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmPropertyMismatchFault(Vec<super::structs::MethodFault>),
+    /// A boxed array of *PbmResourceInUse*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmResourceInUse(Vec<super::structs::MethodFault>),
+    /// A boxed array of *PbmPlacementCapabilityConstraintsRequirement*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmPlacementCapabilityConstraintsRequirement(Vec<super::structs::PbmPlacementCapabilityConstraintsRequirement>),
+    /// A boxed array of *PbmPlacementCapabilityProfileRequirement*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmPlacementCapabilityProfileRequirement(Vec<super::structs::PbmPlacementCapabilityProfileRequirement>),
+    /// A boxed array of *PbmPlacementCompatibilityResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmPlacementCompatibilityResult(Vec<super::structs::PbmPlacementCompatibilityResult>),
+    /// A boxed array of *PbmPlacementMatchingReplicationResources*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmPlacementMatchingReplicationResources(Vec<super::structs::PbmPlacementMatchingReplicationResources>),
+    /// A boxed array of *PbmPlacementMatchingResources*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmPlacementMatchingResources(Vec<Box<dyn super::traits::PbmPlacementMatchingResourcesTrait>>),
+    /// A boxed array of *PbmPlacementHub*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmPlacementHub(Vec<super::structs::PbmPlacementHub>),
+    /// A boxed array of *PbmPlacementRequirement*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmPlacementRequirement(Vec<Box<dyn super::traits::PbmPlacementRequirementTrait>>),
+    /// A boxed array of *PbmPlacementResourceUtilization*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmPlacementResourceUtilization(Vec<super::structs::PbmPlacementResourceUtilization>),
+    /// A boxed array of *PbmCapabilityProfile*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmCapabilityProfile(Vec<Box<dyn super::traits::PbmCapabilityProfileTrait>>),
+    /// A boxed array of *PbmCapabilityProfileCreateSpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmCapabilityProfileCreateSpec(Vec<super::structs::PbmCapabilityProfileCreateSpec>),
+    /// A boxed array of *PbmCapabilityProfileUpdateSpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmCapabilityProfileUpdateSpec(Vec<super::structs::PbmCapabilityProfileUpdateSpec>),
+    /// A boxed array of *PbmCapabilityConstraints*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmCapabilityConstraints(Vec<Box<dyn super::traits::PbmCapabilityConstraintsTrait>>),
+    /// A boxed array of *PbmDataServiceToPoliciesMap*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmDataServiceToPoliciesMap(Vec<super::structs::PbmDataServiceToPoliciesMap>),
+    /// A boxed array of *PbmDefaultCapabilityProfile*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmDefaultCapabilityProfile(Vec<super::structs::PbmDefaultCapabilityProfile>),
+    /// A boxed array of *PbmDefaultProfileInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmDefaultProfileInfo(Vec<super::structs::PbmDefaultProfileInfo>),
+    /// A boxed array of *PbmProfile*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmProfile(Vec<Box<dyn super::traits::PbmProfileTrait>>),
+    /// A boxed array of *PbmProfileId*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmProfileId(Vec<super::structs::PbmProfileId>),
+    /// A boxed array of *PbmProfileOperationOutcome*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmProfileOperationOutcome(Vec<super::structs::PbmProfileOperationOutcome>),
+    /// A boxed array of *PbmProfileType*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmProfileType(Vec<super::structs::PbmProfileType>),
+    /// A boxed array of *PbmQueryProfileResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmQueryProfileResult(Vec<super::structs::PbmQueryProfileResult>),
+    /// A boxed array of *PbmProfileResourceType*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmProfileResourceType(Vec<super::structs::PbmProfileResourceType>),
+    /// A boxed array of *PbmCapabilitySubProfileConstraints*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmCapabilitySubProfileConstraints(Vec<super::structs::PbmCapabilitySubProfileConstraints>),
+    /// A boxed array of *PbmCapabilitySubProfile*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmCapabilitySubProfile(Vec<super::structs::PbmCapabilitySubProfile>),
+    /// A boxed array of *PbmDatastoreSpaceStatistics*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmDatastoreSpaceStatistics(Vec<super::structs::PbmDatastoreSpaceStatistics>),
+    /// A boxed array of *PbmQueryReplicationGroupResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmQueryReplicationGroupResult(Vec<super::structs::PbmQueryReplicationGroupResult>),
+    /// A boxed array of *SmsAboutInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfSmsAboutInfo(Vec<super::structs::SmsAboutInfo>),
+    /// A boxed array of *EntityReference*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfEntityReference(Vec<super::structs::EntityReference>),
+    /// A boxed array of *FaultDomainFilter*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfFaultDomainFilter(Vec<super::structs::FaultDomainFilter>),
+    /// A boxed array of *ReplicationGroupFilter*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfReplicationGroupFilter(Vec<super::structs::ReplicationGroupFilter>),
+    /// A boxed array of *SmsTaskInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfSmsTaskInfo(Vec<super::structs::SmsTaskInfo>),
+    /// A boxed array of *AuthConnectionFailed*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfAuthConnectionFailed(Vec<super::structs::MethodFault>),
+    /// A boxed array of *CertificateAuthorityFault*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfCertificateAuthorityFault(Vec<super::structs::MethodFault>),
+    /// A boxed array of *CertificateNotImported*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfCertificateNotImported(Vec<super::structs::MethodFault>),
+    /// A boxed array of *CertificateNotTrusted*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfCertificateNotTrusted(Vec<super::structs::MethodFault>),
+    /// A boxed array of *CertificateRefreshFailed*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfCertificateRefreshFailed(Vec<super::structs::MethodFault>),
+    /// A boxed array of *CertificateRevocationFailed*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfCertificateRevocationFailed(Vec<super::structs::MethodFault>),
+    /// A boxed array of *DuplicateEntry*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfDuplicateEntry(Vec<super::structs::MethodFault>),
+    /// A boxed array of *InactiveProvider*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfInactiveProvider(Vec<super::structs::MethodFault>),
+    /// A boxed array of *IncorrectUsernamePassword*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfIncorrectUsernamePassword(Vec<super::structs::MethodFault>),
+    /// A boxed array of *InvalidCertificate*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfInvalidCertificate(Vec<super::structs::MethodFault>),
+    /// A boxed array of *SmsInvalidLogin*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfSmsInvalidLogin(Vec<super::structs::MethodFault>),
+    /// A boxed array of *InvalidProfile*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfInvalidProfile(Vec<super::structs::MethodFault>),
+    /// A boxed array of *InvalidSession*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfInvalidSession(Vec<super::structs::MethodFault>),
+    /// A boxed array of *InvalidUrl*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfInvalidUrl(Vec<super::structs::MethodFault>),
+    /// A boxed array of *MultipleSortSpecsNotSupported*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfMultipleSortSpecsNotSupported(Vec<super::structs::MethodFault>),
+    /// A boxed array of *NoCommonProviderForAllBackings*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfNoCommonProviderForAllBackings(Vec<super::structs::MethodFault>),
+    /// A boxed array of *NotSupportedByProvider*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfNotSupportedByProvider(Vec<super::structs::MethodFault>),
+    /// A boxed array of *ProviderBusy*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfProviderBusy(Vec<super::structs::MethodFault>),
+    /// A boxed array of *ProviderConnectionFailed*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfProviderConnectionFailed(Vec<super::structs::MethodFault>),
+    /// A boxed array of *ProviderNotFound*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfProviderNotFound(Vec<super::structs::MethodFault>),
+    /// A boxed array of *ProviderOutOfProvisioningResource*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfProviderOutOfProvisioningResource(Vec<super::structs::MethodFault>),
+    /// A boxed array of *ProviderOutOfResource*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfProviderOutOfResource(Vec<super::structs::MethodFault>),
+    /// A boxed array of *ProviderRegistrationFault*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfProviderRegistrationFault(Vec<super::structs::MethodFault>),
+    /// A boxed array of *ProviderSyncFailed*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfProviderSyncFailed(Vec<super::structs::MethodFault>),
+    /// A boxed array of *ProviderUnavailable*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfProviderUnavailable(Vec<super::structs::MethodFault>),
+    /// A boxed array of *ProviderUnregistrationFault*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfProviderUnregistrationFault(Vec<super::structs::MethodFault>),
+    /// A boxed array of *ProxyRegistrationFailed*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfProxyRegistrationFailed(Vec<super::structs::MethodFault>),
+    /// A boxed array of *QueryExecutionFault*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfQueryExecutionFault(Vec<super::structs::MethodFault>),
+    /// A boxed array of *QueryNotSupported*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfQueryNotSupported(Vec<super::structs::MethodFault>),
+    /// A boxed array of *SmsResourceInUse*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfSmsResourceInUse(Vec<super::structs::MethodFault>),
+    /// A boxed array of *ServiceNotInitialized*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfServiceNotInitialized(Vec<super::structs::MethodFault>),
+    /// A boxed array of *SmsFault*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfSmsFault(Vec<super::structs::MethodFault>),
+    /// A boxed array of *SyncInProgress*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfSyncInProgress(Vec<super::structs::MethodFault>),
+    /// A boxed array of *TooMany*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfTooMany(Vec<super::structs::MethodFault>),
+    /// A boxed array of *AlreadyDone*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfAlreadyDone(Vec<super::structs::MethodFault>),
+    /// A boxed array of *InvalidFunctionTarget*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfInvalidFunctionTarget(Vec<super::structs::MethodFault>),
+    /// A boxed array of *InvalidReplicationState*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfInvalidReplicationState(Vec<super::structs::MethodFault>),
+    /// A boxed array of *NoReplicationTarget*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfNoReplicationTarget(Vec<super::structs::MethodFault>),
+    /// A boxed array of *NoValidReplica*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfNoValidReplica(Vec<super::structs::MethodFault>),
+    /// A boxed array of *PeerNotReachable*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfPeerNotReachable(Vec<super::structs::MethodFault>),
+    /// A boxed array of *SmsReplicationFault*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfSmsReplicationFault(Vec<super::structs::MethodFault>),
+    /// A boxed array of *SyncOngoing*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfSyncOngoing(Vec<super::structs::MethodFault>),
+    /// A boxed array of *AlarmFilter*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfAlarmFilter(Vec<super::structs::AlarmFilter>),
+    /// A boxed array of *AlarmResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfAlarmResult(Vec<super::structs::AlarmResult>),
+    /// A boxed array of *SmsProviderInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfSmsProviderInfo(Vec<Box<dyn super::traits::SmsProviderInfoTrait>>),
+    /// A boxed array of *SmsProviderSpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfSmsProviderSpec(Vec<Box<dyn super::traits::SmsProviderSpecTrait>>),
+    /// A boxed array of *VASAProviderUpgradeSpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfVasaProviderUpgradeSpec(Vec<super::structs::VasaProviderUpgradeSpec>),
+    /// A boxed array of *VasaProviderInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfVasaProviderInfo(Vec<super::structs::VasaProviderInfo>),
+    /// A boxed array of *RelatedStorageArray*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfRelatedStorageArray(Vec<super::structs::RelatedStorageArray>),
+    /// A boxed array of *SupportedVendorModelMapping*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfSupportedVendorModelMapping(Vec<super::structs::SupportedVendorModelMapping>),
+    /// A boxed array of *VasaProviderSpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfVasaProviderSpec(Vec<super::structs::VasaProviderSpec>),
+    /// A boxed array of *BackingConfig*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfBackingConfig(Vec<super::structs::BackingConfig>),
+    /// A boxed array of *BackingStoragePool*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfBackingStoragePool(Vec<super::structs::BackingStoragePool>),
+    /// A boxed array of *DatastoreBackingPoolMapping*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfDatastoreBackingPoolMapping(Vec<super::structs::DatastoreBackingPoolMapping>),
+    /// A boxed array of *DatastorePair*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfDatastorePair(Vec<super::structs::DatastorePair>),
+    /// A boxed array of *DrsMigrationCapabilityResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfDrsMigrationCapabilityResult(Vec<super::structs::DrsMigrationCapabilityResult>),
+    /// A boxed array of *FaultDomainProviderMapping*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfFaultDomainProviderMapping(Vec<super::structs::FaultDomainProviderMapping>),
+    /// A boxed array of *FcStoragePort*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfFcStoragePort(Vec<super::structs::FcStoragePort>),
+    /// A boxed array of *FcoeStoragePort*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfFcoeStoragePort(Vec<super::structs::FcoeStoragePort>),
+    /// A boxed array of *StorageFileSystemInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfStorageFileSystemInfo(Vec<super::structs::StorageFileSystemInfo>),
+    /// A boxed array of *IscsiStoragePort*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfIscsiStoragePort(Vec<super::structs::IscsiStoragePort>),
+    /// A boxed array of *LunHbaAssociation*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfLunHbaAssociation(Vec<super::structs::LunHbaAssociation>),
+    /// A boxed array of *NameValuePair*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfNameValuePair(Vec<super::structs::NameValuePair>),
+    /// A boxed array of *StorageAlarm*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfStorageAlarm(Vec<super::structs::StorageAlarm>),
+    /// A boxed array of *StorageArray*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfStorageArray(Vec<super::structs::StorageArray>),
+    /// A boxed array of *StorageCapability*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfStorageCapability(Vec<super::structs::StorageCapability>),
+    /// A boxed array of *StorageContainer*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfStorageContainer(Vec<super::structs::StorageContainer>),
+    /// A boxed array of *StorageContainerResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfStorageContainerResult(Vec<super::structs::StorageContainerResult>),
+    /// A boxed array of *StorageContainerSpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfStorageContainerSpec(Vec<super::structs::StorageContainerSpec>),
+    /// A boxed array of *StorageFileSystem*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfStorageFileSystem(Vec<super::structs::StorageFileSystem>),
+    /// A boxed array of *StorageLun*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfStorageLun(Vec<super::structs::StorageLun>),
+    /// A boxed array of *StoragePort*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfStoragePort(Vec<Box<dyn super::traits::StoragePortTrait>>),
+    /// A boxed array of *StorageProcessor*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfStorageProcessor(Vec<super::structs::StorageProcessor>),
+    /// A boxed array of *DeviceId*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfDeviceId(Vec<Box<dyn super::traits::DeviceIdTrait>>),
+    /// A boxed array of *FailoverParam*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfFailoverParam(Vec<Box<dyn super::traits::FailoverParamTrait>>),
+    /// A boxed array of *PolicyAssociation*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfPolicyAssociation(Vec<super::structs::PolicyAssociation>),
+    /// A boxed array of *ReplicationGroupData*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfReplicationGroupData(Vec<super::structs::ReplicationGroupData>),
+    /// A boxed array of *FailoverSuccessResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfFailoverSuccessResult(Vec<super::structs::FailoverSuccessResult>),
+    /// A boxed array of *RecoveredDevice*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfRecoveredDevice(Vec<super::structs::RecoveredDevice>),
+    /// A boxed array of *RecoveredDiskInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfRecoveredDiskInfo(Vec<super::structs::RecoveredDiskInfo>),
+    /// A boxed array of *FaultDomainInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfFaultDomainInfo(Vec<super::structs::FaultDomainInfo>),
+    /// A boxed array of *GroupErrorResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfGroupErrorResult(Vec<super::structs::GroupErrorResult>),
+    /// A boxed array of *GroupInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfGroupInfo(Vec<Box<dyn super::traits::GroupInfoTrait>>),
+    /// A boxed array of *GroupOperationResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfGroupOperationResult(Vec<Box<dyn super::traits::GroupOperationResultTrait>>),
+    /// A boxed array of *PointInTimeReplicaId*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfPointInTimeReplicaId(Vec<super::structs::PointInTimeReplicaId>),
+    /// A boxed array of *PromoteParam*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfPromoteParam(Vec<super::structs::PromoteParam>),
+    /// A boxed array of *QueryPointInTimeReplicaParam*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfQueryPointInTimeReplicaParam(Vec<super::structs::QueryPointInTimeReplicaParam>),
+    /// A boxed array of *ReplicaQueryIntervalParam*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfReplicaQueryIntervalParam(Vec<super::structs::ReplicaQueryIntervalParam>),
+    /// A boxed array of *QueryPointInTimeReplicaSuccessResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfQueryPointInTimeReplicaSuccessResult(Vec<super::structs::QueryPointInTimeReplicaSuccessResult>),
+    /// A boxed array of *PointInTimeReplicaInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfPointInTimeReplicaInfo(Vec<super::structs::PointInTimeReplicaInfo>),
+    /// A boxed array of *QueryPointInTimeReplicaSummaryResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfQueryPointInTimeReplicaSummaryResult(Vec<super::structs::QueryPointInTimeReplicaSummaryResult>),
+    /// A boxed array of *ReplicaIntervalQueryResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfReplicaIntervalQueryResult(Vec<super::structs::ReplicaIntervalQueryResult>),
+    /// A boxed array of *QueryReplicationGroupSuccessResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfQueryReplicationGroupSuccessResult(Vec<super::structs::QueryReplicationGroupSuccessResult>),
+    /// A boxed array of *QueryReplicationPeerResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfQueryReplicationPeerResult(Vec<super::structs::QueryReplicationPeerResult>),
+    /// A boxed array of *RecoveredTargetGroupMemberInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfRecoveredTargetGroupMemberInfo(Vec<super::structs::RecoveredTargetGroupMemberInfo>),
+    /// A boxed array of *ReplicaId*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfReplicaId(Vec<super::structs::ReplicaId>),
+    /// A boxed array of *ReverseReplicationSuccessResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfReverseReplicationSuccessResult(Vec<super::structs::ReverseReplicationSuccessResult>),
+    /// A boxed array of *SourceGroupInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfSourceGroupInfo(Vec<super::structs::SourceGroupInfo>),
+    /// A boxed array of *ReplicationTargetInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfReplicationTargetInfo(Vec<super::structs::ReplicationTargetInfo>),
+    /// A boxed array of *SourceGroupMemberInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfSourceGroupMemberInfo(Vec<super::structs::SourceGroupMemberInfo>),
+    /// A boxed array of *TargetDeviceId*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfTargetDeviceId(Vec<super::structs::TargetDeviceId>),
+    /// A boxed array of *SyncReplicationGroupSuccessResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfSyncReplicationGroupSuccessResult(Vec<super::structs::SyncReplicationGroupSuccessResult>),
+    /// A boxed array of *TargetGroupInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfTargetGroupInfo(Vec<super::structs::TargetGroupInfo>),
+    /// A boxed array of *TargetToSourceInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfTargetToSourceInfo(Vec<super::structs::TargetToSourceInfo>),
+    /// A boxed array of *TargetGroupMemberInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfTargetGroupMemberInfo(Vec<Box<dyn super::traits::TargetGroupMemberInfoTrait>>),
+    /// A boxed array of *TestFailoverParam*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfTestFailoverParam(Vec<super::structs::TestFailoverParam>),
+    /// A boxed array of *VVolId*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfVVolId(Vec<super::structs::VVolId>),
+    /// A boxed array of *VasaVirtualDiskId*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfVasaVirtualDiskId(Vec<super::structs::VasaVirtualDiskId>),
+    /// A boxed array of *VirtualDiskKey*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfVirtualDiskKey(Vec<super::structs::VirtualDiskKey>),
+    /// A boxed array of *VirtualDiskMoId*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfVirtualDiskMoId(Vec<super::structs::VirtualDiskMoId>),
+    /// A boxed array of *VirtualMachineFilePath*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfVirtualMachineFilePath(Vec<super::structs::VirtualMachineFilePath>),
+    /// A boxed array of *VirtualMachineId*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfVirtualMachineId(Vec<Box<dyn super::traits::VirtualMachineIdTrait>>),
+    /// A boxed array of *VirtualMachineMoId*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfVirtualMachineMoId(Vec<super::structs::VirtualMachineMoId>),
+    /// A boxed array of *VirtualMachineUUID*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfVirtualMachineUuid(Vec<super::structs::VirtualMachineUuid>),
     /// A boxed array of *AboutInfo*. To be used in *Any* placeholders.
     ArrayOfAboutInfo(Vec<super::structs::AboutInfo>),
     /// A boxed array of *AuthorizationDescription*. To be used in *Any* placeholders.
@@ -88,6 +1550,10 @@ pub enum ValueElements {
     ArrayOfCapability(Vec<super::structs::Capability>),
     /// A boxed array of *ClusterComputeResourceClusterConfigResult*. To be used in *Any* placeholders.
     ArrayOfClusterComputeResourceClusterConfigResult(Vec<super::structs::ClusterComputeResourceClusterConfigResult>),
+    /// A boxed array of *ClusterComputeResourceCryptoModePolicy*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 8.0.3.0
+    ArrayOfClusterComputeResourceCryptoModePolicy(Vec<super::structs::ClusterComputeResourceCryptoModePolicy>),
     /// A boxed array of *ClusterComputeResourceDVSConfigurationValidation*. To be used in *Any* placeholders.
     ArrayOfClusterComputeResourceDvsConfigurationValidation(Vec<super::structs::ClusterComputeResourceDvsConfigurationValidation>),
     /// A boxed array of *ClusterComputeResourceDVSSetting*. To be used in *Any* placeholders.
@@ -108,8 +1574,16 @@ pub enum ValueElements {
     ArrayOfClusterComputeResourceHostConfigurationProfile(Vec<super::structs::ClusterComputeResourceHostConfigurationProfile>),
     /// A boxed array of *ClusterComputeResourceHostConfigurationValidation*. To be used in *Any* placeholders.
     ArrayOfClusterComputeResourceHostConfigurationValidation(Vec<super::structs::ClusterComputeResourceHostConfigurationValidation>),
+    /// A boxed array of *ClusterComputeResourceHostEvacuationInfo*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 8.0.3.0
+    ArrayOfClusterComputeResourceHostEvacuationInfo(Vec<super::structs::ClusterComputeResourceHostEvacuationInfo>),
     /// A boxed array of *ClusterComputeResourceHostVmkNicInfo*. To be used in *Any* placeholders.
     ArrayOfClusterComputeResourceHostVmkNicInfo(Vec<super::structs::ClusterComputeResourceHostVmkNicInfo>),
+    /// A boxed array of *ClusterComputeResourceMaintenanceInfo*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 8.0.3.0
+    ArrayOfClusterComputeResourceMaintenanceInfo(Vec<super::structs::ClusterComputeResourceMaintenanceInfo>),
     /// A boxed array of *ClusterComputeResourceSummary*. To be used in *Any* placeholders.
     ArrayOfClusterComputeResourceSummary(Vec<super::structs::ClusterComputeResourceSummary>),
     /// A boxed array of *ClusterComputeResourceVCProfile*. To be used in *Any* placeholders.
@@ -126,6 +1600,12 @@ pub enum ValueElements {
     ArrayOfComputeResourceConfigSpec(Vec<Box<dyn super::traits::ComputeResourceConfigSpecTrait>>),
     /// A boxed array of *ComputeResourceHostSPBMLicenseInfo*. To be used in *Any* placeholders.
     ArrayOfComputeResourceHostSpbmLicenseInfo(Vec<super::structs::ComputeResourceHostSpbmLicenseInfo>),
+    /// A boxed array of *ComputeResourceHostSeedSpec*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 8.0.3.0
+    ArrayOfComputeResourceHostSeedSpec(Vec<super::structs::ComputeResourceHostSeedSpec>),
+    /// A boxed array of *ComputeResourceHostSeedSpecSingleHostSpec*. To be used in *Any* placeholders.
+    ArrayOfComputeResourceHostSeedSpecSingleHostSpec(Vec<super::structs::ComputeResourceHostSeedSpecSingleHostSpec>),
     /// A boxed array of *ComputeResourceSummary*. To be used in *Any* placeholders.
     ArrayOfComputeResourceSummary(Vec<Box<dyn super::traits::ComputeResourceSummaryTrait>>),
     /// A boxed array of *CustomFieldDef*. To be used in *Any* placeholders.
@@ -182,6 +1662,82 @@ pub enum ValueElements {
     ArrayOfDiagnosticManagerLogDescriptor(Vec<super::structs::DiagnosticManagerLogDescriptor>),
     /// A boxed array of *DiagnosticManagerLogHeader*. To be used in *Any* placeholders.
     ArrayOfDiagnosticManagerLogHeader(Vec<super::structs::DiagnosticManagerLogHeader>),
+    /// A boxed array of *DirectPathProfileManagerCapacityInfo*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    ArrayOfDirectPathProfileManagerCapacityInfo(Vec<super::structs::DirectPathProfileManagerCapacityInfo>),
+    /// A boxed array of *DirectPathProfileManagerCapacityQueryByDeviceConfig*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    ArrayOfDirectPathProfileManagerCapacityQueryByDeviceConfig(Vec<super::structs::DirectPathProfileManagerCapacityQueryByDeviceConfig>),
+    /// A boxed array of *DirectPathProfileManagerCapacityQueryById*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    ArrayOfDirectPathProfileManagerCapacityQueryById(Vec<super::structs::DirectPathProfileManagerCapacityQueryById>),
+    /// A boxed array of *DirectPathProfileManagerCapacityQueryByName*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    ArrayOfDirectPathProfileManagerCapacityQueryByName(Vec<super::structs::DirectPathProfileManagerCapacityQueryByName>),
+    /// A boxed array of *DirectPathProfileManagerCapacityQuerySpec*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    ArrayOfDirectPathProfileManagerCapacityQuerySpec(Vec<Box<dyn super::traits::DirectPathProfileManagerCapacityQuerySpecTrait>>),
+    /// A boxed array of *DirectPathProfileManagerCapacityResult*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    ArrayOfDirectPathProfileManagerCapacityResult(Vec<Box<dyn super::traits::DirectPathProfileManagerCapacityResultTrait>>),
+    /// A boxed array of *DirectPathProfileManagerCapacityUnknown*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    ArrayOfDirectPathProfileManagerCapacityUnknown(Vec<super::structs::DirectPathProfileManagerCapacityUnknown>),
+    /// A boxed array of *DirectPathProfileManagerCreateSpec*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    ArrayOfDirectPathProfileManagerCreateSpec(Vec<super::structs::DirectPathProfileManagerCreateSpec>),
+    /// A boxed array of *DirectPathProfileManagerDirectPathConfig*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    ArrayOfDirectPathProfileManagerDirectPathConfig(Vec<Box<dyn super::traits::DirectPathProfileManagerDirectPathConfigTrait>>),
+    /// A boxed array of *DirectPathProfileInfo*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    ArrayOfDirectPathProfileInfo(Vec<super::structs::DirectPathProfileInfo>),
+    /// A boxed array of *DirectPathProfileManagerDvxDirectPathConfig*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    ArrayOfDirectPathProfileManagerDvxDirectPathConfig(Vec<super::structs::DirectPathProfileManagerDvxDirectPathConfig>),
+    /// A boxed array of *DirectPathProfileManagerDynamicDirectPathConfig*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    ArrayOfDirectPathProfileManagerDynamicDirectPathConfig(Vec<super::structs::DirectPathProfileManagerDynamicDirectPathConfig>),
+    /// A boxed array of *DirectPathProfileManagerFilterSpec*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    ArrayOfDirectPathProfileManagerFilterSpec(Vec<super::structs::DirectPathProfileManagerFilterSpec>),
+    /// A boxed array of *DirectPathProfileManagerTargetCluster*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    ArrayOfDirectPathProfileManagerTargetCluster(Vec<super::structs::DirectPathProfileManagerTargetCluster>),
+    /// A boxed array of *DirectPathProfileManagerTargetEntity*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    ArrayOfDirectPathProfileManagerTargetEntity(Vec<Box<dyn super::traits::DirectPathProfileManagerTargetEntityTrait>>),
+    /// A boxed array of *DirectPathProfileManagerTargetHost*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    ArrayOfDirectPathProfileManagerTargetHost(Vec<super::structs::DirectPathProfileManagerTargetHost>),
+    /// A boxed array of *DirectPathProfileManagerUpdateSpec*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    ArrayOfDirectPathProfileManagerUpdateSpec(Vec<super::structs::DirectPathProfileManagerUpdateSpec>),
+    /// A boxed array of *DirectPathProfileManagerVirtualDeviceGroupDirectPathConfig*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    ArrayOfDirectPathProfileManagerVirtualDeviceGroupDirectPathConfig(Vec<super::structs::DirectPathProfileManagerVirtualDeviceGroupDirectPathConfig>),
+    /// A boxed array of *DirectPathProfileManagerVmiopDirectPathConfig*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    ArrayOfDirectPathProfileManagerVmiopDirectPathConfig(Vec<super::structs::DirectPathProfileManagerVmiopDirectPathConfig>),
     /// A boxed array of *DVSBackupRestoreCapability*. To be used in *Any* placeholders.
     ArrayOfDvsBackupRestoreCapability(Vec<super::structs::DvsBackupRestoreCapability>),
     /// A boxed array of *DVSCapability*. To be used in *Any* placeholders.
@@ -274,6 +1830,10 @@ pub enum ValueElements {
     ArrayOfFolderBatchAddHostsToClusterResult(Vec<super::structs::FolderBatchAddHostsToClusterResult>),
     /// A boxed array of *FolderBatchAddStandaloneHostsResult*. To be used in *Any* placeholders.
     ArrayOfFolderBatchAddStandaloneHostsResult(Vec<super::structs::FolderBatchAddStandaloneHostsResult>),
+    /// A boxed array of *FolderExternallyManagedFolderInfo*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    ArrayOfFolderExternallyManagedFolderInfo(Vec<super::structs::FolderExternallyManagedFolderInfo>),
     /// A boxed array of *FolderFailedHostResult*. To be used in *Any* placeholders.
     ArrayOfFolderFailedHostResult(Vec<super::structs::FolderFailedHostResult>),
     /// A boxed array of *FolderNewHostSpec*. To be used in *Any* placeholders.
@@ -284,6 +1844,18 @@ pub enum ValueElements {
     ArrayOfReplicationVmProgressInfo(Vec<super::structs::ReplicationVmProgressInfo>),
     /// A boxed array of *HbrManagerVmReplicationCapability*. To be used in *Any* placeholders.
     ArrayOfHbrManagerVmReplicationCapability(Vec<super::structs::HbrManagerVmReplicationCapability>),
+    /// A boxed array of *HbrReplicationTargetSpec*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    ArrayOfHbrReplicationTargetSpec(Vec<Box<dyn super::traits::HbrReplicationTargetSpecTrait>>),
+    /// A boxed array of *HbrTargetSpec*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    ArrayOfHbrTargetSpec(Vec<super::structs::HbrTargetSpec>),
+    /// A boxed array of *HbrTargetSpecReplacement*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    ArrayOfHbrTargetSpecReplacement(Vec<super::structs::HbrTargetSpecReplacement>),
     /// A boxed array of *HealthUpdate*. To be used in *Any* placeholders.
     ArrayOfHealthUpdate(Vec<super::structs::HealthUpdate>),
     /// A boxed array of *HealthUpdateInfo*. To be used in *Any* placeholders.
@@ -330,10 +1902,22 @@ pub enum ValueElements {
     ArrayOfHostIoFilterInfo(Vec<super::structs::HostIoFilterInfo>),
     /// A boxed array of *IoFilterInfo*. To be used in *Any* placeholders.
     ArrayOfIoFilterInfo(Vec<Box<dyn super::traits::IoFilterInfoTrait>>),
+    /// A boxed array of *PinnedCertificate*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 8.0.3.0
+    ArrayOfPinnedCertificate(Vec<super::structs::PinnedCertificate>),
     /// A boxed array of *IoFilterQueryIssueResult*. To be used in *Any* placeholders.
     ArrayOfIoFilterQueryIssueResult(Vec<super::structs::IoFilterQueryIssueResult>),
     /// A boxed array of *IoFilterHostIssue*. To be used in *Any* placeholders.
     ArrayOfIoFilterHostIssue(Vec<super::structs::IoFilterHostIssue>),
+    /// A boxed array of *IoFilterManagerSslTrust*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 8.0.3.0
+    ArrayOfIoFilterManagerSslTrust(Vec<Box<dyn super::traits::IoFilterManagerSslTrustTrait>>),
+    /// A boxed array of *UntrustedCertificate*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 8.0.3.0
+    ArrayOfUntrustedCertificate(Vec<super::structs::UntrustedCertificate>),
     /// A boxed array of *IpAddress*. To be used in *Any* placeholders.
     ArrayOfIpAddress(Vec<Box<dyn super::traits::IpAddressTrait>>),
     /// A boxed array of *IpPoolManagerIpAllocation*. To be used in *Any* placeholders.
@@ -401,9 +1985,13 @@ pub enum ValueElements {
     /// A boxed array of *OvfCreateDescriptorResult*. To be used in *Any* placeholders.
     ArrayOfOvfCreateDescriptorResult(Vec<super::structs::OvfCreateDescriptorResult>),
     /// A boxed array of *OvfCreateImportSpecParams*. To be used in *Any* placeholders.
-    ArrayOfOvfCreateImportSpecParams(Vec<super::structs::OvfCreateImportSpecParams>),
+    ArrayOfOvfCreateImportSpecParams(Vec<Box<dyn super::traits::OvfCreateImportSpecParamsTrait>>),
     /// A boxed array of *OvfCreateImportSpecResult*. To be used in *Any* placeholders.
     ArrayOfOvfCreateImportSpecResult(Vec<super::structs::OvfCreateImportSpecResult>),
+    /// A boxed array of *OvfDatastoreMapping*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    ArrayOfOvfDatastoreMapping(Vec<super::structs::OvfDatastoreMapping>),
     /// A boxed array of *OvfDeploymentOption*. To be used in *Any* placeholders.
     ArrayOfOvfDeploymentOption(Vec<super::structs::OvfDeploymentOption>),
     /// A boxed array of *OvfFileItem*. To be used in *Any* placeholders.
@@ -414,6 +2002,10 @@ pub enum ValueElements {
     ArrayOfOvfNetworkMapping(Vec<super::structs::OvfNetworkMapping>),
     /// A boxed array of *OvfFile*. To be used in *Any* placeholders.
     ArrayOfOvfFile(Vec<super::structs::OvfFile>),
+    /// A boxed array of *OvfImportParams*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    ArrayOfOvfImportParams(Vec<super::structs::OvfImportParams>),
     /// A boxed array of *OvfOptionInfo*. To be used in *Any* placeholders.
     ArrayOfOvfOptionInfo(Vec<super::structs::OvfOptionInfo>),
     /// A boxed array of *OvfParseDescriptorParams*. To be used in *Any* placeholders.
@@ -422,6 +2014,10 @@ pub enum ValueElements {
     ArrayOfOvfParseDescriptorResult(Vec<super::structs::OvfParseDescriptorResult>),
     /// A boxed array of *OvfResourceMap*. To be used in *Any* placeholders.
     ArrayOfOvfResourceMap(Vec<super::structs::OvfResourceMap>),
+    /// A boxed array of *OvfStorageProfileMapping*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    ArrayOfOvfStorageProfileMapping(Vec<super::structs::OvfStorageProfileMapping>),
     /// A boxed array of *OvfValidateHostParams*. To be used in *Any* placeholders.
     ArrayOfOvfValidateHostParams(Vec<super::structs::OvfValidateHostParams>),
     /// A boxed array of *OvfValidateHostResult*. To be used in *Any* placeholders.
@@ -485,7 +2081,7 @@ pub enum ValueElements {
     /// A boxed array of *ResourcePoolQuickStats*. To be used in *Any* placeholders.
     ArrayOfResourcePoolQuickStats(Vec<super::structs::ResourcePoolQuickStats>),
     /// A boxed array of *SDDCBase*. To be used in *Any* placeholders.
-    ArrayOfSddcBase(Vec<super::structs::SddcBase>),
+    ArrayOfSddcBase(Vec<Box<dyn super::traits::SddcBaseTrait>>),
     /// A boxed array of *SelectionSet*. To be used in *Any* placeholders.
     ArrayOfSelectionSet(Vec<Box<dyn super::traits::SelectionSetTrait>>),
     /// A boxed array of *HostVMotionCompatibility*. To be used in *Any* placeholders.
@@ -560,6 +2156,22 @@ pub enum ValueElements {
     ArrayOfTaskFilterSpecByUsername(Vec<super::structs::TaskFilterSpecByUsername>),
     /// A boxed array of *TaskInfo*. To be used in *Any* placeholders.
     ArrayOfTaskInfo(Vec<super::structs::TaskInfo>),
+    /// A boxed array of *TaskInfoFilterSpec*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 8.0.3.0
+    ArrayOfTaskInfoFilterSpec(Vec<super::structs::TaskInfoFilterSpec>),
+    /// A boxed array of *TaskInfoFilterSpecFilterTaskResults*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 8.0.3.0
+    ArrayOfTaskInfoFilterSpecFilterTaskResults(Vec<super::structs::TaskInfoFilterSpecFilterTaskResults>),
+    /// A boxed array of *TaskManagerTaskViewSpec*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    ArrayOfTaskManagerTaskViewSpec(Vec<Box<dyn super::traits::TaskManagerTaskViewSpecTrait>>),
+    /// A boxed array of *TaskManagerViewByStartId*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    ArrayOfTaskManagerViewByStartId(Vec<super::structs::TaskManagerViewByStartId>),
     /// A boxed array of *TaskReason*. To be used in *Any* placeholders.
     ArrayOfTaskReason(Vec<Box<dyn super::traits::TaskReasonTrait>>),
     /// A boxed array of *TaskReasonAlarm*. To be used in *Any* placeholders.
@@ -644,6 +2256,54 @@ pub enum ValueElements {
     ArrayOfVirtualMachineTicket(Vec<super::structs::VirtualMachineTicket>),
     /// A boxed array of *VirtualMachineWipeResult*. To be used in *Any* placeholders.
     ArrayOfVirtualMachineWipeResult(Vec<super::structs::VirtualMachineWipeResult>),
+    /// A boxed array of *VsanComparator*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanComparator(Vec<Box<dyn super::traits::VsanComparatorTrait>>),
+    /// A boxed array of *VsanCompositeConstraint*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanCompositeConstraint(Vec<super::structs::VsanCompositeConstraint>),
+    /// A boxed array of *VsanDataObfuscationRule*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanDataObfuscationRule(Vec<super::structs::VsanDataObfuscationRule>),
+    /// A boxed array of *VsanJsonComparator*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanJsonComparator(Vec<super::structs::VsanJsonComparator>),
+    /// A boxed array of *VsanJsonFilterRule*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanJsonFilterRule(Vec<super::structs::VsanJsonFilterRule>),
+    /// A boxed array of *VsanMassCollectorPropertyParams*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanMassCollectorPropertyParams(Vec<super::structs::VsanMassCollectorPropertyParams>),
+    /// A boxed array of *VsanMassCollectorSpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanMassCollectorSpec(Vec<super::structs::VsanMassCollectorSpec>),
+    /// A boxed array of *VsanNestJsonComparator*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanNestJsonComparator(Vec<super::structs::VsanNestJsonComparator>),
+    /// A boxed array of *VsanObjectTypeRule*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanObjectTypeRule(Vec<super::structs::VsanObjectTypeRule>),
+    /// A boxed array of *VsanPropertyConstraint*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanPropertyConstraint(Vec<super::structs::VsanPropertyConstraint>),
+    /// A boxed array of *VsanRegexBasedRule*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanRegexBasedRule(Vec<super::structs::VsanRegexBasedRule>),
+    /// A boxed array of *VsanResourceConstraint*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanResourceConstraint(Vec<Box<dyn super::traits::VsanResourceConstraintTrait>>),
     /// A boxed array of *VsanUpgradeSystemAPIBrokenIssue*. To be used in *Any* placeholders.
     ArrayOfVsanUpgradeSystemApiBrokenIssue(Vec<super::structs::VsanUpgradeSystemApiBrokenIssue>),
     /// A boxed array of *VsanUpgradeSystemAutoClaimEnabledOnHostsIssue*. To be used in *Any* placeholders.
@@ -661,7 +2321,7 @@ pub enum ValueElements {
     /// A boxed array of *VsanUpgradeSystemPreflightCheckIssue*. To be used in *Any* placeholders.
     ArrayOfVsanUpgradeSystemPreflightCheckIssue(Vec<Box<dyn super::traits::VsanUpgradeSystemPreflightCheckIssueTrait>>),
     /// A boxed array of *VsanUpgradeSystemPreflightCheckResult*. To be used in *Any* placeholders.
-    ArrayOfVsanUpgradeSystemPreflightCheckResult(Vec<super::structs::VsanUpgradeSystemPreflightCheckResult>),
+    ArrayOfVsanUpgradeSystemPreflightCheckResult(Vec<Box<dyn super::traits::VsanUpgradeSystemPreflightCheckResultTrait>>),
     /// A boxed array of *VsanUpgradeSystemRogueHostsInClusterIssue*. To be used in *Any* placeholders.
     ArrayOfVsanUpgradeSystemRogueHostsInClusterIssue(Vec<super::structs::VsanUpgradeSystemRogueHostsInClusterIssue>),
     /// A boxed array of *VsanUpgradeSystemUpgradeHistoryDiskGroupOp*. To be used in *Any* placeholders.
@@ -671,7 +2331,7 @@ pub enum ValueElements {
     /// A boxed array of *VsanUpgradeSystemUpgradeHistoryPreflightFail*. To be used in *Any* placeholders.
     ArrayOfVsanUpgradeSystemUpgradeHistoryPreflightFail(Vec<super::structs::VsanUpgradeSystemUpgradeHistoryPreflightFail>),
     /// A boxed array of *VsanUpgradeSystemUpgradeStatus*. To be used in *Any* placeholders.
-    ArrayOfVsanUpgradeSystemUpgradeStatus(Vec<super::structs::VsanUpgradeSystemUpgradeStatus>),
+    ArrayOfVsanUpgradeSystemUpgradeStatus(Vec<Box<dyn super::traits::VsanUpgradeSystemUpgradeStatusTrait>>),
     /// A boxed array of *VsanUpgradeSystemV2ObjectsPresentDuringDowngradeIssue*. To be used in *Any* placeholders.
     ArrayOfVsanUpgradeSystemV2ObjectsPresentDuringDowngradeIssue(Vec<super::structs::VsanUpgradeSystemV2ObjectsPresentDuringDowngradeIssue>),
     /// A boxed array of *VsanUpgradeSystemWrongEsxVersionIssue*. To be used in *Any* placeholders.
@@ -738,6 +2398,10 @@ pub enum ValueElements {
     /// 
     /// ***Since:*** vSphere API Release 8.0.0.1
     ArrayOfClusterClusterInitialPlacementAction(Vec<super::structs::ClusterClusterInitialPlacementAction>),
+    /// A boxed array of *ClusterPowerContext*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfClusterPowerContext(Vec<super::structs::ClusterPowerContext>),
     /// A boxed array of *ClusterConfigInfo*. To be used in *Any* placeholders.
     ArrayOfClusterConfigInfo(Vec<super::structs::ClusterConfigInfo>),
     /// A boxed array of *ClusterConfigInfoEx*. To be used in *Any* placeholders.
@@ -836,8 +2500,20 @@ pub enum ValueElements {
     ArrayOfClusterFailoverResourcesAdmissionControlInfo(Vec<super::structs::ClusterFailoverResourcesAdmissionControlInfo>),
     /// A boxed array of *ClusterFailoverResourcesAdmissionControlPolicy*. To be used in *Any* placeholders.
     ArrayOfClusterFailoverResourcesAdmissionControlPolicy(Vec<super::structs::ClusterFailoverResourcesAdmissionControlPolicy>),
+    /// A boxed array of *VsanFaultDomainDestroySpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanFaultDomainDestroySpec(Vec<super::structs::VsanFaultDomainDestroySpec>),
+    /// A boxed array of *VsanFaultDomainUpdateSpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanFaultDomainUpdateSpec(Vec<super::structs::VsanFaultDomainUpdateSpec>),
     /// A boxed array of *ClusterFixedSizeSlotPolicy*. To be used in *Any* placeholders.
     ArrayOfClusterFixedSizeSlotPolicy(Vec<super::structs::ClusterFixedSizeSlotPolicy>),
+    /// A boxed array of *ClusterFtVmHostRuleInfo*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 8.0.3.0
+    ArrayOfClusterFtVmHostRuleInfo(Vec<super::structs::ClusterFtVmHostRuleInfo>),
     /// A boxed array of *ClusterGroupInfo*. To be used in *Any* placeholders.
     ArrayOfClusterGroupInfo(Vec<Box<dyn super::traits::ClusterGroupInfoTrait>>),
     /// A boxed array of *ClusterGroupSpec*. To be used in *Any* placeholders.
@@ -860,6 +2536,10 @@ pub enum ValueElements {
     ArrayOfClusterNotAttemptedVmInfo(Vec<super::structs::ClusterNotAttemptedVmInfo>),
     /// A boxed array of *ClusterOrchestrationInfo*. To be used in *Any* placeholders.
     ArrayOfClusterOrchestrationInfo(Vec<super::structs::ClusterOrchestrationInfo>),
+    /// A boxed array of *PerformClusterPowerActionSpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfPerformClusterPowerActionSpec(Vec<super::structs::PerformClusterPowerActionSpec>),
     /// A boxed array of *PlacementAction*. To be used in *Any* placeholders.
     ArrayOfPlacementAction(Vec<super::structs::PlacementAction>),
     /// A boxed array of *PlacementResult*. To be used in *Any* placeholders.
@@ -878,6 +2558,10 @@ pub enum ValueElements {
     ArrayOfClusterPreemptibleVmPairSpec(Vec<super::structs::ClusterPreemptibleVmPairSpec>),
     /// A boxed array of *ClusterProactiveDrsConfigInfo*. To be used in *Any* placeholders.
     ArrayOfClusterProactiveDrsConfigInfo(Vec<super::structs::ClusterProactiveDrsConfigInfo>),
+    /// A boxed array of *QueryVsanManagedStorageSpaceUsageSpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfQueryVsanManagedStorageSpaceUsageSpec(Vec<super::structs::QueryVsanManagedStorageSpaceUsageSpec>),
     /// A boxed array of *ClusterRecommendation*. To be used in *Any* placeholders.
     ArrayOfClusterRecommendation(Vec<super::structs::ClusterRecommendation>),
     /// A boxed array of *ClusterResourceUsageSummary*. To be used in *Any* placeholders.
@@ -886,8 +2570,22 @@ pub enum ValueElements {
     ArrayOfClusterRuleInfo(Vec<Box<dyn super::traits::ClusterRuleInfoTrait>>),
     /// A boxed array of *ClusterRuleSpec*. To be used in *Any* placeholders.
     ArrayOfClusterRuleSpec(Vec<super::structs::ClusterRuleSpec>),
+    /// A boxed array of *VsanSiteFaultDomain*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanSiteFaultDomain(Vec<super::structs::VsanSiteFaultDomain>),
+    /// A boxed array of *VsanSiteFaultDomainConfig*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanSiteFaultDomainConfig(Vec<super::structs::VsanSiteFaultDomainConfig>),
     /// A boxed array of *ClusterSlotPolicy*. To be used in *Any* placeholders.
     ArrayOfClusterSlotPolicy(Vec<Box<dyn super::traits::ClusterSlotPolicyTrait>>),
+    /// A boxed array of *VsanStorageComplianceResult*. To be used in *Any* placeholders.
+    ArrayOfVsanStorageComplianceResult(Vec<super::structs::VsanStorageComplianceResult>),
+    /// A boxed array of *VsanStorageOperationalStatus*. To be used in *Any* placeholders.
+    ArrayOfVsanStorageOperationalStatus(Vec<super::structs::VsanStorageOperationalStatus>),
+    /// A boxed array of *VsanStoragePolicyStatus*. To be used in *Any* placeholders.
+    ArrayOfVsanStoragePolicyStatus(Vec<super::structs::VsanStoragePolicyStatus>),
     /// A boxed array of *ClusterSystemVMsConfigInfo*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 7.0.3.0
@@ -902,6 +2600,16 @@ pub enum ValueElements {
     ArrayOfClusterTagCategoryUpdateSpec(Vec<super::structs::ClusterTagCategoryUpdateSpec>),
     /// A boxed array of *ClusterUsageSummary*. To be used in *Any* placeholders.
     ArrayOfClusterUsageSummary(Vec<super::structs::ClusterUsageSummary>),
+    /// A boxed array of *VimClusterVSANPreferredFaultDomainInfo*. To be used in *Any* placeholders.
+    ArrayOfVimClusterVsanPreferredFaultDomainInfo(Vec<super::structs::VimClusterVsanPreferredFaultDomainInfo>),
+    /// A boxed array of *VimClusterVSANStretchedClusterCapability*. To be used in *Any* placeholders.
+    ArrayOfVimClusterVsanStretchedClusterCapability(Vec<super::structs::VimClusterVsanStretchedClusterCapability>),
+    /// A boxed array of *VimClusterVSANStretchedClusterFaultDomainConfig*. To be used in *Any* placeholders.
+    ArrayOfVimClusterVsanStretchedClusterFaultDomainConfig(Vec<super::structs::VimClusterVsanStretchedClusterFaultDomainConfig>),
+    /// A boxed array of *VSANStretchedClusterHostVirtualApplianceStatus*. To be used in *Any* placeholders.
+    ArrayOfVsanStretchedClusterHostVirtualApplianceStatus(Vec<super::structs::VsanStretchedClusterHostVirtualApplianceStatus>),
+    /// A boxed array of *VimClusterVSANWitnessHostInfo*. To be used in *Any* placeholders.
+    ArrayOfVimClusterVsanWitnessHostInfo(Vec<super::structs::VimClusterVsanWitnessHostInfo>),
     /// A boxed array of *ClusterVmComponentProtectionSettings*. To be used in *Any* placeholders.
     ArrayOfClusterVmComponentProtectionSettings(Vec<super::structs::ClusterVmComponentProtectionSettings>),
     /// A boxed array of *ClusterVmGroup*. To be used in *Any* placeholders.
@@ -916,6 +2624,534 @@ pub enum ValueElements {
     ArrayOfClusterVmReadiness(Vec<super::structs::ClusterVmReadiness>),
     /// A boxed array of *ClusterVmToolsMonitoringSettings*. To be used in *Any* placeholders.
     ArrayOfClusterVmToolsMonitoringSettings(Vec<super::structs::ClusterVmToolsMonitoringSettings>),
+    /// A boxed array of *VsanAttachToSrOperation*. To be used in *Any* placeholders.
+    ArrayOfVsanAttachToSrOperation(Vec<super::structs::VsanAttachToSrOperation>),
+    /// A boxed array of *VsanCapability*. To be used in *Any* placeholders.
+    ArrayOfVsanCapability(Vec<super::structs::VsanCapability>),
+    /// A boxed array of *VsanClusterAdvCfgSyncHostResult*. To be used in *Any* placeholders.
+    ArrayOfVsanClusterAdvCfgSyncHostResult(Vec<super::structs::VsanClusterAdvCfgSyncHostResult>),
+    /// A boxed array of *VsanClusterAdvCfgSyncResult*. To be used in *Any* placeholders.
+    ArrayOfVsanClusterAdvCfgSyncResult(Vec<super::structs::VsanClusterAdvCfgSyncResult>),
+    /// A boxed array of *VsanClusterBalancePerDiskInfo*. To be used in *Any* placeholders.
+    ArrayOfVsanClusterBalancePerDiskInfo(Vec<super::structs::VsanClusterBalancePerDiskInfo>),
+    /// A boxed array of *VsanClusterBalanceSummary*. To be used in *Any* placeholders.
+    ArrayOfVsanClusterBalanceSummary(Vec<super::structs::VsanClusterBalanceSummary>),
+    /// A boxed array of *VsanClusterClomdLivenessResult*. To be used in *Any* placeholders.
+    ArrayOfVsanClusterClomdLivenessResult(Vec<super::structs::VsanClusterClomdLivenessResult>),
+    /// A boxed array of *VsanClusterConfig*. To be used in *Any* placeholders.
+    ArrayOfVsanClusterConfig(Vec<super::structs::VsanClusterConfig>),
+    /// A boxed array of *VsanClusterCreateVmHealthTestResult*. To be used in *Any* placeholders.
+    ArrayOfVsanClusterCreateVmHealthTestResult(Vec<super::structs::VsanClusterCreateVmHealthTestResult>),
+    /// A boxed array of *VsanClusterDitEncryptionHealthSummary*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanClusterDitEncryptionHealthSummary(Vec<super::structs::VsanClusterDitEncryptionHealthSummary>),
+    /// A boxed array of *VsanClusterEncryptionHealthSummary*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanClusterEncryptionHealthSummary(Vec<super::structs::VsanClusterEncryptionHealthSummary>),
+    /// A boxed array of *VsanClusterFileServiceHealthSummary*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanClusterFileServiceHealthSummary(Vec<super::structs::VsanClusterFileServiceHealthSummary>),
+    /// A boxed array of *VsanClusterGlobalDedupHealthSummary*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanClusterGlobalDedupHealthSummary(Vec<super::structs::VsanClusterGlobalDedupHealthSummary>),
+    /// A boxed array of *VsanClusterHclInfo*. To be used in *Any* placeholders.
+    ArrayOfVsanClusterHclInfo(Vec<super::structs::VsanClusterHclInfo>),
+    /// A boxed array of *VsanClusterHealthAction*. To be used in *Any* placeholders.
+    ArrayOfVsanClusterHealthAction(Vec<super::structs::VsanClusterHealthAction>),
+    /// A boxed array of *VsanClusterHealthCheckInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanClusterHealthCheckInfo(Vec<super::structs::VsanClusterHealthCheckInfo>),
+    /// A boxed array of *VsanClusterHealthConfigs*. To be used in *Any* placeholders.
+    ArrayOfVsanClusterHealthConfigs(Vec<super::structs::VsanClusterHealthConfigs>),
+    /// A boxed array of *VsanClusterHealthLink*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanClusterHealthLink(Vec<super::structs::VsanClusterHealthLink>),
+    /// A boxed array of *VsanClusterHealthGroup*. To be used in *Any* placeholders.
+    ArrayOfVsanClusterHealthGroup(Vec<super::structs::VsanClusterHealthGroup>),
+    /// A boxed array of *VsanClusterHealthLinkBase*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanClusterHealthLinkBase(Vec<Box<dyn super::traits::VsanClusterHealthLinkBaseTrait>>),
+    /// A boxed array of *VsanClusterHealthQuerySpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanClusterHealthQuerySpec(Vec<super::structs::VsanClusterHealthQuerySpec>),
+    /// A boxed array of *VsanClusterHealthResultBase*. To be used in *Any* placeholders.
+    ArrayOfVsanClusterHealthResultBase(Vec<Box<dyn super::traits::VsanClusterHealthResultBaseTrait>>),
+    /// A boxed array of *VsanClusterHealthResultColumnInfo*. To be used in *Any* placeholders.
+    ArrayOfVsanClusterHealthResultColumnInfo(Vec<super::structs::VsanClusterHealthResultColumnInfo>),
+    /// A boxed array of *VsanClusterHealthResultKeyValuePair*. To be used in *Any* placeholders.
+    ArrayOfVsanClusterHealthResultKeyValuePair(Vec<super::structs::VsanClusterHealthResultKeyValuePair>),
+    /// A boxed array of *VsanClusterHealthResultRow*. To be used in *Any* placeholders.
+    ArrayOfVsanClusterHealthResultRow(Vec<super::structs::VsanClusterHealthResultRow>),
+    /// A boxed array of *VsanClusterHealthResultTable*. To be used in *Any* placeholders.
+    ArrayOfVsanClusterHealthResultTable(Vec<super::structs::VsanClusterHealthResultTable>),
+    /// A boxed array of *VsanClusterHealthResultWithRemediation*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanClusterHealthResultWithRemediation(Vec<super::structs::VsanClusterHealthResultWithRemediation>),
+    /// A boxed array of *VsanClusterHealthSummary*. To be used in *Any* placeholders.
+    ArrayOfVsanClusterHealthSummary(Vec<super::structs::VsanClusterHealthSummary>),
+    /// A boxed array of *VsanClusterHealthSystemObjectsRepairResult*. To be used in *Any* placeholders.
+    ArrayOfVsanClusterHealthSystemObjectsRepairResult(Vec<super::structs::VsanClusterHealthSystemObjectsRepairResult>),
+    /// A boxed array of *VsanClusterHealthSystemStatusResult*. To be used in *Any* placeholders.
+    ArrayOfVsanClusterHealthSystemStatusResult(Vec<super::structs::VsanClusterHealthSystemStatusResult>),
+    /// A boxed array of *VsanClusterHealthSystemVersionResult*. To be used in *Any* placeholders.
+    ArrayOfVsanClusterHealthSystemVersionResult(Vec<super::structs::VsanClusterHealthSystemVersionResult>),
+    /// A boxed array of *VsanClusterHealthTest*. To be used in *Any* placeholders.
+    ArrayOfVsanClusterHealthTest(Vec<super::structs::VsanClusterHealthTest>),
+    /// A boxed array of *VsanClusterHostVmknicMapping*. To be used in *Any* placeholders.
+    ArrayOfVsanClusterHostVmknicMapping(Vec<super::structs::VsanClusterHostVmknicMapping>),
+    /// A boxed array of *VsanClusterLimitHealthResult*. To be used in *Any* placeholders.
+    ArrayOfVsanClusterLimitHealthResult(Vec<super::structs::VsanClusterLimitHealthResult>),
+    /// A boxed array of *VsanClusterNetworkHealthResult*. To be used in *Any* placeholders.
+    ArrayOfVsanClusterNetworkHealthResult(Vec<super::structs::VsanClusterNetworkHealthResult>),
+    /// A boxed array of *VsanClusterNetworkLoadTestResult*. To be used in *Any* placeholders.
+    ArrayOfVsanClusterNetworkLoadTestResult(Vec<super::structs::VsanClusterNetworkLoadTestResult>),
+    /// A boxed array of *VsanClusterNetworkPartitionInfo*. To be used in *Any* placeholders.
+    ArrayOfVsanClusterNetworkPartitionInfo(Vec<super::structs::VsanClusterNetworkPartitionInfo>),
+    /// A boxed array of *VsanClusterNetworkPerfTaskSpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanClusterNetworkPerfTaskSpec(Vec<super::structs::VsanClusterNetworkPerfTaskSpec>),
+    /// A boxed array of *VsanClusterProactiveTestResult*. To be used in *Any* placeholders.
+    ArrayOfVsanClusterProactiveTestResult(Vec<super::structs::VsanClusterProactiveTestResult>),
+    /// A boxed array of *VsanClusterTelemetryProxyConfig*. To be used in *Any* placeholders.
+    ArrayOfVsanClusterTelemetryProxyConfig(Vec<super::structs::VsanClusterTelemetryProxyConfig>),
+    /// A boxed array of *VsanClusterVMsHealthOverallResult*. To be used in *Any* placeholders.
+    ArrayOfVsanClusterVMsHealthOverallResult(Vec<super::structs::VsanClusterVMsHealthOverallResult>),
+    /// A boxed array of *VsanClusterVMsHealthSummaryResult*. To be used in *Any* placeholders.
+    ArrayOfVsanClusterVMsHealthSummaryResult(Vec<super::structs::VsanClusterVMsHealthSummaryResult>),
+    /// A boxed array of *VsanClusterVmdkLoadTestResult*. To be used in *Any* placeholders.
+    ArrayOfVsanClusterVmdkLoadTestResult(Vec<super::structs::VsanClusterVmdkLoadTestResult>),
+    /// A boxed array of *VsanClusterWhatifHostFailuresResult*. To be used in *Any* placeholders.
+    ArrayOfVsanClusterWhatifHostFailuresResult(Vec<super::structs::VsanClusterWhatifHostFailuresResult>),
+    /// A boxed array of *VsanConfigGeneration*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanConfigGeneration(Vec<super::structs::VsanConfigGeneration>),
+    /// A boxed array of *VsanDataDrivenAPIAction*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanDataDrivenApiAction(Vec<super::structs::VsanDataDrivenApiAction>),
+    /// A boxed array of *VsanDiagnosticsThreshold*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanDiagnosticsThreshold(Vec<super::structs::VsanDiagnosticsThreshold>),
+    /// A boxed array of *VsanDiskFormatConversionCheckResult*. To be used in *Any* placeholders.
+    ArrayOfVsanDiskFormatConversionCheckResult(Vec<super::structs::VsanDiskFormatConversionCheckResult>),
+    /// A boxed array of *VsanDiskFormatConversionSpec*. To be used in *Any* placeholders.
+    ArrayOfVsanDiskFormatConversionSpec(Vec<super::structs::VsanDiskFormatConversionSpec>),
+    /// A boxed array of *VimClusterVsanDiskMappingsConfigSpec*. To be used in *Any* placeholders.
+    ArrayOfVimClusterVsanDiskMappingsConfigSpec(Vec<super::structs::VimClusterVsanDiskMappingsConfigSpec>),
+    /// A boxed array of *VsanEntitySpaceUsage*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanEntitySpaceUsage(Vec<super::structs::VsanEntitySpaceUsage>),
+    /// A boxed array of *VimClusterVsanFaultDomainSpec*. To be used in *Any* placeholders.
+    ArrayOfVimClusterVsanFaultDomainSpec(Vec<Box<dyn super::traits::VimClusterVsanFaultDomainSpecTrait>>),
+    /// A boxed array of *VimClusterVsanFaultDomainsConfigSpec*. To be used in *Any* placeholders.
+    ArrayOfVimClusterVsanFaultDomainsConfigSpec(Vec<super::structs::VimClusterVsanFaultDomainsConfigSpec>),
+    /// A boxed array of *VsanHealthActionBase*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanHealthActionBase(Vec<Box<dyn super::traits::VsanHealthActionBaseTrait>>),
+    /// A boxed array of *VsanHealthActionSteps*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanHealthActionSteps(Vec<super::structs::VsanHealthActionSteps>),
+    /// A boxed array of *VsanHealthApiBasedAction*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanHealthApiBasedAction(Vec<super::structs::VsanHealthApiBasedAction>),
+    /// A boxed array of *VsanHealthCmdBasedAction*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanHealthCmdBasedAction(Vec<super::structs::VsanHealthCmdBasedAction>),
+    /// A boxed array of *VsanHealthConfirmationDialog*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanHealthConfirmationDialog(Vec<super::structs::VsanHealthConfirmationDialog>),
+    /// A boxed array of *VsanHealthCorrelation*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanHealthCorrelation(Vec<super::structs::VsanHealthCorrelation>),
+    /// A boxed array of *VsanHealthDataDrivenAction*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanHealthDataDrivenAction(Vec<super::structs::VsanHealthDataDrivenAction>),
+    /// A boxed array of *VsanHealthExtMgmtPreCheckResult*. To be used in *Any* placeholders.
+    ArrayOfVsanHealthExtMgmtPreCheckResult(Vec<super::structs::VsanHealthExtMgmtPreCheckResult>),
+    /// A boxed array of *VsanHealthTroubleshooting*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanHealthTroubleshooting(Vec<super::structs::VsanHealthTroubleshooting>),
+    /// A boxed array of *VsanHealthTxtBasedAction*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanHealthTxtBasedAction(Vec<super::structs::VsanHealthTxtBasedAction>),
+    /// A boxed array of *VsanHistoricalHealthQuerySpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanHistoricalHealthQuerySpec(Vec<super::structs::VsanHistoricalHealthQuerySpec>),
+    /// A boxed array of *VsanHistoricalHealthTest*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanHistoricalHealthTest(Vec<super::structs::VsanHistoricalHealthTest>),
+    /// A boxed array of *VsanHostClomdLivenessResult*. To be used in *Any* placeholders.
+    ArrayOfVsanHostClomdLivenessResult(Vec<super::structs::VsanHostClomdLivenessResult>),
+    /// A boxed array of *VsanHostCreateVmHealthTestResult*. To be used in *Any* placeholders.
+    ArrayOfVsanHostCreateVmHealthTestResult(Vec<super::structs::VsanHostCreateVmHealthTestResult>),
+    /// A boxed array of *VimClusterVsanHostDiskMapping*. To be used in *Any* placeholders.
+    ArrayOfVimClusterVsanHostDiskMapping(Vec<super::structs::VimClusterVsanHostDiskMapping>),
+    /// A boxed array of *VsanHostHealthSystemVersionResult*. To be used in *Any* placeholders.
+    ArrayOfVsanHostHealthSystemVersionResult(Vec<super::structs::VsanHostHealthSystemVersionResult>),
+    /// A boxed array of *VsanIoInsightInstance*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanIoInsightInstance(Vec<super::structs::VsanIoInsightInstance>),
+    /// A boxed array of *VsanIoInsightInstanceQuerySpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanIoInsightInstanceQuerySpec(Vec<super::structs::VsanIoInsightInstanceQuerySpec>),
+    /// A boxed array of *VsanIscsiHomeObjectSpec*. To be used in *Any* placeholders.
+    ArrayOfVsanIscsiHomeObjectSpec(Vec<super::structs::VsanIscsiHomeObjectSpec>),
+    /// A boxed array of *VsanIscsiInitiatorGroup*. To be used in *Any* placeholders.
+    ArrayOfVsanIscsiInitiatorGroup(Vec<super::structs::VsanIscsiInitiatorGroup>),
+    /// A boxed array of *VsanIscsiLUN*. To be used in *Any* placeholders.
+    ArrayOfVsanIscsiLun(Vec<super::structs::VsanIscsiLun>),
+    /// A boxed array of *VsanIscsiLUNCommonInfo*. To be used in *Any* placeholders.
+    ArrayOfVsanIscsiLunCommonInfo(Vec<Box<dyn super::traits::VsanIscsiLunCommonInfoTrait>>),
+    /// A boxed array of *VsanIscsiLUNSpec*. To be used in *Any* placeholders.
+    ArrayOfVsanIscsiLunSpec(Vec<super::structs::VsanIscsiLunSpec>),
+    /// A boxed array of *VsanIscsiTarget*. To be used in *Any* placeholders.
+    ArrayOfVsanIscsiTarget(Vec<super::structs::VsanIscsiTarget>),
+    /// A boxed array of *VsanIscsiTargetAuthSpec*. To be used in *Any* placeholders.
+    ArrayOfVsanIscsiTargetAuthSpec(Vec<super::structs::VsanIscsiTargetAuthSpec>),
+    /// A boxed array of *VsanIscsiTargetBasicInfo*. To be used in *Any* placeholders.
+    ArrayOfVsanIscsiTargetBasicInfo(Vec<Box<dyn super::traits::VsanIscsiTargetBasicInfoTrait>>),
+    /// A boxed array of *VsanIscsiTargetCommonInfo*. To be used in *Any* placeholders.
+    ArrayOfVsanIscsiTargetCommonInfo(Vec<Box<dyn super::traits::VsanIscsiTargetCommonInfoTrait>>),
+    /// A boxed array of *VsanIscsiTargetServiceConfig*. To be used in *Any* placeholders.
+    ArrayOfVsanIscsiTargetServiceConfig(Vec<Box<dyn super::traits::VsanIscsiTargetServiceConfigTrait>>),
+    /// A boxed array of *VsanIscsiTargetServiceDefaultConfigSpec*. To be used in *Any* placeholders.
+    ArrayOfVsanIscsiTargetServiceDefaultConfigSpec(Vec<super::structs::VsanIscsiTargetServiceDefaultConfigSpec>),
+    /// A boxed array of *VsanIscsiTargetServiceSpec*. To be used in *Any* placeholders.
+    ArrayOfVsanIscsiTargetServiceSpec(Vec<super::structs::VsanIscsiTargetServiceSpec>),
+    /// A boxed array of *VsanIscsiTargetSpec*. To be used in *Any* placeholders.
+    ArrayOfVsanIscsiTargetSpec(Vec<super::structs::VsanIscsiTargetSpec>),
+    /// A boxed array of *VsanNetworkDiagnostics*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanNetworkDiagnostics(Vec<super::structs::VsanNetworkDiagnostics>),
+    /// A boxed array of *VsanObjIdentityQuerySpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanObjIdentityQuerySpec(Vec<super::structs::VsanObjIdentityQuerySpec>),
+    /// A boxed array of *VsanClusterObjectExtAttrs*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanClusterObjectExtAttrs(Vec<super::structs::VsanClusterObjectExtAttrs>),
+    /// A boxed array of *VsanObjectExtraAttributes*. To be used in *Any* placeholders.
+    ArrayOfVsanObjectExtraAttributes(Vec<super::structs::VsanObjectExtraAttributes>),
+    /// A boxed array of *VsanObjectIdentity*. To be used in *Any* placeholders.
+    ArrayOfVsanObjectIdentity(Vec<super::structs::VsanObjectIdentity>),
+    /// A boxed array of *VsanObjectIdentityAndHealth*. To be used in *Any* placeholders.
+    ArrayOfVsanObjectIdentityAndHealth(Vec<super::structs::VsanObjectIdentityAndHealth>),
+    /// A boxed array of *VsanObjectInformation*. To be used in *Any* placeholders.
+    ArrayOfVsanObjectInformation(Vec<super::structs::VsanObjectInformation>),
+    /// A boxed array of *VsanObjectQuerySpec*. To be used in *Any* placeholders.
+    ArrayOfVsanObjectQuerySpec(Vec<super::structs::VsanObjectQuerySpec>),
+    /// A boxed array of *VsanObjectSpaceSummary*. To be used in *Any* placeholders.
+    ArrayOfVsanObjectSpaceSummary(Vec<super::structs::VsanObjectSpaceSummary>),
+    /// A boxed array of *VsanPerfDiagnoseQuerySpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanPerfDiagnoseQuerySpec(Vec<super::structs::VsanPerfDiagnoseQuerySpec>),
+    /// A boxed array of *VsanPerfDiagnosticException*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanPerfDiagnosticException(Vec<super::structs::VsanPerfDiagnosticException>),
+    /// A boxed array of *VsanPerfDiagnosticResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanPerfDiagnosticResult(Vec<super::structs::VsanPerfDiagnosticResult>),
+    /// A boxed array of *VsanPerfEntityMetricCSV*. To be used in *Any* placeholders.
+    ArrayOfVsanPerfEntityMetricCsv(Vec<super::structs::VsanPerfEntityMetricCsv>),
+    /// A boxed array of *VsanPerfEntityType*. To be used in *Any* placeholders.
+    ArrayOfVsanPerfEntityType(Vec<super::structs::VsanPerfEntityType>),
+    /// A boxed array of *VsanPerfGraph*. To be used in *Any* placeholders.
+    ArrayOfVsanPerfGraph(Vec<super::structs::VsanPerfGraph>),
+    /// A boxed array of *VsanPerfHotspotEntitiesMetrics*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanPerfHotspotEntitiesMetrics(Vec<super::structs::VsanPerfHotspotEntitiesMetrics>),
+    /// A boxed array of *VsanPerfHotspotQuerySpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanPerfHotspotQuerySpec(Vec<super::structs::VsanPerfHotspotQuerySpec>),
+    /// A boxed array of *VsanPerfMasterInformation*. To be used in *Any* placeholders.
+    ArrayOfVsanPerfMasterInformation(Vec<super::structs::VsanPerfMasterInformation>),
+    /// A boxed array of *VsanPerfMemberInfo*. To be used in *Any* placeholders.
+    ArrayOfVsanPerfMemberInfo(Vec<super::structs::VsanPerfMemberInfo>),
+    /// A boxed array of *VsanPerfMetricId*. To be used in *Any* placeholders.
+    ArrayOfVsanPerfMetricId(Vec<super::structs::VsanPerfMetricId>),
+    /// A boxed array of *VsanPerfMetricSeriesCSV*. To be used in *Any* placeholders.
+    ArrayOfVsanPerfMetricSeriesCsv(Vec<super::structs::VsanPerfMetricSeriesCsv>),
+    /// A boxed array of *VsanPerfNodeInformation*. To be used in *Any* placeholders.
+    ArrayOfVsanPerfNodeInformation(Vec<super::structs::VsanPerfNodeInformation>),
+    /// A boxed array of *VsanPerfQuerySpec*. To be used in *Any* placeholders.
+    ArrayOfVsanPerfQuerySpec(Vec<super::structs::VsanPerfQuerySpec>),
+    /// A boxed array of *VsanPerfThreshold*. To be used in *Any* placeholders.
+    ArrayOfVsanPerfThreshold(Vec<super::structs::VsanPerfThreshold>),
+    /// A boxed array of *VsanPerfTimeRange*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanPerfTimeRange(Vec<super::structs::VsanPerfTimeRange>),
+    /// A boxed array of *VsanPerfTimeRangeQuerySpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanPerfTimeRangeQuerySpec(Vec<super::structs::VsanPerfTimeRangeQuerySpec>),
+    /// A boxed array of *VsanPerfTopEntities*. To be used in *Any* placeholders.
+    ArrayOfVsanPerfTopEntities(Vec<super::structs::VsanPerfTopEntities>),
+    /// A boxed array of *VsanPerfTopEntity*. To be used in *Any* placeholders.
+    ArrayOfVsanPerfTopEntity(Vec<super::structs::VsanPerfTopEntity>),
+    /// A boxed array of *VsanPerfTopQuerySpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanPerfTopQuerySpec(Vec<super::structs::VsanPerfTopQuerySpec>),
+    /// A boxed array of *VsanPerfsvcConfig*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanPerfsvcConfig(Vec<super::structs::VsanPerfsvcConfig>),
+    /// A boxed array of *VsanRemoteClusterQuerySpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanRemoteClusterQuerySpec(Vec<super::structs::VsanRemoteClusterQuerySpec>),
+    /// A boxed array of *VsanSpaceQuerySpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanSpaceQuerySpec(Vec<super::structs::VsanSpaceQuerySpec>),
+    /// A boxed array of *VsanSpaceUsage*. To be used in *Any* placeholders.
+    ArrayOfVsanSpaceUsage(Vec<super::structs::VsanSpaceUsage>),
+    /// A boxed array of *VsanSpaceUsageDetailResult*. To be used in *Any* placeholders.
+    ArrayOfVsanSpaceUsageDetailResult(Vec<super::structs::VsanSpaceUsageDetailResult>),
+    /// A boxed array of *VsanSpaceUsageWithDatastoreType*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanSpaceUsageWithDatastoreType(Vec<super::structs::VsanSpaceUsageWithDatastoreType>),
+    /// A boxed array of *VsanStorageWorkloadType*. To be used in *Any* placeholders.
+    ArrayOfVsanStorageWorkloadType(Vec<super::structs::VsanStorageWorkloadType>),
+    /// A boxed array of *VsanStretchedClusterConfig*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanStretchedClusterConfig(Vec<super::structs::VsanStretchedClusterConfig>),
+    /// A boxed array of *VsanSyncingObjectFilter*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanSyncingObjectFilter(Vec<super::structs::VsanSyncingObjectFilter>),
+    /// A boxed array of *VsanUnicastAddressInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanUnicastAddressInfo(Vec<super::structs::VsanUnicastAddressInfo>),
+    /// A boxed array of *VsanUpgradeStatusEx*. To be used in *Any* placeholders.
+    ArrayOfVsanUpgradeStatusEx(Vec<super::structs::VsanUpgradeStatusEx>),
+    /// A boxed array of *VsanUpgradeSystemUpgradeHistoryStoragePoolOp*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanUpgradeSystemUpgradeHistoryStoragePoolOp(Vec<super::structs::VsanUpgradeSystemUpgradeHistoryStoragePoolOp>),
+    /// A boxed array of *VsanVcKmipServersHealth*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanVcKmipServersHealth(Vec<super::structs::VsanVcKmipServersHealth>),
+    /// A boxed array of *VsanVcLifecycleCheckResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanVcLifecycleCheckResult(Vec<super::structs::VsanVcLifecycleCheckResult>),
+    /// A boxed array of *VsanVcLifecycleCheckSpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanVcLifecycleCheckSpec(Vec<super::structs::VsanVcLifecycleCheckSpec>),
+    /// A boxed array of *VsanVsanClusterPcapGroup*. To be used in *Any* placeholders.
+    ArrayOfVsanVsanClusterPcapGroup(Vec<super::structs::VsanVsanClusterPcapGroup>),
+    /// A boxed array of *VsanVsanClusterPcapResult*. To be used in *Any* placeholders.
+    ArrayOfVsanVsanClusterPcapResult(Vec<super::structs::VsanVsanClusterPcapResult>),
+    /// A boxed array of *VsanVumSystemConfig*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanVumSystemConfig(Vec<super::structs::VsanVumSystemConfig>),
+    /// A boxed array of *VsanWhatifCapacity*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanWhatifCapacity(Vec<super::structs::VsanWhatifCapacity>),
+    /// A boxed array of *VimClusterVsanWitnessSpec*. To be used in *Any* placeholders.
+    ArrayOfVimClusterVsanWitnessSpec(Vec<super::structs::VimClusterVsanWitnessSpec>),
+    /// A boxed array of *CnsAccessControlSpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfCnsAccessControlSpec(Vec<Box<dyn super::traits::CnsAccessControlSpecTrait>>),
+    /// A boxed array of *CnsAsyncQueryResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfCnsAsyncQueryResult(Vec<super::structs::CnsAsyncQueryResult>),
+    /// A boxed array of *CnsBackingObjectDetails*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfCnsBackingObjectDetails(Vec<Box<dyn super::traits::CnsBackingObjectDetailsTrait>>),
+    /// A boxed array of *CnsBaseCreateSpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfCnsBaseCreateSpec(Vec<Box<dyn super::traits::CnsBaseCreateSpecTrait>>),
+    /// A boxed array of *CnsBlockBackingDetails*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfCnsBlockBackingDetails(Vec<super::structs::CnsBlockBackingDetails>),
+    /// A boxed array of *CnsBlockVolumeRelocateSpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfCnsBlockVolumeRelocateSpec(Vec<super::structs::CnsBlockVolumeRelocateSpec>),
+    /// A boxed array of *CnsContainerCluster*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfCnsContainerCluster(Vec<super::structs::CnsContainerCluster>),
+    /// A boxed array of *CnsCursor*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfCnsCursor(Vec<super::structs::CnsCursor>),
+    /// A boxed array of *CnsEntityMetadata*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfCnsEntityMetadata(Vec<Box<dyn super::traits::CnsEntityMetadataTrait>>),
+    /// A boxed array of *CnsFileBackingDetails*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfCnsFileBackingDetails(Vec<Box<dyn super::traits::CnsFileBackingDetailsTrait>>),
+    /// A boxed array of *CnsFileCreateSpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfCnsFileCreateSpec(Vec<Box<dyn super::traits::CnsFileCreateSpecTrait>>),
+    /// A boxed array of *CnsKubernetesEntityMetadata*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfCnsKubernetesEntityMetadata(Vec<super::structs::CnsKubernetesEntityMetadata>),
+    /// A boxed array of *CnsKubernetesEntityReference*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfCnsKubernetesEntityReference(Vec<super::structs::CnsKubernetesEntityReference>),
+    /// A boxed array of *CnsKubernetesQueryFilter*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfCnsKubernetesQueryFilter(Vec<super::structs::CnsKubernetesQueryFilter>),
+    /// A boxed array of *CnsNFSAccessControlSpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfCnsNfsAccessControlSpec(Vec<super::structs::CnsNfsAccessControlSpec>),
+    /// A boxed array of *CnsPlacementResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfCnsPlacementResult(Vec<super::structs::CnsPlacementResult>),
+    /// A boxed array of *CnsQueryFilter*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfCnsQueryFilter(Vec<Box<dyn super::traits::CnsQueryFilterTrait>>),
+    /// A boxed array of *CnsQueryResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfCnsQueryResult(Vec<super::structs::CnsQueryResult>),
+    /// A boxed array of *CnsQuerySelection*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfCnsQuerySelection(Vec<super::structs::CnsQuerySelection>),
+    /// A boxed array of *CnsSnapshotCreateSpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfCnsSnapshotCreateSpec(Vec<super::structs::CnsSnapshotCreateSpec>),
+    /// A boxed array of *CnsSnapshotDeleteSpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfCnsSnapshotDeleteSpec(Vec<super::structs::CnsSnapshotDeleteSpec>),
+    /// A boxed array of *CnsSnapshotId*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfCnsSnapshotId(Vec<super::structs::CnsSnapshotId>),
+    /// A boxed array of *CnsSnapshotVolumeSource*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfCnsSnapshotVolumeSource(Vec<super::structs::CnsSnapshotVolumeSource>),
+    /// A boxed array of *CnsVSANFileCreateSpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfCnsVsanFileCreateSpec(Vec<super::structs::CnsVsanFileCreateSpec>),
+    /// A boxed array of *CnsVolume*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfCnsVolume(Vec<super::structs::CnsVolume>),
+    /// A boxed array of *CnsVolumeACLConfigureSpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfCnsVolumeAclConfigureSpec(Vec<super::structs::CnsVolumeAclConfigureSpec>),
+    /// A boxed array of *CnsVolumeAttachDetachSpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfCnsVolumeAttachDetachSpec(Vec<super::structs::CnsVolumeAttachDetachSpec>),
+    /// A boxed array of *CnsVolumeAttachResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfCnsVolumeAttachResult(Vec<super::structs::CnsVolumeAttachResult>),
+    /// A boxed array of *CnsVolumeCreateResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfCnsVolumeCreateResult(Vec<super::structs::CnsVolumeCreateResult>),
+    /// A boxed array of *CnsVolumeCreateSpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfCnsVolumeCreateSpec(Vec<super::structs::CnsVolumeCreateSpec>),
+    /// A boxed array of *CnsVolumeExtendSpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfCnsVolumeExtendSpec(Vec<super::structs::CnsVolumeExtendSpec>),
+    /// A boxed array of *CnsVolumeId*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfCnsVolumeId(Vec<super::structs::CnsVolumeId>),
+    /// A boxed array of *CnsVolumeMetadata*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfCnsVolumeMetadata(Vec<super::structs::CnsVolumeMetadata>),
+    /// A boxed array of *CnsVolumeMetadataUpdateSpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfCnsVolumeMetadataUpdateSpec(Vec<super::structs::CnsVolumeMetadataUpdateSpec>),
+    /// A boxed array of *CnsVolumeOperationBatchResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfCnsVolumeOperationBatchResult(Vec<super::structs::CnsVolumeOperationBatchResult>),
+    /// A boxed array of *CnsVolumeOperationResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfCnsVolumeOperationResult(Vec<Box<dyn super::traits::CnsVolumeOperationResultTrait>>),
+    /// A boxed array of *CnsVolumePolicyReconfigSpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfCnsVolumePolicyReconfigSpec(Vec<super::structs::CnsVolumePolicyReconfigSpec>),
+    /// A boxed array of *CnsVolumeRelocateSpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfCnsVolumeRelocateSpec(Vec<Box<dyn super::traits::CnsVolumeRelocateSpecTrait>>),
+    /// A boxed array of *CnsVolumeSource*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfCnsVolumeSource(Vec<Box<dyn super::traits::CnsVolumeSourceTrait>>),
+    /// A boxed array of *CnsVsanFileShareBackingDetails*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfCnsVsanFileShareBackingDetails(Vec<super::structs::CnsVsanFileShareBackingDetails>),
     /// A boxed array of *DistributedVirtualPort*. To be used in *Any* placeholders.
     ArrayOfDistributedVirtualPort(Vec<super::structs::DistributedVirtualPort>),
     /// A boxed array of *DVPortConfigInfo*. To be used in *Any* placeholders.
@@ -990,6 +3226,38 @@ pub enum ValueElements {
     ArrayOfEntityBackup(Vec<super::structs::EntityBackup>),
     /// A boxed array of *EntityBackupConfig*. To be used in *Any* placeholders.
     ArrayOfEntityBackupConfig(Vec<super::structs::EntityBackupConfig>),
+    /// A boxed array of *DVSFilterSpecConnecteeSpec*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 8.0.3.0
+    ArrayOfDvsFilterSpecConnecteeSpec(Vec<Box<dyn super::traits::DvsFilterSpecConnecteeSpecTrait>>),
+    /// A boxed array of *DVSFilterSpecPnicConnecteeSpec*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 8.0.3.0
+    ArrayOfDvsFilterSpecPnicConnecteeSpec(Vec<super::structs::DvsFilterSpecPnicConnecteeSpec>),
+    /// A boxed array of *DVSFilterSpecPvlanSpec*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 8.0.3.0
+    ArrayOfDvsFilterSpecPvlanSpec(Vec<super::structs::DvsFilterSpecPvlanSpec>),
+    /// A boxed array of *DVSFilterSpecTrunkVlanSpec*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 8.0.3.0
+    ArrayOfDvsFilterSpecTrunkVlanSpec(Vec<super::structs::DvsFilterSpecTrunkVlanSpec>),
+    /// A boxed array of *DVSFilterSpecVlanIdSpec*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 8.0.3.0
+    ArrayOfDvsFilterSpecVlanIdSpec(Vec<super::structs::DvsFilterSpecVlanIdSpec>),
+    /// A boxed array of *DVSFilterSpecVlanSpec*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 8.0.3.0
+    ArrayOfDvsFilterSpecVlanSpec(Vec<Box<dyn super::traits::DvsFilterSpecVlanSpecTrait>>),
+    /// A boxed array of *DVSFilterSpecVmConnecteeSpec*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 8.0.3.0
+    ArrayOfDvsFilterSpecVmConnecteeSpec(Vec<super::structs::DvsFilterSpecVmConnecteeSpec>),
+    /// A boxed array of *DVSFilterSpecVmknicConnecteeSpec*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 8.0.3.0
+    ArrayOfDvsFilterSpecVmknicConnecteeSpec(Vec<super::structs::DvsFilterSpecVmknicConnecteeSpec>),
     /// A boxed array of *DistributedVirtualSwitchHostMember*. To be used in *Any* placeholders.
     ArrayOfDistributedVirtualSwitchHostMember(Vec<super::structs::DistributedVirtualSwitchHostMember>),
     /// A boxed array of *DistributedVirtualSwitchHostMemberBacking*. To be used in *Any* placeholders.
@@ -1000,6 +3268,10 @@ pub enum ValueElements {
     ArrayOfDistributedVirtualSwitchHostMemberConfigSpec(Vec<super::structs::DistributedVirtualSwitchHostMemberConfigSpec>),
     /// A boxed array of *HostMemberHealthCheckResult*. To be used in *Any* placeholders.
     ArrayOfHostMemberHealthCheckResult(Vec<Box<dyn super::traits::HostMemberHealthCheckResultTrait>>),
+    /// A boxed array of *DistributedVirtualSwitchHostMemberHostUplinkState*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 8.0.3.0
+    ArrayOfDistributedVirtualSwitchHostMemberHostUplinkState(Vec<super::structs::DistributedVirtualSwitchHostMemberHostUplinkState>),
     /// A boxed array of *DistributedVirtualSwitchHostMemberPnicBacking*. To be used in *Any* placeholders.
     ArrayOfDistributedVirtualSwitchHostMemberPnicBacking(Vec<super::structs::DistributedVirtualSwitchHostMemberPnicBacking>),
     /// A boxed array of *DistributedVirtualSwitchHostMemberPnicSpec*. To be used in *Any* placeholders.
@@ -1088,6 +3360,10 @@ pub enum ValueElements {
     ArrayOfVMwareDvsConfigInfo(Vec<super::structs::VMwareDvsConfigInfo>),
     /// A boxed array of *VMwareDVSConfigSpec*. To be used in *Any* placeholders.
     ArrayOfVMwareDvsConfigSpec(Vec<super::structs::VMwareDvsConfigSpec>),
+    /// A boxed array of *VmwareDistributedVirtualSwitchDpuFailoverPolicy*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 8.0.3.0
+    ArrayOfVmwareDistributedVirtualSwitchDpuFailoverPolicy(Vec<super::structs::VmwareDistributedVirtualSwitchDpuFailoverPolicy>),
     /// A boxed array of *VMwareDvsDpuCapability*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 8.0.0.1
@@ -1120,12 +3396,24 @@ pub enum ValueElements {
     ArrayOfVMwareDvsMtuCapability(Vec<super::structs::VMwareDvsMtuCapability>),
     /// A boxed array of *VMwareDVSMtuHealthCheckResult*. To be used in *Any* placeholders.
     ArrayOfVMwareDvsMtuHealthCheckResult(Vec<super::structs::VMwareDvsMtuHealthCheckResult>),
+    /// A boxed array of *VmwareDistributedVirtualSwitchNetworkOffloadConfig*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 8.0.3.0
+    ArrayOfVmwareDistributedVirtualSwitchNetworkOffloadConfig(Vec<super::structs::VmwareDistributedVirtualSwitchNetworkOffloadConfig>),
     /// A boxed array of *VMwareDVSPvlanConfigSpec*. To be used in *Any* placeholders.
     ArrayOfVMwareDvsPvlanConfigSpec(Vec<super::structs::VMwareDvsPvlanConfigSpec>),
     /// A boxed array of *VMwareDVSPvlanMapEntry*. To be used in *Any* placeholders.
     ArrayOfVMwareDvsPvlanMapEntry(Vec<super::structs::VMwareDvsPvlanMapEntry>),
     /// A boxed array of *VmwareDistributedVirtualSwitchPvlanSpec*. To be used in *Any* placeholders.
     ArrayOfVmwareDistributedVirtualSwitchPvlanSpec(Vec<super::structs::VmwareDistributedVirtualSwitchPvlanSpec>),
+    /// A boxed array of *VmwareDistributedVirtualSwitchRealTimeConfig*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 8.0.3.1
+    ArrayOfVmwareDistributedVirtualSwitchRealTimeConfig(Vec<super::structs::VmwareDistributedVirtualSwitchRealTimeConfig>),
+    /// A boxed array of *VmwareDistributedVirtualSwitchRealTimeLanAnnotation*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 8.0.3.1
+    ArrayOfVmwareDistributedVirtualSwitchRealTimeLanAnnotation(Vec<super::structs::VmwareDistributedVirtualSwitchRealTimeLanAnnotation>),
     /// A boxed array of *DVSSecurityPolicy*. To be used in *Any* placeholders.
     ArrayOfDvsSecurityPolicy(Vec<super::structs::DvsSecurityPolicy>),
     /// A boxed array of *VMwareDVSTeamingHealthCheckConfig*. To be used in *Any* placeholders.
@@ -1184,10 +3472,26 @@ pub enum ValueElements {
     ArrayOfCryptoManagerKmipClusterStatus(Vec<super::structs::CryptoManagerKmipClusterStatus>),
     /// A boxed array of *CryptoManagerKmipCryptoKeyStatus*. To be used in *Any* placeholders.
     ArrayOfCryptoManagerKmipCryptoKeyStatus(Vec<super::structs::CryptoManagerKmipCryptoKeyStatus>),
+    /// A boxed array of *CryptoManagerKmipCryptoKeyStatusKeyInfo*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    ArrayOfCryptoManagerKmipCryptoKeyStatusKeyInfo(Vec<Box<dyn super::traits::CryptoManagerKmipCryptoKeyStatusKeyInfoTrait>>),
+    /// A boxed array of *CryptoManagerKmipCryptoKeyStatusWrappingKeyIdKeyInfo*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    ArrayOfCryptoManagerKmipCryptoKeyStatusWrappingKeyIdKeyInfo(Vec<super::structs::CryptoManagerKmipCryptoKeyStatusWrappingKeyIdKeyInfo>),
+    /// A boxed array of *CryptoManagerKmipCryptoKeyStatusWrappingRotationIntervalKeyInfo*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    ArrayOfCryptoManagerKmipCryptoKeyStatusWrappingRotationIntervalKeyInfo(Vec<super::structs::CryptoManagerKmipCryptoKeyStatusWrappingRotationIntervalKeyInfo>),
     /// A boxed array of *CryptoManagerKmipCustomAttributeSpec*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 8.0.1.0
     ArrayOfCryptoManagerKmipCustomAttributeSpec(Vec<super::structs::CryptoManagerKmipCustomAttributeSpec>),
+    /// A boxed array of *CryptoManagerKmipGenerateKeySpec*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    ArrayOfCryptoManagerKmipGenerateKeySpec(Vec<super::structs::CryptoManagerKmipGenerateKeySpec>),
     /// A boxed array of *CryptoManagerKmipServerCertInfo*. To be used in *Any* placeholders.
     ArrayOfCryptoManagerKmipServerCertInfo(Vec<super::structs::CryptoManagerKmipServerCertInfo>),
     /// A boxed array of *CryptoManagerKmipServerStatus*. To be used in *Any* placeholders.
@@ -1210,10 +3514,34 @@ pub enum ValueElements {
     ArrayOfKeyProviderId(Vec<super::structs::KeyProviderId>),
     /// A boxed array of *KmipClusterInfo*. To be used in *Any* placeholders.
     ArrayOfKmipClusterInfo(Vec<super::structs::KmipClusterInfo>),
+    /// A boxed array of *KmipClusterInfoKeyInfo*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    ArrayOfKmipClusterInfoKeyInfo(Vec<Box<dyn super::traits::KmipClusterInfoKeyInfoTrait>>),
+    /// A boxed array of *KmipClusterInfoWrappingKeyIdKeyInfo*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    ArrayOfKmipClusterInfoWrappingKeyIdKeyInfo(Vec<super::structs::KmipClusterInfoWrappingKeyIdKeyInfo>),
+    /// A boxed array of *KmipClusterInfoWrappingRotationIntervalKeyInfo*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    ArrayOfKmipClusterInfoWrappingRotationIntervalKeyInfo(Vec<super::structs::KmipClusterInfoWrappingRotationIntervalKeyInfo>),
     /// A boxed array of *KmipServerInfo*. To be used in *Any* placeholders.
     ArrayOfKmipServerInfo(Vec<super::structs::KmipServerInfo>),
     /// A boxed array of *KmipServerSpec*. To be used in *Any* placeholders.
     ArrayOfKmipServerSpec(Vec<super::structs::KmipServerSpec>),
+    /// A boxed array of *KmipServerSpecKeySpec*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    ArrayOfKmipServerSpecKeySpec(Vec<Box<dyn super::traits::KmipServerSpecKeySpecTrait>>),
+    /// A boxed array of *KmipServerSpecWrappingKeyIdKeySpec*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    ArrayOfKmipServerSpecWrappingKeyIdKeySpec(Vec<super::structs::KmipServerSpecWrappingKeyIdKeySpec>),
+    /// A boxed array of *KmipServerSpecWrappingRotationIntervalKeySpec*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    ArrayOfKmipServerSpecWrappingRotationIntervalKeySpec(Vec<super::structs::KmipServerSpecWrappingRotationIntervalKeySpec>),
     /// A boxed array of *KmipServerStatus*. To be used in *Any* placeholders.
     ArrayOfKmipServerStatus(Vec<super::structs::KmipServerStatus>),
     /// A boxed array of *AccountCreatedEvent*. To be used in *Any* placeholders.
@@ -1516,6 +3844,14 @@ pub enum ValueElements {
     ArrayOfEventFilterSpecByTime(Vec<super::structs::EventFilterSpecByTime>),
     /// A boxed array of *EventFilterSpecByUsername*. To be used in *Any* placeholders.
     ArrayOfEventFilterSpecByUsername(Vec<super::structs::EventFilterSpecByUsername>),
+    /// A boxed array of *EventManagerEventViewSpec*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    ArrayOfEventManagerEventViewSpec(Vec<Box<dyn super::traits::EventManagerEventViewSpecTrait>>),
+    /// A boxed array of *EventManagerViewByStartId*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    ArrayOfEventManagerViewByStartId(Vec<super::structs::EventManagerViewByStartId>),
     /// A boxed array of *ExitMaintenanceModeEvent*. To be used in *Any* placeholders.
     ArrayOfExitMaintenanceModeEvent(Vec<super::structs::Event>),
     /// A boxed array of *ExitStandbyModeFailedEvent*. To be used in *Any* placeholders.
@@ -2270,6 +4606,46 @@ pub enum ValueElements {
     ArrayOfClockSkew(Vec<super::structs::MethodFault>),
     /// A boxed array of *CloneFromSnapshotNotSupported*. To be used in *Any* placeholders.
     ArrayOfCloneFromSnapshotNotSupported(Vec<super::structs::MethodFault>),
+    /// A boxed array of *CnsAlreadyRegisteredFault*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfCnsAlreadyRegisteredFault(Vec<super::structs::MethodFault>),
+    /// A boxed array of *CnsFault*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfCnsFault(Vec<super::structs::MethodFault>),
+    /// A boxed array of *CnsInCompatibleFault*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfCnsInCompatibleFault(Vec<super::structs::MethodFault>),
+    /// A boxed array of *CnsMissingControllerFault*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfCnsMissingControllerFault(Vec<super::structs::MethodFault>),
+    /// A boxed array of *CnsMissingPrivilegeFault*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfCnsMissingPrivilegeFault(Vec<super::structs::MethodFault>),
+    /// A boxed array of *CnsNotRegisteredFault*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfCnsNotRegisteredFault(Vec<super::structs::MethodFault>),
+    /// A boxed array of *CnsPlacementFault*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfCnsPlacementFault(Vec<super::structs::MethodFault>),
+    /// A boxed array of *CnsRankedLowerFault*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfCnsRankedLowerFault(Vec<super::structs::MethodFault>),
+    /// A boxed array of *CnsSnapshotNotFoundFault*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfCnsSnapshotNotFoundFault(Vec<super::structs::MethodFault>),
+    /// A boxed array of *CnsVolumeNotFoundFault*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfCnsVolumeNotFoundFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *CollectorAddressUnset*. To be used in *Any* placeholders.
     ArrayOfCollectorAddressUnset(Vec<super::structs::MethodFault>),
     /// A boxed array of *ConcurrentAccess*. To be used in *Any* placeholders.
@@ -2474,6 +4850,10 @@ pub enum ValueElements {
     ArrayOfFilterInUse(Vec<super::structs::MethodFault>),
     /// A boxed array of *FtIssuesOnHost*. To be used in *Any* placeholders.
     ArrayOfFtIssuesOnHost(Vec<super::structs::MethodFault>),
+    /// A boxed array of *FtVmHostRuleViolation*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 8.0.3.0
+    ArrayOfFtVmHostRuleViolation(Vec<super::structs::MethodFault>),
     /// A boxed array of *FullStorageVMotionNotSupported*. To be used in *Any* placeholders.
     ArrayOfFullStorageVMotionNotSupported(Vec<super::structs::MethodFault>),
     /// A boxed array of *GatewayConnectFault*. To be used in *Any* placeholders.
@@ -3512,6 +5892,12 @@ pub enum ValueElements {
     ArrayOfVsanFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *VsanIncompatibleDiskMapping*. To be used in *Any* placeholders.
     ArrayOfVsanIncompatibleDiskMapping(Vec<super::structs::MethodFault>),
+    /// A boxed array of *VsanNodeNotMaster*. To be used in *Any* placeholders.
+    ArrayOfVsanNodeNotMaster(Vec<super::structs::MethodFault>),
+    /// A boxed array of *VsanSslVerifyCertFault*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanSslVerifyCertFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *VspanDestPortConflict*. To be used in *Any* placeholders.
     ArrayOfVspanDestPortConflict(Vec<super::structs::MethodFault>),
     /// A boxed array of *VspanPortConflict*. To be used in *Any* placeholders.
@@ -3552,6 +5938,10 @@ pub enum ValueElements {
     ArrayOfHostAssignableHardwareConfig(Vec<super::structs::HostAssignableHardwareConfig>),
     /// A boxed array of *HostAssignableHardwareConfigAttributeOverride*. To be used in *Any* placeholders.
     ArrayOfHostAssignableHardwareConfigAttributeOverride(Vec<super::structs::HostAssignableHardwareConfigAttributeOverride>),
+    /// A boxed array of *HostAuthenticationInfo*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    ArrayOfHostAuthenticationInfo(Vec<super::structs::HostAuthenticationInfo>),
     /// A boxed array of *HostAuthenticationManagerInfo*. To be used in *Any* placeholders.
     ArrayOfHostAuthenticationManagerInfo(Vec<super::structs::HostAuthenticationManagerInfo>),
     /// A boxed array of *HostAuthenticationStoreInfo*. To be used in *Any* placeholders.
@@ -3616,6 +6006,10 @@ pub enum ValueElements {
     ArrayOfHostCpuPackage(Vec<super::structs::HostCpuPackage>),
     /// A boxed array of *HostCpuPowerManagementInfo*. To be used in *Any* placeholders.
     ArrayOfHostCpuPowerManagementInfo(Vec<super::structs::HostCpuPowerManagementInfo>),
+    /// A boxed array of *HostCpuSchedulerInfo*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 8.0.3.0
+    ArrayOfHostCpuSchedulerInfo(Vec<super::structs::HostCpuSchedulerInfo>),
     /// A boxed array of *HostHyperThreadScheduleInfo*. To be used in *Any* placeholders.
     ArrayOfHostHyperThreadScheduleInfo(Vec<super::structs::HostHyperThreadScheduleInfo>),
     /// A boxed array of *HostDataTransportConnectionInfo*. To be used in *Any* placeholders.
@@ -3700,6 +6094,10 @@ pub enum ValueElements {
     ArrayOfHostDeploymentInfo(Vec<super::structs::HostDeploymentInfo>),
     /// A boxed array of *HostDevice*. To be used in *Any* placeholders.
     ArrayOfHostDevice(Vec<Box<dyn super::traits::HostDeviceTrait>>),
+    /// A boxed array of *DevicePciId*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfDevicePciId(Vec<super::structs::DevicePciId>),
     /// A boxed array of *HostDhcpService*. To be used in *Any* placeholders.
     ArrayOfHostDhcpService(Vec<super::structs::HostDhcpService>),
     /// A boxed array of *HostDhcpServiceConfig*. To be used in *Any* placeholders.
@@ -3848,6 +6246,22 @@ pub enum ValueElements {
     ArrayOfHostProxySwitchHostLagConfig(Vec<super::structs::HostProxySwitchHostLagConfig>),
     /// A boxed array of *HostProxySwitchSpec*. To be used in *Any* placeholders.
     ArrayOfHostProxySwitchSpec(Vec<super::structs::HostProxySwitchSpec>),
+    /// A boxed array of *HostSpbmDatastoreInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfHostSpbmDatastoreInfo(Vec<super::structs::HostSpbmDatastoreInfo>),
+    /// A boxed array of *HostSpbmHashInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfHostSpbmHashInfo(Vec<super::structs::HostSpbmHashInfo>),
+    /// A boxed array of *HostSpbmPolicyBlobInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfHostSpbmPolicyBlobInfo(Vec<super::structs::HostSpbmPolicyBlobInfo>),
+    /// A boxed array of *HostSpbmPolicyInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfHostSpbmPolicyInfo(Vec<super::structs::HostSpbmPolicyInfo>),
     /// A boxed array of *HostImageProfileSummary*. To be used in *Any* placeholders.
     ArrayOfHostImageProfileSummary(Vec<super::structs::HostImageProfileSummary>),
     /// A boxed array of *HostInternetScsiHba*. To be used in *Any* placeholders.
@@ -3883,7 +6297,7 @@ pub enum ValueElements {
     /// A boxed array of *HostInternetScsiTargetTransport*. To be used in *Any* placeholders.
     ArrayOfHostInternetScsiTargetTransport(Vec<super::structs::HostInternetScsiTargetTransport>),
     /// A boxed array of *HostIpConfig*. To be used in *Any* placeholders.
-    ArrayOfHostIpConfig(Vec<super::structs::HostIpConfig>),
+    ArrayOfHostIpConfig(Vec<Box<dyn super::traits::HostIpConfigTrait>>),
     /// A boxed array of *HostIpConfigIpV6Address*. To be used in *Any* placeholders.
     ArrayOfHostIpConfigIpV6Address(Vec<super::structs::HostIpConfigIpV6Address>),
     /// A boxed array of *HostIpConfigIpV6AddressConfiguration*. To be used in *Any* placeholders.
@@ -3914,6 +6328,18 @@ pub enum ValueElements {
     ArrayOfKernelModuleInfo(Vec<super::structs::KernelModuleInfo>),
     /// A boxed array of *KernelModuleSectionInfo*. To be used in *Any* placeholders.
     ArrayOfKernelModuleSectionInfo(Vec<super::structs::KernelModuleSectionInfo>),
+    /// A boxed array of *LACPInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfLacpInfo(Vec<super::structs::LacpInfo>),
+    /// A boxed array of *LAGInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfLagInfo(Vec<super::structs::LagInfo>),
+    /// A boxed array of *LAGUplinkInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfLagUplinkInfo(Vec<super::structs::LagUplinkInfo>),
     /// A boxed array of *HostLicenseSpec*. To be used in *Any* placeholders.
     ArrayOfHostLicenseSpec(Vec<super::structs::HostLicenseSpec>),
     /// A boxed array of *LinkDiscoveryProtocolConfig*. To be used in *Any* placeholders.
@@ -4108,6 +6534,10 @@ pub enum ValueElements {
     ArrayOfHostParallelScsiHba(Vec<super::structs::HostParallelScsiHba>),
     /// A boxed array of *HostParallelScsiTargetTransport*. To be used in *Any* placeholders.
     ArrayOfHostParallelScsiTargetTransport(Vec<super::structs::HostParallelScsiTargetTransport>),
+    /// A boxed array of *HostPartialMaintenanceModeRuntimeInfo*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 8.0.3.0
+    ArrayOfHostPartialMaintenanceModeRuntimeInfo(Vec<super::structs::HostPartialMaintenanceModeRuntimeInfo>),
     /// A boxed array of *HostPatchManagerLocator*. To be used in *Any* placeholders.
     ArrayOfHostPatchManagerLocator(Vec<super::structs::HostPatchManagerLocator>),
     /// A boxed array of *HostPatchManagerPatchManagerOperationSpec*. To be used in *Any* placeholders.
@@ -4166,6 +6596,10 @@ pub enum ValueElements {
     ArrayOfHostPlugStoreTopologyPlugin(Vec<super::structs::HostPlugStoreTopologyPlugin>),
     /// A boxed array of *HostPlugStoreTopologyTarget*. To be used in *Any* placeholders.
     ArrayOfHostPlugStoreTopologyTarget(Vec<super::structs::HostPlugStoreTopologyTarget>),
+    /// A boxed array of *PnicTSOInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfPnicTsoInfo(Vec<super::structs::PnicTsoInfo>),
     /// A boxed array of *HostPortGroup*. To be used in *Any* placeholders.
     ArrayOfHostPortGroup(Vec<super::structs::HostPortGroup>),
     /// A boxed array of *HostPortGroupConfig*. To be used in *Any* placeholders.
@@ -4362,6 +6796,10 @@ pub enum ValueElements {
     /// 
     /// ***Since:*** vSphere API Release 7.0.3.0
     ArrayOfHostTcpTargetTransport(Vec<super::structs::HostTcpTargetTransport>),
+    /// A boxed array of *HostTdxInfo*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    ArrayOfHostTdxInfo(Vec<super::structs::HostTdxInfo>),
     /// A boxed array of *HostTpmAttestationInfo*. To be used in *Any* placeholders.
     ArrayOfHostTpmAttestationInfo(Vec<super::structs::HostTpmAttestationInfo>),
     /// A boxed array of *HostTpmAttestationReport*. To be used in *Any* placeholders.
@@ -4438,6 +6876,8 @@ pub enum ValueElements {
     ArrayOfHostVMotionManagerSrcInstantCloneResult(Vec<super::structs::HostVMotionManagerSrcInstantCloneResult>),
     /// A boxed array of *HostVMotionNetConfig*. To be used in *Any* placeholders.
     ArrayOfHostVMotionNetConfig(Vec<super::structs::HostVMotionNetConfig>),
+    /// A boxed array of *VimHostVSANStretchedClusterHostCapability*. To be used in *Any* placeholders.
+    ArrayOfVimHostVsanStretchedClusterHostCapability(Vec<super::structs::VimHostVsanStretchedClusterHostCapability>),
     /// A boxed array of *HostVfatVolume*. To be used in *Any* placeholders.
     ArrayOfHostVfatVolume(Vec<super::structs::HostVfatVolume>),
     /// A boxed array of *HostVffsVolume*. To be used in *Any* placeholders.
@@ -4510,10 +6950,136 @@ pub enum ValueElements {
     ArrayOfHostVmfsSpec(Vec<super::structs::HostVmfsSpec>),
     /// A boxed array of *VmfsUnmapBandwidthSpec*. To be used in *Any* placeholders.
     ArrayOfVmfsUnmapBandwidthSpec(Vec<super::structs::VmfsUnmapBandwidthSpec>),
+    /// A boxed array of *VsanBasicDeviceInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanBasicDeviceInfo(Vec<super::structs::VsanBasicDeviceInfo>),
+    /// A boxed array of *VsanClusterMembershipInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanClusterMembershipInfo(Vec<super::structs::VsanClusterMembershipInfo>),
+    /// A boxed array of *VsanDaemonHealth*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanDaemonHealth(Vec<super::structs::VsanDaemonHealth>),
     /// A boxed array of *VsanDatastoreInfo*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 7.0.1.0
     ArrayOfVsanDatastoreInfo(Vec<super::structs::VsanDatastoreInfo>),
+    /// A boxed array of *VsanDiskEncryptionHealth*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanDiskEncryptionHealth(Vec<super::structs::VsanDiskEncryptionHealth>),
+    /// A boxed array of *VsanDiskRebalanceResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanDiskRebalanceResult(Vec<super::structs::VsanDiskRebalanceResult>),
+    /// A boxed array of *VsanDitEncryptionHealthSummary*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanDitEncryptionHealthSummary(Vec<super::structs::VsanDitEncryptionHealthSummary>),
+    /// A boxed array of *VsanEncryptionHealthSummary*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanEncryptionHealthSummary(Vec<super::structs::VsanEncryptionHealthSummary>),
+    /// A boxed array of *VsanFailedRepairObjectResult*. To be used in *Any* placeholders.
+    ArrayOfVsanFailedRepairObjectResult(Vec<super::structs::VsanFailedRepairObjectResult>),
+    /// A boxed array of *VsanFileServerHealthSummary*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanFileServerHealthSummary(Vec<super::structs::VsanFileServerHealthSummary>),
+    /// A boxed array of *VsanFileServiceBalanceHealth*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanFileServiceBalanceHealth(Vec<super::structs::VsanFileServiceBalanceHealth>),
+    /// A boxed array of *VsanFileServiceHealthSummary*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanFileServiceHealthSummary(Vec<super::structs::VsanFileServiceHealthSummary>),
+    /// A boxed array of *VsanFileServiceRootFsHealth*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanFileServiceRootFsHealth(Vec<super::structs::VsanFileServiceRootFsHealth>),
+    /// A boxed array of *VsanFileServiceShareHealthSummary*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanFileServiceShareHealthSummary(Vec<super::structs::VsanFileServiceShareHealthSummary>),
+    /// A boxed array of *VsanHclCommonDeviceInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanHclCommonDeviceInfo(Vec<Box<dyn super::traits::VsanHclCommonDeviceInfoTrait>>),
+    /// A boxed array of *VsanHclComputeResource*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanHclComputeResource(Vec<super::structs::VsanHclComputeResource>),
+    /// A boxed array of *VsanHclControllerInfo*. To be used in *Any* placeholders.
+    ArrayOfVsanHclControllerInfo(Vec<super::structs::VsanHclControllerInfo>),
+    /// A boxed array of *VsanHclDiskInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanHclDiskInfo(Vec<super::structs::VsanHclDiskInfo>),
+    /// A boxed array of *VsanHclFirmwareFile*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanHclFirmwareFile(Vec<super::structs::VsanHclFirmwareFile>),
+    /// A boxed array of *VsanHclFirmwareUpdateSpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanHclFirmwareUpdateSpec(Vec<super::structs::VsanHclFirmwareUpdateSpec>),
+    /// A boxed array of *VsanHclMemInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanHclMemInfo(Vec<super::structs::VsanHclMemInfo>),
+    /// A boxed array of *VsanHclNicInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanHclNicInfo(Vec<super::structs::VsanHclNicInfo>),
+    /// A boxed array of *VsanHealthQuerySpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanHealthQuerySpec(Vec<super::structs::VsanHealthQuerySpec>),
+    /// A boxed array of *VsanHostCimProviderInfo*. To be used in *Any* placeholders.
+    ArrayOfVsanHostCimProviderInfo(Vec<super::structs::VsanHostCimProviderInfo>),
+    /// A boxed array of *VsanHostEMMSummary*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanHostEmmSummary(Vec<super::structs::VsanHostEmmSummary>),
+    /// A boxed array of *VsanHostFwComponent*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanHostFwComponent(Vec<super::structs::VsanHostFwComponent>),
+    /// A boxed array of *VsanHostGlobalDedupConfigHealthSummary*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanHostGlobalDedupConfigHealthSummary(Vec<super::structs::VsanHostGlobalDedupConfigHealthSummary>),
+    /// A boxed array of *VsanHostHclInfo*. To be used in *Any* placeholders.
+    ArrayOfVsanHostHclInfo(Vec<super::structs::VsanHostHclInfo>),
+    /// A boxed array of *VsanHostHealthSystemStatusResult*. To be used in *Any* placeholders.
+    ArrayOfVsanHostHealthSystemStatusResult(Vec<super::structs::VsanHostHealthSystemStatusResult>),
+    /// A boxed array of *VsanHostHwDeviceId*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanHostHwDeviceId(Vec<super::structs::VsanHostHwDeviceId>),
+    /// A boxed array of *VsanHostIoInsightInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanHostIoInsightInfo(Vec<super::structs::VsanHostIoInsightInfo>),
+    /// A boxed array of *VsanHostQueryCheckLimitsSpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanHostQueryCheckLimitsSpec(Vec<super::structs::VsanHostQueryCheckLimitsSpec>),
+    /// A boxed array of *VsanHostReference*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanHostReference(Vec<super::structs::VsanHostReference>),
+    /// A boxed array of *VsanHostVirtualApplianceInfo*. To be used in *Any* placeholders.
+    ArrayOfVsanHostVirtualApplianceInfo(Vec<super::structs::VsanHostVirtualApplianceInfo>),
+    /// A boxed array of *VsanHostVmdkLoadTestResult*. To be used in *Any* placeholders.
+    ArrayOfVsanHostVmdkLoadTestResult(Vec<super::structs::VsanHostVmdkLoadTestResult>),
+    /// A boxed array of *VsanHwToVcgInfoMapping*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanHwToVcgInfoMapping(Vec<super::structs::VsanHwToVcgInfoMapping>),
     /// A boxed array of *HostVsanInternalSystemCmmdsQuery*. To be used in *Any* placeholders.
     ArrayOfHostVsanInternalSystemCmmdsQuery(Vec<super::structs::HostVsanInternalSystemCmmdsQuery>),
     /// A boxed array of *HostVsanInternalSystemDeleteVsanObjectsResult*. To be used in *Any* placeholders.
@@ -4530,6 +7096,78 @@ pub enum ValueElements {
     ArrayOfHostVsanInternalSystemVsanObjectOperationResult(Vec<super::structs::HostVsanInternalSystemVsanObjectOperationResult>),
     /// A boxed array of *HostVsanInternalSystemVsanPhysicalDiskDiagnosticsResult*. To be used in *Any* placeholders.
     ArrayOfHostVsanInternalSystemVsanPhysicalDiskDiagnosticsResult(Vec<super::structs::HostVsanInternalSystemVsanPhysicalDiskDiagnosticsResult>),
+    /// A boxed array of *VsanIoInsightInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanIoInsightInfo(Vec<super::structs::VsanIoInsightInfo>),
+    /// A boxed array of *VsanIperfClientSpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanIperfClientSpec(Vec<super::structs::VsanIperfClientSpec>),
+    /// A boxed array of *VsanKmsHealth*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanKmsHealth(Vec<super::structs::VsanKmsHealth>),
+    /// A boxed array of *VsanLimitHealthResult*. To be used in *Any* placeholders.
+    ArrayOfVsanLimitHealthResult(Vec<super::structs::VsanLimitHealthResult>),
+    /// A boxed array of *VsanNetworkDiagnosticsHealthInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanNetworkDiagnosticsHealthInfo(Vec<super::structs::VsanNetworkDiagnosticsHealthInfo>),
+    /// A boxed array of *VsanNetworkHealthResult*. To be used in *Any* placeholders.
+    ArrayOfVsanNetworkHealthResult(Vec<super::structs::VsanNetworkHealthResult>),
+    /// A boxed array of *VsanNetworkLoadTestResult*. To be used in *Any* placeholders.
+    ArrayOfVsanNetworkLoadTestResult(Vec<super::structs::VsanNetworkLoadTestResult>),
+    /// A boxed array of *VsanNetworkPeerHealthResult*. To be used in *Any* placeholders.
+    ArrayOfVsanNetworkPeerHealthResult(Vec<super::structs::VsanNetworkPeerHealthResult>),
+    /// A boxed array of *VsanNicRdmaInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanNicRdmaInfo(Vec<super::structs::VsanNicRdmaInfo>),
+    /// A boxed array of *VsanObjectHealth*. To be used in *Any* placeholders.
+    ArrayOfVsanObjectHealth(Vec<super::structs::VsanObjectHealth>),
+    /// A boxed array of *VsanObjectOverallHealth*. To be used in *Any* placeholders.
+    ArrayOfVsanObjectOverallHealth(Vec<super::structs::VsanObjectOverallHealth>),
+    /// A boxed array of *VsanPhysicalDiskHealth*. To be used in *Any* placeholders.
+    ArrayOfVsanPhysicalDiskHealth(Vec<super::structs::VsanPhysicalDiskHealth>),
+    /// A boxed array of *VsanPhysicalDiskHealthSummary*. To be used in *Any* placeholders.
+    ArrayOfVsanPhysicalDiskHealthSummary(Vec<super::structs::VsanPhysicalDiskHealthSummary>),
+    /// A boxed array of *VsanProactiveRebalanceInfoEx*. To be used in *Any* placeholders.
+    ArrayOfVsanProactiveRebalanceInfoEx(Vec<super::structs::VsanProactiveRebalanceInfoEx>),
+    /// A boxed array of *VsanQueryResultHostInfo*. To be used in *Any* placeholders.
+    ArrayOfVsanQueryResultHostInfo(Vec<super::structs::VsanQueryResultHostInfo>),
+    /// A boxed array of *VsanRepairObjectsResult*. To be used in *Any* placeholders.
+    ArrayOfVsanRepairObjectsResult(Vec<super::structs::VsanRepairObjectsResult>),
+    /// A boxed array of *VsanResourceHealth*. To be used in *Any* placeholders.
+    ArrayOfVsanResourceHealth(Vec<super::structs::VsanResourceHealth>),
+    /// A boxed array of *VsanServerClusterInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanServerClusterInfo(Vec<super::structs::VsanServerClusterInfo>),
+    /// A boxed array of *VsanSmartDiskStats*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanSmartDiskStats(Vec<super::structs::VsanSmartDiskStats>),
+    /// A boxed array of *VsanSmartParameter*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanSmartParameter(Vec<super::structs::VsanSmartParameter>),
+    /// A boxed array of *VsanSmartStatsHostSummary*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanSmartStatsHostSummary(Vec<super::structs::VsanSmartStatsHostSummary>),
+    /// A boxed array of *VsanVcgDeviceInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanVcgDeviceInfo(Vec<super::structs::VsanVcgDeviceInfo>),
+    /// A boxed array of *VsanVmdkIOLoadSpec*. To be used in *Any* placeholders.
+    ArrayOfVsanVmdkIoLoadSpec(Vec<super::structs::VsanVmdkIoLoadSpec>),
+    /// A boxed array of *VsanVmdkLoadTestResult*. To be used in *Any* placeholders.
+    ArrayOfVsanVmdkLoadTestResult(Vec<super::structs::VsanVmdkLoadTestResult>),
+    /// A boxed array of *VsanVmdkLoadTestSpec*. To be used in *Any* placeholders.
+    ArrayOfVsanVmdkLoadTestSpec(Vec<super::structs::VsanVmdkLoadTestSpec>),
+    /// A boxed array of *VsanVsanPcapResult*. To be used in *Any* placeholders.
+    ArrayOfVsanVsanPcapResult(Vec<super::structs::VsanVsanPcapResult>),
     /// A boxed array of *VvolDatastoreInfo*. To be used in *Any* placeholders.
     ArrayOfVvolDatastoreInfo(Vec<super::structs::VvolDatastoreInfo>),
     /// A boxed array of *HostVvolNQN*. To be used in *Any* placeholders.
@@ -5184,6 +7822,10 @@ pub enum ValueElements {
     ArrayOfVirtualMachineSgxTargetInfo(Vec<super::structs::VirtualMachineSgxTargetInfo>),
     /// A boxed array of *VirtualMachineSnapshotInfo*. To be used in *Any* placeholders.
     ArrayOfVirtualMachineSnapshotInfo(Vec<super::structs::VirtualMachineSnapshotInfo>),
+    /// A boxed array of *SnapshotSelectionSpec*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 8.0.3.0
+    ArrayOfSnapshotSelectionSpec(Vec<super::structs::SnapshotSelectionSpec>),
     /// A boxed array of *VirtualMachineSnapshotTree*. To be used in *Any* placeholders.
     ArrayOfVirtualMachineSnapshotTree(Vec<super::structs::VirtualMachineSnapshotTree>),
     /// A boxed array of *VirtualMachineSoundInfo*. To be used in *Any* placeholders.
@@ -5198,6 +7840,14 @@ pub enum ValueElements {
     ArrayOfVirtualMachineStorageInfo(Vec<super::structs::VirtualMachineStorageInfo>),
     /// A boxed array of *VirtualMachineUsageOnDatastore*. To be used in *Any* placeholders.
     ArrayOfVirtualMachineUsageOnDatastore(Vec<super::structs::VirtualMachineUsageOnDatastore>),
+    /// A boxed array of *SubnetInfo*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    ArrayOfSubnetInfo(Vec<super::structs::SubnetInfo>),
+    /// A boxed array of *SubnetInfoFolderInfo*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    ArrayOfSubnetInfoFolderInfo(Vec<super::structs::SubnetInfoFolderInfo>),
     /// A boxed array of *VirtualMachineSummary*. To be used in *Any* placeholders.
     ArrayOfVirtualMachineSummary(Vec<super::structs::VirtualMachineSummary>),
     /// A boxed array of *VirtualMachineConfigSummary*. To be used in *Any* placeholders.
@@ -5782,8 +8432,16 @@ pub enum ValueElements {
     ArrayOfVirtualVmxnet2Option(Vec<super::structs::VirtualVmxnet2Option>),
     /// A boxed array of *VirtualVmxnet3*. To be used in *Any* placeholders.
     ArrayOfVirtualVmxnet3(Vec<Box<dyn super::traits::VirtualVmxnet3Trait>>),
+    /// A boxed array of *VirtualVmxnet3StrictLatencyConfig*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 8.0.3.1
+    ArrayOfVirtualVmxnet3StrictLatencyConfig(Vec<super::structs::VirtualVmxnet3StrictLatencyConfig>),
     /// A boxed array of *VirtualVmxnet3Option*. To be used in *Any* placeholders.
     ArrayOfVirtualVmxnet3Option(Vec<Box<dyn super::traits::VirtualVmxnet3OptionTrait>>),
+    /// A boxed array of *VirtualVmxnet3OptionStrictLatencyConfigOption*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 8.0.3.1
+    ArrayOfVirtualVmxnet3OptionStrictLatencyConfigOption(Vec<super::structs::VirtualVmxnet3OptionStrictLatencyConfigOption>),
     /// A boxed array of *VirtualVmxnet3Vrdma*. To be used in *Any* placeholders.
     ArrayOfVirtualVmxnet3Vrdma(Vec<super::structs::VirtualVmxnet3Vrdma>),
     /// A boxed array of *VirtualVmxnet3VrdmaOption*. To be used in *Any* placeholders.
@@ -5861,23 +8519,791 @@ pub enum ValueElements {
     /// A boxed array of *DeviceGroupId*. To be used in *Any* placeholders.
     ArrayOfDeviceGroupId(Vec<super::structs::DeviceGroupId>),
     /// A boxed array of *FaultDomainId*. To be used in *Any* placeholders.
-    ArrayOfFaultDomainId(Vec<super::structs::FaultDomainId>),
+    ArrayOfFaultDomainId(Vec<Box<dyn super::traits::FaultDomainIdTrait>>),
     /// A boxed array of *ReplicationGroupId*. To be used in *Any* placeholders.
     ArrayOfReplicationGroupId(Vec<super::structs::ReplicationGroupId>),
     /// A boxed array of *ReplicationSpec*. To be used in *Any* placeholders.
     ArrayOfReplicationSpec(Vec<super::structs::ReplicationSpec>),
+    /// A boxed array of *ActiveVsanDirectoryServerConfig*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfActiveVsanDirectoryServerConfig(Vec<super::structs::ActiveVsanDirectoryServerConfig>),
+    /// A boxed array of *VsanAdvancedDatastoreConfig*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanAdvancedDatastoreConfig(Vec<super::structs::VsanAdvancedDatastoreConfig>),
+    /// A boxed array of *VsanCapacityReservationInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanCapacityReservationInfo(Vec<super::structs::VsanCapacityReservationInfo>),
+    /// A boxed array of *VsanClientDatastoreConfig*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanClientDatastoreConfig(Vec<super::structs::VsanClientDatastoreConfig>),
+    /// A boxed array of *VsanClusterConfigPrecheckItem*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanClusterConfigPrecheckItem(Vec<super::structs::VsanClusterConfigPrecheckItem>),
+    /// A boxed array of *ClusterRuntimeInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfClusterRuntimeInfo(Vec<super::structs::ClusterRuntimeInfo>),
+    /// A boxed array of *VsanCompatibilityCheckResult*. To be used in *Any* placeholders.
+    ArrayOfVsanCompatibilityCheckResult(Vec<super::structs::VsanCompatibilityCheckResult>),
+    /// A boxed array of *VsanConfigInfoEx*. To be used in *Any* placeholders.
+    ArrayOfVsanConfigInfoEx(Vec<super::structs::VsanConfigInfoEx>),
+    /// A boxed array of *VimVsanDataEfficiencyCapacityState*. To be used in *Any* placeholders.
+    ArrayOfVimVsanDataEfficiencyCapacityState(Vec<super::structs::VimVsanDataEfficiencyCapacityState>),
+    /// A boxed array of *VsanDataEfficiencyConfig*. To be used in *Any* placeholders.
+    ArrayOfVsanDataEfficiencyConfig(Vec<Box<dyn super::traits::VsanDataEfficiencyConfigTrait>>),
+    /// A boxed array of *VsanDataEfficiencyConfigEx*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanDataEfficiencyConfigEx(Vec<super::structs::VsanDataEfficiencyConfigEx>),
+    /// A boxed array of *VsanDataEncryptionConfig*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanDataEncryptionConfig(Vec<super::structs::VsanDataEncryptionConfig>),
+    /// A boxed array of *VsanDataInTransitEncryptionConfig*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanDataInTransitEncryptionConfig(Vec<super::structs::VsanDataInTransitEncryptionConfig>),
+    /// A boxed array of *VsanDatastoreConfig*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanDatastoreConfig(Vec<Box<dyn super::traits::VsanDatastoreConfigTrait>>),
+    /// A boxed array of *VsanDatastoreSourcePrecheckItem*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanDatastoreSourcePrecheckItem(Vec<super::structs::VsanDatastoreSourcePrecheckItem>),
+    /// A boxed array of *VsanDatastoreSourcePrecheckResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanDatastoreSourcePrecheckResult(Vec<super::structs::VsanDatastoreSourcePrecheckResult>),
+    /// A boxed array of *VsanDatastoreSpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanDatastoreSpec(Vec<Box<dyn super::traits::VsanDatastoreSpecTrait>>),
+    /// A boxed array of *DefaultDatastorePolicySelectionInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfDefaultDatastorePolicySelectionInfo(Vec<super::structs::DefaultDatastorePolicySelectionInfo>),
+    /// A boxed array of *VsanDirectoryServerConfig*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanDirectoryServerConfig(Vec<Box<dyn super::traits::VsanDirectoryServerConfigTrait>>),
+    /// A boxed array of *DiskClaimConfiguration*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfDiskClaimConfiguration(Vec<super::structs::DiskClaimConfiguration>),
+    /// A boxed array of *VsanDiskDataEvacuationResourceCheckTaskDetails*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanDiskDataEvacuationResourceCheckTaskDetails(Vec<super::structs::VsanDiskDataEvacuationResourceCheckTaskDetails>),
+    /// A boxed array of *VsanDiskGroupResourceCheckResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanDiskGroupResourceCheckResult(Vec<super::structs::VsanDiskGroupResourceCheckResult>),
+    /// A boxed array of *VsanDiskResourceCheckResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanDiskResourceCheckResult(Vec<Box<dyn super::traits::VsanDiskResourceCheckResultTrait>>),
+    /// A boxed array of *VSANEntityCompatibilityResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanEntityCompatibilityResult(Vec<super::structs::VsanEntityCompatibilityResult>),
+    /// A boxed array of *EntityResourceCheckDetails*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfEntityResourceCheckDetails(Vec<Box<dyn super::traits::EntityResourceCheckDetailsTrait>>),
+    /// A boxed array of *VsanFaultDomainResourceCheckResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanFaultDomainResourceCheckResult(Vec<super::structs::VsanFaultDomainResourceCheckResult>),
+    /// A boxed array of *VsanFileServiceConfig*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanFileServiceConfig(Vec<super::structs::VsanFileServiceConfig>),
+    /// A boxed array of *VsanFileServiceDomain*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanFileServiceDomain(Vec<super::structs::VsanFileServiceDomain>),
+    /// A boxed array of *VsanFileServiceDomainConfig*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanFileServiceDomainConfig(Vec<super::structs::VsanFileServiceDomainConfig>),
+    /// A boxed array of *VsanFileServiceDomainQuerySpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanFileServiceDomainQuerySpec(Vec<super::structs::VsanFileServiceDomainQuerySpec>),
+    /// A boxed array of *VsanFileServiceIpConfig*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanFileServiceIpConfig(Vec<super::structs::VsanFileServiceIpConfig>),
+    /// A boxed array of *VsanFileShare*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanFileShare(Vec<super::structs::VsanFileShare>),
+    /// A boxed array of *VsanFileShareConfig*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanFileShareConfig(Vec<super::structs::VsanFileShareConfig>),
+    /// A boxed array of *VsanFileShareNetPermission*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanFileShareNetPermission(Vec<super::structs::VsanFileShareNetPermission>),
+    /// A boxed array of *VsanFileShareQueryProperties*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanFileShareQueryProperties(Vec<super::structs::VsanFileShareQueryProperties>),
+    /// A boxed array of *FileShareQueryResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfFileShareQueryResult(Vec<super::structs::FileShareQueryResult>),
+    /// A boxed array of *VsanFileShareQuerySpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanFileShareQuerySpec(Vec<super::structs::VsanFileShareQuerySpec>),
+    /// A boxed array of *VsanFileShareRuntimeInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanFileShareRuntimeInfo(Vec<super::structs::VsanFileShareRuntimeInfo>),
+    /// A boxed array of *VsanFileShareSmbOptions*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanFileShareSmbOptions(Vec<super::structs::VsanFileShareSmbOptions>),
+    /// A boxed array of *VsanFileShareSnapshot*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanFileShareSnapshot(Vec<super::structs::VsanFileShareSnapshot>),
+    /// A boxed array of *VsanFileShareSnapshotConfig*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanFileShareSnapshotConfig(Vec<super::structs::VsanFileShareSnapshotConfig>),
+    /// A boxed array of *VsanFileShareSnapshotQueryResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanFileShareSnapshotQueryResult(Vec<super::structs::VsanFileShareSnapshotQueryResult>),
+    /// A boxed array of *VsanFileShareSnapshotQuerySpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanFileShareSnapshotQuerySpec(Vec<super::structs::VsanFileShareSnapshotQuerySpec>),
+    /// A boxed array of *VsanHciMeshDatastoreSource*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanHciMeshDatastoreSource(Vec<super::structs::VsanHciMeshDatastoreSource>),
+    /// A boxed array of *VsanHostResourceCheckResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanHostResourceCheckResult(Vec<super::structs::VsanHostResourceCheckResult>),
+    /// A boxed array of *VsanIODiagnosticsFailedCheck*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanIoDiagnosticsFailedCheck(Vec<super::structs::VsanIoDiagnosticsFailedCheck>),
+    /// A boxed array of *VsanIODiagnosticsInstance*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanIoDiagnosticsInstance(Vec<super::structs::VsanIoDiagnosticsInstance>),
+    /// A boxed array of *VsanIODiagnosticsInstanceEvent*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanIoDiagnosticsInstanceEvent(Vec<super::structs::VsanIoDiagnosticsInstanceEvent>),
+    /// A boxed array of *VsanIODiagnosticsInstanceQuerySpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanIoDiagnosticsInstanceQuerySpec(Vec<super::structs::VsanIoDiagnosticsInstanceQuerySpec>),
+    /// A boxed array of *VsanIODiagnosticsObjectLayout*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanIoDiagnosticsObjectLayout(Vec<super::structs::VsanIoDiagnosticsObjectLayout>),
+    /// A boxed array of *VsanIODiagnosticsPrecheckResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanIoDiagnosticsPrecheckResult(Vec<super::structs::VsanIoDiagnosticsPrecheckResult>),
+    /// A boxed array of *VsanIODiagnosticsStats*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanIoDiagnosticsStats(Vec<super::structs::VsanIoDiagnosticsStats>),
+    /// A boxed array of *VsanIODiagnosticsTarget*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanIoDiagnosticsTarget(Vec<super::structs::VsanIoDiagnosticsTarget>),
+    /// A boxed array of *VsanIODiagnosticsTargetStats*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanIoDiagnosticsTargetStats(Vec<super::structs::VsanIoDiagnosticsTargetStats>),
+    /// A boxed array of *VsanIOLatency*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanIoLatency(Vec<super::structs::VsanIoLatency>),
+    /// A boxed array of *VsanIOLatencyMetrics*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanIoLatencyMetrics(Vec<super::structs::VsanIoLatencyMetrics>),
+    /// A boxed array of *LifecycleConfigDetails*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfLifecycleConfigDetails(Vec<super::structs::LifecycleConfigDetails>),
+    /// A boxed array of *LifecycleFaultDomainDetails*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfLifecycleFaultDomainDetails(Vec<super::structs::LifecycleFaultDomainDetails>),
+    /// A boxed array of *LifecyclePreCheckResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfLifecyclePreCheckResult(Vec<super::structs::LifecyclePreCheckResult>),
+    /// A boxed array of *LifecycleWitnessDetails*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfLifecycleWitnessDetails(Vec<super::structs::LifecycleWitnessDetails>),
+    /// A boxed array of *VsanMetricProfile*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanMetricProfile(Vec<super::structs::VsanMetricProfile>),
+    /// A boxed array of *VsanMetricsConfig*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanMetricsConfig(Vec<super::structs::VsanMetricsConfig>),
+    /// A boxed array of *VsanMountPrecheckItem*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanMountPrecheckItem(Vec<Box<dyn super::traits::VsanMountPrecheckItemTrait>>),
+    /// A boxed array of *VsanMountPrecheckNetworkConnectivity*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanMountPrecheckNetworkConnectivity(Vec<super::structs::VsanMountPrecheckNetworkConnectivity>),
+    /// A boxed array of *VsanMountPrecheckNetworkConnectivityDetail*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanMountPrecheckNetworkConnectivityDetail(Vec<super::structs::VsanMountPrecheckNetworkConnectivityDetail>),
+    /// A boxed array of *VsanMountPrecheckNetworkConnectivityResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanMountPrecheckNetworkConnectivityResult(Vec<super::structs::VsanMountPrecheckNetworkConnectivityResult>),
+    /// A boxed array of *VsanMountPrecheckNetworkLatency*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanMountPrecheckNetworkLatency(Vec<super::structs::VsanMountPrecheckNetworkLatency>),
+    /// A boxed array of *VsanMountPrecheckNetworkLatencyDetail*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanMountPrecheckNetworkLatencyDetail(Vec<super::structs::VsanMountPrecheckNetworkLatencyDetail>),
+    /// A boxed array of *VsanMountPrecheckNetworkLatencyResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanMountPrecheckNetworkLatencyResult(Vec<super::structs::VsanMountPrecheckNetworkLatencyResult>),
+    /// A boxed array of *VsanMountPrecheckResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanMountPrecheckResult(Vec<Box<dyn super::traits::VsanMountPrecheckResultTrait>>),
+    /// A boxed array of *VsanObjectHealthTelemetrySummary*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanObjectHealthTelemetrySummary(Vec<super::structs::VsanObjectHealthTelemetrySummary>),
+    /// A boxed array of *VsanObjectIOStats*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanObjectIoStats(Vec<super::structs::VsanObjectIoStats>),
+    /// A boxed array of *VsanProactiveRebalanceInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanProactiveRebalanceInfo(Vec<super::structs::VsanProactiveRebalanceInfo>),
+    /// A boxed array of *VsanRdmaConfig*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanRdmaConfig(Vec<super::structs::VsanRdmaConfig>),
+    /// A boxed array of *VimVsanReconfigSpec*. To be used in *Any* placeholders.
+    ArrayOfVimVsanReconfigSpec(Vec<super::structs::VimVsanReconfigSpec>),
+    /// A boxed array of *VsanRemoteVcInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanRemoteVcInfo(Vec<Box<dyn super::traits::VsanRemoteVcInfoTrait>>),
+    /// A boxed array of *VsanRemoteVcInfoStandalone*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanRemoteVcInfoStandalone(Vec<super::structs::VsanRemoteVcInfoStandalone>),
+    /// A boxed array of *RemoteVsanSite*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfRemoteVsanSite(Vec<super::structs::RemoteVsanSite>),
+    /// A boxed array of *RemoteVsanSiteAffinity*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfRemoteVsanSiteAffinity(Vec<super::structs::RemoteVsanSiteAffinity>),
+    /// A boxed array of *RepairTimerInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfRepairTimerInfo(Vec<super::structs::RepairTimerInfo>),
+    /// A boxed array of *VsanResourceCheckComponentResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanResourceCheckComponentResult(Vec<Box<dyn super::traits::VsanResourceCheckComponentResultTrait>>),
+    /// A boxed array of *VsanResourceCheckDataPersistenceResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanResourceCheckDataPersistenceResult(Vec<super::structs::VsanResourceCheckDataPersistenceResult>),
+    /// A boxed array of *VsanResourceCheckResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanResourceCheckResult(Vec<Box<dyn super::traits::VsanResourceCheckResultTrait>>),
+    /// A boxed array of *VsanResourceCheckSpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanResourceCheckSpec(Vec<super::structs::VsanResourceCheckSpec>),
+    /// A boxed array of *VsanResourceCheckStatus*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanResourceCheckStatus(Vec<super::structs::VsanResourceCheckStatus>),
+    /// A boxed array of *VsanResourceCheckTaskDetails*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanResourceCheckTaskDetails(Vec<Box<dyn super::traits::VsanResourceCheckTaskDetailsTrait>>),
+    /// A boxed array of *VsanResourceCheckVsanResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanResourceCheckVsanResult(Vec<super::structs::VsanResourceCheckVsanResult>),
+    /// A boxed array of *ResyncIopsInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfResyncIopsInfo(Vec<super::structs::ResyncIopsInfo>),
+    /// A boxed array of *VsanRuntimeStatsHostMap*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanRuntimeStatsHostMap(Vec<super::structs::VsanRuntimeStatsHostMap>),
+    /// A boxed array of *SSDEnduranceThresholdSpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    /// 
+    /// ***Since:*** 8.0.0.4
+    ArrayOfSsdEnduranceThresholdSpec(Vec<super::structs::SsdEnduranceThresholdSpec>),
+    /// A boxed array of *VsanServerHostUnicastInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanServerHostUnicastInfo(Vec<super::structs::VsanServerHostUnicastInfo>),
+    /// A boxed array of *VSANSharedWitnessCompatibilityResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanSharedWitnessCompatibilityResult(Vec<super::structs::VsanSharedWitnessCompatibilityResult>),
+    /// A boxed array of *VsanSnapServiceConfig*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    /// 
+    /// ***Since:*** 8.0.0.4
+    ArrayOfVsanSnapServiceConfig(Vec<super::structs::VsanSnapServiceConfig>),
+    /// A boxed array of *VsanStoragePoolDiskResourceCheckResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanStoragePoolDiskResourceCheckResult(Vec<super::structs::VsanStoragePoolDiskResourceCheckResult>),
+    /// A boxed array of *VsanStoragePoolResourceCheckResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanStoragePoolResourceCheckResult(Vec<super::structs::VsanStoragePoolResourceCheckResult>),
+    /// A boxed array of *VcRemoteVsanServerClusterConfig*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVcRemoteVsanServerClusterConfig(Vec<super::structs::VcRemoteVsanServerClusterConfig>),
+    /// A boxed array of *VcRemoteVsanServerClusterInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVcRemoteVsanServerClusterInfo(Vec<super::structs::VcRemoteVsanServerClusterInfo>),
+    /// A boxed array of *VsanIscsiVipConfig*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanIscsiVipConfig(Vec<super::structs::VsanIscsiVipConfig>),
+    /// A boxed array of *VsanIscsiVipConfigSpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanIscsiVipConfigSpec(Vec<Box<dyn super::traits::VsanIscsiVipConfigSpecTrait>>),
+    /// A boxed array of *VsanIscsiVipDVswitchConfig*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanIscsiVipDVswitchConfig(Vec<super::structs::VsanIscsiVipDVswitchConfig>),
+    /// A boxed array of *VsanVipNetworkConfig*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanVipNetworkConfig(Vec<super::structs::VsanVipNetworkConfig>),
+    /// A boxed array of *VsanIscsiVipVswitchConfig*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanIscsiVipVswitchConfig(Vec<super::structs::VsanIscsiVipVswitchConfig>),
+    /// A boxed array of *VsanBurnInTest*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanBurnInTest(Vec<super::structs::VsanBurnInTest>),
+    /// A boxed array of *VsanBurnInTestCheckResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanBurnInTestCheckResult(Vec<super::structs::VsanBurnInTestCheckResult>),
+    /// A boxed array of *VsanCloudHealthStatus*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanCloudHealthStatus(Vec<super::structs::VsanCloudHealthStatus>),
+    /// A boxed array of *VsanClusterBurnInTestResultList*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanClusterBurnInTestResultList(Vec<super::structs::VsanClusterBurnInTestResultList>),
+    /// A boxed array of *VsanCompliantDriver*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanCompliantDriver(Vec<super::structs::VsanCompliantDriver>),
+    /// A boxed array of *VsanCompliantFirmware*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanCompliantFirmware(Vec<super::structs::VsanCompliantFirmware>),
+    /// A boxed array of *VsanConfigBaseIssue*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanConfigBaseIssue(Vec<Box<dyn super::traits::VsanConfigBaseIssueTrait>>),
+    /// A boxed array of *VsanConfigCheckResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanConfigCheckResult(Vec<super::structs::VsanConfigCheckResult>),
+    /// A boxed array of *VsanConfigNotAllDisksClaimedIssue*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanConfigNotAllDisksClaimedIssue(Vec<super::structs::VsanConfigNotAllDisksClaimedIssue>),
+    /// A boxed array of *VsanDatastoreDefaultPolicySelectionConfig*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanDatastoreDefaultPolicySelectionConfig(Vec<super::structs::VsanDatastoreDefaultPolicySelectionConfig>),
+    /// A boxed array of *VsanDeconvergedNetConfig*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanDeconvergedNetConfig(Vec<super::structs::VsanDeconvergedNetConfig>),
+    /// A boxed array of *VsanDiskModelInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanDiskModelInfo(Vec<super::structs::VsanDiskModelInfo>),
+    /// A boxed array of *VsanDownloadItem*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanDownloadItem(Vec<super::structs::VsanDownloadItem>),
+    /// A boxed array of *VsanEsaConfig*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanEsaConfig(Vec<super::structs::VsanEsaConfig>),
+    /// A boxed array of *VsanEsaConfigInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanEsaConfigInfo(Vec<super::structs::VsanEsaConfigInfo>),
+    /// A boxed array of *VsanEsaDiskConfiguration*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanEsaDiskConfiguration(Vec<super::structs::VsanEsaDiskConfiguration>),
+    /// A boxed array of *VsanExtendedConfig*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanExtendedConfig(Vec<super::structs::VsanExtendedConfig>),
+    /// A boxed array of *VsanFileServiceOvfSpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanFileServiceOvfSpec(Vec<super::structs::VsanFileServiceOvfSpec>),
+    /// A boxed array of *VsanFileServicePreflightCheckResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanFileServicePreflightCheckResult(Vec<super::structs::VsanFileServicePreflightCheckResult>),
+    /// A boxed array of *VsanGenericClusterBaseIssue*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanGenericClusterBaseIssue(Vec<super::structs::VsanGenericClusterBaseIssue>),
+    /// A boxed array of *VsanGenericClusterBestPracticeHealth*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanGenericClusterBestPracticeHealth(Vec<super::structs::VsanGenericClusterBestPracticeHealth>),
+    /// A boxed array of *VsanHclDeviceConstraint*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanHclDeviceConstraint(Vec<super::structs::VsanHclDeviceConstraint>),
+    /// A boxed array of *VsanHclDiskConstraint*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanHclDiskConstraint(Vec<super::structs::VsanHclDiskConstraint>),
+    /// A boxed array of *VsanHclDriverInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanHclDriverInfo(Vec<super::structs::VsanHclDriverInfo>),
+    /// A boxed array of *VsanHclMinFwConstraint*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanHclMinFwConstraint(Vec<super::structs::VsanHclMinFwConstraint>),
+    /// A boxed array of *VsanHclQuerySpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanHclQuerySpec(Vec<super::structs::VsanHclQuerySpec>),
+    /// A boxed array of *VsanHclReleaseConstraint*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanHclReleaseConstraint(Vec<super::structs::VsanHclReleaseConstraint>),
+    /// A boxed array of *VsanHealthConfigSpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanHealthConfigSpec(Vec<super::structs::VsanHealthConfigSpec>),
+    /// A boxed array of *VsanHealthCustomizationSpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    /// 
+    /// ***Since:*** 8.0.0.4
+    ArrayOfVsanHealthCustomizationSpec(Vec<super::structs::VsanHealthCustomizationSpec>),
+    /// A boxed array of *VsanHealthThreshold*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanHealthThreshold(Vec<super::structs::VsanHealthThreshold>),
+    /// A boxed array of *VsanHistoricalHealthConfig*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanHistoricalHealthConfig(Vec<super::structs::VsanHistoricalHealthConfig>),
+    /// A boxed array of *VsanHostDeviceInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanHostDeviceInfo(Vec<super::structs::VsanHostDeviceInfo>),
+    /// A boxed array of *VsanHwToVcgInfoMappingSpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanHwToVcgInfoMappingSpec(Vec<super::structs::VsanHwToVcgInfoMappingSpec>),
+    /// A boxed array of *VsanIOTripAnalyzerConfig*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanIoTripAnalyzerConfig(Vec<super::structs::VsanIoTripAnalyzerConfig>),
+    /// A boxed array of *VsanIOTripAnalyzerRecurrence*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanIoTripAnalyzerRecurrence(Vec<super::structs::VsanIoTripAnalyzerRecurrence>),
+    /// A boxed array of *VsanInternalExtendedConfig*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanInternalExtendedConfig(Vec<super::structs::VsanInternalExtendedConfig>),
+    /// A boxed array of *VsanNetworkConfigBaseIssue*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanNetworkConfigBaseIssue(Vec<Box<dyn super::traits::VsanNetworkConfigBaseIssueTrait>>),
+    /// A boxed array of *VsanNetworkConfigBestPracticeHealth*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanNetworkConfigBestPracticeHealth(Vec<super::structs::VsanNetworkConfigBestPracticeHealth>),
+    /// A boxed array of *VsanNetworkConfigPnicSpeedInconsistencyIssue*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanNetworkConfigPnicSpeedInconsistencyIssue(Vec<super::structs::VsanNetworkConfigPnicSpeedInconsistencyIssue>),
+    /// A boxed array of *VsanNetworkConfigPortgroupWithNoRedundancyIssue*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanNetworkConfigPortgroupWithNoRedundancyIssue(Vec<super::structs::VsanNetworkConfigPortgroupWithNoRedundancyIssue>),
+    /// A boxed array of *VsanNetworkConfigVdsScopeIssue*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanNetworkConfigVdsScopeIssue(Vec<super::structs::VsanNetworkConfigVdsScopeIssue>),
+    /// A boxed array of *VsanNetworkConfigVsanNotOnVdsIssue*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanNetworkConfigVsanNotOnVdsIssue(Vec<super::structs::VsanNetworkConfigVsanNotOnVdsIssue>),
+    /// A boxed array of *VsanNetworkConfigVswitchWithNoRedundancyIssue*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanNetworkConfigVswitchWithNoRedundancyIssue(Vec<super::structs::VsanNetworkConfigVswitchWithNoRedundancyIssue>),
+    /// A boxed array of *VsanNetworkVMotionVmknicNotFountIssue*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanNetworkVMotionVmknicNotFountIssue(Vec<super::structs::VsanNetworkVMotionVmknicNotFountIssue>),
+    /// A boxed array of *VsanObjSnapParams*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    /// 
+    /// ***Since:*** 8.0.0.4
+    ArrayOfVsanObjSnapParams(Vec<super::structs::VsanObjSnapParams>),
+    /// A boxed array of *VsanObjectDetail*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    /// 
+    /// ***Since:*** 8.0.0.4
+    ArrayOfVsanObjectDetail(Vec<super::structs::VsanObjectDetail>),
+    /// A boxed array of *VsanObjectSnapshotId*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    /// 
+    /// ***Since:*** 8.0.0.4
+    ArrayOfVsanObjectSnapshotId(Vec<super::structs::VsanObjectSnapshotId>),
+    /// A boxed array of *VimVsanVsanPMemConfig*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVimVsanVsanPMemConfig(Vec<super::structs::VimVsanVsanPMemConfig>),
+    /// A boxed array of *VsanPerfsvcHealthResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanPerfsvcHealthResult(Vec<super::structs::VsanPerfsvcHealthResult>),
+    /// A boxed array of *VsanPrepareVsanForVcsaSpec*. To be used in *Any* placeholders.
+    ArrayOfVsanPrepareVsanForVcsaSpec(Vec<super::structs::VsanPrepareVsanForVcsaSpec>),
+    /// A boxed array of *VsanSnapshotDetail*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    /// 
+    /// ***Since:*** 8.0.0.4
+    ArrayOfVsanSnapshotDetail(Vec<super::structs::VsanSnapshotDetail>),
+    /// A boxed array of *VsanSnapshotQueryResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    /// 
+    /// ***Since:*** 8.0.0.4
+    ArrayOfVsanSnapshotQueryResult(Vec<super::structs::VsanSnapshotQueryResult>),
+    /// A boxed array of *VsanSnapshotQuerySpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    /// 
+    /// ***Since:*** 8.0.0.4
+    ArrayOfVsanSnapshotQuerySpec(Vec<super::structs::VsanSnapshotQuerySpec>),
+    /// A boxed array of *VsanSpaceEfficiencyMetadataSize*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanSpaceEfficiencyMetadataSize(Vec<super::structs::VsanSpaceEfficiencyMetadataSize>),
+    /// A boxed array of *VsanSpaceEfficiencyRatio*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    /// 
+    /// ***Since:*** 8.0.0.4
+    ArrayOfVsanSpaceEfficiencyRatio(Vec<super::structs::VsanSpaceEfficiencyRatio>),
+    /// A boxed array of *VsanUnmapConfig*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanUnmapConfig(Vec<super::structs::VsanUnmapConfig>),
+    /// A boxed array of *VsanUpdateItem*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanUpdateItem(Vec<super::structs::VsanUpdateItem>),
+    /// A boxed array of *VsanVcPostDeployConfigSpec*. To be used in *Any* placeholders.
+    ArrayOfVsanVcPostDeployConfigSpec(Vec<super::structs::VsanVcPostDeployConfigSpec>),
+    /// A boxed array of *VsanVcStretchedClusterConfigSpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanVcStretchedClusterConfigSpec(Vec<super::structs::VsanVcStretchedClusterConfigSpec>),
+    /// A boxed array of *VsanVcsaDeploymentProgress*. To be used in *Any* placeholders.
+    ArrayOfVsanVcsaDeploymentProgress(Vec<super::structs::VsanVcsaDeploymentProgress>),
+    /// A boxed array of *VsanVdsMigrationPlan*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanVdsMigrationPlan(Vec<super::structs::VsanVdsMigrationPlan>),
+    /// A boxed array of *VsanVdsPgMigrationHostInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanVdsPgMigrationHostInfo(Vec<super::structs::VsanVdsPgMigrationHostInfo>),
+    /// A boxed array of *VsanVdsPgMigrationSpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanVdsPgMigrationSpec(Vec<super::structs::VsanVdsPgMigrationSpec>),
+    /// A boxed array of *VsanVdsPgMigrationVmInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanVdsPgMigrationVmInfo(Vec<super::structs::VsanVdsPgMigrationVmInfo>),
+    /// A boxed array of *VsanVibInstallPreflightStatus*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanVibInstallPreflightStatus(Vec<super::structs::VsanVibInstallPreflightStatus>),
+    /// A boxed array of *VsanVibScanResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanVibScanResult(Vec<super::structs::VsanVibScanResult>),
+    /// A boxed array of *VsanVibSpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanVibSpec(Vec<super::structs::VsanVibSpec>),
+    /// A boxed array of *VsanVmVdsMigrationSpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanVmVdsMigrationSpec(Vec<super::structs::VsanVmVdsMigrationSpec>),
+    /// A boxed array of *VsanVnicVdsMigrationSpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanVnicVdsMigrationSpec(Vec<super::structs::VsanVnicVdsMigrationSpec>),
+    /// A boxed array of *VsanVumConfig*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanVumConfig(Vec<super::structs::VsanVumConfig>),
+    /// A boxed array of *VsanWitnessHostConfig*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanWitnessHostConfig(Vec<super::structs::VsanWitnessHostConfig>),
+    /// A boxed array of *VsanXVCClientInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanXvcClientInfo(Vec<super::structs::VsanXvcClientInfo>),
+    /// A boxed array of *VsanXVCDatastoreConfig*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanXvcDatastoreConfig(Vec<super::structs::VsanXvcDatastoreConfig>),
+    /// A boxed array of *VsanXVCDatastoreInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanXvcDatastoreInfo(Vec<super::structs::VsanXvcDatastoreInfo>),
+    /// A boxed array of *VsanXvcClientConfig*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanXvcClientConfig(Vec<super::structs::VsanXvcClientConfig>),
+    /// A boxed array of *VsanXvcClientInfoSpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanXvcClientInfoSpec(Vec<super::structs::VsanXvcClientInfoSpec>),
+    /// A boxed array of *VsanXvcQueryCriteria*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanXvcQueryCriteria(Vec<super::structs::VsanXvcQueryCriteria>),
+    /// A boxed array of *VsanXvcQueryFilter*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanXvcQueryFilter(Vec<super::structs::VsanXvcQueryFilter>),
+    /// A boxed array of *VsanXvcQueryPropertyValue*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanXvcQueryPropertyValue(Vec<super::structs::VsanXvcQueryPropertyValue>),
+    /// A boxed array of *VsanXvcQueryResultSet*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanXvcQueryResultSet(Vec<super::structs::VsanXvcQueryResultSet>),
+    /// A boxed array of *VsanXvcQuerySpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanXvcQuerySpec(Vec<super::structs::VsanXvcQuerySpec>),
+    /// A boxed array of *VsanXvcResultItem*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanXvcResultItem(Vec<super::structs::VsanXvcResultItem>),
     /// A boxed array of *VsanClusterConfigInfo*. To be used in *Any* placeholders.
-    ArrayOfVsanClusterConfigInfo(Vec<super::structs::VsanClusterConfigInfo>),
+    ArrayOfVsanClusterConfigInfo(Vec<Box<dyn super::traits::VsanClusterConfigInfoTrait>>),
     /// A boxed array of *VsanClusterConfigInfoHostDefaultInfo*. To be used in *Any* placeholders.
     ArrayOfVsanClusterConfigInfoHostDefaultInfo(Vec<super::structs::VsanClusterConfigInfoHostDefaultInfo>),
+    /// A boxed array of *VsanClusterCoreConfig*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    ArrayOfVsanClusterCoreConfig(Vec<super::structs::VsanClusterCoreConfig>),
+    /// A boxed array of *VsanClusterCoreConfigSpec*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    ArrayOfVsanClusterCoreConfigSpec(Vec<super::structs::VsanClusterCoreConfigSpec>),
+    /// A boxed array of *VsanHostAbortWipeDiskStatus*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanHostAbortWipeDiskStatus(Vec<super::structs::VsanHostAbortWipeDiskStatus>),
+    /// A boxed array of *VsanHostAboutInfoEx*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanHostAboutInfoEx(Vec<super::structs::VsanHostAboutInfoEx>),
+    /// A boxed array of *VsanAddStoragePoolDiskSpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanAddStoragePoolDiskSpec(Vec<super::structs::VsanAddStoragePoolDiskSpec>),
     /// A boxed array of *VsanHostClusterStatus*. To be used in *Any* placeholders.
     ArrayOfVsanHostClusterStatus(Vec<super::structs::VsanHostClusterStatus>),
     /// A boxed array of *VsanHostClusterStatusState*. To be used in *Any* placeholders.
     ArrayOfVsanHostClusterStatusState(Vec<super::structs::VsanHostClusterStatusState>),
     /// A boxed array of *VsanHostClusterStatusStateCompletionEstimate*. To be used in *Any* placeholders.
     ArrayOfVsanHostClusterStatusStateCompletionEstimate(Vec<super::structs::VsanHostClusterStatusStateCompletionEstimate>),
+    /// A boxed array of *VsanComplianceDetail*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanComplianceDetail(Vec<super::structs::VsanComplianceDetail>),
+    /// A boxed array of *VsanComplianceResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanComplianceResult(Vec<super::structs::VsanComplianceResult>),
     /// A boxed array of *VsanHostConfigInfo*. To be used in *Any* placeholders.
-    ArrayOfVsanHostConfigInfo(Vec<super::structs::VsanHostConfigInfo>),
+    ArrayOfVsanHostConfigInfo(Vec<Box<dyn super::traits::VsanHostConfigInfoTrait>>),
     /// A boxed array of *VsanHostConfigInfoClusterInfo*. To be used in *Any* placeholders.
     ArrayOfVsanHostConfigInfoClusterInfo(Vec<super::structs::VsanHostConfigInfoClusterInfo>),
     /// A boxed array of *VsanHostFaultDomainInfo*. To be used in *Any* placeholders.
@@ -5885,29 +9311,223 @@ pub enum ValueElements {
     /// A boxed array of *VsanHostConfigInfoNetworkInfo*. To be used in *Any* placeholders.
     ArrayOfVsanHostConfigInfoNetworkInfo(Vec<super::structs::VsanHostConfigInfoNetworkInfo>),
     /// A boxed array of *VsanHostConfigInfoNetworkInfoPortConfig*. To be used in *Any* placeholders.
-    ArrayOfVsanHostConfigInfoNetworkInfoPortConfig(Vec<super::structs::VsanHostConfigInfoNetworkInfoPortConfig>),
+    ArrayOfVsanHostConfigInfoNetworkInfoPortConfig(Vec<Box<dyn super::traits::VsanHostConfigInfoNetworkInfoPortConfigTrait>>),
     /// A boxed array of *VsanHostConfigInfoStorageInfo*. To be used in *Any* placeholders.
     ArrayOfVsanHostConfigInfoStorageInfo(Vec<super::structs::VsanHostConfigInfoStorageInfo>),
+    /// A boxed array of *VsanHostConfigInfoEx*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanHostConfigInfoEx(Vec<super::structs::VsanHostConfigInfoEx>),
+    /// A boxed array of *VsanHostCreateNativeKeyProviderSpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanHostCreateNativeKeyProviderSpec(Vec<super::structs::VsanHostCreateNativeKeyProviderSpec>),
+    /// A boxed array of *VsanInTransitEncryptionInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanInTransitEncryptionInfo(Vec<super::structs::VsanInTransitEncryptionInfo>),
     /// A boxed array of *VsanHostDecommissionMode*. To be used in *Any* placeholders.
     ArrayOfVsanHostDecommissionMode(Vec<super::structs::VsanHostDecommissionMode>),
+    /// A boxed array of *VsanDeleteStoragePoolDiskSpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanDeleteStoragePoolDiskSpec(Vec<super::structs::VsanDeleteStoragePoolDiskSpec>),
     /// A boxed array of *VsanHostDiskMapInfo*. To be used in *Any* placeholders.
     ArrayOfVsanHostDiskMapInfo(Vec<super::structs::VsanHostDiskMapInfo>),
+    /// A boxed array of *VimVsanHostDiskMapInfoEx*. To be used in *Any* placeholders.
+    ArrayOfVimVsanHostDiskMapInfoEx(Vec<super::structs::VimVsanHostDiskMapInfoEx>),
     /// A boxed array of *VsanHostDiskMapResult*. To be used in *Any* placeholders.
     ArrayOfVsanHostDiskMapResult(Vec<super::structs::VsanHostDiskMapResult>),
     /// A boxed array of *VsanHostDiskMapping*. To be used in *Any* placeholders.
     ArrayOfVsanHostDiskMapping(Vec<super::structs::VsanHostDiskMapping>),
+    /// A boxed array of *VimVsanHostDiskMappingCreationSpec*. To be used in *Any* placeholders.
+    ArrayOfVimVsanHostDiskMappingCreationSpec(Vec<super::structs::VimVsanHostDiskMappingCreationSpec>),
     /// A boxed array of *VsanHostDiskResult*. To be used in *Any* placeholders.
-    ArrayOfVsanHostDiskResult(Vec<super::structs::VsanHostDiskResult>),
+    ArrayOfVsanHostDiskResult(Vec<Box<dyn super::traits::VsanHostDiskResultTrait>>),
+    /// A boxed array of *VimVsanHostDiskResultEx*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVimVsanHostDiskResultEx(Vec<super::structs::VimVsanHostDiskResultEx>),
+    /// A boxed array of *VsanHostDrsStats*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanHostDrsStats(Vec<super::structs::VsanHostDrsStats>),
+    /// A boxed array of *VsanHostEncryptionInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanHostEncryptionInfo(Vec<super::structs::VsanHostEncryptionInfo>),
     /// A boxed array of *VsanHostIpConfig*. To be used in *Any* placeholders.
-    ArrayOfVsanHostIpConfig(Vec<super::structs::VsanHostIpConfig>),
+    ArrayOfVsanHostIpConfig(Vec<Box<dyn super::traits::VsanHostIpConfigTrait>>),
+    /// A boxed array of *VsanHostIpConfigEx*. To be used in *Any* placeholders.
+    ArrayOfVsanHostIpConfigEx(Vec<super::structs::VsanHostIpConfigEx>),
     /// A boxed array of *VsanHostMembershipInfo*. To be used in *Any* placeholders.
     ArrayOfVsanHostMembershipInfo(Vec<super::structs::VsanHostMembershipInfo>),
+    /// A boxed array of *VsanPolicyStatus*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanPolicyStatus(Vec<super::structs::VsanPolicyStatus>),
+    /// A boxed array of *VsanHostPortConfigEx*. To be used in *Any* placeholders.
+    ArrayOfVsanHostPortConfigEx(Vec<super::structs::VsanHostPortConfigEx>),
+    /// A boxed array of *VimVsanHostQueryVsanDisksSpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVimVsanHostQueryVsanDisksSpec(Vec<super::structs::VimVsanHostQueryVsanDisksSpec>),
+    /// A boxed array of *RemoteVsanServerClusterConfig*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfRemoteVsanServerClusterConfig(Vec<super::structs::RemoteVsanServerClusterConfig>),
+    /// A boxed array of *VsanHostRuntimeStats*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanHostRuntimeStats(Vec<super::structs::VsanHostRuntimeStats>),
+    /// A boxed array of *VsanHostServerClusterUnicastConfig*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanHostServerClusterUnicastConfig(Vec<super::structs::VsanHostServerClusterUnicastConfig>),
+    /// A boxed array of *VsanHostServerClusterUnicastInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanHostServerClusterUnicastInfo(Vec<super::structs::VsanHostServerClusterUnicastInfo>),
+    /// A boxed array of *SiteAffinityInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfSiteAffinityInfo(Vec<super::structs::SiteAffinityInfo>),
+    /// A boxed array of *VsanStoragePoolDisk*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanStoragePoolDisk(Vec<super::structs::VsanStoragePoolDisk>),
+    /// A boxed array of *VimVsanHostStoragePoolDiskInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVimVsanHostStoragePoolDiskInfo(Vec<super::structs::VimVsanHostStoragePoolDiskInfo>),
+    /// A boxed array of *VimVsanHostStoragePoolInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVimVsanHostStoragePoolInfo(Vec<super::structs::VimVsanHostStoragePoolInfo>),
+    /// A boxed array of *VimVsanHostTrimDiskEntry*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVimVsanHostTrimDiskEntry(Vec<super::structs::VimVsanHostTrimDiskEntry>),
+    /// A boxed array of *VimVsanHostTrimDiskSpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVimVsanHostTrimDiskSpec(Vec<super::structs::VimVsanHostTrimDiskSpec>),
+    /// A boxed array of *VimVsanHostUpdateStoragePoolDiskSpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVimVsanHostUpdateStoragePoolDiskSpec(Vec<super::structs::VimVsanHostUpdateStoragePoolDiskSpec>),
+    /// A boxed array of *VsanHostAssociatedObjects*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanHostAssociatedObjects(Vec<super::structs::VsanHostAssociatedObjects>),
+    /// A boxed array of *VsanHostAssociatedObjectsResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanHostAssociatedObjectsResult(Vec<super::structs::VsanHostAssociatedObjectsResult>),
+    /// A boxed array of *VsanComplianceQuerySpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanComplianceQuerySpec(Vec<super::structs::VsanComplianceQuerySpec>),
+    /// A boxed array of *VsanHostComponentSyncState*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanHostComponentSyncState(Vec<super::structs::VsanHostComponentSyncState>),
+    /// A boxed array of *VimVsanHostVsanDirectStorage*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVimVsanHostVsanDirectStorage(Vec<super::structs::VimVsanHostVsanDirectStorage>),
     /// A boxed array of *VsanHostVsanDiskInfo*. To be used in *Any* placeholders.
     ArrayOfVsanHostVsanDiskInfo(Vec<super::structs::VsanHostVsanDiskInfo>),
+    /// A boxed array of *VimVsanHostVsanDiskManagementSystemCapability*. To be used in *Any* placeholders.
+    ArrayOfVimVsanHostVsanDiskManagementSystemCapability(Vec<super::structs::VimVsanHostVsanDiskManagementSystemCapability>),
+    /// A boxed array of *VimVsanHostVsanHostCapability*. To be used in *Any* placeholders.
+    ArrayOfVimVsanHostVsanHostCapability(Vec<super::structs::VimVsanHostVsanHostCapability>),
+    /// A boxed array of *VimVsanHostVsanManagedDisksInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVimVsanHostVsanManagedDisksInfo(Vec<super::structs::VimVsanHostVsanManagedDisksInfo>),
+    /// A boxed array of *VimVsanHostVsanManagedPMemInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVimVsanHostVsanManagedPMemInfo(Vec<super::structs::VimVsanHostVsanManagedPMemInfo>),
+    /// A boxed array of *VsanObjectProfileInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanObjectProfileInfo(Vec<super::structs::VsanObjectProfileInfo>),
+    /// A boxed array of *VsanHostVsanObjectSyncState*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanHostVsanObjectSyncState(Vec<super::structs::VsanHostVsanObjectSyncState>),
     /// A boxed array of *VsanHostRuntimeInfo*. To be used in *Any* placeholders.
     ArrayOfVsanHostRuntimeInfo(Vec<super::structs::VsanHostRuntimeInfo>),
     /// A boxed array of *VsanHostRuntimeInfoDiskIssue*. To be used in *Any* placeholders.
     ArrayOfVsanHostRuntimeInfoDiskIssue(Vec<super::structs::VsanHostRuntimeInfoDiskIssue>),
+    /// A boxed array of *VimVsanHostVsanScsiDisk*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVimVsanHostVsanScsiDisk(Vec<super::structs::VimVsanHostVsanScsiDisk>),
+    /// A boxed array of *VsanHostVsanObjectSyncQueryResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanHostVsanObjectSyncQueryResult(Vec<super::structs::VsanHostVsanObjectSyncQueryResult>),
+    /// A boxed array of *VsanSyncingObjectRecoveryDetails*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanSyncingObjectRecoveryDetails(Vec<super::structs::VsanSyncingObjectRecoveryDetails>),
+    /// A boxed array of *VsanWhatIfEvacDetail*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanWhatIfEvacDetail(Vec<super::structs::VsanWhatIfEvacDetail>),
+    /// A boxed array of *VsanWhatIfEvacResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanWhatIfEvacResult(Vec<super::structs::VsanWhatIfEvacResult>),
+    /// A boxed array of *VsanHostWipeDiskStatus*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanHostWipeDiskStatus(Vec<super::structs::VsanHostWipeDiskStatus>),
+    /// A boxed array of *VsanBrokenDiskChainIssue*. To be used in *Any* placeholders.
+    ArrayOfVsanBrokenDiskChainIssue(Vec<super::structs::VsanBrokenDiskChainIssue>),
+    /// A boxed array of *VsanDisallowDataMovementIssue*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanDisallowDataMovementIssue(Vec<super::structs::VsanDisallowDataMovementIssue>),
+    /// A boxed array of *VsanDisallowEvacuateDataIssue*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanDisallowEvacuateDataIssue(Vec<super::structs::VsanDisallowEvacuateDataIssue>),
+    /// A boxed array of *VsanDiskUnhealthIssue*. To be used in *Any* placeholders.
+    ArrayOfVsanDiskUnhealthIssue(Vec<super::structs::VsanDiskUnhealthIssue>),
+    /// A boxed array of *VsanHigherObjectsPresentDuringDowngradeIssue*. To be used in *Any* placeholders.
+    ArrayOfVsanHigherObjectsPresentDuringDowngradeIssue(Vec<super::structs::VsanHigherObjectsPresentDuringDowngradeIssue>),
+    /// A boxed array of *VsanHostPropertyRetrieveIssue*. To be used in *Any* placeholders.
+    ArrayOfVsanHostPropertyRetrieveIssue(Vec<super::structs::VsanHostPropertyRetrieveIssue>),
+    /// A boxed array of *VsanHostWithHybridDiskgroupIssue*. To be used in *Any* placeholders.
+    ArrayOfVsanHostWithHybridDiskgroupIssue(Vec<super::structs::VsanHostWithHybridDiskgroupIssue>),
+    /// A boxed array of *VsanHostsCompressionOnlyNotSupported*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanHostsCompressionOnlyNotSupported(Vec<super::structs::VsanHostsCompressionOnlyNotSupported>),
+    /// A boxed array of *VsanMixedEsxVersionInClientIssue*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanMixedEsxVersionInClientIssue(Vec<super::structs::VsanMixedEsxVersionInClientIssue>),
+    /// A boxed array of *VsanMixedEsxVersionIssue*. To be used in *Any* placeholders.
+    ArrayOfVsanMixedEsxVersionIssue(Vec<super::structs::VsanMixedEsxVersionIssue>),
+    /// A boxed array of *VsanObjectInaccessibleIssue*. To be used in *Any* placeholders.
+    ArrayOfVsanObjectInaccessibleIssue(Vec<super::structs::VsanObjectInaccessibleIssue>),
+    /// A boxed array of *VsanObjectPolicyIssue*. To be used in *Any* placeholders.
+    ArrayOfVsanObjectPolicyIssue(Vec<super::structs::VsanObjectPolicyIssue>),
+    /// A boxed array of *VsanRemoteClusterNotCompatible*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanRemoteClusterNotCompatible(Vec<super::structs::VsanRemoteClusterNotCompatible>),
+    /// A boxed array of *VsanUnknownScanIssue*. To be used in *Any* placeholders.
+    ArrayOfVsanUnknownScanIssue(Vec<super::structs::VsanUnknownScanIssue>),
+    /// A boxed array of *VsanUnsupportedHighDiskVersionIssue*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanUnsupportedHighDiskVersionIssue(Vec<super::structs::VsanUnsupportedHighDiskVersionIssue>),
     /// A boxed array of *BaseConfigInfo*. To be used in *Any* placeholders.
     ArrayOfBaseConfigInfo(Vec<Box<dyn super::traits::BaseConfigInfoTrait>>),
     /// A boxed array of *BaseConfigInfoBackingInfo*. To be used in *Any* placeholders.
@@ -5938,6 +9558,22 @@ pub enum ValueElements {
     ArrayOfvslmInfrastructureObjectPolicySpec(Vec<super::structs::VslmInfrastructureObjectPolicySpec>),
     /// A boxed array of *VslmMigrateSpec*. To be used in *Any* placeholders.
     ArrayOfVslmMigrateSpec(Vec<Box<dyn super::traits::VslmMigrateSpecTrait>>),
+    /// A boxed array of *VStorageObjectReconcileResult*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    ArrayOfVStorageObjectReconcileResult(Vec<super::structs::VStorageObjectReconcileResult>),
+    /// A boxed array of *VStorageObjectReconcileResultInvalidDiskPath*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    ArrayOfVStorageObjectReconcileResultInvalidDiskPath(Vec<super::structs::VStorageObjectReconcileResultInvalidDiskPath>),
+    /// A boxed array of *VStorageObjectReconcileResultReconcileDetail*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    ArrayOfVStorageObjectReconcileResultReconcileDetail(Vec<super::structs::VStorageObjectReconcileResultReconcileDetail>),
+    /// A boxed array of *VStorageObjectReconcileSpec*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.0.0.0
+    ArrayOfVStorageObjectReconcileSpec(Vec<super::structs::VStorageObjectReconcileSpec>),
     /// A boxed array of *VslmRelocateSpec*. To be used in *Any* placeholders.
     ArrayOfVslmRelocateSpec(Vec<super::structs::VslmRelocateSpec>),
     /// A boxed array of *VStorageObjectStateInfo*. To be used in *Any* placeholders.
@@ -6046,6 +9682,86 @@ pub enum ValueElements {
     ArrayOfUpdateSet(Vec<super::structs::UpdateSet>),
     /// A boxed array of *WaitOptions*. To be used in *Any* placeholders.
     ArrayOfWaitOptions(Vec<super::structs::WaitOptions>),
+    /// A boxed array of *VslmAboutInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vslm`.
+    ArrayOfVslmAboutInfo(Vec<super::structs::VslmAboutInfo>),
+    /// A boxed array of *VslmQueryDatastoreInfoResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vslm`.
+    ArrayOfVslmQueryDatastoreInfoResult(Vec<super::structs::VslmQueryDatastoreInfoResult>),
+    /// A boxed array of *VslmServiceInstanceContent*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vslm`.
+    ArrayOfVslmServiceInstanceContent(Vec<super::structs::VslmServiceInstanceContent>),
+    /// A boxed array of *VslmTaskInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vslm`.
+    ArrayOfVslmTaskInfo(Vec<super::structs::VslmTaskInfo>),
+    /// A boxed array of *VslmTaskReason*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vslm`.
+    ArrayOfVslmTaskReason(Vec<Box<dyn super::traits::VslmTaskReasonTrait>>),
+    /// A boxed array of *VslmTaskReasonAlarm*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vslm`.
+    ArrayOfVslmTaskReasonAlarm(Vec<super::structs::VslmTaskReasonAlarm>),
+    /// A boxed array of *VslmTaskReasonSchedule*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vslm`.
+    ArrayOfVslmTaskReasonSchedule(Vec<super::structs::VslmTaskReasonSchedule>),
+    /// A boxed array of *VslmTaskReasonSystem*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vslm`.
+    ArrayOfVslmTaskReasonSystem(Vec<super::structs::VslmTaskReasonSystem>),
+    /// A boxed array of *VslmTaskReasonUser*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vslm`.
+    ArrayOfVslmTaskReasonUser(Vec<super::structs::VslmTaskReasonUser>),
+    /// A boxed array of *VslmSyncFault*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vslm`.
+    ArrayOfVslmSyncFault(Vec<super::structs::MethodFault>),
+    /// A boxed array of *VslmFault*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vslm`.
+    ArrayOfVslmFault(Vec<super::structs::MethodFault>),
+    /// A boxed array of *VslmDatastoreSyncStatus*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vslm`.
+    ArrayOfVslmDatastoreSyncStatus(Vec<super::structs::VslmDatastoreSyncStatus>),
+    /// A boxed array of *VslmVsoVStorageObjectAssociations*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vslm`.
+    ArrayOfVslmVsoVStorageObjectAssociations(Vec<super::structs::VslmVsoVStorageObjectAssociations>),
+    /// A boxed array of *VslmVsoVStorageObjectAssociationsVmDiskAssociation*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vslm`.
+    ArrayOfVslmVsoVStorageObjectAssociationsVmDiskAssociation(Vec<super::structs::VslmVsoVStorageObjectAssociationsVmDiskAssociation>),
+    /// A boxed array of *VslmVsoVStorageObjectQueryResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vslm`.
+    ArrayOfVslmVsoVStorageObjectQueryResult(Vec<super::structs::VslmVsoVStorageObjectQueryResult>),
+    /// A boxed array of *VslmVsoVStorageObjectQuerySpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vslm`.
+    ArrayOfVslmVsoVStorageObjectQuerySpec(Vec<super::structs::VslmVsoVStorageObjectQuerySpec>),
+    /// A boxed array of *VslmVsoVStorageObjectResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vslm`.
+    ArrayOfVslmVsoVStorageObjectResult(Vec<super::structs::VslmVsoVStorageObjectResult>),
+    /// A boxed array of *VslmVsoVStorageObjectSnapshotResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vslm`.
+    ArrayOfVslmVsoVStorageObjectSnapshotResult(Vec<super::structs::VslmVsoVStorageObjectSnapshotResult>),
+    /// A boxed *EntityReferenceEntityType_enum*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    EntityReferenceEntityType(super::enums::EntityReferenceEntityTypeEnum),
+    /// A boxed array of *EntityReferenceEntityType_enum*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/sms`.
+    ArrayOfEntityReferenceEntityType(Vec<super::enums::EntityReferenceEntityTypeEnum>),
     /// A boxed *ComputeResourceHostSPBMLicenseInfoHostSPBMLicenseState_enum*. To be used in *Any* placeholders.
     ComputeResourceHostSpbmLicenseInfoHostSpbmLicenseState(super::enums::ComputeResourceHostSpbmLicenseInfoHostSpbmLicenseStateEnum),
     /// A boxed array of *ComputeResourceHostSPBMLicenseInfoHostSPBMLicenseState_enum*. To be used in *Any* placeholders.
@@ -6314,6 +10030,22 @@ pub enum ValueElements {
     ObjectUpdateKind(super::enums::ObjectUpdateKindEnum),
     /// A boxed array of *ObjectUpdateKind_enum*. To be used in *Any* placeholders.
     ArrayOfObjectUpdateKind(Vec<super::enums::ObjectUpdateKindEnum>),
+    /// A boxed *VslmTaskInfoState_enum*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vslm`.
+    VslmTaskInfoState(super::enums::VslmTaskInfoStateEnum),
+    /// A boxed array of *VslmTaskInfoState_enum*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vslm`.
+    ArrayOfVslmTaskInfoState(Vec<super::enums::VslmTaskInfoStateEnum>),
+    /// A boxed *VslmEventVslmEventInfoState_enum*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vslm`.
+    VslmEventVslmEventInfoState(super::enums::VslmEventVslmEventInfoStateEnum),
+    /// A boxed array of *VslmEventVslmEventInfoState_enum*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vslm`.
+    ArrayOfVslmEventVslmEventInfoState(Vec<super::enums::VslmEventVslmEventInfoStateEnum>),
 }
 impl serde::Serialize for ValueElements {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
@@ -6442,6 +10174,1418 @@ impl serde::Serialize for ValueElements {
                 state.serialize_field("_typeName", "ArrayOfMethodName")?;
                 state.serialize_field("_value", value)?;
             },
+            ValueElements::ArrayOfAgencyComputeResourceScope(value) => {
+                state.serialize_field("_typeName", "ArrayOfAgencyComputeResourceScope")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAgencyConfigInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfAgencyConfigInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAgencyScope(value) => {
+                state.serialize_field("_typeName", "ArrayOfAgencyScope")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAgencyVmFolder(value) => {
+                state.serialize_field("_typeName", "ArrayOfAgencyVMFolder")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAgencyVmResourcePool(value) => {
+                state.serialize_field("_typeName", "ArrayOfAgencyVMResourcePool")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAgentAnyCertificate(value) => {
+                state.serialize_field("_typeName", "ArrayOfAgentAnyCertificate")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAgentConfigInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfAgentConfigInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAgentOvfEnvironmentInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfAgentOvfEnvironmentInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAgentOvfEnvironmentInfoOvfProperty(value) => {
+                state.serialize_field("_typeName", "ArrayOfAgentOvfEnvironmentInfoOvfProperty")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAgentPinnedPemCertificate(value) => {
+                state.serialize_field("_typeName", "ArrayOfAgentPinnedPemCertificate")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAgentRuntimeInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfAgentRuntimeInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAgentSslTrust(value) => {
+                state.serialize_field("_typeName", "ArrayOfAgentSslTrust")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAgentStoragePolicy(value) => {
+                state.serialize_field("_typeName", "ArrayOfAgentStoragePolicy")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAgentVibMatchingRule(value) => {
+                state.serialize_field("_typeName", "ArrayOfAgentVibMatchingRule")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAgentVmHook(value) => {
+                state.serialize_field("_typeName", "ArrayOfAgentVmHook")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAgentVsanStoragePolicy(value) => {
+                state.serialize_field("_typeName", "ArrayOfAgentVsanStoragePolicy")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfEamObjectRuntimeInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfEamObjectRuntimeInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCertificateNotTrustedFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfCertificateNotTrustedFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDisabledClusterFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfDisabledClusterFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfEamAppFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfEamAppFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfEamFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfEamFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfEamIoFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfEamIOFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfEamRuntimeFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfEamRuntimeFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfEamServiceNotInitialized(value) => {
+                state.serialize_field("_typeName", "ArrayOfEamServiceNotInitialized")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfEamSystemFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfEamSystemFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInvalidAgencyScope(value) => {
+                state.serialize_field("_typeName", "ArrayOfInvalidAgencyScope")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInvalidAgentConfiguration(value) => {
+                state.serialize_field("_typeName", "ArrayOfInvalidAgentConfiguration")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfEamInvalidLogin(value) => {
+                state.serialize_field("_typeName", "ArrayOfEamInvalidLogin")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfEamInvalidState(value) => {
+                state.serialize_field("_typeName", "ArrayOfEamInvalidState")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfEamInvalidUrl(value) => {
+                state.serialize_field("_typeName", "ArrayOfEamInvalidUrl")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfEamInvalidVibPackage(value) => {
+                state.serialize_field("_typeName", "ArrayOfEamInvalidVibPackage")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNoConnectionToVCenter(value) => {
+                state.serialize_field("_typeName", "ArrayOfNoConnectionToVCenter")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNotAuthorized(value) => {
+                state.serialize_field("_typeName", "ArrayOfNotAuthorized")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAgencyDisabled(value) => {
+                state.serialize_field("_typeName", "ArrayOfAgencyDisabled")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAgencyIssue(value) => {
+                state.serialize_field("_typeName", "ArrayOfAgencyIssue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAgentIssue(value) => {
+                state.serialize_field("_typeName", "ArrayOfAgentIssue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCannotAccessAgentOvf(value) => {
+                state.serialize_field("_typeName", "ArrayOfCannotAccessAgentOVF")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCannotAccessAgentVib(value) => {
+                state.serialize_field("_typeName", "ArrayOfCannotAccessAgentVib")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfEamCertificateNotTrusted(value) => {
+                state.serialize_field("_typeName", "ArrayOfEamCertificateNotTrusted")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfExtensibleIssue(value) => {
+                state.serialize_field("_typeName", "ArrayOfExtensibleIssue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostInMaintenanceMode(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostInMaintenanceMode")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostInPartialMaintenanceMode(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostInPartialMaintenanceMode")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostInStandbyMode(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostInStandbyMode")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostIssue(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostIssue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfManagedHostNotReachable(value) => {
+                state.serialize_field("_typeName", "ArrayOfManagedHostNotReachable")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostPoweredOff(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostPoweredOff")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfImmediateHostRebootRequired(value) => {
+                state.serialize_field("_typeName", "ArrayOfImmediateHostRebootRequired")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfIncompatibleHostVersion(value) => {
+                state.serialize_field("_typeName", "ArrayOfIncompatibleHostVersion")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInsufficientIpAddresses(value) => {
+                state.serialize_field("_typeName", "ArrayOfInsufficientIpAddresses")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInsufficientResources(value) => {
+                state.serialize_field("_typeName", "ArrayOfInsufficientResources")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInsufficientSpace(value) => {
+                state.serialize_field("_typeName", "ArrayOfInsufficientSpace")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInvalidConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfInvalidConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfIssue(value) => {
+                state.serialize_field("_typeName", "ArrayOfIssue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfMissingAgentIpPool(value) => {
+                state.serialize_field("_typeName", "ArrayOfMissingAgentIpPool")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfMissingDvFilterSwitch(value) => {
+                state.serialize_field("_typeName", "ArrayOfMissingDvFilterSwitch")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNoAgentVmDatastore(value) => {
+                state.serialize_field("_typeName", "ArrayOfNoAgentVmDatastore")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNoAgentVmNetwork(value) => {
+                state.serialize_field("_typeName", "ArrayOfNoAgentVmNetwork")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNoCustomAgentVmDatastore(value) => {
+                state.serialize_field("_typeName", "ArrayOfNoCustomAgentVmDatastore")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNoCustomAgentVmNetwork(value) => {
+                state.serialize_field("_typeName", "ArrayOfNoCustomAgentVmNetwork")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNoDiscoverableAgentVmDatastore(value) => {
+                state.serialize_field("_typeName", "ArrayOfNoDiscoverableAgentVmDatastore")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNoDiscoverableAgentVmNetwork(value) => {
+                state.serialize_field("_typeName", "ArrayOfNoDiscoverableAgentVmNetwork")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOrphanedAgency(value) => {
+                state.serialize_field("_typeName", "ArrayOfOrphanedAgency")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOrphanedDvFilterSwitch(value) => {
+                state.serialize_field("_typeName", "ArrayOfOrphanedDvFilterSwitch")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfInvalidFormat(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfInvalidFormat")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfInvalidProperty(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfInvalidProperty")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfTransitionFailed(value) => {
+                state.serialize_field("_typeName", "ArrayOfTransitionFailed")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfUnknownAgentVm(value) => {
+                state.serialize_field("_typeName", "ArrayOfUnknownAgentVm")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVibCannotPutHostInMaintenanceMode(value) => {
+                state.serialize_field("_typeName", "ArrayOfVibCannotPutHostInMaintenanceMode")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVibCannotPutHostOutOfMaintenanceMode(value) => {
+                state.serialize_field("_typeName", "ArrayOfVibCannotPutHostOutOfMaintenanceMode")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVibDependenciesNotMetByHost(value) => {
+                state.serialize_field("_typeName", "ArrayOfVibDependenciesNotMetByHost")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVibInvalidFormat(value) => {
+                state.serialize_field("_typeName", "ArrayOfVibInvalidFormat")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVibIssue(value) => {
+                state.serialize_field("_typeName", "ArrayOfVibIssue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVibNotInstalled(value) => {
+                state.serialize_field("_typeName", "ArrayOfVibNotInstalled")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVibRequirementsNotMetByHost(value) => {
+                state.serialize_field("_typeName", "ArrayOfVibRequirementsNotMetByHost")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVibRequiresHostInMaintenanceMode(value) => {
+                state.serialize_field("_typeName", "ArrayOfVibRequiresHostInMaintenanceMode")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVibRequiresHostReboot(value) => {
+                state.serialize_field("_typeName", "ArrayOfVibRequiresHostReboot")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVibRequiresManualInstallation(value) => {
+                state.serialize_field("_typeName", "ArrayOfVibRequiresManualInstallation")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVibRequiresManualUninstallation(value) => {
+                state.serialize_field("_typeName", "ArrayOfVibRequiresManualUninstallation")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmCorrupted(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmCorrupted")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmDeployed(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmDeployed")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmHookFailed(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmHookFailed")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmHookTimedout(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmHookTimedout")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmInaccessible(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmInaccessible")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmIssue(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmIssue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmMarkedAsTemplate(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmMarkedAsTemplate")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmNotDeployed(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmNotDeployed")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmOrphaned(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmOrphaned")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmPoweredOff(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmPoweredOff")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmPoweredOn(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmPoweredOn")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmProtected(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmProtected")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmRequiresHostOutOfMaintenanceMode(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmRequiresHostOutOfMaintenanceMode")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmSuspended(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmSuspended")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmWrongFolder(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmWrongFolder")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmWrongResourcePool(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmWrongResourcePool")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterAgentAgentIssue(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterAgentAgentIssue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterAgentCertificateNotTrusted(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterAgentCertificateNotTrusted")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterAgentHostInMaintenanceMode(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterAgentHostInMaintenanceMode")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterAgentHostInPartialMaintenanceMode(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterAgentHostInPartialMaintenanceMode")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterAgentInsufficientClusterResources(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterAgentInsufficientClusterResources")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterAgentInsufficientClusterSpace(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterAgentInsufficientClusterSpace")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterAgentInvalidConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterAgentInvalidConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterAgentMissingClusterVmDatastore(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterAgentMissingClusterVmDatastore")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterAgentMissingClusterVmNetwork(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterAgentMissingClusterVmNetwork")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterAgentOvfInvalidProperty(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterAgentOvfInvalidProperty")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterAgentTransitionFailed(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterAgentTransitionFailed")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterAgentVmHookFailed(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterAgentVmHookFailed")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterAgentVmHookTimedout(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterAgentVmHookTimedout")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterAgentVmInaccessible(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterAgentVmInaccessible")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterAgentVmIssue(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterAgentVmIssue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterAgentVmNotDeployed(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterAgentVmNotDeployed")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterAgentVmNotRemoved(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterAgentVmNotRemoved")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterAgentVmPoweredOff(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterAgentVmPoweredOff")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterAgentVmPoweredOn(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterAgentVmPoweredOn")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterAgentVmProtected(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterAgentVmProtected")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterAgentVmSuspended(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterAgentVmSuspended")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfIntegrityAgencyCannotDeleteSoftware(value) => {
+                state.serialize_field("_typeName", "ArrayOfIntegrityAgencyCannotDeleteSoftware")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfIntegrityAgencyCannotStageSoftware(value) => {
+                state.serialize_field("_typeName", "ArrayOfIntegrityAgencyCannotStageSoftware")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfIntegrityAgencyVumIssue(value) => {
+                state.serialize_field("_typeName", "ArrayOfIntegrityAgencyVUMIssue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfIntegrityAgencyVumUnavailable(value) => {
+                state.serialize_field("_typeName", "ArrayOfIntegrityAgencyVUMUnavailable")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPersonalityAgencyCannotConfigureSolutions(value) => {
+                state.serialize_field("_typeName", "ArrayOfPersonalityAgencyCannotConfigureSolutions")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPersonalityAgencyCannotUploadDepot(value) => {
+                state.serialize_field("_typeName", "ArrayOfPersonalityAgencyCannotUploadDepot")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPersonalityAgencyDepotIssue(value) => {
+                state.serialize_field("_typeName", "ArrayOfPersonalityAgencyDepotIssue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPersonalityAgencyInaccessibleDepot(value) => {
+                state.serialize_field("_typeName", "ArrayOfPersonalityAgencyInaccessibleDepot")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPersonalityAgencyInvalidDepot(value) => {
+                state.serialize_field("_typeName", "ArrayOfPersonalityAgencyInvalidDepot")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPersonalityAgencyPmIssue(value) => {
+                state.serialize_field("_typeName", "ArrayOfPersonalityAgencyPMIssue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPersonalityAgencyPmUnavailable(value) => {
+                state.serialize_field("_typeName", "ArrayOfPersonalityAgencyPMUnavailable")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPersonalityAgentAwaitingPmRemediation(value) => {
+                state.serialize_field("_typeName", "ArrayOfPersonalityAgentAwaitingPMRemediation")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPersonalityAgentBlockedByAgencyOperation(value) => {
+                state.serialize_field("_typeName", "ArrayOfPersonalityAgentBlockedByAgencyOperation")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPersonalityAgentPmIssue(value) => {
+                state.serialize_field("_typeName", "ArrayOfPersonalityAgentPMIssue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHooksHookListSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfHooksHookListSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHooksMarkAsProcessedSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfHooksMarkAsProcessedSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSolutionsApplySpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfSolutionsApplySpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSolutionsClusterBoundSolutionConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfSolutionsClusterBoundSolutionConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSolutionsClusterSolutionComplianceResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfSolutionsClusterSolutionComplianceResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSolutionsComplianceResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfSolutionsComplianceResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSolutionsComplianceSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfSolutionsComplianceSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSolutionsDeploymentUnitComplianceResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfSolutionsDeploymentUnitComplianceResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSolutionsHookAcknowledgeConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfSolutionsHookAcknowledgeConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSolutionsHookConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfSolutionsHookConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSolutionsHookInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfSolutionsHookInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSolutionsHostBoundSolutionConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfSolutionsHostBoundSolutionConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSolutionsHostComplianceResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfSolutionsHostComplianceResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSolutionsInteractiveHookAcknowledgeConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfSolutionsInteractiveHookAcknowledgeConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSolutionsOvfProperty(value) => {
+                state.serialize_field("_typeName", "ArrayOfSolutionsOvfProperty")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSolutionsProfileIdStoragePolicy(value) => {
+                state.serialize_field("_typeName", "ArrayOfSolutionsProfileIdStoragePolicy")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSolutionsSolutionComplianceResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfSolutionsSolutionComplianceResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSolutionsSolutionConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfSolutionsSolutionConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSolutionsSolutionValidationResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfSolutionsSolutionValidationResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSolutionsStoragePolicy(value) => {
+                state.serialize_field("_typeName", "ArrayOfSolutionsStoragePolicy")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSolutionsTransitionSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfSolutionsTransitionSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSolutionsTypeSpecificSolutionConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfSolutionsTypeSpecificSolutionConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSolutionsUrlVmSource(value) => {
+                state.serialize_field("_typeName", "ArrayOfSolutionsUrlVMSource")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSolutionsVmNetworkMapping(value) => {
+                state.serialize_field("_typeName", "ArrayOfSolutionsVMNetworkMapping")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSolutionsVmSource(value) => {
+                state.serialize_field("_typeName", "ArrayOfSolutionsVMSource")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSolutionsValidateSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfSolutionsValidateSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSolutionsValidationResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfSolutionsValidationResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSolutionsVmResourceSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfSolutionsVmResourceSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVibVibInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVibVibInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVibVibInfoSoftwareTags(value) => {
+                state.serialize_field("_typeName", "ArrayOfVibVibInfoSoftwareTags")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVibVibServicesAnyCertificate(value) => {
+                state.serialize_field("_typeName", "ArrayOfVibVibServicesAnyCertificate")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVibVibServicesPinnedPemCertificate(value) => {
+                state.serialize_field("_typeName", "ArrayOfVibVibServicesPinnedPemCertificate")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVibVibServicesSslTrust(value) => {
+                state.serialize_field("_typeName", "ArrayOfVibVibServicesSslTrust")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmAboutInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmAboutInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmExtendedElementDescription(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmExtendedElementDescription")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmLoggingConfiguration(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmLoggingConfiguration")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmServerObjectRef(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmServerObjectRef")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmServiceInstanceContent(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmServiceInstanceContent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmCapabilityInstance(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmCapabilityInstance")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmCapabilityMetadata(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmCapabilityMetadata")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmCapabilityMetadataUniqueId(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmCapabilityMetadataUniqueId")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmCapabilityConstraintInstance(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmCapabilityConstraintInstance")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmCapabilityGenericTypeInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmCapabilityGenericTypeInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmCapabilityPropertyInstance(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmCapabilityPropertyInstance")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmCapabilityPropertyMetadata(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmCapabilityPropertyMetadata")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmCapabilityTypeInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmCapabilityTypeInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmCapabilityMetadataPerCategory(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmCapabilityMetadataPerCategory")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmCapabilitySchema(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmCapabilitySchema")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmCapabilityNamespaceInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmCapabilityNamespaceInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmCapabilitySchemaVendorInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmCapabilitySchemaVendorInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmCapabilityVendorNamespaceInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmCapabilityVendorNamespaceInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmCapabilityVendorResourceTypeInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmCapabilityVendorResourceTypeInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmLineOfServiceInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmLineOfServiceInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmPersistenceBasedDataServiceInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmPersistenceBasedDataServiceInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmVaioDataServiceInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmVaioDataServiceInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmCapabilityDescription(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmCapabilityDescription")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmCapabilityDiscreteSet(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmCapabilityDiscreteSet")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmCapabilityRange(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmCapabilityRange")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmCapabilityTimeSpan(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmCapabilityTimeSpan")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmComplianceResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmComplianceResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmFetchEntityHealthStatusSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmFetchEntityHealthStatusSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmComplianceOperationalStatus(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmComplianceOperationalStatus")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmCompliancePolicyStatus(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmCompliancePolicyStatus")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmRollupComplianceResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmRollupComplianceResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmAlreadyExists(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmAlreadyExists")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmCapabilityProfilePropertyMismatchFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmCapabilityProfilePropertyMismatchFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmCompatibilityCheckFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmCompatibilityCheckFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmDefaultProfileAppliesFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmDefaultProfileAppliesFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmDuplicateName(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmDuplicateName")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmIncompatibleVendorSpecificRuleSet(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmIncompatibleVendorSpecificRuleSet")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmFaultInvalidLogin(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmFaultInvalidLogin")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmLegacyHubsNotSupported(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmLegacyHubsNotSupported")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmFaultNoPermission(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmFaultNoPermission")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmFaultNoPermissionEntityPrivileges(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmFaultNoPermissionEntityPrivileges")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmNonExistentHubs(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmNonExistentHubs")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmFaultNotFound(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmFaultNotFound")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmFaultProfileStorageFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmFaultProfileStorageFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmPropertyMismatchFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmPropertyMismatchFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmResourceInUse(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmResourceInUse")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmPlacementCapabilityConstraintsRequirement(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmPlacementCapabilityConstraintsRequirement")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmPlacementCapabilityProfileRequirement(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmPlacementCapabilityProfileRequirement")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmPlacementCompatibilityResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmPlacementCompatibilityResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmPlacementMatchingReplicationResources(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmPlacementMatchingReplicationResources")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmPlacementMatchingResources(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmPlacementMatchingResources")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmPlacementHub(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmPlacementHub")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmPlacementRequirement(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmPlacementRequirement")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmPlacementResourceUtilization(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmPlacementResourceUtilization")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmCapabilityProfile(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmCapabilityProfile")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmCapabilityProfileCreateSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmCapabilityProfileCreateSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmCapabilityProfileUpdateSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmCapabilityProfileUpdateSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmCapabilityConstraints(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmCapabilityConstraints")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmDataServiceToPoliciesMap(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmDataServiceToPoliciesMap")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmDefaultCapabilityProfile(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmDefaultCapabilityProfile")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmDefaultProfileInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmDefaultProfileInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmProfile(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmProfile")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmProfileId(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmProfileId")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmProfileOperationOutcome(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmProfileOperationOutcome")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmProfileType(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmProfileType")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmQueryProfileResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmQueryProfileResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmProfileResourceType(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmProfileResourceType")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmCapabilitySubProfileConstraints(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmCapabilitySubProfileConstraints")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmCapabilitySubProfile(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmCapabilitySubProfile")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmDatastoreSpaceStatistics(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmDatastoreSpaceStatistics")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPbmQueryReplicationGroupResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfPbmQueryReplicationGroupResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSmsAboutInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfSmsAboutInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfEntityReference(value) => {
+                state.serialize_field("_typeName", "ArrayOfEntityReference")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFaultDomainFilter(value) => {
+                state.serialize_field("_typeName", "ArrayOfFaultDomainFilter")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfReplicationGroupFilter(value) => {
+                state.serialize_field("_typeName", "ArrayOfReplicationGroupFilter")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSmsTaskInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfSmsTaskInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAuthConnectionFailed(value) => {
+                state.serialize_field("_typeName", "ArrayOfAuthConnectionFailed")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCertificateAuthorityFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfCertificateAuthorityFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCertificateNotImported(value) => {
+                state.serialize_field("_typeName", "ArrayOfCertificateNotImported")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCertificateNotTrusted(value) => {
+                state.serialize_field("_typeName", "ArrayOfCertificateNotTrusted")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCertificateRefreshFailed(value) => {
+                state.serialize_field("_typeName", "ArrayOfCertificateRefreshFailed")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCertificateRevocationFailed(value) => {
+                state.serialize_field("_typeName", "ArrayOfCertificateRevocationFailed")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDuplicateEntry(value) => {
+                state.serialize_field("_typeName", "ArrayOfDuplicateEntry")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInactiveProvider(value) => {
+                state.serialize_field("_typeName", "ArrayOfInactiveProvider")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfIncorrectUsernamePassword(value) => {
+                state.serialize_field("_typeName", "ArrayOfIncorrectUsernamePassword")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInvalidCertificate(value) => {
+                state.serialize_field("_typeName", "ArrayOfInvalidCertificate")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSmsInvalidLogin(value) => {
+                state.serialize_field("_typeName", "ArrayOfSmsInvalidLogin")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInvalidProfile(value) => {
+                state.serialize_field("_typeName", "ArrayOfInvalidProfile")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInvalidSession(value) => {
+                state.serialize_field("_typeName", "ArrayOfInvalidSession")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInvalidUrl(value) => {
+                state.serialize_field("_typeName", "ArrayOfInvalidUrl")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfMultipleSortSpecsNotSupported(value) => {
+                state.serialize_field("_typeName", "ArrayOfMultipleSortSpecsNotSupported")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNoCommonProviderForAllBackings(value) => {
+                state.serialize_field("_typeName", "ArrayOfNoCommonProviderForAllBackings")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNotSupportedByProvider(value) => {
+                state.serialize_field("_typeName", "ArrayOfNotSupportedByProvider")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfProviderBusy(value) => {
+                state.serialize_field("_typeName", "ArrayOfProviderBusy")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfProviderConnectionFailed(value) => {
+                state.serialize_field("_typeName", "ArrayOfProviderConnectionFailed")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfProviderNotFound(value) => {
+                state.serialize_field("_typeName", "ArrayOfProviderNotFound")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfProviderOutOfProvisioningResource(value) => {
+                state.serialize_field("_typeName", "ArrayOfProviderOutOfProvisioningResource")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfProviderOutOfResource(value) => {
+                state.serialize_field("_typeName", "ArrayOfProviderOutOfResource")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfProviderRegistrationFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfProviderRegistrationFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfProviderSyncFailed(value) => {
+                state.serialize_field("_typeName", "ArrayOfProviderSyncFailed")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfProviderUnavailable(value) => {
+                state.serialize_field("_typeName", "ArrayOfProviderUnavailable")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfProviderUnregistrationFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfProviderUnregistrationFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfProxyRegistrationFailed(value) => {
+                state.serialize_field("_typeName", "ArrayOfProxyRegistrationFailed")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfQueryExecutionFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfQueryExecutionFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfQueryNotSupported(value) => {
+                state.serialize_field("_typeName", "ArrayOfQueryNotSupported")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSmsResourceInUse(value) => {
+                state.serialize_field("_typeName", "ArrayOfSmsResourceInUse")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfServiceNotInitialized(value) => {
+                state.serialize_field("_typeName", "ArrayOfServiceNotInitialized")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSmsFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfSmsFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSyncInProgress(value) => {
+                state.serialize_field("_typeName", "ArrayOfSyncInProgress")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfTooMany(value) => {
+                state.serialize_field("_typeName", "ArrayOfTooMany")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAlreadyDone(value) => {
+                state.serialize_field("_typeName", "ArrayOfAlreadyDone")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInvalidFunctionTarget(value) => {
+                state.serialize_field("_typeName", "ArrayOfInvalidFunctionTarget")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfInvalidReplicationState(value) => {
+                state.serialize_field("_typeName", "ArrayOfInvalidReplicationState")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNoReplicationTarget(value) => {
+                state.serialize_field("_typeName", "ArrayOfNoReplicationTarget")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNoValidReplica(value) => {
+                state.serialize_field("_typeName", "ArrayOfNoValidReplica")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPeerNotReachable(value) => {
+                state.serialize_field("_typeName", "ArrayOfPeerNotReachable")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSmsReplicationFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfSmsReplicationFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSyncOngoing(value) => {
+                state.serialize_field("_typeName", "ArrayOfSyncOngoing")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAlarmFilter(value) => {
+                state.serialize_field("_typeName", "ArrayOfAlarmFilter")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfAlarmResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfAlarmResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSmsProviderInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfSmsProviderInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSmsProviderSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfSmsProviderSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVasaProviderUpgradeSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVASAProviderUpgradeSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVasaProviderInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVasaProviderInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfRelatedStorageArray(value) => {
+                state.serialize_field("_typeName", "ArrayOfRelatedStorageArray")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSupportedVendorModelMapping(value) => {
+                state.serialize_field("_typeName", "ArrayOfSupportedVendorModelMapping")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVasaProviderSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVasaProviderSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfBackingConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfBackingConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfBackingStoragePool(value) => {
+                state.serialize_field("_typeName", "ArrayOfBackingStoragePool")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDatastoreBackingPoolMapping(value) => {
+                state.serialize_field("_typeName", "ArrayOfDatastoreBackingPoolMapping")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDatastorePair(value) => {
+                state.serialize_field("_typeName", "ArrayOfDatastorePair")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDrsMigrationCapabilityResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfDrsMigrationCapabilityResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFaultDomainProviderMapping(value) => {
+                state.serialize_field("_typeName", "ArrayOfFaultDomainProviderMapping")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFcStoragePort(value) => {
+                state.serialize_field("_typeName", "ArrayOfFcStoragePort")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFcoeStoragePort(value) => {
+                state.serialize_field("_typeName", "ArrayOfFcoeStoragePort")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStorageFileSystemInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfStorageFileSystemInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfIscsiStoragePort(value) => {
+                state.serialize_field("_typeName", "ArrayOfIscsiStoragePort")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfLunHbaAssociation(value) => {
+                state.serialize_field("_typeName", "ArrayOfLunHbaAssociation")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfNameValuePair(value) => {
+                state.serialize_field("_typeName", "ArrayOfNameValuePair")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStorageAlarm(value) => {
+                state.serialize_field("_typeName", "ArrayOfStorageAlarm")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStorageArray(value) => {
+                state.serialize_field("_typeName", "ArrayOfStorageArray")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStorageCapability(value) => {
+                state.serialize_field("_typeName", "ArrayOfStorageCapability")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStorageContainer(value) => {
+                state.serialize_field("_typeName", "ArrayOfStorageContainer")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStorageContainerResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfStorageContainerResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStorageContainerSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfStorageContainerSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStorageFileSystem(value) => {
+                state.serialize_field("_typeName", "ArrayOfStorageFileSystem")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStorageLun(value) => {
+                state.serialize_field("_typeName", "ArrayOfStorageLun")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStoragePort(value) => {
+                state.serialize_field("_typeName", "ArrayOfStoragePort")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfStorageProcessor(value) => {
+                state.serialize_field("_typeName", "ArrayOfStorageProcessor")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDeviceId(value) => {
+                state.serialize_field("_typeName", "ArrayOfDeviceId")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFailoverParam(value) => {
+                state.serialize_field("_typeName", "ArrayOfFailoverParam")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPolicyAssociation(value) => {
+                state.serialize_field("_typeName", "ArrayOfPolicyAssociation")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfReplicationGroupData(value) => {
+                state.serialize_field("_typeName", "ArrayOfReplicationGroupData")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFailoverSuccessResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfFailoverSuccessResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfRecoveredDevice(value) => {
+                state.serialize_field("_typeName", "ArrayOfRecoveredDevice")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfRecoveredDiskInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfRecoveredDiskInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFaultDomainInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfFaultDomainInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGroupErrorResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfGroupErrorResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGroupInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfGroupInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfGroupOperationResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfGroupOperationResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPointInTimeReplicaId(value) => {
+                state.serialize_field("_typeName", "ArrayOfPointInTimeReplicaId")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPromoteParam(value) => {
+                state.serialize_field("_typeName", "ArrayOfPromoteParam")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfQueryPointInTimeReplicaParam(value) => {
+                state.serialize_field("_typeName", "ArrayOfQueryPointInTimeReplicaParam")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfReplicaQueryIntervalParam(value) => {
+                state.serialize_field("_typeName", "ArrayOfReplicaQueryIntervalParam")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfQueryPointInTimeReplicaSuccessResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfQueryPointInTimeReplicaSuccessResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPointInTimeReplicaInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfPointInTimeReplicaInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfQueryPointInTimeReplicaSummaryResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfQueryPointInTimeReplicaSummaryResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfReplicaIntervalQueryResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfReplicaIntervalQueryResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfQueryReplicationGroupSuccessResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfQueryReplicationGroupSuccessResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfQueryReplicationPeerResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfQueryReplicationPeerResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfRecoveredTargetGroupMemberInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfRecoveredTargetGroupMemberInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfReplicaId(value) => {
+                state.serialize_field("_typeName", "ArrayOfReplicaId")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfReverseReplicationSuccessResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfReverseReplicationSuccessResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSourceGroupInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfSourceGroupInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfReplicationTargetInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfReplicationTargetInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSourceGroupMemberInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfSourceGroupMemberInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfTargetDeviceId(value) => {
+                state.serialize_field("_typeName", "ArrayOfTargetDeviceId")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSyncReplicationGroupSuccessResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfSyncReplicationGroupSuccessResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfTargetGroupInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfTargetGroupInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfTargetToSourceInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfTargetToSourceInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfTargetGroupMemberInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfTargetGroupMemberInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfTestFailoverParam(value) => {
+                state.serialize_field("_typeName", "ArrayOfTestFailoverParam")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVVolId(value) => {
+                state.serialize_field("_typeName", "ArrayOfVVolId")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVasaVirtualDiskId(value) => {
+                state.serialize_field("_typeName", "ArrayOfVasaVirtualDiskId")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualDiskKey(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualDiskKey")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualDiskMoId(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualDiskMoId")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineFilePath(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineFilePath")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineId(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineId")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineMoId(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineMoId")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualMachineUuid(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualMachineUUID")?;
+                state.serialize_field("_value", value)?;
+            },
             ValueElements::ArrayOfAboutInfo(value) => {
                 state.serialize_field("_typeName", "ArrayOfAboutInfo")?;
                 state.serialize_field("_value", value)?;
@@ -6490,6 +11634,10 @@ impl serde::Serialize for ValueElements {
                 state.serialize_field("_typeName", "ArrayOfClusterComputeResourceClusterConfigResult")?;
                 state.serialize_field("_value", value)?;
             },
+            ValueElements::ArrayOfClusterComputeResourceCryptoModePolicy(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterComputeResourceCryptoModePolicy")?;
+                state.serialize_field("_value", value)?;
+            },
             ValueElements::ArrayOfClusterComputeResourceDvsConfigurationValidation(value) => {
                 state.serialize_field("_typeName", "ArrayOfClusterComputeResourceDVSConfigurationValidation")?;
                 state.serialize_field("_value", value)?;
@@ -6530,8 +11678,16 @@ impl serde::Serialize for ValueElements {
                 state.serialize_field("_typeName", "ArrayOfClusterComputeResourceHostConfigurationValidation")?;
                 state.serialize_field("_value", value)?;
             },
+            ValueElements::ArrayOfClusterComputeResourceHostEvacuationInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterComputeResourceHostEvacuationInfo")?;
+                state.serialize_field("_value", value)?;
+            },
             ValueElements::ArrayOfClusterComputeResourceHostVmkNicInfo(value) => {
                 state.serialize_field("_typeName", "ArrayOfClusterComputeResourceHostVmkNicInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterComputeResourceMaintenanceInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterComputeResourceMaintenanceInfo")?;
                 state.serialize_field("_value", value)?;
             },
             ValueElements::ArrayOfClusterComputeResourceSummary(value) => {
@@ -6560,6 +11716,14 @@ impl serde::Serialize for ValueElements {
             },
             ValueElements::ArrayOfComputeResourceHostSpbmLicenseInfo(value) => {
                 state.serialize_field("_typeName", "ArrayOfComputeResourceHostSPBMLicenseInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfComputeResourceHostSeedSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfComputeResourceHostSeedSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfComputeResourceHostSeedSpecSingleHostSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfComputeResourceHostSeedSpecSingleHostSpec")?;
                 state.serialize_field("_value", value)?;
             },
             ValueElements::ArrayOfComputeResourceSummary(value) => {
@@ -6660,6 +11824,82 @@ impl serde::Serialize for ValueElements {
             },
             ValueElements::ArrayOfDiagnosticManagerLogHeader(value) => {
                 state.serialize_field("_typeName", "ArrayOfDiagnosticManagerLogHeader")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDirectPathProfileManagerCapacityInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfDirectPathProfileManagerCapacityInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDirectPathProfileManagerCapacityQueryByDeviceConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfDirectPathProfileManagerCapacityQueryByDeviceConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDirectPathProfileManagerCapacityQueryById(value) => {
+                state.serialize_field("_typeName", "ArrayOfDirectPathProfileManagerCapacityQueryById")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDirectPathProfileManagerCapacityQueryByName(value) => {
+                state.serialize_field("_typeName", "ArrayOfDirectPathProfileManagerCapacityQueryByName")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDirectPathProfileManagerCapacityQuerySpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfDirectPathProfileManagerCapacityQuerySpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDirectPathProfileManagerCapacityResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfDirectPathProfileManagerCapacityResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDirectPathProfileManagerCapacityUnknown(value) => {
+                state.serialize_field("_typeName", "ArrayOfDirectPathProfileManagerCapacityUnknown")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDirectPathProfileManagerCreateSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfDirectPathProfileManagerCreateSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDirectPathProfileManagerDirectPathConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfDirectPathProfileManagerDirectPathConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDirectPathProfileInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfDirectPathProfileInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDirectPathProfileManagerDvxDirectPathConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfDirectPathProfileManagerDvxDirectPathConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDirectPathProfileManagerDynamicDirectPathConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfDirectPathProfileManagerDynamicDirectPathConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDirectPathProfileManagerFilterSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfDirectPathProfileManagerFilterSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDirectPathProfileManagerTargetCluster(value) => {
+                state.serialize_field("_typeName", "ArrayOfDirectPathProfileManagerTargetCluster")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDirectPathProfileManagerTargetEntity(value) => {
+                state.serialize_field("_typeName", "ArrayOfDirectPathProfileManagerTargetEntity")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDirectPathProfileManagerTargetHost(value) => {
+                state.serialize_field("_typeName", "ArrayOfDirectPathProfileManagerTargetHost")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDirectPathProfileManagerUpdateSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfDirectPathProfileManagerUpdateSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDirectPathProfileManagerVirtualDeviceGroupDirectPathConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfDirectPathProfileManagerVirtualDeviceGroupDirectPathConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDirectPathProfileManagerVmiopDirectPathConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfDirectPathProfileManagerVmiopDirectPathConfig")?;
                 state.serialize_field("_value", value)?;
             },
             ValueElements::ArrayOfDvsBackupRestoreCapability(value) => {
@@ -6834,6 +12074,10 @@ impl serde::Serialize for ValueElements {
                 state.serialize_field("_typeName", "ArrayOfFolderBatchAddStandaloneHostsResult")?;
                 state.serialize_field("_value", value)?;
             },
+            ValueElements::ArrayOfFolderExternallyManagedFolderInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfFolderExternallyManagedFolderInfo")?;
+                state.serialize_field("_value", value)?;
+            },
             ValueElements::ArrayOfFolderFailedHostResult(value) => {
                 state.serialize_field("_typeName", "ArrayOfFolderFailedHostResult")?;
                 state.serialize_field("_value", value)?;
@@ -6852,6 +12096,18 @@ impl serde::Serialize for ValueElements {
             },
             ValueElements::ArrayOfHbrManagerVmReplicationCapability(value) => {
                 state.serialize_field("_typeName", "ArrayOfHbrManagerVmReplicationCapability")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHbrReplicationTargetSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfHbrReplicationTargetSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHbrTargetSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfHbrTargetSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHbrTargetSpecReplacement(value) => {
+                state.serialize_field("_typeName", "ArrayOfHbrTargetSpecReplacement")?;
                 state.serialize_field("_value", value)?;
             },
             ValueElements::ArrayOfHealthUpdate(value) => {
@@ -6942,12 +12198,24 @@ impl serde::Serialize for ValueElements {
                 state.serialize_field("_typeName", "ArrayOfIoFilterInfo")?;
                 state.serialize_field("_value", value)?;
             },
+            ValueElements::ArrayOfPinnedCertificate(value) => {
+                state.serialize_field("_typeName", "ArrayOfPinnedCertificate")?;
+                state.serialize_field("_value", value)?;
+            },
             ValueElements::ArrayOfIoFilterQueryIssueResult(value) => {
                 state.serialize_field("_typeName", "ArrayOfIoFilterQueryIssueResult")?;
                 state.serialize_field("_value", value)?;
             },
             ValueElements::ArrayOfIoFilterHostIssue(value) => {
                 state.serialize_field("_typeName", "ArrayOfIoFilterHostIssue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfIoFilterManagerSslTrust(value) => {
+                state.serialize_field("_typeName", "ArrayOfIoFilterManagerSslTrust")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfUntrustedCertificate(value) => {
+                state.serialize_field("_typeName", "ArrayOfUntrustedCertificate")?;
                 state.serialize_field("_value", value)?;
             },
             ValueElements::ArrayOfIpAddress(value) => {
@@ -7090,6 +12358,10 @@ impl serde::Serialize for ValueElements {
                 state.serialize_field("_typeName", "ArrayOfOvfCreateImportSpecResult")?;
                 state.serialize_field("_value", value)?;
             },
+            ValueElements::ArrayOfOvfDatastoreMapping(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfDatastoreMapping")?;
+                state.serialize_field("_value", value)?;
+            },
             ValueElements::ArrayOfOvfDeploymentOption(value) => {
                 state.serialize_field("_typeName", "ArrayOfOvfDeploymentOption")?;
                 state.serialize_field("_value", value)?;
@@ -7110,6 +12382,10 @@ impl serde::Serialize for ValueElements {
                 state.serialize_field("_typeName", "ArrayOfOvfFile")?;
                 state.serialize_field("_value", value)?;
             },
+            ValueElements::ArrayOfOvfImportParams(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfImportParams")?;
+                state.serialize_field("_value", value)?;
+            },
             ValueElements::ArrayOfOvfOptionInfo(value) => {
                 state.serialize_field("_typeName", "ArrayOfOvfOptionInfo")?;
                 state.serialize_field("_value", value)?;
@@ -7124,6 +12400,10 @@ impl serde::Serialize for ValueElements {
             },
             ValueElements::ArrayOfOvfResourceMap(value) => {
                 state.serialize_field("_typeName", "ArrayOfOvfResourceMap")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfOvfStorageProfileMapping(value) => {
+                state.serialize_field("_typeName", "ArrayOfOvfStorageProfileMapping")?;
                 state.serialize_field("_value", value)?;
             },
             ValueElements::ArrayOfOvfValidateHostParams(value) => {
@@ -7402,6 +12682,22 @@ impl serde::Serialize for ValueElements {
                 state.serialize_field("_typeName", "ArrayOfTaskInfo")?;
                 state.serialize_field("_value", value)?;
             },
+            ValueElements::ArrayOfTaskInfoFilterSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfTaskInfoFilterSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfTaskInfoFilterSpecFilterTaskResults(value) => {
+                state.serialize_field("_typeName", "ArrayOfTaskInfoFilterSpecFilterTaskResults")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfTaskManagerTaskViewSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfTaskManagerTaskViewSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfTaskManagerViewByStartId(value) => {
+                state.serialize_field("_typeName", "ArrayOfTaskManagerViewByStartId")?;
+                state.serialize_field("_value", value)?;
+            },
             ValueElements::ArrayOfTaskReason(value) => {
                 state.serialize_field("_typeName", "ArrayOfTaskReason")?;
                 state.serialize_field("_value", value)?;
@@ -7544,6 +12840,54 @@ impl serde::Serialize for ValueElements {
             },
             ValueElements::ArrayOfVirtualMachineWipeResult(value) => {
                 state.serialize_field("_typeName", "ArrayOfVirtualMachineWipeResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanComparator(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanComparator")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanCompositeConstraint(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanCompositeConstraint")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanDataObfuscationRule(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanDataObfuscationRule")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanJsonComparator(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanJsonComparator")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanJsonFilterRule(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanJsonFilterRule")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanMassCollectorPropertyParams(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanMassCollectorPropertyParams")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanMassCollectorSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanMassCollectorSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanNestJsonComparator(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanNestJsonComparator")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanObjectTypeRule(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanObjectTypeRule")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanPropertyConstraint(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanPropertyConstraint")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanRegexBasedRule(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanRegexBasedRule")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanResourceConstraint(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanResourceConstraint")?;
                 state.serialize_field("_value", value)?;
             },
             ValueElements::ArrayOfVsanUpgradeSystemApiBrokenIssue(value) => {
@@ -7728,6 +13072,10 @@ impl serde::Serialize for ValueElements {
             },
             ValueElements::ArrayOfClusterClusterInitialPlacementAction(value) => {
                 state.serialize_field("_typeName", "ArrayOfClusterClusterInitialPlacementAction")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterPowerContext(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterPowerContext")?;
                 state.serialize_field("_value", value)?;
             },
             ValueElements::ArrayOfClusterConfigInfo(value) => {
@@ -7922,8 +13270,20 @@ impl serde::Serialize for ValueElements {
                 state.serialize_field("_typeName", "ArrayOfClusterFailoverResourcesAdmissionControlPolicy")?;
                 state.serialize_field("_value", value)?;
             },
+            ValueElements::ArrayOfVsanFaultDomainDestroySpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanFaultDomainDestroySpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanFaultDomainUpdateSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanFaultDomainUpdateSpec")?;
+                state.serialize_field("_value", value)?;
+            },
             ValueElements::ArrayOfClusterFixedSizeSlotPolicy(value) => {
                 state.serialize_field("_typeName", "ArrayOfClusterFixedSizeSlotPolicy")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterFtVmHostRuleInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterFtVmHostRuleInfo")?;
                 state.serialize_field("_value", value)?;
             },
             ValueElements::ArrayOfClusterGroupInfo(value) => {
@@ -7970,6 +13330,10 @@ impl serde::Serialize for ValueElements {
                 state.serialize_field("_typeName", "ArrayOfClusterOrchestrationInfo")?;
                 state.serialize_field("_value", value)?;
             },
+            ValueElements::ArrayOfPerformClusterPowerActionSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfPerformClusterPowerActionSpec")?;
+                state.serialize_field("_value", value)?;
+            },
             ValueElements::ArrayOfPlacementAction(value) => {
                 state.serialize_field("_typeName", "ArrayOfPlacementAction")?;
                 state.serialize_field("_value", value)?;
@@ -7998,6 +13362,10 @@ impl serde::Serialize for ValueElements {
                 state.serialize_field("_typeName", "ArrayOfClusterProactiveDrsConfigInfo")?;
                 state.serialize_field("_value", value)?;
             },
+            ValueElements::ArrayOfQueryVsanManagedStorageSpaceUsageSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfQueryVsanManagedStorageSpaceUsageSpec")?;
+                state.serialize_field("_value", value)?;
+            },
             ValueElements::ArrayOfClusterRecommendation(value) => {
                 state.serialize_field("_typeName", "ArrayOfClusterRecommendation")?;
                 state.serialize_field("_value", value)?;
@@ -8014,8 +13382,28 @@ impl serde::Serialize for ValueElements {
                 state.serialize_field("_typeName", "ArrayOfClusterRuleSpec")?;
                 state.serialize_field("_value", value)?;
             },
+            ValueElements::ArrayOfVsanSiteFaultDomain(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanSiteFaultDomain")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanSiteFaultDomainConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanSiteFaultDomainConfig")?;
+                state.serialize_field("_value", value)?;
+            },
             ValueElements::ArrayOfClusterSlotPolicy(value) => {
                 state.serialize_field("_typeName", "ArrayOfClusterSlotPolicy")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanStorageComplianceResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanStorageComplianceResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanStorageOperationalStatus(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanStorageOperationalStatus")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanStoragePolicyStatus(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanStoragePolicyStatus")?;
                 state.serialize_field("_value", value)?;
             },
             ValueElements::ArrayOfClusterSystemVMsConfigInfo(value) => {
@@ -8032,6 +13420,26 @@ impl serde::Serialize for ValueElements {
             },
             ValueElements::ArrayOfClusterUsageSummary(value) => {
                 state.serialize_field("_typeName", "ArrayOfClusterUsageSummary")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVimClusterVsanPreferredFaultDomainInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVimClusterVSANPreferredFaultDomainInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVimClusterVsanStretchedClusterCapability(value) => {
+                state.serialize_field("_typeName", "ArrayOfVimClusterVSANStretchedClusterCapability")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVimClusterVsanStretchedClusterFaultDomainConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfVimClusterVSANStretchedClusterFaultDomainConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanStretchedClusterHostVirtualApplianceStatus(value) => {
+                state.serialize_field("_typeName", "ArrayOfVSANStretchedClusterHostVirtualApplianceStatus")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVimClusterVsanWitnessHostInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVimClusterVSANWitnessHostInfo")?;
                 state.serialize_field("_value", value)?;
             },
             ValueElements::ArrayOfClusterVmComponentProtectionSettings(value) => {
@@ -8060,6 +13468,698 @@ impl serde::Serialize for ValueElements {
             },
             ValueElements::ArrayOfClusterVmToolsMonitoringSettings(value) => {
                 state.serialize_field("_typeName", "ArrayOfClusterVmToolsMonitoringSettings")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanAttachToSrOperation(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanAttachToSrOperation")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanCapability(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanCapability")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanClusterAdvCfgSyncHostResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanClusterAdvCfgSyncHostResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanClusterAdvCfgSyncResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanClusterAdvCfgSyncResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanClusterBalancePerDiskInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanClusterBalancePerDiskInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanClusterBalanceSummary(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanClusterBalanceSummary")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanClusterClomdLivenessResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanClusterClomdLivenessResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanClusterConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanClusterConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanClusterCreateVmHealthTestResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanClusterCreateVmHealthTestResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanClusterDitEncryptionHealthSummary(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanClusterDitEncryptionHealthSummary")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanClusterEncryptionHealthSummary(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanClusterEncryptionHealthSummary")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanClusterFileServiceHealthSummary(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanClusterFileServiceHealthSummary")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanClusterGlobalDedupHealthSummary(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanClusterGlobalDedupHealthSummary")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanClusterHclInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanClusterHclInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanClusterHealthAction(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanClusterHealthAction")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanClusterHealthCheckInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanClusterHealthCheckInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanClusterHealthConfigs(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanClusterHealthConfigs")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanClusterHealthLink(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanClusterHealthLink")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanClusterHealthGroup(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanClusterHealthGroup")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanClusterHealthLinkBase(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanClusterHealthLinkBase")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanClusterHealthQuerySpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanClusterHealthQuerySpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanClusterHealthResultBase(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanClusterHealthResultBase")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanClusterHealthResultColumnInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanClusterHealthResultColumnInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanClusterHealthResultKeyValuePair(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanClusterHealthResultKeyValuePair")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanClusterHealthResultRow(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanClusterHealthResultRow")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanClusterHealthResultTable(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanClusterHealthResultTable")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanClusterHealthResultWithRemediation(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanClusterHealthResultWithRemediation")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanClusterHealthSummary(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanClusterHealthSummary")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanClusterHealthSystemObjectsRepairResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanClusterHealthSystemObjectsRepairResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanClusterHealthSystemStatusResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanClusterHealthSystemStatusResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanClusterHealthSystemVersionResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanClusterHealthSystemVersionResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanClusterHealthTest(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanClusterHealthTest")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanClusterHostVmknicMapping(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanClusterHostVmknicMapping")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanClusterLimitHealthResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanClusterLimitHealthResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanClusterNetworkHealthResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanClusterNetworkHealthResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanClusterNetworkLoadTestResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanClusterNetworkLoadTestResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanClusterNetworkPartitionInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanClusterNetworkPartitionInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanClusterNetworkPerfTaskSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanClusterNetworkPerfTaskSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanClusterProactiveTestResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanClusterProactiveTestResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanClusterTelemetryProxyConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanClusterTelemetryProxyConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanClusterVMsHealthOverallResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanClusterVMsHealthOverallResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanClusterVMsHealthSummaryResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanClusterVMsHealthSummaryResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanClusterVmdkLoadTestResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanClusterVmdkLoadTestResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanClusterWhatifHostFailuresResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanClusterWhatifHostFailuresResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanConfigGeneration(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanConfigGeneration")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanDataDrivenApiAction(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanDataDrivenAPIAction")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanDiagnosticsThreshold(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanDiagnosticsThreshold")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanDiskFormatConversionCheckResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanDiskFormatConversionCheckResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanDiskFormatConversionSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanDiskFormatConversionSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVimClusterVsanDiskMappingsConfigSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVimClusterVsanDiskMappingsConfigSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanEntitySpaceUsage(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanEntitySpaceUsage")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVimClusterVsanFaultDomainSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVimClusterVsanFaultDomainSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVimClusterVsanFaultDomainsConfigSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVimClusterVsanFaultDomainsConfigSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHealthActionBase(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHealthActionBase")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHealthActionSteps(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHealthActionSteps")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHealthApiBasedAction(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHealthApiBasedAction")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHealthCmdBasedAction(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHealthCmdBasedAction")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHealthConfirmationDialog(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHealthConfirmationDialog")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHealthCorrelation(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHealthCorrelation")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHealthDataDrivenAction(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHealthDataDrivenAction")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHealthExtMgmtPreCheckResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHealthExtMgmtPreCheckResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHealthTroubleshooting(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHealthTroubleshooting")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHealthTxtBasedAction(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHealthTxtBasedAction")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHistoricalHealthQuerySpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHistoricalHealthQuerySpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHistoricalHealthTest(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHistoricalHealthTest")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHostClomdLivenessResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHostClomdLivenessResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHostCreateVmHealthTestResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHostCreateVmHealthTestResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVimClusterVsanHostDiskMapping(value) => {
+                state.serialize_field("_typeName", "ArrayOfVimClusterVsanHostDiskMapping")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHostHealthSystemVersionResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHostHealthSystemVersionResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanIoInsightInstance(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanIoInsightInstance")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanIoInsightInstanceQuerySpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanIoInsightInstanceQuerySpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanIscsiHomeObjectSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanIscsiHomeObjectSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanIscsiInitiatorGroup(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanIscsiInitiatorGroup")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanIscsiLun(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanIscsiLUN")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanIscsiLunCommonInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanIscsiLUNCommonInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanIscsiLunSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanIscsiLUNSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanIscsiTarget(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanIscsiTarget")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanIscsiTargetAuthSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanIscsiTargetAuthSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanIscsiTargetBasicInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanIscsiTargetBasicInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanIscsiTargetCommonInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanIscsiTargetCommonInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanIscsiTargetServiceConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanIscsiTargetServiceConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanIscsiTargetServiceDefaultConfigSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanIscsiTargetServiceDefaultConfigSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanIscsiTargetServiceSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanIscsiTargetServiceSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanIscsiTargetSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanIscsiTargetSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanNetworkDiagnostics(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanNetworkDiagnostics")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanObjIdentityQuerySpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanObjIdentityQuerySpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanClusterObjectExtAttrs(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanClusterObjectExtAttrs")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanObjectExtraAttributes(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanObjectExtraAttributes")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanObjectIdentity(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanObjectIdentity")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanObjectIdentityAndHealth(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanObjectIdentityAndHealth")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanObjectInformation(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanObjectInformation")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanObjectQuerySpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanObjectQuerySpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanObjectSpaceSummary(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanObjectSpaceSummary")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanPerfDiagnoseQuerySpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanPerfDiagnoseQuerySpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanPerfDiagnosticException(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanPerfDiagnosticException")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanPerfDiagnosticResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanPerfDiagnosticResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanPerfEntityMetricCsv(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanPerfEntityMetricCSV")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanPerfEntityType(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanPerfEntityType")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanPerfGraph(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanPerfGraph")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanPerfHotspotEntitiesMetrics(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanPerfHotspotEntitiesMetrics")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanPerfHotspotQuerySpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanPerfHotspotQuerySpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanPerfMasterInformation(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanPerfMasterInformation")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanPerfMemberInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanPerfMemberInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanPerfMetricId(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanPerfMetricId")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanPerfMetricSeriesCsv(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanPerfMetricSeriesCSV")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanPerfNodeInformation(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanPerfNodeInformation")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanPerfQuerySpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanPerfQuerySpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanPerfThreshold(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanPerfThreshold")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanPerfTimeRange(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanPerfTimeRange")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanPerfTimeRangeQuerySpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanPerfTimeRangeQuerySpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanPerfTopEntities(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanPerfTopEntities")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanPerfTopEntity(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanPerfTopEntity")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanPerfTopQuerySpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanPerfTopQuerySpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanPerfsvcConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanPerfsvcConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanRemoteClusterQuerySpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanRemoteClusterQuerySpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanSpaceQuerySpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanSpaceQuerySpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanSpaceUsage(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanSpaceUsage")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanSpaceUsageDetailResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanSpaceUsageDetailResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanSpaceUsageWithDatastoreType(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanSpaceUsageWithDatastoreType")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanStorageWorkloadType(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanStorageWorkloadType")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanStretchedClusterConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanStretchedClusterConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanSyncingObjectFilter(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanSyncingObjectFilter")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanUnicastAddressInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanUnicastAddressInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanUpgradeStatusEx(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanUpgradeStatusEx")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanUpgradeSystemUpgradeHistoryStoragePoolOp(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanUpgradeSystemUpgradeHistoryStoragePoolOp")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanVcKmipServersHealth(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanVcKmipServersHealth")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanVcLifecycleCheckResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanVcLifecycleCheckResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanVcLifecycleCheckSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanVcLifecycleCheckSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanVsanClusterPcapGroup(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanVsanClusterPcapGroup")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanVsanClusterPcapResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanVsanClusterPcapResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanVumSystemConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanVumSystemConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanWhatifCapacity(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanWhatifCapacity")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVimClusterVsanWitnessSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVimClusterVsanWitnessSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCnsAccessControlSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfCnsAccessControlSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCnsAsyncQueryResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfCnsAsyncQueryResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCnsBackingObjectDetails(value) => {
+                state.serialize_field("_typeName", "ArrayOfCnsBackingObjectDetails")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCnsBaseCreateSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfCnsBaseCreateSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCnsBlockBackingDetails(value) => {
+                state.serialize_field("_typeName", "ArrayOfCnsBlockBackingDetails")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCnsBlockVolumeRelocateSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfCnsBlockVolumeRelocateSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCnsContainerCluster(value) => {
+                state.serialize_field("_typeName", "ArrayOfCnsContainerCluster")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCnsCursor(value) => {
+                state.serialize_field("_typeName", "ArrayOfCnsCursor")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCnsEntityMetadata(value) => {
+                state.serialize_field("_typeName", "ArrayOfCnsEntityMetadata")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCnsFileBackingDetails(value) => {
+                state.serialize_field("_typeName", "ArrayOfCnsFileBackingDetails")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCnsFileCreateSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfCnsFileCreateSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCnsKubernetesEntityMetadata(value) => {
+                state.serialize_field("_typeName", "ArrayOfCnsKubernetesEntityMetadata")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCnsKubernetesEntityReference(value) => {
+                state.serialize_field("_typeName", "ArrayOfCnsKubernetesEntityReference")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCnsKubernetesQueryFilter(value) => {
+                state.serialize_field("_typeName", "ArrayOfCnsKubernetesQueryFilter")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCnsNfsAccessControlSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfCnsNFSAccessControlSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCnsPlacementResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfCnsPlacementResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCnsQueryFilter(value) => {
+                state.serialize_field("_typeName", "ArrayOfCnsQueryFilter")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCnsQueryResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfCnsQueryResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCnsQuerySelection(value) => {
+                state.serialize_field("_typeName", "ArrayOfCnsQuerySelection")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCnsSnapshotCreateSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfCnsSnapshotCreateSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCnsSnapshotDeleteSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfCnsSnapshotDeleteSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCnsSnapshotId(value) => {
+                state.serialize_field("_typeName", "ArrayOfCnsSnapshotId")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCnsSnapshotVolumeSource(value) => {
+                state.serialize_field("_typeName", "ArrayOfCnsSnapshotVolumeSource")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCnsVsanFileCreateSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfCnsVSANFileCreateSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCnsVolume(value) => {
+                state.serialize_field("_typeName", "ArrayOfCnsVolume")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCnsVolumeAclConfigureSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfCnsVolumeACLConfigureSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCnsVolumeAttachDetachSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfCnsVolumeAttachDetachSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCnsVolumeAttachResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfCnsVolumeAttachResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCnsVolumeCreateResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfCnsVolumeCreateResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCnsVolumeCreateSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfCnsVolumeCreateSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCnsVolumeExtendSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfCnsVolumeExtendSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCnsVolumeId(value) => {
+                state.serialize_field("_typeName", "ArrayOfCnsVolumeId")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCnsVolumeMetadata(value) => {
+                state.serialize_field("_typeName", "ArrayOfCnsVolumeMetadata")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCnsVolumeMetadataUpdateSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfCnsVolumeMetadataUpdateSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCnsVolumeOperationBatchResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfCnsVolumeOperationBatchResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCnsVolumeOperationResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfCnsVolumeOperationResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCnsVolumePolicyReconfigSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfCnsVolumePolicyReconfigSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCnsVolumeRelocateSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfCnsVolumeRelocateSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCnsVolumeSource(value) => {
+                state.serialize_field("_typeName", "ArrayOfCnsVolumeSource")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCnsVsanFileShareBackingDetails(value) => {
+                state.serialize_field("_typeName", "ArrayOfCnsVsanFileShareBackingDetails")?;
                 state.serialize_field("_value", value)?;
             },
             ValueElements::ArrayOfDistributedVirtualPort(value) => {
@@ -8206,6 +14306,38 @@ impl serde::Serialize for ValueElements {
                 state.serialize_field("_typeName", "ArrayOfEntityBackupConfig")?;
                 state.serialize_field("_value", value)?;
             },
+            ValueElements::ArrayOfDvsFilterSpecConnecteeSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfDVSFilterSpecConnecteeSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsFilterSpecPnicConnecteeSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfDVSFilterSpecPnicConnecteeSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsFilterSpecPvlanSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfDVSFilterSpecPvlanSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsFilterSpecTrunkVlanSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfDVSFilterSpecTrunkVlanSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsFilterSpecVlanIdSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfDVSFilterSpecVlanIdSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsFilterSpecVlanSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfDVSFilterSpecVlanSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsFilterSpecVmConnecteeSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfDVSFilterSpecVmConnecteeSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDvsFilterSpecVmknicConnecteeSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfDVSFilterSpecVmknicConnecteeSpec")?;
+                state.serialize_field("_value", value)?;
+            },
             ValueElements::ArrayOfDistributedVirtualSwitchHostMember(value) => {
                 state.serialize_field("_typeName", "ArrayOfDistributedVirtualSwitchHostMember")?;
                 state.serialize_field("_value", value)?;
@@ -8224,6 +14356,10 @@ impl serde::Serialize for ValueElements {
             },
             ValueElements::ArrayOfHostMemberHealthCheckResult(value) => {
                 state.serialize_field("_typeName", "ArrayOfHostMemberHealthCheckResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDistributedVirtualSwitchHostMemberHostUplinkState(value) => {
+                state.serialize_field("_typeName", "ArrayOfDistributedVirtualSwitchHostMemberHostUplinkState")?;
                 state.serialize_field("_value", value)?;
             },
             ValueElements::ArrayOfDistributedVirtualSwitchHostMemberPnicBacking(value) => {
@@ -8398,6 +14534,10 @@ impl serde::Serialize for ValueElements {
                 state.serialize_field("_typeName", "ArrayOfVMwareDVSConfigSpec")?;
                 state.serialize_field("_value", value)?;
             },
+            ValueElements::ArrayOfVmwareDistributedVirtualSwitchDpuFailoverPolicy(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmwareDistributedVirtualSwitchDpuFailoverPolicy")?;
+                state.serialize_field("_value", value)?;
+            },
             ValueElements::ArrayOfVMwareDvsDpuCapability(value) => {
                 state.serialize_field("_typeName", "ArrayOfVMwareDvsDpuCapability")?;
                 state.serialize_field("_value", value)?;
@@ -8454,6 +14594,10 @@ impl serde::Serialize for ValueElements {
                 state.serialize_field("_typeName", "ArrayOfVMwareDVSMtuHealthCheckResult")?;
                 state.serialize_field("_value", value)?;
             },
+            ValueElements::ArrayOfVmwareDistributedVirtualSwitchNetworkOffloadConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmwareDistributedVirtualSwitchNetworkOffloadConfig")?;
+                state.serialize_field("_value", value)?;
+            },
             ValueElements::ArrayOfVMwareDvsPvlanConfigSpec(value) => {
                 state.serialize_field("_typeName", "ArrayOfVMwareDVSPvlanConfigSpec")?;
                 state.serialize_field("_value", value)?;
@@ -8464,6 +14608,14 @@ impl serde::Serialize for ValueElements {
             },
             ValueElements::ArrayOfVmwareDistributedVirtualSwitchPvlanSpec(value) => {
                 state.serialize_field("_typeName", "ArrayOfVmwareDistributedVirtualSwitchPvlanSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmwareDistributedVirtualSwitchRealTimeConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmwareDistributedVirtualSwitchRealTimeConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVmwareDistributedVirtualSwitchRealTimeLanAnnotation(value) => {
+                state.serialize_field("_typeName", "ArrayOfVmwareDistributedVirtualSwitchRealTimeLanAnnotation")?;
                 state.serialize_field("_value", value)?;
             },
             ValueElements::ArrayOfDvsSecurityPolicy(value) => {
@@ -8574,8 +14726,24 @@ impl serde::Serialize for ValueElements {
                 state.serialize_field("_typeName", "ArrayOfCryptoManagerKmipCryptoKeyStatus")?;
                 state.serialize_field("_value", value)?;
             },
+            ValueElements::ArrayOfCryptoManagerKmipCryptoKeyStatusKeyInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfCryptoManagerKmipCryptoKeyStatusKeyInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCryptoManagerKmipCryptoKeyStatusWrappingKeyIdKeyInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfCryptoManagerKmipCryptoKeyStatusWrappingKeyIdKeyInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCryptoManagerKmipCryptoKeyStatusWrappingRotationIntervalKeyInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfCryptoManagerKmipCryptoKeyStatusWrappingRotationIntervalKeyInfo")?;
+                state.serialize_field("_value", value)?;
+            },
             ValueElements::ArrayOfCryptoManagerKmipCustomAttributeSpec(value) => {
                 state.serialize_field("_typeName", "ArrayOfCryptoManagerKmipCustomAttributeSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCryptoManagerKmipGenerateKeySpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfCryptoManagerKmipGenerateKeySpec")?;
                 state.serialize_field("_value", value)?;
             },
             ValueElements::ArrayOfCryptoManagerKmipServerCertInfo(value) => {
@@ -8622,12 +14790,36 @@ impl serde::Serialize for ValueElements {
                 state.serialize_field("_typeName", "ArrayOfKmipClusterInfo")?;
                 state.serialize_field("_value", value)?;
             },
+            ValueElements::ArrayOfKmipClusterInfoKeyInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfKmipClusterInfoKeyInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfKmipClusterInfoWrappingKeyIdKeyInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfKmipClusterInfoWrappingKeyIdKeyInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfKmipClusterInfoWrappingRotationIntervalKeyInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfKmipClusterInfoWrappingRotationIntervalKeyInfo")?;
+                state.serialize_field("_value", value)?;
+            },
             ValueElements::ArrayOfKmipServerInfo(value) => {
                 state.serialize_field("_typeName", "ArrayOfKmipServerInfo")?;
                 state.serialize_field("_value", value)?;
             },
             ValueElements::ArrayOfKmipServerSpec(value) => {
                 state.serialize_field("_typeName", "ArrayOfKmipServerSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfKmipServerSpecKeySpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfKmipServerSpecKeySpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfKmipServerSpecWrappingKeyIdKeySpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfKmipServerSpecWrappingKeyIdKeySpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfKmipServerSpecWrappingRotationIntervalKeySpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfKmipServerSpecWrappingRotationIntervalKeySpec")?;
                 state.serialize_field("_value", value)?;
             },
             ValueElements::ArrayOfKmipServerStatus(value) => {
@@ -9232,6 +15424,14 @@ impl serde::Serialize for ValueElements {
             },
             ValueElements::ArrayOfEventFilterSpecByUsername(value) => {
                 state.serialize_field("_typeName", "ArrayOfEventFilterSpecByUsername")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfEventManagerEventViewSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfEventManagerEventViewSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfEventManagerViewByStartId(value) => {
+                state.serialize_field("_typeName", "ArrayOfEventManagerViewByStartId")?;
                 state.serialize_field("_value", value)?;
             },
             ValueElements::ArrayOfExitMaintenanceModeEvent(value) => {
@@ -10742,6 +16942,46 @@ impl serde::Serialize for ValueElements {
                 state.serialize_field("_typeName", "ArrayOfCloneFromSnapshotNotSupported")?;
                 state.serialize_field("_value", value)?;
             },
+            ValueElements::ArrayOfCnsAlreadyRegisteredFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfCnsAlreadyRegisteredFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCnsFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfCnsFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCnsInCompatibleFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfCnsInCompatibleFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCnsMissingControllerFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfCnsMissingControllerFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCnsMissingPrivilegeFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfCnsMissingPrivilegeFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCnsNotRegisteredFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfCnsNotRegisteredFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCnsPlacementFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfCnsPlacementFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCnsRankedLowerFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfCnsRankedLowerFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCnsSnapshotNotFoundFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfCnsSnapshotNotFoundFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfCnsVolumeNotFoundFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfCnsVolumeNotFoundFault")?;
+                state.serialize_field("_value", value)?;
+            },
             ValueElements::ArrayOfCollectorAddressUnset(value) => {
                 state.serialize_field("_typeName", "ArrayOfCollectorAddressUnset")?;
                 state.serialize_field("_value", value)?;
@@ -11148,6 +17388,10 @@ impl serde::Serialize for ValueElements {
             },
             ValueElements::ArrayOfFtIssuesOnHost(value) => {
                 state.serialize_field("_typeName", "ArrayOfFtIssuesOnHost")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFtVmHostRuleViolation(value) => {
+                state.serialize_field("_typeName", "ArrayOfFtVmHostRuleViolation")?;
                 state.serialize_field("_value", value)?;
             },
             ValueElements::ArrayOfFullStorageVMotionNotSupported(value) => {
@@ -13218,6 +19462,14 @@ impl serde::Serialize for ValueElements {
                 state.serialize_field("_typeName", "ArrayOfVsanIncompatibleDiskMapping")?;
                 state.serialize_field("_value", value)?;
             },
+            ValueElements::ArrayOfVsanNodeNotMaster(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanNodeNotMaster")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanSslVerifyCertFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanSslVerifyCertFault")?;
+                state.serialize_field("_value", value)?;
+            },
             ValueElements::ArrayOfVspanDestPortConflict(value) => {
                 state.serialize_field("_typeName", "ArrayOfVspanDestPortConflict")?;
                 state.serialize_field("_value", value)?;
@@ -13296,6 +19548,10 @@ impl serde::Serialize for ValueElements {
             },
             ValueElements::ArrayOfHostAssignableHardwareConfigAttributeOverride(value) => {
                 state.serialize_field("_typeName", "ArrayOfHostAssignableHardwareConfigAttributeOverride")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostAuthenticationInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostAuthenticationInfo")?;
                 state.serialize_field("_value", value)?;
             },
             ValueElements::ArrayOfHostAuthenticationManagerInfo(value) => {
@@ -13420,6 +19676,10 @@ impl serde::Serialize for ValueElements {
             },
             ValueElements::ArrayOfHostCpuPowerManagementInfo(value) => {
                 state.serialize_field("_typeName", "ArrayOfHostCpuPowerManagementInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostCpuSchedulerInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostCpuSchedulerInfo")?;
                 state.serialize_field("_value", value)?;
             },
             ValueElements::ArrayOfHostHyperThreadScheduleInfo(value) => {
@@ -13580,6 +19840,10 @@ impl serde::Serialize for ValueElements {
             },
             ValueElements::ArrayOfHostDevice(value) => {
                 state.serialize_field("_typeName", "ArrayOfHostDevice")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDevicePciId(value) => {
+                state.serialize_field("_typeName", "ArrayOfDevicePciId")?;
                 state.serialize_field("_value", value)?;
             },
             ValueElements::ArrayOfHostDhcpService(value) => {
@@ -13854,6 +20118,22 @@ impl serde::Serialize for ValueElements {
                 state.serialize_field("_typeName", "ArrayOfHostProxySwitchSpec")?;
                 state.serialize_field("_value", value)?;
             },
+            ValueElements::ArrayOfHostSpbmDatastoreInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostSpbmDatastoreInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostSpbmHashInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostSpbmHashInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostSpbmPolicyBlobInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostSpbmPolicyBlobInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfHostSpbmPolicyInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostSpbmPolicyInfo")?;
+                state.serialize_field("_value", value)?;
+            },
             ValueElements::ArrayOfHostImageProfileSummary(value) => {
                 state.serialize_field("_typeName", "ArrayOfHostImageProfileSummary")?;
                 state.serialize_field("_value", value)?;
@@ -13984,6 +20264,18 @@ impl serde::Serialize for ValueElements {
             },
             ValueElements::ArrayOfKernelModuleSectionInfo(value) => {
                 state.serialize_field("_typeName", "ArrayOfKernelModuleSectionInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfLacpInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfLACPInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfLagInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfLAGInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfLagUplinkInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfLAGUplinkInfo")?;
                 state.serialize_field("_value", value)?;
             },
             ValueElements::ArrayOfHostLicenseSpec(value) => {
@@ -14362,6 +20654,10 @@ impl serde::Serialize for ValueElements {
                 state.serialize_field("_typeName", "ArrayOfHostParallelScsiTargetTransport")?;
                 state.serialize_field("_value", value)?;
             },
+            ValueElements::ArrayOfHostPartialMaintenanceModeRuntimeInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostPartialMaintenanceModeRuntimeInfo")?;
+                state.serialize_field("_value", value)?;
+            },
             ValueElements::ArrayOfHostPatchManagerLocator(value) => {
                 state.serialize_field("_typeName", "ArrayOfHostPatchManagerLocator")?;
                 state.serialize_field("_value", value)?;
@@ -14476,6 +20772,10 @@ impl serde::Serialize for ValueElements {
             },
             ValueElements::ArrayOfHostPlugStoreTopologyTarget(value) => {
                 state.serialize_field("_typeName", "ArrayOfHostPlugStoreTopologyTarget")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfPnicTsoInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfPnicTSOInfo")?;
                 state.serialize_field("_value", value)?;
             },
             ValueElements::ArrayOfHostPortGroup(value) => {
@@ -14834,6 +21134,10 @@ impl serde::Serialize for ValueElements {
                 state.serialize_field("_typeName", "ArrayOfHostTcpTargetTransport")?;
                 state.serialize_field("_value", value)?;
             },
+            ValueElements::ArrayOfHostTdxInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfHostTdxInfo")?;
+                state.serialize_field("_value", value)?;
+            },
             ValueElements::ArrayOfHostTpmAttestationInfo(value) => {
                 state.serialize_field("_typeName", "ArrayOfHostTpmAttestationInfo")?;
                 state.serialize_field("_value", value)?;
@@ -14964,6 +21268,10 @@ impl serde::Serialize for ValueElements {
             },
             ValueElements::ArrayOfHostVMotionNetConfig(value) => {
                 state.serialize_field("_typeName", "ArrayOfHostVMotionNetConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVimHostVsanStretchedClusterHostCapability(value) => {
+                state.serialize_field("_typeName", "ArrayOfVimHostVSANStretchedClusterHostCapability")?;
                 state.serialize_field("_value", value)?;
             },
             ValueElements::ArrayOfHostVfatVolume(value) => {
@@ -15110,8 +21418,148 @@ impl serde::Serialize for ValueElements {
                 state.serialize_field("_typeName", "ArrayOfVmfsUnmapBandwidthSpec")?;
                 state.serialize_field("_value", value)?;
             },
+            ValueElements::ArrayOfVsanBasicDeviceInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanBasicDeviceInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanClusterMembershipInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanClusterMembershipInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanDaemonHealth(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanDaemonHealth")?;
+                state.serialize_field("_value", value)?;
+            },
             ValueElements::ArrayOfVsanDatastoreInfo(value) => {
                 state.serialize_field("_typeName", "ArrayOfVsanDatastoreInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanDiskEncryptionHealth(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanDiskEncryptionHealth")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanDiskRebalanceResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanDiskRebalanceResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanDitEncryptionHealthSummary(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanDitEncryptionHealthSummary")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanEncryptionHealthSummary(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanEncryptionHealthSummary")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanFailedRepairObjectResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanFailedRepairObjectResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanFileServerHealthSummary(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanFileServerHealthSummary")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanFileServiceBalanceHealth(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanFileServiceBalanceHealth")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanFileServiceHealthSummary(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanFileServiceHealthSummary")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanFileServiceRootFsHealth(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanFileServiceRootFsHealth")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanFileServiceShareHealthSummary(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanFileServiceShareHealthSummary")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHclCommonDeviceInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHclCommonDeviceInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHclComputeResource(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHclComputeResource")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHclControllerInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHclControllerInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHclDiskInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHclDiskInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHclFirmwareFile(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHclFirmwareFile")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHclFirmwareUpdateSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHclFirmwareUpdateSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHclMemInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHclMemInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHclNicInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHclNicInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHealthQuerySpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHealthQuerySpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHostCimProviderInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHostCimProviderInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHostEmmSummary(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHostEMMSummary")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHostFwComponent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHostFwComponent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHostGlobalDedupConfigHealthSummary(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHostGlobalDedupConfigHealthSummary")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHostHclInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHostHclInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHostHealthSystemStatusResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHostHealthSystemStatusResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHostHwDeviceId(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHostHwDeviceId")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHostIoInsightInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHostIoInsightInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHostQueryCheckLimitsSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHostQueryCheckLimitsSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHostReference(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHostReference")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHostVirtualApplianceInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHostVirtualApplianceInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHostVmdkLoadTestResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHostVmdkLoadTestResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHwToVcgInfoMapping(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHwToVcgInfoMapping")?;
                 state.serialize_field("_value", value)?;
             },
             ValueElements::ArrayOfHostVsanInternalSystemCmmdsQuery(value) => {
@@ -15144,6 +21592,110 @@ impl serde::Serialize for ValueElements {
             },
             ValueElements::ArrayOfHostVsanInternalSystemVsanPhysicalDiskDiagnosticsResult(value) => {
                 state.serialize_field("_typeName", "ArrayOfHostVsanInternalSystemVsanPhysicalDiskDiagnosticsResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanIoInsightInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanIoInsightInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanIperfClientSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanIperfClientSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanKmsHealth(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanKmsHealth")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanLimitHealthResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanLimitHealthResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanNetworkDiagnosticsHealthInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanNetworkDiagnosticsHealthInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanNetworkHealthResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanNetworkHealthResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanNetworkLoadTestResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanNetworkLoadTestResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanNetworkPeerHealthResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanNetworkPeerHealthResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanNicRdmaInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanNicRdmaInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanObjectHealth(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanObjectHealth")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanObjectOverallHealth(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanObjectOverallHealth")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanPhysicalDiskHealth(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanPhysicalDiskHealth")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanPhysicalDiskHealthSummary(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanPhysicalDiskHealthSummary")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanProactiveRebalanceInfoEx(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanProactiveRebalanceInfoEx")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanQueryResultHostInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanQueryResultHostInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanRepairObjectsResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanRepairObjectsResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanResourceHealth(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanResourceHealth")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanServerClusterInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanServerClusterInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanSmartDiskStats(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanSmartDiskStats")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanSmartParameter(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanSmartParameter")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanSmartStatsHostSummary(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanSmartStatsHostSummary")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanVcgDeviceInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanVcgDeviceInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanVmdkIoLoadSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanVmdkIOLoadSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanVmdkLoadTestResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanVmdkLoadTestResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanVmdkLoadTestSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanVmdkLoadTestSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanVsanPcapResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanVsanPcapResult")?;
                 state.serialize_field("_value", value)?;
             },
             ValueElements::ArrayOfVvolDatastoreInfo(value) => {
@@ -16422,6 +22974,10 @@ impl serde::Serialize for ValueElements {
                 state.serialize_field("_typeName", "ArrayOfVirtualMachineSnapshotInfo")?;
                 state.serialize_field("_value", value)?;
             },
+            ValueElements::ArrayOfSnapshotSelectionSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfSnapshotSelectionSpec")?;
+                state.serialize_field("_value", value)?;
+            },
             ValueElements::ArrayOfVirtualMachineSnapshotTree(value) => {
                 state.serialize_field("_typeName", "ArrayOfVirtualMachineSnapshotTree")?;
                 state.serialize_field("_value", value)?;
@@ -16448,6 +23004,14 @@ impl serde::Serialize for ValueElements {
             },
             ValueElements::ArrayOfVirtualMachineUsageOnDatastore(value) => {
                 state.serialize_field("_typeName", "ArrayOfVirtualMachineUsageOnDatastore")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSubnetInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfSubnetInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSubnetInfoFolderInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfSubnetInfoFolderInfo")?;
                 state.serialize_field("_value", value)?;
             },
             ValueElements::ArrayOfVirtualMachineSummary(value) => {
@@ -17554,8 +24118,16 @@ impl serde::Serialize for ValueElements {
                 state.serialize_field("_typeName", "ArrayOfVirtualVmxnet3")?;
                 state.serialize_field("_value", value)?;
             },
+            ValueElements::ArrayOfVirtualVmxnet3StrictLatencyConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualVmxnet3StrictLatencyConfig")?;
+                state.serialize_field("_value", value)?;
+            },
             ValueElements::ArrayOfVirtualVmxnet3Option(value) => {
                 state.serialize_field("_typeName", "ArrayOfVirtualVmxnet3Option")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVirtualVmxnet3OptionStrictLatencyConfigOption(value) => {
+                state.serialize_field("_typeName", "ArrayOfVirtualVmxnet3OptionStrictLatencyConfigOption")?;
                 state.serialize_field("_value", value)?;
             },
             ValueElements::ArrayOfVirtualVmxnet3Vrdma(value) => {
@@ -17722,12 +24294,768 @@ impl serde::Serialize for ValueElements {
                 state.serialize_field("_typeName", "ArrayOfReplicationSpec")?;
                 state.serialize_field("_value", value)?;
             },
+            ValueElements::ArrayOfActiveVsanDirectoryServerConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfActiveVsanDirectoryServerConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanAdvancedDatastoreConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanAdvancedDatastoreConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanCapacityReservationInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanCapacityReservationInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanClientDatastoreConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanClientDatastoreConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanClusterConfigPrecheckItem(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanClusterConfigPrecheckItem")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfClusterRuntimeInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfClusterRuntimeInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanCompatibilityCheckResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanCompatibilityCheckResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanConfigInfoEx(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanConfigInfoEx")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVimVsanDataEfficiencyCapacityState(value) => {
+                state.serialize_field("_typeName", "ArrayOfVimVsanDataEfficiencyCapacityState")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanDataEfficiencyConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanDataEfficiencyConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanDataEfficiencyConfigEx(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanDataEfficiencyConfigEx")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanDataEncryptionConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanDataEncryptionConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanDataInTransitEncryptionConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanDataInTransitEncryptionConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanDatastoreConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanDatastoreConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanDatastoreSourcePrecheckItem(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanDatastoreSourcePrecheckItem")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanDatastoreSourcePrecheckResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanDatastoreSourcePrecheckResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanDatastoreSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanDatastoreSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDefaultDatastorePolicySelectionInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfDefaultDatastorePolicySelectionInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanDirectoryServerConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanDirectoryServerConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfDiskClaimConfiguration(value) => {
+                state.serialize_field("_typeName", "ArrayOfDiskClaimConfiguration")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanDiskDataEvacuationResourceCheckTaskDetails(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanDiskDataEvacuationResourceCheckTaskDetails")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanDiskGroupResourceCheckResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanDiskGroupResourceCheckResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanDiskResourceCheckResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanDiskResourceCheckResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanEntityCompatibilityResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVSANEntityCompatibilityResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfEntityResourceCheckDetails(value) => {
+                state.serialize_field("_typeName", "ArrayOfEntityResourceCheckDetails")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanFaultDomainResourceCheckResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanFaultDomainResourceCheckResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanFileServiceConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanFileServiceConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanFileServiceDomain(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanFileServiceDomain")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanFileServiceDomainConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanFileServiceDomainConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanFileServiceDomainQuerySpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanFileServiceDomainQuerySpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanFileServiceIpConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanFileServiceIpConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanFileShare(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanFileShare")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanFileShareConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanFileShareConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanFileShareNetPermission(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanFileShareNetPermission")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanFileShareQueryProperties(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanFileShareQueryProperties")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfFileShareQueryResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfFileShareQueryResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanFileShareQuerySpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanFileShareQuerySpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanFileShareRuntimeInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanFileShareRuntimeInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanFileShareSmbOptions(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanFileShareSmbOptions")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanFileShareSnapshot(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanFileShareSnapshot")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanFileShareSnapshotConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanFileShareSnapshotConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanFileShareSnapshotQueryResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanFileShareSnapshotQueryResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanFileShareSnapshotQuerySpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanFileShareSnapshotQuerySpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHciMeshDatastoreSource(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHciMeshDatastoreSource")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHostResourceCheckResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHostResourceCheckResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanIoDiagnosticsFailedCheck(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanIODiagnosticsFailedCheck")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanIoDiagnosticsInstance(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanIODiagnosticsInstance")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanIoDiagnosticsInstanceEvent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanIODiagnosticsInstanceEvent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanIoDiagnosticsInstanceQuerySpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanIODiagnosticsInstanceQuerySpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanIoDiagnosticsObjectLayout(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanIODiagnosticsObjectLayout")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanIoDiagnosticsPrecheckResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanIODiagnosticsPrecheckResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanIoDiagnosticsStats(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanIODiagnosticsStats")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanIoDiagnosticsTarget(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanIODiagnosticsTarget")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanIoDiagnosticsTargetStats(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanIODiagnosticsTargetStats")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanIoLatency(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanIOLatency")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanIoLatencyMetrics(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanIOLatencyMetrics")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfLifecycleConfigDetails(value) => {
+                state.serialize_field("_typeName", "ArrayOfLifecycleConfigDetails")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfLifecycleFaultDomainDetails(value) => {
+                state.serialize_field("_typeName", "ArrayOfLifecycleFaultDomainDetails")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfLifecyclePreCheckResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfLifecyclePreCheckResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfLifecycleWitnessDetails(value) => {
+                state.serialize_field("_typeName", "ArrayOfLifecycleWitnessDetails")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanMetricProfile(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanMetricProfile")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanMetricsConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanMetricsConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanMountPrecheckItem(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanMountPrecheckItem")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanMountPrecheckNetworkConnectivity(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanMountPrecheckNetworkConnectivity")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanMountPrecheckNetworkConnectivityDetail(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanMountPrecheckNetworkConnectivityDetail")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanMountPrecheckNetworkConnectivityResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanMountPrecheckNetworkConnectivityResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanMountPrecheckNetworkLatency(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanMountPrecheckNetworkLatency")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanMountPrecheckNetworkLatencyDetail(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanMountPrecheckNetworkLatencyDetail")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanMountPrecheckNetworkLatencyResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanMountPrecheckNetworkLatencyResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanMountPrecheckResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanMountPrecheckResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanObjectHealthTelemetrySummary(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanObjectHealthTelemetrySummary")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanObjectIoStats(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanObjectIOStats")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanProactiveRebalanceInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanProactiveRebalanceInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanRdmaConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanRdmaConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVimVsanReconfigSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVimVsanReconfigSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanRemoteVcInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanRemoteVcInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanRemoteVcInfoStandalone(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanRemoteVcInfoStandalone")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfRemoteVsanSite(value) => {
+                state.serialize_field("_typeName", "ArrayOfRemoteVsanSite")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfRemoteVsanSiteAffinity(value) => {
+                state.serialize_field("_typeName", "ArrayOfRemoteVsanSiteAffinity")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfRepairTimerInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfRepairTimerInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanResourceCheckComponentResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanResourceCheckComponentResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanResourceCheckDataPersistenceResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanResourceCheckDataPersistenceResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanResourceCheckResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanResourceCheckResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanResourceCheckSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanResourceCheckSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanResourceCheckStatus(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanResourceCheckStatus")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanResourceCheckTaskDetails(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanResourceCheckTaskDetails")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanResourceCheckVsanResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanResourceCheckVsanResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfResyncIopsInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfResyncIopsInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanRuntimeStatsHostMap(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanRuntimeStatsHostMap")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSsdEnduranceThresholdSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfSSDEnduranceThresholdSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanServerHostUnicastInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanServerHostUnicastInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanSharedWitnessCompatibilityResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVSANSharedWitnessCompatibilityResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanSnapServiceConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanSnapServiceConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanStoragePoolDiskResourceCheckResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanStoragePoolDiskResourceCheckResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanStoragePoolResourceCheckResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanStoragePoolResourceCheckResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVcRemoteVsanServerClusterConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfVcRemoteVsanServerClusterConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVcRemoteVsanServerClusterInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVcRemoteVsanServerClusterInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanIscsiVipConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanIscsiVipConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanIscsiVipConfigSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanIscsiVipConfigSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanIscsiVipDVswitchConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanIscsiVipDVswitchConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanVipNetworkConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanVipNetworkConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanIscsiVipVswitchConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanIscsiVipVswitchConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanBurnInTest(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanBurnInTest")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanBurnInTestCheckResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanBurnInTestCheckResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanCloudHealthStatus(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanCloudHealthStatus")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanClusterBurnInTestResultList(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanClusterBurnInTestResultList")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanCompliantDriver(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanCompliantDriver")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanCompliantFirmware(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanCompliantFirmware")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanConfigBaseIssue(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanConfigBaseIssue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanConfigCheckResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanConfigCheckResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanConfigNotAllDisksClaimedIssue(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanConfigNotAllDisksClaimedIssue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanDatastoreDefaultPolicySelectionConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanDatastoreDefaultPolicySelectionConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanDeconvergedNetConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanDeconvergedNetConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanDiskModelInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanDiskModelInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanDownloadItem(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanDownloadItem")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanEsaConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanEsaConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanEsaConfigInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanEsaConfigInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanEsaDiskConfiguration(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanEsaDiskConfiguration")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanExtendedConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanExtendedConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanFileServiceOvfSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanFileServiceOvfSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanFileServicePreflightCheckResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanFileServicePreflightCheckResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanGenericClusterBaseIssue(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanGenericClusterBaseIssue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanGenericClusterBestPracticeHealth(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanGenericClusterBestPracticeHealth")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHclDeviceConstraint(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHclDeviceConstraint")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHclDiskConstraint(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHclDiskConstraint")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHclDriverInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHclDriverInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHclMinFwConstraint(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHclMinFwConstraint")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHclQuerySpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHclQuerySpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHclReleaseConstraint(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHclReleaseConstraint")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHealthConfigSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHealthConfigSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHealthCustomizationSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHealthCustomizationSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHealthThreshold(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHealthThreshold")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHistoricalHealthConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHistoricalHealthConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHostDeviceInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHostDeviceInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHwToVcgInfoMappingSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHwToVcgInfoMappingSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanIoTripAnalyzerConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanIOTripAnalyzerConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanIoTripAnalyzerRecurrence(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanIOTripAnalyzerRecurrence")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanInternalExtendedConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanInternalExtendedConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanNetworkConfigBaseIssue(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanNetworkConfigBaseIssue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanNetworkConfigBestPracticeHealth(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanNetworkConfigBestPracticeHealth")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanNetworkConfigPnicSpeedInconsistencyIssue(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanNetworkConfigPnicSpeedInconsistencyIssue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanNetworkConfigPortgroupWithNoRedundancyIssue(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanNetworkConfigPortgroupWithNoRedundancyIssue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanNetworkConfigVdsScopeIssue(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanNetworkConfigVdsScopeIssue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanNetworkConfigVsanNotOnVdsIssue(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanNetworkConfigVsanNotOnVdsIssue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanNetworkConfigVswitchWithNoRedundancyIssue(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanNetworkConfigVswitchWithNoRedundancyIssue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanNetworkVMotionVmknicNotFountIssue(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanNetworkVMotionVmknicNotFountIssue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanObjSnapParams(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanObjSnapParams")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanObjectDetail(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanObjectDetail")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanObjectSnapshotId(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanObjectSnapshotId")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVimVsanVsanPMemConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfVimVsanVsanPMemConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanPerfsvcHealthResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanPerfsvcHealthResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanPrepareVsanForVcsaSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanPrepareVsanForVcsaSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanSnapshotDetail(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanSnapshotDetail")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanSnapshotQueryResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanSnapshotQueryResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanSnapshotQuerySpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanSnapshotQuerySpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanSpaceEfficiencyMetadataSize(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanSpaceEfficiencyMetadataSize")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanSpaceEfficiencyRatio(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanSpaceEfficiencyRatio")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanUnmapConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanUnmapConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanUpdateItem(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanUpdateItem")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanVcPostDeployConfigSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanVcPostDeployConfigSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanVcStretchedClusterConfigSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanVcStretchedClusterConfigSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanVcsaDeploymentProgress(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanVcsaDeploymentProgress")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanVdsMigrationPlan(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanVdsMigrationPlan")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanVdsPgMigrationHostInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanVdsPgMigrationHostInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanVdsPgMigrationSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanVdsPgMigrationSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanVdsPgMigrationVmInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanVdsPgMigrationVmInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanVibInstallPreflightStatus(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanVibInstallPreflightStatus")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanVibScanResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanVibScanResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanVibSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanVibSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanVmVdsMigrationSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanVmVdsMigrationSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanVnicVdsMigrationSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanVnicVdsMigrationSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanVumConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanVumConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanWitnessHostConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanWitnessHostConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanXvcClientInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanXVCClientInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanXvcDatastoreConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanXVCDatastoreConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanXvcDatastoreInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanXVCDatastoreInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanXvcClientConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanXvcClientConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanXvcClientInfoSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanXvcClientInfoSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanXvcQueryCriteria(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanXvcQueryCriteria")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanXvcQueryFilter(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanXvcQueryFilter")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanXvcQueryPropertyValue(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanXvcQueryPropertyValue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanXvcQueryResultSet(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanXvcQueryResultSet")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanXvcQuerySpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanXvcQuerySpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanXvcResultItem(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanXvcResultItem")?;
+                state.serialize_field("_value", value)?;
+            },
             ValueElements::ArrayOfVsanClusterConfigInfo(value) => {
                 state.serialize_field("_typeName", "ArrayOfVsanClusterConfigInfo")?;
                 state.serialize_field("_value", value)?;
             },
             ValueElements::ArrayOfVsanClusterConfigInfoHostDefaultInfo(value) => {
                 state.serialize_field("_typeName", "ArrayOfVsanClusterConfigInfoHostDefaultInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanClusterCoreConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanClusterCoreConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanClusterCoreConfigSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanClusterCoreConfigSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHostAbortWipeDiskStatus(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHostAbortWipeDiskStatus")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHostAboutInfoEx(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHostAboutInfoEx")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanAddStoragePoolDiskSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanAddStoragePoolDiskSpec")?;
                 state.serialize_field("_value", value)?;
             },
             ValueElements::ArrayOfVsanHostClusterStatus(value) => {
@@ -17740,6 +25068,14 @@ impl serde::Serialize for ValueElements {
             },
             ValueElements::ArrayOfVsanHostClusterStatusStateCompletionEstimate(value) => {
                 state.serialize_field("_typeName", "ArrayOfVsanHostClusterStatusStateCompletionEstimate")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanComplianceDetail(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanComplianceDetail")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanComplianceResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanComplianceResult")?;
                 state.serialize_field("_value", value)?;
             },
             ValueElements::ArrayOfVsanHostConfigInfo(value) => {
@@ -17766,12 +25102,32 @@ impl serde::Serialize for ValueElements {
                 state.serialize_field("_typeName", "ArrayOfVsanHostConfigInfoStorageInfo")?;
                 state.serialize_field("_value", value)?;
             },
+            ValueElements::ArrayOfVsanHostConfigInfoEx(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHostConfigInfoEx")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHostCreateNativeKeyProviderSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHostCreateNativeKeyProviderSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanInTransitEncryptionInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanInTransitEncryptionInfo")?;
+                state.serialize_field("_value", value)?;
+            },
             ValueElements::ArrayOfVsanHostDecommissionMode(value) => {
                 state.serialize_field("_typeName", "ArrayOfVsanHostDecommissionMode")?;
                 state.serialize_field("_value", value)?;
             },
+            ValueElements::ArrayOfVsanDeleteStoragePoolDiskSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanDeleteStoragePoolDiskSpec")?;
+                state.serialize_field("_value", value)?;
+            },
             ValueElements::ArrayOfVsanHostDiskMapInfo(value) => {
                 state.serialize_field("_typeName", "ArrayOfVsanHostDiskMapInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVimVsanHostDiskMapInfoEx(value) => {
+                state.serialize_field("_typeName", "ArrayOfVimVsanHostDiskMapInfoEx")?;
                 state.serialize_field("_value", value)?;
             },
             ValueElements::ArrayOfVsanHostDiskMapResult(value) => {
@@ -17782,20 +25138,140 @@ impl serde::Serialize for ValueElements {
                 state.serialize_field("_typeName", "ArrayOfVsanHostDiskMapping")?;
                 state.serialize_field("_value", value)?;
             },
+            ValueElements::ArrayOfVimVsanHostDiskMappingCreationSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVimVsanHostDiskMappingCreationSpec")?;
+                state.serialize_field("_value", value)?;
+            },
             ValueElements::ArrayOfVsanHostDiskResult(value) => {
                 state.serialize_field("_typeName", "ArrayOfVsanHostDiskResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVimVsanHostDiskResultEx(value) => {
+                state.serialize_field("_typeName", "ArrayOfVimVsanHostDiskResultEx")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHostDrsStats(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHostDrsStats")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHostEncryptionInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHostEncryptionInfo")?;
                 state.serialize_field("_value", value)?;
             },
             ValueElements::ArrayOfVsanHostIpConfig(value) => {
                 state.serialize_field("_typeName", "ArrayOfVsanHostIpConfig")?;
                 state.serialize_field("_value", value)?;
             },
+            ValueElements::ArrayOfVsanHostIpConfigEx(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHostIpConfigEx")?;
+                state.serialize_field("_value", value)?;
+            },
             ValueElements::ArrayOfVsanHostMembershipInfo(value) => {
                 state.serialize_field("_typeName", "ArrayOfVsanHostMembershipInfo")?;
                 state.serialize_field("_value", value)?;
             },
+            ValueElements::ArrayOfVsanPolicyStatus(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanPolicyStatus")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHostPortConfigEx(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHostPortConfigEx")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVimVsanHostQueryVsanDisksSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVimVsanHostQueryVsanDisksSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfRemoteVsanServerClusterConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfRemoteVsanServerClusterConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHostRuntimeStats(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHostRuntimeStats")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHostServerClusterUnicastConfig(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHostServerClusterUnicastConfig")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHostServerClusterUnicastInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHostServerClusterUnicastInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfSiteAffinityInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfSiteAffinityInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanStoragePoolDisk(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanStoragePoolDisk")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVimVsanHostStoragePoolDiskInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVimVsanHostStoragePoolDiskInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVimVsanHostStoragePoolInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVimVsanHostStoragePoolInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVimVsanHostTrimDiskEntry(value) => {
+                state.serialize_field("_typeName", "ArrayOfVimVsanHostTrimDiskEntry")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVimVsanHostTrimDiskSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVimVsanHostTrimDiskSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVimVsanHostUpdateStoragePoolDiskSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVimVsanHostUpdateStoragePoolDiskSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHostAssociatedObjects(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHostAssociatedObjects")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHostAssociatedObjectsResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHostAssociatedObjectsResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanComplianceQuerySpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanComplianceQuerySpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHostComponentSyncState(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHostComponentSyncState")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVimVsanHostVsanDirectStorage(value) => {
+                state.serialize_field("_typeName", "ArrayOfVimVsanHostVsanDirectStorage")?;
+                state.serialize_field("_value", value)?;
+            },
             ValueElements::ArrayOfVsanHostVsanDiskInfo(value) => {
                 state.serialize_field("_typeName", "ArrayOfVsanHostVsanDiskInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVimVsanHostVsanDiskManagementSystemCapability(value) => {
+                state.serialize_field("_typeName", "ArrayOfVimVsanHostVsanDiskManagementSystemCapability")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVimVsanHostVsanHostCapability(value) => {
+                state.serialize_field("_typeName", "ArrayOfVimVsanHostVsanHostCapability")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVimVsanHostVsanManagedDisksInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVimVsanHostVsanManagedDisksInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVimVsanHostVsanManagedPMemInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVimVsanHostVsanManagedPMemInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanObjectProfileInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanObjectProfileInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHostVsanObjectSyncState(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHostVsanObjectSyncState")?;
                 state.serialize_field("_value", value)?;
             },
             ValueElements::ArrayOfVsanHostRuntimeInfo(value) => {
@@ -17804,6 +25280,90 @@ impl serde::Serialize for ValueElements {
             },
             ValueElements::ArrayOfVsanHostRuntimeInfoDiskIssue(value) => {
                 state.serialize_field("_typeName", "ArrayOfVsanHostRuntimeInfoDiskIssue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVimVsanHostVsanScsiDisk(value) => {
+                state.serialize_field("_typeName", "ArrayOfVimVsanHostVsanScsiDisk")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHostVsanObjectSyncQueryResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHostVsanObjectSyncQueryResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanSyncingObjectRecoveryDetails(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanSyncingObjectRecoveryDetails")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanWhatIfEvacDetail(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanWhatIfEvacDetail")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanWhatIfEvacResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanWhatIfEvacResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHostWipeDiskStatus(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHostWipeDiskStatus")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanBrokenDiskChainIssue(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanBrokenDiskChainIssue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanDisallowDataMovementIssue(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanDisallowDataMovementIssue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanDisallowEvacuateDataIssue(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanDisallowEvacuateDataIssue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanDiskUnhealthIssue(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanDiskUnhealthIssue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHigherObjectsPresentDuringDowngradeIssue(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHigherObjectsPresentDuringDowngradeIssue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHostPropertyRetrieveIssue(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHostPropertyRetrieveIssue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHostWithHybridDiskgroupIssue(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHostWithHybridDiskgroupIssue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanHostsCompressionOnlyNotSupported(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanHostsCompressionOnlyNotSupported")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanMixedEsxVersionInClientIssue(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanMixedEsxVersionInClientIssue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanMixedEsxVersionIssue(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanMixedEsxVersionIssue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanObjectInaccessibleIssue(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanObjectInaccessibleIssue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanObjectPolicyIssue(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanObjectPolicyIssue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanRemoteClusterNotCompatible(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanRemoteClusterNotCompatible")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanUnknownScanIssue(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanUnknownScanIssue")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVsanUnsupportedHighDiskVersionIssue(value) => {
+                state.serialize_field("_typeName", "ArrayOfVsanUnsupportedHighDiskVersionIssue")?;
                 state.serialize_field("_value", value)?;
             },
             ValueElements::ArrayOfBaseConfigInfo(value) => {
@@ -17864,6 +25424,22 @@ impl serde::Serialize for ValueElements {
             },
             ValueElements::ArrayOfVslmMigrateSpec(value) => {
                 state.serialize_field("_typeName", "ArrayOfVslmMigrateSpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVStorageObjectReconcileResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVStorageObjectReconcileResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVStorageObjectReconcileResultInvalidDiskPath(value) => {
+                state.serialize_field("_typeName", "ArrayOfVStorageObjectReconcileResultInvalidDiskPath")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVStorageObjectReconcileResultReconcileDetail(value) => {
+                state.serialize_field("_typeName", "ArrayOfVStorageObjectReconcileResultReconcileDetail")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVStorageObjectReconcileSpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVStorageObjectReconcileSpec")?;
                 state.serialize_field("_value", value)?;
             },
             ValueElements::ArrayOfVslmRelocateSpec(value) => {
@@ -18076,6 +25652,86 @@ impl serde::Serialize for ValueElements {
             },
             ValueElements::ArrayOfWaitOptions(value) => {
                 state.serialize_field("_typeName", "ArrayOfWaitOptions")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVslmAboutInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVslmAboutInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVslmQueryDatastoreInfoResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVslmQueryDatastoreInfoResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVslmServiceInstanceContent(value) => {
+                state.serialize_field("_typeName", "ArrayOfVslmServiceInstanceContent")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVslmTaskInfo(value) => {
+                state.serialize_field("_typeName", "ArrayOfVslmTaskInfo")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVslmTaskReason(value) => {
+                state.serialize_field("_typeName", "ArrayOfVslmTaskReason")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVslmTaskReasonAlarm(value) => {
+                state.serialize_field("_typeName", "ArrayOfVslmTaskReasonAlarm")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVslmTaskReasonSchedule(value) => {
+                state.serialize_field("_typeName", "ArrayOfVslmTaskReasonSchedule")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVslmTaskReasonSystem(value) => {
+                state.serialize_field("_typeName", "ArrayOfVslmTaskReasonSystem")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVslmTaskReasonUser(value) => {
+                state.serialize_field("_typeName", "ArrayOfVslmTaskReasonUser")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVslmSyncFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfVslmSyncFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVslmFault(value) => {
+                state.serialize_field("_typeName", "ArrayOfVslmFault")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVslmDatastoreSyncStatus(value) => {
+                state.serialize_field("_typeName", "ArrayOfVslmDatastoreSyncStatus")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVslmVsoVStorageObjectAssociations(value) => {
+                state.serialize_field("_typeName", "ArrayOfVslmVsoVStorageObjectAssociations")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVslmVsoVStorageObjectAssociationsVmDiskAssociation(value) => {
+                state.serialize_field("_typeName", "ArrayOfVslmVsoVStorageObjectAssociationsVmDiskAssociation")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVslmVsoVStorageObjectQueryResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVslmVsoVStorageObjectQueryResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVslmVsoVStorageObjectQuerySpec(value) => {
+                state.serialize_field("_typeName", "ArrayOfVslmVsoVStorageObjectQuerySpec")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVslmVsoVStorageObjectResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVslmVsoVStorageObjectResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVslmVsoVStorageObjectSnapshotResult(value) => {
+                state.serialize_field("_typeName", "ArrayOfVslmVsoVStorageObjectSnapshotResult")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::EntityReferenceEntityType(value) => {
+                state.serialize_field("_typeName", "EntityReferenceEntityType")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfEntityReferenceEntityType(value) => {
+                state.serialize_field("_typeName", "ArrayOfEntityReferenceEntityType")?;
                 state.serialize_field("_value", value)?;
             },
             ValueElements::ComputeResourceHostSpbmLicenseInfoHostSpbmLicenseState(value) => {
@@ -18604,6 +26260,22 @@ impl serde::Serialize for ValueElements {
             },
             ValueElements::ArrayOfObjectUpdateKind(value) => {
                 state.serialize_field("_typeName", "ArrayOfObjectUpdateKind")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::VslmTaskInfoState(value) => {
+                state.serialize_field("_typeName", "VslmTaskInfoState")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVslmTaskInfoState(value) => {
+                state.serialize_field("_typeName", "ArrayOfVslmTaskInfoState")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::VslmEventVslmEventInfoState(value) => {
+                state.serialize_field("_typeName", "VslmEventVslmEventInfoState")?;
+                state.serialize_field("_value", value)?;
+            },
+            ValueElements::ArrayOfVslmEventVslmEventInfoState(value) => {
+                state.serialize_field("_typeName", "ArrayOfVslmEventVslmEventInfoState")?;
                 state.serialize_field("_value", value)?;
             },
         }

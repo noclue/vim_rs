@@ -84,7 +84,7 @@ impl HostVMotionSystem {
     /// ***InvalidArgument***: if the IpConfig is invalid or cannot be used.
     /// 
     /// ***HostConfigFault***: for any other failure
-    pub async fn update_ip_config(&self, ip_config: &crate::types::structs::HostIpConfig) -> Result<()> {
+    pub async fn update_ip_config(&self, ip_config: &dyn crate::types::traits::HostIpConfigTrait) -> Result<()> {
         let input = UpdateIpConfigRequestType {ip_config, };
         let path = format!("/HostVMotionSystem/{moId}/UpdateIpConfig", moId = &self.mo_id);
         let req = self.client.post_request(&path, &input);
@@ -101,7 +101,7 @@ impl HostVMotionSystem {
         self.client.execute_option(req).await
     }
     /// IP configuration of the VMotion VirtualNic.
-    pub async fn ip_config(&self) -> Result<Option<crate::types::structs::HostIpConfig>> {
+    pub async fn ip_config(&self) -> Result<Option<Box<dyn crate::types::traits::HostIpConfigTrait>>> {
         let path = format!("/HostVMotionSystem/{moId}/ipConfig", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         self.client.execute_option(req).await
@@ -140,5 +140,5 @@ struct SetCustomValueRequestType<'a> {
 #[serde(tag="_typeName")]
 struct UpdateIpConfigRequestType<'a> {
     #[serde(rename = "ipConfig")]
-    ip_config: &'a crate::types::structs::HostIpConfig,
+    ip_config: &'a dyn crate::types::traits::HostIpConfigTrait,
 }

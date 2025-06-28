@@ -59,8 +59,8 @@ impl SessionManager {
     ///
     /// a ticket that may be used to invoke the specified request.
     /// The first choice for authenticating the host is
-    /// *GenericServiceTicket#sslCertificate*.
-    /// If *GenericServiceTicket#sslCertificate* is unset, the
+    /// *SessionManagerGenericServiceTicket.sslCertificate*.
+    /// If *SessionManagerGenericServiceTicket.sslCertificate* is unset, the
     /// following logic is used to authenticate the host:
     /// 1\. If the VC system supports the crypto hash algorithm of
     /// the *SessionManagerGenericServiceTicket.sslThumbprint* or
@@ -238,6 +238,9 @@ impl SessionManager {
         let req = self.client.post_request(&path, &input);
         self.client.execute(req).await
     }
+    /// Deprecated as of vSphere API 5.1 for VirtualCenter login use SSO style
+    /// *SessionManager.LoginByToken*.
+    /// 
     /// Log on to the server using SSPI pass-through authentication.
     /// 
     /// This method provides support for passing credentials of the calling
@@ -281,9 +284,6 @@ impl SessionManager {
     /// ## Returns:
     ///
     /// The UserSession object.
-    /// 
-    /// As of vSphere API 5.1 for VirtualCenter login use SSO style
-    /// *SessionManager.LoginByToken*
     ///
     /// ## Errors:
     ///

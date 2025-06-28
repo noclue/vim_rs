@@ -233,7 +233,29 @@ impl TryFrom<&RefOr<Schema>> for DataType {
                 } => {
                     let array_type = DataType::try_from(items)?;
                     Ok(DataType::Array(Box::new(array_type)))
-                }
+                },
+                Schema{
+                    schema_type: None,
+                    all_of: Some(all_of),
+                    ..
+                } => {
+                    // In order to provide field description for reference types the vCenter 9.0
+                    // OpenAPI spec uses `allOf` with a single reference to the referenced type. As
+                    // a result we need to extract the reference from the `allOf` array.
+                    // allOf: [ { $ref: "#/components/schemas/VirtualMachineVMCIDeviceFilterInfo" } ]
+                    if all_of.len() == 1 {
+                        if let RefOr::Ref { reference, .. } = &all_of[0] {
+                            return Ok(DataType::Reference(
+                                reference_to_schema_name(reference)?.to_string(),
+                            ));
+                        }
+                    }
+                    // If we reach here, it is an unsupported type and we return an error.
+                    Err(super::Error::UnsupportedType(format!(
+                        "{:?}",
+                        inline_schema
+                    )))
+                },
                 _ => Err(super::Error::UnsupportedType(format!(
                     "{:?}",
                     inline_schema

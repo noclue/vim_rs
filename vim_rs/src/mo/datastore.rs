@@ -597,6 +597,8 @@ impl Datastore {
         let req = self.client.get_request(&path);
         self.client.execute(req).await
     }
+    /// Deprecated as of vSphere8.0 U3, and there is no replacement for it.
+    /// 
     /// Configuration of storage I/O resource management for the datastore.
     /// 
     /// Currently we only support storage I/O resource management on VMFS volumes
