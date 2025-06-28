@@ -146,7 +146,7 @@ mod tests {
 
     #[test]
     pub fn load_openapi() {
-        let openapi = include_str!("../../vim_build/data/vi_json_openapi_specification_v8_0_2_0.json");
+        let openapi = include_str!("../../vim_build/data/vi_json_openapi_specification_v9_0_0_0_24798170.json");
         let spec: super::OpenAPI = serde_json::from_str(openapi).unwrap();
         let schemas = spec.components.unwrap().schemas.unwrap();
         dbg!(schemas
