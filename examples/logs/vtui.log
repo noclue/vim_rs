@@ -1,0 +1,23 @@
+19:54:08 [INFO] Logging system initialized
+19:54:08 [INFO] Starting vtui application!
+19:54:08 [WARN] !!! WARNING !!! Insecure mode enabled. TLS certificate and hostname verification is disabled. !!! WARNING !!!
+19:54:19 [INFO] LoadProperties. moref: {
+  "_typeName": "ManagedObjectReference",
+  "type": "VirtualMachine",
+  "value": "vm-77"
+}
+19:54:24 [INFO] Resource Type Selected. resource_type: Cluster
+19:54:24 [WARN] Update received for unknown filter 'session[52fdbee5-cdbd-6491-b868-f80a01d04cef]52843fd6-71a9-c96f-0ce1-1daebddcb0ef'
+19:54:27 [INFO] Resource Type Selected. resource_type: Datastore
+19:54:27 [WARN] Update received for unknown filter 'session[52fdbee5-cdbd-6491-b868-f80a01d04cef]52cb2fde-9c04-76ca-39f8-6fb2f4c18efb'
+19:54:28 [INFO] LoadProperties. moref: {
+  "_typeName": "ManagedObjectReference",
+  "type": "Datastore",
+  "value": "datastore-75"
+}
+19:54:32 [INFO] Expanding collection: resource: Host, parent: datastore1 [{
+  "_typeName": "ManagedObjectReference",
+  "type": "Datastore",
+  "value": "datastore-75"
+}]
+19:55:21 [INFO] Quitting...
