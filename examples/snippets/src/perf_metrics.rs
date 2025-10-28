@@ -117,12 +117,14 @@ async fn main() -> Result<()> {
         let metric_ids = vm_metrics
             .iter()
             .map(|metric| PerfMetricId {
+                data_object_: vim_rs::types::structs::DataObject {},
                 counter_id: metric.counter_id,
                 instance: "*".to_string(),
             })
             .collect();
 
         let spec = PerfQuerySpec {
+            data_object_: vim_rs::types::structs::DataObject {},
             entity: vm.clone(),
             metric_id: Some(metric_ids),
             max_sample: Some(1),

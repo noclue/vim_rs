@@ -1,17 +1,18 @@
-use std::sync::Arc;
 use crate::core::client::Client;
 use crate::core::error::{Error, Result};
 use crate::core::pc_helpers::{obj_spec_for_view, BoxableError, Queriable};
 use crate::mo::{PropertyCollector, View, ViewManager};
 use crate::types::structs::{ManagedObjectReference, ObjectContent, ObjectSpec};
+use std::sync::Arc;
 
 /// A trait for objects that can be retrieved using the PropertyCollector utilities. In essence they
 /// provide a `PropertySpec` for the object type and implement TryFrom<ObjectContent> to convert
 /// from the `PropertyCollector::retrieve_properties_ex` API response to the object instances.
 pub trait Retrievable: Queriable + TryFrom<ObjectContent>
 where
-    Self::Error: BoxableError
-{}
+    Self::Error: BoxableError,
+{
+}
 
 /// Blanket implementation for Retrievable for all Queriable types that implement TryFrom<ObjectContent>.
 impl<T: Queriable + TryFrom<ObjectContent, Error = E>, E: BoxableError> Retrievable for T {}
@@ -54,13 +55,12 @@ impl ObjectRetriever {
     /// [`ObjectRetriever`] API.
     pub async fn retrieve_objects_from_container<T: Retrievable>(&self, container: &ManagedObjectReference) -> Result<Vec<T>>
     where
-        <T as TryFrom<crate::types::structs::ObjectContent>>::Error: BoxableError
+        <T as TryFrom<crate::types::structs::ObjectContent>>::Error: BoxableError,
     {
-        let view_moref = self.view_manager.create_container_view(
-            container,
-            Some(&[T::prop_spec().r#type]),
-            true,
-        ).await?;
+        let view_moref = self
+            .view_manager
+            .create_container_view(container, Some(&[T::prop_spec().r#type]), true)
+            .await?;
         self.retrieve_object_from_view(&view_moref).await
     }
 
@@ -75,7 +75,7 @@ impl ObjectRetriever {
     /// [`ObjectRetriever`] API.
     pub async fn retrieve_objects_from_list<T: Retrievable>(&self, objs: &[ManagedObjectReference]) -> Result<Vec<T>>
     where
-        <T as TryFrom<crate::types::structs::ObjectContent>>::Error: BoxableError
+        <T as TryFrom<crate::types::structs::ObjectContent>>::Error: BoxableError,
     {
         let view_moref = self.view_manager.create_list_view(Some(objs)).await?;
         self.retrieve_object_from_view(&view_moref).await
@@ -85,7 +85,7 @@ impl ObjectRetriever {
     /// retrieval is complete.
     async fn retrieve_object_from_view<T: Retrievable>(&self, view_moref: &ManagedObjectReference)-> Result<Vec<T>>
     where
-        <T as TryFrom<crate::types::structs::ObjectContent>>::Error: BoxableError
+        <T as TryFrom<crate::types::structs::ObjectContent>>::Error: BoxableError,
     {
         let view = View::new(self.client.clone(), &view_moref.value);
         let object_set = obj_spec_for_view(view_moref.clone());
@@ -105,20 +105,25 @@ impl ObjectRetriever {
     /// [`ObjectRetriever`] API.
     pub async fn retrieve_objects<T: Retrievable>(&self, object_set: Vec<ObjectSpec>) -> Result<Vec<T>>
     where
-        <T as TryFrom<crate::types::structs::ObjectContent>>::Error: BoxableError
+        <T as TryFrom<crate::types::structs::ObjectContent>>::Error: BoxableError,
     {
         let spec_set = vec![crate::types::structs::PropertyFilterSpec {
+            data_object_: crate::types::structs::DataObject {},
             object_set,
             prop_set: vec![T::prop_spec()],
             report_missing_objects_in_results: Some(true),
         }];
         let options = crate::types::structs::RetrieveOptions {
+            data_object_: crate::types::structs::DataObject {},
             max_objects: Some(100),
         };
 
         let mut vms: Vec<T> = Vec::new();
 
-        let retrieve_result = self.property_collector.retrieve_properties_ex(&spec_set, &options).await?;
+        let retrieve_result = self
+            .property_collector
+            .retrieve_properties_ex(&spec_set, &options)
+            .await?;
         let Some(mut res) = retrieve_result else {
             return Ok(Vec::new());
         };
@@ -130,7 +135,10 @@ impl ObjectRetriever {
             let Some(token) = res.token else {
                 break;
             };
-            res = self.property_collector.continue_retrieve_properties_ex(&token).await?;
+            res = self
+                .property_collector
+                .continue_retrieve_properties_ex(&token)
+                .await?;
         }
         Ok(vms)
     }

@@ -1,10 +1,9 @@
-
 use log::{debug, info};
 use std::convert::AsRef;
 use vim_rs::types::boxed_types::ValueElements;
 use vim_rs::types::convert::CastInto;
 use vim_rs::types::enums::MoTypesEnum;
-use vim_rs::types::structs::VirtualE1000;
+use vim_rs::types::structs::{DataObject, VirtualDevice, VirtualE1000, VirtualEthernetCard};
 use vim_rs::types::traits::VirtualDeviceTrait;
 use vim_rs::types::traits::VirtualEthernetCardTrait;
 use vim_rs::types::vim_any::VimAny;
@@ -165,22 +164,27 @@ fn eth_as_any() -> VimAny {
 
 fn create_virtual_e1000() -> VirtualE1000 {
     VirtualE1000 {
-        mac_address: Some("00:50:56:aa:bb:cc".to_string()),
-        wake_on_lan_enabled: Some(true),
-        address_type: Some("Generated".to_string()),
-        numa_node: None,
-        device_group_info: None,
-        resource_allocation: None,
-        upt_compatibility_enabled: Some(false),
-        external_id: None,
-        unit_number: None,
-        backing: None,
-        controller_key: None,
-        slot_info: None,
-        key: 1000,
-        device_info: None,
-        connectable: None,
-        dynamic_property: None,
-        subnet_id: None,
+        virtual_ethernet_card_: VirtualEthernetCard {
+            virtual_device_: VirtualDevice {
+                data_object_: DataObject {},
+                backing: None,
+                controller_key: None,
+                slot_info: None,
+                key: 1000,
+                device_info: None,
+                connectable: None,
+                unit_number: None,
+                numa_node: None,
+                device_group_info: None,
+            },
+            mac_address: Some("00:50:56:aa:bb:cc".to_string()),
+            wake_on_lan_enabled: Some(true),
+            address_type: Some("Generated".to_string()),
+            resource_allocation: None,
+            upt_compatibility_enabled: Some(false),
+            external_id: None,
+            dynamic_property: None,
+            subnet_id: None,
+        },
     }
 }

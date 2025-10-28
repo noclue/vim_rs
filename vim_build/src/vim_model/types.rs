@@ -236,7 +236,7 @@ pub struct Enum {
 }
 
 /// Indication if a type is to be emitted or not. Types marked enum are always emitted.
-/// Types marked prune are emitted but their children are not. The children of pruned types are 
+/// Types marked prune are emitted but their children are not. The children of pruned types are
 /// marked as skip. The skip types are not emitted.
 /// To simplify code generation, the name of the pruned parent type is kept in the skipped children
 /// types.
@@ -266,7 +266,7 @@ impl EmitMode {
 ///   deviceProtocol:
 ///     description: |2
 ///       VRDMA Device protocol.
-///   
+///
 ///       See
 ///       *VirtualVmxnet3VrdmaOptionDeviceProtocols_enum* for more information.
 ///     type: string
@@ -438,8 +438,8 @@ impl TryFrom<&RefOr<Schema>> for DataType {
                 } => {
                     let array_type = DataType::try_from(items)?;
                     Ok(DataType::Array(Box::new(array_type)))
-                },
-                Schema{
+                }
+                Schema {
                     schema_type: None,
                     all_of: Some(all_of),
                     ..
@@ -460,7 +460,7 @@ impl TryFrom<&RefOr<Schema>> for DataType {
                         "{:?}",
                         inline_schema
                     )))
-                },
+                }
                 _ => Err(super::Error::UnsupportedType(format!(
                     "{:?}",
                     inline_schema

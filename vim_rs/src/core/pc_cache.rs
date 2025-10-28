@@ -7,13 +7,22 @@ use crate::core::error::{Error, Result};
 use crate::core::pc_helpers::{self, BoxableError, Queriable};
 use crate::mo::{PropertyCollector, PropertyFilter, View, ViewManager};
 use crate::types::enums::ObjectUpdateKindEnum;
-use crate::types::structs::{ManagedObjectReference, ObjectSpec, ObjectUpdate, PropertyFilterSpec, PropertyFilterUpdate, PropertySpec, WaitOptions};
+use crate::types::structs::{
+    DataObject, ManagedObjectReference, ObjectSpec, ObjectUpdate, PropertyFilterSpec,
+    PropertyFilterUpdate, PropertySpec, WaitOptions,
+};
+use indexmap::IndexMap;
+use log::{debug, error, warn};
+use std::cell::RefCell;
+use std::ops::Index;
+use std::rc::Rc;
+use std::sync::{Arc, RwLock};
 
 /// A trait for objects that can be retrieved and continuously updated using the `PropertyCollector`
 /// API.
 pub trait Cacheable: Queriable + TryFrom<ObjectUpdate>
 where
-    Self::Error: BoxableError
+    Self::Error: BoxableError,
 {
     /// The type of the object.
     fn apply_update(&mut self, update: ObjectUpdate) -> Result<()>;
@@ -79,7 +88,7 @@ pub enum CacheAction {
 
 pub trait ObjectCacheListener<T: Cacheable>: Send
 where
-    T::Error: BoxableError
+    T::Error: BoxableError,
 {
     /// Called when a new object is added to the cache.
     ///
@@ -104,7 +113,7 @@ where
 /// objects that stores objects by their ID.
 pub struct ObjectCache<T: Cacheable>
 where
-    T::Error: BoxableError
+    T::Error: BoxableError,
 {
     cache: IndexMap<String, T>,
     /// Optional listener for receiving notifications about objects in the cache.
@@ -115,7 +124,7 @@ where
 
 impl<T: Cacheable> ObjectCache<T>
 where
-    T::Error: BoxableError
+    T::Error: BoxableError,
 {
     /// Create a new ObjectCache.
     pub fn new() -> Self {
@@ -184,12 +193,11 @@ where
             }
         }
     }
-
 }
 
 impl<T: Cacheable> Index<usize> for ObjectCache<T>
 where
-    T::Error: BoxableError
+    T::Error: BoxableError,
 {
     type Output = T;
 
@@ -205,7 +213,7 @@ where
 
 impl<T: Cacheable> Index<&str> for ObjectCache<T>
 where
-    T::Error: BoxableError
+    T::Error: BoxableError,
 {
     type Output = T;
 
@@ -220,7 +228,7 @@ where
 
 impl<T: Cacheable> Index<String> for ObjectCache<T>
 where
-    T::Error: BoxableError
+    T::Error: BoxableError,
 {
     type Output = T;
 
@@ -232,7 +240,7 @@ where
 
 impl<'a, T: Cacheable> IntoIterator for &'a ObjectCache<T>
 where
-    T::Error: BoxableError
+    T::Error: BoxableError,
 {
     type Item = &'a T;
     type IntoIter = indexmap::map::Values<'a, String, T>;
@@ -244,7 +252,7 @@ where
 
 impl<T: Cacheable> Cache for ObjectCache<T>
 where
-    T::Error: BoxableError
+    T::Error: BoxableError,
 {
     /// Get the property spec for the objects in this cache.
     fn prop_spec(&self) -> Result<PropertySpec> {
@@ -401,7 +409,9 @@ impl CacheManager {
                                                            true,
         ).await?;
 
-        let res= self.add_cache(cache, pc_helpers::obj_spec_for_view(view.clone())).await;
+        let res = self
+            .add_cache(cache, pc_helpers::obj_spec_for_view(view.clone()))
+            .await;
         if let Ok(ref filter) = res {
             if let Some(record) = self.caches.get_mut(&filter.value) {
                 record.view = Some(view.value.clone());
@@ -417,7 +427,9 @@ impl CacheManager {
     ) -> Result<ManagedObjectReference> {
         let view = self.view_manager.create_list_view(Some(obj)).await?;
 
-        let res= self.add_cache(cache, pc_helpers::obj_spec_for_view(view.clone())).await;
+        let res = self
+            .add_cache(cache, pc_helpers::obj_spec_for_view(view.clone()))
+            .await;
         if let Ok(ref filter) = res {
             if let Some(record) = self.caches.get_mut(&filter.value) {
                 record.view = Some(view.value.clone());
@@ -425,8 +437,6 @@ impl CacheManager {
         };
         res
     }
-
-
 
     /// Add a cache for a specific type of object. This creates a filter on the server to update
     /// the cache. The filter is created with the given object set.
@@ -436,17 +446,19 @@ impl CacheManager {
         object_set: Vec<ObjectSpec>,
     ) -> Result<ManagedObjectReference> {
         let filter_spec = PropertyFilterSpec {
+            data_object_: DataObject {},
             object_set,
             prop_set: vec![cache.prop_spec()?],
             report_missing_objects_in_results: None,
         };
 
-        let filter = self.property_collector.create_filter(&filter_spec, false).await?;
+        let filter = self
+            .property_collector
+            .create_filter(&filter_spec, false)
+            .await?;
 
-        self.caches.insert(filter.value.clone(), CacheRecord{
-            cache,
-            view: None,
-        });
+        self.caches
+            .insert(filter.value.clone(), CacheRecord { cache, view: None });
         Ok(filter)
     }
 
@@ -497,7 +509,6 @@ impl CacheManager {
             }
         }
     }
-
 }
 
 /// Utility for calling the PropertyCollector::WaitForUpdates API successively. It keeps track of
@@ -511,7 +522,6 @@ pub struct Monitor {
 const MAX_OBJECT_UPDATES_PER_CALL: i32 = 256;
 
 impl Monitor {
-
     /// Create a new Monitor with an existing PropertyCollector. This allows to not use the
     /// default PropertyCollector, have different PropertyCollector instances and different
     /// CacheManager instances.
@@ -535,10 +545,14 @@ impl Monitor {
     pub async fn wait_updates(&mut self, delay_s: i32) -> Result<Option<Vec<PropertyFilterUpdate>>>
     {
         let options = WaitOptions {
+            data_object_: DataObject {},
             max_wait_seconds: Some(delay_s),
             max_object_updates: Some(MAX_OBJECT_UPDATES_PER_CALL),
         };
-        let result = self.property_collector.wait_for_updates_ex(Some(&self.version), Some(&options)).await?;
+        let result = self
+            .property_collector
+            .wait_for_updates_ex(Some(&self.version), Some(&options))
+            .await?;
         let Some(update_set) = result else {
             return Ok(None);
         };
