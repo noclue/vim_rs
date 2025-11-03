@@ -295,7 +295,6 @@ impl Cache for PropertyBrowserState {
     fn prop_spec(&self) -> vim_rs::core::pc_helpers::Result<PropertySpec> {
         let s: &'static str = From::from(&self.obj.r#type);
         Ok(PropertySpec {
-            data_object_: vim_rs::types::structs::DataObject {},
             r#type: s.to_string(),
             all: Some(true),
             path_set: None,

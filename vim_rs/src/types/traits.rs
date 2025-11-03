@@ -9,25 +9,7 @@ use super::vim_any::VimAny;
 /// This is the built-in base interface implemented by all
 /// data objects.
 pub trait DataObjectTrait : super::traits::VimObjectTrait {
-    /// Get a reference to the DataObject parent struct
-    fn get_data_object(&self) -> &super::structs::DataObject;
-    /// Get a mutable reference to the DataObject parent struct
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject;
 }
-impl std::ops::Deref for dyn DataObjectTrait {
-    type Target = super::structs::DataObject;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_data_object()
-    }
-}
-
-impl std::ops::DerefMut for dyn DataObjectTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_data_object_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn DataObjectTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -68,10656 +50,5330 @@ impl<'de> de::Visitor<'de> for DataObjectVisitor {
 }
 
 impl DataObjectTrait for DataObject {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { self }
 }
 impl DataObjectTrait for AgencyConfigInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for AgencyScope {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for AgencyComputeResourceScope {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.agency_scope_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.agency_scope_.data_object_ }
 }
 impl DataObjectTrait for AgencyVmFolder {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for AgencyVmResourcePool {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for AgentConfigInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for AgentOvfEnvironmentInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for AgentOvfEnvironmentInfoOvfProperty {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for AgentSslTrust {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for AgentAnyCertificate {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.agent_ssl_trust_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.agent_ssl_trust_.data_object_ }
 }
 impl DataObjectTrait for AgentPinnedPemCertificate {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.agent_ssl_trust_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.agent_ssl_trust_.data_object_ }
 }
 impl DataObjectTrait for AgentStoragePolicy {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for AgentVsanStoragePolicy {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.agent_storage_policy_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.agent_storage_policy_.data_object_ }
 }
 impl DataObjectTrait for AgentVibMatchingRule {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for AgentVmHook {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for EamObjectRuntimeInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for AgentRuntimeInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.eam_object_runtime_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.eam_object_runtime_info_.data_object_ }
 }
 impl DataObjectTrait for Issue {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for AgencyIssue {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.issue_.data_object_ }
 }
 impl DataObjectTrait for AgencyDisabled {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for AgentIssue {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for EamCertificateNotTrusted {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for HostInPartialMaintenanceMode {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for ManagedHostNotReachable {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for MissingDvFilterSwitch {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for OvfInvalidProperty {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for TransitionFailed {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for VibIssue {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for ImmediateHostRebootRequired {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vib_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vib_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for VibCannotPutHostInMaintenanceMode {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vib_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vib_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for VibCannotPutHostOutOfMaintenanceMode {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vib_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vib_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for VibNotInstalled {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vib_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vib_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for CannotAccessAgentVib {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vib_not_installed_.vib_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vib_not_installed_.vib_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for VibDependenciesNotMetByHost {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vib_not_installed_.vib_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vib_not_installed_.vib_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for VibInvalidFormat {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vib_not_installed_.vib_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vib_not_installed_.vib_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for VibRequirementsNotMetByHost {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vib_not_installed_.vib_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vib_not_installed_.vib_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for VibRequiresHostInMaintenanceMode {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vib_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vib_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for VibRequiresHostReboot {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vib_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vib_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for VibRequiresManualInstallation {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vib_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vib_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for VibRequiresManualUninstallation {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vib_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vib_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for VmIssue {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for InvalidConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vm_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vm_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for VmCorrupted {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vm_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vm_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for VmDeployed {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vm_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vm_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for HostInMaintenanceMode {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vm_deployed_.vm_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vm_deployed_.vm_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for HostInStandbyMode {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vm_deployed_.vm_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vm_deployed_.vm_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for HostPoweredOff {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vm_deployed_.vm_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vm_deployed_.vm_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for VmHookFailed {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vm_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vm_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for VmHookTimedout {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vm_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vm_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for VmInaccessible {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vm_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vm_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for VmMarkedAsTemplate {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vm_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vm_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for VmOrphaned {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vm_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vm_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for VmPoweredOff {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vm_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vm_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for InsufficientIpAddresses {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vm_powered_off_.vm_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vm_powered_off_.vm_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for MissingAgentIpPool {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vm_powered_off_.vm_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vm_powered_off_.vm_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for VmPoweredOn {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vm_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vm_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for VmProtected {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vm_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vm_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for VmSuspended {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vm_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vm_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for VmWrongFolder {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vm_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vm_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for VmWrongResourcePool {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vm_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vm_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for VmNotDeployed {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for CannotAccessAgentOvf {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vm_not_deployed_.agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vm_not_deployed_.agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for IncompatibleHostVersion {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vm_not_deployed_.agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vm_not_deployed_.agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for InsufficientResources {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vm_not_deployed_.agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vm_not_deployed_.agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for InsufficientSpace {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vm_not_deployed_.agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vm_not_deployed_.agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for NoAgentVmDatastore {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vm_not_deployed_.agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vm_not_deployed_.agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for NoCustomAgentVmDatastore {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.no_agent_vm_datastore_.vm_not_deployed_.agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.no_agent_vm_datastore_.vm_not_deployed_.agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for NoAgentVmNetwork {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vm_not_deployed_.agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vm_not_deployed_.agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for NoCustomAgentVmNetwork {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.no_agent_vm_network_.vm_not_deployed_.agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.no_agent_vm_network_.vm_not_deployed_.agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for NoDiscoverableAgentVmDatastore {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vm_not_deployed_.agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vm_not_deployed_.agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for NoDiscoverableAgentVmNetwork {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vm_not_deployed_.agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vm_not_deployed_.agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for OvfInvalidFormat {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vm_not_deployed_.agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vm_not_deployed_.agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for VmRequiresHostOutOfMaintenanceMode {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vm_not_deployed_.agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vm_not_deployed_.agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for PersonalityAgentPmIssue {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for PersonalityAgentAwaitingPmRemediation {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.personality_agent_pm_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.personality_agent_pm_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for PersonalityAgentBlockedByAgencyOperation {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.personality_agent_pm_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.personality_agent_pm_issue_.agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for OrphanedAgency {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for ClusterAgentAgentIssue {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for ClusterAgentOvfInvalidProperty {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cluster_agent_agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cluster_agent_agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for ClusterAgentTransitionFailed {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cluster_agent_agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cluster_agent_agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for ClusterAgentVmIssue {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cluster_agent_agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cluster_agent_agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for ClusterAgentHostInMaintenanceMode {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cluster_agent_vm_issue_.cluster_agent_agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cluster_agent_vm_issue_.cluster_agent_agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for ClusterAgentHostInPartialMaintenanceMode {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cluster_agent_vm_issue_.cluster_agent_agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cluster_agent_vm_issue_.cluster_agent_agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for ClusterAgentInvalidConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cluster_agent_vm_issue_.cluster_agent_agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cluster_agent_vm_issue_.cluster_agent_agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for ClusterAgentVmHookFailed {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cluster_agent_vm_issue_.cluster_agent_agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cluster_agent_vm_issue_.cluster_agent_agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for ClusterAgentVmHookTimedout {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cluster_agent_vm_issue_.cluster_agent_agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cluster_agent_vm_issue_.cluster_agent_agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for ClusterAgentVmInaccessible {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cluster_agent_vm_issue_.cluster_agent_agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cluster_agent_vm_issue_.cluster_agent_agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for ClusterAgentVmNotRemoved {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cluster_agent_vm_issue_.cluster_agent_agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cluster_agent_vm_issue_.cluster_agent_agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for ClusterAgentVmPoweredOff {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cluster_agent_vm_issue_.cluster_agent_agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cluster_agent_vm_issue_.cluster_agent_agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for ClusterAgentInsufficientClusterResources {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cluster_agent_vm_powered_off_.cluster_agent_vm_issue_.cluster_agent_agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cluster_agent_vm_powered_off_.cluster_agent_vm_issue_.cluster_agent_agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for ClusterAgentVmPoweredOn {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cluster_agent_vm_issue_.cluster_agent_agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cluster_agent_vm_issue_.cluster_agent_agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for ClusterAgentVmProtected {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cluster_agent_vm_issue_.cluster_agent_agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cluster_agent_vm_issue_.cluster_agent_agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for ClusterAgentVmSuspended {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cluster_agent_vm_issue_.cluster_agent_agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cluster_agent_vm_issue_.cluster_agent_agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for ClusterAgentVmNotDeployed {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cluster_agent_agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cluster_agent_agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for ClusterAgentCertificateNotTrusted {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cluster_agent_vm_not_deployed_.cluster_agent_agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cluster_agent_vm_not_deployed_.cluster_agent_agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for ClusterAgentInsufficientClusterSpace {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cluster_agent_vm_not_deployed_.cluster_agent_agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cluster_agent_vm_not_deployed_.cluster_agent_agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for ClusterAgentMissingClusterVmDatastore {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cluster_agent_vm_not_deployed_.cluster_agent_agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cluster_agent_vm_not_deployed_.cluster_agent_agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for ClusterAgentMissingClusterVmNetwork {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cluster_agent_vm_not_deployed_.cluster_agent_agent_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cluster_agent_vm_not_deployed_.cluster_agent_agent_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for IntegrityAgencyVumIssue {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for IntegrityAgencyCannotDeleteSoftware {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.integrity_agency_vum_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.integrity_agency_vum_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for IntegrityAgencyCannotStageSoftware {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.integrity_agency_vum_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.integrity_agency_vum_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for IntegrityAgencyVumUnavailable {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.integrity_agency_vum_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.integrity_agency_vum_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for PersonalityAgencyPmIssue {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for PersonalityAgencyCannotConfigureSolutions {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.personality_agency_pm_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.personality_agency_pm_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for PersonalityAgencyDepotIssue {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.personality_agency_pm_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.personality_agency_pm_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for PersonalityAgencyCannotUploadDepot {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.personality_agency_depot_issue_.personality_agency_pm_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.personality_agency_depot_issue_.personality_agency_pm_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for PersonalityAgencyInaccessibleDepot {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.personality_agency_depot_issue_.personality_agency_pm_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.personality_agency_depot_issue_.personality_agency_pm_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for PersonalityAgencyInvalidDepot {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.personality_agency_depot_issue_.personality_agency_pm_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.personality_agency_depot_issue_.personality_agency_pm_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for PersonalityAgencyPmUnavailable {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.personality_agency_pm_issue_.agency_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.personality_agency_pm_issue_.agency_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for ExtensibleIssue {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.issue_.data_object_ }
 }
 impl DataObjectTrait for HostIssue {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.issue_.data_object_ }
 }
 impl DataObjectTrait for OrphanedDvFilterSwitch {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for UnknownAgentVm {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_issue_.issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_issue_.issue_.data_object_ }
 }
 impl DataObjectTrait for HooksHookListSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HooksMarkAsProcessedSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for SolutionsApplySpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for SolutionsClusterSolutionComplianceResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for SolutionsComplianceResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for SolutionsComplianceSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for SolutionsDeploymentUnitComplianceResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for SolutionsHookAcknowledgeConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for SolutionsInteractiveHookAcknowledgeConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.solutions_hook_acknowledge_config_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.solutions_hook_acknowledge_config_.data_object_ }
 }
 impl DataObjectTrait for SolutionsHookConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for SolutionsHookInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for SolutionsHostComplianceResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for SolutionsOvfProperty {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for SolutionsSolutionComplianceResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for SolutionsSolutionConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for SolutionsSolutionValidationResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for SolutionsStoragePolicy {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for SolutionsProfileIdStoragePolicy {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.solutions_storage_policy_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.solutions_storage_policy_.data_object_ }
 }
 impl DataObjectTrait for SolutionsTransitionSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for SolutionsTypeSpecificSolutionConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for SolutionsClusterBoundSolutionConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.solutions_type_specific_solution_config_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.solutions_type_specific_solution_config_.data_object_ }
 }
 impl DataObjectTrait for SolutionsHostBoundSolutionConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.solutions_type_specific_solution_config_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.solutions_type_specific_solution_config_.data_object_ }
 }
 impl DataObjectTrait for SolutionsVmNetworkMapping {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for SolutionsVmSource {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for SolutionsUrlVmSource {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.solutions_vm_source_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.solutions_vm_source_.data_object_ }
 }
 impl DataObjectTrait for SolutionsValidateSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for SolutionsValidationResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for SolutionsVmResourceSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VibVibInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VibVibInfoSoftwareTags {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VibVibServicesSslTrust {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VibVibServicesAnyCertificate {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vib_vib_services_ssl_trust_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vib_vib_services_ssl_trust_.data_object_ }
 }
 impl DataObjectTrait for VibVibServicesPinnedPemCertificate {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vib_vib_services_ssl_trust_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vib_vib_services_ssl_trust_.data_object_ }
 }
 impl DataObjectTrait for PbmAboutInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PbmExtendedElementDescription {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PbmLoggingConfiguration {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PbmServerObjectRef {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PbmServiceInstanceContent {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PbmCapabilityInstance {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PbmCapabilityMetadata {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PbmCapabilityMetadataUniqueId {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PbmCapabilityConstraintInstance {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PbmCapabilityPropertyInstance {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PbmCapabilityPropertyMetadata {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PbmCapabilityTypeInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PbmCapabilityGenericTypeInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.pbm_capability_type_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.pbm_capability_type_info_.data_object_ }
 }
 impl DataObjectTrait for PbmCapabilityMetadataPerCategory {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PbmCapabilitySchema {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PbmCapabilityNamespaceInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PbmCapabilitySchemaVendorInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PbmCapabilityVendorNamespaceInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PbmCapabilityVendorResourceTypeInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PbmLineOfServiceInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PbmPersistenceBasedDataServiceInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.pbm_line_of_service_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.pbm_line_of_service_info_.data_object_ }
 }
 impl DataObjectTrait for PbmVaioDataServiceInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.pbm_line_of_service_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.pbm_line_of_service_info_.data_object_ }
 }
 impl DataObjectTrait for PbmCapabilityDescription {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PbmCapabilityDiscreteSet {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PbmCapabilityRange {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PbmCapabilityTimeSpan {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PbmComplianceResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PbmFetchEntityHealthStatusSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PbmComplianceOperationalStatus {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PbmCompliancePolicyStatus {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PbmRollupComplianceResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PbmFaultNoPermissionEntityPrivileges {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PbmPlacementCompatibilityResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PbmPlacementMatchingResources {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PbmPlacementMatchingReplicationResources {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.pbm_placement_matching_resources_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.pbm_placement_matching_resources_.data_object_ }
 }
 impl DataObjectTrait for PbmPlacementHub {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PbmPlacementRequirement {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PbmPlacementCapabilityConstraintsRequirement {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.pbm_placement_requirement_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.pbm_placement_requirement_.data_object_ }
 }
 impl DataObjectTrait for PbmPlacementCapabilityProfileRequirement {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.pbm_placement_requirement_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.pbm_placement_requirement_.data_object_ }
 }
 impl DataObjectTrait for PbmPlacementResourceUtilization {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PbmCapabilityProfileCreateSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PbmCapabilityProfileUpdateSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PbmCapabilityConstraints {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PbmCapabilitySubProfileConstraints {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.pbm_capability_constraints_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.pbm_capability_constraints_.data_object_ }
 }
 impl DataObjectTrait for PbmDataServiceToPoliciesMap {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PbmDefaultProfileInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PbmProfile {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PbmCapabilityProfile {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.pbm_profile_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.pbm_profile_.data_object_ }
 }
 impl DataObjectTrait for PbmDefaultCapabilityProfile {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.pbm_capability_profile_.pbm_profile_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.pbm_capability_profile_.pbm_profile_.data_object_ }
 }
 impl DataObjectTrait for PbmProfileId {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PbmProfileOperationOutcome {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PbmProfileType {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PbmQueryProfileResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PbmProfileResourceType {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PbmCapabilitySubProfile {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PbmDatastoreSpaceStatistics {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PbmQueryReplicationGroupResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for SmsAboutInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for EntityReference {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for FaultDomainFilter {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ReplicationGroupFilter {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for SmsTaskInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for AlarmFilter {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for AlarmResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for SmsProviderInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VasaProviderInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.sms_provider_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.sms_provider_info_.data_object_ }
 }
 impl DataObjectTrait for SmsProviderSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VasaProviderSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.sms_provider_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.sms_provider_spec_.data_object_ }
 }
 impl DataObjectTrait for VasaProviderUpgradeSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for RelatedStorageArray {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for SupportedVendorModelMapping {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for BackingConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for BackingStoragePool {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DatastoreBackingPoolMapping {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DatastorePair {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DrsMigrationCapabilityResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for FaultDomainProviderMapping {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for StorageFileSystemInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for LunHbaAssociation {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for NameValuePair {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for StorageAlarm {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for StorageArray {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for StorageCapability {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for StorageContainer {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for StorageContainerResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for StorageContainerSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for StorageFileSystem {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for StorageLun {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for StoragePort {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for FcStoragePort {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.storage_port_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.storage_port_.data_object_ }
 }
 impl DataObjectTrait for FcoeStoragePort {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.storage_port_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.storage_port_.data_object_ }
 }
 impl DataObjectTrait for IscsiStoragePort {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.storage_port_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.storage_port_.data_object_ }
 }
 impl DataObjectTrait for StorageProcessor {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DeviceId {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VVolId {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.device_id_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.device_id_.data_object_ }
 }
 impl DataObjectTrait for VasaVirtualDiskId {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.device_id_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.device_id_.data_object_ }
 }
 impl DataObjectTrait for VirtualDiskKey {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.device_id_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.device_id_.data_object_ }
 }
 impl DataObjectTrait for VirtualDiskMoId {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.device_id_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.device_id_.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineId {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.device_id_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.device_id_.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineFilePath {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_machine_id_.device_id_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_machine_id_.device_id_.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineMoId {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_machine_id_.device_id_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_machine_id_.device_id_.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineUuid {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_machine_id_.device_id_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_machine_id_.device_id_.data_object_ }
 }
 impl DataObjectTrait for FailoverParam {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for TestFailoverParam {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.failover_param_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.failover_param_.data_object_ }
 }
 impl DataObjectTrait for PolicyAssociation {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ReplicationGroupData {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for RecoveredDevice {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for RecoveredDiskInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for GroupInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for SourceGroupInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.group_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.group_info_.data_object_ }
 }
 impl DataObjectTrait for TargetGroupInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.group_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.group_info_.data_object_ }
 }
 impl DataObjectTrait for GroupOperationResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for FailoverSuccessResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.group_operation_result_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.group_operation_result_.data_object_ }
 }
 impl DataObjectTrait for GroupErrorResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.group_operation_result_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.group_operation_result_.data_object_ }
 }
 impl DataObjectTrait for QueryPointInTimeReplicaSuccessResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.group_operation_result_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.group_operation_result_.data_object_ }
 }
 impl DataObjectTrait for QueryPointInTimeReplicaSummaryResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.group_operation_result_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.group_operation_result_.data_object_ }
 }
 impl DataObjectTrait for QueryReplicationGroupSuccessResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.group_operation_result_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.group_operation_result_.data_object_ }
 }
 impl DataObjectTrait for ReverseReplicationSuccessResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.group_operation_result_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.group_operation_result_.data_object_ }
 }
 impl DataObjectTrait for SyncReplicationGroupSuccessResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.group_operation_result_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.group_operation_result_.data_object_ }
 }
 impl DataObjectTrait for PointInTimeReplicaId {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PromoteParam {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for QueryPointInTimeReplicaParam {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ReplicaQueryIntervalParam {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PointInTimeReplicaInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ReplicaIntervalQueryResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for QueryReplicationPeerResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ReplicaId {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ReplicationTargetInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for SourceGroupMemberInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for TargetDeviceId {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for TargetToSourceInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for TargetGroupMemberInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for RecoveredTargetGroupMemberInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.target_group_member_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.target_group_member_info_.data_object_ }
 }
 impl DataObjectTrait for AboutInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for AuthorizationDescription {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for EntityPrivilege {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for Permission {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for AuthorizationPrivilege {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PrivilegeAvailability {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for AuthorizationRole {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for UserPrivilegeResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for BatchResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for Capability {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterComputeResourceClusterConfigResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterComputeResourceCryptoModePolicy {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterComputeResourceDvsSetting {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterComputeResourceDvsSettingDvPortgroupToServiceMapping {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterComputeResourceDvsProfile {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterComputeResourceDvsProfileDvPortgroupSpecToServiceMapping {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterComputeResourceHciConfigInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterComputeResourceHciConfigSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterComputeResourceHostConfigurationInput {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterComputeResourceHostConfigurationProfile {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterComputeResourceHostEvacuationInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterComputeResourceHostVmkNicInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterComputeResourceMaintenanceInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterComputeResourceVcProfile {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterComputeResourceValidationResultBase {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterComputeResourceDvsConfigurationValidation {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cluster_compute_resource_validation_result_base_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cluster_compute_resource_validation_result_base_.data_object_ }
 }
 impl DataObjectTrait for ClusterComputeResourceHostConfigurationValidation {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cluster_compute_resource_validation_result_base_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cluster_compute_resource_validation_result_base_.data_object_ }
 }
 impl DataObjectTrait for VsanClusterConfigPrecheckItem {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cluster_compute_resource_validation_result_base_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cluster_compute_resource_validation_result_base_.data_object_ }
 }
 impl DataObjectTrait for ClusterComputeResourceVcsSlots {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ComputeResourceConfigInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterConfigInfoEx {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.compute_resource_config_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.compute_resource_config_info_.data_object_ }
 }
 impl DataObjectTrait for ComputeResourceConfigSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterConfigSpecEx {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.compute_resource_config_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.compute_resource_config_spec_.data_object_ }
 }
 impl DataObjectTrait for ComputeResourceHostSpbmLicenseInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ComputeResourceHostSeedSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ComputeResourceHostSeedSpecSingleHostSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ComputeResourceSummary {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterComputeResourceSummary {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.compute_resource_summary_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.compute_resource_summary_.data_object_ }
 }
 impl DataObjectTrait for CustomFieldDef {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CustomFieldValue {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CustomFieldStringValue {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.custom_field_value_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.custom_field_value_.data_object_ }
 }
 impl DataObjectTrait for CustomizationSpecInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CustomizationSpecItem {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DatacenterBasicConnectInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DatacenterConfigInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DatacenterConfigSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DatastoreCapability {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DatastoreHostMount {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DatastoreInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for LocalDatastoreInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.datastore_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.datastore_info_.data_object_ }
 }
 impl DataObjectTrait for NasDatastoreInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.datastore_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.datastore_info_.data_object_ }
 }
 impl DataObjectTrait for PMemDatastoreInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.datastore_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.datastore_info_.data_object_ }
 }
 impl DataObjectTrait for VmfsDatastoreInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.datastore_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.datastore_info_.data_object_ }
 }
 impl DataObjectTrait for VsanDatastoreInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.datastore_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.datastore_info_.data_object_ }
 }
 impl DataObjectTrait for VvolDatastoreInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.datastore_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.datastore_info_.data_object_ }
 }
 impl DataObjectTrait for DatastoreMountPathDatastorePair {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DatastoreSummary {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DatastoreVVolContainerFailoverPair {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DatastoreNamespaceManagerDirectoryInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for Description {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ElementDescription {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.description_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.description_.data_object_ }
 }
 impl DataObjectTrait for EvcMode {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.element_description_.description_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.element_description_.description_.data_object_ }
 }
 impl DataObjectTrait for ExtendedElementDescription {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.element_description_.description_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.element_description_.description_.data_object_ }
 }
 impl DataObjectTrait for FeatureEvcMode {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.element_description_.description_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.element_description_.description_.data_object_ }
 }
 impl DataObjectTrait for OptionDef {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.element_description_.description_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.element_description_.description_.data_object_ }
 }
 impl DataObjectTrait for ExtendedDescription {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.description_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.description_.data_object_ }
 }
 impl DataObjectTrait for MethodDescription {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.description_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.description_.data_object_ }
 }
 impl DataObjectTrait for TypeDescription {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.description_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.description_.data_object_ }
 }
 impl DataObjectTrait for ScheduledTaskDetail {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.type_description_.description_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.type_description_.description_.data_object_ }
 }
 impl DataObjectTrait for DesiredSoftwareSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DesiredSoftwareSpecBaseImageSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DesiredSoftwareSpecComponentSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DesiredSoftwareSpecVendorAddOnSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DiagnosticManagerAuditRecordResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DiagnosticManagerBundleInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DiagnosticManagerLogDescriptor {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DiagnosticManagerLogHeader {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DirectPathProfileManagerCapacityQuerySpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DirectPathProfileManagerCapacityQueryByDeviceConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.direct_path_profile_manager_capacity_query_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.direct_path_profile_manager_capacity_query_spec_.data_object_ }
 }
 impl DataObjectTrait for DirectPathProfileManagerCapacityQueryById {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.direct_path_profile_manager_capacity_query_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.direct_path_profile_manager_capacity_query_spec_.data_object_ }
 }
 impl DataObjectTrait for DirectPathProfileManagerCapacityQueryByName {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.direct_path_profile_manager_capacity_query_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.direct_path_profile_manager_capacity_query_spec_.data_object_ }
 }
 impl DataObjectTrait for DirectPathProfileManagerCapacityResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DirectPathProfileManagerCapacityInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.direct_path_profile_manager_capacity_result_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.direct_path_profile_manager_capacity_result_.data_object_ }
 }
 impl DataObjectTrait for DirectPathProfileManagerCapacityUnknown {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.direct_path_profile_manager_capacity_result_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.direct_path_profile_manager_capacity_result_.data_object_ }
 }
 impl DataObjectTrait for DirectPathProfileManagerCreateSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DirectPathProfileManagerDirectPathConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DirectPathProfileManagerDvxDirectPathConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.direct_path_profile_manager_direct_path_config_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.direct_path_profile_manager_direct_path_config_.data_object_ }
 }
 impl DataObjectTrait for DirectPathProfileManagerDynamicDirectPathConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.direct_path_profile_manager_direct_path_config_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.direct_path_profile_manager_direct_path_config_.data_object_ }
 }
 impl DataObjectTrait for DirectPathProfileManagerVirtualDeviceGroupDirectPathConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.direct_path_profile_manager_direct_path_config_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.direct_path_profile_manager_direct_path_config_.data_object_ }
 }
 impl DataObjectTrait for DirectPathProfileManagerVmiopDirectPathConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.direct_path_profile_manager_direct_path_config_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.direct_path_profile_manager_direct_path_config_.data_object_ }
 }
 impl DataObjectTrait for DirectPathProfileInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DirectPathProfileManagerFilterSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DirectPathProfileManagerTargetEntity {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DirectPathProfileManagerTargetCluster {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.direct_path_profile_manager_target_entity_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.direct_path_profile_manager_target_entity_.data_object_ }
 }
 impl DataObjectTrait for DirectPathProfileManagerTargetHost {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.direct_path_profile_manager_target_entity_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.direct_path_profile_manager_target_entity_.data_object_ }
 }
 impl DataObjectTrait for DirectPathProfileManagerUpdateSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DvsBackupRestoreCapability {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DvsCapability {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DvsConfigInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VMwareDvsConfigInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.dvs_config_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.dvs_config_info_.data_object_ }
 }
 impl DataObjectTrait for DvsConfigSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VMwareDvsConfigSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.dvs_config_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.dvs_config_spec_.data_object_ }
 }
 impl DataObjectTrait for DvsContactInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DvsCreateSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DvsFeatureCapability {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VMwareDvsFeatureCapability {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.dvs_feature_capability_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.dvs_feature_capability_.data_object_ }
 }
 impl DataObjectTrait for DvsHealthCheckConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VMwareDvsHealthCheckConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.dvs_health_check_config_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.dvs_health_check_config_.data_object_ }
 }
 impl DataObjectTrait for VMwareDvsTeamingHealthCheckConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.v_mware_dvs_health_check_config_.dvs_health_check_config_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.v_mware_dvs_health_check_config_.dvs_health_check_config_.data_object_ }
 }
 impl DataObjectTrait for VMwareDvsVlanMtuHealthCheckConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.v_mware_dvs_health_check_config_.dvs_health_check_config_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.v_mware_dvs_health_check_config_.dvs_health_check_config_.data_object_ }
 }
 impl DataObjectTrait for DvsHealthCheckCapability {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VMwareDvsHealthCheckCapability {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.dvs_health_check_capability_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.dvs_health_check_capability_.data_object_ }
 }
 impl DataObjectTrait for DvsHostInfrastructureTrafficResource {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DvsHostInfrastructureTrafficResourceAllocation {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DvsNetworkResourceManagementCapability {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DvsResourceRuntimeInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DvsRollbackCapability {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DvsRuntimeInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DvsSummary {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DvsPolicy {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DvsUplinkPortPolicy {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DvsNameArrayUplinkPortPolicy {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.dvs_uplink_port_policy_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.dvs_uplink_port_policy_.data_object_ }
 }
 impl DataObjectTrait for EnumDescription {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for EnvironmentBrowserConfigOptionQuerySpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for Extension {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ExtensionClientInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ExtensionEventTypeInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ExtensionFaultTypeInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ExtensionHealthInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ExtensionOvfConsumerInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ExtensionPrivilegeInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ExtensionResourceInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ExtensionServerInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ExtensionTaskTypeInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ExtensionManagerIpAllocationUsage {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for FaultsByHost {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for FaultsByVm {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for FileLockInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for FileLockInfoResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for FolderBatchAddHostsToClusterResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for FolderBatchAddStandaloneHostsResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for FolderExternallyManagedFolderInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for FolderFailedHostResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for FolderNewHostSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HbrManagerReplicationVmInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ReplicationVmProgressInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HbrManagerVmReplicationCapability {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HbrReplicationTargetSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HbrTargetSpecReplacement {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.hbr_replication_target_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.hbr_replication_target_spec_.data_object_ }
 }
 impl DataObjectTrait for HbrTargetSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HealthUpdate {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HealthUpdateInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PerfInterval {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostServiceTicket {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostSystemComplianceCheckState {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostSystemReconnectSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostSystemRemediationState {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HttpNfcLeaseCapabilities {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HttpNfcLeaseDatastoreLeaseInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HttpNfcLeaseDeviceUrl {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HttpNfcLeaseHostInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HttpNfcLeaseInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HttpNfcLeaseManifestEntry {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HttpNfcLeaseProbeResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HttpNfcLeaseSourceFile {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ImportSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualAppImportSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.import_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.import_spec_.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineImportSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.import_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.import_spec_.data_object_ }
 }
 impl DataObjectTrait for InheritablePolicy {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for BoolPolicy {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.inheritable_policy_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.inheritable_policy_.data_object_ }
 }
 impl DataObjectTrait for IntPolicy {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.inheritable_policy_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.inheritable_policy_.data_object_ }
 }
 impl DataObjectTrait for LongPolicy {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.inheritable_policy_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.inheritable_policy_.data_object_ }
 }
 impl DataObjectTrait for StringPolicy {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.inheritable_policy_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.inheritable_policy_.data_object_ }
 }
 impl DataObjectTrait for DvsFilterConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.inheritable_policy_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.inheritable_policy_.data_object_ }
 }
 impl DataObjectTrait for DvsFilterConfigSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.dvs_filter_config_.inheritable_policy_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.dvs_filter_config_.inheritable_policy_.data_object_ }
 }
 impl DataObjectTrait for DvsTrafficFilterConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.dvs_filter_config_.inheritable_policy_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.dvs_filter_config_.inheritable_policy_.data_object_ }
 }
 impl DataObjectTrait for DvsTrafficFilterConfigSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.dvs_traffic_filter_config_.dvs_filter_config_.inheritable_policy_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.dvs_traffic_filter_config_.dvs_filter_config_.inheritable_policy_.data_object_ }
 }
 impl DataObjectTrait for DvsFilterPolicy {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.inheritable_policy_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.inheritable_policy_.data_object_ }
 }
 impl DataObjectTrait for DvsTrafficShapingPolicy {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.inheritable_policy_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.inheritable_policy_.data_object_ }
 }
 impl DataObjectTrait for DvsVendorSpecificConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.inheritable_policy_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.inheritable_policy_.data_object_ }
 }
 impl DataObjectTrait for DvsFailureCriteria {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.inheritable_policy_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.inheritable_policy_.data_object_ }
 }
 impl DataObjectTrait for DvsMacLearningPolicy {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.inheritable_policy_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.inheritable_policy_.data_object_ }
 }
 impl DataObjectTrait for DvsMacManagementPolicy {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.inheritable_policy_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.inheritable_policy_.data_object_ }
 }
 impl DataObjectTrait for DvsSecurityPolicy {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.inheritable_policy_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.inheritable_policy_.data_object_ }
 }
 impl DataObjectTrait for VMwareUplinkLacpPolicy {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.inheritable_policy_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.inheritable_policy_.data_object_ }
 }
 impl DataObjectTrait for VMwareUplinkPortOrderPolicy {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.inheritable_policy_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.inheritable_policy_.data_object_ }
 }
 impl DataObjectTrait for VmwareUplinkPortTeamingPolicy {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.inheritable_policy_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.inheritable_policy_.data_object_ }
 }
 impl DataObjectTrait for VmwareDistributedVirtualSwitchVlanSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.inheritable_policy_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.inheritable_policy_.data_object_ }
 }
 impl DataObjectTrait for VmwareDistributedVirtualSwitchPvlanSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vmware_distributed_virtual_switch_vlan_spec_.inheritable_policy_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vmware_distributed_virtual_switch_vlan_spec_.inheritable_policy_.data_object_ }
 }
 impl DataObjectTrait for VmwareDistributedVirtualSwitchTrunkVlanSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vmware_distributed_virtual_switch_vlan_spec_.inheritable_policy_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vmware_distributed_virtual_switch_vlan_spec_.inheritable_policy_.data_object_ }
 }
 impl DataObjectTrait for VmwareDistributedVirtualSwitchVlanIdSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vmware_distributed_virtual_switch_vlan_spec_.inheritable_policy_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vmware_distributed_virtual_switch_vlan_spec_.inheritable_policy_.data_object_ }
 }
 impl DataObjectTrait for IoFilterInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterIoFilterInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.io_filter_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.io_filter_info_.data_object_ }
 }
 impl DataObjectTrait for HostIoFilterInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.io_filter_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.io_filter_info_.data_object_ }
 }
 impl DataObjectTrait for IoFilterQueryIssueResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for IoFilterHostIssue {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for IoFilterManagerSslTrust {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PinnedCertificate {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.io_filter_manager_ssl_trust_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.io_filter_manager_ssl_trust_.data_object_ }
 }
 impl DataObjectTrait for UntrustedCertificate {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.io_filter_manager_ssl_trust_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.io_filter_manager_ssl_trust_.data_object_ }
 }
 impl DataObjectTrait for IpPoolManagerIpAllocation {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for KeyValue {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for LatencySensitivity {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for LicenseAssignmentManagerLicenseAssignment {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for LicenseAvailabilityInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for LicenseDiagnostics {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for LicenseManagerEvaluationInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for LicenseFeatureInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostLicensableResourceInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for LicenseManagerLicenseInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for LicenseSource {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for EvaluationLicenseSource {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.license_source_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.license_source_.data_object_ }
 }
 impl DataObjectTrait for LicenseServerSource {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.license_source_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.license_source_.data_object_ }
 }
 impl DataObjectTrait for LocalLicenseSource {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.license_source_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.license_source_.data_object_ }
 }
 impl DataObjectTrait for LicenseUsageInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for LicenseReservationInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for LocalizationManagerMessageCatalog {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for NegatableExpression {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for IntExpression {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.negatable_expression_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.negatable_expression_.data_object_ }
 }
 impl DataObjectTrait for IpAddress {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.negatable_expression_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.negatable_expression_.data_object_ }
 }
 impl DataObjectTrait for IpRange {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.ip_address_.negatable_expression_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.ip_address_.negatable_expression_.data_object_ }
 }
 impl DataObjectTrait for SingleIp {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.ip_address_.negatable_expression_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.ip_address_.negatable_expression_.data_object_ }
 }
 impl DataObjectTrait for MacAddress {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.negatable_expression_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.negatable_expression_.data_object_ }
 }
 impl DataObjectTrait for MacRange {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.mac_address_.negatable_expression_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.mac_address_.negatable_expression_.data_object_ }
 }
 impl DataObjectTrait for SingleMac {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.mac_address_.negatable_expression_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.mac_address_.negatable_expression_.data_object_ }
 }
 impl DataObjectTrait for StringExpression {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.negatable_expression_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.negatable_expression_.data_object_ }
 }
 impl DataObjectTrait for DvsIpPort {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.negatable_expression_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.negatable_expression_.data_object_ }
 }
 impl DataObjectTrait for DvsIpPortRange {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.dvs_ip_port_.negatable_expression_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.dvs_ip_port_.negatable_expression_.data_object_ }
 }
 impl DataObjectTrait for DvsSingleIpPort {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.dvs_ip_port_.negatable_expression_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.dvs_ip_port_.negatable_expression_.data_object_ }
 }
 impl DataObjectTrait for NetworkSummary {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for OpaqueNetworkSummary {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.network_summary_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.network_summary_.data_object_ }
 }
 impl DataObjectTrait for NumericRange {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for OpaqueNetworkCapability {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for OvfConsumerOstNode {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for OvfConsumerOvfSection {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for OvfManagerCommonParams {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for OvfCreateImportSpecParams {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.ovf_manager_common_params_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.ovf_manager_common_params_.data_object_ }
 }
 impl DataObjectTrait for OvfImportParams {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.ovf_create_import_spec_params_.ovf_manager_common_params_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.ovf_create_import_spec_params_.ovf_manager_common_params_.data_object_ }
 }
 impl DataObjectTrait for OvfParseDescriptorParams {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.ovf_manager_common_params_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.ovf_manager_common_params_.data_object_ }
 }
 impl DataObjectTrait for OvfValidateHostParams {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.ovf_manager_common_params_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.ovf_manager_common_params_.data_object_ }
 }
 impl DataObjectTrait for OvfCreateDescriptorParams {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for OvfCreateDescriptorResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for OvfCreateImportSpecResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for OvfDatastoreMapping {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for OvfDeploymentOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for OvfFileItem {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for OvfNetworkInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for OvfNetworkMapping {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for OvfFile {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for OvfOptionInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for OvfParseDescriptorResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for OvfResourceMap {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for OvfStorageProfileMapping {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for OvfValidateHostResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PasswordField {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PerformanceDescription {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PerfCompositeMetric {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PerfCounterInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PerformanceManagerCounterLevelMapping {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PerfEntityMetricBase {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PerfEntityMetric {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.perf_entity_metric_base_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.perf_entity_metric_base_.data_object_ }
 }
 impl DataObjectTrait for PerfEntityMetricCsv {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.perf_entity_metric_base_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.perf_entity_metric_base_.data_object_ }
 }
 impl DataObjectTrait for PerfMetricId {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PerfMetricSeries {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PerfMetricIntSeries {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.perf_metric_series_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.perf_metric_series_.data_object_ }
 }
 impl DataObjectTrait for PerfMetricSeriesCsv {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.perf_metric_series_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.perf_metric_series_.data_object_ }
 }
 impl DataObjectTrait for PerfProviderSummary {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PerfQuerySpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PerfSampleInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PrivilegePolicyDef {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ResourceAllocationInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ResourceAllocationOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ResourceConfigOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ResourceConfigSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DatabaseSizeEstimate {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DatabaseSizeParam {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for InventoryDescription {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PerformanceStatisticsDescription {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ResourcePoolResourceUsage {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ResourcePoolRuntimeInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ResourcePoolSummary {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualAppSummary {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.resource_pool_summary_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.resource_pool_summary_.data_object_ }
 }
 impl DataObjectTrait for ResourcePoolQuickStats {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for SddcBase {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VimVsanReconfigSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.sddc_base_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.sddc_base_.data_object_ }
 }
 impl DataObjectTrait for SelectionSet {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DvPortgroupSelection {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.selection_set_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.selection_set_.data_object_ }
 }
 impl DataObjectTrait for DvsSelection {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.selection_set_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.selection_set_.data_object_ }
 }
 impl DataObjectTrait for HostVMotionCompatibility {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ProductComponentInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ServiceContent {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ServiceLocator {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ServiceLocatorCredential {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ServiceLocatorNamePassword {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.service_locator_credential_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.service_locator_credential_.data_object_ }
 }
 impl DataObjectTrait for ServiceLocatorSamlCredential {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.service_locator_credential_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.service_locator_credential_.data_object_ }
 }
 impl DataObjectTrait for ServiceManagerServiceInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for SessionManagerGenericServiceTicket {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for SessionManagerLocalTicket {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for SessionManagerServiceRequestSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for SessionManagerHttpServiceRequestSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.session_manager_service_request_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.session_manager_service_request_spec_.data_object_ }
 }
 impl DataObjectTrait for SessionManagerVmomiServiceRequestSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.session_manager_service_request_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.session_manager_service_request_spec_.data_object_ }
 }
 impl DataObjectTrait for SharesInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for SharesOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for SiteInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for StoragePodSummary {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for StorageIoAllocationInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for StorageIoAllocationOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for StorageIormInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for StorageIormConfigOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for StorageIormConfigSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PodStorageDrsEntry {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for StoragePerformanceSummary {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for StorageResourceManagerStorageProfileStatistics {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for Tag {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for TaskDescription {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for TaskFilterSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for TaskFilterSpecByEntity {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for TaskFilterSpecByTime {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for TaskFilterSpecByUsername {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for TaskInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for TaskInfoFilterSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for TaskInfoFilterSpecFilterTaskResults {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for TaskManagerTaskViewSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for TaskManagerViewByStartId {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.task_manager_task_view_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.task_manager_task_view_spec_.data_object_ }
 }
 impl DataObjectTrait for TaskReason {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for TaskReasonAlarm {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.task_reason_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.task_reason_.data_object_ }
 }
 impl DataObjectTrait for TaskReasonSchedule {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.task_reason_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.task_reason_.data_object_ }
 }
 impl DataObjectTrait for TaskReasonSystem {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.task_reason_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.task_reason_.data_object_ }
 }
 impl DataObjectTrait for TaskReasonUser {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.task_reason_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.task_reason_.data_object_ }
 }
 impl DataObjectTrait for UpdateVirtualMachineFilesResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for UpdateVirtualMachineFilesResultFailedVmFileInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for UserSearchResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PosixUserSearchResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.user_search_result_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.user_search_result_.data_object_ }
 }
 impl DataObjectTrait for UserSession {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VVolVmConfigFileUpdateResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VVolVmConfigFileUpdateResultFailedVmConfigFileInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VasaStorageArray {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VasaStorageArrayDiscoveryFcTransport {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VasaStorageArrayDiscoveryIpTransport {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VasaStorageArrayDiscoverySvcInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VasaProviderContainerSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VimVasaProvider {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VimVasaProviderStatePerArray {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VimVasaProviderVirtualHostConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VimVasaProviderInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualAppLinkInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualDiskSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DeviceBackedVirtualDiskSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_disk_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_disk_spec_.data_object_ }
 }
 impl DataObjectTrait for FileBackedVirtualDiskSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_disk_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_disk_spec_.data_object_ }
 }
 impl DataObjectTrait for SeSparseVirtualDiskSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.file_backed_virtual_disk_spec_.virtual_disk_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.file_backed_virtual_disk_spec_.virtual_disk_spec_.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineConnection {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineMksConnection {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_machine_connection_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_machine_connection_.data_object_ }
 }
 impl DataObjectTrait for DiskChangeInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DiskChangeExtent {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineDisplayTopology {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineMksTicket {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for StorageRequirement {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineTicket {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineWipeResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanComparator {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanJsonComparator {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_comparator_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_comparator_.data_object_ }
 }
 impl DataObjectTrait for VsanNestJsonComparator {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_comparator_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_comparator_.data_object_ }
 }
 impl DataObjectTrait for VsanDataObfuscationRule {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanJsonFilterRule {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanMassCollectorPropertyParams {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanMassCollectorSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanObjectTypeRule {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanRegexBasedRule {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanResourceConstraint {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanCompositeConstraint {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_resource_constraint_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_resource_constraint_.data_object_ }
 }
 impl DataObjectTrait for VsanPropertyConstraint {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_resource_constraint_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_resource_constraint_.data_object_ }
 }
 impl DataObjectTrait for VsanUpgradeSystemNetworkPartitionInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanUpgradeSystemPreflightCheckIssue {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanUpgradeSystemApiBrokenIssue {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_upgrade_system_preflight_check_issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_upgrade_system_preflight_check_issue_.data_object_ }
 }
 impl DataObjectTrait for VsanUpgradeSystemAutoClaimEnabledOnHostsIssue {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_upgrade_system_preflight_check_issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_upgrade_system_preflight_check_issue_.data_object_ }
 }
 impl DataObjectTrait for VsanUpgradeSystemHostsDisconnectedIssue {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_upgrade_system_preflight_check_issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_upgrade_system_preflight_check_issue_.data_object_ }
 }
 impl DataObjectTrait for VsanUpgradeSystemMissingHostsInClusterIssue {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_upgrade_system_preflight_check_issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_upgrade_system_preflight_check_issue_.data_object_ }
 }
 impl DataObjectTrait for VsanUpgradeSystemNetworkPartitionIssue {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_upgrade_system_preflight_check_issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_upgrade_system_preflight_check_issue_.data_object_ }
 }
 impl DataObjectTrait for VsanUpgradeSystemNotEnoughFreeCapacityIssue {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_upgrade_system_preflight_check_issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_upgrade_system_preflight_check_issue_.data_object_ }
 }
 impl DataObjectTrait for VsanUpgradeSystemRogueHostsInClusterIssue {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_upgrade_system_preflight_check_issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_upgrade_system_preflight_check_issue_.data_object_ }
 }
 impl DataObjectTrait for VsanUpgradeSystemV2ObjectsPresentDuringDowngradeIssue {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_upgrade_system_preflight_check_issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_upgrade_system_preflight_check_issue_.data_object_ }
 }
 impl DataObjectTrait for VsanUpgradeSystemWrongEsxVersionIssue {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_upgrade_system_preflight_check_issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_upgrade_system_preflight_check_issue_.data_object_ }
 }
 impl DataObjectTrait for VsanBrokenDiskChainIssue {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_upgrade_system_preflight_check_issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_upgrade_system_preflight_check_issue_.data_object_ }
 }
 impl DataObjectTrait for VsanDisallowDataMovementIssue {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_upgrade_system_preflight_check_issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_upgrade_system_preflight_check_issue_.data_object_ }
 }
 impl DataObjectTrait for VsanDisallowEvacuateDataIssue {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_upgrade_system_preflight_check_issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_upgrade_system_preflight_check_issue_.data_object_ }
 }
 impl DataObjectTrait for VsanDiskUnhealthIssue {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_upgrade_system_preflight_check_issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_upgrade_system_preflight_check_issue_.data_object_ }
 }
 impl DataObjectTrait for VsanHigherObjectsPresentDuringDowngradeIssue {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_upgrade_system_preflight_check_issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_upgrade_system_preflight_check_issue_.data_object_ }
 }
 impl DataObjectTrait for VsanHostPropertyRetrieveIssue {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_upgrade_system_preflight_check_issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_upgrade_system_preflight_check_issue_.data_object_ }
 }
 impl DataObjectTrait for VsanHostWithHybridDiskgroupIssue {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_upgrade_system_preflight_check_issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_upgrade_system_preflight_check_issue_.data_object_ }
 }
 impl DataObjectTrait for VsanHostsCompressionOnlyNotSupported {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_upgrade_system_preflight_check_issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_upgrade_system_preflight_check_issue_.data_object_ }
 }
 impl DataObjectTrait for VsanMixedEsxVersionInClientIssue {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_upgrade_system_preflight_check_issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_upgrade_system_preflight_check_issue_.data_object_ }
 }
 impl DataObjectTrait for VsanMixedEsxVersionIssue {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_upgrade_system_preflight_check_issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_upgrade_system_preflight_check_issue_.data_object_ }
 }
 impl DataObjectTrait for VsanObjectInaccessibleIssue {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_upgrade_system_preflight_check_issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_upgrade_system_preflight_check_issue_.data_object_ }
 }
 impl DataObjectTrait for VsanObjectPolicyIssue {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_upgrade_system_preflight_check_issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_upgrade_system_preflight_check_issue_.data_object_ }
 }
 impl DataObjectTrait for VsanRemoteClusterNotCompatible {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_upgrade_system_preflight_check_issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_upgrade_system_preflight_check_issue_.data_object_ }
 }
 impl DataObjectTrait for VsanUnknownScanIssue {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_upgrade_system_preflight_check_issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_upgrade_system_preflight_check_issue_.data_object_ }
 }
 impl DataObjectTrait for VsanUnsupportedHighDiskVersionIssue {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_upgrade_system_preflight_check_issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_upgrade_system_preflight_check_issue_.data_object_ }
 }
 impl DataObjectTrait for VsanUpgradeSystemPreflightCheckResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanDiskFormatConversionCheckResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_upgrade_system_preflight_check_result_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_upgrade_system_preflight_check_result_.data_object_ }
 }
 impl DataObjectTrait for VsanUpgradeSystemUpgradeHistoryItem {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanUpgradeSystemUpgradeHistoryDiskGroupOp {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_upgrade_system_upgrade_history_item_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_upgrade_system_upgrade_history_item_.data_object_ }
 }
 impl DataObjectTrait for VsanUpgradeSystemUpgradeHistoryPreflightFail {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_upgrade_system_upgrade_history_item_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_upgrade_system_upgrade_history_item_.data_object_ }
 }
 impl DataObjectTrait for VsanUpgradeSystemUpgradeHistoryStoragePoolOp {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_upgrade_system_upgrade_history_item_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_upgrade_system_upgrade_history_item_.data_object_ }
 }
 impl DataObjectTrait for VsanUpgradeSystemUpgradeStatus {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanUpgradeStatusEx {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_upgrade_system_upgrade_status_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_upgrade_system_upgrade_status_.data_object_ }
 }
 impl DataObjectTrait for Action {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CreateTaskAction {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.action_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.action_.data_object_ }
 }
 impl DataObjectTrait for MethodAction {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.action_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.action_.data_object_ }
 }
 impl DataObjectTrait for RunScriptAction {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.action_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.action_.data_object_ }
 }
 impl DataObjectTrait for SendEmailAction {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.action_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.action_.data_object_ }
 }
 impl DataObjectTrait for SendSnmpAction {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.action_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.action_.data_object_ }
 }
 impl DataObjectTrait for MethodActionArgument {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for AlarmAction {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for AlarmTriggeringAction {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.alarm_action_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.alarm_action_.data_object_ }
 }
 impl DataObjectTrait for GroupAlarmAction {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.alarm_action_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.alarm_action_.data_object_ }
 }
 impl DataObjectTrait for AlarmDescription {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for AlarmExpression {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for AndAlarmExpression {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.alarm_expression_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.alarm_expression_.data_object_ }
 }
 impl DataObjectTrait for EventAlarmExpression {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.alarm_expression_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.alarm_expression_.data_object_ }
 }
 impl DataObjectTrait for MetricAlarmExpression {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.alarm_expression_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.alarm_expression_.data_object_ }
 }
 impl DataObjectTrait for OrAlarmExpression {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.alarm_expression_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.alarm_expression_.data_object_ }
 }
 impl DataObjectTrait for StateAlarmExpression {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.alarm_expression_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.alarm_expression_.data_object_ }
 }
 impl DataObjectTrait for AlarmFilterSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for AlarmSetting {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for AlarmSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for AlarmInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.alarm_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.alarm_spec_.data_object_ }
 }
 impl DataObjectTrait for AlarmState {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for AlarmTriggeringActionTransitionSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for EventAlarmExpressionComparison {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterAction {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterClusterInitialPlacementAction {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cluster_action_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cluster_action_.data_object_ }
 }
 impl DataObjectTrait for ClusterHostInfraUpdateHaModeAction {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cluster_action_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cluster_action_.data_object_ }
 }
 impl DataObjectTrait for ClusterHostPowerAction {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cluster_action_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cluster_action_.data_object_ }
 }
 impl DataObjectTrait for ClusterInitialPlacementAction {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cluster_action_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cluster_action_.data_object_ }
 }
 impl DataObjectTrait for ClusterMigrationAction {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cluster_action_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cluster_action_.data_object_ }
 }
 impl DataObjectTrait for PlacementAction {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cluster_action_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cluster_action_.data_object_ }
 }
 impl DataObjectTrait for HbrDiskMigrationAction {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cluster_action_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cluster_action_.data_object_ }
 }
 impl DataObjectTrait for StorageMigrationAction {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cluster_action_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cluster_action_.data_object_ }
 }
 impl DataObjectTrait for StoragePlacementAction {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cluster_action_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cluster_action_.data_object_ }
 }
 impl DataObjectTrait for ClusterActionHistory {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterAttemptedVmInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterPowerContext {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterConfigInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterConfigSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterCryptoConfigInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterDasAamNodeState {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterDasAdmissionControlInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterFailoverHostAdmissionControlInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cluster_das_admission_control_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cluster_das_admission_control_info_.data_object_ }
 }
 impl DataObjectTrait for ClusterFailoverLevelAdmissionControlInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cluster_das_admission_control_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cluster_das_admission_control_info_.data_object_ }
 }
 impl DataObjectTrait for ClusterFailoverResourcesAdmissionControlInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cluster_das_admission_control_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cluster_das_admission_control_info_.data_object_ }
 }
 impl DataObjectTrait for ClusterDasAdmissionControlPolicy {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterFailoverHostAdmissionControlPolicy {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cluster_das_admission_control_policy_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cluster_das_admission_control_policy_.data_object_ }
 }
 impl DataObjectTrait for ClusterFailoverLevelAdmissionControlPolicy {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cluster_das_admission_control_policy_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cluster_das_admission_control_policy_.data_object_ }
 }
 impl DataObjectTrait for ClusterFailoverResourcesAdmissionControlPolicy {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cluster_das_admission_control_policy_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cluster_das_admission_control_policy_.data_object_ }
 }
 impl DataObjectTrait for ClusterDasAdvancedRuntimeInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterDasFailoverLevelAdvancedRuntimeInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cluster_das_advanced_runtime_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cluster_das_advanced_runtime_info_.data_object_ }
 }
 impl DataObjectTrait for DasHeartbeatDatastoreInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterDasAdvancedRuntimeInfoVmcpCapabilityInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterDasConfigInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterDasData {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterDasDataSummary {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cluster_das_data_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cluster_das_data_.data_object_ }
 }
 impl DataObjectTrait for ClusterDasFailoverLevelAdvancedRuntimeInfoHostSlots {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterDasFailoverLevelAdvancedRuntimeInfoSlotInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterDasFailoverLevelAdvancedRuntimeInfoVmSlots {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterDasFdmHostState {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterDasHostInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterDasAamHostInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cluster_das_host_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cluster_das_host_info_.data_object_ }
 }
 impl DataObjectTrait for ClusterDasHostRecommendation {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterDasVmConfigInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterDasVmSettings {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterDpmConfigInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterDpmHostConfigInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterDrsConfigInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterDrsFaults {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterDrsFaultsFaultsByVm {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterDrsFaultsFaultsByVirtualDisk {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cluster_drs_faults_faults_by_vm_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cluster_drs_faults_faults_by_vm_.data_object_ }
 }
 impl DataObjectTrait for ClusterDrsMigration {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterDrsRecommendation {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterDrsVmConfigInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterEvcManagerCheckResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterEvcManagerEvcState {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterEnterMaintenanceResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterFailoverHostAdmissionControlInfoHostStatus {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterGroupInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterHostGroup {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cluster_group_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cluster_group_info_.data_object_ }
 }
 impl DataObjectTrait for ClusterVmGroup {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cluster_group_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cluster_group_info_.data_object_ }
 }
 impl DataObjectTrait for ClusterHostRecommendation {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterInfraUpdateHaConfigInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterNotAttemptedVmInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterOrchestrationInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PerformClusterPowerActionSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PlacementResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PlacementSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterPowerOnVmResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterPreemptibleVmPairInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterProactiveDrsConfigInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for QueryVsanManagedStorageSpaceUsageSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterRecommendation {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterResourceUsageSummary {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterRuleInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterAffinityRuleSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cluster_rule_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cluster_rule_info_.data_object_ }
 }
 impl DataObjectTrait for ClusterAntiAffinityRuleSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cluster_rule_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cluster_rule_info_.data_object_ }
 }
 impl DataObjectTrait for ClusterDependencyRuleInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cluster_rule_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cluster_rule_info_.data_object_ }
 }
 impl DataObjectTrait for ClusterFtVmHostRuleInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cluster_rule_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cluster_rule_info_.data_object_ }
 }
 impl DataObjectTrait for ClusterVmHostRuleInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cluster_rule_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cluster_rule_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualDiskAntiAffinityRuleSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cluster_rule_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cluster_rule_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualDiskRuleSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cluster_rule_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cluster_rule_info_.data_object_ }
 }
 impl DataObjectTrait for VsanSiteFaultDomain {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanSiteFaultDomainConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterSlotPolicy {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterFixedSizeSlotPolicy {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cluster_slot_policy_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cluster_slot_policy_.data_object_ }
 }
 impl DataObjectTrait for VsanStorageComplianceResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanStorageOperationalStatus {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanStoragePolicyStatus {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterSystemVMsConfigInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterSystemVMsConfigSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterUsageSummary {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VimClusterVsanPreferredFaultDomainInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VimClusterVsanStretchedClusterCapability {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VimClusterVsanStretchedClusterFaultDomainConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanStretchedClusterHostVirtualApplianceStatus {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VimClusterVsanWitnessHostInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterVmComponentProtectionSettings {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterVmOrchestrationInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterVmReadiness {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterVmToolsMonitoringSettings {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanAttachToSrOperation {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanCapability {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanClusterAdvCfgSyncHostResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanClusterAdvCfgSyncResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanClusterBalancePerDiskInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanClusterBalanceSummary {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanClusterClomdLivenessResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanClusterConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanClusterCreateVmHealthTestResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanClusterDitEncryptionHealthSummary {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanClusterEncryptionHealthSummary {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanClusterFileServiceHealthSummary {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanClusterGlobalDedupHealthSummary {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanClusterHclInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanClusterHealthAction {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanClusterHealthCheckInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanClusterHealthConfigs {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanClusterHealthGroup {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanClusterHealthLinkBase {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanClusterHealthLink {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_cluster_health_link_base_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_cluster_health_link_base_.data_object_ }
 }
 impl DataObjectTrait for VsanClusterHealthQuerySpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanClusterHealthResultBase {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanClusterHealthResultTable {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_cluster_health_result_base_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_cluster_health_result_base_.data_object_ }
 }
 impl DataObjectTrait for VsanClusterHealthResultWithRemediation {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_cluster_health_result_base_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_cluster_health_result_base_.data_object_ }
 }
 impl DataObjectTrait for VsanClusterHealthResultColumnInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanClusterHealthResultKeyValuePair {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanClusterHealthResultRow {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanClusterHealthSummary {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanClusterHealthSystemObjectsRepairResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanClusterHealthSystemStatusResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanClusterHealthSystemVersionResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanClusterHealthTest {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanClusterHostVmknicMapping {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanClusterLimitHealthResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanClusterNetworkHealthResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanClusterNetworkLoadTestResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanClusterNetworkPartitionInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanClusterNetworkPerfTaskSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanClusterProactiveTestResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanClusterTelemetryProxyConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanClusterVMsHealthOverallResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanClusterVMsHealthSummaryResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanClusterVmdkLoadTestResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanClusterWhatifHostFailuresResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanConfigGeneration {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanDataDrivenApiAction {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanDiagnosticsThreshold {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanDiskFormatConversionSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VimClusterVsanDiskMappingsConfigSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanEntitySpaceUsage {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VimClusterVsanFaultDomainSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanFaultDomainDestroySpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vim_cluster_vsan_fault_domain_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vim_cluster_vsan_fault_domain_spec_.data_object_ }
 }
 impl DataObjectTrait for VsanFaultDomainUpdateSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vim_cluster_vsan_fault_domain_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vim_cluster_vsan_fault_domain_spec_.data_object_ }
 }
 impl DataObjectTrait for VimClusterVsanFaultDomainsConfigSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHealthActionBase {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHealthActionSteps {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_health_action_base_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_health_action_base_.data_object_ }
 }
 impl DataObjectTrait for VsanHealthApiBasedAction {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_health_action_base_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_health_action_base_.data_object_ }
 }
 impl DataObjectTrait for VsanHealthCmdBasedAction {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_health_action_base_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_health_action_base_.data_object_ }
 }
 impl DataObjectTrait for VsanHealthDataDrivenAction {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_health_action_base_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_health_action_base_.data_object_ }
 }
 impl DataObjectTrait for VsanHealthTxtBasedAction {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_health_action_base_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_health_action_base_.data_object_ }
 }
 impl DataObjectTrait for VsanHealthConfirmationDialog {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHealthCorrelation {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHealthExtMgmtPreCheckResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHealthTroubleshooting {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHistoricalHealthQuerySpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHistoricalHealthTest {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHostClomdLivenessResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHostCreateVmHealthTestResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VimClusterVsanHostDiskMapping {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHostHealthSystemVersionResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanIoInsightInstance {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanIoInsightInstanceQuerySpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanIscsiHomeObjectSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanIscsiInitiatorGroup {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanIscsiLunCommonInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanIscsiLun {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_iscsi_lun_common_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_iscsi_lun_common_info_.data_object_ }
 }
 impl DataObjectTrait for VsanIscsiLunSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_iscsi_lun_common_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_iscsi_lun_common_info_.data_object_ }
 }
 impl DataObjectTrait for VsanIscsiTargetAuthSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanIscsiTargetBasicInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanIscsiTargetCommonInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_iscsi_target_basic_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_iscsi_target_basic_info_.data_object_ }
 }
 impl DataObjectTrait for VsanIscsiTarget {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_iscsi_target_common_info_.vsan_iscsi_target_basic_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_iscsi_target_common_info_.vsan_iscsi_target_basic_info_.data_object_ }
 }
 impl DataObjectTrait for VsanIscsiTargetSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_iscsi_target_common_info_.vsan_iscsi_target_basic_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_iscsi_target_common_info_.vsan_iscsi_target_basic_info_.data_object_ }
 }
 impl DataObjectTrait for VsanIscsiTargetServiceConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanIscsiTargetServiceSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_iscsi_target_service_config_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_iscsi_target_service_config_.data_object_ }
 }
 impl DataObjectTrait for VsanIscsiTargetServiceDefaultConfigSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanNetworkDiagnostics {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanObjIdentityQuerySpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanClusterObjectExtAttrs {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanObjectExtraAttributes {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanObjectIdentity {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanObjectIdentityAndHealth {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanObjectInformation {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanObjectQuerySpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanObjectSpaceSummary {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanPerfDiagnoseQuerySpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanPerfDiagnosticException {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanPerfDiagnosticResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanPerfEntityMetricCsv {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanPerfEntityType {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanPerfGraph {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanPerfHotspotEntitiesMetrics {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanPerfHotspotQuerySpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanPerfMasterInformation {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanPerfMemberInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanPerfMetricId {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanPerfMetricSeriesCsv {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanPerfNodeInformation {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanPerfQuerySpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanPerfThreshold {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanPerfTimeRange {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanPerfTimeRangeQuerySpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanPerfTopEntities {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanPerfTopEntity {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanPerfTopQuerySpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanPerfsvcConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanRemoteClusterQuerySpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanSpaceQuerySpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanSpaceUsage {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanSpaceUsageDetailResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanSpaceUsageWithDatastoreType {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanStorageWorkloadType {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanStretchedClusterConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanSyncingObjectFilter {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanUnicastAddressInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanVcKmipServersHealth {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanVcLifecycleCheckResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanVcLifecycleCheckSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanVsanClusterPcapGroup {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanVsanClusterPcapResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanVumSystemConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanWhatifCapacity {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VimClusterVsanWitnessSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CnsAccessControlSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CnsNfsAccessControlSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cns_access_control_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cns_access_control_spec_.data_object_ }
 }
 impl DataObjectTrait for CnsBackingObjectDetails {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CnsBlockBackingDetails {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cns_backing_object_details_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cns_backing_object_details_.data_object_ }
 }
 impl DataObjectTrait for CnsFileBackingDetails {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cns_backing_object_details_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cns_backing_object_details_.data_object_ }
 }
 impl DataObjectTrait for CnsVsanFileShareBackingDetails {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cns_file_backing_details_.cns_backing_object_details_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cns_file_backing_details_.cns_backing_object_details_.data_object_ }
 }
 impl DataObjectTrait for CnsBaseCreateSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CnsFileCreateSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cns_base_create_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cns_base_create_spec_.data_object_ }
 }
 impl DataObjectTrait for CnsVsanFileCreateSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cns_file_create_spec_.cns_base_create_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cns_file_create_spec_.cns_base_create_spec_.data_object_ }
 }
 impl DataObjectTrait for CnsContainerCluster {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CnsCursor {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CnsEntityMetadata {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CnsKubernetesEntityMetadata {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cns_entity_metadata_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cns_entity_metadata_.data_object_ }
 }
 impl DataObjectTrait for CnsKubernetesEntityReference {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CnsPlacementResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CnsQueryFilter {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CnsKubernetesQueryFilter {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cns_query_filter_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cns_query_filter_.data_object_ }
 }
 impl DataObjectTrait for CnsQueryResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CnsQuerySelection {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CnsSnapshotCreateSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CnsSnapshotDeleteSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CnsSnapshotId {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CnsVolume {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CnsVolumeAclConfigureSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CnsVolumeAttachDetachSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CnsVolumeCreateSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CnsVolumeExtendSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CnsVolumeId {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CnsVolumeMetadata {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CnsVolumeMetadataUpdateSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CnsVolumeOperationBatchResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CnsVolumeOperationResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CnsAsyncQueryResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cns_volume_operation_result_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cns_volume_operation_result_.data_object_ }
 }
 impl DataObjectTrait for CnsVolumeAttachResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cns_volume_operation_result_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cns_volume_operation_result_.data_object_ }
 }
 impl DataObjectTrait for CnsVolumeCreateResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cns_volume_operation_result_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cns_volume_operation_result_.data_object_ }
 }
 impl DataObjectTrait for CnsVolumePolicyReconfigSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CnsVolumeRelocateSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CnsBlockVolumeRelocateSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cns_volume_relocate_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cns_volume_relocate_spec_.data_object_ }
 }
 impl DataObjectTrait for CnsVolumeSource {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CnsSnapshotVolumeSource {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cns_volume_source_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cns_volume_source_.data_object_ }
 }
 impl DataObjectTrait for DistributedVirtualPort {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DvPortConfigInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DvPortConfigSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DvsFilterParameter {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DvsHostLocalPortInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DvPortStatus {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DvPortSetting {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VMwareDvsPortSetting {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.dv_port_setting_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.dv_port_setting_.data_object_ }
 }
 impl DataObjectTrait for DvPortState {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DvPortgroupConfigInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DvPortgroupConfigSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DistributedVirtualPortgroupNsxPortgroupOperationResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DvPortgroupPolicy {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VMwareDvsPortgroupPolicy {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.dv_portgroup_policy_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.dv_portgroup_policy_.data_object_ }
 }
 impl DataObjectTrait for DistributedVirtualPortgroupProblem {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DistributedVirtualPortgroupInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DistributedVirtualSwitchInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DistributedVirtualSwitchManagerCompatibilityResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DvsManagerDvsConfigTarget {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DistributedVirtualSwitchManagerDvsProductSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DistributedVirtualSwitchManagerHostContainer {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DistributedVirtualSwitchManagerHostDvsFilterSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DistributedVirtualSwitchManagerHostArrayFilter {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.distributed_virtual_switch_manager_host_dvs_filter_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.distributed_virtual_switch_manager_host_dvs_filter_spec_.data_object_ }
 }
 impl DataObjectTrait for DistributedVirtualSwitchManagerHostContainerFilter {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.distributed_virtual_switch_manager_host_dvs_filter_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.distributed_virtual_switch_manager_host_dvs_filter_spec_.data_object_ }
 }
 impl DataObjectTrait for DistributedVirtualSwitchManagerHostDvsMembershipFilter {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.distributed_virtual_switch_manager_host_dvs_filter_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.distributed_virtual_switch_manager_host_dvs_filter_spec_.data_object_ }
 }
 impl DataObjectTrait for DistributedVirtualSwitchManagerImportResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DvsManagerPhysicalNicsList {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for EntityBackup {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for EntityBackupConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DvsFilterSpecConnecteeSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DvsFilterSpecPnicConnecteeSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.dvs_filter_spec_connectee_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.dvs_filter_spec_connectee_spec_.data_object_ }
 }
 impl DataObjectTrait for DvsFilterSpecVmConnecteeSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.dvs_filter_spec_connectee_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.dvs_filter_spec_connectee_spec_.data_object_ }
 }
 impl DataObjectTrait for DvsFilterSpecVmknicConnecteeSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.dvs_filter_spec_connectee_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.dvs_filter_spec_connectee_spec_.data_object_ }
 }
 impl DataObjectTrait for DvsFilterSpecVlanSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DvsFilterSpecPvlanSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.dvs_filter_spec_vlan_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.dvs_filter_spec_vlan_spec_.data_object_ }
 }
 impl DataObjectTrait for DvsFilterSpecTrunkVlanSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.dvs_filter_spec_vlan_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.dvs_filter_spec_vlan_spec_.data_object_ }
 }
 impl DataObjectTrait for DvsFilterSpecVlanIdSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.dvs_filter_spec_vlan_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.dvs_filter_spec_vlan_spec_.data_object_ }
 }
 impl DataObjectTrait for DistributedVirtualSwitchHostMember {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DistributedVirtualSwitchHostMemberBacking {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DistributedVirtualSwitchHostMemberPnicBacking {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.distributed_virtual_switch_host_member_backing_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.distributed_virtual_switch_host_member_backing_.data_object_ }
 }
 impl DataObjectTrait for DistributedVirtualSwitchHostMemberConfigInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DistributedVirtualSwitchHostMemberConfigSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostMemberHealthCheckResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostMemberUplinkHealthCheckResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_member_health_check_result_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_member_health_check_result_.data_object_ }
 }
 impl DataObjectTrait for VMwareDvsMtuHealthCheckResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_member_uplink_health_check_result_.host_member_health_check_result_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_member_uplink_health_check_result_.host_member_health_check_result_.data_object_ }
 }
 impl DataObjectTrait for VMwareDvsVlanHealthCheckResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_member_uplink_health_check_result_.host_member_health_check_result_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_member_uplink_health_check_result_.host_member_health_check_result_.data_object_ }
 }
 impl DataObjectTrait for VMwareDvsTeamingHealthCheckResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_member_health_check_result_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_member_health_check_result_.data_object_ }
 }
 impl DataObjectTrait for DistributedVirtualSwitchHostMemberHostUplinkState {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DistributedVirtualSwitchHostMemberPnicSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostMemberRuntimeInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DistributedVirtualSwitchHostMemberRuntimeState {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DistributedVirtualSwitchHostMemberTransportZoneInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DistributedVirtualSwitchHostProductSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DistributedVirtualSwitchKeyedOpaqueBlob {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DistributedVirtualSwitchNetworkOffloadSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DvsNetworkResourcePool {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DvsNetworkResourcePoolAllocationInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DvsNetworkResourcePoolConfigSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DistributedVirtualSwitchPortConnectee {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DistributedVirtualSwitchPortConnection {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DistributedVirtualSwitchPortCriteria {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DistributedVirtualSwitchPortStatistics {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DistributedVirtualSwitchProductSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DvsTrafficRule {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DvsNetworkRuleAction {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DvsAcceptNetworkRuleAction {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.dvs_network_rule_action_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.dvs_network_rule_action_.data_object_ }
 }
 impl DataObjectTrait for DvsCopyNetworkRuleAction {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.dvs_network_rule_action_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.dvs_network_rule_action_.data_object_ }
 }
 impl DataObjectTrait for DvsDropNetworkRuleAction {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.dvs_network_rule_action_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.dvs_network_rule_action_.data_object_ }
 }
 impl DataObjectTrait for DvsGreEncapNetworkRuleAction {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.dvs_network_rule_action_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.dvs_network_rule_action_.data_object_ }
 }
 impl DataObjectTrait for DvsLogNetworkRuleAction {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.dvs_network_rule_action_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.dvs_network_rule_action_.data_object_ }
 }
 impl DataObjectTrait for DvsMacRewriteNetworkRuleAction {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.dvs_network_rule_action_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.dvs_network_rule_action_.data_object_ }
 }
 impl DataObjectTrait for DvsPuntNetworkRuleAction {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.dvs_network_rule_action_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.dvs_network_rule_action_.data_object_ }
 }
 impl DataObjectTrait for DvsRateLimitNetworkRuleAction {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.dvs_network_rule_action_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.dvs_network_rule_action_.data_object_ }
 }
 impl DataObjectTrait for DvsUpdateTagNetworkRuleAction {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.dvs_network_rule_action_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.dvs_network_rule_action_.data_object_ }
 }
 impl DataObjectTrait for DvsNetworkRuleQualifier {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DvsIpNetworkRuleQualifier {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.dvs_network_rule_qualifier_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.dvs_network_rule_qualifier_.data_object_ }
 }
 impl DataObjectTrait for DvsMacNetworkRuleQualifier {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.dvs_network_rule_qualifier_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.dvs_network_rule_qualifier_.data_object_ }
 }
 impl DataObjectTrait for DvsSystemTrafficNetworkRuleQualifier {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.dvs_network_rule_qualifier_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.dvs_network_rule_qualifier_.data_object_ }
 }
 impl DataObjectTrait for DvsTrafficRuleset {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DvsVmVnicNetworkResourcePool {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DvsVmVnicResourcePoolConfigSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DvsVmVnicResourceAllocation {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DvsVmVnicNetworkResourcePoolRuntimeInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DvsVnicAllocatedResource {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VmwareDistributedVirtualSwitchDpuFailoverPolicy {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VMwareDvsDpuCapability {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VMwareIpfixConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VMwareDvsIpfixCapability {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VMwareDvsLacpCapability {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VMwareDvsLacpGroupConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VMwareDvsLacpGroupSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VMwareDvsLagIpfixConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VMwareDvsLagVlanConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VMwareDvsMtuCapability {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VmwareDistributedVirtualSwitchNetworkOffloadConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VMwareDvsPvlanConfigSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VMwareDvsPvlanMapEntry {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VmwareDistributedVirtualSwitchRealTimeConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VmwareDistributedVirtualSwitchRealTimeLanAnnotation {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VMwareDvsVspanConfigSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VMwareDvsVspanCapability {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VMwareVspanPort {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VMwareVspanSession {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CryptoKeyId {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CryptoKeyPlain {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CryptoKeyResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CryptoManagerHostKeyStatus {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CryptoManagerKmipCertSignRequest {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CryptoManagerKmipCertificateInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CryptoManagerKmipClusterStatus {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CryptoManagerKmipCryptoKeyStatus {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CryptoManagerKmipCryptoKeyStatusKeyInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CryptoManagerKmipCryptoKeyStatusWrappingKeyIdKeyInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.crypto_manager_kmip_crypto_key_status_key_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.crypto_manager_kmip_crypto_key_status_key_info_.data_object_ }
 }
 impl DataObjectTrait for CryptoManagerKmipCryptoKeyStatusWrappingRotationIntervalKeyInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.crypto_manager_kmip_crypto_key_status_key_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.crypto_manager_kmip_crypto_key_status_key_info_.data_object_ }
 }
 impl DataObjectTrait for CryptoManagerKmipCustomAttributeSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CryptoManagerKmipGenerateKeySpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CryptoManagerKmipServerCertInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CryptoManagerKmipServerStatus {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CryptoSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CryptoSpecDecrypt {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.crypto_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.crypto_spec_.data_object_ }
 }
 impl DataObjectTrait for CryptoSpecDeepRecrypt {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.crypto_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.crypto_spec_.data_object_ }
 }
 impl DataObjectTrait for CryptoSpecEncrypt {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.crypto_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.crypto_spec_.data_object_ }
 }
 impl DataObjectTrait for CryptoSpecNoOp {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.crypto_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.crypto_spec_.data_object_ }
 }
 impl DataObjectTrait for CryptoSpecRegister {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.crypto_spec_no_op_.crypto_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.crypto_spec_no_op_.crypto_spec_.data_object_ }
 }
 impl DataObjectTrait for CryptoSpecShallowRecrypt {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.crypto_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.crypto_spec_.data_object_ }
 }
 impl DataObjectTrait for KeyProviderId {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for KmipClusterInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for KmipClusterInfoKeyInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for KmipClusterInfoWrappingKeyIdKeyInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.kmip_cluster_info_key_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.kmip_cluster_info_key_info_.data_object_ }
 }
 impl DataObjectTrait for KmipClusterInfoWrappingRotationIntervalKeyInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.kmip_cluster_info_key_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.kmip_cluster_info_key_info_.data_object_ }
 }
 impl DataObjectTrait for KmipServerInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for KmipServerSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for KmipServerSpecKeySpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for KmipServerSpecWrappingKeyIdKeySpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.kmip_server_spec_key_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.kmip_server_spec_key_spec_.data_object_ }
 }
 impl DataObjectTrait for KmipServerSpecWrappingRotationIntervalKeySpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.kmip_server_spec_key_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.kmip_server_spec_key_spec_.data_object_ }
 }
 impl DataObjectTrait for KmipServerStatus {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ChangesInfoEventArgument {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DvsOutOfSyncHostArgument {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for Event {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for EventArgument {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for EntityEventArgument {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.event_argument_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.event_argument_.data_object_ }
 }
 impl DataObjectTrait for AlarmEventArgument {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.entity_event_argument_.event_argument_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.entity_event_argument_.event_argument_.data_object_ }
 }
 impl DataObjectTrait for ComputeResourceEventArgument {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.entity_event_argument_.event_argument_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.entity_event_argument_.event_argument_.data_object_ }
 }
 impl DataObjectTrait for DatacenterEventArgument {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.entity_event_argument_.event_argument_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.entity_event_argument_.event_argument_.data_object_ }
 }
 impl DataObjectTrait for DatastoreEventArgument {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.entity_event_argument_.event_argument_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.entity_event_argument_.event_argument_.data_object_ }
 }
 impl DataObjectTrait for DvsEventArgument {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.entity_event_argument_.event_argument_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.entity_event_argument_.event_argument_.data_object_ }
 }
 impl DataObjectTrait for FolderEventArgument {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.entity_event_argument_.event_argument_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.entity_event_argument_.event_argument_.data_object_ }
 }
 impl DataObjectTrait for HostEventArgument {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.entity_event_argument_.event_argument_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.entity_event_argument_.event_argument_.data_object_ }
 }
 impl DataObjectTrait for ManagedEntityEventArgument {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.entity_event_argument_.event_argument_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.entity_event_argument_.event_argument_.data_object_ }
 }
 impl DataObjectTrait for NetworkEventArgument {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.entity_event_argument_.event_argument_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.entity_event_argument_.event_argument_.data_object_ }
 }
 impl DataObjectTrait for ResourcePoolEventArgument {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.entity_event_argument_.event_argument_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.entity_event_argument_.event_argument_.data_object_ }
 }
 impl DataObjectTrait for ScheduledTaskEventArgument {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.entity_event_argument_.event_argument_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.entity_event_argument_.event_argument_.data_object_ }
 }
 impl DataObjectTrait for VmEventArgument {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.entity_event_argument_.event_argument_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.entity_event_argument_.event_argument_.data_object_ }
 }
 impl DataObjectTrait for ProfileEventArgument {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.event_argument_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.event_argument_.data_object_ }
 }
 impl DataObjectTrait for RoleEventArgument {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.event_argument_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.event_argument_.data_object_ }
 }
 impl DataObjectTrait for EventDescription {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for EventArgDesc {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for EventDescriptionEventDetail {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for EventFilterSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for EventFilterSpecByEntity {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for EventFilterSpecByTime {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for EventFilterSpecByUsername {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for EventManagerEventViewSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for EventManagerViewByStartId {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.event_manager_event_view_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.event_manager_event_view_spec_.data_object_ }
 }
 impl DataObjectTrait for ExtendedEventPair {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VnicPortArgument {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ExtExtendedProductInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ManagedByInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ExtManagedEntityInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ExtSolutionManagerInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ExtSolutionManagerInfoTabInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for AnswerFileUpdateFailure {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ConflictingConfigurationConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DatacenterMismatchArgument {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DvsApplyOperationFaultFaultOnObject {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DvsOperationBulkFaultFaultOnHost {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ImportOperationBulkFaultFaultOnImport {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for MultipleCertificatesVerifyFaultThumbprintData {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for NoPermissionEntityPrivileges {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ProfileUpdateFailedUpdateFailure {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostActiveDirectory {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostActiveDirectorySpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostAssignableHardwareBinding {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostAssignableHardwareConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostAssignableHardwareConfigAttributeOverride {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostAuthenticationInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostAuthenticationManagerInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostAuthenticationStoreInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostDirectoryStoreInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_authentication_store_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_authentication_store_info_.data_object_ }
 }
 impl DataObjectTrait for HostActiveDirectoryInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_directory_store_info_.host_authentication_store_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_directory_store_info_.host_authentication_store_info_.data_object_ }
 }
 impl DataObjectTrait for HostLocalAuthenticationInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_authentication_store_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_authentication_store_info_.data_object_ }
 }
 impl DataObjectTrait for AutoStartPowerInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostAutoStartManagerConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for AutoStartDefaults {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostBiosInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostBootDeviceInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostBootDevice {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostCacheConfigurationInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostCacheConfigurationSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostCapability {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostCertificateManagerCertificateInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostCertificateManagerCertificateSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostConfigChange {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostConfigInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostConfigManager {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostConfigSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostConnectInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostDatastoreConnectInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostDatastoreExistsConnectInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_datastore_connect_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_datastore_connect_info_.data_object_ }
 }
 impl DataObjectTrait for HostDatastoreNameConflictConnectInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_datastore_connect_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_datastore_connect_info_.data_object_ }
 }
 impl DataObjectTrait for HostLicenseConnectInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostConnectInfoNetworkInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostNewNetworkConnectInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_connect_info_network_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_connect_info_network_info_.data_object_ }
 }
 impl DataObjectTrait for HostConnectSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostCpuIdInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostCpuInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostCpuPackage {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostCpuPowerManagementInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostCpuSchedulerInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostHyperThreadScheduleInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostDataTransportConnectionInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostNfcConnectionInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_data_transport_connection_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_data_transport_connection_info_.data_object_ }
 }
 impl DataObjectTrait for FileInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for FloppyImageFileInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.file_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.file_info_.data_object_ }
 }
 impl DataObjectTrait for FolderFileInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.file_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.file_info_.data_object_ }
 }
 impl DataObjectTrait for IsoImageFileInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.file_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.file_info_.data_object_ }
 }
 impl DataObjectTrait for VmConfigFileInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.file_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.file_info_.data_object_ }
 }
 impl DataObjectTrait for TemplateConfigFileInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vm_config_file_info_.file_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vm_config_file_info_.file_info_.data_object_ }
 }
 impl DataObjectTrait for VmDiskFileInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.file_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.file_info_.data_object_ }
 }
 impl DataObjectTrait for VmLogFileInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.file_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.file_info_.data_object_ }
 }
 impl DataObjectTrait for VmNvramFileInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.file_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.file_info_.data_object_ }
 }
 impl DataObjectTrait for VmSnapshotFileInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.file_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.file_info_.data_object_ }
 }
 impl DataObjectTrait for FileQueryFlags {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for FileQuery {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for FloppyImageFileQuery {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.file_query_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.file_query_.data_object_ }
 }
 impl DataObjectTrait for FolderFileQuery {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.file_query_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.file_query_.data_object_ }
 }
 impl DataObjectTrait for IsoImageFileQuery {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.file_query_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.file_query_.data_object_ }
 }
 impl DataObjectTrait for VmConfigFileQuery {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.file_query_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.file_query_.data_object_ }
 }
 impl DataObjectTrait for TemplateConfigFileQuery {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vm_config_file_query_.file_query_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vm_config_file_query_.file_query_.data_object_ }
 }
 impl DataObjectTrait for VmDiskFileQuery {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.file_query_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.file_query_.data_object_ }
 }
 impl DataObjectTrait for VmLogFileQuery {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.file_query_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.file_query_.data_object_ }
 }
 impl DataObjectTrait for VmNvramFileQuery {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.file_query_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.file_query_.data_object_ }
 }
 impl DataObjectTrait for VmSnapshotFileQuery {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.file_query_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.file_query_.data_object_ }
 }
 impl DataObjectTrait for HostDatastoreBrowserSearchResults {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostDatastoreBrowserSearchSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VmConfigFileEncryptionInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VmConfigFileQueryFlags {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VmConfigFileQueryFilter {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VmDiskFileEncryptionInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VmDiskFileQueryFlags {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VmDiskFileQueryFilter {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostDatastoreSystemCapabilities {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostDatastoreSystemDatastoreResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostDatastoreSystemVvolDatastoreSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostDateTimeConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostDateTimeInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostDateTimeSystemServiceTestResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostDateTimeSystemTimeZone {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostDeploymentInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostDevice {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ScsiLun {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_device_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_device_.data_object_ }
 }
 impl DataObjectTrait for HostScsiDisk {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.scsi_lun_.host_device_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.scsi_lun_.host_device_.data_object_ }
 }
 impl DataObjectTrait for DevicePciId {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostDhcpService {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostDhcpServiceConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostDhcpServiceSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostDiagnosticPartition {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostDiagnosticPartitionCreateDescription {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostDiagnosticPartitionCreateOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostDiagnosticPartitionCreateSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostDigestInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostTpmDigestInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_digest_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_digest_info_.data_object_ }
 }
 impl DataObjectTrait for HostDiskConfigurationResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostDiskDimensions {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostDiskDimensionsChs {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostDiskDimensionsLba {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostDiskPartitionInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostDiskPartitionBlockRange {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostDiskPartitionLayout {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostDiskPartitionAttributes {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostDiskPartitionSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostDnsConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostDnsConfigSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_dns_config_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_dns_config_.data_object_ }
 }
 impl DataObjectTrait for HostDvxClass {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostEnterMaintenanceResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostEsxAgentHostManagerConfigInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostFaultToleranceManagerComponentHealthInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for FcoeConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for FcoeConfigFcoeCapabilities {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for FcoeConfigFcoeSpecification {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for FcoeConfigVlanRange {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostFeatureCapability {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostFeatureMask {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostFeatureVersionInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostFibreChannelOverEthernetHbaLinkInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostFileAccess {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ModeInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostFileSystemMountInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostFileSystemVolume {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostLocalFileSystemVolume {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_file_system_volume_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_file_system_volume_.data_object_ }
 }
 impl DataObjectTrait for HostNasVolume {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_file_system_volume_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_file_system_volume_.data_object_ }
 }
 impl DataObjectTrait for HostPMemVolume {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_file_system_volume_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_file_system_volume_.data_object_ }
 }
 impl DataObjectTrait for HostVfatVolume {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_file_system_volume_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_file_system_volume_.data_object_ }
 }
 impl DataObjectTrait for HostVffsVolume {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_file_system_volume_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_file_system_volume_.data_object_ }
 }
 impl DataObjectTrait for HostVmfsVolume {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_file_system_volume_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_file_system_volume_.data_object_ }
 }
 impl DataObjectTrait for HostVvolVolume {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_file_system_volume_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_file_system_volume_.data_object_ }
 }
 impl DataObjectTrait for HostFileSystemVolumeInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostFirewallConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostFirewallConfigRuleSetConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostFirewallInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostFirewallDefaultPolicy {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostFlagInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostForceMountedInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostFru {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostGatewaySpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostGraphicsConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostGraphicsConfigDeviceType {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostGraphicsInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostHardwareInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostHardwareStatusInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DpuStatusInfoOperationalInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostHardwareElementInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DpuStatusInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_hardware_element_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_hardware_element_info_.data_object_ }
 }
 impl DataObjectTrait for HostStorageElementInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_hardware_element_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_hardware_element_info_.data_object_ }
 }
 impl DataObjectTrait for HostStorageOperationalInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostHbaCreateSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostTcpHbaCreateSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_hba_create_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_hba_create_spec_.data_object_ }
 }
 impl DataObjectTrait for HealthSystemRuntime {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostAccessControlEntry {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostHostBusAdapter {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostBlockHba {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_host_bus_adapter_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_host_bus_adapter_.data_object_ }
 }
 impl DataObjectTrait for HostFibreChannelHba {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_host_bus_adapter_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_host_bus_adapter_.data_object_ }
 }
 impl DataObjectTrait for HostFibreChannelOverEthernetHba {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_fibre_channel_hba_.host_host_bus_adapter_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_fibre_channel_hba_.host_host_bus_adapter_.data_object_ }
 }
 impl DataObjectTrait for HostInternetScsiHba {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_host_bus_adapter_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_host_bus_adapter_.data_object_ }
 }
 impl DataObjectTrait for HostParallelScsiHba {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_host_bus_adapter_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_host_bus_adapter_.data_object_ }
 }
 impl DataObjectTrait for HostPcieHba {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_host_bus_adapter_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_host_bus_adapter_.data_object_ }
 }
 impl DataObjectTrait for HostRdmaHba {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_host_bus_adapter_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_host_bus_adapter_.data_object_ }
 }
 impl DataObjectTrait for HostSerialAttachedHba {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_host_bus_adapter_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_host_bus_adapter_.data_object_ }
 }
 impl DataObjectTrait for HostTcpHba {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_host_bus_adapter_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_host_bus_adapter_.data_object_ }
 }
 impl DataObjectTrait for HostProxySwitch {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostProxySwitchConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostProxySwitchEnsInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostProxySwitchHostLagConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostProxySwitchSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostSpbmDatastoreInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostSpbmHashInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostSpbmPolicyBlobInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostSpbmPolicyInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostImageProfileSummary {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostInternetScsiHbaAuthenticationCapabilities {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostInternetScsiHbaAuthenticationProperties {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostInternetScsiHbaDigestCapabilities {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostInternetScsiHbaDigestProperties {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostInternetScsiHbaDiscoveryCapabilities {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostInternetScsiHbaDiscoveryProperties {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostInternetScsiHbaIpCapabilities {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostInternetScsiHbaIpProperties {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostInternetScsiHbaIPv6Properties {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostInternetScsiHbaIscsiIpv6Address {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostInternetScsiHbaSendTarget {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostInternetScsiHbaStaticTarget {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostInternetScsiHbaTargetSet {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostIpConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanFileServiceIpConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_ip_config_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_ip_config_.data_object_ }
 }
 impl DataObjectTrait for HostIpConfigIpV6Address {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostIpConfigIpV6AddressConfiguration {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostIpRouteConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostIpRouteConfigSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_ip_route_config_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_ip_route_config_.data_object_ }
 }
 impl DataObjectTrait for HostIpRouteEntry {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostIpRouteOp {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostIpRouteTableConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostIpRouteTableInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostIpmiInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for IscsiDependencyEntity {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for IscsiMigrationDependency {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for IscsiPortInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for IscsiStatus {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for KernelModuleInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for KernelModuleSectionInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for LacpInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for LagInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for LagUplinkInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostLicenseSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for LinkDiscoveryProtocolConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostAccountSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostPosixAccountSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_account_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_account_spec_.data_object_ }
 }
 impl DataObjectTrait for HostLocalFileSystemVolumeSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostLowLevelProvisioningManagerDiskLayoutSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostLowLevelProvisioningManagerFileDeleteResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostLowLevelProvisioningManagerFileDeleteSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostLowLevelProvisioningManagerFileReserveResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostLowLevelProvisioningManagerFileReserveSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostLowLevelProvisioningManagerSnapshotLayoutSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostLowLevelProvisioningManagerVmMigrationStatus {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostLowLevelProvisioningManagerVmRecoveryInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostMaintenanceSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ServiceConsoleReservationInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineMemoryReservationInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineMemoryReservationSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostMemorySpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostMemoryTierInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostMountInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostMultipathInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostMultipathInfoLogicalUnit {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostMultipathInfoLogicalUnitPolicy {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostMultipathInfoFixedLogicalUnitPolicy {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_multipath_info_logical_unit_policy_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_multipath_info_logical_unit_policy_.data_object_ }
 }
 impl DataObjectTrait for HostMultipathInfoHppLogicalUnitPolicy {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_multipath_info_logical_unit_policy_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_multipath_info_logical_unit_policy_.data_object_ }
 }
 impl DataObjectTrait for HostMultipathInfoLogicalUnitStorageArrayTypePolicy {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostMultipathInfoPath {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostMultipathStateInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostMultipathStateInfoPath {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostNasVolumeConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostNasVolumeSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostNasVolumeUserInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostNatService {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostNatServiceConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostNatServiceNameServiceSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostNatServicePortForwardSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostNatServiceSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostNetCapabilities {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostNetOffloadCapabilities {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostNetStackInstance {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostNetworkConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostNetworkConfigNetStackSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostNetworkConfigResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostNetworkInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostNetworkPolicy {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostNicFailureCriteria {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostNicOrderPolicy {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostNicTeamingPolicy {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostNetworkSecurityPolicy {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostNetworkTrafficShapingPolicy {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostNtpConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostNumaInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostNumaNode {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostNumericSensorInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for NvdimmDimmInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for NvdimmGuid {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for NvdimmHealthInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for NvdimmInterleaveSetInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for NvdimmNamespaceCreateSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for NvdimmNamespaceDeleteSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for NvdimmNamespaceDetails {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for NvdimmNamespaceInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for NvdimmSystemInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for NvdimmPMemNamespaceCreateSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for NvdimmRegionInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for NvdimmSummary {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostNvmeController {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostNvmeDisconnectSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostNvmeDiscoveryLog {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostNvmeDiscoveryLogEntry {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostNvmeNamespace {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostNvmeSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostNvmeConnectSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_nvme_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_nvme_spec_.data_object_ }
 }
 impl DataObjectTrait for HostNvmeDiscoverSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_nvme_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_nvme_spec_.data_object_ }
 }
 impl DataObjectTrait for HostNvmeTopology {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostNvmeTopologyInterface {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostNvmeTransportParameters {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostNvmeOpaqueTransportParameters {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_nvme_transport_parameters_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_nvme_transport_parameters_.data_object_ }
 }
 impl DataObjectTrait for HostNvmeOverFibreChannelParameters {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_nvme_transport_parameters_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_nvme_transport_parameters_.data_object_ }
 }
 impl DataObjectTrait for HostNvmeOverRdmaParameters {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_nvme_transport_parameters_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_nvme_transport_parameters_.data_object_ }
 }
 impl DataObjectTrait for HostNvmeOverTcpParameters {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_nvme_transport_parameters_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_nvme_transport_parameters_.data_object_ }
 }
 impl DataObjectTrait for HostOpaqueNetworkInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostOpaqueSwitch {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostOpaqueSwitchPhysicalNicZone {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostPartialMaintenanceModeRuntimeInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostPatchManagerLocator {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostPatchManagerPatchManagerOperationSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostPatchManagerResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostPatchManagerStatus {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostPatchManagerStatusPrerequisitePatch {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostPathSelectionPolicyOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostPciDevice {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostPciPassthruConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostSriovConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_pci_passthru_config_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_pci_passthru_config_.data_object_ }
 }
 impl DataObjectTrait for HostPciPassthruInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostSriovInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_pci_passthru_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_pci_passthru_info_.data_object_ }
 }
 impl DataObjectTrait for HostPersistentMemoryInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PhysicalNic {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PhysicalNicCdpDeviceCapability {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PhysicalNicCdpInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PhysicalNicConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PhysicalNicLinkInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for LinkLayerDiscoveryProtocolInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PhysicalNicHintInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PhysicalNicHint {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PhysicalNicIpHint {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.physical_nic_hint_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.physical_nic_hint_.data_object_ }
 }
 impl DataObjectTrait for PhysicalNicNameHint {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.physical_nic_hint_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.physical_nic_hint_.data_object_ }
 }
 impl DataObjectTrait for PhysicalNicSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostPlugStoreTopology {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostPlugStoreTopologyAdapter {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostPlugStoreTopologyDevice {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostPlugStoreTopologyPath {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostPlugStoreTopologyPlugin {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostPlugStoreTopologyTarget {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PnicTsoInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostPortGroup {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostPortGroupConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostPortGroupPort {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostPortGroupSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PowerSystemCapability {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PowerSystemInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostPowerPolicy {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostProtocolEndpoint {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostPtpConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostPtpConfigPtpPort {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostQualifiedName {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostRdmaDevice {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostRdmaDeviceBacking {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostRdmaDevicePnicBacking {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_rdma_device_backing_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_rdma_device_backing_.data_object_ }
 }
 impl DataObjectTrait for HostRdmaDeviceCapability {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostRdmaDeviceConnectionInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostReliableMemoryInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostResignatureRescanResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostFirewallRuleset {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostFirewallRulesetIpList {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostFirewallRulesetIpNetwork {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostFirewallRule {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostFirewallRulesetRulesetSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostRuntimeInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostRuntimeInfoNetStackInstanceRuntimeInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostNetworkResourceRuntime {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostRuntimeInfoNetworkRuntimeInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostPlacedVirtualNicIdentifier {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostPnicNetworkResourceInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostRuntimeInfoStateEncryptionInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostScsiDiskPartition {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ScsiLunCapabilities {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ScsiLunDescriptor {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ScsiLunDurableName {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostScsiTopology {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostScsiTopologyInterface {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostScsiTopologyLun {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostScsiTopologyTarget {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostSecuritySpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostService {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostServiceSourcePackage {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostServiceConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostServiceInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostSevInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostSgxInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostSgxRegistrationInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostSharedGpuCapabilities {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostSnmpSystemAgentLimits {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostSnmpConfigSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostSnmpDestination {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for SoftwarePackage {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for SoftwarePackageCapability {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for Relation {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostSriovDevicePoolInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostSriovNetworkDevicePoolInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_sriov_device_pool_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_sriov_device_pool_info_.data_object_ }
 }
 impl DataObjectTrait for HostSslThumbprintInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostStorageArrayTypePolicyOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostStorageDeviceInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostStorageSystemDiskLocatorLedResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostStorageSystemScsiLunResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostStorageSystemVmfsVolumeResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostListSummary {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostConfigSummary {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostListSummaryGatewaySummary {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostHardwareSummary {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostListSummaryQuickStats {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for SystemEventInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostSystemHealthInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostSystemIdentificationInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostSystemInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostSystemResourceInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostSystemSwapConfiguration {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostSystemSwapConfigurationSystemSwapOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostSystemSwapConfigurationDatastoreOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_system_swap_configuration_system_swap_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_system_swap_configuration_system_swap_option_.data_object_ }
 }
 impl DataObjectTrait for HostSystemSwapConfigurationDisabledOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_system_swap_configuration_system_swap_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_system_swap_configuration_system_swap_option_.data_object_ }
 }
 impl DataObjectTrait for HostSystemSwapConfigurationHostCacheOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_system_swap_configuration_system_swap_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_system_swap_configuration_system_swap_option_.data_object_ }
 }
 impl DataObjectTrait for HostSystemSwapConfigurationHostLocalSwapOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_system_swap_configuration_system_swap_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_system_swap_configuration_system_swap_option_.data_object_ }
 }
 impl DataObjectTrait for HostTargetTransport {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostBlockAdapterTargetTransport {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_target_transport_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_target_transport_.data_object_ }
 }
 impl DataObjectTrait for HostFibreChannelTargetTransport {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_target_transport_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_target_transport_.data_object_ }
 }
 impl DataObjectTrait for HostFibreChannelOverEthernetTargetTransport {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_fibre_channel_target_transport_.host_target_transport_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_fibre_channel_target_transport_.host_target_transport_.data_object_ }
 }
 impl DataObjectTrait for HostInternetScsiTargetTransport {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_target_transport_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_target_transport_.data_object_ }
 }
 impl DataObjectTrait for HostParallelScsiTargetTransport {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_target_transport_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_target_transport_.data_object_ }
 }
 impl DataObjectTrait for HostPcieTargetTransport {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_target_transport_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_target_transport_.data_object_ }
 }
 impl DataObjectTrait for HostRdmaTargetTransport {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_target_transport_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_target_transport_.data_object_ }
 }
 impl DataObjectTrait for HostSerialAttachedTargetTransport {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_target_transport_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_target_transport_.data_object_ }
 }
 impl DataObjectTrait for HostTcpTargetTransport {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_target_transport_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_target_transport_.data_object_ }
 }
 impl DataObjectTrait for HostTdxInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostTpmAttestationInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostTpmAttestationReport {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostTpmEventDetails {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostTpmBootCompleteEventDetails {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_tpm_event_details_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_tpm_event_details_.data_object_ }
 }
 impl DataObjectTrait for HostTpmBootSecurityOptionEventDetails {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_tpm_event_details_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_tpm_event_details_.data_object_ }
 }
 impl DataObjectTrait for HostTpmNvTagEventDetails {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_tpm_boot_security_option_event_details_.host_tpm_event_details_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_tpm_boot_security_option_event_details_.host_tpm_event_details_.data_object_ }
 }
 impl DataObjectTrait for HostTpmSignerEventDetails {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_tpm_boot_security_option_event_details_.host_tpm_event_details_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_tpm_boot_security_option_event_details_.host_tpm_event_details_.data_object_ }
 }
 impl DataObjectTrait for HostTpmCommandEventDetails {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_tpm_event_details_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_tpm_event_details_.data_object_ }
 }
 impl DataObjectTrait for HostTpmOptionEventDetails {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_tpm_event_details_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_tpm_event_details_.data_object_ }
 }
 impl DataObjectTrait for HostTpmSoftwareComponentEventDetails {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_tpm_event_details_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_tpm_event_details_.data_object_ }
 }
 impl DataObjectTrait for HostTpmVersionEventDetails {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_tpm_event_details_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_tpm_event_details_.data_object_ }
 }
 impl DataObjectTrait for HostTpmEventLogEntry {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostTrustAuthorityAttestationInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostUnresolvedVmfsExtent {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostUnresolvedVmfsResignatureSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostUnresolvedVmfsResolutionResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostUnresolvedVmfsResolutionSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostUnresolvedVmfsVolume {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostUnresolvedVmfsVolumeResolveStatus {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostVFlashManagerVFlashCacheConfigInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostVFlashManagerVFlashCacheConfigInfoVFlashModuleConfigOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostVFlashManagerVFlashCacheConfigSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostVFlashManagerVFlashConfigInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostVFlashManagerVFlashResourceConfigInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostVFlashManagerVFlashResourceConfigSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostVFlashManagerVFlashResourceRunTimeInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostVFlashResourceConfigurationResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostVMotionConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostVMotionInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostVMotionManagerDstInstantCloneResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostVMotionManagerSrcInstantCloneResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostVMotionNetConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VimHostVsanStretchedClusterHostCapability {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostVffsSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostVirtualNic {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostVirtualNicConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostVirtualNicIpRouteSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostVirtualNicOpaqueNetworkSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostVirtualNicSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostVirtualNicConnection {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualNicManagerNetConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostVirtualNicManagerNicTypeSelection {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostVirtualNicManagerInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostVirtualSwitch {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostVirtualSwitchBeaconConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostVirtualSwitchBridge {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostVirtualSwitchAutoBridge {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_virtual_switch_bridge_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_virtual_switch_bridge_.data_object_ }
 }
 impl DataObjectTrait for HostVirtualSwitchBondBridge {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_virtual_switch_bridge_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_virtual_switch_bridge_.data_object_ }
 }
 impl DataObjectTrait for HostVirtualSwitchSimpleBridge {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_virtual_switch_bridge_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_virtual_switch_bridge_.data_object_ }
 }
 impl DataObjectTrait for HostVirtualSwitchConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostVirtualSwitchSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostVmciAccessManagerAccessSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VmfsDatastoreOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VmfsDatastoreBaseOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VmfsDatastoreMultipleExtentOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vmfs_datastore_base_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vmfs_datastore_base_option_.data_object_ }
 }
 impl DataObjectTrait for VmfsDatastoreSingleExtentOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vmfs_datastore_base_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vmfs_datastore_base_option_.data_object_ }
 }
 impl DataObjectTrait for VmfsDatastoreAllExtentOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vmfs_datastore_single_extent_option_.vmfs_datastore_base_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vmfs_datastore_single_extent_option_.vmfs_datastore_base_option_.data_object_ }
 }
 impl DataObjectTrait for VmfsDatastoreSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VmfsDatastoreCreateSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vmfs_datastore_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vmfs_datastore_spec_.data_object_ }
 }
 impl DataObjectTrait for VmfsDatastoreExpandSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vmfs_datastore_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vmfs_datastore_spec_.data_object_ }
 }
 impl DataObjectTrait for VmfsDatastoreExtendSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vmfs_datastore_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vmfs_datastore_spec_.data_object_ }
 }
 impl DataObjectTrait for HostVmfsRescanResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VmfsConfigOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostVmfsSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VmfsUnmapBandwidthSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanBasicDeviceInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanClusterMembershipInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanDaemonHealth {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanDiskEncryptionHealth {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanDiskRebalanceResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanDitEncryptionHealthSummary {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanEncryptionHealthSummary {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanFailedRepairObjectResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanFileServerHealthSummary {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanFileServiceBalanceHealth {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanFileServiceHealthSummary {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanFileServiceRootFsHealth {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanFileServiceShareHealthSummary {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHclCommonDeviceInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHclNicInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_hcl_common_device_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_hcl_common_device_info_.data_object_ }
 }
 impl DataObjectTrait for VsanHclComputeResource {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHclControllerInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHclDiskInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHclFirmwareFile {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHclFirmwareUpdateSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHclMemInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHealthQuerySpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHostCimProviderInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHostEmmSummary {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHostFwComponent {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHostGlobalDedupConfigHealthSummary {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHostHclInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHostHealthSystemStatusResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHostHwDeviceId {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHostIoInsightInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHostQueryCheckLimitsSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHostReference {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHostVirtualApplianceInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHostVmdkLoadTestResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHwToVcgInfoMapping {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostVsanInternalSystemCmmdsQuery {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostVsanInternalSystemDeleteVsanObjectsResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanNewPolicyBatch {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanPolicyChangeBatch {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanPolicyCost {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanPolicySatisfiability {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostVsanInternalSystemVsanObjectOperationResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostVsanInternalSystemVsanPhysicalDiskDiagnosticsResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanIoInsightInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanIperfClientSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanKmsHealth {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanLimitHealthResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanNetworkDiagnosticsHealthInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanNetworkHealthResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanNetworkLoadTestResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanNetworkPeerHealthResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanNicRdmaInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanObjectHealth {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanObjectOverallHealth {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanPhysicalDiskHealth {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanPhysicalDiskHealthSummary {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanProactiveRebalanceInfoEx {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanQueryResultHostInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanRepairObjectsResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanResourceHealth {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanServerClusterInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanSmartDiskStats {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanSmartParameter {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanSmartStatsHostSummary {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanVcgDeviceInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanVmdkIoLoadSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanVmdkLoadTestResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanVmdkLoadTestSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanVsanPcapResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostVvolNqn {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VVolHostPe {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostVvolVolumeHostVvolNqn {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostVvolVolumeSpecification {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for NetDhcpConfigInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for NetDhcpConfigInfoDhcpOptions {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for NetDhcpConfigSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for NetDhcpConfigSpecDhcpOptionsSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for NetDnsConfigInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for NetDnsConfigSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for NetIpConfigInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for NetIpConfigInfoIpAddress {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for NetIpConfigSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for NetIpConfigSpecIpAddressSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for NetIpRouteConfigInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for NetIpRouteConfigInfoGateway {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for NetIpRouteConfigInfoIpRoute {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for NetIpRouteConfigSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for NetIpRouteConfigSpecGatewaySpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for NetIpRouteConfigSpecIpRouteSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for NetIpStackInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for NetIpStackInfoDefaultRouter {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for NetIpStackInfoNetToMedia {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for NetBiosConfigInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for WinNetBiosConfigInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.net_bios_config_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.net_bios_config_info_.data_object_ }
 }
 impl DataObjectTrait for ArrayUpdateSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterDasVmConfigSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.array_update_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.array_update_spec_.data_object_ }
 }
 impl DataObjectTrait for ClusterDatastoreUpdateSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.array_update_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.array_update_spec_.data_object_ }
 }
 impl DataObjectTrait for ClusterDpmHostConfigSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.array_update_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.array_update_spec_.data_object_ }
 }
 impl DataObjectTrait for ClusterDrsVmConfigSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.array_update_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.array_update_spec_.data_object_ }
 }
 impl DataObjectTrait for ClusterGroupSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.array_update_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.array_update_spec_.data_object_ }
 }
 impl DataObjectTrait for ClusterPreemptibleVmPairSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.array_update_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.array_update_spec_.data_object_ }
 }
 impl DataObjectTrait for ClusterRuleSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.array_update_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.array_update_spec_.data_object_ }
 }
 impl DataObjectTrait for ClusterTagCategoryUpdateSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.array_update_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.array_update_spec_.data_object_ }
 }
 impl DataObjectTrait for ClusterVmOrchestrationSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.array_update_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.array_update_spec_.data_object_ }
 }
 impl DataObjectTrait for StorageDrsOptionSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.array_update_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.array_update_spec_.data_object_ }
 }
 impl DataObjectTrait for StorageDrsVmConfigSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.array_update_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.array_update_spec_.data_object_ }
 }
 impl DataObjectTrait for VAppOvfSectionSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.array_update_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.array_update_spec_.data_object_ }
 }
 impl DataObjectTrait for VAppProductSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.array_update_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.array_update_spec_.data_object_ }
 }
 impl DataObjectTrait for VAppPropertySpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.array_update_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.array_update_spec_.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineCpuIdInfoSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.array_update_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.array_update_spec_.data_object_ }
 }
 impl DataObjectTrait for OptionType {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for BoolOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.option_type_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.option_type_.data_object_ }
 }
 impl DataObjectTrait for ChoiceOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.option_type_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.option_type_.data_object_ }
 }
 impl DataObjectTrait for FloatOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.option_type_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.option_type_.data_object_ }
 }
 impl DataObjectTrait for IntOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.option_type_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.option_type_.data_object_ }
 }
 impl DataObjectTrait for LongOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.option_type_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.option_type_.data_object_ }
 }
 impl DataObjectTrait for StringOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.option_type_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.option_type_.data_object_ }
 }
 impl DataObjectTrait for OptionValue {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostInternetScsiHbaParamValue {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.option_value_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.option_value_.data_object_ }
 }
 impl DataObjectTrait for ApplyProfile {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ProfileApplyProfileElement {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.apply_profile_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.apply_profile_.data_object_ }
 }
 impl DataObjectTrait for ActiveDirectoryProfile {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.apply_profile_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.apply_profile_.data_object_ }
 }
 impl DataObjectTrait for AuthenticationProfile {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.apply_profile_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.apply_profile_.data_object_ }
 }
 impl DataObjectTrait for DateTimeProfile {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.apply_profile_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.apply_profile_.data_object_ }
 }
 impl DataObjectTrait for DvsProfile {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.apply_profile_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.apply_profile_.data_object_ }
 }
 impl DataObjectTrait for DvsVNicProfile {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.apply_profile_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.apply_profile_.data_object_ }
 }
 impl DataObjectTrait for DvsHostVNicProfile {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.dvs_v_nic_profile_.apply_profile_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.dvs_v_nic_profile_.apply_profile_.data_object_ }
 }
 impl DataObjectTrait for DvsServiceConsoleVNicProfile {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.dvs_v_nic_profile_.apply_profile_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.dvs_v_nic_profile_.apply_profile_.data_object_ }
 }
 impl DataObjectTrait for FirewallProfile {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.apply_profile_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.apply_profile_.data_object_ }
 }
 impl DataObjectTrait for FirewallProfileRulesetProfile {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.apply_profile_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.apply_profile_.data_object_ }
 }
 impl DataObjectTrait for HostApplyProfile {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.apply_profile_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.apply_profile_.data_object_ }
 }
 impl DataObjectTrait for HostMemoryProfile {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.apply_profile_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.apply_profile_.data_object_ }
 }
 impl DataObjectTrait for IpAddressProfile {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.apply_profile_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.apply_profile_.data_object_ }
 }
 impl DataObjectTrait for IpRouteProfile {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.apply_profile_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.apply_profile_.data_object_ }
 }
 impl DataObjectTrait for NasStorageProfile {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.apply_profile_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.apply_profile_.data_object_ }
 }
 impl DataObjectTrait for NetStackInstanceProfile {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.apply_profile_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.apply_profile_.data_object_ }
 }
 impl DataObjectTrait for NetworkPolicyProfile {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.apply_profile_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.apply_profile_.data_object_ }
 }
 impl DataObjectTrait for NetworkProfile {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.apply_profile_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.apply_profile_.data_object_ }
 }
 impl DataObjectTrait for NetworkProfileDnsConfigProfile {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.apply_profile_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.apply_profile_.data_object_ }
 }
 impl DataObjectTrait for NsxHostVNicProfile {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.apply_profile_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.apply_profile_.data_object_ }
 }
 impl DataObjectTrait for OpaqueSwitchProfile {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.apply_profile_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.apply_profile_.data_object_ }
 }
 impl DataObjectTrait for OptionProfile {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.apply_profile_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.apply_profile_.data_object_ }
 }
 impl DataObjectTrait for PermissionProfile {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.apply_profile_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.apply_profile_.data_object_ }
 }
 impl DataObjectTrait for PhysicalNicProfile {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.apply_profile_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.apply_profile_.data_object_ }
 }
 impl DataObjectTrait for PnicUplinkProfile {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.apply_profile_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.apply_profile_.data_object_ }
 }
 impl DataObjectTrait for PortGroupProfile {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.apply_profile_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.apply_profile_.data_object_ }
 }
 impl DataObjectTrait for HostPortGroupProfile {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.port_group_profile_.apply_profile_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.port_group_profile_.apply_profile_.data_object_ }
 }
 impl DataObjectTrait for ServiceConsolePortGroupProfile {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.port_group_profile_.apply_profile_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.port_group_profile_.apply_profile_.data_object_ }
 }
 impl DataObjectTrait for VmPortGroupProfile {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.port_group_profile_.apply_profile_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.port_group_profile_.apply_profile_.data_object_ }
 }
 impl DataObjectTrait for VirtualSwitchSelectionProfile {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.apply_profile_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.apply_profile_.data_object_ }
 }
 impl DataObjectTrait for VlanProfile {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.apply_profile_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.apply_profile_.data_object_ }
 }
 impl DataObjectTrait for SecurityProfile {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.apply_profile_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.apply_profile_.data_object_ }
 }
 impl DataObjectTrait for ServiceProfile {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.apply_profile_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.apply_profile_.data_object_ }
 }
 impl DataObjectTrait for StaticRouteProfile {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.apply_profile_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.apply_profile_.data_object_ }
 }
 impl DataObjectTrait for StorageProfile {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.apply_profile_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.apply_profile_.data_object_ }
 }
 impl DataObjectTrait for UserGroupProfile {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.apply_profile_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.apply_profile_.data_object_ }
 }
 impl DataObjectTrait for UserProfile {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.apply_profile_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.apply_profile_.data_object_ }
 }
 impl DataObjectTrait for VirtualSwitchProfile {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.apply_profile_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.apply_profile_.data_object_ }
 }
 impl DataObjectTrait for LinkProfile {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.apply_profile_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.apply_profile_.data_object_ }
 }
 impl DataObjectTrait for NumPortsProfile {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.apply_profile_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.apply_profile_.data_object_ }
 }
 impl DataObjectTrait for ProfileApplyProfileProperty {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ComplianceLocator {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ComplianceProfile {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ComplianceResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ComplianceFailure {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ComplianceFailureComplianceFailureValues {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ProfileDeferredPolicyOptionParameter {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ProfileExpression {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ProfileCompositeExpression {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.profile_expression_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.profile_expression_.data_object_ }
 }
 impl DataObjectTrait for ProfileSimpleExpression {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.profile_expression_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.profile_expression_.data_object_ }
 }
 impl DataObjectTrait for ProfileExpressionMetadata {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ProfileParameterMetadata {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ProfileParameterMetadataParameterRelationMetadata {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ProfilePolicy {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ProfilePolicyMetadata {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PolicyOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CompositePolicyOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.policy_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.policy_option_.data_object_ }
 }
 impl DataObjectTrait for ProfilePolicyOptionMetadata {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ProfileCompositePolicyOptionMetadata {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.profile_policy_option_metadata_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.profile_policy_option_metadata_.data_object_ }
 }
 impl DataObjectTrait for UserInputRequiredParameterMetadata {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.profile_policy_option_metadata_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.profile_policy_option_metadata_.data_object_ }
 }
 impl DataObjectTrait for ProfileConfigInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterProfileConfigInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.profile_config_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.profile_config_info_.data_object_ }
 }
 impl DataObjectTrait for HostProfileConfigInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.profile_config_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.profile_config_info_.data_object_ }
 }
 impl DataObjectTrait for ProfileCreateSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ProfileSerializedCreateSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.profile_create_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.profile_create_spec_.data_object_ }
 }
 impl DataObjectTrait for HostProfileSerializedHostProfileSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.profile_serialized_create_spec_.profile_create_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.profile_serialized_create_spec_.profile_create_spec_.data_object_ }
 }
 impl DataObjectTrait for ClusterProfileCreateSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.profile_create_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.profile_create_spec_.data_object_ }
 }
 impl DataObjectTrait for ClusterProfileConfigSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cluster_profile_create_spec_.profile_create_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cluster_profile_create_spec_.profile_create_spec_.data_object_ }
 }
 impl DataObjectTrait for ClusterProfileCompleteConfigSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cluster_profile_config_spec_.cluster_profile_create_spec_.profile_create_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cluster_profile_config_spec_.cluster_profile_create_spec_.profile_create_spec_.data_object_ }
 }
 impl DataObjectTrait for ClusterProfileConfigServiceCreateSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.cluster_profile_config_spec_.cluster_profile_create_spec_.profile_create_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.cluster_profile_config_spec_.cluster_profile_create_spec_.profile_create_spec_.data_object_ }
 }
 impl DataObjectTrait for HostProfileConfigSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.profile_create_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.profile_create_spec_.data_object_ }
 }
 impl DataObjectTrait for HostProfileCompleteConfigSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_profile_config_spec_.profile_create_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_profile_config_spec_.profile_create_spec_.data_object_ }
 }
 impl DataObjectTrait for HostProfileHostBasedConfigSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_profile_config_spec_.profile_create_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_profile_config_spec_.profile_create_spec_.data_object_ }
 }
 impl DataObjectTrait for ProfileDescription {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ProfileDescriptionSection {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ProfileMetadata {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ProfileMetadataProfileOperationMessage {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ProfileMetadataProfileSortSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ProfilePropertyPath {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ProfileProfileStructure {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ProfileProfileStructureProperty {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for AnswerFile {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for AnswerFileStatusResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for AnswerFileStatusError {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ProfileExecuteResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ApplyHostProfileConfigurationSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.profile_execute_result_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.profile_execute_result_.data_object_ }
 }
 impl DataObjectTrait for ProfileExecuteError {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostProfileValidationFailureInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostSpecification {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostSubSpecification {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for AnswerFileCreateSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for AnswerFileOptionsCreateSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.answer_file_create_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.answer_file_create_spec_.data_object_ }
 }
 impl DataObjectTrait for AnswerFileSerializedCreateSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.answer_file_create_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.answer_file_create_spec_.data_object_ }
 }
 impl DataObjectTrait for ApplyHostProfileConfigurationResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostProfileManagerCompositionResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostProfileManagerCompositionResultResultElement {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostProfileManagerCompositionValidationResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostProfileManagerCompositionValidationResultResultElement {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostProfileManagerConfigTaskList {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostProfilesEntityCustomizations {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for StructuredCustomizations {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.host_profiles_entity_customizations_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.host_profiles_entity_customizations_.data_object_ }
 }
 impl DataObjectTrait for HostProfileManagerHostToConfigSpecMap {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ScheduledTaskDescription {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ScheduledTaskSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ScheduledTaskInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.scheduled_task_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.scheduled_task_spec_.data_object_ }
 }
 impl DataObjectTrait for TaskScheduler {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for AfterStartupTaskScheduler {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.task_scheduler_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.task_scheduler_.data_object_ }
 }
 impl DataObjectTrait for OnceTaskScheduler {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.task_scheduler_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.task_scheduler_.data_object_ }
 }
 impl DataObjectTrait for RecurrentTaskScheduler {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.task_scheduler_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.task_scheduler_.data_object_ }
 }
 impl DataObjectTrait for HourlyTaskScheduler {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.recurrent_task_scheduler_.task_scheduler_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.recurrent_task_scheduler_.task_scheduler_.data_object_ }
 }
 impl DataObjectTrait for DailyTaskScheduler {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.hourly_task_scheduler_.recurrent_task_scheduler_.task_scheduler_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.hourly_task_scheduler_.recurrent_task_scheduler_.task_scheduler_.data_object_ }
 }
 impl DataObjectTrait for MonthlyTaskScheduler {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.daily_task_scheduler_.hourly_task_scheduler_.recurrent_task_scheduler_.task_scheduler_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.daily_task_scheduler_.hourly_task_scheduler_.recurrent_task_scheduler_.task_scheduler_.data_object_ }
 }
 impl DataObjectTrait for MonthlyByDayTaskScheduler {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.monthly_task_scheduler_.daily_task_scheduler_.hourly_task_scheduler_.recurrent_task_scheduler_.task_scheduler_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.monthly_task_scheduler_.daily_task_scheduler_.hourly_task_scheduler_.recurrent_task_scheduler_.task_scheduler_.data_object_ }
 }
 impl DataObjectTrait for MonthlyByWeekdayTaskScheduler {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.monthly_task_scheduler_.daily_task_scheduler_.hourly_task_scheduler_.recurrent_task_scheduler_.task_scheduler_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.monthly_task_scheduler_.daily_task_scheduler_.hourly_task_scheduler_.recurrent_task_scheduler_.task_scheduler_.data_object_ }
 }
 impl DataObjectTrait for WeeklyTaskScheduler {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.daily_task_scheduler_.hourly_task_scheduler_.recurrent_task_scheduler_.task_scheduler_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.daily_task_scheduler_.hourly_task_scheduler_.recurrent_task_scheduler_.task_scheduler_.data_object_ }
 }
 impl DataObjectTrait for ApplyStorageRecommendationResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for StorageDrsAutomationConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for StorageDrsConfigInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for StorageDrsConfigSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for StorageDrsIoLoadBalanceConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PlacementAffinityRule {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PlacementRankResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PlacementRankSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for StorageDrsPlacementRankVmSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for StorageDrsPodConfigInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for StorageDrsPodConfigSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for StorageDrsPodSelectionSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PodDiskLocator {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VmPodConfigForPlacement {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for StorageDrsSpaceLoadBalanceConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for StoragePlacementResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for StoragePlacementSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for StorageDrsVmConfigInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VAppCloneSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VAppCloneSpecNetworkMappingPair {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VAppCloneSpecResourceMap {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VAppEntityConfigInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VAppIpAssignmentInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for IpPool {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for IpPoolAssociation {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for IpPoolIpPoolConfigInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VAppOvfSectionInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VAppProductInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VAppPropertyInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VmConfigInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VAppConfigInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vm_config_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vm_config_info_.data_object_ }
 }
 impl DataObjectTrait for VmConfigSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VAppConfigSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vm_config_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vm_config_spec_.data_object_ }
 }
 impl DataObjectTrait for ClusterNetworkConfigSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for FailoverNodeInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for NodeDeploymentSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PassiveNodeDeploymentSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.node_deployment_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.node_deployment_spec_.data_object_ }
 }
 impl DataObjectTrait for NodeNetworkSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PassiveNodeNetworkSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.node_network_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.node_network_spec_.data_object_ }
 }
 impl DataObjectTrait for SourceNodeSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VchaClusterConfigInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VchaClusterConfigSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VchaClusterDeploymentSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VchaClusterNetworkSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for WitnessNodeInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VchaClusterHealth {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VchaClusterRuntimeInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VchaNodeRuntimeInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineAffinityInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineBaseIndependentFilterSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineEmptyIndependentFilterSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_machine_base_independent_filter_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_machine_base_independent_filter_spec_.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineIndependentFilterSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_machine_base_independent_filter_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_machine_base_independent_filter_spec_.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineBootOptions {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineBootOptionsBootableDevice {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineBootOptionsBootableCdromDevice {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_machine_boot_options_bootable_device_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_machine_boot_options_bootable_device_.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineBootOptionsBootableDiskDevice {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_machine_boot_options_bootable_device_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_machine_boot_options_bootable_device_.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineBootOptionsBootableEthernetDevice {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_machine_boot_options_bootable_device_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_machine_boot_options_bootable_device_.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineBootOptionsBootableFloppyDevice {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_machine_boot_options_bootable_device_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_machine_boot_options_bootable_device_.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineCapability {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineCertThumbprint {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineCloneSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineConfigInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineConfigInfoDatastoreUrlPair {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineConfigInfoOverheadInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineConfigOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineConfigOptionDescriptor {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineConfigSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ConfigTarget {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineConsolePreferences {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineContentLibraryItemInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DatastoreOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineDatastoreVolumeOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineDefaultPowerOpInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineDeviceRuntimeInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineDeviceRuntimeInfoDeviceRuntimeState {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeState {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_machine_device_runtime_info_device_runtime_state_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_machine_device_runtime_info_device_runtime_state_.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineDvxClassInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for FaultToleranceConfigInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for FaultTolerancePrimaryConfigInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.fault_tolerance_config_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.fault_tolerance_config_info_.data_object_ }
 }
 impl DataObjectTrait for FaultToleranceSecondaryConfigInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.fault_tolerance_config_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.fault_tolerance_config_info_.data_object_ }
 }
 impl DataObjectTrait for FaultToleranceConfigSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for FaultToleranceMetaSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for FaultToleranceSecondaryOpResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for FaultToleranceVmConfigSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for FaultToleranceDiskSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineFeatureRequirement {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineFileInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineFileLayout {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineFileLayoutDiskLayout {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineFileLayoutSnapshotLayout {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineFileLayoutEx {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineFileLayoutExDiskLayout {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineFileLayoutExDiskUnit {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineFileLayoutExFileInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineFileLayoutExSnapshotLayout {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineFlagInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineForkConfigInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for GuestInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for GuestInfoCustomizationInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for GuestDiskInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for GuestInfoNamespaceGenerationInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for GuestNicInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for GuestScreenInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for GuestStackInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for GuestInfoVirtualDiskMapping {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineGuestIntegrityInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineGuestMonitoringModeInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for GuestOsDescriptor {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineGuestQuiesceSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineWindowsQuiesceSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_machine_guest_quiesce_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_machine_guest_quiesce_spec_.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineIdeDiskDevicePartitionInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineInstantCloneSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineLegacyNetworkSwitchInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineMessage {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineMetadataManagerVmMetadata {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineMetadataManagerVmMetadataInput {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineMetadataManagerVmMetadataOwner {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineMetadataManagerVmMetadataResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineNetworkShaperInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineProfileDetails {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineProfileDetailsDiskProfileDetails {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineProfileRawData {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineProfileSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineDefaultProfileSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_machine_profile_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_machine_profile_spec_.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineDefinedProfileSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_machine_profile_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_machine_profile_spec_.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineEmptyProfileSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_machine_profile_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_machine_profile_spec_.data_object_ }
 }
 impl DataObjectTrait for VirtualMachinePropertyRelation {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineQuestionInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineRelocateSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineRelocateSpecDiskLocator {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineRelocateSpecDiskLocatorBackingSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ReplicationConfigSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ReplicationInfoDiskSettings {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineRuntimeInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineRuntimeInfoDasProtectionState {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ScheduledHardwareUpgradeInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineSgxInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineSnapshotInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for SnapshotSelectionSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineSnapshotTree {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineSriovDevicePoolInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineSriovNetworkDevicePoolInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_machine_sriov_device_pool_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_machine_sriov_device_pool_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineStorageInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineUsageOnDatastore {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for SubnetInfoFolderInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineSummary {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineConfigSummary {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineGuestSummary {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineQuickStats {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineQuickStatsMemoryTierStats {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineStorageSummary {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineTargetInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineCdromInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_machine_target_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_machine_target_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineDatastoreInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_machine_target_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_machine_target_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineDiskDeviceInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_machine_target_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_machine_target_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineIdeDiskDeviceInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_machine_disk_device_info_.virtual_machine_target_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_machine_disk_device_info_.virtual_machine_target_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineScsiDiskDeviceInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_machine_disk_device_info_.virtual_machine_target_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_machine_disk_device_info_.virtual_machine_target_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineDynamicPassthroughInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_machine_target_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_machine_target_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineFloppyInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_machine_target_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_machine_target_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineNetworkInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_machine_target_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_machine_target_info_.data_object_ }
 }
 impl DataObjectTrait for OpaqueNetworkTargetInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_machine_target_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_machine_target_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineParallelInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_machine_target_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_machine_target_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualMachinePciPassthroughInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_machine_target_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_machine_target_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineSriovInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_machine_pci_passthrough_info_.virtual_machine_target_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_machine_pci_passthrough_info_.virtual_machine_target_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualMachinePciSharedGpuPassthroughInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_machine_target_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_machine_target_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualMachinePrecisionClockInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_machine_target_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_machine_target_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineScsiPassthroughInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_machine_target_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_machine_target_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineSerialInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_machine_target_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_machine_target_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineSgxTargetInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_machine_target_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_machine_target_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineSoundInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_machine_target_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_machine_target_info_.data_object_ }
 }
 impl DataObjectTrait for SubnetInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_machine_target_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_machine_target_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineUsbInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_machine_target_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_machine_target_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineVFlashModuleInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_machine_target_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_machine_target_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineVMotionStunTimeInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_machine_target_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_machine_target_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineVendorDeviceGroupInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_machine_target_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_machine_target_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineVgpuDeviceInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_machine_target_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_machine_target_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineVgpuProfileInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_machine_target_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_machine_target_info_.data_object_ }
 }
 impl DataObjectTrait for ToolsConfigInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ToolsConfigInfoToolsLastInstallInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for UsbScanCodeSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for UsbScanCodeSpecKeyEvent {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for UsbScanCodeSpecModifierType {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineVcpuConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineVendorDeviceGroupInfoComponentDeviceInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineVirtualDeviceGroups {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineVirtualDeviceGroupsDeviceGroup {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineVirtualDeviceGroupsVendorDeviceGroup {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_machine_virtual_device_groups_device_group_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_machine_virtual_device_groups_device_group_.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineVirtualDeviceSwap {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineVirtualDeviceSwapDeviceSwapInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualHardware {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualHardwareOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineVirtualNuma {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineVirtualNumaInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineVirtualPMem {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CheckResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CustomizationAdapterMapping {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CustomizationGlobalIpSettings {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CustomizationGuiRunOnce {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CustomizationGuiUnattended {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CustomizationIpSettings {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CustomizationIpSettingsIpV6AddressSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CustomizationIdentification {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CustomizationIdentitySettings {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CustomizationCloudinitPrep {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.customization_identity_settings_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.customization_identity_settings_.data_object_ }
 }
 impl DataObjectTrait for CustomizationLinuxPrep {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.customization_identity_settings_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.customization_identity_settings_.data_object_ }
 }
 impl DataObjectTrait for CustomizationSysprep {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.customization_identity_settings_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.customization_identity_settings_.data_object_ }
 }
 impl DataObjectTrait for CustomizationSysprepText {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.customization_identity_settings_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.customization_identity_settings_.data_object_ }
 }
 impl DataObjectTrait for CustomizationIpGenerator {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CustomizationCustomIpGenerator {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.customization_ip_generator_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.customization_ip_generator_.data_object_ }
 }
 impl DataObjectTrait for CustomizationDhcpIpGenerator {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.customization_ip_generator_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.customization_ip_generator_.data_object_ }
 }
 impl DataObjectTrait for CustomizationFixedIp {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.customization_ip_generator_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.customization_ip_generator_.data_object_ }
 }
 impl DataObjectTrait for CustomizationUnknownIpGenerator {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.customization_ip_generator_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.customization_ip_generator_.data_object_ }
 }
 impl DataObjectTrait for CustomizationIpV6Generator {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CustomizationAutoIpV6Generator {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.customization_ip_v_6_generator_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.customization_ip_v_6_generator_.data_object_ }
 }
 impl DataObjectTrait for CustomizationCustomIpV6Generator {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.customization_ip_v_6_generator_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.customization_ip_v_6_generator_.data_object_ }
 }
 impl DataObjectTrait for CustomizationDhcpIpV6Generator {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.customization_ip_v_6_generator_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.customization_ip_v_6_generator_.data_object_ }
 }
 impl DataObjectTrait for CustomizationFixedIpV6 {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.customization_ip_v_6_generator_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.customization_ip_v_6_generator_.data_object_ }
 }
 impl DataObjectTrait for CustomizationStatelessIpV6Generator {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.customization_ip_v_6_generator_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.customization_ip_v_6_generator_.data_object_ }
 }
 impl DataObjectTrait for CustomizationUnknownIpV6Generator {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.customization_ip_v_6_generator_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.customization_ip_v_6_generator_.data_object_ }
 }
 impl DataObjectTrait for CustomizationLicenseFilePrintData {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CustomizationName {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CustomizationCustomName {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.customization_name_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.customization_name_.data_object_ }
 }
 impl DataObjectTrait for CustomizationFixedName {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.customization_name_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.customization_name_.data_object_ }
 }
 impl DataObjectTrait for CustomizationPrefixName {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.customization_name_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.customization_name_.data_object_ }
 }
 impl DataObjectTrait for CustomizationUnknownName {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.customization_name_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.customization_name_.data_object_ }
 }
 impl DataObjectTrait for CustomizationVirtualMachineName {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.customization_name_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.customization_name_.data_object_ }
 }
 impl DataObjectTrait for CustomizationOptions {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CustomizationLinuxOptions {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.customization_options_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.customization_options_.data_object_ }
 }
 impl DataObjectTrait for CustomizationWinOptions {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.customization_options_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.customization_options_.data_object_ }
 }
 impl DataObjectTrait for CustomizationPassword {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CustomizationSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for CustomizationUserData {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostDiskMappingInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostDiskMappingPartitionInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostDiskMappingOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for HostDiskMappingPartitionOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualDevice {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualCdrom {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_.data_object_ }
 }
 impl DataObjectTrait for VirtualController {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_.data_object_ }
 }
 impl DataObjectTrait for VirtualIdeController {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_controller_.virtual_device_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_controller_.virtual_device_.data_object_ }
 }
 impl DataObjectTrait for VirtualNvdimmController {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_controller_.virtual_device_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_controller_.virtual_device_.data_object_ }
 }
 impl DataObjectTrait for VirtualNvmeController {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_controller_.virtual_device_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_controller_.virtual_device_.data_object_ }
 }
 impl DataObjectTrait for VirtualPciController {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_controller_.virtual_device_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_controller_.virtual_device_.data_object_ }
 }
 impl DataObjectTrait for VirtualPs2Controller {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_controller_.virtual_device_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_controller_.virtual_device_.data_object_ }
 }
 impl DataObjectTrait for VirtualSataController {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_controller_.virtual_device_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_controller_.virtual_device_.data_object_ }
 }
 impl DataObjectTrait for VirtualAhciController {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_sata_controller_.virtual_controller_.virtual_device_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_sata_controller_.virtual_controller_.virtual_device_.data_object_ }
 }
 impl DataObjectTrait for VirtualScsiController {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_controller_.virtual_device_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_controller_.virtual_device_.data_object_ }
 }
 impl DataObjectTrait for ParaVirtualScsiController {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_scsi_controller_.virtual_controller_.virtual_device_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_scsi_controller_.virtual_controller_.virtual_device_.data_object_ }
 }
 impl DataObjectTrait for VirtualBusLogicController {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_scsi_controller_.virtual_controller_.virtual_device_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_scsi_controller_.virtual_controller_.virtual_device_.data_object_ }
 }
 impl DataObjectTrait for VirtualLsiLogicController {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_scsi_controller_.virtual_controller_.virtual_device_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_scsi_controller_.virtual_controller_.virtual_device_.data_object_ }
 }
 impl DataObjectTrait for VirtualLsiLogicSasController {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_scsi_controller_.virtual_controller_.virtual_device_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_scsi_controller_.virtual_controller_.virtual_device_.data_object_ }
 }
 impl DataObjectTrait for VirtualSioController {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_controller_.virtual_device_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_controller_.virtual_device_.data_object_ }
 }
 impl DataObjectTrait for VirtualUsbController {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_controller_.virtual_device_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_controller_.virtual_device_.data_object_ }
 }
 impl DataObjectTrait for VirtualUsbxhciController {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_controller_.virtual_device_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_controller_.virtual_device_.data_object_ }
 }
 impl DataObjectTrait for VirtualDisk {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_.data_object_ }
 }
 impl DataObjectTrait for VirtualEthernetCard {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_.data_object_ }
 }
 impl DataObjectTrait for VirtualE1000 {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_ethernet_card_.virtual_device_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_ethernet_card_.virtual_device_.data_object_ }
 }
 impl DataObjectTrait for VirtualE1000E {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_ethernet_card_.virtual_device_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_ethernet_card_.virtual_device_.data_object_ }
 }
 impl DataObjectTrait for VirtualPcNet32 {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_ethernet_card_.virtual_device_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_ethernet_card_.virtual_device_.data_object_ }
 }
 impl DataObjectTrait for VirtualSriovEthernetCard {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_ethernet_card_.virtual_device_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_ethernet_card_.virtual_device_.data_object_ }
 }
 impl DataObjectTrait for VirtualVmxnet {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_ethernet_card_.virtual_device_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_ethernet_card_.virtual_device_.data_object_ }
 }
 impl DataObjectTrait for VirtualVmxnet2 {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_vmxnet_.virtual_ethernet_card_.virtual_device_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_vmxnet_.virtual_ethernet_card_.virtual_device_.data_object_ }
 }
 impl DataObjectTrait for VirtualVmxnet3 {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_vmxnet_.virtual_ethernet_card_.virtual_device_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_vmxnet_.virtual_ethernet_card_.virtual_device_.data_object_ }
 }
 impl DataObjectTrait for VirtualVmxnet3Vrdma {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_vmxnet_3_.virtual_vmxnet_.virtual_ethernet_card_.virtual_device_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_vmxnet_3_.virtual_vmxnet_.virtual_ethernet_card_.virtual_device_.data_object_ }
 }
 impl DataObjectTrait for VirtualFloppy {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_.data_object_ }
 }
 impl DataObjectTrait for VirtualKeyboard {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_.data_object_ }
 }
 impl DataObjectTrait for VirtualNvdimm {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_.data_object_ }
 }
 impl DataObjectTrait for VirtualPciPassthrough {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_.data_object_ }
 }
 impl DataObjectTrait for VirtualParallelPort {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_.data_object_ }
 }
 impl DataObjectTrait for VirtualPointingDevice {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_.data_object_ }
 }
 impl DataObjectTrait for VirtualPrecisionClock {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_.data_object_ }
 }
 impl DataObjectTrait for VirtualScsiPassthrough {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_.data_object_ }
 }
 impl DataObjectTrait for VirtualSerialPort {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_.data_object_ }
 }
 impl DataObjectTrait for VirtualSoundCard {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_.data_object_ }
 }
 impl DataObjectTrait for VirtualEnsoniq1371 {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_sound_card_.virtual_device_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_sound_card_.virtual_device_.data_object_ }
 }
 impl DataObjectTrait for VirtualHdAudioCard {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_sound_card_.virtual_device_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_sound_card_.virtual_device_.data_object_ }
 }
 impl DataObjectTrait for VirtualSoundBlaster16 {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_sound_card_.virtual_device_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_sound_card_.virtual_device_.data_object_ }
 }
 impl DataObjectTrait for VirtualTpm {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_.data_object_ }
 }
 impl DataObjectTrait for VirtualUsb {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineVmciDevice {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineVmirom {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineVideoCard {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_.data_object_ }
 }
 impl DataObjectTrait for VirtualWdt {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_.data_object_ }
 }
 impl DataObjectTrait for VirtualDeviceBackingInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualDeviceDeviceBackingInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_backing_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_backing_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualCdromAtapiBackingInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_device_backing_info_.virtual_device_backing_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_device_backing_info_.virtual_device_backing_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualCdromPassthroughBackingInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_device_backing_info_.virtual_device_backing_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_device_backing_info_.virtual_device_backing_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualDiskRawDiskVer2BackingInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_device_backing_info_.virtual_device_backing_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_device_backing_info_.virtual_device_backing_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualDiskPartitionedRawDiskVer2BackingInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_disk_raw_disk_ver_2_backing_info_.virtual_device_device_backing_info_.virtual_device_backing_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_disk_raw_disk_ver_2_backing_info_.virtual_device_device_backing_info_.virtual_device_backing_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualEthernetCardLegacyNetworkBackingInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_device_backing_info_.virtual_device_backing_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_device_backing_info_.virtual_device_backing_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualEthernetCardNetworkBackingInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_device_backing_info_.virtual_device_backing_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_device_backing_info_.virtual_device_backing_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualFloppyDeviceBackingInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_device_backing_info_.virtual_device_backing_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_device_backing_info_.virtual_device_backing_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualPciPassthroughDeviceBackingInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_device_backing_info_.virtual_device_backing_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_device_backing_info_.virtual_device_backing_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualPciPassthroughDynamicBackingInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_device_backing_info_.virtual_device_backing_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_device_backing_info_.virtual_device_backing_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualParallelPortDeviceBackingInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_device_backing_info_.virtual_device_backing_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_device_backing_info_.virtual_device_backing_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualPointingDeviceDeviceBackingInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_device_backing_info_.virtual_device_backing_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_device_backing_info_.virtual_device_backing_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualScsiPassthroughDeviceBackingInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_device_backing_info_.virtual_device_backing_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_device_backing_info_.virtual_device_backing_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualSerialPortDeviceBackingInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_device_backing_info_.virtual_device_backing_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_device_backing_info_.virtual_device_backing_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualSoundCardDeviceBackingInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_device_backing_info_.virtual_device_backing_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_device_backing_info_.virtual_device_backing_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualUsbRemoteHostBackingInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_device_backing_info_.virtual_device_backing_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_device_backing_info_.virtual_device_backing_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualUsbusbBackingInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_device_backing_info_.virtual_device_backing_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_device_backing_info_.virtual_device_backing_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualDeviceFileBackingInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_backing_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_backing_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualCdromIsoBackingInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_file_backing_info_.virtual_device_backing_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_file_backing_info_.virtual_device_backing_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualDiskFlatVer1BackingInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_file_backing_info_.virtual_device_backing_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_file_backing_info_.virtual_device_backing_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualDiskFlatVer2BackingInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_file_backing_info_.virtual_device_backing_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_file_backing_info_.virtual_device_backing_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualDiskLocalPMemBackingInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_file_backing_info_.virtual_device_backing_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_file_backing_info_.virtual_device_backing_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualDiskRawDiskMappingVer1BackingInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_file_backing_info_.virtual_device_backing_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_file_backing_info_.virtual_device_backing_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualDiskSeSparseBackingInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_file_backing_info_.virtual_device_backing_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_file_backing_info_.virtual_device_backing_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualDiskSparseVer1BackingInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_file_backing_info_.virtual_device_backing_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_file_backing_info_.virtual_device_backing_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualDiskSparseVer2BackingInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_file_backing_info_.virtual_device_backing_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_file_backing_info_.virtual_device_backing_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualFloppyImageBackingInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_file_backing_info_.virtual_device_backing_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_file_backing_info_.virtual_device_backing_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualNvdimmBackingInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_file_backing_info_.virtual_device_backing_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_file_backing_info_.virtual_device_backing_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualParallelPortFileBackingInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_file_backing_info_.virtual_device_backing_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_file_backing_info_.virtual_device_backing_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualSerialPortFileBackingInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_file_backing_info_.virtual_device_backing_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_file_backing_info_.virtual_device_backing_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualDevicePipeBackingInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_backing_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_backing_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualSerialPortPipeBackingInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_pipe_backing_info_.virtual_device_backing_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_pipe_backing_info_.virtual_device_backing_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualDeviceRemoteDeviceBackingInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_backing_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_backing_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualCdromRemoteAtapiBackingInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_remote_device_backing_info_.virtual_device_backing_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_remote_device_backing_info_.virtual_device_backing_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualCdromRemotePassthroughBackingInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_remote_device_backing_info_.virtual_device_backing_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_remote_device_backing_info_.virtual_device_backing_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualFloppyRemoteDeviceBackingInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_remote_device_backing_info_.virtual_device_backing_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_remote_device_backing_info_.virtual_device_backing_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualUsbRemoteClientBackingInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_remote_device_backing_info_.virtual_device_backing_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_remote_device_backing_info_.virtual_device_backing_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualDeviceUriBackingInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_backing_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_backing_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualSerialPortUriBackingInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_uri_backing_info_.virtual_device_backing_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_uri_backing_info_.virtual_device_backing_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualEthernetCardDistributedVirtualPortBackingInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_backing_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_backing_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualEthernetCardOpaqueNetworkBackingInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_backing_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_backing_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualPciPassthroughDvxBackingInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_backing_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_backing_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualPciPassthroughPluginBackingInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_backing_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_backing_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualPciPassthroughVmiopBackingInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_pci_passthrough_plugin_backing_info_.virtual_device_backing_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_pci_passthrough_plugin_backing_info_.virtual_device_backing_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualPrecisionClockSystemClockBackingInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_backing_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_backing_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualSerialPortThinPrintBackingInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_backing_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_backing_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualSriovEthernetCardSriovBackingInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_backing_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_backing_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualDeviceBusSlotInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualDevicePciBusSlotInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_bus_slot_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_bus_slot_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualUsbControllerPciBusSlotInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_pci_bus_slot_info_.virtual_device_bus_slot_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_pci_bus_slot_info_.virtual_device_bus_slot_info_.data_object_ }
 }
 impl DataObjectTrait for VirtualDeviceConnectInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualDeviceDeviceGroupInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualDeviceOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualCdromOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualControllerOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualIdeControllerOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_controller_option_.virtual_device_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_controller_option_.virtual_device_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualNvdimmControllerOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_controller_option_.virtual_device_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_controller_option_.virtual_device_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualNvmeControllerOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_controller_option_.virtual_device_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_controller_option_.virtual_device_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualPciControllerOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_controller_option_.virtual_device_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_controller_option_.virtual_device_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualPs2ControllerOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_controller_option_.virtual_device_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_controller_option_.virtual_device_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualSataControllerOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_controller_option_.virtual_device_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_controller_option_.virtual_device_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualAhciControllerOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_sata_controller_option_.virtual_controller_option_.virtual_device_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_sata_controller_option_.virtual_controller_option_.virtual_device_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualScsiControllerOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_controller_option_.virtual_device_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_controller_option_.virtual_device_option_.data_object_ }
 }
 impl DataObjectTrait for ParaVirtualScsiControllerOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_scsi_controller_option_.virtual_controller_option_.virtual_device_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_scsi_controller_option_.virtual_controller_option_.virtual_device_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualBusLogicControllerOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_scsi_controller_option_.virtual_controller_option_.virtual_device_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_scsi_controller_option_.virtual_controller_option_.virtual_device_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualLsiLogicControllerOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_scsi_controller_option_.virtual_controller_option_.virtual_device_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_scsi_controller_option_.virtual_controller_option_.virtual_device_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualLsiLogicSasControllerOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_scsi_controller_option_.virtual_controller_option_.virtual_device_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_scsi_controller_option_.virtual_controller_option_.virtual_device_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualSioControllerOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_controller_option_.virtual_device_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_controller_option_.virtual_device_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualUsbControllerOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_controller_option_.virtual_device_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_controller_option_.virtual_device_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualUsbxhciControllerOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_controller_option_.virtual_device_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_controller_option_.virtual_device_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualDiskOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualEthernetCardOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualE1000Option {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_ethernet_card_option_.virtual_device_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_ethernet_card_option_.virtual_device_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualE1000EOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_ethernet_card_option_.virtual_device_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_ethernet_card_option_.virtual_device_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualPcNet32Option {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_ethernet_card_option_.virtual_device_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_ethernet_card_option_.virtual_device_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualSriovEthernetCardOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_ethernet_card_option_.virtual_device_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_ethernet_card_option_.virtual_device_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualVmxnetOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_ethernet_card_option_.virtual_device_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_ethernet_card_option_.virtual_device_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualVmxnet2Option {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_vmxnet_option_.virtual_ethernet_card_option_.virtual_device_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_vmxnet_option_.virtual_ethernet_card_option_.virtual_device_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualVmxnet3Option {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_vmxnet_option_.virtual_ethernet_card_option_.virtual_device_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_vmxnet_option_.virtual_ethernet_card_option_.virtual_device_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualVmxnet3VrdmaOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_vmxnet_3_option_.virtual_vmxnet_option_.virtual_ethernet_card_option_.virtual_device_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_vmxnet_3_option_.virtual_vmxnet_option_.virtual_ethernet_card_option_.virtual_device_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualFloppyOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualKeyboardOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualNvdimmOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualPciPassthroughOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualParallelPortOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualPointingDeviceOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualPrecisionClockOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualScsiPassthroughOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualSerialPortOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualSoundCardOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualEnsoniq1371Option {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_sound_card_option_.virtual_device_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_sound_card_option_.virtual_device_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualHdAudioCardOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_sound_card_option_.virtual_device_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_sound_card_option_.virtual_device_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualSoundBlaster16Option {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_sound_card_option_.virtual_device_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_sound_card_option_.virtual_device_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualTpmOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualUsbOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineVmciDeviceOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualVmiromOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualVideoCardOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualWdtOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualDeviceBackingOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualDeviceDeviceBackingOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_backing_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_backing_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualCdromAtapiBackingOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_device_backing_option_.virtual_device_backing_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_device_backing_option_.virtual_device_backing_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualCdromPassthroughBackingOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_device_backing_option_.virtual_device_backing_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_device_backing_option_.virtual_device_backing_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualCdromRemoteAtapiBackingOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_device_backing_option_.virtual_device_backing_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_device_backing_option_.virtual_device_backing_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualDiskRawDiskMappingVer1BackingOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_device_backing_option_.virtual_device_backing_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_device_backing_option_.virtual_device_backing_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualDiskRawDiskVer2BackingOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_device_backing_option_.virtual_device_backing_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_device_backing_option_.virtual_device_backing_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualDiskPartitionedRawDiskVer2BackingOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_disk_raw_disk_ver_2_backing_option_.virtual_device_device_backing_option_.virtual_device_backing_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_disk_raw_disk_ver_2_backing_option_.virtual_device_device_backing_option_.virtual_device_backing_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualEthernetCardLegacyNetworkBackingOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_device_backing_option_.virtual_device_backing_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_device_backing_option_.virtual_device_backing_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualEthernetCardNetworkBackingOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_device_backing_option_.virtual_device_backing_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_device_backing_option_.virtual_device_backing_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualFloppyDeviceBackingOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_device_backing_option_.virtual_device_backing_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_device_backing_option_.virtual_device_backing_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualPciPassthroughDeviceBackingOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_device_backing_option_.virtual_device_backing_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_device_backing_option_.virtual_device_backing_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualPciPassthroughDynamicBackingOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_device_backing_option_.virtual_device_backing_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_device_backing_option_.virtual_device_backing_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualParallelPortDeviceBackingOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_device_backing_option_.virtual_device_backing_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_device_backing_option_.virtual_device_backing_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualPointingDeviceBackingOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_device_backing_option_.virtual_device_backing_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_device_backing_option_.virtual_device_backing_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualScsiPassthroughDeviceBackingOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_device_backing_option_.virtual_device_backing_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_device_backing_option_.virtual_device_backing_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualSerialPortDeviceBackingOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_device_backing_option_.virtual_device_backing_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_device_backing_option_.virtual_device_backing_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualSoundCardDeviceBackingOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_device_backing_option_.virtual_device_backing_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_device_backing_option_.virtual_device_backing_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualUsbRemoteHostBackingOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_device_backing_option_.virtual_device_backing_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_device_backing_option_.virtual_device_backing_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualUsbusbBackingOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_device_backing_option_.virtual_device_backing_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_device_backing_option_.virtual_device_backing_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualDeviceFileBackingOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_backing_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_backing_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualCdromIsoBackingOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_file_backing_option_.virtual_device_backing_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_file_backing_option_.virtual_device_backing_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualDiskFlatVer1BackingOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_file_backing_option_.virtual_device_backing_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_file_backing_option_.virtual_device_backing_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualDiskFlatVer2BackingOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_file_backing_option_.virtual_device_backing_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_file_backing_option_.virtual_device_backing_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualDiskLocalPMemBackingOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_file_backing_option_.virtual_device_backing_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_file_backing_option_.virtual_device_backing_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualDiskSeSparseBackingOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_file_backing_option_.virtual_device_backing_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_file_backing_option_.virtual_device_backing_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualDiskSparseVer1BackingOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_file_backing_option_.virtual_device_backing_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_file_backing_option_.virtual_device_backing_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualDiskSparseVer2BackingOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_file_backing_option_.virtual_device_backing_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_file_backing_option_.virtual_device_backing_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualFloppyImageBackingOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_file_backing_option_.virtual_device_backing_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_file_backing_option_.virtual_device_backing_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualParallelPortFileBackingOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_file_backing_option_.virtual_device_backing_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_file_backing_option_.virtual_device_backing_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualSerialPortFileBackingOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_file_backing_option_.virtual_device_backing_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_file_backing_option_.virtual_device_backing_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualDevicePipeBackingOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_backing_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_backing_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualSerialPortPipeBackingOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_pipe_backing_option_.virtual_device_backing_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_pipe_backing_option_.virtual_device_backing_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualDeviceRemoteDeviceBackingOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_backing_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_backing_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualCdromRemotePassthroughBackingOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_remote_device_backing_option_.virtual_device_backing_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_remote_device_backing_option_.virtual_device_backing_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualFloppyRemoteDeviceBackingOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_remote_device_backing_option_.virtual_device_backing_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_remote_device_backing_option_.virtual_device_backing_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualUsbRemoteClientBackingOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_remote_device_backing_option_.virtual_device_backing_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_remote_device_backing_option_.virtual_device_backing_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualDeviceUriBackingOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_backing_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_backing_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualSerialPortUriBackingOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_uri_backing_option_.virtual_device_backing_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_uri_backing_option_.virtual_device_backing_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualEthernetCardDvPortBackingOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_backing_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_backing_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualEthernetCardOpaqueNetworkBackingOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_backing_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_backing_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualPciPassthroughDvxBackingOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_backing_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_backing_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualPciPassthroughPluginBackingOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_backing_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_backing_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualPciPassthroughVmiopBackingOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_pci_passthrough_plugin_backing_option_.virtual_device_backing_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_pci_passthrough_plugin_backing_option_.virtual_device_backing_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualPrecisionClockSystemClockBackingOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_backing_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_backing_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualSerialPortThinPrintBackingOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_backing_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_backing_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualSriovEthernetCardSriovBackingOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_backing_option_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_backing_option_.data_object_ }
 }
 impl DataObjectTrait for VirtualDeviceBusSlotOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualDeviceConnectOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualDeviceConfigSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualDiskConfigSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.virtual_device_config_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.virtual_device_config_spec_.data_object_ }
 }
 impl DataObjectTrait for VirtualDeviceConfigSpecBackingSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualDiskVFlashCacheConfigInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualDiskId {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualDiskDeltaDiskFormatsSupported {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualDiskOptionVFlashCacheConfigOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualEthernetCardResourceAllocation {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualPciPassthroughAllowedDevice {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineVmciDeviceFilterInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineVmciDeviceFilterSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualMachineVmciDeviceOptionFilterSpecOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualVmxnet3StrictLatencyConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VirtualVmxnet3OptionStrictLatencyConfigOption {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for GuestAliases {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for GuestAuthAliasInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for GuestAuthSubject {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for GuestAuthAnySubject {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.guest_auth_subject_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.guest_auth_subject_.data_object_ }
 }
 impl DataObjectTrait for GuestAuthNamedSubject {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.guest_auth_subject_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.guest_auth_subject_.data_object_ }
 }
 impl DataObjectTrait for GuestMappedAliases {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for GuestFileAttributes {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for GuestPosixFileAttributes {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.guest_file_attributes_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.guest_file_attributes_.data_object_ }
 }
 impl DataObjectTrait for GuestWindowsFileAttributes {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.guest_file_attributes_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.guest_file_attributes_.data_object_ }
 }
 impl DataObjectTrait for GuestFileInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for FileTransferInformation {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for GuestListFileInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for GuestAuthentication {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for NamePasswordAuthentication {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.guest_authentication_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.guest_authentication_.data_object_ }
 }
 impl DataObjectTrait for SamlTokenAuthentication {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.guest_authentication_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.guest_authentication_.data_object_ }
 }
 impl DataObjectTrait for SspiAuthentication {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.guest_authentication_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.guest_authentication_.data_object_ }
 }
 impl DataObjectTrait for TicketedSessionAuthentication {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.guest_authentication_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.guest_authentication_.data_object_ }
 }
 impl DataObjectTrait for GuestProcessInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for GuestProgramSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for GuestWindowsProgramSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.guest_program_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.guest_program_spec_.data_object_ }
 }
 impl DataObjectTrait for GuestRegKeySpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for GuestRegKeyNameSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for GuestRegKeyRecordSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for GuestRegValueSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for GuestRegValueDataSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for GuestRegValueBinarySpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.guest_reg_value_data_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.guest_reg_value_data_spec_.data_object_ }
 }
 impl DataObjectTrait for GuestRegValueDwordSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.guest_reg_value_data_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.guest_reg_value_data_spec_.data_object_ }
 }
 impl DataObjectTrait for GuestRegValueExpandStringSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.guest_reg_value_data_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.guest_reg_value_data_spec_.data_object_ }
 }
 impl DataObjectTrait for GuestRegValueMultiStringSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.guest_reg_value_data_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.guest_reg_value_data_spec_.data_object_ }
 }
 impl DataObjectTrait for GuestRegValueQwordSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.guest_reg_value_data_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.guest_reg_value_data_spec_.data_object_ }
 }
 impl DataObjectTrait for GuestRegValueStringSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.guest_reg_value_data_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.guest_reg_value_data_spec_.data_object_ }
 }
 impl DataObjectTrait for GuestRegValueNameSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DeviceGroupId {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for FaultDomainId {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for FaultDomainInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.fault_domain_id_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.fault_domain_id_.data_object_ }
 }
 impl DataObjectTrait for ReplicationGroupId {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ReplicationSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanCapacityReservationInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ClusterRuntimeInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanCompatibilityCheckResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VimVsanDataEfficiencyCapacityState {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanDataEfficiencyConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanDataEfficiencyConfigEx {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_data_efficiency_config_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_data_efficiency_config_.data_object_ }
 }
 impl DataObjectTrait for VsanDataEncryptionConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanDataInTransitEncryptionConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanDatastoreConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanAdvancedDatastoreConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_datastore_config_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_datastore_config_.data_object_ }
 }
 impl DataObjectTrait for VsanDatastoreSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanClientDatastoreConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_datastore_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_datastore_spec_.data_object_ }
 }
 impl DataObjectTrait for VsanXvcClientConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_datastore_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_datastore_spec_.data_object_ }
 }
 impl DataObjectTrait for DefaultDatastorePolicySelectionInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanDirectoryServerConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ActiveVsanDirectoryServerConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_directory_server_config_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_directory_server_config_.data_object_ }
 }
 impl DataObjectTrait for DiskClaimConfiguration {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanEntityCompatibilityResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for EntityResourceCheckDetails {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanDiskGroupResourceCheckResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.entity_resource_check_details_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.entity_resource_check_details_.data_object_ }
 }
 impl DataObjectTrait for VsanDiskResourceCheckResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.entity_resource_check_details_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.entity_resource_check_details_.data_object_ }
 }
 impl DataObjectTrait for VsanStoragePoolDiskResourceCheckResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_disk_resource_check_result_.entity_resource_check_details_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_disk_resource_check_result_.entity_resource_check_details_.data_object_ }
 }
 impl DataObjectTrait for VsanFaultDomainResourceCheckResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.entity_resource_check_details_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.entity_resource_check_details_.data_object_ }
 }
 impl DataObjectTrait for VsanHostResourceCheckResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.entity_resource_check_details_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.entity_resource_check_details_.data_object_ }
 }
 impl DataObjectTrait for VsanResourceCheckResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.entity_resource_check_details_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.entity_resource_check_details_.data_object_ }
 }
 impl DataObjectTrait for VsanResourceCheckComponentResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_resource_check_result_.entity_resource_check_details_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_resource_check_result_.entity_resource_check_details_.data_object_ }
 }
 impl DataObjectTrait for VsanResourceCheckDataPersistenceResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_resource_check_component_result_.vsan_resource_check_result_.entity_resource_check_details_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_resource_check_component_result_.vsan_resource_check_result_.entity_resource_check_details_.data_object_ }
 }
 impl DataObjectTrait for VsanResourceCheckVsanResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_resource_check_component_result_.vsan_resource_check_result_.entity_resource_check_details_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_resource_check_component_result_.vsan_resource_check_result_.entity_resource_check_details_.data_object_ }
 }
 impl DataObjectTrait for VsanStoragePoolResourceCheckResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.entity_resource_check_details_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.entity_resource_check_details_.data_object_ }
 }
 impl DataObjectTrait for VsanFileServiceConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanFileServiceDomain {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanFileServiceDomainConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanFileServiceDomainQuerySpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanFileShare {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanFileShareConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanFileShareNetPermission {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanFileShareQueryProperties {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for FileShareQueryResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanFileShareQuerySpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanFileShareRuntimeInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanFileShareSmbOptions {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanFileShareSnapshot {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanFileShareSnapshotConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanFileShareSnapshotQueryResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanFileShareSnapshotQuerySpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHciMeshDatastoreSource {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanIoDiagnosticsFailedCheck {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanIoDiagnosticsInstance {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanIoDiagnosticsInstanceEvent {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanIoDiagnosticsInstanceQuerySpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanIoDiagnosticsObjectLayout {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanIoDiagnosticsPrecheckResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanIoDiagnosticsStats {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanIoDiagnosticsTarget {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanIoDiagnosticsTargetStats {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanIoLatency {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanIoLatencyMetrics {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for LifecycleConfigDetails {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for LifecycleFaultDomainDetails {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for LifecyclePreCheckResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for LifecycleWitnessDetails {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanMetricProfile {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanMetricsConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanMountPrecheckItem {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanDatastoreSourcePrecheckItem {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_mount_precheck_item_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_mount_precheck_item_.data_object_ }
 }
 impl DataObjectTrait for VsanMountPrecheckNetworkConnectivityResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_mount_precheck_item_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_mount_precheck_item_.data_object_ }
 }
 impl DataObjectTrait for VsanMountPrecheckNetworkLatencyResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_mount_precheck_item_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_mount_precheck_item_.data_object_ }
 }
 impl DataObjectTrait for VsanMountPrecheckNetworkConnectivity {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanMountPrecheckNetworkConnectivityDetail {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanMountPrecheckNetworkLatency {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanMountPrecheckNetworkLatencyDetail {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanMountPrecheckResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanDatastoreSourcePrecheckResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_mount_precheck_result_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_mount_precheck_result_.data_object_ }
 }
 impl DataObjectTrait for VsanObjectHealthTelemetrySummary {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanObjectIoStats {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanProactiveRebalanceInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanRdmaConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanRemoteVcInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanRemoteVcInfoStandalone {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_remote_vc_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_remote_vc_info_.data_object_ }
 }
 impl DataObjectTrait for RemoteVsanSite {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for RemoteVsanSiteAffinity {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for RepairTimerInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanResourceCheckSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanResourceCheckStatus {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanResourceCheckTaskDetails {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanDiskDataEvacuationResourceCheckTaskDetails {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_resource_check_task_details_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_resource_check_task_details_.data_object_ }
 }
 impl DataObjectTrait for ResyncIopsInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanRuntimeStatsHostMap {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for SsdEnduranceThresholdSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanServerHostUnicastInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanSharedWitnessCompatibilityResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanSnapServiceConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VcRemoteVsanServerClusterConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VcRemoteVsanServerClusterInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanIscsiVipConfigSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanIscsiVipConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_iscsi_vip_config_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_iscsi_vip_config_spec_.data_object_ }
 }
 impl DataObjectTrait for VsanIscsiVipDVswitchConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanVipNetworkConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanIscsiVipVswitchConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanBurnInTest {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanBurnInTestCheckResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanCloudHealthStatus {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanClusterBurnInTestResultList {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanCompliantDriver {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanCompliantFirmware {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanConfigBaseIssue {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanConfigNotAllDisksClaimedIssue {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_config_base_issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_config_base_issue_.data_object_ }
 }
 impl DataObjectTrait for VsanConfigCheckResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanDatastoreDefaultPolicySelectionConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanDeconvergedNetConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanDiskModelInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanDownloadItem {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanEsaConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanEsaConfigInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanEsaDiskConfiguration {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanExtendedConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanFileServiceOvfSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanFileServicePreflightCheckResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanGenericClusterBaseIssue {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanGenericClusterBestPracticeHealth {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHclDeviceConstraint {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHclDiskConstraint {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHclDriverInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHclMinFwConstraint {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHclQuerySpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHclReleaseConstraint {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHealthConfigSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHealthCustomizationSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHealthThreshold {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHistoricalHealthConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHostDeviceInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHwToVcgInfoMappingSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanIoTripAnalyzerConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanIoTripAnalyzerRecurrence {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanInternalExtendedConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanNetworkConfigBaseIssue {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanNetworkConfigPnicSpeedInconsistencyIssue {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_network_config_base_issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_network_config_base_issue_.data_object_ }
 }
 impl DataObjectTrait for VsanNetworkConfigPortgroupWithNoRedundancyIssue {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_network_config_base_issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_network_config_base_issue_.data_object_ }
 }
 impl DataObjectTrait for VsanNetworkConfigVdsScopeIssue {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_network_config_base_issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_network_config_base_issue_.data_object_ }
 }
 impl DataObjectTrait for VsanNetworkConfigVsanNotOnVdsIssue {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_network_config_base_issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_network_config_base_issue_.data_object_ }
 }
 impl DataObjectTrait for VsanNetworkConfigVswitchWithNoRedundancyIssue {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_network_config_base_issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_network_config_base_issue_.data_object_ }
 }
 impl DataObjectTrait for VsanNetworkVMotionVmknicNotFountIssue {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_network_config_base_issue_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_network_config_base_issue_.data_object_ }
 }
 impl DataObjectTrait for VsanNetworkConfigBestPracticeHealth {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanObjSnapParams {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanObjectDetail {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanObjectSnapshotId {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VimVsanVsanPMemConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanPerfsvcHealthResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanPrepareVsanForVcsaSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanSnapshotDetail {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanSnapshotQueryResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanSnapshotQuerySpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanSpaceEfficiencyMetadataSize {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanSpaceEfficiencyRatio {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanUnmapConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanUpdateItem {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanVcPostDeployConfigSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanVcStretchedClusterConfigSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanVcsaDeploymentProgress {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanVdsMigrationPlan {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanVdsPgMigrationHostInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanVdsPgMigrationSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanVdsPgMigrationVmInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanVibInstallPreflightStatus {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanVibScanResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanVibSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanVmVdsMigrationSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanVnicVdsMigrationSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanVumConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanWitnessHostConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanXvcClientInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanXvcDatastoreConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanXvcDatastoreInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanXvcClientInfoSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanXvcQueryCriteria {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanXvcQueryFilter {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanXvcQueryPropertyValue {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanXvcQueryResultSet {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanXvcQuerySpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanXvcResultItem {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanClusterConfigInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanConfigInfoEx {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_cluster_config_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_cluster_config_info_.data_object_ }
 }
 impl DataObjectTrait for VsanClusterConfigInfoHostDefaultInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanClusterCoreConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanClusterCoreConfigSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHostAbortWipeDiskStatus {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHostAboutInfoEx {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanAddStoragePoolDiskSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHostClusterStatus {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHostClusterStatusState {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHostClusterStatusStateCompletionEstimate {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanComplianceDetail {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanComplianceResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHostConfigInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHostConfigInfoEx {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_host_config_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_host_config_info_.data_object_ }
 }
 impl DataObjectTrait for VsanHostConfigInfoClusterInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHostFaultDomainInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHostConfigInfoNetworkInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHostConfigInfoNetworkInfoPortConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHostPortConfigEx {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_host_config_info_network_info_port_config_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_host_config_info_network_info_port_config_.data_object_ }
 }
 impl DataObjectTrait for VsanHostConfigInfoStorageInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHostCreateNativeKeyProviderSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanInTransitEncryptionInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHostDecommissionMode {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanDeleteStoragePoolDiskSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHostDiskMapInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VimVsanHostDiskMapInfoEx {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHostDiskMapResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHostDiskMapping {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VimVsanHostDiskMappingCreationSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHostDiskResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VimVsanHostDiskResultEx {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_host_disk_result_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_host_disk_result_.data_object_ }
 }
 impl DataObjectTrait for VsanHostDrsStats {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHostEncryptionInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHostIpConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHostIpConfigEx {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vsan_host_ip_config_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vsan_host_ip_config_.data_object_ }
 }
 impl DataObjectTrait for VsanHostMembershipInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanPolicyStatus {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VimVsanHostQueryVsanDisksSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for RemoteVsanServerClusterConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHostRuntimeStats {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHostServerClusterUnicastConfig {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHostServerClusterUnicastInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for SiteAffinityInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanStoragePoolDisk {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VimVsanHostStoragePoolDiskInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VimVsanHostStoragePoolInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VimVsanHostTrimDiskEntry {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VimVsanHostTrimDiskSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VimVsanHostUpdateStoragePoolDiskSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHostAssociatedObjects {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHostAssociatedObjectsResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanComplianceQuerySpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHostComponentSyncState {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VimVsanHostVsanDirectStorage {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHostVsanDiskInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VimVsanHostVsanDiskManagementSystemCapability {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VimVsanHostVsanHostCapability {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VimVsanHostVsanManagedDisksInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VimVsanHostVsanManagedPMemInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanObjectProfileInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHostVsanObjectSyncState {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHostRuntimeInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHostRuntimeInfoDiskIssue {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VimVsanHostVsanScsiDisk {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHostVsanObjectSyncQueryResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanSyncingObjectRecoveryDetails {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanWhatIfEvacDetail {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanWhatIfEvacResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VsanHostWipeDiskStatus {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for BaseConfigInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VStorageObjectConfigInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.base_config_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.base_config_info_.data_object_ }
 }
 impl DataObjectTrait for BaseConfigInfoBackingInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for BaseConfigInfoFileBackingInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.base_config_info_backing_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.base_config_info_backing_info_.data_object_ }
 }
 impl DataObjectTrait for BaseConfigInfoDiskFileBackingInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.base_config_info_file_backing_info_.base_config_info_backing_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.base_config_info_file_backing_info_.base_config_info_backing_info_.data_object_ }
 }
 impl DataObjectTrait for BaseConfigInfoRawDiskMappingBackingInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.base_config_info_file_backing_info_.base_config_info_backing_info_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.base_config_info_file_backing_info_.base_config_info_backing_info_.data_object_ }
 }
 impl DataObjectTrait for VslmCreateSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VslmCreateSpecBackingSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VslmCreateSpecDiskFileBackingSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vslm_create_spec_backing_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vslm_create_spec_backing_spec_.data_object_ }
 }
 impl DataObjectTrait for VslmCreateSpecRawDiskMappingBackingSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vslm_create_spec_backing_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vslm_create_spec_backing_spec_.data_object_ }
 }
 impl DataObjectTrait for DiskCryptoSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for Id {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VslmInfrastructureObjectPolicy {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VslmInfrastructureObjectPolicySpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VslmMigrateSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VslmCloneSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vslm_migrate_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vslm_migrate_spec_.data_object_ }
 }
 impl DataObjectTrait for VslmRelocateSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vslm_migrate_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vslm_migrate_spec_.data_object_ }
 }
 impl DataObjectTrait for VStorageObjectReconcileResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VStorageObjectReconcileResultInvalidDiskPath {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VStorageObjectReconcileResultReconcileDetail {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VStorageObjectReconcileSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VStorageObjectStateInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VslmTagEntry {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VslmVClockInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VStorageObject {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VStorageObjectSnapshot {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VStorageObjectSnapshotDetails {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VStorageObjectSnapshotInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VStorageObjectSnapshotInfoVStorageObjectSnapshot {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for RetrieveVStorageObjSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VStorageObjectAssociations {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VStorageObjectAssociationsVmDiskAssociations {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DynamicArray {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for DynamicProperty {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for KeyAnyValue {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for LocalizableMessage {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for LocalizedMethodFault {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PropertyChange {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PropertyFilterSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PropertyFilterUpdate {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for MissingObject {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for MissingProperty {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ObjectContent {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ObjectSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for ObjectUpdate {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for PropertySpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for RetrieveOptions {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for RetrieveResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for SelectionSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for TraversalSpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.selection_spec_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.selection_spec_.data_object_ }
 }
 impl DataObjectTrait for UpdateSet {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for WaitOptions {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VslmAboutInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VslmQueryDatastoreInfoResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VslmServiceInstanceContent {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VslmTaskInfo {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VslmTaskReason {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VslmTaskReasonAlarm {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vslm_task_reason_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vslm_task_reason_.data_object_ }
 }
 impl DataObjectTrait for VslmTaskReasonSchedule {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vslm_task_reason_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vslm_task_reason_.data_object_ }
 }
 impl DataObjectTrait for VslmTaskReasonSystem {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vslm_task_reason_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vslm_task_reason_.data_object_ }
 }
 impl DataObjectTrait for VslmTaskReasonUser {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.vslm_task_reason_.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.vslm_task_reason_.data_object_ }
 }
 impl DataObjectTrait for VslmDatastoreSyncStatus {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VslmVsoVStorageObjectAssociations {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VslmVsoVStorageObjectAssociationsVmDiskAssociation {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VslmVsoVStorageObjectQueryResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VslmVsoVStorageObjectQuerySpec {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VslmVsoVStorageObjectResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl DataObjectTrait for VslmVsoVStorageObjectSnapshotResult {
-    fn get_data_object(&self) -> &super::structs::DataObject { &self.data_object_ }
-    fn get_data_object_mut(&mut self) -> &mut super::structs::DataObject { &mut self.data_object_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -16072,25 +10728,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
 /// - `Agency::update(config).scope?`
 /// - `EsxAgentManager::create_agency(agency_config_info).scope?`
 pub trait AgencyScopeTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the AgencyScope parent struct
-    fn get_agency_scope(&self) -> &super::structs::AgencyScope;
-    /// Get a mutable reference to the AgencyScope parent struct
-    fn get_agency_scope_mut(&mut self) -> &mut super::structs::AgencyScope;
 }
-impl std::ops::Deref for dyn AgencyScopeTrait {
-    type Target = super::structs::AgencyScope;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_agency_scope()
-    }
-}
-
-impl std::ops::DerefMut for dyn AgencyScopeTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_agency_scope_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn AgencyScopeTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -16131,12 +10769,8 @@ impl<'de> de::Visitor<'de> for AgencyScopeVisitor {
 }
 
 impl AgencyScopeTrait for AgencyScope {
-    fn get_agency_scope(&self) -> &super::structs::AgencyScope { &self }
-    fn get_agency_scope_mut(&mut self) -> &mut super::structs::AgencyScope { self }
 }
 impl AgencyScopeTrait for AgencyComputeResourceScope {
-    fn get_agency_scope(&self) -> &super::structs::AgencyScope { &self.agency_scope_ }
-    fn get_agency_scope_mut(&mut self) -> &mut super::structs::AgencyScope { &mut self.agency_scope_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn AgencyScopeTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -16179,25 +10813,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn AgencyScope
 /// 
 /// *(10 of 12 paths)*
 pub trait AgentSslTrustTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the AgentSslTrust parent struct
-    fn get_agent_ssl_trust(&self) -> &super::structs::AgentSslTrust;
-    /// Get a mutable reference to the AgentSslTrust parent struct
-    fn get_agent_ssl_trust_mut(&mut self) -> &mut super::structs::AgentSslTrust;
 }
-impl std::ops::Deref for dyn AgentSslTrustTrait {
-    type Target = super::structs::AgentSslTrust;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_agent_ssl_trust()
-    }
-}
-
-impl std::ops::DerefMut for dyn AgentSslTrustTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_agent_ssl_trust_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn AgentSslTrustTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -16238,16 +10854,10 @@ impl<'de> de::Visitor<'de> for AgentSslTrustVisitor {
 }
 
 impl AgentSslTrustTrait for AgentSslTrust {
-    fn get_agent_ssl_trust(&self) -> &super::structs::AgentSslTrust { &self }
-    fn get_agent_ssl_trust_mut(&mut self) -> &mut super::structs::AgentSslTrust { self }
 }
 impl AgentSslTrustTrait for AgentAnyCertificate {
-    fn get_agent_ssl_trust(&self) -> &super::structs::AgentSslTrust { &self.agent_ssl_trust_ }
-    fn get_agent_ssl_trust_mut(&mut self) -> &mut super::structs::AgentSslTrust { &mut self.agent_ssl_trust_ }
 }
 impl AgentSslTrustTrait for AgentPinnedPemCertificate {
-    fn get_agent_ssl_trust(&self) -> &super::structs::AgentSslTrust { &self.agent_ssl_trust_ }
-    fn get_agent_ssl_trust_mut(&mut self) -> &mut super::structs::AgentSslTrust { &mut self.agent_ssl_trust_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn AgentSslTrustTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -16284,25 +10894,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn AgentSslTru
 /// - `Agency::update(config).agent_config?[*].vm_storage_policies?[*]`
 /// - `EsxAgentManager::create_agency(agency_config_info).agent_config?[*].vm_storage_policies?[*]`
 pub trait AgentStoragePolicyTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the AgentStoragePolicy parent struct
-    fn get_agent_storage_policy(&self) -> &super::structs::AgentStoragePolicy;
-    /// Get a mutable reference to the AgentStoragePolicy parent struct
-    fn get_agent_storage_policy_mut(&mut self) -> &mut super::structs::AgentStoragePolicy;
 }
-impl std::ops::Deref for dyn AgentStoragePolicyTrait {
-    type Target = super::structs::AgentStoragePolicy;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_agent_storage_policy()
-    }
-}
-
-impl std::ops::DerefMut for dyn AgentStoragePolicyTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_agent_storage_policy_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn AgentStoragePolicyTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -16343,12 +10935,8 @@ impl<'de> de::Visitor<'de> for AgentStoragePolicyVisitor {
 }
 
 impl AgentStoragePolicyTrait for AgentStoragePolicy {
-    fn get_agent_storage_policy(&self) -> &super::structs::AgentStoragePolicy { &self }
-    fn get_agent_storage_policy_mut(&mut self) -> &mut super::structs::AgentStoragePolicy { self }
 }
 impl AgentStoragePolicyTrait for AgentVsanStoragePolicy {
-    fn get_agent_storage_policy(&self) -> &super::structs::AgentStoragePolicy { &self.agent_storage_policy_ }
-    fn get_agent_storage_policy_mut(&mut self) -> &mut super::structs::AgentStoragePolicy { &mut self.agent_storage_policy_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn AgentStoragePolicyTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -21430,25 +16018,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn HostIssueTr
 /// 
 /// This structure may be used only with operations rendered under `/eam`.
 pub trait SolutionsHookAcknowledgeConfigTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the SolutionsHookAcknowledgeConfig parent struct
-    fn get_solutions_hook_acknowledge_config(&self) -> &super::structs::SolutionsHookAcknowledgeConfig;
-    /// Get a mutable reference to the SolutionsHookAcknowledgeConfig parent struct
-    fn get_solutions_hook_acknowledge_config_mut(&mut self) -> &mut super::structs::SolutionsHookAcknowledgeConfig;
 }
-impl std::ops::Deref for dyn SolutionsHookAcknowledgeConfigTrait {
-    type Target = super::structs::SolutionsHookAcknowledgeConfig;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_solutions_hook_acknowledge_config()
-    }
-}
-
-impl std::ops::DerefMut for dyn SolutionsHookAcknowledgeConfigTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_solutions_hook_acknowledge_config_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn SolutionsHookAcknowledgeConfigTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -21489,12 +16059,8 @@ impl<'de> de::Visitor<'de> for SolutionsHookAcknowledgeConfigVisitor {
 }
 
 impl SolutionsHookAcknowledgeConfigTrait for SolutionsHookAcknowledgeConfig {
-    fn get_solutions_hook_acknowledge_config(&self) -> &super::structs::SolutionsHookAcknowledgeConfig { &self }
-    fn get_solutions_hook_acknowledge_config_mut(&mut self) -> &mut super::structs::SolutionsHookAcknowledgeConfig { self }
 }
 impl SolutionsHookAcknowledgeConfigTrait for SolutionsInteractiveHookAcknowledgeConfig {
-    fn get_solutions_hook_acknowledge_config(&self) -> &super::structs::SolutionsHookAcknowledgeConfig { &self.solutions_hook_acknowledge_config_ }
-    fn get_solutions_hook_acknowledge_config_mut(&mut self) -> &mut super::structs::SolutionsHookAcknowledgeConfig { &mut self.solutions_hook_acknowledge_config_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn SolutionsHookAcknowledgeConfigTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -21519,25 +16085,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn SolutionsHo
 /// 
 /// This structure may be used only with operations rendered under `/eam`.
 pub trait SolutionsStoragePolicyTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the SolutionsStoragePolicy parent struct
-    fn get_solutions_storage_policy(&self) -> &super::structs::SolutionsStoragePolicy;
-    /// Get a mutable reference to the SolutionsStoragePolicy parent struct
-    fn get_solutions_storage_policy_mut(&mut self) -> &mut super::structs::SolutionsStoragePolicy;
 }
-impl std::ops::Deref for dyn SolutionsStoragePolicyTrait {
-    type Target = super::structs::SolutionsStoragePolicy;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_solutions_storage_policy()
-    }
-}
-
-impl std::ops::DerefMut for dyn SolutionsStoragePolicyTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_solutions_storage_policy_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn SolutionsStoragePolicyTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -21578,12 +16126,8 @@ impl<'de> de::Visitor<'de> for SolutionsStoragePolicyVisitor {
 }
 
 impl SolutionsStoragePolicyTrait for SolutionsStoragePolicy {
-    fn get_solutions_storage_policy(&self) -> &super::structs::SolutionsStoragePolicy { &self }
-    fn get_solutions_storage_policy_mut(&mut self) -> &mut super::structs::SolutionsStoragePolicy { self }
 }
 impl SolutionsStoragePolicyTrait for SolutionsProfileIdStoragePolicy {
-    fn get_solutions_storage_policy(&self) -> &super::structs::SolutionsStoragePolicy { &self.solutions_storage_policy_ }
-    fn get_solutions_storage_policy_mut(&mut self) -> &mut super::structs::SolutionsStoragePolicy { &mut self.solutions_storage_policy_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn SolutionsStoragePolicyTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -21608,25 +16152,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn SolutionsSt
 /// 
 /// This structure may be used only with operations rendered under `/eam`.
 pub trait SolutionsTypeSpecificSolutionConfigTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the SolutionsTypeSpecificSolutionConfig parent struct
-    fn get_solutions_type_specific_solution_config(&self) -> &super::structs::SolutionsTypeSpecificSolutionConfig;
-    /// Get a mutable reference to the SolutionsTypeSpecificSolutionConfig parent struct
-    fn get_solutions_type_specific_solution_config_mut(&mut self) -> &mut super::structs::SolutionsTypeSpecificSolutionConfig;
 }
-impl std::ops::Deref for dyn SolutionsTypeSpecificSolutionConfigTrait {
-    type Target = super::structs::SolutionsTypeSpecificSolutionConfig;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_solutions_type_specific_solution_config()
-    }
-}
-
-impl std::ops::DerefMut for dyn SolutionsTypeSpecificSolutionConfigTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_solutions_type_specific_solution_config_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn SolutionsTypeSpecificSolutionConfigTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -21667,16 +16193,10 @@ impl<'de> de::Visitor<'de> for SolutionsTypeSpecificSolutionConfigVisitor {
 }
 
 impl SolutionsTypeSpecificSolutionConfigTrait for SolutionsTypeSpecificSolutionConfig {
-    fn get_solutions_type_specific_solution_config(&self) -> &super::structs::SolutionsTypeSpecificSolutionConfig { &self }
-    fn get_solutions_type_specific_solution_config_mut(&mut self) -> &mut super::structs::SolutionsTypeSpecificSolutionConfig { self }
 }
 impl SolutionsTypeSpecificSolutionConfigTrait for SolutionsClusterBoundSolutionConfig {
-    fn get_solutions_type_specific_solution_config(&self) -> &super::structs::SolutionsTypeSpecificSolutionConfig { &self.solutions_type_specific_solution_config_ }
-    fn get_solutions_type_specific_solution_config_mut(&mut self) -> &mut super::structs::SolutionsTypeSpecificSolutionConfig { &mut self.solutions_type_specific_solution_config_ }
 }
 impl SolutionsTypeSpecificSolutionConfigTrait for SolutionsHostBoundSolutionConfig {
-    fn get_solutions_type_specific_solution_config(&self) -> &super::structs::SolutionsTypeSpecificSolutionConfig { &self.solutions_type_specific_solution_config_ }
-    fn get_solutions_type_specific_solution_config_mut(&mut self) -> &mut super::structs::SolutionsTypeSpecificSolutionConfig { &mut self.solutions_type_specific_solution_config_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn SolutionsTypeSpecificSolutionConfigTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -21704,25 +16224,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn SolutionsTy
 /// 
 /// This structure may be used only with operations rendered under `/eam`.
 pub trait SolutionsVmSourceTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the SolutionsVmSource parent struct
-    fn get_solutions_vm_source(&self) -> &super::structs::SolutionsVmSource;
-    /// Get a mutable reference to the SolutionsVmSource parent struct
-    fn get_solutions_vm_source_mut(&mut self) -> &mut super::structs::SolutionsVmSource;
 }
-impl std::ops::Deref for dyn SolutionsVmSourceTrait {
-    type Target = super::structs::SolutionsVmSource;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_solutions_vm_source()
-    }
-}
-
-impl std::ops::DerefMut for dyn SolutionsVmSourceTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_solutions_vm_source_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn SolutionsVmSourceTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -21763,12 +16265,8 @@ impl<'de> de::Visitor<'de> for SolutionsVmSourceVisitor {
 }
 
 impl SolutionsVmSourceTrait for SolutionsVmSource {
-    fn get_solutions_vm_source(&self) -> &super::structs::SolutionsVmSource { &self }
-    fn get_solutions_vm_source_mut(&mut self) -> &mut super::structs::SolutionsVmSource { self }
 }
 impl SolutionsVmSourceTrait for SolutionsUrlVmSource {
-    fn get_solutions_vm_source(&self) -> &super::structs::SolutionsVmSource { &self.solutions_vm_source_ }
-    fn get_solutions_vm_source_mut(&mut self) -> &mut super::structs::SolutionsVmSource { &mut self.solutions_vm_source_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn SolutionsVmSourceTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -21793,25 +16291,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn SolutionsVm
 /// 
 /// ***Since:*** vEAM API 8.2
 pub trait VibVibServicesSslTrustTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the VibVibServicesSslTrust parent struct
-    fn get_vib_vib_services_ssl_trust(&self) -> &super::structs::VibVibServicesSslTrust;
-    /// Get a mutable reference to the VibVibServicesSslTrust parent struct
-    fn get_vib_vib_services_ssl_trust_mut(&mut self) -> &mut super::structs::VibVibServicesSslTrust;
 }
-impl std::ops::Deref for dyn VibVibServicesSslTrustTrait {
-    type Target = super::structs::VibVibServicesSslTrust;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_vib_vib_services_ssl_trust()
-    }
-}
-
-impl std::ops::DerefMut for dyn VibVibServicesSslTrustTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_vib_vib_services_ssl_trust_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn VibVibServicesSslTrustTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -21852,16 +16332,10 @@ impl<'de> de::Visitor<'de> for VibVibServicesSslTrustVisitor {
 }
 
 impl VibVibServicesSslTrustTrait for VibVibServicesSslTrust {
-    fn get_vib_vib_services_ssl_trust(&self) -> &super::structs::VibVibServicesSslTrust { &self }
-    fn get_vib_vib_services_ssl_trust_mut(&mut self) -> &mut super::structs::VibVibServicesSslTrust { self }
 }
 impl VibVibServicesSslTrustTrait for VibVibServicesAnyCertificate {
-    fn get_vib_vib_services_ssl_trust(&self) -> &super::structs::VibVibServicesSslTrust { &self.vib_vib_services_ssl_trust_ }
-    fn get_vib_vib_services_ssl_trust_mut(&mut self) -> &mut super::structs::VibVibServicesSslTrust { &mut self.vib_vib_services_ssl_trust_ }
 }
 impl VibVibServicesSslTrustTrait for VibVibServicesPinnedPemCertificate {
-    fn get_vib_vib_services_ssl_trust(&self) -> &super::structs::VibVibServicesSslTrust { &self.vib_vib_services_ssl_trust_ }
-    fn get_vib_vib_services_ssl_trust_mut(&mut self) -> &mut super::structs::VibVibServicesSslTrust { &mut self.vib_vib_services_ssl_trust_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VibVibServicesSslTrustTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -22120,25 +16594,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn PbmLineOfSe
 /// - `PbmPlacementSolver::pbm_check_compatibility_with_spec().matching_resources?[*]`
 /// - `PbmPlacementSolver::pbm_check_requirements().matching_resources?[*]`
 pub trait PbmPlacementMatchingResourcesTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the PbmPlacementMatchingResources parent struct
-    fn get_pbm_placement_matching_resources(&self) -> &super::structs::PbmPlacementMatchingResources;
-    /// Get a mutable reference to the PbmPlacementMatchingResources parent struct
-    fn get_pbm_placement_matching_resources_mut(&mut self) -> &mut super::structs::PbmPlacementMatchingResources;
 }
-impl std::ops::Deref for dyn PbmPlacementMatchingResourcesTrait {
-    type Target = super::structs::PbmPlacementMatchingResources;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_pbm_placement_matching_resources()
-    }
-}
-
-impl std::ops::DerefMut for dyn PbmPlacementMatchingResourcesTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_pbm_placement_matching_resources_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn PbmPlacementMatchingResourcesTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -22179,12 +16635,8 @@ impl<'de> de::Visitor<'de> for PbmPlacementMatchingResourcesVisitor {
 }
 
 impl PbmPlacementMatchingResourcesTrait for PbmPlacementMatchingResources {
-    fn get_pbm_placement_matching_resources(&self) -> &super::structs::PbmPlacementMatchingResources { &self }
-    fn get_pbm_placement_matching_resources_mut(&mut self) -> &mut super::structs::PbmPlacementMatchingResources { self }
 }
 impl PbmPlacementMatchingResourcesTrait for PbmPlacementMatchingReplicationResources {
-    fn get_pbm_placement_matching_resources(&self) -> &super::structs::PbmPlacementMatchingResources { &self.pbm_placement_matching_resources_ }
-    fn get_pbm_placement_matching_resources_mut(&mut self) -> &mut super::structs::PbmPlacementMatchingResources { &mut self.pbm_placement_matching_resources_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn PbmPlacementMatchingResourcesTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -22212,25 +16664,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn PbmPlacemen
 /// ### How to access
 /// - `PbmPlacementSolver::pbm_check_requirements(placement_subject_requirement)`
 pub trait PbmPlacementRequirementTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the PbmPlacementRequirement parent struct
-    fn get_pbm_placement_requirement(&self) -> &super::structs::PbmPlacementRequirement;
-    /// Get a mutable reference to the PbmPlacementRequirement parent struct
-    fn get_pbm_placement_requirement_mut(&mut self) -> &mut super::structs::PbmPlacementRequirement;
 }
-impl std::ops::Deref for dyn PbmPlacementRequirementTrait {
-    type Target = super::structs::PbmPlacementRequirement;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_pbm_placement_requirement()
-    }
-}
-
-impl std::ops::DerefMut for dyn PbmPlacementRequirementTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_pbm_placement_requirement_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn PbmPlacementRequirementTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -22271,16 +16705,10 @@ impl<'de> de::Visitor<'de> for PbmPlacementRequirementVisitor {
 }
 
 impl PbmPlacementRequirementTrait for PbmPlacementRequirement {
-    fn get_pbm_placement_requirement(&self) -> &super::structs::PbmPlacementRequirement { &self }
-    fn get_pbm_placement_requirement_mut(&mut self) -> &mut super::structs::PbmPlacementRequirement { self }
 }
 impl PbmPlacementRequirementTrait for PbmPlacementCapabilityConstraintsRequirement {
-    fn get_pbm_placement_requirement(&self) -> &super::structs::PbmPlacementRequirement { &self.pbm_placement_requirement_ }
-    fn get_pbm_placement_requirement_mut(&mut self) -> &mut super::structs::PbmPlacementRequirement { &mut self.pbm_placement_requirement_ }
 }
 impl PbmPlacementRequirementTrait for PbmPlacementCapabilityProfileRequirement {
-    fn get_pbm_placement_requirement(&self) -> &super::structs::PbmPlacementRequirement { &self.pbm_placement_requirement_ }
-    fn get_pbm_placement_requirement_mut(&mut self) -> &mut super::structs::PbmPlacementRequirement { &mut self.pbm_placement_requirement_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn PbmPlacementRequirementTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -22318,25 +16746,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn PbmPlacemen
 /// - `PbmProfileProfileManager::pbm_retrieve_content()⇒PbmCapabilityProfileTrait.constraints`
 /// - `PbmProfileProfileManager::pbm_query_default_requirement_profiles().default_profile?⇒PbmCapabilityProfileTrait.constraints`
 pub trait PbmCapabilityConstraintsTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the PbmCapabilityConstraints parent struct
-    fn get_pbm_capability_constraints(&self) -> &super::structs::PbmCapabilityConstraints;
-    /// Get a mutable reference to the PbmCapabilityConstraints parent struct
-    fn get_pbm_capability_constraints_mut(&mut self) -> &mut super::structs::PbmCapabilityConstraints;
 }
-impl std::ops::Deref for dyn PbmCapabilityConstraintsTrait {
-    type Target = super::structs::PbmCapabilityConstraints;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_pbm_capability_constraints()
-    }
-}
-
-impl std::ops::DerefMut for dyn PbmCapabilityConstraintsTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_pbm_capability_constraints_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn PbmCapabilityConstraintsTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -22377,12 +16787,8 @@ impl<'de> de::Visitor<'de> for PbmCapabilityConstraintsVisitor {
 }
 
 impl PbmCapabilityConstraintsTrait for PbmCapabilityConstraints {
-    fn get_pbm_capability_constraints(&self) -> &super::structs::PbmCapabilityConstraints { &self }
-    fn get_pbm_capability_constraints_mut(&mut self) -> &mut super::structs::PbmCapabilityConstraints { self }
 }
 impl PbmCapabilityConstraintsTrait for PbmCapabilitySubProfileConstraints {
-    fn get_pbm_capability_constraints(&self) -> &super::structs::PbmCapabilityConstraints { &self.pbm_capability_constraints_ }
-    fn get_pbm_capability_constraints_mut(&mut self) -> &mut super::structs::PbmCapabilityConstraints { &mut self.pbm_capability_constraints_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn PbmCapabilityConstraintsTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -23067,25 +17473,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn StoragePort
 /// 
 /// *(10 of 16 paths)*
 pub trait DeviceIdTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the DeviceId parent struct
-    fn get_device_id(&self) -> &super::structs::DeviceId;
-    /// Get a mutable reference to the DeviceId parent struct
-    fn get_device_id_mut(&mut self) -> &mut super::structs::DeviceId;
 }
-impl std::ops::Deref for dyn DeviceIdTrait {
-    type Target = super::structs::DeviceId;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_device_id()
-    }
-}
-
-impl std::ops::DerefMut for dyn DeviceIdTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_device_id_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn DeviceIdTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -23126,40 +17514,22 @@ impl<'de> de::Visitor<'de> for DeviceIdVisitor {
 }
 
 impl DeviceIdTrait for DeviceId {
-    fn get_device_id(&self) -> &super::structs::DeviceId { &self }
-    fn get_device_id_mut(&mut self) -> &mut super::structs::DeviceId { self }
 }
 impl DeviceIdTrait for VVolId {
-    fn get_device_id(&self) -> &super::structs::DeviceId { &self.device_id_ }
-    fn get_device_id_mut(&mut self) -> &mut super::structs::DeviceId { &mut self.device_id_ }
 }
 impl DeviceIdTrait for VasaVirtualDiskId {
-    fn get_device_id(&self) -> &super::structs::DeviceId { &self.device_id_ }
-    fn get_device_id_mut(&mut self) -> &mut super::structs::DeviceId { &mut self.device_id_ }
 }
 impl DeviceIdTrait for VirtualDiskKey {
-    fn get_device_id(&self) -> &super::structs::DeviceId { &self.device_id_ }
-    fn get_device_id_mut(&mut self) -> &mut super::structs::DeviceId { &mut self.device_id_ }
 }
 impl DeviceIdTrait for VirtualDiskMoId {
-    fn get_device_id(&self) -> &super::structs::DeviceId { &self.device_id_ }
-    fn get_device_id_mut(&mut self) -> &mut super::structs::DeviceId { &mut self.device_id_ }
 }
 impl DeviceIdTrait for VirtualMachineId {
-    fn get_device_id(&self) -> &super::structs::DeviceId { &self.device_id_ }
-    fn get_device_id_mut(&mut self) -> &mut super::structs::DeviceId { &mut self.device_id_ }
 }
 impl DeviceIdTrait for VirtualMachineFilePath {
-    fn get_device_id(&self) -> &super::structs::DeviceId { &self.virtual_machine_id_.device_id_ }
-    fn get_device_id_mut(&mut self) -> &mut super::structs::DeviceId { &mut self.virtual_machine_id_.device_id_ }
 }
 impl DeviceIdTrait for VirtualMachineMoId {
-    fn get_device_id(&self) -> &super::structs::DeviceId { &self.virtual_machine_id_.device_id_ }
-    fn get_device_id_mut(&mut self) -> &mut super::structs::DeviceId { &mut self.virtual_machine_id_.device_id_ }
 }
 impl DeviceIdTrait for VirtualMachineUuid {
-    fn get_device_id(&self) -> &super::structs::DeviceId { &self.virtual_machine_id_.device_id_ }
-    fn get_device_id_mut(&mut self) -> &mut super::structs::DeviceId { &mut self.virtual_machine_id_.device_id_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DeviceIdTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -23212,25 +17582,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DeviceIdTra
 /// 
 /// *(10 of 16 paths)*
 pub trait VirtualMachineIdTrait : super::traits::DeviceIdTrait {
-    /// Get a reference to the VirtualMachineId parent struct
-    fn get_virtual_machine_id(&self) -> &super::structs::VirtualMachineId;
-    /// Get a mutable reference to the VirtualMachineId parent struct
-    fn get_virtual_machine_id_mut(&mut self) -> &mut super::structs::VirtualMachineId;
 }
-impl std::ops::Deref for dyn VirtualMachineIdTrait {
-    type Target = super::structs::VirtualMachineId;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_virtual_machine_id()
-    }
-}
-
-impl std::ops::DerefMut for dyn VirtualMachineIdTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_virtual_machine_id_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn VirtualMachineIdTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -23271,20 +17623,12 @@ impl<'de> de::Visitor<'de> for VirtualMachineIdVisitor {
 }
 
 impl VirtualMachineIdTrait for VirtualMachineId {
-    fn get_virtual_machine_id(&self) -> &super::structs::VirtualMachineId { &self }
-    fn get_virtual_machine_id_mut(&mut self) -> &mut super::structs::VirtualMachineId { self }
 }
 impl VirtualMachineIdTrait for VirtualMachineFilePath {
-    fn get_virtual_machine_id(&self) -> &super::structs::VirtualMachineId { &self.virtual_machine_id_ }
-    fn get_virtual_machine_id_mut(&mut self) -> &mut super::structs::VirtualMachineId { &mut self.virtual_machine_id_ }
 }
 impl VirtualMachineIdTrait for VirtualMachineMoId {
-    fn get_virtual_machine_id(&self) -> &super::structs::VirtualMachineId { &self.virtual_machine_id_ }
-    fn get_virtual_machine_id_mut(&mut self) -> &mut super::structs::VirtualMachineId { &mut self.virtual_machine_id_ }
 }
 impl VirtualMachineIdTrait for VirtualMachineUuid {
-    fn get_virtual_machine_id(&self) -> &super::structs::VirtualMachineId { &self.virtual_machine_id_ }
-    fn get_virtual_machine_id_mut(&mut self) -> &mut super::structs::VirtualMachineId { &mut self.virtual_machine_id_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualMachineIdTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -25191,25 +19535,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn TypeDescrip
 /// - `DirectPathProfileManager::direct_path_profile_manager_query_capacity(query_spec)`
 /// - `DirectPathProfileManager::direct_path_profile_manager_query_capacity()→DirectPathProfileManagerCapacityUnknown.query_spec`
 pub trait DirectPathProfileManagerCapacityQuerySpecTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the DirectPathProfileManagerCapacityQuerySpec parent struct
-    fn get_direct_path_profile_manager_capacity_query_spec(&self) -> &super::structs::DirectPathProfileManagerCapacityQuerySpec;
-    /// Get a mutable reference to the DirectPathProfileManagerCapacityQuerySpec parent struct
-    fn get_direct_path_profile_manager_capacity_query_spec_mut(&mut self) -> &mut super::structs::DirectPathProfileManagerCapacityQuerySpec;
 }
-impl std::ops::Deref for dyn DirectPathProfileManagerCapacityQuerySpecTrait {
-    type Target = super::structs::DirectPathProfileManagerCapacityQuerySpec;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_direct_path_profile_manager_capacity_query_spec()
-    }
-}
-
-impl std::ops::DerefMut for dyn DirectPathProfileManagerCapacityQuerySpecTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_direct_path_profile_manager_capacity_query_spec_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn DirectPathProfileManagerCapacityQuerySpecTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -25250,20 +19576,12 @@ impl<'de> de::Visitor<'de> for DirectPathProfileManagerCapacityQuerySpecVisitor 
 }
 
 impl DirectPathProfileManagerCapacityQuerySpecTrait for DirectPathProfileManagerCapacityQuerySpec {
-    fn get_direct_path_profile_manager_capacity_query_spec(&self) -> &super::structs::DirectPathProfileManagerCapacityQuerySpec { &self }
-    fn get_direct_path_profile_manager_capacity_query_spec_mut(&mut self) -> &mut super::structs::DirectPathProfileManagerCapacityQuerySpec { self }
 }
 impl DirectPathProfileManagerCapacityQuerySpecTrait for DirectPathProfileManagerCapacityQueryByDeviceConfig {
-    fn get_direct_path_profile_manager_capacity_query_spec(&self) -> &super::structs::DirectPathProfileManagerCapacityQuerySpec { &self.direct_path_profile_manager_capacity_query_spec_ }
-    fn get_direct_path_profile_manager_capacity_query_spec_mut(&mut self) -> &mut super::structs::DirectPathProfileManagerCapacityQuerySpec { &mut self.direct_path_profile_manager_capacity_query_spec_ }
 }
 impl DirectPathProfileManagerCapacityQuerySpecTrait for DirectPathProfileManagerCapacityQueryById {
-    fn get_direct_path_profile_manager_capacity_query_spec(&self) -> &super::structs::DirectPathProfileManagerCapacityQuerySpec { &self.direct_path_profile_manager_capacity_query_spec_ }
-    fn get_direct_path_profile_manager_capacity_query_spec_mut(&mut self) -> &mut super::structs::DirectPathProfileManagerCapacityQuerySpec { &mut self.direct_path_profile_manager_capacity_query_spec_ }
 }
 impl DirectPathProfileManagerCapacityQuerySpecTrait for DirectPathProfileManagerCapacityQueryByName {
-    fn get_direct_path_profile_manager_capacity_query_spec(&self) -> &super::structs::DirectPathProfileManagerCapacityQuerySpec { &self.direct_path_profile_manager_capacity_query_spec_ }
-    fn get_direct_path_profile_manager_capacity_query_spec_mut(&mut self) -> &mut super::structs::DirectPathProfileManagerCapacityQuerySpec { &mut self.direct_path_profile_manager_capacity_query_spec_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DirectPathProfileManagerCapacityQuerySpecTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -25300,25 +19618,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DirectPathP
 /// ### How to access
 /// - `DirectPathProfileManager::direct_path_profile_manager_query_capacity()`
 pub trait DirectPathProfileManagerCapacityResultTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the DirectPathProfileManagerCapacityResult parent struct
-    fn get_direct_path_profile_manager_capacity_result(&self) -> &super::structs::DirectPathProfileManagerCapacityResult;
-    /// Get a mutable reference to the DirectPathProfileManagerCapacityResult parent struct
-    fn get_direct_path_profile_manager_capacity_result_mut(&mut self) -> &mut super::structs::DirectPathProfileManagerCapacityResult;
 }
-impl std::ops::Deref for dyn DirectPathProfileManagerCapacityResultTrait {
-    type Target = super::structs::DirectPathProfileManagerCapacityResult;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_direct_path_profile_manager_capacity_result()
-    }
-}
-
-impl std::ops::DerefMut for dyn DirectPathProfileManagerCapacityResultTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_direct_path_profile_manager_capacity_result_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn DirectPathProfileManagerCapacityResultTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -25359,16 +19659,10 @@ impl<'de> de::Visitor<'de> for DirectPathProfileManagerCapacityResultVisitor {
 }
 
 impl DirectPathProfileManagerCapacityResultTrait for DirectPathProfileManagerCapacityResult {
-    fn get_direct_path_profile_manager_capacity_result(&self) -> &super::structs::DirectPathProfileManagerCapacityResult { &self }
-    fn get_direct_path_profile_manager_capacity_result_mut(&mut self) -> &mut super::structs::DirectPathProfileManagerCapacityResult { self }
 }
 impl DirectPathProfileManagerCapacityResultTrait for DirectPathProfileManagerCapacityInfo {
-    fn get_direct_path_profile_manager_capacity_result(&self) -> &super::structs::DirectPathProfileManagerCapacityResult { &self.direct_path_profile_manager_capacity_result_ }
-    fn get_direct_path_profile_manager_capacity_result_mut(&mut self) -> &mut super::structs::DirectPathProfileManagerCapacityResult { &mut self.direct_path_profile_manager_capacity_result_ }
 }
 impl DirectPathProfileManagerCapacityResultTrait for DirectPathProfileManagerCapacityUnknown {
-    fn get_direct_path_profile_manager_capacity_result(&self) -> &super::structs::DirectPathProfileManagerCapacityResult { &self.direct_path_profile_manager_capacity_result_ }
-    fn get_direct_path_profile_manager_capacity_result_mut(&mut self) -> &mut super::structs::DirectPathProfileManagerCapacityResult { &mut self.direct_path_profile_manager_capacity_result_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DirectPathProfileManagerCapacityResultTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -25408,25 +19702,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DirectPathP
 /// - `DirectPathProfileManager::direct_path_profile_manager_query_capacity()→DirectPathProfileManagerCapacityInfo.profile.device_config`
 /// - `DirectPathProfileManager::direct_path_profile_manager_query_capacity()→DirectPathProfileManagerCapacityUnknown.query_spec→DirectPathProfileManagerCapacityQueryByDeviceConfig.device_config`
 pub trait DirectPathProfileManagerDirectPathConfigTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the DirectPathProfileManagerDirectPathConfig parent struct
-    fn get_direct_path_profile_manager_direct_path_config(&self) -> &super::structs::DirectPathProfileManagerDirectPathConfig;
-    /// Get a mutable reference to the DirectPathProfileManagerDirectPathConfig parent struct
-    fn get_direct_path_profile_manager_direct_path_config_mut(&mut self) -> &mut super::structs::DirectPathProfileManagerDirectPathConfig;
 }
-impl std::ops::Deref for dyn DirectPathProfileManagerDirectPathConfigTrait {
-    type Target = super::structs::DirectPathProfileManagerDirectPathConfig;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_direct_path_profile_manager_direct_path_config()
-    }
-}
-
-impl std::ops::DerefMut for dyn DirectPathProfileManagerDirectPathConfigTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_direct_path_profile_manager_direct_path_config_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn DirectPathProfileManagerDirectPathConfigTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -25467,24 +19743,14 @@ impl<'de> de::Visitor<'de> for DirectPathProfileManagerDirectPathConfigVisitor {
 }
 
 impl DirectPathProfileManagerDirectPathConfigTrait for DirectPathProfileManagerDirectPathConfig {
-    fn get_direct_path_profile_manager_direct_path_config(&self) -> &super::structs::DirectPathProfileManagerDirectPathConfig { &self }
-    fn get_direct_path_profile_manager_direct_path_config_mut(&mut self) -> &mut super::structs::DirectPathProfileManagerDirectPathConfig { self }
 }
 impl DirectPathProfileManagerDirectPathConfigTrait for DirectPathProfileManagerDvxDirectPathConfig {
-    fn get_direct_path_profile_manager_direct_path_config(&self) -> &super::structs::DirectPathProfileManagerDirectPathConfig { &self.direct_path_profile_manager_direct_path_config_ }
-    fn get_direct_path_profile_manager_direct_path_config_mut(&mut self) -> &mut super::structs::DirectPathProfileManagerDirectPathConfig { &mut self.direct_path_profile_manager_direct_path_config_ }
 }
 impl DirectPathProfileManagerDirectPathConfigTrait for DirectPathProfileManagerDynamicDirectPathConfig {
-    fn get_direct_path_profile_manager_direct_path_config(&self) -> &super::structs::DirectPathProfileManagerDirectPathConfig { &self.direct_path_profile_manager_direct_path_config_ }
-    fn get_direct_path_profile_manager_direct_path_config_mut(&mut self) -> &mut super::structs::DirectPathProfileManagerDirectPathConfig { &mut self.direct_path_profile_manager_direct_path_config_ }
 }
 impl DirectPathProfileManagerDirectPathConfigTrait for DirectPathProfileManagerVirtualDeviceGroupDirectPathConfig {
-    fn get_direct_path_profile_manager_direct_path_config(&self) -> &super::structs::DirectPathProfileManagerDirectPathConfig { &self.direct_path_profile_manager_direct_path_config_ }
-    fn get_direct_path_profile_manager_direct_path_config_mut(&mut self) -> &mut super::structs::DirectPathProfileManagerDirectPathConfig { &mut self.direct_path_profile_manager_direct_path_config_ }
 }
 impl DirectPathProfileManagerDirectPathConfigTrait for DirectPathProfileManagerVmiopDirectPathConfig {
-    fn get_direct_path_profile_manager_direct_path_config(&self) -> &super::structs::DirectPathProfileManagerDirectPathConfig { &self.direct_path_profile_manager_direct_path_config_ }
-    fn get_direct_path_profile_manager_direct_path_config_mut(&mut self) -> &mut super::structs::DirectPathProfileManagerDirectPathConfig { &mut self.direct_path_profile_manager_direct_path_config_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DirectPathProfileManagerDirectPathConfigTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -25520,25 +19786,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DirectPathP
 /// ### How to access
 /// - `DirectPathProfileManager::direct_path_profile_manager_query_capacity(target)`
 pub trait DirectPathProfileManagerTargetEntityTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the DirectPathProfileManagerTargetEntity parent struct
-    fn get_direct_path_profile_manager_target_entity(&self) -> &super::structs::DirectPathProfileManagerTargetEntity;
-    /// Get a mutable reference to the DirectPathProfileManagerTargetEntity parent struct
-    fn get_direct_path_profile_manager_target_entity_mut(&mut self) -> &mut super::structs::DirectPathProfileManagerTargetEntity;
 }
-impl std::ops::Deref for dyn DirectPathProfileManagerTargetEntityTrait {
-    type Target = super::structs::DirectPathProfileManagerTargetEntity;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_direct_path_profile_manager_target_entity()
-    }
-}
-
-impl std::ops::DerefMut for dyn DirectPathProfileManagerTargetEntityTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_direct_path_profile_manager_target_entity_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn DirectPathProfileManagerTargetEntityTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -25579,16 +19827,10 @@ impl<'de> de::Visitor<'de> for DirectPathProfileManagerTargetEntityVisitor {
 }
 
 impl DirectPathProfileManagerTargetEntityTrait for DirectPathProfileManagerTargetEntity {
-    fn get_direct_path_profile_manager_target_entity(&self) -> &super::structs::DirectPathProfileManagerTargetEntity { &self }
-    fn get_direct_path_profile_manager_target_entity_mut(&mut self) -> &mut super::structs::DirectPathProfileManagerTargetEntity { self }
 }
 impl DirectPathProfileManagerTargetEntityTrait for DirectPathProfileManagerTargetCluster {
-    fn get_direct_path_profile_manager_target_entity(&self) -> &super::structs::DirectPathProfileManagerTargetEntity { &self.direct_path_profile_manager_target_entity_ }
-    fn get_direct_path_profile_manager_target_entity_mut(&mut self) -> &mut super::structs::DirectPathProfileManagerTargetEntity { &mut self.direct_path_profile_manager_target_entity_ }
 }
 impl DirectPathProfileManagerTargetEntityTrait for DirectPathProfileManagerTargetHost {
-    fn get_direct_path_profile_manager_target_entity(&self) -> &super::structs::DirectPathProfileManagerTargetEntity { &self.direct_path_profile_manager_target_entity_ }
-    fn get_direct_path_profile_manager_target_entity_mut(&mut self) -> &mut super::structs::DirectPathProfileManagerTargetEntity { &mut self.direct_path_profile_manager_target_entity_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DirectPathProfileManagerTargetEntityTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -26497,25 +20739,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VMwareDvsHe
 /// - `VsanVdsSystem::vsan_vds_get_migration_plan().vds_spec.capability?.features_supported?.health_check_capability?`
 /// - `VsanVdsSystem::vsan_vds_migrate_vss(migration_plan).vds_spec.capability?.features_supported?.health_check_capability?`
 pub trait DvsHealthCheckCapabilityTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the DvsHealthCheckCapability parent struct
-    fn get_dvs_health_check_capability(&self) -> &super::structs::DvsHealthCheckCapability;
-    /// Get a mutable reference to the DvsHealthCheckCapability parent struct
-    fn get_dvs_health_check_capability_mut(&mut self) -> &mut super::structs::DvsHealthCheckCapability;
 }
-impl std::ops::Deref for dyn DvsHealthCheckCapabilityTrait {
-    type Target = super::structs::DvsHealthCheckCapability;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_dvs_health_check_capability()
-    }
-}
-
-impl std::ops::DerefMut for dyn DvsHealthCheckCapabilityTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_dvs_health_check_capability_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn DvsHealthCheckCapabilityTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -26556,12 +20780,8 @@ impl<'de> de::Visitor<'de> for DvsHealthCheckCapabilityVisitor {
 }
 
 impl DvsHealthCheckCapabilityTrait for DvsHealthCheckCapability {
-    fn get_dvs_health_check_capability(&self) -> &super::structs::DvsHealthCheckCapability { &self }
-    fn get_dvs_health_check_capability_mut(&mut self) -> &mut super::structs::DvsHealthCheckCapability { self }
 }
 impl DvsHealthCheckCapabilityTrait for VMwareDvsHealthCheckCapability {
-    fn get_dvs_health_check_capability(&self) -> &super::structs::DvsHealthCheckCapability { &self.dvs_health_check_capability_ }
-    fn get_dvs_health_check_capability_mut(&mut self) -> &mut super::structs::DvsHealthCheckCapability { &mut self.dvs_health_check_capability_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DvsHealthCheckCapabilityTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -26594,25 +20814,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DvsHealthCh
 /// - `VsanVdsSystem::vsan_vds_get_migration_plan().vds_spec.config_spec.uplink_port_policy?`
 /// - `VsanVdsSystem::vsan_vds_migrate_vss(migration_plan).vds_spec.config_spec.uplink_port_policy?`
 pub trait DvsUplinkPortPolicyTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the DvsUplinkPortPolicy parent struct
-    fn get_dvs_uplink_port_policy(&self) -> &super::structs::DvsUplinkPortPolicy;
-    /// Get a mutable reference to the DvsUplinkPortPolicy parent struct
-    fn get_dvs_uplink_port_policy_mut(&mut self) -> &mut super::structs::DvsUplinkPortPolicy;
 }
-impl std::ops::Deref for dyn DvsUplinkPortPolicyTrait {
-    type Target = super::structs::DvsUplinkPortPolicy;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_dvs_uplink_port_policy()
-    }
-}
-
-impl std::ops::DerefMut for dyn DvsUplinkPortPolicyTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_dvs_uplink_port_policy_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn DvsUplinkPortPolicyTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -26653,12 +20855,8 @@ impl<'de> de::Visitor<'de> for DvsUplinkPortPolicyVisitor {
 }
 
 impl DvsUplinkPortPolicyTrait for DvsUplinkPortPolicy {
-    fn get_dvs_uplink_port_policy(&self) -> &super::structs::DvsUplinkPortPolicy { &self }
-    fn get_dvs_uplink_port_policy_mut(&mut self) -> &mut super::structs::DvsUplinkPortPolicy { self }
 }
 impl DvsUplinkPortPolicyTrait for DvsNameArrayUplinkPortPolicy {
-    fn get_dvs_uplink_port_policy(&self) -> &super::structs::DvsUplinkPortPolicy { &self.dvs_uplink_port_policy_ }
-    fn get_dvs_uplink_port_policy_mut(&mut self) -> &mut super::structs::DvsUplinkPortPolicy { &mut self.dvs_uplink_port_policy_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DvsUplinkPortPolicyTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -26683,25 +20881,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DvsUplinkPo
 /// 
 /// ***Since:*** vSphere API Release 9.0.0.0
 pub trait HbrReplicationTargetSpecTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the HbrReplicationTargetSpec parent struct
-    fn get_hbr_replication_target_spec(&self) -> &super::structs::HbrReplicationTargetSpec;
-    /// Get a mutable reference to the HbrReplicationTargetSpec parent struct
-    fn get_hbr_replication_target_spec_mut(&mut self) -> &mut super::structs::HbrReplicationTargetSpec;
 }
-impl std::ops::Deref for dyn HbrReplicationTargetSpecTrait {
-    type Target = super::structs::HbrReplicationTargetSpec;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_hbr_replication_target_spec()
-    }
-}
-
-impl std::ops::DerefMut for dyn HbrReplicationTargetSpecTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_hbr_replication_target_spec_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn HbrReplicationTargetSpecTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -26742,12 +20922,8 @@ impl<'de> de::Visitor<'de> for HbrReplicationTargetSpecVisitor {
 }
 
 impl HbrReplicationTargetSpecTrait for HbrReplicationTargetSpec {
-    fn get_hbr_replication_target_spec(&self) -> &super::structs::HbrReplicationTargetSpec { &self }
-    fn get_hbr_replication_target_spec_mut(&mut self) -> &mut super::structs::HbrReplicationTargetSpec { self }
 }
 impl HbrReplicationTargetSpecTrait for HbrTargetSpecReplacement {
-    fn get_hbr_replication_target_spec(&self) -> &super::structs::HbrReplicationTargetSpec { &self.hbr_replication_target_spec_ }
-    fn get_hbr_replication_target_spec_mut(&mut self) -> &mut super::structs::HbrReplicationTargetSpec { &mut self.hbr_replication_target_spec_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn HbrReplicationTargetSpecTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -27704,25 +21880,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn IoFilterInf
 /// - `IoFilterManager::install_io_filter_task(vib_ssl_trust)`
 /// - `IoFilterManager::upgrade_io_filter_task(vib_ssl_trust)`
 pub trait IoFilterManagerSslTrustTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the IoFilterManagerSslTrust parent struct
-    fn get_io_filter_manager_ssl_trust(&self) -> &super::structs::IoFilterManagerSslTrust;
-    /// Get a mutable reference to the IoFilterManagerSslTrust parent struct
-    fn get_io_filter_manager_ssl_trust_mut(&mut self) -> &mut super::structs::IoFilterManagerSslTrust;
 }
-impl std::ops::Deref for dyn IoFilterManagerSslTrustTrait {
-    type Target = super::structs::IoFilterManagerSslTrust;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_io_filter_manager_ssl_trust()
-    }
-}
-
-impl std::ops::DerefMut for dyn IoFilterManagerSslTrustTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_io_filter_manager_ssl_trust_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn IoFilterManagerSslTrustTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -27763,16 +21921,10 @@ impl<'de> de::Visitor<'de> for IoFilterManagerSslTrustVisitor {
 }
 
 impl IoFilterManagerSslTrustTrait for IoFilterManagerSslTrust {
-    fn get_io_filter_manager_ssl_trust(&self) -> &super::structs::IoFilterManagerSslTrust { &self }
-    fn get_io_filter_manager_ssl_trust_mut(&mut self) -> &mut super::structs::IoFilterManagerSslTrust { self }
 }
 impl IoFilterManagerSslTrustTrait for PinnedCertificate {
-    fn get_io_filter_manager_ssl_trust(&self) -> &super::structs::IoFilterManagerSslTrust { &self.io_filter_manager_ssl_trust_ }
-    fn get_io_filter_manager_ssl_trust_mut(&mut self) -> &mut super::structs::IoFilterManagerSslTrust { &mut self.io_filter_manager_ssl_trust_ }
 }
 impl IoFilterManagerSslTrustTrait for UntrustedCertificate {
-    fn get_io_filter_manager_ssl_trust(&self) -> &super::structs::IoFilterManagerSslTrust { &self.io_filter_manager_ssl_trust_ }
-    fn get_io_filter_manager_ssl_trust_mut(&mut self) -> &mut super::structs::IoFilterManagerSslTrust { &mut self.io_filter_manager_ssl_trust_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn IoFilterManagerSslTrustTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -27810,25 +21962,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn IoFilterMan
 /// - `HostProfile::execute_host_profile().config_spec?.license?.source?`
 /// - `HostProfileManager::generate_config_task_list().config_spec?.license?.source?`
 pub trait LicenseSourceTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the LicenseSource parent struct
-    fn get_license_source(&self) -> &super::structs::LicenseSource;
-    /// Get a mutable reference to the LicenseSource parent struct
-    fn get_license_source_mut(&mut self) -> &mut super::structs::LicenseSource;
 }
-impl std::ops::Deref for dyn LicenseSourceTrait {
-    type Target = super::structs::LicenseSource;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_license_source()
-    }
-}
-
-impl std::ops::DerefMut for dyn LicenseSourceTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_license_source_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn LicenseSourceTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -27869,20 +22003,12 @@ impl<'de> de::Visitor<'de> for LicenseSourceVisitor {
 }
 
 impl LicenseSourceTrait for LicenseSource {
-    fn get_license_source(&self) -> &super::structs::LicenseSource { &self }
-    fn get_license_source_mut(&mut self) -> &mut super::structs::LicenseSource { self }
 }
 impl LicenseSourceTrait for EvaluationLicenseSource {
-    fn get_license_source(&self) -> &super::structs::LicenseSource { &self.license_source_ }
-    fn get_license_source_mut(&mut self) -> &mut super::structs::LicenseSource { &mut self.license_source_ }
 }
 impl LicenseSourceTrait for LicenseServerSource {
-    fn get_license_source(&self) -> &super::structs::LicenseSource { &self.license_source_ }
-    fn get_license_source_mut(&mut self) -> &mut super::structs::LicenseSource { &mut self.license_source_ }
 }
 impl LicenseSourceTrait for LocalLicenseSource {
-    fn get_license_source(&self) -> &super::structs::LicenseSource { &self.license_source_ }
-    fn get_license_source_mut(&mut self) -> &mut super::structs::LicenseSource { &mut self.license_source_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn LicenseSourceTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -29184,25 +23310,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn ResourcePoo
 /// - `ClusterComputeResource::configure_hci_task(cluster_spec).v_san_config_spec?`
 /// - `ClusterComputeResource::validate_hci_configuration(hci_config_spec).v_san_config_spec?`
 pub trait SddcBaseTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the SddcBase parent struct
-    fn get_sddc_base(&self) -> &super::structs::SddcBase;
-    /// Get a mutable reference to the SddcBase parent struct
-    fn get_sddc_base_mut(&mut self) -> &mut super::structs::SddcBase;
 }
-impl std::ops::Deref for dyn SddcBaseTrait {
-    type Target = super::structs::SddcBase;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_sddc_base()
-    }
-}
-
-impl std::ops::DerefMut for dyn SddcBaseTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_sddc_base_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn SddcBaseTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -29243,12 +23351,8 @@ impl<'de> de::Visitor<'de> for SddcBaseVisitor {
 }
 
 impl SddcBaseTrait for SddcBase {
-    fn get_sddc_base(&self) -> &super::structs::SddcBase { &self }
-    fn get_sddc_base_mut(&mut self) -> &mut super::structs::SddcBase { self }
 }
 impl SddcBaseTrait for VimVsanReconfigSpec {
-    fn get_sddc_base(&self) -> &super::structs::SddcBase { &self.sddc_base_ }
-    fn get_sddc_base_mut(&mut self) -> &mut super::structs::SddcBase { &mut self.sddc_base_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn SddcBaseTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -29274,25 +23378,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn SddcBaseTra
 /// ### How to access
 /// - `DistributedVirtualSwitchManager::dvs_manager_export_entity_task(selection_set)`
 pub trait SelectionSetTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the SelectionSet parent struct
-    fn get_selection_set(&self) -> &super::structs::SelectionSet;
-    /// Get a mutable reference to the SelectionSet parent struct
-    fn get_selection_set_mut(&mut self) -> &mut super::structs::SelectionSet;
 }
-impl std::ops::Deref for dyn SelectionSetTrait {
-    type Target = super::structs::SelectionSet;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_selection_set()
-    }
-}
-
-impl std::ops::DerefMut for dyn SelectionSetTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_selection_set_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn SelectionSetTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -29333,16 +23419,10 @@ impl<'de> de::Visitor<'de> for SelectionSetVisitor {
 }
 
 impl SelectionSetTrait for SelectionSet {
-    fn get_selection_set(&self) -> &super::structs::SelectionSet { &self }
-    fn get_selection_set_mut(&mut self) -> &mut super::structs::SelectionSet { self }
 }
 impl SelectionSetTrait for DvPortgroupSelection {
-    fn get_selection_set(&self) -> &super::structs::SelectionSet { &self.selection_set_ }
-    fn get_selection_set_mut(&mut self) -> &mut super::structs::SelectionSet { &mut self.selection_set_ }
 }
 impl SelectionSetTrait for DvsSelection {
-    fn get_selection_set(&self) -> &super::structs::SelectionSet { &self.selection_set_ }
-    fn get_selection_set_mut(&mut self) -> &mut super::structs::SelectionSet { &mut self.selection_set_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn SelectionSetTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -29382,25 +23462,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn SelectionSe
 /// 
 /// *(10 of 39 paths)*
 pub trait ServiceLocatorCredentialTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the ServiceLocatorCredential parent struct
-    fn get_service_locator_credential(&self) -> &super::structs::ServiceLocatorCredential;
-    /// Get a mutable reference to the ServiceLocatorCredential parent struct
-    fn get_service_locator_credential_mut(&mut self) -> &mut super::structs::ServiceLocatorCredential;
 }
-impl std::ops::Deref for dyn ServiceLocatorCredentialTrait {
-    type Target = super::structs::ServiceLocatorCredential;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_service_locator_credential()
-    }
-}
-
-impl std::ops::DerefMut for dyn ServiceLocatorCredentialTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_service_locator_credential_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn ServiceLocatorCredentialTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -29441,16 +23503,10 @@ impl<'de> de::Visitor<'de> for ServiceLocatorCredentialVisitor {
 }
 
 impl ServiceLocatorCredentialTrait for ServiceLocatorCredential {
-    fn get_service_locator_credential(&self) -> &super::structs::ServiceLocatorCredential { &self }
-    fn get_service_locator_credential_mut(&mut self) -> &mut super::structs::ServiceLocatorCredential { self }
 }
 impl ServiceLocatorCredentialTrait for ServiceLocatorNamePassword {
-    fn get_service_locator_credential(&self) -> &super::structs::ServiceLocatorCredential { &self.service_locator_credential_ }
-    fn get_service_locator_credential_mut(&mut self) -> &mut super::structs::ServiceLocatorCredential { &mut self.service_locator_credential_ }
 }
 impl ServiceLocatorCredentialTrait for ServiceLocatorSamlCredential {
-    fn get_service_locator_credential(&self) -> &super::structs::ServiceLocatorCredential { &self.service_locator_credential_ }
-    fn get_service_locator_credential_mut(&mut self) -> &mut super::structs::ServiceLocatorCredential { &mut self.service_locator_credential_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn ServiceLocatorCredentialTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -29483,25 +23539,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn ServiceLoca
 /// ### How to access
 /// - `SessionManager::acquire_generic_service_ticket(spec)`
 pub trait SessionManagerServiceRequestSpecTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the SessionManagerServiceRequestSpec parent struct
-    fn get_session_manager_service_request_spec(&self) -> &super::structs::SessionManagerServiceRequestSpec;
-    /// Get a mutable reference to the SessionManagerServiceRequestSpec parent struct
-    fn get_session_manager_service_request_spec_mut(&mut self) -> &mut super::structs::SessionManagerServiceRequestSpec;
 }
-impl std::ops::Deref for dyn SessionManagerServiceRequestSpecTrait {
-    type Target = super::structs::SessionManagerServiceRequestSpec;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_session_manager_service_request_spec()
-    }
-}
-
-impl std::ops::DerefMut for dyn SessionManagerServiceRequestSpecTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_session_manager_service_request_spec_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn SessionManagerServiceRequestSpecTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -29542,16 +23580,10 @@ impl<'de> de::Visitor<'de> for SessionManagerServiceRequestSpecVisitor {
 }
 
 impl SessionManagerServiceRequestSpecTrait for SessionManagerServiceRequestSpec {
-    fn get_session_manager_service_request_spec(&self) -> &super::structs::SessionManagerServiceRequestSpec { &self }
-    fn get_session_manager_service_request_spec_mut(&mut self) -> &mut super::structs::SessionManagerServiceRequestSpec { self }
 }
 impl SessionManagerServiceRequestSpecTrait for SessionManagerHttpServiceRequestSpec {
-    fn get_session_manager_service_request_spec(&self) -> &super::structs::SessionManagerServiceRequestSpec { &self.session_manager_service_request_spec_ }
-    fn get_session_manager_service_request_spec_mut(&mut self) -> &mut super::structs::SessionManagerServiceRequestSpec { &mut self.session_manager_service_request_spec_ }
 }
 impl SessionManagerServiceRequestSpecTrait for SessionManagerVmomiServiceRequestSpec {
-    fn get_session_manager_service_request_spec(&self) -> &super::structs::SessionManagerServiceRequestSpec { &self.session_manager_service_request_spec_ }
-    fn get_session_manager_service_request_spec_mut(&mut self) -> &mut super::structs::SessionManagerServiceRequestSpec { &mut self.session_manager_service_request_spec_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn SessionManagerServiceRequestSpecTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -29583,25 +23615,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn SessionMana
 /// ### How to access
 /// - `TaskManager::read_next_tasks_by_view_spec(view_spec)`
 pub trait TaskManagerTaskViewSpecTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the TaskManagerTaskViewSpec parent struct
-    fn get_task_manager_task_view_spec(&self) -> &super::structs::TaskManagerTaskViewSpec;
-    /// Get a mutable reference to the TaskManagerTaskViewSpec parent struct
-    fn get_task_manager_task_view_spec_mut(&mut self) -> &mut super::structs::TaskManagerTaskViewSpec;
 }
-impl std::ops::Deref for dyn TaskManagerTaskViewSpecTrait {
-    type Target = super::structs::TaskManagerTaskViewSpec;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_task_manager_task_view_spec()
-    }
-}
-
-impl std::ops::DerefMut for dyn TaskManagerTaskViewSpecTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_task_manager_task_view_spec_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn TaskManagerTaskViewSpecTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -29642,12 +23656,8 @@ impl<'de> de::Visitor<'de> for TaskManagerTaskViewSpecVisitor {
 }
 
 impl TaskManagerTaskViewSpecTrait for TaskManagerTaskViewSpec {
-    fn get_task_manager_task_view_spec(&self) -> &super::structs::TaskManagerTaskViewSpec { &self }
-    fn get_task_manager_task_view_spec_mut(&mut self) -> &mut super::structs::TaskManagerTaskViewSpec { self }
 }
 impl TaskManagerTaskViewSpecTrait for TaskManagerViewByStartId {
-    fn get_task_manager_task_view_spec(&self) -> &super::structs::TaskManagerTaskViewSpec { &self.task_manager_task_view_spec_ }
-    fn get_task_manager_task_view_spec_mut(&mut self) -> &mut super::structs::TaskManagerTaskViewSpec { &mut self.task_manager_task_view_spec_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn TaskManagerTaskViewSpecTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -29681,25 +23691,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn TaskManager
 /// - `TaskManager::read_next_tasks_by_view_spec().reason`
 /// - `TaskManager::create_task().reason`
 pub trait TaskReasonTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the TaskReason parent struct
-    fn get_task_reason(&self) -> &super::structs::TaskReason;
-    /// Get a mutable reference to the TaskReason parent struct
-    fn get_task_reason_mut(&mut self) -> &mut super::structs::TaskReason;
 }
-impl std::ops::Deref for dyn TaskReasonTrait {
-    type Target = super::structs::TaskReason;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_task_reason()
-    }
-}
-
-impl std::ops::DerefMut for dyn TaskReasonTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_task_reason_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn TaskReasonTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -29740,24 +23732,14 @@ impl<'de> de::Visitor<'de> for TaskReasonVisitor {
 }
 
 impl TaskReasonTrait for TaskReason {
-    fn get_task_reason(&self) -> &super::structs::TaskReason { &self }
-    fn get_task_reason_mut(&mut self) -> &mut super::structs::TaskReason { self }
 }
 impl TaskReasonTrait for TaskReasonAlarm {
-    fn get_task_reason(&self) -> &super::structs::TaskReason { &self.task_reason_ }
-    fn get_task_reason_mut(&mut self) -> &mut super::structs::TaskReason { &mut self.task_reason_ }
 }
 impl TaskReasonTrait for TaskReasonSchedule {
-    fn get_task_reason(&self) -> &super::structs::TaskReason { &self.task_reason_ }
-    fn get_task_reason_mut(&mut self) -> &mut super::structs::TaskReason { &mut self.task_reason_ }
 }
 impl TaskReasonTrait for TaskReasonSystem {
-    fn get_task_reason(&self) -> &super::structs::TaskReason { &self.task_reason_ }
-    fn get_task_reason_mut(&mut self) -> &mut super::structs::TaskReason { &mut self.task_reason_ }
 }
 impl TaskReasonTrait for TaskReasonUser {
-    fn get_task_reason(&self) -> &super::structs::TaskReason { &self.task_reason_ }
-    fn get_task_reason_mut(&mut self) -> &mut super::structs::TaskReason { &mut self.task_reason_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn TaskReasonTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -30264,25 +24246,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualMach
 /// 
 /// This structure may be used only with operations rendered under `/vsan`.
 pub trait VsanComparatorTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the VsanComparator parent struct
-    fn get_vsan_comparator(&self) -> &super::structs::VsanComparator;
-    /// Get a mutable reference to the VsanComparator parent struct
-    fn get_vsan_comparator_mut(&mut self) -> &mut super::structs::VsanComparator;
 }
-impl std::ops::Deref for dyn VsanComparatorTrait {
-    type Target = super::structs::VsanComparator;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_vsan_comparator()
-    }
-}
-
-impl std::ops::DerefMut for dyn VsanComparatorTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_vsan_comparator_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn VsanComparatorTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -30323,16 +24287,10 @@ impl<'de> de::Visitor<'de> for VsanComparatorVisitor {
 }
 
 impl VsanComparatorTrait for VsanComparator {
-    fn get_vsan_comparator(&self) -> &super::structs::VsanComparator { &self }
-    fn get_vsan_comparator_mut(&mut self) -> &mut super::structs::VsanComparator { self }
 }
 impl VsanComparatorTrait for VsanJsonComparator {
-    fn get_vsan_comparator(&self) -> &super::structs::VsanComparator { &self.vsan_comparator_ }
-    fn get_vsan_comparator_mut(&mut self) -> &mut super::structs::VsanComparator { &mut self.vsan_comparator_ }
 }
 impl VsanComparatorTrait for VsanNestJsonComparator {
-    fn get_vsan_comparator(&self) -> &super::structs::VsanComparator { &self.vsan_comparator_ }
-    fn get_vsan_comparator_mut(&mut self) -> &mut super::structs::VsanComparator { &mut self.vsan_comparator_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VsanComparatorTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -31101,25 +25059,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VsanUpgrade
 /// - `Alarm::reconfigure_alarm(spec).action?→AlarmTriggeringAction.action`
 /// - `AlarmManager::create_alarm(spec).action?→AlarmTriggeringAction.action`
 pub trait ActionTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the Action parent struct
-    fn get_action(&self) -> &super::structs::Action;
-    /// Get a mutable reference to the Action parent struct
-    fn get_action_mut(&mut self) -> &mut super::structs::Action;
 }
-impl std::ops::Deref for dyn ActionTrait {
-    type Target = super::structs::Action;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_action()
-    }
-}
-
-impl std::ops::DerefMut for dyn ActionTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_action_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn ActionTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -31160,28 +25100,16 @@ impl<'de> de::Visitor<'de> for ActionVisitor {
 }
 
 impl ActionTrait for Action {
-    fn get_action(&self) -> &super::structs::Action { &self }
-    fn get_action_mut(&mut self) -> &mut super::structs::Action { self }
 }
 impl ActionTrait for CreateTaskAction {
-    fn get_action(&self) -> &super::structs::Action { &self.action_ }
-    fn get_action_mut(&mut self) -> &mut super::structs::Action { &mut self.action_ }
 }
 impl ActionTrait for MethodAction {
-    fn get_action(&self) -> &super::structs::Action { &self.action_ }
-    fn get_action_mut(&mut self) -> &mut super::structs::Action { &mut self.action_ }
 }
 impl ActionTrait for RunScriptAction {
-    fn get_action(&self) -> &super::structs::Action { &self.action_ }
-    fn get_action_mut(&mut self) -> &mut super::structs::Action { &mut self.action_ }
 }
 impl ActionTrait for SendEmailAction {
-    fn get_action(&self) -> &super::structs::Action { &self.action_ }
-    fn get_action_mut(&mut self) -> &mut super::structs::Action { &mut self.action_ }
 }
 impl ActionTrait for SendSnmpAction {
-    fn get_action(&self) -> &super::structs::Action { &self.action_ }
-    fn get_action_mut(&mut self) -> &mut super::structs::Action { &mut self.action_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn ActionTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -31218,25 +25146,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn ActionTrait
 /// - `Alarm::reconfigure_alarm(spec).action?`
 /// - `AlarmManager::create_alarm(spec).action?`
 pub trait AlarmActionTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the AlarmAction parent struct
-    fn get_alarm_action(&self) -> &super::structs::AlarmAction;
-    /// Get a mutable reference to the AlarmAction parent struct
-    fn get_alarm_action_mut(&mut self) -> &mut super::structs::AlarmAction;
 }
-impl std::ops::Deref for dyn AlarmActionTrait {
-    type Target = super::structs::AlarmAction;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_alarm_action()
-    }
-}
-
-impl std::ops::DerefMut for dyn AlarmActionTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_alarm_action_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn AlarmActionTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -31277,16 +25187,10 @@ impl<'de> de::Visitor<'de> for AlarmActionVisitor {
 }
 
 impl AlarmActionTrait for AlarmAction {
-    fn get_alarm_action(&self) -> &super::structs::AlarmAction { &self }
-    fn get_alarm_action_mut(&mut self) -> &mut super::structs::AlarmAction { self }
 }
 impl AlarmActionTrait for AlarmTriggeringAction {
-    fn get_alarm_action(&self) -> &super::structs::AlarmAction { &self.alarm_action_ }
-    fn get_alarm_action_mut(&mut self) -> &mut super::structs::AlarmAction { &mut self.alarm_action_ }
 }
 impl AlarmActionTrait for GroupAlarmAction {
-    fn get_alarm_action(&self) -> &super::structs::AlarmAction { &self.alarm_action_ }
-    fn get_alarm_action_mut(&mut self) -> &mut super::structs::AlarmAction { &mut self.alarm_action_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn AlarmActionTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -31317,25 +25221,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn AlarmAction
 /// - `Alarm::reconfigure_alarm(spec).expression`
 /// - `AlarmManager::create_alarm(spec).expression`
 pub trait AlarmExpressionTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the AlarmExpression parent struct
-    fn get_alarm_expression(&self) -> &super::structs::AlarmExpression;
-    /// Get a mutable reference to the AlarmExpression parent struct
-    fn get_alarm_expression_mut(&mut self) -> &mut super::structs::AlarmExpression;
 }
-impl std::ops::Deref for dyn AlarmExpressionTrait {
-    type Target = super::structs::AlarmExpression;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_alarm_expression()
-    }
-}
-
-impl std::ops::DerefMut for dyn AlarmExpressionTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_alarm_expression_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn AlarmExpressionTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -31376,28 +25262,16 @@ impl<'de> de::Visitor<'de> for AlarmExpressionVisitor {
 }
 
 impl AlarmExpressionTrait for AlarmExpression {
-    fn get_alarm_expression(&self) -> &super::structs::AlarmExpression { &self }
-    fn get_alarm_expression_mut(&mut self) -> &mut super::structs::AlarmExpression { self }
 }
 impl AlarmExpressionTrait for AndAlarmExpression {
-    fn get_alarm_expression(&self) -> &super::structs::AlarmExpression { &self.alarm_expression_ }
-    fn get_alarm_expression_mut(&mut self) -> &mut super::structs::AlarmExpression { &mut self.alarm_expression_ }
 }
 impl AlarmExpressionTrait for EventAlarmExpression {
-    fn get_alarm_expression(&self) -> &super::structs::AlarmExpression { &self.alarm_expression_ }
-    fn get_alarm_expression_mut(&mut self) -> &mut super::structs::AlarmExpression { &mut self.alarm_expression_ }
 }
 impl AlarmExpressionTrait for MetricAlarmExpression {
-    fn get_alarm_expression(&self) -> &super::structs::AlarmExpression { &self.alarm_expression_ }
-    fn get_alarm_expression_mut(&mut self) -> &mut super::structs::AlarmExpression { &mut self.alarm_expression_ }
 }
 impl AlarmExpressionTrait for OrAlarmExpression {
-    fn get_alarm_expression(&self) -> &super::structs::AlarmExpression { &self.alarm_expression_ }
-    fn get_alarm_expression_mut(&mut self) -> &mut super::structs::AlarmExpression { &mut self.alarm_expression_ }
 }
 impl AlarmExpressionTrait for StateAlarmExpression {
-    fn get_alarm_expression(&self) -> &super::structs::AlarmExpression { &self.alarm_expression_ }
-    fn get_alarm_expression_mut(&mut self) -> &mut super::structs::AlarmExpression { &mut self.alarm_expression_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn AlarmExpressionTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -31750,25 +25624,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn ClusterActi
 /// - `ClusterComputeResource::summary_ex.admission_control_info?`
 /// - `ClusterComputeResource::summary→ClusterComputeResourceSummary.admission_control_info?`
 pub trait ClusterDasAdmissionControlInfoTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the ClusterDasAdmissionControlInfo parent struct
-    fn get_cluster_das_admission_control_info(&self) -> &super::structs::ClusterDasAdmissionControlInfo;
-    /// Get a mutable reference to the ClusterDasAdmissionControlInfo parent struct
-    fn get_cluster_das_admission_control_info_mut(&mut self) -> &mut super::structs::ClusterDasAdmissionControlInfo;
 }
-impl std::ops::Deref for dyn ClusterDasAdmissionControlInfoTrait {
-    type Target = super::structs::ClusterDasAdmissionControlInfo;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_cluster_das_admission_control_info()
-    }
-}
-
-impl std::ops::DerefMut for dyn ClusterDasAdmissionControlInfoTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_cluster_das_admission_control_info_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn ClusterDasAdmissionControlInfoTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -31809,20 +25665,12 @@ impl<'de> de::Visitor<'de> for ClusterDasAdmissionControlInfoVisitor {
 }
 
 impl ClusterDasAdmissionControlInfoTrait for ClusterDasAdmissionControlInfo {
-    fn get_cluster_das_admission_control_info(&self) -> &super::structs::ClusterDasAdmissionControlInfo { &self }
-    fn get_cluster_das_admission_control_info_mut(&mut self) -> &mut super::structs::ClusterDasAdmissionControlInfo { self }
 }
 impl ClusterDasAdmissionControlInfoTrait for ClusterFailoverHostAdmissionControlInfo {
-    fn get_cluster_das_admission_control_info(&self) -> &super::structs::ClusterDasAdmissionControlInfo { &self.cluster_das_admission_control_info_ }
-    fn get_cluster_das_admission_control_info_mut(&mut self) -> &mut super::structs::ClusterDasAdmissionControlInfo { &mut self.cluster_das_admission_control_info_ }
 }
 impl ClusterDasAdmissionControlInfoTrait for ClusterFailoverLevelAdmissionControlInfo {
-    fn get_cluster_das_admission_control_info(&self) -> &super::structs::ClusterDasAdmissionControlInfo { &self.cluster_das_admission_control_info_ }
-    fn get_cluster_das_admission_control_info_mut(&mut self) -> &mut super::structs::ClusterDasAdmissionControlInfo { &mut self.cluster_das_admission_control_info_ }
 }
 impl ClusterDasAdmissionControlInfoTrait for ClusterFailoverResourcesAdmissionControlInfo {
-    fn get_cluster_das_admission_control_info(&self) -> &super::structs::ClusterDasAdmissionControlInfo { &self.cluster_das_admission_control_info_ }
-    fn get_cluster_das_admission_control_info_mut(&mut self) -> &mut super::structs::ClusterDasAdmissionControlInfo { &mut self.cluster_das_admission_control_info_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn ClusterDasAdmissionControlInfoTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -32099,25 +25947,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn ClusterDasA
 /// - `ClusterComputeResource::summary_ex.das_data?`
 /// - `ClusterComputeResource::summary→ClusterComputeResourceSummary.das_data?`
 pub trait ClusterDasDataTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the ClusterDasData parent struct
-    fn get_cluster_das_data(&self) -> &super::structs::ClusterDasData;
-    /// Get a mutable reference to the ClusterDasData parent struct
-    fn get_cluster_das_data_mut(&mut self) -> &mut super::structs::ClusterDasData;
 }
-impl std::ops::Deref for dyn ClusterDasDataTrait {
-    type Target = super::structs::ClusterDasData;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_cluster_das_data()
-    }
-}
-
-impl std::ops::DerefMut for dyn ClusterDasDataTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_cluster_das_data_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn ClusterDasDataTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -32158,12 +25988,8 @@ impl<'de> de::Visitor<'de> for ClusterDasDataVisitor {
 }
 
 impl ClusterDasDataTrait for ClusterDasData {
-    fn get_cluster_das_data(&self) -> &super::structs::ClusterDasData { &self }
-    fn get_cluster_das_data_mut(&mut self) -> &mut super::structs::ClusterDasData { self }
 }
 impl ClusterDasDataTrait for ClusterDasDataSummary {
-    fn get_cluster_das_data(&self) -> &super::structs::ClusterDasData { &self.cluster_das_data_ }
-    fn get_cluster_das_data_mut(&mut self) -> &mut super::structs::ClusterDasData { &mut self.cluster_das_data_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn ClusterDasDataTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -32189,25 +26015,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn ClusterDasD
 /// ### How to access
 /// - `ClusterComputeResource::retrieve_das_advanced_runtime_info().das_host_info?`
 pub trait ClusterDasHostInfoTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the ClusterDasHostInfo parent struct
-    fn get_cluster_das_host_info(&self) -> &super::structs::ClusterDasHostInfo;
-    /// Get a mutable reference to the ClusterDasHostInfo parent struct
-    fn get_cluster_das_host_info_mut(&mut self) -> &mut super::structs::ClusterDasHostInfo;
 }
-impl std::ops::Deref for dyn ClusterDasHostInfoTrait {
-    type Target = super::structs::ClusterDasHostInfo;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_cluster_das_host_info()
-    }
-}
-
-impl std::ops::DerefMut for dyn ClusterDasHostInfoTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_cluster_das_host_info_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn ClusterDasHostInfoTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -32248,12 +26056,8 @@ impl<'de> de::Visitor<'de> for ClusterDasHostInfoVisitor {
 }
 
 impl ClusterDasHostInfoTrait for ClusterDasHostInfo {
-    fn get_cluster_das_host_info(&self) -> &super::structs::ClusterDasHostInfo { &self }
-    fn get_cluster_das_host_info_mut(&mut self) -> &mut super::structs::ClusterDasHostInfo { self }
 }
 impl ClusterDasHostInfoTrait for ClusterDasAamHostInfo {
-    fn get_cluster_das_host_info(&self) -> &super::structs::ClusterDasHostInfo { &self.cluster_das_host_info_ }
-    fn get_cluster_das_host_info_mut(&mut self) -> &mut super::structs::ClusterDasHostInfo { &mut self.cluster_das_host_info_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn ClusterDasHostInfoTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -32841,25 +26645,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn ClusterRule
 /// 
 /// *(10 of 18 paths)*
 pub trait ClusterSlotPolicyTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the ClusterSlotPolicy parent struct
-    fn get_cluster_slot_policy(&self) -> &super::structs::ClusterSlotPolicy;
-    /// Get a mutable reference to the ClusterSlotPolicy parent struct
-    fn get_cluster_slot_policy_mut(&mut self) -> &mut super::structs::ClusterSlotPolicy;
 }
-impl std::ops::Deref for dyn ClusterSlotPolicyTrait {
-    type Target = super::structs::ClusterSlotPolicy;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_cluster_slot_policy()
-    }
-}
-
-impl std::ops::DerefMut for dyn ClusterSlotPolicyTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_cluster_slot_policy_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn ClusterSlotPolicyTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -32900,12 +26686,8 @@ impl<'de> de::Visitor<'de> for ClusterSlotPolicyVisitor {
 }
 
 impl ClusterSlotPolicyTrait for ClusterSlotPolicy {
-    fn get_cluster_slot_policy(&self) -> &super::structs::ClusterSlotPolicy { &self }
-    fn get_cluster_slot_policy_mut(&mut self) -> &mut super::structs::ClusterSlotPolicy { self }
 }
 impl ClusterSlotPolicyTrait for ClusterFixedSizeSlotPolicy {
-    fn get_cluster_slot_policy(&self) -> &super::structs::ClusterSlotPolicy { &self.cluster_slot_policy_ }
-    fn get_cluster_slot_policy_mut(&mut self) -> &mut super::structs::ClusterSlotPolicy { &mut self.cluster_slot_policy_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn ClusterSlotPolicyTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -33875,25 +27657,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VsanIscsiTa
 /// ### How to access
 /// - `CnsVolumeManager::cns_configure_volume_ac_ls(acl_config_specs).access_control_spec_list[*]`
 pub trait CnsAccessControlSpecTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the CnsAccessControlSpec parent struct
-    fn get_cns_access_control_spec(&self) -> &super::structs::CnsAccessControlSpec;
-    /// Get a mutable reference to the CnsAccessControlSpec parent struct
-    fn get_cns_access_control_spec_mut(&mut self) -> &mut super::structs::CnsAccessControlSpec;
 }
-impl std::ops::Deref for dyn CnsAccessControlSpecTrait {
-    type Target = super::structs::CnsAccessControlSpec;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_cns_access_control_spec()
-    }
-}
-
-impl std::ops::DerefMut for dyn CnsAccessControlSpecTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_cns_access_control_spec_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn CnsAccessControlSpecTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -33934,12 +27698,8 @@ impl<'de> de::Visitor<'de> for CnsAccessControlSpecVisitor {
 }
 
 impl CnsAccessControlSpecTrait for CnsAccessControlSpec {
-    fn get_cns_access_control_spec(&self) -> &super::structs::CnsAccessControlSpec { &self }
-    fn get_cns_access_control_spec_mut(&mut self) -> &mut super::structs::CnsAccessControlSpec { self }
 }
 impl CnsAccessControlSpecTrait for CnsNfsAccessControlSpec {
-    fn get_cns_access_control_spec(&self) -> &super::structs::CnsAccessControlSpec { &self.cns_access_control_spec_ }
-    fn get_cns_access_control_spec_mut(&mut self) -> &mut super::structs::CnsAccessControlSpec { &mut self.cns_access_control_spec_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn CnsAccessControlSpecTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -34212,25 +27972,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn CnsFileBack
 /// ### How to access
 /// - `CnsVolumeManager::cns_create_volume(create_specs).create_spec?`
 pub trait CnsBaseCreateSpecTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the CnsBaseCreateSpec parent struct
-    fn get_cns_base_create_spec(&self) -> &super::structs::CnsBaseCreateSpec;
-    /// Get a mutable reference to the CnsBaseCreateSpec parent struct
-    fn get_cns_base_create_spec_mut(&mut self) -> &mut super::structs::CnsBaseCreateSpec;
 }
-impl std::ops::Deref for dyn CnsBaseCreateSpecTrait {
-    type Target = super::structs::CnsBaseCreateSpec;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_cns_base_create_spec()
-    }
-}
-
-impl std::ops::DerefMut for dyn CnsBaseCreateSpecTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_cns_base_create_spec_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn CnsBaseCreateSpecTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -34271,16 +28013,10 @@ impl<'de> de::Visitor<'de> for CnsBaseCreateSpecVisitor {
 }
 
 impl CnsBaseCreateSpecTrait for CnsBaseCreateSpec {
-    fn get_cns_base_create_spec(&self) -> &super::structs::CnsBaseCreateSpec { &self }
-    fn get_cns_base_create_spec_mut(&mut self) -> &mut super::structs::CnsBaseCreateSpec { self }
 }
 impl CnsBaseCreateSpecTrait for CnsFileCreateSpec {
-    fn get_cns_base_create_spec(&self) -> &super::structs::CnsBaseCreateSpec { &self.cns_base_create_spec_ }
-    fn get_cns_base_create_spec_mut(&mut self) -> &mut super::structs::CnsBaseCreateSpec { &mut self.cns_base_create_spec_ }
 }
 impl CnsBaseCreateSpecTrait for CnsVsanFileCreateSpec {
-    fn get_cns_base_create_spec(&self) -> &super::structs::CnsBaseCreateSpec { &self.cns_file_create_spec_.cns_base_create_spec_ }
-    fn get_cns_base_create_spec_mut(&mut self) -> &mut super::structs::CnsBaseCreateSpec { &mut self.cns_file_create_spec_.cns_base_create_spec_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn CnsBaseCreateSpecTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -34315,25 +28051,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn CnsBaseCrea
 /// ### How to access
 /// - `CnsVolumeManager::cns_create_volume(create_specs).create_spec?⇒CnsFileCreateSpecTrait`
 pub trait CnsFileCreateSpecTrait : super::traits::CnsBaseCreateSpecTrait {
-    /// Get a reference to the CnsFileCreateSpec parent struct
-    fn get_cns_file_create_spec(&self) -> &super::structs::CnsFileCreateSpec;
-    /// Get a mutable reference to the CnsFileCreateSpec parent struct
-    fn get_cns_file_create_spec_mut(&mut self) -> &mut super::structs::CnsFileCreateSpec;
 }
-impl std::ops::Deref for dyn CnsFileCreateSpecTrait {
-    type Target = super::structs::CnsFileCreateSpec;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_cns_file_create_spec()
-    }
-}
-
-impl std::ops::DerefMut for dyn CnsFileCreateSpecTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_cns_file_create_spec_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn CnsFileCreateSpecTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -34374,12 +28092,8 @@ impl<'de> de::Visitor<'de> for CnsFileCreateSpecVisitor {
 }
 
 impl CnsFileCreateSpecTrait for CnsFileCreateSpec {
-    fn get_cns_file_create_spec(&self) -> &super::structs::CnsFileCreateSpec { &self }
-    fn get_cns_file_create_spec_mut(&mut self) -> &mut super::structs::CnsFileCreateSpec { self }
 }
 impl CnsFileCreateSpecTrait for CnsVsanFileCreateSpec {
-    fn get_cns_file_create_spec(&self) -> &super::structs::CnsFileCreateSpec { &self.cns_file_create_spec_ }
-    fn get_cns_file_create_spec_mut(&mut self) -> &mut super::structs::CnsFileCreateSpec { &mut self.cns_file_create_spec_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn CnsFileCreateSpecTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -34952,25 +28666,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn CnsVolumeRe
 /// ### How to access
 /// - `CnsVolumeManager::cns_create_volume(create_specs).volume_source?`
 pub trait CnsVolumeSourceTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the CnsVolumeSource parent struct
-    fn get_cns_volume_source(&self) -> &super::structs::CnsVolumeSource;
-    /// Get a mutable reference to the CnsVolumeSource parent struct
-    fn get_cns_volume_source_mut(&mut self) -> &mut super::structs::CnsVolumeSource;
 }
-impl std::ops::Deref for dyn CnsVolumeSourceTrait {
-    type Target = super::structs::CnsVolumeSource;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_cns_volume_source()
-    }
-}
-
-impl std::ops::DerefMut for dyn CnsVolumeSourceTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_cns_volume_source_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn CnsVolumeSourceTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -35011,12 +28707,8 @@ impl<'de> de::Visitor<'de> for CnsVolumeSourceVisitor {
 }
 
 impl CnsVolumeSourceTrait for CnsVolumeSource {
-    fn get_cns_volume_source(&self) -> &super::structs::CnsVolumeSource { &self }
-    fn get_cns_volume_source_mut(&mut self) -> &mut super::structs::CnsVolumeSource { self }
 }
 impl CnsVolumeSourceTrait for CnsSnapshotVolumeSource {
-    fn get_cns_volume_source(&self) -> &super::structs::CnsVolumeSource { &self.cns_volume_source_ }
-    fn get_cns_volume_source_mut(&mut self) -> &mut super::structs::CnsVolumeSource { &mut self.cns_volume_source_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn CnsVolumeSourceTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -35452,25 +29144,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn Distributed
 /// 
 /// ***Since:*** vSphere API Release 8.0.3.0
 pub trait DvsFilterSpecConnecteeSpecTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the DvsFilterSpecConnecteeSpec parent struct
-    fn get_dvs_filter_spec_connectee_spec(&self) -> &super::structs::DvsFilterSpecConnecteeSpec;
-    /// Get a mutable reference to the DvsFilterSpecConnecteeSpec parent struct
-    fn get_dvs_filter_spec_connectee_spec_mut(&mut self) -> &mut super::structs::DvsFilterSpecConnecteeSpec;
 }
-impl std::ops::Deref for dyn DvsFilterSpecConnecteeSpecTrait {
-    type Target = super::structs::DvsFilterSpecConnecteeSpec;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_dvs_filter_spec_connectee_spec()
-    }
-}
-
-impl std::ops::DerefMut for dyn DvsFilterSpecConnecteeSpecTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_dvs_filter_spec_connectee_spec_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn DvsFilterSpecConnecteeSpecTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -35511,20 +29185,12 @@ impl<'de> de::Visitor<'de> for DvsFilterSpecConnecteeSpecVisitor {
 }
 
 impl DvsFilterSpecConnecteeSpecTrait for DvsFilterSpecConnecteeSpec {
-    fn get_dvs_filter_spec_connectee_spec(&self) -> &super::structs::DvsFilterSpecConnecteeSpec { &self }
-    fn get_dvs_filter_spec_connectee_spec_mut(&mut self) -> &mut super::structs::DvsFilterSpecConnecteeSpec { self }
 }
 impl DvsFilterSpecConnecteeSpecTrait for DvsFilterSpecPnicConnecteeSpec {
-    fn get_dvs_filter_spec_connectee_spec(&self) -> &super::structs::DvsFilterSpecConnecteeSpec { &self.dvs_filter_spec_connectee_spec_ }
-    fn get_dvs_filter_spec_connectee_spec_mut(&mut self) -> &mut super::structs::DvsFilterSpecConnecteeSpec { &mut self.dvs_filter_spec_connectee_spec_ }
 }
 impl DvsFilterSpecConnecteeSpecTrait for DvsFilterSpecVmConnecteeSpec {
-    fn get_dvs_filter_spec_connectee_spec(&self) -> &super::structs::DvsFilterSpecConnecteeSpec { &self.dvs_filter_spec_connectee_spec_ }
-    fn get_dvs_filter_spec_connectee_spec_mut(&mut self) -> &mut super::structs::DvsFilterSpecConnecteeSpec { &mut self.dvs_filter_spec_connectee_spec_ }
 }
 impl DvsFilterSpecConnecteeSpecTrait for DvsFilterSpecVmknicConnecteeSpec {
-    fn get_dvs_filter_spec_connectee_spec(&self) -> &super::structs::DvsFilterSpecConnecteeSpec { &self.dvs_filter_spec_connectee_spec_ }
-    fn get_dvs_filter_spec_connectee_spec_mut(&mut self) -> &mut super::structs::DvsFilterSpecConnecteeSpec { &mut self.dvs_filter_spec_connectee_spec_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DvsFilterSpecConnecteeSpecTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -35556,25 +29222,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DvsFilterSp
 /// 
 /// ***Since:*** vSphere API Release 8.0.3.0
 pub trait DvsFilterSpecVlanSpecTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the DvsFilterSpecVlanSpec parent struct
-    fn get_dvs_filter_spec_vlan_spec(&self) -> &super::structs::DvsFilterSpecVlanSpec;
-    /// Get a mutable reference to the DvsFilterSpecVlanSpec parent struct
-    fn get_dvs_filter_spec_vlan_spec_mut(&mut self) -> &mut super::structs::DvsFilterSpecVlanSpec;
 }
-impl std::ops::Deref for dyn DvsFilterSpecVlanSpecTrait {
-    type Target = super::structs::DvsFilterSpecVlanSpec;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_dvs_filter_spec_vlan_spec()
-    }
-}
-
-impl std::ops::DerefMut for dyn DvsFilterSpecVlanSpecTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_dvs_filter_spec_vlan_spec_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn DvsFilterSpecVlanSpecTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -35615,20 +29263,12 @@ impl<'de> de::Visitor<'de> for DvsFilterSpecVlanSpecVisitor {
 }
 
 impl DvsFilterSpecVlanSpecTrait for DvsFilterSpecVlanSpec {
-    fn get_dvs_filter_spec_vlan_spec(&self) -> &super::structs::DvsFilterSpecVlanSpec { &self }
-    fn get_dvs_filter_spec_vlan_spec_mut(&mut self) -> &mut super::structs::DvsFilterSpecVlanSpec { self }
 }
 impl DvsFilterSpecVlanSpecTrait for DvsFilterSpecPvlanSpec {
-    fn get_dvs_filter_spec_vlan_spec(&self) -> &super::structs::DvsFilterSpecVlanSpec { &self.dvs_filter_spec_vlan_spec_ }
-    fn get_dvs_filter_spec_vlan_spec_mut(&mut self) -> &mut super::structs::DvsFilterSpecVlanSpec { &mut self.dvs_filter_spec_vlan_spec_ }
 }
 impl DvsFilterSpecVlanSpecTrait for DvsFilterSpecTrunkVlanSpec {
-    fn get_dvs_filter_spec_vlan_spec(&self) -> &super::structs::DvsFilterSpecVlanSpec { &self.dvs_filter_spec_vlan_spec_ }
-    fn get_dvs_filter_spec_vlan_spec_mut(&mut self) -> &mut super::structs::DvsFilterSpecVlanSpec { &mut self.dvs_filter_spec_vlan_spec_ }
 }
 impl DvsFilterSpecVlanSpecTrait for DvsFilterSpecVlanIdSpec {
-    fn get_dvs_filter_spec_vlan_spec(&self) -> &super::structs::DvsFilterSpecVlanSpec { &self.dvs_filter_spec_vlan_spec_ }
-    fn get_dvs_filter_spec_vlan_spec_mut(&mut self) -> &mut super::structs::DvsFilterSpecVlanSpec { &mut self.dvs_filter_spec_vlan_spec_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DvsFilterSpecVlanSpecTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -35669,25 +29309,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DvsFilterSp
 /// 
 /// *(10 of 17 paths)*
 pub trait DistributedVirtualSwitchHostMemberBackingTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the DistributedVirtualSwitchHostMemberBacking parent struct
-    fn get_distributed_virtual_switch_host_member_backing(&self) -> &super::structs::DistributedVirtualSwitchHostMemberBacking;
-    /// Get a mutable reference to the DistributedVirtualSwitchHostMemberBacking parent struct
-    fn get_distributed_virtual_switch_host_member_backing_mut(&mut self) -> &mut super::structs::DistributedVirtualSwitchHostMemberBacking;
 }
-impl std::ops::Deref for dyn DistributedVirtualSwitchHostMemberBackingTrait {
-    type Target = super::structs::DistributedVirtualSwitchHostMemberBacking;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_distributed_virtual_switch_host_member_backing()
-    }
-}
-
-impl std::ops::DerefMut for dyn DistributedVirtualSwitchHostMemberBackingTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_distributed_virtual_switch_host_member_backing_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn DistributedVirtualSwitchHostMemberBackingTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -35728,12 +29350,8 @@ impl<'de> de::Visitor<'de> for DistributedVirtualSwitchHostMemberBackingVisitor 
 }
 
 impl DistributedVirtualSwitchHostMemberBackingTrait for DistributedVirtualSwitchHostMemberBacking {
-    fn get_distributed_virtual_switch_host_member_backing(&self) -> &super::structs::DistributedVirtualSwitchHostMemberBacking { &self }
-    fn get_distributed_virtual_switch_host_member_backing_mut(&mut self) -> &mut super::structs::DistributedVirtualSwitchHostMemberBacking { self }
 }
 impl DistributedVirtualSwitchHostMemberBackingTrait for DistributedVirtualSwitchHostMemberPnicBacking {
-    fn get_distributed_virtual_switch_host_member_backing(&self) -> &super::structs::DistributedVirtualSwitchHostMemberBacking { &self.distributed_virtual_switch_host_member_backing_ }
-    fn get_distributed_virtual_switch_host_member_backing_mut(&mut self) -> &mut super::structs::DistributedVirtualSwitchHostMemberBacking { &mut self.distributed_virtual_switch_host_member_backing_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DistributedVirtualSwitchHostMemberBackingTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -35989,25 +29607,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn HostMemberU
 /// 
 /// *(10 of 20 paths)*
 pub trait DvsNetworkRuleActionTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the DvsNetworkRuleAction parent struct
-    fn get_dvs_network_rule_action(&self) -> &super::structs::DvsNetworkRuleAction;
-    /// Get a mutable reference to the DvsNetworkRuleAction parent struct
-    fn get_dvs_network_rule_action_mut(&mut self) -> &mut super::structs::DvsNetworkRuleAction;
 }
-impl std::ops::Deref for dyn DvsNetworkRuleActionTrait {
-    type Target = super::structs::DvsNetworkRuleAction;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_dvs_network_rule_action()
-    }
-}
-
-impl std::ops::DerefMut for dyn DvsNetworkRuleActionTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_dvs_network_rule_action_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn DvsNetworkRuleActionTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -36048,44 +29648,24 @@ impl<'de> de::Visitor<'de> for DvsNetworkRuleActionVisitor {
 }
 
 impl DvsNetworkRuleActionTrait for DvsNetworkRuleAction {
-    fn get_dvs_network_rule_action(&self) -> &super::structs::DvsNetworkRuleAction { &self }
-    fn get_dvs_network_rule_action_mut(&mut self) -> &mut super::structs::DvsNetworkRuleAction { self }
 }
 impl DvsNetworkRuleActionTrait for DvsAcceptNetworkRuleAction {
-    fn get_dvs_network_rule_action(&self) -> &super::structs::DvsNetworkRuleAction { &self.dvs_network_rule_action_ }
-    fn get_dvs_network_rule_action_mut(&mut self) -> &mut super::structs::DvsNetworkRuleAction { &mut self.dvs_network_rule_action_ }
 }
 impl DvsNetworkRuleActionTrait for DvsCopyNetworkRuleAction {
-    fn get_dvs_network_rule_action(&self) -> &super::structs::DvsNetworkRuleAction { &self.dvs_network_rule_action_ }
-    fn get_dvs_network_rule_action_mut(&mut self) -> &mut super::structs::DvsNetworkRuleAction { &mut self.dvs_network_rule_action_ }
 }
 impl DvsNetworkRuleActionTrait for DvsDropNetworkRuleAction {
-    fn get_dvs_network_rule_action(&self) -> &super::structs::DvsNetworkRuleAction { &self.dvs_network_rule_action_ }
-    fn get_dvs_network_rule_action_mut(&mut self) -> &mut super::structs::DvsNetworkRuleAction { &mut self.dvs_network_rule_action_ }
 }
 impl DvsNetworkRuleActionTrait for DvsGreEncapNetworkRuleAction {
-    fn get_dvs_network_rule_action(&self) -> &super::structs::DvsNetworkRuleAction { &self.dvs_network_rule_action_ }
-    fn get_dvs_network_rule_action_mut(&mut self) -> &mut super::structs::DvsNetworkRuleAction { &mut self.dvs_network_rule_action_ }
 }
 impl DvsNetworkRuleActionTrait for DvsLogNetworkRuleAction {
-    fn get_dvs_network_rule_action(&self) -> &super::structs::DvsNetworkRuleAction { &self.dvs_network_rule_action_ }
-    fn get_dvs_network_rule_action_mut(&mut self) -> &mut super::structs::DvsNetworkRuleAction { &mut self.dvs_network_rule_action_ }
 }
 impl DvsNetworkRuleActionTrait for DvsMacRewriteNetworkRuleAction {
-    fn get_dvs_network_rule_action(&self) -> &super::structs::DvsNetworkRuleAction { &self.dvs_network_rule_action_ }
-    fn get_dvs_network_rule_action_mut(&mut self) -> &mut super::structs::DvsNetworkRuleAction { &mut self.dvs_network_rule_action_ }
 }
 impl DvsNetworkRuleActionTrait for DvsPuntNetworkRuleAction {
-    fn get_dvs_network_rule_action(&self) -> &super::structs::DvsNetworkRuleAction { &self.dvs_network_rule_action_ }
-    fn get_dvs_network_rule_action_mut(&mut self) -> &mut super::structs::DvsNetworkRuleAction { &mut self.dvs_network_rule_action_ }
 }
 impl DvsNetworkRuleActionTrait for DvsRateLimitNetworkRuleAction {
-    fn get_dvs_network_rule_action(&self) -> &super::structs::DvsNetworkRuleAction { &self.dvs_network_rule_action_ }
-    fn get_dvs_network_rule_action_mut(&mut self) -> &mut super::structs::DvsNetworkRuleAction { &mut self.dvs_network_rule_action_ }
 }
 impl DvsNetworkRuleActionTrait for DvsUpdateTagNetworkRuleAction {
-    fn get_dvs_network_rule_action(&self) -> &super::structs::DvsNetworkRuleAction { &self.dvs_network_rule_action_ }
-    fn get_dvs_network_rule_action_mut(&mut self) -> &mut super::structs::DvsNetworkRuleAction { &mut self.dvs_network_rule_action_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DvsNetworkRuleActionTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -36361,25 +29941,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn CryptoManag
 /// 
 /// *(10 of 100 paths)*
 pub trait CryptoSpecTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the CryptoSpec parent struct
-    fn get_crypto_spec(&self) -> &super::structs::CryptoSpec;
-    /// Get a mutable reference to the CryptoSpec parent struct
-    fn get_crypto_spec_mut(&mut self) -> &mut super::structs::CryptoSpec;
 }
-impl std::ops::Deref for dyn CryptoSpecTrait {
-    type Target = super::structs::CryptoSpec;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_crypto_spec()
-    }
-}
-
-impl std::ops::DerefMut for dyn CryptoSpecTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_crypto_spec_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn CryptoSpecTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -36420,32 +29982,18 @@ impl<'de> de::Visitor<'de> for CryptoSpecVisitor {
 }
 
 impl CryptoSpecTrait for CryptoSpec {
-    fn get_crypto_spec(&self) -> &super::structs::CryptoSpec { &self }
-    fn get_crypto_spec_mut(&mut self) -> &mut super::structs::CryptoSpec { self }
 }
 impl CryptoSpecTrait for CryptoSpecDecrypt {
-    fn get_crypto_spec(&self) -> &super::structs::CryptoSpec { &self.crypto_spec_ }
-    fn get_crypto_spec_mut(&mut self) -> &mut super::structs::CryptoSpec { &mut self.crypto_spec_ }
 }
 impl CryptoSpecTrait for CryptoSpecDeepRecrypt {
-    fn get_crypto_spec(&self) -> &super::structs::CryptoSpec { &self.crypto_spec_ }
-    fn get_crypto_spec_mut(&mut self) -> &mut super::structs::CryptoSpec { &mut self.crypto_spec_ }
 }
 impl CryptoSpecTrait for CryptoSpecEncrypt {
-    fn get_crypto_spec(&self) -> &super::structs::CryptoSpec { &self.crypto_spec_ }
-    fn get_crypto_spec_mut(&mut self) -> &mut super::structs::CryptoSpec { &mut self.crypto_spec_ }
 }
 impl CryptoSpecTrait for CryptoSpecNoOp {
-    fn get_crypto_spec(&self) -> &super::structs::CryptoSpec { &self.crypto_spec_ }
-    fn get_crypto_spec_mut(&mut self) -> &mut super::structs::CryptoSpec { &mut self.crypto_spec_ }
 }
 impl CryptoSpecTrait for CryptoSpecRegister {
-    fn get_crypto_spec(&self) -> &super::structs::CryptoSpec { &self.crypto_spec_no_op_.crypto_spec_ }
-    fn get_crypto_spec_mut(&mut self) -> &mut super::structs::CryptoSpec { &mut self.crypto_spec_no_op_.crypto_spec_ }
 }
 impl CryptoSpecTrait for CryptoSpecShallowRecrypt {
-    fn get_crypto_spec(&self) -> &super::structs::CryptoSpec { &self.crypto_spec_ }
-    fn get_crypto_spec_mut(&mut self) -> &mut super::structs::CryptoSpec { &mut self.crypto_spec_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn CryptoSpecTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -36493,25 +30041,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn CryptoSpecT
 /// 
 /// *(10 of 100 paths)*
 pub trait CryptoSpecNoOpTrait : super::traits::CryptoSpecTrait {
-    /// Get a reference to the CryptoSpecNoOp parent struct
-    fn get_crypto_spec_no_op(&self) -> &super::structs::CryptoSpecNoOp;
-    /// Get a mutable reference to the CryptoSpecNoOp parent struct
-    fn get_crypto_spec_no_op_mut(&mut self) -> &mut super::structs::CryptoSpecNoOp;
 }
-impl std::ops::Deref for dyn CryptoSpecNoOpTrait {
-    type Target = super::structs::CryptoSpecNoOp;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_crypto_spec_no_op()
-    }
-}
-
-impl std::ops::DerefMut for dyn CryptoSpecNoOpTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_crypto_spec_no_op_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn CryptoSpecNoOpTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -36552,12 +30082,8 @@ impl<'de> de::Visitor<'de> for CryptoSpecNoOpVisitor {
 }
 
 impl CryptoSpecNoOpTrait for CryptoSpecNoOp {
-    fn get_crypto_spec_no_op(&self) -> &super::structs::CryptoSpecNoOp { &self }
-    fn get_crypto_spec_no_op_mut(&mut self) -> &mut super::structs::CryptoSpecNoOp { self }
 }
 impl CryptoSpecNoOpTrait for CryptoSpecRegister {
-    fn get_crypto_spec_no_op(&self) -> &super::structs::CryptoSpecNoOp { &self.crypto_spec_no_op_ }
-    fn get_crypto_spec_no_op_mut(&mut self) -> &mut super::structs::CryptoSpecNoOp { &mut self.crypto_spec_no_op_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn CryptoSpecNoOpTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -36588,25 +30114,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn CryptoSpecN
 /// - `CryptoManagerKmip::list_kms_clusters().key_info?`
 /// - `CryptoManagerKmip::retrieve_kmip_servers_status_task(clusters).key_info?`
 pub trait KmipClusterInfoKeyInfoTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the KmipClusterInfoKeyInfo parent struct
-    fn get_kmip_cluster_info_key_info(&self) -> &super::structs::KmipClusterInfoKeyInfo;
-    /// Get a mutable reference to the KmipClusterInfoKeyInfo parent struct
-    fn get_kmip_cluster_info_key_info_mut(&mut self) -> &mut super::structs::KmipClusterInfoKeyInfo;
 }
-impl std::ops::Deref for dyn KmipClusterInfoKeyInfoTrait {
-    type Target = super::structs::KmipClusterInfoKeyInfo;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_kmip_cluster_info_key_info()
-    }
-}
-
-impl std::ops::DerefMut for dyn KmipClusterInfoKeyInfoTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_kmip_cluster_info_key_info_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn KmipClusterInfoKeyInfoTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -36647,16 +30155,10 @@ impl<'de> de::Visitor<'de> for KmipClusterInfoKeyInfoVisitor {
 }
 
 impl KmipClusterInfoKeyInfoTrait for KmipClusterInfoKeyInfo {
-    fn get_kmip_cluster_info_key_info(&self) -> &super::structs::KmipClusterInfoKeyInfo { &self }
-    fn get_kmip_cluster_info_key_info_mut(&mut self) -> &mut super::structs::KmipClusterInfoKeyInfo { self }
 }
 impl KmipClusterInfoKeyInfoTrait for KmipClusterInfoWrappingKeyIdKeyInfo {
-    fn get_kmip_cluster_info_key_info(&self) -> &super::structs::KmipClusterInfoKeyInfo { &self.kmip_cluster_info_key_info_ }
-    fn get_kmip_cluster_info_key_info_mut(&mut self) -> &mut super::structs::KmipClusterInfoKeyInfo { &mut self.kmip_cluster_info_key_info_ }
 }
 impl KmipClusterInfoKeyInfoTrait for KmipClusterInfoWrappingRotationIntervalKeyInfo {
-    fn get_kmip_cluster_info_key_info(&self) -> &super::structs::KmipClusterInfoKeyInfo { &self.kmip_cluster_info_key_info_ }
-    fn get_kmip_cluster_info_key_info_mut(&mut self) -> &mut super::structs::KmipClusterInfoKeyInfo { &mut self.kmip_cluster_info_key_info_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn KmipClusterInfoKeyInfoTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -36697,25 +30199,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn KmipCluster
 /// 
 /// *(10 of 25 paths)*
 pub trait KmipServerSpecKeySpecTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the KmipServerSpecKeySpec parent struct
-    fn get_kmip_server_spec_key_spec(&self) -> &super::structs::KmipServerSpecKeySpec;
-    /// Get a mutable reference to the KmipServerSpecKeySpec parent struct
-    fn get_kmip_server_spec_key_spec_mut(&mut self) -> &mut super::structs::KmipServerSpecKeySpec;
 }
-impl std::ops::Deref for dyn KmipServerSpecKeySpecTrait {
-    type Target = super::structs::KmipServerSpecKeySpec;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_kmip_server_spec_key_spec()
-    }
-}
-
-impl std::ops::DerefMut for dyn KmipServerSpecKeySpecTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_kmip_server_spec_key_spec_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn KmipServerSpecKeySpecTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -36756,16 +30240,10 @@ impl<'de> de::Visitor<'de> for KmipServerSpecKeySpecVisitor {
 }
 
 impl KmipServerSpecKeySpecTrait for KmipServerSpecKeySpec {
-    fn get_kmip_server_spec_key_spec(&self) -> &super::structs::KmipServerSpecKeySpec { &self }
-    fn get_kmip_server_spec_key_spec_mut(&mut self) -> &mut super::structs::KmipServerSpecKeySpec { self }
 }
 impl KmipServerSpecKeySpecTrait for KmipServerSpecWrappingKeyIdKeySpec {
-    fn get_kmip_server_spec_key_spec(&self) -> &super::structs::KmipServerSpecKeySpec { &self.kmip_server_spec_key_spec_ }
-    fn get_kmip_server_spec_key_spec_mut(&mut self) -> &mut super::structs::KmipServerSpecKeySpec { &mut self.kmip_server_spec_key_spec_ }
 }
 impl KmipServerSpecKeySpecTrait for KmipServerSpecWrappingRotationIntervalKeySpec {
-    fn get_kmip_server_spec_key_spec(&self) -> &super::structs::KmipServerSpecKeySpec { &self.kmip_server_spec_key_spec_ }
-    fn get_kmip_server_spec_key_spec_mut(&mut self) -> &mut super::structs::KmipServerSpecKeySpec { &mut self.kmip_server_spec_key_spec_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn KmipServerSpecKeySpecTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -36794,25 +30272,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn KmipServerS
 /// are used to manage supplementary properties of different kinds
 /// of event objects.
 pub trait EventArgumentTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the EventArgument parent struct
-    fn get_event_argument(&self) -> &super::structs::EventArgument;
-    /// Get a mutable reference to the EventArgument parent struct
-    fn get_event_argument_mut(&mut self) -> &mut super::structs::EventArgument;
 }
-impl std::ops::Deref for dyn EventArgumentTrait {
-    type Target = super::structs::EventArgument;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_event_argument()
-    }
-}
-
-impl std::ops::DerefMut for dyn EventArgumentTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_event_argument_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn EventArgumentTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -36853,68 +30313,36 @@ impl<'de> de::Visitor<'de> for EventArgumentVisitor {
 }
 
 impl EventArgumentTrait for EventArgument {
-    fn get_event_argument(&self) -> &super::structs::EventArgument { &self }
-    fn get_event_argument_mut(&mut self) -> &mut super::structs::EventArgument { self }
 }
 impl EventArgumentTrait for EntityEventArgument {
-    fn get_event_argument(&self) -> &super::structs::EventArgument { &self.event_argument_ }
-    fn get_event_argument_mut(&mut self) -> &mut super::structs::EventArgument { &mut self.event_argument_ }
 }
 impl EventArgumentTrait for AlarmEventArgument {
-    fn get_event_argument(&self) -> &super::structs::EventArgument { &self.entity_event_argument_.event_argument_ }
-    fn get_event_argument_mut(&mut self) -> &mut super::structs::EventArgument { &mut self.entity_event_argument_.event_argument_ }
 }
 impl EventArgumentTrait for ComputeResourceEventArgument {
-    fn get_event_argument(&self) -> &super::structs::EventArgument { &self.entity_event_argument_.event_argument_ }
-    fn get_event_argument_mut(&mut self) -> &mut super::structs::EventArgument { &mut self.entity_event_argument_.event_argument_ }
 }
 impl EventArgumentTrait for DatacenterEventArgument {
-    fn get_event_argument(&self) -> &super::structs::EventArgument { &self.entity_event_argument_.event_argument_ }
-    fn get_event_argument_mut(&mut self) -> &mut super::structs::EventArgument { &mut self.entity_event_argument_.event_argument_ }
 }
 impl EventArgumentTrait for DatastoreEventArgument {
-    fn get_event_argument(&self) -> &super::structs::EventArgument { &self.entity_event_argument_.event_argument_ }
-    fn get_event_argument_mut(&mut self) -> &mut super::structs::EventArgument { &mut self.entity_event_argument_.event_argument_ }
 }
 impl EventArgumentTrait for DvsEventArgument {
-    fn get_event_argument(&self) -> &super::structs::EventArgument { &self.entity_event_argument_.event_argument_ }
-    fn get_event_argument_mut(&mut self) -> &mut super::structs::EventArgument { &mut self.entity_event_argument_.event_argument_ }
 }
 impl EventArgumentTrait for FolderEventArgument {
-    fn get_event_argument(&self) -> &super::structs::EventArgument { &self.entity_event_argument_.event_argument_ }
-    fn get_event_argument_mut(&mut self) -> &mut super::structs::EventArgument { &mut self.entity_event_argument_.event_argument_ }
 }
 impl EventArgumentTrait for HostEventArgument {
-    fn get_event_argument(&self) -> &super::structs::EventArgument { &self.entity_event_argument_.event_argument_ }
-    fn get_event_argument_mut(&mut self) -> &mut super::structs::EventArgument { &mut self.entity_event_argument_.event_argument_ }
 }
 impl EventArgumentTrait for ManagedEntityEventArgument {
-    fn get_event_argument(&self) -> &super::structs::EventArgument { &self.entity_event_argument_.event_argument_ }
-    fn get_event_argument_mut(&mut self) -> &mut super::structs::EventArgument { &mut self.entity_event_argument_.event_argument_ }
 }
 impl EventArgumentTrait for NetworkEventArgument {
-    fn get_event_argument(&self) -> &super::structs::EventArgument { &self.entity_event_argument_.event_argument_ }
-    fn get_event_argument_mut(&mut self) -> &mut super::structs::EventArgument { &mut self.entity_event_argument_.event_argument_ }
 }
 impl EventArgumentTrait for ResourcePoolEventArgument {
-    fn get_event_argument(&self) -> &super::structs::EventArgument { &self.entity_event_argument_.event_argument_ }
-    fn get_event_argument_mut(&mut self) -> &mut super::structs::EventArgument { &mut self.entity_event_argument_.event_argument_ }
 }
 impl EventArgumentTrait for ScheduledTaskEventArgument {
-    fn get_event_argument(&self) -> &super::structs::EventArgument { &self.entity_event_argument_.event_argument_ }
-    fn get_event_argument_mut(&mut self) -> &mut super::structs::EventArgument { &mut self.entity_event_argument_.event_argument_ }
 }
 impl EventArgumentTrait for VmEventArgument {
-    fn get_event_argument(&self) -> &super::structs::EventArgument { &self.entity_event_argument_.event_argument_ }
-    fn get_event_argument_mut(&mut self) -> &mut super::structs::EventArgument { &mut self.entity_event_argument_.event_argument_ }
 }
 impl EventArgumentTrait for ProfileEventArgument {
-    fn get_event_argument(&self) -> &super::structs::EventArgument { &self.event_argument_ }
-    fn get_event_argument_mut(&mut self) -> &mut super::structs::EventArgument { &mut self.event_argument_ }
 }
 impl EventArgumentTrait for RoleEventArgument {
-    fn get_event_argument(&self) -> &super::structs::EventArgument { &self.event_argument_ }
-    fn get_event_argument_mut(&mut self) -> &mut super::structs::EventArgument { &mut self.event_argument_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn EventArgumentTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -37141,25 +30569,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn EntityEvent
 /// ### How to access
 /// - `EventManager::query_events(event_view_spec)`
 pub trait EventManagerEventViewSpecTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the EventManagerEventViewSpec parent struct
-    fn get_event_manager_event_view_spec(&self) -> &super::structs::EventManagerEventViewSpec;
-    /// Get a mutable reference to the EventManagerEventViewSpec parent struct
-    fn get_event_manager_event_view_spec_mut(&mut self) -> &mut super::structs::EventManagerEventViewSpec;
 }
-impl std::ops::Deref for dyn EventManagerEventViewSpecTrait {
-    type Target = super::structs::EventManagerEventViewSpec;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_event_manager_event_view_spec()
-    }
-}
-
-impl std::ops::DerefMut for dyn EventManagerEventViewSpecTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_event_manager_event_view_spec_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn EventManagerEventViewSpecTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -37200,12 +30610,8 @@ impl<'de> de::Visitor<'de> for EventManagerEventViewSpecVisitor {
 }
 
 impl EventManagerEventViewSpecTrait for EventManagerEventViewSpec {
-    fn get_event_manager_event_view_spec(&self) -> &super::structs::EventManagerEventViewSpec { &self }
-    fn get_event_manager_event_view_spec_mut(&mut self) -> &mut super::structs::EventManagerEventViewSpec { self }
 }
 impl EventManagerEventViewSpecTrait for EventManagerViewByStartId {
-    fn get_event_manager_event_view_spec(&self) -> &super::structs::EventManagerEventViewSpec { &self.event_manager_event_view_spec_ }
-    fn get_event_manager_event_view_spec_mut(&mut self) -> &mut super::structs::EventManagerEventViewSpec { &mut self.event_manager_event_view_spec_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn EventManagerEventViewSpecTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -38049,25 +31455,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VmConfigFil
 /// - `HostDatastoreBrowser::search_datastore_task(search_spec).query?[*]`
 /// - `HostDatastoreBrowser::search_datastore_sub_folders_task(search_spec).query?[*]`
 pub trait FileQueryTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the FileQuery parent struct
-    fn get_file_query(&self) -> &super::structs::FileQuery;
-    /// Get a mutable reference to the FileQuery parent struct
-    fn get_file_query_mut(&mut self) -> &mut super::structs::FileQuery;
 }
-impl std::ops::Deref for dyn FileQueryTrait {
-    type Target = super::structs::FileQuery;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_file_query()
-    }
-}
-
-impl std::ops::DerefMut for dyn FileQueryTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_file_query_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn FileQueryTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -38108,44 +31496,24 @@ impl<'de> de::Visitor<'de> for FileQueryVisitor {
 }
 
 impl FileQueryTrait for FileQuery {
-    fn get_file_query(&self) -> &super::structs::FileQuery { &self }
-    fn get_file_query_mut(&mut self) -> &mut super::structs::FileQuery { self }
 }
 impl FileQueryTrait for FloppyImageFileQuery {
-    fn get_file_query(&self) -> &super::structs::FileQuery { &self.file_query_ }
-    fn get_file_query_mut(&mut self) -> &mut super::structs::FileQuery { &mut self.file_query_ }
 }
 impl FileQueryTrait for FolderFileQuery {
-    fn get_file_query(&self) -> &super::structs::FileQuery { &self.file_query_ }
-    fn get_file_query_mut(&mut self) -> &mut super::structs::FileQuery { &mut self.file_query_ }
 }
 impl FileQueryTrait for IsoImageFileQuery {
-    fn get_file_query(&self) -> &super::structs::FileQuery { &self.file_query_ }
-    fn get_file_query_mut(&mut self) -> &mut super::structs::FileQuery { &mut self.file_query_ }
 }
 impl FileQueryTrait for VmConfigFileQuery {
-    fn get_file_query(&self) -> &super::structs::FileQuery { &self.file_query_ }
-    fn get_file_query_mut(&mut self) -> &mut super::structs::FileQuery { &mut self.file_query_ }
 }
 impl FileQueryTrait for TemplateConfigFileQuery {
-    fn get_file_query(&self) -> &super::structs::FileQuery { &self.vm_config_file_query_.file_query_ }
-    fn get_file_query_mut(&mut self) -> &mut super::structs::FileQuery { &mut self.vm_config_file_query_.file_query_ }
 }
 impl FileQueryTrait for VmDiskFileQuery {
-    fn get_file_query(&self) -> &super::structs::FileQuery { &self.file_query_ }
-    fn get_file_query_mut(&mut self) -> &mut super::structs::FileQuery { &mut self.file_query_ }
 }
 impl FileQueryTrait for VmLogFileQuery {
-    fn get_file_query(&self) -> &super::structs::FileQuery { &self.file_query_ }
-    fn get_file_query_mut(&mut self) -> &mut super::structs::FileQuery { &mut self.file_query_ }
 }
 impl FileQueryTrait for VmNvramFileQuery {
-    fn get_file_query(&self) -> &super::structs::FileQuery { &self.file_query_ }
-    fn get_file_query_mut(&mut self) -> &mut super::structs::FileQuery { &mut self.file_query_ }
 }
 impl FileQueryTrait for VmSnapshotFileQuery {
-    fn get_file_query(&self) -> &super::structs::FileQuery { &self.file_query_ }
-    fn get_file_query_mut(&mut self) -> &mut super::structs::FileQuery { &mut self.file_query_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn FileQueryTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -39286,25 +32654,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn HostHardwar
 /// ### How to access
 /// - `HostStorageSystem::create_software_adapter(spec)`
 pub trait HostHbaCreateSpecTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the HostHbaCreateSpec parent struct
-    fn get_host_hba_create_spec(&self) -> &super::structs::HostHbaCreateSpec;
-    /// Get a mutable reference to the HostHbaCreateSpec parent struct
-    fn get_host_hba_create_spec_mut(&mut self) -> &mut super::structs::HostHbaCreateSpec;
 }
-impl std::ops::Deref for dyn HostHbaCreateSpecTrait {
-    type Target = super::structs::HostHbaCreateSpec;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_host_hba_create_spec()
-    }
-}
-
-impl std::ops::DerefMut for dyn HostHbaCreateSpecTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_host_hba_create_spec_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn HostHbaCreateSpecTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -39345,12 +32695,8 @@ impl<'de> de::Visitor<'de> for HostHbaCreateSpecVisitor {
 }
 
 impl HostHbaCreateSpecTrait for HostHbaCreateSpec {
-    fn get_host_hba_create_spec(&self) -> &super::structs::HostHbaCreateSpec { &self }
-    fn get_host_hba_create_spec_mut(&mut self) -> &mut super::structs::HostHbaCreateSpec { self }
 }
 impl HostHbaCreateSpecTrait for HostTcpHbaCreateSpec {
-    fn get_host_hba_create_spec(&self) -> &super::structs::HostHbaCreateSpec { &self.host_hba_create_spec_ }
-    fn get_host_hba_create_spec_mut(&mut self) -> &mut super::structs::HostHbaCreateSpec { &mut self.host_hba_create_spec_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn HostHbaCreateSpecTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -40362,25 +33708,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn HostNvmeSpe
 /// ### How to access
 /// - `HostStorageSystem::discover_nvme_controllers().entry?[*].transport_parameters`
 pub trait HostNvmeTransportParametersTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the HostNvmeTransportParameters parent struct
-    fn get_host_nvme_transport_parameters(&self) -> &super::structs::HostNvmeTransportParameters;
-    /// Get a mutable reference to the HostNvmeTransportParameters parent struct
-    fn get_host_nvme_transport_parameters_mut(&mut self) -> &mut super::structs::HostNvmeTransportParameters;
 }
-impl std::ops::Deref for dyn HostNvmeTransportParametersTrait {
-    type Target = super::structs::HostNvmeTransportParameters;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_host_nvme_transport_parameters()
-    }
-}
-
-impl std::ops::DerefMut for dyn HostNvmeTransportParametersTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_host_nvme_transport_parameters_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn HostNvmeTransportParametersTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -40421,24 +33749,14 @@ impl<'de> de::Visitor<'de> for HostNvmeTransportParametersVisitor {
 }
 
 impl HostNvmeTransportParametersTrait for HostNvmeTransportParameters {
-    fn get_host_nvme_transport_parameters(&self) -> &super::structs::HostNvmeTransportParameters { &self }
-    fn get_host_nvme_transport_parameters_mut(&mut self) -> &mut super::structs::HostNvmeTransportParameters { self }
 }
 impl HostNvmeTransportParametersTrait for HostNvmeOpaqueTransportParameters {
-    fn get_host_nvme_transport_parameters(&self) -> &super::structs::HostNvmeTransportParameters { &self.host_nvme_transport_parameters_ }
-    fn get_host_nvme_transport_parameters_mut(&mut self) -> &mut super::structs::HostNvmeTransportParameters { &mut self.host_nvme_transport_parameters_ }
 }
 impl HostNvmeTransportParametersTrait for HostNvmeOverFibreChannelParameters {
-    fn get_host_nvme_transport_parameters(&self) -> &super::structs::HostNvmeTransportParameters { &self.host_nvme_transport_parameters_ }
-    fn get_host_nvme_transport_parameters_mut(&mut self) -> &mut super::structs::HostNvmeTransportParameters { &mut self.host_nvme_transport_parameters_ }
 }
 impl HostNvmeTransportParametersTrait for HostNvmeOverRdmaParameters {
-    fn get_host_nvme_transport_parameters(&self) -> &super::structs::HostNvmeTransportParameters { &self.host_nvme_transport_parameters_ }
-    fn get_host_nvme_transport_parameters_mut(&mut self) -> &mut super::structs::HostNvmeTransportParameters { &mut self.host_nvme_transport_parameters_ }
 }
 impl HostNvmeTransportParametersTrait for HostNvmeOverTcpParameters {
-    fn get_host_nvme_transport_parameters(&self) -> &super::structs::HostNvmeTransportParameters { &self.host_nvme_transport_parameters_ }
-    fn get_host_nvme_transport_parameters_mut(&mut self) -> &mut super::structs::HostNvmeTransportParameters { &mut self.host_nvme_transport_parameters_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn HostNvmeTransportParametersTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -40803,25 +34121,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn PhysicalNic
 /// - `HostSystem::config.network?.rdma_device?[*].backing?`
 /// - `HostNetworkSystem::network_info.rdma_device?[*].backing?`
 pub trait HostRdmaDeviceBackingTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the HostRdmaDeviceBacking parent struct
-    fn get_host_rdma_device_backing(&self) -> &super::structs::HostRdmaDeviceBacking;
-    /// Get a mutable reference to the HostRdmaDeviceBacking parent struct
-    fn get_host_rdma_device_backing_mut(&mut self) -> &mut super::structs::HostRdmaDeviceBacking;
 }
-impl std::ops::Deref for dyn HostRdmaDeviceBackingTrait {
-    type Target = super::structs::HostRdmaDeviceBacking;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_host_rdma_device_backing()
-    }
-}
-
-impl std::ops::DerefMut for dyn HostRdmaDeviceBackingTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_host_rdma_device_backing_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn HostRdmaDeviceBackingTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -40862,12 +34162,8 @@ impl<'de> de::Visitor<'de> for HostRdmaDeviceBackingVisitor {
 }
 
 impl HostRdmaDeviceBackingTrait for HostRdmaDeviceBacking {
-    fn get_host_rdma_device_backing(&self) -> &super::structs::HostRdmaDeviceBacking { &self }
-    fn get_host_rdma_device_backing_mut(&mut self) -> &mut super::structs::HostRdmaDeviceBacking { self }
 }
 impl HostRdmaDeviceBackingTrait for HostRdmaDevicePnicBacking {
-    fn get_host_rdma_device_backing(&self) -> &super::structs::HostRdmaDeviceBacking { &self.host_rdma_device_backing_ }
-    fn get_host_rdma_device_backing_mut(&mut self) -> &mut super::structs::HostRdmaDeviceBacking { &mut self.host_rdma_device_backing_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn HostRdmaDeviceBackingTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -41118,25 +34414,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn HostSystemS
 /// 
 /// *(10 of 21 paths)*
 pub trait HostTargetTransportTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the HostTargetTransport parent struct
-    fn get_host_target_transport(&self) -> &super::structs::HostTargetTransport;
-    /// Get a mutable reference to the HostTargetTransport parent struct
-    fn get_host_target_transport_mut(&mut self) -> &mut super::structs::HostTargetTransport;
 }
-impl std::ops::Deref for dyn HostTargetTransportTrait {
-    type Target = super::structs::HostTargetTransport;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_host_target_transport()
-    }
-}
-
-impl std::ops::DerefMut for dyn HostTargetTransportTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_host_target_transport_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn HostTargetTransportTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -41177,44 +34455,24 @@ impl<'de> de::Visitor<'de> for HostTargetTransportVisitor {
 }
 
 impl HostTargetTransportTrait for HostTargetTransport {
-    fn get_host_target_transport(&self) -> &super::structs::HostTargetTransport { &self }
-    fn get_host_target_transport_mut(&mut self) -> &mut super::structs::HostTargetTransport { self }
 }
 impl HostTargetTransportTrait for HostBlockAdapterTargetTransport {
-    fn get_host_target_transport(&self) -> &super::structs::HostTargetTransport { &self.host_target_transport_ }
-    fn get_host_target_transport_mut(&mut self) -> &mut super::structs::HostTargetTransport { &mut self.host_target_transport_ }
 }
 impl HostTargetTransportTrait for HostFibreChannelTargetTransport {
-    fn get_host_target_transport(&self) -> &super::structs::HostTargetTransport { &self.host_target_transport_ }
-    fn get_host_target_transport_mut(&mut self) -> &mut super::structs::HostTargetTransport { &mut self.host_target_transport_ }
 }
 impl HostTargetTransportTrait for HostFibreChannelOverEthernetTargetTransport {
-    fn get_host_target_transport(&self) -> &super::structs::HostTargetTransport { &self.host_fibre_channel_target_transport_.host_target_transport_ }
-    fn get_host_target_transport_mut(&mut self) -> &mut super::structs::HostTargetTransport { &mut self.host_fibre_channel_target_transport_.host_target_transport_ }
 }
 impl HostTargetTransportTrait for HostInternetScsiTargetTransport {
-    fn get_host_target_transport(&self) -> &super::structs::HostTargetTransport { &self.host_target_transport_ }
-    fn get_host_target_transport_mut(&mut self) -> &mut super::structs::HostTargetTransport { &mut self.host_target_transport_ }
 }
 impl HostTargetTransportTrait for HostParallelScsiTargetTransport {
-    fn get_host_target_transport(&self) -> &super::structs::HostTargetTransport { &self.host_target_transport_ }
-    fn get_host_target_transport_mut(&mut self) -> &mut super::structs::HostTargetTransport { &mut self.host_target_transport_ }
 }
 impl HostTargetTransportTrait for HostPcieTargetTransport {
-    fn get_host_target_transport(&self) -> &super::structs::HostTargetTransport { &self.host_target_transport_ }
-    fn get_host_target_transport_mut(&mut self) -> &mut super::structs::HostTargetTransport { &mut self.host_target_transport_ }
 }
 impl HostTargetTransportTrait for HostRdmaTargetTransport {
-    fn get_host_target_transport(&self) -> &super::structs::HostTargetTransport { &self.host_target_transport_ }
-    fn get_host_target_transport_mut(&mut self) -> &mut super::structs::HostTargetTransport { &mut self.host_target_transport_ }
 }
 impl HostTargetTransportTrait for HostSerialAttachedTargetTransport {
-    fn get_host_target_transport(&self) -> &super::structs::HostTargetTransport { &self.host_target_transport_ }
-    fn get_host_target_transport_mut(&mut self) -> &mut super::structs::HostTargetTransport { &mut self.host_target_transport_ }
 }
 impl HostTargetTransportTrait for HostTcpTargetTransport {
-    fn get_host_target_transport(&self) -> &super::structs::HostTargetTransport { &self.host_target_transport_ }
-    fn get_host_target_transport_mut(&mut self) -> &mut super::structs::HostTargetTransport { &mut self.host_target_transport_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn HostTargetTransportTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -41652,25 +34910,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn HostTpmBoot
 /// 
 /// *(10 of 11 paths)*
 pub trait HostVirtualSwitchBridgeTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the HostVirtualSwitchBridge parent struct
-    fn get_host_virtual_switch_bridge(&self) -> &super::structs::HostVirtualSwitchBridge;
-    /// Get a mutable reference to the HostVirtualSwitchBridge parent struct
-    fn get_host_virtual_switch_bridge_mut(&mut self) -> &mut super::structs::HostVirtualSwitchBridge;
 }
-impl std::ops::Deref for dyn HostVirtualSwitchBridgeTrait {
-    type Target = super::structs::HostVirtualSwitchBridge;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_host_virtual_switch_bridge()
-    }
-}
-
-impl std::ops::DerefMut for dyn HostVirtualSwitchBridgeTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_host_virtual_switch_bridge_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn HostVirtualSwitchBridgeTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -41711,20 +34951,12 @@ impl<'de> de::Visitor<'de> for HostVirtualSwitchBridgeVisitor {
 }
 
 impl HostVirtualSwitchBridgeTrait for HostVirtualSwitchBridge {
-    fn get_host_virtual_switch_bridge(&self) -> &super::structs::HostVirtualSwitchBridge { &self }
-    fn get_host_virtual_switch_bridge_mut(&mut self) -> &mut super::structs::HostVirtualSwitchBridge { self }
 }
 impl HostVirtualSwitchBridgeTrait for HostVirtualSwitchAutoBridge {
-    fn get_host_virtual_switch_bridge(&self) -> &super::structs::HostVirtualSwitchBridge { &self.host_virtual_switch_bridge_ }
-    fn get_host_virtual_switch_bridge_mut(&mut self) -> &mut super::structs::HostVirtualSwitchBridge { &mut self.host_virtual_switch_bridge_ }
 }
 impl HostVirtualSwitchBridgeTrait for HostVirtualSwitchBondBridge {
-    fn get_host_virtual_switch_bridge(&self) -> &super::structs::HostVirtualSwitchBridge { &self.host_virtual_switch_bridge_ }
-    fn get_host_virtual_switch_bridge_mut(&mut self) -> &mut super::structs::HostVirtualSwitchBridge { &mut self.host_virtual_switch_bridge_ }
 }
 impl HostVirtualSwitchBridgeTrait for HostVirtualSwitchSimpleBridge {
-    fn get_host_virtual_switch_bridge(&self) -> &super::structs::HostVirtualSwitchBridge { &self.host_virtual_switch_bridge_ }
-    fn get_host_virtual_switch_bridge_mut(&mut self) -> &mut super::structs::HostVirtualSwitchBridge { &mut self.host_virtual_switch_bridge_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn HostVirtualSwitchBridgeTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -45244,25 +38476,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn AnswerFileC
 /// Subclasses of this must be defined to provide host or cluster customization
 /// data in specific formats.
 pub trait HostProfilesEntityCustomizationsTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the HostProfilesEntityCustomizations parent struct
-    fn get_host_profiles_entity_customizations(&self) -> &super::structs::HostProfilesEntityCustomizations;
-    /// Get a mutable reference to the HostProfilesEntityCustomizations parent struct
-    fn get_host_profiles_entity_customizations_mut(&mut self) -> &mut super::structs::HostProfilesEntityCustomizations;
 }
-impl std::ops::Deref for dyn HostProfilesEntityCustomizationsTrait {
-    type Target = super::structs::HostProfilesEntityCustomizations;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_host_profiles_entity_customizations()
-    }
-}
-
-impl std::ops::DerefMut for dyn HostProfilesEntityCustomizationsTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_host_profiles_entity_customizations_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn HostProfilesEntityCustomizationsTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -45303,12 +38517,8 @@ impl<'de> de::Visitor<'de> for HostProfilesEntityCustomizationsVisitor {
 }
 
 impl HostProfilesEntityCustomizationsTrait for HostProfilesEntityCustomizations {
-    fn get_host_profiles_entity_customizations(&self) -> &super::structs::HostProfilesEntityCustomizations { &self }
-    fn get_host_profiles_entity_customizations_mut(&mut self) -> &mut super::structs::HostProfilesEntityCustomizations { self }
 }
 impl HostProfilesEntityCustomizationsTrait for StructuredCustomizations {
-    fn get_host_profiles_entity_customizations(&self) -> &super::structs::HostProfilesEntityCustomizations { &self.host_profiles_entity_customizations_ }
-    fn get_host_profiles_entity_customizations_mut(&mut self) -> &mut super::structs::HostProfilesEntityCustomizations { &mut self.host_profiles_entity_customizations_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn HostProfilesEntityCustomizationsTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -46754,25 +39964,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn NodeNetwork
 /// 
 /// *(10 of 100 paths)*
 pub trait VirtualMachineBaseIndependentFilterSpecTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the VirtualMachineBaseIndependentFilterSpec parent struct
-    fn get_virtual_machine_base_independent_filter_spec(&self) -> &super::structs::VirtualMachineBaseIndependentFilterSpec;
-    /// Get a mutable reference to the VirtualMachineBaseIndependentFilterSpec parent struct
-    fn get_virtual_machine_base_independent_filter_spec_mut(&mut self) -> &mut super::structs::VirtualMachineBaseIndependentFilterSpec;
 }
-impl std::ops::Deref for dyn VirtualMachineBaseIndependentFilterSpecTrait {
-    type Target = super::structs::VirtualMachineBaseIndependentFilterSpec;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_virtual_machine_base_independent_filter_spec()
-    }
-}
-
-impl std::ops::DerefMut for dyn VirtualMachineBaseIndependentFilterSpecTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_virtual_machine_base_independent_filter_spec_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn VirtualMachineBaseIndependentFilterSpecTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -46813,16 +40005,10 @@ impl<'de> de::Visitor<'de> for VirtualMachineBaseIndependentFilterSpecVisitor {
 }
 
 impl VirtualMachineBaseIndependentFilterSpecTrait for VirtualMachineBaseIndependentFilterSpec {
-    fn get_virtual_machine_base_independent_filter_spec(&self) -> &super::structs::VirtualMachineBaseIndependentFilterSpec { &self }
-    fn get_virtual_machine_base_independent_filter_spec_mut(&mut self) -> &mut super::structs::VirtualMachineBaseIndependentFilterSpec { self }
 }
 impl VirtualMachineBaseIndependentFilterSpecTrait for VirtualMachineEmptyIndependentFilterSpec {
-    fn get_virtual_machine_base_independent_filter_spec(&self) -> &super::structs::VirtualMachineBaseIndependentFilterSpec { &self.virtual_machine_base_independent_filter_spec_ }
-    fn get_virtual_machine_base_independent_filter_spec_mut(&mut self) -> &mut super::structs::VirtualMachineBaseIndependentFilterSpec { &mut self.virtual_machine_base_independent_filter_spec_ }
 }
 impl VirtualMachineBaseIndependentFilterSpecTrait for VirtualMachineIndependentFilterSpec {
-    fn get_virtual_machine_base_independent_filter_spec(&self) -> &super::structs::VirtualMachineBaseIndependentFilterSpec { &self.virtual_machine_base_independent_filter_spec_ }
-    fn get_virtual_machine_base_independent_filter_spec_mut(&mut self) -> &mut super::structs::VirtualMachineBaseIndependentFilterSpec { &mut self.virtual_machine_base_independent_filter_spec_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualMachineBaseIndependentFilterSpecTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -46861,25 +40047,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualMach
 /// 
 /// *(10 of 26 paths)*
 pub trait VirtualMachineBootOptionsBootableDeviceTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the VirtualMachineBootOptionsBootableDevice parent struct
-    fn get_virtual_machine_boot_options_bootable_device(&self) -> &super::structs::VirtualMachineBootOptionsBootableDevice;
-    /// Get a mutable reference to the VirtualMachineBootOptionsBootableDevice parent struct
-    fn get_virtual_machine_boot_options_bootable_device_mut(&mut self) -> &mut super::structs::VirtualMachineBootOptionsBootableDevice;
 }
-impl std::ops::Deref for dyn VirtualMachineBootOptionsBootableDeviceTrait {
-    type Target = super::structs::VirtualMachineBootOptionsBootableDevice;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_virtual_machine_boot_options_bootable_device()
-    }
-}
-
-impl std::ops::DerefMut for dyn VirtualMachineBootOptionsBootableDeviceTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_virtual_machine_boot_options_bootable_device_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn VirtualMachineBootOptionsBootableDeviceTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -46920,24 +40088,14 @@ impl<'de> de::Visitor<'de> for VirtualMachineBootOptionsBootableDeviceVisitor {
 }
 
 impl VirtualMachineBootOptionsBootableDeviceTrait for VirtualMachineBootOptionsBootableDevice {
-    fn get_virtual_machine_boot_options_bootable_device(&self) -> &super::structs::VirtualMachineBootOptionsBootableDevice { &self }
-    fn get_virtual_machine_boot_options_bootable_device_mut(&mut self) -> &mut super::structs::VirtualMachineBootOptionsBootableDevice { self }
 }
 impl VirtualMachineBootOptionsBootableDeviceTrait for VirtualMachineBootOptionsBootableCdromDevice {
-    fn get_virtual_machine_boot_options_bootable_device(&self) -> &super::structs::VirtualMachineBootOptionsBootableDevice { &self.virtual_machine_boot_options_bootable_device_ }
-    fn get_virtual_machine_boot_options_bootable_device_mut(&mut self) -> &mut super::structs::VirtualMachineBootOptionsBootableDevice { &mut self.virtual_machine_boot_options_bootable_device_ }
 }
 impl VirtualMachineBootOptionsBootableDeviceTrait for VirtualMachineBootOptionsBootableDiskDevice {
-    fn get_virtual_machine_boot_options_bootable_device(&self) -> &super::structs::VirtualMachineBootOptionsBootableDevice { &self.virtual_machine_boot_options_bootable_device_ }
-    fn get_virtual_machine_boot_options_bootable_device_mut(&mut self) -> &mut super::structs::VirtualMachineBootOptionsBootableDevice { &mut self.virtual_machine_boot_options_bootable_device_ }
 }
 impl VirtualMachineBootOptionsBootableDeviceTrait for VirtualMachineBootOptionsBootableEthernetDevice {
-    fn get_virtual_machine_boot_options_bootable_device(&self) -> &super::structs::VirtualMachineBootOptionsBootableDevice { &self.virtual_machine_boot_options_bootable_device_ }
-    fn get_virtual_machine_boot_options_bootable_device_mut(&mut self) -> &mut super::structs::VirtualMachineBootOptionsBootableDevice { &mut self.virtual_machine_boot_options_bootable_device_ }
 }
 impl VirtualMachineBootOptionsBootableDeviceTrait for VirtualMachineBootOptionsBootableFloppyDevice {
-    fn get_virtual_machine_boot_options_bootable_device(&self) -> &super::structs::VirtualMachineBootOptionsBootableDevice { &self.virtual_machine_boot_options_bootable_device_ }
-    fn get_virtual_machine_boot_options_bootable_device_mut(&mut self) -> &mut super::structs::VirtualMachineBootOptionsBootableDevice { &mut self.virtual_machine_boot_options_bootable_device_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualMachineBootOptionsBootableDeviceTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -46977,25 +40135,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualMach
 /// - `Datacenter::query_connection_info_via_spec().vm?[*].runtime.device?[*].runtime_state`
 /// - `EnvironmentBrowser::query_config_target().usb?[*].summary?.runtime.device?[*].runtime_state`
 pub trait VirtualMachineDeviceRuntimeInfoDeviceRuntimeStateTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the VirtualMachineDeviceRuntimeInfoDeviceRuntimeState parent struct
-    fn get_virtual_machine_device_runtime_info_device_runtime_state(&self) -> &super::structs::VirtualMachineDeviceRuntimeInfoDeviceRuntimeState;
-    /// Get a mutable reference to the VirtualMachineDeviceRuntimeInfoDeviceRuntimeState parent struct
-    fn get_virtual_machine_device_runtime_info_device_runtime_state_mut(&mut self) -> &mut super::structs::VirtualMachineDeviceRuntimeInfoDeviceRuntimeState;
 }
-impl std::ops::Deref for dyn VirtualMachineDeviceRuntimeInfoDeviceRuntimeStateTrait {
-    type Target = super::structs::VirtualMachineDeviceRuntimeInfoDeviceRuntimeState;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_virtual_machine_device_runtime_info_device_runtime_state()
-    }
-}
-
-impl std::ops::DerefMut for dyn VirtualMachineDeviceRuntimeInfoDeviceRuntimeStateTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_virtual_machine_device_runtime_info_device_runtime_state_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn VirtualMachineDeviceRuntimeInfoDeviceRuntimeStateTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -47036,12 +40176,8 @@ impl<'de> de::Visitor<'de> for VirtualMachineDeviceRuntimeInfoDeviceRuntimeState
 }
 
 impl VirtualMachineDeviceRuntimeInfoDeviceRuntimeStateTrait for VirtualMachineDeviceRuntimeInfoDeviceRuntimeState {
-    fn get_virtual_machine_device_runtime_info_device_runtime_state(&self) -> &super::structs::VirtualMachineDeviceRuntimeInfoDeviceRuntimeState { &self }
-    fn get_virtual_machine_device_runtime_info_device_runtime_state_mut(&mut self) -> &mut super::structs::VirtualMachineDeviceRuntimeInfoDeviceRuntimeState { self }
 }
 impl VirtualMachineDeviceRuntimeInfoDeviceRuntimeStateTrait for VirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeState {
-    fn get_virtual_machine_device_runtime_info_device_runtime_state(&self) -> &super::structs::VirtualMachineDeviceRuntimeInfoDeviceRuntimeState { &self.virtual_machine_device_runtime_info_device_runtime_state_ }
-    fn get_virtual_machine_device_runtime_info_device_runtime_state_mut(&mut self) -> &mut super::structs::VirtualMachineDeviceRuntimeInfoDeviceRuntimeState { &mut self.virtual_machine_device_runtime_info_device_runtime_state_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualMachineDeviceRuntimeInfoDeviceRuntimeStateTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -47314,25 +40450,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualMach
 /// 
 /// *(10 of 100 paths)*
 pub trait VirtualMachineProfileSpecTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the VirtualMachineProfileSpec parent struct
-    fn get_virtual_machine_profile_spec(&self) -> &super::structs::VirtualMachineProfileSpec;
-    /// Get a mutable reference to the VirtualMachineProfileSpec parent struct
-    fn get_virtual_machine_profile_spec_mut(&mut self) -> &mut super::structs::VirtualMachineProfileSpec;
 }
-impl std::ops::Deref for dyn VirtualMachineProfileSpecTrait {
-    type Target = super::structs::VirtualMachineProfileSpec;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_virtual_machine_profile_spec()
-    }
-}
-
-impl std::ops::DerefMut for dyn VirtualMachineProfileSpecTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_virtual_machine_profile_spec_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn VirtualMachineProfileSpecTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -47373,20 +40491,12 @@ impl<'de> de::Visitor<'de> for VirtualMachineProfileSpecVisitor {
 }
 
 impl VirtualMachineProfileSpecTrait for VirtualMachineProfileSpec {
-    fn get_virtual_machine_profile_spec(&self) -> &super::structs::VirtualMachineProfileSpec { &self }
-    fn get_virtual_machine_profile_spec_mut(&mut self) -> &mut super::structs::VirtualMachineProfileSpec { self }
 }
 impl VirtualMachineProfileSpecTrait for VirtualMachineDefaultProfileSpec {
-    fn get_virtual_machine_profile_spec(&self) -> &super::structs::VirtualMachineProfileSpec { &self.virtual_machine_profile_spec_ }
-    fn get_virtual_machine_profile_spec_mut(&mut self) -> &mut super::structs::VirtualMachineProfileSpec { &mut self.virtual_machine_profile_spec_ }
 }
 impl VirtualMachineProfileSpecTrait for VirtualMachineDefinedProfileSpec {
-    fn get_virtual_machine_profile_spec(&self) -> &super::structs::VirtualMachineProfileSpec { &self.virtual_machine_profile_spec_ }
-    fn get_virtual_machine_profile_spec_mut(&mut self) -> &mut super::structs::VirtualMachineProfileSpec { &mut self.virtual_machine_profile_spec_ }
 }
 impl VirtualMachineProfileSpecTrait for VirtualMachineEmptyProfileSpec {
-    fn get_virtual_machine_profile_spec(&self) -> &super::structs::VirtualMachineProfileSpec { &self.virtual_machine_profile_spec_ }
-    fn get_virtual_machine_profile_spec_mut(&mut self) -> &mut super::structs::VirtualMachineProfileSpec { &mut self.virtual_machine_profile_spec_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualMachineProfileSpecTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -48137,25 +41247,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualMach
 /// 
 /// *(10 of 12 paths)*
 pub trait CustomizationIdentitySettingsTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the CustomizationIdentitySettings parent struct
-    fn get_customization_identity_settings(&self) -> &super::structs::CustomizationIdentitySettings;
-    /// Get a mutable reference to the CustomizationIdentitySettings parent struct
-    fn get_customization_identity_settings_mut(&mut self) -> &mut super::structs::CustomizationIdentitySettings;
 }
-impl std::ops::Deref for dyn CustomizationIdentitySettingsTrait {
-    type Target = super::structs::CustomizationIdentitySettings;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_customization_identity_settings()
-    }
-}
-
-impl std::ops::DerefMut for dyn CustomizationIdentitySettingsTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_customization_identity_settings_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn CustomizationIdentitySettingsTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -48196,24 +41288,14 @@ impl<'de> de::Visitor<'de> for CustomizationIdentitySettingsVisitor {
 }
 
 impl CustomizationIdentitySettingsTrait for CustomizationIdentitySettings {
-    fn get_customization_identity_settings(&self) -> &super::structs::CustomizationIdentitySettings { &self }
-    fn get_customization_identity_settings_mut(&mut self) -> &mut super::structs::CustomizationIdentitySettings { self }
 }
 impl CustomizationIdentitySettingsTrait for CustomizationCloudinitPrep {
-    fn get_customization_identity_settings(&self) -> &super::structs::CustomizationIdentitySettings { &self.customization_identity_settings_ }
-    fn get_customization_identity_settings_mut(&mut self) -> &mut super::structs::CustomizationIdentitySettings { &mut self.customization_identity_settings_ }
 }
 impl CustomizationIdentitySettingsTrait for CustomizationLinuxPrep {
-    fn get_customization_identity_settings(&self) -> &super::structs::CustomizationIdentitySettings { &self.customization_identity_settings_ }
-    fn get_customization_identity_settings_mut(&mut self) -> &mut super::structs::CustomizationIdentitySettings { &mut self.customization_identity_settings_ }
 }
 impl CustomizationIdentitySettingsTrait for CustomizationSysprep {
-    fn get_customization_identity_settings(&self) -> &super::structs::CustomizationIdentitySettings { &self.customization_identity_settings_ }
-    fn get_customization_identity_settings_mut(&mut self) -> &mut super::structs::CustomizationIdentitySettings { &mut self.customization_identity_settings_ }
 }
 impl CustomizationIdentitySettingsTrait for CustomizationSysprepText {
-    fn get_customization_identity_settings(&self) -> &super::structs::CustomizationIdentitySettings { &self.customization_identity_settings_ }
-    fn get_customization_identity_settings_mut(&mut self) -> &mut super::structs::CustomizationIdentitySettings { &mut self.customization_identity_settings_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn CustomizationIdentitySettingsTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -48256,25 +41338,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn Customizati
 /// 
 /// *(10 of 27 paths)*
 pub trait CustomizationIpGeneratorTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the CustomizationIpGenerator parent struct
-    fn get_customization_ip_generator(&self) -> &super::structs::CustomizationIpGenerator;
-    /// Get a mutable reference to the CustomizationIpGenerator parent struct
-    fn get_customization_ip_generator_mut(&mut self) -> &mut super::structs::CustomizationIpGenerator;
 }
-impl std::ops::Deref for dyn CustomizationIpGeneratorTrait {
-    type Target = super::structs::CustomizationIpGenerator;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_customization_ip_generator()
-    }
-}
-
-impl std::ops::DerefMut for dyn CustomizationIpGeneratorTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_customization_ip_generator_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn CustomizationIpGeneratorTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -48315,24 +41379,14 @@ impl<'de> de::Visitor<'de> for CustomizationIpGeneratorVisitor {
 }
 
 impl CustomizationIpGeneratorTrait for CustomizationIpGenerator {
-    fn get_customization_ip_generator(&self) -> &super::structs::CustomizationIpGenerator { &self }
-    fn get_customization_ip_generator_mut(&mut self) -> &mut super::structs::CustomizationIpGenerator { self }
 }
 impl CustomizationIpGeneratorTrait for CustomizationCustomIpGenerator {
-    fn get_customization_ip_generator(&self) -> &super::structs::CustomizationIpGenerator { &self.customization_ip_generator_ }
-    fn get_customization_ip_generator_mut(&mut self) -> &mut super::structs::CustomizationIpGenerator { &mut self.customization_ip_generator_ }
 }
 impl CustomizationIpGeneratorTrait for CustomizationDhcpIpGenerator {
-    fn get_customization_ip_generator(&self) -> &super::structs::CustomizationIpGenerator { &self.customization_ip_generator_ }
-    fn get_customization_ip_generator_mut(&mut self) -> &mut super::structs::CustomizationIpGenerator { &mut self.customization_ip_generator_ }
 }
 impl CustomizationIpGeneratorTrait for CustomizationFixedIp {
-    fn get_customization_ip_generator(&self) -> &super::structs::CustomizationIpGenerator { &self.customization_ip_generator_ }
-    fn get_customization_ip_generator_mut(&mut self) -> &mut super::structs::CustomizationIpGenerator { &mut self.customization_ip_generator_ }
 }
 impl CustomizationIpGeneratorTrait for CustomizationUnknownIpGenerator {
-    fn get_customization_ip_generator(&self) -> &super::structs::CustomizationIpGenerator { &self.customization_ip_generator_ }
-    fn get_customization_ip_generator_mut(&mut self) -> &mut super::structs::CustomizationIpGenerator { &mut self.customization_ip_generator_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn CustomizationIpGeneratorTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -48375,25 +41429,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn Customizati
 /// 
 /// *(10 of 27 paths)*
 pub trait CustomizationIpV6GeneratorTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the CustomizationIpV6Generator parent struct
-    fn get_customization_ip_v_6_generator(&self) -> &super::structs::CustomizationIpV6Generator;
-    /// Get a mutable reference to the CustomizationIpV6Generator parent struct
-    fn get_customization_ip_v_6_generator_mut(&mut self) -> &mut super::structs::CustomizationIpV6Generator;
 }
-impl std::ops::Deref for dyn CustomizationIpV6GeneratorTrait {
-    type Target = super::structs::CustomizationIpV6Generator;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_customization_ip_v_6_generator()
-    }
-}
-
-impl std::ops::DerefMut for dyn CustomizationIpV6GeneratorTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_customization_ip_v_6_generator_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn CustomizationIpV6GeneratorTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -48434,32 +41470,18 @@ impl<'de> de::Visitor<'de> for CustomizationIpV6GeneratorVisitor {
 }
 
 impl CustomizationIpV6GeneratorTrait for CustomizationIpV6Generator {
-    fn get_customization_ip_v_6_generator(&self) -> &super::structs::CustomizationIpV6Generator { &self }
-    fn get_customization_ip_v_6_generator_mut(&mut self) -> &mut super::structs::CustomizationIpV6Generator { self }
 }
 impl CustomizationIpV6GeneratorTrait for CustomizationAutoIpV6Generator {
-    fn get_customization_ip_v_6_generator(&self) -> &super::structs::CustomizationIpV6Generator { &self.customization_ip_v_6_generator_ }
-    fn get_customization_ip_v_6_generator_mut(&mut self) -> &mut super::structs::CustomizationIpV6Generator { &mut self.customization_ip_v_6_generator_ }
 }
 impl CustomizationIpV6GeneratorTrait for CustomizationCustomIpV6Generator {
-    fn get_customization_ip_v_6_generator(&self) -> &super::structs::CustomizationIpV6Generator { &self.customization_ip_v_6_generator_ }
-    fn get_customization_ip_v_6_generator_mut(&mut self) -> &mut super::structs::CustomizationIpV6Generator { &mut self.customization_ip_v_6_generator_ }
 }
 impl CustomizationIpV6GeneratorTrait for CustomizationDhcpIpV6Generator {
-    fn get_customization_ip_v_6_generator(&self) -> &super::structs::CustomizationIpV6Generator { &self.customization_ip_v_6_generator_ }
-    fn get_customization_ip_v_6_generator_mut(&mut self) -> &mut super::structs::CustomizationIpV6Generator { &mut self.customization_ip_v_6_generator_ }
 }
 impl CustomizationIpV6GeneratorTrait for CustomizationFixedIpV6 {
-    fn get_customization_ip_v_6_generator(&self) -> &super::structs::CustomizationIpV6Generator { &self.customization_ip_v_6_generator_ }
-    fn get_customization_ip_v_6_generator_mut(&mut self) -> &mut super::structs::CustomizationIpV6Generator { &mut self.customization_ip_v_6_generator_ }
 }
 impl CustomizationIpV6GeneratorTrait for CustomizationStatelessIpV6Generator {
-    fn get_customization_ip_v_6_generator(&self) -> &super::structs::CustomizationIpV6Generator { &self.customization_ip_v_6_generator_ }
-    fn get_customization_ip_v_6_generator_mut(&mut self) -> &mut super::structs::CustomizationIpV6Generator { &mut self.customization_ip_v_6_generator_ }
 }
 impl CustomizationIpV6GeneratorTrait for CustomizationUnknownIpV6Generator {
-    fn get_customization_ip_v_6_generator(&self) -> &super::structs::CustomizationIpV6Generator { &self.customization_ip_v_6_generator_ }
-    fn get_customization_ip_v_6_generator_mut(&mut self) -> &mut super::structs::CustomizationIpV6Generator { &mut self.customization_ip_v_6_generator_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn CustomizationIpV6GeneratorTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -48507,25 +41529,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn Customizati
 /// 
 /// *(10 of 24 paths)*
 pub trait CustomizationNameTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the CustomizationName parent struct
-    fn get_customization_name(&self) -> &super::structs::CustomizationName;
-    /// Get a mutable reference to the CustomizationName parent struct
-    fn get_customization_name_mut(&mut self) -> &mut super::structs::CustomizationName;
 }
-impl std::ops::Deref for dyn CustomizationNameTrait {
-    type Target = super::structs::CustomizationName;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_customization_name()
-    }
-}
-
-impl std::ops::DerefMut for dyn CustomizationNameTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_customization_name_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn CustomizationNameTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -48566,28 +41570,16 @@ impl<'de> de::Visitor<'de> for CustomizationNameVisitor {
 }
 
 impl CustomizationNameTrait for CustomizationName {
-    fn get_customization_name(&self) -> &super::structs::CustomizationName { &self }
-    fn get_customization_name_mut(&mut self) -> &mut super::structs::CustomizationName { self }
 }
 impl CustomizationNameTrait for CustomizationCustomName {
-    fn get_customization_name(&self) -> &super::structs::CustomizationName { &self.customization_name_ }
-    fn get_customization_name_mut(&mut self) -> &mut super::structs::CustomizationName { &mut self.customization_name_ }
 }
 impl CustomizationNameTrait for CustomizationFixedName {
-    fn get_customization_name(&self) -> &super::structs::CustomizationName { &self.customization_name_ }
-    fn get_customization_name_mut(&mut self) -> &mut super::structs::CustomizationName { &mut self.customization_name_ }
 }
 impl CustomizationNameTrait for CustomizationPrefixName {
-    fn get_customization_name(&self) -> &super::structs::CustomizationName { &self.customization_name_ }
-    fn get_customization_name_mut(&mut self) -> &mut super::structs::CustomizationName { &mut self.customization_name_ }
 }
 impl CustomizationNameTrait for CustomizationUnknownName {
-    fn get_customization_name(&self) -> &super::structs::CustomizationName { &self.customization_name_ }
-    fn get_customization_name_mut(&mut self) -> &mut super::structs::CustomizationName { &mut self.customization_name_ }
 }
 impl CustomizationNameTrait for CustomizationVirtualMachineName {
-    fn get_customization_name(&self) -> &super::structs::CustomizationName { &self.customization_name_ }
-    fn get_customization_name_mut(&mut self) -> &mut super::structs::CustomizationName { &mut self.customization_name_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn CustomizationNameTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -48632,25 +41624,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn Customizati
 /// 
 /// *(10 of 12 paths)*
 pub trait CustomizationOptionsTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the CustomizationOptions parent struct
-    fn get_customization_options(&self) -> &super::structs::CustomizationOptions;
-    /// Get a mutable reference to the CustomizationOptions parent struct
-    fn get_customization_options_mut(&mut self) -> &mut super::structs::CustomizationOptions;
 }
-impl std::ops::Deref for dyn CustomizationOptionsTrait {
-    type Target = super::structs::CustomizationOptions;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_customization_options()
-    }
-}
-
-impl std::ops::DerefMut for dyn CustomizationOptionsTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_customization_options_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn CustomizationOptionsTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -48691,16 +41665,10 @@ impl<'de> de::Visitor<'de> for CustomizationOptionsVisitor {
 }
 
 impl CustomizationOptionsTrait for CustomizationOptions {
-    fn get_customization_options(&self) -> &super::structs::CustomizationOptions { &self }
-    fn get_customization_options_mut(&mut self) -> &mut super::structs::CustomizationOptions { self }
 }
 impl CustomizationOptionsTrait for CustomizationLinuxOptions {
-    fn get_customization_options(&self) -> &super::structs::CustomizationOptions { &self.customization_options_ }
-    fn get_customization_options_mut(&mut self) -> &mut super::structs::CustomizationOptions { &mut self.customization_options_ }
 }
 impl CustomizationOptionsTrait for CustomizationWinOptions {
-    fn get_customization_options(&self) -> &super::structs::CustomizationOptions { &self.customization_options_ }
-    fn get_customization_options_mut(&mut self) -> &mut super::structs::CustomizationOptions { &mut self.customization_options_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn CustomizationOptionsTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -50735,25 +43703,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualSoun
 /// 
 /// *(10 of 100 paths)*
 pub trait VirtualDeviceBackingInfoTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the VirtualDeviceBackingInfo parent struct
-    fn get_virtual_device_backing_info(&self) -> &super::structs::VirtualDeviceBackingInfo;
-    /// Get a mutable reference to the VirtualDeviceBackingInfo parent struct
-    fn get_virtual_device_backing_info_mut(&mut self) -> &mut super::structs::VirtualDeviceBackingInfo;
 }
-impl std::ops::Deref for dyn VirtualDeviceBackingInfoTrait {
-    type Target = super::structs::VirtualDeviceBackingInfo;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_virtual_device_backing_info()
-    }
-}
-
-impl std::ops::DerefMut for dyn VirtualDeviceBackingInfoTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_virtual_device_backing_info_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn VirtualDeviceBackingInfoTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -50794,196 +43744,100 @@ impl<'de> de::Visitor<'de> for VirtualDeviceBackingInfoVisitor {
 }
 
 impl VirtualDeviceBackingInfoTrait for VirtualDeviceBackingInfo {
-    fn get_virtual_device_backing_info(&self) -> &super::structs::VirtualDeviceBackingInfo { &self }
-    fn get_virtual_device_backing_info_mut(&mut self) -> &mut super::structs::VirtualDeviceBackingInfo { self }
 }
 impl VirtualDeviceBackingInfoTrait for VirtualDeviceDeviceBackingInfo {
-    fn get_virtual_device_backing_info(&self) -> &super::structs::VirtualDeviceBackingInfo { &self.virtual_device_backing_info_ }
-    fn get_virtual_device_backing_info_mut(&mut self) -> &mut super::structs::VirtualDeviceBackingInfo { &mut self.virtual_device_backing_info_ }
 }
 impl VirtualDeviceBackingInfoTrait for VirtualCdromAtapiBackingInfo {
-    fn get_virtual_device_backing_info(&self) -> &super::structs::VirtualDeviceBackingInfo { &self.virtual_device_device_backing_info_.virtual_device_backing_info_ }
-    fn get_virtual_device_backing_info_mut(&mut self) -> &mut super::structs::VirtualDeviceBackingInfo { &mut self.virtual_device_device_backing_info_.virtual_device_backing_info_ }
 }
 impl VirtualDeviceBackingInfoTrait for VirtualCdromPassthroughBackingInfo {
-    fn get_virtual_device_backing_info(&self) -> &super::structs::VirtualDeviceBackingInfo { &self.virtual_device_device_backing_info_.virtual_device_backing_info_ }
-    fn get_virtual_device_backing_info_mut(&mut self) -> &mut super::structs::VirtualDeviceBackingInfo { &mut self.virtual_device_device_backing_info_.virtual_device_backing_info_ }
 }
 impl VirtualDeviceBackingInfoTrait for VirtualDiskRawDiskVer2BackingInfo {
-    fn get_virtual_device_backing_info(&self) -> &super::structs::VirtualDeviceBackingInfo { &self.virtual_device_device_backing_info_.virtual_device_backing_info_ }
-    fn get_virtual_device_backing_info_mut(&mut self) -> &mut super::structs::VirtualDeviceBackingInfo { &mut self.virtual_device_device_backing_info_.virtual_device_backing_info_ }
 }
 impl VirtualDeviceBackingInfoTrait for VirtualDiskPartitionedRawDiskVer2BackingInfo {
-    fn get_virtual_device_backing_info(&self) -> &super::structs::VirtualDeviceBackingInfo { &self.virtual_disk_raw_disk_ver_2_backing_info_.virtual_device_device_backing_info_.virtual_device_backing_info_ }
-    fn get_virtual_device_backing_info_mut(&mut self) -> &mut super::structs::VirtualDeviceBackingInfo { &mut self.virtual_disk_raw_disk_ver_2_backing_info_.virtual_device_device_backing_info_.virtual_device_backing_info_ }
 }
 impl VirtualDeviceBackingInfoTrait for VirtualEthernetCardLegacyNetworkBackingInfo {
-    fn get_virtual_device_backing_info(&self) -> &super::structs::VirtualDeviceBackingInfo { &self.virtual_device_device_backing_info_.virtual_device_backing_info_ }
-    fn get_virtual_device_backing_info_mut(&mut self) -> &mut super::structs::VirtualDeviceBackingInfo { &mut self.virtual_device_device_backing_info_.virtual_device_backing_info_ }
 }
 impl VirtualDeviceBackingInfoTrait for VirtualEthernetCardNetworkBackingInfo {
-    fn get_virtual_device_backing_info(&self) -> &super::structs::VirtualDeviceBackingInfo { &self.virtual_device_device_backing_info_.virtual_device_backing_info_ }
-    fn get_virtual_device_backing_info_mut(&mut self) -> &mut super::structs::VirtualDeviceBackingInfo { &mut self.virtual_device_device_backing_info_.virtual_device_backing_info_ }
 }
 impl VirtualDeviceBackingInfoTrait for VirtualFloppyDeviceBackingInfo {
-    fn get_virtual_device_backing_info(&self) -> &super::structs::VirtualDeviceBackingInfo { &self.virtual_device_device_backing_info_.virtual_device_backing_info_ }
-    fn get_virtual_device_backing_info_mut(&mut self) -> &mut super::structs::VirtualDeviceBackingInfo { &mut self.virtual_device_device_backing_info_.virtual_device_backing_info_ }
 }
 impl VirtualDeviceBackingInfoTrait for VirtualPciPassthroughDeviceBackingInfo {
-    fn get_virtual_device_backing_info(&self) -> &super::structs::VirtualDeviceBackingInfo { &self.virtual_device_device_backing_info_.virtual_device_backing_info_ }
-    fn get_virtual_device_backing_info_mut(&mut self) -> &mut super::structs::VirtualDeviceBackingInfo { &mut self.virtual_device_device_backing_info_.virtual_device_backing_info_ }
 }
 impl VirtualDeviceBackingInfoTrait for VirtualPciPassthroughDynamicBackingInfo {
-    fn get_virtual_device_backing_info(&self) -> &super::structs::VirtualDeviceBackingInfo { &self.virtual_device_device_backing_info_.virtual_device_backing_info_ }
-    fn get_virtual_device_backing_info_mut(&mut self) -> &mut super::structs::VirtualDeviceBackingInfo { &mut self.virtual_device_device_backing_info_.virtual_device_backing_info_ }
 }
 impl VirtualDeviceBackingInfoTrait for VirtualParallelPortDeviceBackingInfo {
-    fn get_virtual_device_backing_info(&self) -> &super::structs::VirtualDeviceBackingInfo { &self.virtual_device_device_backing_info_.virtual_device_backing_info_ }
-    fn get_virtual_device_backing_info_mut(&mut self) -> &mut super::structs::VirtualDeviceBackingInfo { &mut self.virtual_device_device_backing_info_.virtual_device_backing_info_ }
 }
 impl VirtualDeviceBackingInfoTrait for VirtualPointingDeviceDeviceBackingInfo {
-    fn get_virtual_device_backing_info(&self) -> &super::structs::VirtualDeviceBackingInfo { &self.virtual_device_device_backing_info_.virtual_device_backing_info_ }
-    fn get_virtual_device_backing_info_mut(&mut self) -> &mut super::structs::VirtualDeviceBackingInfo { &mut self.virtual_device_device_backing_info_.virtual_device_backing_info_ }
 }
 impl VirtualDeviceBackingInfoTrait for VirtualScsiPassthroughDeviceBackingInfo {
-    fn get_virtual_device_backing_info(&self) -> &super::structs::VirtualDeviceBackingInfo { &self.virtual_device_device_backing_info_.virtual_device_backing_info_ }
-    fn get_virtual_device_backing_info_mut(&mut self) -> &mut super::structs::VirtualDeviceBackingInfo { &mut self.virtual_device_device_backing_info_.virtual_device_backing_info_ }
 }
 impl VirtualDeviceBackingInfoTrait for VirtualSerialPortDeviceBackingInfo {
-    fn get_virtual_device_backing_info(&self) -> &super::structs::VirtualDeviceBackingInfo { &self.virtual_device_device_backing_info_.virtual_device_backing_info_ }
-    fn get_virtual_device_backing_info_mut(&mut self) -> &mut super::structs::VirtualDeviceBackingInfo { &mut self.virtual_device_device_backing_info_.virtual_device_backing_info_ }
 }
 impl VirtualDeviceBackingInfoTrait for VirtualSoundCardDeviceBackingInfo {
-    fn get_virtual_device_backing_info(&self) -> &super::structs::VirtualDeviceBackingInfo { &self.virtual_device_device_backing_info_.virtual_device_backing_info_ }
-    fn get_virtual_device_backing_info_mut(&mut self) -> &mut super::structs::VirtualDeviceBackingInfo { &mut self.virtual_device_device_backing_info_.virtual_device_backing_info_ }
 }
 impl VirtualDeviceBackingInfoTrait for VirtualUsbRemoteHostBackingInfo {
-    fn get_virtual_device_backing_info(&self) -> &super::structs::VirtualDeviceBackingInfo { &self.virtual_device_device_backing_info_.virtual_device_backing_info_ }
-    fn get_virtual_device_backing_info_mut(&mut self) -> &mut super::structs::VirtualDeviceBackingInfo { &mut self.virtual_device_device_backing_info_.virtual_device_backing_info_ }
 }
 impl VirtualDeviceBackingInfoTrait for VirtualUsbusbBackingInfo {
-    fn get_virtual_device_backing_info(&self) -> &super::structs::VirtualDeviceBackingInfo { &self.virtual_device_device_backing_info_.virtual_device_backing_info_ }
-    fn get_virtual_device_backing_info_mut(&mut self) -> &mut super::structs::VirtualDeviceBackingInfo { &mut self.virtual_device_device_backing_info_.virtual_device_backing_info_ }
 }
 impl VirtualDeviceBackingInfoTrait for VirtualDeviceFileBackingInfo {
-    fn get_virtual_device_backing_info(&self) -> &super::structs::VirtualDeviceBackingInfo { &self.virtual_device_backing_info_ }
-    fn get_virtual_device_backing_info_mut(&mut self) -> &mut super::structs::VirtualDeviceBackingInfo { &mut self.virtual_device_backing_info_ }
 }
 impl VirtualDeviceBackingInfoTrait for VirtualCdromIsoBackingInfo {
-    fn get_virtual_device_backing_info(&self) -> &super::structs::VirtualDeviceBackingInfo { &self.virtual_device_file_backing_info_.virtual_device_backing_info_ }
-    fn get_virtual_device_backing_info_mut(&mut self) -> &mut super::structs::VirtualDeviceBackingInfo { &mut self.virtual_device_file_backing_info_.virtual_device_backing_info_ }
 }
 impl VirtualDeviceBackingInfoTrait for VirtualDiskFlatVer1BackingInfo {
-    fn get_virtual_device_backing_info(&self) -> &super::structs::VirtualDeviceBackingInfo { &self.virtual_device_file_backing_info_.virtual_device_backing_info_ }
-    fn get_virtual_device_backing_info_mut(&mut self) -> &mut super::structs::VirtualDeviceBackingInfo { &mut self.virtual_device_file_backing_info_.virtual_device_backing_info_ }
 }
 impl VirtualDeviceBackingInfoTrait for VirtualDiskFlatVer2BackingInfo {
-    fn get_virtual_device_backing_info(&self) -> &super::structs::VirtualDeviceBackingInfo { &self.virtual_device_file_backing_info_.virtual_device_backing_info_ }
-    fn get_virtual_device_backing_info_mut(&mut self) -> &mut super::structs::VirtualDeviceBackingInfo { &mut self.virtual_device_file_backing_info_.virtual_device_backing_info_ }
 }
 impl VirtualDeviceBackingInfoTrait for VirtualDiskLocalPMemBackingInfo {
-    fn get_virtual_device_backing_info(&self) -> &super::structs::VirtualDeviceBackingInfo { &self.virtual_device_file_backing_info_.virtual_device_backing_info_ }
-    fn get_virtual_device_backing_info_mut(&mut self) -> &mut super::structs::VirtualDeviceBackingInfo { &mut self.virtual_device_file_backing_info_.virtual_device_backing_info_ }
 }
 impl VirtualDeviceBackingInfoTrait for VirtualDiskRawDiskMappingVer1BackingInfo {
-    fn get_virtual_device_backing_info(&self) -> &super::structs::VirtualDeviceBackingInfo { &self.virtual_device_file_backing_info_.virtual_device_backing_info_ }
-    fn get_virtual_device_backing_info_mut(&mut self) -> &mut super::structs::VirtualDeviceBackingInfo { &mut self.virtual_device_file_backing_info_.virtual_device_backing_info_ }
 }
 impl VirtualDeviceBackingInfoTrait for VirtualDiskSeSparseBackingInfo {
-    fn get_virtual_device_backing_info(&self) -> &super::structs::VirtualDeviceBackingInfo { &self.virtual_device_file_backing_info_.virtual_device_backing_info_ }
-    fn get_virtual_device_backing_info_mut(&mut self) -> &mut super::structs::VirtualDeviceBackingInfo { &mut self.virtual_device_file_backing_info_.virtual_device_backing_info_ }
 }
 impl VirtualDeviceBackingInfoTrait for VirtualDiskSparseVer1BackingInfo {
-    fn get_virtual_device_backing_info(&self) -> &super::structs::VirtualDeviceBackingInfo { &self.virtual_device_file_backing_info_.virtual_device_backing_info_ }
-    fn get_virtual_device_backing_info_mut(&mut self) -> &mut super::structs::VirtualDeviceBackingInfo { &mut self.virtual_device_file_backing_info_.virtual_device_backing_info_ }
 }
 impl VirtualDeviceBackingInfoTrait for VirtualDiskSparseVer2BackingInfo {
-    fn get_virtual_device_backing_info(&self) -> &super::structs::VirtualDeviceBackingInfo { &self.virtual_device_file_backing_info_.virtual_device_backing_info_ }
-    fn get_virtual_device_backing_info_mut(&mut self) -> &mut super::structs::VirtualDeviceBackingInfo { &mut self.virtual_device_file_backing_info_.virtual_device_backing_info_ }
 }
 impl VirtualDeviceBackingInfoTrait for VirtualFloppyImageBackingInfo {
-    fn get_virtual_device_backing_info(&self) -> &super::structs::VirtualDeviceBackingInfo { &self.virtual_device_file_backing_info_.virtual_device_backing_info_ }
-    fn get_virtual_device_backing_info_mut(&mut self) -> &mut super::structs::VirtualDeviceBackingInfo { &mut self.virtual_device_file_backing_info_.virtual_device_backing_info_ }
 }
 impl VirtualDeviceBackingInfoTrait for VirtualNvdimmBackingInfo {
-    fn get_virtual_device_backing_info(&self) -> &super::structs::VirtualDeviceBackingInfo { &self.virtual_device_file_backing_info_.virtual_device_backing_info_ }
-    fn get_virtual_device_backing_info_mut(&mut self) -> &mut super::structs::VirtualDeviceBackingInfo { &mut self.virtual_device_file_backing_info_.virtual_device_backing_info_ }
 }
 impl VirtualDeviceBackingInfoTrait for VirtualParallelPortFileBackingInfo {
-    fn get_virtual_device_backing_info(&self) -> &super::structs::VirtualDeviceBackingInfo { &self.virtual_device_file_backing_info_.virtual_device_backing_info_ }
-    fn get_virtual_device_backing_info_mut(&mut self) -> &mut super::structs::VirtualDeviceBackingInfo { &mut self.virtual_device_file_backing_info_.virtual_device_backing_info_ }
 }
 impl VirtualDeviceBackingInfoTrait for VirtualSerialPortFileBackingInfo {
-    fn get_virtual_device_backing_info(&self) -> &super::structs::VirtualDeviceBackingInfo { &self.virtual_device_file_backing_info_.virtual_device_backing_info_ }
-    fn get_virtual_device_backing_info_mut(&mut self) -> &mut super::structs::VirtualDeviceBackingInfo { &mut self.virtual_device_file_backing_info_.virtual_device_backing_info_ }
 }
 impl VirtualDeviceBackingInfoTrait for VirtualDevicePipeBackingInfo {
-    fn get_virtual_device_backing_info(&self) -> &super::structs::VirtualDeviceBackingInfo { &self.virtual_device_backing_info_ }
-    fn get_virtual_device_backing_info_mut(&mut self) -> &mut super::structs::VirtualDeviceBackingInfo { &mut self.virtual_device_backing_info_ }
 }
 impl VirtualDeviceBackingInfoTrait for VirtualSerialPortPipeBackingInfo {
-    fn get_virtual_device_backing_info(&self) -> &super::structs::VirtualDeviceBackingInfo { &self.virtual_device_pipe_backing_info_.virtual_device_backing_info_ }
-    fn get_virtual_device_backing_info_mut(&mut self) -> &mut super::structs::VirtualDeviceBackingInfo { &mut self.virtual_device_pipe_backing_info_.virtual_device_backing_info_ }
 }
 impl VirtualDeviceBackingInfoTrait for VirtualDeviceRemoteDeviceBackingInfo {
-    fn get_virtual_device_backing_info(&self) -> &super::structs::VirtualDeviceBackingInfo { &self.virtual_device_backing_info_ }
-    fn get_virtual_device_backing_info_mut(&mut self) -> &mut super::structs::VirtualDeviceBackingInfo { &mut self.virtual_device_backing_info_ }
 }
 impl VirtualDeviceBackingInfoTrait for VirtualCdromRemoteAtapiBackingInfo {
-    fn get_virtual_device_backing_info(&self) -> &super::structs::VirtualDeviceBackingInfo { &self.virtual_device_remote_device_backing_info_.virtual_device_backing_info_ }
-    fn get_virtual_device_backing_info_mut(&mut self) -> &mut super::structs::VirtualDeviceBackingInfo { &mut self.virtual_device_remote_device_backing_info_.virtual_device_backing_info_ }
 }
 impl VirtualDeviceBackingInfoTrait for VirtualCdromRemotePassthroughBackingInfo {
-    fn get_virtual_device_backing_info(&self) -> &super::structs::VirtualDeviceBackingInfo { &self.virtual_device_remote_device_backing_info_.virtual_device_backing_info_ }
-    fn get_virtual_device_backing_info_mut(&mut self) -> &mut super::structs::VirtualDeviceBackingInfo { &mut self.virtual_device_remote_device_backing_info_.virtual_device_backing_info_ }
 }
 impl VirtualDeviceBackingInfoTrait for VirtualFloppyRemoteDeviceBackingInfo {
-    fn get_virtual_device_backing_info(&self) -> &super::structs::VirtualDeviceBackingInfo { &self.virtual_device_remote_device_backing_info_.virtual_device_backing_info_ }
-    fn get_virtual_device_backing_info_mut(&mut self) -> &mut super::structs::VirtualDeviceBackingInfo { &mut self.virtual_device_remote_device_backing_info_.virtual_device_backing_info_ }
 }
 impl VirtualDeviceBackingInfoTrait for VirtualUsbRemoteClientBackingInfo {
-    fn get_virtual_device_backing_info(&self) -> &super::structs::VirtualDeviceBackingInfo { &self.virtual_device_remote_device_backing_info_.virtual_device_backing_info_ }
-    fn get_virtual_device_backing_info_mut(&mut self) -> &mut super::structs::VirtualDeviceBackingInfo { &mut self.virtual_device_remote_device_backing_info_.virtual_device_backing_info_ }
 }
 impl VirtualDeviceBackingInfoTrait for VirtualDeviceUriBackingInfo {
-    fn get_virtual_device_backing_info(&self) -> &super::structs::VirtualDeviceBackingInfo { &self.virtual_device_backing_info_ }
-    fn get_virtual_device_backing_info_mut(&mut self) -> &mut super::structs::VirtualDeviceBackingInfo { &mut self.virtual_device_backing_info_ }
 }
 impl VirtualDeviceBackingInfoTrait for VirtualSerialPortUriBackingInfo {
-    fn get_virtual_device_backing_info(&self) -> &super::structs::VirtualDeviceBackingInfo { &self.virtual_device_uri_backing_info_.virtual_device_backing_info_ }
-    fn get_virtual_device_backing_info_mut(&mut self) -> &mut super::structs::VirtualDeviceBackingInfo { &mut self.virtual_device_uri_backing_info_.virtual_device_backing_info_ }
 }
 impl VirtualDeviceBackingInfoTrait for VirtualEthernetCardDistributedVirtualPortBackingInfo {
-    fn get_virtual_device_backing_info(&self) -> &super::structs::VirtualDeviceBackingInfo { &self.virtual_device_backing_info_ }
-    fn get_virtual_device_backing_info_mut(&mut self) -> &mut super::structs::VirtualDeviceBackingInfo { &mut self.virtual_device_backing_info_ }
 }
 impl VirtualDeviceBackingInfoTrait for VirtualEthernetCardOpaqueNetworkBackingInfo {
-    fn get_virtual_device_backing_info(&self) -> &super::structs::VirtualDeviceBackingInfo { &self.virtual_device_backing_info_ }
-    fn get_virtual_device_backing_info_mut(&mut self) -> &mut super::structs::VirtualDeviceBackingInfo { &mut self.virtual_device_backing_info_ }
 }
 impl VirtualDeviceBackingInfoTrait for VirtualPciPassthroughDvxBackingInfo {
-    fn get_virtual_device_backing_info(&self) -> &super::structs::VirtualDeviceBackingInfo { &self.virtual_device_backing_info_ }
-    fn get_virtual_device_backing_info_mut(&mut self) -> &mut super::structs::VirtualDeviceBackingInfo { &mut self.virtual_device_backing_info_ }
 }
 impl VirtualDeviceBackingInfoTrait for VirtualPciPassthroughPluginBackingInfo {
-    fn get_virtual_device_backing_info(&self) -> &super::structs::VirtualDeviceBackingInfo { &self.virtual_device_backing_info_ }
-    fn get_virtual_device_backing_info_mut(&mut self) -> &mut super::structs::VirtualDeviceBackingInfo { &mut self.virtual_device_backing_info_ }
 }
 impl VirtualDeviceBackingInfoTrait for VirtualPciPassthroughVmiopBackingInfo {
-    fn get_virtual_device_backing_info(&self) -> &super::structs::VirtualDeviceBackingInfo { &self.virtual_pci_passthrough_plugin_backing_info_.virtual_device_backing_info_ }
-    fn get_virtual_device_backing_info_mut(&mut self) -> &mut super::structs::VirtualDeviceBackingInfo { &mut self.virtual_pci_passthrough_plugin_backing_info_.virtual_device_backing_info_ }
 }
 impl VirtualDeviceBackingInfoTrait for VirtualPrecisionClockSystemClockBackingInfo {
-    fn get_virtual_device_backing_info(&self) -> &super::structs::VirtualDeviceBackingInfo { &self.virtual_device_backing_info_ }
-    fn get_virtual_device_backing_info_mut(&mut self) -> &mut super::structs::VirtualDeviceBackingInfo { &mut self.virtual_device_backing_info_ }
 }
 impl VirtualDeviceBackingInfoTrait for VirtualSerialPortThinPrintBackingInfo {
-    fn get_virtual_device_backing_info(&self) -> &super::structs::VirtualDeviceBackingInfo { &self.virtual_device_backing_info_ }
-    fn get_virtual_device_backing_info_mut(&mut self) -> &mut super::structs::VirtualDeviceBackingInfo { &mut self.virtual_device_backing_info_ }
 }
 impl VirtualDeviceBackingInfoTrait for VirtualSriovEthernetCardSriovBackingInfo {
-    fn get_virtual_device_backing_info(&self) -> &super::structs::VirtualDeviceBackingInfo { &self.virtual_device_backing_info_ }
-    fn get_virtual_device_backing_info_mut(&mut self) -> &mut super::structs::VirtualDeviceBackingInfo { &mut self.virtual_device_backing_info_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualDeviceBackingInfoTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -52077,25 +44931,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualDevi
 /// 
 /// *(10 of 100 paths)*
 pub trait VirtualPciPassthroughPluginBackingInfoTrait : super::traits::VirtualDeviceBackingInfoTrait {
-    /// Get a reference to the VirtualPciPassthroughPluginBackingInfo parent struct
-    fn get_virtual_pci_passthrough_plugin_backing_info(&self) -> &super::structs::VirtualPciPassthroughPluginBackingInfo;
-    /// Get a mutable reference to the VirtualPciPassthroughPluginBackingInfo parent struct
-    fn get_virtual_pci_passthrough_plugin_backing_info_mut(&mut self) -> &mut super::structs::VirtualPciPassthroughPluginBackingInfo;
 }
-impl std::ops::Deref for dyn VirtualPciPassthroughPluginBackingInfoTrait {
-    type Target = super::structs::VirtualPciPassthroughPluginBackingInfo;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_virtual_pci_passthrough_plugin_backing_info()
-    }
-}
-
-impl std::ops::DerefMut for dyn VirtualPciPassthroughPluginBackingInfoTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_virtual_pci_passthrough_plugin_backing_info_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn VirtualPciPassthroughPluginBackingInfoTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -52136,12 +44972,8 @@ impl<'de> de::Visitor<'de> for VirtualPciPassthroughPluginBackingInfoVisitor {
 }
 
 impl VirtualPciPassthroughPluginBackingInfoTrait for VirtualPciPassthroughPluginBackingInfo {
-    fn get_virtual_pci_passthrough_plugin_backing_info(&self) -> &super::structs::VirtualPciPassthroughPluginBackingInfo { &self }
-    fn get_virtual_pci_passthrough_plugin_backing_info_mut(&mut self) -> &mut super::structs::VirtualPciPassthroughPluginBackingInfo { self }
 }
 impl VirtualPciPassthroughPluginBackingInfoTrait for VirtualPciPassthroughVmiopBackingInfo {
-    fn get_virtual_pci_passthrough_plugin_backing_info(&self) -> &super::structs::VirtualPciPassthroughPluginBackingInfo { &self.virtual_pci_passthrough_plugin_backing_info_ }
-    fn get_virtual_pci_passthrough_plugin_backing_info_mut(&mut self) -> &mut super::structs::VirtualPciPassthroughPluginBackingInfo { &mut self.virtual_pci_passthrough_plugin_backing_info_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualPciPassthroughPluginBackingInfoTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -52184,25 +45016,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualPciP
 /// 
 /// *(10 of 65 paths)*
 pub trait VirtualDeviceBusSlotInfoTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the VirtualDeviceBusSlotInfo parent struct
-    fn get_virtual_device_bus_slot_info(&self) -> &super::structs::VirtualDeviceBusSlotInfo;
-    /// Get a mutable reference to the VirtualDeviceBusSlotInfo parent struct
-    fn get_virtual_device_bus_slot_info_mut(&mut self) -> &mut super::structs::VirtualDeviceBusSlotInfo;
 }
-impl std::ops::Deref for dyn VirtualDeviceBusSlotInfoTrait {
-    type Target = super::structs::VirtualDeviceBusSlotInfo;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_virtual_device_bus_slot_info()
-    }
-}
-
-impl std::ops::DerefMut for dyn VirtualDeviceBusSlotInfoTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_virtual_device_bus_slot_info_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn VirtualDeviceBusSlotInfoTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -52243,16 +45057,10 @@ impl<'de> de::Visitor<'de> for VirtualDeviceBusSlotInfoVisitor {
 }
 
 impl VirtualDeviceBusSlotInfoTrait for VirtualDeviceBusSlotInfo {
-    fn get_virtual_device_bus_slot_info(&self) -> &super::structs::VirtualDeviceBusSlotInfo { &self }
-    fn get_virtual_device_bus_slot_info_mut(&mut self) -> &mut super::structs::VirtualDeviceBusSlotInfo { self }
 }
 impl VirtualDeviceBusSlotInfoTrait for VirtualDevicePciBusSlotInfo {
-    fn get_virtual_device_bus_slot_info(&self) -> &super::structs::VirtualDeviceBusSlotInfo { &self.virtual_device_bus_slot_info_ }
-    fn get_virtual_device_bus_slot_info_mut(&mut self) -> &mut super::structs::VirtualDeviceBusSlotInfo { &mut self.virtual_device_bus_slot_info_ }
 }
 impl VirtualDeviceBusSlotInfoTrait for VirtualUsbControllerPciBusSlotInfo {
-    fn get_virtual_device_bus_slot_info(&self) -> &super::structs::VirtualDeviceBusSlotInfo { &self.virtual_device_pci_bus_slot_info_.virtual_device_bus_slot_info_ }
-    fn get_virtual_device_bus_slot_info_mut(&mut self) -> &mut super::structs::VirtualDeviceBusSlotInfo { &mut self.virtual_device_pci_bus_slot_info_.virtual_device_bus_slot_info_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualDeviceBusSlotInfoTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -55868,25 +48676,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualDevi
 /// - `GuestAliasManager::list_guest_mapped_aliases().subjects[*]`
 /// - `GuestAliasManager::list_guest_aliases().aliases[*].subject`
 pub trait GuestAuthSubjectTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the GuestAuthSubject parent struct
-    fn get_guest_auth_subject(&self) -> &super::structs::GuestAuthSubject;
-    /// Get a mutable reference to the GuestAuthSubject parent struct
-    fn get_guest_auth_subject_mut(&mut self) -> &mut super::structs::GuestAuthSubject;
 }
-impl std::ops::Deref for dyn GuestAuthSubjectTrait {
-    type Target = super::structs::GuestAuthSubject;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_guest_auth_subject()
-    }
-}
-
-impl std::ops::DerefMut for dyn GuestAuthSubjectTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_guest_auth_subject_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn GuestAuthSubjectTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -55927,16 +48717,10 @@ impl<'de> de::Visitor<'de> for GuestAuthSubjectVisitor {
 }
 
 impl GuestAuthSubjectTrait for GuestAuthSubject {
-    fn get_guest_auth_subject(&self) -> &super::structs::GuestAuthSubject { &self }
-    fn get_guest_auth_subject_mut(&mut self) -> &mut super::structs::GuestAuthSubject { self }
 }
 impl GuestAuthSubjectTrait for GuestAuthAnySubject {
-    fn get_guest_auth_subject(&self) -> &super::structs::GuestAuthSubject { &self.guest_auth_subject_ }
-    fn get_guest_auth_subject_mut(&mut self) -> &mut super::structs::GuestAuthSubject { &mut self.guest_auth_subject_ }
 }
 impl GuestAuthSubjectTrait for GuestAuthNamedSubject {
-    fn get_guest_auth_subject(&self) -> &super::structs::GuestAuthSubject { &self.guest_auth_subject_ }
-    fn get_guest_auth_subject_mut(&mut self) -> &mut super::structs::GuestAuthSubject { &mut self.guest_auth_subject_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn GuestAuthSubjectTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -56384,25 +49168,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn GuestProgra
 /// - `GuestWindowsRegistryManager::list_registry_values_in_guest().data`
 /// - `GuestWindowsRegistryManager::set_registry_value_in_guest(value).data`
 pub trait GuestRegValueDataSpecTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the GuestRegValueDataSpec parent struct
-    fn get_guest_reg_value_data_spec(&self) -> &super::structs::GuestRegValueDataSpec;
-    /// Get a mutable reference to the GuestRegValueDataSpec parent struct
-    fn get_guest_reg_value_data_spec_mut(&mut self) -> &mut super::structs::GuestRegValueDataSpec;
 }
-impl std::ops::Deref for dyn GuestRegValueDataSpecTrait {
-    type Target = super::structs::GuestRegValueDataSpec;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_guest_reg_value_data_spec()
-    }
-}
-
-impl std::ops::DerefMut for dyn GuestRegValueDataSpecTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_guest_reg_value_data_spec_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn GuestRegValueDataSpecTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -56443,32 +49209,18 @@ impl<'de> de::Visitor<'de> for GuestRegValueDataSpecVisitor {
 }
 
 impl GuestRegValueDataSpecTrait for GuestRegValueDataSpec {
-    fn get_guest_reg_value_data_spec(&self) -> &super::structs::GuestRegValueDataSpec { &self }
-    fn get_guest_reg_value_data_spec_mut(&mut self) -> &mut super::structs::GuestRegValueDataSpec { self }
 }
 impl GuestRegValueDataSpecTrait for GuestRegValueBinarySpec {
-    fn get_guest_reg_value_data_spec(&self) -> &super::structs::GuestRegValueDataSpec { &self.guest_reg_value_data_spec_ }
-    fn get_guest_reg_value_data_spec_mut(&mut self) -> &mut super::structs::GuestRegValueDataSpec { &mut self.guest_reg_value_data_spec_ }
 }
 impl GuestRegValueDataSpecTrait for GuestRegValueDwordSpec {
-    fn get_guest_reg_value_data_spec(&self) -> &super::structs::GuestRegValueDataSpec { &self.guest_reg_value_data_spec_ }
-    fn get_guest_reg_value_data_spec_mut(&mut self) -> &mut super::structs::GuestRegValueDataSpec { &mut self.guest_reg_value_data_spec_ }
 }
 impl GuestRegValueDataSpecTrait for GuestRegValueExpandStringSpec {
-    fn get_guest_reg_value_data_spec(&self) -> &super::structs::GuestRegValueDataSpec { &self.guest_reg_value_data_spec_ }
-    fn get_guest_reg_value_data_spec_mut(&mut self) -> &mut super::structs::GuestRegValueDataSpec { &mut self.guest_reg_value_data_spec_ }
 }
 impl GuestRegValueDataSpecTrait for GuestRegValueMultiStringSpec {
-    fn get_guest_reg_value_data_spec(&self) -> &super::structs::GuestRegValueDataSpec { &self.guest_reg_value_data_spec_ }
-    fn get_guest_reg_value_data_spec_mut(&mut self) -> &mut super::structs::GuestRegValueDataSpec { &mut self.guest_reg_value_data_spec_ }
 }
 impl GuestRegValueDataSpecTrait for GuestRegValueQwordSpec {
-    fn get_guest_reg_value_data_spec(&self) -> &super::structs::GuestRegValueDataSpec { &self.guest_reg_value_data_spec_ }
-    fn get_guest_reg_value_data_spec_mut(&mut self) -> &mut super::structs::GuestRegValueDataSpec { &mut self.guest_reg_value_data_spec_ }
 }
 impl GuestRegValueDataSpecTrait for GuestRegValueStringSpec {
-    fn get_guest_reg_value_data_spec(&self) -> &super::structs::GuestRegValueDataSpec { &self.guest_reg_value_data_spec_ }
-    fn get_guest_reg_value_data_spec_mut(&mut self) -> &mut super::structs::GuestRegValueDataSpec { &mut self.guest_reg_value_data_spec_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn GuestRegValueDataSpecTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -57089,25 +49841,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VsanDatasto
 /// 
 /// *(10 of 29 paths)*
 pub trait VsanDirectoryServerConfigTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the VsanDirectoryServerConfig parent struct
-    fn get_vsan_directory_server_config(&self) -> &super::structs::VsanDirectoryServerConfig;
-    /// Get a mutable reference to the VsanDirectoryServerConfig parent struct
-    fn get_vsan_directory_server_config_mut(&mut self) -> &mut super::structs::VsanDirectoryServerConfig;
 }
-impl std::ops::Deref for dyn VsanDirectoryServerConfigTrait {
-    type Target = super::structs::VsanDirectoryServerConfig;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_vsan_directory_server_config()
-    }
-}
-
-impl std::ops::DerefMut for dyn VsanDirectoryServerConfigTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_vsan_directory_server_config_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn VsanDirectoryServerConfigTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -57148,12 +49882,8 @@ impl<'de> de::Visitor<'de> for VsanDirectoryServerConfigVisitor {
 }
 
 impl VsanDirectoryServerConfigTrait for VsanDirectoryServerConfig {
-    fn get_vsan_directory_server_config(&self) -> &super::structs::VsanDirectoryServerConfig { &self }
-    fn get_vsan_directory_server_config_mut(&mut self) -> &mut super::structs::VsanDirectoryServerConfig { self }
 }
 impl VsanDirectoryServerConfigTrait for ActiveVsanDirectoryServerConfig {
-    fn get_vsan_directory_server_config(&self) -> &super::structs::VsanDirectoryServerConfig { &self.vsan_directory_server_config_ }
-    fn get_vsan_directory_server_config_mut(&mut self) -> &mut super::structs::VsanDirectoryServerConfig { &mut self.vsan_directory_server_config_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VsanDirectoryServerConfigTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -58581,25 +51311,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VsanIscsiVi
 /// - `VsanVcClusterHealthSystem::vsan_query_cluster_historical_health().vsan_config?.issues?[*]`
 /// - `VsanResourceCheckSystem::vsan_get_resource_check_status().result?.health?.vsan_config?.issues?[*]`
 pub trait VsanConfigBaseIssueTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the VsanConfigBaseIssue parent struct
-    fn get_vsan_config_base_issue(&self) -> &super::structs::VsanConfigBaseIssue;
-    /// Get a mutable reference to the VsanConfigBaseIssue parent struct
-    fn get_vsan_config_base_issue_mut(&mut self) -> &mut super::structs::VsanConfigBaseIssue;
 }
-impl std::ops::Deref for dyn VsanConfigBaseIssueTrait {
-    type Target = super::structs::VsanConfigBaseIssue;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_vsan_config_base_issue()
-    }
-}
-
-impl std::ops::DerefMut for dyn VsanConfigBaseIssueTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_vsan_config_base_issue_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn VsanConfigBaseIssueTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -58640,12 +51352,8 @@ impl<'de> de::Visitor<'de> for VsanConfigBaseIssueVisitor {
 }
 
 impl VsanConfigBaseIssueTrait for VsanConfigBaseIssue {
-    fn get_vsan_config_base_issue(&self) -> &super::structs::VsanConfigBaseIssue { &self }
-    fn get_vsan_config_base_issue_mut(&mut self) -> &mut super::structs::VsanConfigBaseIssue { self }
 }
 impl VsanConfigBaseIssueTrait for VsanConfigNotAllDisksClaimedIssue {
-    fn get_vsan_config_base_issue(&self) -> &super::structs::VsanConfigBaseIssue { &self.vsan_config_base_issue_ }
-    fn get_vsan_config_base_issue_mut(&mut self) -> &mut super::structs::VsanConfigBaseIssue { &mut self.vsan_config_base_issue_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VsanConfigBaseIssueTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -58675,25 +51383,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VsanConfigB
 /// - `VsanVcClusterHealthSystem::vsan_query_cluster_historical_health().network_config?.issues?[*]`
 /// - `VsanResourceCheckSystem::vsan_get_resource_check_status().result?.health?.network_config?.issues?[*]`
 pub trait VsanNetworkConfigBaseIssueTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the VsanNetworkConfigBaseIssue parent struct
-    fn get_vsan_network_config_base_issue(&self) -> &super::structs::VsanNetworkConfigBaseIssue;
-    /// Get a mutable reference to the VsanNetworkConfigBaseIssue parent struct
-    fn get_vsan_network_config_base_issue_mut(&mut self) -> &mut super::structs::VsanNetworkConfigBaseIssue;
 }
-impl std::ops::Deref for dyn VsanNetworkConfigBaseIssueTrait {
-    type Target = super::structs::VsanNetworkConfigBaseIssue;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_vsan_network_config_base_issue()
-    }
-}
-
-impl std::ops::DerefMut for dyn VsanNetworkConfigBaseIssueTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_vsan_network_config_base_issue_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn VsanNetworkConfigBaseIssueTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -58734,32 +51424,18 @@ impl<'de> de::Visitor<'de> for VsanNetworkConfigBaseIssueVisitor {
 }
 
 impl VsanNetworkConfigBaseIssueTrait for VsanNetworkConfigBaseIssue {
-    fn get_vsan_network_config_base_issue(&self) -> &super::structs::VsanNetworkConfigBaseIssue { &self }
-    fn get_vsan_network_config_base_issue_mut(&mut self) -> &mut super::structs::VsanNetworkConfigBaseIssue { self }
 }
 impl VsanNetworkConfigBaseIssueTrait for VsanNetworkConfigPnicSpeedInconsistencyIssue {
-    fn get_vsan_network_config_base_issue(&self) -> &super::structs::VsanNetworkConfigBaseIssue { &self.vsan_network_config_base_issue_ }
-    fn get_vsan_network_config_base_issue_mut(&mut self) -> &mut super::structs::VsanNetworkConfigBaseIssue { &mut self.vsan_network_config_base_issue_ }
 }
 impl VsanNetworkConfigBaseIssueTrait for VsanNetworkConfigPortgroupWithNoRedundancyIssue {
-    fn get_vsan_network_config_base_issue(&self) -> &super::structs::VsanNetworkConfigBaseIssue { &self.vsan_network_config_base_issue_ }
-    fn get_vsan_network_config_base_issue_mut(&mut self) -> &mut super::structs::VsanNetworkConfigBaseIssue { &mut self.vsan_network_config_base_issue_ }
 }
 impl VsanNetworkConfigBaseIssueTrait for VsanNetworkConfigVdsScopeIssue {
-    fn get_vsan_network_config_base_issue(&self) -> &super::structs::VsanNetworkConfigBaseIssue { &self.vsan_network_config_base_issue_ }
-    fn get_vsan_network_config_base_issue_mut(&mut self) -> &mut super::structs::VsanNetworkConfigBaseIssue { &mut self.vsan_network_config_base_issue_ }
 }
 impl VsanNetworkConfigBaseIssueTrait for VsanNetworkConfigVsanNotOnVdsIssue {
-    fn get_vsan_network_config_base_issue(&self) -> &super::structs::VsanNetworkConfigBaseIssue { &self.vsan_network_config_base_issue_ }
-    fn get_vsan_network_config_base_issue_mut(&mut self) -> &mut super::structs::VsanNetworkConfigBaseIssue { &mut self.vsan_network_config_base_issue_ }
 }
 impl VsanNetworkConfigBaseIssueTrait for VsanNetworkConfigVswitchWithNoRedundancyIssue {
-    fn get_vsan_network_config_base_issue(&self) -> &super::structs::VsanNetworkConfigBaseIssue { &self.vsan_network_config_base_issue_ }
-    fn get_vsan_network_config_base_issue_mut(&mut self) -> &mut super::structs::VsanNetworkConfigBaseIssue { &mut self.vsan_network_config_base_issue_ }
 }
 impl VsanNetworkConfigBaseIssueTrait for VsanNetworkVMotionVmknicNotFountIssue {
-    fn get_vsan_network_config_base_issue(&self) -> &super::structs::VsanNetworkConfigBaseIssue { &self.vsan_network_config_base_issue_ }
-    fn get_vsan_network_config_base_issue_mut(&mut self) -> &mut super::structs::VsanNetworkConfigBaseIssue { &mut self.vsan_network_config_base_issue_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VsanNetworkConfigBaseIssueTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -60203,25 +52879,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn SelectionSp
 /// ### How to access
 /// - `VslmTask::vslm_query_info().reason`
 pub trait VslmTaskReasonTrait : super::traits::DataObjectTrait {
-    /// Get a reference to the VslmTaskReason parent struct
-    fn get_vslm_task_reason(&self) -> &super::structs::VslmTaskReason;
-    /// Get a mutable reference to the VslmTaskReason parent struct
-    fn get_vslm_task_reason_mut(&mut self) -> &mut super::structs::VslmTaskReason;
 }
-impl std::ops::Deref for dyn VslmTaskReasonTrait {
-    type Target = super::structs::VslmTaskReason;
-
-    fn deref(&self) -> &Self::Target {
-        self.get_vslm_task_reason()
-    }
-}
-
-impl std::ops::DerefMut for dyn VslmTaskReasonTrait {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.get_vslm_task_reason_mut()
-    }
-}
-
 impl<'s> serde::Serialize for dyn VslmTaskReasonTrait + 's {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -60262,24 +52920,14 @@ impl<'de> de::Visitor<'de> for VslmTaskReasonVisitor {
 }
 
 impl VslmTaskReasonTrait for VslmTaskReason {
-    fn get_vslm_task_reason(&self) -> &super::structs::VslmTaskReason { &self }
-    fn get_vslm_task_reason_mut(&mut self) -> &mut super::structs::VslmTaskReason { self }
 }
 impl VslmTaskReasonTrait for VslmTaskReasonAlarm {
-    fn get_vslm_task_reason(&self) -> &super::structs::VslmTaskReason { &self.vslm_task_reason_ }
-    fn get_vslm_task_reason_mut(&mut self) -> &mut super::structs::VslmTaskReason { &mut self.vslm_task_reason_ }
 }
 impl VslmTaskReasonTrait for VslmTaskReasonSchedule {
-    fn get_vslm_task_reason(&self) -> &super::structs::VslmTaskReason { &self.vslm_task_reason_ }
-    fn get_vslm_task_reason_mut(&mut self) -> &mut super::structs::VslmTaskReason { &mut self.vslm_task_reason_ }
 }
 impl VslmTaskReasonTrait for VslmTaskReasonSystem {
-    fn get_vslm_task_reason(&self) -> &super::structs::VslmTaskReason { &self.vslm_task_reason_ }
-    fn get_vslm_task_reason_mut(&mut self) -> &mut super::structs::VslmTaskReason { &mut self.vslm_task_reason_ }
 }
 impl VslmTaskReasonTrait for VslmTaskReasonUser {
-    fn get_vslm_task_reason(&self) -> &super::structs::VslmTaskReason { &self.vslm_task_reason_ }
-    fn get_vslm_task_reason_mut(&mut self) -> &mut super::structs::VslmTaskReason { &mut self.vslm_task_reason_ }
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VslmTaskReasonTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {

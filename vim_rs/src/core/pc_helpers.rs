@@ -1,5 +1,10 @@
 use super::super::types::vim_any::VimAny;
-use crate::types::structs::{ManagedObjectReference, ObjectSpec, PropertySpec, TraversalSpec};
+use super::client;
+use crate::types::structs::{
+    ManagedObjectReference, ObjectSpec, PropertySpec, SelectionSpec, TraversalSpec,
+};
+use log::error;
+use thiserror::Error;
 
 /// Trait for errors that can be properly boxed and sent across threads
 pub trait BoxableError: std::error::Error + Send + Sync + 'static {}
@@ -37,12 +42,10 @@ type StaticStr = &'static str;
 pub(crate) fn obj_spec_for_view(view_moref: ManagedObjectReference) -> Vec<ObjectSpec> {
     let r#type = view_moref.r#type.clone();
     vec![ObjectSpec {
-        data_object_: DataObject {},
         obj: view_moref,
         skip: Some(false),
         select_set: Some(vec![Box::new(TraversalSpec {
             selection_spec_: SelectionSpec {
-                data_object_: DataObject {},
                 name: Some("traverseEntities".to_string()),
             },
             r#type: StaticStr::from(r#type).to_string(),

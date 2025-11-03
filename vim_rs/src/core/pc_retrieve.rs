@@ -108,13 +108,11 @@ impl ObjectRetriever {
         <T as TryFrom<crate::types::structs::ObjectContent>>::Error: BoxableError,
     {
         let spec_set = vec![crate::types::structs::PropertyFilterSpec {
-            data_object_: crate::types::structs::DataObject {},
             object_set,
             prop_set: vec![T::prop_spec()],
             report_missing_objects_in_results: Some(true),
         }];
         let options = crate::types::structs::RetrieveOptions {
-            data_object_: crate::types::structs::DataObject {},
             max_objects: Some(100),
         };
 

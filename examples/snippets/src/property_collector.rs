@@ -57,14 +57,11 @@ async fn main() -> Result<()> {
         PropertyCollector::new(client.clone(), &content.property_collector.value);
 
     let spec_set = vec![structs::PropertyFilterSpec {
-        data_object_: vim_rs::types::structs::DataObject {},
         object_set: vec![structs::ObjectSpec {
-            data_object_: vim_rs::types::structs::DataObject {},
             obj: view_moref.clone(),
             skip: Some(false),
             select_set: Some(vec![Box::new(structs::TraversalSpec {
                 selection_spec_: SelectionSpec {
-                    data_object_: vim_rs::types::structs::DataObject {},
                     name: Some("traverseEntities".to_string()),
                 },
                 r#type: Into::<&str>::into(MoTypesEnum::ContainerView).to_string(),
@@ -74,7 +71,6 @@ async fn main() -> Result<()> {
             })]),
         }],
         prop_set: vec![structs::PropertySpec {
-            data_object_: vim_rs::types::structs::DataObject {},
             all: Some(false),
             path_set: Some(vec!["name".to_string()]),
             r#type: Into::<&str>::into(MoTypesEnum::VirtualMachine).to_string(),
@@ -82,7 +78,6 @@ async fn main() -> Result<()> {
         report_missing_objects_in_results: Some(true),
     }];
     let options = structs::RetrieveOptions {
-        data_object_: vim_rs::types::structs::DataObject {},
         max_objects: Some(100),
     };
     let retrieve_result = property_collector

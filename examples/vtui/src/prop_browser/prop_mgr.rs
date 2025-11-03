@@ -20,7 +20,7 @@ use std::ops::DerefMut;
 use std::rc::Rc;
 use tui_tree_widget::TreeState;
 use vim_rs::core::pc_cache::{CacheManager, SharedRefCacheProxy};
-use vim_rs::types::structs::{DataObject, ManagedObjectReference, ObjectSpec};
+use vim_rs::types::structs::{ManagedObjectReference, ObjectSpec};
 
 pub struct PropertyBrowserManager {
     /// Cache manager for managing object caches.
@@ -45,7 +45,6 @@ impl PropertyBrowserManager {
             .add_cache(
                 Box::new(ReadWriteCacheProxy::new(browser_state.clone())),
                 vec![ObjectSpec {
-                    data_object_: DataObject {},
                     obj: obj.clone(),
                     skip: Some(false),
                     select_set: None,
@@ -72,7 +71,6 @@ impl PropertyBrowserManager {
             .add_cache(
                 Box::new(ReadWriteCacheProxy::new(browser_state.clone())),
                 vec![ObjectSpec {
-                    data_object_: DataObject {},
                     obj: record.obj.clone(),
                     skip: Some(false),
                     select_set: None,
@@ -208,7 +206,6 @@ impl PropertyBrowserManager {
             .add_cache(
                 Box::new(ReadWriteCacheProxy::new(self.browser_state.clone())),
                 vec![ObjectSpec {
-                    data_object_: DataObject {},
                     obj: self.obj.clone(),
                     skip: Some(false),
                     select_set: None,

@@ -89,35 +89,41 @@ impl<'a> TraitEmitter<'a> {
         ))?;
         self.printer.indent();
 
-        // Add parent struct accessor methods
-        self.printer.println(&format!(
-            "/// Get a reference to the {} parent struct",
-            struct_name
-        ))?;
-        self.printer.println(&format!(
-            "fn get_{}(&self) -> &super::structs::{};",
-            to_field_name(&self.type_name),
-            struct_name
-        ))?;
-        self.printer.println(&format!(
-            "/// Get a mutable reference to the {} parent struct",
-            struct_name
-        ))?;
-        self.printer.println(&format!(
-            "fn get_{}_mut(&mut self) -> &mut super::structs::{};",
-            to_field_name(&self.type_name),
-            struct_name
-        ))?;
+        // Only add accessor methods if type has any fields in its chain
+        let has_fields = self.model.has_any_fields_in_chain(&self.type_name)?;
+        if has_fields {
+            // Add parent struct accessor methods
+            self.printer.println(&format!(
+                "/// Get a reference to the {} parent struct",
+                struct_name
+            ))?;
+            self.printer.println(&format!(
+                "fn get_{}(&self) -> &super::structs::{};",
+                to_field_name(&self.type_name),
+                struct_name
+            ))?;
+            self.printer.println(&format!(
+                "/// Get a mutable reference to the {} parent struct",
+                struct_name
+            ))?;
+            self.printer.println(&format!(
+                "fn get_{}_mut(&mut self) -> &mut super::structs::{};",
+                to_field_name(&self.type_name),
+                struct_name
+            ))?;
 
-        // Add field getters for this type's own fields
-        for (prop_name, property) in &vim_type.fields {
-            self.emit_trait_field(prop_name, property)?;
+            // Add field getters for this type's own fields
+            for (prop_name, property) in &vim_type.fields {
+                self.emit_trait_field(prop_name, property)?;
+            }
         }
         self.printer.dedent();
         self.printer.println("}")?;
 
-        // Add Deref implementations for the trait
-        self.emit_trait_deref_implementations(vim_type)?;
+        // Add Deref implementations for the trait (only if has fields)
+        if has_fields {
+            self.emit_trait_deref_implementations(vim_type)?;
+        }
 
         Ok(())
     }
@@ -264,33 +270,37 @@ impl<'a> TraitEmitter<'a> {
             .println(&format!("impl {}Trait for {} {{", base_name, struct_name))?;
         self.printer.indent();
 
-        // Implement parent accessor methods
-        let trait_struct_name = &trait_type.name;
-        let getter_method = format!("get_{}", to_field_name(trait_struct_name));
-        let getter_mut_method = format!("get_{}_mut", to_field_name(trait_struct_name));
+        // Only implement accessor methods if trait type has fields
+        let has_fields = self.model.has_any_fields_in_chain(&trait_type.name)?;
+        if has_fields {
+            // Implement parent accessor methods
+            let trait_struct_name = &trait_type.name;
+            let getter_method = format!("get_{}", to_field_name(trait_struct_name));
+            let getter_mut_method = format!("get_{}_mut", to_field_name(trait_struct_name));
 
-        // Build the access path from type_name to trait_type
-        let access_path = self.build_parent_access_path(type_name, trait_struct_name)?;
+            // Build the access path from type_name to trait_type
+            let access_path = self.build_parent_access_path(type_name, trait_struct_name)?;
 
-        self.printer.println(&format!(
-            "fn {}(&self) -> &super::structs::{} {{ {} }}",
-            getter_method, base_name, access_path
-        ))?;
+            self.printer.println(&format!(
+                "fn {}(&self) -> &super::structs::{} {{ {} }}",
+                getter_method, base_name, access_path
+            ))?;
 
-        // For mutable getter, we need to return without the leading & if it's self
-        let mut_access = if access_path == "&self" {
-            "self".to_string()
-        } else {
-            access_path.replace("&self", "&mut self")
-        };
-        self.printer.println(&format!(
-            "fn {}(&mut self) -> &mut super::structs::{} {{ {} }}",
-            getter_mut_method, base_name, mut_access
-        ))?;
+            // For mutable getter, we need to return without the leading & if it's self
+            let mut_access = if access_path == "&self" {
+                "self".to_string()
+            } else {
+                access_path.replace("&self", "&mut self")
+            };
+            self.printer.println(&format!(
+                "fn {}(&mut self) -> &mut super::structs::{} {{ {} }}",
+                getter_mut_method, base_name, mut_access
+            ))?;
 
-        // Implement field getters
-        for (prop_name, property) in &trait_type.fields {
-            self.emit_field_getter(trait_type, prop_name, property, type_name)?;
+            // Implement field getters
+            for (prop_name, property) in &trait_type.fields {
+                self.emit_field_getter(trait_type, prop_name, property, type_name)?;
+            }
         }
         self.printer.dedent();
         self.printer.println("}")?;
@@ -298,12 +308,13 @@ impl<'a> TraitEmitter<'a> {
     }
 
     /// Build access path from child type to parent type through composition chain
+    /// Skip empty parents (marker traits) that have no fields
     fn build_parent_access_path(&self, from_type: &str, to_type: &str) -> Result<String> {
         if from_type == to_type {
             return Ok("&self".to_string());
         }
 
-        // Navigate parent chain from from_type until we find to_type
+        // Navigate parent chain from from_type until we find to_type, skipping empty parents
         let mut path = String::from("&self");
         let mut current_type_name = from_type.to_string();
 
@@ -320,8 +331,11 @@ impl<'a> TraitEmitter<'a> {
                     break;
                 }
 
-                let parent_field = parent_field_name(parent);
-                path.push_str(&format!(".{}", parent_field));
+                // Only add parent field to path if parent has fields (not a marker trait)
+                if self.model.has_any_fields_in_chain(parent)? {
+                    let parent_field = parent_field_name(parent);
+                    path.push_str(&format!(".{}", parent_field));
+                }
 
                 if parent == to_type {
                     return Ok(path);

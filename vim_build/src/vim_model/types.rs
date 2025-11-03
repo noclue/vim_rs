@@ -307,6 +307,11 @@ impl Struct {
     pub fn has_children(&self) -> bool {
         !self.children.is_empty()
     }
+
+    /// Returns true if this struct has no fields of its own
+    pub fn is_empty(&self) -> bool {
+        self.fields.is_empty()
+    }
 }
 
 /// Represents a Vim Property model.
@@ -605,6 +610,33 @@ impl Model {
             }
         }
         false
+    }
+
+    /// Returns true if any type in the inheritance chain (including the given type) has fields
+    pub fn has_any_fields_in_chain(&self, struct_name: &str) -> Result<bool> {
+        let chain = self.inheritance_chain(&struct_name.to_string())?;
+        for struct_ref in chain {
+            if !struct_ref.borrow().is_empty() {
+                return Ok(true);
+            }
+        }
+        Ok(false)
+    }
+
+    /// Returns true if the type has a parent with fields (i.e., parent is not just a marker)
+    pub fn has_useful_parent(&self, struct_name: &str) -> Result<bool> {
+        let struct_type = self
+            .structs
+            .get(struct_name)
+            .ok_or_else(|| super::Error::InvalidReference(struct_name.to_string()))?;
+
+        if let Some(parent_name) = &struct_type.borrow().parent {
+            if parent_name == "Any" {
+                return Ok(false);
+            }
+            return self.has_any_fields_in_chain(parent_name);
+        }
+        Ok(false)
     }
 }
 

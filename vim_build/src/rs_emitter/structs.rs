@@ -94,9 +94,9 @@ impl<'a> TypesEmitter<'a> {
     }
 
     fn emit_deref_implementations(&mut self, vim_type: &Struct) -> Result<()> {
-        // Only emit Deref if there's a parent (and it's not Any)
+        // Only emit Deref if there's a parent with fields (not a marker trait)
         if let Some(parent) = vim_type.parent.as_ref() {
-            if parent != "Any" {
+            if parent != "Any" && self.vim_model.has_any_fields_in_chain(parent)? {
                 let struct_name = to_type_name(&vim_type.name);
                 let parent_type = to_type_name(parent);
                 let parent_field = parent_field_name(parent);
@@ -156,8 +156,9 @@ impl<'a> TypesEmitter<'a> {
 
     fn emit_struct_all_fields(&mut self, vim_type: &Struct) -> Result<()> {
         // Emit a single parent field instead of flattening all parent fields
+        // Skip parent field if parent has no fields (it's just a marker trait)
         if let Some(parent) = vim_type.parent.as_ref() {
-            if parent != "Any" {
+            if parent != "Any" && self.vim_model.has_any_fields_in_chain(parent)? {
                 // Emit parent field for composition
                 let parent_field = parent_field_name(parent);
                 let parent_type = to_type_name(parent);
@@ -198,6 +199,7 @@ impl<'a> TypesEmitter<'a> {
     /// Build field access path for serialization. With composition, fields from parent types
     /// are accessed through parent fields. E.g., for VirtualVmxnet accessing VirtualDevice.key:
     /// "self.virtual_ethernet_card_.virtual_device_.key"
+    /// Skip empty parent types (marker traits) that have no fields.
     fn build_field_access_path(
         &self,
         vim_type: &Struct,
@@ -209,7 +211,7 @@ impl<'a> TypesEmitter<'a> {
             return Ok(format!("self.{}", field_name));
         }
 
-        // Need to navigate through parent chain
+        // Need to navigate through parent chain, skipping empty parents
         let mut path = String::from("self");
         let mut current_type_name = vim_type.name.clone();
 
@@ -226,8 +228,11 @@ impl<'a> TypesEmitter<'a> {
                     break;
                 }
 
-                let parent_field = parent_field_name(parent);
-                path.push_str(&format!(".{}", parent_field));
+                // Only add parent field to path if parent has fields (not a marker trait)
+                if self.vim_model.has_any_fields_in_chain(parent)? {
+                    let parent_field = parent_field_name(parent);
+                    path.push_str(&format!(".{}", parent_field));
+                }
 
                 if parent == target_struct_name {
                     // Found the parent that owns the field
@@ -469,11 +474,18 @@ impl<'a> TypesEmitter<'a> {
         // Build nested struct construction from innermost parent to current type
         field_count = 1;
 
-        // Build from root to leaf - construct parent objects first
+        // Build from root to leaf - construct parent objects first, skipping empty parents
+        // Track which parent temp vars were actually created (non-empty types only)
         for (idx, struct_type_ref) in inheritance_chain.iter().enumerate() {
             let struct_ref = (**struct_type_ref).borrow();
             let current_struct_name = to_type_name(&struct_ref.name);
             let is_last = idx == inheritance_chain.len() - 1;
+
+            // Skip empty parent types (marker traits) - don't generate temp vars for them
+            // Only skip if this type AND all its ancestors have no fields
+            if !is_last && !self.vim_model.has_any_fields_in_chain(&struct_ref.name)? {
+                continue;
+            }
 
             if is_last {
                 // This is the current type we're deserializing
@@ -490,12 +502,33 @@ impl<'a> TypesEmitter<'a> {
             self.printer.indent();
 
             // If this struct has a parent (and not Any), it needs a parent field
+            // Find the nearest non-empty ancestor that has a temp var
             if let Some(parent_name) = &struct_ref.parent {
                 if parent_name != "Any" && !is_last {
-                    let parent_field = parent_field_name(parent_name);
-                    let parent_temp_var = to_field_name(parent_name);
-                    self.printer
-                        .println(&format!("{parent_field}: {parent_temp_var}_temp,"))?;
+                    // Find nearest non-empty ancestor
+                    let mut ancestor_name = parent_name.clone();
+                    loop {
+                        if self.vim_model.has_any_fields_in_chain(&ancestor_name)? {
+                            let parent_field = parent_field_name(&ancestor_name);
+                            let parent_temp_var = to_field_name(&ancestor_name);
+                            self.printer
+                                .println(&format!("{parent_field}: {parent_temp_var}_temp,"))?;
+                            break;
+                        }
+                        // Move up to next ancestor
+                        if let Some(next_parent) = &self.vim_model.structs.get(&ancestor_name) {
+                            if let Some(next) = &next_parent.borrow().parent {
+                                if next == "Any" {
+                                    break;
+                                }
+                                ancestor_name = next.clone();
+                            } else {
+                                break;
+                            }
+                        } else {
+                            break;
+                        }
+                    }
                 }
             }
 
@@ -514,13 +547,33 @@ impl<'a> TypesEmitter<'a> {
 
             // Handle the current (last) struct specially
             if is_last {
-                // Add parent field if exists
+                // Add parent field if exists and has fields (not a marker trait)
+                // Find the nearest non-empty ancestor
                 if let Some(parent_name) = &vim_type.parent {
                     if parent_name != "Any" {
-                        let parent_field = parent_field_name(parent_name);
-                        let parent_temp_var = to_field_name(parent_name);
-                        self.printer
-                            .println(&format!("{parent_field}: {parent_temp_var}_temp,"))?;
+                        let mut ancestor_name = parent_name.clone();
+                        loop {
+                            if self.vim_model.has_any_fields_in_chain(&ancestor_name)? {
+                                let parent_field = parent_field_name(&ancestor_name);
+                                let parent_temp_var = to_field_name(&ancestor_name);
+                                self.printer
+                                    .println(&format!("{parent_field}: {parent_temp_var}_temp,"))?;
+                                break;
+                            }
+                            // Move up to next ancestor
+                            if let Some(next_parent) = &self.vim_model.structs.get(&ancestor_name) {
+                                if let Some(next) = &next_parent.borrow().parent {
+                                    if next == "Any" {
+                                        break;
+                                    }
+                                    ancestor_name = next.clone();
+                                } else {
+                                    break;
+                                }
+                            } else {
+                                break;
+                            }
+                        }
                     }
                 }
 

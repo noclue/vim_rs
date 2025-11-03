@@ -419,7 +419,6 @@ fn prop_spec(managed_object_type: &Ident, fields: &Vec<FieldInfo>) -> proc_macro
     quote! {
         fn prop_spec() -> vim_rs::types::structs::PropertySpec {
             vim_rs::types::structs::PropertySpec {
-                data_object_: vim_rs::types::structs::DataObject {},
                 all: Some(false),
                 path_set: Some(vec![
                     #(#prop_paths_quoted),*

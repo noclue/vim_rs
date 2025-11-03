@@ -27,7 +27,7 @@ use utils::connect;
 use vim_rs::core::client::Client;
 use vim_rs::mo::EventManager;
 use vim_rs::types::struct_enum::StructType;
-use vim_rs::types::structs::{DataObject, Event, EventFilterSpec, EventFilterSpecByTime};
+use vim_rs::types::structs::{Event, EventFilterSpec, EventFilterSpecByTime};
 
 /// Get the event type ID from an event
 /// The semantics of how eventTypeId matching is done is as follows:
@@ -52,10 +52,8 @@ async fn dump_events(client: Arc<Client>, event_manager: &EventManager) -> Resul
     let thirty_minutes_ago = Utc::now() - ChronoDuration::minutes(30);
 
     let filter = &EventFilterSpec {
-        data_object_: DataObject {},
         entity: None,
         time: Some(EventFilterSpecByTime {
-            data_object_: DataObject {},
             begin_time: Some(thirty_minutes_ago.to_rfc3339()),
             end_time: None,
         }),

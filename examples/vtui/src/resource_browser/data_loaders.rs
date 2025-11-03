@@ -39,12 +39,10 @@ where
     for<'a> Row<'static>: From<&'a T>,
 {
     let object_specs = vec![ObjectSpec {
-        data_object_: DataObject {},
         obj: object.clone(),
         skip: Some(false),
         select_set: Some(vec![Box::new(TraversalSpec {
             selection_spec_: SelectionSpec {
-                data_object_: DataObject {},
                 name: Some("expandProperty".to_string()),
             },
             r#type: StaticStr::from(object.r#type.clone()).to_string(),

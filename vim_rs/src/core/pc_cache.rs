@@ -8,8 +8,8 @@ use crate::core::pc_helpers::{self, BoxableError, Queriable};
 use crate::mo::{PropertyCollector, PropertyFilter, View, ViewManager};
 use crate::types::enums::ObjectUpdateKindEnum;
 use crate::types::structs::{
-    DataObject, ManagedObjectReference, ObjectSpec, ObjectUpdate, PropertyFilterSpec,
-    PropertyFilterUpdate, PropertySpec, WaitOptions,
+    ManagedObjectReference, ObjectSpec, ObjectUpdate, PropertyFilterSpec, PropertyFilterUpdate,
+    PropertySpec, WaitOptions,
 };
 use indexmap::IndexMap;
 use log::{debug, error, warn};
@@ -446,7 +446,6 @@ impl CacheManager {
         object_set: Vec<ObjectSpec>,
     ) -> Result<ManagedObjectReference> {
         let filter_spec = PropertyFilterSpec {
-            data_object_: DataObject {},
             object_set,
             prop_set: vec![cache.prop_spec()?],
             report_missing_objects_in_results: None,
@@ -545,7 +544,6 @@ impl Monitor {
     pub async fn wait_updates(&mut self, delay_s: i32) -> Result<Option<Vec<PropertyFilterUpdate>>>
     {
         let options = WaitOptions {
-            data_object_: DataObject {},
             max_wait_seconds: Some(delay_s),
             max_object_updates: Some(MAX_OBJECT_UPDATES_PER_CALL),
         };
