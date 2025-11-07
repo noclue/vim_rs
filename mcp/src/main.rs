@@ -81,7 +81,7 @@ struct SemanticSearchInput {
     limit: usize,
 
     /// Filter by item type
-    #[schemars(description = "Filter results by type: 'all', 'methods', 'types', or 'enums' (default: 'all')")]
+    #[schemars(description = "Filter results by type: 'all', 'methods', 'types', 'enums', or 'examples' (default: 'all')")]
     #[serde(default = "default_filter")]
     filter: String,
 }
@@ -331,6 +331,103 @@ impl McpServer {
         }
     }
 
+    /// List all available code examples with categories
+    #[tool(description = "List all available vim_rs code examples organized by category. Use this to discover examples for connection, property collector, macros, events, and more.")]
+    async fn list_examples(&self, params: Parameters<()>) -> Result<CallToolResult, McpError> {
+        let mut by_category: std::collections::HashMap<String, Vec<String>> = std::collections::HashMap::new();
+
+        for example in &self.api_data.examples {
+            by_category
+                .entry(example.category.clone())
+                .or_insert_with(Vec::new)
+                .push(format!("- **{}** - {}", example.name, example.title));
+        }
+
+        let mut categories: Vec<_> = by_category.keys().cloned().collect();
+        categories.sort();
+
+        let mut output = String::from("# vim_rs Code Examples\n\n");
+        output.push_str(&format!("Total examples: {}\n\n", self.api_data.examples.len()));
+
+        for category in categories {
+            let examples = by_category.get(&category).unwrap();
+            output.push_str(&format!("## {} ({} examples)\n", category, examples.len()));
+            for example in examples {
+                output.push_str(&format!("{}\n", example));
+            }
+            output.push('\n');
+        }
+
+        output.push_str("Use `get_example` with the example name to see the full code.\n");
+
+        Ok(CallToolResult::success(vec![Content::text(output)]))
+    }
+
+    /// Get a specific code example by name
+    #[tool(description = "Get a specific vim_rs code example by name. Returns the complete source code, description, and Cargo.toml dependencies. Use list_examples to see all available examples.")]
+    async fn get_example(&self, params: Parameters<(String,)>) -> Result<CallToolResult, McpError> {
+        let name = &params.0.0;
+
+        let example = self.api_data.examples.iter()
+            .find(|e| e.name == *name);
+
+        if let Some(ex) = example {
+            let output = format!(
+                "# {}\n\n**Category:** {}\n\n## Description\n\n{}\n\n## Source Code\n\n```rust\n{}\n```\n\n## Dependencies (Cargo.toml)\n\n```toml\n{}\n```\n\n**File:** `examples/{}`\n",
+                ex.title,
+                ex.category,
+                ex.description,
+                ex.source_code,
+                ex.dependencies,
+                ex.file_path
+            );
+            Ok(CallToolResult::success(vec![Content::text(output)]))
+        } else {
+            let message = format!("Example '{}' not found. Use list_examples to see all available examples.", name);
+            Ok(CallToolResult::success(vec![Content::text(message)]))
+        }
+    }
+
+    /// Search code examples by category or keyword
+    #[tool(description = "Search vim_rs code examples by category (connection, property_collector, macro_usage, events, performance, general) or keyword in title/description.")]
+    async fn search_examples(&self, params: Parameters<(String,)>) -> Result<CallToolResult, McpError> {
+        let query = params.0.0.to_lowercase();
+        let mut results = Vec::new();
+
+        for example in &self.api_data.examples {
+            let category_match = example.category.to_lowercase().contains(&query);
+            let title_match = example.title.to_lowercase().contains(&query);
+            let desc_match = example.description.to_lowercase().contains(&query);
+            let name_match = example.name.to_lowercase().contains(&query);
+
+            if category_match || title_match || desc_match || name_match {
+                results.push(format!(
+                    "**{}** ({})\n{}\nUse: `get_example(\"{}\")`\n",
+                    example.title,
+                    example.category,
+                    example.description.lines().next().unwrap_or(""),
+                    example.name
+                ));
+            }
+        }
+
+        if results.is_empty() {
+            let message = format!(
+                "No examples found matching '{}'. Available categories: connection, property_collector, macro_usage, events, performance, general",
+                query
+            );
+            Ok(CallToolResult::success(vec![Content::text(message)]))
+        } else {
+            let message = format!(
+                "Found {} example(s) matching '{}':\n\n{}",
+                results.len(),
+                query,
+                results.join("\n")
+            );
+            Ok(CallToolResult::success(vec![Content::text(message)]))
+        }
+    }
+
     /// Semantic search using natural language queries (requires embeddings)
     #[cfg(feature = "embeddings")]
     #[tool(description = "Semantic search for vSphere API using natural language queries. Returns Rust methods, types, and enums from the vim_rs crate based on meaning, not just keywords.")]
@@ -379,9 +476,10 @@ impl McpServer {
                 "methods" => "method",
                 "types" => "structure",
                 "enums" => "enum",
+                "examples" => "example",
                 _ => {
                     return Err(McpError::invalid_params(
-                        format!("Invalid filter value: '{}'. Must be 'all', 'methods', 'types', or 'enums'", params.0.filter),
+                        format!("Invalid filter value: '{}'. Must be 'all', 'methods', 'types', 'enums', or 'examples'", params.0.filter),
                         None
                     ));
                 }
@@ -492,6 +590,19 @@ impl McpServer {
                             None
                         }
                     }
+                    "example" => {
+                        if let Some(example) = self.api_data.examples.iter().find(|e| e.name == item_name) {
+                            Some(format!(
+                                "## {} (Example)\n\n**Category:** {}\n\n**Description:**\n{}\n\n**Usage:**\n```\nget_example(\"{}\")\n```\n\n---\n",
+                                example.title,
+                                example.category,
+                                example.description.lines().take(3).collect::<Vec<_>>().join(" "),
+                                example.name
+                            ))
+                        } else {
+                            None
+                        }
+                    }
                     _ => None,
                 };
 
@@ -535,7 +646,7 @@ impl ServerHandler for McpServer {
                 icons: None,
                 website_url: None,
             },
-            instructions: Some("Search and explore the vSphere API for Rust development. Use search_methods, search_types, and search_enums for keyword-based search, or semantic_search for natural language queries (if embeddings are available). This server provides information about the vim_rs Rust crate only, not for Python, Go, Java, or other language bindings.".to_string()),
+            instructions: Some("Search and explore the vSphere API for Rust development. Use search_methods, search_types, and search_enums for keyword-based search, or semantic_search for natural language queries (if embeddings are available). Use list_examples, get_example, and search_examples to learn how to use vim_rs with working code examples covering connection, property collectors, macros, events, and more. This server provides information about the vim_rs Rust crate only, not for Python, Go, Java, or other language bindings.".to_string()),
             ..Default::default()
         }
     }

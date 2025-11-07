@@ -111,12 +111,31 @@ struct EnumerationsOutput {
     enumerations: Vec<EnumerationEntry>,
 }
 
+// Code Examples - for teaching usage patterns
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CodeExample {
+    pub name: String,
+    pub title: String,
+    pub description: String,
+    pub category: String,  // "connection", "property_collector", "macro_usage", etc.
+    pub source_code: String,
+    pub file_path: String,
+    pub dependencies: String,  // Cargo.toml snippet
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+struct ExamplesOutput {
+    examples: Vec<CodeExample>,
+}
+
 /// Holds all loaded API data
 #[derive(Debug, Clone)]
 pub struct ApiData {
     pub managed_objects: Vec<ManagedObjectEntry>,
     pub data_structures: Vec<StructureEntry>,
     pub enumerations: Vec<EnumerationEntry>,
+    pub examples: Vec<CodeExample>,
 }
 
 impl ApiData {
@@ -153,17 +172,29 @@ impl ApiData {
             Vec::new()
         };
 
+        let examples_path = data_dir.join("examples.json");
+        let examples = if examples_path.exists() {
+            let content = std::fs::read_to_string(&examples_path)?;
+            let output: ExamplesOutput = serde_json::from_str(&content)?;
+            output.examples
+        } else {
+            warn!("examples.json not found, using empty list");
+            Vec::new()
+        };
+
         info!(
-            "Loaded {} managed objects, {} data structures, {} enumerations",
+            "Loaded {} managed objects, {} data structures, {} enumerations, {} examples",
             managed_objects.len(),
             data_structures.len(),
-            enumerations.len()
+            enumerations.len(),
+            examples.len()
         );
 
         Ok(ApiData {
             managed_objects,
             data_structures,
             enumerations,
+            examples,
         })
     }
 }

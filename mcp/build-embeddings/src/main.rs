@@ -115,7 +115,32 @@ async fn main() -> Result<()> {
         });
     }
 
-    info!("Created {} text chunks", records.len());
+    // Process code examples
+    for example in &api_data.examples {
+        let text = format!(
+            "{} - {} (Category: {}). {}",
+            example.name,
+            example.title,
+            example.category,
+            example.description
+        );
+        records.push(EmbeddingRecord {
+            text,
+            item_type: "example".to_string(),
+            object_name: example.category.clone(),
+            item_name: example.name.clone(),
+            rust_name: example.title.clone(),
+            rust_module: "examples".to_string(),
+        });
+    }
+
+    info!("Created {} text chunks ({} methods, {} structures, {} enums, {} examples)",
+        records.len(),
+        api_data.managed_objects.iter().map(|mo| mo.methods.len()).sum::<usize>(),
+        api_data.data_structures.len(),
+        api_data.enumerations.len(),
+        api_data.examples.len()
+    );
 
     // Step 2: Initialize embedding model
     info!("Initializing embedding model (all-MiniLM-L6-v2)...");
