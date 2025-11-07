@@ -100,13 +100,21 @@ impl McpServer {
         #[cfg(feature = "embeddings")]
         let (embedding_model, embeddings_db) = {
             let embeddings_db_path = data_dir.join("embeddings.lancedb");
+            let model_cache_dir = data_dir.join("model_cache");
+
+            // Create cache directory if it doesn't exist
+            if !model_cache_dir.exists() {
+                std::fs::create_dir_all(&model_cache_dir)?;
+            }
 
             if embeddings_db_path.exists() {
                 info!("Loading embeddings from {}", embeddings_db_path.display());
+                info!("Using model cache directory: {}", model_cache_dir.display());
 
-                // Load embedding model
+                // Load embedding model with persistent cache
                 match TextEmbedding::try_new(
                     InitOptions::new(EmbeddingModel::AllMiniLML6V2)
+                        .with_cache_dir(model_cache_dir)
                         .with_show_download_progress(false)
                 ) {
                     Ok(model) => {

@@ -34,8 +34,17 @@ async fn main() -> Result<()> {
         .unwrap()
         .join("data");
     let embeddings_db_path = data_dir.join("embeddings.lancedb");
+    let model_cache_dir = data_dir.join("model_cache");
+
+    // Create cache directory if it doesn't exist
+    if !model_cache_dir.exists() {
+        std::fs::create_dir_all(&model_cache_dir)
+            .context("Failed to create model cache directory")?;
+    }
 
     info!("Loading API data from {}", data_dir.display());
+    info!("Using model cache directory: {}", model_cache_dir.display());
+
     let api_data = ApiData::load_from_dir(&data_dir)
         .context("Failed to load API data from JSON files")?;
 
@@ -108,6 +117,7 @@ async fn main() -> Result<()> {
     info!("Initializing embedding model (all-MiniLM-L6-v2)...");
     let model = TextEmbedding::try_new(
         InitOptions::new(EmbeddingModel::AllMiniLML6V2)
+            .with_cache_dir(model_cache_dir)
             .with_show_download_progress(true)
     )
     .context("Failed to initialize embedding model")?;

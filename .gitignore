@@ -2,3 +2,6 @@
 .vscode
 examples/perf_metrics/src/vim
 .idea
+
+# MCP model cache (fastembed downloads)
+mcp/data/model_cache/
