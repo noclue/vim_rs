@@ -28,6 +28,10 @@ use lancedb::{Connection, query::{ExecutableQuery, QueryBase}};
 #[cfg(feature = "embeddings")]
 use std::sync::Mutex;
 
+// Conditional imports for CUDA GPU acceleration
+#[cfg(feature = "cuda")]
+use ort::execution_providers::CUDAExecutionProvider;
+
 // ============================================================================
 // MCP Server
 // ============================================================================
@@ -112,11 +116,24 @@ impl McpServer {
                 info!("Using model cache directory: {}", model_cache_dir.display());
 
                 // Load embedding model with persistent cache
-                match TextEmbedding::try_new(
+                // Configure execution providers: CUDA if available, fallback to CPU
+                #[cfg(feature = "cuda")]
+                let init_options = {
+                    info!("CUDA feature enabled - attempting GPU acceleration");
                     InitOptions::new(EmbeddingModel::AllMiniLML6V2)
                         .with_cache_dir(model_cache_dir)
                         .with_show_download_progress(false)
-                ) {
+                        .with_execution_providers(vec![
+                            CUDAExecutionProvider::default().build()
+                        ])
+                };
+
+                #[cfg(not(feature = "cuda"))]
+                let init_options = InitOptions::new(EmbeddingModel::AllMiniLML6V2)
+                    .with_cache_dir(model_cache_dir)
+                    .with_show_download_progress(false);
+
+                match TextEmbedding::try_new(init_options) {
                     Ok(model) => {
                         info!("Embedding model loaded successfully");
 

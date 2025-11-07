@@ -9,6 +9,10 @@ use arrow_array::{RecordBatch, RecordBatchIterator, StringArray, Float32Array, F
 use arrow_schema::{DataType, Field, Schema};
 use lancedb::connect;
 
+// Conditional imports for CUDA GPU acceleration
+#[cfg(feature = "cuda")]
+use ort::execution_providers::CUDAExecutionProvider;
+
 #[derive(Debug, Clone)]
 struct EmbeddingRecord {
     text: String,
@@ -115,12 +119,26 @@ async fn main() -> Result<()> {
 
     // Step 2: Initialize embedding model
     info!("Initializing embedding model (all-MiniLM-L6-v2)...");
-    let mut model = TextEmbedding::try_new(
+
+    // Configure execution providers: CUDA if available, fallback to CPU
+    #[cfg(feature = "cuda")]
+    let init_options = {
+        info!("CUDA feature enabled - using GPU acceleration for embeddings");
         InitOptions::new(EmbeddingModel::AllMiniLML6V2)
             .with_cache_dir(model_cache_dir)
             .with_show_download_progress(true)
-    )
-    .context("Failed to initialize embedding model")?;
+            .with_execution_providers(vec![
+                CUDAExecutionProvider::default().build()
+            ])
+    };
+
+    #[cfg(not(feature = "cuda"))]
+    let init_options = InitOptions::new(EmbeddingModel::AllMiniLML6V2)
+        .with_cache_dir(model_cache_dir)
+        .with_show_download_progress(true);
+
+    let mut model = TextEmbedding::try_new(init_options)
+        .context("Failed to initialize embedding model")?;
 
     info!("Model initialized successfully");
 
