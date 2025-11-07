@@ -347,7 +347,7 @@ pub struct Model {
 
 impl Model {
     /// Return an iterator that starts with a parent structure node and iterates over all of its subtree.
-    pub fn children(&self, parent: &String) -> Result<StructChildrenIntoIterator> {
+    pub fn children(&self, parent: &String) -> Result<StructChildrenIntoIterator<'_>> {
         let parent_index = self
             .structs
             .get_index_of(parent)

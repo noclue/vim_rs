@@ -50,14 +50,14 @@ pub struct TypeDefResolver<'a> {
 }
 
 impl TypeDefResolver<'_> {
-    pub fn new(vim_model: &Model) -> TypeDefResolver {
+    pub fn new(vim_model: &Model) -> TypeDefResolver<'_> {
         TypeDefResolver {
             vim_model,
             root_package: "super".to_string(),
         }
     }
 
-    pub fn new_with_root_package(vim_model: &Model, root_package: String) -> TypeDefResolver {
+    pub fn new_with_root_package(vim_model: &Model, root_package: String) -> TypeDefResolver<'_> {
         TypeDefResolver {
             vim_model,
             root_package,

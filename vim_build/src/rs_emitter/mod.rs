@@ -5,7 +5,7 @@ pub mod enums;
 pub mod errors;
 pub mod library;
 mod mo;
-mod names;
+pub mod names;
 pub mod ser;
 pub mod struct_enum;
 pub(crate) mod structs;
