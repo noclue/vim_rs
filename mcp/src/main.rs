@@ -92,7 +92,7 @@ fn default_filter() -> String {
 
 #[tool_router]
 impl McpServer {
-    fn new() -> Result<Self> {
+    async fn new() -> Result<Self> {
         // Try to load API data from the data directory
         let data_dir = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("data");
         let api_data = ApiData::load_from_dir(&data_dir)?;
@@ -112,13 +112,11 @@ impl McpServer {
                     Ok(model) => {
                         info!("Embedding model loaded successfully");
 
-                        // Connect to LanceDB
-                        let rt = tokio::runtime::Handle::current();
-                        match rt.block_on(async {
-                            lancedb::connect(&embeddings_db_path.to_string_lossy())
-                                .execute()
-                                .await
-                        }) {
+                        // Connect to LanceDB (now just await it)
+                        match lancedb::connect(&embeddings_db_path.to_string_lossy())
+                            .execute()
+                            .await
+                        {
                             Ok(db) => {
                                 info!("Connected to embeddings database");
                                 (Some(Arc::new(Mutex::new(model))), Some(Arc::new(db)))
@@ -530,7 +528,7 @@ async fn main() -> Result<()> {
     info!("Starting MCP server");
 
     // Create the server instance
-    let server = McpServer::new()?;
+    let server = McpServer::new().await?;
 
     // Serve using stdio transport
     info!("MCP server ready");
