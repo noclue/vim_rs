@@ -1,0 +1,11 @@
+[package]
+name = "pdf_parser"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "pdf_parser"
+path = "src/main.rs"
+
+[dependencies]
+extractous = "0.3"
