@@ -115,7 +115,7 @@ async fn main() -> Result<()> {
 
     // Step 2: Initialize embedding model
     info!("Initializing embedding model (all-MiniLM-L6-v2)...");
-    let model = TextEmbedding::try_new(
+    let mut model = TextEmbedding::try_new(
         InitOptions::new(EmbeddingModel::AllMiniLML6V2)
             .with_cache_dir(model_cache_dir)
             .with_show_download_progress(true)
