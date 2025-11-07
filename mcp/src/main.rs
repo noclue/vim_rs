@@ -1,112 +1,110 @@
 use anyhow::Result;
 use rmcp::{
-    server::Server,
-    types::{ServerInfo, Tool, ToolInputSchema, Resource},
+    ErrorData as McpError, handler::server::{
+        ServerHandler,
+        tool::{ToolRouter},
+        wrapper::Parameters,
+    }, 
+    model::*,
+    service::ServiceExt, 
+    tool, 
+    tool_handler,
+    tool_router
 };
-use serde_json::{json, Value};
-use std::collections::HashMap;
-use tracing::info;
+use serde::{Deserialize, Serialize};
+use schemars::JsonSchema;
+use tokio::io::{stdin, stdout};
+use tracing::{error, info};
+
+/// McpServer - A Model Context Protocol server
+#[derive(Clone, Debug)]
+pub struct McpServer {
+    tool_router: ToolRouter<Self>,
+}
+
+/// Input parameters for the hello tool
+#[derive(Serialize, Deserialize, JsonSchema)]
+struct HelloInput {
+    /// Name to greet
+    #[schemars(description = "The name of a person to greet")]
+    name: String,
+}
+
+#[tool_router]
+impl McpServer {
+    fn new() -> Self {
+        Self {
+            tool_router: Self::tool_router(),
+        }
+    }
+
+    /// A simple hello world tool that greets the user
+    #[tool(description = "A simple hello world tool that greets the user")]
+    async fn hello(&self, params: Parameters<HelloInput>) -> Result<CallToolResult, McpError> {
+        let greeting = format!("Hello, {}! Welcome to vim_rs MCP server.", params.0.name);
+        Ok(CallToolResult::success(vec![Content::text(greeting)]))
+    }
+}
+
+#[tool_handler]
+impl ServerHandler for McpServer {
+    fn get_info(&self) -> ServerInfo {
+        ServerInfo {
+            capabilities: ServerCapabilities::builder()
+                .enable_tools()
+                .build(),
+            server_info: Implementation{
+                name: env!("CARGO_CRATE_NAME").to_owned(),
+                title: Some("Sample MCP server".into()),
+                version: env!("CARGO_PKG_VERSION").to_owned(),
+                icons: None,
+                website_url: None,
+            },
+            instructions: Some("A simple hello world MCP server that greets the user.".to_string()),
+            ..Default::default()
+        }
+    }
+
+}
 
 #[tokio::main]
 async fn main() -> Result<()> {
     // Initialize logging to stderr
     tracing_subscriber::fmt()
         .with_writer(std::io::stderr)
-        .with_max_level(tracing::Level::INFO)
+        .with_max_level(tracing::Level::TRACE)
         .init();
 
-    info!("Starting vim_rs MCP server");
+    info!("Starting MCP server");
 
-    // Create server with metadata
-    let server = Server::new(ServerInfo {
-        name: "vim-mcp-server".to_string(),
-        version: "0.1.0".to_string(),
-    });
+    // Create the server instance
+    let server = McpServer::new();
 
-    // Register tools
-    server.add_tool(Tool {
-        name: "hello".to_string(),
-        description: Some("A simple hello world tool that greets the user".to_string()),
-        input_schema: ToolInputSchema {
-            schema_type: "object".to_string(),
-            properties: Some({
-                let mut props = HashMap::new();
-                props.insert(
-                    "name".to_string(),
-                    json!({
-                        "type": "string",
-                        "description": "Name to greet"
-                    }),
-                );
-                props
-            }),
-            required: Some(vec!["name".to_string()]),
-        },
-    });
-
-    server.add_tool(Tool {
-        name: "stats".to_string(),
-        description: Some("Get statistics about the vSphere API".to_string()),
-        input_schema: ToolInputSchema {
-            schema_type: "object".to_string(),
-            properties: None,
-            required: None,
-        },
-    });
-
-    // Register tool handler
-    server.set_tool_handler(|tool_name: String, arguments: Value| async move {
-        match tool_name.as_str() {
-            "hello" => {
-                let name = arguments["name"].as_str().unwrap_or("World");
-                Ok(json!({
-                    "content": [{
-                        "type": "text",
-                        "text": format!("Hello, {}! Welcome to vim_rs MCP server.", name)
-                    }]
-                }))
-            }
-            "stats" => Ok(json!({
-                "content": [{
-                    "type": "text",
-                    "text": "vSphere API Statistics:\n- Managed Objects: 184\n- Total Methods: 2,195\n- Data Structures: 3,890\n- Enumerations: 623\n\nGenerated in 4.75 seconds!"
-                }]
-            })),
-            _ => Err(anyhow::anyhow!("Unknown tool: {}", tool_name)),
-        }
-    });
-
-    // Register resources
-    server.add_resource(Resource {
-        uri: "vim://metadata".to_string(),
-        name: "vSphere API Metadata".to_string(),
-        description: Some("Metadata about the generated vSphere API data".to_string()),
-        mime_type: Some("application/json".to_string()),
-    });
-
-    // Register resource handler
-    server.set_resource_handler(|uri: String| async move {
-        match uri.as_str() {
-            "vim://metadata" => Ok(json!({
-                "contents": [{
-                    "uri": "vim://metadata",
-                    "mimeType": "application/json",
-                    "text": r#"{
-  "managed_objects": 184,
-  "total_methods": 2195,
-  "data_structures_total": 3890,
-  "enumerations": 623,
-  "generation_duration_ms": 4750
-}"#
-                }]
-            })),
-            _ => Err(anyhow::anyhow!("Unknown resource: {}", uri)),
-        }
-    });
-
-    // Run the server (handles stdio communication)
+    // Serve using stdio transport
     info!("MCP server ready");
-    server.run().await?;
-
+    let service = server.serve((stdin(), stdout()))
+        .await
+        .inspect_err(|e| error!("Error serving server: {}", e))?;
+    
+    service.waiting().await?;
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use tracing::debug;
+
+    #[tokio::test]
+    async fn test_mcp_server() -> Result<()> {
+        let router = McpServer::tool_router();
+        debug!("Router: {:?}", router);
+        assert!(router.has_route("hello"));
+
+        let mcp_server = McpServer::new();
+        let tool_router = &mcp_server.tool_router;
+        assert!(tool_router.has_route("hello"));
+
+        Ok(())
+    }
 }
