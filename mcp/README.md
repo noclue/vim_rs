@@ -63,7 +63,7 @@ echo '{"jsonrpc":"2.0","id":6,"method":"resources/read","params":{"uri":"vim://m
 ```
 mcp/
 ├── src/
-│   └── main.rs          # MCP server implementation
+│   └── main.rs          # MCP server implementation (~110 lines using rmcp)
 ├── data/                # Generated JSON data
 │   ├── managed_objects.json    (2.9 MB - 184 objects, 2,195 methods)
 │   ├── data_structures.json    (8.0 MB - 3,890 structures)
@@ -71,6 +71,12 @@ mcp/
 │   └── metadata.json           (566 bytes)
 └── docs/                # Design documentation
 ```
+
+**Implementation:** Uses the `rmcp` crate which provides a high-level API for MCP servers:
+- Declarative tool and resource registration
+- Automatic protocol handling (no manual JSON-RPC code needed)
+- Clean async handlers with closures
+- Much simpler than raw JSON-RPC (reduced from 270 lines to ~110 lines!)
 
 ## Data Generation
 
@@ -128,9 +134,17 @@ Example configuration:
 
 ### Dependencies
 - Rust 1.70+
-- tokio for async runtime
-- serde for JSON serialization
-- tracing for logging
+- **rmcp** - MCP protocol implementation (simplified server API)
+- tokio - async runtime
+- serde/serde_json - JSON serialization
+- tracing - logging
+
+### Code Structure
+The server implementation (~110 lines) uses the `rmcp` crate which provides:
+- Simple server builder and registration API
+- Automatic JSON-RPC 2.0 protocol handling
+- stdio transport handling
+- Proper error responses
 
 ### Testing
 ```bash
