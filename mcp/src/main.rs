@@ -24,7 +24,7 @@ use vim_mcp_server::model::ApiData;
 #[cfg(feature = "embeddings")]
 use fastembed::{EmbeddingModel, InitOptions, TextEmbedding};
 #[cfg(feature = "embeddings")]
-use lancedb::{Connection, query::ExecutableQuery};
+use lancedb::{Connection, query::{ExecutableQuery, QueryBase}};
 
 // ============================================================================
 // MCP Server
@@ -323,12 +323,12 @@ impl McpServer {
         let query_embedding = match embedding_model.embed(vec![params.0.query.clone()], None) {
             Ok(mut embeddings) => {
                 if embeddings.is_empty() {
-                    return Err(McpError::internal_error("Failed to generate query embedding".to_string()));
+                    return Err(McpError::internal_error("Failed to generate query embedding".to_string(), None));
                 }
                 embeddings.remove(0)
             }
             Err(e) => {
-                return Err(McpError::internal_error(format!("Failed to generate query embedding: {}", e)));
+                return Err(McpError::internal_error(format!("Failed to generate query embedding: {}", e), None));
             }
         };
 
@@ -336,13 +336,13 @@ impl McpServer {
         let table = match embeddings_db.open_table("vim_api").execute().await {
             Ok(table) => table,
             Err(e) => {
-                return Err(McpError::internal_error(format!("Failed to open embeddings table: {}", e)));
+                return Err(McpError::internal_error(format!("Failed to open embeddings table: {}", e), None));
             }
         };
 
         let mut query = table
             .vector_search(query_embedding)
-            .map_err(|e| McpError::internal_error(format!("Vector search failed: {}", e)))?
+            .map_err(|e| McpError::internal_error(format!("Vector search failed: {}", e), None))?
             .limit(params.0.limit);
 
         // Apply filter if specified
@@ -353,7 +353,8 @@ impl McpServer {
                 "enums" => "enum",
                 _ => {
                     return Err(McpError::invalid_params(
-                        format!("Invalid filter value: '{}'. Must be 'all', 'methods', 'types', or 'enums'", params.0.filter)
+                        format!("Invalid filter value: '{}'. Must be 'all', 'methods', 'types', or 'enums'", params.0.filter),
+                        None
                     ));
                 }
             };
@@ -363,12 +364,11 @@ impl McpServer {
         let results = match query.execute().await {
             Ok(batches) => batches,
             Err(e) => {
-                return Err(McpError::internal_error(format!("Failed to execute search: {}", e)));
+                return Err(McpError::internal_error(format!("Failed to execute search: {}", e), None));
             }
         };
 
         // Format results
-        use arrow_array::RecordBatch;
         use arrow_array::cast::AsArray;
 
         let mut formatted_results = Vec::new();
@@ -391,10 +391,11 @@ impl McpServer {
                 let details = match item_type {
                     "method" => {
                         // Find the method
+                        let mut result = None;
                         for mo in &self.api_data.managed_objects {
                             if let Some(method) = mo.methods.iter().find(|m| m.name == item_name) {
                                 let desc = method.description.as_deref().unwrap_or("No description");
-                                return Some(format!(
+                                result = Some(format!(
                                     "## {}.{}\n\n**Rust:** `{}`\n\n**Signature:**\n```rust\n{}\n```\n\n**Description:**\n{}\n\n**Related Types:** {}\n\n---\n",
                                     mo.name,
                                     method.name,
@@ -403,9 +404,10 @@ impl McpServer {
                                     desc,
                                     method.related_types.join(", ")
                                 ));
+                                break;
                             }
                         }
-                        None
+                        result
                     }
                     "structure" => {
                         if let Some(structure) = self.api_data.data_structures.iter().find(|s| s.name == item_name) {
