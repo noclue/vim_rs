@@ -103,11 +103,10 @@ impl McpServer {
                 info!("Loading embeddings from {}", embeddings_db_path.display());
 
                 // Load embedding model
-                match TextEmbedding::try_new(InitOptions {
-                    model_name: EmbeddingModel::AllMiniLML6V2,
-                    show_download_progress: false,
-                    ..Default::default()
-                }) {
+                match TextEmbedding::try_new(
+                    InitOptions::new(EmbeddingModel::AllMiniLML6V2)
+                        .with_show_download_progress(false)
+                ) {
                     Ok(model) => {
                         info!("Embedding model loaded successfully");
 

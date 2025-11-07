@@ -7,7 +7,7 @@ use vim_mcp_server::model::ApiData;
 
 use arrow_array::{RecordBatch, RecordBatchIterator, StringArray, Float32Array, FixedSizeListArray};
 use arrow_schema::{DataType, Field, Schema};
-use lancedb::{connect, Connection};
+use lancedb::connect;
 
 #[derive(Debug, Clone)]
 struct EmbeddingRecord {
@@ -106,11 +106,10 @@ async fn main() -> Result<()> {
 
     // Step 2: Initialize embedding model
     info!("Initializing embedding model (all-MiniLM-L6-v2)...");
-    let model = TextEmbedding::try_new(InitOptions {
-        model_name: EmbeddingModel::AllMiniLML6V2,
-        show_download_progress: true,
-        ..Default::default()
-    })
+    let model = TextEmbedding::try_new(
+        InitOptions::new(EmbeddingModel::AllMiniLML6V2)
+            .with_show_download_progress(true)
+    )
     .context("Failed to initialize embedding model")?;
 
     info!("Model initialized successfully");
@@ -184,6 +183,8 @@ fn create_record_batch(
     embeddings: &[Vec<f32>],
     schema: &Arc<Schema>,
 ) -> Result<RecordBatch> {
+    use arrow_schema::FieldRef;
+
     let text_array = StringArray::from(
         records.iter().map(|r| r.text.as_str()).collect::<Vec<_>>()
     );
@@ -205,8 +206,11 @@ fn create_record_batch(
 
     // Flatten embeddings for FixedSizeListArray
     let flat_embeddings: Vec<f32> = embeddings.iter().flat_map(|v| v.iter().copied()).collect();
-    let values = Float32Array::from(flat_embeddings);
-    let vector_array = FixedSizeListArray::try_new_from_values(values, 384)?;
+    let values = Arc::new(Float32Array::from(flat_embeddings));
+
+    // Create field for the inner array
+    let field: FieldRef = Arc::new(Field::new("item", DataType::Float32, true));
+    let vector_array = FixedSizeListArray::try_new(field, 384, values, None)?;
 
     RecordBatch::try_new(
         schema.clone(),

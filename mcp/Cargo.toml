@@ -19,8 +19,8 @@ tokio-util = "0.7.17"
 # Embeddings and vector search (optional for semantic search)
 fastembed = { version = "5.2.0", optional = true }
 lancedb = { version = "0.22.3", optional = true }
-arrow-array = { version = "53", optional = true }
-arrow-schema = { version = "53", optional = true }
+arrow-array = { version = "56", optional = true }
+arrow-schema = { version = "56", optional = true }
 
 [features]
 default = ["embeddings"]
