@@ -81,7 +81,6 @@ Each entry should have:
 
 ```json
 {
-  "version": "9.0.0.0",
   "generated_at": "2024-01-15T10:30:00Z",
   "source": "vim_model processed from vi_json_openapi_specification_v9_0_0_0_24798170.json",
   "managed_objects": [
@@ -125,32 +124,7 @@ Each entry should have:
             "return_type": "Result<ManagedObjectReference>",
             "is_async": true
           },
-          "description": "Creates a new snapshot of this virtual machine...",
-          "summary": "Creates a new snapshot of this virtual machine.",
-          "deprecated": true,
-          "deprecation_note": "Deprecated as of vSphere 8.0GA, use CreateSnapshotEx_Task instead",
-          "privileges": {
-            "raw": "***Required privileges:*** VirtualMachine.State.CreateSnapshot",
-            "parsed": ["VirtualMachine.State.CreateSnapshot"]
-          },
-          "errors": [
-            {
-              "type": "TaskInProgress",
-              "description": "if the virtual machine is busy"
-            },
-            {
-              "type": "NotSupported",
-              "description": "if the host product does not support snapshots..."
-            },
-            {
-              "type": "SnapshotFault",
-              "description": "if an error occurs during the snapshot operation"
-            },
-            {
-              "type": "InvalidName",
-              "description": "if the specified snapshot name is invalid"
-            }
-          ],
+          "description": "Creates a new snapshot of this virtual machine. A snapshot is a point in time copy of the virtual machine.\n\n***Deprecated as of vSphere 8.0GA***, use CreateSnapshotEx_Task instead.\n\n***Required privileges:*** VirtualMachine.State.CreateSnapshot\n\n***Possible errors:***\n\n***TaskInProgress***: if the virtual machine is busy\n***NotSupported***: if the host product does not support snapshots\n***SnapshotFault***: if an error occurs during the snapshot operation\n***InvalidName***: if the specified snapshot name is invalid",
           "related_types": [
             "ManagedObjectReference",
             "VirtualMachineSnapshot"
@@ -180,17 +154,19 @@ Each entry should have:
   - **parameters**: Array extracted from Method.input via Model.request_types
   - **return_type**: Rust return type from Method.output
   - **is_async**: Boolean (always true for vim_rs methods)
-- **description**: Model's Method.description
-- **summary**: First line of description
-- **deprecated**: Parsed from description
-- **deprecation_note**: Extracted deprecation text
-- **privileges**: Parsed from description
-  - **raw**: Original text containing privileges
-  - **parsed**: Extracted privilege strings
-- **errors**: Parsed from Method.error_description
+- **description**: Model's Method.description **as-is** (no parsing in v1)
+  - Contains privileges, errors, deprecation as vanilla markdown
+  - LLMs can parse on-the-fly when needed
+  - Semantic search works on raw text
 - **related_types**: Extracted from Method.input and Method.output
 
-**Note:** No `tags` field - removed as redundant
+**v1 Simplification:**
+- No `summary` field (v2 feature)
+- No `deprecated`/`deprecation_note` fields (v2 feature)
+- No `privileges` object (v2 feature)
+- No `errors` array (v2 feature)
+- No `tags` field (v2 feature)
+- Description kept as raw markdown from Model
 
 ---
 
@@ -200,7 +176,6 @@ Each entry should have:
 
 ```json
 {
-  "version": "9.0.0.0",
   "generated_at": "2024-01-15T10:30:00Z",
   "source": "vim_model processed from vi_json_openapi_specification_v9_0_0_0_24798170.json",
   "structures": [
@@ -327,7 +302,6 @@ Each entry should have:
 
 ```json
 {
-  "version": "9.0.0.0",
   "generated_at": "2024-01-15T10:30:00Z",
   "source": "vim_model processed from vi_json_openapi_specification_v9_0_0_0_24798170.json",
   "enumerations": [
@@ -397,34 +371,24 @@ Each entry should have:
 
 ```json
 {
-  "version": "9.0.0.0",
-  "vsphere_version": "9.0.0.0",
-  "build_number": "24798170",
   "generated_at": "2024-01-15T10:30:00Z",
-  "vim_rs_version": "0.1.0",
-  "source_files": {
-    "openapi_spec": "vi_json_openapi_specification_v9_0_0_0_24798170.json",
-    "vim_build_version": "0.1.0"
-  },
+  "source": "vi_json_openapi_specification_v9_0_0_0_24798170.json",
   "statistics": {
     "managed_objects": 145,
-    "managed_objects_with_methods": 145,
     "total_methods": 2195,
     "data_structures_total": 8234,
     "data_structures_emitted": 6000,
     "data_structures_pruned": 2,
     "data_structures_skipped": 2232,
     "enumerations": 1504,
-    "request_types": 2195,
     "pruned_types": ["MethodFault", "Event"]
   },
-  "indexes_generated": [
+  "files_generated": [
     "managed_objects.json",
     "data_structures.json",
     "enumerations.json"
   ],
-  "generation_duration_ms": 15234,
-  "notes": "data_structures.json includes ALL types (emit, prune, and skip) for complete documentation"
+  "generation_duration_ms": 15234
 }
 ```
 
@@ -500,35 +464,19 @@ for child_struct in model.children(&parent_name)? {
 }
 ```
 
-#### 4. Description Parsing
+#### 4. Description Handling (v1: No Parsing)
 
-Parse structured data from Model's description fields:
+Keep descriptions as-is from Model:
 ```rust
-// From Method.description or Struct.description
+// v1: No parsing - keep descriptions as vanilla markdown
+let method_entry = MethodEntry {
+    description: method.description.clone(),  // Raw markdown from Model
+    // No parsing for privileges, errors, deprecation
+    // LLMs can parse on-the-fly when needed
+};
 
-// Parse privileges
-fn parse_privileges(description: &Option<String>) -> PrivilegeInfo {
-    // Look for: "***Required privileges:*** Privilege.Name"
-    // Regex: r"\*\*\*Required privileges:\*\*\*\s*(.+)"
-}
-
-// Parse errors
-fn parse_errors(description: &Option<String>) -> Vec<ErrorInfo> {
-    // Look for: "***ErrorType***: description"
-    // Regex: r"\*\*\*(\w+)\*\*\*:\s*(.+)"
-}
-
-// Parse deprecation
-fn parse_deprecation(description: &Option<String>) -> (bool, Option<String>) {
-    // Look for: "Deprecated as of vSphere X.Y"
-    // Regex: r"Deprecated as of (.+?)[\.,]"
-}
-
-// Extract summary
-fn extract_summary(description: &Option<String>) -> Option<String> {
-    // First line of description
-    description.as_ref().map(|d| d.lines().next().unwrap_or("").trim().to_string())
-}
+// v2: Add structured fields if filtering becomes necessary
+// For now, semantic search works on raw text
 ```
 
 #### 5. Include All Types Including Pruned
@@ -568,7 +516,7 @@ for (name, struct_ref) in &model.structs {
 ✅ Use Model's helper methods (rust_name(), inheritance_chain())
 ✅ Use rs_emitter's name conversion and type resolution
 ✅ Include ALL types in JSON (emit, prune, and skip)
-✅ Parse descriptions for structured data (privileges, errors)
+✅ Keep descriptions as vanilla markdown (no parsing in v1)
 
 ---
 
@@ -654,18 +602,19 @@ for field in &event_ex.fields {
 
 ## File Locations
 
-Generated files will be placed in:
+Generated files will be placed in project root:
 
 ```
 vim_rs/
-├── vim_build/
-│   └── data/
-│       ├── vi_json_openapi_specification_v9_0_0_0_24798170.json  (input)
-│       └── mcp/  (NEW - generated output)
-│           ├── managed_objects.json
-│           ├── data_structures.json
-│           ├── enumerations.json
-│           └── metadata.json
+├── mcp/
+│   └── data/  (generated JSON files)
+│       ├── managed_objects.json
+│       ├── data_structures.json
+│       ├── enumerations.json
+│       └── metadata.json
+└── vim_build/
+    └── data/
+        └── vi_json_openapi_specification_v9_0_0_0_24798170.json  (input)
 ```
 
 ---
