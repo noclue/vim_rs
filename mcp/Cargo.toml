@@ -15,3 +15,13 @@ tracing-subscriber = "0.3"
 rmcp = { version = "0.8.5", features = ["server", "macros"] }
 schemars = { version = "1.0", features = ["derive"] }
 tokio-util = "0.7.17"
+
+# Embeddings and vector search (optional for semantic search)
+fastembed = { version = "5.2.0", optional = true }
+lancedb = { version = "0.22.3", optional = true }
+arrow-array = { version = "53", optional = true }
+arrow-schema = { version = "53", optional = true }
+
+[features]
+default = ["embeddings"]
+embeddings = ["fastembed", "lancedb", "arrow-array", "arrow-schema"]
