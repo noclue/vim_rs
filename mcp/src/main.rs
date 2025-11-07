@@ -25,6 +25,8 @@ use vim_mcp_server::model::ApiData;
 use fastembed::{EmbeddingModel, InitOptions, TextEmbedding};
 #[cfg(feature = "embeddings")]
 use lancedb::{Connection, query::{ExecutableQuery, QueryBase}};
+#[cfg(feature = "embeddings")]
+use std::sync::Mutex;
 
 // ============================================================================
 // MCP Server
@@ -36,7 +38,7 @@ pub struct McpServer {
     tool_router: ToolRouter<Self>,
     api_data: Arc<ApiData>,
     #[cfg(feature = "embeddings")]
-    embedding_model: Option<Arc<TextEmbedding>>,
+    embedding_model: Option<Arc<Mutex<TextEmbedding>>>,
     #[cfg(feature = "embeddings")]
     embeddings_db: Option<Arc<Connection>>,
 }
@@ -119,7 +121,7 @@ impl McpServer {
                         }) {
                             Ok(db) => {
                                 info!("Connected to embeddings database");
-                                (Some(Arc::new(model)), Some(Arc::new(db)))
+                                (Some(Arc::new(Mutex::new(model))), Some(Arc::new(db)))
                             }
                             Err(e) => {
                                 warn!("Failed to connect to embeddings database: {}", e);
@@ -320,15 +322,18 @@ impl McpServer {
         let embeddings_db = self.embeddings_db.as_ref().unwrap();
 
         // Generate embedding for query
-        let query_embedding = match embedding_model.embed(vec![params.0.query.clone()], None) {
-            Ok(mut embeddings) => {
-                if embeddings.is_empty() {
-                    return Err(McpError::internal_error("Failed to generate query embedding".to_string(), None));
+        let query_embedding = {
+            let mut model = embedding_model.lock().unwrap();
+            match model.embed(vec![params.0.query.clone()], None) {
+                Ok(mut embeddings) => {
+                    if embeddings.is_empty() {
+                        return Err(McpError::internal_error("Failed to generate query embedding".to_string(), None));
+                    }
+                    embeddings.remove(0)
                 }
-                embeddings.remove(0)
-            }
-            Err(e) => {
-                return Err(McpError::internal_error(format!("Failed to generate query embedding: {}", e), None));
+                Err(e) => {
+                    return Err(McpError::internal_error(format!("Failed to generate query embedding: {}", e), None));
+                }
             }
         };
 
@@ -388,9 +393,9 @@ impl McpServer {
             for i in 0..batch.num_rows() {
                 let item_type = item_type_array.value(i);
                 let item_name = item_name_array.value(i);
-                let object_name = object_name_array.value(i);
-                let rust_name = rust_name_array.value(i);
-                let text = text_array.value(i);
+                let _object_name = object_name_array.value(i);
+                let _rust_name = rust_name_array.value(i);
+                let _text = text_array.value(i);
 
                 // Find full details from api_data
                 let details = match item_type {
