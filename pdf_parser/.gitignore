@@ -1,0 +1,5 @@
+# PDF files (can be large)
+data/*.pdf
+
+# Output files
+target/
