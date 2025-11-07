@@ -4,6 +4,23 @@ use crate::rs_emitter::names::TypeDefResolver;
 use std::path::Path;
 use chrono::Utc;
 
+fn format_vim_type(dt: &DataType) -> String {
+    match dt {
+        DataType::Boolean => "Boolean".to_string(),
+        DataType::String => "String".to_string(),
+        DataType::Int8 => "Int8".to_string(),
+        DataType::Int16 => "Int16".to_string(),
+        DataType::Int32 => "Int32".to_string(),
+        DataType::Int64 => "Int64".to_string(),
+        DataType::Float => "Float".to_string(),
+        DataType::Double => "Double".to_string(),
+        DataType::DateTime => "DateTime".to_string(),
+        DataType::Binary => "Binary".to_string(),
+        DataType::Array(inner) => format!("Array<{}>", format_vim_type(inner)),
+        DataType::Reference(name) => name.clone(),
+    }
+}
+
 pub fn emit_data_structures_json(
     model: &Model,
     output_dir: &Path,
@@ -55,7 +72,7 @@ pub fn emit_data_structures_json(
                 name: field_name.clone(),
                 rust_name: field.rust_name(),
                 rust_type,
-                vim_type: format!("{:?}", field.vim_type),
+                vim_type: format_vim_type(&field.vim_type),
                 required: !field.optional,
                 description: field.description.clone(),
                 is_array,

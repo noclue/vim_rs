@@ -43,15 +43,13 @@ fn emit_mcp_data(
     output_dir: &Path,
     pruned_types: Option<&[&str]>,
 ) -> Result<(), Box<dyn std::error::Error>> {
-    use vim_model::load_vim_model;
-
     // Load OpenAPI spec and transform to vim_model
     let openapi = generator::load_openapi(vi_json_spec_path)?;
-    let vim_model = load_vim_model(&openapi, pruned_types)?;
+    let model = vim_model::load_vim_model(&openapi, pruned_types)?;
 
     // Generate JSON files
     let pruned_types_slice = pruned_types.unwrap_or(&[]);
-    json_emitter::emit_mcp_data(&vim_model, output_dir, pruned_types_slice)?;
+    json_emitter::emit_mcp_data(&model, output_dir, pruned_types_slice)?;
 
     Ok(())
 }
