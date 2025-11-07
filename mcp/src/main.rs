@@ -370,10 +370,15 @@ impl McpServer {
 
         // Format results
         use arrow_array::cast::AsArray;
+        use futures::stream::StreamExt;
 
         let mut formatted_results = Vec::new();
 
-        for batch in results {
+        // Collect batches from stream
+        let batches: Vec<_> = results.try_collect().await
+            .map_err(|e| McpError::internal_error(format!("Failed to collect results: {}", e), None))?;
+
+        for batch in batches {
             let item_type_array = batch.column_by_name("item_type").unwrap().as_string::<i32>();
             let item_name_array = batch.column_by_name("item_name").unwrap().as_string::<i32>();
             let object_name_array = batch.column_by_name("object_name").unwrap().as_string::<i32>();

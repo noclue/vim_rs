@@ -21,7 +21,8 @@ fastembed = { version = "5.2.0", optional = true }
 lancedb = { version = "0.22.3", optional = true }
 arrow-array = { version = "56", optional = true }
 arrow-schema = { version = "56", optional = true }
+futures = { version = "0.3", optional = true }
 
 [features]
 default = ["embeddings"]
-embeddings = ["fastembed", "lancedb", "arrow-array", "arrow-schema"]
+embeddings = ["fastembed", "lancedb", "arrow-array", "arrow-schema", "futures"]
