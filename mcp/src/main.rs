@@ -370,7 +370,7 @@ impl McpServer {
 
         // Format results
         use arrow_array::cast::AsArray;
-        use futures::stream::StreamExt;
+        use futures::TryStreamExt;
 
         let mut formatted_results = Vec::new();
 
