@@ -1035,6 +1035,24 @@ dependencies = [
 ]
 
 [[package]]
+name = "build-embeddings"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "arrow-array",
+ "arrow-schema",
+ "fastembed",
+ "lancedb",
+ "ort",
+ "serde",
+ "serde_json",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
+ "vim_mcp_server",
+]
+
+[[package]]
 name = "built"
 version = "0.7.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -7318,7 +7336,6 @@ dependencies = [
  "fastembed",
  "futures",
  "lancedb",
- "ort",
  "rmcp",
  "schemars 1.1.0",
  "serde",

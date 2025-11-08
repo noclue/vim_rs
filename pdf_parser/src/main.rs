@@ -1,13 +1,14 @@
 use extractous::Extractor;
 use std::error::Error;
 use std::fs;
+use std::io::Read;
 use std::path::{Path, PathBuf};
+use std::time::{Duration, Instant};
 
 /// Configuration for PDF parsing
 struct Config {
     input_dir: PathBuf,
     output_dir: PathBuf,
-    pdf_files: Vec<String>,
 }
 
 impl Config {
@@ -17,8 +18,34 @@ impl Config {
         Config {
             input_dir: base_dir.join("data"),
             output_dir: base_dir.parent().unwrap().join("mcp").join("guides"),
-            pdf_files: vec!["vcf.pdf".to_string(), "vsphere.pdf".to_string()],
         }
+    }
+
+    /// Scan input directory for all PDF files
+    fn find_pdf_files(&self) -> Result<Vec<String>, Box<dyn Error>> {
+        let mut pdf_files = Vec::new();
+
+        if !self.input_dir.exists() {
+            return Err(format!("Input directory does not exist: {}", self.input_dir.display()).into());
+        }
+
+        for entry in fs::read_dir(&self.input_dir)? {
+            let entry = entry?;
+            let path = entry.path();
+
+            if path.is_file() {
+                if let Some(extension) = path.extension() {
+                    if extension.eq_ignore_ascii_case("pdf") {
+                        if let Some(filename) = path.file_name() {
+                            pdf_files.push(filename.to_string_lossy().to_string());
+                        }
+                    }
+                }
+            }
+        }
+
+        pdf_files.sort();
+        Ok(pdf_files)
     }
 }
 
@@ -34,10 +61,15 @@ fn extract_pdf_text(pdf_path: &Path) -> Result<String, Box<dyn Error>> {
         .map_err(|e| format!("Failed to read PDF file {}: {}", pdf_path.display(), e))?;
 
     // Extract text from the PDF
-    let text = extractor
+    let (mut stream, _metadata) = extractor
         .extract_bytes(&file_content)
         .map_err(|e| format!("Failed to extract text from {}: {}", pdf_path.display(), e))?;
 
+    // Read stream to string
+    let mut text = String::new();
+    stream.read_to_string(&mut text)
+        .map_err(|e| format!("Failed to read extracted text: {}", e))?;
+    
     println!("✅ Extracted {} characters", text.len());
     Ok(text)
 }
@@ -60,11 +92,32 @@ fn save_text(text: &str, output_path: &Path) -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
+/// Format duration as human-readable string
+fn format_duration(duration: Duration) -> String {
+    let total_secs = duration.as_secs();
+    let millis = duration.subsec_millis();
+    
+    if total_secs >= 3600 {
+        let hours = total_secs / 3600;
+        let mins = (total_secs % 3600) / 60;
+        let secs = total_secs % 60;
+        format!("{}h {}m {}s", hours, mins, secs)
+    } else if total_secs >= 60 {
+        let mins = total_secs / 60;
+        let secs = total_secs % 60;
+        format!("{}m {}s", mins, secs)
+    } else {
+        format!("{}.{:03}s", total_secs, millis)
+    }
+}
+
 /// Process a single PDF file
-fn process_pdf(config: &Config, pdf_filename: &str) -> Result<(), Box<dyn Error>> {
-    println!("\n{'=':<60}", "");
+fn process_pdf(config: &Config, pdf_filename: &str) -> Result<Duration, Box<dyn Error>> {
+    let start_time = Instant::now();
+    
+    println!("\n{:=<60}", "");
     println!("Processing: {}", pdf_filename);
-    println!("{'=':<60}\n", "");
+    println!("{:=<60}\n", "");
 
     // Construct input path
     let input_path = config.input_dir.join(pdf_filename);
@@ -73,7 +126,7 @@ fn process_pdf(config: &Config, pdf_filename: &str) -> Result<(), Box<dyn Error>
     if !input_path.exists() {
         println!("⚠️  File not found: {}", input_path.display());
         println!("   Please place {} in the pdf_parser/data/ directory", pdf_filename);
-        return Ok(()); // Skip this file but don't fail the whole process
+        return Ok(Duration::ZERO); // Skip this file but don't fail the whole process
     }
 
     // Get file size for reporting
@@ -90,14 +143,17 @@ fn process_pdf(config: &Config, pdf_filename: &str) -> Result<(), Box<dyn Error>
     // Save extracted text
     save_text(&text, &output_path)?;
 
-    println!("\n✨ Successfully processed {}", pdf_filename);
+    let elapsed = start_time.elapsed();
+    println!("\n✨ Successfully processed {} in {}", pdf_filename, format_duration(elapsed));
 
-    Ok(())
+    Ok(elapsed)
 }
 
 fn main() -> Result<(), Box<dyn Error>> {
+    let total_start = Instant::now();
+    
     println!("\n🚀 PDF Text Extractor");
-    println!("{'=':<60}\n", "");
+    println!("{:=<60}\n", "");
 
     let config = Config::new();
 
@@ -105,13 +161,32 @@ fn main() -> Result<(), Box<dyn Error>> {
     println!("📂 Output directory: {}", config.output_dir.display());
     println!();
 
+    // Scan for PDF files
+    let pdf_files = config.find_pdf_files()?;
+    
+    if pdf_files.is_empty() {
+        println!("⚠️  No PDF files found in {}", config.input_dir.display());
+        println!("   Please place PDF files in the pdf_parser/data/ directory");
+        return Ok(());
+    }
+
+    println!("📋 Found {} PDF file(s):", pdf_files.len());
+    for pdf_file in &pdf_files {
+        println!("   • {}", pdf_file);
+    }
+    println!();
+
     let mut success_count = 0;
     let mut error_count = 0;
+    let mut processing_times: Vec<(String, Duration)> = Vec::new();
 
     // Process each PDF file
-    for pdf_file in &config.pdf_files {
+    for pdf_file in &pdf_files {
         match process_pdf(&config, pdf_file) {
-            Ok(_) => success_count += 1,
+            Ok(duration) => {
+                success_count += 1;
+                processing_times.push((pdf_file.clone(), duration));
+            }
             Err(e) => {
                 eprintln!("❌ Error processing {}: {}", pdf_file, e);
                 error_count += 1;
@@ -119,12 +194,27 @@ fn main() -> Result<(), Box<dyn Error>> {
         }
     }
 
+    let total_elapsed = total_start.elapsed();
+
     // Summary
-    println!("\n{'=':<60}", "");
+    println!("\n{:=<60}", "");
     println!("📊 Summary");
-    println!("{'=':<60}", "");
+    println!("{:=<60}", "");
     println!("✅ Successful: {}", success_count);
     println!("❌ Errors: {}", error_count);
+    println!();
+    
+    // Per-file timing
+    if !processing_times.is_empty() {
+        println!("⏱️  Processing Times:");
+        for (filename, duration) in &processing_times {
+            println!("   • {}: {}", filename, format_duration(*duration));
+        }
+        println!();
+    }
+    
+    // Total time
+    println!("⏱️  Total time: {}", format_duration(total_elapsed));
     println!();
 
     if error_count > 0 {

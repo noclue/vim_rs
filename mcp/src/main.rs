@@ -47,14 +47,6 @@ pub struct McpServer {
     embeddings_db: Option<Arc<Connection>>,
 }
 
-/// Input parameters for the hello tool
-#[derive(Serialize, Deserialize, JsonSchema)]
-struct HelloInput {
-    /// Name to greet
-    #[schemars(description = "The name of a person to greet")]
-    name: String,
-}
-
 /// Input parameters for search tools
 #[derive(Serialize, Deserialize, JsonSchema)]
 struct SearchInput {
@@ -193,13 +185,6 @@ impl McpServer {
             #[cfg(feature = "embeddings")]
             embeddings_db,
         })
-    }
-
-    /// A simple hello world tool that greets the user
-    #[tool(description = "A simple hello world tool that greets the user")]
-    async fn hello(&self, params: Parameters<HelloInput>) -> Result<CallToolResult, McpError> {
-        let greeting = format!("Hello, {}! Welcome to vim_rs MCP server.", params.0.name);
-        Ok(CallToolResult::success(vec![Content::text(greeting)]))
     }
 
     /// Search for vSphere API methods by name or description (Rust bindings only)
@@ -706,8 +691,6 @@ mod tests {
     #[tokio::test]
     async fn test_mcp_server() -> Result<()> {
         let router = McpServer::tool_router();
-        debug!("Router: {:?}", router);
-        assert!(router.has_route("hello"));
         assert!(router.has_route("search_methods"));
         assert!(router.has_route("search_types"));
         assert!(router.has_route("search_enums"));
