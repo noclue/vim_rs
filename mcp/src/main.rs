@@ -94,6 +94,28 @@ fn default_filter() -> String {
     "all".to_string()
 }
 
+/// Input parameters for get_example tool
+#[derive(Serialize, Deserialize, JsonSchema)]
+struct GetExampleInput {
+    /// Example name
+    #[schemars(description = "The name of the example to retrieve (e.g., 'connection_basic', 'property_collector_macro')")]
+    name: String,
+}
+
+/// Input parameters for search_examples tool
+#[derive(Serialize, Deserialize, JsonSchema)]
+struct SearchExamplesInput {
+    /// Search query for examples
+    #[schemars(description = "Search query - can be a category (connection, property_collector, events, etc.) or keyword")]
+    query: String,
+}
+
+/// Input parameters for list_examples tool (empty struct for consistency)
+#[derive(Serialize, Deserialize, JsonSchema)]
+struct ListExamplesInput {
+    // Empty - list_examples takes no parameters but needs object schema
+}
+
 #[tool_router]
 impl McpServer {
     async fn new() -> Result<Self> {
@@ -333,7 +355,7 @@ impl McpServer {
 
     /// List all available code examples with categories
     #[tool(description = "List all available vim_rs code examples organized by category. Use this to discover examples for connection, property collector, macros, events, and more.")]
-    async fn list_examples(&self, params: Parameters<()>) -> Result<CallToolResult, McpError> {
+    async fn list_examples(&self, _params: Parameters<ListExamplesInput>) -> Result<CallToolResult, McpError> {
         let mut by_category: std::collections::HashMap<String, Vec<String>> = std::collections::HashMap::new();
 
         for example in &self.api_data.examples {
@@ -365,8 +387,8 @@ impl McpServer {
 
     /// Get a specific code example by name
     #[tool(description = "Get a specific vim_rs code example by name. Returns the complete source code, description, and Cargo.toml dependencies. Use list_examples to see all available examples.")]
-    async fn get_example(&self, params: Parameters<(String,)>) -> Result<CallToolResult, McpError> {
-        let name = &params.0.0;
+    async fn get_example(&self, params: Parameters<GetExampleInput>) -> Result<CallToolResult, McpError> {
+        let name = &params.0.name;
 
         let example = self.api_data.examples.iter()
             .find(|e| e.name == *name);
@@ -390,8 +412,8 @@ impl McpServer {
 
     /// Search code examples by category or keyword
     #[tool(description = "Search vim_rs code examples by category (connection, property_collector, macro_usage, events, performance, general) or keyword in title/description.")]
-    async fn search_examples(&self, params: Parameters<(String,)>) -> Result<CallToolResult, McpError> {
-        let query = params.0.0.to_lowercase();
+    async fn search_examples(&self, params: Parameters<SearchExamplesInput>) -> Result<CallToolResult, McpError> {
+        let query = params.0.query.to_lowercase();
         let mut results = Vec::new();
 
         for example in &self.api_data.examples {
