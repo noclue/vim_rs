@@ -124,6 +124,12 @@ struct SearchGuidesInput {
     query: String,
 }
 
+/// Input parameters for get_workflow_guide tool (empty struct for consistency)
+#[derive(Serialize, Deserialize, JsonSchema)]
+struct GetWorkflowGuideInput {
+    // Empty - get_workflow_guide takes no parameters but needs object schema
+}
+
 #[tool_router]
 impl McpServer {
     async fn new() -> Result<Self> {
@@ -545,6 +551,79 @@ impl McpServer {
         }
     }
 
+    /// Get comprehensive vim_rs workflow guide
+    #[tool(description = "CALL THIS FIRST! Returns the complete vim_rs workflow guide with connection patterns, property collector usage, code snippets, and best practices. Essential for writing correct vim_rs code on the first try.")]
+    async fn get_workflow_guide(&self, _params: Parameters<GetWorkflowGuideInput>) -> Result<CallToolResult, McpError> {
+        // Try to load the workflow guide from the guides directory
+        let guides_dir = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .parent()
+            .unwrap()
+            .join("data")
+            .join("guides");
+
+        let guide_path = guides_dir.join("VIM_RS_WORKFLOW_GUIDE.md");
+
+        let content = if guide_path.exists() {
+            match std::fs::read_to_string(&guide_path) {
+                Ok(content) => content,
+                Err(e) => {
+                    return Ok(CallToolResult::success(vec![Content::text(format!(
+                        "Error reading workflow guide: {}. Use search_examples or get_example to find usage patterns.",
+                        e
+                    ))]));
+                }
+            }
+        } else {
+            // Fallback minimal guide if file not found
+            r#"# vim_rs Quick Start
+
+## Connection Pattern (ALWAYS USE THIS)
+```rust
+use anyhow::{Context, Result};
+use std::sync::Arc;
+use vim_rs::{Client, ClientBuilder};
+
+pub async fn connect(app_name: &str, app_version: &str) -> Result<Arc<Client>> {
+    let vc_server = std::env::var("VIM_SERVER").context("VIM_SERVER env var not set")?;
+    let username = std::env::var("VIM_USERNAME").context("VIM_USERNAME env var not set")?;
+    let pwd = std::env::var("VIM_PASSWORD").context("VIM_PASSWORD env var not set")?;
+
+    let client = ClientBuilder::new(vc_server.as_str())
+        .insecure(true)
+        .basic_authn(username.as_str(), pwd.as_str())
+        .app_details(app_name, app_version)
+        .build()
+        .await?;
+
+    Ok(client)
+}
+```
+
+## Data Retrieval Pattern (ALWAYS USE THIS)
+```rust
+use vim_macros::vim_retrievable;
+use vim_rs::core::pc_retrieve::ObjectRetriever;
+
+vim_retrievable!(
+    struct Host: HostSystem {
+        name = "name",
+        power_state = "runtime.powerState",
+    }
+);
+
+let retriever = ObjectRetriever::new(client.clone())?;
+let hosts: Vec<Host> = retriever
+    .retrieve_objects_from_container(&client.service_content().root_folder)
+    .await?;
+```
+
+For complete guide, use: list_examples, get_example, search_examples
+"#.to_string()
+        };
+
+        Ok(CallToolResult::success(vec![Content::text(content)]))
+    }
+
     /// Semantic search using natural language queries (requires embeddings)
     #[cfg(feature = "embeddings")]
     #[tool(description = "Semantic search for vSphere API using natural language queries. Returns Rust methods, types, enums, code examples, and admin guide sections from vim_rs based on meaning, not just keywords. Use filter='guides' to search only documentation guides.")]
@@ -797,7 +876,19 @@ impl ServerHandler for McpServer {
                 icons: None,
                 website_url: None,
             },
-            instructions: Some("Search and explore the vSphere API for Rust development. Use search_methods, search_types, and search_enums for keyword-based search, or semantic_search for natural language queries (if embeddings are available). Use list_examples, get_example, and search_examples to learn how to use vim_rs with working code examples covering connection, property collectors, macros, events, and more. This server provides information about the vim_rs Rust crate only, not for Python, Go, Java, or other language bindings.".to_string()),
+            instructions: Some(
+                "🎯 START HERE: Call get_workflow_guide() FIRST to learn the correct vim_rs patterns!\n\n\
+                This MCP server provides comprehensive vSphere API documentation for Rust development using vim_rs.\n\n\
+                THREE-TIER KNOWLEDGE SYSTEM:\n\
+                1. API Reference: search_methods, search_types, search_enums → WHAT exists\n\
+                2. Code Examples: list_examples, get_example, search_examples → HOW to code it\n\
+                3. Admin Guides: search_guides, get_guide, semantic_search(filter='guides') → WHEN/WHY/GOTCHAS\n\n\
+                CRITICAL: Always use ClientBuilder and vim_retrievable! macro (see workflow guide).\n\
+                Never manually construct PropertyCollector specs or fetch objects one-by-one.\n\n\
+                For semantic/natural language queries: semantic_search (requires embeddings).\n\n\
+                ⚠️ IMPORTANT: This server covers vim_rs (Rust) only, not Python/Go/Java/PowerCLI bindings."
+                .to_string()
+            ),
             ..Default::default()
         }
     }
