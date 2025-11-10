@@ -137,12 +137,54 @@ async fn main() -> Result<()> {
         });
     }
 
-    info!("Created {} text chunks ({} methods, {} structures, {} enums, {} examples)",
+    // Process guide chunks
+    for guide in &api_data.guides {
+        // Include headings, topics, and content summary for search
+        let topics_str = if guide.topics.is_empty() {
+            String::new()
+        } else {
+            format!(" Topics: {}.", guide.topics.join(", "))
+        };
+
+        let sub_section_str = if let Some(ref sub) = guide.sub_section {
+            format!(" ({})", sub)
+        } else {
+            String::new()
+        };
+
+        // Truncate content to first 200 chars for embedding text (full content in chunk)
+        let content_preview = if guide.content.len() > 200 {
+            format!("{}...", &guide.content[..200])
+        } else {
+            guide.content.clone()
+        };
+
+        let text = format!(
+            "{} > {}{}.{} {}",
+            guide.heading_h2,
+            guide.heading_h3,
+            sub_section_str,
+            topics_str,
+            content_preview
+        );
+
+        records.push(EmbeddingRecord {
+            text,
+            item_type: "guide".to_string(),
+            object_name: guide.source_file.clone(),
+            item_name: guide.chunk_id.clone(),
+            rust_name: format!("{} > {}", guide.heading_h2, guide.heading_h3),
+            rust_module: "guides".to_string(),
+        });
+    }
+
+    info!("Created {} text chunks ({} methods, {} structures, {} enums, {} examples, {} guides)",
         records.len(),
         api_data.managed_objects.iter().map(|mo| mo.methods.len()).sum::<usize>(),
         api_data.data_structures.len(),
         api_data.enumerations.len(),
-        api_data.examples.len()
+        api_data.examples.len(),
+        api_data.guides.len()
     );
 
     // Step 2: Initialize embedding model

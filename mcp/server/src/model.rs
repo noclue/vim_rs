@@ -129,6 +129,20 @@ struct ExamplesOutput {
     examples: Vec<CodeExample>,
 }
 
+// Guide chunks - matches build_guides output
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct GuideChunk {
+    pub heading_h2: String,
+    pub heading_h3: String,
+    pub sub_section: Option<String>,
+    pub content: String,
+    pub word_count: usize,
+    pub source_file: String,
+    pub chunk_id: String,
+    pub topics: Vec<String>,
+}
+
 /// Holds all loaded API data
 #[derive(Debug, Clone)]
 pub struct ApiData {
@@ -136,6 +150,7 @@ pub struct ApiData {
     pub data_structures: Vec<StructureEntry>,
     pub enumerations: Vec<EnumerationEntry>,
     pub examples: Vec<CodeExample>,
+    pub guides: Vec<GuideChunk>,
 }
 
 impl ApiData {
@@ -182,12 +197,34 @@ impl ApiData {
             Vec::new()
         };
 
+        // Load guide chunks from guides directory
+        let guides_dir = data_dir.join("guides");
+        let mut guides = Vec::new();
+
+        if guides_dir.exists() && guides_dir.is_dir() {
+            for entry in std::fs::read_dir(&guides_dir)? {
+                let entry = entry?;
+                let path = entry.path();
+
+                // Only process .json files
+                if path.extension().and_then(|s| s.to_str()) == Some("json") {
+                    let content = std::fs::read_to_string(&path)?;
+                    let chunks: Vec<GuideChunk> = serde_json::from_str(&content)?;
+                    info!("Loaded {} chunks from {}", chunks.len(), path.display());
+                    guides.extend(chunks);
+                }
+            }
+        } else {
+            warn!("guides directory not found, using empty list");
+        }
+
         info!(
-            "Loaded {} managed objects, {} data structures, {} enumerations, {} examples",
+            "Loaded {} managed objects, {} data structures, {} enumerations, {} examples, {} guide chunks",
             managed_objects.len(),
             data_structures.len(),
             enumerations.len(),
-            examples.len()
+            examples.len(),
+            guides.len()
         );
 
         Ok(ApiData {
@@ -195,6 +232,7 @@ impl ApiData {
             data_structures,
             enumerations,
             examples,
+            guides,
         })
     }
 }

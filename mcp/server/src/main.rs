@@ -108,6 +108,22 @@ struct ListExamplesInput {
     // Empty - list_examples takes no parameters but needs object schema
 }
 
+/// Input parameters for get_guide tool
+#[derive(Serialize, Deserialize, JsonSchema)]
+struct GetGuideInput {
+    /// Chunk ID of the guide section to retrieve
+    #[schemars(description = "The chunk_id of the guide section (e.g., 'installing-esx-understanding-auto-deploy')")]
+    chunk_id: String,
+}
+
+/// Input parameters for search_guides tool
+#[derive(Serialize, Deserialize, JsonSchema)]
+struct SearchGuidesInput {
+    /// Search query for guides
+    #[schemars(description = "Search query - keywords from topic, heading, or content (e.g., 'auto deploy', 'host profiles', 'dpu')")]
+    query: String,
+}
+
 #[tool_router]
 impl McpServer {
     async fn new() -> Result<Self> {
@@ -439,13 +455,103 @@ impl McpServer {
         }
     }
 
+    /// Get a specific guide section by chunk ID
+    #[tool(description = "Get a specific vSphere/VCF guide section by chunk_id. Returns complete content from admin documentation guides. Use semantic_search with filter='guides' to find relevant sections first.")]
+    async fn get_guide(&self, params: Parameters<GetGuideInput>) -> Result<CallToolResult, McpError> {
+        let chunk_id = &params.0.chunk_id;
+
+        let guide = self.api_data.guides.iter()
+            .find(|g| g.chunk_id == *chunk_id);
+
+        if let Some(g) = guide {
+            let topics = if g.topics.is_empty() {
+                "None".to_string()
+            } else {
+                g.topics.join(", ")
+            };
+
+            let sub_section = g.sub_section.as_ref()
+                .map(|s| format!(" - {}", s))
+                .unwrap_or_default();
+
+            let output = format!(
+                "# {} > {}{}\n\n**Source:** {}\n\n**Topics:** {}\n\n**Word Count:** {}\n\n## Content\n\n{}\n",
+                g.heading_h2,
+                g.heading_h3,
+                sub_section,
+                g.source_file,
+                topics,
+                g.word_count,
+                g.content
+            );
+            Ok(CallToolResult::success(vec![Content::text(output)]))
+        } else {
+            let message = format!(
+                "Guide section '{}' not found. Use semantic_search with filter='guides' to find relevant guide sections.",
+                chunk_id
+            );
+            Ok(CallToolResult::success(vec![Content::text(message)]))
+        }
+    }
+
+    /// Search guide sections by keyword
+    #[tool(description = "Search vSphere/VCF documentation guides by keyword in headings, topics, or content. Returns matching guide sections from admin documentation.")]
+    async fn search_guides(&self, params: Parameters<SearchGuidesInput>) -> Result<CallToolResult, McpError> {
+        let query = params.0.query.to_lowercase();
+        let mut results = Vec::new();
+
+        for guide in &self.api_data.guides {
+            let h2_match = guide.heading_h2.to_lowercase().contains(&query);
+            let h3_match = guide.heading_h3.to_lowercase().contains(&query);
+            let topics_match = guide.topics.iter().any(|t| t.to_lowercase().contains(&query));
+            let content_match = guide.content.to_lowercase().contains(&query);
+
+            if h2_match || h3_match || topics_match || content_match {
+                let sub_section = guide.sub_section.as_ref()
+                    .map(|s| format!(" - {}", s))
+                    .unwrap_or_default();
+
+                let content_preview = if guide.content.len() > 150 {
+                    format!("{}...", &guide.content[..150])
+                } else {
+                    guide.content.clone()
+                };
+
+                results.push(format!(
+                    "**{} > {}{}**\n{}\nUse: `get_guide(\"{}\")`\n",
+                    guide.heading_h2,
+                    guide.heading_h3,
+                    sub_section,
+                    content_preview,
+                    guide.chunk_id
+                ));
+            }
+        }
+
+        if results.is_empty() {
+            let message = format!(
+                "No guide sections found matching '{}'. Try semantic_search with filter='guides' for better results.",
+                query
+            );
+            Ok(CallToolResult::success(vec![Content::text(message)]))
+        } else {
+            let message = format!(
+                "Found {} guide section(s) matching '{}':\n\n{}",
+                results.len(),
+                query,
+                results.join("\n")
+            );
+            Ok(CallToolResult::success(vec![Content::text(message)]))
+        }
+    }
+
     /// Semantic search using natural language queries (requires embeddings)
     #[cfg(feature = "embeddings")]
-    #[tool(description = "Semantic search for vSphere API using natural language queries. Returns Rust methods, types, and enums from the vim_rs crate based on meaning, not just keywords.")]
+    #[tool(description = "Semantic search for vSphere API using natural language queries. Returns Rust methods, types, enums, code examples, and admin guide sections from vim_rs based on meaning, not just keywords. Use filter='guides' to search only documentation guides.")]
     async fn semantic_search(&self, params: Parameters<SemanticSearchInput>) -> Result<CallToolResult, McpError> {
         // Check if embeddings are available
         if self.embedding_model.is_none() || self.embeddings_db.is_none() {
-            let message = "Semantic search is not available. Embeddings database not found. Please run build-embeddings first or use text search tools (search_methods, search_types, search_enums).".to_string();
+            let message = "Semantic search is not available. Embeddings database not found. Please run build-embeddings first or use text search tools (search_methods, search_types, search_enums, search_guides).".to_string();
             return Ok(CallToolResult::success(vec![Content::text(message)]));
         }
 
@@ -488,9 +594,10 @@ impl McpServer {
                 "types" => "structure",
                 "enums" => "enum",
                 "examples" => "example",
+                "guides" => "guide",
                 _ => {
                     return Err(McpError::invalid_params(
-                        format!("Invalid filter value: '{}'. Must be 'all', 'methods', 'types', 'enums', or 'examples'", params.0.filter),
+                        format!("Invalid filter value: '{}'. Must be 'all', 'methods', 'types', 'enums', 'examples', or 'guides'", params.0.filter),
                         None
                     ));
                 }
@@ -609,6 +716,39 @@ impl McpServer {
                                 example.category,
                                 example.description.lines().take(3).collect::<Vec<_>>().join(" "),
                                 example.name
+                            ))
+                        } else {
+                            None
+                        }
+                    }
+                    "guide" => {
+                        if let Some(guide) = self.api_data.guides.iter().find(|g| g.chunk_id == item_name) {
+                            let topics = if guide.topics.is_empty() {
+                                "None".to_string()
+                            } else {
+                                guide.topics.join(", ")
+                            };
+
+                            let sub_section = guide.sub_section.as_ref()
+                                .map(|s| format!(" - {}", s))
+                                .unwrap_or_default();
+
+                            // Truncate content to ~500 chars for preview
+                            let content_preview = if guide.content.len() > 500 {
+                                format!("{}...", &guide.content[..500])
+                            } else {
+                                guide.content.clone()
+                            };
+
+                            Some(format!(
+                                "## {} > {}{}\n\n**Source:** {}\n\n**Topics:** {}\n\n**Content:**\n{}\n\n**Usage:**\n```\nget_guide(\"{}\")\n```\n\n---\n",
+                                guide.heading_h2,
+                                guide.heading_h3,
+                                sub_section,
+                                guide.source_file,
+                                topics,
+                                content_preview,
+                                guide.chunk_id
                             ))
                         } else {
                             None
