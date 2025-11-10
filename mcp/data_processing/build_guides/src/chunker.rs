@@ -14,6 +14,11 @@ pub fn create_chunks(sections: &[Section], source_file: &str) -> Result<Vec<Guid
         let content_text = section.content.join("\n");
         let word_count = count_words(&content_text);
 
+        // Skip empty sections
+        if word_count == 0 {
+            continue;
+        }
+
         // If section fits within max, create single chunk
         if word_count <= MAX_WORDS {
             let chunk = create_chunk(
@@ -29,6 +34,12 @@ pub fn create_chunks(sections: &[Section], source_file: &str) -> Result<Vec<Guid
             // Split oversized section on paragraph boundaries
             let sub_chunks = split_on_paragraphs(&section.content);
             for (idx, sub_content) in sub_chunks.iter().enumerate() {
+                // Skip empty sub-chunks
+                let sub_word_count = count_words(sub_content);
+                if sub_word_count == 0 {
+                    continue;
+                }
+
                 let sub_section = if sub_chunks.len() > 1 {
                     Some(format!("Part {}", idx + 1))
                 } else {
@@ -59,6 +70,9 @@ fn split_on_paragraphs(lines: &[String]) -> Vec<String> {
     let mut in_list = false;
     let mut in_important_note = false;
 
+    // Hard limit: if chunk exceeds this, force split even in lists
+    const HARD_LIMIT: usize = MAX_WORDS + (MAX_WORDS / 2); // 1200 words
+
     for line in lines {
         let trimmed = line.trim();
 
@@ -83,12 +97,32 @@ fn split_on_paragraphs(lines: &[String]) -> Vec<String> {
         // Count words in this line
         let line_words = count_words(line);
 
-        // If we're at a paragraph boundary and adding this would exceed MAX_WORDS, split here
-        if is_paragraph_boundary && current_words > 0 && current_words + line_words > MAX_WORDS {
+        // Split if:
+        // 1. At paragraph boundary and would exceed MAX_WORDS
+        // 2. Current chunk exceeds HARD_LIMIT (force split even in lists)
+        let should_split = if is_paragraph_boundary && current_words > 0 && current_words + line_words > MAX_WORDS {
+            true
+        } else if current_words > HARD_LIMIT {
+            // Hard limit exceeded - force split at next safe point
+            // Safe points: any line break (even in lists)
+            true
+        } else {
+            false
+        };
+
+        if should_split {
             // Save current chunk
             chunks.push(current_chunk.join("\n"));
             current_chunk.clear();
             current_words = 0;
+            in_list = false;
+            in_important_note = false;
+
+            // If this line is not blank, start new chunk with it
+            if !trimmed.is_empty() {
+                current_chunk.push(line.clone());
+                current_words += line_words;
+            }
             continue;
         }
 
