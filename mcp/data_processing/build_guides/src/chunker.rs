@@ -1,0 +1,225 @@
+use crate::markdown_parser::Section;
+use crate::topic_extractor;
+use crate::GuideChunk;
+use anyhow::Result;
+
+const MIN_WORDS: usize = 200;
+const MAX_WORDS: usize = 800;
+
+/// Create chunks from parsed sections
+pub fn create_chunks(sections: &[Section], source_file: &str) -> Result<Vec<GuideChunk>> {
+    let mut chunks = Vec::new();
+
+    for section in sections {
+        let content_text = section.content.join("\n");
+        let word_count = count_words(&content_text);
+
+        // If section fits within max, create single chunk
+        if word_count <= MAX_WORDS {
+            let chunk = create_chunk(
+                &section.h2,
+                &section.h3,
+                None,
+                &content_text,
+                source_file,
+                &chunks,
+            );
+            chunks.push(chunk);
+        } else {
+            // Split oversized section on paragraph boundaries
+            let sub_chunks = split_on_paragraphs(&section.content);
+            for (idx, sub_content) in sub_chunks.iter().enumerate() {
+                let sub_section = if sub_chunks.len() > 1 {
+                    Some(format!("Part {}", idx + 1))
+                } else {
+                    None
+                };
+
+                let chunk = create_chunk(
+                    &section.h2,
+                    &section.h3,
+                    sub_section,
+                    sub_content,
+                    source_file,
+                    &chunks,
+                );
+                chunks.push(chunk);
+            }
+        }
+    }
+
+    Ok(chunks)
+}
+
+/// Split content on paragraph boundaries while respecting MAX_WORDS
+fn split_on_paragraphs(lines: &[String]) -> Vec<String> {
+    let mut chunks = Vec::new();
+    let mut current_chunk = Vec::new();
+    let mut current_words = 0;
+    let mut in_list = false;
+    let mut in_important_note = false;
+
+    for line in lines {
+        let trimmed = line.trim();
+
+        // Detect list start
+        if trimmed.starts_with("* ") || trimmed.starts_with("- ") {
+            in_list = true;
+        }
+
+        // Detect Important/Note boxes
+        if trimmed == "Important:" || trimmed == "Note:" {
+            in_important_note = true;
+        }
+
+        // Detect end of Important/Note (blank line after content)
+        if in_important_note && trimmed.is_empty() && !current_chunk.is_empty() {
+            in_important_note = false;
+        }
+
+        // Detect paragraph boundary (blank line when not in list/important/note)
+        let is_paragraph_boundary = trimmed.is_empty() && !in_list && !in_important_note;
+
+        // Count words in this line
+        let line_words = count_words(line);
+
+        // If we're at a paragraph boundary and adding this would exceed MAX_WORDS, split here
+        if is_paragraph_boundary && current_words > 0 && current_words + line_words > MAX_WORDS {
+            // Save current chunk
+            chunks.push(current_chunk.join("\n"));
+            current_chunk.clear();
+            current_words = 0;
+            continue;
+        }
+
+        // Add line to current chunk
+        current_chunk.push(line.clone());
+        current_words += line_words;
+
+        // If blank line and we were in a list, list has ended
+        if trimmed.is_empty() && in_list {
+            in_list = false;
+        }
+    }
+
+    // Don't forget the last chunk
+    if !current_chunk.is_empty() {
+        chunks.push(current_chunk.join("\n"));
+    }
+
+    chunks
+}
+
+/// Create a single chunk with metadata
+fn create_chunk(
+    h2: &str,
+    h3: &str,
+    sub_section: Option<String>,
+    content: &str,
+    source_file: &str,
+    existing_chunks: &[GuideChunk],
+) -> GuideChunk {
+    let word_count = count_words(content);
+    let topics = topic_extractor::extract_topics(h2, h3, content);
+    let chunk_id = generate_chunk_id(h2, h3, existing_chunks);
+
+    GuideChunk {
+        heading_h2: h2.to_string(),
+        heading_h3: h3.to_string(),
+        sub_section,
+        content: content.to_string(),
+        word_count,
+        source_file: source_file.to_string(),
+        chunk_id,
+        topics,
+    }
+}
+
+/// Count words in text
+fn count_words(text: &str) -> usize {
+    text.split_whitespace().count()
+}
+
+/// Generate unique chunk ID from headings
+fn generate_chunk_id(h2: &str, h3: &str, existing_chunks: &[GuideChunk]) -> String {
+    // Convert to kebab-case
+    let h2_slug = slugify(h2);
+    let h3_slug = slugify(h3);
+
+    // Base ID
+    let base_id = format!("{}-{}", h2_slug, h3_slug);
+
+    // Count how many chunks already exist with this base
+    let count = existing_chunks
+        .iter()
+        .filter(|c| c.chunk_id.starts_with(&base_id))
+        .count();
+
+    if count == 0 {
+        base_id
+    } else {
+        format!("{}-{:03}", base_id, count + 1)
+    }
+}
+
+/// Convert text to slug (kebab-case)
+fn slugify(text: &str) -> String {
+    text.to_lowercase()
+        .chars()
+        .map(|c| {
+            if c.is_alphanumeric() {
+                c
+            } else if c.is_whitespace() || c == '-' {
+                '-'
+            } else {
+                '\0'
+            }
+        })
+        .filter(|&c| c != '\0')
+        .collect::<String>()
+        .split('-')
+        .filter(|s| !s.is_empty())
+        .collect::<Vec<&str>>()
+        .join("-")
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_count_words() {
+        assert_eq!(count_words("Hello world"), 2);
+        assert_eq!(count_words("  Multiple   spaces  "), 2);
+        assert_eq!(count_words(""), 0);
+    }
+
+    #[test]
+    fn test_slugify() {
+        assert_eq!(slugify("Hello World"), "hello-world");
+        assert_eq!(slugify("Understanding vSphere Auto Deploy"), "understanding-vsphere-auto-deploy");
+        assert_eq!(slugify("Multiple---Dashes"), "multiple-dashes");
+        assert_eq!(slugify("Special!@#Characters"), "specialcharacters");
+    }
+
+    #[test]
+    fn test_generate_chunk_id() {
+        let chunks = vec![];
+        let id1 = generate_chunk_id("Installing ESX", "Understanding Auto Deploy", &chunks);
+        assert_eq!(id1, "installing-esx-understanding-auto-deploy");
+
+        let chunk1 = GuideChunk {
+            heading_h2: "Installing ESX".to_string(),
+            heading_h3: "Understanding Auto Deploy".to_string(),
+            sub_section: None,
+            content: "test".to_string(),
+            word_count: 1,
+            source_file: "test".to_string(),
+            chunk_id: id1.clone(),
+            topics: vec![],
+        };
+
+        let id2 = generate_chunk_id("Installing ESX", "Understanding Auto Deploy", &[chunk1]);
+        assert_eq!(id2, "installing-esx-understanding-auto-deploy-002");
+    }
+}
