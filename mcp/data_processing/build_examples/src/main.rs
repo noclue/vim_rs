@@ -1,7 +1,7 @@
 use anyhow::{Context, Result};
 use serde::{Deserialize, Serialize};
 use std::fs;
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
 use tracing::info;
 use walkdir::WalkDir;
 
@@ -30,6 +30,8 @@ fn main() -> Result<()> {
 
     // Navigate to the examples directory
     let examples_dir = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+        .parent()
+        .unwrap()
         .parent()
         .unwrap()
         .parent()
@@ -143,11 +145,14 @@ env_logger = "0.11"
             .then(a.name.cmp(&b.name))
     });
 
-    // Write to JSON
+    // Write to JSON - output to mcp/data/api_definitions/examples.json
     let output_dir = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
         .parent()
         .unwrap()
-        .join("data");
+        .parent()
+        .unwrap()
+        .join("data")
+        .join("api_definitions");
 
     fs::create_dir_all(&output_dir)?;
 

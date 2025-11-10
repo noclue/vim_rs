@@ -32,13 +32,16 @@ async fn main() -> Result<()> {
 
     info!("Starting embedding generation for vim_rs MCP server");
 
-    // Paths
-    let data_dir = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+    // Paths - navigate to mcp/data/
+    let mcp_data_dir = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+        .parent()
+        .unwrap()
         .parent()
         .unwrap()
         .join("data");
-    let embeddings_db_path = data_dir.join("embeddings.lancedb");
-    let model_cache_dir = data_dir.join("model_cache");
+    let api_definitions_dir = mcp_data_dir.join("api_definitions");
+    let embeddings_db_path = mcp_data_dir.join("embeddings.lancedb");
+    let model_cache_dir = mcp_data_dir.join("model_cache");
 
     // Create cache directory if it doesn't exist
     if !model_cache_dir.exists() {
@@ -46,10 +49,10 @@ async fn main() -> Result<()> {
             .context("Failed to create model cache directory")?;
     }
 
-    info!("Loading API data from {}", data_dir.display());
+    info!("Loading API data from {}", api_definitions_dir.display());
     info!("Using model cache directory: {}", model_cache_dir.display());
 
-    let api_data = ApiData::load_from_dir(&data_dir)
+    let api_data = ApiData::load_from_dir(&api_definitions_dir)
         .context("Failed to load API data from JSON files")?;
 
     // Step 1: Create text chunks for embedding

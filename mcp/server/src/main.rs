@@ -111,14 +111,18 @@ struct ListExamplesInput {
 #[tool_router]
 impl McpServer {
     async fn new() -> Result<Self> {
-        // Try to load API data from the data directory
-        let data_dir = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("data");
-        let api_data = ApiData::load_from_dir(&data_dir)?;
+        // Try to load API data from the data directory - navigate to mcp/data/
+        let mcp_data_dir = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+            .parent()
+            .unwrap()
+            .join("data");
+        let api_definitions_dir = mcp_data_dir.join("api_definitions");
+        let api_data = ApiData::load_from_dir(&api_definitions_dir)?;
 
         #[cfg(feature = "embeddings")]
         let (embedding_model, embeddings_db) = {
-            let embeddings_db_path = data_dir.join("embeddings.lancedb");
-            let model_cache_dir = data_dir.join("model_cache");
+            let embeddings_db_path = mcp_data_dir.join("embeddings.lancedb");
+            let model_cache_dir = mcp_data_dir.join("model_cache");
 
             // Create cache directory if it doesn't exist
             if !model_cache_dir.exists() {

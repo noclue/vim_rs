@@ -13,11 +13,18 @@ struct Config {
 
 impl Config {
     fn new() -> Self {
-        let base_dir = Path::new(env!("CARGO_MANIFEST_DIR"));
+        // Navigate to mcp/data/guides from mcp/data_processing/pdf_parser
+        let mcp_data_guides = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+            .parent()  // -> mcp/data_processing
+            .unwrap()
+            .parent()  // -> mcp
+            .unwrap()
+            .join("data")
+            .join("guides");
 
         Config {
-            input_dir: base_dir.join("data"),
-            output_dir: base_dir.parent().unwrap().join("mcp").join("guides"),
+            input_dir: mcp_data_guides.join("pdf"),
+            output_dir: mcp_data_guides.join("txt"),
         }
     }
 
@@ -125,7 +132,7 @@ fn process_pdf(config: &Config, pdf_filename: &str) -> Result<Duration, Box<dyn 
     // Check if file exists
     if !input_path.exists() {
         println!("⚠️  File not found: {}", input_path.display());
-        println!("   Please place {} in the pdf_parser/data/ directory", pdf_filename);
+        println!("   Please place {} in the mcp/data/guides/pdf/ directory", pdf_filename);
         return Ok(Duration::ZERO); // Skip this file but don't fail the whole process
     }
 
@@ -166,7 +173,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     
     if pdf_files.is_empty() {
         println!("⚠️  No PDF files found in {}", config.input_dir.display());
-        println!("   Please place PDF files in the pdf_parser/data/ directory");
+        println!("   Please place PDF files in the mcp/data/guides/pdf/ directory");
         return Ok(());
     }
 

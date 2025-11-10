@@ -23,7 +23,7 @@ static PRUNED_TYPES: [&str; 2] = ["MethodFault", "Event"];
 fn main() {
     let root_folder = Path::new("../");
     let vi_json_spec_path = Path::new("data/vi_json_openapi_specification_v9_0_0_0_24798170.json");
-    let mcp_output_dir = root_folder.join("mcp/data");  // Project root: vim_rs/mcp/data
+    let mcp_output_dir = root_folder.join("mcp/data/api_definitions");  // Output to api_definitions
 
     //generate_to_console(vi_json_spec_path).unwrap();
     let start = Instant::now();
