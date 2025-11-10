@@ -554,14 +554,10 @@ impl McpServer {
     /// Get comprehensive vim_rs workflow guide
     #[tool(description = "CALL THIS FIRST! Returns the complete vim_rs workflow guide with connection patterns, property collector usage, code snippets, and best practices. Essential for writing correct vim_rs code on the first try.")]
     async fn get_workflow_guide(&self, _params: Parameters<GetWorkflowGuideInput>) -> Result<CallToolResult, McpError> {
-        // Try to load the workflow guide from the guides directory
-        let guides_dir = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
-            .parent()
-            .unwrap()
-            .join("data")
-            .join("guides");
-
-        let guide_path = guides_dir.join("VIM_RS_WORKFLOW_GUIDE.md");
+        // Load the workflow guide from the server guides directory
+        let guide_path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("guides")
+            .join("VIM_RS_WORKFLOW_GUIDE.md");
 
         let content = if guide_path.exists() {
             match std::fs::read_to_string(&guide_path) {
