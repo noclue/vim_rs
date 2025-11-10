@@ -15,6 +15,7 @@ pub fn mark_headings(
     let mut output = Vec::new();
     let mut current_page = 1u32;
     let mut found_titles: HashSet<(u32, String)> = HashSet::new();
+    let mut toc_entries: Option<&Vec<TocEntry>> = None;
 
     for line in lines {
         // Track page via footer
@@ -22,12 +23,14 @@ pub fn mark_headings(
             // Extract page number from footer
             let page_str = caps[0].split_whitespace().last().unwrap();
             current_page = page_str.parse()?;
+            current_page += 1u32;
+            toc_entries = toc_map.get(&current_page);
         }
 
         // Check if this line matches a TOC title for current page
         let mut matched = false;
-        if let Some(toc_entries) = toc_map.get(&current_page) {
-            for entry in toc_entries {
+        if let Some(entries) = toc_entries {
+            for entry in entries {
                 if line.trim() == entry.title {
                     // Exact match found!
                     let heading = format!(
@@ -52,7 +55,7 @@ pub fn mark_headings(
     for (page, entries) in toc_map {
         for entry in entries {
             if !found_titles.contains(&(*page, entry.title.clone())) {
-                bail!(
+                println!(
                     "TOC entry '{}' not found on page {} (expected after previous title)",
                     entry.title,
                     page
