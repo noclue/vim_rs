@@ -19,6 +19,7 @@ use tracing::{error, info, warn};
 
 // Import data model from the library
 use vim_mcp_server::model::ApiData;
+use vim_mcp_server::property_collector;
 
 // Conditional imports for embeddings feature
 #[cfg(feature = "embeddings")]
@@ -128,6 +129,25 @@ struct SearchGuidesInput {
 #[derive(Serialize, Deserialize, JsonSchema)]
 struct GetWorkflowGuideInput {
     // Empty - get_workflow_guide takes no parameters but needs object schema
+}
+
+/// Input parameters for list_managed_object_types tool (empty struct for consistency)
+#[derive(Serialize, Deserialize, JsonSchema)]
+struct ListManagedObjectTypesInput {
+    // Empty - list_managed_object_types takes no parameters but needs object schema
+}
+
+/// Input parameters for get_property_info tool
+#[derive(Serialize, Deserialize, JsonSchema)]
+struct GetPropertyInfoInput {
+    /// Managed object type (e.g., "VirtualMachine", "HostSystem", "Folder")
+    #[schemars(description = "The managed object type name (e.g., 'VirtualMachine', 'HostSystem', 'Datacenter')")]
+    managed_object: String,
+
+    /// Property path in snake_case (e.g., "guest.ip_address" or empty for top-level fields)
+    #[schemars(description = "Property path in snake_case format (e.g., 'guest.ip_address', 'config.hardware.device') or empty string to list top-level fields")]
+    #[serde(default)]
+    property_path: String,
 }
 
 #[tool_router]
@@ -620,6 +640,108 @@ For complete guide, use: list_examples, get_example, search_examples
         Ok(CallToolResult::success(vec![Content::text(content)]))
     }
 
+    /// List all supported managed object types
+    #[tool(description = "Returns a list of all vSphere managed object types supported by the property collector system. These types can be used with get_property_info to explore their properties. Returns the top-level types like VirtualMachine, HostSystem, Datacenter, etc.")]
+    async fn list_managed_object_types(&self, _params: Parameters<ListManagedObjectTypesInput>) -> Result<CallToolResult, McpError> {
+        let types = property_collector::get_managed_object_types();
+
+        let mut output = String::from("# Supported Managed Object Types\n\n");
+        output.push_str(&format!("Total: {} types\n\n", types.len()));
+        output.push_str("Use these types with `get_property_info` to explore their properties.\n\n");
+
+        for (idx, mo_type) in types.iter().enumerate() {
+            output.push_str(&format!("{}. **{}**\n", idx + 1, mo_type.name));
+        }
+
+        output.push_str("\n## Example Usage\n\n");
+        output.push_str("```\n");
+        output.push_str("get_property_info(managed_object=\"VirtualMachine\", property_path=\"\")\n");
+        output.push_str("get_property_info(managed_object=\"VirtualMachine\", property_path=\"guest.ip_address\")\n");
+        output.push_str("```\n");
+
+        Ok(CallToolResult::success(vec![Content::text(output)]))
+    }
+
+    /// Get property information for a managed object and property path
+    #[tool(description = "Get detailed information about a property path for a managed object. Provide the managed object type (e.g., 'VirtualMachine') and an optional property path in snake_case (e.g., 'guest.ip_address'). If property_path is empty, returns all top-level properties. Returns the VIM path, Rust type, optionality, documentation, and child fields if it's a complex type.")]
+    async fn get_property_info(&self, params: Parameters<GetPropertyInfoInput>) -> Result<CallToolResult, McpError> {
+        let managed_object = &params.0.managed_object;
+        let property_path = &params.0.property_path;
+
+        match property_collector::get_property_info(managed_object, property_path) {
+            Ok(info) => {
+                let mut output = String::new();
+
+                if property_path.is_empty() {
+                    output.push_str(&format!("# Top-Level Properties for {}\n\n", managed_object));
+                } else {
+                    output.push_str(&format!("# Property: {}.{}\n\n", managed_object, property_path));
+                }
+
+                output.push_str(&format!("**VIM Path:** `{}`\n", info.vim_path));
+                output.push_str(&format!("**Rust Type:** `{}`\n", info.rust_type));
+                output.push_str(&format!("**Optional:** {}\n\n", info.is_optional));
+
+                if let Some(doc) = &info.documentation {
+                    output.push_str("## Documentation\n\n");
+                    output.push_str(doc);
+                    output.push_str("\n\n");
+                }
+
+                if let Some(children) = &info.child_fields {
+                    output.push_str("## Child Properties\n\n");
+                    output.push_str(&format!("Found {} child properties:\n\n", children.len()));
+
+                    for child in children {
+                        output.push_str(&format!("### `{}`\n", child.field_name));
+                        output.push_str(&format!("- **VIM Name:** `{}`\n", child.vim_name));
+                        output.push_str(&format!("- **Rust Type:** `{}`\n", child.rust_type));
+                        output.push_str(&format!("- **Optional:** {}\n", child.is_optional));
+
+                        if let Some(doc) = &child.documentation {
+                            // Truncate doc to first 200 chars for child fields
+                            let doc_preview = if doc.len() > 200 {
+                                format!("{}...", &doc[..200])
+                            } else {
+                                doc.clone()
+                            };
+                            output.push_str(&format!("- **Description:** {}\n", doc_preview));
+                        }
+                        output.push_str("\n");
+                    }
+
+                    output.push_str("\n## Example Usage in vim_retrievable!\n\n");
+                    output.push_str("```rust\n");
+                    output.push_str("vim_retrievable!(\n");
+                    output.push_str(&format!("    struct My{}: {} {{\n", managed_object, managed_object));
+                    for child in children.iter().take(5) {
+                        let full_path = if property_path.is_empty() {
+                            child.field_name.clone()
+                        } else {
+                            format!("{}.{}", property_path, child.field_name)
+                        };
+                        output.push_str(&format!("        {} = \"{}\",\n", child.field_name, full_path));
+                    }
+                    output.push_str("    }\n");
+                    output.push_str(");\n");
+                    output.push_str("```\n");
+                }
+
+                Ok(CallToolResult::success(vec![Content::text(output)]))
+            }
+            Err(e) => {
+                let error_msg = format!(
+                    "Error getting property info for {}.{}:\n\n{}\n\n\
+                    Use `list_managed_object_types` to see all supported types.",
+                    managed_object,
+                    property_path,
+                    e
+                );
+                Ok(CallToolResult::success(vec![Content::text(error_msg)]))
+            }
+        }
+    }
+
     /// Semantic search using natural language queries (requires embeddings)
     #[cfg(feature = "embeddings")]
     #[tool(description = "Semantic search for vSphere API using natural language queries. Returns Rust methods, types, enums, code examples, and admin guide sections from vim_rs based on meaning, not just keywords. Use filter='guides' to search only documentation guides.")]
@@ -879,6 +1001,10 @@ impl ServerHandler for McpServer {
                 1. API Reference: search_methods, search_types, search_enums → WHAT exists\n\
                 2. Code Examples: list_examples, get_example, search_examples → HOW to code it\n\
                 3. Admin Guides: search_guides, get_guide, semantic_search(filter='guides') → WHEN/WHY/GOTCHAS\n\n\
+                🆕 PROPERTY COLLECTOR HELPERS:\n\
+                - list_managed_object_types → List all supported managed object types (VirtualMachine, HostSystem, etc.)\n\
+                - get_property_info → Explore property paths and their types (e.g., VirtualMachine.guest.ip_address)\n\
+                Use these to discover valid property paths for vim_retrievable! macro.\n\n\
                 CRITICAL: Always use ClientBuilder and vim_retrievable! macro (see workflow guide).\n\
                 Never manually construct PropertyCollector specs or fetch objects one-by-one.\n\n\
                 For semantic/natural language queries: semantic_search (requires embeddings).\n\n\
