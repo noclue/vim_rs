@@ -25,7 +25,7 @@ pub fn emit_data_structures_json(
     model: &Model,
     output_dir: &Path,
 ) -> super::Result<()> {
-    let tdf = TypeDefResolver::new_with_root_package(model, "crate::types".to_string());
+    let tdf = TypeDefResolver::new_with_root_package(model, "vim_rs::types".to_string());
     let mut structures = Vec::new();
 
     for (name, struct_ref) in &model.structs {
@@ -88,6 +88,12 @@ pub fn emit_data_structures_json(
         // Build inheritance chain
         let inheritance_chain = build_inheritance_chain(model, name);
 
+        // Collect implemented traits (traits from all ancestors that have children)
+        let implements_traits = collect_implemented_traits(model, name);
+
+        // Collect all descendants recursively
+        let all_descendants = collect_all_descendants(model, name);
+
         structures.push(StructureEntry {
             name: name.clone(),
             rust_name: s.rust_name(),
@@ -100,6 +106,8 @@ pub fn emit_data_structures_json(
             fields,
             related_types,
             inheritance_chain,
+            implements_traits,
+            all_descendants,
         });
     }
 
@@ -158,4 +166,54 @@ fn build_inheritance_chain(model: &Model, name: &str) -> Vec<String> {
     }
 
     chain
+}
+
+fn collect_implemented_traits(model: &Model, name: &str) -> Vec<String> {
+    let mut traits = Vec::new();
+    let mut current = name.to_string();
+
+    // Walk up the inheritance chain and collect traits from ancestors that have children
+    while let Some(struct_ref) = model.structs.get(&current) {
+        let s = struct_ref.borrow();
+
+        // If this type has children and is emitted, it has a trait
+        if s.has_children() && matches!(s.emit_mode, EmitMode::Emit) && current != "Any" {
+            traits.push(format!("{}Trait", s.rust_name()));
+        }
+
+        // Move to parent
+        if let Some(parent) = &s.parent {
+            if parent == "Any" {
+                break;
+            }
+            current = parent.clone();
+        } else {
+            break;
+        }
+    }
+
+    traits.reverse(); // Put most general trait first
+    traits
+}
+
+fn collect_all_descendants(model: &Model, name: &str) -> Vec<String> {
+    let mut descendants = Vec::new();
+
+    if let Ok(children) = model.children(&name.to_string()) {
+        for child in children {
+            let child_borrow = child.borrow();
+            // Only include non-skipped types
+            if !child_borrow.emit_mode.is_skip() {
+                let child_name = child_borrow.name.clone();
+                // Don't include the parent itself
+                if child_name != name {
+                    descendants.push(child_name);
+                }
+            }
+        }
+    }
+
+    descendants.sort();
+    descendants.dedup();
+    descendants
 }

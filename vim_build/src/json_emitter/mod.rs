@@ -4,6 +4,7 @@ mod managed_objects;
 mod data_structures;
 mod enumerations;
 mod metadata;
+mod traits;
 
 use crate::vim_model::Model;
 use std::path::Path;
@@ -34,6 +35,7 @@ pub fn emit_mcp_data(
     managed_objects::emit_managed_objects_json(model, output_dir)?;
     data_structures::emit_data_structures_json(model, output_dir)?;
     enumerations::emit_enumerations_json(model, output_dir)?;
+    traits::emit_traits_json(model, output_dir)?;
     metadata::emit_metadata_json(model, output_dir, start.elapsed(), pruned_types)?;
 
     Ok(())

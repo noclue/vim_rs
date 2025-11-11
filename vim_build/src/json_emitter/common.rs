@@ -69,6 +69,8 @@ pub struct StructureEntry {
     pub fields: Vec<FieldEntry>,
     pub related_types: Vec<String>,
     pub inheritance_chain: Vec<String>,
+    pub implements_traits: Vec<String>,
+    pub all_descendants: Vec<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]

@@ -72,6 +72,8 @@ pub struct StructureEntry {
     pub fields: Vec<FieldEntry>,
     pub related_types: Vec<String>,
     pub inheritance_chain: Vec<String>,
+    pub implements_traits: Vec<String>,
+    pub all_descendants: Vec<String>,
 }
 
 // Enumerations - matches vim_build/src/json_emitter/common.rs
@@ -93,6 +95,28 @@ pub struct EnumerationEntry {
     pub variants: Vec<VariantEntry>,
 }
 
+// Traits - matches vim_build/src/json_emitter/traits.rs
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct GetterEntry {
+    pub name: String,
+    pub return_type: String,
+    pub description: Option<String>,
+    pub field_name: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct TraitEntry {
+    pub name: String,
+    pub rust_name: String,
+    pub rust_module: String,
+    pub description: Option<String>,
+    pub parent_trait: Option<String>,
+    pub getters: Vec<GetterEntry>,
+    pub implementing_types: Vec<String>,
+    pub all_descendants: Vec<String>,
+}
+
 // Wrapper structures with metadata (what's actually in the JSON files)
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -109,6 +133,11 @@ struct DataStructuresOutput {
 #[derive(Debug, Serialize, Deserialize)]
 struct EnumerationsOutput {
     enumerations: Vec<EnumerationEntry>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+struct TraitsOutput {
+    traits: Vec<TraitEntry>,
 }
 
 // Code Examples - for teaching usage patterns
@@ -149,6 +178,7 @@ pub struct ApiData {
     pub managed_objects: Vec<ManagedObjectEntry>,
     pub data_structures: Vec<StructureEntry>,
     pub enumerations: Vec<EnumerationEntry>,
+    pub traits: Vec<TraitEntry>,
     pub examples: Vec<CodeExample>,
     pub guides: Vec<GuideChunk>,
 }
@@ -187,6 +217,16 @@ impl ApiData {
             Vec::new()
         };
 
+        let traits_path = data_dir.join("traits.json");
+        let traits = if traits_path.exists() {
+            let content = std::fs::read_to_string(&traits_path)?;
+            let output: TraitsOutput = serde_json::from_str(&content)?;
+            output.traits
+        } else {
+            warn!("traits.json not found, using empty list");
+            Vec::new()
+        };
+
         let examples_path = data_dir.join("examples.json");
         let examples = if examples_path.exists() {
             let content = std::fs::read_to_string(&examples_path)?;
@@ -219,10 +259,11 @@ impl ApiData {
         }
 
         info!(
-            "Loaded {} managed objects, {} data structures, {} enumerations, {} examples, {} guide chunks",
+            "Loaded {} managed objects, {} data structures, {} enumerations, {} traits, {} examples, {} guide chunks",
             managed_objects.len(),
             data_structures.len(),
             enumerations.len(),
+            traits.len(),
             examples.len(),
             guides.len()
         );
@@ -231,6 +272,7 @@ impl ApiData {
             managed_objects,
             data_structures,
             enumerations,
+            traits,
             examples,
             guides,
         })

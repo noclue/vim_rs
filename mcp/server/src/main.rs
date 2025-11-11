@@ -150,6 +150,14 @@ struct GetPropertyInfoInput {
     property_path: String,
 }
 
+/// Input parameters for get_type_info tool
+#[derive(Serialize, Deserialize, JsonSchema)]
+struct GetTypeInfoInput {
+    /// Type name (e.g., "VirtualDevice", "VirtualEthernetCard", "VirtualDeviceTrait")
+    #[schemars(description = "The type name to query. Can be a struct (e.g., 'VirtualDevice'), trait (e.g., 'VirtualDeviceTrait'), or enum (e.g., 'ManagedEntityStatus')")]
+    type_name: String,
+}
+
 #[tool_router]
 impl McpServer {
     async fn new() -> Result<Self> {
@@ -740,6 +748,220 @@ For complete guide, use: list_examples, get_example, search_examples
                 Ok(CallToolResult::success(vec![Content::text(error_msg)]))
             }
         }
+    }
+
+    /// Get comprehensive type information for structs, traits, or enums
+    #[tool(description = "Get comprehensive information about any vim_rs type. Returns parent chain, children, grandchildren, fields with types, implemented traits, getter methods, and more. Works for structs (VirtualDevice), traits (VirtualDeviceTrait), and enums (ManagedEntityStatus). Essential for understanding type hierarchies and polymorphism.")]
+    async fn get_type_info(&self, params: Parameters<GetTypeInfoInput>) -> Result<CallToolResult, McpError> {
+        let type_name = &params.0.type_name;
+        let mut output = String::new();
+
+        // Check if it's a trait (ends with "Trait")
+        if type_name.ends_with("Trait") {
+            // Look up trait
+            if let Some(trait_info) = self.api_data.traits.iter().find(|t| t.rust_name == *type_name) {
+                output.push_str(&format!("# Trait: {}\n\n", trait_info.rust_name));
+                output.push_str(&format!("**Module:** `{}`\n", trait_info.rust_module));
+                output.push_str(&format!("**Original Type:** `{}`\n\n", trait_info.name));
+
+                if let Some(desc) = &trait_info.description {
+                    output.push_str("## Description\n\n");
+                    output.push_str(desc);
+                    output.push_str("\n\n");
+                }
+
+                if let Some(parent) = &trait_info.parent_trait {
+                    output.push_str(&format!("**Parent Trait:** `{}`\n\n", parent));
+                }
+
+                // Getter methods
+                if !trait_info.getters.is_empty() {
+                    output.push_str("## Getter Methods\n\n");
+                    for getter in &trait_info.getters {
+                        output.push_str(&format!("### `{}() -> {}`\n", getter.name, getter.return_type));
+                        output.push_str(&format!("- **Field:** `{}`\n", getter.field_name));
+                        if let Some(desc) = &getter.description {
+                            let doc_preview = if desc.len() > 200 {
+                                format!("{}...", &desc[..200])
+                            } else {
+                                desc.clone()
+                            };
+                            output.push_str(&format!("- **Description:** {}\n", doc_preview));
+                        }
+                        output.push_str("\n");
+                    }
+                }
+
+                // Implementing types
+                if !trait_info.implementing_types.is_empty() {
+                    output.push_str(&format!("## Implementing Types ({} types)\n\n", trait_info.implementing_types.len()));
+                    for impl_type in trait_info.implementing_types.iter().take(20) {
+                        output.push_str(&format!("- `{}`\n", impl_type));
+                    }
+                    if trait_info.implementing_types.len() > 20 {
+                        output.push_str(&format!("\n... and {} more\n", trait_info.implementing_types.len() - 20));
+                    }
+                    output.push_str("\n");
+                }
+
+                // Usage example
+                output.push_str("## Usage Example\n\n");
+                output.push_str("```rust\n");
+                output.push_str("use vim_rs::types::convert::CastInto;\n");
+                output.push_str(&format!("use vim_rs::types::traits::{};\n\n", trait_info.rust_name));
+                output.push_str("// Cast from parent trait to this trait\n");
+                if let Some(parent) = &trait_info.parent_trait {
+                    output.push_str(&format!("let device: &dyn {} = /* ... */;\n", parent));
+                    output.push_str(&format!("if let Some(specialized): Option<&dyn {}> = device.as_ref().into_ref() {{\n", trait_info.rust_name));
+                } else {
+                    output.push_str(&format!("let device: Box<dyn {}> = /* ... */;\n", trait_info.rust_name));
+                    output.push_str("if let Some(specialized) = device.as_ref() {\n");
+                }
+                if !trait_info.getters.is_empty() {
+                    let getter = &trait_info.getters[0];
+                    output.push_str(&format!("    let value = specialized.{}();\n", getter.name));
+                }
+                output.push_str("}\n");
+                output.push_str("```\n");
+
+                return Ok(CallToolResult::success(vec![Content::text(output)]));
+            }
+        }
+
+        // Check if it's a struct
+        if let Some(struct_info) = self.api_data.data_structures.iter().find(|s|
+            s.name == *type_name || s.rust_name == *type_name
+        ) {
+            output.push_str(&format!("# Struct: {}\n\n", struct_info.rust_name));
+            output.push_str(&format!("**Module:** `{}`\n", struct_info.rust_module));
+            output.push_str(&format!("**Emit Mode:** {}\n\n", struct_info.emit_mode));
+
+            if let Some(desc) = &struct_info.description {
+                output.push_str("## Description\n\n");
+                output.push_str(desc);
+                output.push_str("\n\n");
+            }
+
+            // Inheritance chain
+            if !struct_info.inheritance_chain.is_empty() {
+                output.push_str("## Inheritance Chain\n\n");
+                output.push_str(&struct_info.inheritance_chain.join(" → "));
+                output.push_str("\n\n");
+            }
+
+            // Implemented traits
+            if !struct_info.implements_traits.is_empty() {
+                output.push_str("## Implemented Traits\n\n");
+                for trait_name in &struct_info.implements_traits {
+                    output.push_str(&format!("- `{}`\n", trait_name));
+                }
+                output.push_str("\n");
+            }
+
+            // Direct children
+            if !struct_info.children.is_empty() {
+                output.push_str(&format!("## Direct Children ({} types)\n\n", struct_info.children.len()));
+                for child in struct_info.children.iter().take(10) {
+                    output.push_str(&format!("- `{}`\n", child));
+                }
+                if struct_info.children.len() > 10 {
+                    output.push_str(&format!("\n... and {} more\n", struct_info.children.len() - 10));
+                }
+                output.push_str("\n");
+            }
+
+            // All descendants (recursive)
+            if !struct_info.all_descendants.is_empty() {
+                output.push_str(&format!("## All Descendants ({} types total)\n\n", struct_info.all_descendants.len()));
+                for desc in struct_info.all_descendants.iter().take(15) {
+                    output.push_str(&format!("- `{}`\n", desc));
+                }
+                if struct_info.all_descendants.len() > 15 {
+                    output.push_str(&format!("\n... and {} more\n", struct_info.all_descendants.len() - 15));
+                }
+                output.push_str("\n");
+            }
+
+            // Fields
+            if !struct_info.fields.is_empty() {
+                output.push_str(&format!("## Fields ({} fields)\n\n", struct_info.fields.len()));
+                for field in &struct_info.fields {
+                    output.push_str(&format!("### `{}: {}`\n", field.rust_name, field.rust_type));
+                    output.push_str(&format!("- **VIM Type:** `{}`\n", field.vim_type));
+                    output.push_str(&format!("- **Required:** {}\n", field.required));
+                    if field.is_array {
+                        output.push_str("- **Array:** Yes\n");
+                    }
+                    if field.is_trait {
+                        if let Some(trait_name) = &field.trait_name {
+                            output.push_str(&format!("- **Trait:** `{}`\n", trait_name));
+                        }
+                    }
+                    if let Some(desc) = &field.description {
+                        let doc_preview = if desc.len() > 200 {
+                            format!("{}...", &desc[..200])
+                        } else {
+                            desc.clone()
+                        };
+                        output.push_str(&format!("- **Description:** {}\n", doc_preview));
+                    }
+                    output.push_str("\n");
+                }
+            }
+
+            return Ok(CallToolResult::success(vec![Content::text(output)]));
+        }
+
+        // Check if it's an enum
+        if let Some(enum_info) = self.api_data.enumerations.iter().find(|e|
+            e.name == *type_name || e.rust_name == *type_name
+        ) {
+            output.push_str(&format!("# Enum: {}\n\n", enum_info.rust_name));
+            output.push_str(&format!("**Module:** `{}`\n\n", enum_info.rust_module));
+
+            if let Some(desc) = &enum_info.description {
+                output.push_str("## Description\n\n");
+                output.push_str(desc);
+                output.push_str("\n\n");
+            }
+
+            output.push_str(&format!("## Variants ({} variants)\n\n", enum_info.variants.len()));
+            for variant in &enum_info.variants {
+                output.push_str(&format!("### `{}`\n", variant.rust_name));
+                output.push_str(&format!("- **VIM Value:** `{}`\n", variant.discriminator_value));
+                if let Some(desc) = &variant.description {
+                    output.push_str(&format!("- **Description:** {}\n", desc));
+                }
+                output.push_str("\n");
+            }
+
+            output.push_str("## Usage Example\n\n");
+            output.push_str("```rust\n");
+            output.push_str(&format!("use vim_rs::types::enums::{};\n\n", enum_info.rust_name));
+            output.push_str(&format!("match value {{\n"));
+            for variant in enum_info.variants.iter().take(3) {
+                output.push_str(&format!("    {}::{} => {{ /* ... */ }}\n", enum_info.rust_name, variant.rust_name));
+            }
+            if enum_info.variants.len() > 3 {
+                output.push_str("    // ...\n");
+            }
+            output.push_str("}\n");
+            output.push_str("```\n");
+
+            return Ok(CallToolResult::success(vec![Content::text(output)]));
+        }
+
+        // Type not found
+        let error_msg = format!(
+            "Type '{}' not found.\n\n\
+            This tool supports:\n\
+            - Structs: e.g., 'VirtualDevice', 'VirtualMachine', 'HostSystem'\n\
+            - Traits: e.g., 'VirtualDeviceTrait', 'VirtualEthernetCardTrait'\n\
+            - Enums: e.g., 'ManagedEntityStatus', 'VirtualMachinePowerState'\n\n\
+            Use search_types, search_enums, or semantic_search to find type names.",
+            type_name
+        );
+        Ok(CallToolResult::success(vec![Content::text(error_msg)]))
     }
 
     /// Semantic search using natural language queries (requires embeddings)
