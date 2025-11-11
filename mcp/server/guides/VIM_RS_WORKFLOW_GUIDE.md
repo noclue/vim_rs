@@ -159,6 +159,171 @@ vim_macros = { path = "../vim_macros" }
 - Use `retrieve_objects_from_container()` to fetch all objects of a type
 - The macro generates `id` field automatically (ManagedObjectReference)
 
+
+### Step 2.5: Working with Polymorphic Types (CRITICAL FOR 20B!)
+
+**⚠️ EXTREMELY IMPORTANT: vim_rs uses TRAITS for polymorphic types, NOT ENUMS!**
+
+Many vSphere properties return polymorphic types (types that can be one of several subtypes). For example:
+- `config.hardware.device` returns `Vec<Box<dyn VirtualDeviceTrait>>` (not an enum!)
+- Device subtypes include: VirtualEthernetCard, VirtualDisk, VirtualCdrom, etc.
+
+**The WRONG way (what 20B tried):**
+```rust
+// ❌ THIS DOES NOT WORK - VirtualDevice is NOT an enum!
+match device {
+    VirtualHardwareDevice::VirtualEthernetCard(card) => { /* ... */ }
+    _ => {}
+}
+```
+
+**The CORRECT way - Using Traits:**
+
+vim_rs provides **three ways** to work with polymorphic trait types:
+
+#### Method 1: Cast to a More Specific Trait (MOST COMMON)
+
+Use `CastInto` trait to convert between trait types:
+
+```rust
+use vim_rs::types::convert::CastInto;
+use vim_rs::types::traits::VirtualEthernetCardTrait;
+
+vim_retrievable!(
+    struct Vm: VirtualMachine {
+        name = "name",
+        devices = "config.hardware.device",  // Returns Vec<Box<dyn VirtualDeviceTrait>>
+    }
+);
+
+// Iterate through devices and filter for Ethernet cards
+if let Some(devices) = vm.devices {
+    for device in devices {
+        // Try to cast VirtualDeviceTrait -> VirtualEthernetCardTrait
+        let Some(eth): Option<&dyn VirtualEthernetCardTrait> = device.as_ref().into_ref() else {
+            continue;  // Not an ethernet card, skip
+        };
+        
+        // Now we can use VirtualEthernetCardTrait methods
+        if let Some(mac) = eth.get_mac_address() {
+            println!("MAC: {}", mac);
+        }
+    }
+}
+```
+
+**Key points:**
+- Import `vim_rs::types::convert::CastInto`
+- Import the target trait (e.g., `VirtualEthernetCardTrait`)
+- Use `.as_ref().into_ref()` to get `Option<&dyn TargetTrait>`
+- Use `let Some(...) = ... else { continue }` pattern to handle None
+
+#### Method 2: Downcast to Concrete Type
+
+Use `as_any_ref()` and `downcast_ref()` to get a specific struct type:
+
+```rust
+use vim_rs::types::structs::VirtualE1000;
+
+if let Some(devices) = vm.devices {
+    for device in devices {
+        // Try to downcast to specific VirtualE1000 type
+        if let Some(e1000) = device.as_any_ref().downcast_ref::<VirtualE1000>() {
+            println!("Found E1000 with MAC: {:?}", e1000.mac_address);
+        }
+    }
+}
+```
+
+#### Method 3: Use Trait Getter Methods
+
+All traits provide `get_*()` methods to access fields from the base type:
+
+```rust
+use vim_rs::types::traits::VirtualDeviceTrait;
+
+if let Some(devices) = vm.devices {
+    for device in devices {
+        // VirtualDeviceTrait provides get_key(), get_backing(), etc.
+        let key = device.get_key();
+        let controller_key = device.get_controller_key();
+        println!("Device {} on controller {:?}", key, controller_key);
+    }
+}
+```
+
+#### Complete Working Example: Collecting MAC Addresses
+
+```rust
+use vim_macros::vim_retrievable;
+use vim_rs::core::pc_retrieve::ObjectRetriever;
+use vim_rs::types::convert::CastInto;
+use vim_rs::types::traits::VirtualEthernetCardTrait;
+
+vim_retrievable!(
+    struct Vm: VirtualMachine {
+        name = "name",
+        devices = "config.hardware.device",
+    }
+);
+
+async fn get_vm_macs(client: Arc<Client>) -> Result<Vec<(String, String)>> {
+    let retriever = ObjectRetriever::new(client.clone())?;
+    let vms: Vec<Vm> = retriever
+        .retrieve_objects_from_container(&client.service_content().root_folder)
+        .await?;
+    
+    let mut results = Vec::new();
+    
+    for vm in vms {
+        if let Some(devices) = vm.devices {
+            for device in devices {
+                // Cast to VirtualEthernetCardTrait
+                let Some(eth): Option<&dyn VirtualEthernetCardTrait> = device.as_ref().into_ref() else {
+                    continue;
+                };
+                
+                // Use trait getter method
+                if let Some(mac) = eth.get_mac_address() {
+                    results.push((vm.name.clone(), mac.clone()));
+                }
+            }
+        }
+    }
+    
+    Ok(results)
+}
+```
+
+#### Common Trait Hierarchies
+
+**VirtualDevice hierarchy:**
+- `VirtualDeviceTrait` (base)
+  - `VirtualEthernetCardTrait` → All network cards
+    - `VirtualE1000`, `VirtualE1000e`, `VirtualVmxnet3`, etc.
+  - `VirtualDiskTrait` → All disks
+  - `VirtualControllerTrait` → Controllers
+    - `VirtualSCSIControllerTrait`, `VirtualIDEControllerTrait`, etc.
+
+**Other common polymorphic types:**
+- `DescriptionTrait` - Device descriptions
+- `VirtualDeviceBackingInfoTrait` - Device backing stores
+- `DataObjectTrait` - Base for all data structures
+
+#### When to Use Which Method
+
+| Use Case | Method | Example |
+|----------|--------|---------|
+| Filter by category | Cast to trait | Get all ethernet cards from devices |
+| Check specific type | Downcast to struct | Find VirtualE1000 specifically |
+| Access base fields | Use trait getters | Get device key from any device |
+
+**🔑 Key Takeaway for 20B:**
+- Polymorphic types are `Box<dyn SomeTrait>`, not enums
+- Use `.as_ref().into_ref()` to cast between traits
+- Use `.as_any_ref().downcast_ref::<Type>()` to get concrete types
+- Always import `vim_rs::types::convert::CastInto`
+
 ### Step 3: Common Patterns
 
 **Pattern: Filter objects by property**
@@ -313,6 +478,30 @@ async fn main() -> Result<()> {
     Ok(())
 }
 ```
+
+---
+
+❌ **DON'T** treat polymorphic types as enums:
+```rust
+// WRONG - VirtualDevice is NOT an enum!
+match device {
+    VirtualHardwareDevice::VirtualEthernetCard(card) => { /* ... */ }
+    _ => {}
+}
+```
+
+✅ **DO** use CastInto trait to work with polymorphic types:
+```rust
+use vim_rs::types::convert::CastInto;
+use vim_rs::types::traits::VirtualEthernetCardTrait;
+
+// Cast trait -> more specific trait
+let Some(eth): Option<&dyn VirtualEthernetCardTrait> = device.as_ref().into_ref() else {
+    continue;
+};
+// Now use eth.get_mac_address(), etc.
+```
+
 
 ## Quick Reference: Essential Managed Objects
 

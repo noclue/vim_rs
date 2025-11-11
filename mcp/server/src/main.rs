@@ -1005,6 +1005,12 @@ impl ServerHandler for McpServer {
                 - list_managed_object_types → List all supported managed object types (VirtualMachine, HostSystem, etc.)\n\
                 - get_property_info → Explore property paths and their types (e.g., VirtualMachine.guest.ip_address)\n\
                 Use these to discover valid property paths for vim_retrievable! macro.\n\n\
+                ⚠️ CRITICAL FOR POLYMORPHIC TYPES:\n\
+                vim_rs uses TRAITS for polymorphic types, NOT enums!\n\
+                - VirtualDevice is `Box<dyn VirtualDeviceTrait>`, not an enum\n\
+                - Use CastInto trait: `device.as_ref().into_ref()` to cast between traits\n\
+                - Import `vim_rs::types::convert::CastInto` when working with polymorphic types\n\
+                - See workflow guide Step 2.5 for complete examples\n\n\
                 CRITICAL: Always use ClientBuilder and vim_retrievable! macro (see workflow guide).\n\
                 Never manually construct PropertyCollector specs or fetch objects one-by-one.\n\n\
                 For semantic/natural language queries: semantic_search (requires embeddings).\n\n\
