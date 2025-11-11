@@ -324,6 +324,107 @@ async fn get_vm_macs(client: Arc<Client>) -> Result<Vec<(String, String)>> {
 - Use `.as_any_ref().downcast_ref::<Type>()` to get concrete types
 - Always import `vim_rs::types::convert::CastInto`
 
+
+---
+
+## ⚠️ SPECIAL CASE: Getting MAC Addresses from VirtualMachine Devices
+
+**THIS IS THE #1 MOST COMMON MISTAKE - READ CAREFULLY!**
+
+When you retrieve `config.hardware.device` from a VirtualMachine, you get `Vec<Box<dyn VirtualDeviceTrait>>`. This includes disks, controllers, NICs, etc.
+
+**❌ WRONG APPROACH - DON'T DO THIS:**
+```rust
+// ❌ This is what 20B keeps trying - DON'T DO THIS!
+for device in devices {
+    match device.as_any_ref() {
+        Some(v): &VirtualE1000 => v.mac_address.clone(),
+        Some(v): &VirtualE1000E => v.mac_address.clone(),
+        Some(v): &VirtualVmxnet3 => v.mac_address.clone(),
+        // ... listing every single NIC type
+        _ => None,
+    }
+}
+// This won't compile AND you'll miss new NIC types!
+```
+
+**✅ CORRECT APPROACH - DO THIS INSTEAD:**
+```rust
+use vim_rs::types::convert::CastInto;
+use vim_rs::types::traits::VirtualEthernetCardTrait;
+
+for device in devices {
+    // Cast to VirtualEthernetCardTrait - works for ALL ethernet card types!
+    let Some(eth): Option<&dyn VirtualEthernetCardTrait> = device.as_ref().into_ref() else {
+        continue;  // Not an ethernet card (disk, controller, etc.)
+    };
+    
+    // Use the trait method - works for E1000, E1000e, Vmxnet3, etc.
+    if let Some(mac) = eth.get_mac_address() {
+        println!("MAC: {}", mac);
+    }
+}
+```
+
+**Why the correct way is better:**
+1. Works for ALL ethernet card types (E1000, E1000e, Vmxnet3, Sriov, etc.)
+2. Single cast instead of checking every type
+3. Automatically supports new NIC types VMware adds
+4. Actually compiles!
+
+**Complete working example:**
+```rust
+use anyhow::Result;
+use log::info;
+use vim_macros::vim_retrievable;
+use vim_rs::core::pc_retrieve::ObjectRetriever;
+use vim_rs::types::convert::CastInto;  // MUST import this!
+use vim_rs::types::traits::VirtualEthernetCardTrait;
+
+vim_retrievable!(
+    struct Vm: VirtualMachine {
+        name = "name",
+        devices = "config.hardware.device",
+    }
+);
+
+#[tokio::main]
+async fn main() -> Result<()> {
+    env_logger::init();
+    let client = connect(env!("CARGO_PKG_NAME"), env!("CARGO_PKG_VERSION")).await?;
+    let retriever = ObjectRetriever::new(client.clone())?;
+    let vms: Vec<Vm> = retriever
+        .retrieve_objects_from_container(&client.service_content().root_folder)
+        .await?;
+
+    for vm in vms {
+        info!("VM: {}", vm.name);
+        
+        if let Some(devices) = vm.devices {
+            for device in devices {
+                // Cast to ethernet card trait
+                let Some(eth): Option<&dyn VirtualEthernetCardTrait> = device.as_ref().into_ref() else {
+                    continue;
+                };
+                
+                // Get MAC address using trait method
+                if let Some(mac) = eth.get_mac_address() {
+                    info!("  MAC: {}", mac);
+                }
+            }
+        }
+    }
+    
+    Ok(())
+}
+```
+
+**Remember:**
+- Import `vim_rs::types::convert::CastInto`
+- Import `vim_rs::types::traits::VirtualEthernetCardTrait`
+- Use `device.as_ref().into_ref()` to cast
+- Use `eth.get_mac_address()` to get the MAC
+
 ### Step 3: Common Patterns
 
 **Pattern: Filter objects by property**
@@ -502,6 +603,35 @@ let Some(eth): Option<&dyn VirtualEthernetCardTrait> = device.as_ref().into_ref(
 // Now use eth.get_mac_address(), etc.
 ```
 
+
+
+---
+
+❌ **DON'T** downcast to every NIC type to get MAC addresses:
+```rust
+// WRONG - tedious, error-prone, won't compile
+match device.as_any_ref() {
+    Some(v): &VirtualE1000 => v.mac_address.clone(),
+    Some(v): &VirtualE1000E => v.mac_address.clone(),
+    Some(v): &VirtualVmxnet3 => v.mac_address.clone(),
+    _ => None,
+}
+```
+
+✅ **DO** cast to VirtualEthernetCardTrait once:
+```rust
+use vim_rs::types::convert::CastInto;
+use vim_rs::types::traits::VirtualEthernetCardTrait;
+
+// Cast to trait - works for ALL NIC types!
+let Some(eth): Option<&dyn VirtualEthernetCardTrait> = device.as_ref().into_ref() else {
+    continue;
+};
+// Get MAC using trait method
+if let Some(mac) = eth.get_mac_address() {
+    println!("MAC: {}", mac);
+}
+```
 
 ## Quick Reference: Essential Managed Objects
 

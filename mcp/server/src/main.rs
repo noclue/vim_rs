@@ -1009,8 +1009,13 @@ impl ServerHandler for McpServer {
                 vim_rs uses TRAITS for polymorphic types, NOT enums!\n\
                 - VirtualDevice is `Box<dyn VirtualDeviceTrait>`, not an enum\n\
                 - Use CastInto trait: `device.as_ref().into_ref()` to cast between traits\n\
-                - Import `vim_rs::types::convert::CastInto` when working with polymorphic types\n\
-                - See workflow guide Step 2.5 for complete examples\n\n\
+                - Import `vim_rs::types::convert::CastInto` when working with polymorphic types\n\n\
+                🚨 MOST COMMON MISTAKE - Getting MAC addresses:\n\
+                DON'T downcast to every NIC type (VirtualE1000, VirtualE1000E, etc.)\n\
+                DO cast to VirtualEthernetCardTrait once:\n\
+                  let Some(eth): Option<&dyn VirtualEthernetCardTrait> = device.as_ref().into_ref() else { continue };\n\
+                  eth.get_mac_address()  // Works for ALL NIC types!\n\
+                See workflow guide for complete example.\n\n\
                 CRITICAL: Always use ClientBuilder and vim_retrievable! macro (see workflow guide).\n\
                 Never manually construct PropertyCollector specs or fetch objects one-by-one.\n\n\
                 For semantic/natural language queries: semantic_search (requires embeddings).\n\n\
