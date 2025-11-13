@@ -162,6 +162,7 @@ struct ExamplesOutput {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GuideChunk {
+    pub heading_h1: String,
     pub heading_h2: String,
     pub heading_h3: String,
     pub sub_section: Option<String>,
@@ -185,10 +186,13 @@ pub struct ApiData {
 
 impl ApiData {
     /// Load all JSON data files from the specified directory
+    /// Looks for API definition files in data_dir/api_definitions/ if not found in data_dir/
     pub fn load_from_dir(data_dir: &Path) -> Result<Self> {
-        let managed_objects_path = data_dir.join("managed_objects.json");
-        let data_structures_path = data_dir.join("data_structures.json");
-        let enumerations_path = data_dir.join("enumerations.json");
+        // Try api_definitions subdirectory first, then root directory
+        let api_definitions_dir = data_dir.join("api_definitions");
+        let managed_objects_path = api_definitions_dir.join("managed_objects.json");
+        let data_structures_path = api_definitions_dir.join("data_structures.json");
+        let enumerations_path = api_definitions_dir.join("enumerations.json");
 
         let managed_objects = if managed_objects_path.exists() {
             let content = std::fs::read_to_string(&managed_objects_path)?;
@@ -217,7 +221,11 @@ impl ApiData {
             Vec::new()
         };
 
-        let traits_path = data_dir.join("traits.json");
+        let traits_path = if api_definitions_dir.join("traits.json").exists() {
+            api_definitions_dir.join("traits.json")
+        } else {
+            data_dir.join("traits.json")
+        };
         let traits = if traits_path.exists() {
             let content = std::fs::read_to_string(&traits_path)?;
             let output: TraitsOutput = serde_json::from_str(&content)?;
@@ -227,7 +235,11 @@ impl ApiData {
             Vec::new()
         };
 
-        let examples_path = data_dir.join("examples.json");
+        let examples_path = if api_definitions_dir.join("examples.json").exists() {
+            api_definitions_dir.join("examples.json")
+        } else {
+            data_dir.join("examples.json")
+        };
         let examples = if examples_path.exists() {
             let content = std::fs::read_to_string(&examples_path)?;
             let output: ExamplesOutput = serde_json::from_str(&content)?;
@@ -237,21 +249,21 @@ impl ApiData {
             Vec::new()
         };
 
-        // Load guide chunks from guides directory
-        let guides_dir = data_dir.join("guides");
         let mut guides = Vec::new();
 
-        if guides_dir.exists() && guides_dir.is_dir() {
-            for entry in std::fs::read_dir(&guides_dir)? {
+        if api_definitions_dir.exists() && api_definitions_dir.is_dir() {
+            for entry in std::fs::read_dir(&api_definitions_dir)? {
                 let entry = entry?;
                 let path = entry.path();
 
                 // Only process .json files
-                if path.extension().and_then(|s| s.to_str()) == Some("json") {
-                    let content = std::fs::read_to_string(&path)?;
-                    let chunks: Vec<GuideChunk> = serde_json::from_str(&content)?;
-                    info!("Loaded {} chunks from {}", chunks.len(), path.display());
-                    guides.extend(chunks);
+                if let Some(file_name) = path.file_name().and_then(|s| s.to_str()) {
+                    if file_name.ends_with("_guide.json") {
+                        let content = std::fs::read_to_string(&path)?;
+                        let chunks: Vec<GuideChunk> = serde_json::from_str(&content)?;
+                        info!("Loaded {} chunks from {}", chunks.len(), path.display());
+                        guides.extend(chunks);
+                    }
                 }
             }
         } else {

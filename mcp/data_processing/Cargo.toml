@@ -1,9 +1,0 @@
-[workspace]
-members = [
-    "build_embeddings",
-    "build_examples",
-    "build_guides",
-    "pdf_parser",
-    "text_processor",
-]
-resolver = "2"

@@ -1,0 +1,10 @@
+[workspace]
+members = [
+    "server",
+    "data_processing/build_embeddings",
+    "data_processing/build_examples",
+    "data_processing/build_guides",
+    "data_processing/pdf_parser",
+    "data_processing/text_processor",
+]
+resolver = "2"

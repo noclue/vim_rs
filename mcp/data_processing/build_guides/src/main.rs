@@ -9,6 +9,9 @@ use std::path::PathBuf;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GuideChunk {
+    /// H1 heading (document/chapter title)
+    pub heading_h1: String,
+
     /// H2 heading (major topic)
     pub heading_h2: String,
 
@@ -79,7 +82,7 @@ fn main() -> Result<()> {
     println!("Parsing markdown structure...");
     let sections = markdown_parser::parse_markdown(&content)?;
 
-    println!("Found {} H3 sections", sections.len());
+    println!("Found {} sections", sections.len());
 
     println!("Chunking sections...");
     let source_file = input_path

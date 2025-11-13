@@ -1,10 +1,13 @@
 use std::collections::HashSet;
 
 /// Extract topics/keywords from headings and content
-pub fn extract_topics(h2: &str, h3: &str, content: &str) -> Vec<String> {
+pub fn extract_topics(h1: Option<&str>, h2: &str, h3: &str, content: &str) -> Vec<String> {
     let mut topics = HashSet::new();
 
-    // Extract from H2 and H3 headings
+    // Extract from H1, H2, and H3 headings
+    if let Some(h1_text) = h1 {
+        topics.extend(extract_from_heading(h1_text));
+    }
     topics.extend(extract_from_heading(h2));
     topics.extend(extract_from_heading(h3));
 
@@ -166,6 +169,7 @@ Even more content.
 
     #[test]
     fn test_extract_topics_combined() {
+        let h1 = Some("vSphere Administration Guide");
         let h2 = "Installing ESX Using vSphere Auto Deploy";
         let h3 = "Understanding Auto Deploy";
         let content = r#"Auto Deploy provisions ESX hosts with an image profile.
@@ -175,11 +179,12 @@ Important:
 The vSphere Host Profiles capability is deprecated in ESX 9.0.
 "#;
 
-        let topics = extract_topics(h2, h3, content);
+        let topics = extract_topics(h1, h2, h3, content);
 
         // Should have topics from headings
-        assert!(topics.contains(&"installing".to_string()));
         assert!(topics.contains(&"vsphere".to_string()));
+        assert!(topics.contains(&"administration".to_string()));
+        assert!(topics.contains(&"installing".to_string()));
         assert!(topics.contains(&"auto".to_string()));
         assert!(topics.contains(&"deploy".to_string()));
 

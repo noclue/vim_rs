@@ -166,8 +166,24 @@ impl McpServer {
             .parent()
             .unwrap()
             .join("data");
-        let api_definitions_dir = mcp_data_dir.join("api_definitions");
-        let api_data = ApiData::load_from_dir(&api_definitions_dir)?;
+        // ApiData::load_from_dir expects the parent data directory, not api_definitions
+        // because it looks for data_dir/guides/ subdirectory
+        info!("Loading API data from {}", mcp_data_dir.display());
+        info!("Looking for guides in: {}", mcp_data_dir.join("guides").display());
+        let api_data = ApiData::load_from_dir(&mcp_data_dir)?;
+        info!("Loaded {} guide chunks into memory", api_data.guides.len());
+        if api_data.guides.is_empty() {
+            warn!("⚠️  WARNING: No guide chunks loaded! Check that guides are in {}", mcp_data_dir.join("guides").display());
+        } else {
+            // Log a sample guide to verify they're loading correctly
+            if let Some(first_guide) = api_data.guides.first() {
+                info!("Sample guide loaded: {} > {} > {} (chunk_id: {})", 
+                    first_guide.heading_h1, 
+                    first_guide.heading_h2, 
+                    first_guide.heading_h3,
+                    first_guide.chunk_id);
+            }
+        }
 
         #[cfg(feature = "embeddings")]
         let (embedding_model, embeddings_db) = {
@@ -509,7 +525,8 @@ impl McpServer {
                 .unwrap_or_default();
 
             let output = format!(
-                "# {} > {}{}\n\n**Source:** {}\n\n**Topics:** {}\n\n**Word Count:** {}\n\n## Content\n\n{}\n",
+                "# {} > {} > {}{}\n\n**Source:** {}\n\n**Topics:** {}\n\n**Word Count:** {}\n\n## Content\n\n{}\n",
+                g.heading_h1,
                 g.heading_h2,
                 g.heading_h3,
                 sub_section,
@@ -532,15 +549,17 @@ impl McpServer {
     #[tool(description = "Search vSphere/VCF documentation guides by keyword in headings, topics, or content. Returns matching guide sections from admin documentation.")]
     async fn search_guides(&self, params: Parameters<SearchGuidesInput>) -> Result<CallToolResult, McpError> {
         let query = params.0.query.to_lowercase();
+        info!("search_guides: query='{}', total_guides={}", query, self.api_data.guides.len());
         let mut results = Vec::new();
 
         for guide in &self.api_data.guides {
+            let h1_match = guide.heading_h1.to_lowercase().contains(&query);
             let h2_match = guide.heading_h2.to_lowercase().contains(&query);
             let h3_match = guide.heading_h3.to_lowercase().contains(&query);
             let topics_match = guide.topics.iter().any(|t| t.to_lowercase().contains(&query));
             let content_match = guide.content.to_lowercase().contains(&query);
 
-            if h2_match || h3_match || topics_match || content_match {
+            if h1_match || h2_match || h3_match || topics_match || content_match {
                 let sub_section = guide.sub_section.as_ref()
                     .map(|s| format!(" - {}", s))
                     .unwrap_or_default();
@@ -552,7 +571,8 @@ impl McpServer {
                 };
 
                 results.push(format!(
-                    "**{} > {}{}**\n{}\nUse: `get_guide(\"{}\")`\n",
+                    "**{} > {} > {}{}**\n{}\nUse: `get_guide(\"{}\")`\n",
+                    guide.heading_h1,
                     guide.heading_h2,
                     guide.heading_h3,
                     sub_section,
@@ -1014,9 +1034,10 @@ For complete guide, use: list_examples, get_example, search_examples
                 "enums" => "enum",
                 "examples" => "example",
                 "guides" => "guide",
+                "managed_objects" => "managed_object",
                 _ => {
                     return Err(McpError::invalid_params(
-                        format!("Invalid filter value: '{}'. Must be 'all', 'methods', 'types', 'enums', 'examples', or 'guides'", params.0.filter),
+                        format!("Invalid filter value: '{}'. Must be 'all', 'methods', 'types', 'enums', 'examples', 'guides', or 'managed_objects'", params.0.filter),
                         None
                     ));
                 }
@@ -1041,6 +1062,11 @@ For complete guide, use: list_examples, get_example, search_examples
         let batches: Vec<_> = results.try_collect().await
             .map_err(|e| McpError::internal_error(format!("Failed to collect results: {}", e), None))?;
 
+        // Debug: Log how many results we got
+        let total_rows: usize = batches.iter().map(|b| b.num_rows()).sum();
+        info!("Semantic search returned {} total rows for query '{}' with filter '{}'", total_rows, params.0.query, params.0.filter);
+        info!("Total guides in memory for lookup: {}", self.api_data.guides.len());
+
         for batch in batches {
             let item_type_array = batch.column_by_name("item_type").unwrap().as_string::<i32>();
             let item_name_array = batch.column_by_name("item_name").unwrap().as_string::<i32>();
@@ -1057,6 +1083,19 @@ For complete guide, use: list_examples, get_example, search_examples
 
                 // Find full details from api_data
                 let details = match item_type {
+                    "managed_object" => {
+                        if let Some(managed_object) = self.api_data.managed_objects.iter().find(|m| m.name == item_name) {
+                            Some(format!(
+                                "## {}\n\n**Rust Struct:** `{}`\n\n**Rust Module:** `{}`\n\n**Description:**\n{}\n\n---\n",
+                                managed_object.name,
+                                managed_object.rust_struct,
+                                managed_object.rust_module,
+                                managed_object.description.as_deref().unwrap_or("No description")
+                            ))
+                        } else {
+                            None
+                        }
+                    }
                     "method" => {
                         // Find the method
                         let mut result = None;
@@ -1160,7 +1199,8 @@ For complete guide, use: list_examples, get_example, search_examples
                             };
 
                             Some(format!(
-                                "## {} > {}{}\n\n**Source:** {}\n\n**Topics:** {}\n\n**Content:**\n{}\n\n**Usage:**\n```\nget_guide(\"{}\")\n```\n\n---\n",
+                                "## {} > {} > {}{}\n\n**Source:** {}\n\n**Topics:** {}\n\n**Content:**\n{}\n\n**Usage:**\n```\nget_guide(\"{}\")\n```\n\n---\n",
+                                guide.heading_h1,
                                 guide.heading_h2,
                                 guide.heading_h3,
                                 sub_section,

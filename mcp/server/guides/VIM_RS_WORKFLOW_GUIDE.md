@@ -15,7 +15,7 @@ vim_rs is a Rust SDK for the vSphere API. It provides:
 When building vim_rs applications, use these resources in order:
 
 1. **API Reference** (semantic_search, search_methods, search_types, search_enums)
-   - WHAT exists: method signatures, types, enums
+   - WHAT exists: managed objects, methods, types, enums
    - Use to find the correct Rust types and method names
 
 2. **Code Examples** (list_examples, get_example, search_examples)
@@ -37,7 +37,7 @@ use anyhow::{Context, Result};
 use std::env;
 use std::sync::Arc;
 use vim_rs::Client;
-use vim_rs::ClientBuilder;
+use vim_rs:core::ClientBuilder;
 
 pub async fn connect(app_name: &str, app_version: &str) -> Result<Arc<Client>> {
     let vc_server = env::var("VIM_SERVER").context("VIM_SERVER env var not set")?;
@@ -76,14 +76,33 @@ async fn main() -> Result<()> {
 **Dependencies needed:**
 ```toml
 [dependencies]
-vim_rs = { path = "../vim_rs" }
+vim_rs = "0.2.5"
 anyhow = "1.0"
 tokio = { version = "1.0", features = ["full"] }
 env_logger = "0.11"
 log = "0.4"
 ```
+### Step 2: Call APIs (ALWAYS USE THIS PATTERN)
 
-### Step 2: Data Retrieval with Property Collector (ALWAYS USE THIS PATTERN)
+To call any API on vSphere:
+
+1. Create a proxy to a managed object using a `vim_rs::core::Client` and id from `ManagedObjectReference`.
+2. Call the method and await the results
+
+**Example:**
+```rust
+// Create a VirtualMachine managed object from the reference
+let vm = vim_rs::mo::VirtualMachine::new(client.clone(), &vm_ref.value);
+
+// Call power_on_vm_task with None for host (let vCenter choose)
+let task_ref = vm.power_on_vm_task(None).await?;
+```
+Notes:
+* **⚠️ IMPORTANT:** Managed object types reside in `vim_rs::mo` module.
+* Managed Objects are proxies to objects living on the server like `VirtualMachine`, `Folder` etc.
+* Managed Objects expose methods that call the remote APIs.
+
+### Step 3: Data Retrieval with Property Collector (ALWAYS USE THIS PATTERN)
 
 To fetch data from vSphere, **always use the `vim_retrievable!` macro**. This is the correct, efficient way.
 
@@ -149,18 +168,19 @@ async fn main() -> Result<()> {
 
 **Additional dependency:**
 ```toml
-vim_macros = { path = "../vim_macros" }
+vim_macros = "0.2.5"
 ```
 
 **Key Points:**
 - `vim_retrievable!` generates a struct with property mappings
-- Property paths use vSphere notation (e.g., "summary.overall_status")
+- Property paths use Rust formatted names (e.g., "summary.overall_status")
+    - ❌ DO NOT use Java style names like "summary.overallStatus"
 - `ObjectRetriever` handles batching automatically (efficient!)
 - Use `retrieve_objects_from_container()` to fetch all objects of a type
 - The macro generates `id` field automatically (ManagedObjectReference)
 
 
-### Step 2.5: Working with Polymorphic Types (CRITICAL FOR 20B!)
+### Step 3.5: Working with Polymorphic Types (CRITICAL)
 
 **⚠️ EXTREMELY IMPORTANT: vim_rs uses TRAITS for polymorphic types, NOT ENUMS!**
 
@@ -168,7 +188,7 @@ Many vSphere properties return polymorphic types (types that can be one of sever
 - `config.hardware.device` returns `Vec<Box<dyn VirtualDeviceTrait>>` (not an enum!)
 - Device subtypes include: VirtualEthernetCard, VirtualDisk, VirtualCdrom, etc.
 
-**The WRONG way (what 20B tried):**
+**The WRONG way:**
 ```rust
 // ❌ THIS DOES NOT WORK - VirtualDevice is NOT an enum!
 match device {
@@ -181,7 +201,7 @@ match device {
 
 vim_rs provides **three ways** to work with polymorphic trait types:
 
-#### Method 1: Cast to a More Specific Trait (MOST COMMON)
+#### Option 1: Cast to a More Different Trait (MOST COMMON)
 
 Use `CastInto` trait to convert between trait types:
 
@@ -216,11 +236,11 @@ if let Some(devices) = vm.devices {
 - Import `vim_rs::types::convert::CastInto`
 - Import the target trait (e.g., `VirtualEthernetCardTrait`)
 - Use `.as_ref().into_ref()` to get `Option<&dyn TargetTrait>`
-- Use `let Some(...) = ... else { continue }` pattern to handle None
+- Use `let Some(...) = ... else { continue }` pattern to handle failed trait cast
 
-#### Method 2: Downcast to Concrete Type
+#### Method 2: Downcast to Concrete Struct Type
 
-Use `as_any_ref()` and `downcast_ref()` to get a specific struct type:
+Use `std::any:Any` `as_any_ref()` and `downcast_ref()` to get a specific struct type:
 
 ```rust
 use vim_rs::types::structs::VirtualE1000;
@@ -237,7 +257,7 @@ if let Some(devices) = vm.devices {
 
 #### Method 3: Use Trait Getter Methods
 
-All traits provide `get_*()` methods to access fields from the base type:
+All traits provide `get_*()` methods to access fields from the struct type:
 
 ```rust
 use vim_rs::types::traits::VirtualDeviceTrait;
@@ -295,21 +315,6 @@ async fn get_vm_macs(client: Arc<Client>) -> Result<Vec<(String, String)>> {
 }
 ```
 
-#### Common Trait Hierarchies
-
-**VirtualDevice hierarchy:**
-- `VirtualDeviceTrait` (base)
-  - `VirtualEthernetCardTrait` → All network cards
-    - `VirtualE1000`, `VirtualE1000e`, `VirtualVmxnet3`, etc.
-  - `VirtualDiskTrait` → All disks
-  - `VirtualControllerTrait` → Controllers
-    - `VirtualSCSIControllerTrait`, `VirtualIDEControllerTrait`, etc.
-
-**Other common polymorphic types:**
-- `DescriptionTrait` - Device descriptions
-- `VirtualDeviceBackingInfoTrait` - Device backing stores
-- `DataObjectTrait` - Base for all data structures
-
 #### When to Use Which Method
 
 | Use Case | Method | Example |
@@ -366,62 +371,9 @@ for device in devices {
 }
 ```
 
-**Why the correct way is better:**
-1. Works for ALL ethernet card types (E1000, E1000e, Vmxnet3, Sriov, etc.)
-2. Single cast instead of checking every type
-3. Automatically supports new NIC types VMware adds
-4. Actually compiles!
-
-**Complete working example:**
-```rust
-use anyhow::Result;
-use log::info;
-use vim_macros::vim_retrievable;
-use vim_rs::core::pc_retrieve::ObjectRetriever;
-use vim_rs::types::convert::CastInto;  // MUST import this!
-use vim_rs::types::traits::VirtualEthernetCardTrait;
-
-vim_retrievable!(
-    struct Vm: VirtualMachine {
-        name = "name",
-        devices = "config.hardware.device",
-    }
-);
-
-#[tokio::main]
-async fn main() -> Result<()> {
-    env_logger::init();
-    let client = connect(env!("CARGO_PKG_NAME"), env!("CARGO_PKG_VERSION")).await?;
-    let retriever = ObjectRetriever::new(client.clone())?;
-    let vms: Vec<Vm> = retriever
-        .retrieve_objects_from_container(&client.service_content().root_folder)
-        .await?;
-
-    for vm in vms {
-        info!("VM: {}", vm.name);
-        
-        if let Some(devices) = vm.devices {
-            for device in devices {
-                // Cast to ethernet card trait
-                let Some(eth): Option<&dyn VirtualEthernetCardTrait> = device.as_ref().into_ref() else {
-                    continue;
-                };
-                
-                // Get MAC address using trait method
-                if let Some(mac) = eth.get_mac_address() {
-                    info!("  MAC: {}", mac);
-                }
-            }
-        }
-    }
-    
-    Ok(())
-}
-```
-
 **Remember:**
 - Import `vim_rs::types::convert::CastInto`
-- Import `vim_rs::types::traits::VirtualEthernetCardTrait`
+- Import target trait `vim_rs::types::traits::VirtualEthernetCardTrait`
 - Use `device.as_ref().into_ref()` to cast
 - Use `eth.get_mac_address()` to get the MAC
 
@@ -522,7 +474,9 @@ let client = Client { /* manual construction */ };
 
 ✅ **DO** use ClientBuilder:
 ```rust
-let client = ClientBuilder::new(server).build().await?;
+let client = ClientBuilder::new(server)
+                .basic_authn(username.as_str(), pwd.as_str())
+                .build().await?;
 ```
 
 ---
@@ -669,7 +623,7 @@ use anyhow::{Context, Result};
 use std::env;
 use std::sync::Arc;
 use log::info;
-use vim_rs::{Client, ClientBuilder};
+use vim_rs::core::{Client, ClientBuilder};
 use vim_macros::vim_retrievable;
 use vim_rs::core::pc_retrieve::ObjectRetriever;
 
@@ -724,8 +678,8 @@ async fn main() -> Result<()> {
 **Cargo.toml dependencies:**
 ```toml
 [dependencies]
-vim_rs = { path = "../vim_rs" }
-vim_macros = { path = "../vim_macros" }
+vim_rs = "0.2.5"
+vim_macros = "0.2.5"
 anyhow = "1.0"
 tokio = { version = "1.0", features = ["full"] }
 env_logger = "0.11"

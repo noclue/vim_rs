@@ -22,6 +22,7 @@ pub fn create_chunks(sections: &[Section], source_file: &str) -> Result<Vec<Guid
         // If section fits within max, create single chunk
         if word_count <= MAX_WORDS {
             let chunk = create_chunk(
+                &section.h1,
                 &section.h2,
                 &section.h3,
                 None,
@@ -47,6 +48,7 @@ pub fn create_chunks(sections: &[Section], source_file: &str) -> Result<Vec<Guid
                 };
 
                 let chunk = create_chunk(
+                    &section.h1,
                     &section.h2,
                     &section.h3,
                     sub_section,
@@ -146,6 +148,7 @@ fn split_on_paragraphs(lines: &[String]) -> Vec<String> {
 
 /// Create a single chunk with metadata
 fn create_chunk(
+    h1: &str,
     h2: &str,
     h3: &str,
     sub_section: Option<String>,
@@ -154,10 +157,11 @@ fn create_chunk(
     existing_chunks: &[GuideChunk],
 ) -> GuideChunk {
     let word_count = count_words(content);
-    let topics = topic_extractor::extract_topics(h2, h3, content);
-    let chunk_id = generate_chunk_id(h2, h3, existing_chunks);
+    let topics = topic_extractor::extract_topics(Some(h1), h2, h3, content);
+    let chunk_id = generate_chunk_id(h1, h2, h3, existing_chunks);
 
     GuideChunk {
+        heading_h1: h1.to_string(),
         heading_h2: h2.to_string(),
         heading_h3: h3.to_string(),
         sub_section,
@@ -175,13 +179,22 @@ fn count_words(text: &str) -> usize {
 }
 
 /// Generate unique chunk ID from headings
-fn generate_chunk_id(h2: &str, h3: &str, existing_chunks: &[GuideChunk]) -> String {
+fn generate_chunk_id(h1: &str, h2: &str, h3: &str, existing_chunks: &[GuideChunk]) -> String {
     // Convert to kebab-case
+    let h1_slug = slugify(h1);
     let h2_slug = slugify(h2);
     let h3_slug = slugify(h3);
 
-    // Base ID
-    let base_id = format!("{}-{}", h2_slug, h3_slug);
+    // Build base ID from all headings (h1-h2-h3)
+    // If h2 or h3 is empty, omit it from the ID
+    let mut parts = vec![h1_slug];
+    if !h2.is_empty() {
+        parts.push(h2_slug);
+    }
+    if !h3.is_empty() {
+        parts.push(h3_slug);
+    }
+    let base_id = parts.join("-");
 
     // Count how many chunks already exist with this base
     let count = existing_chunks
@@ -239,10 +252,11 @@ mod tests {
     #[test]
     fn test_generate_chunk_id() {
         let chunks = vec![];
-        let id1 = generate_chunk_id("Installing ESX", "Understanding Auto Deploy", &chunks);
-        assert_eq!(id1, "installing-esx-understanding-auto-deploy");
+        let id1 = generate_chunk_id("ESX Installation", "Installing ESX", "Understanding Auto Deploy", &chunks);
+        assert_eq!(id1, "esx-installation-installing-esx-understanding-auto-deploy");
 
         let chunk1 = GuideChunk {
+            heading_h1: "ESX Installation".to_string(),
             heading_h2: "Installing ESX".to_string(),
             heading_h3: "Understanding Auto Deploy".to_string(),
             sub_section: None,
@@ -253,7 +267,46 @@ mod tests {
             topics: vec![],
         };
 
-        let id2 = generate_chunk_id("Installing ESX", "Understanding Auto Deploy", &[chunk1]);
-        assert_eq!(id2, "installing-esx-understanding-auto-deploy-002");
+        let id2 = generate_chunk_id("ESX Installation", "Installing ESX", "Understanding Auto Deploy", &[chunk1]);
+        assert_eq!(id2, "esx-installation-installing-esx-understanding-auto-deploy-002");
+        
+        // Test with empty H2
+        let id3 = generate_chunk_id("ESX Installation", "", "Understanding Auto Deploy", &chunks);
+        assert_eq!(id3, "esx-installation-understanding-auto-deploy");
+        
+        // Test with empty H2 and H3
+        let id4 = generate_chunk_id("ESX Installation", "", "", &chunks);
+        assert_eq!(id4, "esx-installation");
+    }
+
+    #[test]
+    fn test_create_chunks_includes_h1() {
+        use crate::markdown_parser::Section;
+
+        let sections = vec![
+            Section {
+                h1: "Main Guide".to_string(),
+                h2: "Section A".to_string(),
+                h3: "Subsection 1".to_string(),
+                content: vec!["Content here.".to_string()],
+            },
+            Section {
+                h1: "Main Guide".to_string(),
+                h2: "Section B".to_string(),
+                h3: "".to_string(),
+                content: vec!["Content under H2 only.".to_string()],
+            },
+        ];
+
+        let chunks = create_chunks(&sections, "test").unwrap();
+
+        assert_eq!(chunks.len(), 2);
+        assert_eq!(chunks[0].heading_h1, "Main Guide");
+        assert_eq!(chunks[0].heading_h2, "Section A");
+        assert_eq!(chunks[0].heading_h3, "Subsection 1");
+        
+        assert_eq!(chunks[1].heading_h1, "Main Guide");
+        assert_eq!(chunks[1].heading_h2, "Section B");
+        assert_eq!(chunks[1].heading_h3, "");
     }
 }

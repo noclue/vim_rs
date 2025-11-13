@@ -8,6 +8,7 @@ use vim_mcp_server::model::ApiData;
 use arrow_array::{RecordBatch, RecordBatchIterator, StringArray, Float32Array, FixedSizeListArray};
 use arrow_schema::{DataType, Field, Schema};
 use lancedb::connect;
+use lancedb::query::{QueryBase, ExecutableQuery};
 
 // Conditional imports for CUDA GPU acceleration
 #[cfg(feature = "cuda")]
@@ -50,14 +51,43 @@ async fn main() -> Result<()> {
     }
 
     info!("Loading API data from {}", api_definitions_dir.display());
+    info!("Loading guides from {}", mcp_data_dir.join("guides").display());
     info!("Using model cache directory: {}", model_cache_dir.display());
 
-    let api_data = ApiData::load_from_dir(&api_definitions_dir)
+    // ApiData::load_from_dir expects the parent data directory, not api_definitions
+    // because it looks for data_dir/guides/ subdirectory
+    let api_data = ApiData::load_from_dir(&mcp_data_dir)
         .context("Failed to load API data from JSON files")?;
 
     // Step 1: Create text chunks for embedding
     info!("Creating text chunks for embedding...");
     let mut records = Vec::new();
+
+    // Process managed objects
+    for mo in &api_data.managed_objects {
+        let text = format!(
+            "{} - {}",
+            mo.name,
+            mo.description.as_deref().unwrap_or("No description")
+        );
+        records.push(EmbeddingRecord {
+            text,
+            item_type: "managed_object".to_string(),
+            object_name: mo.name.clone(),
+            item_name: mo.name.clone(),
+            rust_name: mo.rust_struct.clone(),
+            rust_module: mo.rust_module.clone(),
+        });
+    }
+
+    let managed_object_count = api_data.managed_objects.len();
+
+    // Verification: Ensure managed objects were loaded
+    if managed_object_count == 0 {
+        warn!("⚠️  WARNING: No managed objects loaded! Check that managed_objects.json is in {}", api_definitions_dir.display());
+    } else {
+        info!("✓ Loaded {} managed objects", managed_object_count);
+    }
 
     // Process methods
     for mo in &api_data.managed_objects {
@@ -160,7 +190,8 @@ async fn main() -> Result<()> {
         };
 
         let text = format!(
-            "{} > {}{}.{} {}",
+            "{} > {} > {}{}.{} {}",
+            guide.heading_h1,
             guide.heading_h2,
             guide.heading_h3,
             sub_section_str,
@@ -173,19 +204,35 @@ async fn main() -> Result<()> {
             item_type: "guide".to_string(),
             object_name: guide.source_file.clone(),
             item_name: guide.chunk_id.clone(),
-            rust_name: format!("{} > {}", guide.heading_h2, guide.heading_h3),
+            rust_name: format!("{} > {} > {}", guide.heading_h1, guide.heading_h2, guide.heading_h3),
             rust_module: "guides".to_string(),
         });
     }
 
+    let guide_count = api_data.guides.len();
     info!("Created {} text chunks ({} methods, {} structures, {} enums, {} examples, {} guides)",
         records.len(),
         api_data.managed_objects.iter().map(|mo| mo.methods.len()).sum::<usize>(),
         api_data.data_structures.len(),
         api_data.enumerations.len(),
         api_data.examples.len(),
-        api_data.guides.len()
+        guide_count
     );
+
+    // Verification: Ensure guides were loaded
+    if guide_count == 0 {
+        warn!("⚠️  WARNING: No guide chunks loaded! Check that guides are in {}", mcp_data_dir.join("guides").display());
+    } else {
+        info!("✓ Loaded {} guide chunks", guide_count);
+        
+        // Verify guide records were created
+        let guide_records_count = records.iter().filter(|r| r.item_type == "guide").count();
+        if guide_records_count != guide_count {
+            warn!("⚠️  WARNING: Mismatch between loaded guides ({}) and guide records ({})", guide_count, guide_records_count);
+        } else {
+            info!("✓ Created {} guide embedding records", guide_records_count);
+        }
+    }
 
     // Step 2: Initialize embedding model
     info!("Initializing embedding model (all-MiniLM-L6-v2)...");
@@ -203,9 +250,12 @@ async fn main() -> Result<()> {
     };
 
     #[cfg(not(feature = "cuda"))]
-    let init_options = InitOptions::new(EmbeddingModel::AllMiniLML6V2)
-        .with_cache_dir(model_cache_dir)
-        .with_show_download_progress(true);
+    let init_options = {
+        info!("CUDA feature disabled - using CPU acceleration for embeddings");
+        InitOptions::new(EmbeddingModel::AllMiniLML6V2)
+            .with_cache_dir(model_cache_dir)
+            .with_show_download_progress(true)
+    };
 
     let mut model = TextEmbedding::try_new(init_options)
         .context("Failed to initialize embedding model")?;
@@ -253,6 +303,63 @@ async fn main() -> Result<()> {
     info!("  Database: {}", embeddings_db_path.display());
     info!("  Records: {}", records.len());
     info!("  Dimensions: 384");
+
+    // Verification: Test that guides are searchable in the database
+    if guide_count > 0 {
+        info!("Verifying guide embeddings in database...");
+        let table = db.open_table("vim_api")
+            .execute()
+            .await
+            .context("Failed to open embeddings table for verification")?;
+
+        // Search for a guide record to verify it's in the database
+        let guide_records: Vec<_> = records.iter()
+            .enumerate()
+            .filter(|(_, r)| r.item_type == "guide")
+            .take(5)
+            .collect();
+
+        if !guide_records.is_empty() {
+            let (idx, guide_record) = guide_records[0];
+            info!("  Testing search for guide: {}", guide_record.item_name);
+            
+            // Get the embedding for this guide
+            let guide_embedding = &embeddings[idx];
+            
+            // Perform a vector search
+            let mut query = table
+                .vector_search(guide_embedding.clone())
+                .map_err(|e| anyhow::anyhow!("Vector search failed: {}", e))?
+                .limit(5);
+
+            query = query.only_if("item_type = 'guide'");
+            
+            let results = query.execute().await
+                .map_err(|e| anyhow::anyhow!("Failed to execute verification search: {}", e))?;
+
+            // Collect results (simplified verification - just check that we can query)
+            let mut found_count = 0;
+            use futures::stream::TryStreamExt;
+            use arrow_array::cast::AsArray;
+            let mut results_stream = results;
+            while let Some(batch_result) = results_stream.try_next().await
+                .map_err(|e| anyhow::anyhow!("Failed to read verification results: {}", e))? {
+                let batch = batch_result;
+                let item_type_array = batch.column_by_name("item_type").unwrap().as_string::<i32>();
+                for i in 0..batch.num_rows() {
+                    if item_type_array.value(i) == "guide" {
+                        found_count += 1;
+                    }
+                }
+            }
+
+            if found_count > 0 {
+                info!("  ✓ Verified: Found {} guide(s) in database search", found_count);
+            } else {
+                warn!("  ⚠️  WARNING: No guides found in database search - embeddings may not be working correctly");
+            }
+        }
+    }
 
     Ok(())
 }
