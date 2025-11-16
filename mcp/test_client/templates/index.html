@@ -7,6 +7,20 @@
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
+    <!-- Theme toggle button -->
+    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+        <svg id="theme-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+    </button>
     <div class="container">
         <header>
             <h1>MCP Test Client</h1>
@@ -59,6 +73,77 @@
     </div>
 
     <script>
+        // Theme management
+        (function() {
+            const themeToggle = document.getElementById('theme-toggle');
+            const themeIcon = document.getElementById('theme-icon');
+            const html = document.documentElement;
+            
+            // Get saved theme preference or detect system preference
+            function getInitialTheme() {
+                const saved = localStorage.getItem('theme');
+                if (saved === 'light' || saved === 'dark') {
+                    return saved;
+                }
+                // Detect system preference
+                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    return 'dark';
+                }
+                return 'light';
+            }
+            
+            // Set theme
+            function setTheme(theme) {
+                html.setAttribute('data-theme', theme);
+                localStorage.setItem('theme', theme);
+                updateIcon(theme);
+            }
+            
+            // Update icon based on theme
+            function updateIcon(theme) {
+                if (theme === 'dark') {
+                    // Moon icon for dark mode
+                    themeIcon.innerHTML = `
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    `;
+                } else {
+                    // Sun icon for light mode
+                    themeIcon.innerHTML = `
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    `;
+                }
+            }
+            
+            // Initialize theme
+            const initialTheme = getInitialTheme();
+            setTheme(initialTheme);
+            
+            // Toggle theme on button click
+            themeToggle.addEventListener('click', () => {
+                const currentTheme = html.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                setTheme(newTheme);
+            });
+            
+            // Listen for system theme changes (if no manual preference is set)
+            if (window.matchMedia) {
+                window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+                    // Only auto-switch if user hasn't manually set a preference
+                    if (!localStorage.getItem('theme')) {
+                        setTheme(e.matches ? 'dark' : 'light');
+                    }
+                });
+            }
+        })();
+
         const toolSelect = document.getElementById('tool-select');
         const toolInfo = document.getElementById('tool-info');
         const toolName = document.getElementById('tool-name');

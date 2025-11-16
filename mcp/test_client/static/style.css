@@ -21,6 +21,42 @@
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
 
+/* Dark theme variables */
+[data-theme="dark"] {
+    --primary-color: #3b82f6;
+    --primary-hover: #2563eb;
+    --secondary-color: #94a3b8;
+    --success-color: #34d399;
+    --error-color: #f87171;
+    --border-color: #334155;
+    --bg-light: #1e293b;
+    --bg-white: #0f172a;
+    --text-primary: #f1f5f9;
+    --text-secondary: #cbd5e1;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+}
+
+/* System preference detection */
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        --primary-color: #3b82f6;
+        --primary-hover: #2563eb;
+        --secondary-color: #94a3b8;
+        --success-color: #34d399;
+        --error-color: #f87171;
+        --border-color: #334155;
+        --bg-light: #1e293b;
+        --bg-white: #0f172a;
+        --text-primary: #f1f5f9;
+        --text-secondary: #cbd5e1;
+        --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+        --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+        --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+    }
+}
+
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     line-height: 1.6;
@@ -67,6 +103,18 @@ header h1 {
     margin-bottom: 1.5rem;
 }
 
+[data-theme="dark"] .error-banner {
+    background-color: #7f1d1d;
+    color: #fecaca;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .error-banner {
+        background-color: #7f1d1d;
+        color: #fecaca;
+    }
+}
+
 /* Tool selector */
 .tool-selector {
     margin-bottom: 2rem;
@@ -111,6 +159,7 @@ header h1 {
     border: 1px solid var(--border-color);
     border-radius: 6px;
     background-color: var(--bg-white);
+    color: var(--text-primary);
     transition: border-color 0.2s, box-shadow 0.2s;
 }
 
@@ -253,6 +302,16 @@ fieldset legend {
     background-color: #fef2f2;
 }
 
+[data-theme="dark"] .result-item.result-error {
+    background-color: #7f1d1d;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .result-item.result-error {
+        background-color: #7f1d1d;
+    }
+}
+
 .result-header {
     display: flex;
     align-items: center;
@@ -292,6 +351,30 @@ fieldset legend {
     color: #991b1b;
 }
 
+[data-theme="dark"] .result-badge.success {
+    background-color: #064e3b;
+    color: #a7f3d0;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .result-badge.success {
+        background-color: #064e3b;
+        color: #a7f3d0;
+    }
+}
+
+[data-theme="dark"] .result-badge.error {
+    background-color: #7f1d1d;
+    color: #fecaca;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .result-badge.error {
+        background-color: #7f1d1d;
+        color: #fecaca;
+    }
+}
+
 .result-section {
     margin-bottom: 1rem;
 }
@@ -325,6 +408,18 @@ fieldset legend {
     background-color: #fee;
     border-color: var(--error-color);
     color: #991b1b;
+}
+
+[data-theme="dark"] .result-section.result-error pre {
+    background-color: #7f1d1d;
+    color: #fecaca;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .result-section.result-error pre {
+        background-color: #7f1d1d;
+        color: #fecaca;
+    }
 }
 
 .result-output {
@@ -476,6 +571,54 @@ fieldset legend {
         flex-direction: column;
         align-items: flex-start;
     }
+
+    .theme-toggle {
+        top: 0.5rem;
+        right: 0.5rem;
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+
+    .theme-toggle svg {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+/* Theme toggle button */
+.theme-toggle {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    background-color: var(--bg-white);
+    border: 1px solid var(--border-color);
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: var(--shadow-md);
+    transition: transform 0.2s, box-shadow 0.2s;
+    z-index: 1000;
+    font-size: 1.25rem;
+}
+
+.theme-toggle:hover {
+    transform: scale(1.05);
+    box-shadow: var(--shadow-lg);
+}
+
+.theme-toggle:active {
+    transform: scale(0.95);
+}
+
+.theme-toggle svg {
+    width: 24px;
+    height: 24px;
+    fill: var(--text-primary);
 }
 
 /* Scrollbar styling for webkit browsers */
@@ -496,5 +639,15 @@ fieldset legend {
 
 .result-output::-webkit-scrollbar-thumb:hover {
     background: #475569;
+}
+
+[data-theme="dark"] .result-output::-webkit-scrollbar-thumb:hover {
+    background: #64748b;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .result-output::-webkit-scrollbar-thumb:hover {
+        background: #64748b;
+    }
 }
 
