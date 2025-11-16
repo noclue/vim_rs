@@ -31,6 +31,17 @@ path = "src/dynamic_property_fetch.rs"
 name = "root_objects"
 path = "src/root_objects.rs"
 
+[[bin]]
+name = "vm_ip"
+path = "src/vm_ip.rs"
+
+[[bin]]
+name = "vm_rename"
+path = "src/vm_rename.rs"
+
+[[bin]]
+name = "vm_toggle_wol"
+path = "src/vm_toggle_wol.rs"
 
 [dependencies]
 anyhow = "1.0"

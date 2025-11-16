@@ -1,7 +1,50 @@
 //! # VM Cache Events Example
-//! This example demonstrates how to use the `vim_macros` library to efficiently replicate specific
-//! properties from virtual machines in a VMware vSphere environment. It monitors for changes in VM
-//! properties and acknowledges these on the console.
+//!
+//! This example demonstrates how to use the vSphere PropertyCollector cache system to
+//! efficiently monitor changes to virtual machine properties in real-time.
+//!
+//! ## Key Concepts
+//!
+//! **PropertyCollector Cache**: Unlike the `vim_retrievable!` macro which fetches properties
+//! once, the cache system uses vSphere's WaitForUpdatesEx to continuously monitor objects
+//! and receive incremental updates when properties change.
+//!
+//! **vim_updatable! macro**: Similar to `vim_retrievable!`, but generates code optimized
+//! for the cache system, supporting create/update/delete operations.
+//!
+//! **ObjectCacheListener**: A trait you implement to receive callbacks when objects are:
+//! - Created (`on_new`)
+//! - Modified (`on_update`)
+//! - Deleted (`on_remove`)
+//!
+//! ## How It Works
+//!
+//! 1. Define a struct with `vim_updatable!` specifying which VM properties to track
+//! 2. Implement `ObjectCacheListener` to handle property change events
+//! 3. Create a `CacheManager` and `ObjectCache` with your listener
+//! 4. Add the root folder (or any container) to watch all VMs within it
+//! 5. Call `wait_updates()` in a loop to receive and process changes
+//!
+//! ## Use Cases
+//!
+//! - Real-time monitoring dashboards
+//! - Audit logging of VM changes
+//! - Triggering automation based on state changes
+//! - Maintaining a synchronized replica of vSphere inventory
+//!
+//! ## Performance Benefits
+//!
+//! The cache system is highly efficient because:
+//! - Only changed properties are transmitted (not full objects)
+//! - A single PropertyCollector filter watches all VMs
+//! - The server tracks what data the client already has
+//! - Network traffic is minimized through incremental updates
+//!
+//! In this example:
+//! 1. We connect to vSphere and create a cache manager
+//! 2. We track VM name and power state changes
+//! 3. We print events to the console as VMs are created, updated, or removed
+//! 4. The example runs for 60 seconds then exits cleanly
 
 use log::info;
 use std::fmt::{Display, Formatter};
