@@ -2,7 +2,7 @@ use std::any;
 
 /// Casts trait object to Any. This is the first step in casting between trait objects.
 /// The second step is to downcast Any to the actual data type inside trait specific code.
-/// See the implementations of `CastFrom` for an example.  
+/// See the implementations of `CastFrom` for an example.
 pub trait AsAny {
     /// Cast a reference to a trait object.
     fn as_any_ref<'a>(&'a self) -> &'a dyn any::Any;

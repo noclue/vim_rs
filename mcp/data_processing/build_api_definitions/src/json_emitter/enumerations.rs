@@ -1,8 +1,9 @@
-use crate::json_emitter::common::*;
-use crate::vim_model::Model;
-use crate::rs_emitter::names::to_enum_variant;
+use vim_mcp_server::*;
+use vim_build::vim_model::Model;
+use vim_build::rs_emitter::names::to_enum_variant;
 use std::path::Path;
 use chrono::Utc;
+use tracing::info;
 
 pub fn emit_enumerations_json(
     model: &Model,
@@ -43,6 +44,7 @@ pub fn emit_enumerations_json(
     let file = std::fs::File::create(&output_path)?;
     serde_json::to_writer_pretty(file, &output)?;
 
-    println!("Generated: {}", output_path.display());
+    info!("Generated: {}", output_path.display());
     Ok(())
 }
+

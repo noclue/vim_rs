@@ -1,6 +1,6 @@
-use crate::vim_model::{Method, DataType, Model};
-use crate::json_emitter::common::{MethodSignature, ParameterInfo};
-use crate::rs_emitter::names::{TypeDefResolver, to_fn_name};
+use vim_build::vim_model::{Method, DataType, Model};
+use vim_mcp_server::{MethodSignature, ParameterInfo};
+use vim_build::rs_emitter::names::{TypeDefResolver, to_fn_name};
 
 pub fn generate_method_signature(
     method: &Method,
@@ -69,3 +69,4 @@ pub fn generate_method_signature(
         is_async: true,
     }
 }
+

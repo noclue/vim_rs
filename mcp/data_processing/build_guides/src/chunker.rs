@@ -3,7 +3,6 @@ use crate::topic_extractor;
 use crate::GuideChunk;
 use anyhow::Result;
 
-const MIN_WORDS: usize = 200;
 const MAX_WORDS: usize = 800;
 
 /// Create chunks from parsed sections

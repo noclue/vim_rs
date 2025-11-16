@@ -3,6 +3,10 @@ name = "vim_build"
 version = "0.1.0"
 edition = "2021"
 
+[lib]
+name = "vim_build"
+path = "src/lib.rs"
+
 [[bin]]
 name = "generate"
 path = "src/main.rs"

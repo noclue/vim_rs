@@ -1,8 +1,9 @@
-use crate::json_emitter::common::*;
-use crate::vim_model::{Model, EmitMode, DataType, Struct};
-use crate::rs_emitter::names::TypeDefResolver;
+use vim_mcp_server::*;
+use vim_build::vim_model::{Model, EmitMode, DataType, Struct};
+use vim_build::rs_emitter::names::TypeDefResolver;
 use std::path::Path;
 use chrono::Utc;
+use tracing::info;
 
 fn format_vim_type(dt: &DataType) -> String {
     match dt {
@@ -121,7 +122,7 @@ pub fn emit_data_structures_json(
     let file = std::fs::File::create(&output_path)?;
     serde_json::to_writer_pretty(file, &output)?;
 
-    println!("Generated: {}", output_path.display());
+    info!("Generated: {}", output_path.display());
     Ok(())
 }
 
@@ -217,3 +218,4 @@ fn collect_all_descendants(model: &Model, name: &str) -> Vec<String> {
     descendants.dedup();
     descendants
 }
+

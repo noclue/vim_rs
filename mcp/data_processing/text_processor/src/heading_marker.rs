@@ -3,6 +3,7 @@
 use anyhow::{bail, Result};
 use regex::Regex;
 use std::collections::{HashMap, HashSet};
+use tracing::{info, warn};
 
 use crate::toc_parser::TocEntry;
 
@@ -55,7 +56,7 @@ pub fn mark_headings(
     for (page, entries) in toc_map {
         for entry in entries {
             if !found_titles.contains(&(*page, entry.title.clone())) {
-                println!(
+                warn!(
                     "TOC entry '{}' not found on page {} (expected after previous title)",
                     entry.title,
                     page
@@ -64,7 +65,7 @@ pub fn mark_headings(
         }
     }
 
-    println!("✓ All {} TOC entries found and marked", found_titles.len());
+    info!("✓ All {} TOC entries found and marked", found_titles.len());
 
     Ok(output)
 }

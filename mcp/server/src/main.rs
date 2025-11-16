@@ -48,19 +48,6 @@ pub struct McpServer {
     embeddings_db: Option<Arc<Connection>>,
 }
 
-/// Input parameters for search tools
-#[derive(Serialize, Deserialize, JsonSchema)]
-struct SearchInput {
-    /// Search query
-    #[schemars(description = "The search query to find matching items")]
-    query: String,
-
-    /// Maximum number of results to return
-    #[schemars(description = "Maximum number of results to return (default: 10)")]
-    #[serde(default = "default_limit")]
-    limit: usize,
-}
-
 /// Input parameters for semantic search tool
 #[derive(Serialize, Deserialize, JsonSchema)]
 struct SemanticSearchInput {
@@ -115,14 +102,6 @@ struct GetGuideInput {
     /// Chunk ID of the guide section to retrieve
     #[schemars(description = "The chunk_id of the guide section (e.g., 'installing-esx-understanding-auto-deploy')")]
     chunk_id: String,
-}
-
-/// Input parameters for search_guides tool
-#[derive(Serialize, Deserialize, JsonSchema)]
-struct SearchGuidesInput {
-    /// Search query for guides
-    #[schemars(description = "Search query - keywords from topic, heading, or content (e.g., 'auto deploy', 'host profiles', 'dpu')")]
-    query: String,
 }
 
 /// Input parameters for get_workflow_guide tool (empty struct for consistency)
@@ -255,157 +234,6 @@ impl McpServer {
             #[cfg(feature = "embeddings")]
             embeddings_db,
         })
-    }
-
-    /// Search for vSphere API methods by name or description (Rust bindings only)
-    #[tool(description = "Search for vSphere API methods by name or description. Returns Rust method signatures and usage from the vim_rs crate.")]
-    async fn search_methods(&self, params: Parameters<SearchInput>) -> Result<CallToolResult, McpError> {
-        let query = params.0.query.to_lowercase();
-        let limit = params.0.limit;
-        let mut results = Vec::new();
-        let mut count = 0;
-
-        for mo in &self.api_data.managed_objects {
-            for method in &mo.methods {
-                if count >= limit {
-                    break;
-                }
-
-                let name_match = method.name.to_lowercase().contains(&query);
-                let desc_match = method.description.as_ref()
-                    .map(|d| d.to_lowercase().contains(&query))
-                    .unwrap_or(false);
-
-                if name_match || desc_match {
-                    let desc = method.description.as_deref().unwrap_or("No description");
-                    let result = format!(
-                        "## {}.{}\n\n**Rust:** `{}`\n\n**Signature:**\n```rust\n{}\n```\n\n**Description:**\n{}\n\n**Related Types:** {}\n\n---\n",
-                        mo.name,
-                        method.name,
-                        method.rust_name,
-                        method.signature.full,
-                        desc,
-                        method.related_types.join(", ")
-                    );
-                    results.push(result);
-                    count += 1;
-                }
-            }
-            if count >= limit {
-                break;
-            }
-        }
-
-        if results.is_empty() {
-            let message = format!("No methods found matching '{}'", params.0.query);
-            Ok(CallToolResult::success(vec![Content::text(message)]))
-        } else {
-            let message = format!("Found {} method(s) matching '{}':\n\n{}",
-                results.len(), params.0.query, results.join("\n"));
-            Ok(CallToolResult::success(vec![Content::text(message)]))
-        }
-    }
-
-    /// Search for vSphere API data structures by name or description (Rust types only)
-    #[tool(description = "Search for vSphere API data structures by name or description. Returns Rust struct definitions and field information from the vim_rs crate.")]
-    async fn search_types(&self, params: Parameters<SearchInput>) -> Result<CallToolResult, McpError> {
-        let query = params.0.query.to_lowercase();
-        let limit = params.0.limit;
-        let mut results = Vec::new();
-
-        for structure in &self.api_data.data_structures {
-            if results.len() >= limit {
-                break;
-            }
-
-            let name_match = structure.name.to_lowercase().contains(&query);
-            let desc_match = structure.description.as_ref()
-                .map(|d| d.to_lowercase().contains(&query))
-                .unwrap_or(false);
-
-            if name_match || desc_match {
-                let desc = structure.description.as_deref().unwrap_or("No description");
-                let parent_info = structure.parent.as_ref()
-                    .map(|p| format!(" (extends {})", p))
-                    .unwrap_or_default();
-
-                let mut field_list = String::new();
-                for field in structure.fields.iter().take(10) {
-                    let req = if field.required { "required" } else { "optional" };
-                    field_list.push_str(&format!("  - `{}`: {} ({})\n", field.name, field.vim_type, req));
-                }
-                if structure.fields.len() > 10 {
-                    field_list.push_str(&format!("  ... and {} more fields\n", structure.fields.len() - 10));
-                }
-
-                let result = format!(
-                    "## {}{}\n\n**Rust:** `{}`\n\n**Description:**\n{}\n\n**Fields:**\n{}\n**Related Types:** {}\n\n---\n",
-                    structure.name,
-                    parent_info,
-                    structure.rust_name,
-                    desc,
-                    field_list,
-                    structure.related_types.join(", ")
-                );
-                results.push(result);
-            }
-        }
-
-        if results.is_empty() {
-            let message = format!("No data structures found matching '{}'", params.0.query);
-            Ok(CallToolResult::success(vec![Content::text(message)]))
-        } else {
-            let message = format!("Found {} data structure(s) matching '{}':\n\n{}",
-                results.len(), params.0.query, results.join("\n"));
-            Ok(CallToolResult::success(vec![Content::text(message)]))
-        }
-    }
-
-    /// Search for vSphere API enumerations by name or description (Rust enums only)
-    #[tool(description = "Search for vSphere API enumerations by name or description. Returns Rust enum definitions and variant information from the vim_rs crate.")]
-    async fn search_enums(&self, params: Parameters<SearchInput>) -> Result<CallToolResult, McpError> {
-        let query = params.0.query.to_lowercase();
-        let limit = params.0.limit;
-        let mut results = Vec::new();
-
-        for enumeration in &self.api_data.enumerations {
-            if results.len() >= limit {
-                break;
-            }
-
-            let name_match = enumeration.name.to_lowercase().contains(&query);
-            let desc_match = enumeration.description.as_ref()
-                .map(|d| d.to_lowercase().contains(&query))
-                .unwrap_or(false);
-
-            if name_match || desc_match {
-                let desc = enumeration.description.as_deref().unwrap_or("No description");
-
-                let mut variant_list = String::new();
-                for variant in &enumeration.variants {
-                    let variant_desc = variant.description.as_deref().unwrap_or("");
-                    variant_list.push_str(&format!("  - `{}`: {}\n", variant.name, variant_desc));
-                }
-
-                let result = format!(
-                    "## {}\n\n**Rust:** `{}`\n\n**Description:**\n{}\n\n**Variants:**\n{}\n---\n",
-                    enumeration.name,
-                    enumeration.rust_name,
-                    desc,
-                    variant_list
-                );
-                results.push(result);
-            }
-        }
-
-        if results.is_empty() {
-            let message = format!("No enumerations found matching '{}'", params.0.query);
-            Ok(CallToolResult::success(vec![Content::text(message)]))
-        } else {
-            let message = format!("Found {} enumeration(s) matching '{}':\n\n{}",
-                results.len(), params.0.query, results.join("\n"));
-            Ok(CallToolResult::success(vec![Content::text(message)]))
-        }
     }
 
     /// List all available code examples with categories
@@ -545,60 +373,6 @@ impl McpServer {
         }
     }
 
-    /// Search guide sections by keyword
-    #[tool(description = "Search vSphere/VCF documentation guides by keyword in headings, topics, or content. Returns matching guide sections from admin documentation.")]
-    async fn search_guides(&self, params: Parameters<SearchGuidesInput>) -> Result<CallToolResult, McpError> {
-        let query = params.0.query.to_lowercase();
-        info!("search_guides: query='{}', total_guides={}", query, self.api_data.guides.len());
-        let mut results = Vec::new();
-
-        for guide in &self.api_data.guides {
-            let h1_match = guide.heading_h1.to_lowercase().contains(&query);
-            let h2_match = guide.heading_h2.to_lowercase().contains(&query);
-            let h3_match = guide.heading_h3.to_lowercase().contains(&query);
-            let topics_match = guide.topics.iter().any(|t| t.to_lowercase().contains(&query));
-            let content_match = guide.content.to_lowercase().contains(&query);
-
-            if h1_match || h2_match || h3_match || topics_match || content_match {
-                let sub_section = guide.sub_section.as_ref()
-                    .map(|s| format!(" - {}", s))
-                    .unwrap_or_default();
-
-                let content_preview = if guide.content.len() > 150 {
-                    format!("{}...", &guide.content[..150])
-                } else {
-                    guide.content.clone()
-                };
-
-                results.push(format!(
-                    "**{} > {} > {}{}**\n{}\nUse: `get_guide(\"{}\")`\n",
-                    guide.heading_h1,
-                    guide.heading_h2,
-                    guide.heading_h3,
-                    sub_section,
-                    content_preview,
-                    guide.chunk_id
-                ));
-            }
-        }
-
-        if results.is_empty() {
-            let message = format!(
-                "No guide sections found matching '{}'. Try semantic_search with filter='guides' for better results.",
-                query
-            );
-            Ok(CallToolResult::success(vec![Content::text(message)]))
-        } else {
-            let message = format!(
-                "Found {} guide section(s) matching '{}':\n\n{}",
-                results.len(),
-                query,
-                results.join("\n")
-            );
-            Ok(CallToolResult::success(vec![Content::text(message)]))
-        }
-    }
-
     /// Get comprehensive vim_rs workflow guide
     #[tool(description = "CALL THIS FIRST! Returns the complete vim_rs workflow guide with connection patterns, property collector usage, code snippets, and best practices. Essential for writing correct vim_rs code on the first try.")]
     async fn get_workflow_guide(&self, _params: Parameters<GetWorkflowGuideInput>) -> Result<CallToolResult, McpError> {
@@ -669,8 +443,8 @@ For complete guide, use: list_examples, get_example, search_examples
     }
 
     /// List all supported managed object types
-    #[tool(description = "Returns a list of all vSphere managed object types supported by the property collector system. These types can be used with get_property_info to explore their properties. Returns the top-level types like VirtualMachine, HostSystem, Datacenter, etc.")]
-    async fn list_managed_object_types(&self, _params: Parameters<ListManagedObjectTypesInput>) -> Result<CallToolResult, McpError> {
+    #[tool(description = "Returns a list of all vSphere property collector root managed object types. These types can be used with get_property_info to explore their properties. Returns the top-level types like VirtualMachine, HostSystem, Datacenter, etc.")]
+    async fn list_property_collector_root_types(&self, _params: Parameters<ListManagedObjectTypesInput>) -> Result<CallToolResult, McpError> {
         let types = property_collector::get_managed_object_types();
 
         let mut output = String::from("# Supported Managed Object Types\n\n");
@@ -696,78 +470,76 @@ For complete guide, use: list_examples, get_example, search_examples
         let managed_object = &params.0.managed_object;
         let property_path = &params.0.property_path;
 
-        match property_collector::get_property_info(managed_object, property_path) {
-            Ok(info) => {
-                let mut output = String::new();
-
-                if property_path.is_empty() {
-                    output.push_str(&format!("# Top-Level Properties for {}\n\n", managed_object));
-                } else {
-                    output.push_str(&format!("# Property: {}.{}\n\n", managed_object, property_path));
-                }
-
-                output.push_str(&format!("**VIM Path:** `{}`\n", info.vim_path));
-                output.push_str(&format!("**Rust Type:** `{}`\n", info.rust_type));
-                output.push_str(&format!("**Optional:** {}\n\n", info.is_optional));
-
-                if let Some(doc) = &info.documentation {
-                    output.push_str("## Documentation\n\n");
-                    output.push_str(doc);
-                    output.push_str("\n\n");
-                }
-
-                if let Some(children) = &info.child_fields {
-                    output.push_str("## Child Properties\n\n");
-                    output.push_str(&format!("Found {} child properties:\n\n", children.len()));
-
-                    for child in children {
-                        output.push_str(&format!("### `{}`\n", child.field_name));
-                        output.push_str(&format!("- **VIM Name:** `{}`\n", child.vim_name));
-                        output.push_str(&format!("- **Rust Type:** `{}`\n", child.rust_type));
-                        output.push_str(&format!("- **Optional:** {}\n", child.is_optional));
-
-                        if let Some(doc) = &child.documentation {
-                            // Truncate doc to first 200 chars for child fields
-                            let doc_preview = if doc.len() > 200 {
-                                format!("{}...", &doc[..200])
-                            } else {
-                                doc.clone()
-                            };
-                            output.push_str(&format!("- **Description:** {}\n", doc_preview));
-                        }
-                        output.push_str("\n");
-                    }
-
-                    output.push_str("\n## Example Usage in vim_retrievable!\n\n");
-                    output.push_str("```rust\n");
-                    output.push_str("vim_retrievable!(\n");
-                    output.push_str(&format!("    struct My{}: {} {{\n", managed_object, managed_object));
-                    for child in children.iter().take(5) {
-                        let full_path = if property_path.is_empty() {
-                            child.field_name.clone()
-                        } else {
-                            format!("{}.{}", property_path, child.field_name)
-                        };
-                        output.push_str(&format!("        {} = \"{}\",\n", child.field_name, full_path));
-                    }
-                    output.push_str("    }\n");
-                    output.push_str(");\n");
-                    output.push_str("```\n");
-                }
-
-                Ok(CallToolResult::success(vec![Content::text(output)]))
-            }
+        let info = match property_collector::get_property_info(managed_object, property_path) {
+            Ok(info) => info,
             Err(e) => {
-                let error_msg = format!(
+                return Ok(CallToolResult::success(vec![Content::text(format!(
                     "Error getting property info for {}.{}:\n\n{}\n\n\
                     Use `list_managed_object_types` to see all supported types.",
                     managed_object,
                     property_path,
                     e
-                );
-                Ok(CallToolResult::success(vec![Content::text(error_msg)]))
+                ))]));
             }
+        };
+        let mut output = String::new();
+
+        if property_path.is_empty() {
+            output.push_str(&format!("# Top-Level Properties for {}\n\n", managed_object));
+        } else {
+            output.push_str(&format!("# Property: {}.{}\n\n", managed_object, property_path));
         }
+
+        output.push_str(&format!("**VIM Path:** `{}`\n", info.vim_path));
+        output.push_str(&format!("**Rust Type:** `{}`\n", info.rust_type));
+        output.push_str(&format!("**Optional:** {}\n\n", info.is_optional));
+
+        if let Some(doc) = &info.documentation {
+            output.push_str("## Documentation\n\n");
+            output.push_str(doc);
+            output.push_str("\n\n");
+        }
+
+        if let Some(children) = &info.child_fields {
+            output.push_str("## Child Properties\n\n");
+            output.push_str(&format!("Found {} child properties:\n\n", children.len()));
+
+            for child in children {
+                output.push_str(&format!("### `{}`\n", child.field_name));
+                output.push_str(&format!("- **VIM Name:** `{}`\n", child.vim_name));
+                output.push_str(&format!("- **Rust Type:** `{}`\n", child.rust_type));
+                output.push_str(&format!("- **Optional:** {}\n", child.is_optional));
+
+                if let Some(doc) = &child.documentation {
+                    // Truncate doc to first 200 chars for child fields
+                    let doc_preview = if doc.len() > 200 {
+                        format!("{}...", &doc[..200])
+                    } else {
+                        doc.clone()
+                    };
+                    output.push_str(&format!("- **Description:** {}\n", doc_preview));
+                }
+                output.push_str("\n");
+            }
+
+            output.push_str("\n## Example Usage in vim_retrievable!\n\n");
+            output.push_str("```rust\n");
+            output.push_str("vim_retrievable!(\n");
+            output.push_str(&format!("    struct My{}: {} {{\n", managed_object, managed_object));
+            for child in children.iter().take(5) {
+                let full_path = if property_path.is_empty() {
+                    child.field_name.clone()
+                } else {
+                    format!("{}.{}", property_path, child.field_name)
+                };
+                output.push_str(&format!("        {} = \"{}\",\n", child.field_name, full_path));
+            }
+            output.push_str("    }\n");
+            output.push_str(");\n");
+            output.push_str("```\n");
+        }
+
+        Ok(CallToolResult::success(vec![Content::text(output)]))
     }
 
     /// Get comprehensive type information for structs, traits, or enums
@@ -975,10 +747,10 @@ For complete guide, use: list_examples, get_example, search_examples
         let error_msg = format!(
             "Type '{}' not found.\n\n\
             This tool supports:\n\
-            - Structs: e.g., 'VirtualDevice', 'VirtualMachine', 'HostSystem'\n\
+            - Structs: e.g., 'VirtualDevice', 'VirtualEthernetCard', 'VirtualMachineConfigInfo'\n\
             - Traits: e.g., 'VirtualDeviceTrait', 'VirtualEthernetCardTrait'\n\
             - Enums: e.g., 'ManagedEntityStatus', 'VirtualMachinePowerState'\n\n\
-            Use search_types, search_enums, or semantic_search to find type names.",
+            Use the `search` tool to find type names.",
             type_name
         );
         Ok(CallToolResult::success(vec![Content::text(error_msg)]))
@@ -986,8 +758,8 @@ For complete guide, use: list_examples, get_example, search_examples
 
     /// Semantic search using natural language queries (requires embeddings)
     #[cfg(feature = "embeddings")]
-    #[tool(description = "Semantic search for vSphere API using natural language queries. Returns Rust methods, types, enums, code examples, and admin guide sections from vim_rs based on meaning, not just keywords. Use filter='guides' to search only documentation guides.")]
-    async fn semantic_search(&self, params: Parameters<SemanticSearchInput>) -> Result<CallToolResult, McpError> {
+    #[tool(description = "Search vSphere documentation using natural language queries. Returns Rust methods, types, enums, code examples, and admin guide sections from vim_rs based on meaning, not just keywords. Use filter='guides' to search only documentation guides.")]
+    async fn search(&self, params: Parameters<SemanticSearchInput>) -> Result<CallToolResult, McpError> {
         // Check if embeddings are available
         if self.embedding_model.is_none() || self.embeddings_db.is_none() {
             let message = "Semantic search is not available. Embeddings database not found. Please run build-embeddings first or use text search tools (search_methods, search_types, search_enums, search_guides).".to_string();

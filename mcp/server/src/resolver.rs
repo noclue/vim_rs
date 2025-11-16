@@ -30,6 +30,8 @@ pub enum FieldProcessingType {
 pub struct FieldData {
     /// The Rust data type of the field
     pub data_type: String,
+    /// The name of the type used for further field look ups. Only relevant for complex types - structs and traits
+    pub type_name: &'static str,
     /// Whether the field is optional
     pub is_optional: bool,
     /// The field processing type
@@ -45,6 +47,7 @@ pub struct FieldData {
 pub fn get_default_field_data() -> FieldData {
     FieldData {
         data_type: "String".to_string(),
+        type_name: "",
         is_optional: false,
         processing_type: FieldProcessingType::Enum("PrimitiveString"),
         vim_path: "name".to_string(),
@@ -101,6 +104,7 @@ pub fn resolve_path(managed_object: &str, path: &str) -> Result<FieldData> {
 
     Ok(FieldData {
         data_type: add_optional(&node_data.type_decl, optional),
+        type_name: node_data.type_name,
         is_optional: optional,
         processing_type: node_data.processing_type.clone(),
         vim_path: path.join("."),

@@ -1,9 +1,10 @@
-use crate::json_emitter::common::*;
+use vim_mcp_server::*;
 use crate::json_emitter::signature_generator;
-use crate::vim_model::{Model, Method, DataType};
-use crate::rs_emitter::names::to_fn_name;
+use vim_build::vim_model::{Model, Method, DataType};
+use vim_build::rs_emitter::names::to_fn_name;
 use std::path::Path;
 use chrono::Utc;
+use tracing::info;
 
 pub fn emit_managed_objects_json(
     model: &Model,
@@ -52,7 +53,7 @@ pub fn emit_managed_objects_json(
     let file = std::fs::File::create(&output_path)?;
     serde_json::to_writer_pretty(file, &output)?;
 
-    println!("Generated: {}", output_path.display());
+    info!("Generated: {}", output_path.display());
     Ok(())
 }
 
@@ -73,3 +74,4 @@ fn extract_related_types(method: &Method) -> Vec<String> {
     types.dedup();
     types
 }
+

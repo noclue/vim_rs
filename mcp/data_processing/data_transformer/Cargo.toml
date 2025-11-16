@@ -1,0 +1,30 @@
+[package]
+name = "data-transformer"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "data-transformer"
+path = "src/main.rs"
+
+[dependencies]
+# Tool libraries
+pdf_parser = { path = "../pdf_parser" }
+text-processor = { path = "../text_processor" }
+build_guides = { path = "../build_guides" }
+build-examples = { path = "../build_examples" }
+build-embeddings = { path = "../build_embeddings", features = ["cuda"] }
+build-api-definitions = { path = "../build_api_definitions" }
+
+# For build_api_definitions and build_embeddings
+vim_build = { path = "../../../vim_build" }
+vim_mcp_server = { path = "../../server" }
+
+# Core dependencies
+anyhow = "1.0"
+tracing = "0.1"
+tracing-subscriber = "0.3"
+tokio = { version = "1.42", features = ["full"] }
+serde_json = "1.0"
+thiserror = "2.0"
+

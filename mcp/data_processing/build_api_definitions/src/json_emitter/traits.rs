@@ -1,36 +1,9 @@
-use crate::json_emitter::common::*;
-use crate::vim_model::{Model, EmitMode, Field};
-use crate::rs_emitter::names::TypeDefResolver;
+use vim_mcp_server::{TraitsOutput, TraitEntry, GetterEntry};
+use vim_build::vim_model::{Model, EmitMode, Field};
+use vim_build::rs_emitter::names::TypeDefResolver;
 use std::path::Path;
 use chrono::Utc;
-use serde::{Serialize, Deserialize};
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct TraitsOutput {
-    pub generated_at: chrono::DateTime<Utc>,
-    pub source: String,
-    pub traits: Vec<TraitEntry>,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct TraitEntry {
-    pub name: String,
-    pub rust_name: String,
-    pub rust_module: String,
-    pub description: Option<String>,
-    pub parent_trait: Option<String>,
-    pub getters: Vec<GetterEntry>,
-    pub implementing_types: Vec<String>,
-    pub all_descendants: Vec<String>,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct GetterEntry {
-    pub name: String,
-    pub return_type: String,
-    pub description: Option<String>,
-    pub field_name: String,
-}
+use tracing::info;
 
 pub fn emit_traits_json(
     model: &Model,
@@ -103,7 +76,7 @@ pub fn emit_traits_json(
     let file = std::fs::File::create(&output_path)?;
     serde_json::to_writer_pretty(file, &output)?;
 
-    println!("Generated: {}", output_path.display());
+    info!("Generated: {}", output_path.display());
     Ok(())
 }
 
@@ -171,7 +144,8 @@ fn getter_return_type(tdf: &TypeDefResolver, property: &Field) -> Result<String,
     Ok(field_type)
 }
 
-fn get_by_ref(vim_type: &crate::vim_model::DataType) -> bool {
-    use crate::vim_model::DataType;
+fn get_by_ref(vim_type: &vim_build::vim_model::DataType) -> bool {
+    use vim_build::vim_model::DataType;
     matches!(vim_type, DataType::String | DataType::Binary | DataType::Array(_))
 }
+

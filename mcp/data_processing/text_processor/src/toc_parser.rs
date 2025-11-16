@@ -3,6 +3,7 @@
 use anyhow::Result;
 use regex::Regex;
 use std::collections::HashMap;
+use tracing::info;
 
 use crate::glyph_widths::calculate_width;
 
@@ -19,7 +20,7 @@ pub fn parse_and_export_toc(lines: &[String]) -> Result<String> {
     let toc_map = parse_toc(lines)?;
         
 
-    println!("Found {} TOC entries", toc_map.len());
+    info!("Found {} TOC entries", toc_map.len());
 
     Ok(toc_to_markdown(&toc_map))
 }
@@ -68,7 +69,7 @@ pub fn parse_toc(lines: &[String]) -> Result<HashMap<u32, Vec<TocEntry>>> {
         }
     }
 
-    println!("Found {} TOC entries", toc_map.len());
+    info!("Found {} TOC entries", toc_map.len());
 
     Ok(toc_map)
 }

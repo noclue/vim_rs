@@ -1,4 +1,5 @@
 use anyhow::Result;
+use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use std::path::Path;
 use tracing::{info, warn};
@@ -120,24 +121,31 @@ pub struct TraitEntry {
 // Wrapper structures with metadata (what's actually in the JSON files)
 
 #[derive(Debug, Serialize, Deserialize)]
-struct ManagedObjectsOutput {
-    managed_objects: Vec<ManagedObjectEntry>,
-    // Ignoring generated_at and source for now
+pub struct ManagedObjectsOutput {
+    pub generated_at: DateTime<Utc>,
+    pub source: String,
+    pub managed_objects: Vec<ManagedObjectEntry>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-struct DataStructuresOutput {
-    structures: Vec<StructureEntry>,
+pub struct DataStructuresOutput {
+    pub generated_at: DateTime<Utc>,
+    pub source: String,
+    pub structures: Vec<StructureEntry>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-struct EnumerationsOutput {
-    enumerations: Vec<EnumerationEntry>,
+pub struct EnumerationsOutput {
+    pub generated_at: DateTime<Utc>,
+    pub source: String,
+    pub enumerations: Vec<EnumerationEntry>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-struct TraitsOutput {
-    traits: Vec<TraitEntry>,
+pub struct TraitsOutput {
+    pub generated_at: DateTime<Utc>,
+    pub source: String,
+    pub traits: Vec<TraitEntry>,
 }
 
 // Code Examples - for teaching usage patterns
@@ -193,6 +201,8 @@ impl ApiData {
         let managed_objects_path = api_definitions_dir.join("managed_objects.json");
         let data_structures_path = api_definitions_dir.join("data_structures.json");
         let enumerations_path = api_definitions_dir.join("enumerations.json");
+        let traits_path = api_definitions_dir.join("traits.json");
+        let examples_path = api_definitions_dir.join("examples.json");
 
         let managed_objects = if managed_objects_path.exists() {
             let content = std::fs::read_to_string(&managed_objects_path)?;
@@ -221,11 +231,6 @@ impl ApiData {
             Vec::new()
         };
 
-        let traits_path = if api_definitions_dir.join("traits.json").exists() {
-            api_definitions_dir.join("traits.json")
-        } else {
-            data_dir.join("traits.json")
-        };
         let traits = if traits_path.exists() {
             let content = std::fs::read_to_string(&traits_path)?;
             let output: TraitsOutput = serde_json::from_str(&content)?;
@@ -235,11 +240,6 @@ impl ApiData {
             Vec::new()
         };
 
-        let examples_path = if api_definitions_dir.join("examples.json").exists() {
-            api_definitions_dir.join("examples.json")
-        } else {
-            data_dir.join("examples.json")
-        };
         let examples = if examples_path.exists() {
             let content = std::fs::read_to_string(&examples_path)?;
             let output: ExamplesOutput = serde_json::from_str(&content)?;

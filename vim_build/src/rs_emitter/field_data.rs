@@ -124,6 +124,12 @@ impl<'a> FieldDataEmitter<'a> {
                 HierarchyError::UnsupportedObjectType(class.to_string())
             }
         })
+}
+#[allow(dead_code)]
+pub(crate) fn get_type_fields(class: &str) -> Result<&'static phf::Map<&'static str, NodeData>> {
+    CLASS_FIELDS
+        .get(class)
+        .ok_or_else(|| HierarchyError::UnsupportedObjectType(class.to_string()))
 }")?;
         Ok(())
     }

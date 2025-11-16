@@ -1,8 +1,32 @@
-use crate::json_emitter::common::*;
-use crate::vim_model::{Model, EmitMode};
+use vim_build::vim_model::{Model, EmitMode};
 use std::path::Path;
 use std::time::Duration;
-use chrono::Utc;
+use chrono::{DateTime, Utc};
+use serde::{Deserialize, Serialize};
+use tracing::info;
+
+// Metadata Schema - kept local since these will be removed later
+
+#[derive(Debug, Serialize, Deserialize)]
+struct MetadataOutput {
+    generated_at: DateTime<Utc>,
+    source: String,
+    statistics: Statistics,
+    files_generated: Vec<String>,
+    generation_duration_ms: u128,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+struct Statistics {
+    managed_objects: usize,
+    total_methods: usize,
+    data_structures_total: usize,
+    data_structures_emitted: usize,
+    data_structures_pruned: usize,
+    data_structures_skipped: usize,
+    enumerations: usize,
+    pruned_types: Vec<String>,
+}
 
 pub fn emit_metadata_json(
     model: &Model,
@@ -43,6 +67,7 @@ pub fn emit_metadata_json(
     let file = std::fs::File::create(&output_path)?;
     serde_json::to_writer_pretty(file, &output)?;
 
-    println!("Generated: {}", output_path.display());
+    info!("Generated: {}", output_path.display());
     Ok(())
 }
+

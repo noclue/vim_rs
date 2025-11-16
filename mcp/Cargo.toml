@@ -1,9 +1,11 @@
 [workspace]
 members = [
     "server",
+    "data_processing/build_api_definitions",
     "data_processing/build_embeddings",
     "data_processing/build_examples",
     "data_processing/build_guides",
+    "data_processing/data_transformer",
     "data_processing/pdf_parser",
     "data_processing/text_processor",
 ]

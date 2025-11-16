@@ -1038,6 +1038,23 @@ dependencies = [
 ]
 
 [[package]]
+name = "build-api-definitions"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "check_keyword",
+ "chrono",
+ "convert_case",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.17",
+ "tracing",
+ "tracing-subscriber",
+ "vim_build",
+ "vim_mcp_server",
+]
+
+[[package]]
 name = "build-embeddings"
 version = "0.1.0"
 dependencies = [
@@ -1076,6 +1093,8 @@ dependencies = [
  "regex",
  "serde",
  "serde_json",
+ "tracing",
+ "tracing-subscriber",
 ]
 
 [[package]]
@@ -1215,6 +1234,15 @@ name = "cfg_aliases"
 version = "0.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "613afe47fcd5fac7ccf1db93babcb082c5994d996f20b8b159f2ad1658eb5724"
+
+[[package]]
+name = "check_keyword"
+version = "0.3.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c3678a4fc14c47dce76127d66f9b2637ff497af665d5618f1f756f4ad1b4a5b1"
+dependencies = [
+ "phf 0.11.3",
+]
 
 [[package]]
 name = "chrono"
@@ -1382,6 +1410,15 @@ name = "constant_time_eq"
 version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7c74b8349d32d297c9134b8c88677813a227df8f779daa29bfc29c183fe3dca6"
+
+[[package]]
+name = "convert_case"
+version = "0.8.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "baaaa0ecca5b51987b9423ccdc971514dd8b0bb7b4060b983d3664dad3f1f89f"
+dependencies = [
+ "unicode-segmentation",
+]
 
 [[package]]
 name = "core-foundation"
@@ -1622,6 +1659,26 @@ dependencies = [
  "lock_api",
  "once_cell",
  "parking_lot_core",
+]
+
+[[package]]
+name = "data-transformer"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "build-api-definitions",
+ "build-embeddings",
+ "build-examples",
+ "build_guides",
+ "pdf_parser",
+ "serde_json",
+ "text-processor",
+ "thiserror 2.0.17",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
+ "vim_build",
+ "vim_mcp_server",
 ]
 
 [[package]]
@@ -4880,6 +4937,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "openapi30"
+version = "0.1.0"
+dependencies = [
+ "indexmap 2.12.0",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.17",
+]
+
+[[package]]
 name = "opendal"
 version = "0.54.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -5079,6 +5146,8 @@ name = "pdf_parser"
 version = "0.1.0"
 dependencies = [
  "extractous",
+ "tracing",
+ "tracing-subscriber",
 ]
 
 [[package]]
@@ -5140,6 +5209,7 @@ version = "0.11.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1fd6780a80ae0c52cc120a26a1a42c1ae51b247a253e4e06113d23d2c2edd078"
 dependencies = [
+ "phf_macros",
  "phf_shared 0.11.3",
 ]
 
@@ -5150,6 +5220,39 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "913273894cec178f401a31ec4b656318d95473527be05c0752cc41cdc32be8b7"
 dependencies = [
  "phf_shared 0.12.1",
+]
+
+[[package]]
+name = "phf_codegen"
+version = "0.11.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "aef8048c789fa5e851558d709946d6d79a8ff88c0440c587967f8e94bfb1216a"
+dependencies = [
+ "phf_generator",
+ "phf_shared 0.11.3",
+]
+
+[[package]]
+name = "phf_generator"
+version = "0.11.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3c80231409c20246a13fddb31776fb942c38553c51e871f8cbd687a4cfb5843d"
+dependencies = [
+ "phf_shared 0.11.3",
+ "rand 0.8.5",
+]
+
+[[package]]
+name = "phf_macros"
+version = "0.11.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f84ac04429c13a7ff43785d75ad27569f2951ce0ffd30a3321230db2fc727216"
+dependencies = [
+ "phf_generator",
+ "phf_shared 0.11.3",
+ "proc-macro2",
+ "quote",
+ "syn 2.0.110",
 ]
 
 [[package]]
@@ -6944,6 +7047,8 @@ dependencies = [
  "anyhow",
  "lazy_static",
  "regex",
+ "tracing",
+ "tracing-subscriber",
 ]
 
 [[package]]
@@ -7538,12 +7643,29 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0b928f33d975fc6ad9f86c8f283853ad26bdd5b10b7f1542aa2fa15e2289105a"
 
 [[package]]
+name = "vim_build"
+version = "0.1.0"
+dependencies = [
+ "check_keyword",
+ "chrono",
+ "convert_case",
+ "indexmap 2.12.0",
+ "log",
+ "openapi30",
+ "phf_codegen",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.17",
+]
+
+[[package]]
 name = "vim_mcp_server"
 version = "0.1.0"
 dependencies = [
  "anyhow",
  "arrow-array",
  "arrow-schema",
+ "chrono",
  "fastembed",
  "futures",
  "lancedb",

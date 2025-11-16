@@ -1,10 +1,8 @@
-mod generator;
-mod printer;
-pub mod rs_emitter;
-mod vim_model;
+pub mod json_emitter;
 
-use generator::emit_vim_bindings;
-use std::{path::Path, time::Instant};
+use anyhow::Result;
+use std::path::Path;
+use vim_build::{load_openapi, load_vim_model};
 
 /// Types whose hierarchies are pruned from the model. The listed types will be generated. Their
 /// descendants will not. This means that:
@@ -17,14 +15,18 @@ use std::{path::Path, time::Instant};
 /// 4. deserialization for the descendant types will be handled by the parent type Visitor. The
 /// parent type Visitor will optionally accept the discriminator during creation to populate the
 /// correct type_name_ for the descendant types.
-static PRUNED_TYPES: [&str; 2] = ["MethodFault", "Event"];
+pub const PRUNED_TYPES: [&str; 2] = ["MethodFault", "Event"];
 
-fn main() {
-    let root_folder = Path::new("../");
-    let vi_json_spec_path = Path::new("data/vi_json_openapi_specification_v9_0_0_0_24798170.json");
+/// Build API definitions from OpenAPI specification
+pub fn build_api_definitions(vi_json_spec_path: &Path, output_dir: &Path) -> Result<()> {
+    // Load OpenAPI spec and transform to vim_model
+    let openapi = load_openapi(vi_json_spec_path)?;
+    let model = load_vim_model(&openapi, Some(&PRUNED_TYPES))?;
 
-    //generate_to_console(vi_json_spec_path).unwrap();
-    let start = Instant::now();
-    emit_vim_bindings(vi_json_spec_path, root_folder, Some(&PRUNED_TYPES)).unwrap();
-    println!("Total time in Rust generation: {:?}", start.elapsed());
+    // Generate JSON files
+    json_emitter::emit_mcp_data(&model, output_dir, &PRUNED_TYPES)
+        .map_err(|e| anyhow::anyhow!("Failed to emit MCP data: {}", e))?;
+
+    Ok(())
 }
+

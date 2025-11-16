@@ -1,5 +1,5 @@
 use crate::resolver::{resolve_path, FieldData, HierarchyError};
-use crate::field_data::lookup_field_data;
+use crate::field_data::get_type_fields;
 use serde::{Deserialize, Serialize};
 
 /// A managed object type with its name
@@ -91,39 +91,9 @@ pub fn get_property_info(
 }
 
 fn get_top_level_fields(managed_object: &str) -> Result<PropertyInfo, HierarchyError> {
-    // Get all fields for this managed object by using the lookup_field_data function
-    // We need to iterate through the CLASS_FIELDS to find all fields for this object
-    // Since we can't directly access the map, we'll try common fields and collect them
-
-    // For now, we'll use a helper approach: try to resolve an empty path which should give us
-    // information about the object itself
-    let mut child_fields = Vec::new();
-
-    // Common properties that most managed objects have
-    let common_props = vec![
-        "name", "parent", "config", "summary", "runtime", "guest",
-        "network", "datastore", "vm", "host", "resourcePool", "snapshot",
-        "storage", "availableField", "value", "alarmActionsEnabled",
-        "tag", "customValue", "overallStatus", "configStatus", "configIssue",
-        "effectiveRole", "permission", "recentTask", "declaredAlarmState",
-        "triggeredAlarmState", "disabledMethod",
-    ];
-
-    for prop in common_props {
-        if let Ok(node) = lookup_field_data(managed_object, prop) {
-            child_fields.push(ChildField {
-                field_name: prop.replace(".", "_"),
-                vim_name: node.path_segment.to_string(),
-                rust_type: node.type_decl.to_string(),
-                is_optional: node.is_optional,
-                documentation: node.doc.map(|s| s.to_string()),
-            });
-        }
-    }
-
-    if child_fields.is_empty() {
+    let Some(child_fields) = get_child_fields_for_type(managed_object) else {
         return Err(HierarchyError::UnsupportedObjectType(managed_object.to_string()));
-    }
+    };
 
     Ok(PropertyInfo {
         vim_path: "".to_string(),
@@ -144,7 +114,7 @@ fn get_property_details(
     let child_fields = match &field_data.processing_type {
         crate::resolver::FieldProcessingType::Struct | crate::resolver::FieldProcessingType::Trait => {
             // Try to get child fields by attempting to resolve sub-properties
-            get_child_fields_for_type(&field_data)
+            get_child_fields_for_type(&field_data.type_name)
         }
         _ => None,
     };
@@ -154,61 +124,24 @@ fn get_property_details(
         rust_type: field_data.data_type.clone(),
         is_optional: field_data.is_optional,
         documentation: field_data.doc.map(|s| s.to_string()),
-        child_fields,
+        child_fields: child_fields,
     })
 }
 
-fn get_child_fields_for_type(field_data: &FieldData) -> Option<Vec<ChildField>> {
-    // Extract the type name from the Rust type
-    // Types look like: "Option<vim_rs::types::structs::VirtualMachineGuestSummary>"
-    // or "vim_rs::types::structs::VirtualMachineConfigInfo"
-    let type_str = &field_data.data_type;
-
-    // Remove Option<> wrapper if present
-    let inner_type = if type_str.starts_with("Option<") {
-        &type_str[7..type_str.len() - 1]
-    } else {
-        type_str
+fn get_child_fields_for_type(type_name: &str) -> Option<Vec<ChildField>> {
+    let Ok(type_fields) = get_type_fields(type_name) else {
+        return None;
     };
 
-    // Extract the struct name from the fully qualified path
-    let type_name = inner_type
-        .split("::")
-        .last()
-        .and_then(|s| {
-            // Remove any trait wrapper like "Box<dyn ...Trait>>"
-            if s.contains("Trait>>") {
-                s.split("Trait>>").next()
-            } else if s.ends_with(">") {
-                // Handle Vec<...> and other generic types
-                None
-            } else {
-                Some(s)
-            }
-        })?;
-
-    // Try to get fields for this type
     let mut child_fields = Vec::new();
-
-    // Try common field names for structs
-    let common_fields = vec![
-        "name", "type", "value", "key", "description", "summary",
-        "label", "unit_info", "rollup_type", "stats_type",
-        "guest_full_name", "guest_id", "ip_address", "host_name",
-        "tools_status", "tools_version", "tools_running_status",
-        "tools_version_status", "tools_version_status2",
-    ];
-
-    for field in common_fields {
-        if let Ok(node) = lookup_field_data(type_name, field) {
-            child_fields.push(ChildField {
-                field_name: field.to_string(),
-                vim_name: node.path_segment.to_string(),
-                rust_type: node.type_decl.to_string(),
-                is_optional: node.is_optional,
-                documentation: node.doc.map(|s| s.to_string()),
-            });
-        }
+    for (field_name, field_data) in type_fields.entries() {
+        child_fields.push(ChildField {
+            field_name: field_name.to_string(),
+            vim_name: field_data.path_segment.to_string(),
+            rust_type: field_data.type_decl.to_string(),
+            is_optional: field_data.is_optional,
+            documentation: field_data.doc.map(|s| s.to_string()),
+        });
     }
 
     if child_fields.is_empty() {

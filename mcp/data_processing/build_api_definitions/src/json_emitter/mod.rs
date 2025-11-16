@@ -1,4 +1,3 @@
-mod common;
 mod signature_generator;
 mod managed_objects;
 mod data_structures;
@@ -6,7 +5,7 @@ mod enumerations;
 mod metadata;
 mod traits;
 
-use crate::vim_model::Model;
+use vim_build::vim_model::Model;
 use std::path::Path;
 use std::time::Instant;
 
@@ -40,3 +39,4 @@ pub fn emit_mcp_data(
 
     Ok(())
 }
+
