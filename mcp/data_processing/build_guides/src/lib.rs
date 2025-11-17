@@ -36,6 +36,12 @@ pub struct GuideChunk {
 
     /// Auto-extracted topics/keywords
     pub topics: Vec<String>,
+
+    /// Index of this chunk within the article (1-based)
+    pub chunk_index: usize,
+
+    /// Total number of chunks in the article
+    pub chunk_count: usize,
 }
 
 /// Process a single markdown file and write the output as JSON

@@ -423,8 +423,7 @@ fieldset legend {
 }
 
 .result-output {
-    max-height: 600px;
-    overflow-y: auto;
+    /* no styling. No nested scrolling. */
 }
 
 /* Markdown content styling */

@@ -12,7 +12,7 @@ pub fn emit_enumerations_json(
     let mut enumerations = Vec::new();
 
     for (name, enum_def) in &model.enums {
-        let rust_name = name.trim_end_matches("_enum");
+        let rust_name = name.trim_end_matches("_enum").to_string() + "Enum";
 
         let variants = enum_def.variants.iter().map(|v| {
             VariantEntry {
@@ -27,7 +27,7 @@ pub fn emit_enumerations_json(
 
         enumerations.push(EnumerationEntry {
             name: name.clone(),
-            rust_name: rust_name.to_string(),
+            rust_name: rust_name,
             rust_module: "vim_rs::types::enums".to_string(),
             description: enum_def.description.clone(),
             variants,

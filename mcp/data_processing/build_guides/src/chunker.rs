@@ -28,19 +28,23 @@ pub fn create_chunks(sections: &[Section], source_file: &str) -> Result<Vec<Guid
                 &content_text,
                 source_file,
                 &chunks,
+                1,  // chunk_index
+                1,  // chunk_count
             );
             chunks.push(chunk);
         } else {
             // Split oversized section on paragraph boundaries
             let sub_chunks = split_on_paragraphs(&section.content);
-            for (idx, sub_content) in sub_chunks.iter().enumerate() {
-                // Skip empty sub-chunks
-                let sub_word_count = count_words(sub_content);
-                if sub_word_count == 0 {
-                    continue;
-                }
-
-                let sub_section = if sub_chunks.len() > 1 {
+            
+            // Filter out empty sub-chunks and collect valid content
+            let valid_sub_chunks: Vec<&String> = sub_chunks.iter()
+                .filter(|sc| count_words(sc) > 0)
+                .collect();
+            
+            let total_chunks = valid_sub_chunks.len();
+            
+            for (idx, sub_content) in valid_sub_chunks.iter().enumerate() {
+                let sub_section = if total_chunks > 1 {
                     Some(format!("Part {}", idx + 1))
                 } else {
                     None
@@ -54,6 +58,8 @@ pub fn create_chunks(sections: &[Section], source_file: &str) -> Result<Vec<Guid
                     sub_content,
                     source_file,
                     &chunks,
+                    idx + 1,        // chunk_index (1-based)
+                    total_chunks,   // chunk_count
                 );
                 chunks.push(chunk);
             }
@@ -68,44 +74,22 @@ fn split_on_paragraphs(lines: &[String]) -> Vec<String> {
     let mut chunks = Vec::new();
     let mut current_chunk = Vec::new();
     let mut current_words = 0;
-    let mut in_list = false;
-    let mut in_important_note = false;
 
-    // Hard limit: if chunk exceeds this, force split even in lists
+    // Hard limit: if chunk exceeds this, force split at any line boundary
     const HARD_LIMIT: usize = MAX_WORDS + (MAX_WORDS / 2); // 1200 words
 
     for line in lines {
-        let trimmed = line.trim();
-
-        // Detect list start
-        if trimmed.starts_with("* ") || trimmed.starts_with("- ") {
-            in_list = true;
-        }
-
-        // Detect Important/Note boxes
-        if trimmed == "Important:" || trimmed == "Note:" {
-            in_important_note = true;
-        }
-
-        // Detect end of Important/Note (blank line after content)
-        if in_important_note && trimmed.is_empty() && !current_chunk.is_empty() {
-            in_important_note = false;
-        }
-
-        // Detect paragraph boundary (blank line when not in list/important/note)
-        let is_paragraph_boundary = trimmed.is_empty() && !in_list && !in_important_note;
-
-        // Count words in this line
         let line_words = count_words(line);
+        let is_blank = line.trim().is_empty();
 
-        // Split if:
-        // 1. At paragraph boundary and would exceed MAX_WORDS
-        // 2. Current chunk exceeds HARD_LIMIT (force split even in lists)
-        let should_split = if is_paragraph_boundary && current_words > 0 && current_words + line_words > MAX_WORDS {
-            true
-        } else if current_words > HARD_LIMIT {
-            // Hard limit exceeded - force split at next safe point
-            // Safe points: any line break (even in lists)
+        // Check if we should split:
+        // 1. At blank line when exceeding MAX_WORDS
+        // 2. At any line boundary if exceeding HARD_LIMIT
+        let should_split = if current_words > HARD_LIMIT {
+            // Hard limit exceeded - split at any line boundary
+            !current_chunk.is_empty()
+        } else if is_blank && current_words > MAX_WORDS {
+            // At paragraph boundary and exceeding MAX_WORDS
             true
         } else {
             false
@@ -116,25 +100,11 @@ fn split_on_paragraphs(lines: &[String]) -> Vec<String> {
             chunks.push(current_chunk.join("\n"));
             current_chunk.clear();
             current_words = 0;
-            in_list = false;
-            in_important_note = false;
-
-            // If this line is not blank, start new chunk with it
-            if !trimmed.is_empty() {
-                current_chunk.push(line.clone());
-                current_words += line_words;
-            }
-            continue;
         }
 
         // Add line to current chunk
         current_chunk.push(line.clone());
         current_words += line_words;
-
-        // If blank line and we were in a list, list has ended
-        if trimmed.is_empty() && in_list {
-            in_list = false;
-        }
     }
 
     // Don't forget the last chunk
@@ -154,6 +124,8 @@ fn create_chunk(
     content: &str,
     source_file: &str,
     existing_chunks: &[GuideChunk],
+    chunk_index: usize,
+    chunk_count: usize,
 ) -> GuideChunk {
     let word_count = count_words(content);
     let topics = topic_extractor::extract_topics(Some(h1), h2, h3, content);
@@ -169,6 +141,8 @@ fn create_chunk(
         source_file: source_file.to_string(),
         chunk_id,
         topics,
+        chunk_index,
+        chunk_count,
     }
 }
 
@@ -264,6 +238,8 @@ mod tests {
             source_file: "test".to_string(),
             chunk_id: id1.clone(),
             topics: vec![],
+            chunk_index: 1,
+            chunk_count: 1,
         };
 
         let id2 = generate_chunk_id("ESX Installation", "Installing ESX", "Understanding Auto Deploy", &[chunk1]);
@@ -307,5 +283,154 @@ mod tests {
         assert_eq!(chunks[1].heading_h1, "Main Guide");
         assert_eq!(chunks[1].heading_h2, "Section B");
         assert_eq!(chunks[1].heading_h3, "");
+    }
+
+    #[test]
+    fn test_split_on_paragraphs_small_content() {
+        // Content that fits within MAX_WORDS should not be split
+        let lines = vec![
+            "This is a paragraph.".to_string(),
+            "It has multiple lines.".to_string(),
+            "".to_string(),
+            "This is another paragraph.".to_string(),
+        ];
+        
+        let chunks = split_on_paragraphs(&lines);
+        assert_eq!(chunks.len(), 1);
+        assert_eq!(chunks[0], lines.join("\n"));
+    }
+
+    #[test]
+    fn test_split_on_paragraphs_at_blank_line() {
+        // Create content that exceeds MAX_WORDS with a blank line
+        let mut lines = Vec::new();
+        
+        // First paragraph: ~900 words (exceeds MAX_WORDS of 800)
+        for _ in 0..90 {
+            lines.push("word word word word word word word word word word".to_string());
+        }
+        lines.push("".to_string()); // Blank line - should trigger split
+        
+        // Second paragraph: small
+        lines.push("Second paragraph here.".to_string());
+        
+        let chunks = split_on_paragraphs(&lines);
+        assert_eq!(chunks.len(), 2, "Should split at blank line when exceeding MAX_WORDS");
+    }
+
+    #[test]
+    fn test_split_on_paragraphs_hard_limit() {
+        // Create content that exceeds HARD_LIMIT without blank lines
+        let mut lines = Vec::new();
+        
+        // 1300 words without any blank lines (exceeds HARD_LIMIT of 1200)
+        for _ in 0..130 {
+            lines.push("word word word word word word word word word word".to_string());
+        }
+        
+        let chunks = split_on_paragraphs(&lines);
+        assert!(chunks.len() >= 2, "Should force split when exceeding HARD_LIMIT");
+        
+        // Verify that chunks respect the hard limit
+        for chunk in &chunks {
+            let word_count = count_words(chunk);
+            assert!(word_count <= 1210, "Chunks should not exceed HARD_LIMIT by much");
+        }
+    }
+
+    #[test]
+    fn test_split_on_paragraphs_no_split_below_max() {
+        // Content just under MAX_WORDS should not split even at blank lines
+        let mut lines = Vec::new();
+        
+        // ~700 words (below MAX_WORDS of 800)
+        for _ in 0..70 {
+            lines.push("word word word word word word word word word word".to_string());
+        }
+        lines.push("".to_string()); // Blank line
+        lines.push("More content here.".to_string());
+        
+        let chunks = split_on_paragraphs(&lines);
+        assert_eq!(chunks.len(), 1, "Should not split when below MAX_WORDS");
+    }
+
+    #[test]
+    fn test_split_on_paragraphs_empty_input() {
+        let lines: Vec<String> = vec![];
+        let chunks = split_on_paragraphs(&lines);
+        assert_eq!(chunks.len(), 0, "Empty input should produce no chunks");
+    }
+
+    #[test]
+    fn test_split_on_paragraphs_multiple_blank_lines() {
+        // Test with multiple blank lines and content that needs splitting
+        let mut lines = Vec::new();
+        
+        // First section: ~850 words
+        for _ in 0..85 {
+            lines.push("word word word word word word word word word word".to_string());
+        }
+        lines.push("".to_string());
+        lines.push("".to_string()); // Multiple blank lines
+        
+        // Second section: ~850 words
+        for _ in 0..85 {
+            lines.push("word word word word word word word word word word".to_string());
+        }
+        lines.push("".to_string());
+        
+        lines.push("Final paragraph.".to_string());
+        
+        let chunks = split_on_paragraphs(&lines);
+        assert!(chunks.len() >= 2, "Should split at blank lines when exceeding MAX_WORDS");
+    }
+
+    #[test]
+    fn test_chunk_index_and_count() {
+        use crate::markdown_parser::Section;
+
+        // Test single chunk (no split)
+        let sections = vec![
+            Section {
+                h1: "Guide".to_string(),
+                h2: "Small Section".to_string(),
+                h3: "".to_string(),
+                content: vec!["This is a small section.".to_string()],
+            },
+        ];
+        
+        let chunks = create_chunks(&sections, "test").unwrap();
+        assert_eq!(chunks.len(), 1);
+        assert_eq!(chunks[0].chunk_index, 1, "Single chunk should have index 1");
+        assert_eq!(chunks[0].chunk_count, 1, "Single chunk should have count 1");
+
+        // Test split section (multiple chunks)
+        let mut large_content = Vec::new();
+        // Create content that will split into multiple chunks
+        for i in 0..100 {
+            large_content.push(format!("Line {} with some words here to increase word count.", i));
+        }
+        large_content.push("".to_string()); // Blank line
+        for i in 100..200 {
+            large_content.push(format!("Line {} with some more words here to increase word count.", i));
+        }
+        
+        let sections = vec![
+            Section {
+                h1: "Guide".to_string(),
+                h2: "Large Section".to_string(),
+                h3: "".to_string(),
+                content: large_content,
+            },
+        ];
+        
+        let chunks = create_chunks(&sections, "test").unwrap();
+        assert!(chunks.len() > 1, "Large section should split into multiple chunks");
+        
+        let total = chunks.len();
+        for (i, chunk) in chunks.iter().enumerate() {
+            assert_eq!(chunk.chunk_index, i + 1, "Chunk index should be 1-based");
+            assert_eq!(chunk.chunk_count, total, "All chunks should have same total count");
+        }
     }
 }

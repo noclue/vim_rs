@@ -4,6 +4,7 @@ mod heading_marker;
 mod cleanup;
 mod bullet_fixer;
 mod list_merger;
+mod escape_hashes;
 
 use anyhow::{Context, Result};
 use std::fs;
@@ -26,6 +27,10 @@ pub fn process_single_file(input_path: &PathBuf, output_path: &PathBuf) -> Resul
 
     let lines: Vec<String> = content.lines().map(|s| s.to_string()).collect();
     info!("Read {} lines", lines.len());
+
+    // Pass 0: Escape existing hashes
+    info!("  Pass 0: Escaping existing # symbols...");
+    let lines = escape_hashes::escape_existing_hashes(&lines);
 
     // Pass 1: Parse TOC
     info!("  Pass 1: Parsing TOC...");

@@ -179,6 +179,8 @@ pub struct GuideChunk {
     pub source_file: String,
     pub chunk_id: String,
     pub topics: Vec<String>,
+    pub chunk_index: usize,
+    pub chunk_count: usize,
 }
 
 /// Holds all loaded API data

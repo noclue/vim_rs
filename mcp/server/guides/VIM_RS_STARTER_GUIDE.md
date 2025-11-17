@@ -76,7 +76,7 @@ async fn main() -> Result<()> {
 **Dependencies needed:**
 ```toml
 [dependencies]
-vim_rs = "0.2.5"
+vim_rs = "0.2"
 anyhow = "1.0"
 tokio = { version = "1.0", features = ["full"] }
 env_logger = "0.11"
@@ -168,7 +168,7 @@ async fn main() -> Result<()> {
 
 **Additional dependency:**
 ```toml
-vim_macros = "0.2.5"
+vim_macros = "0.2"
 ```
 
 **Key Points:**
@@ -443,24 +443,33 @@ fn do_something() -> Result<()> {
 
 ### Step 1: Search for the concept
 ```
-semantic_search("find VM snapshots")
+search(filter="all", limit=20, query="find VM snapshots",)
 ```
 
-### Step 2: Get details on the method/type
+### Step 2: Get details on the type
 ```
-get_method("VirtualMachine", "CreateSnapshot_Task")
-get_type("VirtualMachineSnapshotInfo")
+get_type("VirtualMachine")
+```
+This works for structures, polymorphic traits, managed objects and enums as they have unique names.
+
+### Step 3: Find details about an API method
+API methods live in managed objects like `VirtualMachine`, `HostSystem` and folder.
+
+`get_type` will give you list of methods on the managed object. To get the details of a method use 
+`get_method` . For example:
+```
+get_method("VirtualMachine", "create_snapshot_ex_task")
 ```
 
 ### Step 3: Find a working example
 ```
-search_examples("snapshot")
-get_example("snapshot_basic")
+search(filter="examples", limit=10, query="events")
+get_example("eventster")
 ```
 
 ### Step 4: Check admin guides for gotchas
 ```
-search_guides("snapshot limitations")
+search(filter="guides", limit=10, query="snapshot limitations")
 get_guide("understanding-snapshots")
 ```
 
@@ -678,8 +687,8 @@ async fn main() -> Result<()> {
 **Cargo.toml dependencies:**
 ```toml
 [dependencies]
-vim_rs = "0.2.5"
-vim_macros = "0.2.5"
+vim_rs = "0.2"
+vim_macros = "0.2"
 anyhow = "1.0"
 tokio = { version = "1.0", features = ["full"] }
 env_logger = "0.11"
