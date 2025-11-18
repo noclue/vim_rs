@@ -1,30 +1,16 @@
 use anyhow::{Context, Result};
 use fastembed::{EmbeddingModel, InitOptions, TextEmbedding};
 use std::path::PathBuf;
-use std::sync::Arc;
 use tracing::{info, warn};
-use vim_mcp_server::model::ApiData;
-
-use arrow_array::{RecordBatch, RecordBatchIterator, StringArray, Float32Array, FixedSizeListArray};
-use arrow_schema::{DataType, Field, Schema};
-use lancedb::connect;
-use lancedb::query::{QueryBase, ExecutableQuery};
+use vim_mcp_server::model::{ApiData, EmbeddingRecord, EmbeddingDatabase};
+use std::fs::File;
+use std::io::BufWriter;
 
 // Conditional imports for CUDA GPU acceleration
 #[cfg(feature = "cuda")]
 use ort::execution_providers::CUDAExecutionProvider;
 
-#[derive(Debug, Clone)]
-struct EmbeddingRecord {
-    text: String,
-    item_type: String,
-    object_name: String,
-    item_name: String,
-    rust_name: String,
-    rust_module: String,
-}
-
-pub async fn build_embeddings(api_data: &ApiData, embeddings_db_path: &PathBuf, model_cache_dir: PathBuf) -> Result<()> {
+pub async fn build_embeddings(api_data: &ApiData, embeddings_path: &PathBuf, model_cache_dir: PathBuf) -> Result<()> {
     // Step 1: Create text chunks for embedding
     info!("Creating text chunks for embedding...");
     let mut records = Vec::new();
@@ -229,162 +215,25 @@ pub async fn build_embeddings(api_data: &ApiData, embeddings_db_path: &PathBuf, 
 
     info!("Generated {} embeddings", embeddings.len());
 
-    // Step 4: Store in LanceDB
-    info!("Creating LanceDB at {}", embeddings_db_path.display());
+    // Step 4: Store in binary file
+    info!("Saving embeddings to {}", embeddings_path.display());
 
-    // Remove existing database if it exists
-    if embeddings_db_path.exists() {
-        warn!("Removing existing embeddings database");
-        std::fs::remove_dir_all(&embeddings_db_path)?;
-    }
+    let database = EmbeddingDatabase {
+        records,
+        vectors: embeddings,
+    };
 
-    let db = connect(&embeddings_db_path.to_string_lossy())
-        .execute()
-        .await
-        .context("Failed to connect to LanceDB")?;
+    let file = File::create(embeddings_path)
+        .context("Failed to create embeddings file")?;
+    let writer = BufWriter::new(file);
 
-    // Prepare data for LanceDB
-    let schema = create_schema();
-    let batch = create_record_batch(&records, &embeddings, &schema)?;
-
-    // Create table
-    info!("Creating 'vim_api' table with {} records", records.len());
-    let batches = RecordBatchIterator::new(vec![Ok(batch)], schema);
-
-    db.create_table("vim_api", Box::new(batches))
-        .execute()
-        .await
-        .context("Failed to create LanceDB table")?;
+    bincode::serialize_into(writer, &database)
+        .context("Failed to serialize embeddings database")?;
 
     info!("✓ Successfully generated and stored embeddings");
-    info!("  Database: {}", embeddings_db_path.display());
-    info!("  Records: {}", records.len());
+    info!("  File: {}", embeddings_path.display());
+    info!("  Records: {}", database.records.len());
     info!("  Dimensions: 384");
 
-    // Verification: Test that guides are searchable in the database
-    if guide_count > 0 {
-        info!("Verifying guide embeddings in database...");
-        let table = db.open_table("vim_api")
-            .execute()
-            .await
-            .context("Failed to open embeddings table for verification")?;
-
-        // Search for a guide record to verify it's in the database
-        let guide_records: Vec<_> = records.iter()
-            .enumerate()
-            .filter(|(_, r)| r.item_type == "guide")
-            .take(5)
-            .collect();
-
-        if !guide_records.is_empty() {
-            let (idx, guide_record) = guide_records[0];
-            info!("  Testing search for guide: {}", guide_record.item_name);
-            
-            // Get the embedding for this guide
-            let guide_embedding = &embeddings[idx];
-            
-            // Perform a vector search
-            let mut query = table
-                .vector_search(guide_embedding.clone())
-                .map_err(|e| anyhow::anyhow!("Vector search failed: {}", e))?
-                .limit(5);
-
-            query = query.only_if("item_type = 'guide'");
-            
-            let results = query.execute().await
-                .map_err(|e| anyhow::anyhow!("Failed to execute verification search: {}", e))?;
-
-            // Collect results (simplified verification - just check that we can query)
-            let mut found_count = 0;
-            use futures::stream::TryStreamExt;
-            use arrow_array::cast::AsArray;
-            let mut results_stream = results;
-            while let Some(batch_result) = results_stream.try_next().await
-                .map_err(|e| anyhow::anyhow!("Failed to read verification results: {}", e))? {
-                let batch = batch_result;
-                let item_type_array = batch.column_by_name("item_type").unwrap().as_string::<i32>();
-                for i in 0..batch.num_rows() {
-                    if item_type_array.value(i) == "guide" {
-                        found_count += 1;
-                    }
-                }
-            }
-
-            if found_count > 0 {
-                info!("  ✓ Verified: Found {} guide(s) in database search", found_count);
-            } else {
-                warn!("  ⚠️  WARNING: No guides found in database search - embeddings may not be working correctly");
-            }
-        }
-    }
-
     Ok(())
-}
-
-fn create_schema() -> Arc<Schema> {
-    Arc::new(Schema::new(vec![
-        Field::new("text", DataType::Utf8, false),
-        Field::new("item_type", DataType::Utf8, false),
-        Field::new("object_name", DataType::Utf8, false),
-        Field::new("item_name", DataType::Utf8, false),
-        Field::new("rust_name", DataType::Utf8, false),
-        Field::new("rust_module", DataType::Utf8, false),
-        Field::new(
-            "vector",
-            DataType::FixedSizeList(
-                Arc::new(Field::new("item", DataType::Float32, true)),
-                384,
-            ),
-            false,
-        ),
-    ]))
-}
-
-fn create_record_batch(
-    records: &[EmbeddingRecord],
-    embeddings: &[Vec<f32>],
-    schema: &Arc<Schema>,
-) -> Result<RecordBatch> {
-    use arrow_schema::FieldRef;
-
-    let text_array = StringArray::from(
-        records.iter().map(|r| r.text.as_str()).collect::<Vec<_>>()
-    );
-    let item_type_array = StringArray::from(
-        records.iter().map(|r| r.item_type.as_str()).collect::<Vec<_>>()
-    );
-    let object_name_array = StringArray::from(
-        records.iter().map(|r| r.object_name.as_str()).collect::<Vec<_>>()
-    );
-    let item_name_array = StringArray::from(
-        records.iter().map(|r| r.item_name.as_str()).collect::<Vec<_>>()
-    );
-    let rust_name_array = StringArray::from(
-        records.iter().map(|r| r.rust_name.as_str()).collect::<Vec<_>>()
-    );
-    let rust_module_array = StringArray::from(
-        records.iter().map(|r| r.rust_module.as_str()).collect::<Vec<_>>()
-    );
-
-    // Flatten embeddings for FixedSizeListArray
-    let flat_embeddings: Vec<f32> = embeddings.iter().flat_map(|v| v.iter().copied()).collect();
-    let values = Arc::new(Float32Array::from(flat_embeddings));
-
-    // Create field for the inner array
-    let field: FieldRef = Arc::new(Field::new("item", DataType::Float32, true));
-    let vector_array = FixedSizeListArray::try_new(field, 384, values, None)?;
-
-    RecordBatch::try_new(
-        schema.clone(),
-        vec![
-            Arc::new(text_array),
-            Arc::new(item_type_array),
-            Arc::new(object_name_array),
-            Arc::new(item_name_array),
-            Arc::new(rust_name_array),
-            Arc::new(rust_module_array),
-            Arc::new(vector_array),
-        ],
-    )
-    .context("Failed to create RecordBatch")
 }

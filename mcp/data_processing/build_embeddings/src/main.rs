@@ -21,7 +21,7 @@ async fn main() -> Result<()> {
         .parent()
         .unwrap()
         .join("data");
-    let embeddings_db_path = mcp_data_dir.join("embeddings.lancedb");
+    let embeddings_db_path = mcp_data_dir.join("embeddings.bin");
     let model_cache_dir = mcp_data_dir.join("model_cache");
 
     // Create cache directory if it doesn't exist

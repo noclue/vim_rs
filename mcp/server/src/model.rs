@@ -292,3 +292,23 @@ impl ApiData {
         })
     }
 }
+
+// ============================================================================
+// Embedding Data Structures
+// ============================================================================
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct EmbeddingRecord {
+    pub text: String,
+    pub item_type: String,
+    pub object_name: String,
+    pub item_name: String,
+    pub rust_name: String,
+    pub rust_module: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct EmbeddingDatabase {
+    pub records: Vec<EmbeddingRecord>,
+    pub vectors: Vec<Vec<f32>>,
+}

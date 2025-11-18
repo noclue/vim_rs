@@ -36,7 +36,7 @@ async fn main() -> Result<()> {
     info!("");
 
     // Define all paths relative to workspace root
-    let mcp_data_dir = workspace_root.join("mcp/data");
+    let mcp_data_dir = workspace_root.join("mcp").join("data");
     let guides_dir = mcp_data_dir.join("guides");
     let examples_dir = workspace_root.join("examples");
     let vim_build_data_dir = workspace_root.join("vim_build/data");
@@ -220,7 +220,7 @@ fn run_build_examples(examples_dir: &PathBuf, mcp_data_dir: &PathBuf) -> Result<
 }
 
 async fn run_build_embeddings(mcp_data_dir: &PathBuf) -> Result<()> {
-    let embeddings_db_path = mcp_data_dir.join("embeddings.lancedb");
+    let embeddings_db_path = mcp_data_dir.join("embeddings.bin");
     let model_cache_dir = mcp_data_dir.join("model_cache");
 
     info!("Embeddings database: {}", embeddings_db_path.display());

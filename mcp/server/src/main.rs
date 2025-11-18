@@ -1,4 +1,4 @@
-use anyhow::Result;
+use anyhow::{Result, Context};
 use rmcp::{
     ErrorData as McpError, handler::server::{
         ServerHandler,
@@ -20,14 +20,19 @@ use tracing::{error, info, warn};
 // Import data model from the library
 use vim_mcp_server::model::ApiData;
 use vim_mcp_server::property_collector;
+use vim_mcp_server::model::EmbeddingDatabase;
 
 // Conditional imports for embeddings feature
 #[cfg(feature = "embeddings")]
 use fastembed::{EmbeddingModel, InitOptions, TextEmbedding};
 #[cfg(feature = "embeddings")]
-use lancedb::{Connection, query::{ExecutableQuery, QueryBase}};
+use rayon::prelude::*;
 #[cfg(feature = "embeddings")]
 use std::sync::Mutex;
+#[cfg(feature = "embeddings")]
+use std::fs::File;
+#[cfg(feature = "embeddings")]
+use std::io::BufReader;
 
 // Conditional imports for CUDA GPU acceleration
 #[cfg(feature = "cuda")]
@@ -45,7 +50,7 @@ pub struct McpServer {
     #[cfg(feature = "embeddings")]
     embedding_model: Option<Arc<Mutex<TextEmbedding>>>,
     #[cfg(feature = "embeddings")]
-    embeddings_db: Option<Arc<Connection>>,
+    embeddings_db: Option<Arc<EmbeddingDatabase>>,
 }
 
 /// Input parameters for semantic search tool
@@ -164,7 +169,7 @@ impl McpServer {
 
         #[cfg(feature = "embeddings")]
         let (embedding_model, embeddings_db) = {
-            let embeddings_db_path = mcp_data_dir.join("embeddings.lancedb");
+            let embeddings_path = mcp_data_dir.join("embeddings.bin");
             let model_cache_dir = mcp_data_dir.join("model_cache");
 
             // Create cache directory if it doesn't exist
@@ -172,8 +177,8 @@ impl McpServer {
                 std::fs::create_dir_all(&model_cache_dir)?;
             }
 
-            if embeddings_db_path.exists() {
-                info!("Loading embeddings from {}", embeddings_db_path.display());
+            if embeddings_path.exists() {
+                info!("Loading embeddings from {}", embeddings_path.display());
                 info!("Using model cache directory: {}", model_cache_dir.display());
 
                 // Load embedding model with persistent cache
@@ -198,18 +203,25 @@ impl McpServer {
                     Ok(model) => {
                         info!("Embedding model loaded successfully");
 
-                        // Connect to LanceDB (now just await it)
-                        match lancedb::connect(&embeddings_db_path.to_string_lossy())
-                            .execute()
-                            .await
-                        {
-                            Ok(db) => {
-                                info!("Connected to embeddings database");
-                                (Some(Arc::new(Mutex::new(model))), Some(Arc::new(db)))
+                        // Load database from binary file
+                        let file = File::open(&embeddings_path).context("Failed to open embeddings file");
+                        match file {
+                            Ok(f) => {
+                                let reader = BufReader::new(f);
+                                match bincode::deserialize_from(reader) {
+                                    Ok(db) => {
+                                        info!("Loaded embeddings database");
+                                        (Some(Arc::new(Mutex::new(model))), Some(Arc::new(db)))
+                                    },
+                                    Err(e) => {
+                                        warn!("Failed to deserialize embeddings: {}", e);
+                                        (Some(Arc::new(Mutex::new(model))), None)
+                                    }
+                                }
                             }
                             Err(e) => {
-                                warn!("Failed to connect to embeddings database: {}", e);
-                                (None, None)
+                                warn!("Failed to open embeddings file: {}", e);
+                                (Some(Arc::new(Mutex::new(model))), None)
                             }
                         }
                     }
@@ -825,212 +837,188 @@ impl McpServer {
             }
         };
 
-        // Query the database
-        let table = match embeddings_db.open_table("vim_api").execute().await {
-            Ok(table) => table,
-            Err(e) => {
-                return Err(McpError::internal_error(format!("Failed to open embeddings table: {}", e), None));
-            }
-        };
+        // Perform parallel search using Rayon
+        let mut scores: Vec<(usize, f32)> = embeddings_db.vectors.par_iter()
+            .enumerate()
+            .map(|(idx, vec)| {
+                // Dot product (vectors are normalized)
+                let score: f32 = vec.iter().zip(&query_embedding).map(|(a, b)| a * b).sum();
+                (idx, score)
+            })
+            .collect();
 
-        let mut query = table
-            .vector_search(query_embedding)
-            .map_err(|e| McpError::internal_error(format!("Vector search failed: {}", e), None))?
-            .limit(params.0.limit);
+        // Sort by score descending
+        scores.par_sort_unstable_by(|a, b| b.1.partial_cmp(&a.1).unwrap_or(std::cmp::Ordering::Equal));
 
-        // Apply filter if specified
-        if params.0.filter != "all" {
-            let filter_type = match params.0.filter.as_str() {
-                "methods" => "method",
-                "structures" => "structure",
-                "enums" => "enum",
-                "examples" => "example",
-                "guides" => "guide",
-                "managed_objects" => "managed_object",
-                _ => {
-                    return Err(McpError::invalid_params(
-                        format!("Invalid filter value: '{}'. Must be 'all', 'methods', 'types', 'enums', 'examples', 'guides', or 'managed_objects'", params.0.filter),
-                        None
-                    ));
-                }
-            };
-            query = query.only_if(format!("item_type = '{}'", filter_type));
-        }
-
-        let results = match query.execute().await {
-            Ok(batches) => batches,
-            Err(e) => {
-                return Err(McpError::internal_error(format!("Failed to execute search: {}", e), None));
-            }
-        };
-
-        // Format results
-        use arrow_array::cast::AsArray;
-        use futures::TryStreamExt;
-
+        // Filter and take top N
+        let limit = params.0.limit;
+        let filter = &params.0.filter;
+        
         let mut formatted_results = Vec::new();
+        let mut count = 0;
 
-        // Collect batches from stream
-        let batches: Vec<_> = results.try_collect().await
-            .map_err(|e| McpError::internal_error(format!("Failed to collect results: {}", e), None))?;
+        for (idx, _score) in scores {
+            if count >= limit {
+                break;
+            }
 
-        // Debug: Log how many results we got
-        let total_rows: usize = batches.iter().map(|b| b.num_rows()).sum();
-        info!("Semantic search returned {} total rows for query '{}' with filter '{}'", total_rows, params.0.query, params.0.filter);
-        info!("Total guides in memory for lookup: {}", self.api_data.guides.len());
-
-        for batch in batches {
-            let item_type_array = batch.column_by_name("item_type").unwrap().as_string::<i32>();
-            let item_name_array = batch.column_by_name("item_name").unwrap().as_string::<i32>();
-            let object_name_array = batch.column_by_name("object_name").unwrap().as_string::<i32>();
-            let rust_name_array = batch.column_by_name("rust_name").unwrap().as_string::<i32>();
-            let text_array = batch.column_by_name("text").unwrap().as_string::<i32>();
-
-            for i in 0..batch.num_rows() {
-                let item_type = item_type_array.value(i);
-                let item_name = item_name_array.value(i);
-                let _object_name = object_name_array.value(i);
-                let _rust_name = rust_name_array.value(i);
-                let _text = text_array.value(i);
-
-                // Find full details from api_data
-                let details = match item_type {
-                    "managed_object" => {
-                        if let Some(managed_object) = self.api_data.managed_objects.iter().find(|m| m.name == item_name) {
-                            Some(format!(
-                                "## {}\n\n**Rust Struct:** `{}`\n\n**Rust Module:** `{}`\n\n**Description:**\n{}\n\n---\n",
-                                managed_object.name,
-                                managed_object.rust_struct,
-                                managed_object.rust_module,
-                                managed_object.description.as_deref().unwrap_or("No description")
-                            ))
-                        } else {
-                            None
-                        }
-                    }
-                    "method" => {
-                        // Find the method
-                        let mut result = None;
-                        for mo in &self.api_data.managed_objects {
-                            if let Some(method) = mo.methods.iter().find(|m| m.name == item_name) {
-                                let desc = method.description.as_deref().unwrap_or("No description");
-                                result = Some(format!(
-                                    "## {}.{}\n\n**Rust:** `{}`\n\n**Signature:**\n```rust\n{}\n```\n\n**Description:**\n{}\n\n**Related Types:** {}\n\n---\n",
-                                    mo.name,
-                                    method.name,
-                                    method.rust_name,
-                                    method.signature.full,
-                                    desc,
-                                    method.related_types.join(", ")
-                                ));
-                                break;
-                            }
-                        }
-                        result
-                    }
-                    "structure" => {
-                        if let Some(structure) = self.api_data.data_structures.iter().find(|s| s.name == item_name) {
-                            let desc = structure.description.as_deref().unwrap_or("No description");
-                            let parent_info = structure.parent.as_ref()
-                                .map(|p| format!(" (extends {})", p))
-                                .unwrap_or_default();
-
-                            let mut field_list = String::new();
-                            for field in structure.fields.iter().take(10) {
-                                let req = if field.required { "required" } else { "optional" };
-                                field_list.push_str(&format!("  - `{}`: {} ({})\n", field.name, field.vim_type, req));
-                            }
-                            if structure.fields.len() > 10 {
-                                field_list.push_str(&format!("  ... and {} more fields\n", structure.fields.len() - 10));
-                            }
-
-                            Some(format!(
-                                "## {}{}\n\n**Rust:** `{}`\n\n**Description:**\n{}\n\n**Fields:**\n{}\n**Related Types:** {}\n\n---\n",
-                                structure.name,
-                                parent_info,
-                                structure.rust_name,
-                                desc,
-                                field_list,
-                                structure.related_types.join(", ")
-                            ))
-                        } else {
-                            None
-                        }
-                    }
-                    "enum" => {
-                        if let Some(enumeration) = self.api_data.enumerations.iter().find(|e| e.name == item_name) {
-                            let desc = enumeration.description.as_deref().unwrap_or("No description");
-
-                            let mut variant_list = String::new();
-                            for variant in &enumeration.variants {
-                                let variant_desc = variant.description.as_deref().unwrap_or("");
-                                variant_list.push_str(&format!("  - `{}`: {}\n", variant.name, variant_desc));
-                            }
-
-                            Some(format!(
-                                "## {}\n\n**Rust:** `{}`\n\n**Description:**\n{}\n\n**Variants:**\n{}\n---\n",
-                                enumeration.name,
-                                enumeration.rust_name,
-                                desc,
-                                variant_list
-                            ))
-                        } else {
-                            None
-                        }
-                    }
-                    "example" => {
-                        if let Some(example) = self.api_data.examples.iter().find(|e| e.name == item_name) {
-                            Some(format!(
-                                "## {} (Example)\n\n**Category:** {}\n\n**Description:**\n{}\n\n**Usage:**\n```\nget_example(\"{}\")\n```\n\n---\n",
-                                example.title,
-                                example.category,
-                                example.description.lines().take(3).collect::<Vec<_>>().join(" "),
-                                example.name
-                            ))
-                        } else {
-                            None
-                        }
-                    }
-                    "guide" => {
-                        if let Some(guide) = self.api_data.guides.iter().find(|g| g.chunk_id == item_name) {
-                            let topics = if guide.topics.is_empty() {
-                                "None".to_string()
-                            } else {
-                                guide.topics.join(", ")
-                            };
-
-                            let sub_section = guide.sub_section.as_ref()
-                                .map(|s| format!(" - {}", s))
-                                .unwrap_or_default();
-
-                            // Truncate content to ~500 chars for preview
-                            let content_preview = if guide.content.len() > 500 {
-                                format!("{}...", &guide.content[..500])
-                            } else {
-                                guide.content.clone()
-                            };
-
-                            Some(format!(
-                                "## {} > {} > {}{}\n\n**Source:** {}\n\n**Topics:** {}\n\n**Content:**\n{}\n\n**Usage:**\n```\nget_guide(\"{}\")\n```\n\n---\n",
-                                guide.heading_h1,
-                                guide.heading_h2,
-                                guide.heading_h3,
-                                sub_section,
-                                guide.source_file,
-                                topics,
-                                content_preview,
-                                guide.chunk_id
-                            ))
-                        } else {
-                            None
-                        }
-                    }
-                    _ => None,
+            let record = &embeddings_db.records[idx];
+            
+            // Apply filter
+            if filter != "all" {
+                let filter_type = match filter.as_str() {
+                    "methods" => "method",
+                    "structures" => "structure",
+                    "enums" => "enum",
+                    "examples" => "example",
+                    "guides" => "guide",
+                    "managed_objects" => "managed_object",
+                    _ => "all"
                 };
-
-                if let Some(detail) = details {
-                    formatted_results.push(detail);
+                
+                if record.item_type != filter_type {
+                    continue;
                 }
+            }
+
+            // Format result based on item type
+            let details = match record.item_type.as_str() {
+                "managed_object" => {
+                    if let Some(managed_object) = self.api_data.managed_objects.iter().find(|m| m.name == record.item_name) {
+                        Some(format!(
+                            "## {}\n\n**Rust Struct:** `{}`\n\n**Rust Module:** `{}`\n\n**Description:**\n{}\n\n---\n",
+                            managed_object.name,
+                            managed_object.rust_struct,
+                            managed_object.rust_module,
+                            managed_object.description.as_deref().unwrap_or("No description")
+                        ))
+                    } else {
+                        None
+                    }
+                }
+                "method" => {
+                    // Find the method
+                    let mut result = None;
+                    for mo in &self.api_data.managed_objects {
+                        if let Some(method) = mo.methods.iter().find(|m| m.name == record.item_name) {
+                            let desc = method.description.as_deref().unwrap_or("No description");
+                            result = Some(format!(
+                                "## {}.{}\n\n**Rust:** `{}`\n\n**Signature:**\n```rust\n{}\n```\n\n**Description:**\n{}\n\n**Related Types:** {}\n\n---\n",
+                                mo.name,
+                                method.name,
+                                method.rust_name,
+                                method.signature.full,
+                                desc,
+                                method.related_types.join(", ")
+                            ));
+                            break;
+                        }
+                    }
+                    result
+                }
+                "structure" => {
+                    if let Some(structure) = self.api_data.data_structures.iter().find(|s| s.name == record.item_name) {
+                        let desc = structure.description.as_deref().unwrap_or("No description");
+                        let parent_info = structure.parent.as_ref()
+                            .map(|p| format!(" (extends {})", p))
+                            .unwrap_or_default();
+
+                        let mut field_list = String::new();
+                        for field in structure.fields.iter().take(10) {
+                            let req = if field.required { "required" } else { "optional" };
+                            field_list.push_str(&format!("  - `{}`: {} ({})\n", field.name, field.vim_type, req));
+                        }
+                        if structure.fields.len() > 10 {
+                            field_list.push_str(&format!("  ... and {} more fields\n", structure.fields.len() - 10));
+                        }
+
+                        Some(format!(
+                            "## {}{}\n\n**Rust:** `{}`\n\n**Description:**\n{}\n\n**Fields:**\n{}\n**Related Types:** {}\n\n---\n",
+                            structure.name,
+                            parent_info,
+                            structure.rust_name,
+                            desc,
+                            field_list,
+                            structure.related_types.join(", ")
+                        ))
+                    } else {
+                        None
+                    }
+                }
+                "enum" => {
+                    if let Some(enumeration) = self.api_data.enumerations.iter().find(|e| e.name == record.item_name) {
+                        let desc = enumeration.description.as_deref().unwrap_or("No description");
+
+                        let mut variant_list = String::new();
+                        for variant in &enumeration.variants {
+                            let variant_desc = variant.description.as_deref().unwrap_or("");
+                            variant_list.push_str(&format!("  - `{}`: {}\n", variant.name, variant_desc));
+                        }
+
+                        Some(format!(
+                            "## {}\n\n**Rust:** `{}`\n\n**Description:**\n{}\n\n**Variants:**\n{}\n---\n",
+                            enumeration.name,
+                            enumeration.rust_name,
+                            desc,
+                            variant_list
+                        ))
+                    } else {
+                        None
+                    }
+                }
+                "example" => {
+                    if let Some(example) = self.api_data.examples.iter().find(|e| e.name == record.item_name) {
+                        Some(format!(
+                            "## {} (Example)\n\n**Category:** {}\n\n**Description:**\n{}\n\n**Usage:**\n```\nget_example(\"{}\")\n```\n\n---\n",
+                            example.title,
+                            example.category,
+                            example.description.lines().take(3).collect::<Vec<_>>().join(" "),
+                            example.name
+                        ))
+                    } else {
+                        None
+                    }
+                }
+                "guide" => {
+                    if let Some(guide) = self.api_data.guides.iter().find(|g| g.chunk_id == record.item_name) {
+                        let topics = if guide.topics.is_empty() {
+                            "None".to_string()
+                        } else {
+                            guide.topics.join(", ")
+                        };
+
+                        let sub_section = guide.sub_section.as_ref()
+                            .map(|s| format!(" - {}", s))
+                            .unwrap_or_default();
+
+                        // Truncate content to ~500 chars for preview
+                        let content_preview = if guide.content.len() > 500 {
+                            format!("{}...", &guide.content[..500])
+                        } else {
+                            guide.content.clone()
+                        };
+
+                        Some(format!(
+                            "## {} > {} > {}{}\n\n**Source:** {}\n\n**Topics:** {}\n\n**Content:**\n{}\n\n**Usage:**\n```\nget_guide(\"{}\")\n```\n\n---\n",
+                            guide.heading_h1,
+                            guide.heading_h2,
+                            guide.heading_h3,
+                            sub_section,
+                            guide.source_file,
+                            topics,
+                            content_preview,
+                            guide.chunk_id
+                        ))
+                    } else {
+                        None
+                    }
+                }
+                _ => None,
+            };
+
+            if let Some(detail) = details {
+                formatted_results.push(detail);
+                count += 1;
             }
         }
 
@@ -1107,7 +1095,7 @@ async fn main() -> Result<()> {
     // Initialize logging to stderr
     tracing_subscriber::fmt()
         .with_writer(std::io::stderr)
-        .with_max_level(tracing::Level::TRACE)
+        .with_max_level(tracing::Level::DEBUG)
         .init();
 
     info!("Starting MCP server");
@@ -1128,7 +1116,6 @@ async fn main() -> Result<()> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use tracing::debug;
 
     #[tokio::test]
     async fn test_mcp_server() -> Result<()> {
