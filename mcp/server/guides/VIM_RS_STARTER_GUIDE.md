@@ -323,7 +323,7 @@ async fn get_vm_macs(client: Arc<Client>) -> Result<Vec<(String, String)>> {
 | Check specific type | Downcast to struct | Find VirtualE1000 specifically |
 | Access base fields | Use trait getters | Get device key from any device |
 
-**🔑 Key Takeaway for 20B:**
+**🔑 Key Takeaway:**
 - Polymorphic types are `Box<dyn SomeTrait>`, not enums
 - Use `.as_ref().into_ref()` to cast between traits
 - Use `.as_any_ref().downcast_ref::<Type>()` to get concrete types
@@ -377,7 +377,7 @@ for device in devices {
 - Use `device.as_ref().into_ref()` to cast
 - Use `eth.get_mac_address()` to get the MAC
 
-### Step 3: Common Patterns
+### Step 4: Common Patterns
 
 **Pattern: Filter objects by property**
 ```rust
@@ -396,7 +396,7 @@ let connected_hosts: Vec<&Host> = hosts
 // If you have a ManagedObjectReference
 let host_ref = /* ... */;
 let hosts: Vec<Host> = retriever
-    .retrieve_objects(&[host_ref])
+    .retrieve_objects_from_list(&[host_ref])
     .await?;
 ```
 
@@ -417,60 +417,6 @@ vim_retrievable!(
 let datacenters: Vec<Datacenter> = retriever
     .retrieve_objects_from_container(root)
     .await?;
-```
-
-## Error Handling Best Practices
-
-**Always use `anyhow::Result` and `.context()`:**
-
-```rust
-use anyhow::{Context, Result};
-
-fn do_something() -> Result<()> {
-    let value = std::fs::read_to_string("config.toml")
-        .context("Failed to read config file")?;
-
-    let parsed = parse_config(&value)
-        .context("Failed to parse config")?;
-
-    Ok(())
-}
-```
-
-**Don't use `.unwrap()` or `.expect()` in production code.**
-
-## How to Find the Right API to Use
-
-### Step 1: Search for the concept
-```
-search(filter="all", limit=20, query="find VM snapshots",)
-```
-
-### Step 2: Get details on the type
-```
-get_type("VirtualMachine")
-```
-This works for structures, polymorphic traits, managed objects and enums as they have unique names.
-
-### Step 3: Find details about an API method
-API methods live in managed objects like `VirtualMachine`, `HostSystem` and folder.
-
-`get_type` will give you list of methods on the managed object. To get the details of a method use 
-`get_method` . For example:
-```
-get_method("VirtualMachine", "create_snapshot_ex_task")
-```
-
-### Step 3: Find a working example
-```
-search(filter="examples", limit=10, query="events")
-get_example("eventster")
-```
-
-### Step 4: Check admin guides for gotchas
-```
-search(filter="guides", limit=10, query="snapshot limitations")
-get_guide("understanding-snapshots")
 ```
 
 ## Common Mistakes to Avoid
@@ -611,17 +557,135 @@ if let Some(mac) = eth.get_mac_address() {
 - `PropertyCollector` - Bulk property retrieval (use `ObjectRetriever` wrapper)
 - `TaskManager` - Task tracking
 - `SessionManager` - Session handling (handled by ClientBuilder)
+- `SearchIndex` - Lookup Virtual Machines, Hosts, Datatores by inventory path, IP, DNS, UUID etc.
 
-## When to Use Which Tool
+## MCP Server Tools and Workflows
+
+### Three Main Workflows
+
+#### Workflow 1: Start Here - Get the Starter Guide
+**Always call this first when beginning with vim_rs:**
+
+```
+get_starter_guide()
+```
+
+Returns the complete vim_rs starter guide with connection patterns, property collector usage, code snippets, and best practices. Essential for writing correct vim_rs code on the first try.
+
+---
+
+#### Workflow 2: Explore API, Examples, and Documentation
+
+Use **search** to find relevant items, then use **get** tools to dive deep:
+
+**Step 1: Search semantically** (finds items by meaning, not just keywords)
+```
+search(query="how to power on a virtual machine", limit=10, filter="all")
+```
+
+**Filters available:**
+- `all` - Search everything (default)
+- `examples` - Search only code examples
+- `guides` - Search only vSphere/VCF admin documentation
+- `managed_objects` - Search only managed object types (VirtualMachine, etc.)
+- `methods` - Search only API methods
+- `structures` - Search only data structures/types
+- `enums` - Search only enumerations
+
+**Step 2: Get detailed information** using the appropriate tool:
+
+| If you found... | Use this tool | Example |
+|----------------|---------------|---------|
+| **Code Example** | `get_example(name="...")` | `get_example(name="connection_basic")` |
+| **Guide Section** | `get_guide(chunk_id="...")` | `get_guide(chunk_id="installing-esx-understanding-auto-deploy")` |
+| **Managed Object or Struct** | `get_type(type_name="...")` | `get_type(type_name="VirtualMachine")` |
+| **Method** | `get_method(managed_object="...", method_name="...")` | `get_method(managed_object="VirtualMachine", method_name="power_on_vm_task")` |
+
+**Tool Details:**
+
+- **`search`** - Natural language semantic search across all vim_rs documentation
+  - Returns: API items, code examples, and guide sections based on meaning
+  - Use `filter` parameter to narrow results by type
+  
+- **`get_example`** - Get complete source code, description, and dependencies for a specific example
+  - Returns: Full Rust code, Cargo.toml dependencies, category, and usage notes
+  
+- **`get_guide`** - Get specific vSphere/VCF admin guide section
+  - Returns: Complete documentation content with headings, topics, and word count
+  
+- **`get_type`** - Get comprehensive information about types (structs, traits, enums, managed objects)
+  - Returns: Description, fields, methods, inheritance, implementing types, usage examples
+  - Works for: Managed objects (VirtualMachine), structs (VirtualDevice), traits (VirtualDeviceTrait), enums (ManagedEntityStatus)
+  
+- **`get_method`** - Get detailed method information
+  - Returns: Full signature, parameters, return type, description, related types, usage example
+
+---
+
+#### Workflow 3: Build Property Collector Paths
+
+Use these tools to discover valid property paths for `vim_retrievable!` macro:
+
+**Step 1: List available root types**
+```
+list_property_collector_root_types()
+```
+
+Returns all supported managed object types (VirtualMachine, HostSystem, Datacenter, Datastore, ClusterComputeResource, etc.) that can be used as roots in the property collector.
+
+**Step 2: Explore property paths**
+```
+get_property_info(managed_object="VirtualMachine", property_path="")
+```
+
+Returns detailed information about a property path including:
+- VIM path (e.g., `guest.ipAddress`)
+- Rust type (e.g., `Option<String>`)
+- Whether it's optional
+- Documentation
+- Child fields (if it's a complex type)
+- Example usage in `vim_retrievable!` macro
+
+**Examples:**
+```
+# List all top-level properties for VirtualMachine
+get_property_info(managed_object="VirtualMachine", property_path="")
+
+# Get details about a specific nested property
+get_property_info(managed_object="VirtualMachine", property_path="guest.ip_address")
+
+# Explore nested structures
+get_property_info(managed_object="VirtualMachine", property_path="config.hardware.device")
+```
+
+This workflow helps you build correct property paths like:
+```rust
+vim_retrievable!(
+    struct MyVirtualMachine: VirtualMachine {
+        name = "name",
+        power_state = "runtime.powerState",
+        ip_address = "guest.ipAddress",
+        num_cpu = "config.hardware.numCPU",
+    }
+);
+```
+
+---
+
+### Quick Reference: Task to Tool Mapping
 
 | Task | Tool | Example |
 |------|------|---------|
-| "How do I create a VM?" | `search_examples("vm")` | Get working code |
-| "What's the signature for PowerOnVM_Task?" | `get_method("VirtualMachine", "PowerOnVM_Task")` | Get API details |
-| "What fields does VirtualMachineConfigSpec have?" | `get_type("VirtualMachineConfigSpec")` | Get type info |
-| "What are the VM power states?" | `search_enums("power state")` | Get enum variants |
-| "How does DRS work?" | `search_guides("drs")` | Get concepts |
-| "Find anything about snapshots" | `semantic_search("snapshots")` | Broad search |
+| **Getting Started** | `get_starter_guide()` | Learn vim_rs patterns first |
+| **Find working code** | `search(filter="examples")` | `search(query="create vm", filter="examples")` |
+| **Find admin concepts** | `search(filter="guides")` | `search(query="drs", filter="guides")` |
+| **Broad semantic search** | `search(query="...")` | `search(query="snapshots")` |
+| **Get example code** | `get_example(name="...")` | `get_example(name="property_collector_macro")` |
+| **Get guide section** | `get_guide(chunk_id="...")` | `get_guide(chunk_id="vcenter-concepts")` |
+| **Understand a type** | `get_type(type_name="...")` | `get_type(type_name="VirtualMachineConfigSpec")` |
+| **Get method signature** | `get_method(...)` | `get_method(managed_object="VirtualMachine", method_name="power_on_vm_task")` |
+| **List property collector roots** | `list_property_collector_root_types()` | See all available managed object types |
+| **Build property paths** | `get_property_info(...)` | `get_property_info(managed_object="VirtualMachine", property_path="guest.ip_address")` |
 
 ## Complete Minimal Example Template
 
@@ -700,16 +764,10 @@ log = "0.4"
 1. **Always** use `ClientBuilder` for connections
 2. **Always** use `vim_retrievable!` macro for data retrieval
 3. **Always** use `ObjectRetriever` for fetching objects
-4. **Always** use `anyhow::Result` and `.context()` for errors
 5. **Always** check code examples first before inventing patterns
 6. **Never** manually construct PropertyCollector specs
 7. **Never** fetch objects one-by-one in loops
 8. **Never** use `.unwrap()` in production code
 
-**When in doubt, ask for an example:**
-```
-search_examples("<your task>")
-get_example("<example_name>")
-```
 
 This workflow ensures your vim_rs code will work correctly on the first try!
