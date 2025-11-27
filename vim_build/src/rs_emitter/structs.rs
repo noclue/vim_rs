@@ -6,7 +6,7 @@ use crate::vim_model::Model;
 use super::super::printer::Printer;
 
 use super::super::vim_model::*;
-use super::common::emit_description;
+use super::common::{emit_description, emit_description_with_paths};
 use super::errors::{Error, Result};
 use super::names::*;
 
@@ -63,7 +63,7 @@ impl<'a> TypesEmitter<'a> {
         {
             let this = &mut *self;
             let doc_string: &Option<String> = &vim_type.description;
-            emit_description(this.printer, doc_string)
+            emit_description_with_paths(this.printer, doc_string, &vim_type.paths)
         }?;
         let struct_name = to_type_name(name);
         if name == "ManagedObjectReference" {

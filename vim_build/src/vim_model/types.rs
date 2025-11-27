@@ -6,6 +6,207 @@ use std::cell::RefCell;
 use super::*;
 use openapi30::*;
 
+// ============================================================================
+// Path Types - for navigating to types via the API
+// ============================================================================
+
+/// Starting point for a navigation path.
+#[derive(Debug, Clone, PartialEq)]
+pub enum PathOrigin {
+    /// Property accessor (GET method) on a managed object.
+    /// e.g., `VirtualMachine::config` returns `VirtualMachineConfigInfo`
+    PropertyAccessor {
+        managed_object: String,
+        property_name: String,
+    },
+    /// Method output (return type).
+    /// e.g., `VirtualMachine::reconfigure()` returns `Task`
+    MethodOutput {
+        managed_object: String,
+        method_name: String,
+    },
+    /// Method input parameter.
+    /// e.g., `VirtualMachine::apply_evc_mode_vm_task(mask)` takes `HostFeatureMask[]`
+    MethodInput {
+        managed_object: String,
+        method_name: String,
+        parameter_name: String,
+    },
+}
+
+/// A single navigation step in a path.
+#[derive(Debug, Clone, PartialEq)]
+pub enum PathStep {
+    /// Access a field: `.field_name`, `.field_name?`, `.field_name[*]`
+    Field {
+        field_name: String,
+        is_optional: bool,
+        is_boxed: bool,
+        is_array: bool,
+    },
+    /// Downcast to a more specific type.
+    /// - If `is_trait_cast` is true: `⇒TypeNameTrait` (uses CastFrom/CastInto)
+    /// - If `is_trait_cast` is false: `→TypeName` (uses std::any downcast)
+    Downcast {
+        to_type: String,
+        /// True if target type has children and requires trait-based casting
+        is_trait_cast: bool,
+    },
+}
+
+/// Complete path from an origin to a destination type.
+#[derive(Debug, Clone, PartialEq)]
+pub struct TypePath {
+    pub origin: PathOrigin,
+    pub steps: Vec<PathStep>,
+}
+
+impl TypePath {
+    /// Render the path as shorthand notation using Rust-style names.
+    ///
+    /// Notation:
+    /// - `TypeName::` - scope resolution after type names
+    /// - `.field_name` - field access (snake_case)
+    /// - `?` - optional element
+    /// - `[*]` - array iteration
+    /// - `→TypeName` - downcast to specific type
+    /// - `(param_name)` - method input parameter (snake_case)
+    ///
+    /// Examples:
+    /// - `VirtualMachine::config?.hardware.device[*]→VirtualEthernetCard`
+    /// - `VirtualMachine::apply_evc_mode_vm_task(mask?)[*]`
+    pub fn to_shorthand(&self) -> String {
+        let mut result = String::new();
+
+        // Render origin
+        match &self.origin {
+            PathOrigin::PropertyAccessor {
+                managed_object,
+                property_name,
+            } => {
+                result.push_str(managed_object);
+                result.push_str("::");
+                // Convert property name to snake_case
+                result.push_str(&property_name.to_case(Case::Snake));
+            }
+            PathOrigin::MethodOutput {
+                managed_object,
+                method_name,
+            } => {
+                result.push_str(managed_object);
+                result.push_str("::");
+                // Convert method name to snake_case
+                result.push_str(&method_name.to_case(Case::Snake));
+                result.push_str("()");
+            }
+            PathOrigin::MethodInput {
+                managed_object,
+                method_name,
+                parameter_name,
+            } => {
+                result.push_str(managed_object);
+                result.push_str("::");
+                // Convert method name to snake_case
+                result.push_str(&method_name.to_case(Case::Snake));
+                result.push('(');
+                // Convert parameter name to snake_case
+                result.push_str(&parameter_name.to_case(Case::Snake));
+                result.push(')');
+            }
+        }
+
+        // Render steps
+        for step in &self.steps {
+            match step {
+                PathStep::Field {
+                    field_name,
+                    is_optional,
+                    is_array,
+                    ..
+                } => {
+                    result.push('.');
+                    // Convert field name to snake_case
+                    result.push_str(&field_name.to_case(Case::Snake).into_safe());
+                    if *is_optional {
+                        result.push('?');
+                    }
+                    if *is_array {
+                        result.push_str("[*]");
+                    }
+                }
+                PathStep::Downcast {
+                    to_type,
+                    is_trait_cast,
+                } => {
+                    if *is_trait_cast {
+                        // Trait cast uses double arrow and appends "Trait"
+                        result.push_str("⇒");
+                        result.push_str(&to_type.to_case(Case::Pascal).into_safe());
+                        result.push_str("Trait");
+                    } else {
+                        // Struct downcast uses single arrow
+                        result.push('→');
+                        result.push_str(&to_type.to_case(Case::Pascal).into_safe());
+                    }
+                }
+            }
+        }
+
+        result
+    }
+
+    /// Extract the PropertyCollector path portion using Rust-style names.
+    ///
+    /// Returns the dot-separated field path that can be used with PropertyCollector,
+    /// stopping at the first array or downcast. Returns `None` if the path starts
+    /// with a method input/output (PropertyCollector only works with properties).
+    ///
+    /// Example: For `VirtualMachine::config.hardware.device[*]→VirtualEthernetCard`,
+    /// returns `Some("config.hardware.device")`.
+    pub fn property_collector_path(&self) -> Option<String> {
+        // PropertyCollector only works with property accessors
+        let property_name = match &self.origin {
+            PathOrigin::PropertyAccessor { property_name, .. } => {
+                property_name.to_case(Case::Snake)
+            }
+            _ => return None,
+        };
+
+        let mut path_parts = vec![property_name];
+
+        for step in &self.steps {
+            match step {
+                PathStep::Field {
+                    field_name,
+                    is_array,
+                    ..
+                } => {
+                    path_parts.push(field_name.to_case(Case::Snake));
+                    // PropertyCollector cannot traverse into arrays
+                    if *is_array {
+                        break;
+                    }
+                }
+                PathStep::Downcast { .. } => {
+                    // PropertyCollector cannot handle downcasts (trait or struct)
+                    break;
+                }
+            }
+        }
+
+        Some(path_parts.join("."))
+    }
+
+    /// Returns the depth of the path (number of steps).
+    pub fn depth(&self) -> usize {
+        self.steps.len()
+    }
+}
+
+// ============================================================================
+// VIM Model Types
+// ============================================================================
+
 /// Represents a Vim Enum model. This is a set of string values.
 /// For example:
 /// ```yaml
@@ -30,6 +231,8 @@ pub struct Enum {
     pub description: Option<String>,
     pub variants: Vec<String>,
     pub discriminator_value: Option<String>,
+    /// Paths from API entry points leading to this enum type.
+    pub paths: Vec<TypePath>,
 }
 
 /// Indication if a type is to be emitted or not. Types marked enum are always emitted.
@@ -80,6 +283,8 @@ pub struct Struct {
     pub children: Vec<String>,
     pub last_child: String,
     pub emit_mode: EmitMode,
+    /// Paths from API entry points leading to this struct type.
+    pub paths: Vec<TypePath>,
 }
 
 impl Struct {
@@ -503,6 +708,7 @@ mod tests {
             children: vec![],
             last_child: "".to_string(),
             emit_mode: EmitMode::Emit,
+            paths: vec![],
         };
         assert_eq!(str.rust_name(), "StructCrateEnum");
     }

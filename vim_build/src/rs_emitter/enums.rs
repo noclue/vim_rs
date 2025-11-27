@@ -1,6 +1,6 @@
 use crate::{printer::Printer, vim_model::Model};
 
-use super::common::emit_description;
+use super::common::emit_description_with_paths;
 use super::errors::Result;
 use super::{to_enum_variant, to_type_name};
 
@@ -8,7 +8,7 @@ pub fn emit_enums(vim_model: &Model, printer: &mut dyn Printer) -> Result<()> {
     for (_, vim_enum) in &vim_model.enums {
         {
             let doc_string: &Option<String> = &vim_enum.description;
-            emit_description(printer, doc_string)
+            emit_description_with_paths(printer, doc_string, &vim_enum.paths)
         }?;
 
         let enum_name = to_type_name(&vim_enum.name);

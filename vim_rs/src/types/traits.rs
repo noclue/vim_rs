@@ -10721,6 +10721,12 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
 /// Scope specifies which where to deploy agents.
 /// 
 /// This structure may be used only with operations rendered under `/eam`.
+///
+/// ### How to access
+/// - `Agency::config.scope?`
+/// - `Agency::query_config().scope?`
+/// - `Agency::update(config).scope?`
+/// - `EsxAgentManager::create_agency(agency_config_info).scope?`
 pub trait AgencyScopeTrait : super::traits::DataObjectTrait {
 }
 impl<'s> serde::Serialize for dyn AgencyScopeTrait + 's {
@@ -10792,6 +10798,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn AgencyScope
 /// This structure may be used only with operations rendered under `/eam`.
 /// 
 /// ***Since:*** vEAM API 8.2
+///
+/// ### How to access
+/// - `Agent::config.ovf_ssl_trust?`
+/// - `Agent::config.vib_ssl_trust?`
+/// - `Agency::config.agent_config?[*].ovf_ssl_trust?`
+/// - `Agency::config.agent_config?[*].vib_ssl_trust?`
+/// - `Agent::agent_query_config().ovf_ssl_trust?`
+/// - `Agent::agent_query_config().vib_ssl_trust?`
+/// - `Agency::query_config().agent_config?[*].ovf_ssl_trust?`
+/// - `Agency::query_config().agent_config?[*].vib_ssl_trust?`
+/// - `Agency::update(config).agent_config?[*].ovf_ssl_trust?`
+/// - `EsxAgentManager::create_agency(agency_config_info).agent_config?[*].ovf_ssl_trust?`
+/// 
+/// *(10 of 12 paths)*
 pub trait AgentSslTrustTrait : super::traits::DataObjectTrait {
 }
 impl<'s> serde::Serialize for dyn AgentSslTrustTrait + 's {
@@ -10865,6 +10885,14 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn AgentSslTru
 /// Specifies the storage policies configured on Agent VMs.
 /// 
 /// This structure may be used only with operations rendered under `/eam`.
+///
+/// ### How to access
+/// - `Agent::config.vm_storage_policies?[*]`
+/// - `Agency::config.agent_config?[*].vm_storage_policies?[*]`
+/// - `Agent::agent_query_config().vm_storage_policies?[*]`
+/// - `Agency::query_config().agent_config?[*].vm_storage_policies?[*]`
+/// - `Agency::update(config).agent_config?[*].vm_storage_policies?[*]`
+/// - `EsxAgentManager::create_agency(agency_config_info).agent_config?[*].vm_storage_policies?[*]`
 pub trait AgentStoragePolicyTrait : super::traits::DataObjectTrait {
 }
 impl<'s> serde::Serialize for dyn AgentStoragePolicyTrait + 's {
@@ -10941,6 +10969,10 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn AgentStorag
 /// to that goal state.
 /// 
 /// This structure may be used only with operations rendered under `/eam`.
+///
+/// ### How to access
+/// - `Agency::runtime`
+/// - `Agency::agency_query_runtime()`
 pub trait EamObjectRuntimeInfoTrait : super::traits::DataObjectTrait {
     /// The health of the managed entity.
     /// 
@@ -11121,6 +11153,17 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn EamObjectRu
 /// See also *EamObject.Resolve*, *EamObject.ResolveAll*.
 /// 
 /// This structure may be used only with operations rendered under `/eam`.
+///
+/// ### How to access
+/// - `EsxAgentManager::issue`
+/// - `Agency::runtime.issue?[*]`
+/// - `Agency::add_issue()`
+/// - `Agency::add_issue(issue)`
+/// - `Agency::query_issue()`
+/// - `Agent::query_issue()`
+/// - `EamObject::query_issue()`
+/// - `EsxAgentManager::query_issue()`
+/// - `Agency::agency_query_runtime().issue?[*]`
 pub trait IssueTrait : super::traits::DataObjectTrait {
     /// A unique identifier per <code>Issue</code> instance.
     fn get_key(&self) -> i32;
@@ -15205,6 +15248,10 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VibVibServi
 /// See *PbmCapabilityPropertyMetadata*.
 /// 
 /// This structure may be used only with operations rendered under `/pbm`.
+///
+/// ### How to access
+/// - `PbmProfileProfileManager::pbm_fetch_capability_metadata().capability_metadata[*].property_metadata[*].r#type?`
+/// - `PbmProfileProfileManager::pbm_fetch_capability_schema().capability_metadata_per_category[*].capability_metadata[*].property_metadata[*].r#type?`
 pub trait PbmCapabilityTypeInfoTrait : super::traits::DataObjectTrait {
     /// Datatype for a property.
     /// 
@@ -15286,6 +15333,9 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn PbmCapabili
 /// Describes Line of Service of a capability provider.
 /// 
 /// This structure may be used only with operations rendered under `/pbm`.
+///
+/// ### How to access
+/// - `PbmProfileProfileManager::pbm_fetch_capability_schema().line_of_service?`
 pub trait PbmLineOfServiceInfoTrait : super::traits::DataObjectTrait {
     /// *PbmLineOfServiceInfoLineOfServiceEnum_enum* - must be one of the values
     /// for enum *PbmLineOfServiceInfoLineOfServiceEnum_enum*.
@@ -15376,6 +15426,11 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn PbmLineOfSe
 /// policy, for a specific datastore.
 /// 
 /// This structure may be used only with operations rendered under `/pbm`.
+///
+/// ### How to access
+/// - `PbmPlacementSolver::pbm_check_compatibility().matching_resources?[*]`
+/// - `PbmPlacementSolver::pbm_check_compatibility_with_spec().matching_resources?[*]`
+/// - `PbmPlacementSolver::pbm_check_requirements().matching_resources?[*]`
 pub trait PbmPlacementMatchingResourcesTrait : super::traits::DataObjectTrait {
 }
 impl<'s> serde::Serialize for dyn PbmPlacementMatchingResourcesTrait + 's {
@@ -15443,6 +15498,9 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn PbmPlacemen
 /// Defines a constraint for placing objects onto *PbmPlacementHub*s.
 /// 
 /// This structure may be used only with operations rendered under `/pbm`.
+///
+/// ### How to access
+/// - `PbmPlacementSolver::pbm_check_requirements(placement_subject_requirement)`
 pub trait PbmPlacementRequirementTrait : super::traits::DataObjectTrait {
 }
 impl<'s> serde::Serialize for dyn PbmPlacementRequirementTrait + 's {
@@ -15515,6 +15573,16 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn PbmPlacemen
 /// object for capability subprofile constraints.
 /// 
 /// This structure may be used only with operations rendered under `/pbm`.
+///
+/// ### How to access
+/// - `PbmPlacementSolver::pbm_check_compatibility_with_spec(profile_spec).constraints`
+/// - `PbmPlacementSolver::pbm_query_matching_hub_with_spec(create_spec).constraints`
+/// - `PbmProfileProfileManager::pbm_create(create_spec).constraints`
+/// - `PbmProfileProfileManager::pbm_update(update_spec).constraints?`
+/// - `PbmPlacementSolver::pbm_check_requirements(placement_subject_requirement)→PbmPlacementCapabilityConstraintsRequirement.constraints`
+/// - `PbmProfileProfileManager::pbm_find_applicable_default_profile()⇒PbmCapabilityProfileTrait.constraints`
+/// - `PbmProfileProfileManager::pbm_retrieve_content()⇒PbmCapabilityProfileTrait.constraints`
+/// - `PbmProfileProfileManager::pbm_query_default_requirement_profiles().default_profile?⇒PbmCapabilityProfileTrait.constraints`
 pub trait PbmCapabilityConstraintsTrait : super::traits::DataObjectTrait {
 }
 impl<'s> serde::Serialize for dyn PbmCapabilityConstraintsTrait + 's {
@@ -15589,6 +15657,11 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn PbmCapabili
 /// and virtual disks.
 /// 
 /// This structure may be used only with operations rendered under `/pbm`.
+///
+/// ### How to access
+/// - `PbmProfileProfileManager::pbm_find_applicable_default_profile()`
+/// - `PbmProfileProfileManager::pbm_retrieve_content()`
+/// - `PbmProfileProfileManager::pbm_query_default_requirement_profiles().default_profile?`
 pub trait PbmProfileTrait : super::traits::DataObjectTrait {
     /// Unique identifier for the profile.
     fn get_profile_id(&self) -> &super::structs::PbmProfileId;
@@ -15700,6 +15773,11 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn PbmProfileT
 /// from tag-based storage capabilities or from vSAN storage capabilities.
 /// 
 /// This structure may be used only with operations rendered under `/pbm`.
+///
+/// ### How to access
+/// - `PbmProfileProfileManager::pbm_find_applicable_default_profile()⇒PbmCapabilityProfileTrait`
+/// - `PbmProfileProfileManager::pbm_retrieve_content()⇒PbmCapabilityProfileTrait`
+/// - `PbmProfileProfileManager::pbm_query_default_requirement_profiles().default_profile?⇒PbmCapabilityProfileTrait`
 pub trait PbmCapabilityProfileTrait : super::traits::PbmProfileTrait {
     /// Indicates whether the profile is requirement
     /// profile, a resource profile or a data service profile.
@@ -15836,6 +15914,11 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn PbmCapabili
 /// providers.
 /// 
 /// This structure may be used only with operations rendered under `/sms`.
+///
+/// ### How to access
+/// - `SmsProvider::query_provider_info()`
+/// - `VasaProvider::query_provider_info()`
+/// - `SmsStorageManager::query_storage_container().provider_info?[*]`
 pub trait SmsProviderInfoTrait : super::traits::DataObjectTrait {
     /// Unique identifier
     fn get_uid(&self) -> &str;
@@ -15920,6 +16003,9 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn SmsProvider
 /// providers.
 /// 
 /// This structure may be used only with operations rendered under `/sms`.
+///
+/// ### How to access
+/// - `SmsStorageManager::register_provider_task(provider_spec)`
 pub trait SmsProviderSpecTrait : super::traits::DataObjectTrait {
     /// Name
     /// The maximum length of the name is 275 characters.
@@ -15996,6 +16082,11 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn SmsProvider
 /// This data object represents the storage port.
 /// 
 /// This structure may be used only with operations rendered under `/sms`.
+///
+/// ### How to access
+/// - `SmsStorageManager::query_port_associated_with_array()`
+/// - `SmsStorageManager::query_port_associated_with_lun()`
+/// - `SmsStorageManager::query_port_associated_with_processor()`
 pub trait StoragePortTrait : super::traits::DataObjectTrait {
     /// Unique identifier
     fn get_uuid(&self) -> &str;
@@ -16089,6 +16180,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn StoragePort
 /// Base class that represents a replicated device.
 /// 
 /// This structure may be used only with operations rendered under `/sms`.
+///
+/// ### How to access
+/// - `VasaProvider::failover_replication_group_task(failover_param).policy_associations?[*].id`
+/// - `SmsStorageManager::query_replication_group_info()→FailoverSuccessResult.recovered_device_info?[*].recovered_device_id?`
+/// - `SmsStorageManager::query_replication_group_info()→FailoverSuccessResult.recovered_device_info?[*].source_device_id`
+/// - `VasaProvider::query_point_in_time_replica()→FailoverSuccessResult.recovered_device_info?[*].recovered_device_id?`
+/// - `VasaProvider::query_point_in_time_replica()→FailoverSuccessResult.recovered_device_info?[*].source_device_id`
+/// - `VasaProvider::query_replication_group()→FailoverSuccessResult.recovered_device_info?[*].recovered_device_id?`
+/// - `VasaProvider::query_replication_group()→FailoverSuccessResult.recovered_device_info?[*].source_device_id`
+/// - `SmsStorageManager::query_replication_group_info()→QueryReplicationGroupSuccessResult.rg_info→TargetGroupInfo.devices?[*].source_id`
+/// - `SmsStorageManager::query_replication_group_info()→QueryReplicationGroupSuccessResult.rg_info→SourceGroupInfo.member_info?[*].device_id`
+/// - `SmsStorageManager::query_replication_group_info()→QueryReplicationGroupSuccessResult.rg_info→TargetGroupInfo.devices?[*]→RecoveredTargetGroupMemberInfo.recovered_device_id?`
+/// 
+/// *(10 of 16 paths)*
 pub trait DeviceIdTrait : super::traits::DataObjectTrait {
 }
 impl<'s> serde::Serialize for dyn DeviceIdTrait + 's {
@@ -16184,6 +16289,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DeviceIdTra
 /// Abstracts the identity of a virtual machine.
 /// 
 /// This structure may be used only with operations rendered under `/sms`.
+///
+/// ### How to access
+/// - `VasaProvider::failover_replication_group_task(failover_param).policy_associations?[*].id⇒VirtualMachineIdTrait`
+/// - `SmsStorageManager::query_replication_group_info()→FailoverSuccessResult.recovered_device_info?[*].recovered_device_id?⇒VirtualMachineIdTrait`
+/// - `SmsStorageManager::query_replication_group_info()→FailoverSuccessResult.recovered_device_info?[*].source_device_id⇒VirtualMachineIdTrait`
+/// - `VasaProvider::query_point_in_time_replica()→FailoverSuccessResult.recovered_device_info?[*].recovered_device_id?⇒VirtualMachineIdTrait`
+/// - `VasaProvider::query_point_in_time_replica()→FailoverSuccessResult.recovered_device_info?[*].source_device_id⇒VirtualMachineIdTrait`
+/// - `VasaProvider::query_replication_group()→FailoverSuccessResult.recovered_device_info?[*].recovered_device_id?⇒VirtualMachineIdTrait`
+/// - `VasaProvider::query_replication_group()→FailoverSuccessResult.recovered_device_info?[*].source_device_id⇒VirtualMachineIdTrait`
+/// - `SmsStorageManager::query_replication_group_info()→QueryReplicationGroupSuccessResult.rg_info→TargetGroupInfo.devices?[*].source_id⇒VirtualMachineIdTrait`
+/// - `SmsStorageManager::query_replication_group_info()→QueryReplicationGroupSuccessResult.rg_info→SourceGroupInfo.member_info?[*].device_id⇒VirtualMachineIdTrait`
+/// - `SmsStorageManager::query_replication_group_info()→QueryReplicationGroupSuccessResult.rg_info→TargetGroupInfo.devices?[*]→RecoveredTargetGroupMemberInfo.recovered_device_id?⇒VirtualMachineIdTrait`
+/// 
+/// *(10 of 16 paths)*
 pub trait VirtualMachineIdTrait : super::traits::DeviceIdTrait {
 }
 impl<'s> serde::Serialize for dyn VirtualMachineIdTrait + 's {
@@ -16259,6 +16378,9 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualMach
 /// Input to the failover or testFailover methods.
 /// 
 /// This structure may be used only with operations rendered under `/sms`.
+///
+/// ### How to access
+/// - `VasaProvider::failover_replication_group_task(failover_param)`
 pub trait FailoverParamTrait : super::traits::DataObjectTrait {
     /// Whether the failover is a planned failover or not.
     /// 
@@ -16373,6 +16495,11 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn FailoverPar
 /// *TargetGroupInfo*.
 /// 
 /// This structure may be used only with operations rendered under `/sms`.
+///
+/// ### How to access
+/// - `SmsStorageManager::query_replication_group_info()→QueryReplicationGroupSuccessResult.rg_info`
+/// - `VasaProvider::query_point_in_time_replica()→QueryReplicationGroupSuccessResult.rg_info`
+/// - `VasaProvider::query_replication_group()→QueryReplicationGroupSuccessResult.rg_info`
 pub trait GroupInfoTrait : super::traits::DataObjectTrait {
     /// Identifier of the group + fault domain id.
     fn get_group_id(&self) -> &super::structs::ReplicationGroupId;
@@ -16452,6 +16579,11 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn GroupInfoTr
 /// operation specific &lt;Operation&gt;SuccessResult
 /// 
 /// This structure may be used only with operations rendered under `/sms`.
+///
+/// ### How to access
+/// - `SmsStorageManager::query_replication_group_info()`
+/// - `VasaProvider::query_point_in_time_replica()`
+/// - `VasaProvider::query_replication_group()`
 pub trait GroupOperationResultTrait : super::traits::DataObjectTrait {
     /// Replication group Id.
     fn get_group_id(&self) -> &super::structs::ReplicationGroupId;
@@ -16566,6 +16698,11 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn GroupOperat
 /// the ReplicationGroup.
 /// 
 /// This structure may be used only with operations rendered under `/sms`.
+///
+/// ### How to access
+/// - `SmsStorageManager::query_replication_group_info()→QueryReplicationGroupSuccessResult.rg_info→TargetGroupInfo.devices?[*]`
+/// - `VasaProvider::query_point_in_time_replica()→QueryReplicationGroupSuccessResult.rg_info→TargetGroupInfo.devices?[*]`
+/// - `VasaProvider::query_replication_group()→QueryReplicationGroupSuccessResult.rg_info→TargetGroupInfo.devices?[*]`
 pub trait TargetGroupMemberInfoTrait : super::traits::DataObjectTrait {
     /// Identifier of the replica device.
     fn get_replica_id(&self) -> &super::structs::ReplicaId;
@@ -16650,6 +16787,10 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn TargetGroup
     }
 }
 /// Describes the validation results.
+///
+/// ### How to access
+/// - `ClusterComputeResource::validate_hci_configuration()`
+/// - `VsanVcClusterConfigSystem::vsan_validate_config_spec()`
 pub trait ClusterComputeResourceValidationResultBaseTrait : super::traits::DataObjectTrait {
     /// Describes the messages relevant to the validation result
     fn get_info(&self) -> &Option<Vec<super::structs::LocalizableMessage>>;
@@ -16730,6 +16871,10 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn ClusterComp
 }
 /// Configuration of the compute resource; applies to both standalone hosts
 /// and clusters.
+///
+/// ### How to access
+/// - `ComputeResource::configuration_ex`
+/// - `ClusterComputeResource::configuration_ex`
 pub trait ComputeResourceConfigInfoTrait : super::traits::DataObjectTrait {
     /// Swapfile placement policy for virtual machines within this compute
     /// resource.
@@ -16839,6 +16984,16 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn ComputeReso
     }
 }
 /// Changes to apply to the compute resource configuration.
+///
+/// ### How to access
+/// - `Folder::add_standalone_host_task(comp_res_spec)`
+/// - `Folder::batch_add_hosts_to_cluster_task(comp_res_spec)`
+/// - `Folder::batch_add_standalone_hosts_task(comp_res_spec)`
+/// - `StoragePod::add_standalone_host_task(comp_res_spec)`
+/// - `StoragePod::batch_add_hosts_to_cluster_task(comp_res_spec)`
+/// - `StoragePod::batch_add_standalone_hosts_task(comp_res_spec)`
+/// - `ComputeResource::reconfigure_compute_resource_task(spec)`
+/// - `ClusterComputeResource::reconfigure_compute_resource_task(spec)`
 pub trait ComputeResourceConfigSpecTrait : super::traits::DataObjectTrait {
     /// New setting for the swapfile placement policy.
     /// 
@@ -17000,6 +17155,10 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn ComputeReso
 }
 /// This data object type encapsulates a typical set of ComputeResource information
 /// that is useful for list views and summary pages.
+///
+/// ### How to access
+/// - `ComputeResource::summary`
+/// - `ClusterComputeResource::summary`
 pub trait ComputeResourceSummaryTrait : super::traits::DataObjectTrait {
     /// Aggregated CPU resources of all hosts, in MHz.
     fn get_total_cpu(&self) -> i32;
@@ -17128,6 +17287,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn ComputeReso
     }
 }
 /// Base type for storing values.
+///
+/// ### How to access
+/// - `VirtualMachine::custom_value`
+/// - `VirtualMachine::value`
+/// - `VirtualMachine::summary.custom_value?[*]`
+/// - `HostSystem::custom_value`
+/// - `HostSystem::value`
+/// - `HostSystem::summary.custom_value?[*]`
+/// - `Task::value`
+/// - `Network::custom_value`
+/// - `Network::value`
+/// - `DistributedVirtualPortgroup::custom_value`
+/// 
+/// *(10 of 57 paths)*
 pub trait CustomFieldValueTrait : super::traits::DataObjectTrait {
     /// The ID of the field to which this value belongs.
     fn get_key(&self) -> i32;
@@ -17202,6 +17375,9 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn CustomField
 /// that have more specific details about a datastore.
 /// 
 /// See also *HostVmfsVolume*, *HostNasVolume*, *HostLocalFileSystemVolume*.
+///
+/// ### How to access
+/// - `Datastore::info`
 pub trait DatastoreInfoTrait : super::traits::DataObjectTrait {
     /// The name of the datastore.
     fn get_name(&self) -> &str;
@@ -17420,6 +17596,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DatastoreIn
     }
 }
 /// Static strings used for describing an object or property.
+///
+/// ### How to access
+/// - `VirtualMachine::config.hardware.device?[*].device_info?`
+/// - `VirtualMachine::config.device_groups?.device_group?[*].device_info?`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→StoragePlacementAction.relocate_spec.device_change?[*].device.device_info?`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→StorageMigrationAction.relocate_spec.device_change?[*].device.device_info?`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→PlacementAction.relocate_spec?.device_change?[*].device.device_info?`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→ClusterClusterInitialPlacementAction.config_spec?.device_change?[*].device.device_info?`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→ClusterClusterInitialPlacementAction.config_spec?.device_groups?.device_group?[*].device_info?`
+/// - `ClusterComputeResource::action_history.action→StoragePlacementAction.relocate_spec.device_change?[*].device.device_info?`
+/// - `ClusterComputeResource::action_history.action→StorageMigrationAction.relocate_spec.device_change?[*].device.device_info?`
+/// - `ClusterComputeResource::action_history.action→PlacementAction.relocate_spec?.device_change?[*].device.device_info?`
+/// 
+/// *(10 of 100 paths)*
 pub trait DescriptionTrait : super::traits::DataObjectTrait {
     /// Display label.
     fn get_label(&self) -> &str;
@@ -17541,6 +17731,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn Description
     }
 }
 /// Static strings used for describing an object model string or enumeration.
+///
+/// ### How to access
+/// - `ClusterComputeResource::action_history.action→StoragePlacementAction.relocate_spec.device_change?[*].device.device_info?⇒ElementDescriptionTrait`
+/// - `ClusterComputeResource::action_history.action→StorageMigrationAction.relocate_spec.device_change?[*].device.device_info?⇒ElementDescriptionTrait`
+/// - `ClusterComputeResource::action_history.action→PlacementAction.relocate_spec?.device_change?[*].device.device_info?⇒ElementDescriptionTrait`
+/// - `ClusterComputeResource::action_history.action→ClusterClusterInitialPlacementAction.config_spec?.device_change?[*].device.device_info?⇒ElementDescriptionTrait`
+/// - `ClusterComputeResource::action_history.action→ClusterClusterInitialPlacementAction.config_spec?.device_groups?.device_group?[*].device_info?⇒ElementDescriptionTrait`
+/// - `AlarmManager::description.state_operator[*]`
+/// - `AlarmManager::description.metric_operator[*]`
+/// - `AlarmManager::description.host_system_connection_state[*]`
+/// - `AlarmManager::description.virtual_machine_power_state[*]`
+/// - `AlarmManager::description.datastore_connection_state[*]`
+/// 
+/// *(10 of 100 paths)*
 pub trait ElementDescriptionTrait : super::traits::DescriptionTrait {
     /// Enumeration or literal ID being described.
     fn get_key(&self) -> &str;
@@ -17625,6 +17829,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn ElementDesc
     }
 }
 /// Static strings used for describing an object type.
+///
+/// ### How to access
+/// - `VirtualMachine::config.hardware.device?[*].device_info?⇒TypeDescriptionTrait`
+/// - `VirtualMachine::config.device_groups?.device_group?[*].device_info?⇒TypeDescriptionTrait`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→StoragePlacementAction.relocate_spec.device_change?[*].device.device_info?⇒TypeDescriptionTrait`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→StorageMigrationAction.relocate_spec.device_change?[*].device.device_info?⇒TypeDescriptionTrait`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→PlacementAction.relocate_spec?.device_change?[*].device.device_info?⇒TypeDescriptionTrait`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→ClusterClusterInitialPlacementAction.config_spec?.device_change?[*].device.device_info?⇒TypeDescriptionTrait`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→ClusterClusterInitialPlacementAction.config_spec?.device_groups?.device_group?[*].device_info?⇒TypeDescriptionTrait`
+/// - `ClusterComputeResource::action_history.action→StoragePlacementAction.relocate_spec.device_change?[*].device.device_info?⇒TypeDescriptionTrait`
+/// - `ClusterComputeResource::action_history.action→StorageMigrationAction.relocate_spec.device_change?[*].device.device_info?⇒TypeDescriptionTrait`
+/// - `ClusterComputeResource::action_history.action→PlacementAction.relocate_spec?.device_change?[*].device.device_info?⇒TypeDescriptionTrait`
+/// 
+/// *(10 of 100 paths)*
 pub trait TypeDescriptionTrait : super::traits::DescriptionTrait {
     /// Type being described
     fn get_key(&self) -> &str;
@@ -17698,6 +17916,10 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn TypeDescrip
 /// *DirectPathProfileManager.DirectPathProfileManagerQueryCapacity*.
 /// 
 /// ***Since:*** vSphere API Release 9.0.0.0
+///
+/// ### How to access
+/// - `DirectPathProfileManager::direct_path_profile_manager_query_capacity(query_spec)`
+/// - `DirectPathProfileManager::direct_path_profile_manager_query_capacity()→DirectPathProfileManagerCapacityUnknown.query_spec`
 pub trait DirectPathProfileManagerCapacityQuerySpecTrait : super::traits::DataObjectTrait {
 }
 impl<'s> serde::Serialize for dyn DirectPathProfileManagerCapacityQuerySpecTrait + 's {
@@ -17778,6 +18000,9 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DirectPathP
 /// *DirectPathProfileManagerCapacityQuerySpec*.
 /// 
 /// ***Since:*** vSphere API Release 9.0.0.0
+///
+/// ### How to access
+/// - `DirectPathProfileManager::direct_path_profile_manager_query_capacity()`
 pub trait DirectPathProfileManagerCapacityResultTrait : super::traits::DataObjectTrait {
 }
 impl<'s> serde::Serialize for dyn DirectPathProfileManagerCapacityResultTrait + 's {
@@ -17855,6 +18080,13 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DirectPathP
 /// its own properties.
 /// 
 /// ***Since:*** vSphere API Release 9.0.0.0
+///
+/// ### How to access
+/// - `DirectPathProfileManager::direct_path_profile_manager_create(spec).device_config`
+/// - `DirectPathProfileManager::direct_path_profile_manager_list().device_config`
+/// - `DirectPathProfileManager::direct_path_profile_manager_query_capacity(query_spec)→DirectPathProfileManagerCapacityQueryByDeviceConfig.device_config`
+/// - `DirectPathProfileManager::direct_path_profile_manager_query_capacity()→DirectPathProfileManagerCapacityInfo.profile.device_config`
+/// - `DirectPathProfileManager::direct_path_profile_manager_query_capacity()→DirectPathProfileManagerCapacityUnknown.query_spec→DirectPathProfileManagerCapacityQueryByDeviceConfig.device_config`
 pub trait DirectPathProfileManagerDirectPathConfigTrait : super::traits::DataObjectTrait {
 }
 impl<'s> serde::Serialize for dyn DirectPathProfileManagerDirectPathConfigTrait + 's {
@@ -17936,6 +18168,9 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DirectPathP
 /// *DirectPathProfileManager.DirectPathProfileManagerQueryCapacity*.
 /// 
 /// ***Since:*** vSphere API Release 9.0.0.0
+///
+/// ### How to access
+/// - `DirectPathProfileManager::direct_path_profile_manager_query_capacity(target)`
 pub trait DirectPathProfileManagerTargetEntityTrait : super::traits::DataObjectTrait {
 }
 impl<'s> serde::Serialize for dyn DirectPathProfileManagerTargetEntityTrait + 's {
@@ -18005,6 +18240,10 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DirectPathP
     }
 }
 /// Configuration of a *DistributedVirtualSwitch*.
+///
+/// ### How to access
+/// - `VmwareDistributedVirtualSwitch::config`
+/// - `DistributedVirtualSwitch::config`
 pub trait DvsConfigInfoTrait : super::traits::DataObjectTrait {
     /// Generated UUID of the switch.
     /// 
@@ -18216,6 +18455,14 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DvsConfigIn
 /// Use the *DistributedVirtualSwitch.ReconfigureDvs_Task*
 /// method to apply the configuration to the
 /// switch.
+///
+/// ### How to access
+/// - `VmwareDistributedVirtualSwitch::reconfigure_dvs_task(spec)`
+/// - `Folder::create_dvs_task(spec).config_spec`
+/// - `StoragePod::create_dvs_task(spec).config_spec`
+/// - `DistributedVirtualSwitch::reconfigure_dvs_task(spec)`
+/// - `VsanVdsSystem::vsan_vds_get_migration_plan().vds_spec.config_spec`
+/// - `VsanVdsSystem::vsan_vds_migrate_vss(migration_plan).vds_spec.config_spec`
 pub trait DvsConfigSpecTrait : super::traits::DataObjectTrait {
     /// Set of dynamic properties.
     /// 
@@ -18413,6 +18660,17 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DvsConfigSp
 /// These properties are read-only with
 /// the exception of
 /// *DVSFeatureCapability.vmDirectPathGen2Supported*.
+///
+/// ### How to access
+/// - `VmwareDistributedVirtualSwitch::capability.features_supported?`
+/// - `DistributedVirtualSwitch::capability.features_supported?`
+/// - `VmwareDistributedVirtualSwitch::update_dvs_capability(capability).features_supported?`
+/// - `Folder::create_dvs_task(spec).capability?.features_supported?`
+/// - `StoragePod::create_dvs_task(spec).capability?.features_supported?`
+/// - `DistributedVirtualSwitch::update_dvs_capability(capability).features_supported?`
+/// - `DistributedVirtualSwitchManager::query_dvs_feature_capability()`
+/// - `VsanVdsSystem::vsan_vds_get_migration_plan().vds_spec.capability?.features_supported?`
+/// - `VsanVdsSystem::vsan_vds_migrate_vss(migration_plan).vds_spec.capability?.features_supported?`
 pub trait DvsFeatureCapabilityTrait : super::traits::DataObjectTrait {
     /// Deprecated as of vSphere API 5.0, use
     /// <code>networkResourceManagementCapability</code>.*DVSNetworkResourceManagementCapability.networkResourceManagementSupported*.
@@ -18571,6 +18829,12 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DvsFeatureC
 }
 /// The *DVSHealthCheckConfig* data object
 /// defines vSphere Distributed Switch health check configuration.
+///
+/// ### How to access
+/// - `VmwareDistributedVirtualSwitch::config.health_check_config?[*]`
+/// - `DistributedVirtualSwitch::config.health_check_config?[*]`
+/// - `VmwareDistributedVirtualSwitch::update_dvs_health_check_config_task(health_check_config)`
+/// - `DistributedVirtualSwitch::update_dvs_health_check_config_task(health_check_config)`
 pub trait DvsHealthCheckConfigTrait : super::traits::DataObjectTrait {
     /// True if enable health check.
     fn get_enable(&self) -> Option<bool>;
@@ -18657,6 +18921,12 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DvsHealthCh
 }
 /// This class defines health check configuration for
 /// VMware vSphere Distributed Switch.
+///
+/// ### How to access
+/// - `VmwareDistributedVirtualSwitch::config.health_check_config?[*]⇒VMwareDvsHealthCheckConfigTrait`
+/// - `DistributedVirtualSwitch::config.health_check_config?[*]⇒VMwareDvsHealthCheckConfigTrait`
+/// - `VmwareDistributedVirtualSwitch::update_dvs_health_check_config_task(health_check_config)⇒VMwareDvsHealthCheckConfigTrait`
+/// - `DistributedVirtualSwitch::update_dvs_health_check_config_task(health_check_config)⇒VMwareDvsHealthCheckConfigTrait`
 pub trait VMwareDvsHealthCheckConfigTrait : super::traits::DvsHealthCheckConfigTrait {
 }
 impl<'s> serde::Serialize for dyn VMwareDvsHealthCheckConfigTrait + 's {
@@ -18727,6 +18997,17 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VMwareDvsHe
 }
 /// Health check capabilities of health check supported by the
 /// vSphere Distributed Switch
+///
+/// ### How to access
+/// - `VmwareDistributedVirtualSwitch::capability.features_supported?.health_check_capability?`
+/// - `DistributedVirtualSwitch::capability.features_supported?.health_check_capability?`
+/// - `VmwareDistributedVirtualSwitch::update_dvs_capability(capability).features_supported?.health_check_capability?`
+/// - `Folder::create_dvs_task(spec).capability?.features_supported?.health_check_capability?`
+/// - `StoragePod::create_dvs_task(spec).capability?.features_supported?.health_check_capability?`
+/// - `DistributedVirtualSwitch::update_dvs_capability(capability).features_supported?.health_check_capability?`
+/// - `DistributedVirtualSwitchManager::query_dvs_feature_capability().health_check_capability?`
+/// - `VsanVdsSystem::vsan_vds_get_migration_plan().vds_spec.capability?.features_supported?.health_check_capability?`
+/// - `VsanVdsSystem::vsan_vds_migrate_vss(migration_plan).vds_spec.capability?.features_supported?.health_check_capability?`
 pub trait DvsHealthCheckCapabilityTrait : super::traits::DataObjectTrait {
 }
 impl<'s> serde::Serialize for dyn DvsHealthCheckCapabilityTrait + 's {
@@ -18792,6 +19073,16 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DvsHealthCh
     }
 }
 /// The base class for uplink port policy.
+///
+/// ### How to access
+/// - `VmwareDistributedVirtualSwitch::config.uplink_port_policy`
+/// - `DistributedVirtualSwitch::config.uplink_port_policy`
+/// - `VmwareDistributedVirtualSwitch::reconfigure_dvs_task(spec).uplink_port_policy?`
+/// - `Folder::create_dvs_task(spec).config_spec.uplink_port_policy?`
+/// - `StoragePod::create_dvs_task(spec).config_spec.uplink_port_policy?`
+/// - `DistributedVirtualSwitch::reconfigure_dvs_task(spec).uplink_port_policy?`
+/// - `VsanVdsSystem::vsan_vds_get_migration_plan().vds_spec.config_spec.uplink_port_policy?`
+/// - `VsanVdsSystem::vsan_vds_migrate_vss(migration_plan).vds_spec.config_spec.uplink_port_policy?`
 pub trait DvsUplinkPortPolicyTrait : super::traits::DataObjectTrait {
 }
 impl<'s> serde::Serialize for dyn DvsUplinkPortPolicyTrait + 's {
@@ -18931,6 +19222,11 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn HbrReplicat
 /// This class is the abstract base for *VirtualMachineImportSpec* and
 /// *VirtualAppImportSpec*. These three classes form a composite structure
 /// that allows us to contain arbitrarily complex entitites in a single ImportSpec.
+///
+/// ### How to access
+/// - `ResourcePool::import_v_app(spec)`
+/// - `VirtualApp::import_v_app(spec)`
+/// - `OvfManager::create_import_spec().import_spec?`
 pub trait ImportSpecTrait : super::traits::DataObjectTrait {
     /// Configuration of sub-entities (virtual machine or vApp).
     /// 
@@ -19230,6 +19526,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn Inheritable
 /// *DvsRateLimitNetworkRuleAction*
 /// </td>
 /// </tr>
+///
+/// ### How to access
+/// - `DistributedVirtualPortgroup::config.default_port_config?.filter_policy?.filter_config?[*]`
+/// - `VmwareDistributedVirtualSwitch::config.default_port_config.filter_policy?.filter_config?[*]`
+/// - `DistributedVirtualSwitch::config.default_port_config.filter_policy?.filter_config?[*]`
+/// - `DistributedVirtualPortgroup::reconfigure_dv_portgroup_task(spec).default_port_config?.filter_policy?.filter_config?[*]`
+/// - `VmwareDistributedVirtualSwitch::create_dv_portgroup_task(spec).default_port_config?.filter_policy?.filter_config?[*]`
+/// - `VmwareDistributedVirtualSwitch::add_dv_portgroup_task(spec).default_port_config?.filter_policy?.filter_config?[*]`
+/// - `VmwareDistributedVirtualSwitch::reconfigure_dvs_task(spec).default_port_config?.filter_policy?.filter_config?[*]`
+/// - `VmwareDistributedVirtualSwitch::reconfigure_dv_port_task(port).setting?.filter_policy?.filter_config?[*]`
+/// - `Folder::create_dvs_task(spec).config_spec.default_port_config?.filter_policy?.filter_config?[*]`
+/// - `StoragePod::create_dvs_task(spec).config_spec.default_port_config?.filter_policy?.filter_config?[*]`
+/// 
+/// *(10 of 20 paths)*
 pub trait DvsFilterConfigTrait : super::traits::InheritablePolicyTrait {
     /// The key of Network Filter Config.
     fn get_key(&self) -> &Option<String>;
@@ -19365,6 +19675,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DvsFilterCo
 /// *DvsRateLimitNetworkRuleAction*
 /// </td>
 /// </tr>
+///
+/// ### How to access
+/// - `DistributedVirtualPortgroup::config.default_port_config?.filter_policy?.filter_config?[*]⇒DvsTrafficFilterConfigTrait`
+/// - `VmwareDistributedVirtualSwitch::config.default_port_config.filter_policy?.filter_config?[*]⇒DvsTrafficFilterConfigTrait`
+/// - `DistributedVirtualSwitch::config.default_port_config.filter_policy?.filter_config?[*]⇒DvsTrafficFilterConfigTrait`
+/// - `DistributedVirtualPortgroup::reconfigure_dv_portgroup_task(spec).default_port_config?.filter_policy?.filter_config?[*]⇒DvsTrafficFilterConfigTrait`
+/// - `VmwareDistributedVirtualSwitch::create_dv_portgroup_task(spec).default_port_config?.filter_policy?.filter_config?[*]⇒DvsTrafficFilterConfigTrait`
+/// - `VmwareDistributedVirtualSwitch::add_dv_portgroup_task(spec).default_port_config?.filter_policy?.filter_config?[*]⇒DvsTrafficFilterConfigTrait`
+/// - `VmwareDistributedVirtualSwitch::reconfigure_dvs_task(spec).default_port_config?.filter_policy?.filter_config?[*]⇒DvsTrafficFilterConfigTrait`
+/// - `VmwareDistributedVirtualSwitch::reconfigure_dv_port_task(port).setting?.filter_policy?.filter_config?[*]⇒DvsTrafficFilterConfigTrait`
+/// - `Folder::create_dvs_task(spec).config_spec.default_port_config?.filter_policy?.filter_config?[*]⇒DvsTrafficFilterConfigTrait`
+/// - `StoragePod::create_dvs_task(spec).config_spec.default_port_config?.filter_policy?.filter_config?[*]⇒DvsTrafficFilterConfigTrait`
+/// 
+/// *(10 of 20 paths)*
 pub trait DvsTrafficFilterConfigTrait : super::traits::DvsFilterConfigTrait {
     /// Network Traffic Ruleset
     fn get_traffic_ruleset(&self) -> &Option<super::structs::DvsTrafficRuleset>;
@@ -19434,6 +19758,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DvsTrafficF
     }
 }
 /// Base class for Vlan Specifiation for ports.
+///
+/// ### How to access
+/// - `DistributedVirtualPortgroup::config.default_port_config?→VMwareDvsPortSetting.vlan?`
+/// - `VmwareDistributedVirtualSwitch::config.default_port_config→VMwareDvsPortSetting.vlan?`
+/// - `DistributedVirtualSwitch::config.default_port_config→VMwareDvsPortSetting.vlan?`
+/// - `DistributedVirtualPortgroup::reconfigure_dv_portgroup_task(spec).default_port_config?→VMwareDvsPortSetting.vlan?`
+/// - `VmwareDistributedVirtualSwitch::create_dv_portgroup_task(spec).default_port_config?→VMwareDvsPortSetting.vlan?`
+/// - `VmwareDistributedVirtualSwitch::add_dv_portgroup_task(spec).default_port_config?→VMwareDvsPortSetting.vlan?`
+/// - `VmwareDistributedVirtualSwitch::reconfigure_dvs_task(spec).default_port_config?→VMwareDvsPortSetting.vlan?`
+/// - `VmwareDistributedVirtualSwitch::reconfigure_dv_port_task(port).setting?→VMwareDvsPortSetting.vlan?`
+/// - `Folder::create_dvs_task(spec).config_spec.default_port_config?→VMwareDvsPortSetting.vlan?`
+/// - `StoragePod::create_dvs_task(spec).config_spec.default_port_config?→VMwareDvsPortSetting.vlan?`
+/// 
+/// *(10 of 22 paths)*
 pub trait VmwareDistributedVirtualSwitchVlanSpecTrait : super::traits::InheritablePolicyTrait {
 }
 impl<'s> serde::Serialize for dyn VmwareDistributedVirtualSwitchVlanSpecTrait + 's {
@@ -19621,6 +19959,10 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn IoFilterInf
 /// Specifies an SSL trust policy.
 /// 
 /// ***Since:*** vSphere API Release 8.0.3.0
+///
+/// ### How to access
+/// - `IoFilterManager::install_io_filter_task(vib_ssl_trust)`
+/// - `IoFilterManager::upgrade_io_filter_task(vib_ssl_trust)`
 pub trait IoFilterManagerSslTrustTrait : super::traits::DataObjectTrait {
 }
 impl<'s> serde::Serialize for dyn IoFilterManagerSslTrustTrait + 's {
@@ -19693,6 +20035,16 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn IoFilterMan
 /// 
 /// This data object type is used to communicate configuration about
 /// where to find licenses to use for this system.
+///
+/// ### How to access
+/// - `LicenseManager::source`
+/// - `LicenseManager::configure_license_source(license_source)`
+/// - `LicenseManager::query_license_usage().source`
+/// - `HostProfileManager::apply_host_config_task(config_spec).license?.source?`
+/// - `HostProfileManager::generate_config_task_list(config_spec).license?.source?`
+/// - `HostProfileManager::generate_host_profile_task_list_task(config_spec).license?.source?`
+/// - `HostProfile::execute_host_profile().config_spec?.license?.source?`
+/// - `HostProfileManager::generate_config_task_list().config_spec?.license?.source?`
 pub trait LicenseSourceTrait : super::traits::DataObjectTrait {
 }
 impl<'s> serde::Serialize for dyn LicenseSourceTrait + 's {
@@ -19890,6 +20242,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn NegatableEx
     }
 }
 /// This is the abstract base class for IP address.
+///
+/// ### How to access
+/// - `DistributedVirtualPortgroup::config.default_port_config?.filter_policy?.filter_config?[*]⇒DvsTrafficFilterConfigTrait.traffic_ruleset?.rules?[*].qualifier?[*]→DvsIpNetworkRuleQualifier.source_address?`
+/// - `DistributedVirtualPortgroup::config.default_port_config?.filter_policy?.filter_config?[*]⇒DvsTrafficFilterConfigTrait.traffic_ruleset?.rules?[*].qualifier?[*]→DvsIpNetworkRuleQualifier.destination_address?`
+/// - `VmwareDistributedVirtualSwitch::config.default_port_config.filter_policy?.filter_config?[*]⇒DvsTrafficFilterConfigTrait.traffic_ruleset?.rules?[*].qualifier?[*]→DvsIpNetworkRuleQualifier.source_address?`
+/// - `VmwareDistributedVirtualSwitch::config.default_port_config.filter_policy?.filter_config?[*]⇒DvsTrafficFilterConfigTrait.traffic_ruleset?.rules?[*].qualifier?[*]→DvsIpNetworkRuleQualifier.destination_address?`
+/// - `DistributedVirtualSwitch::config.default_port_config.filter_policy?.filter_config?[*]⇒DvsTrafficFilterConfigTrait.traffic_ruleset?.rules?[*].qualifier?[*]→DvsIpNetworkRuleQualifier.source_address?`
+/// - `DistributedVirtualSwitch::config.default_port_config.filter_policy?.filter_config?[*]⇒DvsTrafficFilterConfigTrait.traffic_ruleset?.rules?[*].qualifier?[*]→DvsIpNetworkRuleQualifier.destination_address?`
+/// - `DistributedVirtualPortgroup::reconfigure_dv_portgroup_task(spec).default_port_config?.filter_policy?.filter_config?[*]⇒DvsTrafficFilterConfigTrait.traffic_ruleset?.rules?[*].qualifier?[*]→DvsIpNetworkRuleQualifier.source_address?`
+/// - `DistributedVirtualPortgroup::reconfigure_dv_portgroup_task(spec).default_port_config?.filter_policy?.filter_config?[*]⇒DvsTrafficFilterConfigTrait.traffic_ruleset?.rules?[*].qualifier?[*]→DvsIpNetworkRuleQualifier.destination_address?`
+/// - `VmwareDistributedVirtualSwitch::create_dv_portgroup_task(spec).default_port_config?.filter_policy?.filter_config?[*]⇒DvsTrafficFilterConfigTrait.traffic_ruleset?.rules?[*].qualifier?[*]→DvsIpNetworkRuleQualifier.source_address?`
+/// - `VmwareDistributedVirtualSwitch::create_dv_portgroup_task(spec).default_port_config?.filter_policy?.filter_config?[*]⇒DvsTrafficFilterConfigTrait.traffic_ruleset?.rules?[*].qualifier?[*]→DvsIpNetworkRuleQualifier.destination_address?`
+/// 
+/// *(10 of 36 paths)*
 pub trait IpAddressTrait : super::traits::NegatableExpressionTrait {
 }
 impl<'s> serde::Serialize for dyn IpAddressTrait + 's {
@@ -19959,6 +20325,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn IpAddressTr
     }
 }
 /// Base class for specifying MAC addresses.
+///
+/// ### How to access
+/// - `DistributedVirtualPortgroup::config.default_port_config?.filter_policy?.filter_config?[*]⇒DvsTrafficFilterConfigTrait.traffic_ruleset?.rules?[*].qualifier?[*]→DvsMacNetworkRuleQualifier.source_address?`
+/// - `DistributedVirtualPortgroup::config.default_port_config?.filter_policy?.filter_config?[*]⇒DvsTrafficFilterConfigTrait.traffic_ruleset?.rules?[*].qualifier?[*]→DvsMacNetworkRuleQualifier.destination_address?`
+/// - `VmwareDistributedVirtualSwitch::config.default_port_config.filter_policy?.filter_config?[*]⇒DvsTrafficFilterConfigTrait.traffic_ruleset?.rules?[*].qualifier?[*]→DvsMacNetworkRuleQualifier.source_address?`
+/// - `VmwareDistributedVirtualSwitch::config.default_port_config.filter_policy?.filter_config?[*]⇒DvsTrafficFilterConfigTrait.traffic_ruleset?.rules?[*].qualifier?[*]→DvsMacNetworkRuleQualifier.destination_address?`
+/// - `DistributedVirtualSwitch::config.default_port_config.filter_policy?.filter_config?[*]⇒DvsTrafficFilterConfigTrait.traffic_ruleset?.rules?[*].qualifier?[*]→DvsMacNetworkRuleQualifier.source_address?`
+/// - `DistributedVirtualSwitch::config.default_port_config.filter_policy?.filter_config?[*]⇒DvsTrafficFilterConfigTrait.traffic_ruleset?.rules?[*].qualifier?[*]→DvsMacNetworkRuleQualifier.destination_address?`
+/// - `DistributedVirtualPortgroup::reconfigure_dv_portgroup_task(spec).default_port_config?.filter_policy?.filter_config?[*]⇒DvsTrafficFilterConfigTrait.traffic_ruleset?.rules?[*].qualifier?[*]→DvsMacNetworkRuleQualifier.source_address?`
+/// - `DistributedVirtualPortgroup::reconfigure_dv_portgroup_task(spec).default_port_config?.filter_policy?.filter_config?[*]⇒DvsTrafficFilterConfigTrait.traffic_ruleset?.rules?[*].qualifier?[*]→DvsMacNetworkRuleQualifier.destination_address?`
+/// - `VmwareDistributedVirtualSwitch::create_dv_portgroup_task(spec).default_port_config?.filter_policy?.filter_config?[*]⇒DvsTrafficFilterConfigTrait.traffic_ruleset?.rules?[*].qualifier?[*]→DvsMacNetworkRuleQualifier.source_address?`
+/// - `VmwareDistributedVirtualSwitch::create_dv_portgroup_task(spec).default_port_config?.filter_policy?.filter_config?[*]⇒DvsTrafficFilterConfigTrait.traffic_ruleset?.rules?[*].qualifier?[*]→DvsMacNetworkRuleQualifier.destination_address?`
+/// 
+/// *(10 of 36 paths)*
 pub trait MacAddressTrait : super::traits::NegatableExpressionTrait {
 }
 impl<'s> serde::Serialize for dyn MacAddressTrait + 's {
@@ -20030,6 +20410,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn MacAddressT
 /// Base class for specifying Ports.
 /// 
 /// Objects of the base class represent any port (single/range/list).
+///
+/// ### How to access
+/// - `DistributedVirtualPortgroup::config.default_port_config?.filter_policy?.filter_config?[*]⇒DvsTrafficFilterConfigTrait.traffic_ruleset?.rules?[*].qualifier?[*]→DvsIpNetworkRuleQualifier.source_ip_port?`
+/// - `DistributedVirtualPortgroup::config.default_port_config?.filter_policy?.filter_config?[*]⇒DvsTrafficFilterConfigTrait.traffic_ruleset?.rules?[*].qualifier?[*]→DvsIpNetworkRuleQualifier.destination_ip_port?`
+/// - `VmwareDistributedVirtualSwitch::config.default_port_config.filter_policy?.filter_config?[*]⇒DvsTrafficFilterConfigTrait.traffic_ruleset?.rules?[*].qualifier?[*]→DvsIpNetworkRuleQualifier.source_ip_port?`
+/// - `VmwareDistributedVirtualSwitch::config.default_port_config.filter_policy?.filter_config?[*]⇒DvsTrafficFilterConfigTrait.traffic_ruleset?.rules?[*].qualifier?[*]→DvsIpNetworkRuleQualifier.destination_ip_port?`
+/// - `DistributedVirtualSwitch::config.default_port_config.filter_policy?.filter_config?[*]⇒DvsTrafficFilterConfigTrait.traffic_ruleset?.rules?[*].qualifier?[*]→DvsIpNetworkRuleQualifier.source_ip_port?`
+/// - `DistributedVirtualSwitch::config.default_port_config.filter_policy?.filter_config?[*]⇒DvsTrafficFilterConfigTrait.traffic_ruleset?.rules?[*].qualifier?[*]→DvsIpNetworkRuleQualifier.destination_ip_port?`
+/// - `DistributedVirtualPortgroup::reconfigure_dv_portgroup_task(spec).default_port_config?.filter_policy?.filter_config?[*]⇒DvsTrafficFilterConfigTrait.traffic_ruleset?.rules?[*].qualifier?[*]→DvsIpNetworkRuleQualifier.source_ip_port?`
+/// - `DistributedVirtualPortgroup::reconfigure_dv_portgroup_task(spec).default_port_config?.filter_policy?.filter_config?[*]⇒DvsTrafficFilterConfigTrait.traffic_ruleset?.rules?[*].qualifier?[*]→DvsIpNetworkRuleQualifier.destination_ip_port?`
+/// - `VmwareDistributedVirtualSwitch::create_dv_portgroup_task(spec).default_port_config?.filter_policy?.filter_config?[*]⇒DvsTrafficFilterConfigTrait.traffic_ruleset?.rules?[*].qualifier?[*]→DvsIpNetworkRuleQualifier.source_ip_port?`
+/// - `VmwareDistributedVirtualSwitch::create_dv_portgroup_task(spec).default_port_config?.filter_policy?.filter_config?[*]⇒DvsTrafficFilterConfigTrait.traffic_ruleset?.rules?[*].qualifier?[*]→DvsIpNetworkRuleQualifier.destination_ip_port?`
+/// 
+/// *(10 of 36 paths)*
 pub trait DvsIpPortTrait : super::traits::NegatableExpressionTrait {
 }
 impl<'s> serde::Serialize for dyn DvsIpPortTrait + 's {
@@ -20099,6 +20493,15 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DvsIpPortTr
     }
 }
 /// General information about a network.
+///
+/// ### How to access
+/// - `Network::summary`
+/// - `DistributedVirtualPortgroup::summary`
+/// - `OpaqueNetwork::summary`
+/// - `HostSystem::query_host_connection_info().network?[*].summary`
+/// - `Datacenter::query_connection_info().network?[*].summary`
+/// - `Datacenter::query_connection_info_via_spec().network?[*].summary`
+/// - `EnvironmentBrowser::query_config_target().network?[*].network`
 pub trait NetworkSummaryTrait : super::traits::DataObjectTrait {
     /// Reference to the associated managed object.
     /// 
@@ -20321,6 +20724,9 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn OvfManagerC
     }
 }
 /// Parameters for deploying an OVF.
+///
+/// ### How to access
+/// - `OvfManager::create_import_spec(cisp)`
 pub trait OvfCreateImportSpecParamsTrait : super::traits::OvfManagerCommonParamsTrait {
     /// The name to set on the entity (more precisely, on the top-level vApp or
     /// VM of the entity) as it appears in VI.
@@ -20466,6 +20872,11 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn OvfCreateIm
 }
 /// Base type for the various *PerfEntityMetric*
 /// encodings.
+///
+/// ### How to access
+/// - `PerformanceManager::query_perf()`
+/// - `PerformanceManager::query_perf_composite().entity?`
+/// - `PerformanceManager::query_perf_composite().child_entity?[*]`
 pub trait PerfEntityMetricBaseTrait : super::traits::DataObjectTrait {
     /// Performance provider ID.
     fn get_entity(&self) -> &super::structs::ManagedObjectReference;
@@ -20544,6 +20955,11 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn PerfEntityM
 /// 
 /// Useful data objects that store actual metric values
 /// extend this data object (see *PerfMetricIntSeries*).
+///
+/// ### How to access
+/// - `PerformanceManager::query_perf()→PerfEntityMetric.value?[*]`
+/// - `PerformanceManager::query_perf_composite().entity?→PerfEntityMetric.value?[*]`
+/// - `PerformanceManager::query_perf_composite().child_entity?[*]→PerfEntityMetric.value?[*]`
 pub trait PerfMetricSeriesTrait : super::traits::DataObjectTrait {
     /// An identifier for the performance metric.
     fn get_id(&self) -> &super::structs::PerfMetricId;
@@ -20619,6 +21035,10 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn PerfMetricS
 }
 /// This data object type encapsulates a typical set of resource
 /// pool information that is useful for list views and summary pages.
+///
+/// ### How to access
+/// - `ResourcePool::summary`
+/// - `VirtualApp::summary`
 pub trait ResourcePoolSummaryTrait : super::traits::DataObjectTrait {
     /// Name of resource pool.
     fn get_name(&self) -> &str;
@@ -20712,6 +21132,11 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn ResourcePoo
 /// 
 /// For example, vSan configuration spec will extend from this which will
 /// allow HCI API to pass the spec to set up vSan on the cluster.
+///
+/// ### How to access
+/// - `ClusterComputeResource::extend_hci_task(v_san_config_spec)`
+/// - `ClusterComputeResource::configure_hci_task(cluster_spec).v_san_config_spec?`
+/// - `ClusterComputeResource::validate_hci_configuration(hci_config_spec).v_san_config_spec?`
 pub trait SddcBaseTrait : super::traits::DataObjectTrait {
 }
 impl<'s> serde::Serialize for dyn SddcBaseTrait + 's {
@@ -20777,6 +21202,9 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn SddcBaseTra
     }
 }
 /// Base class for selecting entities
+///
+/// ### How to access
+/// - `DistributedVirtualSwitchManager::dvs_manager_export_entity_task(selection_set)`
 pub trait SelectionSetTrait : super::traits::DataObjectTrait {
 }
 impl<'s> serde::Serialize for dyn SelectionSetTrait + 's {
@@ -20847,6 +21275,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn SelectionSe
 }
 /// The data object type is a base type of credential for authentication such
 /// as username/password or SAML token.
+///
+/// ### How to access
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→StoragePlacementAction.relocate_spec.service?.credential`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→StorageMigrationAction.relocate_spec.service?.credential`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→PlacementAction.relocate_spec?.service?.credential`
+/// - `StoragePod::pod_storage_drs_entry.action_history?[*].action→StoragePlacementAction.relocate_spec.service?.credential`
+/// - `StoragePod::pod_storage_drs_entry.action_history?[*].action→StorageMigrationAction.relocate_spec.service?.credential`
+/// - `ClusterComputeResource::action_history.action→StoragePlacementAction.relocate_spec.service?.credential`
+/// - `ClusterComputeResource::action_history.action→StorageMigrationAction.relocate_spec.service?.credential`
+/// - `ClusterComputeResource::action_history.action→PlacementAction.relocate_spec?.service?.credential`
+/// - `ClusterComputeResource::recommendation.action?[*]→StoragePlacementAction.relocate_spec.service?.credential`
+/// - `ClusterComputeResource::recommendation.action?[*]→StorageMigrationAction.relocate_spec.service?.credential`
+/// 
+/// *(10 of 39 paths)*
 pub trait ServiceLocatorCredentialTrait : super::traits::DataObjectTrait {
 }
 impl<'s> serde::Serialize for dyn ServiceLocatorCredentialTrait + 's {
@@ -20921,6 +21363,9 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn ServiceLoca
 /// *SessionManager.AcquireGenericServiceTicket*.
 /// This is the base class for more specific service request specifications.
 /// E.g. for HTTP services the derived class will provide a URL property.
+///
+/// ### How to access
+/// - `SessionManager::acquire_generic_service_ticket(spec)`
 pub trait SessionManagerServiceRequestSpecTrait : super::traits::DataObjectTrait {
 }
 impl<'s> serde::Serialize for dyn SessionManagerServiceRequestSpecTrait + 's {
@@ -20994,6 +21439,9 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn SessionMana
 /// Task Console.
 /// 
 /// ***Since:*** vSphere API Release 9.0.0.0
+///
+/// ### How to access
+/// - `TaskManager::read_next_tasks_by_view_spec(view_spec)`
 pub trait TaskManagerTaskViewSpecTrait : super::traits::DataObjectTrait {
 }
 impl<'s> serde::Serialize for dyn TaskManagerTaskViewSpecTrait + 's {
@@ -21061,6 +21509,15 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn TaskManager
 /// Base type for all task reasons.
 /// 
 /// Task reasons represent the kind of entity responsible for a task's creation.
+///
+/// ### How to access
+/// - `Task::info.reason`
+/// - `TaskHistoryCollector::latest_page.reason`
+/// - `EventManager::post_event(task_info).reason`
+/// - `TaskHistoryCollector::read_next_tasks().reason`
+/// - `TaskHistoryCollector::read_previous_tasks().reason`
+/// - `TaskManager::read_next_tasks_by_view_spec().reason`
+/// - `TaskManager::create_task().reason`
 pub trait TaskReasonTrait : super::traits::DataObjectTrait {
 }
 impl<'s> serde::Serialize for dyn TaskReasonTrait + 's {
@@ -21142,6 +21599,9 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn TaskReasonT
 /// 
 /// This object describes
 /// the additional information.
+///
+/// ### How to access
+/// - `UserDirectory::retrieve_user_groups()`
 pub trait UserSearchResultTrait : super::traits::DataObjectTrait {
     /// Login name of a user or the name of a group.
     /// 
@@ -21226,6 +21686,10 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn UserSearchR
     }
 }
 /// Specification used to create or clone a virtual disk
+///
+/// ### How to access
+/// - `VirtualDiskManager::copy_virtual_disk_task(dest_spec)`
+/// - `VirtualDiskManager::create_virtual_disk_task(spec)`
 pub trait VirtualDiskSpecTrait : super::traits::DataObjectTrait {
     /// The type of the new virtual disk.
     /// 
@@ -21315,6 +21779,17 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualDisk
     }
 }
 /// Specification used to create a file based virtual disk
+///
+/// ### How to access
+/// - `HostVsanHealthSystem::vsan_host_cleanup_vmdk_load_test(specs).vmdk_create_spec?`
+/// - `HostVsanHealthSystem::vsan_host_prepare_vmdk_load_test(specs).vmdk_create_spec?`
+/// - `HostVsanHealthSystem::vsan_host_run_vmdk_load_test(specs).vmdk_create_spec?`
+/// - `VirtualDiskManager::copy_virtual_disk_task(dest_spec)⇒FileBackedVirtualDiskSpecTrait`
+/// - `VirtualDiskManager::create_virtual_disk_task(spec)⇒FileBackedVirtualDiskSpecTrait`
+/// - `VsanVcClusterHealthSystem::vsan_vc_cluster_run_vmdk_load_test(specs).vmdk_create_spec?`
+/// - `HostVsanHealthSystem::vsan_host_run_vmdk_load_test().spec.vmdk_create_spec?`
+/// - `VsanVcClusterHealthSystem::vsan_query_vc_cluster_vmdk_workload_types().specs[*].vmdk_create_spec?`
+/// - `VsanVcClusterHealthSystem::vsan_query_vc_cluster_vmdk_load_history_test().host_results?[*].vmdk_results?[*].spec.vmdk_create_spec?`
 pub trait FileBackedVirtualDiskSpecTrait : super::traits::VirtualDiskSpecTrait {
     /// Specify the capacity of the virtual disk in Kb.
     fn get_capacity_kb(&self) -> i64;
@@ -21412,6 +21887,10 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn FileBackedV
 /// machine.
 /// 
 /// ***Since:*** vSphere API Release 7.0.1.0
+///
+/// ### How to access
+/// - `VirtualMachine::drop_connections(list_of_connections)`
+/// - `VirtualMachine::query_connections()`
 pub trait VirtualMachineConnectionTrait : super::traits::DataObjectTrait {
     /// The unique identifier associated with the connection.
     /// 
@@ -21573,6 +22052,9 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VsanCompara
 /// Defines the base criteria for matching resources based on their types.
 /// 
 /// This structure may be used only with operations rendered under `/vsan`.
+///
+/// ### How to access
+/// - `VsanMassCollector::vsan_retrieve_properties(mass_collector_specs).constraint?`
 pub trait VsanResourceConstraintTrait : super::traits::DataObjectTrait {
     /// The type of the resources targeted by this constraint.
     /// 
@@ -21656,6 +22138,10 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VsanResourc
 /// 
 /// Can be used directly
 /// but usually a derived class with a specific issue type is used.
+///
+/// ### How to access
+/// - `VsanUpgradeSystem::perform_vsan_upgrade_preflight_check().issues?[*]`
+/// - `VsanUpgradeSystem::query_vsan_upgrade_status().history?[*]→VsanUpgradeSystemUpgradeHistoryPreflightFail.preflight_result.issues?[*]`
 pub trait VsanUpgradeSystemPreflightCheckIssueTrait : super::traits::DataObjectTrait {
     /// Message describing the issue.
     fn get_msg(&self) -> &str;
@@ -21840,6 +22326,10 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VsanUpgrade
     }
 }
 /// Captures the result of a VSAN upgrade pre-flight check.
+///
+/// ### How to access
+/// - `VsanUpgradeSystem::perform_vsan_upgrade_preflight_check()`
+/// - `VsanUpgradeSystem::query_vsan_upgrade_status().history?[*]→VsanUpgradeSystemUpgradeHistoryPreflightFail.preflight_result`
 pub trait VsanUpgradeSystemPreflightCheckResultTrait : super::traits::DataObjectTrait {
     /// Detected issues.
     /// 
@@ -21923,6 +22413,9 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VsanUpgrade
     }
 }
 /// Captures one "log entry" of an upgrade process.
+///
+/// ### How to access
+/// - `VsanUpgradeSystem::query_vsan_upgrade_status().history?[*]`
 pub trait VsanUpgradeSystemUpgradeHistoryItemTrait : super::traits::DataObjectTrait {
     /// Time stamp when the history is record.
     fn get_timestamp(&self) -> &str;
@@ -22033,6 +22526,9 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VsanUpgrade
 /// 
 /// Contains
 /// information about progress, result, and a detailed log of operations.
+///
+/// ### How to access
+/// - `VsanUpgradeSystem::query_vsan_upgrade_status()`
 pub trait VsanUpgradeSystemUpgradeStatusTrait : super::traits::DataObjectTrait {
     /// True if there is an active upgrade process.
     /// 
@@ -22129,6 +22625,13 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VsanUpgrade
 /// This is an abstract type.
 /// A client creates a scheduled task or an alarm each of which triggers
 /// an action, defined by a subclass of this type.
+///
+/// ### How to access
+/// - `ScheduledTask::reconfigure_scheduled_task(spec).action`
+/// - `ScheduledTaskManager::create_scheduled_task(spec).action`
+/// - `ScheduledTaskManager::create_object_scheduled_task(spec).action`
+/// - `Alarm::reconfigure_alarm(spec).action?→AlarmTriggeringAction.action`
+/// - `AlarmManager::create_alarm(spec).action?→AlarmTriggeringAction.action`
 pub trait ActionTrait : super::traits::DataObjectTrait {
 }
 impl<'s> serde::Serialize for dyn ActionTrait + 's {
@@ -22212,6 +22715,10 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn ActionTrait
 /// Action invoked by triggered alarm.
 /// 
 /// This is an abstract type.
+///
+/// ### How to access
+/// - `Alarm::reconfigure_alarm(spec).action?`
+/// - `AlarmManager::create_alarm(spec).action?`
 pub trait AlarmActionTrait : super::traits::DataObjectTrait {
 }
 impl<'s> serde::Serialize for dyn AlarmActionTrait + 's {
@@ -22282,6 +22789,11 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn AlarmAction
 }
 /// Base type for the expressions specifying the conditions that define
 /// the status of an alarm.
+///
+/// ### How to access
+/// - `AlarmManager::default_expression`
+/// - `Alarm::reconfigure_alarm(spec).expression`
+/// - `AlarmManager::create_alarm(spec).expression`
 pub trait AlarmExpressionTrait : super::traits::DataObjectTrait {
 }
 impl<'s> serde::Serialize for dyn AlarmExpressionTrait + 's {
@@ -22363,6 +22875,10 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn AlarmExpres
     }
 }
 /// Parameters for alarm creation.
+///
+/// ### How to access
+/// - `Alarm::reconfigure_alarm(spec)`
+/// - `AlarmManager::create_alarm(spec)`
 pub trait AlarmSpecTrait : super::traits::DataObjectTrait {
     /// Name of the alarm.
     fn get_name(&self) -> &str;
@@ -22477,6 +22993,16 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn AlarmSpecTr
     }
 }
 /// Base class for all action recommendations in VirtualCenter.
+///
+/// ### How to access
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]`
+/// - `StoragePod::pod_storage_drs_entry.action_history?[*].action`
+/// - `ClusterComputeResource::action_history.action`
+/// - `ClusterComputeResource::recommendation.action?[*]`
+/// - `Datastore::datastore_enter_maintenance_mode().recommendations?[*].action?[*]`
+/// - `ClusterComputeResource::cluster_enter_maintenance_mode().recommendations?[*].action?[*]`
+/// - `ClusterComputeResource::place_vm().recommendations?[*].action?[*]`
+/// - `StorageResourceManager::recommend_datastores().recommendations?[*].action?[*]`
 pub trait ClusterActionTrait : super::traits::DataObjectTrait {
     /// Type of the action.
     /// 
@@ -22606,6 +23132,11 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn ClusterActi
     }
 }
 /// Base class for admission control related information of a vSphere HA cluster.
+///
+/// ### How to access
+/// - `ComputeResource::summary→ClusterComputeResourceSummary.admission_control_info?`
+/// - `ClusterComputeResource::summary_ex.admission_control_info?`
+/// - `ClusterComputeResource::summary→ClusterComputeResourceSummary.admission_control_info?`
 pub trait ClusterDasAdmissionControlInfoTrait : super::traits::DataObjectTrait {
 }
 impl<'s> serde::Serialize for dyn ClusterDasAdmissionControlInfoTrait + 's {
@@ -22679,6 +23210,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn ClusterDasA
     }
 }
 /// Base class for specifying how admission control should be done for vSphere HA.
+///
+/// ### How to access
+/// - `ComputeResource::configuration_ex→ClusterConfigInfoEx.das_config.admission_control_policy?`
+/// - `ClusterComputeResource::configuration.das_config.admission_control_policy?`
+/// - `ClusterComputeResource::configuration_ex→ClusterConfigInfoEx.das_config.admission_control_policy?`
+/// - `Folder::create_cluster(spec).das_config?.admission_control_policy?`
+/// - `Folder::create_cluster_ex(spec).das_config?.admission_control_policy?`
+/// - `Folder::add_standalone_host_task(comp_res_spec)→ClusterConfigSpecEx.das_config?.admission_control_policy?`
+/// - `Folder::batch_add_hosts_to_cluster_task(comp_res_spec)→ClusterConfigSpecEx.das_config?.admission_control_policy?`
+/// - `Folder::batch_add_standalone_hosts_task(comp_res_spec)→ClusterConfigSpecEx.das_config?.admission_control_policy?`
+/// - `StoragePod::create_cluster(spec).das_config?.admission_control_policy?`
+/// - `StoragePod::create_cluster_ex(spec).das_config?.admission_control_policy?`
+/// 
+/// *(10 of 18 paths)*
 pub trait ClusterDasAdmissionControlPolicyTrait : super::traits::DataObjectTrait {
     /// Percentage of resource reduction that a cluster of VMs can tolerate
     /// in case of a failover.
@@ -22781,6 +23326,9 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn ClusterDasA
 }
 /// Base class for advanced runtime information related to the high
 /// availability service for a cluster.
+///
+/// ### How to access
+/// - `ClusterComputeResource::retrieve_das_advanced_runtime_info()`
 pub trait ClusterDasAdvancedRuntimeInfoTrait : super::traits::DataObjectTrait {
     /// The information pertaining to the HA agents on the hosts
     fn get_das_host_info(&self) -> &Option<Box<dyn super::traits::ClusterDasHostInfoTrait>>;
@@ -22859,6 +23407,11 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn ClusterDasA
     }
 }
 /// Base class for DAS data for high availability service for a cluster.
+///
+/// ### How to access
+/// - `ComputeResource::summary→ClusterComputeResourceSummary.das_data?`
+/// - `ClusterComputeResource::summary_ex.das_data?`
+/// - `ClusterComputeResource::summary→ClusterComputeResourceSummary.das_data?`
 pub trait ClusterDasDataTrait : super::traits::DataObjectTrait {
 }
 impl<'s> serde::Serialize for dyn ClusterDasDataTrait + 's {
@@ -22924,6 +23477,9 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn ClusterDasD
     }
 }
 /// HA specific advanced information pertaining to the hosts in the cluster.
+///
+/// ### How to access
+/// - `ClusterComputeResource::retrieve_das_advanced_runtime_info().das_host_info?`
 pub trait ClusterDasHostInfoTrait : super::traits::DataObjectTrait {
 }
 impl<'s> serde::Serialize for dyn ClusterDasHostInfoTrait + 's {
@@ -22990,6 +23546,14 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn ClusterDasH
 }
 /// FaultsByVm is the faults generated by DRS when it tries to
 /// move a VM.
+///
+/// ### How to access
+/// - `StoragePod::pod_storage_drs_entry.drs_fault?[*].faults_by_vm[*]`
+/// - `ClusterComputeResource::drs_fault.faults_by_vm[*]`
+/// - `Datastore::datastore_enter_maintenance_mode().drs_fault?.faults_by_vm[*]`
+/// - `ClusterComputeResource::cluster_enter_maintenance_mode().fault?.faults_by_vm[*]`
+/// - `ClusterComputeResource::place_vm().drs_fault?.faults_by_vm[*]`
+/// - `StorageResourceManager::recommend_datastores().drs_fault?.faults_by_vm[*]`
 pub trait ClusterDrsFaultsFaultsByVmTrait : super::traits::DataObjectTrait {
     /// The VM that DRS was trying to migrate when it generated the faults.
     /// 
@@ -23071,6 +23635,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn ClusterDrsF
 /// 
 /// All virtual machines and hosts that are part of a group
 /// must be part of the same cluster.
+///
+/// ### How to access
+/// - `ComputeResource::configuration_ex→ClusterConfigInfoEx.group?[*]`
+/// - `ClusterComputeResource::configuration_ex→ClusterConfigInfoEx.group?[*]`
+/// - `Folder::create_cluster_ex(spec).group_spec?[*].info?`
+/// - `Folder::add_standalone_host_task(comp_res_spec)→ClusterConfigSpecEx.group_spec?[*].info?`
+/// - `Folder::batch_add_hosts_to_cluster_task(comp_res_spec)→ClusterConfigSpecEx.group_spec?[*].info?`
+/// - `Folder::batch_add_standalone_hosts_task(comp_res_spec)→ClusterConfigSpecEx.group_spec?[*].info?`
+/// - `StoragePod::create_cluster_ex(spec).group_spec?[*].info?`
+/// - `StoragePod::add_standalone_host_task(comp_res_spec)→ClusterConfigSpecEx.group_spec?[*].info?`
+/// - `StoragePod::batch_add_hosts_to_cluster_task(comp_res_spec)→ClusterConfigSpecEx.group_spec?[*].info?`
+/// - `StoragePod::batch_add_standalone_hosts_task(comp_res_spec)→ClusterConfigSpecEx.group_spec?[*].info?`
+/// 
+/// *(10 of 14 paths)*
 pub trait ClusterGroupInfoTrait : super::traits::DataObjectTrait {
     /// Unique name of the group.
     fn get_name(&self) -> &str;
@@ -23220,6 +23798,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn ClusterGrou
 /// recommendations to satisfy the DRS rules. You are not required to act on the
 /// recommendations, but the Server maintains the recommendations until the rules
 /// are satisfied.
+///
+/// ### How to access
+/// - `StoragePod::pod_storage_drs_entry.storage_drs_config.pod_config.rule?[*]`
+/// - `ComputeResource::configuration_ex→ClusterConfigInfoEx.rule?[*]`
+/// - `ClusterComputeResource::configuration.rule?[*]`
+/// - `ClusterComputeResource::configuration_ex→ClusterConfigInfoEx.rule?[*]`
+/// - `Folder::create_cluster(spec).rules_spec?[*].info?`
+/// - `Folder::create_cluster_ex(spec).rules_spec?[*].info?`
+/// - `Folder::add_standalone_host_task(comp_res_spec)→ClusterConfigSpecEx.rules_spec?[*].info?`
+/// - `Folder::batch_add_hosts_to_cluster_task(comp_res_spec)→ClusterConfigSpecEx.rules_spec?[*].info?`
+/// - `Folder::batch_add_standalone_hosts_task(comp_res_spec)→ClusterConfigSpecEx.rules_spec?[*].info?`
+/// - `StoragePod::create_cluster(spec).rules_spec?[*].info?`
+/// 
+/// *(10 of 24 paths)*
 pub trait ClusterRuleInfoTrait : super::traits::DataObjectTrait {
     /// Unique ID for rules.
     /// 
@@ -23424,6 +24016,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn ClusterRule
 /// outlier virtual machines will use multiple slots. Using such a policy introduces
 /// a risk that vSphere HA will be unable to failover these virtual machines because
 /// of resource fragmentation.
+///
+/// ### How to access
+/// - `ComputeResource::configuration_ex→ClusterConfigInfoEx.das_config.admission_control_policy?→ClusterFailoverLevelAdmissionControlPolicy.slot_policy?`
+/// - `ClusterComputeResource::configuration.das_config.admission_control_policy?→ClusterFailoverLevelAdmissionControlPolicy.slot_policy?`
+/// - `ClusterComputeResource::configuration_ex→ClusterConfigInfoEx.das_config.admission_control_policy?→ClusterFailoverLevelAdmissionControlPolicy.slot_policy?`
+/// - `Folder::create_cluster(spec).das_config?.admission_control_policy?→ClusterFailoverLevelAdmissionControlPolicy.slot_policy?`
+/// - `Folder::create_cluster_ex(spec).das_config?.admission_control_policy?→ClusterFailoverLevelAdmissionControlPolicy.slot_policy?`
+/// - `Folder::add_standalone_host_task(comp_res_spec)→ClusterConfigSpecEx.das_config?.admission_control_policy?→ClusterFailoverLevelAdmissionControlPolicy.slot_policy?`
+/// - `Folder::batch_add_hosts_to_cluster_task(comp_res_spec)→ClusterConfigSpecEx.das_config?.admission_control_policy?→ClusterFailoverLevelAdmissionControlPolicy.slot_policy?`
+/// - `Folder::batch_add_standalone_hosts_task(comp_res_spec)→ClusterConfigSpecEx.das_config?.admission_control_policy?→ClusterFailoverLevelAdmissionControlPolicy.slot_policy?`
+/// - `StoragePod::create_cluster(spec).das_config?.admission_control_policy?→ClusterFailoverLevelAdmissionControlPolicy.slot_policy?`
+/// - `StoragePod::create_cluster_ex(spec).das_config?.admission_control_policy?→ClusterFailoverLevelAdmissionControlPolicy.slot_policy?`
+/// 
+/// *(10 of 18 paths)*
 pub trait ClusterSlotPolicyTrait : super::traits::DataObjectTrait {
 }
 impl<'s> serde::Serialize for dyn ClusterSlotPolicyTrait + 's {
@@ -23561,6 +24167,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VsanCluster
     }
 }
 /// The base class for vSAN health summary test result
+///
+/// ### How to access
+/// - `VsanPerformanceManager::vsan_perf_query_cluster_health().group_details?[*]`
+/// - `VsanPerformanceManager::vsan_perf_query_cluster_health().group_tests?[*].test_details?[*]`
+/// - `VsanVcClusterHealthSystem::vsan_query_vc_cluster_health_summary().groups?[*].group_details?[*]`
+/// - `VsanVcClusterHealthSystem::vsan_query_cluster_historical_health().groups?[*].group_details?[*]`
+/// - `VsanClusterHealthSystem::vsan_query_cluster_create_vm_health_test().cluster_result.health_test?.test_details?[*]`
+/// - `VsanClusterHealthSystem::vsan_query_cluster_network_perf_test().cluster_result.health_test?.test_details?[*]`
+/// - `VsanPerformanceManager::vsan_perf_query_cluster_health().group_tests?[*].historical_results?[*].test_details?[*]`
+/// - `VsanVcClusterHealthSystem::vsan_query_vc_cluster_create_vm_health_history_test().cluster_result.health_test?.test_details?[*]`
+/// - `VsanVcClusterHealthSystem::vsan_query_vc_cluster_create_vm_health_test().cluster_result.health_test?.test_details?[*]`
+/// - `VsanVcClusterHealthSystem::vsan_query_vc_cluster_health_summary().groups?[*].group_tests?[*].test_details?[*]`
+/// 
+/// *(10 of 26 paths)*
 pub trait VsanClusterHealthResultBaseTrait : super::traits::DataObjectTrait {
     /// The label name for the vSAN health test
     fn get_label(&self) -> &Option<String>;
@@ -23635,6 +24255,13 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VsanCluster
     }
 }
 /// Describes a fault domain structure.
+///
+/// ### How to access
+/// - `ClusterComputeResource::extend_hci_task(v_san_config_spec)→VimVsanReconfigSpec.fault_domains_spec?.fault_domains[*]`
+/// - `ClusterComputeResource::configure_hci_task(cluster_spec).v_san_config_spec?→VimVsanReconfigSpec.fault_domains_spec?.fault_domains[*]`
+/// - `ClusterComputeResource::validate_hci_configuration(hci_config_spec).v_san_config_spec?→VimVsanReconfigSpec.fault_domains_spec?.fault_domains[*]`
+/// - `VsanVcClusterConfigSystem::vsan_cluster_reconfig(vsan_reconfig_spec).fault_domains_spec?.fault_domains[*]`
+/// - `VsanVcClusterConfigSystem::vsan_validate_config_spec(vsan_reconfig_spec).fault_domains_spec?.fault_domains[*]`
 pub trait VimClusterVsanFaultDomainSpecTrait : super::traits::DataObjectTrait {
     /// List of hosts that will participate in the newly created fault domain.
     /// 
@@ -23718,6 +24345,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VimClusterV
 /// This is the base class for vSAN health issue remediation or troubleshooting.
 /// 
 /// This structure may be used only with operations rendered under `/vsan`.
+///
+/// ### How to access
+/// - `VsanPerformanceManager::vsan_perf_query_cluster_health().group_details?[*]→VsanClusterHealthResultWithRemediation.troubleshooting?.diagnostic_steps?[*]`
+/// - `VsanPerformanceManager::vsan_perf_query_cluster_health().group_details?[*]→VsanClusterHealthResultWithRemediation.troubleshooting?.remediations?[*]`
+/// - `VsanPerformanceManager::vsan_perf_query_cluster_health().group_tests?[*].test_details?[*]→VsanClusterHealthResultWithRemediation.troubleshooting?.diagnostic_steps?[*]`
+/// - `VsanPerformanceManager::vsan_perf_query_cluster_health().group_tests?[*].test_details?[*]→VsanClusterHealthResultWithRemediation.troubleshooting?.remediations?[*]`
+/// - `VsanVcClusterHealthSystem::vsan_query_vc_cluster_health_summary().groups?[*].group_details?[*]→VsanClusterHealthResultWithRemediation.troubleshooting?.diagnostic_steps?[*]`
+/// - `VsanVcClusterHealthSystem::vsan_query_vc_cluster_health_summary().groups?[*].group_details?[*]→VsanClusterHealthResultWithRemediation.troubleshooting?.remediations?[*]`
+/// - `VsanVcClusterHealthSystem::vsan_query_cluster_historical_health().groups?[*].group_details?[*]→VsanClusterHealthResultWithRemediation.troubleshooting?.diagnostic_steps?[*]`
+/// - `VsanVcClusterHealthSystem::vsan_query_cluster_historical_health().groups?[*].group_details?[*]→VsanClusterHealthResultWithRemediation.troubleshooting?.remediations?[*]`
+/// - `VsanClusterHealthSystem::vsan_query_cluster_create_vm_health_test().cluster_result.health_test?.test_details?[*]→VsanClusterHealthResultWithRemediation.troubleshooting?.diagnostic_steps?[*]`
+/// - `VsanClusterHealthSystem::vsan_query_cluster_create_vm_health_test().cluster_result.health_test?.test_details?[*]→VsanClusterHealthResultWithRemediation.troubleshooting?.remediations?[*]`
+/// 
+/// *(10 of 52 paths)*
 pub trait VsanHealthActionBaseTrait : super::traits::DataObjectTrait {
     /// The descriptive message for explaining what the action it is.
     /// 
@@ -23907,6 +24548,10 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VsanIscsiLu
     }
 }
 /// Specifies the basic properties for iSCSI target.
+///
+/// ### How to access
+/// - `VsanIscsiTargetSystem::vsan_vit_get_iscsi_initiator_group().targets?[*]`
+/// - `VsanIscsiTargetSystem::vsan_vit_get_iscsi_initiator_groups().targets?[*]`
 pub trait VsanIscsiTargetBasicInfoTrait : super::traits::DataObjectTrait {
     /// Alias, i.e., the human readable name.
     fn get_alias(&self) -> &str;
@@ -23995,6 +24640,10 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VsanIscsiTa
     }
 }
 /// Specifies the common properties for vSAN iSCSI target.
+///
+/// ### How to access
+/// - `VsanIscsiTargetSystem::vsan_vit_get_iscsi_initiator_group().targets?[*]⇒VsanIscsiTargetCommonInfoTrait`
+/// - `VsanIscsiTargetSystem::vsan_vit_get_iscsi_initiator_groups().targets?[*]⇒VsanIscsiTargetCommonInfoTrait`
 pub trait VsanIscsiTargetCommonInfoTrait : super::traits::VsanIscsiTargetBasicInfoTrait {
     /// Authentication information.
     fn get_auth_spec(&self) -> &Option<super::structs::VsanIscsiTargetAuthSpec>;
@@ -24098,6 +24747,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VsanIscsiTa
     }
 }
 /// Specified common properties for vSAN iSCSI target service.
+///
+/// ### How to access
+/// - `ComputeResource::configuration_ex→ClusterConfigInfoEx.vsan_config_info?→VsanConfigInfoEx.iscsi_config?`
+/// - `ClusterComputeResource::configuration_ex→ClusterConfigInfoEx.vsan_config_info?→VsanConfigInfoEx.iscsi_config?`
+/// - `Folder::create_cluster_ex(spec).vsan_config?→VsanConfigInfoEx.iscsi_config?`
+/// - `Folder::add_standalone_host_task(comp_res_spec)→ClusterConfigSpecEx.vsan_config?→VsanConfigInfoEx.iscsi_config?`
+/// - `Folder::batch_add_hosts_to_cluster_task(comp_res_spec)→ClusterConfigSpecEx.vsan_config?→VsanConfigInfoEx.iscsi_config?`
+/// - `Folder::batch_add_standalone_hosts_task(comp_res_spec)→ClusterConfigSpecEx.vsan_config?→VsanConfigInfoEx.iscsi_config?`
+/// - `StoragePod::create_cluster_ex(spec).vsan_config?→VsanConfigInfoEx.iscsi_config?`
+/// - `StoragePod::add_standalone_host_task(comp_res_spec)→ClusterConfigSpecEx.vsan_config?→VsanConfigInfoEx.iscsi_config?`
+/// - `StoragePod::batch_add_hosts_to_cluster_task(comp_res_spec)→ClusterConfigSpecEx.vsan_config?→VsanConfigInfoEx.iscsi_config?`
+/// - `StoragePod::batch_add_standalone_hosts_task(comp_res_spec)→ClusterConfigSpecEx.vsan_config?→VsanConfigInfoEx.iscsi_config?`
+/// 
+/// *(10 of 20 paths)*
 pub trait VsanIscsiTargetServiceConfigTrait : super::traits::DataObjectTrait {
     /// vSAN iSCSI target service default configuration.
     fn get_default_config(&self) -> &Option<super::structs::VsanIscsiTargetServiceDefaultConfigSpec>;
@@ -24180,6 +24843,9 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VsanIscsiTa
 /// This class defines general access control list spec.
 /// 
 /// This structure may be used only with operations rendered under `/vsan`.
+///
+/// ### How to access
+/// - `CnsVolumeManager::cns_configure_volume_ac_ls(acl_config_specs).access_control_spec_list[*]`
 pub trait CnsAccessControlSpecTrait : super::traits::DataObjectTrait {
 }
 impl<'s> serde::Serialize for dyn CnsAccessControlSpecTrait + 's {
@@ -24261,6 +24927,10 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn CnsAccessCo
 /// backs the volume.
 /// 
 /// This structure may be used only with operations rendered under `/vsan`.
+///
+/// ### How to access
+/// - `CnsVolumeManager::cns_create_volume(create_specs).backing_object_details`
+/// - `CnsVolumeManager::cns_query_volume().volumes?[*].backing_object_details?`
 pub trait CnsBackingObjectDetailsTrait : super::traits::DataObjectTrait {
     /// During creation this field specifies desired container volume capacity in MB.
     /// 
@@ -24357,6 +25027,10 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn CnsBackingO
 /// container volume.
 /// 
 /// This structure may be used only with operations rendered under `/vsan`.
+///
+/// ### How to access
+/// - `CnsVolumeManager::cns_create_volume(create_specs).backing_object_details⇒CnsFileBackingDetailsTrait`
+/// - `CnsVolumeManager::cns_query_volume().volumes?[*].backing_object_details?⇒CnsFileBackingDetailsTrait`
 pub trait CnsFileBackingDetailsTrait : super::traits::CnsBackingObjectDetailsTrait {
     /// At the time of creation this field would identify the existing file share
     /// that should be used to back the container volume.
@@ -24436,6 +25110,9 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn CnsFileBack
 /// Base specification for volume creation.
 /// 
 /// This structure may be used only with operations rendered under `/vsan`.
+///
+/// ### How to access
+/// - `CnsVolumeManager::cns_create_volume(create_specs).create_spec?`
 pub trait CnsBaseCreateSpecTrait : super::traits::DataObjectTrait {
 }
 impl<'s> serde::Serialize for dyn CnsBaseCreateSpecTrait + 's {
@@ -24512,6 +25189,9 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn CnsBaseCrea
 /// non vSAN file service based file shares in future.
 /// 
 /// This structure may be used only with operations rendered under `/vsan`.
+///
+/// ### How to access
+/// - `CnsVolumeManager::cns_create_volume(create_specs).create_spec?⇒CnsFileCreateSpecTrait`
 pub trait CnsFileCreateSpecTrait : super::traits::CnsBaseCreateSpecTrait {
 }
 impl<'s> serde::Serialize for dyn CnsFileCreateSpecTrait + 's {
@@ -24580,6 +25260,11 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn CnsFileCrea
 /// in container orchestrators like Kubernetes, Docker swarm etc.
 /// 
 /// This structure may be used only with operations rendered under `/vsan`.
+///
+/// ### How to access
+/// - `CnsVolumeManager::cns_create_volume(create_specs).metadata?.entity_metadata?[*]`
+/// - `CnsVolumeManager::cns_update_volume_metadata(update_specs).metadata.entity_metadata?[*]`
+/// - `CnsVolumeManager::cns_query_volume().volumes?[*].metadata?.entity_metadata?[*]`
 pub trait CnsEntityMetadataTrait : super::traits::DataObjectTrait {
     /// Represents the name of entity.
     fn get_entity_name(&self) -> &str;
@@ -24687,6 +25372,10 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn CnsEntityMe
 /// specified.
 /// 
 /// This structure may be used only with operations rendered under `/vsan`.
+///
+/// ### How to access
+/// - `CnsVolumeManager::cns_query_volume(filter)`
+/// - `CnsVolumeManager::cns_query_async(filter)`
 pub trait CnsQueryFilterTrait : super::traits::DataObjectTrait {
     /// Volume identifiers to be queried.
     /// 
@@ -24933,6 +25622,9 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn CnsVolumeOp
 /// Base class for the volume relocation spec.
 /// 
 /// This structure may be used only with operations rendered under `/vsan`.
+///
+/// ### How to access
+/// - `CnsVolumeManager::cns_relocate_volume(relocate_specs)`
 pub trait CnsVolumeRelocateSpecTrait : super::traits::DataObjectTrait {
     /// Unique identifier for the volume.
     fn get_volume_id(&self) -> &super::structs::CnsVolumeId;
@@ -25020,6 +25712,9 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn CnsVolumeRe
 /// The source can be a volume snapshot or a volume.
 /// 
 /// This structure may be used only with operations rendered under `/vsan`.
+///
+/// ### How to access
+/// - `CnsVolumeManager::cns_create_volume(create_specs).volume_source?`
 pub trait CnsVolumeSourceTrait : super::traits::DataObjectTrait {
 }
 impl<'s> serde::Serialize for dyn CnsVolumeSourceTrait + 's {
@@ -25086,6 +25781,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn CnsVolumeSo
 }
 /// The *DVPortSetting* data object
 /// describes the network configuration of a *DistributedVirtualPort*.
+///
+/// ### How to access
+/// - `DistributedVirtualPortgroup::config.default_port_config?`
+/// - `VmwareDistributedVirtualSwitch::config.default_port_config`
+/// - `DistributedVirtualSwitch::config.default_port_config`
+/// - `DistributedVirtualPortgroup::reconfigure_dv_portgroup_task(spec).default_port_config?`
+/// - `VmwareDistributedVirtualSwitch::create_dv_portgroup_task(spec).default_port_config?`
+/// - `VmwareDistributedVirtualSwitch::add_dv_portgroup_task(spec).default_port_config?`
+/// - `VmwareDistributedVirtualSwitch::reconfigure_dvs_task(spec).default_port_config?`
+/// - `VmwareDistributedVirtualSwitch::reconfigure_dv_port_task(port).setting?`
+/// - `Folder::create_dvs_task(spec).config_spec.default_port_config?`
+/// - `StoragePod::create_dvs_task(spec).config_spec.default_port_config?`
+/// 
+/// *(10 of 20 paths)*
 pub trait DvPortSettingTrait : super::traits::DataObjectTrait {
     /// Indicates whether this port is blocked.
     /// 
@@ -25201,6 +25910,16 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DvPortSetti
 /// 
 /// This field is not applicable
 /// when queried directly against an ESX host.
+///
+/// ### How to access
+/// - `DistributedVirtualPortgroup::config.policy`
+/// - `DistributedVirtualPortgroup::reconfigure_dv_portgroup_task(spec).policy?`
+/// - `VmwareDistributedVirtualSwitch::create_dv_portgroup_task(spec).policy?`
+/// - `VmwareDistributedVirtualSwitch::add_dv_portgroup_task(spec).policy?`
+/// - `ClusterComputeResource::configure_hci_task(cluster_spec).dvs_prof?[*].dv_portgroup_mapping?[*].dv_portgroup_spec?.policy?`
+/// - `ClusterComputeResource::validate_hci_configuration(hci_config_spec).dvs_prof?[*].dv_portgroup_mapping?[*].dv_portgroup_spec?.policy?`
+/// - `DistributedVirtualSwitch::create_dv_portgroup_task(spec).policy?`
+/// - `DistributedVirtualSwitch::add_dv_portgroup_task(spec).policy?`
 pub trait DvPortgroupPolicyTrait : super::traits::DataObjectTrait {
     /// Allow the *DVPortSetting.blocked* setting
     /// of an individual port to override the setting in
@@ -25314,6 +26033,9 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DvPortgroup
     }
 }
 /// Base class for filters to check host compatibility.
+///
+/// ### How to access
+/// - `DistributedVirtualSwitchManager::query_dvs_check_compatibility(host_filter_spec)`
 pub trait DistributedVirtualSwitchManagerHostDvsFilterSpecTrait : super::traits::DataObjectTrait {
     /// If this flag is true, then the filter returns the hosts in the
     /// *DistributedVirtualSwitchManagerHostContainer*
@@ -25552,6 +26274,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DvsFilterSp
     }
 }
 /// Base class.
+///
+/// ### How to access
+/// - `HostSystem::config.network?.proxy_switch?[*].spec.backing?`
+/// - `VmwareDistributedVirtualSwitch::config.host?[*].config.backing`
+/// - `DistributedVirtualSwitch::config.host?[*].config.backing`
+/// - `HostNetworkSystem::network_config.proxy_switch?[*].spec?.backing?`
+/// - `HostNetworkSystem::network_info.proxy_switch?[*].spec.backing?`
+/// - `VmwareDistributedVirtualSwitch::reconfigure_dvs_task(spec).host?[*].backing?`
+/// - `Folder::create_dvs_task(spec).config_spec.host?[*].backing?`
+/// - `StoragePod::create_dvs_task(spec).config_spec.host?[*].backing?`
+/// - `DistributedVirtualSwitch::reconfigure_dvs_task(spec).host?[*].backing?`
+/// - `HostNetworkSystem::update_network_config(config).proxy_switch?[*].spec?.backing?`
+/// 
+/// *(10 of 17 paths)*
 pub trait DistributedVirtualSwitchHostMemberBackingTrait : super::traits::DataObjectTrait {
 }
 impl<'s> serde::Serialize for dyn DistributedVirtualSwitchHostMemberBackingTrait + 's {
@@ -25617,6 +26353,10 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn Distributed
     }
 }
 /// This class defines healthcheck result of the vSphere Distributed Switch.
+///
+/// ### How to access
+/// - `VmwareDistributedVirtualSwitch::runtime.host_member_runtime?[*].health_check_result?[*]`
+/// - `DistributedVirtualSwitch::runtime.host_member_runtime?[*].health_check_result?[*]`
 pub trait HostMemberHealthCheckResultTrait : super::traits::DataObjectTrait {
     /// The summary of health check result.
     fn get_summary(&self) -> &Option<String>;
@@ -25702,6 +26442,10 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn HostMemberH
 }
 /// This class defines healthcheck result of a specified Uplink port
 /// in vSphere Distributed Switch.
+///
+/// ### How to access
+/// - `VmwareDistributedVirtualSwitch::runtime.host_member_runtime?[*].health_check_result?[*]⇒HostMemberUplinkHealthCheckResultTrait`
+/// - `DistributedVirtualSwitch::runtime.host_member_runtime?[*].health_check_result?[*]⇒HostMemberUplinkHealthCheckResultTrait`
 pub trait HostMemberUplinkHealthCheckResultTrait : super::traits::HostMemberHealthCheckResultTrait {
     /// The uplink port key.
     fn get_uplink_port_key(&self) -> &str;
@@ -25776,6 +26520,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn HostMemberU
     }
 }
 /// This class is the base class for network rule action.
+///
+/// ### How to access
+/// - `DistributedVirtualPortgroup::config.default_port_config?.filter_policy?.filter_config?[*]⇒DvsTrafficFilterConfigTrait.traffic_ruleset?.rules?[*].action?`
+/// - `VmwareDistributedVirtualSwitch::config.default_port_config.filter_policy?.filter_config?[*]⇒DvsTrafficFilterConfigTrait.traffic_ruleset?.rules?[*].action?`
+/// - `DistributedVirtualSwitch::config.default_port_config.filter_policy?.filter_config?[*]⇒DvsTrafficFilterConfigTrait.traffic_ruleset?.rules?[*].action?`
+/// - `DistributedVirtualPortgroup::reconfigure_dv_portgroup_task(spec).default_port_config?.filter_policy?.filter_config?[*]⇒DvsTrafficFilterConfigTrait.traffic_ruleset?.rules?[*].action?`
+/// - `VmwareDistributedVirtualSwitch::create_dv_portgroup_task(spec).default_port_config?.filter_policy?.filter_config?[*]⇒DvsTrafficFilterConfigTrait.traffic_ruleset?.rules?[*].action?`
+/// - `VmwareDistributedVirtualSwitch::add_dv_portgroup_task(spec).default_port_config?.filter_policy?.filter_config?[*]⇒DvsTrafficFilterConfigTrait.traffic_ruleset?.rules?[*].action?`
+/// - `VmwareDistributedVirtualSwitch::reconfigure_dvs_task(spec).default_port_config?.filter_policy?.filter_config?[*]⇒DvsTrafficFilterConfigTrait.traffic_ruleset?.rules?[*].action?`
+/// - `VmwareDistributedVirtualSwitch::reconfigure_dv_port_task(port).setting?.filter_policy?.filter_config?[*]⇒DvsTrafficFilterConfigTrait.traffic_ruleset?.rules?[*].action?`
+/// - `Folder::create_dvs_task(spec).config_spec.default_port_config?.filter_policy?.filter_config?[*]⇒DvsTrafficFilterConfigTrait.traffic_ruleset?.rules?[*].action?`
+/// - `StoragePod::create_dvs_task(spec).config_spec.default_port_config?.filter_policy?.filter_config?[*]⇒DvsTrafficFilterConfigTrait.traffic_ruleset?.rules?[*].action?`
+/// 
+/// *(10 of 20 paths)*
 pub trait DvsNetworkRuleActionTrait : super::traits::DataObjectTrait {
 }
 impl<'s> serde::Serialize for dyn DvsNetworkRuleActionTrait + 's {
@@ -25873,6 +26631,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DvsNetworkR
     }
 }
 /// This class is the base class for identifying network traffic.
+///
+/// ### How to access
+/// - `DistributedVirtualPortgroup::config.default_port_config?.filter_policy?.filter_config?[*]⇒DvsTrafficFilterConfigTrait.traffic_ruleset?.rules?[*].qualifier?[*]`
+/// - `VmwareDistributedVirtualSwitch::config.default_port_config.filter_policy?.filter_config?[*]⇒DvsTrafficFilterConfigTrait.traffic_ruleset?.rules?[*].qualifier?[*]`
+/// - `DistributedVirtualSwitch::config.default_port_config.filter_policy?.filter_config?[*]⇒DvsTrafficFilterConfigTrait.traffic_ruleset?.rules?[*].qualifier?[*]`
+/// - `DistributedVirtualPortgroup::reconfigure_dv_portgroup_task(spec).default_port_config?.filter_policy?.filter_config?[*]⇒DvsTrafficFilterConfigTrait.traffic_ruleset?.rules?[*].qualifier?[*]`
+/// - `VmwareDistributedVirtualSwitch::create_dv_portgroup_task(spec).default_port_config?.filter_policy?.filter_config?[*]⇒DvsTrafficFilterConfigTrait.traffic_ruleset?.rules?[*].qualifier?[*]`
+/// - `VmwareDistributedVirtualSwitch::add_dv_portgroup_task(spec).default_port_config?.filter_policy?.filter_config?[*]⇒DvsTrafficFilterConfigTrait.traffic_ruleset?.rules?[*].qualifier?[*]`
+/// - `VmwareDistributedVirtualSwitch::reconfigure_dvs_task(spec).default_port_config?.filter_policy?.filter_config?[*]⇒DvsTrafficFilterConfigTrait.traffic_ruleset?.rules?[*].qualifier?[*]`
+/// - `VmwareDistributedVirtualSwitch::reconfigure_dv_port_task(port).setting?.filter_policy?.filter_config?[*]⇒DvsTrafficFilterConfigTrait.traffic_ruleset?.rules?[*].qualifier?[*]`
+/// - `Folder::create_dvs_task(spec).config_spec.default_port_config?.filter_policy?.filter_config?[*]⇒DvsTrafficFilterConfigTrait.traffic_ruleset?.rules?[*].qualifier?[*]`
+/// - `StoragePod::create_dvs_task(spec).config_spec.default_port_config?.filter_policy?.filter_config?[*]⇒DvsTrafficFilterConfigTrait.traffic_ruleset?.rules?[*].qualifier?[*]`
+/// 
+/// *(10 of 20 paths)*
 pub trait DvsNetworkRuleQualifierTrait : super::traits::DataObjectTrait {
     /// The key of the Qualifier
     fn get_key(&self) -> &Option<String>;
@@ -25954,6 +26726,9 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DvsNetworkR
 /// Base class of key information.
 /// 
 /// ***Since:*** vSphere API Release 9.0.0.0
+///
+/// ### How to access
+/// - `CryptoManagerKmip::query_crypto_key_status().key_info?`
 pub trait CryptoManagerKmipCryptoKeyStatusKeyInfoTrait : super::traits::DataObjectTrait {
     /// Wrapping Key ID
     fn get_key_id(&self) -> &str;
@@ -26029,6 +26804,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn CryptoManag
 }
 /// This data object type encapsulates virtual machine or disk encryption
 /// settings.
+///
+/// ### How to access
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→StoragePlacementAction.relocate_spec.crypto_spec?`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→StorageMigrationAction.relocate_spec.crypto_spec?`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→PlacementAction.relocate_spec?.crypto_spec?`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→ClusterClusterInitialPlacementAction.config_spec?.crypto?`
+/// - `StoragePod::pod_storage_drs_entry.action_history?[*].action→StoragePlacementAction.relocate_spec.crypto_spec?`
+/// - `ClusterComputeResource::action_history.action→StoragePlacementAction.relocate_spec.crypto_spec?`
+/// - `ClusterComputeResource::action_history.action→StorageMigrationAction.relocate_spec.crypto_spec?`
+/// - `ClusterComputeResource::action_history.action→PlacementAction.relocate_spec?.crypto_spec?`
+/// - `ClusterComputeResource::action_history.action→ClusterClusterInitialPlacementAction.config_spec?.crypto?`
+/// - `ClusterComputeResource::recommendation.action?[*]→StoragePlacementAction.relocate_spec.crypto_spec?`
+/// 
+/// *(10 of 100 paths)*
 pub trait CryptoSpecTrait : super::traits::DataObjectTrait {
 }
 impl<'s> serde::Serialize for dyn CryptoSpecTrait + 's {
@@ -26115,6 +26904,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn CryptoSpecT
 }
 /// This data object type indicates that the encryption settings of the
 /// virtual machine or disk should not be modified by the operation.
+///
+/// ### How to access
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→StoragePlacementAction.relocate_spec.crypto_spec?⇒CryptoSpecNoOpTrait`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→StorageMigrationAction.relocate_spec.crypto_spec?⇒CryptoSpecNoOpTrait`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→PlacementAction.relocate_spec?.crypto_spec?⇒CryptoSpecNoOpTrait`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→ClusterClusterInitialPlacementAction.config_spec?.crypto?⇒CryptoSpecNoOpTrait`
+/// - `StoragePod::pod_storage_drs_entry.action_history?[*].action→StoragePlacementAction.relocate_spec.crypto_spec?⇒CryptoSpecNoOpTrait`
+/// - `ClusterComputeResource::action_history.action→StoragePlacementAction.relocate_spec.crypto_spec?⇒CryptoSpecNoOpTrait`
+/// - `ClusterComputeResource::action_history.action→StorageMigrationAction.relocate_spec.crypto_spec?⇒CryptoSpecNoOpTrait`
+/// - `ClusterComputeResource::action_history.action→PlacementAction.relocate_spec?.crypto_spec?⇒CryptoSpecNoOpTrait`
+/// - `ClusterComputeResource::action_history.action→ClusterClusterInitialPlacementAction.config_spec?.crypto?⇒CryptoSpecNoOpTrait`
+/// - `ClusterComputeResource::recommendation.action?[*]→StoragePlacementAction.relocate_spec.crypto_spec?⇒CryptoSpecNoOpTrait`
+/// 
+/// *(10 of 100 paths)*
 pub trait CryptoSpecNoOpTrait : super::traits::CryptoSpecTrait {
 }
 impl<'s> serde::Serialize for dyn CryptoSpecNoOpTrait + 's {
@@ -26182,6 +26985,12 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn CryptoSpecN
 /// Base class of key information.
 /// 
 /// ***Since:*** vSphere API Release 9.0.0.0
+///
+/// ### How to access
+/// - `CryptoManagerKmip::kmip_servers.key_info?`
+/// - `CryptoManagerKmip::list_kmip_servers().key_info?`
+/// - `CryptoManagerKmip::list_kms_clusters().key_info?`
+/// - `CryptoManagerKmip::retrieve_kmip_servers_status_task(clusters).key_info?`
 pub trait KmipClusterInfoKeyInfoTrait : super::traits::DataObjectTrait {
 }
 impl<'s> serde::Serialize for dyn KmipClusterInfoKeyInfoTrait + 's {
@@ -26253,6 +27062,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn KmipCluster
 /// Base class of key specification.
 /// 
 /// ***Since:*** vSphere API Release 9.0.0.0
+///
+/// ### How to access
+/// - `HostSystem::config.vsan_host_config?→VsanHostConfigInfoEx.encryption_info?.kmip_servers?[*].key_spec?`
+/// - `ComputeResource::configuration_ex→ClusterConfigInfoEx.vsan_host_config?[*]→VsanHostConfigInfoEx.encryption_info?.kmip_servers?[*].key_spec?`
+/// - `ClusterComputeResource::configuration_ex→ClusterConfigInfoEx.vsan_host_config?[*]→VsanHostConfigInfoEx.encryption_info?.kmip_servers?[*].key_spec?`
+/// - `HostVsanSystem::config→VsanHostConfigInfoEx.encryption_info?.kmip_servers?[*].key_spec?`
+/// - `Folder::create_cluster_ex(spec).vsan_host_config_spec?[*]→VsanHostConfigInfoEx.encryption_info?.kmip_servers?[*].key_spec?`
+/// - `Folder::add_standalone_host_task(comp_res_spec)→ClusterConfigSpecEx.vsan_host_config_spec?[*]→VsanHostConfigInfoEx.encryption_info?.kmip_servers?[*].key_spec?`
+/// - `Folder::batch_add_hosts_to_cluster_task(comp_res_spec)→ClusterConfigSpecEx.vsan_host_config_spec?[*]→VsanHostConfigInfoEx.encryption_info?.kmip_servers?[*].key_spec?`
+/// - `Folder::batch_add_standalone_hosts_task(comp_res_spec)→ClusterConfigSpecEx.vsan_host_config_spec?[*]→VsanHostConfigInfoEx.encryption_info?.kmip_servers?[*].key_spec?`
+/// - `StoragePod::create_cluster_ex(spec).vsan_host_config_spec?[*]→VsanHostConfigInfoEx.encryption_info?.kmip_servers?[*].key_spec?`
+/// - `StoragePod::add_standalone_host_task(comp_res_spec)→ClusterConfigSpecEx.vsan_host_config_spec?[*]→VsanHostConfigInfoEx.encryption_info?.kmip_servers?[*].key_spec?`
+/// 
+/// *(10 of 25 paths)*
 pub trait KmipServerSpecKeySpecTrait : super::traits::DataObjectTrait {
 }
 impl<'s> serde::Serialize for dyn KmipServerSpecKeySpecTrait + 's {
@@ -26576,6 +27399,9 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn EntityEvent
 /// BaseClass allowing different views on filtered set.
 /// 
 /// ***Since:*** vSphere API Release 9.0.0.0
+///
+/// ### How to access
+/// - `EventManager::query_events(event_view_spec)`
 pub trait EventManagerEventViewSpecTrait : super::traits::DataObjectTrait {
 }
 impl<'s> serde::Serialize for dyn EventManagerEventViewSpecTrait + 's {
@@ -26642,6 +27468,14 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn EventManage
 }
 /// The *HostAuthenticationStoreInfo* base class defines status information
 /// for local and host Active Directory authentication.
+///
+/// ### How to access
+/// - `HostSystem::config.authentication_manager_info?.auth_config[*]`
+/// - `HostActiveDirectoryAuthentication::info`
+/// - `HostAuthenticationStore::info`
+/// - `HostDirectoryStore::info`
+/// - `HostLocalAuthentication::info`
+/// - `HostAuthenticationManager::info.auth_config[*]`
 pub trait HostAuthenticationStoreInfoTrait : super::traits::DataObjectTrait {
     /// Indicates whether the authentication store is configured.
     /// - Host Active Directory authentication - <code>enabled</code>
@@ -26725,6 +27559,14 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn HostAuthent
 }
 /// *HostDirectoryStoreInfo* is a base class for objects that
 /// provide information about directory-based authentication stores.
+///
+/// ### How to access
+/// - `HostSystem::config.authentication_manager_info?.auth_config[*]⇒HostDirectoryStoreInfoTrait`
+/// - `HostActiveDirectoryAuthentication::info⇒HostDirectoryStoreInfoTrait`
+/// - `HostAuthenticationStore::info⇒HostDirectoryStoreInfoTrait`
+/// - `HostDirectoryStore::info⇒HostDirectoryStoreInfoTrait`
+/// - `HostLocalAuthentication::info⇒HostDirectoryStoreInfoTrait`
+/// - `HostAuthenticationManager::info.auth_config[*]⇒HostDirectoryStoreInfoTrait`
 pub trait HostDirectoryStoreInfoTrait : super::traits::HostAuthenticationStoreInfoTrait {
 }
 impl<'s> serde::Serialize for dyn HostDirectoryStoreInfoTrait + 's {
@@ -26790,6 +27632,11 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn HostDirecto
     }
 }
 /// The base data object type for information about datastores on the host.
+///
+/// ### How to access
+/// - `HostSystem::query_host_connection_info().datastore?[*]`
+/// - `Datacenter::query_connection_info().datastore?[*]`
+/// - `Datacenter::query_connection_info_via_spec().datastore?[*]`
 pub trait HostDatastoreConnectInfoTrait : super::traits::DataObjectTrait {
     /// Basic datastore information.
     /// 
@@ -26866,6 +27713,11 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn HostDatasto
     }
 }
 /// The base data object type for information about networks on the host.
+///
+/// ### How to access
+/// - `HostSystem::query_host_connection_info().network?[*]`
+/// - `Datacenter::query_connection_info().network?[*]`
+/// - `Datacenter::query_connection_info_via_spec().network?[*]`
 pub trait HostConnectInfoNetworkInfoTrait : super::traits::DataObjectTrait {
     /// Basic network information, such as network name.
     /// 
@@ -27255,6 +28107,11 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VmConfigFil
 /// filters and details that apply to every file. Querying only file details generally
 /// does not require opening files and so is an efficient query. Derived types add
 /// query parameters specific to the type of file.
+///
+/// ### How to access
+/// - `HostDatastoreBrowser::supported_type`
+/// - `HostDatastoreBrowser::search_datastore_task(search_spec).query?[*]`
+/// - `HostDatastoreBrowser::search_datastore_sub_folders_task(search_spec).query?[*]`
 pub trait FileQueryTrait : super::traits::DataObjectTrait {
 }
 impl<'s> serde::Serialize for dyn FileQueryTrait + 's {
@@ -27353,6 +28210,11 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn FileQueryTr
 }
 /// This data object type describes query specification for the virtual machine
 /// configuration file.
+///
+/// ### How to access
+/// - `HostDatastoreBrowser::supported_type⇒VmConfigFileQueryTrait`
+/// - `HostDatastoreBrowser::search_datastore_task(search_spec).query?[*]⇒VmConfigFileQueryTrait`
+/// - `HostDatastoreBrowser::search_datastore_sub_folders_task(search_spec).query?[*]⇒VmConfigFileQueryTrait`
 pub trait VmConfigFileQueryTrait : super::traits::FileQueryTrait {
     /// The filter specification for the virtual machine configuration file query.
     fn get_filter(&self) -> &Option<super::structs::VmConfigFileQueryFilter>;
@@ -27541,6 +28403,15 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn HostDeviceT
 ///   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<code>scsi-disk</code>  
 ///   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<code>scsi-processor</code>  
 ///   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<code>scsi-unknown</code>
+///
+/// ### How to access
+/// - `HostSystem::config.storage_device?.scsi_lun?[*]`
+/// - `HostStorageSystem::storage_device_info.scsi_lun?[*]`
+/// - `HostProfileManager::apply_host_config_task(config_spec).storage_device?.scsi_lun?[*]`
+/// - `HostProfileManager::generate_config_task_list(config_spec).storage_device?.scsi_lun?[*]`
+/// - `HostProfileManager::generate_host_profile_task_list_task(config_spec).storage_device?.scsi_lun?[*]`
+/// - `HostProfile::execute_host_profile().config_spec?.storage_device?.scsi_lun?[*]`
+/// - `HostProfileManager::generate_config_task_list().config_spec?.storage_device?.scsi_lun?[*]`
 pub trait ScsiLunTrait : super::traits::HostDeviceTrait {
     /// Linkable identifier
     fn get_key(&self) -> &Option<String>;
@@ -27892,6 +28763,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn HostDigestI
 /// 2001:DB8:101::230:6eff:fe04:d9ff. The address can also consist of the
 /// symbol '::' to represent multiple 16-bit groups of
 /// contiguous 0's only once in an address as described in RFC 2373.
+///
+/// ### How to access
+/// - `HostSystem::config.network?.dns_config?`
+/// - `HostSystem::config.network?.net_stack_instance?[*].dns_config?`
+/// - `HostNetworkSystem::dns_config`
+/// - `HostNetworkSystem::network_config.dns_config?`
+/// - `HostNetworkSystem::network_info.dns_config?`
+/// - `HostNetworkSystem::network_info.net_stack_instance?[*].dns_config?`
+/// - `HostNetworkSystem::network_config.net_stack_spec?[*].net_stack_instance.dns_config?`
+/// - `HostProfileManager::apply_host_config_task(config_spec).network?.dns_config?`
+/// - `HostProfileManager::generate_config_task_list(config_spec).network?.dns_config?`
+/// - `HostProfileManager::generate_host_profile_task_list_task(config_spec).network?.dns_config?`
+/// 
+/// *(10 of 20 paths)*
 pub trait HostDnsConfigTrait : super::traits::DataObjectTrait {
     /// The flag to indicate whether or not DHCP (dynamic host control
     /// protocol) is used to determine DNS configuration automatically.
@@ -28027,6 +28912,10 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn HostDnsConf
 /// See also *DatastoreInfo*, *HostVmfsVolume*, *HostNasVolume*, *HostVffsVolume*, *HostLocalFileSystemVolume*
 /// 
 /// However, a FileSystemVolume need not be exposed a datastore., *HostVfatVolume*.
+///
+/// ### How to access
+/// - `HostSystem::config.file_system_volume?.mount_info?[*].volume`
+/// - `HostStorageSystem::file_system_volume_info.mount_info?[*].volume`
 pub trait HostFileSystemVolumeTrait : super::traits::DataObjectTrait {
     /// FileSystemType of this particular file system
     /// See *HostFileSystemVolumeFileSystemType_enum*
@@ -28148,6 +29037,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn HostFileSys
 }
 /// Data object describing the operational status of a physical
 /// element.
+///
+/// ### How to access
+/// - `HostSystem::runtime.health_system_runtime?.hardware_status_info?.memory_status_info?[*]`
+/// - `HostSystem::runtime.health_system_runtime?.hardware_status_info?.cpu_status_info?[*]`
+/// - `HostSystem::summary.runtime?.health_system_runtime?.hardware_status_info?.memory_status_info?[*]`
+/// - `HostSystem::summary.runtime?.health_system_runtime?.hardware_status_info?.cpu_status_info?[*]`
+/// - `HostHealthStatusSystem::runtime.hardware_status_info?.memory_status_info?[*]`
+/// - `HostHealthStatusSystem::runtime.hardware_status_info?.cpu_status_info?[*]`
+/// - `HostSystem::query_host_connection_info().host.runtime?.health_system_runtime?.hardware_status_info?.memory_status_info?[*]`
+/// - `Datacenter::query_connection_info().host.runtime?.health_system_runtime?.hardware_status_info?.memory_status_info?[*]`
+/// - `Datacenter::query_connection_info().host.runtime?.health_system_runtime?.hardware_status_info?.cpu_status_info?[*]`
+/// - `Datacenter::query_connection_info_via_spec().host.runtime?.health_system_runtime?.hardware_status_info?.memory_status_info?[*]`
+/// 
+/// *(10 of 12 paths)*
 pub trait HostHardwareElementInfoTrait : super::traits::DataObjectTrait {
     /// The name of the physical element
     fn get_name(&self) -> &str;
@@ -28235,6 +29138,9 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn HostHardwar
 /// to create a software host bus adapter of a specific kind.
 /// 
 /// ***Since:*** vSphere API Release 7.0.3.0
+///
+/// ### How to access
+/// - `HostStorageSystem::create_software_adapter(spec)`
 pub trait HostHbaCreateSpecTrait : super::traits::DataObjectTrait {
 }
 impl<'s> serde::Serialize for dyn HostHbaCreateSpecTrait + 's {
@@ -28304,6 +29210,15 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn HostHbaCrea
 /// 
 /// A host bus adapter (HBA) is a hardware
 /// or software adapter that connects the host to storage devices.
+///
+/// ### How to access
+/// - `HostSystem::config.storage_device?.host_bus_adapter?[*]`
+/// - `HostStorageSystem::storage_device_info.host_bus_adapter?[*]`
+/// - `HostProfileManager::apply_host_config_task(config_spec).storage_device?.host_bus_adapter?[*]`
+/// - `HostProfileManager::generate_config_task_list(config_spec).storage_device?.host_bus_adapter?[*]`
+/// - `HostProfileManager::generate_host_profile_task_list_task(config_spec).storage_device?.host_bus_adapter?[*]`
+/// - `HostProfile::execute_host_profile().config_spec?.storage_device?.host_bus_adapter?[*]`
+/// - `HostProfileManager::generate_config_task_list().config_spec?.storage_device?.host_bus_adapter?[*]`
 pub trait HostHostBusAdapterTrait : super::traits::DataObjectTrait {
     /// The linkable identifier.
     fn get_key(&self) -> &Option<String>;
@@ -28505,6 +29420,15 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn HostHostBus
     }
 }
 /// This data object type describes the Fibre Channel host bus adapter.
+///
+/// ### How to access
+/// - `HostSystem::config.storage_device?.host_bus_adapter?[*]⇒HostFibreChannelHbaTrait`
+/// - `HostStorageSystem::storage_device_info.host_bus_adapter?[*]⇒HostFibreChannelHbaTrait`
+/// - `HostProfileManager::apply_host_config_task(config_spec).storage_device?.host_bus_adapter?[*]⇒HostFibreChannelHbaTrait`
+/// - `HostProfileManager::generate_config_task_list(config_spec).storage_device?.host_bus_adapter?[*]⇒HostFibreChannelHbaTrait`
+/// - `HostProfileManager::generate_host_profile_task_list_task(config_spec).storage_device?.host_bus_adapter?[*]⇒HostFibreChannelHbaTrait`
+/// - `HostProfile::execute_host_profile().config_spec?.storage_device?.host_bus_adapter?[*]⇒HostFibreChannelHbaTrait`
+/// - `HostProfileManager::generate_config_task_list().config_spec?.storage_device?.host_bus_adapter?[*]⇒HostFibreChannelHbaTrait`
 pub trait HostFibreChannelHbaTrait : super::traits::HostHostBusAdapterTrait {
     /// The world wide port name for the adapter.
     fn get_port_world_wide_name(&self) -> i64;
@@ -28587,6 +29511,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn HostFibreCh
     }
 }
 /// The IP configuration.
+///
+/// ### How to access
+/// - `HostSystem::config.vmotion?.ip_config?`
+/// - `HostSystem::config.network?.pnic?[*].spec.ip?`
+/// - `HostSystem::config.network?.vnic?[*].spec.ip?`
+/// - `HostSystem::config.network?.console_vnic?[*].spec.ip?`
+/// - `HostSystem::config.date_time_info?.ptp_config?.port?[*].ip_config?`
+/// - `ClusterComputeResource::hci_config.host_config_profile?.date_time_config?.ptp_config?.port?[*].ip_config?`
+/// - `HostVMotionSystem::ip_config`
+/// - `HostDateTimeSystem::date_time_info.ptp_config?.port?[*].ip_config?`
+/// - `HostNetworkSystem::network_config.pnic?[*].spec.ip?`
+/// - `HostNetworkSystem::network_config.vnic?[*].spec?.ip?`
+/// 
+/// *(10 of 62 paths)*
 pub trait HostIpConfigTrait : super::traits::DataObjectTrait {
     /// The flag to indicate whether or not DHCP (dynamic host
     /// control protocol) is enabled.
@@ -28693,6 +29631,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn HostIpConfi
 /// field (:). For example, 2001:DB8:101::230:6eff:fe04:d9ff. The address can
 /// also consist of symbol '::' to represent multiple 16-bit groups of
 /// contiguous 0's only once in an address as described in RFC 2373.
+///
+/// ### How to access
+/// - `HostSystem::config.network?.ip_route_config?`
+/// - `HostSystem::config.network?.console_ip_route_config?`
+/// - `HostSystem::config.network?.net_stack_instance?[*].ip_route_config?`
+/// - `HostSystem::config.network?.vnic?[*].spec.ip_route_spec?.ip_route_config?`
+/// - `HostSystem::config.network?.console_vnic?[*].spec.ip_route_spec?.ip_route_config?`
+/// - `HostNetworkSystem::console_ip_route_config`
+/// - `HostNetworkSystem::ip_route_config`
+/// - `HostNetworkSystem::network_config.ip_route_config?`
+/// - `HostNetworkSystem::network_config.console_ip_route_config?`
+/// - `HostNetworkSystem::network_info.ip_route_config?`
+/// 
+/// *(10 of 65 paths)*
 pub trait HostIpRouteConfigTrait : super::traits::DataObjectTrait {
     /// The default gateway address.
     fn get_default_gateway(&self) -> &Option<String>;
@@ -28783,6 +29735,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn HostIpRoute
 /// 
 /// The password and description properties
 /// are not supported for group accounts on POSIX hosts.
+///
+/// ### How to access
+/// - `HostLocalAccountManager::create_group(group)`
+/// - `HostLocalAccountManager::create_user(user)`
+/// - `HostLocalAccountManager::update_user(user)`
+/// - `HostProfileManager::apply_host_config_task(config_spec).user_account?[*]`
+/// - `HostProfileManager::apply_host_config_task(config_spec).usergroup_account?[*]`
+/// - `HostProfileManager::generate_config_task_list(config_spec).user_account?[*]`
+/// - `HostProfileManager::generate_config_task_list(config_spec).usergroup_account?[*]`
+/// - `HostProfileManager::generate_host_profile_task_list_task(config_spec).user_account?[*]`
+/// - `HostProfile::execute_host_profile().config_spec?.user_account?[*]`
+/// - `HostProfile::execute_host_profile().config_spec?.usergroup_account?[*]`
+/// 
+/// *(10 of 13 paths)*
 pub trait HostAccountSpecTrait : super::traits::DataObjectTrait {
     /// The ID of the specified account.
     fn get_id(&self) -> &str;
@@ -28864,6 +29830,16 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn HostAccount
 /// 
 /// This policy determines
 /// how paths should be utilized when accessing a device.
+///
+/// ### How to access
+/// - `HostSystem::config.storage_device?.multipath_info?.lun?[*].policy`
+/// - `HostStorageSystem::storage_device_info.multipath_info?.lun?[*].policy`
+/// - `HostStorageSystem::set_multipath_lun_policy(policy)`
+/// - `HostProfileManager::apply_host_config_task(config_spec).storage_device?.multipath_info?.lun?[*].policy`
+/// - `HostProfileManager::generate_config_task_list(config_spec).storage_device?.multipath_info?.lun?[*].policy`
+/// - `HostProfileManager::generate_host_profile_task_list_task(config_spec).storage_device?.multipath_info?.lun?[*].policy`
+/// - `HostProfile::execute_host_profile().config_spec?.storage_device?.multipath_info?.lun?[*].policy`
+/// - `HostProfileManager::generate_config_task_list().config_spec?.storage_device?.multipath_info?.lun?[*].policy`
 pub trait HostMultipathInfoLogicalUnitPolicyTrait : super::traits::DataObjectTrait {
     /// String representing the path selection policy for a device.
     /// 
@@ -29042,6 +30018,9 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn HostNvmeSpe
 /// 
 /// For some further information, see:
 /// - "NVM Express over Fabrics 1.0", Section 1.5.7, "Connection"
+///
+/// ### How to access
+/// - `HostStorageSystem::discover_nvme_controllers().entry?[*].transport_parameters`
 pub trait HostNvmeTransportParametersTrait : super::traits::DataObjectTrait {
 }
 impl<'s> serde::Serialize for dyn HostNvmeTransportParametersTrait + 's {
@@ -29120,6 +30099,9 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn HostNvmeTra
 }
 /// This data object provides information about the state of PciPassthru
 /// for all pci devices.
+///
+/// ### How to access
+/// - `HostPciPassthruSystem::update_passthru_config(config)`
 pub trait HostPciPassthruConfigTrait : super::traits::DataObjectTrait {
     /// The name ID of this PCI, composed of "bus:slot.function".
     fn get_id(&self) -> &str;
@@ -29209,6 +30191,10 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn HostPciPass
 }
 /// This data object provides information about the state of PciPassthru
 /// for all pci devices.
+///
+/// ### How to access
+/// - `HostSystem::config.pci_passthru_info?[*]`
+/// - `HostPciPassthruSystem::pci_passthru_info`
 pub trait HostPciPassthruInfoTrait : super::traits::DataObjectTrait {
     /// The name ID of this PCI, composed of "bus:slot.function".
     fn get_id(&self) -> &str;
@@ -29376,6 +30362,10 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn PhysicalNic
 }
 /// This data object represents the physical
 /// backing of an RDMA device.
+///
+/// ### How to access
+/// - `HostSystem::config.network?.rdma_device?[*].backing?`
+/// - `HostNetworkSystem::network_info.rdma_device?[*].backing?`
 pub trait HostRdmaDeviceBackingTrait : super::traits::DataObjectTrait {
 }
 impl<'s> serde::Serialize for dyn HostRdmaDeviceBackingTrait + 's {
@@ -29440,6 +30430,9 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn HostRdmaDev
         }
     }
 }
+/// ### How to access
+/// - `HostSystem::config.sriov_device_pool?[*]`
+/// - `HostPciPassthruSystem::sriov_device_pool_info`
 pub trait HostSriovDevicePoolInfoTrait : super::traits::DataObjectTrait {
     fn get_key(&self) -> &str;
 }
@@ -29512,6 +30505,10 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn HostSriovDe
 /// This class is not supposed to be used directly.  
 /// These values are to be used in a *SystemSwapConfiguration.option*
 /// array.
+///
+/// ### How to access
+/// - `HostSystem::config.system_swap_configuration?.option?[*]`
+/// - `HostSystem::update_system_swap_configuration(sys_swap_config).option?[*]`
 pub trait HostSystemSwapConfigurationSystemSwapOptionTrait : super::traits::DataObjectTrait {
     /// Specifies the order the options are preferred among each other.
     /// 
@@ -29598,6 +30595,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn HostSystemS
     }
 }
 /// Transport information about a SCSI target.
+///
+/// ### How to access
+/// - `HostSystem::config.storage_device?.plug_store_topology?.target?[*].transport?`
+/// - `HostSystem::config.storage_device?.scsi_topology?.adapter?[*].target?[*].transport?`
+/// - `HostSystem::config.storage_device?.multipath_info?.lun?[*].path[*].transport?`
+/// - `HostStorageSystem::storage_device_info.plug_store_topology?.target?[*].transport?`
+/// - `HostStorageSystem::storage_device_info.scsi_topology?.adapter?[*].target?[*].transport?`
+/// - `HostStorageSystem::storage_device_info.multipath_info?.lun?[*].path[*].transport?`
+/// - `HostProfileManager::apply_host_config_task(config_spec).storage_device?.plug_store_topology?.target?[*].transport?`
+/// - `HostProfileManager::generate_config_task_list(config_spec).storage_device?.plug_store_topology?.target?[*].transport?`
+/// - `HostProfileManager::generate_host_profile_task_list_task(config_spec).storage_device?.plug_store_topology?.target?[*].transport?`
+/// - `HostProfile::execute_host_profile().config_spec?.storage_device?.plug_store_topology?.target?[*].transport?`
+/// 
+/// *(10 of 21 paths)*
 pub trait HostTargetTransportTrait : super::traits::DataObjectTrait {
 }
 impl<'s> serde::Serialize for dyn HostTargetTransportTrait + 's {
@@ -29695,6 +30706,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn HostTargetT
     }
 }
 /// Fibre Channel transport information about a SCSI target.
+///
+/// ### How to access
+/// - `HostSystem::config.storage_device?.plug_store_topology?.target?[*].transport?⇒HostFibreChannelTargetTransportTrait`
+/// - `HostSystem::config.storage_device?.scsi_topology?.adapter?[*].target?[*].transport?⇒HostFibreChannelTargetTransportTrait`
+/// - `HostSystem::config.storage_device?.multipath_info?.lun?[*].path[*].transport?⇒HostFibreChannelTargetTransportTrait`
+/// - `HostStorageSystem::storage_device_info.plug_store_topology?.target?[*].transport?⇒HostFibreChannelTargetTransportTrait`
+/// - `HostStorageSystem::storage_device_info.scsi_topology?.adapter?[*].target?[*].transport?⇒HostFibreChannelTargetTransportTrait`
+/// - `HostStorageSystem::storage_device_info.multipath_info?.lun?[*].path[*].transport?⇒HostFibreChannelTargetTransportTrait`
+/// - `HostProfileManager::apply_host_config_task(config_spec).storage_device?.plug_store_topology?.target?[*].transport?⇒HostFibreChannelTargetTransportTrait`
+/// - `HostProfileManager::generate_config_task_list(config_spec).storage_device?.plug_store_topology?.target?[*].transport?⇒HostFibreChannelTargetTransportTrait`
+/// - `HostProfileManager::generate_host_profile_task_list_task(config_spec).storage_device?.plug_store_topology?.target?[*].transport?⇒HostFibreChannelTargetTransportTrait`
+/// - `HostProfile::execute_host_profile().config_spec?.storage_device?.plug_store_topology?.target?[*].transport?⇒HostFibreChannelTargetTransportTrait`
+/// 
+/// *(10 of 21 paths)*
 pub trait HostFibreChannelTargetTransportTrait : super::traits::HostTargetTransportTrait {
     /// The world wide port name of the target.
     fn get_port_world_wide_name(&self) -> i64;
@@ -29772,6 +30797,9 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn HostFibreCh
 /// 
 /// It contains parameters common to
 /// all TPM event types.
+///
+/// ### How to access
+/// - `HostSystem::query_tpm_attestation_report().tpm_events[*].event_details`
 pub trait HostTpmEventDetailsTrait : super::traits::DataObjectTrait {
     /// Value of the Platform Configuration Register (PCR) for this event.
     fn get_data_hash(&self) -> &Vec<i8>;
@@ -29899,6 +30927,9 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn HostTpmEven
 /// 
 /// Each instance of this event reports details of a single security-related
 /// boot option, as set in the kernel.
+///
+/// ### How to access
+/// - `HostSystem::query_tpm_attestation_report().tpm_events[*].event_details⇒HostTpmBootSecurityOptionEventDetailsTrait`
 pub trait HostTpmBootSecurityOptionEventDetailsTrait : super::traits::HostTpmEventDetailsTrait {
     /// Security-related options string, reflecting the state of an option set
     /// in the kernel.
@@ -29978,6 +31009,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn HostTpmBoot
 /// A bridge connects a virtual switch to a physical network adapter.
 /// 
 /// There are multiple types of bridges.
+///
+/// ### How to access
+/// - `HostSystem::config.network?.vswitch?[*].spec.bridge?`
+/// - `HostNetworkSystem::network_config.vswitch?[*].spec?.bridge?`
+/// - `HostNetworkSystem::network_info.vswitch?[*].spec.bridge?`
+/// - `HostNetworkSystem::add_virtual_switch(spec).bridge?`
+/// - `HostNetworkSystem::update_virtual_switch(spec).bridge?`
+/// - `HostNetworkSystem::update_network_config(config).vswitch?[*].spec?.bridge?`
+/// - `HostProfileManager::apply_host_config_task(config_spec).network?.vswitch?[*].spec?.bridge?`
+/// - `HostProfileManager::generate_config_task_list(config_spec).network?.vswitch?[*].spec?.bridge?`
+/// - `HostProfileManager::generate_host_profile_task_list_task(config_spec).network?.vswitch?[*].spec?.bridge?`
+/// - `HostProfile::execute_host_profile().config_spec?.network?.vswitch?[*].spec?.bridge?`
+/// 
+/// *(10 of 11 paths)*
 pub trait HostVirtualSwitchBridgeTrait : super::traits::DataObjectTrait {
 }
 impl<'s> serde::Serialize for dyn HostVirtualSwitchBridgeTrait + 's {
@@ -30051,6 +31096,11 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn HostVirtual
     }
 }
 /// Base class that describes a VMFS datastore provisioning option.
+///
+/// ### How to access
+/// - `HostDatastoreSystem::query_vmfs_datastore_create_options().info`
+/// - `HostDatastoreSystem::query_vmfs_datastore_expand_options().info`
+/// - `HostDatastoreSystem::query_vmfs_datastore_extend_options().info`
 pub trait VmfsDatastoreBaseOptionTrait : super::traits::DataObjectTrait {
     /// The partition table layout that the disk will have if this
     /// provisioning option is selected.
@@ -30155,6 +31205,11 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VmfsDatasto
 /// 
 /// A single extent implies that one disk partition will be
 /// created on the disk for creating or increasing the capacity of a VMFS datastore.
+///
+/// ### How to access
+/// - `HostDatastoreSystem::query_vmfs_datastore_create_options().info⇒VmfsDatastoreSingleExtentOptionTrait`
+/// - `HostDatastoreSystem::query_vmfs_datastore_expand_options().info⇒VmfsDatastoreSingleExtentOptionTrait`
+/// - `HostDatastoreSystem::query_vmfs_datastore_extend_options().info⇒VmfsDatastoreSingleExtentOptionTrait`
 pub trait VmfsDatastoreSingleExtentOptionTrait : super::traits::VmfsDatastoreBaseOptionTrait {
     /// The block range to be used as an extent in a VMFS datastore.
     fn get_vmfs_extent(&self) -> &super::structs::HostDiskPartitionBlockRange;
@@ -30229,6 +31284,11 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VmfsDatasto
 /// way to point to one of the creation specifications that can be used to
 /// apply a specification to effect the creation or extension of a VMFS
 /// datastore.
+///
+/// ### How to access
+/// - `HostDatastoreSystem::query_vmfs_datastore_create_options().spec`
+/// - `HostDatastoreSystem::query_vmfs_datastore_expand_options().spec`
+/// - `HostDatastoreSystem::query_vmfs_datastore_extend_options().spec`
 pub trait VmfsDatastoreSpecTrait : super::traits::DataObjectTrait {
     /// The UUID of the SCSI disk on which the VMFS datastore is located.
     /// 
@@ -30473,6 +31533,9 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VsanHclComm
 }
 /// This data object type describes the NetBIOS configuration of
 /// an operating system.
+///
+/// ### How to access
+/// - `VirtualMachine::guest.net?[*].net_bios_config?`
 pub trait NetBiosConfigInfoTrait : super::traits::DataObjectTrait {
     /// NetBIOS configuration mode.
     /// 
@@ -30716,6 +31779,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn ArrayUpdate
     }
 }
 /// The base data object type for all options.
+///
+/// ### How to access
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→StoragePlacementAction.relocate_spec.device_change?[*].device.device_info?→OptionDef.option_type`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→StorageMigrationAction.relocate_spec.device_change?[*].device.device_info?→OptionDef.option_type`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→PlacementAction.relocate_spec?.device_change?[*].device.device_info?→OptionDef.option_type`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→ClusterClusterInitialPlacementAction.config_spec?.device_change?[*].device.device_info?→OptionDef.option_type`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→ClusterClusterInitialPlacementAction.config_spec?.device_groups?.device_group?[*].device_info?→OptionDef.option_type`
+/// - `ClusterComputeResource::action_history.action→StoragePlacementAction.relocate_spec.device_change?[*].device.device_info?→OptionDef.option_type`
+/// - `ClusterComputeResource::action_history.action→StorageMigrationAction.relocate_spec.device_change?[*].device.device_info?→OptionDef.option_type`
+/// - `ClusterComputeResource::action_history.action→PlacementAction.relocate_spec?.device_change?[*].device.device_info?→OptionDef.option_type`
+/// - `ClusterComputeResource::action_history.action→ClusterClusterInitialPlacementAction.config_spec?.device_change?[*].device.device_info?→OptionDef.option_type`
+/// - `ClusterComputeResource::action_history.action→ClusterClusterInitialPlacementAction.config_spec?.device_groups?.device_group?[*].device_info?→OptionDef.option_type`
+/// 
+/// *(10 of 100 paths)*
 pub trait OptionTypeTrait : super::traits::DataObjectTrait {
     /// The flag to indicate whether or not a user
     /// can modify a value belonging to this option type.
@@ -30814,6 +31891,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn OptionTypeT
     }
 }
 /// Describes the key/value pair of a configured option.
+///
+/// ### How to access
+/// - `ComputeResource::configuration_ex→ClusterConfigInfoEx.das_config.option?[*]`
+/// - `ComputeResource::configuration_ex→ClusterConfigInfoEx.drs_config.option?[*]`
+/// - `ComputeResource::configuration_ex→ClusterConfigInfoEx.dpm_config_info?.option?[*]`
+/// - `ClusterComputeResource::configuration.das_config.option?[*]`
+/// - `ClusterComputeResource::configuration.drs_config.option?[*]`
+/// - `ClusterComputeResource::configuration_ex→ClusterConfigInfoEx.das_config.option?[*]`
+/// - `ClusterComputeResource::configuration_ex→ClusterConfigInfoEx.drs_config.option?[*]`
+/// - `ClusterComputeResource::configuration_ex→ClusterConfigInfoEx.dpm_config_info?.option?[*]`
+/// - `Datacenter::power_on_multi_vm_task(option)`
+/// - `Datastore::datastore_enter_maintenance_mode().recommendations?[*].action?[*]→ClusterClusterInitialPlacementAction.config_spec?.extra_config?[*]`
+/// 
+/// *(10 of 100 paths)*
 pub trait OptionValueTrait : super::traits::DataObjectTrait {
     /// The name of the option using dot notation to reflect the
     /// option's position in a hierarchy.
@@ -30901,6 +31992,9 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn OptionValue
 /// 
 /// <code>ApplyProfile</code> defines ESX configuration data storage and it
 /// supports recursive profile definition for the profile plug-in architecture.
+///
+/// ### How to access
+/// - `HostProfileManager::create_default_profile()`
 pub trait ApplyProfileTrait : super::traits::DataObjectTrait {
     /// Indicates whether the profile is enabled.
     fn get_enabled(&self) -> bool;
@@ -31613,6 +32707,9 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn ApplyProfil
 /// If a profile plug-in defines additional policies or subprofiles, use the
 /// *ApplyProfile.policy* or *ApplyProfile.property*
 /// list to access the configuration data.
+///
+/// ### How to access
+/// - `HostProfileManager::create_default_profile()⇒DvsVNicProfileTrait`
 pub trait DvsVNicProfileTrait : super::traits::ApplyProfileTrait {
     /// Linkable identifier.
     fn get_key(&self) -> &str;
@@ -31693,6 +32790,9 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DvsVNicProf
 }
 /// *PortGroupProfile* is the base class for the different port group
 /// subprofile objects.
+///
+/// ### How to access
+/// - `HostProfileManager::create_default_profile()⇒PortGroupProfileTrait`
 pub trait PortGroupProfileTrait : super::traits::ApplyProfileTrait {
     /// Linkable identifier.
     fn get_key(&self) -> &str;
@@ -31795,6 +32895,19 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn PortGroupPr
         }
     }
 }
+/// ### How to access
+/// - `HostProfile::config→HostProfileConfigInfo.default_comply_profile?.expression[*]`
+/// - `HostProfile::config→HostProfileConfigInfo.custom_comply_profile?.expression[*]`
+/// - `HostProfile::config→ClusterProfileConfigInfo.comply_profile?.expression[*]`
+/// - `Profile::config→HostProfileConfigInfo.default_comply_profile?.expression[*]`
+/// - `Profile::config→HostProfileConfigInfo.custom_comply_profile?.expression[*]`
+/// - `Profile::config→ClusterProfileConfigInfo.comply_profile?.expression[*]`
+/// - `ClusterProfile::config→HostProfileConfigInfo.default_comply_profile?.expression[*]`
+/// - `ClusterProfile::config→HostProfileConfigInfo.custom_comply_profile?.expression[*]`
+/// - `ClusterProfile::config→ClusterProfileConfigInfo.comply_profile?.expression[*]`
+/// - `HostProfile::update_host_profile(config)→HostProfileCompleteConfigSpec.custom_comply_profile?.expression[*]`
+/// 
+/// *(10 of 25 paths)*
 pub trait ProfileExpressionTrait : super::traits::DataObjectTrait {
     /// Identifier of this expression.
     /// 
@@ -31890,6 +33003,9 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn ProfileExpr
 /// A policy option is one of the configuration options from the
 /// *ProfilePolicyMetadata*.*ProfilePolicyMetadata.possibleOption*
 /// list.
+///
+/// ### How to access
+/// - `HostProfileManager::create_default_profile().policy?[*].policy_option`
 pub trait PolicyOptionTrait : super::traits::DataObjectTrait {
     /// Identifier for the policy option.
     /// 
@@ -31972,6 +33088,11 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn PolicyOptio
 }
 /// The *ProfilePolicyOptionMetadata* data object contains the metadata information
 /// for a *PolicyOption*.
+///
+/// ### How to access
+/// - `HostProfileManager::query_policy_metadata().possible_option[*]`
+/// - `ProfileManager::query_policy_metadata().possible_option[*]`
+/// - `ClusterProfileManager::query_policy_metadata().possible_option[*]`
 pub trait ProfilePolicyOptionMetadataTrait : super::traits::DataObjectTrait {
     /// Identifier for the policy option.
     /// - The <code>id.key</code> value
@@ -32061,6 +33182,10 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn ProfilePoli
         }
     }
 }
+/// ### How to access
+/// - `HostProfile::config`
+/// - `Profile::config`
+/// - `ClusterProfile::config`
 pub trait ProfileConfigInfoTrait : super::traits::DataObjectTrait {
     /// Name of the profile
     fn get_name(&self) -> &str;
@@ -32145,6 +33270,11 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn ProfileConf
     }
 }
 /// Specification describing the parameters during Profile creation
+///
+/// ### How to access
+/// - `HostProfileManager::create_profile(create_spec)`
+/// - `ProfileManager::create_profile(create_spec)`
+/// - `ClusterProfileManager::create_profile(create_spec)`
 pub trait ProfileCreateSpecTrait : super::traits::DataObjectTrait {
     /// Name of the profile
     fn get_name(&self) -> &Option<String>;
@@ -32279,6 +33409,11 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn ProfileCrea
 }
 /// The *ProfileSerializedCreateSpec* data object
 /// defines a string that contains a serialized representation of a host profile.
+///
+/// ### How to access
+/// - `HostProfileManager::create_profile(create_spec)⇒ProfileSerializedCreateSpecTrait`
+/// - `ProfileManager::create_profile(create_spec)⇒ProfileSerializedCreateSpecTrait`
+/// - `ClusterProfileManager::create_profile(create_spec)⇒ProfileSerializedCreateSpecTrait`
 pub trait ProfileSerializedCreateSpecTrait : super::traits::ProfileCreateSpecTrait {
     /// Representation of the profile in the string form.
     fn get_profile_config_string(&self) -> &str;
@@ -32348,6 +33483,11 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn ProfileSeri
     }
 }
 /// Base class for Cluster CreateSpecs
+///
+/// ### How to access
+/// - `HostProfileManager::create_profile(create_spec)⇒ClusterProfileCreateSpecTrait`
+/// - `ProfileManager::create_profile(create_spec)⇒ClusterProfileCreateSpecTrait`
+/// - `ClusterProfileManager::create_profile(create_spec)⇒ClusterProfileCreateSpecTrait`
 pub trait ClusterProfileCreateSpecTrait : super::traits::ProfileCreateSpecTrait {
 }
 impl<'s> serde::Serialize for dyn ClusterProfileCreateSpecTrait + 's {
@@ -32422,6 +33562,12 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn ClusterProf
 }
 /// DataObject which is a baseclass for other configuration
 /// specifications.
+///
+/// ### How to access
+/// - `ClusterProfile::update_cluster_profile(config)`
+/// - `HostProfileManager::create_profile(create_spec)⇒ClusterProfileConfigSpecTrait`
+/// - `ProfileManager::create_profile(create_spec)⇒ClusterProfileConfigSpecTrait`
+/// - `ClusterProfileManager::create_profile(create_spec)⇒ClusterProfileConfigSpecTrait`
 pub trait ClusterProfileConfigSpecTrait : super::traits::ClusterProfileCreateSpecTrait {
 }
 impl<'s> serde::Serialize for dyn ClusterProfileConfigSpecTrait + 's {
@@ -32492,6 +33638,12 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn ClusterProf
 }
 /// *HostProfileConfigSpec* is the base data object
 /// for all *HostProfile* configuration specifications.
+///
+/// ### How to access
+/// - `HostProfile::update_host_profile(config)`
+/// - `HostProfileManager::create_profile(create_spec)⇒HostProfileConfigSpecTrait`
+/// - `ProfileManager::create_profile(create_spec)⇒HostProfileConfigSpecTrait`
+/// - `ClusterProfileManager::create_profile(create_spec)⇒HostProfileConfigSpecTrait`
 pub trait HostProfileConfigSpecTrait : super::traits::ProfileCreateSpecTrait {
 }
 impl<'s> serde::Serialize for dyn HostProfileConfigSpecTrait + 's {
@@ -32563,6 +33715,9 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn HostProfile
 /// The *ProfileExecuteResult* data object contains the results from a
 /// *HostProfile*.*HostProfile.ExecuteHostProfile*
 /// operation.
+///
+/// ### How to access
+/// - `HostProfile::execute_host_profile()`
 pub trait ProfileExecuteResultTrait : super::traits::DataObjectTrait {
     /// Status of the profile execution operation.
     /// 
@@ -32703,6 +33858,9 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn ProfileExec
     }
 }
 /// Base class for host-specific answer file options.
+///
+/// ### How to access
+/// - `HostProfileManager::update_answer_file_task(config_spec)`
 pub trait AnswerFileCreateSpecTrait : super::traits::DataObjectTrait {
     /// If "false", then the answer file will be saved without being validated.
     /// 
@@ -32850,6 +34008,11 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn HostProfile
     }
 }
 /// Parameters for scheduled task creation.
+///
+/// ### How to access
+/// - `ScheduledTask::reconfigure_scheduled_task(spec)`
+/// - `ScheduledTaskManager::create_scheduled_task(spec)`
+/// - `ScheduledTaskManager::create_object_scheduled_task(spec)`
 pub trait ScheduledTaskSpecTrait : super::traits::DataObjectTrait {
     /// Name of the scheduled task.
     fn get_name(&self) -> &str;
@@ -32966,6 +34129,11 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn ScheduledTa
 /// After you have established the task timing, use the scheduler
 /// object for the *ScheduledTaskSpec*
 /// *ScheduledTaskSpec.scheduler* property value.
+///
+/// ### How to access
+/// - `ScheduledTask::reconfigure_scheduled_task(spec).scheduler`
+/// - `ScheduledTaskManager::create_scheduled_task(spec).scheduler`
+/// - `ScheduledTaskManager::create_object_scheduled_task(spec).scheduler`
 pub trait TaskSchedulerTrait : super::traits::DataObjectTrait {
     /// The time that the schedule for the task takes effect.
     /// 
@@ -33096,6 +34264,11 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn TaskSchedul
 }
 /// The *RecurrentTaskScheduler* data object is the base type for
 /// the hierarchy that includes hourly, daily, weekly, and monthly task schedulers.
+///
+/// ### How to access
+/// - `ScheduledTask::reconfigure_scheduled_task(spec).scheduler⇒RecurrentTaskSchedulerTrait`
+/// - `ScheduledTaskManager::create_scheduled_task(spec).scheduler⇒RecurrentTaskSchedulerTrait`
+/// - `ScheduledTaskManager::create_object_scheduled_task(spec).scheduler⇒RecurrentTaskSchedulerTrait`
 pub trait RecurrentTaskSchedulerTrait : super::traits::TaskSchedulerTrait {
     /// How often to run the scheduled task.
     /// 
@@ -33205,6 +34378,11 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn RecurrentTa
 /// If you set the interval to a value greater than 1, the task will
 /// execute at the specified hourly interval. (For example, an interval
 /// of 2 will cause the task to execute at the specified minute every 2 hours.)
+///
+/// ### How to access
+/// - `ScheduledTask::reconfigure_scheduled_task(spec).scheduler⇒HourlyTaskSchedulerTrait`
+/// - `ScheduledTaskManager::create_scheduled_task(spec).scheduler⇒HourlyTaskSchedulerTrait`
+/// - `ScheduledTaskManager::create_object_scheduled_task(spec).scheduler⇒HourlyTaskSchedulerTrait`
 pub trait HourlyTaskSchedulerTrait : super::traits::RecurrentTaskSchedulerTrait {
     /// The minute at which the *RecurrentTaskScheduler* runs
     /// the task.
@@ -33312,6 +34490,11 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn HourlyTaskS
 /// execute at the specified daily interval. (For example, an interval
 /// of 2 will cause the task to execute at the specified hour and minute
 /// every 2 days.)
+///
+/// ### How to access
+/// - `ScheduledTask::reconfigure_scheduled_task(spec).scheduler⇒DailyTaskSchedulerTrait`
+/// - `ScheduledTaskManager::create_scheduled_task(spec).scheduler⇒DailyTaskSchedulerTrait`
+/// - `ScheduledTaskManager::create_object_scheduled_task(spec).scheduler⇒DailyTaskSchedulerTrait`
 pub trait DailyTaskSchedulerTrait : super::traits::HourlyTaskSchedulerTrait {
     /// The hour at which the *RecurrentTaskScheduler* runs the task.
     /// 
@@ -33405,6 +34588,11 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DailyTaskSc
 /// The *MonthlyTaskScheduler* data object is the base type for
 /// the monthly schedulers (*MonthlyByDayTaskScheduler* and
 /// *MonthlyByWeekdayTaskScheduler*).
+///
+/// ### How to access
+/// - `ScheduledTask::reconfigure_scheduled_task(spec).scheduler⇒MonthlyTaskSchedulerTrait`
+/// - `ScheduledTaskManager::create_scheduled_task(spec).scheduler⇒MonthlyTaskSchedulerTrait`
+/// - `ScheduledTaskManager::create_object_scheduled_task(spec).scheduler⇒MonthlyTaskSchedulerTrait`
 pub trait MonthlyTaskSchedulerTrait : super::traits::DailyTaskSchedulerTrait {
 }
 impl<'s> serde::Serialize for dyn MonthlyTaskSchedulerTrait + 's {
@@ -33474,6 +34662,11 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn MonthlyTask
     }
 }
 /// VM Configuration.
+///
+/// ### How to access
+/// - `VirtualMachine::config.v_app_config?`
+/// - `VirtualMachineSnapshot::config.v_app_config?`
+/// - `HostSystem::query_memory_overhead_ex(vm_config_info).v_app_config?`
 pub trait VmConfigInfoTrait : super::traits::DataObjectTrait {
     /// Information about the package content.
     fn get_product(&self) -> &Option<Vec<super::structs::VAppProductInfo>>;
@@ -33586,6 +34779,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VmConfigInf
     }
 }
 /// vApp related configuration of a VM.
+///
+/// ### How to access
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→ClusterClusterInitialPlacementAction.config_spec?.v_app_config?`
+/// - `StoragePod::pod_storage_drs_entry.action_history?[*].action→ClusterClusterInitialPlacementAction.config_spec?.v_app_config?`
+/// - `ClusterComputeResource::action_history.action→ClusterClusterInitialPlacementAction.config_spec?.v_app_config?`
+/// - `ClusterComputeResource::recommendation.action?[*]→ClusterClusterInitialPlacementAction.config_spec?.v_app_config?`
+/// - `VirtualMachine::reconfig_vm_task(spec).v_app_config?`
+/// - `VirtualMachine::clone_vm_task(spec).config?.v_app_config?`
+/// - `Folder::create_vm_task(config).v_app_config?`
+/// - `ResourcePool::create_child_vm_task(config).v_app_config?`
+/// - `ResourcePool::import_v_app(spec)→VirtualMachineImportSpec.config_spec.v_app_config?`
+/// - `Datastore::datastore_enter_maintenance_mode().recommendations?[*].action?[*]→ClusterClusterInitialPlacementAction.config_spec?.v_app_config?`
+/// 
+/// *(10 of 23 paths)*
 pub trait VmConfigSpecTrait : super::traits::DataObjectTrait {
     /// Information about the product.
     /// 
@@ -33722,6 +34929,10 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VmConfigSpe
 /// The NodeDeploymentSpec class defines location
 /// specification of the nodes the VCHA Cluster along with Management
 /// vCenter Server information that manages node VM.
+///
+/// ### How to access
+/// - `FailoverClusterConfigurator::create_witness_node_task(witness_deployment_spec)`
+/// - `FailoverClusterConfigurator::deploy_vcha_task(deployment_spec).witness_deployment_spec`
 pub trait NodeDeploymentSpecTrait : super::traits::DataObjectTrait {
     /// ESX host on which the VM is to be deployed.
     /// 
@@ -33864,6 +35075,9 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn NodeDeploym
 }
 /// The NodeNetworkSpec class defines network specification of a node
 /// in the VCHA Cluster.
+///
+/// ### How to access
+/// - `FailoverClusterConfigurator::prepare_vcha_task(network_spec).witness_network_spec`
 pub trait NodeNetworkSpecTrait : super::traits::DataObjectTrait {
     /// VCHA Cluster network configuration of the node.
     /// 
@@ -33941,6 +35155,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn NodeNetwork
 /// independent filters to be attached/removed on VMs virtual disk.
 /// 
 /// ***Since:*** vSphere API Release 7.0.2.1
+///
+/// ### How to access
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→StoragePlacementAction.relocate_spec.disk?[*].filter_spec?[*]`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→StoragePlacementAction.relocate_spec.device_change?[*].filter_spec?[*]`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→StorageMigrationAction.relocate_spec.disk?[*].filter_spec?[*]`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→StorageMigrationAction.relocate_spec.device_change?[*].filter_spec?[*]`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→PlacementAction.relocate_spec?.disk?[*].filter_spec?[*]`
+/// - `ClusterComputeResource::action_history.action→StoragePlacementAction.relocate_spec.disk?[*].filter_spec?[*]`
+/// - `ClusterComputeResource::action_history.action→StoragePlacementAction.relocate_spec.device_change?[*].filter_spec?[*]`
+/// - `ClusterComputeResource::action_history.action→StorageMigrationAction.relocate_spec.disk?[*].filter_spec?[*]`
+/// - `ClusterComputeResource::action_history.action→StorageMigrationAction.relocate_spec.device_change?[*].filter_spec?[*]`
+/// - `ClusterComputeResource::action_history.action→PlacementAction.relocate_spec?.disk?[*].filter_spec?[*]`
+/// 
+/// *(10 of 100 paths)*
 pub trait VirtualMachineBaseIndependentFilterSpecTrait : super::traits::DataObjectTrait {
 }
 impl<'s> serde::Serialize for dyn VirtualMachineBaseIndependentFilterSpecTrait + 's {
@@ -34010,6 +35238,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualMach
     }
 }
 /// Bootable device.
+///
+/// ### How to access
+/// - `VirtualMachine::config.boot_options?.boot_order?[*]`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→ClusterClusterInitialPlacementAction.config_spec?.boot_options?.boot_order?[*]`
+/// - `StoragePod::pod_storage_drs_entry.action_history?[*].action→ClusterClusterInitialPlacementAction.config_spec?.boot_options?.boot_order?[*]`
+/// - `ClusterComputeResource::action_history.action→ClusterClusterInitialPlacementAction.config_spec?.boot_options?.boot_order?[*]`
+/// - `ClusterComputeResource::recommendation.action?[*]→ClusterClusterInitialPlacementAction.config_spec?.boot_options?.boot_order?[*]`
+/// - `VirtualMachineSnapshot::config.boot_options?.boot_order?[*]`
+/// - `VirtualMachine::reconfig_vm_task(spec).boot_options?.boot_order?[*]`
+/// - `VirtualMachine::clone_vm_task(spec).config?.boot_options?.boot_order?[*]`
+/// - `HostSystem::query_memory_overhead_ex(vm_config_info).boot_options?.boot_order?[*]`
+/// - `Folder::create_vm_task(config).boot_options?.boot_order?[*]`
+/// 
+/// *(10 of 26 paths)*
 pub trait VirtualMachineBootOptionsBootableDeviceTrait : super::traits::DataObjectTrait {
 }
 impl<'s> serde::Serialize for dyn VirtualMachineBootOptionsBootableDeviceTrait + 's {
@@ -34090,6 +35332,14 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualMach
 /// 
 /// Subclassed for information that is specific
 /// to certain device types.
+///
+/// ### How to access
+/// - `VirtualMachine::runtime.device?[*].runtime_state`
+/// - `VirtualMachine::summary.runtime.device?[*].runtime_state`
+/// - `HostSystem::query_host_connection_info().vm?[*].runtime.device?[*].runtime_state`
+/// - `Datacenter::query_connection_info().vm?[*].runtime.device?[*].runtime_state`
+/// - `Datacenter::query_connection_info_via_spec().vm?[*].runtime.device?[*].runtime_state`
+/// - `EnvironmentBrowser::query_config_target().usb?[*].summary?.runtime.device?[*].runtime_state`
 pub trait VirtualMachineDeviceRuntimeInfoDeviceRuntimeStateTrait : super::traits::DataObjectTrait {
 }
 impl<'s> serde::Serialize for dyn VirtualMachineDeviceRuntimeInfoDeviceRuntimeStateTrait + 's {
@@ -34159,6 +35409,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualMach
 /// 
 /// role, instanceUuids and configPaths contain information about the
 /// whole fault tolerance group.
+///
+/// ### How to access
+/// - `VirtualMachine::config.ft_info?`
+/// - `VirtualMachine::summary.config.ft_info?`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→ClusterClusterInitialPlacementAction.config_spec?.ft_info?`
+/// - `StoragePod::pod_storage_drs_entry.action_history?[*].action→ClusterClusterInitialPlacementAction.config_spec?.ft_info?`
+/// - `ClusterComputeResource::action_history.action→ClusterClusterInitialPlacementAction.config_spec?.ft_info?`
+/// - `ClusterComputeResource::recommendation.action?[*]→ClusterClusterInitialPlacementAction.config_spec?.ft_info?`
+/// - `VirtualMachineSnapshot::config.ft_info?`
+/// - `VirtualMachine::reconfig_vm_task(spec).ft_info?`
+/// - `VirtualMachine::clone_vm_task(spec).config?.ft_info?`
+/// - `HostSystem::query_memory_overhead_ex(vm_config_info).ft_info?`
+/// 
+/// *(10 of 31 paths)*
 pub trait FaultToleranceConfigInfoTrait : super::traits::DataObjectTrait {
     /// The index of the current VM in instanceUuids array starting from 1, so
     /// 1 means that it is the primary VM.
@@ -34255,6 +35519,9 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn FaultTolera
 }
 /// This data object type encapsulates configuration settings
 /// when creating a virtual machine quiesced snapshot.
+///
+/// ### How to access
+/// - `VirtualMachine::create_snapshot_ex_task(quiesce_spec)`
 pub trait VirtualMachineGuestQuiesceSpecTrait : super::traits::DataObjectTrait {
     /// The property to indicate maximum time in minutes for snapshot operation
     /// to be performed on the virtual machine.
@@ -34328,6 +35595,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualMach
 }
 /// The ProfileSpec data object is used to specify the Storage Policy to be
 /// associated with a Virtual Machine Home or a Virtual Disk.
+///
+/// ### How to access
+/// - `ComputeResource::configuration_ex→ClusterConfigInfoEx.vsan_config_info?→VsanConfigInfoEx.perfsvc_config?.profile?`
+/// - `ComputeResource::configuration_ex→ClusterConfigInfoEx.vsan_config_info?→VsanConfigInfoEx.iscsi_config?→VsanIscsiTargetServiceSpec.home_object_storage_policy?`
+/// - `ClusterComputeResource::action_history.action→StoragePlacementAction.relocate_spec.profile?[*]`
+/// - `ClusterComputeResource::action_history.action→StorageMigrationAction.relocate_spec.profile?[*]`
+/// - `ClusterComputeResource::action_history.action→PlacementAction.relocate_spec?.profile?[*]`
+/// - `ClusterComputeResource::action_history.action→ClusterClusterInitialPlacementAction.config_spec?.vm_profile?[*]`
+/// - `ClusterComputeResource::recommendation.action?[*]→StoragePlacementAction.relocate_spec.profile?[*]`
+/// - `Folder::create_vm_task(config).vm_profile?[*]`
+/// - `Folder::create_vm_task(config).device_change?[*].profile?[*]`
+/// - `Folder::create_cluster_ex(spec).vsan_config?→VsanConfigInfoEx.perfsvc_config?.profile?`
+/// 
+/// *(10 of 100 paths)*
 pub trait VirtualMachineProfileSpecTrait : super::traits::DataObjectTrait {
 }
 impl<'s> serde::Serialize for dyn VirtualMachineProfileSpecTrait + 's {
@@ -34400,6 +35681,9 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualMach
         }
     }
 }
+/// ### How to access
+/// - `EnvironmentBrowser::query_config_target().sriov?[*].device_pool?`
+/// - `EnvironmentBrowser::query_config_target().pci_passthrough?[*]→VirtualMachineSriovInfo.device_pool?`
 pub trait VirtualMachineSriovDevicePoolInfoTrait : super::traits::DataObjectTrait {
     /// To be used for extending to other device types
     fn get_key(&self) -> &str;
@@ -34777,6 +36061,9 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualMach
     }
 }
 /// Description of a generic PCI device that can be attached to a virtual machine.
+///
+/// ### How to access
+/// - `EnvironmentBrowser::query_config_target().pci_passthrough?[*]`
 pub trait VirtualMachinePciPassthroughInfoTrait : super::traits::VirtualMachineTargetInfoTrait {
     /// Details of the PCI device, including vendor, class and
     /// device identification information.
@@ -34851,6 +36138,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualMach
     }
 }
 /// Base device group type.
+///
+/// ### How to access
+/// - `VirtualMachine::config.device_groups?.device_group?[*]`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→ClusterClusterInitialPlacementAction.config_spec?.device_groups?.device_group?[*]`
+/// - `StoragePod::pod_storage_drs_entry.action_history?[*].action→ClusterClusterInitialPlacementAction.config_spec?.device_groups?.device_group?[*]`
+/// - `ClusterComputeResource::action_history.action→ClusterClusterInitialPlacementAction.config_spec?.device_groups?.device_group?[*]`
+/// - `ClusterComputeResource::recommendation.action?[*]→ClusterClusterInitialPlacementAction.config_spec?.device_groups?.device_group?[*]`
+/// - `VirtualMachineSnapshot::config.device_groups?.device_group?[*]`
+/// - `VirtualMachine::reconfig_vm_task(spec).device_groups?.device_group?[*]`
+/// - `VirtualMachine::clone_vm_task(spec).config?.device_groups?.device_group?[*]`
+/// - `HostSystem::query_memory_overhead_ex(vm_config_info).device_groups?.device_group?[*]`
+/// - `Folder::create_vm_task(config).device_groups?.device_group?[*]`
+/// 
+/// *(10 of 26 paths)*
 pub trait VirtualMachineVirtualDeviceGroupsDeviceGroupTrait : super::traits::DataObjectTrait {
     /// Group instance key.
     /// 
@@ -34931,6 +36232,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualMach
     }
 }
 /// Base type for sysprep, sysprepText, or linuxPrep object type.
+///
+/// ### How to access
+/// - `VirtualMachine::check_customization_spec(spec).identity`
+/// - `VirtualMachine::customize_vm_task(spec).identity`
+/// - `VirtualMachine::clone_vm_task(spec).customization?.identity`
+/// - `ClusterComputeResource::place_vm(placement_spec).clone_spec?.customization?.identity`
+/// - `VirtualMachineGuestCustomizationManager::customize_guest_task(spec).identity`
+/// - `CustomizationSpecManager::create_customization_spec(item).spec.identity`
+/// - `CustomizationSpecManager::get_customization_spec().spec.identity`
+/// - `CustomizationSpecManager::overwrite_customization_spec(item).spec.identity`
+/// - `CustomizationSpecManager::customization_spec_item_to_xml(item).spec.identity`
+/// - `CustomizationSpecManager::xml_to_customization_spec_item().spec.identity`
+/// 
+/// *(10 of 12 paths)*
 pub trait CustomizationIdentitySettingsTrait : super::traits::DataObjectTrait {
 }
 impl<'s> serde::Serialize for dyn CustomizationIdentitySettingsTrait + 's {
@@ -35008,6 +36323,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn Customizati
     }
 }
 /// Base type for the various IP specification possibilities.
+///
+/// ### How to access
+/// - `VirtualMachine::check_customization_spec(spec).nic_setting_map?[*].adapter.ip`
+/// - `VirtualMachine::customize_vm_task(spec).nic_setting_map?[*].adapter.ip`
+/// - `VirtualMachine::clone_vm_task(spec).customization?.nic_setting_map?[*].adapter.ip`
+/// - `ClusterComputeResource::place_vm(placement_spec).clone_spec?.customization?.nic_setting_map?[*].adapter.ip`
+/// - `FailoverClusterConfigurator::create_passive_node_task(passive_deployment_spec).failover_ip_settings?.ip`
+/// - `FailoverClusterConfigurator::create_witness_node_task(witness_deployment_spec).ip_settings.ip`
+/// - `FailoverClusterConfigurator::create_witness_node_task(witness_deployment_spec)→PassiveNodeDeploymentSpec.failover_ip_settings?.ip`
+/// - `FailoverClusterConfigurator::deploy_vcha_task(deployment_spec).passive_deployment_spec.failover_ip_settings?.ip`
+/// - `FailoverClusterConfigurator::deploy_vcha_task(deployment_spec).witness_deployment_spec.ip_settings.ip`
+/// - `VirtualMachineGuestCustomizationManager::customize_guest_task(spec).nic_setting_map?[*].adapter.ip`
+/// 
+/// *(10 of 27 paths)*
 pub trait CustomizationIpGeneratorTrait : super::traits::DataObjectTrait {
 }
 impl<'s> serde::Serialize for dyn CustomizationIpGeneratorTrait + 's {
@@ -35085,6 +36414,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn Customizati
     }
 }
 /// Base type for the various IpV6 specification possibilities
+///
+/// ### How to access
+/// - `VirtualMachine::check_customization_spec(spec).nic_setting_map?[*].adapter.ip_v_6_spec?.ip[*]`
+/// - `VirtualMachine::customize_vm_task(spec).nic_setting_map?[*].adapter.ip_v_6_spec?.ip[*]`
+/// - `VirtualMachine::clone_vm_task(spec).customization?.nic_setting_map?[*].adapter.ip_v_6_spec?.ip[*]`
+/// - `ClusterComputeResource::place_vm(placement_spec).clone_spec?.customization?.nic_setting_map?[*].adapter.ip_v_6_spec?.ip[*]`
+/// - `FailoverClusterConfigurator::create_passive_node_task(passive_deployment_spec).failover_ip_settings?.ip_v_6_spec?.ip[*]`
+/// - `FailoverClusterConfigurator::create_witness_node_task(witness_deployment_spec).ip_settings.ip_v_6_spec?.ip[*]`
+/// - `FailoverClusterConfigurator::create_witness_node_task(witness_deployment_spec)→PassiveNodeDeploymentSpec.failover_ip_settings?.ip_v_6_spec?.ip[*]`
+/// - `FailoverClusterConfigurator::deploy_vcha_task(deployment_spec).passive_deployment_spec.failover_ip_settings?.ip_v_6_spec?.ip[*]`
+/// - `FailoverClusterConfigurator::deploy_vcha_task(deployment_spec).witness_deployment_spec.ip_settings.ip_v_6_spec?.ip[*]`
+/// - `VirtualMachineGuestCustomizationManager::customize_guest_task(spec).nic_setting_map?[*].adapter.ip_v_6_spec?.ip[*]`
+/// 
+/// *(10 of 27 paths)*
 pub trait CustomizationIpV6GeneratorTrait : super::traits::DataObjectTrait {
 }
 impl<'s> serde::Serialize for dyn CustomizationIpV6GeneratorTrait + 's {
@@ -35171,6 +36514,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn Customizati
 }
 /// A base object type for a virtual machine name that can be either fixed or
 /// auto-generated.
+///
+/// ### How to access
+/// - `VirtualMachine::check_customization_spec(spec).identity→CustomizationLinuxPrep.host_name`
+/// - `VirtualMachine::customize_vm_task(spec).identity→CustomizationLinuxPrep.host_name`
+/// - `VirtualMachine::check_customization_spec(spec).identity→CustomizationSysprep.user_data.computer_name`
+/// - `VirtualMachine::clone_vm_task(spec).customization?.identity→CustomizationLinuxPrep.host_name`
+/// - `VirtualMachine::customize_vm_task(spec).identity→CustomizationSysprep.user_data.computer_name`
+/// - `ClusterComputeResource::place_vm(placement_spec).clone_spec?.customization?.identity→CustomizationLinuxPrep.host_name`
+/// - `ClusterComputeResource::place_vm(placement_spec).clone_spec?.customization?.identity→CustomizationSysprep.user_data.computer_name`
+/// - `VirtualMachineGuestCustomizationManager::customize_guest_task(spec).identity→CustomizationLinuxPrep.host_name`
+/// - `CustomizationSpecManager::create_customization_spec(item).spec.identity→CustomizationLinuxPrep.host_name`
+/// - `CustomizationSpecManager::get_customization_spec().spec.identity→CustomizationLinuxPrep.host_name`
+/// 
+/// *(10 of 24 paths)*
 pub trait CustomizationNameTrait : super::traits::DataObjectTrait {
 }
 impl<'s> serde::Serialize for dyn CustomizationNameTrait + 's {
@@ -35252,6 +36609,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn Customizati
     }
 }
 /// Base object type for optional operations supported by the customization process.
+///
+/// ### How to access
+/// - `VirtualMachine::check_customization_spec(spec).options?`
+/// - `VirtualMachine::customize_vm_task(spec).options?`
+/// - `VirtualMachine::clone_vm_task(spec).customization?.options?`
+/// - `ClusterComputeResource::place_vm(placement_spec).clone_spec?.customization?.options?`
+/// - `VirtualMachineGuestCustomizationManager::customize_guest_task(spec).options?`
+/// - `CustomizationSpecManager::create_customization_spec(item).spec.options?`
+/// - `CustomizationSpecManager::get_customization_spec().spec.options?`
+/// - `CustomizationSpecManager::overwrite_customization_spec(item).spec.options?`
+/// - `CustomizationSpecManager::customization_spec_item_to_xml(item).spec.options?`
+/// - `CustomizationSpecManager::xml_to_customization_spec_item().spec.options?`
+/// 
+/// *(10 of 12 paths)*
 pub trait CustomizationOptionsTrait : super::traits::DataObjectTrait {
 }
 impl<'s> serde::Serialize for dyn CustomizationOptionsTrait + 's {
@@ -35326,6 +36697,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn Customizati
 /// to display devices they do not recognize. For example, a client with an
 /// older version than the server to which it connects may see a device
 /// without knowing what it is.
+///
+/// ### How to access
+/// - `VirtualMachine::config.hardware.device?[*]`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→StoragePlacementAction.relocate_spec.device_change?[*].device`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→StorageMigrationAction.relocate_spec.device_change?[*].device`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→PlacementAction.relocate_spec?.device_change?[*].device`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→ClusterClusterInitialPlacementAction.config_spec?.device_change?[*].device`
+/// - `StoragePod::pod_storage_drs_entry.action_history?[*].action→StoragePlacementAction.relocate_spec.device_change?[*].device`
+/// - `ClusterComputeResource::action_history.action→StoragePlacementAction.relocate_spec.device_change?[*].device`
+/// - `ClusterComputeResource::action_history.action→StorageMigrationAction.relocate_spec.device_change?[*].device`
+/// - `ClusterComputeResource::action_history.action→PlacementAction.relocate_spec?.device_change?[*].device`
+/// - `ClusterComputeResource::action_history.action→ClusterClusterInitialPlacementAction.config_spec?.device_change?[*].device`
+/// 
+/// *(10 of 65 paths)*
 pub trait VirtualDeviceTrait : super::traits::DataObjectTrait {
     /// A unique key that distinguishes this device from other
     /// devices in the same virtual machine.
@@ -36076,6 +37461,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualDevi
 /// *VirtualDevice* to inherit
 /// general information about a controller (such as name and description), and to allow
 /// controllers to appear in a generic list of virtual devices.
+///
+/// ### How to access
+/// - `VirtualMachine::config.hardware.device?[*]⇒VirtualControllerTrait`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→StoragePlacementAction.relocate_spec.device_change?[*].device⇒VirtualControllerTrait`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→StorageMigrationAction.relocate_spec.device_change?[*].device⇒VirtualControllerTrait`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→PlacementAction.relocate_spec?.device_change?[*].device⇒VirtualControllerTrait`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→ClusterClusterInitialPlacementAction.config_spec?.device_change?[*].device⇒VirtualControllerTrait`
+/// - `StoragePod::pod_storage_drs_entry.action_history?[*].action→StoragePlacementAction.relocate_spec.device_change?[*].device⇒VirtualControllerTrait`
+/// - `ClusterComputeResource::action_history.action→StoragePlacementAction.relocate_spec.device_change?[*].device⇒VirtualControllerTrait`
+/// - `ClusterComputeResource::action_history.action→StorageMigrationAction.relocate_spec.device_change?[*].device⇒VirtualControllerTrait`
+/// - `ClusterComputeResource::action_history.action→PlacementAction.relocate_spec?.device_change?[*].device⇒VirtualControllerTrait`
+/// - `ClusterComputeResource::action_history.action→ClusterClusterInitialPlacementAction.config_spec?.device_change?[*].device⇒VirtualControllerTrait`
+/// 
+/// *(10 of 65 paths)*
 pub trait VirtualControllerTrait : super::traits::VirtualDeviceTrait {
     /// Bus number associated with this controller.
     fn get_bus_number(&self) -> i32;
@@ -36237,6 +37636,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualCont
 }
 /// The VirtualSATAController data object type represents
 /// a SATA controller in a virtual machine.
+///
+/// ### How to access
+/// - `VirtualMachine::config.hardware.device?[*]⇒VirtualSataControllerTrait`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→StoragePlacementAction.relocate_spec.device_change?[*].device⇒VirtualSataControllerTrait`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→StorageMigrationAction.relocate_spec.device_change?[*].device⇒VirtualSataControllerTrait`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→PlacementAction.relocate_spec?.device_change?[*].device⇒VirtualSataControllerTrait`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→ClusterClusterInitialPlacementAction.config_spec?.device_change?[*].device⇒VirtualSataControllerTrait`
+/// - `StoragePod::pod_storage_drs_entry.action_history?[*].action→StoragePlacementAction.relocate_spec.device_change?[*].device⇒VirtualSataControllerTrait`
+/// - `ClusterComputeResource::action_history.action→StoragePlacementAction.relocate_spec.device_change?[*].device⇒VirtualSataControllerTrait`
+/// - `ClusterComputeResource::action_history.action→StorageMigrationAction.relocate_spec.device_change?[*].device⇒VirtualSataControllerTrait`
+/// - `ClusterComputeResource::action_history.action→PlacementAction.relocate_spec?.device_change?[*].device⇒VirtualSataControllerTrait`
+/// - `ClusterComputeResource::action_history.action→ClusterClusterInitialPlacementAction.config_spec?.device_change?[*].device⇒VirtualSataControllerTrait`
+/// 
+/// *(10 of 65 paths)*
 pub trait VirtualSataControllerTrait : super::traits::VirtualControllerTrait {
 }
 impl<'s> serde::Serialize for dyn VirtualSataControllerTrait + 's {
@@ -36303,6 +37716,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualSata
 }
 /// The VirtualSCSIController data object type represents
 /// a SCSI controller in a virtual machine.
+///
+/// ### How to access
+/// - `VirtualMachine::config.hardware.device?[*]⇒VirtualScsiControllerTrait`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→StoragePlacementAction.relocate_spec.device_change?[*].device⇒VirtualScsiControllerTrait`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→StorageMigrationAction.relocate_spec.device_change?[*].device⇒VirtualScsiControllerTrait`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→PlacementAction.relocate_spec?.device_change?[*].device⇒VirtualScsiControllerTrait`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→ClusterClusterInitialPlacementAction.config_spec?.device_change?[*].device⇒VirtualScsiControllerTrait`
+/// - `StoragePod::pod_storage_drs_entry.action_history?[*].action→StoragePlacementAction.relocate_spec.device_change?[*].device⇒VirtualScsiControllerTrait`
+/// - `ClusterComputeResource::action_history.action→StoragePlacementAction.relocate_spec.device_change?[*].device⇒VirtualScsiControllerTrait`
+/// - `ClusterComputeResource::action_history.action→StorageMigrationAction.relocate_spec.device_change?[*].device⇒VirtualScsiControllerTrait`
+/// - `ClusterComputeResource::action_history.action→PlacementAction.relocate_spec?.device_change?[*].device⇒VirtualScsiControllerTrait`
+/// - `ClusterComputeResource::action_history.action→ClusterClusterInitialPlacementAction.config_spec?.device_change?[*].device⇒VirtualScsiControllerTrait`
+/// 
+/// *(10 of 65 paths)*
 pub trait VirtualScsiControllerTrait : super::traits::VirtualControllerTrait {
     /// All SCSI controllers support hot adding and removing of devices.
     /// 
@@ -36415,6 +37842,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualScsi
 }
 /// The *VirtualEthernetCard* data object contains the properties
 /// of an Ethernet adapter attached to a virtual machine.
+///
+/// ### How to access
+/// - `VirtualMachine::config.hardware.device?[*]⇒VirtualEthernetCardTrait`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→StoragePlacementAction.relocate_spec.device_change?[*].device⇒VirtualEthernetCardTrait`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→StorageMigrationAction.relocate_spec.device_change?[*].device⇒VirtualEthernetCardTrait`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→PlacementAction.relocate_spec?.device_change?[*].device⇒VirtualEthernetCardTrait`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→ClusterClusterInitialPlacementAction.config_spec?.device_change?[*].device⇒VirtualEthernetCardTrait`
+/// - `StoragePod::pod_storage_drs_entry.action_history?[*].action→StoragePlacementAction.relocate_spec.device_change?[*].device⇒VirtualEthernetCardTrait`
+/// - `ClusterComputeResource::action_history.action→StoragePlacementAction.relocate_spec.device_change?[*].device⇒VirtualEthernetCardTrait`
+/// - `ClusterComputeResource::action_history.action→StorageMigrationAction.relocate_spec.device_change?[*].device⇒VirtualEthernetCardTrait`
+/// - `ClusterComputeResource::action_history.action→PlacementAction.relocate_spec?.device_change?[*].device⇒VirtualEthernetCardTrait`
+/// - `ClusterComputeResource::action_history.action→ClusterClusterInitialPlacementAction.config_spec?.device_change?[*].device⇒VirtualEthernetCardTrait`
+/// 
+/// *(10 of 65 paths)*
 pub trait VirtualEthernetCardTrait : super::traits::VirtualDeviceTrait {
     /// Set of dynamic properties.
     /// 
@@ -36641,6 +38082,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualEthe
 }
 /// The VirtualVmxnet data object type represents an instance
 /// of the Vmxnet virtual Ethernet adapter attached to a virtual machine.
+///
+/// ### How to access
+/// - `VirtualMachine::config.hardware.device?[*]⇒VirtualVmxnetTrait`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→StoragePlacementAction.relocate_spec.device_change?[*].device⇒VirtualVmxnetTrait`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→StorageMigrationAction.relocate_spec.device_change?[*].device⇒VirtualVmxnetTrait`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→PlacementAction.relocate_spec?.device_change?[*].device⇒VirtualVmxnetTrait`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→ClusterClusterInitialPlacementAction.config_spec?.device_change?[*].device⇒VirtualVmxnetTrait`
+/// - `StoragePod::pod_storage_drs_entry.action_history?[*].action→StoragePlacementAction.relocate_spec.device_change?[*].device⇒VirtualVmxnetTrait`
+/// - `ClusterComputeResource::action_history.action→StoragePlacementAction.relocate_spec.device_change?[*].device⇒VirtualVmxnetTrait`
+/// - `ClusterComputeResource::action_history.action→StorageMigrationAction.relocate_spec.device_change?[*].device⇒VirtualVmxnetTrait`
+/// - `ClusterComputeResource::action_history.action→PlacementAction.relocate_spec?.device_change?[*].device⇒VirtualVmxnetTrait`
+/// - `ClusterComputeResource::action_history.action→ClusterClusterInitialPlacementAction.config_spec?.device_change?[*].device⇒VirtualVmxnetTrait`
+/// 
+/// *(10 of 65 paths)*
 pub trait VirtualVmxnetTrait : super::traits::VirtualEthernetCardTrait {
 }
 impl<'s> serde::Serialize for dyn VirtualVmxnetTrait + 's {
@@ -36715,6 +38170,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualVmxn
 }
 /// The VirtualVmxnet3 data object type represents an instance
 /// of the Vmxnet3 virtual Ethernet adapter attached to a virtual machine.
+///
+/// ### How to access
+/// - `VirtualMachine::config.hardware.device?[*]⇒VirtualVmxnet3Trait`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→StoragePlacementAction.relocate_spec.device_change?[*].device⇒VirtualVmxnet3Trait`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→StorageMigrationAction.relocate_spec.device_change?[*].device⇒VirtualVmxnet3Trait`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→PlacementAction.relocate_spec?.device_change?[*].device⇒VirtualVmxnet3Trait`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→ClusterClusterInitialPlacementAction.config_spec?.device_change?[*].device⇒VirtualVmxnet3Trait`
+/// - `StoragePod::pod_storage_drs_entry.action_history?[*].action→StoragePlacementAction.relocate_spec.device_change?[*].device⇒VirtualVmxnet3Trait`
+/// - `ClusterComputeResource::action_history.action→StoragePlacementAction.relocate_spec.device_change?[*].device⇒VirtualVmxnet3Trait`
+/// - `ClusterComputeResource::action_history.action→StorageMigrationAction.relocate_spec.device_change?[*].device⇒VirtualVmxnet3Trait`
+/// - `ClusterComputeResource::action_history.action→PlacementAction.relocate_spec?.device_change?[*].device⇒VirtualVmxnet3Trait`
+/// - `ClusterComputeResource::action_history.action→ClusterClusterInitialPlacementAction.config_spec?.device_change?[*].device⇒VirtualVmxnet3Trait`
+/// 
+/// *(10 of 65 paths)*
 pub trait VirtualVmxnet3Trait : super::traits::VirtualVmxnetTrait {
     /// Indicates whether UPTv2(Uniform Pass-through version 2) compatibility is
     /// enabled on this network adapter.
@@ -36805,6 +38274,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualVmxn
 }
 /// This data object type represents a sound card in
 /// a virtual machine.
+///
+/// ### How to access
+/// - `VirtualMachine::config.hardware.device?[*]⇒VirtualSoundCardTrait`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→StoragePlacementAction.relocate_spec.device_change?[*].device⇒VirtualSoundCardTrait`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→StorageMigrationAction.relocate_spec.device_change?[*].device⇒VirtualSoundCardTrait`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→PlacementAction.relocate_spec?.device_change?[*].device⇒VirtualSoundCardTrait`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→ClusterClusterInitialPlacementAction.config_spec?.device_change?[*].device⇒VirtualSoundCardTrait`
+/// - `StoragePod::pod_storage_drs_entry.action_history?[*].action→StoragePlacementAction.relocate_spec.device_change?[*].device⇒VirtualSoundCardTrait`
+/// - `ClusterComputeResource::action_history.action→StoragePlacementAction.relocate_spec.device_change?[*].device⇒VirtualSoundCardTrait`
+/// - `ClusterComputeResource::action_history.action→StorageMigrationAction.relocate_spec.device_change?[*].device⇒VirtualSoundCardTrait`
+/// - `ClusterComputeResource::action_history.action→PlacementAction.relocate_spec?.device_change?[*].device⇒VirtualSoundCardTrait`
+/// - `ClusterComputeResource::action_history.action→ClusterClusterInitialPlacementAction.config_spec?.device_change?[*].device⇒VirtualSoundCardTrait`
+/// 
+/// *(10 of 65 paths)*
 pub trait VirtualSoundCardTrait : super::traits::VirtualDeviceTrait {
 }
 impl<'s> serde::Serialize for dyn VirtualSoundCardTrait + 's {
@@ -36883,6 +38366,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualSoun
 /// This base type does not define any properties. It is used as a namespace
 /// for general-purpose subtypes. Specific devices are represented by subtypes
 /// which define properties for device-specific backing information.
+///
+/// ### How to access
+/// - `VirtualMachine::config.hardware.device?[*].backing?`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→StoragePlacementAction.relocate_spec.disk?[*].disk_backing_info?`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→StorageMigrationAction.relocate_spec.disk?[*].disk_backing_info?`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→PlacementAction.relocate_spec?.disk?[*].disk_backing_info?`
+/// - `StoragePod::pod_storage_drs_entry.action_history?[*].action→StoragePlacementAction.relocate_spec.disk?[*].disk_backing_info?`
+/// - `StoragePod::pod_storage_drs_entry.action_history?[*].action→StorageMigrationAction.relocate_spec.disk?[*].disk_backing_info?`
+/// - `ClusterComputeResource::action_history.action→StoragePlacementAction.relocate_spec.disk?[*].disk_backing_info?`
+/// - `ClusterComputeResource::action_history.action→StorageMigrationAction.relocate_spec.disk?[*].disk_backing_info?`
+/// - `ClusterComputeResource::action_history.action→PlacementAction.relocate_spec?.disk?[*].disk_backing_info?`
+/// - `ClusterComputeResource::recommendation.action?[*]→StoragePlacementAction.relocate_spec.disk?[*].disk_backing_info?`
+/// 
+/// *(10 of 100 paths)*
 pub trait VirtualDeviceBackingInfoTrait : super::traits::DataObjectTrait {
 }
 impl<'s> serde::Serialize for dyn VirtualDeviceBackingInfoTrait + 's {
@@ -37134,6 +38631,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualDevi
 /// The <code>*VirtualDeviceDeviceBackingInfo*</code> data object type
 /// defines information about a host device or resource that backs a device
 /// in a virtual machine.
+///
+/// ### How to access
+/// - `VirtualMachine::config.hardware.device?[*].backing?⇒VirtualDeviceDeviceBackingInfoTrait`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→StoragePlacementAction.relocate_spec.disk?[*].disk_backing_info?⇒VirtualDeviceDeviceBackingInfoTrait`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→StorageMigrationAction.relocate_spec.disk?[*].disk_backing_info?⇒VirtualDeviceDeviceBackingInfoTrait`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→PlacementAction.relocate_spec?.disk?[*].disk_backing_info?⇒VirtualDeviceDeviceBackingInfoTrait`
+/// - `StoragePod::pod_storage_drs_entry.action_history?[*].action→StoragePlacementAction.relocate_spec.disk?[*].disk_backing_info?⇒VirtualDeviceDeviceBackingInfoTrait`
+/// - `StoragePod::pod_storage_drs_entry.action_history?[*].action→StorageMigrationAction.relocate_spec.disk?[*].disk_backing_info?⇒VirtualDeviceDeviceBackingInfoTrait`
+/// - `ClusterComputeResource::action_history.action→StoragePlacementAction.relocate_spec.disk?[*].disk_backing_info?⇒VirtualDeviceDeviceBackingInfoTrait`
+/// - `ClusterComputeResource::action_history.action→StorageMigrationAction.relocate_spec.disk?[*].disk_backing_info?⇒VirtualDeviceDeviceBackingInfoTrait`
+/// - `ClusterComputeResource::action_history.action→PlacementAction.relocate_spec?.disk?[*].disk_backing_info?⇒VirtualDeviceDeviceBackingInfoTrait`
+/// - `ClusterComputeResource::recommendation.action?[*]→StoragePlacementAction.relocate_spec.disk?[*].disk_backing_info?⇒VirtualDeviceDeviceBackingInfoTrait`
+/// 
+/// *(10 of 100 paths)*
 pub trait VirtualDeviceDeviceBackingInfoTrait : super::traits::VirtualDeviceBackingInfoTrait {
     /// The name of the device on the host system.
     fn get_device_name(&self) -> &str;
@@ -37302,6 +38813,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualDevi
 }
 /// This data object type contains information about backing a virtual disk by
 /// using a host device, as used by VMware Server.
+///
+/// ### How to access
+/// - `VirtualMachine::config.hardware.device?[*].backing?⇒VirtualDiskRawDiskVer2BackingInfoTrait`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→StoragePlacementAction.relocate_spec.disk?[*].disk_backing_info?⇒VirtualDiskRawDiskVer2BackingInfoTrait`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→StorageMigrationAction.relocate_spec.disk?[*].disk_backing_info?⇒VirtualDiskRawDiskVer2BackingInfoTrait`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→PlacementAction.relocate_spec?.disk?[*].disk_backing_info?⇒VirtualDiskRawDiskVer2BackingInfoTrait`
+/// - `StoragePod::pod_storage_drs_entry.action_history?[*].action→StoragePlacementAction.relocate_spec.disk?[*].disk_backing_info?⇒VirtualDiskRawDiskVer2BackingInfoTrait`
+/// - `StoragePod::pod_storage_drs_entry.action_history?[*].action→StorageMigrationAction.relocate_spec.disk?[*].disk_backing_info?⇒VirtualDiskRawDiskVer2BackingInfoTrait`
+/// - `ClusterComputeResource::action_history.action→StoragePlacementAction.relocate_spec.disk?[*].disk_backing_info?⇒VirtualDiskRawDiskVer2BackingInfoTrait`
+/// - `ClusterComputeResource::action_history.action→StorageMigrationAction.relocate_spec.disk?[*].disk_backing_info?⇒VirtualDiskRawDiskVer2BackingInfoTrait`
+/// - `ClusterComputeResource::action_history.action→PlacementAction.relocate_spec?.disk?[*].disk_backing_info?⇒VirtualDiskRawDiskVer2BackingInfoTrait`
+/// - `ClusterComputeResource::recommendation.action?[*]→StoragePlacementAction.relocate_spec.disk?[*].disk_backing_info?⇒VirtualDiskRawDiskVer2BackingInfoTrait`
+/// 
+/// *(10 of 100 paths)*
 pub trait VirtualDiskRawDiskVer2BackingInfoTrait : super::traits::VirtualDeviceDeviceBackingInfoTrait {
     /// The name of the raw disk descriptor file.
     fn get_descriptor_file_name(&self) -> &str;
@@ -37392,6 +38917,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualDisk
 }
 /// <code>*VirtualDeviceFileBackingInfo*</code> is a data object type
 /// for information about file backing for a device in a virtual machine.
+///
+/// ### How to access
+/// - `VirtualMachine::config.hardware.device?[*].backing?⇒VirtualDeviceFileBackingInfoTrait`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→StoragePlacementAction.relocate_spec.disk?[*].disk_backing_info?⇒VirtualDeviceFileBackingInfoTrait`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→StorageMigrationAction.relocate_spec.disk?[*].disk_backing_info?⇒VirtualDeviceFileBackingInfoTrait`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→PlacementAction.relocate_spec?.disk?[*].disk_backing_info?⇒VirtualDeviceFileBackingInfoTrait`
+/// - `StoragePod::pod_storage_drs_entry.action_history?[*].action→StoragePlacementAction.relocate_spec.disk?[*].disk_backing_info?⇒VirtualDeviceFileBackingInfoTrait`
+/// - `StoragePod::pod_storage_drs_entry.action_history?[*].action→StorageMigrationAction.relocate_spec.disk?[*].disk_backing_info?⇒VirtualDeviceFileBackingInfoTrait`
+/// - `ClusterComputeResource::action_history.action→StoragePlacementAction.relocate_spec.disk?[*].disk_backing_info?⇒VirtualDeviceFileBackingInfoTrait`
+/// - `ClusterComputeResource::action_history.action→StorageMigrationAction.relocate_spec.disk?[*].disk_backing_info?⇒VirtualDeviceFileBackingInfoTrait`
+/// - `ClusterComputeResource::action_history.action→PlacementAction.relocate_spec?.disk?[*].disk_backing_info?⇒VirtualDeviceFileBackingInfoTrait`
+/// - `ClusterComputeResource::recommendation.action?[*]→StoragePlacementAction.relocate_spec.disk?[*].disk_backing_info?⇒VirtualDeviceFileBackingInfoTrait`
+/// 
+/// *(10 of 100 paths)*
 pub trait VirtualDeviceFileBackingInfoTrait : super::traits::VirtualDeviceBackingInfoTrait {
     /// Filename for the host file used in this backing.
     fn get_file_name(&self) -> &str;
@@ -37555,6 +39094,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualDevi
 /// The <code>*VirtualDevicePipeBackingInfo*</code> data object type
 /// defines information for using a named pipe as backing for a device
 /// in a virtual machine.
+///
+/// ### How to access
+/// - `VirtualMachine::config.hardware.device?[*].backing?⇒VirtualDevicePipeBackingInfoTrait`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→StoragePlacementAction.relocate_spec.disk?[*].disk_backing_info?⇒VirtualDevicePipeBackingInfoTrait`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→StorageMigrationAction.relocate_spec.disk?[*].disk_backing_info?⇒VirtualDevicePipeBackingInfoTrait`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→PlacementAction.relocate_spec?.disk?[*].disk_backing_info?⇒VirtualDevicePipeBackingInfoTrait`
+/// - `StoragePod::pod_storage_drs_entry.action_history?[*].action→StoragePlacementAction.relocate_spec.disk?[*].disk_backing_info?⇒VirtualDevicePipeBackingInfoTrait`
+/// - `StoragePod::pod_storage_drs_entry.action_history?[*].action→StorageMigrationAction.relocate_spec.disk?[*].disk_backing_info?⇒VirtualDevicePipeBackingInfoTrait`
+/// - `ClusterComputeResource::action_history.action→StoragePlacementAction.relocate_spec.disk?[*].disk_backing_info?⇒VirtualDevicePipeBackingInfoTrait`
+/// - `ClusterComputeResource::action_history.action→StorageMigrationAction.relocate_spec.disk?[*].disk_backing_info?⇒VirtualDevicePipeBackingInfoTrait`
+/// - `ClusterComputeResource::action_history.action→PlacementAction.relocate_spec?.disk?[*].disk_backing_info?⇒VirtualDevicePipeBackingInfoTrait`
+/// - `ClusterComputeResource::recommendation.action?[*]→StoragePlacementAction.relocate_spec.disk?[*].disk_backing_info?⇒VirtualDevicePipeBackingInfoTrait`
+/// 
+/// *(10 of 100 paths)*
 pub trait VirtualDevicePipeBackingInfoTrait : super::traits::VirtualDeviceBackingInfoTrait {
     /// Pipe name for the host pipe associated with this backing.
     fn get_pipe_name(&self) -> &str;
@@ -37630,6 +39183,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualDevi
 /// The primary difference between a remote device backing and a
 /// local device backing is that the VirtualCenter server cannot provide a list
 /// of remote host devices available for this virtual device backing.
+///
+/// ### How to access
+/// - `VirtualMachine::config.hardware.device?[*].backing?⇒VirtualDeviceRemoteDeviceBackingInfoTrait`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→StoragePlacementAction.relocate_spec.disk?[*].disk_backing_info?⇒VirtualDeviceRemoteDeviceBackingInfoTrait`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→StorageMigrationAction.relocate_spec.disk?[*].disk_backing_info?⇒VirtualDeviceRemoteDeviceBackingInfoTrait`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→PlacementAction.relocate_spec?.disk?[*].disk_backing_info?⇒VirtualDeviceRemoteDeviceBackingInfoTrait`
+/// - `StoragePod::pod_storage_drs_entry.action_history?[*].action→StoragePlacementAction.relocate_spec.disk?[*].disk_backing_info?⇒VirtualDeviceRemoteDeviceBackingInfoTrait`
+/// - `StoragePod::pod_storage_drs_entry.action_history?[*].action→StorageMigrationAction.relocate_spec.disk?[*].disk_backing_info?⇒VirtualDeviceRemoteDeviceBackingInfoTrait`
+/// - `ClusterComputeResource::action_history.action→StoragePlacementAction.relocate_spec.disk?[*].disk_backing_info?⇒VirtualDeviceRemoteDeviceBackingInfoTrait`
+/// - `ClusterComputeResource::action_history.action→StorageMigrationAction.relocate_spec.disk?[*].disk_backing_info?⇒VirtualDeviceRemoteDeviceBackingInfoTrait`
+/// - `ClusterComputeResource::action_history.action→PlacementAction.relocate_spec?.disk?[*].disk_backing_info?⇒VirtualDeviceRemoteDeviceBackingInfoTrait`
+/// - `ClusterComputeResource::recommendation.action?[*]→StoragePlacementAction.relocate_spec.disk?[*].disk_backing_info?⇒VirtualDeviceRemoteDeviceBackingInfoTrait`
+/// 
+/// *(10 of 100 paths)*
 pub trait VirtualDeviceRemoteDeviceBackingInfoTrait : super::traits::VirtualDeviceBackingInfoTrait {
     /// The name of the device on the remote system.
     fn get_device_name(&self) -> &str;
@@ -37726,6 +39293,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualDevi
 }
 /// The <code>*VirtualDeviceURIBackingInfo*</code> data object type
 /// defines information for using a network socket as backing for a virtual device.
+///
+/// ### How to access
+/// - `VirtualMachine::config.hardware.device?[*].backing?⇒VirtualDeviceUriBackingInfoTrait`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→StoragePlacementAction.relocate_spec.disk?[*].disk_backing_info?⇒VirtualDeviceUriBackingInfoTrait`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→StorageMigrationAction.relocate_spec.disk?[*].disk_backing_info?⇒VirtualDeviceUriBackingInfoTrait`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→PlacementAction.relocate_spec?.disk?[*].disk_backing_info?⇒VirtualDeviceUriBackingInfoTrait`
+/// - `StoragePod::pod_storage_drs_entry.action_history?[*].action→StoragePlacementAction.relocate_spec.disk?[*].disk_backing_info?⇒VirtualDeviceUriBackingInfoTrait`
+/// - `StoragePod::pod_storage_drs_entry.action_history?[*].action→StorageMigrationAction.relocate_spec.disk?[*].disk_backing_info?⇒VirtualDeviceUriBackingInfoTrait`
+/// - `ClusterComputeResource::action_history.action→StoragePlacementAction.relocate_spec.disk?[*].disk_backing_info?⇒VirtualDeviceUriBackingInfoTrait`
+/// - `ClusterComputeResource::action_history.action→StorageMigrationAction.relocate_spec.disk?[*].disk_backing_info?⇒VirtualDeviceUriBackingInfoTrait`
+/// - `ClusterComputeResource::action_history.action→PlacementAction.relocate_spec?.disk?[*].disk_backing_info?⇒VirtualDeviceUriBackingInfoTrait`
+/// - `ClusterComputeResource::recommendation.action?[*]→StoragePlacementAction.relocate_spec.disk?[*].disk_backing_info?⇒VirtualDeviceUriBackingInfoTrait`
+/// 
+/// *(10 of 100 paths)*
 pub trait VirtualDeviceUriBackingInfoTrait : super::traits::VirtualDeviceBackingInfoTrait {
     /// Identifies the local host or a system on the network,
     /// depending on the value of <code>*VirtualDeviceURIBackingInfo.direction*</code>.
@@ -37823,6 +39404,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualDevi
 /// This base type does not define
 /// any properties. Specific plugin types are represented by subtypes which
 /// define properties for subtype-specific backing information.
+///
+/// ### How to access
+/// - `VirtualMachine::config.hardware.device?[*].backing?⇒VirtualPciPassthroughPluginBackingInfoTrait`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→StoragePlacementAction.relocate_spec.disk?[*].disk_backing_info?⇒VirtualPciPassthroughPluginBackingInfoTrait`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→StorageMigrationAction.relocate_spec.disk?[*].disk_backing_info?⇒VirtualPciPassthroughPluginBackingInfoTrait`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→PlacementAction.relocate_spec?.disk?[*].disk_backing_info?⇒VirtualPciPassthroughPluginBackingInfoTrait`
+/// - `StoragePod::pod_storage_drs_entry.action_history?[*].action→StoragePlacementAction.relocate_spec.disk?[*].disk_backing_info?⇒VirtualPciPassthroughPluginBackingInfoTrait`
+/// - `StoragePod::pod_storage_drs_entry.action_history?[*].action→StorageMigrationAction.relocate_spec.disk?[*].disk_backing_info?⇒VirtualPciPassthroughPluginBackingInfoTrait`
+/// - `ClusterComputeResource::action_history.action→StoragePlacementAction.relocate_spec.disk?[*].disk_backing_info?⇒VirtualPciPassthroughPluginBackingInfoTrait`
+/// - `ClusterComputeResource::action_history.action→StorageMigrationAction.relocate_spec.disk?[*].disk_backing_info?⇒VirtualPciPassthroughPluginBackingInfoTrait`
+/// - `ClusterComputeResource::action_history.action→PlacementAction.relocate_spec?.disk?[*].disk_backing_info?⇒VirtualPciPassthroughPluginBackingInfoTrait`
+/// - `ClusterComputeResource::recommendation.action?[*]→StoragePlacementAction.relocate_spec.disk?[*].disk_backing_info?⇒VirtualPciPassthroughPluginBackingInfoTrait`
+/// 
+/// *(10 of 100 paths)*
 pub trait VirtualPciPassthroughPluginBackingInfoTrait : super::traits::VirtualDeviceBackingInfoTrait {
 }
 impl<'s> serde::Serialize for dyn VirtualPciPassthroughPluginBackingInfoTrait + 's {
@@ -37894,6 +39489,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualPciP
 /// define any properties. It is used as a namespace for general-purpose subtypes.
 /// Specific devices types are represented by subtypes which define properties for
 /// device-specific backing information.
+///
+/// ### How to access
+/// - `VirtualMachine::config.hardware.device?[*].slot_info?`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→StoragePlacementAction.relocate_spec.device_change?[*].device.slot_info?`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→StorageMigrationAction.relocate_spec.device_change?[*].device.slot_info?`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→PlacementAction.relocate_spec?.device_change?[*].device.slot_info?`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→ClusterClusterInitialPlacementAction.config_spec?.device_change?[*].device.slot_info?`
+/// - `StoragePod::pod_storage_drs_entry.action_history?[*].action→StoragePlacementAction.relocate_spec.device_change?[*].device.slot_info?`
+/// - `ClusterComputeResource::action_history.action→StoragePlacementAction.relocate_spec.device_change?[*].device.slot_info?`
+/// - `ClusterComputeResource::action_history.action→StorageMigrationAction.relocate_spec.device_change?[*].device.slot_info?`
+/// - `ClusterComputeResource::action_history.action→PlacementAction.relocate_spec?.device_change?[*].device.slot_info?`
+/// - `ClusterComputeResource::action_history.action→ClusterClusterInitialPlacementAction.config_spec?.device_change?[*].device.slot_info?`
+/// 
+/// *(10 of 65 paths)*
 pub trait VirtualDeviceBusSlotInfoTrait : super::traits::DataObjectTrait {
 }
 impl<'s> serde::Serialize for dyn VirtualDeviceBusSlotInfoTrait + 's {
@@ -37964,6 +39573,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualDevi
 }
 /// The <code>*VirtualDevicePciBusSlotInfo*</code> data object type
 /// defines information about a pci bus slot of pci device in a virtual machine.
+///
+/// ### How to access
+/// - `VirtualMachine::config.hardware.device?[*].slot_info?⇒VirtualDevicePciBusSlotInfoTrait`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→StoragePlacementAction.relocate_spec.device_change?[*].device.slot_info?⇒VirtualDevicePciBusSlotInfoTrait`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→StorageMigrationAction.relocate_spec.device_change?[*].device.slot_info?⇒VirtualDevicePciBusSlotInfoTrait`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→PlacementAction.relocate_spec?.device_change?[*].device.slot_info?⇒VirtualDevicePciBusSlotInfoTrait`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→ClusterClusterInitialPlacementAction.config_spec?.device_change?[*].device.slot_info?⇒VirtualDevicePciBusSlotInfoTrait`
+/// - `StoragePod::pod_storage_drs_entry.action_history?[*].action→StoragePlacementAction.relocate_spec.device_change?[*].device.slot_info?⇒VirtualDevicePciBusSlotInfoTrait`
+/// - `ClusterComputeResource::action_history.action→StoragePlacementAction.relocate_spec.device_change?[*].device.slot_info?⇒VirtualDevicePciBusSlotInfoTrait`
+/// - `ClusterComputeResource::action_history.action→StorageMigrationAction.relocate_spec.device_change?[*].device.slot_info?⇒VirtualDevicePciBusSlotInfoTrait`
+/// - `ClusterComputeResource::action_history.action→PlacementAction.relocate_spec?.device_change?[*].device.slot_info?⇒VirtualDevicePciBusSlotInfoTrait`
+/// - `ClusterComputeResource::action_history.action→ClusterClusterInitialPlacementAction.config_spec?.device_change?[*].device.slot_info?⇒VirtualDevicePciBusSlotInfoTrait`
+/// 
+/// *(10 of 65 paths)*
 pub trait VirtualDevicePciBusSlotInfoTrait : super::traits::VirtualDeviceBusSlotInfoTrait {
     /// The pci slot number of the virtual device.
     /// 
@@ -38053,6 +39676,10 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualDevi
 /// that are independent of the virtual device.
 /// Backing-dependent options should appear in a subtype of
 /// *VirtualDeviceBackingOption*.
+///
+/// ### How to access
+/// - `EnvironmentBrowser::query_config_option().hardware_options.virtual_device_option[*]`
+/// - `EnvironmentBrowser::query_config_option_ex().hardware_options.virtual_device_option[*]`
 pub trait VirtualDeviceOptionTrait : super::traits::DataObjectTrait {
     /// The name of the run-time class the client should instantiate
     /// to create a run-time instance of this device.
@@ -38910,6 +40537,10 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualDevi
 }
 /// The VirtualControllerOption data object type contains information about
 /// a virtual controller type.
+///
+/// ### How to access
+/// - `EnvironmentBrowser::query_config_option().hardware_options.virtual_device_option[*]⇒VirtualControllerOptionTrait`
+/// - `EnvironmentBrowser::query_config_option_ex().hardware_options.virtual_device_option[*]⇒VirtualControllerOptionTrait`
 pub trait VirtualControllerOptionTrait : super::traits::VirtualDeviceOptionTrait {
     /// The minimum and maximum number of devices this controller can control
     /// at run time.
@@ -39071,6 +40702,10 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualCont
 /// for a virtual SATA controller defined by the
 /// *VirtualSATAController*
 /// data object type.
+///
+/// ### How to access
+/// - `EnvironmentBrowser::query_config_option().hardware_options.virtual_device_option[*]⇒VirtualSataControllerOptionTrait`
+/// - `EnvironmentBrowser::query_config_option_ex().hardware_options.virtual_device_option[*]⇒VirtualSataControllerOptionTrait`
 pub trait VirtualSataControllerOptionTrait : super::traits::VirtualControllerOptionTrait {
     /// Three properties (numSATADisks.min, numSATADisks.max, and
     /// numSATADisks.defaultValue) define the minimum, maximum, and default
@@ -39159,6 +40794,10 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualSata
 /// for a virtual SCSI controller defined by the
 /// *VirtualSCSIController*
 /// data object type.
+///
+/// ### How to access
+/// - `EnvironmentBrowser::query_config_option().hardware_options.virtual_device_option[*]⇒VirtualScsiControllerOptionTrait`
+/// - `EnvironmentBrowser::query_config_option_ex().hardware_options.virtual_device_option[*]⇒VirtualScsiControllerOptionTrait`
 pub trait VirtualScsiControllerOptionTrait : super::traits::VirtualControllerOptionTrait {
     /// Three properties (numSCSIDisks.min, numSCSIDisks.max, and
     /// numSCSIDisks.defaultValue) define the minimum, maximum, and default
@@ -39313,6 +40952,10 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualScsi
 }
 /// This data object type contains the options for the
 /// virtual ethernet card data object type.
+///
+/// ### How to access
+/// - `EnvironmentBrowser::query_config_option().hardware_options.virtual_device_option[*]⇒VirtualEthernetCardOptionTrait`
+/// - `EnvironmentBrowser::query_config_option_ex().hardware_options.virtual_device_option[*]⇒VirtualEthernetCardOptionTrait`
 pub trait VirtualEthernetCardOptionTrait : super::traits::VirtualDeviceOptionTrait {
     /// The valid Organizational Unique Identifiers (OUIs)
     /// supported by this virtual Ethernet card.
@@ -39474,6 +41117,10 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualEthe
 }
 /// The VirtualVmxnetOption data object type contains the options for the
 /// *VirtualVmxnet* data object type.
+///
+/// ### How to access
+/// - `EnvironmentBrowser::query_config_option().hardware_options.virtual_device_option[*]⇒VirtualVmxnetOptionTrait`
+/// - `EnvironmentBrowser::query_config_option_ex().hardware_options.virtual_device_option[*]⇒VirtualVmxnetOptionTrait`
 pub trait VirtualVmxnetOptionTrait : super::traits::VirtualEthernetCardOptionTrait {
 }
 impl<'s> serde::Serialize for dyn VirtualVmxnetOptionTrait + 's {
@@ -39548,6 +41195,10 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualVmxn
 }
 /// The VirtualVmxnet3Option data object type contains the options for the
 /// *VirtualVmxnet3* data object type.
+///
+/// ### How to access
+/// - `EnvironmentBrowser::query_config_option().hardware_options.virtual_device_option[*]⇒VirtualVmxnet3OptionTrait`
+/// - `EnvironmentBrowser::query_config_option_ex().hardware_options.virtual_device_option[*]⇒VirtualVmxnet3OptionTrait`
 pub trait VirtualVmxnet3OptionTrait : super::traits::VirtualVmxnetOptionTrait {
     /// Flag to indicate whether UPTv2(Uniform Pass-through version 2) is
     /// settable on this device.
@@ -39627,6 +41278,10 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualVmxn
 }
 /// The VirtualSoundCardOption data class contains the options for the
 /// virtual sound card class.
+///
+/// ### How to access
+/// - `EnvironmentBrowser::query_config_option().hardware_options.virtual_device_option[*]⇒VirtualSoundCardOptionTrait`
+/// - `EnvironmentBrowser::query_config_option_ex().hardware_options.virtual_device_option[*]⇒VirtualSoundCardOptionTrait`
 pub trait VirtualSoundCardOptionTrait : super::traits::VirtualDeviceOptionTrait {
 }
 impl<'s> serde::Serialize for dyn VirtualSoundCardOptionTrait + 's {
@@ -39701,6 +41356,10 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualSoun
 }
 /// The *VirtualDeviceBackingOption* data class
 /// defines options for device-specific virtual backing objects.
+///
+/// ### How to access
+/// - `EnvironmentBrowser::query_config_option().hardware_options.virtual_device_option[*].backing_option?[*]`
+/// - `EnvironmentBrowser::query_config_option_ex().hardware_options.virtual_device_option[*].backing_option?[*]`
 pub trait VirtualDeviceBackingOptionTrait : super::traits::DataObjectTrait {
     /// The name of the class the client should use to instantiate backing
     /// for the virtual device.
@@ -39996,6 +41655,10 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualDevi
     }
 }
 /// The DeviceBackingOption data class contains device-specific backing options.
+///
+/// ### How to access
+/// - `EnvironmentBrowser::query_config_option().hardware_options.virtual_device_option[*].backing_option?[*]⇒VirtualDeviceDeviceBackingOptionTrait`
+/// - `EnvironmentBrowser::query_config_option_ex().hardware_options.virtual_device_option[*].backing_option?[*]⇒VirtualDeviceDeviceBackingOptionTrait`
 pub trait VirtualDeviceDeviceBackingOptionTrait : super::traits::VirtualDeviceBackingOptionTrait {
     /// Flag to indicate whether the specific instance of this device can
     /// be auto-detected on the host instead of having to specify a
@@ -40154,6 +41817,10 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualDevi
 /// The VirtualDiskOption.RawDiskVer2BackingOption object type
 /// contains the available options when backing a virtual disk
 /// using a host device on VMware Server.
+///
+/// ### How to access
+/// - `EnvironmentBrowser::query_config_option().hardware_options.virtual_device_option[*].backing_option?[*]⇒VirtualDiskRawDiskVer2BackingOptionTrait`
+/// - `EnvironmentBrowser::query_config_option_ex().hardware_options.virtual_device_option[*].backing_option?[*]⇒VirtualDiskRawDiskVer2BackingOptionTrait`
 pub trait VirtualDiskRawDiskVer2BackingOptionTrait : super::traits::VirtualDeviceDeviceBackingOptionTrait {
     /// Valid extensions for the filename of the raw disk descriptor
     /// file.
@@ -40228,6 +41895,10 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualDisk
     }
 }
 /// The FileBackingOption data class contains file-specific backing options.
+///
+/// ### How to access
+/// - `EnvironmentBrowser::query_config_option().hardware_options.virtual_device_option[*].backing_option?[*]⇒VirtualDeviceFileBackingOptionTrait`
+/// - `EnvironmentBrowser::query_config_option_ex().hardware_options.virtual_device_option[*].backing_option?[*]⇒VirtualDeviceFileBackingOptionTrait`
 pub trait VirtualDeviceFileBackingOptionTrait : super::traits::VirtualDeviceBackingOptionTrait {
     /// Valid filename extension for the filename.
     /// 
@@ -40345,6 +42016,10 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualDevi
 }
 /// The <code>*VirtualDevicePipeBackingOption*</code> data object type contains options
 /// specific to pipe backings.
+///
+/// ### How to access
+/// - `EnvironmentBrowser::query_config_option().hardware_options.virtual_device_option[*].backing_option?[*]⇒VirtualDevicePipeBackingOptionTrait`
+/// - `EnvironmentBrowser::query_config_option_ex().hardware_options.virtual_device_option[*].backing_option?[*]⇒VirtualDevicePipeBackingOptionTrait`
 pub trait VirtualDevicePipeBackingOptionTrait : super::traits::VirtualDeviceBackingOptionTrait {
 }
 impl<'s> serde::Serialize for dyn VirtualDevicePipeBackingOptionTrait + 's {
@@ -40416,6 +42091,10 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualDevi
 /// between a remote device backing and a local device backing is that
 /// the VirtualCenter server cannot provide a list of remote host devices
 /// available for this virtual device backing.
+///
+/// ### How to access
+/// - `EnvironmentBrowser::query_config_option().hardware_options.virtual_device_option[*].backing_option?[*]⇒VirtualDeviceRemoteDeviceBackingOptionTrait`
+/// - `EnvironmentBrowser::query_config_option_ex().hardware_options.virtual_device_option[*].backing_option?[*]⇒VirtualDeviceRemoteDeviceBackingOptionTrait`
 pub trait VirtualDeviceRemoteDeviceBackingOptionTrait : super::traits::VirtualDeviceBackingOptionTrait {
     /// Flag to indicate whether the specific instance of this device can
     /// be auto-detected on the host instead of having to specify a
@@ -40503,6 +42182,10 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualDevi
 /// the virtual machine can act as a server or a client.
 /// When the virtual machine acts as a server, it accepts a connection.
 /// When the virtual machine acts as a client, it initiates the connection.
+///
+/// ### How to access
+/// - `EnvironmentBrowser::query_config_option().hardware_options.virtual_device_option[*].backing_option?[*]⇒VirtualDeviceUriBackingOptionTrait`
+/// - `EnvironmentBrowser::query_config_option_ex().hardware_options.virtual_device_option[*].backing_option?[*]⇒VirtualDeviceUriBackingOptionTrait`
 pub trait VirtualDeviceUriBackingOptionTrait : super::traits::VirtualDeviceBackingOptionTrait {
     /// List of possible directions.
     /// 
@@ -40577,6 +42260,10 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualDevi
 }
 /// This data object type describes the options for the
 /// *VirtualPCIPassthroughPluginBackingInfo* data object type.
+///
+/// ### How to access
+/// - `EnvironmentBrowser::query_config_option().hardware_options.virtual_device_option[*].backing_option?[*]⇒VirtualPciPassthroughPluginBackingOptionTrait`
+/// - `EnvironmentBrowser::query_config_option_ex().hardware_options.virtual_device_option[*].backing_option?[*]⇒VirtualPciPassthroughPluginBackingOptionTrait`
 pub trait VirtualPciPassthroughPluginBackingOptionTrait : super::traits::VirtualDeviceBackingOptionTrait {
 }
 impl<'s> serde::Serialize for dyn VirtualPciPassthroughPluginBackingOptionTrait + 's {
@@ -40646,6 +42333,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualPciP
 /// 
 /// The virtual
 /// device being added or modified must be fully specified.
+///
+/// ### How to access
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→StoragePlacementAction.relocate_spec.device_change?[*]`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→StorageMigrationAction.relocate_spec.device_change?[*]`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→PlacementAction.relocate_spec?.device_change?[*]`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→ClusterClusterInitialPlacementAction.config_spec?.device_change?[*]`
+/// - `StoragePod::pod_storage_drs_entry.action_history?[*].action→StoragePlacementAction.relocate_spec.device_change?[*]`
+/// - `ClusterComputeResource::action_history.action→StoragePlacementAction.relocate_spec.device_change?[*]`
+/// - `ClusterComputeResource::action_history.action→StorageMigrationAction.relocate_spec.device_change?[*]`
+/// - `ClusterComputeResource::action_history.action→PlacementAction.relocate_spec?.device_change?[*]`
+/// - `ClusterComputeResource::action_history.action→ClusterClusterInitialPlacementAction.config_spec?.device_change?[*]`
+/// - `ClusterComputeResource::recommendation.action?[*]→StoragePlacementAction.relocate_spec.device_change?[*]`
+/// 
+/// *(10 of 57 paths)*
 pub trait VirtualDeviceConfigSpecTrait : super::traits::DataObjectTrait {
     /// Type of operation being performed on the specified virtual device.
     /// 
@@ -40768,6 +42469,12 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualDevi
     }
 }
 /// A Subject.
+///
+/// ### How to access
+/// - `GuestAliasManager::remove_guest_alias(subject)`
+/// - `GuestAliasManager::add_guest_alias(alias_info).subject`
+/// - `GuestAliasManager::list_guest_mapped_aliases().subjects[*]`
+/// - `GuestAliasManager::list_guest_aliases().aliases[*].subject`
 pub trait GuestAuthSubjectTrait : super::traits::DataObjectTrait {
 }
 impl<'s> serde::Serialize for dyn GuestAuthSubjectTrait + 's {
@@ -40841,6 +42548,12 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn GuestAuthSu
 ///   for Posix guest files.
 /// - Check *GuestWindowsFileAttributes*
 ///   for Windows guest files.
+///
+/// ### How to access
+/// - `GuestFileManager::change_file_attributes_in_guest(file_attributes)`
+/// - `GuestFileManager::initiate_file_transfer_to_guest(file_attributes)`
+/// - `GuestFileManager::initiate_file_transfer_from_guest().attributes`
+/// - `GuestFileManager::list_files_in_guest().files?[*].attributes`
 pub trait GuestFileAttributesTrait : super::traits::DataObjectTrait {
     /// The date and time the file was last modified.
     /// 
@@ -40952,6 +42665,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn GuestFileAt
 }
 /// GuestAuthentication is an abstract base class for authentication
 /// in the guest.
+///
+/// ### How to access
+/// - `GuestAliasManager::add_guest_alias(auth)`
+/// - `GuestAliasManager::list_guest_aliases(auth)`
+/// - `GuestAliasManager::list_guest_mapped_aliases(auth)`
+/// - `GuestAliasManager::remove_guest_alias(auth)`
+/// - `GuestAliasManager::remove_guest_alias_by_cert(auth)`
+/// - `GuestAuthManager::acquire_credentials_in_guest()`
+/// - `GuestAuthManager::acquire_credentials_in_guest(requested_auth)`
+/// - `GuestAuthManager::release_credentials_in_guest(auth)`
+/// - `GuestAuthManager::validate_credentials_in_guest(auth)`
+/// - `GuestFileManager::change_file_attributes_in_guest(auth)`
+/// 
+/// *(10 of 33 paths)*
 pub trait GuestAuthenticationTrait : super::traits::DataObjectTrait {
     /// This is set to true if the client wants an interactive session
     /// in the guest.
@@ -41039,6 +42766,9 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn GuestAuthen
     }
 }
 /// This describes the arguments to *GuestProcessManager.StartProgramInGuest*.
+///
+/// ### How to access
+/// - `GuestProcessManager::start_program_in_guest(spec)`
 pub trait GuestProgramSpecTrait : super::traits::DataObjectTrait {
     /// The absolute path to the program to start.
     /// 
@@ -41159,6 +42889,10 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn GuestProgra
     }
 }
 /// This describes the registry value data.
+///
+/// ### How to access
+/// - `GuestWindowsRegistryManager::list_registry_values_in_guest().data`
+/// - `GuestWindowsRegistryManager::set_registry_value_in_guest(value).data`
 pub trait GuestRegValueDataSpecTrait : super::traits::DataObjectTrait {
 }
 impl<'s> serde::Serialize for dyn GuestRegValueDataSpecTrait + 's {
@@ -41247,6 +42981,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn GuestRegVal
 /// 
 /// Fault domains IDs are globally
 /// unique.
+///
+/// ### How to access
+/// - `ComputeResource::configuration_ex→ClusterConfigInfoEx.vsan_config_info?→VsanConfigInfoEx.perfsvc_config?.profile?→VirtualMachineDefinedProfileSpec.replication_spec?.replication_group_id.fault_domain_id`
+/// - `ComputeResource::configuration_ex→ClusterConfigInfoEx.vsan_config_info?→VsanConfigInfoEx.iscsi_config?→VsanIscsiTargetServiceSpec.home_object_storage_policy?→VirtualMachineDefinedProfileSpec.replication_spec?.replication_group_id.fault_domain_id`
+/// - `ClusterComputeResource::action_history.action→StoragePlacementAction.relocate_spec.profile?[*]→VirtualMachineDefinedProfileSpec.replication_spec?.replication_group_id.fault_domain_id`
+/// - `ClusterComputeResource::action_history.action→StorageMigrationAction.relocate_spec.profile?[*]→VirtualMachineDefinedProfileSpec.replication_spec?.replication_group_id.fault_domain_id`
+/// - `ClusterComputeResource::action_history.action→PlacementAction.relocate_spec?.profile?[*]→VirtualMachineDefinedProfileSpec.replication_spec?.replication_group_id.fault_domain_id`
+/// - `ClusterComputeResource::action_history.action→ClusterClusterInitialPlacementAction.config_spec?.vm_profile?[*]→VirtualMachineDefinedProfileSpec.replication_spec?.replication_group_id.fault_domain_id`
+/// - `ClusterComputeResource::recommendation.action?[*]→StoragePlacementAction.relocate_spec.profile?[*]→VirtualMachineDefinedProfileSpec.replication_spec?.replication_group_id.fault_domain_id`
+/// - `Folder::create_vm_task(config).vm_profile?[*]→VirtualMachineDefinedProfileSpec.replication_spec?.replication_group_id.fault_domain_id`
+/// - `Folder::create_vm_task(config).device_change?[*].profile?[*]→VirtualMachineDefinedProfileSpec.replication_spec?.replication_group_id.fault_domain_id`
+/// - `Folder::create_cluster_ex(spec).vsan_config?→VsanConfigInfoEx.perfsvc_config?.profile?→VirtualMachineDefinedProfileSpec.replication_spec?.replication_group_id.fault_domain_id`
+/// 
+/// *(10 of 100 paths)*
 pub trait FaultDomainIdTrait : super::traits::DataObjectTrait {
     /// ID of the fault domain.
     fn get_id(&self) -> &str;
@@ -41438,6 +43186,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn FaultDomain
 /// </td>
 /// </tr>
 /// </table>
+///
+/// ### How to access
+/// - `HostSystem::config.vsan_host_config?→VsanHostConfigInfoEx.data_efficiency_info?`
+/// - `ComputeResource::configuration_ex→ClusterConfigInfoEx.vsan_config_info?→VsanConfigInfoEx.data_efficiency_config?`
+/// - `ComputeResource::configuration_ex→ClusterConfigInfoEx.vsan_host_config?[*]→VsanHostConfigInfoEx.data_efficiency_info?`
+/// - `ClusterComputeResource::configuration_ex→ClusterConfigInfoEx.vsan_config_info?→VsanConfigInfoEx.data_efficiency_config?`
+/// - `ClusterComputeResource::configuration_ex→ClusterConfigInfoEx.vsan_host_config?[*]→VsanHostConfigInfoEx.data_efficiency_info?`
+/// - `HostVsanSystem::config→VsanHostConfigInfoEx.data_efficiency_info?`
+/// - `Folder::create_cluster_ex(spec).vsan_config?→VsanConfigInfoEx.data_efficiency_config?`
+/// - `Folder::create_cluster_ex(spec).vsan_host_config_spec?[*]→VsanHostConfigInfoEx.data_efficiency_info?`
+/// - `Folder::add_standalone_host_task(comp_res_spec)→ClusterConfigSpecEx.vsan_config?→VsanConfigInfoEx.data_efficiency_config?`
+/// - `Folder::add_standalone_host_task(comp_res_spec)→ClusterConfigSpecEx.vsan_host_config_spec?[*]→VsanHostConfigInfoEx.data_efficiency_info?`
+/// 
+/// *(10 of 49 paths)*
 pub trait VsanDataEfficiencyConfigTrait : super::traits::DataObjectTrait {
     /// Enables data deduplication and compression on the vSAN cluster.
     /// 
@@ -41519,6 +43281,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VsanDataEff
 /// The datastore configuration of a vSAN cluster.
 /// 
 /// This structure may be used only with operations rendered under `/vsan`.
+///
+/// ### How to access
+/// - `HostSystem::config.vsan_host_config?→VsanHostConfigInfoEx.datastore_info?`
+/// - `ComputeResource::configuration_ex→ClusterConfigInfoEx.vsan_config_info?→VsanConfigInfoEx.datastore_config?`
+/// - `ComputeResource::configuration_ex→ClusterConfigInfoEx.vsan_host_config?[*]→VsanHostConfigInfoEx.datastore_info?`
+/// - `ClusterComputeResource::configuration_ex→ClusterConfigInfoEx.vsan_config_info?→VsanConfigInfoEx.datastore_config?`
+/// - `ClusterComputeResource::configuration_ex→ClusterConfigInfoEx.vsan_host_config?[*]→VsanHostConfigInfoEx.datastore_info?`
+/// - `HostVsanSystem::config→VsanHostConfigInfoEx.datastore_info?`
+/// - `Folder::create_cluster_ex(spec).vsan_config?→VsanConfigInfoEx.datastore_config?`
+/// - `Folder::create_cluster_ex(spec).vsan_host_config_spec?[*]→VsanHostConfigInfoEx.datastore_info?`
+/// - `Folder::add_standalone_host_task(comp_res_spec)→ClusterConfigSpecEx.vsan_config?→VsanConfigInfoEx.datastore_config?`
+/// - `Folder::add_standalone_host_task(comp_res_spec)→ClusterConfigSpecEx.vsan_host_config_spec?[*]→VsanHostConfigInfoEx.datastore_info?`
+/// 
+/// *(10 of 42 paths)*
 pub trait VsanDatastoreConfigTrait : super::traits::DataObjectTrait {
     /// The list of non-default vSAN datastores.
     fn get_datastores(&self) -> &Option<Vec<Box<dyn super::traits::VsanDatastoreSpecTrait>>>;
@@ -41590,6 +43366,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VsanDatasto
 /// The configuration information of a vSAN datastore.
 /// 
 /// This structure may be used only with operations rendered under `/vsan`.
+///
+/// ### How to access
+/// - `HostSystem::config.vsan_host_config?→VsanHostConfigInfoEx.datastore_info?.datastores?[*]`
+/// - `ComputeResource::configuration_ex→ClusterConfigInfoEx.vsan_config_info?→VsanConfigInfoEx.datastore_config?.datastores?[*]`
+/// - `ComputeResource::configuration_ex→ClusterConfigInfoEx.vsan_host_config?[*]→VsanHostConfigInfoEx.datastore_info?.datastores?[*]`
+/// - `ClusterComputeResource::configuration_ex→ClusterConfigInfoEx.vsan_config_info?→VsanConfigInfoEx.datastore_config?.datastores?[*]`
+/// - `ClusterComputeResource::configuration_ex→ClusterConfigInfoEx.vsan_host_config?[*]→VsanHostConfigInfoEx.datastore_info?.datastores?[*]`
+/// - `HostVsanSystem::config→VsanHostConfigInfoEx.datastore_info?.datastores?[*]`
+/// - `Folder::create_cluster_ex(spec).vsan_config?→VsanConfigInfoEx.datastore_config?.datastores?[*]`
+/// - `Folder::create_cluster_ex(spec).vsan_host_config_spec?[*]→VsanHostConfigInfoEx.datastore_info?.datastores?[*]`
+/// - `Folder::add_standalone_host_task(comp_res_spec)→ClusterConfigSpecEx.vsan_config?→VsanConfigInfoEx.datastore_config?.datastores?[*]`
+/// - `Folder::add_standalone_host_task(comp_res_spec)→ClusterConfigSpecEx.vsan_host_config_spec?[*]→VsanHostConfigInfoEx.datastore_info?.datastores?[*]`
+/// 
+/// *(10 of 42 paths)*
 pub trait VsanDatastoreSpecTrait : super::traits::DataObjectTrait {
     /// The UUID of the datastore.
     fn get_uuid(&self) -> &str;
@@ -41672,6 +43462,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VsanDatasto
 /// authenticate with a directory server.
 /// 
 /// This structure may be used only with operations rendered under `/vsan`.
+///
+/// ### How to access
+/// - `ComputeResource::configuration_ex→ClusterConfigInfoEx.vsan_config_info?→VsanConfigInfoEx.file_service_config?.domains?[*].directory_server_config?`
+/// - `ClusterComputeResource::configuration_ex→ClusterConfigInfoEx.vsan_config_info?→VsanConfigInfoEx.file_service_config?.domains?[*].directory_server_config?`
+/// - `Folder::create_cluster_ex(spec).vsan_config?→VsanConfigInfoEx.file_service_config?.domains?[*].directory_server_config?`
+/// - `Folder::add_standalone_host_task(comp_res_spec)→ClusterConfigSpecEx.vsan_config?→VsanConfigInfoEx.file_service_config?.domains?[*].directory_server_config?`
+/// - `Folder::batch_add_hosts_to_cluster_task(comp_res_spec)→ClusterConfigSpecEx.vsan_config?→VsanConfigInfoEx.file_service_config?.domains?[*].directory_server_config?`
+/// - `Folder::batch_add_standalone_hosts_task(comp_res_spec)→ClusterConfigSpecEx.vsan_config?→VsanConfigInfoEx.file_service_config?.domains?[*].directory_server_config?`
+/// - `StoragePod::create_cluster_ex(spec).vsan_config?→VsanConfigInfoEx.file_service_config?.domains?[*].directory_server_config?`
+/// - `StoragePod::add_standalone_host_task(comp_res_spec)→ClusterConfigSpecEx.vsan_config?→VsanConfigInfoEx.file_service_config?.domains?[*].directory_server_config?`
+/// - `StoragePod::batch_add_hosts_to_cluster_task(comp_res_spec)→ClusterConfigSpecEx.vsan_config?→VsanConfigInfoEx.file_service_config?.domains?[*].directory_server_config?`
+/// - `StoragePod::batch_add_standalone_hosts_task(comp_res_spec)→ClusterConfigSpecEx.vsan_config?→VsanConfigInfoEx.file_service_config?.domains?[*].directory_server_config?`
+/// 
+/// *(10 of 29 paths)*
 pub trait VsanDirectoryServerConfigTrait : super::traits::DataObjectTrait {
 }
 impl<'s> serde::Serialize for dyn VsanDirectoryServerConfigTrait + 's {
@@ -42035,6 +43839,10 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn EntityResou
 /// simulation.
 /// 
 /// This structure may be used only with operations rendered under `/vsan`.
+///
+/// ### How to access
+/// - `VsanResourceCheckSystem::vsan_get_resource_check_status().result?.fault_domains?[*].hosts?[*].disk_groups?[*].cache_tier_disk?`
+/// - `VsanResourceCheckSystem::vsan_get_resource_check_status().result?.fault_domains?[*].hosts?[*].disk_groups?[*].capacity_tier_disks?[*]`
 pub trait VsanDiskResourceCheckResultTrait : super::traits::EntityResourceCheckDetailsTrait {
 }
 impl<'s> serde::Serialize for dyn VsanDiskResourceCheckResultTrait + 's {
@@ -42103,6 +43911,9 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VsanDiskRes
 /// *VsanResourceCheckSpec*.
 /// 
 /// This structure may be used only with operations rendered under `/vsan`.
+///
+/// ### How to access
+/// - `VsanResourceCheckSystem::vsan_get_resource_check_status().result?`
 pub trait VsanResourceCheckResultTrait : super::traits::EntityResourceCheckDetailsTrait {
     /// The timestamp when the resource check result is generated.
     /// 
@@ -42311,6 +44122,10 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VsanResourc
 /// e.g., regular vSAN or vSphere data persistence platform.
 /// 
 /// This structure may be used only with operations rendered under `/vsan`.
+///
+/// ### How to access
+/// - `VsanResourceCheckSystem::vsan_get_resource_check_status().component_results?[*]`
+/// - `VsanResourceCheckSystem::vsan_get_resource_check_status().result?⇒VsanResourceCheckComponentResultTrait`
 pub trait VsanResourceCheckComponentResultTrait : super::traits::VsanResourceCheckResultTrait {
     /// The type of the component resource check result that is queried.
     /// 
@@ -42394,6 +44209,10 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VsanResourc
 /// precheck status and reason for a specific type of precheck.
 /// 
 /// This structure may be used only with operations rendered under `/vsan`.
+///
+/// ### How to access
+/// - `VsanRemoteDatastoreSystem::mount_precheck().result?[*]`
+/// - `VsanRemoteDatastoreSystem::remote_vc_mount_precheck().result?[*]`
 pub trait VsanMountPrecheckItemTrait : super::traits::DataObjectTrait {
     /// The type of precheck for mounting remote vSAN datastore.
     /// 
@@ -42513,6 +44332,10 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VsanMountPr
 /// Result for all types of remote vSAN mounting prechecks.
 /// 
 /// This structure may be used only with operations rendered under `/vsan`.
+///
+/// ### How to access
+/// - `VsanRemoteDatastoreSystem::mount_precheck()`
+/// - `VsanRemoteDatastoreSystem::remote_vc_mount_precheck()`
 pub trait VsanMountPrecheckResultTrait : super::traits::DataObjectTrait {
     /// A list of precheck results of supported check items.
     /// 
@@ -42588,6 +44411,15 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VsanMountPr
 /// It is used to connect to the remote vCenter from the local.
 /// 
 /// This structure may be used only with operations rendered under `/vsan`.
+///
+/// ### How to access
+/// - `VsanRemoteDatastoreSystem::vsan_query_hci_mesh_datastores(extra_vc_infos)`
+/// - `VsanRemoteDatastoreSystem::vsan_create_datastore_source(datastore_source).vc_info`
+/// - `VsanRemoteDatastoreSystem::vsan_destroy_datastore_source(datastore_source).vc_info`
+/// - `VsanRemoteDatastoreSystem::vsan_precheck_datastore_source(datastore_source).vc_info`
+/// - `VsanRemoteDatastoreSystem::vsan_query_datastore_source().vc_info`
+/// 
+/// *(5 of 6 paths)*
 pub trait VsanRemoteVcInfoTrait : super::traits::DataObjectTrait {
     /// The link type about how the remote vCenter is linked.
     /// 
@@ -42675,6 +44507,10 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VsanRemoteV
 /// the resource check is launched by a parent task.
 /// 
 /// This structure may be used only with operations rendered under `/vsan`.
+///
+/// ### How to access
+/// - `VsanResourceCheckSystem::vsan_get_resource_check_status().task?`
+/// - `VsanResourceCheckSystem::vsan_get_resource_check_status().parent_task?`
 pub trait VsanResourceCheckTaskDetailsTrait : super::traits::DataObjectTrait {
     /// The managed object of the task.
     /// 
@@ -42763,6 +44599,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VsanResourc
 /// Define virtual IP (VIP) specification.
 /// 
 /// This structure may be used only with operations rendered under `/vsan`.
+///
+/// ### How to access
+/// - `ComputeResource::configuration_ex→ClusterConfigInfoEx.vsan_config_info?→VsanConfigInfoEx.iscsi_config?.vip_configs?[*]`
+/// - `ClusterComputeResource::configuration_ex→ClusterConfigInfoEx.vsan_config_info?→VsanConfigInfoEx.iscsi_config?.vip_configs?[*]`
+/// - `Folder::create_cluster_ex(spec).vsan_config?→VsanConfigInfoEx.iscsi_config?.vip_configs?[*]`
+/// - `Folder::add_standalone_host_task(comp_res_spec)→ClusterConfigSpecEx.vsan_config?→VsanConfigInfoEx.iscsi_config?.vip_configs?[*]`
+/// - `Folder::batch_add_hosts_to_cluster_task(comp_res_spec)→ClusterConfigSpecEx.vsan_config?→VsanConfigInfoEx.iscsi_config?.vip_configs?[*]`
+/// - `Folder::batch_add_standalone_hosts_task(comp_res_spec)→ClusterConfigSpecEx.vsan_config?→VsanConfigInfoEx.iscsi_config?.vip_configs?[*]`
+/// - `StoragePod::create_cluster_ex(spec).vsan_config?→VsanConfigInfoEx.iscsi_config?.vip_configs?[*]`
+/// - `StoragePod::add_standalone_host_task(comp_res_spec)→ClusterConfigSpecEx.vsan_config?→VsanConfigInfoEx.iscsi_config?.vip_configs?[*]`
+/// - `StoragePod::batch_add_hosts_to_cluster_task(comp_res_spec)→ClusterConfigSpecEx.vsan_config?→VsanConfigInfoEx.iscsi_config?.vip_configs?[*]`
+/// - `StoragePod::batch_add_standalone_hosts_task(comp_res_spec)→ClusterConfigSpecEx.vsan_config?→VsanConfigInfoEx.iscsi_config?.vip_configs?[*]`
+/// 
+/// *(10 of 20 paths)*
 pub trait VsanIscsiVipConfigSpecTrait : super::traits::DataObjectTrait {
     /// Whether virtual IP (VIP) is enabled or not, disabled if it is not specified.
     fn get_enabled(&self) -> Option<bool>;
@@ -42865,6 +44715,11 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VsanIscsiVi
 /// Base class for all vSAN configuration issues.
 /// 
 /// This structure may be used only with operations rendered under `/vsan`.
+///
+/// ### How to access
+/// - `VsanVcClusterHealthSystem::vsan_query_vc_cluster_health_summary().vsan_config?.issues?[*]`
+/// - `VsanVcClusterHealthSystem::vsan_query_cluster_historical_health().vsan_config?.issues?[*]`
+/// - `VsanResourceCheckSystem::vsan_get_resource_check_status().result?.health?.vsan_config?.issues?[*]`
 pub trait VsanConfigBaseIssueTrait : super::traits::DataObjectTrait {
 }
 impl<'s> serde::Serialize for dyn VsanConfigBaseIssueTrait + 's {
@@ -42932,6 +44787,11 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VsanConfigB
 /// Base class for all vSAN network configuration issues.
 /// 
 /// This structure may be used only with operations rendered under `/vsan`.
+///
+/// ### How to access
+/// - `VsanVcClusterHealthSystem::vsan_query_vc_cluster_health_summary().network_config?.issues?[*]`
+/// - `VsanVcClusterHealthSystem::vsan_query_cluster_historical_health().network_config?.issues?[*]`
+/// - `VsanResourceCheckSystem::vsan_get_resource_check_status().result?.health?.network_config?.issues?[*]`
 pub trait VsanNetworkConfigBaseIssueTrait : super::traits::DataObjectTrait {
 }
 impl<'s> serde::Serialize for dyn VsanNetworkConfigBaseIssueTrait + 's {
@@ -43024,6 +44884,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VsanNetwork
 /// output datatype when retrieving current cluster-wide VSAN service settings.
 /// 
 /// See also *ComputeResource.ReconfigureComputeResource_Task*.
+///
+/// ### How to access
+/// - `ComputeResource::configuration_ex→ClusterConfigInfoEx.vsan_config_info?`
+/// - `ClusterComputeResource::configuration_ex→ClusterConfigInfoEx.vsan_config_info?`
+/// - `Folder::create_cluster_ex(spec).vsan_config?`
+/// - `Folder::add_standalone_host_task(comp_res_spec)→ClusterConfigSpecEx.vsan_config?`
+/// - `Folder::batch_add_hosts_to_cluster_task(comp_res_spec)→ClusterConfigSpecEx.vsan_config?`
+/// - `Folder::batch_add_standalone_hosts_task(comp_res_spec)→ClusterConfigSpecEx.vsan_config?`
+/// - `StoragePod::create_cluster_ex(spec).vsan_config?`
+/// - `StoragePod::add_standalone_host_task(comp_res_spec)→ClusterConfigSpecEx.vsan_config?`
+/// - `StoragePod::batch_add_hosts_to_cluster_task(comp_res_spec)→ClusterConfigSpecEx.vsan_config?`
+/// - `StoragePod::batch_add_standalone_hosts_task(comp_res_spec)→ClusterConfigSpecEx.vsan_config?`
+/// 
+/// *(10 of 19 paths)*
 pub trait VsanClusterConfigInfoTrait : super::traits::DataObjectTrait {
     /// Whether the VSAN service is enabled for the cluster.
     fn get_enabled(&self) -> Option<bool>;
@@ -43117,6 +44991,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VsanCluster
 /// This data object is used both for specifying
 /// settings for updating the VSAN service, and as an output datatype
 /// when retrieving current VSAN service settings.
+///
+/// ### How to access
+/// - `HostSystem::config.vsan_host_config?`
+/// - `ComputeResource::configuration_ex→ClusterConfigInfoEx.vsan_host_config?[*]`
+/// - `ClusterComputeResource::configuration_ex→ClusterConfigInfoEx.vsan_host_config?[*]`
+/// - `HostVsanSystem::config`
+/// - `Folder::create_cluster_ex(spec).vsan_host_config_spec?[*]`
+/// - `Folder::add_standalone_host_task(comp_res_spec)→ClusterConfigSpecEx.vsan_host_config_spec?[*]`
+/// - `Folder::batch_add_hosts_to_cluster_task(comp_res_spec)→ClusterConfigSpecEx.vsan_host_config_spec?[*]`
+/// - `Folder::batch_add_standalone_hosts_task(comp_res_spec)→ClusterConfigSpecEx.vsan_host_config_spec?[*]`
+/// - `StoragePod::create_cluster_ex(spec).vsan_host_config_spec?[*]`
+/// - `StoragePod::add_standalone_host_task(comp_res_spec)→ClusterConfigSpecEx.vsan_host_config_spec?[*]`
+/// 
+/// *(10 of 17 paths)*
 pub trait VsanHostConfigInfoTrait : super::traits::DataObjectTrait {
     /// Whether the VSAN service is currently enabled on this host.
     fn get_enabled(&self) -> Option<bool>;
@@ -43235,6 +45123,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VsanHostCon
 /// configuration for use by the VSAN service.
 /// 
 /// See also *HostVirtualNic*.
+///
+/// ### How to access
+/// - `HostSystem::config.vsan_host_config?.network_info?.port?[*]`
+/// - `ComputeResource::configuration_ex→ClusterConfigInfoEx.vsan_host_config?[*].network_info?.port?[*]`
+/// - `ClusterComputeResource::configuration_ex→ClusterConfigInfoEx.vsan_host_config?[*].network_info?.port?[*]`
+/// - `HostVsanSystem::config.network_info?.port?[*]`
+/// - `Folder::create_cluster_ex(spec).vsan_host_config_spec?[*].network_info?.port?[*]`
+/// - `Folder::add_standalone_host_task(comp_res_spec)→ClusterConfigSpecEx.vsan_host_config_spec?[*].network_info?.port?[*]`
+/// - `Folder::batch_add_hosts_to_cluster_task(comp_res_spec)→ClusterConfigSpecEx.vsan_host_config_spec?[*].network_info?.port?[*]`
+/// - `Folder::batch_add_standalone_hosts_task(comp_res_spec)→ClusterConfigSpecEx.vsan_host_config_spec?[*].network_info?.port?[*]`
+/// - `StoragePod::create_cluster_ex(spec).vsan_host_config_spec?[*].network_info?.port?[*]`
+/// - `StoragePod::add_standalone_host_task(comp_res_spec)→ClusterConfigSpecEx.vsan_host_config_spec?[*].network_info?.port?[*]`
+/// 
+/// *(10 of 17 paths)*
 pub trait VsanHostConfigInfoNetworkInfoPortConfigTrait : super::traits::DataObjectTrait {
     /// *VsanHostIpConfig* for this PortConfig.
     fn get_ip_config(&self) -> &Option<Box<dyn super::traits::VsanHostIpConfigTrait>>;
@@ -43315,6 +45217,9 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VsanHostCon
 /// the VSAN service.
 /// 
 /// See also *HostVsanSystem.QueryDisksForVsan*, *HostVsanSystem.UpdateVsan_Task*, *VsanHostDiskResultState_enum*.
+///
+/// ### How to access
+/// - `HostVsanSystem::query_disks_for_vsan()`
 pub trait VsanHostDiskResultTrait : super::traits::DataObjectTrait {
     /// Disk for this result.
     fn get_disk(&self) -> &super::structs::HostScsiDisk;
@@ -43414,6 +45319,20 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VsanHostDis
 /// represented by *VsanHostConfigInfoNetworkInfoPortConfig*.
 /// 
 /// See also *VsanHostConfigInfoNetworkInfo*, *VsanHostConfigInfoNetworkInfo.port*, *VsanHostConfigInfoNetworkInfoPortConfig*, *HostVsanSystem.UpdateVsan_Task*.
+///
+/// ### How to access
+/// - `HostSystem::config.vsan_host_config?.network_info?.port?[*].ip_config?`
+/// - `ComputeResource::configuration_ex→ClusterConfigInfoEx.vsan_host_config?[*].network_info?.port?[*].ip_config?`
+/// - `ClusterComputeResource::configuration_ex→ClusterConfigInfoEx.vsan_host_config?[*].network_info?.port?[*].ip_config?`
+/// - `HostVsanSystem::config.network_info?.port?[*].ip_config?`
+/// - `Folder::create_cluster_ex(spec).vsan_host_config_spec?[*].network_info?.port?[*].ip_config?`
+/// - `Folder::add_standalone_host_task(comp_res_spec)→ClusterConfigSpecEx.vsan_host_config_spec?[*].network_info?.port?[*].ip_config?`
+/// - `Folder::batch_add_hosts_to_cluster_task(comp_res_spec)→ClusterConfigSpecEx.vsan_host_config_spec?[*].network_info?.port?[*].ip_config?`
+/// - `Folder::batch_add_standalone_hosts_task(comp_res_spec)→ClusterConfigSpecEx.vsan_host_config_spec?[*].network_info?.port?[*].ip_config?`
+/// - `StoragePod::create_cluster_ex(spec).vsan_host_config_spec?[*].network_info?.port?[*].ip_config?`
+/// - `StoragePod::add_standalone_host_task(comp_res_spec)→ClusterConfigSpecEx.vsan_host_config_spec?[*].network_info?.port?[*].ip_config?`
+/// 
+/// *(10 of 17 paths)*
 pub trait VsanHostIpConfigTrait : super::traits::DataObjectTrait {
     /// Agent-to-master multicast IP address.
     fn get_upstream_ip_address(&self) -> &str;
@@ -43809,6 +45728,11 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn BaseConfigI
 }
 /// Specification of the backing of a virtual
 /// storage object.
+///
+/// ### How to access
+/// - `HostVStorageObjectManager::host_create_disk_task(spec).backing_spec`
+/// - `VcenterVStorageObjectManager::create_disk_task(spec).backing_spec`
+/// - `VslmVStorageObjectManager::vslm_create_disk_task(spec).backing_spec`
 pub trait VslmCreateSpecBackingSpecTrait : super::traits::DataObjectTrait {
     /// The datastore managed object where this backing is located.
     /// 
@@ -44030,6 +45954,12 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VslmMigrate
 /// recursion to the derived object by name.
 /// 
 /// Names are meaningful only within the same FilterSpec.
+///
+/// ### How to access
+/// - `PropertyFilter::spec.object_set[*].select_set?[*]`
+/// - `PropertyCollector::create_filter(spec).object_set[*].select_set?[*]`
+/// - `PropertyCollector::retrieve_properties(spec_set).object_set[*].select_set?[*]`
+/// - `PropertyCollector::retrieve_properties_ex(spec_set).object_set[*].select_set?[*]`
 pub trait SelectionSpecTrait : super::traits::DataObjectTrait {
     /// Name of the selection specification.
     fn get_name(&self) -> &Option<String>;
@@ -44103,6 +46033,9 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn SelectionSp
 /// Task reasons represent the kind of entity responsible for a task's creation.
 /// 
 /// This structure may be used only with operations rendered under `/vslm`.
+///
+/// ### How to access
+/// - `VslmTask::vslm_query_info().reason`
 pub trait VslmTaskReasonTrait : super::traits::DataObjectTrait {
 }
 impl<'s> serde::Serialize for dyn VslmTaskReasonTrait + 's {

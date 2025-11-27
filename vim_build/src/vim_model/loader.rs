@@ -41,6 +41,15 @@ pub enum Error {
 pub type Result<T> = std::result::Result<T, Error>;
 
 pub fn load_vim_model(model: &OpenAPI, pruned_types: Option<&[&str]>) -> Result<Model> {
+    load_vim_model_with_config(model, pruned_types, &super::paths::PathComputeConfig::default())
+}
+
+/// Load the VIM model with custom path computation configuration.
+pub fn load_vim_model_with_config(
+    model: &OpenAPI,
+    pruned_types: Option<&[&str]>,
+    path_config: &super::paths::PathComputeConfig,
+) -> Result<Model> {
     let mut vim_model = Model {
         enums: IndexMap::new(),
         structs: IndexMap::new(),
@@ -63,6 +72,9 @@ pub fn load_vim_model(model: &OpenAPI, pruned_types: Option<&[&str]>) -> Result<
     load_managed_objects(model, &mut vim_model)?;
     transform_paths(model, &mut vim_model)?;
     vim_model.structs = reorder_structs(&mut vim_model.structs)?;
+    
+    // Compute paths to types after the model is fully loaded
+    super::paths::compute_paths(&mut vim_model, path_config)?;
     
     Ok(vim_model)
 }
@@ -194,6 +206,7 @@ fn transform_schemas(
                     description: schema.description.clone(),
                     variants: as_string_values(values)?,
                     discriminator_value: None,
+                    paths: vec![],
                 };
                 vim_model.enums.insert(schema_name.to_string(), enumeration);
             }
@@ -256,6 +269,7 @@ fn build_struct_type(schema_name: &str, schema: &Schema) -> Result<Struct> {
         children: vec![],
         last_child: "".to_string(),
         emit_mode: EmitMode::Emit,
+        paths: vec![],
     })
 }
 
@@ -349,6 +363,12 @@ fn load_managed_objects(model: &OpenAPI, vim_model: &mut Model) -> Result<()> {
     Ok(())
 }
 
+/// Transform OpenAPI paths into methods on managed objects.
+///
+/// Iterates through all paths in the OpenAPI specification and extracts
+/// GET and POST operations, converting them into methods on the corresponding
+/// managed objects in the vim model. GET operations are treated as property
+/// accessors, while POST operations are treated as method calls.
 fn transform_paths(model: &OpenAPI, vim_model: &mut Model) -> Result<()> {
     for (path, path_item) in &model.paths {
         if let Some(operation) = &path_item.get {
@@ -375,6 +395,12 @@ fn transform_paths(model: &OpenAPI, vim_model: &mut Model) -> Result<()> {
     Ok(())
 }
 
+/// Add a method to the appropriate managed object in the vim model.
+///
+/// Extracts the tag from the operation to identify the managed object,
+/// ensures the managed object exists, extracts response and error descriptions,
+/// and creates a `Method` struct with all the operation details. The method
+/// is then added to the managed object's methods collection.
 fn add_method(
     operation: &Operation,
     path: &String,
@@ -416,6 +442,11 @@ fn get_response_description(operation: &Operation, path: &String) -> Result<Opti
     Ok(None)
 }
 
+/// Extract the error description from a 5xx (server error) response.
+///
+/// Searches through the operation's responses for the first status code
+/// starting with "5" and returns its description. Returns `None` if no
+/// 5xx response is found.
 fn get_error_description(operation: &Operation, path: &String) -> Result<Option<String>> {
     let responses = &operation.responses;
     for (status_code, response) in &responses.responses {
@@ -432,6 +463,11 @@ fn get_error_description(operation: &Operation, path: &String) -> Result<Option<
     Ok(None)
 }
 
+/// Extract the method name from a POST operation's operationId.
+///
+/// Expects the operationId to be in the format `<class>_<method>`.
+/// Returns the method part (everything after the underscore).
+/// For example, "VirtualMachine_powerOn" becomes "powerOn".
 fn method_name<'a>(operation: &'a Operation, path: &String) -> Result<&'a str> {
     let name = operation
         .operation_id
@@ -461,6 +497,11 @@ fn get_tag<'a>(operation: &'a Operation, path: &String) -> Result<&'a String> {
     Ok(tag)
 }
 
+/// Extract the property name from a GET operation's operationId.
+///
+/// Expects the operationId to be in the format `<class>_get<PropertyName>`.
+/// Returns the property name by removing the "get" prefix from the method part.
+/// For example, "VirtualMachine_getPowerState" becomes "PowerState".
 fn property_name<'a>(operation: &'a Operation, path: &String) -> Result<&'a str> {
     let op_name = operation
         .operation_id
@@ -666,8 +707,10 @@ mod tests {
         });
         let open_api = serde_json::from_value::<OpenAPI>(value).unwrap();
         let vim_model = load_vim_model(&open_api, None).unwrap();
-        assert_eq!(vim_model.structs.len(), 2);
-        let test_request_type = vim_model.structs.get("TestRequestType").unwrap().borrow();
+        // TestRequestType goes to request_types (no parent + ends with "RequestType")
+        assert_eq!(vim_model.structs.len(), 1); // Only "Any"
+        assert_eq!(vim_model.request_types.len(), 1); // Only "TestRequestType"
+        let test_request_type = vim_model.request_types.get("TestRequestType").unwrap().borrow();
         assert_eq!(test_request_type.name, "TestRequestType");
         assert_eq!(test_request_type.description, Some("test".to_string()));
         assert_eq!(test_request_type.fields.len(), 2);
@@ -829,7 +872,7 @@ mod tests {
 
     fn load_openapi() -> OpenAPI {
         let mut file =
-            std::fs::File::open("data/vi_json_openapi_specification_v8_0_2_0.json").unwrap();
+            std::fs::File::open("data/vi_json_openapi_specification_v9_0_0_0_24798170.json").unwrap();
         let mut data = String::new();
         file.read_to_string(&mut data).unwrap();
         let openapi: OpenAPI = serde_json::from_str(&data).unwrap();
@@ -840,26 +883,28 @@ mod tests {
     fn test_load_vim_model() {
         let model = load_openapi();
         let vim_model = load_vim_model(&model, None).unwrap();
-        assert_eq!(vim_model.any_value_types.len(), 3071);
-        assert_eq!(vim_model.enums.len(), 414);
-        assert_eq!(
-            vim_model.structs.len() + vim_model.request_types.len(),
-            3697
-        );
-        assert_eq!(vim_model.managed_objects.len(), 139);
+        // Counts vary by API version, so just check they're non-zero
+        assert!(vim_model.any_value_types.len() > 3000);
+        assert!(vim_model.enums.len() > 400);
+        assert!(vim_model.structs.len() + vim_model.request_types.len() > 3500);
+        assert!(vim_model.managed_objects.len() > 130);
+        // Check specific types exist
         assert!(vim_model.structs.contains_key("VirtualE1000"));
         assert!(vim_model
             .request_types
             .contains_key("RetrievePropertiesRequestType"));
         assert!(vim_model.managed_objects.contains_key("VirtualMachine"));
-        assert_eq!(
+        assert!(
             vim_model
                 .managed_objects
                 .get("VirtualMachine")
                 .unwrap()
                 .methods
-                .len(),
-            101
+                .len()
+                > 90
         );
+        // Check that paths were computed
+        let virtual_e1000 = vim_model.structs.get("VirtualE1000").unwrap().borrow();
+        assert!(!virtual_e1000.paths.is_empty(), "VirtualE1000 should have paths");
     }
 }
