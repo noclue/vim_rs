@@ -3602,6 +3602,7 @@ dependencies = [
  "bincode",
  "chrono",
  "fastembed",
+ "indexmap",
  "ort",
  "phf",
  "rayon",

@@ -4,6 +4,7 @@ use vim_build::rs_emitter::names::TypeDefResolver;
 use std::path::Path;
 use chrono::Utc;
 use tracing::info;
+use std::collections::{HashMap, HashSet};
 
 fn format_vim_type(dt: &DataType) -> String {
     match dt {
@@ -218,4 +219,5 @@ fn collect_all_descendants(model: &Model, name: &str) -> Vec<String> {
     descendants.dedup();
     descendants
 }
+
 

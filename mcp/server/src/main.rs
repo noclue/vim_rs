@@ -66,7 +66,7 @@ struct SemanticSearchInput {
     limit: usize,
 
     /// Filter by item type
-    #[schemars(description = "Filter results by type: 'all', 'managed_objects', 'methods', 'structures', 'enums', or 'examples', 'guides' (default: 'all')")]
+    #[schemars(description = "Filter results by type: 'all', 'managed_objects', 'methods', 'structures', 'enums', 'fields', 'examples', or 'guides' (default: 'all')")]
     #[serde(default = "default_filter")]
     filter: String,
 }
@@ -140,6 +140,18 @@ struct GetMethodInput {
     method_name: String,
 }
 
+/// Input parameters for get_field tool
+#[derive(Serialize, Deserialize, JsonSchema)]
+struct GetFieldInput {
+    /// The owner type name (e.g., "VirtualHardware")
+    #[schemars(description = "The structure type that owns this field")]
+    owner_type: String,
+    
+    /// The field name (e.g., "device", "mac_address")
+    #[schemars(description = "The field name in snake_case (e.g., 'device', 'mac_address')")]
+    field_name: String,
+}
+
 #[tool_router]
 impl McpServer {
     async fn new() -> Result<Self> {
@@ -158,7 +170,7 @@ impl McpServer {
             warn!("⚠️  WARNING: No guide chunks loaded! Check that guides are in {}", mcp_data_dir.join("guides").display());
         } else {
             // Log a sample guide to verify they're loading correctly
-            if let Some(first_guide) = api_data.guides.first() {
+            if let Some(first_guide) = api_data.guides.values().next() {
                 info!("Sample guide loaded: {} > {} > {} (chunk_id: {})", 
                     first_guide.heading_h1, 
                     first_guide.heading_h2, 
@@ -251,8 +263,7 @@ impl McpServer {
     async fn get_example(&self, params: Parameters<GetExampleInput>) -> Result<CallToolResult, McpError> {
         let name = &params.0.name;
 
-        let example = self.api_data.examples.iter()
-            .find(|e| e.name == *name);
+        let example = self.api_data.examples.get(name);
 
         if let Some(ex) = example {
             let output = format!(
@@ -276,8 +287,7 @@ impl McpServer {
     async fn get_guide(&self, params: Parameters<GetGuideInput>) -> Result<CallToolResult, McpError> {
         let chunk_id = &params.0.chunk_id;
 
-        let guide = self.api_data.guides.iter()
-            .find(|g| g.chunk_id == *chunk_id);
+        let guide = self.api_data.guides.get(chunk_id);
 
         if let Some(g) = guide {
             let topics = if g.topics.is_empty() {
@@ -448,7 +458,7 @@ impl McpServer {
         let mut output = String::new();
 
         // Look up trait
-        if let Some(trait_info) = self.api_data.traits.iter().find(|t| t.rust_name == *type_name) {
+        if let Some(trait_info) = self.api_data.traits.get(type_name) {
             output.push_str(&format!("# Trait: {}\n\n", trait_info.rust_name));
             output.push_str(&format!("**Module:** `{}`\n", trait_info.rust_module));
             output.push_str(&format!("**Original Type:** `{}`\n\n", trait_info.name));
@@ -516,10 +526,14 @@ impl McpServer {
             return Ok(CallToolResult::success(vec![Content::text(output)]));
         }
 
-        // Check if it's a managed object
-        if let Some(mo_info) = self.api_data.managed_objects.iter().find(|m|
-            m.name == *type_name || m.rust_struct == *type_name
-        ) {
+        // Check if it's a managed object (try rust_struct first, then name)
+        let mo_info = self.api_data.managed_objects.get(type_name)
+            .or_else(|| {
+                self.api_data.managed_objects_by_name.get(type_name)
+                    .and_then(|rust_struct| self.api_data.managed_objects.get(rust_struct))
+            });
+        
+        if let Some(mo_info) = mo_info {
             output.push_str(&format!("# Managed Object: {}\n\n", mo_info.rust_struct));
             output.push_str(&format!("**Module:** `{}`\n", mo_info.rust_module));
             output.push_str(&format!("**VIM Type:** `{}`\n\n", mo_info.name));
@@ -543,10 +557,14 @@ impl McpServer {
             return Ok(CallToolResult::success(vec![Content::text(output)]));
         }
 
-        // Check if it's a struct
-        if let Some(struct_info) = self.api_data.data_structures.iter().find(|s|
-            s.name == *type_name || s.rust_name == *type_name
-        ) {
+        // Check if it's a struct (try rust_name first, then name)
+        let struct_info = self.api_data.data_structures.get(type_name)
+            .or_else(|| {
+                self.api_data.data_structures_by_name.get(type_name)
+                    .and_then(|rust_name| self.api_data.data_structures.get(rust_name))
+            });
+        
+        if let Some(struct_info) = struct_info {
             output.push_str(&format!("# Struct: {}\n\n", struct_info.rust_name));
             output.push_str(&format!("**Module:** `{}`\n", struct_info.rust_module));
             output.push_str(&format!("**Emit Mode:** {}\n\n", struct_info.emit_mode));
@@ -626,10 +644,14 @@ impl McpServer {
             return Ok(CallToolResult::success(vec![Content::text(output)]));
         }
 
-        // Check if it's an enum
-        if let Some(enum_info) = self.api_data.enumerations.iter().find(|e|
-            e.name == *type_name || e.rust_name == *type_name
-        ) {
+        // Check if it's an enum (try rust_name first, then name)
+        let enum_info = self.api_data.enumerations.get(type_name)
+            .or_else(|| {
+                self.api_data.enumerations_by_name.get(type_name)
+                    .and_then(|rust_name| self.api_data.enumerations.get(rust_name))
+            });
+        
+        if let Some(enum_info) = enum_info {
             output.push_str(&format!("# Enum: {}\n\n", enum_info.rust_name));
             output.push_str(&format!("**Module:** `{}`\n\n", enum_info.rust_module));
 
@@ -686,10 +708,12 @@ impl McpServer {
         let method_name = &params.0.method_name;
         let mut output = String::new();
 
-        // Find the managed object
-        let mo_info = self.api_data.managed_objects.iter().find(|m|
-            m.name == *managed_object || m.rust_struct == *managed_object
-        );
+        // Find the managed object (try rust_struct first, then name)
+        let mo_info = self.api_data.managed_objects.get(managed_object)
+            .or_else(|| {
+                self.api_data.managed_objects_by_name.get(managed_object)
+                    .and_then(|rust_struct| self.api_data.managed_objects.get(rust_struct))
+            });
 
         let mo_info = match mo_info {
             Some(mo) => mo,
@@ -808,6 +832,57 @@ impl McpServer {
         Ok(CallToolResult::success(vec![Content::text(output)]))
     }
 
+    /// Get detailed field information including type, documentation, and ALL field paths from managed objects.
+    #[tool(description = "Get comprehensive field information including type, documentation, and ALL field paths from managed objects. Use this to discover how to access deeply nested fields in vim_retrievable! macros.")]
+    async fn get_field(&self, params: Parameters<GetFieldInput>) -> Result<CallToolResult, McpError> {
+        let owner_type = &params.0.owner_type;
+        let field_name = &params.0.field_name;
+        
+        // Find field in data_structures
+        if let Some(field) = self.api_data.get_field(owner_type, field_name) {
+        
+            let mut output = String::new();
+            output.push_str(&format!("# Field: {}.{}\n\n", owner_type, field_name));
+            output.push_str(&format!("**VIM Name:** `{}`\n", field.name));
+            output.push_str(&format!("**Rust Type:** `{}`\n", field.rust_type));
+            output.push_str(&format!("**Required:** {}\n\n", field.required));
+            
+            if field.is_array {
+                output.push_str("**Array:** Yes\n\n");
+            }
+            
+            if let Some(doc) = &field.description {
+                output.push_str("## Documentation\n\n");
+                output.push_str(doc);
+                output.push_str("\n\n");
+            }
+            
+            // Referenced type docs
+            let struct_info = self.api_data.get_data_structure(owner_type);
+            if let Some(struct_info) = struct_info {
+                if let Some(ref type_doc) = struct_info.description {
+                    output.push_str(&format!("## Part of Structure: {}\n\n", struct_info.rust_name));
+                    output.push_str(type_doc);
+                    output.push_str("\n\n");
+                    
+                    if !struct_info.all_descendants.is_empty() {
+                        output.push_str(&format!(
+                            "*Polymorphic type with {} descendants. Use CastInto trait for downcasting.*\n\n",
+                            struct_info.all_descendants.len()
+                        ));
+                    }
+                }
+            }
+            Ok(CallToolResult::success(vec![Content::text(output)]))
+        }
+        else {
+            return Ok(CallToolResult::success(vec![Content::text(format!(
+                "Field '{}.{}' not found. Use search with filter='fields'.",
+                owner_type, field_name
+            ))]));
+        }
+    }
+
     /// Semantic search using natural language queries (requires embeddings)
     #[cfg(feature = "embeddings")]
     #[tool(description = "Search vSphere documentation using natural language queries. Returns Rust managed objects, methods, structures, enums, examples, and guides based on meaning, not just keywords. Use filter='guides' to search only documentation guides.")]
@@ -873,6 +948,7 @@ impl McpServer {
                     "examples" => "example",
                     "guides" => "guide",
                     "managed_objects" => "managed_object",
+                    "fields" => "field",
                     _ => "all"
                 };
                 
@@ -883,8 +959,8 @@ impl McpServer {
 
             // Format result based on item type
             let details = match record.item_type.as_str() {
-                "managed_object" => {
-                    if let Some(managed_object) = self.api_data.managed_objects.iter().find(|m| m.name == record.item_name) {
+                "managed_object" => {                    
+                    if let Some(managed_object) = self.api_data.get_managed_object(&record.object_name) {
                         Some(format!(
                             "## {}\n\n**Rust Struct:** `{}`\n\n**Rust Module:** `{}`\n\n**Description:**\n{}\n\n---\n",
                             managed_object.name,
@@ -899,25 +975,24 @@ impl McpServer {
                 "method" => {
                     // Find the method
                     let mut result = None;
-                    for mo in &self.api_data.managed_objects {
+                    if let Some(mo) = self.api_data.get_managed_object(&record.object_name) {
                         if let Some(method) = mo.methods.iter().find(|m| m.name == record.item_name) {
                             let desc = method.description.as_deref().unwrap_or("No description");
                             result = Some(format!(
                                 "## {}.{}\n\n**Rust:** `{}`\n\n**Signature:**\n```rust\n{}\n```\n\n**Description:**\n{}\n\n**Related Types:** {}\n\n---\n",
-                                mo.name,
+                                mo.rust_struct,
                                 method.name,
                                 method.rust_name,
                                 method.signature.full,
                                 desc,
                                 method.related_types.join(", ")
                             ));
-                            break;
                         }
                     }
                     result
                 }
                 "structure" => {
-                    if let Some(structure) = self.api_data.data_structures.iter().find(|s| s.name == record.item_name) {
+                    if let Some(structure) = self.api_data.get_data_structure(&record.item_name) {
                         let desc = structure.description.as_deref().unwrap_or("No description");
                         let parent_info = structure.parent.as_ref()
                             .map(|p| format!(" (extends {})", p))
@@ -946,7 +1021,10 @@ impl McpServer {
                     }
                 }
                 "enum" => {
-                    if let Some(enumeration) = self.api_data.enumerations.iter().find(|e| e.name == record.item_name) {
+                    let enumeration = self.api_data.enumerations_by_name.get(&record.item_name)
+                        .and_then(|rust_name| self.api_data.enumerations.get(rust_name));
+                    
+                    if let Some(enumeration) = enumeration {
                         let desc = enumeration.description.as_deref().unwrap_or("No description");
 
                         let mut variant_list = String::new();
@@ -967,7 +1045,7 @@ impl McpServer {
                     }
                 }
                 "example" => {
-                    if let Some(example) = self.api_data.examples.iter().find(|e| e.name == record.item_name) {
+                    if let Some(example) = self.api_data.examples.get(&record.item_name) {
                         Some(format!(
                             "## {} (Example)\n\n**Category:** {}\n\n**Description:**\n{}\n\n**Usage:**\n```\nget_example(\"{}\")\n```\n\n---\n",
                             example.title,
@@ -980,7 +1058,7 @@ impl McpServer {
                     }
                 }
                 "guide" => {
-                    if let Some(guide) = self.api_data.guides.iter().find(|g| g.chunk_id == record.item_name) {
+                    if let Some(guide) = self.api_data.guides.get(&record.item_name) {
                         let topics = if guide.topics.is_empty() {
                             "None".to_string()
                         } else {
@@ -1008,6 +1086,30 @@ impl McpServer {
                             topics,
                             content_preview,
                             guide.chunk_id
+                        ))
+                    } else {
+                        None
+                    }
+                }
+                "field" => {
+                    // Find the field - match on BOTH structure name and field name
+                    let field_result = self.api_data.data_structures.get(&record.object_name)
+                        .and_then(|s| {
+                            s.fields.iter()
+                                .find(|f| f.rust_name == record.item_name)
+                                .map(|f| (s, f))
+                        });
+                    
+                    if let Some((structure, field)) = field_result {
+                        
+                        Some(format!(
+                            "## {} (Field in {})\n\n**Type:** `{}`\n\n{}\n```\nget_field(\"{}\", \"{}\")\n```\n\n---\n",
+                            field.rust_name,
+                            structure.rust_name,
+                            field.rust_type,
+                            field.description.as_deref().unwrap_or("No description"),
+                            structure.rust_name,
+                            field.rust_name
                         ))
                     } else {
                         None

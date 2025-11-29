@@ -2,6 +2,8 @@ use anyhow::Result;
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use std::path::Path;
+use std::collections::HashMap;
+use indexmap::IndexMap;
 use tracing::{info, warn};
 
 // ============================================================================
@@ -186,12 +188,18 @@ pub struct GuideChunk {
 /// Holds all loaded API data
 #[derive(Debug, Clone)]
 pub struct ApiData {
-    pub managed_objects: Vec<ManagedObjectEntry>,
-    pub data_structures: Vec<StructureEntry>,
-    pub enumerations: Vec<EnumerationEntry>,
-    pub traits: Vec<TraitEntry>,
-    pub examples: Vec<CodeExample>,
-    pub guides: Vec<GuideChunk>,
+    // Primary indexes
+    pub managed_objects: IndexMap<String, ManagedObjectEntry>,  // keyed by rust_struct
+    pub data_structures: IndexMap<String, StructureEntry>,      // keyed by rust_name
+    pub enumerations: IndexMap<String, EnumerationEntry>,       // keyed by rust_name
+    pub traits: IndexMap<String, TraitEntry>,                    // keyed by rust_name
+    pub examples: IndexMap<String, CodeExample>,                 // keyed by name
+    pub guides: IndexMap<String, GuideChunk>,                    // keyed by chunk_id
+    
+    // Secondary indexes for dual-key lookups
+    pub managed_objects_by_name: HashMap<String, String>,       // name -> rust_struct
+    pub data_structures_by_name: HashMap<String, String>,       // name -> rust_name
+    pub enumerations_by_name: HashMap<String, String>,          // name -> rust_name
 }
 
 impl ApiData {
@@ -206,52 +214,90 @@ impl ApiData {
         let traits_path = api_definitions_dir.join("traits.json");
         let examples_path = api_definitions_dir.join("examples.json");
 
-        let managed_objects = if managed_objects_path.exists() {
+        // Load managed objects and build indexes
+        let (managed_objects, managed_objects_by_name) = if managed_objects_path.exists() {
             let content = std::fs::read_to_string(&managed_objects_path)?;
             let output: ManagedObjectsOutput = serde_json::from_str(&content)?;
-            output.managed_objects
+            let mut map = IndexMap::new();
+            let mut name_index = HashMap::new();
+            for entry in output.managed_objects {
+                let rust_struct = entry.rust_struct.clone();
+                let name = entry.name.clone();
+                map.insert(rust_struct.clone(), entry);
+                name_index.insert(name, rust_struct);
+            }
+            (map, name_index)
         } else {
-            warn!("managed_objects.json not found, using empty list");
-            Vec::new()
+            warn!("managed_objects.json not found, using empty map");
+            (IndexMap::new(), HashMap::new())
         };
 
-        let data_structures = if data_structures_path.exists() {
+        // Load data structures and build indexes
+        let (data_structures, data_structures_by_name) = if data_structures_path.exists() {
             let content = std::fs::read_to_string(&data_structures_path)?;
             let output: DataStructuresOutput = serde_json::from_str(&content)?;
-            output.structures
+            let mut map = IndexMap::new();
+            let mut name_index = HashMap::new();
+            for entry in output.structures {
+                let rust_name = entry.rust_name.clone();
+                let name = entry.name.clone();
+                map.insert(rust_name.clone(), entry);
+                name_index.insert(name, rust_name);
+            }
+            (map, name_index)
         } else {
-            warn!("data_structures.json not found, using empty list");
-            Vec::new()
+            warn!("data_structures.json not found, using empty map");
+            (IndexMap::new(), HashMap::new())
         };
 
-        let enumerations = if enumerations_path.exists() {
+        // Load enumerations and build indexes
+        let (enumerations, enumerations_by_name) = if enumerations_path.exists() {
             let content = std::fs::read_to_string(&enumerations_path)?;
             let output: EnumerationsOutput = serde_json::from_str(&content)?;
-            output.enumerations
+            let mut map = IndexMap::new();
+            let mut name_index = HashMap::new();
+            for entry in output.enumerations {
+                let rust_name = entry.rust_name.clone();
+                let name = entry.name.clone();
+                map.insert(rust_name.clone(), entry);
+                name_index.insert(name, rust_name);
+            }
+            (map, name_index)
         } else {
-            warn!("enumerations.json not found, using empty list");
-            Vec::new()
+            warn!("enumerations.json not found, using empty map");
+            (IndexMap::new(), HashMap::new())
         };
 
+        // Load traits (no secondary index needed)
         let traits = if traits_path.exists() {
             let content = std::fs::read_to_string(&traits_path)?;
             let output: TraitsOutput = serde_json::from_str(&content)?;
-            output.traits
+            let mut map = IndexMap::new();
+            for entry in output.traits {
+                map.insert(entry.rust_name.clone(), entry);
+            }
+            map
         } else {
-            warn!("traits.json not found, using empty list");
-            Vec::new()
+            warn!("traits.json not found, using empty map");
+            IndexMap::new()
         };
 
+        // Load examples
         let examples = if examples_path.exists() {
             let content = std::fs::read_to_string(&examples_path)?;
             let output: ExamplesOutput = serde_json::from_str(&content)?;
-            output.examples
+            let mut map = IndexMap::new();
+            for entry in output.examples {
+                map.insert(entry.name.clone(), entry);
+            }
+            map
         } else {
-            warn!("examples.json not found, using empty list");
-            Vec::new()
+            warn!("examples.json not found, using empty map");
+            IndexMap::new()
         };
 
-        let mut guides = Vec::new();
+        // Load guides
+        let mut guides = IndexMap::new();
 
         if api_definitions_dir.exists() && api_definitions_dir.is_dir() {
             for entry in std::fs::read_dir(&api_definitions_dir)? {
@@ -264,12 +310,14 @@ impl ApiData {
                         let content = std::fs::read_to_string(&path)?;
                         let chunks: Vec<GuideChunk> = serde_json::from_str(&content)?;
                         info!("Loaded {} chunks from {}", chunks.len(), path.display());
-                        guides.extend(chunks);
+                        for chunk in chunks {
+                            guides.insert(chunk.chunk_id.clone(), chunk);
+                        }
                     }
                 }
             }
         } else {
-            warn!("guides directory not found, using empty list");
+            warn!("guides directory not found, using empty map");
         }
 
         info!(
@@ -289,8 +337,52 @@ impl ApiData {
             traits,
             examples,
             guides,
+            managed_objects_by_name,
+            data_structures_by_name,
+            enumerations_by_name,
         })
     }
+
+    pub fn get_managed_object(&self, rust_struct: &str) -> Option<&ManagedObjectEntry> {
+        self.managed_objects.get(rust_struct)
+            .or_else(|| self.managed_objects_by_name.get(rust_struct)
+                .and_then(|name| self.managed_objects.get(name)))
+    }
+
+    pub fn get_data_structure(&self, rust_name: &str) -> Option<&StructureEntry> {
+        self.data_structures.get(rust_name)
+            .or_else(|| self.data_structures_by_name.get(rust_name)
+                .and_then(|name| self.data_structures.get(name)))
+    }
+
+    pub fn get_enumeration(&self, rust_name: &str) -> Option<&EnumerationEntry> {
+        self.enumerations.get(rust_name)
+            .or_else(|| self.enumerations_by_name.get(rust_name)
+               .and_then(|name| self.enumerations.get(name)))
+    }
+
+    pub fn get_trait(&self, rust_name: &str) -> Option<&TraitEntry> {
+        self.traits.get(rust_name)
+    }
+
+    pub fn get_example(&self, name: &str) -> Option<&CodeExample> {
+        self.examples.get(name)
+    }
+
+    pub fn get_guide(&self, chunk_id: &str) -> Option<&GuideChunk> {
+        self.guides.get(chunk_id)
+    }
+
+    pub fn get_method(&self, managed_object: &str, method_name: &str) -> Option<&MethodEntry> {
+        self.get_managed_object(managed_object)
+            .and_then(|mo| mo.methods.iter().find(|m| m.rust_name == method_name || m.name == method_name))
+    }
+
+    pub fn get_field(&self, data_structure: &str, field_name: &str) -> Option<&FieldEntry> {
+        self.get_data_structure(data_structure)
+            .and_then(|s| s.fields.iter().find(|f| f.rust_name == field_name || f.name == field_name))
+    }
+
 }
 
 // ============================================================================
