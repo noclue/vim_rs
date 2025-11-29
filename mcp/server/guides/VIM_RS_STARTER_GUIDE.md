@@ -14,15 +14,15 @@ vim_rs is a Rust SDK for the vSphere API. It provides:
 
 When building vim_rs applications, use these resources in order:
 
-1. **API Reference** (semantic_search, search_methods, search_types, search_enums)
+1. **API Reference** (search with filter='managed_objects', 'methods', 'structures', 'enums', 'traits')
    - WHAT exists: managed objects, methods, types, enums
    - Use to find the correct Rust types and method names
 
-2. **Code Examples** (list_examples, get_example, search_examples)
+2. **Code Examples** (search with filter='examples', then get by ID)
    - HOW to code it: working patterns for common tasks
    - Use to understand proper usage patterns
 
-3. **Admin Guides** (search_guides, get_guide, semantic_search with filter='guides')
+3. **Admin Guides** (search with filter='guides', then get by ID)
    - WHEN/WHY/GOTCHAS: conceptual knowledge, best practices, limitations
    - Use to understand vSphere concepts and constraints
 
@@ -561,22 +561,47 @@ if let Some(mac) = eth.get_mac_address() {
 
 ## MCP Server Tools and Workflows
 
-### Three Main Workflows
+### Unified API: Two Core Tools
 
-#### Workflow 1: Start Here - Get the Starter Guide
+The MCP server provides a simple, unified interface:
+
+| Tool | Purpose |
+|------|---------|
+| `search(query, filter)` | Find items by natural language query |
+| `get(id)` | Get detailed documentation for any item by ID |
+
+Plus specialized tools for property path exploration:
+- `get_starter_guide()` - This guide
+- `get_property_info(managed_object, property_path)` - Explore property paths
+- `list_property_collector_root_types()` - List available root types
+
+### ID Format Reference
+
+Every item has a unique ID you can pass to `get()`:
+
+| Item Type | ID Format | Example |
+|-----------|-----------|---------|
+| Managed Object | `{rust_struct}` | `VirtualMachine` |
+| Method | `{mo}::{method}` | `VirtualMachine::power_on_vm_task` |
+| Structure | `{rust_name}` | `VirtualDevice` |
+| Field | `{struct}::{field}` | `VirtualHardware::device` |
+| Enum | `{rust_name}` | `ManagedEntityStatus` |
+| Trait | `{rust_name}` | `VirtualDeviceTrait` |
+| Example | `example::{name}` | `example::connection_basic` |
+| Guide | `guide::{chunk_id}` | `guide::installing-esx-auto-deploy` |
+
+### Workflow 1: Start Here - Get the Starter Guide
 **Always call this first when beginning with vim_rs:**
 
 ```
 get_starter_guide()
 ```
 
-Returns the complete vim_rs starter guide with connection patterns, property collector usage, code snippets, and best practices. Essential for writing correct vim_rs code on the first try.
+Returns this complete vim_rs starter guide with connection patterns, property collector usage, code snippets, and best practices.
 
 ---
 
-#### Workflow 2: Explore API, Examples, and Documentation
-
-Use **search** to find relevant items, then use **get** tools to dive deep:
+### Workflow 2: Explore API, Examples, and Documentation
 
 **Step 1: Search semantically** (finds items by meaning, not just keywords)
 ```
@@ -585,40 +610,39 @@ search(query="how to power on a virtual machine", limit=10, filter="all")
 
 **Filters available:**
 - `all` - Search everything (default)
-- `examples` - Search only code examples
-- `guides` - Search only vSphere/VCF admin documentation
-- `managed_objects` - Search only managed object types (VirtualMachine, etc.)
-- `methods` - Search only API methods
-- `structures` - Search only data structures/types
-- `enums` - Search only enumerations
+- `managed_objects` - Managed object types (VirtualMachine, HostSystem, etc.)
+- `methods` - API methods
+- `structures` - Data structures/types
+- `fields` - Structure fields
+- `enums` - Enumerations
+- `traits` - Trait definitions
+- `examples` - Code examples
+- `guides` - vSphere/VCF admin documentation
 
-**Step 2: Get detailed information** using the appropriate tool:
+Search results include the **ID** for each item. Use this ID with `get()`.
 
-| If you found... | Use this tool | Example |
-|----------------|---------------|---------|
-| **Code Example** | `get_example(name="...")` | `get_example(name="connection_basic")` |
-| **Guide Section** | `get_guide(chunk_id="...")` | `get_guide(chunk_id="installing-esx-understanding-auto-deploy")` |
-| **Managed Object or Struct** | `get_type(type_name="...")` | `get_type(type_name="VirtualMachine")` |
-| **Method** | `get_method(managed_object="...", method_name="...")` | `get_method(managed_object="VirtualMachine", method_name="power_on_vm_task")` |
+**Step 2: Get detailed information using the ID from search results:**
+
+```
+get(id="VirtualMachine")                          # Managed object
+get(id="VirtualMachine::power_on_vm_task")        # Method
+get(id="VirtualDevice")                           # Structure  
+get(id="VirtualHardware::device")                 # Field
+get(id="VirtualDeviceTrait")                      # Trait
+get(id="ManagedEntityStatus")                     # Enum
+get(id="example::connection_basic")               # Code example
+get(id="guide::installing-esx-auto-deploy")       # Guide section
+```
 
 **Tool Details:**
 
-- **`search`** - Natural language semantic search across all vim_rs documentation
-  - Returns: API items, code examples, and guide sections based on meaning
-  - Use `filter` parameter to narrow results by type
+- **`search(query, limit, filter)`** - Natural language semantic search
+  - Returns: Matching items with IDs, types, and brief summaries
+  - Each result includes the ID needed for `get()`
   
-- **`get_example`** - Get complete source code, description, and dependencies for a specific example
-  - Returns: Full Rust code, Cargo.toml dependencies, category, and usage notes
-  
-- **`get_guide`** - Get specific vSphere/VCF admin guide section
-  - Returns: Complete documentation content with headings, topics, and word count
-  
-- **`get_type`** - Get comprehensive information about types (structs, traits, enums, managed objects)
-  - Returns: Description, fields, methods, inheritance, implementing types, usage examples
-  - Works for: Managed objects (VirtualMachine), structs (VirtualDevice), traits (VirtualDeviceTrait), enums (ManagedEntityStatus)
-  
-- **`get_method`** - Get detailed method information
-  - Returns: Full signature, parameters, return type, description, related types, usage example
+- **`get(id)`** - Get comprehensive documentation for any item
+  - Returns: Full details including description, fields/methods, usage examples, related types
+  - Works for all item types (managed objects, methods, structures, fields, enums, traits, examples, guides)
 
 ---
 
@@ -677,14 +701,16 @@ vim_retrievable!(
 | Task | Tool | Example |
 |------|------|---------|
 | **Getting Started** | `get_starter_guide()` | Learn vim_rs patterns first |
+| **Find anything** | `search(query="...")` | `search(query="power on vm")` |
 | **Find working code** | `search(filter="examples")` | `search(query="create vm", filter="examples")` |
 | **Find admin concepts** | `search(filter="guides")` | `search(query="drs", filter="guides")` |
-| **Broad semantic search** | `search(query="...")` | `search(query="snapshots")` |
-| **Get example code** | `get_example(name="...")` | `get_example(name="property_collector_macro")` |
-| **Get guide section** | `get_guide(chunk_id="...")` | `get_guide(chunk_id="vcenter-concepts")` |
-| **Understand a type** | `get_type(type_name="...")` | `get_type(type_name="VirtualMachineConfigSpec")` |
-| **Get method signature** | `get_method(...)` | `get_method(managed_object="VirtualMachine", method_name="power_on_vm_task")` |
-| **List property collector roots** | `list_property_collector_root_types()` | See all available managed object types |
+| **Get item details** | `get(id="...")` | `get(id="VirtualMachine")` |
+| **Get example code** | `get(id="example::...")` | `get(id="example::property_collector_macro")` |
+| **Get guide section** | `get(id="guide::...")` | `get(id="guide::vcenter-concepts")` |
+| **Understand a type** | `get(id="...")` | `get(id="VirtualMachineConfigSpec")` |
+| **Get method details** | `get(id="Mo::method")` | `get(id="VirtualMachine::power_on_vm_task")` |
+| **Get field details** | `get(id="Struct::field")` | `get(id="VirtualHardware::device")` |
+| **List property roots** | `list_property_collector_root_types()` | See all available managed object types |
 | **Build property paths** | `get_property_info(...)` | `get_property_info(managed_object="VirtualMachine", property_path="guest.ip_address")` |
 
 ## Complete Minimal Example Template
