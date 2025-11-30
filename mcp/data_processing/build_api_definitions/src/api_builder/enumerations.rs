@@ -4,18 +4,21 @@ use vim_build::rs_emitter::names::to_enum_variant;
 use std::path::Path;
 use chrono::Utc;
 use tracing::info;
+use check_keyword::CheckKeyword;
+use convert_case::{Case, Casing};
+
 
 /// Build enumerations in memory (no file I/O).
 pub fn build_enumerations(model: &Model) -> Vec<EnumerationEntry> {
     let mut enumerations = Vec::new();
 
     for (name, enum_def) in &model.enums {
-        let rust_name = name.trim_end_matches("_enum").to_string() + "Enum";
+        let rust_name = name.trim_end_matches("_enum").to_case(Case::Pascal).into_safe() + "Enum";
+
 
         let variants = enum_def.variants.iter().map(|v| {
             VariantEntry {
-                name: v.clone(),
-                rust_name: to_enum_variant(v),
+                name: to_enum_variant(v),
                 description: None,  // Can enhance later
                 discriminator_value: enum_def.discriminator_value.as_ref()
                     .unwrap_or(v)
@@ -24,8 +27,7 @@ pub fn build_enumerations(model: &Model) -> Vec<EnumerationEntry> {
         }).collect();
 
         enumerations.push(EnumerationEntry {
-            name: name.clone(),
-            rust_name: rust_name,
+            name: rust_name,
             rust_module: "vim_rs::types::enums".to_string(),
             description: enum_def.description.clone(),
             variants,

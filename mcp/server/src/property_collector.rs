@@ -1,6 +1,7 @@
-use crate::resolver::{resolve_path, FieldData, HierarchyError};
+use crate::resolver::{resolve_path, FieldData, FieldProcessingType, HierarchyError};
 use crate::field_data::get_type_fields;
 use serde::{Deserialize, Serialize};
+use std::collections::HashSet;
 
 /// A managed object type with its name
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -10,7 +11,7 @@ pub struct ManagedObjectType {
 
 /// Property information for a given path
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct PropertyInfo {
+pub struct PropertyPathInfo {
     /// The property path in VIM syntax (e.g., "summary.guest.guestFullName")
     pub vim_path: String,
     /// The Rust type of the property (e.g., "Option<String>")
@@ -77,10 +78,10 @@ pub fn get_managed_object_types() -> Vec<ManagedObjectType> {
 ///
 /// # Returns
 /// PropertyInfo with details about the property, including child fields if it's a complex type
-pub fn get_property_info(
+pub fn get_property_path(
     managed_object: &str,
     property_path: &str,
-) -> Result<PropertyInfo, HierarchyError> {
+) -> Result<PropertyPathInfo, HierarchyError> {
     if property_path.is_empty() {
         // Return top-level fields for the managed object
         get_top_level_fields(managed_object)
@@ -90,12 +91,12 @@ pub fn get_property_info(
     }
 }
 
-fn get_top_level_fields(managed_object: &str) -> Result<PropertyInfo, HierarchyError> {
+fn get_top_level_fields(managed_object: &str) -> Result<PropertyPathInfo, HierarchyError> {
     let Some(child_fields) = get_child_fields_for_type(managed_object) else {
         return Err(HierarchyError::UnsupportedObjectType(managed_object.to_string()));
     };
 
-    Ok(PropertyInfo {
+    Ok(PropertyPathInfo {
         vim_path: "".to_string(),
         rust_type: managed_object.to_string(),
         is_optional: false,
@@ -107,7 +108,7 @@ fn get_top_level_fields(managed_object: &str) -> Result<PropertyInfo, HierarchyE
 fn get_property_details(
     managed_object: &str,
     property_path: &str,
-) -> Result<PropertyInfo, HierarchyError> {
+) -> Result<PropertyPathInfo, HierarchyError> {
     let field_data: FieldData = resolve_path(managed_object, property_path)?;
 
     // Check if this property has child fields (i.e., it's a struct or trait)
@@ -119,7 +120,7 @@ fn get_property_details(
         _ => None,
     };
 
-    Ok(PropertyInfo {
+    Ok(PropertyPathInfo {
         vim_path: field_data.vim_path.clone(),
         rust_type: field_data.data_type.clone(),
         is_optional: field_data.is_optional,
@@ -148,5 +149,107 @@ fn get_child_fields_for_type(type_name: &str) -> Option<Vec<ChildField>> {
         None
     } else {
         Some(child_fields)
+    }
+}
+
+/// Maximum depth for property tree traversal
+const MAX_TREE_DEPTH: usize = 5;
+
+/// Generate a property tree for a managed object type
+///
+/// Returns a markdown-formatted tree showing all properties up to 5 levels deep.
+/// Uses box drawing characters for clean visual presentation.
+///
+/// # Arguments
+/// * `managed_object` - The managed object type (e.g., "VirtualMachine")
+/// * `start_path` - Optional starting path to show a subtree (e.g., "config.hardware")
+pub fn get_property_tree(managed_object: &str, start_path: &str) -> Result<String, HierarchyError> {
+    // Determine the starting type - either the managed object or resolved from path
+    let (starting_type, root_type_str) = if start_path.is_empty() {
+        (managed_object.to_string(), managed_object.to_string())
+    } else {
+        // Resolve the path to get the type at that location
+        let field_data = resolve_path(managed_object, start_path)?;
+        
+        // Check if the resolved type can be expanded
+        match field_data.processing_type {
+            FieldProcessingType::Struct | FieldProcessingType::Trait => {
+                if field_data.type_name.is_empty() {
+                    return Err(HierarchyError::NoSubPropertiesAvailable(start_path.to_string()));
+                }
+                (field_data.type_name.to_string(), field_data.data_type)
+            }
+            _ => {
+                return Err(HierarchyError::NoSubPropertiesAvailable(start_path.to_string()));
+            }
+        }
+    };
+
+    let type_fields = get_type_fields(&starting_type)?;
+
+    let mut output = String::new();
+    
+    // Show the root type
+    output.push_str(&format!("{}\n", root_type_str));
+    
+    let mut visited = HashSet::new();
+    visited.insert(starting_type.clone());
+
+    build_tree_from_type(&mut output, type_fields, 0, &mut visited, "");
+
+    Ok(output)
+}
+
+/// Recursively build the tree output with box drawing characters
+fn build_tree_from_type(
+    output: &mut String,
+    fields: &phf::Map<&'static str, crate::resolver::NodeData>,
+    depth: usize,
+    visited: &mut HashSet<String>,
+    prefix: &str,
+) {
+    // Collect and sort fields alphabetically for consistent output
+    let mut field_entries: Vec<_> = fields.entries().collect();
+    field_entries.sort_by_key(|(name, _)| *name);
+
+    let total = field_entries.len();
+
+    for (idx, (field_name, node_data)) in field_entries.iter().enumerate() {
+        let is_last = idx == total - 1;
+        
+        // Box drawing characters
+        let branch = if is_last { "└─" } else { "├─" };
+        let child_prefix = if is_last { "  " } else { "│ " };
+
+        // Format the type, wrapping in Option if needed
+        let type_str = if node_data.is_optional {
+            format!("Option<{}>", node_data.type_decl)
+        } else {
+            node_data.type_decl.to_string()
+        };
+
+        output.push_str(&format!("{}{}{}: {}\n", prefix, branch, field_name, type_str));
+
+        // Recursively expand struct/trait types if within depth limit
+        if depth + 1 < MAX_TREE_DEPTH {
+            let should_expand = matches!(
+                node_data.processing_type,
+                FieldProcessingType::Struct | FieldProcessingType::Trait
+            );
+
+            if should_expand && !node_data.type_name.is_empty() {
+                // Check for cycles - only expand if not already in this branch
+                if !visited.contains(node_data.type_name) {
+                    if let Ok(child_fields) = get_type_fields(node_data.type_name) {
+                        visited.insert(node_data.type_name.to_string());
+                        
+                        let new_prefix = format!("{}{}", prefix, child_prefix);
+                        build_tree_from_type(output, child_fields, depth + 1, visited, &new_prefix);
+                        
+                        visited.remove(node_data.type_name);
+                    }
+                }
+            }
+        }
     }
 }

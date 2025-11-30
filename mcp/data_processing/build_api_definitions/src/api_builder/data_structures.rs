@@ -4,6 +4,8 @@ use vim_build::rs_emitter::names::TypeDefResolver;
 use std::path::Path;
 use chrono::Utc;
 use tracing::info;
+use check_keyword::CheckKeyword;
+use convert_case::{Case, Casing};
 
 /// Convert a vim_build TypePath to an api_database ApiTypePath.
 fn convert_type_path(path: &TypePath) -> ApiTypePath {
@@ -52,18 +54,7 @@ fn convert_type_path(path: &TypePath) -> ApiTypePath {
 
 /// Convert a camelCase or PascalCase string to snake_case.
 fn to_snake_case(s: &str) -> String {
-    let mut result = String::new();
-    for (i, ch) in s.chars().enumerate() {
-        if ch.is_uppercase() {
-            if i > 0 {
-                result.push('_');
-            }
-            result.push(ch.to_ascii_lowercase());
-        } else {
-            result.push(ch);
-        }
-    }
-    result
+    s.to_case(Case::Snake).into_safe()
 }
 
 fn format_vim_type(dt: &DataType) -> String {
@@ -103,7 +94,7 @@ pub fn build_structures(model: &Model) -> Vec<StructureEntry> {
         };
 
         let mut fields = Vec::new();
-        for (field_name, field) in &s.fields {
+        for (_field_name, field) in &s.fields {
             let rust_type = match tdf.field_type(field) {
                 Ok(t) => t,
                 Err(_) => "UnknownType".to_string(),
@@ -129,8 +120,7 @@ pub fn build_structures(model: &Model) -> Vec<StructureEntry> {
             };
 
             fields.push(FieldEntry {
-                name: field_name.clone(),
-                rust_name: field.rust_name(),
+                name: field.rust_name(),
                 rust_type,
                 vim_type: format_vim_type(&field.vim_type),
                 required: !field.optional,
@@ -158,8 +148,7 @@ pub fn build_structures(model: &Model) -> Vec<StructureEntry> {
         let paths: Vec<ApiTypePath> = s.paths.iter().map(convert_type_path).collect();
 
         structures.push(StructureEntry {
-            name: name.clone(),
-            rust_name: s.rust_name(),
+            name: s.rust_name(),
             rust_module: "vim_rs::types::structs".to_string(),
             description: s.description.clone(),
             parent: s.parent.clone(),

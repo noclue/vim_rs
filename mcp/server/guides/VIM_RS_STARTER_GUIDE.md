@@ -623,7 +623,8 @@ The MCP server provides a simple, unified interface:
 
 Plus specialized tools for property path exploration:
 - `get_starter_guide()` - This guide
-- `get_property_info(managed_object, property_path)` - Explore property paths
+- `get_property_tree(managed_object, start_path)` - View full property tree with types
+- `get_property_path(managed_object, property_path)` - Explore specific property paths
 - `list_property_collector_root_types()` - List available root types
 
 ### ID Format Reference
@@ -706,29 +707,53 @@ list_property_collector_root_types()
 
 Returns all supported managed object types (VirtualMachine, HostSystem, Datacenter, Datastore, ClusterComputeResource, etc.) that can be used as roots in the property collector.
 
-**Step 2: Explore property paths**
+**Step 2: View the full property tree**
 ```
-get_property_info(managed_object="VirtualMachine", property_path="")
+get_property_tree(managed_object="VirtualMachine")
+```
+
+Returns a visual tree of all properties up to 5 levels deep with their Rust types:
+```
+VirtualMachine
+├─config: Option<vim_rs::types::structs::VirtualMachineConfigInfo>
+│ ├─hardware: Option<VirtualHardware>
+│ │ ├─device: Option<Vec<Box<dyn VirtualDeviceTrait>>>
+│ │ ├─memory_mb: i32
+│ │ └─num_cpu: i32
+│ └─name: Option<String>
+├─guest: Option<vim_rs::types::structs::GuestInfo>
+│ ├─ip_address: Option<String>
+│ └─host_name: Option<String>
+└─name: String
+```
+
+You can also start from a specific path to explore a subtree:
+```
+get_property_tree(managed_object="VirtualMachine", start_path="config.hardware")
+```
+
+**Step 3: Get details about a specific property**
+```
+get_property_path(managed_object="VirtualMachine", property_path="guest.ip_address")
 ```
 
 Returns detailed information about a property path including:
 - VIM path (e.g., `guest.ipAddress`)
 - Rust type (e.g., `Option<String>`)
-- Whether it's optional
 - Documentation
 - Child fields (if it's a complex type)
 - Example usage in `vim_retrievable!` macro
 
 **Examples:**
 ```
-# List all top-level properties for VirtualMachine
-get_property_info(managed_object="VirtualMachine", property_path="")
+# View full property tree for VirtualMachine
+get_property_tree(managed_object="VirtualMachine")
 
-# Get details about a specific nested property
-get_property_info(managed_object="VirtualMachine", property_path="guest.ip_address")
+# View subtree starting from config.hardware
+get_property_tree(managed_object="VirtualMachine", start_path="config.hardware")
 
-# Explore nested structures
-get_property_info(managed_object="VirtualMachine", property_path="config.hardware.device")
+# Get details about a specific property
+get_property_path(managed_object="VirtualMachine", property_path="guest.ip_address")
 ```
 
 This workflow helps you build correct property paths like:
@@ -759,7 +784,9 @@ vim_retrievable!(
 | **Get method details** | `get(id="Mo::method")` | `get(id="VirtualMachine::power_on_vm_task")` |
 | **Get field details** | `get(id="Struct::field")` | `get(id="VirtualHardware::device")` |
 | **List property roots** | `list_property_collector_root_types()` | See all available managed object types |
-| **Build property paths** | `get_property_info(...)` | `get_property_info(managed_object="VirtualMachine", property_path="guest.ip_address")` |
+| **View property tree** | `get_property_tree(...)` | `get_property_tree(managed_object="VirtualMachine")` |
+| **Explore subtree** | `get_property_tree(...)` | `get_property_tree(managed_object="VirtualMachine", start_path="config.hardware")` |
+| **Get property details** | `get_property_path(...)` | `get_property_path(managed_object="VirtualMachine", property_path="guest.ip_address")` |
 
 ## Complete Minimal Example Template
 

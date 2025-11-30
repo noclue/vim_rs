@@ -5,6 +5,8 @@ use vim_build::rs_emitter::names::to_fn_name;
 use std::path::Path;
 use chrono::Utc;
 use tracing::info;
+use check_keyword::CheckKeyword;
+use convert_case::{Case, Casing};
 
 /// Build managed objects in memory (no file I/O).
 pub fn build_managed_objects(model: &Model) -> Vec<ManagedObjectEntry> {
@@ -23,17 +25,15 @@ pub fn build_managed_objects(model: &Model) -> Vec<ManagedObjectEntry> {
 
 
             methods.push(MethodEntry {
-                name: method.name.clone(),
-                rust_name: to_fn_name(&method.name),
+                name: to_fn_name(&method.name),
                 signature,
                 description: method.description.clone(),  // Raw markdown - no parsing!
             });
         }
 
         managed_objects.push(ManagedObjectEntry {
-            name: mo_name.clone(),
+            name: mo_name.to_case(Case::Pascal).into_safe(),
             rust_module: format!("vim_rs::mo::{}", mo_name),
-            rust_struct: mo_name.clone(),
             description: mo.description.clone(),
             methods,
         });

@@ -53,8 +53,7 @@ pub fn build_traits(model: &Model) -> Vec<TraitEntry> {
             .map(|p| format!("{}Trait", to_type_name(p)));
 
         traits.push(TraitEntry {
-            name: name.clone(),
-            rust_name: format!("{}Trait", s.rust_name()),
+            name: format!("{}Trait", s.rust_name()),
             rust_module: "vim_rs::types::traits".to_string(),
             description: s.description.clone(),
             parent_trait,

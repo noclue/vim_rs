@@ -93,9 +93,9 @@ struct ListManagedObjectTypesInput {
     // Empty - list_managed_object_types takes no parameters but needs object schema
 }
 
-/// Input parameters for get_property_info tool
+/// Input parameters for get_property_path tool
 #[derive(Serialize, Deserialize, JsonSchema)]
-struct GetPropertyInfoInput {
+struct GetPropertyPathInput {
     /// Managed object type (e.g., "VirtualMachine", "HostSystem", "Folder")
     #[schemars(description = "The managed object type name (e.g., 'VirtualMachine', 'HostSystem', 'Datacenter')")]
     managed_object: String,
@@ -106,6 +106,18 @@ struct GetPropertyInfoInput {
     property_path: String,
 }
 
+/// Input parameters for get_property_tree tool
+#[derive(Serialize, Deserialize, JsonSchema)]
+struct GetPropertyTreeInput {
+    /// Managed object type (e.g., "VirtualMachine", "HostSystem", "Folder")
+    #[schemars(description = "The managed object type name (e.g., 'VirtualMachine', 'HostSystem', 'Folder')")]
+    managed_object: String,
+
+    /// Optional starting path to show a subtree (e.g., "config.hardware")
+    #[schemars(description = "Optional property path in snake_case to start the tree from (e.g., 'config.hardware'). If empty, shows from root.")]
+    #[serde(default)]
+    start_path: String,
+}
 
 #[tool_router]
 impl McpServer {
@@ -265,13 +277,13 @@ impl McpServer {
     }
 
     /// List all supported managed object types
-    #[tool(description = "Returns a list of all vSphere property collector root managed object types. These types can be used with get_property_info to explore their properties. Returns the top-level types like VirtualMachine, HostSystem, Datacenter, etc.")]
+    #[tool(description = "Returns a list of all vSphere property collector root managed object types. These types can be used with get_property_path to explore their properties. Returns the top-level types like VirtualMachine, HostSystem, Datacenter, etc.")]
     async fn list_property_collector_root_types(&self, _params: Parameters<ListManagedObjectTypesInput>) -> Result<CallToolResult, McpError> {
         let types = property_collector::get_managed_object_types();
 
         let mut output = String::from("# Supported Managed Object Types\n\n");
         output.push_str(&format!("Total: {} types\n\n", types.len()));
-        output.push_str("Use these types with `get_property_info` to explore their properties.\n\n");
+        output.push_str("Use these types with `get_property_path` to explore their properties.\n\n");
 
         for (idx, mo_type) in types.iter().enumerate() {
             output.push_str(&format!("{}. **{}**\n", idx + 1, mo_type.name));
@@ -279,8 +291,8 @@ impl McpServer {
 
         output.push_str("\n## Example Usage\n\n");
         output.push_str("```\n");
-        output.push_str("get_property_info(managed_object=\"VirtualMachine\", property_path=\"\")\n");
-        output.push_str("get_property_info(managed_object=\"VirtualMachine\", property_path=\"guest.ip_address\")\n");
+        output.push_str("get_property_path(managed_object=\"VirtualMachine\", property_path=\"\")\n");
+        output.push_str("get_property_path(managed_object=\"VirtualMachine\", property_path=\"guest.ip_address\")\n");
         output.push_str("```\n");
 
         Ok(CallToolResult::success(vec![Content::text(output)]))
@@ -288,11 +300,11 @@ impl McpServer {
 
     /// Get property information for a managed object and property path
     #[tool(description = "Get detailed information about a property path for a managed object. Provide the managed object type (e.g., 'VirtualMachine') and an optional property path in snake_case (e.g., 'guest.ip_address'). If property_path is empty, returns all top-level properties. Returns the VIM path, Rust type, optionality, documentation, and child fields if it's a complex type.")]
-    async fn get_property_info(&self, params: Parameters<GetPropertyInfoInput>) -> Result<CallToolResult, McpError> {
+    async fn get_property_path(&self, params: Parameters<GetPropertyPathInput>) -> Result<CallToolResult, McpError> {
         let managed_object = &params.0.managed_object;
         let property_path = &params.0.property_path;
 
-        let info = match property_collector::get_property_info(managed_object, property_path) {
+        let info = match property_collector::get_property_path(managed_object, property_path) {
             Ok(info) => info,
             Err(e) => {
                 return Ok(CallToolResult::success(vec![Content::text(format!(
@@ -312,9 +324,7 @@ impl McpServer {
             output.push_str(&format!("# Property: {}.{}\n\n", managed_object, property_path));
         }
 
-        output.push_str(&format!("**VIM Path:** `{}`\n", info.vim_path));
         output.push_str(&format!("**Rust Type:** `{}`\n", info.rust_type));
-        output.push_str(&format!("**Optional:** {}\n\n", info.is_optional));
 
         if let Some(doc) = &info.documentation {
             output.push_str("## Documentation\n\n");
@@ -328,9 +338,7 @@ impl McpServer {
 
             for child in children {
                 output.push_str(&format!("### `{}`\n", child.field_name));
-                output.push_str(&format!("- **VIM Name:** `{}`\n", child.vim_name));
                 output.push_str(&format!("- **Rust Type:** `{}`\n", child.rust_type));
-                output.push_str(&format!("- **Optional:** {}\n", child.is_optional));
 
                 if let Some(doc) = &child.documentation {
                     // Truncate doc to first 200 chars for child fields
@@ -364,6 +372,36 @@ impl McpServer {
         Ok(CallToolResult::success(vec![Content::text(output)]))
     }
 
+    /// Get the complete property tree for a managed object type
+    #[tool(description = "Get the complete property tree for a managed object type as markdown. Shows all properties up to 5 levels deep with their Rust types. Optionally provide a start_path to show a subtree (e.g., 'config.hardware'). Uses box-drawing characters for visual clarity.")]
+    async fn get_property_tree(&self, params: Parameters<GetPropertyTreeInput>) -> Result<CallToolResult, McpError> {
+        let managed_object = &params.0.managed_object;
+        let start_path = &params.0.start_path;
+
+        match property_collector::get_property_tree(managed_object, start_path) {
+            Ok(tree) => {
+                let title = if start_path.is_empty() {
+                    managed_object.to_string()
+                } else {
+                    format!("{}.{}", managed_object, start_path)
+                };
+                let output = format!(
+                    "# Property Tree: {}\n\n```\n{}\n```\n\n*Tree depth limited to 5 levels. Use `get_property_path` to explore deeper paths.*",
+                    title,
+                    tree.trim_end()
+                );
+                Ok(CallToolResult::success(vec![Content::text(output)]))
+            }
+            Err(e) => {
+                Ok(CallToolResult::success(vec![Content::text(format!(
+                    "Error getting property tree for {}:\n\n{}\n\n\
+                    Use `list_property_collector_root_types` to see all supported types.",
+                    managed_object,
+                    e
+                ))]))
+            }
+        }
+    }
 
     /// Semantic search using natural language queries
     #[tool(description = "Search vSphere API documentation using natural language queries. Returns Rust managed objects, methods, structures, enums, and examples based on meaning, not just keywords.")]
@@ -509,7 +547,7 @@ impl ServerHandler for McpServer {
                 - Example: `VirtualMachine::config?.hardware.device[*]→VirtualEthernetCard`\n\n\
                 PROPERTY COLLECTOR HELPERS:\n\
                 - list_property_collector_root_types → List all supported managed object types\n\
-                - get_property_info → Explore property paths and their types\n\n\
+                - get_property_path → Explore property paths and their types\n\n\
                 ⚠️ CRITICAL FOR POLYMORPHIC TYPES:\n\
                 vim_rs uses TRAITS for polymorphic types, NOT enums!\n\
                 - VirtualDevice is `Box<dyn VirtualDeviceTrait>`, not an enum\n\
@@ -562,7 +600,8 @@ mod tests {
         
         // Verify specialized tools exist
         assert!(router.has_route("get_starter_guide"));
-        assert!(router.has_route("get_property_info"));
+        assert!(router.has_route("get_property_path"));
+        assert!(router.has_route("get_property_tree"));
         assert!(router.has_route("list_property_collector_root_types"));
         assert!(router.has_route("search"));
 

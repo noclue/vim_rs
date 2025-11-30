@@ -289,7 +289,6 @@ pub struct MethodSignature {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct MethodEntry {
     pub name: String,
-    pub rust_name: String,
     pub signature: MethodSignature,
     pub description: Option<String>,
 }
@@ -298,7 +297,6 @@ pub struct MethodEntry {
 pub struct ManagedObjectEntry {
     pub name: String,
     pub rust_module: String,
-    pub rust_struct: String,
     pub description: Option<String>,
     pub methods: Vec<MethodEntry>,
 }
@@ -308,7 +306,6 @@ pub struct ManagedObjectEntry {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct FieldEntry {
     pub name: String,
-    pub rust_name: String,
     pub rust_type: String,
     pub vim_type: String,
     pub required: bool,
@@ -322,7 +319,6 @@ pub struct FieldEntry {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct StructureEntry {
     pub name: String,
-    pub rust_name: String,
     pub rust_module: String,
     pub description: Option<String>,
     pub parent: Option<String>,
@@ -344,7 +340,6 @@ pub struct StructureEntry {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct VariantEntry {
     pub name: String,
-    pub rust_name: String,
     pub description: Option<String>,
     pub discriminator_value: String,
 }
@@ -352,7 +347,6 @@ pub struct VariantEntry {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct EnumerationEntry {
     pub name: String,
-    pub rust_name: String,
     pub rust_module: String,
     pub description: Option<String>,
     pub variants: Vec<VariantEntry>,
@@ -371,7 +365,6 @@ pub struct GetterEntry {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct TraitEntry {
     pub name: String,
-    pub rust_name: String,
     pub rust_module: String,
     pub description: Option<String>,
     pub parent_trait: Option<String>,
@@ -566,39 +559,39 @@ impl ApiData {
         // Add managed objects and their methods
         for mo in managed_objects {
             for method in &mo.methods {
-                let id = format!("{}::{}", mo.rust_struct, method.rust_name);
+                let id = format!("{}::{}", mo.name, method.name);
                 items.insert(id.clone(), ApiItemEntry::Method(MethodItemData {
                     id,
-                    managed_object: mo.rust_struct.clone(),
+                    managed_object: mo.name.clone(),
                     method: method.clone(),
                 }));
             }
-            items.insert(mo.rust_struct.clone(), ApiItemEntry::ManagedObject(mo));
+            items.insert(mo.name.clone(), ApiItemEntry::ManagedObject(mo));
         }
 
         // Add structures and their fields
         for structure in structures {
             for field in &structure.fields {
-                let id = format!("{}::{}", structure.rust_name, field.rust_name);
+                let id = format!("{}::{}", structure.name, field.name);
                 items.insert(id.clone(), ApiItemEntry::Field(FieldItemData {
                     id,
-                    struct_name: structure.rust_name.clone(),
+                    struct_name: structure.name.clone(),
                     struct_description: structure.description.clone(),
                     field: field.clone(),
                     paths: structure.paths.clone(),
                 }));
             }
-            items.insert(structure.rust_name.clone(), ApiItemEntry::Structure(structure));
+            items.insert(structure.name.clone(), ApiItemEntry::Structure(structure));
         }
 
         // Add enumerations
         for e in enumerations {
-            items.insert(e.rust_name.clone(), ApiItemEntry::Enumeration(e));
+            items.insert(e.name.clone(), ApiItemEntry::Enumeration(e));
         }
 
         // Add traits
         for t in traits {
-            items.insert(t.rust_name.clone(), ApiItemEntry::Trait(t));
+            items.insert(t.name.clone(), ApiItemEntry::Trait(t));
         }
 
         // Add examples
@@ -682,12 +675,12 @@ pub enum ApiItemEntry {
 impl ApiItem for ApiItemEntry {
     fn id(&self) -> &str {
         match self {
-            ApiItemEntry::ManagedObject(mo) => &mo.rust_struct,
+            ApiItemEntry::ManagedObject(mo) => &mo.name,
             ApiItemEntry::Method(m) => &m.id,
-            ApiItemEntry::Structure(s) => &s.rust_name,
+            ApiItemEntry::Structure(s) => &s.name,
             ApiItemEntry::Field(f) => &f.id,
-            ApiItemEntry::Enumeration(e) => &e.rust_name,
-            ApiItemEntry::Trait(t) => &t.rust_name,
+            ApiItemEntry::Enumeration(e) => &e.name,
+            ApiItemEntry::Trait(t) => &t.name,
             ApiItemEntry::Example(ex) => &ex.name,
         }
     }
@@ -730,7 +723,7 @@ impl ApiItem for ApiItemEntry {
             }
             ApiItemEntry::Field(f) => {
                 let mut text_parts = vec![
-                    format!("{} field in {}", f.field.rust_name, f.struct_name),
+                    format!("{} field in {}", f.field.name, f.struct_name),
                     format!("Type: {}", f.field.rust_type),
                 ];
                 if let Some(ref desc) = f.field.description {
@@ -775,10 +768,9 @@ impl ApiItem for ApiItemEntry {
         match self {
             ApiItemEntry::ManagedObject(mo) => {
                 format!(
-                    "## {}\n\n**ID:** `{}`\n\n**Rust Struct:** `{}`\n\n**Module:** `{}`\n\n{}\n\n---\n",
+                    "## {}\n\n**ID:** `{}`\n\n**Module:** `{}`\n\n{}\n\n---\n",
                     mo.name,
-                    mo.rust_struct,
-                    mo.rust_struct,
+                    mo.name,
                     mo.rust_module,
                     mo.description.as_deref().unwrap_or("No description")
                 )
@@ -790,7 +782,7 @@ impl ApiItem for ApiItemEntry {
                     m.managed_object,
                     m.method.name,
                     m.id,
-                    m.method.rust_name,
+                    m.method.name,
                     m.method.signature.full,
                     desc
                 )
@@ -817,11 +809,10 @@ impl ApiItem for ApiItemEntry {
                 };
 
                 format!(
-                    "## {}{}\n\n**ID:** `{}`\n\n**Rust:** `{}`\n\n{}{}\n\n---\n",
+                    "## {}{}\n\n**ID:** `{}`\n\n{}{}\n\n---\n",
                     s.name,
                     parent_info,
-                    s.rust_name,
-                    s.rust_name,
+                    s.name,
                     desc,
                     paths_section
                 )
@@ -843,9 +834,9 @@ impl ApiItem for ApiItemEntry {
                 };
 
                 format!(
-                    "## {} (Field in {})\n\n**ID:** `{}`\n\n**Type:** `{}`\n\n{}{}\n\n---\n",
-                    f.field.rust_name,
+                    "## {}.{}\n\n**ID:** `{}`\n\n**Type:** `{}`\n\n{}{}\n\n---\n",
                     f.struct_name,
+                    f.field.name,
                     f.id,
                     f.field.rust_type,
                     f.field.description.as_deref().unwrap_or("No description"),
@@ -864,10 +855,8 @@ impl ApiItem for ApiItemEntry {
                     variants_preview.join(", ")
                 };
                 format!(
-                    "## {}\n\n**ID:** `{}`\n\n**Rust:** `{}`\n\n{}\n\n**Variants:** {}\n\n---\n",
+                    "## {}\n\n**ID:** `{}`\n\n**Variants:** {}\n\n---\n",
                     e.name,
-                    e.rust_name,
-                    e.rust_name,
                     desc,
                     variants_str
                 )
@@ -876,8 +865,8 @@ impl ApiItem for ApiItemEntry {
                 let desc = t.description.as_deref().unwrap_or("No description");
                 format!(
                     "## {} (Trait)\n\n**ID:** `{}`\n\n**Module:** `{}`\n\n{}\n\n---\n",
-                    t.rust_name,
-                    t.rust_name,
+                    t.name,
+                    t.name,
                     t.rust_module,
                     desc
                 )
@@ -966,7 +955,7 @@ fn prepare_text(text: &str) -> String {
 }
 
 fn format_managed_object_doc(mo: &ManagedObjectEntry) -> String {
-    let mut output = format!("# Managed Object: {}\n\n", mo.rust_struct);
+    let mut output = format!("# Managed Object: {}\n\n", mo.name);
     output.push_str(&format!("**Module:** `{}`\n", mo.rust_module));
     output.push_str(&format!("**VIM Type:** `{}`\n\n", mo.name));
 
@@ -980,7 +969,7 @@ fn format_managed_object_doc(mo: &ManagedObjectEntry) -> String {
         output.push_str(&format!("## Methods ({} methods)\n\n", mo.methods.len()));
         output.push_str("Use `get` with method ID to view detailed information.\n\n");
         for method in &mo.methods {
-            output.push_str(&format!("- `{}::{}`\n", mo.rust_struct, method.rust_name));
+            output.push_str(&format!("- `{}::{}`\n", mo.name, method.name));
         }
         output.push('\n');
     }
@@ -989,7 +978,7 @@ fn format_managed_object_doc(mo: &ManagedObjectEntry) -> String {
 }
 
 fn format_method_doc(m: &MethodItemData) -> String {
-    let mut output = format!("# {}::{}\n\n", m.managed_object, m.method.rust_name);
+    let mut output = format!("# {}::{}\n\n", m.managed_object, m.method.name);
     output.push_str(&format!("**VIM Method:** `{}`\n\n", m.method.name));
 
     output.push_str("## Signature\n\n```rust\n");
@@ -1021,7 +1010,7 @@ fn format_method_doc(m: &MethodItemData) -> String {
 }
 
 fn format_structure_doc(s: &StructureEntry) -> String {
-    let mut output = format!("# Struct: {}\n\n", s.rust_name);
+    let mut output = format!("# Struct: {}\n\n", s.name);
     output.push_str(&format!("**Module:** `{}`\n", s.rust_module));
     output.push_str(&format!("**Emit Mode:** {}\n\n", s.emit_mode));
 
@@ -1089,7 +1078,7 @@ fn format_structure_doc(s: &StructureEntry) -> String {
     if !s.fields.is_empty() {
         output.push_str(&format!("## Fields ({} fields)\n\n", s.fields.len()));
         for field in &s.fields {
-            output.push_str(&format!("### `{}: {}`\n", field.rust_name, field.rust_type));
+            output.push_str(&format!("### `{}: {}`\n", field.name, field.rust_type));
             output.push_str(&format!("- **Required:** {}\n", field.required));
             if field.is_array {
                 output.push_str("- **Array:** Yes\n");
@@ -1115,14 +1104,8 @@ fn format_structure_doc(s: &StructureEntry) -> String {
 }
 
 fn format_field_doc(f: &FieldItemData) -> String {
-    let mut output = format!("# Field: {}.{}\n\n", f.struct_name, f.field.rust_name);
-    output.push_str(&format!("**VIM Name:** `{}`\n", f.field.name));
+    let mut output = format!("# Field: {}.{}\n\n", f.struct_name, f.field.name);
     output.push_str(&format!("**Rust Type:** `{}`\n", f.field.rust_type));
-    output.push_str(&format!("**Required:** {}\n\n", f.field.required));
-
-    if f.field.is_array {
-        output.push_str("**Array:** Yes\n\n");
-    }
 
     if let Some(doc) = &f.field.description {
         output.push_str("## Documentation\n\n");
@@ -1160,7 +1143,7 @@ fn format_field_doc(f: &FieldItemData) -> String {
 }
 
 fn format_enumeration_doc(e: &EnumerationEntry) -> String {
-    let mut output = format!("# Enum: {}\n\n", e.rust_name);
+    let mut output = format!("# Enum: {}\n\n", e.name);
     output.push_str(&format!("**Module:** `{}`\n\n", e.rust_module));
 
     if let Some(desc) = &e.description {
@@ -1171,7 +1154,7 @@ fn format_enumeration_doc(e: &EnumerationEntry) -> String {
 
     output.push_str(&format!("## Variants ({} variants)\n\n", e.variants.len()));
     for variant in &e.variants {
-        output.push_str(&format!("### `{}`\n", variant.rust_name));
+        output.push_str(&format!("### `{}`\n", variant.name));
         output.push_str(&format!("- **VIM Value:** `{}`\n", variant.discriminator_value));
         if let Some(desc) = &variant.description {
             output.push_str(&format!("- **Description:** {}\n", desc));
@@ -1180,10 +1163,10 @@ fn format_enumeration_doc(e: &EnumerationEntry) -> String {
     }
 
     output.push_str("## Usage Example\n\n```rust\n");
-    output.push_str(&format!("use vim_rs::types::enums::{};\n\n", e.rust_name));
+    output.push_str(&format!("use vim_rs::types::enums::{};\n\n", e.name));
     output.push_str("match value {\n");
     for variant in e.variants.iter().take(3) {
-        output.push_str(&format!("    {}::{} => {{ /* ... */ }}\n", e.rust_name, variant.rust_name));
+        output.push_str(&format!("    {}::{} => {{ /* ... */ }}\n", e.name, variant.name));
     }
     if e.variants.len() > 3 {
         output.push_str("    // ...\n");
@@ -1194,7 +1177,7 @@ fn format_enumeration_doc(e: &EnumerationEntry) -> String {
 }
 
 fn format_trait_doc(t: &TraitEntry) -> String {
-    let mut output = format!("# Trait: {}\n\n", t.rust_name);
+    let mut output = format!("# Trait: {}\n\n", t.name);
     output.push_str(&format!("**Module:** `{}`\n", t.rust_module));
     output.push_str(&format!("**Original Type:** `{}`\n\n", t.name));
 
@@ -1238,12 +1221,12 @@ fn format_trait_doc(t: &TraitEntry) -> String {
 
     output.push_str("## Usage Example\n\n```rust\n");
     output.push_str("use vim_rs::types::convert::CastInto;\n");
-    output.push_str(&format!("use vim_rs::types::traits::{};\n\n", t.rust_name));
+    output.push_str(&format!("use vim_rs::types::traits::{};\n\n", t.name));
     if let Some(parent) = &t.parent_trait {
         output.push_str(&format!("let device: &dyn {} = /* ... */;\n", parent));
-        output.push_str(&format!("if let Some(specialized): Option<&dyn {}> = device.as_ref().into_ref() {{\n", t.rust_name));
+        output.push_str(&format!("if let Some(specialized): Option<&dyn {}> = device.as_ref().into_ref() {{\n", t.name));
     } else {
-        output.push_str(&format!("let device: Box<dyn {}> = /* ... */;\n", t.rust_name));
+        output.push_str(&format!("let device: Box<dyn {}> = /* ... */;\n", t.name));
         output.push_str("if let Some(specialized) = device.as_ref() {\n");
     }
     if !t.getters.is_empty() {
@@ -1279,12 +1262,10 @@ mod tests {
         ManagedObjectEntry {
             name: "VirtualMachine".to_string(),
             rust_module: "mo".to_string(),
-            rust_struct: "VirtualMachine".to_string(),
             description: Some("A virtual machine managed object".to_string()),
             methods: vec![
                 MethodEntry {
-                    name: "PowerOnVM_Task".to_string(),
-                    rust_name: "power_on_vm_task".to_string(),
+                    name: "power_on_vm_task".to_string(),
                     signature: MethodSignature {
                         full: "async fn power_on_vm_task(&self, host: Option<&HostSystem>) -> Result<Task>".to_string(),
                         parameters: vec![],
