@@ -1,71 +1,47 @@
 # Data Transformer
 
-Orchestrator program that runs all data processing tools in sequence to transform raw vSphere documentation and API specifications into structured data for the vim_rs MCP server.
+Orchestrator program that runs all data processing tools in sequence to transform vSphere API specifications and code examples into structured data for the vim_rs MCP server.
 
 ## Overview
 
-The Data Transformer coordinates six processing steps that convert:
-- PDF documentation → structured markdown chunks
+The Data Transformer coordinates three processing steps that convert:
 - OpenAPI specifications → API definition JSON files
 - Code examples → indexed example JSON
 - All structured data → vector embeddings database
 
 ## Workflow
 
-The transformer executes the following steps in order, with each step depending on the output of previous steps:
+The transformer executes the following steps in order:
 
 ```mermaid
 graph TD
-    A[PDF Files<br/>mcp/data/guides/pdf/] -->|Step 1: PDF Parser| B[TXT Files<br/>mcp/data/guides/txt/]
-    B -->|Step 2: Text Processor| C[Markdown Files<br/>mcp/data/guides/md/]
-    C -->|Step 3: Build Guides| D[Guide JSON<br/>mcp/data/api_definitions/]
+    E[OpenAPI Spec<br/>vim_build/data/] -->|Step 1: Build API Definitions| F[API Definition JSON<br/>mcp/data/api_definitions/]
     
-    E[OpenAPI Spec<br/>vim_build/data/] -->|Step 4: Build API Definitions| F[API Definition JSON<br/>mcp/data/api_definitions/]
+    G[Example Code<br/>examples/] -->|Step 2: Build Examples| H[Examples JSON<br/>mcp/data/api_definitions/]
     
-    G[Example Code<br/>examples/] -->|Step 5: Build Examples| H[Examples JSON<br/>mcp/data/api_definitions/]
-    
-    D -->|Step 6: Build Embeddings| I[Embeddings Database<br/>mcp/data/embeddings.lancedb/]
-    F -->|Step 6: Build Embeddings| I
-    H -->|Step 6: Build Embeddings| I
-
+    F -->|Step 3: Build Embeddings| I[Embeddings Database<br/>mcp/data/embeddings.bin]
+    H -->|Step 3: Build Embeddings| I
 ```
 
 ### Step Details
 
-1. **PDF Parser** (`pdf_parser`)
-   - Extracts text content from PDF documentation files
-   - Input: `mcp/data/guides/pdf/*.pdf`
-   - Output: `mcp/data/guides/txt/*.txt`
-
-2. **Text Processor** (`text_processor`)
-   - Processes raw text files into structured markdown
-   - Parses table of contents, marks headings, cleans up formatting
-   - Input: `mcp/data/guides/txt/*.txt`
-   - Output: `mcp/data/guides/md/*.md`
-
-3. **Build Guides** (`build_guides`)
-   - Chunks markdown files into semantic units
-   - Extracts topics and creates searchable guide chunks
-   - Input: `mcp/data/guides/md/vmware-vsphere-9-0.md`
-   - Output: `mcp/data/api_definitions/vmware-vsphere-9-0_guide.json`
-
-4. **Build API Definitions** (`build_api_definitions`)
+1. **Build API Definitions** (`build_api_definitions`)
    - Transforms OpenAPI specification into structured JSON
    - Generates managed objects, methods, data structures, enumerations, and traits
    - Input: `vim_build/data/vi_json_openapi_specification_v9_0_0_0_24798170.json`
    - Output: `mcp/data/api_definitions/*.json` (multiple files)
 
-5. **Build Examples** (`build_examples`)
+2. **Build Examples** (`build_examples`)
    - Scans code examples directory and indexes them
    - Extracts metadata, descriptions, and categories
    - Input: `examples/**/*.rs`
    - Output: `mcp/data/api_definitions/examples.json`
 
-6. **Build Embeddings** (`build_embeddings`)
+3. **Build Embeddings** (`build_embeddings`)
    - Generates vector embeddings for all structured data
-   - Creates searchable LanceDB database
+   - Creates searchable binary database
    - Input: All JSON files in `mcp/data/api_definitions/`
-   - Output: `mcp/data/embeddings.lancedb/`
+   - Output: `mcp/data/embeddings.bin`
 
 ## Usage
 
@@ -73,7 +49,6 @@ graph TD
 
 - Rust toolchain (stable)
 - CUDA-capable GPU (optional, for faster embeddings generation)
-- PDF files in `mcp/data/guides/pdf/`
 - OpenAPI specification in `vim_build/data/`
 
 ### Running the Transformer
@@ -99,18 +74,13 @@ The program will:
 ### Output
 
 All output is written to `mcp/data/`:
-- `mcp/data/guides/txt/` - Extracted text files
-- `mcp/data/guides/md/` - Processed markdown files
 - `mcp/data/api_definitions/` - All JSON definition files
-- `mcp/data/embeddings.lancedb/` - Vector embeddings database
+- `mcp/data/embeddings.bin` - Vector embeddings database
 - `mcp/data/model_cache/` - Cached ML models
 
 ## Dependencies
 
 The transformer depends on all data processing tools:
-- `pdf_parser` - PDF text extraction
-- `text-processor` - Text to markdown conversion
-- `build_guides` - Markdown chunking
 - `build-api-definitions` - API definition generation
 - `build-examples` - Example indexing
 - `build-embeddings` - Embedding generation (with optional CUDA support)
@@ -126,18 +96,15 @@ Each step is executed independently with error handling:
 ## Performance
 
 The transformer logs timing information for each step:
-- PDF parsing: Depends on PDF file sizes
-- Text processing: Fast, processes multiple files
-- Guide building: Moderate, processes large markdown files
 - API definitions: Moderate, processes large OpenAPI spec
 - Example indexing: Fast, scans Rust source files
 - Embedding generation: Slowest step, benefits from CUDA acceleration
 
-Total execution time varies but typically takes several minutes for a complete run.
+Total execution time varies but typically takes a few minutes for a complete run.
 
 ## Data Model
 
-The transformer produces a structured data model that represents the vSphere API and documentation. The following diagram illustrates the relationships between different data entities:
+The transformer produces a structured data model that represents the vSphere API. The following diagram illustrates the relationships between different data entities:
 
 ```mermaid
 erDiagram
@@ -159,10 +126,6 @@ erDiagram
     DataStructure ||--o| DataStructure : "parent-child"
     DataStructure }o--o{ Trait : "implements"
     Trait ||--o{ DataStructure : "implemented_by"
-    
-    GuideChunk }o--o{ ManagedObject : "mentions"
-    GuideChunk }o--o{ Method : "mentions"
-    GuideChunk }o--o{ DataStructure : "mentions"
     
     CodeExample }o--o{ ManagedObject : "demonstrates"
     CodeExample }o--o{ Method : "demonstrates"
@@ -230,15 +193,6 @@ erDiagram
         Variant[] variants
     }
     
-    GuideChunk {
-        string heading_h1
-        string heading_h2
-        string heading_h3
-        string content
-        string[] topics
-        string chunk_id
-    }
-    
     CodeExample {
         string name
         string title
@@ -281,12 +235,7 @@ erDiagram
 
 **Documentation & Examples:**
 
-6. **Guide Chunks**
-   - Documentation segments extracted from PDF guides
-   - Linked to API entities through topic keywords
-   - Organized by hierarchical headings (H1/H2/H3)
-
-7. **Code Examples**
+6. **Code Examples**
    - Demonstrative code snippets
    - Categorized by usage pattern (connection, property_collector, etc.)
    - Reference **Managed Objects** and **Methods** in source code

@@ -588,7 +588,6 @@ Every item has a unique ID you can pass to `get()`:
 | Enum | `{rust_name}` | `ManagedEntityStatus` |
 | Trait | `{rust_name}` | `VirtualDeviceTrait` |
 | Example | `example::{name}` | `example::connection_basic` |
-| Guide | `guide::{chunk_id}` | `guide::installing-esx-auto-deploy` |
 
 ### Workflow 1: Start Here - Get the Starter Guide
 **Always call this first when beginning with vim_rs:**
@@ -631,7 +630,6 @@ get(id="VirtualHardware::device")                 # Field
 get(id="VirtualDeviceTrait")                      # Trait
 get(id="ManagedEntityStatus")                     # Enum
 get(id="example::connection_basic")               # Code example
-get(id="guide::installing-esx-auto-deploy")       # Guide section
 ```
 
 **Tool Details:**
@@ -706,7 +704,6 @@ vim_retrievable!(
 | **Find admin concepts** | `search(filter="guides")` | `search(query="drs", filter="guides")` |
 | **Get item details** | `get(id="...")` | `get(id="VirtualMachine")` |
 | **Get example code** | `get(id="example::...")` | `get(id="example::property_collector_macro")` |
-| **Get guide section** | `get(id="guide::...")` | `get(id="guide::vcenter-concepts")` |
 | **Understand a type** | `get(id="...")` | `get(id="VirtualMachineConfigSpec")` |
 | **Get method details** | `get(id="Mo::method")` | `get(id="VirtualMachine::power_on_vm_task")` |
 | **Get field details** | `get(id="Struct::field")` | `get(id="VirtualHardware::device")` |

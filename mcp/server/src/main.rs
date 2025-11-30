@@ -65,7 +65,7 @@ struct SemanticSearchInput {
     limit: usize,
 
     /// Filter by item type
-    #[schemars(description = "Filter results by type: 'all', 'managed_objects', 'methods', 'structures', 'enums', 'fields', 'examples', or 'guides' (default: 'all')")]
+    #[schemars(description = "Filter results by type: 'all', 'managed_objects', 'methods', 'structures', 'enums', 'fields', or 'examples' (default: 'all')")]
     #[serde(default = "default_filter")]
     filter: String,
 }
@@ -82,7 +82,7 @@ fn default_filter() -> String {
 #[derive(Serialize, Deserialize, JsonSchema)]
 struct GetInput {
     /// Item ID to retrieve
-    #[schemars(description = "Item ID to retrieve. Examples: 'VirtualMachine' (managed object), 'VirtualMachine::power_on_vm_task' (method), 'VirtualHardware::device' (field), 'VirtualDevice' (struct), 'ManagedEntityStatus' (enum), 'VirtualDeviceTrait' (trait), 'example::connection_basic', 'guide::chunk-id'")]
+    #[schemars(description = "Item ID to retrieve. Examples: 'VirtualMachine' (managed object), 'VirtualMachine::power_on_vm_task' (method), 'VirtualHardware::device' (field), 'VirtualDevice' (struct), 'ManagedEntityStatus' (enum), 'VirtualDeviceTrait' (trait), 'example::connection_basic'")]
     id: String,
 }
 
@@ -122,13 +122,6 @@ impl McpServer {
             .join("data");
         info!("Loading API data from {}", mcp_data_dir.display());
         let api_data = ApiData::load_from_dir(&mcp_data_dir)?;
-        
-        // Verify guides were loaded
-        let guide_count = api_data.count_by_type("guide");
-        if guide_count == 0 {
-            warn!("⚠️  WARNING: No guide chunks loaded! Check that guides are in {}", 
-                mcp_data_dir.join("api_definitions").display());
-        }
 
         #[cfg(feature = "embeddings")]
         let (embedding_model, embeddings_db) = {
@@ -246,8 +239,7 @@ impl McpServer {
                 - Field: `VirtualHardware::device`\n\
                 - Enum: `ManagedEntityStatus`\n\
                 - Trait: `VirtualDeviceTrait`\n\
-                - Example: `example::connection_basic`\n\
-                - Guide: `guide::chunk-id`\n\n\
+                - Example: `example::connection_basic`\n\n\
                 Use `search` to find valid IDs.",
                 id,
                 suggestions_text
@@ -386,7 +378,7 @@ impl McpServer {
 
     /// Semantic search using natural language queries (requires embeddings)
     #[cfg(feature = "embeddings")]
-    #[tool(description = "Search vSphere documentation using natural language queries. Returns Rust managed objects, methods, structures, enums, examples, and guides based on meaning, not just keywords. Use filter='guides' to search only documentation guides.")]
+    #[tool(description = "Search vSphere API documentation using natural language queries. Returns Rust managed objects, methods, structures, enums, and examples based on meaning, not just keywords.")]
     async fn search(&self, params: Parameters<SemanticSearchInput>) -> Result<CallToolResult, McpError> {
         // Check if embeddings are available
         if self.embedding_model.is_none() || self.embeddings_db.is_none() {
@@ -447,7 +439,6 @@ impl McpServer {
                     "structures" => "structure",
                     "enums" => "enum",
                     "examples" => "example",
-                    "guides" => "guide",
                     "managed_objects" => "managed_object",
                     "fields" => "field",
                     "traits" => "trait",
@@ -513,8 +504,7 @@ impl ServerHandler for McpServer {
                 - Field: 'VirtualHardware::device'\n\
                 - Enum: 'ManagedEntityStatus'\n\
                 - Trait: 'VirtualDeviceTrait'\n\
-                - Example: 'example::connection_basic'\n\
-                - Guide: 'guide::chunk-id'\n\n\
+                - Example: 'example::connection_basic'\n\n\
                 PROPERTY COLLECTOR HELPERS:\n\
                 - list_property_collector_root_types → List all supported managed object types\n\
                 - get_property_info → Explore property paths and their types\n\n\

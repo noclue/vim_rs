@@ -1,7 +1,4 @@
 use anyhow::{Context, Result};
-use pdf_parser::{process_pdfs, Config as PdfConfig};
-use text_processor::process_all_files;
-use build_guides::process_single_file;
 use build_examples::build_examples;
 use build_embeddings::build_embeddings;
 use build_api_definitions::build_api_definitions;
@@ -37,61 +34,12 @@ async fn main() -> Result<()> {
 
     // Define all paths relative to workspace root
     let mcp_data_dir = workspace_root.join("mcp").join("data");
-    let guides_dir = mcp_data_dir.join("guides");
     let examples_dir = workspace_root.join("examples");
     let vim_build_data_dir = workspace_root.join("vim_build/data");
 
-    // Step 1: PDF Parser
+    // Step 1: Build API Definitions
     info!("{:=<70}", "");
-    info!("Step 1/6: PDF Parser");
-    info!("{:=<70}", "");
-    let step_start = Instant::now();
-    match run_pdf_parser(&guides_dir) {
-        Ok(_) => {
-            info!("✓ PDF Parser completed in {:?}", step_start.elapsed());
-        }
-        Err(e) => {
-            error!("✗ PDF Parser failed: {}", e);
-            return Err(e).context("PDF Parser step failed");
-        }
-    }
-    info!("");
-
-    // Step 2: Text Processor
-    info!("{:=<70}", "");
-    info!("Step 2/6: Text Processor");
-    info!("{:=<70}", "");
-    let step_start = Instant::now();
-    match run_text_processor(&guides_dir) {
-        Ok(_) => {
-            info!("✓ Text Processor completed in {:?}", step_start.elapsed());
-        }
-        Err(e) => {
-            error!("✗ Text Processor failed: {}", e);
-            return Err(e).context("Text Processor step failed");
-        }
-    }
-    info!("");
-
-    // Step 3: Build Guides
-    info!("{:=<70}", "");
-    info!("Step 3/6: Build Guides");
-    info!("{:=<70}", "");
-    let step_start = Instant::now();
-    match run_build_guides(&mcp_data_dir) {
-        Ok(_) => {
-            info!("✓ Build Guides completed in {:?}", step_start.elapsed());
-        }
-        Err(e) => {
-            error!("✗ Build Guides failed: {}", e);
-            return Err(e).context("Build Guides step failed");
-        }
-    }
-    info!("");
-
-    // Step 4: Build API Definitions
-    info!("{:=<70}", "");
-    info!("Step 4/6: Build API Definitions");
+    info!("Step 1/3: Build API Definitions");
     info!("{:=<70}", "");
     let step_start = Instant::now();
     match run_build_api_definitions(&mcp_data_dir, &vim_build_data_dir) {
@@ -105,9 +53,9 @@ async fn main() -> Result<()> {
     }
     info!("");
 
-    // Step 5: Build Examples
+    // Step 2: Build Examples
     info!("{:=<70}", "");
-    info!("Step 5/6: Build Examples");
+    info!("Step 2/3: Build Examples");
     info!("{:=<70}", "");
     let step_start = Instant::now();
     match run_build_examples(&examples_dir, &mcp_data_dir) {
@@ -121,9 +69,9 @@ async fn main() -> Result<()> {
     }
     info!("");
 
-    // Step 6: Build Embeddings
+    // Step 3: Build Embeddings
     info!("{:=<70}", "");
-    info!("Step 6/6: Build Embeddings");
+    info!("Step 3/3: Build Embeddings");
     info!("{:=<70}", "");
     let step_start = Instant::now();
     match run_build_embeddings(&mcp_data_dir).await {
@@ -145,49 +93,6 @@ async fn main() -> Result<()> {
     info!("Total execution time: {:?}", total_elapsed);
     info!("");
 
-    Ok(())
-}
-
-fn run_pdf_parser(guides_dir: &PathBuf) -> Result<()> {
-    let pdf_dir = guides_dir.join("pdf");
-    let txt_dir = guides_dir.join("txt");
-
-    let config = PdfConfig {
-        input_dir: pdf_dir.clone(),
-        output_dir: txt_dir.clone(),
-    };
-
-    info!("Input directory:  {}", config.input_dir.display());
-    info!("Output directory: {}", config.output_dir.display());
-
-    process_pdfs(&config, Instant::now())
-        .map_err(|e| anyhow::anyhow!("PDF processing failed: {}", e))?;
-    Ok(())
-}
-
-fn run_text_processor(guides_dir: &PathBuf) -> Result<()> {
-    let txt_dir = guides_dir.join("txt");
-    let md_dir = guides_dir.join("md");
-
-    info!("Input directory:  {}", txt_dir.display());
-    info!("Output directory: {}", md_dir.display());
-
-    process_all_files(&txt_dir, &md_dir)?;
-    Ok(())
-}
-
-fn run_build_guides(data_dir: &PathBuf) -> Result<()> {
-    let guides_dir = data_dir.join("guides");
-    let md_dir = guides_dir.join("md");
-    let json_dir = data_dir.join("api_definitions");
-
-    let input_path = md_dir.join("vmware-vsphere-9-0.md");
-    let output_path = json_dir.join("vmware-vsphere-9-0_guide.json");
-
-    info!("Input file:  {}", input_path.display());
-    info!("Output file: {}", output_path.display());
-
-    process_single_file(&input_path, &output_path)?;
     Ok(())
 }
 
@@ -239,4 +144,3 @@ async fn run_build_embeddings(mcp_data_dir: &PathBuf) -> Result<()> {
     build_embeddings(&api_data, &embeddings_db_path, model_cache_dir).await?;
     Ok(())
 }
-

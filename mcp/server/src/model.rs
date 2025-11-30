@@ -167,23 +167,6 @@ struct ExamplesOutput {
     examples: Vec<CodeExample>,
 }
 
-// Guide chunks - matches build_guides output
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct GuideChunk {
-    pub heading_h1: String,
-    pub heading_h2: String,
-    pub heading_h3: String,
-    pub sub_section: Option<String>,
-    pub content: String,
-    pub word_count: usize,
-    pub source_file: String,
-    pub chunk_id: String,
-    pub topics: Vec<String>,
-    pub chunk_index: usize,
-    pub chunk_count: usize,
-}
-
 /// Holds all loaded API data - unified index for all items
 #[derive(Debug, Clone)]
 pub struct ApiData {
@@ -276,29 +259,10 @@ impl ApiData {
             warn!("examples.json not found");
         }
 
-        // Load guides
-        if api_definitions_dir.exists() && api_definitions_dir.is_dir() {
-            for entry in std::fs::read_dir(&api_definitions_dir)? {
-                let entry = entry?;
-                let path = entry.path();
-                if let Some(file_name) = path.file_name().and_then(|s| s.to_str()) {
-                    if file_name.ends_with("_guide.json") {
-                        let content = std::fs::read_to_string(&path)?;
-                        let chunks: Vec<GuideChunk> = serde_json::from_str(&content)?;
-                        info!("Loaded {} chunks from {}", chunks.len(), path.display());
-                        for chunk in chunks {
-                            let id = format!("guide::{}", chunk.chunk_id);
-                            items.insert(id, ApiItemEntry::Guide(chunk));
-                        }
-                    }
-                }
-            }
-        }
-
         let api_data = ApiData { items };
 
         info!(
-            "Loaded {} items: {} managed objects, {} methods, {} structures, {} fields, {} enums, {} traits, {} examples, {} guides",
+            "Loaded {} items: {} managed objects, {} methods, {} structures, {} fields, {} enums, {} traits, {} examples",
             api_data.items.len(),
             api_data.count_by_type("managed_object"),
             api_data.count_by_type("method"),
@@ -307,7 +271,6 @@ impl ApiData {
             api_data.count_by_type("enum"),
             api_data.count_by_type("trait"),
             api_data.count_by_type("example"),
-            api_data.count_by_type("guide"),
         );
 
         Ok(api_data)
@@ -334,7 +297,7 @@ pub trait ApiItem: Send + Sync {
     fn id(&self) -> &str;
     
     /// Item type for filtering: "managed_object", "method", "structure", 
-    /// "enum", "trait", "field", "example", "guide"
+    /// "enum", "trait", "field", "example"
     fn item_type(&self) -> &'static str;
     
     /// Text optimized for semantic search embeddings
@@ -374,7 +337,6 @@ pub enum ApiItemEntry {
     Enumeration(EnumerationEntry),
     Trait(TraitEntry),
     Example(CodeExample),
-    Guide(GuideChunk),
 }
 
 impl ApiItem for ApiItemEntry {
@@ -387,7 +349,6 @@ impl ApiItem for ApiItemEntry {
             ApiItemEntry::Enumeration(e) => &e.rust_name,
             ApiItemEntry::Trait(t) => &t.rust_name,
             ApiItemEntry::Example(ex) => &ex.name, // Note: full ID is "example::{name}" but we store by full ID
-            ApiItemEntry::Guide(g) => &g.chunk_id, // Note: full ID is "guide::{chunk_id}" but we store by full ID
         }
     }
 
@@ -400,7 +361,6 @@ impl ApiItem for ApiItemEntry {
             ApiItemEntry::Enumeration(_) => "enum",
             ApiItemEntry::Trait(_) => "trait",
             ApiItemEntry::Example(_) => "example",
-            ApiItemEntry::Guide(_) => "guide",
         }
     }
 
@@ -466,26 +426,6 @@ impl ApiItem for ApiItemEntry {
                     ex.title,
                     ex.category,
                     ex.description
-                )
-            }
-            ApiItemEntry::Guide(g) => {
-                let topics_str = if g.topics.is_empty() {
-                    String::new()
-                } else {
-                    format!(" Topics: {}.", g.topics.join(", "))
-                };
-                let sub_section_str = g.sub_section.as_ref()
-                    .map(|s| format!(" ({})", s))
-                    .unwrap_or_default();
-                let content_preview = prepare_text(&g.content);
-                format!(
-                    "{} > {} > {}{}.{} {}",
-                    g.heading_h1,
-                    g.heading_h2,
-                    g.heading_h3,
-                    sub_section_str,
-                    topics_str,
-                    content_preview
                 )
             }
         }
@@ -576,33 +516,6 @@ impl ApiItem for ApiItemEntry {
                     ex.name,
                     ex.category,
                     ex.description.lines().take(3).collect::<Vec<_>>().join(" ")
-                )
-            }
-            ApiItemEntry::Guide(g) => {
-                let topics = if g.topics.is_empty() {
-                    "None".to_string()
-                } else {
-                    g.topics.join(", ")
-                };
-                let sub_section = g.sub_section.as_ref()
-                    .map(|s| format!(" - {}", s))
-                    .unwrap_or_default();
-                // Truncate content to ~300 chars for preview
-                let content_preview = if g.content.len() > 300 {
-                    format!("{}...", &g.content[..300])
-                } else {
-                    g.content.clone()
-                };
-                format!(
-                    "## {} > {} > {}{}\n\n**ID:** `guide::{}`\n\n**Source:** {}\n\n**Topics:** {}\n\n{}\n\n---\n",
-                    g.heading_h1,
-                    g.heading_h2,
-                    g.heading_h3,
-                    sub_section,
-                    g.chunk_id,
-                    g.source_file,
-                    topics,
-                    content_preview
                 )
             }
         }
@@ -883,33 +796,6 @@ impl ApiItem for ApiItemEntry {
                     ex.dependencies,
                     ex.file_path
                 )
-            }
-            ApiItemEntry::Guide(g) => {
-                let topics = if g.topics.is_empty() {
-                    "None".to_string()
-                } else {
-                    g.topics.join(", ")
-                };
-
-                let sub_section = g.sub_section.as_ref()
-                    .map(|s| format!(" - {}", s))
-                    .unwrap_or_default();
-
-                let mut output = format!(
-                    "# {} > {} > {}{}\n\n**Source:** {}\n\n**Topics:** {}\n\n**Word Count:** {}\n\n## Content\n\n{}\n",
-                    g.heading_h1,
-                    g.heading_h2,
-                    g.heading_h3,
-                    sub_section,
-                    g.source_file,
-                    topics,
-                    g.word_count,
-                    g.content
-                );
-                if g.chunk_count > 1 {
-                    output.push_str(&format!("\nThis is part {} of {} parts.", g.chunk_index, g.chunk_count));
-                }
-                output
             }
         }
     }

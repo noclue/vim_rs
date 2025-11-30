@@ -9,9 +9,6 @@ path = "src/main.rs"
 
 [dependencies]
 # Tool libraries
-pdf_parser = { path = "../pdf_parser" }
-text-processor = { path = "../text_processor" }
-build_guides = { path = "../build_guides" }
 build-examples = { path = "../build_examples" }
 build-embeddings = { path = "../build_embeddings", features = ["cuda"] }
 build-api-definitions = { path = "../build_api_definitions" }

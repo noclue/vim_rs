@@ -1,7 +1,7 @@
 use anyhow::{Context, Result};
 use fastembed::{EmbeddingModel, InitOptions, TextEmbedding};
 use std::path::PathBuf;
-use tracing::{info, warn};
+use tracing::info;
 use vim_mcp_server::model::{ApiData, ApiItem, EmbeddingRecord, EmbeddingDatabase};
 use std::fs::File;
 use std::io::BufWriter;
@@ -30,7 +30,6 @@ pub async fn build_embeddings(api_data: &ApiData, embeddings_path: &PathBuf, mod
     let enum_count = records.iter().filter(|r| r.item_type == "enum").count();
     let trait_count = records.iter().filter(|r| r.item_type == "trait").count();
     let example_count = records.iter().filter(|r| r.item_type == "example").count();
-    let guide_count = records.iter().filter(|r| r.item_type == "guide").count();
 
     info!("Created {} embedding records:", records.len());
     info!("  - {} managed objects", managed_object_count);
@@ -40,14 +39,6 @@ pub async fn build_embeddings(api_data: &ApiData, embeddings_path: &PathBuf, mod
     info!("  - {} enums", enum_count);
     info!("  - {} traits", trait_count);
     info!("  - {} examples", example_count);
-    info!("  - {} guides", guide_count);
-
-    // Verification: Ensure key items were loaded
-    if guide_count == 0 {
-        warn!("⚠️  WARNING: No guide chunks loaded! Check that guides are available.");
-    } else {
-        info!("✓ Loaded {} guide chunks", guide_count);
-    }
 
     // Assert the VirtualHardware::device field is in the embeddings
     let virtual_hardware_device_field = records.iter()
