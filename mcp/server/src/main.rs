@@ -1,4 +1,4 @@
-use anyhow::{Result, Context};
+use anyhow::Result;
 use rmcp::{
     ErrorData as McpError, handler::server::{
         ServerHandler,
@@ -13,29 +13,18 @@ use rmcp::{
 };
 use serde::{Deserialize, Serialize};
 use schemars::JsonSchema;
-use std::sync::Arc;
+use std::sync::{Arc, Mutex};
 use tokio::io::{stdin, stdout};
 use tracing::{error, info, warn};
+use fastembed::{InitOptions, TextEmbedding};
+use rayon::prelude::*;
 
 // Import data model from the library
-use vim_mcp_server::model::{ApiData, ApiItem, EmbeddingDatabase};
+use vim_mcp_server::model::{ApiDatabase, ApiItem, load_embedded_database, STARTER_GUIDE};
 use vim_mcp_server::property_collector;
-
-// Conditional imports for embeddings feature
-#[cfg(feature = "embeddings")]
-use fastembed::{InitOptions, TextEmbedding};
-#[cfg(feature = "embeddings")]
 use vim_mcp_server::EMBEDDING_MODEL;
-#[cfg(feature = "embeddings")]
-use rayon::prelude::*;
-#[cfg(feature = "embeddings")]
-use std::sync::Mutex;
-#[cfg(feature = "embeddings")]
-use std::fs::File;
-#[cfg(feature = "embeddings")]
-use std::io::BufReader;
 
-// Conditional imports for CUDA GPU acceleration
+// CUDA GPU acceleration (optional)
 #[cfg(feature = "cuda")]
 use ort::execution_providers::CUDAExecutionProvider;
 
@@ -47,11 +36,10 @@ use ort::execution_providers::CUDAExecutionProvider;
 #[derive(Clone)]
 pub struct McpServer {
     tool_router: ToolRouter<Self>,
-    api_data: Arc<ApiData>,
-    #[cfg(feature = "embeddings")]
+    /// Unified API database with items and embeddings
+    api_db: Arc<ApiDatabase>,
+    /// Embedding model for runtime query embedding
     embedding_model: Option<Arc<Mutex<TextEmbedding>>>,
-    #[cfg(feature = "embeddings")]
-    embeddings_db: Option<Arc<EmbeddingDatabase>>,
 }
 
 /// Input parameters for semantic search tool
@@ -117,17 +105,35 @@ struct GetPropertyInfoInput {
 #[tool_router]
 impl McpServer {
     async fn new() -> Result<Self> {
-        // Try to load API data from the data directory - navigate to mcp/data/
-        let mcp_data_dir = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-            .parent()
-            .unwrap()
-            .join("data");
-        info!("Loading API data from {}", mcp_data_dir.display());
-        let api_data = ApiData::load_from_dir(&mcp_data_dir)?;
+        // Load unified API database from embedded binary
+        info!("Loading embedded API database...");
+        let api_db = load_embedded_database()?;
+        
+        info!(
+            "Loaded {} items: {} managed objects, {} methods, {} structures, {} fields, {} enums, {} traits, {} examples",
+            api_db.items.len(),
+            api_db.count_by_type("managed_object"),
+            api_db.count_by_type("method"),
+            api_db.count_by_type("structure"),
+            api_db.count_by_type("field"),
+            api_db.count_by_type("enum"),
+            api_db.count_by_type("trait"),
+            api_db.count_by_type("example"),
+        );
 
-        #[cfg(feature = "embeddings")]
-        let (embedding_model, embeddings_db) = {
-            let embeddings_path = mcp_data_dir.join("embeddings.bin");
+        if api_db.has_embeddings() {
+            info!("Embeddings available: {} vectors", 
+                api_db.embeddings.as_ref().map(|e| e.len()).unwrap_or(0));
+        } else {
+            warn!("No embeddings in database, semantic search will be unavailable");
+        }
+
+        // Initialize embedding model for runtime query embedding
+        let embedding_model = {
+            let mcp_data_dir = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+                .parent()
+                .unwrap()
+                .join("data");
             let model_cache_dir = mcp_data_dir.join("model_cache");
 
             // Create cache directory if it doesn't exist
@@ -135,72 +141,41 @@ impl McpServer {
                 std::fs::create_dir_all(&model_cache_dir)?;
             }
 
-            if embeddings_path.exists() {
-                info!("Loading embeddings from {}", embeddings_path.display());
-                info!("Using model cache directory: {}", model_cache_dir.display());
+            info!("Loading embedding model from cache: {}", model_cache_dir.display());
 
-                // Load embedding model with persistent cache
-                // Configure execution providers: CUDA if available, fallback to CPU
-                #[cfg(feature = "cuda")]
-                let init_options = {
-                    info!("CUDA feature enabled - attempting GPU acceleration");
-                    InitOptions::new(EMBEDDING_MODEL)
-                        .with_cache_dir(model_cache_dir)
-                        .with_show_download_progress(false)
-                        .with_execution_providers(vec![
-                            CUDAExecutionProvider::default().build()
-                        ])
-                };
-
-                #[cfg(not(feature = "cuda"))]
-                let init_options = InitOptions::new(EMBEDDING_MODEL)
+            // Configure execution providers: CUDA if available, fallback to CPU
+            #[cfg(feature = "cuda")]
+            let init_options = {
+                info!("CUDA feature enabled - attempting GPU acceleration");
+                InitOptions::new(EMBEDDING_MODEL)
                     .with_cache_dir(model_cache_dir)
-                    .with_show_download_progress(false);
+                    .with_show_download_progress(false)
+                    .with_execution_providers(vec![
+                        CUDAExecutionProvider::default().build()
+                    ])
+            };
 
-                match TextEmbedding::try_new(init_options) {
-                    Ok(model) => {
-                        info!("Embedding model loaded successfully");
+            #[cfg(not(feature = "cuda"))]
+            let init_options = InitOptions::new(EMBEDDING_MODEL)
+                .with_cache_dir(model_cache_dir)
+                .with_show_download_progress(false);
 
-                        // Load database from binary file
-                        let file = File::open(&embeddings_path).context("Failed to open embeddings file");
-                        match file {
-                            Ok(f) => {
-                                let reader = BufReader::new(f);
-                                match bincode::deserialize_from(reader) {
-                                    Ok(db) => {
-                                        info!("Loaded embeddings database");
-                                        (Some(Arc::new(Mutex::new(model))), Some(Arc::new(db)))
-                                    },
-                                    Err(e) => {
-                                        warn!("Failed to deserialize embeddings: {}", e);
-                                        (Some(Arc::new(Mutex::new(model))), None)
-                                    }
-                                }
-                            }
-                            Err(e) => {
-                                warn!("Failed to open embeddings file: {}", e);
-                                (Some(Arc::new(Mutex::new(model))), None)
-                            }
-                        }
-                    }
-                    Err(e) => {
-                        warn!("Failed to load embedding model: {}", e);
-                        (None, None)
-                    }
+            match TextEmbedding::try_new(init_options) {
+                Ok(model) => {
+                    info!("Embedding model loaded successfully");
+                    Some(Arc::new(Mutex::new(model)))
                 }
-            } else {
-                info!("Embeddings database not found, semantic search will be unavailable");
-                (None, None)
+                Err(e) => {
+                    warn!("Failed to load embedding model: {}", e);
+                    None
+                }
             }
         };
 
         Ok(Self {
             tool_router: Self::tool_router(),
-            api_data: Arc::new(api_data),
-            #[cfg(feature = "embeddings")]
+            api_db: Arc::new(api_db),
             embedding_model,
-            #[cfg(feature = "embeddings")]
-            embeddings_db,
         })
     }
 
@@ -209,14 +184,14 @@ impl McpServer {
     async fn get(&self, params: Parameters<GetInput>) -> Result<CallToolResult, McpError> {
         let id = &params.0.id;
         
-        if let Some(item) = self.api_data.get(id) {
+        if let Some(item) = self.api_db.get(id) {
             Ok(CallToolResult::success(vec![Content::text(item.detailed_document())]))
         } else {
             // Try to provide helpful suggestions
             let mut suggestions = Vec::new();
             
             // Check for close matches in items
-            for item_id in self.api_data.items.keys().take(1000) {
+            for item_id in self.api_db.items.keys().take(1000) {
                 if item_id.to_lowercase().contains(&id.to_lowercase()) 
                    || id.to_lowercase().contains(&item_id.to_lowercase()) {
                     suggestions.push(format!("- `{}`", item_id));
@@ -253,28 +228,8 @@ impl McpServer {
     /// Get comprehensive vim_rs starter guide
     #[tool(description = "CALL THIS FIRST! Returns the complete vim_rs starter guide with connection patterns, property collector usage, code snippets, and best practices. Essential for writing correct vim_rs code on the first try.")]
     async fn get_starter_guide(&self, _params: Parameters<GetStarterGuideInput>) -> Result<CallToolResult, McpError> {
-        // Load the starter guide from the server guides directory
-        let guide_path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
-            .join("guides")
-            .join("VIM_RS_STARTER_GUIDE.md");
-
-        let content = if guide_path.exists() {
-            match std::fs::read_to_string(&guide_path) {
-                Ok(content) => content,
-                Err(e) => {
-                    return Ok(CallToolResult::success(vec![Content::text(format!(
-                        "Error reading starter guide: {}. Use search_examples or get_example to find usage patterns.",
-                        e
-                    ))]));
-                }
-            }
-        } else {
-            return Ok(CallToolResult::success(vec![Content::text(format!(
-                "Error: Starter guide file not found. Use search_examples or get_example to find usage patterns.",
-            ))]));
-        };
-
-        Ok(CallToolResult::success(vec![Content::text(content)]))
+        // Return the embedded starter guide (compiled into the binary)
+        Ok(CallToolResult::success(vec![Content::text(STARTER_GUIDE)]))
     }
 
     /// List all supported managed object types
@@ -378,28 +333,35 @@ impl McpServer {
     }
 
 
-    /// Semantic search using natural language queries (requires embeddings)
-    #[cfg(feature = "embeddings")]
+    /// Semantic search using natural language queries
     #[tool(description = "Search vSphere API documentation using natural language queries. Returns Rust managed objects, methods, structures, enums, and examples based on meaning, not just keywords.")]
     async fn search(&self, params: Parameters<SemanticSearchInput>) -> Result<CallToolResult, McpError> {
         // Check if embeddings are available
-        if self.embedding_model.is_none() || self.embeddings_db.is_none() {
-            let message = "Semantic search is not available. Embeddings database not found.".to_string();
-            return Ok(CallToolResult::success(vec![Content::text(message)]));
-        }
+        let embeddings = match &self.api_db.embeddings {
+            Some(e) => e,
+            None => {
+                let message = "Semantic search is not available. No embeddings in database.".to_string();
+                return Ok(CallToolResult::success(vec![Content::text(message)]));
+            }
+        };
 
-        let embedding_model = self.embedding_model.as_ref().unwrap();
-        let embeddings_db = self.embeddings_db.as_ref().unwrap();
+        let embedding_model = match &self.embedding_model {
+            Some(m) => m,
+            None => {
+                let message = "Semantic search is not available. Embedding model not loaded.".to_string();
+                return Ok(CallToolResult::success(vec![Content::text(message)]));
+            }
+        };
 
         // Generate embedding for query
         let query_embedding = {
             let mut model = embedding_model.lock().unwrap();
             match model.embed(vec![params.0.query.clone()], None) {
-                Ok(mut embeddings) => {
-                    if embeddings.is_empty() {
+                Ok(mut embs) => {
+                    if embs.is_empty() {
                         return Err(McpError::internal_error("Failed to generate query embedding".to_string(), None));
                     }
-                    embeddings.remove(0)
+                    embs.remove(0)
                 }
                 Err(e) => {
                     return Err(McpError::internal_error(format!("Failed to generate query embedding: {}", e), None));
@@ -408,7 +370,8 @@ impl McpServer {
         };
 
         // Perform parallel search using Rayon
-        let mut scores: Vec<(usize, f32)> = embeddings_db.vectors.par_iter()
+        // Embeddings are aligned with items by index
+        let mut scores: Vec<(usize, f32)> = embeddings.par_iter()
             .enumerate()
             .map(|(idx, vec)| {
                 // Dot product (vectors are normalized)
@@ -427,12 +390,16 @@ impl McpServer {
         let mut formatted_results = Vec::new();
         let mut count = 0;
 
+        // Get items as a vec for indexing (IndexMap preserves insertion order)
+        let items: Vec<_> = self.api_db.items.iter().collect();
+
         for (idx, _score) in scores {
             if count >= limit {
                 break;
             }
 
-            let record = &embeddings_db.records[idx];
+            // Get the item at this index
+            let (_id, item) = &items[idx];
             
             // Apply filter
             if filter != "all" {
@@ -447,16 +414,13 @@ impl McpServer {
                     _ => "all"
                 };
                 
-                if record.item_type != filter_type {
+                if item.item_type() != filter_type {
                     continue;
                 }
             }
 
-            // Look up item and get summary using unified ApiItem trait
-            if let Some(item) = self.api_data.get(&record.id) {
-                formatted_results.push(item.search_summary());
-                count += 1;
-            }
+            formatted_results.push(item.search_summary());
+            count += 1;
         }
 
         if formatted_results.is_empty() {
@@ -564,8 +528,6 @@ mod tests {
         assert!(router.has_route("get_starter_guide"));
         assert!(router.has_route("get_property_info"));
         assert!(router.has_route("list_property_collector_root_types"));
-
-        #[cfg(feature = "embeddings")]
         assert!(router.has_route("search"));
 
         Ok(())

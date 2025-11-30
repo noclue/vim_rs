@@ -1,28 +1,21 @@
 use anyhow::{Context, Result};
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 use std::fs;
-use std::path::PathBuf;
+use std::path::Path;
 use tracing::info;
 use walkdir::WalkDir;
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-struct CodeExample {
-    name: String,
-    title: String,
-    description: String,
-    category: String,
-    source_code: String,
-    file_path: String,
-    dependencies: String,
-}
+// Re-export CodeExample for external use
+pub use api_database::CodeExample;
 
 #[derive(Debug, Serialize)]
 struct ExamplesOutput {
     examples: Vec<CodeExample>,
 }
 
-
-pub fn build_examples(examples_dir: &PathBuf, output_dir: &PathBuf) -> Result<()> {
+/// Collect examples from the examples directory and return them in memory (no file I/O).
+/// This is the primary function for the unified binary pipeline.
+pub fn collect_examples(examples_dir: &Path) -> Result<Vec<CodeExample>> {
     info!("Scanning examples directory: {}", examples_dir.display());
 
     let mut examples = Vec::new();
@@ -41,7 +34,7 @@ env_logger = "0.11"
 "#;
 
     // Scan for all .rs files in examples subdirectories
-    for entry in WalkDir::new(&examples_dir)
+    for entry in WalkDir::new(examples_dir)
         .into_iter()
         .filter_map(|e| e.ok())
         .filter(|e| e.path().extension().map_or(false, |ext| ext == "rs"))
@@ -103,7 +96,7 @@ env_logger = "0.11"
             "general"
         };
 
-        let relative_path = path.strip_prefix(&examples_dir)
+        let relative_path = path.strip_prefix(examples_dir)
             .unwrap_or(path)
             .to_string_lossy()
             .to_string();
@@ -127,7 +120,14 @@ env_logger = "0.11"
             .then(a.name.cmp(&b.name))
     });
 
-    fs::create_dir_all(&output_dir)?;
+    Ok(examples)
+}
+
+/// Collect examples and write to JSON file (for debugging).
+pub fn build_examples(examples_dir: &Path, output_dir: &Path) -> Result<()> {
+    let examples = collect_examples(examples_dir)?;
+
+    fs::create_dir_all(output_dir)?;
 
     let output_path = output_dir.join("examples.json");
     let output = ExamplesOutput { examples };

@@ -1,5 +1,5 @@
 use vim_build::vim_model::{Method, DataType, Model};
-use vim_mcp_server::{MethodSignature, ParameterInfo};
+use api_database::{MethodSignature, ParameterInfo};
 use vim_build::rs_emitter::names::{TypeDefResolver, to_fn_name};
 
 pub fn generate_method_signature(
@@ -66,7 +66,6 @@ pub fn generate_method_signature(
         full,
         parameters: params,
         return_type,
-        is_async: true,
     }
 }
 

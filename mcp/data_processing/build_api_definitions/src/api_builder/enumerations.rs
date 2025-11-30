@@ -1,14 +1,12 @@
-use vim_mcp_server::*;
+use api_database::*;
 use vim_build::vim_model::Model;
 use vim_build::rs_emitter::names::to_enum_variant;
 use std::path::Path;
 use chrono::Utc;
 use tracing::info;
 
-pub fn emit_enumerations_json(
-    model: &Model,
-    output_dir: &Path,
-) -> super::Result<()> {
+/// Build enumerations in memory (no file I/O).
+pub fn build_enumerations(model: &Model) -> Vec<EnumerationEntry> {
     let mut enumerations = Vec::new();
 
     for (name, enum_def) in &model.enums {
@@ -33,6 +31,16 @@ pub fn emit_enumerations_json(
             variants,
         });
     }
+
+    enumerations
+}
+
+/// Write enumerations to JSON file (for debugging).
+pub fn emit_enumerations_json(
+    model: &Model,
+    output_dir: &Path,
+) -> super::Result<()> {
+    let enumerations = build_enumerations(model);
 
     let output = EnumerationsOutput {
         generated_at: Utc::now(),

@@ -1,4 +1,4 @@
-use vim_mcp_server::*;
+use api_database::*;
 use vim_build::vim_model::{Model, EmitMode, DataType, Struct};
 use vim_build::rs_emitter::names::TypeDefResolver;
 use std::path::Path;
@@ -22,10 +22,8 @@ fn format_vim_type(dt: &DataType) -> String {
     }
 }
 
-pub fn emit_data_structures_json(
-    model: &Model,
-    output_dir: &Path,
-) -> super::Result<()> {
+/// Build structures in memory (no file I/O).
+pub fn build_structures(model: &Model) -> Vec<StructureEntry> {
     let tdf = TypeDefResolver::new_with_root_package(model, "vim_rs::types".to_string());
     let mut structures = Vec::new();
 
@@ -111,6 +109,16 @@ pub fn emit_data_structures_json(
             all_descendants,
         });
     }
+
+    structures
+}
+
+/// Write data structures to JSON file (for debugging).
+pub fn emit_data_structures_json(
+    model: &Model,
+    output_dir: &Path,
+) -> super::Result<()> {
+    let structures = build_structures(model);
 
     let output = DataStructuresOutput {
         generated_at: Utc::now(),

@@ -1,15 +1,13 @@
-use vim_mcp_server::*;
-use crate::json_emitter::signature_generator;
+use api_database::*;
+use crate::api_builder::signature_generator;
 use vim_build::vim_model::{Model, Method, DataType};
 use vim_build::rs_emitter::names::to_fn_name;
 use std::path::Path;
 use chrono::Utc;
 use tracing::info;
 
-pub fn emit_managed_objects_json(
-    model: &Model,
-    output_dir: &Path,
-) -> super::Result<()> {
+/// Build managed objects in memory (no file I/O).
+pub fn build_managed_objects(model: &Model) -> Vec<ManagedObjectEntry> {
     let mut managed_objects = Vec::new();
 
     for (mo_name, mo) in &model.managed_objects {
@@ -23,14 +21,12 @@ pub fn emit_managed_objects_json(
                 method, mo_name, model
             );
 
-            let related_types = extract_related_types(method);
 
             methods.push(MethodEntry {
                 name: method.name.clone(),
                 rust_name: to_fn_name(&method.name),
                 signature,
                 description: method.description.clone(),  // Raw markdown - no parsing!
-                related_types,
             });
         }
 
@@ -42,6 +38,16 @@ pub fn emit_managed_objects_json(
             methods,
         });
     }
+
+    managed_objects
+}
+
+/// Write managed objects to JSON file (for debugging).
+pub fn emit_managed_objects_json(
+    model: &Model,
+    output_dir: &Path,
+) -> super::Result<()> {
+    let managed_objects = build_managed_objects(model);
 
     let output = ManagedObjectsOutput {
         generated_at: Utc::now(),
@@ -55,23 +61,5 @@ pub fn emit_managed_objects_json(
 
     info!("Generated: {}", output_path.display());
     Ok(())
-}
-
-fn extract_related_types(method: &Method) -> Vec<String> {
-    let mut types = Vec::new();
-
-    // Add input types
-    if let Some(DataType::Reference(type_name)) = &method.input {
-        types.push(type_name.clone());
-    }
-
-    // Add output types
-    if let Some(DataType::Reference(type_name)) = &method.output {
-        types.push(type_name.clone());
-    }
-
-    types.sort();
-    types.dedup();
-    types
 }
 

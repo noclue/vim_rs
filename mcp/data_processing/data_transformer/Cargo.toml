@@ -13,15 +13,17 @@ build-examples = { path = "../build_examples" }
 build-embeddings = { path = "../build_embeddings", features = ["cuda"] }
 build-api-definitions = { path = "../build_api_definitions" }
 
-# For build_api_definitions and build_embeddings
-vim_build = { path = "../../../vim_build" }
-vim_mcp_server = { path = "../../server" }
+# Shared types (api_database - no embedded data, just types)
+api_database = { path = "../../api_database" }
 
 # Core dependencies
 anyhow = "1.0"
 tracing = "0.1"
 tracing-subscriber = "0.3"
 tokio = { version = "1.42", features = ["full"] }
+bincode = "1.3"
+clap = { version = "4.5", features = ["derive"] }
+
+# For --emit-json flag (optional JSON export)
 serde_json = "1.0"
-thiserror = "2.0"
 

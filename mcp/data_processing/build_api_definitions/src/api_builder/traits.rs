@@ -1,14 +1,12 @@
-use vim_mcp_server::{TraitsOutput, TraitEntry, GetterEntry};
+use api_database::{TraitsOutput, TraitEntry, GetterEntry};
 use vim_build::vim_model::{Model, EmitMode, Field};
 use vim_build::rs_emitter::names::TypeDefResolver;
 use std::path::Path;
 use chrono::Utc;
 use tracing::info;
 
-pub fn emit_traits_json(
-    model: &Model,
-    output_dir: &Path,
-) -> super::Result<()> {
+/// Build traits in memory (no file I/O).
+pub fn build_traits(model: &Model) -> Vec<TraitEntry> {
     let tdf = TypeDefResolver::new_with_root_package(model, "vim_rs::types".to_string());
     let mut traits = Vec::new();
 
@@ -65,6 +63,16 @@ pub fn emit_traits_json(
             all_descendants,
         });
     }
+
+    traits
+}
+
+/// Write traits to JSON file (for debugging).
+pub fn emit_traits_json(
+    model: &Model,
+    output_dir: &Path,
+) -> super::Result<()> {
+    let traits = build_traits(model);
 
     let output = TraitsOutput {
         generated_at: Utc::now(),
