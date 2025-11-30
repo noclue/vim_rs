@@ -1,8 +1,9 @@
 use anyhow::{Context, Result};
-use fastembed::{EmbeddingModel, InitOptions, TextEmbedding};
+use fastembed::{InitOptions, TextEmbedding};
 use std::path::PathBuf;
 use tracing::info;
 use vim_mcp_server::model::{ApiData, ApiItem, EmbeddingRecord, EmbeddingDatabase};
+use vim_mcp_server::EMBEDDING_MODEL;
 use std::fs::File;
 use std::io::BufWriter;
 
@@ -55,7 +56,7 @@ pub async fn build_embeddings(api_data: &ApiData, embeddings_path: &PathBuf, mod
     #[cfg(feature = "cuda")]
     let init_options = {
         info!("CUDA feature enabled - using GPU acceleration for embeddings");
-        InitOptions::new(EmbeddingModel::AllMiniLML6V2)
+        InitOptions::new(EMBEDDING_MODEL)
             .with_cache_dir(model_cache_dir)
             .with_show_download_progress(true)
             .with_execution_providers(vec![
@@ -66,7 +67,7 @@ pub async fn build_embeddings(api_data: &ApiData, embeddings_path: &PathBuf, mod
     #[cfg(not(feature = "cuda"))]
     let init_options = {
         info!("CUDA feature disabled - using CPU acceleration for embeddings");
-        InitOptions::new(EmbeddingModel::AllMiniLML6V2)
+        InitOptions::new(EMBEDDING_MODEL)
             .with_cache_dir(model_cache_dir)
             .with_show_download_progress(true)
     };

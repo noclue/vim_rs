@@ -23,7 +23,9 @@ use vim_mcp_server::property_collector;
 
 // Conditional imports for embeddings feature
 #[cfg(feature = "embeddings")]
-use fastembed::{EmbeddingModel, InitOptions, TextEmbedding};
+use fastembed::{InitOptions, TextEmbedding};
+#[cfg(feature = "embeddings")]
+use vim_mcp_server::EMBEDDING_MODEL;
 #[cfg(feature = "embeddings")]
 use rayon::prelude::*;
 #[cfg(feature = "embeddings")]
@@ -142,7 +144,7 @@ impl McpServer {
                 #[cfg(feature = "cuda")]
                 let init_options = {
                     info!("CUDA feature enabled - attempting GPU acceleration");
-                    InitOptions::new(EmbeddingModel::AllMiniLML6V2)
+                    InitOptions::new(EMBEDDING_MODEL)
                         .with_cache_dir(model_cache_dir)
                         .with_show_download_progress(false)
                         .with_execution_providers(vec![
@@ -151,7 +153,7 @@ impl McpServer {
                 };
 
                 #[cfg(not(feature = "cuda"))]
-                let init_options = InitOptions::new(EmbeddingModel::AllMiniLML6V2)
+                let init_options = InitOptions::new(EMBEDDING_MODEL)
                     .with_cache_dir(model_cache_dir)
                     .with_show_download_progress(false);
 
