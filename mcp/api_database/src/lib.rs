@@ -15,6 +15,256 @@ use anyhow::Result;
 #[cfg(feature = "json")]
 use tracing::warn;
 
+use std::collections::HashMap;
+
+// ============================================================================
+// Path Types - for navigating to types via the API
+// ============================================================================
+
+/// Starting point for a navigation path.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum ApiPathOrigin {
+    /// Property accessor (GET method) on a managed object.
+    /// e.g., `VirtualMachine::config` returns `VirtualMachineConfigInfo`
+    PropertyAccessor {
+        managed_object: String,
+        property_name: String,
+    },
+    /// Method output (return type).
+    /// e.g., `VirtualMachine::reconfigure()` returns `Task`
+    MethodOutput {
+        managed_object: String,
+        method_name: String,
+    },
+    /// Method input parameter.
+    /// e.g., `VirtualMachine::apply_evc_mode_vm_task(mask)` takes `HostFeatureMask[]`
+    MethodInput {
+        managed_object: String,
+        method_name: String,
+        parameter_name: String,
+    },
+}
+
+/// A single navigation step in a path.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum ApiPathStep {
+    /// Access a field: `.field_name`, `.field_name?`, `.field_name[*]`
+    Field {
+        field_name: String,
+        is_optional: bool,
+        is_array: bool,
+    },
+    /// Downcast to a more specific type.
+    /// - If `is_trait_cast` is true: `⇒TypeNameTrait` (uses CastFrom/CastInto)
+    /// - If `is_trait_cast` is false: `→TypeName` (uses std::any downcast)
+    Downcast {
+        to_type: String,
+        is_trait_cast: bool,
+    },
+}
+
+/// Complete path from an origin to a destination type.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ApiTypePath {
+    pub origin: ApiPathOrigin,
+    pub steps: Vec<ApiPathStep>,
+}
+
+impl ApiTypePath {
+    /// Render the path as shorthand notation using Rust-style names.
+    ///
+    /// Notation:
+    /// - `TypeName::` - scope resolution after type names
+    /// - `.field_name` - field access (snake_case)
+    /// - `?` - optional element
+    /// - `[*]` - array iteration
+    /// - `→TypeName` - downcast to specific type
+    /// - `(param_name)` - method input parameter (snake_case)
+    ///
+    /// Examples:
+    /// - `VirtualMachine::config?.hardware.device[*]→VirtualEthernetCard`
+    /// - `VirtualMachine::apply_evc_mode_vm_task(mask?)[*]`
+    pub fn to_shorthand(&self) -> String {
+        let mut result = String::new();
+
+        // Render origin
+        match &self.origin {
+            ApiPathOrigin::PropertyAccessor {
+                managed_object,
+                property_name,
+            } => {
+                result.push_str(managed_object);
+                result.push_str("::");
+                result.push_str(property_name);
+            }
+            ApiPathOrigin::MethodOutput {
+                managed_object,
+                method_name,
+            } => {
+                result.push_str(managed_object);
+                result.push_str("::");
+                result.push_str(method_name);
+                result.push_str("()");
+            }
+            ApiPathOrigin::MethodInput {
+                managed_object,
+                method_name,
+                parameter_name,
+            } => {
+                result.push_str(managed_object);
+                result.push_str("::");
+                result.push_str(method_name);
+                result.push('(');
+                result.push_str(parameter_name);
+                result.push(')');
+            }
+        }
+
+        // Render steps
+        for step in &self.steps {
+            match step {
+                ApiPathStep::Field {
+                    field_name,
+                    is_optional,
+                    is_array,
+                } => {
+                    result.push('.');
+                    result.push_str(field_name);
+                    if *is_optional {
+                        result.push('?');
+                    }
+                    if *is_array {
+                        result.push_str("[*]");
+                    }
+                }
+                ApiPathStep::Downcast {
+                    to_type,
+                    is_trait_cast,
+                } => {
+                    if *is_trait_cast {
+                        // Trait cast uses double arrow and appends "Trait"
+                        result.push_str("⇒");
+                        result.push_str(to_type);
+                        result.push_str("Trait");
+                    } else {
+                        // Struct downcast uses single arrow
+                        result.push('→');
+                        result.push_str(to_type);
+                    }
+                }
+            }
+        }
+
+        result
+    }
+
+    /// Returns the depth of the path (number of steps).
+    pub fn depth(&self) -> usize {
+        self.steps.len()
+    }
+}
+
+// ============================================================================
+// Path Selection and Sorting
+// ============================================================================
+
+/// Priority order for inventory types when sorting paths.
+/// Paths from these managed objects are shown first, in this order.
+pub const INVENTORY_TYPE_PRIORITY: &[&str] = &[
+    "VirtualMachine",
+    "HostSystem",
+    "Task",
+    "Network",
+    "DistributedVirtualPortgroup",
+    "VmwareDistributedVirtualSwitch",
+    "Folder",
+    "Datacenter",
+    "ResourcePool",
+    "Datastore",
+    "StoragePod",
+    "ComputeResource",
+    "ClusterComputeResource",
+    "DistributedVirtualSwitch",
+    "VirtualApp",
+];
+
+/// Maximum paths to keep per managed object type
+const MAX_PATHS_PER_MANAGED_OBJECT: usize = 5;
+
+/// Get the managed object name from a path origin
+fn get_managed_object(origin: &ApiPathOrigin) -> &str {
+    match origin {
+        ApiPathOrigin::PropertyAccessor { managed_object, .. } => managed_object,
+        ApiPathOrigin::MethodOutput { managed_object, .. } => managed_object,
+        ApiPathOrigin::MethodInput { managed_object, .. } => managed_object,
+    }
+}
+
+/// Check if a path origin is a property accessor (vs method)
+fn is_property_accessor(origin: &ApiPathOrigin) -> bool {
+    matches!(origin, ApiPathOrigin::PropertyAccessor { .. })
+}
+
+/// Get the sort key for a path (lower = higher priority).
+/// Returns (is_method, inventory_priority, depth) for sorting.
+/// Properties always come before methods (highest priority),
+/// then inventory type priority, then path depth.
+fn path_sort_key(path: &ApiTypePath) -> (bool, usize, usize) {
+    let mo = get_managed_object(&path.origin);
+
+    // Properties before methods (false < true in bool ordering) - HIGHEST PRIORITY
+    let is_method = !is_property_accessor(&path.origin);
+
+    // Find position in priority list (or max if not found)
+    let inventory_priority = INVENTORY_TYPE_PRIORITY
+        .iter()
+        .position(|&t| t == mo)
+        .unwrap_or(usize::MAX);
+
+    // Tertiary sort by path depth (shorter paths first)
+    let depth = path.depth();
+
+    (is_method, inventory_priority, depth)
+}
+
+/// Sort paths by priority and return a limited selection as borrowed references.
+/// Priority: properties before methods, then inventory types, then shorter paths.
+/// Also limits paths per managed object to avoid one MO dominating the list.
+///
+/// # Arguments
+/// * `paths` - The paths to select from
+/// * `limit` - Maximum number of paths to return
+pub fn select_paths_for_display(paths: &[ApiTypePath], limit: usize) -> Vec<&ApiTypePath> {
+    if paths.is_empty() {
+        return Vec::new();
+    }
+
+    // Create sorted indices
+    let mut indices: Vec<usize> = (0..paths.len()).collect();
+    indices.sort_by_key(|&i| path_sort_key(&paths[i]));
+
+    // Count paths per managed object and filter
+    let mut mo_counts: HashMap<&str, usize> = HashMap::new();
+    let mut result = Vec::with_capacity(limit.min(paths.len()));
+
+    for idx in indices {
+        if result.len() >= limit {
+            break;
+        }
+
+        let path = &paths[idx];
+        let mo = get_managed_object(&path.origin);
+        let count = mo_counts.entry(mo).or_insert(0);
+
+        if *count < MAX_PATHS_PER_MANAGED_OBJECT {
+            *count += 1;
+            result.push(path);
+        }
+    }
+
+    result
+}
+
 // ============================================================================
 // Data structures matching the generated JSON files from vim_build
 // ============================================================================
@@ -84,6 +334,9 @@ pub struct StructureEntry {
     pub inheritance_chain: Vec<String>,
     pub implements_traits: Vec<String>,
     pub all_descendants: Vec<String>,
+    /// Paths from API entry points leading to this struct type.
+    #[serde(default)]
+    pub paths: Vec<ApiTypePath>,
 }
 
 // Enumerations
@@ -226,6 +479,7 @@ impl ApiData {
                         struct_name: structure.rust_name.clone(),
                         struct_description: structure.description.clone(),
                         field: field.clone(),
+                        paths: structure.paths.clone(),
                     }));
                 }
                 items.insert(structure.rust_name.clone(), ApiItemEntry::Structure(structure));
@@ -331,6 +585,7 @@ impl ApiData {
                     struct_name: structure.rust_name.clone(),
                     struct_description: structure.description.clone(),
                     field: field.clone(),
+                    paths: structure.paths.clone(),
                 }));
             }
             items.insert(structure.rust_name.clone(), ApiItemEntry::Structure(structure));
@@ -407,6 +662,9 @@ pub struct FieldItemData {
     pub struct_name: String,
     pub struct_description: Option<String>,
     pub field: FieldEntry,
+    /// Paths from API entry points to the parent struct (for navigating to this field).
+    #[serde(default)]
+    pub paths: Vec<ApiTypePath>,
 }
 
 /// Unified enum holding all API item types
@@ -542,23 +800,56 @@ impl ApiItem for ApiItemEntry {
                 let parent_info = s.parent.as_ref()
                     .map(|p| format!(" (extends {})", p))
                     .unwrap_or_default();
+                
+                // Add top 3 paths
+                let paths_section = if !s.paths.is_empty() {
+                    let selected = select_paths_for_display(&s.paths, 3);
+                    if !selected.is_empty() {
+                        let paths_str: Vec<String> = selected.iter()
+                            .map(|p| format!("- `{}`", p.to_shorthand()))
+                            .collect();
+                        format!("\n**Paths:**\n{}\n", paths_str.join("\n"))
+                    } else {
+                        String::new()
+                    }
+                } else {
+                    String::new()
+                };
+
                 format!(
-                    "## {}{}\n\n**ID:** `{}`\n\n**Rust:** `{}`\n\n{}\n\n---\n",
+                    "## {}{}\n\n**ID:** `{}`\n\n**Rust:** `{}`\n\n{}{}\n\n---\n",
                     s.name,
                     parent_info,
                     s.rust_name,
                     s.rust_name,
-                    desc
+                    desc,
+                    paths_section
                 )
             }
             ApiItemEntry::Field(f) => {
+                // Add top 3 parent struct paths
+                let paths_section = if !f.paths.is_empty() {
+                    let selected = select_paths_for_display(&f.paths, 3);
+                    if !selected.is_empty() {
+                        let paths_str: Vec<String> = selected.iter()
+                            .map(|p| format!("- `{}`", p.to_shorthand()))
+                            .collect();
+                        format!("\n**Paths to {}:**\n{}\n", f.struct_name, paths_str.join("\n"))
+                    } else {
+                        String::new()
+                    }
+                } else {
+                    String::new()
+                };
+
                 format!(
-                    "## {} (Field in {})\n\n**ID:** `{}`\n\n**Type:** `{}`\n\n{}\n\n---\n",
+                    "## {} (Field in {})\n\n**ID:** `{}`\n\n**Type:** `{}`\n\n{}{}\n\n---\n",
                     f.field.rust_name,
                     f.struct_name,
                     f.id,
                     f.field.rust_type,
-                    f.field.description.as_deref().unwrap_or("No description")
+                    f.field.description.as_deref().unwrap_or("No description"),
+                    paths_section
                 )
             }
             ApiItemEntry::Enumeration(e) => {
@@ -740,6 +1031,25 @@ fn format_structure_doc(s: &StructureEntry) -> String {
         output.push_str("\n\n");
     }
 
+    // Show top 10 paths for how to access this structure
+    if !s.paths.is_empty() {
+        let selected_paths = select_paths_for_display(&s.paths, 10);
+        if !selected_paths.is_empty() {
+            output.push_str("## How to Access\n\n");
+            for path in &selected_paths {
+                output.push_str(&format!("- `{}`\n", path.to_shorthand()));
+            }
+            if selected_paths.len() < s.paths.len() {
+                output.push_str(&format!(
+                    "\n*({} of {} paths)*\n",
+                    selected_paths.len(),
+                    s.paths.len()
+                ));
+            }
+            output.push('\n');
+        }
+    }
+
     if !s.inheritance_chain.is_empty() {
         output.push_str("## Inheritance Chain\n\n");
         output.push_str(&s.inheritance_chain.join(" → "));
@@ -818,6 +1128,26 @@ fn format_field_doc(f: &FieldItemData) -> String {
         output.push_str("## Documentation\n\n");
         output.push_str(doc);
         output.push_str("\n\n");
+    }
+
+    // Show top 10 paths for how to access the parent structure (and thus this field)
+    if !f.paths.is_empty() {
+        let selected_paths = select_paths_for_display(&f.paths, 10);
+        if !selected_paths.is_empty() {
+            output.push_str("## How to Access\n\n");
+            output.push_str(&format!("Access `{}` via:\n\n", f.struct_name));
+            for path in &selected_paths {
+                output.push_str(&format!("- `{}`\n", path.to_shorthand()));
+            }
+            if selected_paths.len() < f.paths.len() {
+                output.push_str(&format!(
+                    "\n*({} of {} paths)*\n",
+                    selected_paths.len(),
+                    f.paths.len()
+                ));
+            }
+            output.push('\n');
+        }
     }
 
     if let Some(struct_desc) = &f.struct_description {

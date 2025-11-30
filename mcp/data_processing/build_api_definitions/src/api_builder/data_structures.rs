@@ -1,9 +1,70 @@
 use api_database::*;
-use vim_build::vim_model::{Model, EmitMode, DataType, Struct};
+use vim_build::vim_model::{Model, EmitMode, DataType, Struct, TypePath, PathOrigin, PathStep};
 use vim_build::rs_emitter::names::TypeDefResolver;
 use std::path::Path;
 use chrono::Utc;
 use tracing::info;
+
+/// Convert a vim_build TypePath to an api_database ApiTypePath.
+fn convert_type_path(path: &TypePath) -> ApiTypePath {
+    let origin = match &path.origin {
+        PathOrigin::PropertyAccessor { managed_object, property_name } => {
+            ApiPathOrigin::PropertyAccessor {
+                managed_object: managed_object.clone(),
+                property_name: to_snake_case(property_name),
+            }
+        }
+        PathOrigin::MethodOutput { managed_object, method_name } => {
+            ApiPathOrigin::MethodOutput {
+                managed_object: managed_object.clone(),
+                method_name: to_snake_case(method_name),
+            }
+        }
+        PathOrigin::MethodInput { managed_object, method_name, parameter_name } => {
+            ApiPathOrigin::MethodInput {
+                managed_object: managed_object.clone(),
+                method_name: to_snake_case(method_name),
+                parameter_name: to_snake_case(parameter_name),
+            }
+        }
+    };
+
+    let steps = path.steps.iter().map(|step| {
+        match step {
+            PathStep::Field { field_name, is_optional, is_array, .. } => {
+                ApiPathStep::Field {
+                    field_name: to_snake_case(field_name),
+                    is_optional: *is_optional,
+                    is_array: *is_array,
+                }
+            }
+            PathStep::Downcast { to_type, is_trait_cast } => {
+                ApiPathStep::Downcast {
+                    to_type: to_type.clone(),
+                    is_trait_cast: *is_trait_cast,
+                }
+            }
+        }
+    }).collect();
+
+    ApiTypePath { origin, steps }
+}
+
+/// Convert a camelCase or PascalCase string to snake_case.
+fn to_snake_case(s: &str) -> String {
+    let mut result = String::new();
+    for (i, ch) in s.chars().enumerate() {
+        if ch.is_uppercase() {
+            if i > 0 {
+                result.push('_');
+            }
+            result.push(ch.to_ascii_lowercase());
+        } else {
+            result.push(ch);
+        }
+    }
+    result
+}
 
 fn format_vim_type(dt: &DataType) -> String {
     match dt {
@@ -93,6 +154,9 @@ pub fn build_structures(model: &Model) -> Vec<StructureEntry> {
         // Collect all descendants recursively
         let all_descendants = collect_all_descendants(model, name);
 
+        // Convert paths from vim_build format to api_database format
+        let paths: Vec<ApiTypePath> = s.paths.iter().map(convert_type_path).collect();
+
         structures.push(StructureEntry {
             name: name.clone(),
             rust_name: s.rust_name(),
@@ -107,6 +171,7 @@ pub fn build_structures(model: &Model) -> Vec<StructureEntry> {
             inheritance_chain,
             implements_traits,
             all_descendants,
+            paths,
         });
     }
 

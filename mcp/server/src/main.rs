@@ -16,12 +16,17 @@ use schemars::JsonSchema;
 use std::sync::{Arc, Mutex};
 use tokio::io::{stdin, stdout};
 use tracing::{error, info, warn};
-use fastembed::{InitOptions, TextEmbedding};
+#[cfg(not(feature = "embed-model"))]
+use fastembed::InitOptions;
+#[cfg(feature = "embed-model")]
+use fastembed::InitOptionsUserDefined;
+use fastembed::TextEmbedding;
 use rayon::prelude::*;
 
 // Import data model from the library
 use vim_mcp_server::model::{ApiDatabase, ApiItem, load_embedded_database, STARTER_GUIDE};
 use vim_mcp_server::property_collector;
+#[cfg(not(feature = "embed-model"))]
 use vim_mcp_server::EMBEDDING_MODEL;
 
 // CUDA GPU acceleration (optional)
@@ -130,37 +135,64 @@ impl McpServer {
 
         // Initialize embedding model for runtime query embedding
         let embedding_model = {
-            let mcp_data_dir = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-                .parent()
-                .unwrap()
-                .join("data");
-            let model_cache_dir = mcp_data_dir.join("model_cache");
-
-            // Create cache directory if it doesn't exist
-            if !model_cache_dir.exists() {
-                std::fs::create_dir_all(&model_cache_dir)?;
-            }
-
-            info!("Loading embedding model from cache: {}", model_cache_dir.display());
-
-            // Configure execution providers: CUDA if available, fallback to CPU
-            #[cfg(feature = "cuda")]
-            let init_options = {
-                info!("CUDA feature enabled - attempting GPU acceleration");
-                InitOptions::new(EMBEDDING_MODEL)
-                    .with_cache_dir(model_cache_dir)
-                    .with_show_download_progress(false)
-                    .with_execution_providers(vec![
-                        CUDAExecutionProvider::default().build()
-                    ])
+            // When embed-model feature is enabled, use the compiled-in model
+            #[cfg(feature = "embed-model")]
+            let result = {
+                info!("Loading embedded BGE-small-en-v1.5 model...");
+                let user_model = vim_mcp_server::embedded_model::create_embedded_model();
+                
+                #[cfg(feature = "cuda")]
+                let init_options = {
+                    info!("CUDA feature enabled - attempting GPU acceleration");
+                    InitOptionsUserDefined::new()
+                        .with_execution_providers(vec![
+                            CUDAExecutionProvider::default().build()
+                        ])
+                };
+                
+                #[cfg(not(feature = "cuda"))]
+                let init_options = InitOptionsUserDefined::new();
+                
+                TextEmbedding::try_new_from_user_defined(user_model, init_options)
             };
+            
+            // When embed-model is disabled, load from cache directory
+            #[cfg(not(feature = "embed-model"))]
+            let result = {
+                let mcp_data_dir = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+                    .parent()
+                    .unwrap()
+                    .join("data");
+                let model_cache_dir = mcp_data_dir.join("model_cache");
 
-            #[cfg(not(feature = "cuda"))]
-            let init_options = InitOptions::new(EMBEDDING_MODEL)
-                .with_cache_dir(model_cache_dir)
-                .with_show_download_progress(false);
+                // Create cache directory if it doesn't exist
+                if !model_cache_dir.exists() {
+                    std::fs::create_dir_all(&model_cache_dir)?;
+                }
 
-            match TextEmbedding::try_new(init_options) {
+                info!("Loading embedding model from cache: {}", model_cache_dir.display());
+
+                // Configure execution providers: CUDA if available, fallback to CPU
+                #[cfg(feature = "cuda")]
+                let init_options = {
+                    info!("CUDA feature enabled - attempting GPU acceleration");
+                    InitOptions::new(EMBEDDING_MODEL)
+                        .with_cache_dir(model_cache_dir)
+                        .with_show_download_progress(false)
+                        .with_execution_providers(vec![
+                            CUDAExecutionProvider::default().build()
+                        ])
+                };
+
+                #[cfg(not(feature = "cuda"))]
+                let init_options = InitOptions::new(EMBEDDING_MODEL)
+                    .with_cache_dir(model_cache_dir)
+                    .with_show_download_progress(false);
+
+                TextEmbedding::try_new(init_options)
+            };
+            
+            match result {
                 Ok(model) => {
                     info!("Embedding model loaded successfully");
                     Some(Arc::new(Mutex::new(model)))
@@ -471,6 +503,10 @@ impl ServerHandler for McpServer {
                 - Enum: 'ManagedEntityStatus'\n\
                 - Trait: 'VirtualDeviceTrait'\n\
                 - Example: 'example::connection_basic'\n\n\
+                PATH NOTATION (shown in search results):\n\
+                - `::` = property/method on Managed Object, `.` = field access\n\
+                - `?` = optional, `[*]` = array, `→` = downcast, `⇒` = trait cast\n\
+                - Example: `VirtualMachine::config?.hardware.device[*]→VirtualEthernetCard`\n\n\
                 PROPERTY COLLECTOR HELPERS:\n\
                 - list_property_collector_root_types → List all supported managed object types\n\
                 - get_property_info → Explore property paths and their types\n\n\

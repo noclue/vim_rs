@@ -1,6 +1,6 @@
 use api_database::*;
 use crate::api_builder::signature_generator;
-use vim_build::vim_model::{Model, Method, DataType};
+use vim_build::vim_model::Model;
 use vim_build::rs_emitter::names::to_fn_name;
 use std::path::Path;
 use chrono::Utc;

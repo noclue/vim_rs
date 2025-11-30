@@ -542,6 +542,57 @@ if let Some(mac) = eth.get_mac_address() {
 }
 ```
 
+## Understanding API Navigation Paths
+
+When you use `get()` or `search()`, results for structures and fields include **paths** showing how to reach that type from a managed object. Understanding this notation helps you build property collector queries and navigate the API.
+
+### Path Notation
+
+```
+VirtualMachine::config?.hardware.device[*]→VirtualEthernetCard
+```
+
+| Symbol | Meaning | Example |
+|--------|---------|---------|
+| `::` | Scope resolution (property or method on MO) | `VirtualMachine::config` |
+| `.` | Field access | `.hardware.device` |
+| `?` | Optional field (may be None) | `config?` |
+| `[*]` | Array iteration | `device[*]` (iterate over devices) |
+| `→` | Downcast to concrete struct | `→VirtualEthernetCard` |
+| `⇒` | Cast to trait (polymorphic) | `⇒VirtualDeviceTrait` |
+| `()` | Method call (vs property) | `::reconfigure_vm()` |
+| `(param)` | Method input parameter | `::reconfigure_vm(spec)` |
+
+### Path Types
+
+**Property paths** (most common for PropertyCollector):
+- `VirtualMachine::config` - Property accessor
+- `VirtualMachine::config.hardware.num_cpu` - Nested property
+
+**Method paths** (for understanding return types):
+- `VirtualMachine::reconfigure_vm()` - Method return value
+- `VirtualMachine::reconfigure_vm(spec)` - Method input parameter
+
+### How Paths Help You
+
+1. **Build vim_retrievable! property paths**: The path tells you exactly what to put in the macro
+   ```rust
+   vim_retrievable!(
+       struct Vm: VirtualMachine {
+           // Path: VirtualMachine::config.hardware.num_cpu
+           num_cpu = "config.hardware.numCPU",
+       }
+   );
+   ```
+
+2. **Understand polymorphic types**: `→` and `⇒` show when downcasting is needed
+   ```rust
+   // Path: VirtualMachine::config.hardware.device[*]→VirtualEthernetCard
+   // This tells you: iterate device array, then cast to VirtualEthernetCard
+   ```
+
+3. **Handle optional fields**: `?` in paths indicates you need `Option<T>` handling
+
 ## Quick Reference: Essential Managed Objects
 
 **Inventory Objects:**

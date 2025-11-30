@@ -31,6 +31,13 @@ rayon = "1.10"
 # CUDA GPU acceleration (optional, requires CUDA 12.x + cuDNN 9.x runtime)
 ort = { version = "2.0.0-rc.7", optional = true, features = ["cuda", "copy-dylibs"] }
 
+[build-dependencies]
+# Used to download the embedding model during build if not cached
+fastembed = "5.2.0"
+
 [features]
-default = []
+default = ["embed-model"]
 cuda = ["ort"]
+# Embed the BGE-small-en-v1.5 model directly in the binary (~128MB increase)
+# The build script will download the model if not already cached
+embed-model = []
