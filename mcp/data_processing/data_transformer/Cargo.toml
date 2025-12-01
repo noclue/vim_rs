@@ -10,7 +10,7 @@ path = "src/main.rs"
 [dependencies]
 # Tool libraries
 build-examples = { path = "../build_examples" }
-build-embeddings = { path = "../build_embeddings", features = ["cuda"] }
+build-embeddings = { path = "../build_embeddings" }
 build-api-definitions = { path = "../build_api_definitions" }
 
 # Shared types (api_database - no embedded data, just types)
@@ -26,4 +26,9 @@ clap = { version = "4.5", features = ["derive"] }
 
 # For --emit-json flag (optional JSON export)
 serde_json = "1.0"
+
+[features]
+default = []
+# Forward cuda feature to build-embeddings
+cuda = ["build-embeddings/cuda"]
 

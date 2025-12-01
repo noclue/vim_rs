@@ -4,9 +4,8 @@ This MCP server supports NVIDIA GPU acceleration via CUDA for significantly fast
 
 ## Performance Impact
 
-- **CPU**: ~2-5 seconds for embedding queries
-- **GPU (RTX 4090)**: ~0.1-0.3 seconds for embedding queries
-- **Speedup**: 10-20x faster with GPU acceleration
+Query works decently with or without CUDA. Building the API database without CUDA is a multi-minute
+wait. With CUDA it is about half a minute on a good machine.
 
 ## Requirements
 
