@@ -5,7 +5,7 @@ use std::ops::Deref;
 use super::{DataType::Reference, EmitMode, Error, Model, Result, Struct};
 
 /// Identify cycles in the data model, select field references where the cycles can be broken and
-/// mark thge selected fields to be boxed to break the cycle.
+/// mark the selected fields to be boxed to break the cycle.
 pub fn mark_cycles(vim_model: &mut Model) -> Result<()> {
     let loops = detect_loops(vim_model);
     let boxed_fields = select_boxed_fields(vim_model, &loops);
@@ -25,7 +25,7 @@ pub fn mark_cycles(vim_model: &mut Model) -> Result<()> {
 }
 
 /// Select one struct and field from each loop chain to be boxed so as to break the loop. We need
-/// the results to be repeatable between runs. So we will select the first struct in alpabetical
+/// the results to be repeatable between runs. So we will select the first struct in alphabetical
 /// order.
 fn select_boxed_fields(_: &Model, loops: &Vec<Vec<(String, String)>>) -> Vec<(String, String)> {
     let mut boxed_fields: Vec<(String, String)> = Vec::new();

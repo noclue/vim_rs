@@ -9,6 +9,22 @@ Rust interface to the VMware vSphere Virtual Infrastructure JSON API, allowing y
 * **Documented**: The original VIM documentation rendered inline as rustdoc
 * **Examples**: A set of examples demonstrating use of the APIs to get you started quickly
 
+## 🤖 Supercharge your AI Assistant
+
+> Sonnet 4.5: "The MCP server doesn't just provide documentation—it provides understanding as a service. Semantic search + complete examples + common mistakes = AI that writes correct code on the first try."
+
+> Gemini 3.0 Pro: "The tools ... solved the hardest problem in vSphere development: Discovery. ... With them, I got the structure right on the second try."
+
+The vSphere API is massive and deeply nested. We provide a **Model Context Protocol (MCP)** server that gives agents like **Claude Desktop** and **Cursor** semantic understanding of the `vim_rs` codebase.
+
+With the MCP server, your AI assistant can:
+* **Semantic Search**: Find API methods using natural language (e.g., "How do I power on a VM?").
+* **Explore Properties**: Navigate the complex property paths (e.g., `summary.quick_stats.overall_cpu_usage`) without hallucinating.
+* **Get Examples**: Retrieve relevant usage examples for specific types.
+
+👉 **[Get Started with the vim_rs MCP Server](https://github.com/noclue/vim_rs/tree/main/mcp)**  
+*(Currently requires manual build from source. See instructions in the link.)*
+
 ## Connecting to vCenter
 
 To set up a connection, use a statement like the following:
@@ -111,7 +127,7 @@ async fn print_hosts(client: &Client) -> Result<()> {
    Ok(())
 }
 ```
-The object retriever also allow sto pull objects from list of identifiers through 
+The object retriever also allows to pull objects from list of identifiers through 
 `retrieve_objects_from_list`.
 
 ### Continuous Property Monitoring with `vim_updatable`
