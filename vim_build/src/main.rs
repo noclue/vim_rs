@@ -10,8 +10,8 @@ use std::{path::Path, time::Instant};
 /// descendants will not. This means that:
 /// 1. struct types for the descendants will not be emitted
 /// 2. traits for the listed types and their descendants will not be emitted
-/// 3. additional 2 fields will be added to the listed types 
-///     - type_name_ : String - holding the discriminator of the deserialized types 
+/// 3. additional 2 fields will be added to the listed types
+///     - type_name_ : String - holding the discriminator of the deserialized types
 ///     - extra_fields_ : HashMap<String, serde_json::Value> - holding the extra fields that are not
 ///       part of the base type schema
 /// 4. deserialization for the descendant types will be handled by the parent type Visitor. The
@@ -26,5 +26,5 @@ fn main() {
     //generate_to_console(vi_json_spec_path).unwrap();
     let start = Instant::now();
     emit_vim_bindings(vi_json_spec_path, root_folder, Some(&PRUNED_TYPES)).unwrap();
-    println!("Total time in generation: {:?}", start.elapsed());
+    println!("Total time in Rust generation: {:?}", start.elapsed());
 }

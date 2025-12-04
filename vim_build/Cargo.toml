@@ -3,6 +3,10 @@ name = "vim_build"
 version = "0.1.0"
 edition = "2021"
 
+[lib]
+name = "vim_build"
+path = "src/lib.rs"
+
 [[bin]]
 name = "generate"
 path = "src/main.rs"
@@ -17,3 +21,4 @@ check_keyword = "0.3"
 openapi30 = { path = "../openapi30" }
 log = "0.4"
 phf_codegen = "0.11"
+chrono = { version = "0.4", features = ["serde"] }

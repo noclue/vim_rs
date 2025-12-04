@@ -194,6 +194,20 @@
 /// - `VslmStorageLifecycleManager`
 /// - `VslmTask`
 /// - `VslmVStorageObjectManager`
+///
+/// ### How to access
+/// - `Alarm::info.alarm.r#type`
+/// - `Alarm::info.entity.r#type`
+/// - `ClusterComputeResource::add_host_task().r#type`
+/// - `ClusterComputeResource::add_host_task(resource_pool).r#type`
+/// - `ClusterComputeResource::configure_hci_task().r#type`
+/// - `ClusterComputeResource::destroy_task().r#type`
+/// - `ClusterComputeResource::add_host_task(spec).vm_folder?.r#type`
+/// - `AlarmManager::acknowledge_alarm(alarm).r#type`
+/// - `AlarmManager::acknowledge_alarm(entity).r#type`
+/// - `AlarmManager::create_alarm().r#type`
+/// 
+/// *(10 of 98 paths)*
 #[derive(Clone, Debug, PartialEq, Eq, Hash, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum MoTypesEnum {
     Alarm,
@@ -3078,6 +3092,13 @@ pub enum HealthUpdateInfoComponentTypeEnum {
 ///   VirtualCenter does not expect to
 ///   receive heartbeats from the host. The next time a heartbeat is received, the
 ///   host is moved to the connected state again and an event is logged.
+///
+/// ### How to access
+/// - `HostSystem::runtime.connection_state`
+/// - `HostSystem::summary.runtime?.connection_state`
+/// - `HostSystem::query_host_connection_info().host.runtime?.connection_state`
+/// - `Datacenter::query_connection_info().host.runtime?.connection_state`
+/// - `Datacenter::query_connection_info_via_spec().host.runtime?.connection_state`
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostSystemConnectionStateEnum {
     #[serde(rename = "connected")]
@@ -3154,6 +3175,13 @@ pub enum HostCryptoStateEnum {
 ///   
 ///   Hence, the host
 ///   is marked as unknown.
+///
+/// ### How to access
+/// - `HostSystem::runtime.power_state`
+/// - `HostSystem::summary.runtime?.power_state`
+/// - `HostSystem::query_host_connection_info().host.runtime?.power_state`
+/// - `Datacenter::query_connection_info().host.runtime?.power_state`
+/// - `Datacenter::query_connection_info_via_spec().host.runtime?.power_state`
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostSystemPowerStateEnum {
     #[serde(rename = "poweredOn")]
@@ -3281,6 +3309,9 @@ pub enum HttpNfcLeaseModeEnum {
 /// - `done`: When the import/export session is completed, and the lease
 ///   is no longer held.
 /// - `error`: When an error has occurred.
+///
+/// ### How to access
+/// - `HttpNfcLease::state`
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HttpNfcLeaseStateEnum {
     #[serde(rename = "initializing")]
@@ -3391,6 +3422,20 @@ pub enum IoFilterOperationEnum {
 ///   When this value is set to *LatencySensitivity.level* the
 ///   *LatencySensitivity.sensitivity* property should be
 ///   set also.
+///
+/// ### How to access
+/// - `VirtualMachine::config.latency_sensitivity?.level`
+/// - `VirtualMachine::config.vcpu_config?[*].latency_sensitivity?.level`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→ClusterClusterInitialPlacementAction.config_spec?.latency_sensitivity?.level`
+/// - `StoragePod::pod_storage_drs_entry.action_history?[*].action→ClusterClusterInitialPlacementAction.config_spec?.latency_sensitivity?.level`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→ClusterClusterInitialPlacementAction.config_spec?.vcpu_config?[*].latency_sensitivity?.level`
+/// - `StoragePod::pod_storage_drs_entry.action_history?[*].action→ClusterClusterInitialPlacementAction.config_spec?.vcpu_config?[*].latency_sensitivity?.level`
+/// - `ClusterComputeResource::action_history.action→ClusterClusterInitialPlacementAction.config_spec?.latency_sensitivity?.level`
+/// - `ClusterComputeResource::recommendation.action?[*]→ClusterClusterInitialPlacementAction.config_spec?.latency_sensitivity?.level`
+/// - `ClusterComputeResource::action_history.action→ClusterClusterInitialPlacementAction.config_spec?.vcpu_config?[*].latency_sensitivity?.level`
+/// - `ClusterComputeResource::recommendation.action?[*]→ClusterClusterInitialPlacementAction.config_spec?.vcpu_config?[*].latency_sensitivity?.level`
+/// 
+/// *(10 of 52 paths)*
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum LatencySensitivitySensitivityLevelEnum {
     #[serde(rename = "low")]
@@ -3478,6 +3523,12 @@ pub enum LicenseFeatureInfoSourceRestrictionEnum {
 ///   The
 ///   *LicenseManager.EnableFeature* and *LicenseManager.DisableFeature* methods can be used to enable or disable
 ///   this feature.
+///
+/// ### How to access
+/// - `LicenseManager::feature_info.state?`
+/// - `LicenseManager::query_supported_features().state?`
+/// - `LicenseManager::query_license_source_availability().feature.state?`
+/// - `LicenseManager::query_license_usage().feature_info?[*].state?`
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum LicenseFeatureInfoStateEnum {
     #[serde(rename = "enabled")]
@@ -3670,6 +3721,9 @@ pub enum LicenseManagerLicenseKeyEnum {
 /// - `normal`: Running within operating parameters.
 /// - `marginal`: License source unavailable, using license cache.
 /// - `fault`: Initialization has failed or grace period expired.
+///
+/// ### How to access
+/// - `LicenseManager::diagnostics.op_state`
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum LicenseManagerStateEnum {
     #[serde(rename = "initializing")]
@@ -3706,6 +3760,9 @@ pub enum LicenseManagerStateEnum {
 ///   example, when a license server becomes unavailable after a license had been
 ///   successfully reserved from it.
 /// - `licensed`: The required number of licenses have been acquired from the license source.
+///
+/// ### How to access
+/// - `LicenseManager::query_license_usage().reservation_info?[*].state`
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum LicenseReservationInfoStateEnum {
     #[serde(rename = "notUsed")]
@@ -3732,6 +3789,20 @@ pub enum LicenseReservationInfoStateEnum {
 /// - `green`: The entity is OK.
 /// - `yellow`: The entity might have a problem.
 /// - `red`: The entity definitely has a problem.
+///
+/// ### How to access
+/// - `HostSystem::config_status`
+/// - `HostSystem::overall_status`
+/// - `HostSystem::declared_alarm_state.overall_status`
+/// - `HostSystem::summary.overall_status`
+/// - `HostSystem::triggered_alarm_state.overall_status`
+/// - `Network::config_status`
+/// - `Network::overall_status`
+/// - `Network::declared_alarm_state.overall_status`
+/// - `Network::triggered_alarm_state.overall_status`
+/// - `DistributedVirtualPortgroup::config_status`
+/// 
+/// *(10 of 100 paths)*
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum ManagedEntityStatusEnum {
     #[serde(rename = "gray")]
@@ -3866,6 +3937,11 @@ pub enum OvfCreateImportSpecParamsDiskProvisioningTypeEnum {
 /// - `summation`: The sum of all the values of the performance counter over the
 ///   summarization period.
 /// - `none`: The counter is never rolled up.
+///
+/// ### How to access
+/// - `PerformanceManager::perf_counter.rollup_type`
+/// - `PerformanceManager::query_perf_counter().rollup_type`
+/// - `PerformanceManager::query_perf_counter_by_level().rollup_type`
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum PerfSummaryTypeEnum {
     #[serde(rename = "average")]
@@ -3916,6 +3992,11 @@ pub enum PerfSummaryTypeEnum {
 ///   
 ///   For example,
 ///   the number of reads per second.
+///
+/// ### How to access
+/// - `PerformanceManager::perf_counter.stats_type`
+/// - `PerformanceManager::query_perf_counter().stats_type`
+/// - `PerformanceManager::query_perf_counter_by_level().stats_type`
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum PerfStatsTypeEnum {
     #[serde(rename = "absolute")]
@@ -4216,6 +4297,20 @@ pub enum SessionManagerHttpServiceRequestSpecMethodEnum {
 ///   For Disk: Shares = 2000  
 ///   For Network: Shares = *DVSFeatureCapability.networkResourcePoolHighShareValue*
 /// - `custom`: If you specify <code>custom</code> for the *SharesInfo.level* property, when there is resource contention the Server uses the *SharesInfo.shares* value to determine resource allocation.
+///
+/// ### How to access
+/// - `ClusterComputeResource::action_history.action→ClusterClusterInitialPlacementAction.config_spec?.cpu_allocation?.shares?.level`
+/// - `ClusterComputeResource::action_history.action→ClusterClusterInitialPlacementAction.config_spec?.memory_allocation?.shares?.level`
+/// - `ClusterComputeResource::recommendation.action?[*]→ClusterClusterInitialPlacementAction.config_spec?.cpu_allocation?.shares?.level`
+/// - `ClusterComputeResource::recommendation.action?[*]→ClusterClusterInitialPlacementAction.config_spec?.memory_allocation?.shares?.level`
+/// - `ClusterComputeResource::action_history.action→StoragePlacementAction.relocate_spec.device_change?[*].device→VirtualDisk.shares?.level`
+/// - `DistributedVirtualSwitch::network_resource_pool.allocation_info.shares?.level`
+/// - `DistributedVirtualSwitch::config.infrastructure_traffic_resource_config?[*].allocation_info.shares?.level`
+/// - `DistributedVirtualSwitch::config.net_resource_pool_traffic_resource_config?[*].allocation_info.shares?.level`
+/// - `Datastore::datastore_enter_maintenance_mode().recommendations?[*].action?[*]→ClusterClusterInitialPlacementAction.config_spec?.cpu_allocation?.shares?.level`
+/// - `Datastore::datastore_enter_maintenance_mode().recommendations?[*].action?[*]→ClusterClusterInitialPlacementAction.config_spec?.memory_allocation?.shares?.level`
+/// 
+/// *(10 of 100 paths)*
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum SharesLevelEnum {
     #[serde(rename = "low")]
@@ -4244,6 +4339,9 @@ pub enum SharesLevelEnum {
 /// - `CSV`: Comma separated values
 /// - `HEX`: Hex encoded binary data
 /// - `STRING`
+///
+/// ### How to access
+/// - `SimpleCommand::encoding_type`
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum SimpleCommandEncodingEnum {
     #[serde(rename = "CSV")]
@@ -4301,6 +4399,11 @@ pub enum StorageIormThresholdModeEnum {
 ///   tasks pertaining to the specified managed entity itself.
 /// - `all`: Returns tasks pertaining either to the specified managed entity
 ///   or to its child entities.
+///
+/// ### How to access
+/// - `TaskManager::read_next_tasks_by_view_spec(filter_spec).entity?.recursion`
+/// - `TaskManager::create_collector_for_tasks(filter).entity?.recursion`
+/// - `TaskManager::create_collector_with_info_filter_for_tasks(filter).entity?.recursion`
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum TaskFilterSpecRecursionOptionEnum {
     #[serde(rename = "self")]
@@ -4323,6 +4426,11 @@ pub enum TaskFilterSpecRecursionOptionEnum {
 /// - `queuedTime`: The time stamp when the task was created and queued.
 /// - `startedTime`: The time stamp when the task started.
 /// - `completedTime`: The time stamp when the task finished.
+///
+/// ### How to access
+/// - `TaskManager::read_next_tasks_by_view_spec(filter_spec).time?.time_type`
+/// - `TaskManager::create_collector_for_tasks(filter).time?.time_type`
+/// - `TaskManager::create_collector_with_info_filter_for_tasks(filter).time?.time_type`
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum TaskFilterSpecTimeOptionEnum {
     #[serde(rename = "queuedTime")]
@@ -4349,6 +4457,20 @@ pub enum TaskFilterSpecTimeOptionEnum {
 ///   Then the queued tasks are marked as running.
 /// - `success`: When a running task has completed.
 /// - `error`: When a running task has encountered an error.
+///
+/// ### How to access
+/// - `Task::info.state`
+/// - `ScheduledTask::info.state`
+/// - `TaskHistoryCollector::latest_page.state`
+/// - `Task::set_task_state(state)`
+/// - `EventManager::post_event(task_info).state`
+/// - `TaskHistoryCollector::read_next_tasks().state`
+/// - `TaskHistoryCollector::read_previous_tasks().state`
+/// - `TaskManager::read_next_tasks_by_view_spec().state`
+/// - `TaskManager::read_next_tasks_by_view_spec(filter_spec).state?[*]`
+/// - `TaskManager::create_collector_for_tasks(filter).state?[*]`
+/// 
+/// *(10 of 15 paths)*
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum TaskInfoStateEnum {
     #[serde(rename = "queued")]
@@ -4380,6 +4502,10 @@ pub enum TaskInfoStateEnum {
 /// - `stopped`: The vApp is currently powered off or suspended.
 /// - `starting`: The vApp is in the process of starting.
 /// - `stopping`: The vApp is in the process of stopping.
+///
+/// ### How to access
+/// - `ResourcePool::summary→VirtualAppSummary.v_app_state?`
+/// - `VirtualApp::summary→VirtualAppSummary.v_app_state?`
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualAppVAppStateEnum {
     #[serde(rename = "started")]
@@ -4588,6 +4714,14 @@ pub enum VirtualMachineAppHeartbeatStatusTypeEnum {
 ///   on disk, but corrupted in a way that does not allow the server to read the
 ///   content. In this case, no configuration can be returned for a virtual
 ///   machine.
+///
+/// ### How to access
+/// - `VirtualMachine::runtime.connection_state`
+/// - `VirtualMachine::summary.runtime.connection_state`
+/// - `HostSystem::query_host_connection_info().vm?[*].runtime.connection_state`
+/// - `Datacenter::query_connection_info().vm?[*].runtime.connection_state`
+/// - `Datacenter::query_connection_info_via_spec().vm?[*].runtime.connection_state`
+/// - `EnvironmentBrowser::query_config_target().usb?[*].summary?.runtime.connection_state`
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualMachineConnectionStateEnum {
     #[serde(rename = "connected")]
@@ -4665,6 +4799,14 @@ pub enum VirtualMachineCryptoStateEnum {
 ///   synchronizing its state with the primary virtual machine.
 /// - `running`: This state indicates that the virtual machine is running with fault
 ///   tolerance protection.
+///
+/// ### How to access
+/// - `VirtualMachine::runtime.fault_tolerance_state`
+/// - `VirtualMachine::summary.runtime.fault_tolerance_state`
+/// - `HostSystem::query_host_connection_info().vm?[*].runtime.fault_tolerance_state`
+/// - `Datacenter::query_connection_info().vm?[*].runtime.fault_tolerance_state`
+/// - `Datacenter::query_connection_info_via_spec().vm?[*].runtime.fault_tolerance_state`
+/// - `EnvironmentBrowser::query_config_target().usb?[*].summary?.runtime.fault_tolerance_state`
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualMachineFaultToleranceStateEnum {
     #[serde(rename = "notConfigured")]
@@ -4723,6 +4865,12 @@ pub enum VirtualMachineFaultToleranceTypeEnum {
 /// - `lowPriority`: The task of moving this virtual machine is low priority.
 /// - `highPriority`: The task of moving this virtual machine is high priority.
 /// - `defaultPriority`: The task of moving this virtual machine is the default priority.
+///
+/// ### How to access
+/// - `VirtualMachine::migrate_vm_task(priority)`
+/// - `VirtualMachine::relocate_vm_task(priority)`
+/// - `ClusterComputeResource::place_vm(placement_spec).priority?`
+/// - `StorageResourceManager::recommend_datastores(storage_spec).priority?`
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualMachineMovePriorityEnum {
     #[serde(rename = "lowPriority")]
@@ -4797,6 +4945,20 @@ pub enum VirtualMachineNeedSecondaryReasonEnum {
 /// - `poweredOff`: The virtual machine is currently powered off.
 /// - `poweredOn`: The virtual machine is currently powered on.
 /// - `suspended`: The virtual machine is currently suspended.
+///
+/// ### How to access
+/// - `VirtualMachine::runtime.power_state`
+/// - `VirtualMachine::snapshot.root_snapshot_list[*].state`
+/// - `VirtualMachine::summary.runtime.power_state`
+/// - `Agent::runtime.vm_power_state`
+/// - `Agency::runtime→AgentRuntimeInfo.vm_power_state`
+/// - `VirtualMachine::migrate_vm_task(state)`
+/// - `HostSystem::query_host_connection_info().vm?[*].runtime.power_state`
+/// - `Datacenter::query_connection_info().vm?[*].runtime.power_state`
+/// - `Datacenter::query_connection_info_via_spec().vm?[*].runtime.power_state`
+/// - `ServiceInstance::validate_migration(state)`
+/// 
+/// *(10 of 14 paths)*
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualMachinePowerStateEnum {
     #[serde(rename = "poweredOff")]
@@ -4823,6 +4985,14 @@ pub enum VirtualMachinePowerStateEnum {
 /// - `replaying`: The virtual machine is replaying.
 /// - `inactive`: The virtual machine is currently not participating
 ///   in record or replay.
+///
+/// ### How to access
+/// - `VirtualMachine::runtime.record_replay_state`
+/// - `VirtualMachine::summary.runtime.record_replay_state`
+/// - `HostSystem::query_host_connection_info().vm?[*].runtime.record_replay_state`
+/// - `Datacenter::query_connection_info().vm?[*].runtime.record_replay_state`
+/// - `Datacenter::query_connection_info_via_spec().vm?[*].runtime.record_replay_state`
+/// - `EnvironmentBrowser::query_config_target().usb?[*].summary?.runtime.record_replay_state`
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualMachineRecordReplayStateEnum {
     #[serde(rename = "recording")]
@@ -5175,6 +5345,11 @@ pub enum EventAlarmExpressionComparisonOperatorEnum {
 /// Possible values:
 /// - `isAbove`: Test if the target metric item is above the given red or yellow values.
 /// - `isBelow`: Test if the target metric item is below the given red or yellow values.
+///
+/// ### How to access
+/// - `AlarmManager::default_expression→MetricAlarmExpression.operator`
+/// - `Alarm::reconfigure_alarm(spec).expression→MetricAlarmExpression.operator`
+/// - `AlarmManager::create_alarm(spec).expression→MetricAlarmExpression.operator`
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum MetricAlarmOperatorEnum {
     #[serde(rename = "isAbove")]
@@ -5193,6 +5368,11 @@ pub enum MetricAlarmOperatorEnum {
 /// Possible values:
 /// - `isEqual`: Test if the target state matches the given red or yellow states.
 /// - `isUnequal`: Test if the target state does not match the given red or yellow states.
+///
+/// ### How to access
+/// - `AlarmManager::default_expression→StateAlarmExpression.operator`
+/// - `Alarm::reconfigure_alarm(spec).expression→StateAlarmExpression.operator`
+/// - `AlarmManager::create_alarm(spec).expression→StateAlarmExpression.operator`
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum StateAlarmOperatorEnum {
     #[serde(rename = "isEqual")]
@@ -5646,6 +5826,20 @@ pub enum ClusterDasFdmAvailabilityStateEnum {
 /// - `high`: Virtual machines with this priority have a higher chance of powering on after a
 ///   failure if there is insufficient capacity on hosts to meet all virtual machine
 ///   needs.
+///
+/// ### How to access
+/// - `ComputeResource::configuration_ex→ClusterConfigInfoEx.das_vm_config?[*].restart_priority?`
+/// - `ClusterComputeResource::configuration.das_vm_config?[*].restart_priority?`
+/// - `ClusterComputeResource::configuration_ex→ClusterConfigInfoEx.das_vm_config?[*].restart_priority?`
+/// - `Folder::create_cluster(spec).das_vm_config_spec?[*].info?.restart_priority?`
+/// - `Folder::create_cluster_ex(spec).das_vm_config_spec?[*].info?.restart_priority?`
+/// - `Folder::add_standalone_host_task(comp_res_spec)→ClusterConfigSpecEx.das_vm_config_spec?[*].info?.restart_priority?`
+/// - `Folder::batch_add_hosts_to_cluster_task(comp_res_spec)→ClusterConfigSpecEx.das_vm_config_spec?[*].info?.restart_priority?`
+/// - `Folder::batch_add_standalone_hosts_task(comp_res_spec)→ClusterConfigSpecEx.das_vm_config_spec?[*].info?.restart_priority?`
+/// - `StoragePod::create_cluster(spec).das_vm_config_spec?[*].info?.restart_priority?`
+/// - `StoragePod::create_cluster_ex(spec).das_vm_config_spec?[*].info?.restart_priority?`
+/// 
+/// *(10 of 18 paths)*
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum DasVmPriorityEnum {
     #[serde(rename = "disabled")]
@@ -5810,6 +6004,20 @@ pub enum ClusterDasVmSettingsRestartPriorityEnum {
 /// - `automated`: Specifies that VirtualCenter should generate recommendations
 ///   for host power operations, and should execute the
 ///   recommendations automatically.
+///
+/// ### How to access
+/// - `ComputeResource::configuration_ex→ClusterConfigInfoEx.dpm_config_info?.default_dpm_behavior?`
+/// - `ComputeResource::configuration_ex→ClusterConfigInfoEx.dpm_host_config?[*].behavior?`
+/// - `ClusterComputeResource::configuration_ex→ClusterConfigInfoEx.dpm_config_info?.default_dpm_behavior?`
+/// - `ClusterComputeResource::configuration_ex→ClusterConfigInfoEx.dpm_host_config?[*].behavior?`
+/// - `Folder::create_cluster_ex(spec).dpm_config?.default_dpm_behavior?`
+/// - `Folder::add_standalone_host_task(comp_res_spec)→ClusterConfigSpecEx.dpm_config?.default_dpm_behavior?`
+/// - `Folder::batch_add_hosts_to_cluster_task(comp_res_spec)→ClusterConfigSpecEx.dpm_config?.default_dpm_behavior?`
+/// - `Folder::batch_add_standalone_hosts_task(comp_res_spec)→ClusterConfigSpecEx.dpm_config?.default_dpm_behavior?`
+/// - `Folder::create_cluster_ex(spec).dpm_host_config_spec?[*].info?.behavior?`
+/// - `StoragePod::create_cluster_ex(spec).dpm_config?.default_dpm_behavior?`
+/// 
+/// *(10 of 28 paths)*
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum DpmBehaviorEnum {
     #[serde(rename = "manual")]
@@ -5832,6 +6040,20 @@ pub enum DpmBehaviorEnum {
 ///   but should automatically implement only the placement at power on.
 /// - `fullyAutomated`: Specifies that VirtualCenter should automate both the migration
 ///   of virtual machines and their placement with a host at power on.
+///
+/// ### How to access
+/// - `ComputeResource::configuration_ex→ClusterConfigInfoEx.drs_config.default_vm_behavior?`
+/// - `ComputeResource::configuration_ex→ClusterConfigInfoEx.drs_vm_config?[*].behavior?`
+/// - `ClusterComputeResource::configuration.drs_config.default_vm_behavior?`
+/// - `ClusterComputeResource::configuration.drs_vm_config?[*].behavior?`
+/// - `ClusterComputeResource::configuration_ex→ClusterConfigInfoEx.drs_config.default_vm_behavior?`
+/// - `ClusterComputeResource::configuration_ex→ClusterConfigInfoEx.drs_vm_config?[*].behavior?`
+/// - `Folder::create_cluster(spec).drs_config?.default_vm_behavior?`
+/// - `Folder::create_cluster_ex(spec).drs_config?.default_vm_behavior?`
+/// - `Folder::add_standalone_host_task(comp_res_spec)→ClusterConfigSpecEx.drs_config?.default_vm_behavior?`
+/// - `Folder::batch_add_hosts_to_cluster_task(comp_res_spec)→ClusterConfigSpecEx.drs_config?.default_vm_behavior?`
+/// 
+/// *(10 of 36 paths)*
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum DrsBehaviorEnum {
     #[serde(rename = "manual")]
@@ -5912,6 +6134,16 @@ pub enum ClusterHostInfraUpdateHaModeActionOperationTypeEnum {
 ///   
 ///   Power off operation puts the host in
 ///   a state that can be woken up remotely.
+///
+/// ### How to access
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→ClusterHostPowerAction.operation_type`
+/// - `StoragePod::pod_storage_drs_entry.action_history?[*].action→ClusterHostPowerAction.operation_type`
+/// - `ClusterComputeResource::action_history.action→ClusterHostPowerAction.operation_type`
+/// - `ClusterComputeResource::recommendation.action?[*]→ClusterHostPowerAction.operation_type`
+/// - `Datastore::datastore_enter_maintenance_mode().recommendations?[*].action?[*]→ClusterHostPowerAction.operation_type`
+/// - `ClusterComputeResource::cluster_enter_maintenance_mode().recommendations?[*].action?[*]→ClusterHostPowerAction.operation_type`
+/// - `ClusterComputeResource::place_vm().recommendations?[*].action?[*]→ClusterHostPowerAction.operation_type`
+/// - `StorageResourceManager::recommend_datastores().recommendations?[*].action?[*]→ClusterHostPowerAction.operation_type`
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostPowerOperationTypeEnum {
     #[serde(rename = "powerOn")]
@@ -9089,6 +9321,10 @@ pub enum EventCategoryEnum {
 ///   events pertaining to the specified managed entity itself.
 /// - `all`: Returns events pertaining either to the specified managed entity
 ///   or to its child entities.
+///
+/// ### How to access
+/// - `EventManager::query_events(filter).entity?.recursion`
+/// - `EventManager::create_collector_for_events(filter).entity?.recursion`
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum EventFilterSpecRecursionOptionEnum {
     #[serde(rename = "self")]
@@ -10235,6 +10471,11 @@ pub enum AutoStartActionEnum {
 ///   This is the default setting.
 /// - `systemDefault`: The system uses the default value to determine whether or not to wait to
 ///   receive a heartbeat before powering on the next machine in the order.
+///
+/// ### How to access
+/// - `HostSystem::config.auto_start?.power_info?[*].wait_for_heartbeat`
+/// - `HostAutoStartManager::config.power_info?[*].wait_for_heartbeat`
+/// - `HostAutoStartManager::reconfigure_autostart(spec).power_info?[*].wait_for_heartbeat`
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum AutoStartWaitHeartbeatSettingEnum {
     #[serde(rename = "yes")]
@@ -10869,6 +11110,15 @@ pub enum HostFeatureVersionKeyEnum {
 /// - `loop`
 /// - `pointToPoint`
 /// - `unknown`
+///
+/// ### How to access
+/// - `HostSystem::config.storage_device?.host_bus_adapter?[*]⇒HostFibreChannelHbaTrait.port_type`
+/// - `HostStorageSystem::storage_device_info.host_bus_adapter?[*]⇒HostFibreChannelHbaTrait.port_type`
+/// - `HostProfileManager::apply_host_config_task(config_spec).storage_device?.host_bus_adapter?[*]⇒HostFibreChannelHbaTrait.port_type`
+/// - `HostProfileManager::generate_config_task_list(config_spec).storage_device?.host_bus_adapter?[*]⇒HostFibreChannelHbaTrait.port_type`
+/// - `HostProfileManager::generate_host_profile_task_list_task(config_spec).storage_device?.host_bus_adapter?[*]⇒HostFibreChannelHbaTrait.port_type`
+/// - `HostProfile::execute_host_profile().config_spec?.storage_device?.host_bus_adapter?[*]⇒HostFibreChannelHbaTrait.port_type`
+/// - `HostProfileManager::generate_config_task_list().config_spec?.storage_device?.host_bus_adapter?[*]⇒HostFibreChannelHbaTrait.port_type`
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum FibreChannelPortTypeEnum {
     #[serde(rename = "fabric")]
@@ -11240,6 +11490,10 @@ pub enum HostHardwareElementStatusEnum {
 ///   *accessOther*.
 /// - `accessOther`: Describes a combination of one or more roles/permissions which are
 ///   none of the above.
+///
+/// ### How to access
+/// - `HostAccessManager::change_access_mode(access_mode)`
+/// - `HostAccessManager::retrieve_host_access_control_entries().access_mode`
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostAccessModeEnum {
     #[serde(rename = "accessNone")]
@@ -11273,6 +11527,20 @@ pub enum HostAccessModeEnum {
 ///   If the host is in "strict" lockdown mode then no one will be able
 ///   to exit lockdown mode through DCUI in emergency situations,
 ///   i.e. when the connection to vCenter server is permanently lost.
+///
+/// ### How to access
+/// - `HostSystem::config.lockdown_mode?`
+/// - `ClusterComputeResource::hci_config.host_config_profile?.lockdown_mode?`
+/// - `HostAccessManager::lockdown_mode`
+/// - `HostSystem::reconnect_host_task(cnx_spec).lockdown_mode?`
+/// - `Folder::add_standalone_host_task(spec).lockdown_mode?`
+/// - `Folder::batch_add_hosts_to_cluster_task(new_hosts).host_cnx_spec.lockdown_mode?`
+/// - `Folder::batch_add_standalone_hosts_task(new_hosts).host_cnx_spec.lockdown_mode?`
+/// - `Folder::add_standalone_host_task(comp_res_spec).host_seed_spec?.single_host_spec.new_host_cnx_spec?.lockdown_mode?`
+/// - `Folder::batch_add_hosts_to_cluster_task(comp_res_spec).host_seed_spec?.single_host_spec.new_host_cnx_spec?.lockdown_mode?`
+/// - `Datacenter::batch_query_connect_info(host_specs).lockdown_mode?`
+/// 
+/// *(10 of 27 paths)*
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostLockdownModeEnum {
     #[serde(rename = "lockdownDisabled")]
@@ -11485,6 +11753,15 @@ pub enum HostInternetScsiHbaIscsiIpv6AddressIPv6AddressOperationEnum {
 /// - `notsupported`
 /// - `optional`
 /// - `required`
+///
+/// ### How to access
+/// - `HostSystem::config.storage_device?.host_bus_adapter?[*]→HostInternetScsiHba.network_binding_support?`
+/// - `HostStorageSystem::storage_device_info.host_bus_adapter?[*]→HostInternetScsiHba.network_binding_support?`
+/// - `HostProfileManager::apply_host_config_task(config_spec).storage_device?.host_bus_adapter?[*]→HostInternetScsiHba.network_binding_support?`
+/// - `HostProfileManager::generate_config_task_list(config_spec).storage_device?.host_bus_adapter?[*]→HostInternetScsiHba.network_binding_support?`
+/// - `HostProfileManager::generate_host_profile_task_list_task(config_spec).storage_device?.host_bus_adapter?[*]→HostInternetScsiHba.network_binding_support?`
+/// - `HostProfile::execute_host_profile().config_spec?.storage_device?.host_bus_adapter?[*]→HostInternetScsiHba.network_binding_support?`
+/// - `HostProfileManager::generate_config_task_list().config_spec?.storage_device?.host_bus_adapter?[*]→HostInternetScsiHba.network_binding_support?`
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostInternetScsiHbaNetworkBindingSupportTypeEnum {
     #[serde(rename = "notsupported")]
@@ -12968,6 +13245,10 @@ pub enum RdmaProtocolEnum {
 /// Possible values:
 /// - `inbound`
 /// - `outbound`
+///
+/// ### How to access
+/// - `HostSystem::config.firewall?.ruleset?[*].rule[*].direction`
+/// - `HostFirewallSystem::firewall_info.ruleset?[*].rule[*].direction`
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostFirewallRuleDirectionEnum {
     #[serde(rename = "inbound")]
@@ -12986,6 +13267,10 @@ pub enum HostFirewallRuleDirectionEnum {
 /// Possible values:
 /// - `src`
 /// - `dst`
+///
+/// ### How to access
+/// - `HostSystem::config.firewall?.ruleset?[*].rule[*].port_type?`
+/// - `HostFirewallSystem::firewall_info.ruleset?[*].rule[*].port_type?`
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostFirewallRulePortTypeEnum {
     #[serde(rename = "src")]
@@ -13507,6 +13792,9 @@ pub enum HostSgxRegistrationInfoRegistrationTypeEnum {
 /// - `COMPLETE`: Implements test notifications and allows agent configuration
 /// - `DIAGNOSTICS`: Implements only test notification capability only
 /// - `CONFIGURATION`: Allows for agent configuration only
+///
+/// ### How to access
+/// - `HostSnmpSystem::limits.capability`
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostSnmpAgentCapabilityEnum {
     #[serde(rename = "COMPLETE")]
@@ -13641,6 +13929,12 @@ pub enum HostTdxInfoTdxStateEnum {
 /// Possible values:
 /// - `notAccepted`: TPM attestation failed.
 /// - `accepted`: TPM attestation succeeded.
+///
+/// ### How to access
+/// - `HostSystem::summary.tpm_attestation?.status`
+/// - `HostSystem::query_host_connection_info().host.tpm_attestation?.status`
+/// - `Datacenter::query_connection_info().host.tpm_attestation?.status`
+/// - `Datacenter::query_connection_info_via_spec().host.tpm_attestation?.status`
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum HostTpmAttestationInfoAcceptanceStatusEnum {
     #[serde(rename = "notAccepted")]
@@ -14896,6 +15190,11 @@ pub enum AnswerFileValidationInfoStatusEnum {
 /// - `thursday`
 /// - `friday`
 /// - `saturday`
+///
+/// ### How to access
+/// - `ScheduledTask::reconfigure_scheduled_task(spec).scheduler→MonthlyByWeekdayTaskScheduler.weekday`
+/// - `ScheduledTaskManager::create_scheduled_task(spec).scheduler→MonthlyByWeekdayTaskScheduler.weekday`
+/// - `ScheduledTaskManager::create_object_scheduled_task(spec).scheduler→MonthlyByWeekdayTaskScheduler.weekday`
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum DayOfWeekEnum {
     #[serde(rename = "sunday")]
@@ -14930,6 +15229,11 @@ pub enum DayOfWeekEnum {
 /// - `third`
 /// - `fourth`
 /// - `last`
+///
+/// ### How to access
+/// - `ScheduledTask::reconfigure_scheduled_task(spec).scheduler→MonthlyByWeekdayTaskScheduler.offset`
+/// - `ScheduledTaskManager::create_scheduled_task(spec).scheduler→MonthlyByWeekdayTaskScheduler.offset`
+/// - `ScheduledTaskManager::create_object_scheduled_task(spec).scheduler→MonthlyByWeekdayTaskScheduler.offset`
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum WeekOfMonthEnum {
     #[serde(rename = "first")]
@@ -16206,6 +16510,14 @@ pub enum VirtualMachineToolsRunningStatusEnum {
 /// - `toolsNotRunning`: VMware Tools is not running.
 /// - `toolsOld`: VMware Tools is running, but the version is not current.
 /// - `toolsOk`: VMware Tools is running and the version is current.
+///
+/// ### How to access
+/// - `VirtualMachine::guest.tools_status?`
+/// - `VirtualMachine::summary.guest?.tools_status?`
+/// - `HostSystem::query_host_connection_info().vm?[*].guest?.tools_status?`
+/// - `Datacenter::query_connection_info().vm?[*].guest?.tools_status?`
+/// - `Datacenter::query_connection_info_via_spec().vm?[*].guest?.tools_status?`
+/// - `EnvironmentBrowser::query_config_target().usb?[*].summary?.guest?.tools_status?`
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualMachineToolsStatusEnum {
     #[serde(rename = "toolsNotInstalled")]
@@ -17449,6 +17761,20 @@ pub enum VirtualMachineRelocateDiskMoveOptionsEnum {
 /// Possible values:
 /// - `flat`
 /// - `sparse`
+///
+/// ### How to access
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→StoragePlacementAction.relocate_spec.transform?`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→StorageMigrationAction.relocate_spec.transform?`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→PlacementAction.relocate_spec?.transform?`
+/// - `StoragePod::pod_storage_drs_entry.action_history?[*].action→StoragePlacementAction.relocate_spec.transform?`
+/// - `StoragePod::pod_storage_drs_entry.action_history?[*].action→StorageMigrationAction.relocate_spec.transform?`
+/// - `ClusterComputeResource::action_history.action→StoragePlacementAction.relocate_spec.transform?`
+/// - `ClusterComputeResource::action_history.action→StorageMigrationAction.relocate_spec.transform?`
+/// - `ClusterComputeResource::action_history.action→PlacementAction.relocate_spec?.transform?`
+/// - `ClusterComputeResource::recommendation.action?[*]→StoragePlacementAction.relocate_spec.transform?`
+/// - `ClusterComputeResource::recommendation.action?[*]→StorageMigrationAction.relocate_spec.transform?`
+/// 
+/// *(10 of 34 paths)*
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualMachineRelocateTransformationEnum {
     #[serde(rename = "flat")]
@@ -17999,6 +18325,20 @@ pub enum CheckTestTypeEnum {
 /// - `enableNetBIOSViaDhcp`: DHCP server decides whether or not to use NetBIOS.
 /// - `enableNetBIOS`: Always use NetBIOS.
 /// - `disableNetBIOS`: Never use NetBIOS.
+///
+/// ### How to access
+/// - `VirtualMachine::check_customization_spec(spec).nic_setting_map?[*].adapter.net_bios?`
+/// - `VirtualMachine::customize_vm_task(spec).nic_setting_map?[*].adapter.net_bios?`
+/// - `VirtualMachine::clone_vm_task(spec).customization?.nic_setting_map?[*].adapter.net_bios?`
+/// - `ClusterComputeResource::place_vm(placement_spec).clone_spec?.customization?.nic_setting_map?[*].adapter.net_bios?`
+/// - `FailoverClusterConfigurator::create_passive_node_task(passive_deployment_spec).failover_ip_settings?.net_bios?`
+/// - `FailoverClusterConfigurator::create_witness_node_task(witness_deployment_spec).ip_settings.net_bios?`
+/// - `FailoverClusterConfigurator::create_witness_node_task(witness_deployment_spec)→PassiveNodeDeploymentSpec.failover_ip_settings?.net_bios?`
+/// - `FailoverClusterConfigurator::deploy_vcha_task(deployment_spec).passive_deployment_spec.failover_ip_settings?.net_bios?`
+/// - `FailoverClusterConfigurator::deploy_vcha_task(deployment_spec).witness_deployment_spec.ip_settings.net_bios?`
+/// - `VirtualMachineGuestCustomizationManager::customize_guest_task(spec).nic_setting_map?[*].adapter.net_bios?`
+/// 
+/// *(10 of 27 paths)*
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum CustomizationNetBiosModeEnum {
     #[serde(rename = "enableNetBIOSViaDhcp")]
@@ -18023,6 +18363,20 @@ pub enum CustomizationNetBiosModeEnum {
 ///   server.
 /// - `perSeat`: Indicates that a client access license has been purchased for each computer
 ///   that accesses the VirtualCenter server.
+///
+/// ### How to access
+/// - `VirtualMachine::check_customization_spec(spec).identity→CustomizationSysprep.license_file_print_data?.auto_mode`
+/// - `VirtualMachine::customize_vm_task(spec).identity→CustomizationSysprep.license_file_print_data?.auto_mode`
+/// - `VirtualMachine::clone_vm_task(spec).customization?.identity→CustomizationSysprep.license_file_print_data?.auto_mode`
+/// - `ClusterComputeResource::place_vm(placement_spec).clone_spec?.customization?.identity→CustomizationSysprep.license_file_print_data?.auto_mode`
+/// - `VirtualMachineGuestCustomizationManager::customize_guest_task(spec).identity→CustomizationSysprep.license_file_print_data?.auto_mode`
+/// - `CustomizationSpecManager::create_customization_spec(item).spec.identity→CustomizationSysprep.license_file_print_data?.auto_mode`
+/// - `CustomizationSpecManager::get_customization_spec().spec.identity→CustomizationSysprep.license_file_print_data?.auto_mode`
+/// - `CustomizationSpecManager::overwrite_customization_spec(item).spec.identity→CustomizationSysprep.license_file_print_data?.auto_mode`
+/// - `CustomizationSpecManager::customization_spec_item_to_xml(item).spec.identity→CustomizationSysprep.license_file_print_data?.auto_mode`
+/// - `CustomizationSpecManager::xml_to_customization_spec_item().spec.identity→CustomizationSysprep.license_file_print_data?.auto_mode`
+/// 
+/// *(10 of 12 paths)*
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum CustomizationLicenseDataModeEnum {
     #[serde(rename = "perServer")]
@@ -18053,6 +18407,20 @@ pub enum CustomizationLicenseDataModeEnum {
 ///   
 ///   This puts the vm in a
 ///   sealed state.
+///
+/// ### How to access
+/// - `VirtualMachine::check_customization_spec(spec).options?→CustomizationWinOptions.reboot?`
+/// - `VirtualMachine::customize_vm_task(spec).options?→CustomizationWinOptions.reboot?`
+/// - `VirtualMachine::clone_vm_task(spec).customization?.options?→CustomizationWinOptions.reboot?`
+/// - `ClusterComputeResource::place_vm(placement_spec).clone_spec?.customization?.options?→CustomizationWinOptions.reboot?`
+/// - `VirtualMachineGuestCustomizationManager::customize_guest_task(spec).options?→CustomizationWinOptions.reboot?`
+/// - `CustomizationSpecManager::create_customization_spec(item).spec.options?→CustomizationWinOptions.reboot?`
+/// - `CustomizationSpecManager::get_customization_spec().spec.options?→CustomizationWinOptions.reboot?`
+/// - `CustomizationSpecManager::overwrite_customization_spec(item).spec.options?→CustomizationWinOptions.reboot?`
+/// - `CustomizationSpecManager::customization_spec_item_to_xml(item).spec.options?→CustomizationWinOptions.reboot?`
+/// - `CustomizationSpecManager::xml_to_customization_spec_item().spec.options?→CustomizationWinOptions.reboot?`
+/// 
+/// *(10 of 12 paths)*
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum CustomizationSysprepRebootOptionEnum {
     #[serde(rename = "reboot")]
@@ -18225,6 +18593,20 @@ pub enum VirtualDeviceConfigSpecChangeModeEnum {
 /// - `destroy`: Specifies the destruction of a device backing.
 /// - `replace`: Specifies the deletion of the existing backing for a virtual device
 ///   and the creation of a new backing.
+///
+/// ### How to access
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→StoragePlacementAction.relocate_spec.device_change?[*].file_operation?`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→StorageMigrationAction.relocate_spec.device_change?[*].file_operation?`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→PlacementAction.relocate_spec?.device_change?[*].file_operation?`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→ClusterClusterInitialPlacementAction.config_spec?.device_change?[*].file_operation?`
+/// - `StoragePod::pod_storage_drs_entry.action_history?[*].action→StoragePlacementAction.relocate_spec.device_change?[*].file_operation?`
+/// - `ClusterComputeResource::action_history.action→StoragePlacementAction.relocate_spec.device_change?[*].file_operation?`
+/// - `ClusterComputeResource::action_history.action→StorageMigrationAction.relocate_spec.device_change?[*].file_operation?`
+/// - `ClusterComputeResource::action_history.action→PlacementAction.relocate_spec?.device_change?[*].file_operation?`
+/// - `ClusterComputeResource::action_history.action→ClusterClusterInitialPlacementAction.config_spec?.device_change?[*].file_operation?`
+/// - `ClusterComputeResource::recommendation.action?[*]→StoragePlacementAction.relocate_spec.device_change?[*].file_operation?`
+/// 
+/// *(10 of 57 paths)*
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualDeviceConfigSpecFileOperationEnum {
     #[serde(rename = "create")]
@@ -18249,6 +18631,20 @@ pub enum VirtualDeviceConfigSpecFileOperationEnum {
 /// - `add`: Specifies the addition of a virtual device to the configuration.
 /// - `remove`: Specifies the removal of a virtual device.
 /// - `edit`: Specifies changes to the virtual device specification.
+///
+/// ### How to access
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→StoragePlacementAction.relocate_spec.device_change?[*].operation?`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→StorageMigrationAction.relocate_spec.device_change?[*].operation?`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→PlacementAction.relocate_spec?.device_change?[*].operation?`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→ClusterClusterInitialPlacementAction.config_spec?.device_change?[*].operation?`
+/// - `StoragePod::pod_storage_drs_entry.action_history?[*].action→StoragePlacementAction.relocate_spec.device_change?[*].operation?`
+/// - `ClusterComputeResource::action_history.action→StoragePlacementAction.relocate_spec.device_change?[*].operation?`
+/// - `ClusterComputeResource::action_history.action→StorageMigrationAction.relocate_spec.device_change?[*].operation?`
+/// - `ClusterComputeResource::action_history.action→PlacementAction.relocate_spec?.device_change?[*].operation?`
+/// - `ClusterComputeResource::action_history.action→ClusterClusterInitialPlacementAction.config_spec?.device_change?[*].operation?`
+/// - `ClusterComputeResource::recommendation.action?[*]→StoragePlacementAction.relocate_spec.device_change?[*].operation?`
+/// 
+/// *(10 of 57 paths)*
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualDeviceConfigSpecOperationEnum {
     #[serde(rename = "add")]
@@ -18560,6 +18956,20 @@ pub enum VirtualPointingDeviceHostChoiceEnum {
 ///   In this case, no physical machine is involved.
 /// - `physicalSharing`: The virtual SCSI bus is shared between two or more virtual machines
 ///   residing on different physical hosts.
+///
+/// ### How to access
+/// - `VirtualMachine::config.hardware.device?[*]⇒VirtualScsiControllerTrait.shared_bus`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→StoragePlacementAction.relocate_spec.device_change?[*].device⇒VirtualScsiControllerTrait.shared_bus`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→StorageMigrationAction.relocate_spec.device_change?[*].device⇒VirtualScsiControllerTrait.shared_bus`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→PlacementAction.relocate_spec?.device_change?[*].device⇒VirtualScsiControllerTrait.shared_bus`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→ClusterClusterInitialPlacementAction.config_spec?.device_change?[*].device⇒VirtualScsiControllerTrait.shared_bus`
+/// - `StoragePod::pod_storage_drs_entry.action_history?[*].action→StoragePlacementAction.relocate_spec.device_change?[*].device⇒VirtualScsiControllerTrait.shared_bus`
+/// - `ClusterComputeResource::action_history.action→StoragePlacementAction.relocate_spec.device_change?[*].device⇒VirtualScsiControllerTrait.shared_bus`
+/// - `ClusterComputeResource::action_history.action→StorageMigrationAction.relocate_spec.device_change?[*].device⇒VirtualScsiControllerTrait.shared_bus`
+/// - `ClusterComputeResource::action_history.action→PlacementAction.relocate_spec?.device_change?[*].device⇒VirtualScsiControllerTrait.shared_bus`
+/// - `ClusterComputeResource::action_history.action→ClusterClusterInitialPlacementAction.config_spec?.device_change?[*].device⇒VirtualScsiControllerTrait.shared_bus`
+/// 
+/// *(10 of 67 paths)*
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VirtualScsiSharingEnum {
     #[serde(rename = "noSharing")]
@@ -21477,6 +21887,11 @@ pub enum VslmVStorageObjectControlFlagEnum {
 /// - `remove`
 /// - `assign`
 /// - `indirectRemove`
+///
+/// ### How to access
+/// - `PropertyCollector::check_for_updates().filter_set?[*].object_set?[*].change_set?[*].op`
+/// - `PropertyCollector::wait_for_updates().filter_set?[*].object_set?[*].change_set?[*].op`
+/// - `PropertyCollector::wait_for_updates_ex().filter_set?[*].object_set?[*].change_set?[*].op`
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum PropertyChangeOpEnum {
     #[serde(rename = "add")]
@@ -21508,6 +21923,11 @@ pub enum PropertyChangeOpEnum {
 ///   
 ///   For
 ///   instance, this can happen when a virtual machine is destroyed.
+///
+/// ### How to access
+/// - `PropertyCollector::check_for_updates().filter_set?[*].object_set?[*].kind`
+/// - `PropertyCollector::wait_for_updates().filter_set?[*].object_set?[*].kind`
+/// - `PropertyCollector::wait_for_updates_ex().filter_set?[*].object_set?[*].kind`
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum ObjectUpdateKindEnum {
     #[serde(rename = "modify")]
@@ -21534,6 +21954,9 @@ pub enum ObjectUpdateKindEnum {
 ///   Then the queued tasks are marked as running.
 /// - `success`: When a running task has completed.
 /// - `error`: When a running task has encountered an error.
+///
+/// ### How to access
+/// - `VslmTask::vslm_query_info().state`
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize, strum_macros::IntoStaticStr)]
 pub enum VslmTaskInfoStateEnum {
     #[serde(rename = "queued")]

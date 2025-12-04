@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "vim": {
+      "command": "C:\\Users\\karaa\\projects\\rust\\vim-rs\\mcp\\target\\release\\vim_mcp_server.exe"
+    }
+  }
+}
+

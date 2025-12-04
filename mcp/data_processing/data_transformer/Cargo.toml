@@ -1,0 +1,34 @@
+[package]
+name = "data-transformer"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "data-transformer"
+path = "src/main.rs"
+
+[dependencies]
+# Tool libraries
+build-examples = { path = "../build_examples" }
+build-embeddings = { path = "../build_embeddings" }
+build-api-definitions = { path = "../build_api_definitions" }
+
+# Shared types (api_database - no embedded data, just types)
+api_database = { path = "../../api_database" }
+
+# Core dependencies
+anyhow = "1.0"
+tracing = "0.1"
+tracing-subscriber = "0.3"
+tokio = { version = "1.42", features = ["full"] }
+bincode = "1.3"
+clap = { version = "4.5", features = ["derive"] }
+
+# For --emit-json flag (optional JSON export)
+serde_json = "1.0"
+
+[features]
+default = []
+# Forward cuda feature to build-embeddings
+cuda = ["build-embeddings/cuda"]
+

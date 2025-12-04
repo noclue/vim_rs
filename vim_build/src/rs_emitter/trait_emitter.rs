@@ -1,5 +1,5 @@
 use crate::printer::Printer;
-use crate::rs_emitter::common::emit_description;
+use crate::rs_emitter::common::{emit_description, emit_description_with_paths};
 use crate::rs_emitter::errors::{Error, Result};
 use crate::rs_emitter::{get_by_ref, getter_name, to_field_name, to_type_name, TypeDefResolver};
 use crate::vim_model::{EmitMode, Field, Model, Struct};
@@ -79,7 +79,7 @@ impl<'a> TraitEmitter<'a> {
         {
             let this = &mut *self;
             let doc_string: &Option<String> = &vim_type.description;
-            emit_description(this.printer, doc_string)
+            emit_description_with_paths(this.printer, doc_string, &vim_type.paths)
         }?;
         self.printer.println(&format!(
             "pub trait {}Trait : super::traits::{}Trait {{",

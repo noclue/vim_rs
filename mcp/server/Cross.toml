@@ -1,0 +1,15 @@
+# Cross-compilation configuration for Linux ARM64
+# https://github.com/cross-rs/cross
+
+[build.env]
+passthrough = [
+    "CARGO_FEATURE_EMBED_MODEL",
+]
+
+[target.aarch64-unknown-linux-gnu]
+# Install SSL dev packages needed by some dependencies
+pre-build = [
+    "dpkg --add-architecture arm64",
+    "apt-get update",
+    "apt-get install -y libssl-dev:arm64 pkg-config"
+]

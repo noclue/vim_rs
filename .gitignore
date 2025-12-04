@@ -1,4 +1,12 @@
 **/target
 .vscode
 examples/perf_metrics/src/vim
+mcp/data
+mcp/guides
+mcp/build-embeddings/.fastembed_cache
 .idea
+.zed
+.env
+
+# MCP model cache (fastembed downloads)
+mcp/data/model_cache/

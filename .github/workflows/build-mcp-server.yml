@@ -1,0 +1,269 @@
+name: Build MCP Server
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: 'Release tag (optional, creates a draft release)'
+        required: false
+        type: string
+      build_database:
+        description: 'Build api_database.bin from source'
+        required: false
+        type: boolean
+        default: false
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  # Build the API database once (if needed)
+  prepare-database:
+    if: inputs.build_database
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: database-build-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Build API database
+        run: cargo run -p data-transformer --release
+        working-directory: mcp
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: api-database
+          path: mcp/data/api_database.bin
+          retention-days: 1
+
+  # ============================================================================
+  # Linux builds (both targets on ONE runner using cross)
+  # ============================================================================
+  build-linux:
+    needs: [prepare-database]
+    if: always() && !failure() && !cancelled()
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: x86_64-unknown-linux-gnu
+            name: linux-amd64
+            use_cross: false
+          - target: aarch64-unknown-linux-gnu
+            name: linux-arm64
+            use_cross: true
+
+    name: Linux ${{ matrix.name }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+
+      - name: Download database (if built)
+        if: inputs.build_database
+        uses: actions/download-artifact@v4
+        with:
+          name: api-database
+          path: mcp/data
+
+      - name: Verify database exists
+        run: |
+          if [ ! -f mcp/data/api_database.bin ]; then
+            echo "::error::api_database.bin not found. Commit it or enable 'Build api_database.bin from source'"
+            exit 1
+          fi
+
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+          key: linux-${{ matrix.target }}-${{ hashFiles('**/Cargo.lock') }}
+
+      - uses: actions/cache@v4
+        with:
+          path: mcp/data/model_cache
+          key: fastembed-bge-small-v1
+
+      - name: Install cross
+        if: matrix.use_cross
+        run: cargo install cross --git https://github.com/cross-rs/cross
+
+      - name: Build (native)
+        if: ${{ !matrix.use_cross }}
+        working-directory: mcp/server
+        run: cargo build --release --target ${{ matrix.target }}
+
+      - name: Build (cross)
+        if: matrix.use_cross
+        working-directory: mcp/server
+        run: cross build --release --target ${{ matrix.target }}
+
+      - name: Package
+        run: |
+          mkdir -p release
+          cp mcp/server/target/${{ matrix.target }}/release/vim_mcp_server release/
+          cd release && tar -czvf ../vim_mcp_server-${{ matrix.name }}.tar.gz *
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: vim_mcp_server-${{ matrix.name }}
+          path: vim_mcp_server-${{ matrix.name }}.tar.gz
+
+  # ============================================================================
+  # Windows builds (need Windows runner for MSVC targets)
+  # ============================================================================
+  build-windows:
+    needs: [prepare-database]
+    if: always() && !failure() && !cancelled()
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: x86_64-pc-windows-msvc
+            name: windows-amd64
+          - target: aarch64-pc-windows-msvc
+            name: windows-arm64
+
+    name: Windows ${{ matrix.name }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+
+      - name: Download database (if built)
+        if: inputs.build_database
+        uses: actions/download-artifact@v4
+        with:
+          name: api-database
+          path: mcp/data
+
+      - name: Verify database exists
+        shell: bash
+        run: |
+          if [ ! -f mcp/data/api_database.bin ]; then
+            echo "::error::api_database.bin not found. Commit it or enable 'Build api_database.bin from source'"
+            exit 1
+          fi
+
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+          key: windows-${{ matrix.target }}-${{ hashFiles('**/Cargo.lock') }}
+
+      - uses: actions/cache@v4
+        with:
+          path: mcp/data/model_cache
+          key: fastembed-bge-small-v1
+
+      - name: Build
+        working-directory: mcp/server
+        run: cargo build --release --target ${{ matrix.target }}
+
+      - name: Package
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path release | Out-Null
+          Copy-Item "mcp/server/target/${{ matrix.target }}/release/vim_mcp_server.exe" release/
+          Compress-Archive -Path release/* -DestinationPath "vim_mcp_server-${{ matrix.name }}.zip"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: vim_mcp_server-${{ matrix.name }}
+          path: vim_mcp_server-${{ matrix.name }}.zip
+
+  # ============================================================================
+  # macOS ARM64 (native on Apple Silicon runner)
+  # ============================================================================
+  build-macos:
+    needs: [prepare-database]
+    if: always() && !failure() && !cancelled()
+    runs-on: macos-latest
+    name: macOS ARM64
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-apple-darwin
+
+      - name: Download database (if built)
+        if: inputs.build_database
+        uses: actions/download-artifact@v4
+        with:
+          name: api-database
+          path: mcp/data
+
+      - name: Verify database exists
+        run: |
+          if [ ! -f mcp/data/api_database.bin ]; then
+            echo "::error::api_database.bin not found. Commit it or enable 'Build api_database.bin from source'"
+            exit 1
+          fi
+
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+          key: macos-aarch64-${{ hashFiles('**/Cargo.lock') }}
+
+      - uses: actions/cache@v4
+        with:
+          path: mcp/data/model_cache
+          key: fastembed-bge-small-v1
+
+      - name: Build
+        working-directory: mcp/server
+        run: cargo build --release --target aarch64-apple-darwin
+
+      - name: Package
+        run: |
+          mkdir -p release
+          cp mcp/server/target/aarch64-apple-darwin/release/vim_mcp_server release/
+          cd release && tar -czvf ../vim_mcp_server-macos-arm64.tar.gz *
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: vim_mcp_server-macos-arm64
+          path: vim_mcp_server-macos-arm64.tar.gz
+
+  # ============================================================================
+  # Create release (if tag provided)
+  # ============================================================================
+  release:
+    needs: [build-linux, build-windows, build-macos]
+    if: inputs.release_tag != ''
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: vim_mcp_server-*
+          path: artifacts
+          merge-multiple: true
+
+      - name: List artifacts
+        run: ls -lh artifacts/
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ inputs.release_tag }}
+          name: VIM MCP Server ${{ inputs.release_tag }}
+          draft: true
+          generate_release_notes: true
+          files: artifacts/*

@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCP Test Client</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <!-- Theme toggle button -->
+    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+        <svg id="theme-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+    </button>
+    <div class="container">
+        <header>
+            <h1>MCP Test Client</h1>
+            <p class="subtitle">Test and validate MCP server tools</p>
+        </header>
+
+        {% if error %}
+        <div class="error-banner">
+            <strong>Error:</strong> {{ error }}
+        </div>
+        {% endif %}
+
+        {% if has_tools %}
+        <div class="tool-selector">
+            <div class="form-group">
+                <label for="tool-select">Select Tool:</label>
+                <select id="tool-select" class="form-control">
+                    <option value="">-- Choose a tool --</option>
+                    {% for tool in tools %}
+                    <option value="{{ tool.name }}">{{ tool.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div id="tool-info" class="tool-info" style="display: none;">
+                <h3 id="tool-name"></h3>
+                <p id="tool-description" class="tool-description"></p>
+            </div>
+        </div>
+
+        <div id="form-container" class="form-container" style="display: none;">
+            <form id="tool-form">
+                <div id="form-fields"></div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Invoke Tool</button>
+                    <button type="button" class="btn btn-secondary" id="clear-btn">Clear Results</button>
+                </div>
+            </form>
+        </div>
+
+        <div id="results-container" class="results-container" style="display: none;">
+            <h2>Results</h2>
+            <div id="results-list"></div>
+        </div>
+        {% else %}
+        <div class="error-banner">
+            <strong>No tools available.</strong> Make sure the MCP server is configured correctly.
+        </div>
+        {% endif %}
+    </div>
+
+    <script>
+        // Theme management
+        (function() {
+            const themeToggle = document.getElementById('theme-toggle');
+            const themeIcon = document.getElementById('theme-icon');
+            const html = document.documentElement;
+            
+            // Get saved theme preference or detect system preference
+            function getInitialTheme() {
+                const saved = localStorage.getItem('theme');
+                if (saved === 'light' || saved === 'dark') {
+                    return saved;
+                }
+                // Detect system preference
+                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    return 'dark';
+                }
+                return 'light';
+            }
+            
+            // Set theme
+            function setTheme(theme) {
+                html.setAttribute('data-theme', theme);
+                localStorage.setItem('theme', theme);
+                updateIcon(theme);
+            }
+            
+            // Update icon based on theme
+            function updateIcon(theme) {
+                if (theme === 'dark') {
+                    // Moon icon for dark mode
+                    themeIcon.innerHTML = `
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    `;
+                } else {
+                    // Sun icon for light mode
+                    themeIcon.innerHTML = `
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    `;
+                }
+            }
+            
+            // Initialize theme
+            const initialTheme = getInitialTheme();
+            setTheme(initialTheme);
+            
+            // Toggle theme on button click
+            themeToggle.addEventListener('click', () => {
+                const currentTheme = html.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                setTheme(newTheme);
+            });
+            
+            // Listen for system theme changes (if no manual preference is set)
+            if (window.matchMedia) {
+                window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+                    // Only auto-switch if user hasn't manually set a preference
+                    if (!localStorage.getItem('theme')) {
+                        setTheme(e.matches ? 'dark' : 'light');
+                    }
+                });
+            }
+        })();
+
+        const toolSelect = document.getElementById('tool-select');
+        const toolInfo = document.getElementById('tool-info');
+        const toolName = document.getElementById('tool-name');
+        const toolDescription = document.getElementById('tool-description');
+        const formContainer = document.getElementById('form-container');
+        const formFields = document.getElementById('form-fields');
+        const toolForm = document.getElementById('tool-form');
+        const resultsContainer = document.getElementById('results-container');
+        const resultsList = document.getElementById('results-list');
+        const clearBtn = document.getElementById('clear-btn');
+
+        const tools = {{ tools_json | safe }};
+
+        // Tool selection handler
+        toolSelect.addEventListener('change', async (e) => {
+            const selectedTool = e.target.value;
+            
+            if (!selectedTool) {
+                toolInfo.style.display = 'none';
+                formContainer.style.display = 'none';
+                return;
+            }
+
+            // Find tool info
+            const tool = tools.find(t => t.name === selectedTool);
+            if (tool) {
+                toolName.textContent = tool.name;
+                toolDescription.textContent = tool.description || 'No description available';
+                toolInfo.style.display = 'block';
+            }
+
+            // Load form
+            try {
+                const response = await fetch(`/api/tool/${selectedTool}`);
+                const html = await response.text();
+                formFields.innerHTML = html;
+                formContainer.style.display = 'block';
+            } catch (error) {
+                alert('Failed to load tool form: ' + error.message);
+            }
+        });
+
+        // Form submission handler
+        toolForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const selectedTool = toolSelect.value;
+            if (!selectedTool) {
+                alert('Please select a tool');
+                return;
+            }
+
+            // Collect form data
+            const formData = new FormData(toolForm);
+            const parameters = {};
+            
+            for (const [key, value] of formData.entries()) {
+                parameters[key] = value;
+            }
+
+            // Show loading state
+            const submitBtn = toolForm.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Invoking...';
+            submitBtn.disabled = true;
+
+            try {
+                const response = await fetch('/api/invoke', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        tool_name: selectedTool,
+                        parameters: parameters,
+                    }),
+                });
+
+                const result = await response.json();
+                
+                // Add result to display
+                addResult(result);
+                
+                // Show results container
+                resultsContainer.style.display = 'block';
+                
+                // Scroll to results
+                resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                
+            } catch (error) {
+                alert('Failed to invoke tool: ' + error.message);
+            } finally {
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }
+        });
+
+        // Clear results handler
+        clearBtn.addEventListener('click', () => {
+            resultsList.innerHTML = '';
+            resultsContainer.style.display = 'none';
+        });
+
+        // Add result to display
+        function addResult(result) {
+            const resultDiv = document.createElement('div');
+            resultDiv.className = 'result-item' + (result.success ? '' : ' result-error');
+            
+            const timestamp = new Date().toLocaleTimeString();
+            
+            let html = `
+                <div class="result-header">
+                    <h3>${escapeHtml(result.tool_name)}</h3>
+                    <span class="result-timestamp">${timestamp}</span>
+                    ${result.success ? '<span class="result-badge success">Success</span>' : '<span class="result-badge error">Error</span>'}
+                </div>
+            `;
+
+            // Show parameters
+            if (result.parameters && Object.keys(result.parameters).length > 0) {
+                html += `
+                    <div class="result-section">
+                        <h4>Parameters:</h4>
+                        <pre><code>${escapeHtml(JSON.stringify(result.parameters, null, 2))}</code></pre>
+                    </div>
+                `;
+            }
+
+            // Show error if present
+            if (result.error) {
+                html += `
+                    <div class="result-section result-error">
+                        <h4>Error:</h4>
+                        <pre>${escapeHtml(result.error)}</pre>
+                    </div>
+                `;
+            }
+
+            // Show output
+            if (result.output_html) {
+                html += `
+                    <div class="result-section result-output">
+                        <h4>Output:</h4>
+                        <div class="markdown-content">${result.output_html}</div>
+                    </div>
+                `;
+            }
+
+            resultDiv.innerHTML = html;
+            resultsList.insertBefore(resultDiv, resultsList.firstChild);
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>
+

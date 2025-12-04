@@ -44,6 +44,8 @@ pub fn emit_vim_bindings(vi_json_spec_path: &Path, root_folder: &Path, pruned_ty
     let vim_model = transform_model(&model, pruned_types)?;
     generate_bindings(&vim_model, &*root_folder.join("vim_rs/src/"))?;
     generate_field_data(&vim_model, &*root_folder.join("vim_macros/src/field_data.rs"))?;
+    // Also generate field_data.rs for the MCP server
+    generate_field_data(&vim_model, &*root_folder.join("mcp/server/src/field_data.rs"))?;
     Ok(())
 }
 
