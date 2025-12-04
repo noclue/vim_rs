@@ -117,6 +117,15 @@ struct GetPropertyTreeInput {
     #[schemars(description = "Optional property path in snake_case to start the tree from (e.g., 'config.hardware'). If empty, shows from root.")]
     #[serde(default)]
     start_path: String,
+
+    /// Maximum depth to traverse (1-5, default 5)
+    #[schemars(description = "Maximum depth to traverse (1-5). Use lower values to reduce output size. Default is 5.")]
+    #[serde(default = "default_depth")]
+    depth: u8,
+}
+
+fn default_depth() -> u8 {
+    5
 }
 
 #[tool_router]
@@ -373,12 +382,13 @@ impl McpServer {
     }
 
     /// Get the complete property tree for a managed object type
-    #[tool(description = "Get the complete property tree for a managed object type as markdown. Shows all properties up to 5 levels deep with their Rust types. Optionally provide a start_path to show a subtree (e.g., 'config.hardware'). Uses box-drawing characters for visual clarity.")]
+    #[tool(description = "Get property paths for a managed object type. Shows flat dot-separated paths (e.g., 'config.hardware.device') with Rust types. Optional-ness propagates from parent to child. Use 'depth' (1-5) to limit output.")]
     async fn get_property_tree(&self, params: Parameters<GetPropertyTreeInput>) -> Result<CallToolResult, McpError> {
         let managed_object = &params.0.managed_object;
         let start_path = &params.0.start_path;
+        let depth = params.0.depth as usize;
 
-        match property_collector::get_property_tree(managed_object, start_path) {
+        match property_collector::get_property_tree(managed_object, start_path, depth) {
             Ok(tree) => {
                 let title = if start_path.is_empty() {
                     managed_object.to_string()
@@ -386,9 +396,10 @@ impl McpServer {
                     format!("{}.{}", managed_object, start_path)
                 };
                 let output = format!(
-                    "# Property Tree: {}\n\n```\n{}\n```\n\n*Tree depth limited to 5 levels. Use `get_property_path` to explore deeper paths.*",
+                    "# Property Paths: {}\n\n```\n{}\n```\n\n*Depth: {}.*",
                     title,
-                    tree.trim_end()
+                    tree.trim_end(),
+                    depth.clamp(1, 5)
                 );
                 Ok(CallToolResult::success(vec![Content::text(output)]))
             }
