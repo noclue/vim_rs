@@ -2,13 +2,15 @@
 //  examples/get_ip_from_inventory_path.rs
 // ────────────────────────────────────────────────────────────────
 
-use anyhow::Result;
-use log::{error, info};
 use std::env;
+
+use anyhow::{Context, Result};
+use log::{error, info};
+use utils::connect;
 
 use vim_macros::vim_retrievable;
 use vim_rs::{
-    core::client::ClientBuilder, mo::SearchIndex, types::structs::ManagedObjectReference,
+    mo::SearchIndex, types::structs::ManagedObjectReference,
 };
 
 // Define a tiny struct that mirrors the `VirtualMachine` object but
@@ -19,35 +21,19 @@ vim_retrievable! {
     }
 }
 
-/// Helper that reads vCenter connection details from env vars
-/// (or you can change this to read from a CLI argument / config file).
-fn get_vsphere_cfg() -> anyhow::Result<(String, String, String)> {
-    let url = env::var("VSPHERE_URL").map_err(|_| anyhow::anyhow!("Missing VSPHERE_URL"))?;
-    let user = env::var("VSPHERE_USER").map_err(|_| anyhow::anyhow!("Missing VSPHERE_USER"))?;
-    let password =
-        env::var("VSPHERE_PASSWORD").map_err(|_| anyhow::anyhow!("Missing VSPHERE_PASSWORD"))?;
-    Ok((url, user, password))
-}
-
 #[tokio::main]
 async fn main() -> Result<()> {
     // ----- 1️⃣  Connection ----------------------------------------------------
     env_logger::init();
 
-    let (vsphere_url, username, password) = get_vsphere_cfg()?;
-
-    info!("Connecting to vCenter: {}", vsphere_url);
-    let client = ClientBuilder::new(vsphere_url.as_str())
-        .insecure(true)
-        .basic_authn(username.as_str(), password.as_str())
-        //.app_details(app_name, app_version)
-        .build()
-        .await?;
-    info!("✅  Logged in as {}", username);
+    let client = connect("vm_ip_example", env!("CARGO_PKG_VERSION")).await?;
+    println!("Connected to {}", client.service_content().about.full_name);
+    info!("✅  Logged in");
 
     // ----- 2️⃣  Resolve inventory path ---------------------------------------
     // Example path – replace with the one you want to query.
-    let inv_path = "/Datacenter/vm/Prod/YourVM";
+    let inv_path = env::var("VM_INVENTORY_PATH")
+        .context("VM_INVENTORY_PATH env var not set (e.g., '/Datacenter/vm/Prod/YourVM')")?;
 
     // The SearchIndex service is used for *FindByInventoryPath*.
     let search_index = SearchIndex::new(
@@ -60,7 +46,7 @@ async fn main() -> Result<()> {
             .value,
     );
     let vm_moref_opt: Option<ManagedObjectReference> =
-        match search_index.find_by_inventory_path(inv_path).await? {
+        match search_index.find_by_inventory_path(&inv_path).await? {
             Some(moref) => Some(moref),
             None => {
                 error!("No object found at inventory path '{}'", inv_path);
@@ -84,9 +70,13 @@ async fn main() -> Result<()> {
         .await?;
 
     // ----- 4️⃣  Display the IP address --------------------------------------
-    match &vm_ip[0].ip_address {
-        Some(ip) => println!("IP address of '{}' is {}", inv_path, ip),
-        None => println!("Could not read guest IP. Maybe VMware Tools is not running?"),
+    if let Some(vm_info) = vm_ip.first() {
+        match &vm_info.ip_address {
+            Some(ip) => println!("IP address of '{}' is {}", inv_path, ip),
+            None => println!("Could not read guest IP. Maybe VMware Tools is not running?"),
+        }
+    } else {
+        error!("Could not retrieve VM properties. The VM might have been deleted.");
     }
 
     Ok(())
