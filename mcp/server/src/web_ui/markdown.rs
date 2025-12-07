@@ -1,6 +1,10 @@
+//! Convert markdown to HTML
+
+#[cfg(feature = "web-ui")]
 use pulldown_cmark::{html, Options, Parser};
 
 /// Convert markdown to HTML
+#[cfg(feature = "web-ui")]
 pub fn markdown_to_html(markdown: &str) -> String {
     let mut options = Options::empty();
     options.insert(Options::ENABLE_TABLES);
@@ -15,7 +19,7 @@ pub fn markdown_to_html(markdown: &str) -> String {
     html_output
 }
 
-#[cfg(test)]
+#[cfg(all(test, feature = "web-ui"))]
 mod tests {
     use super::*;
 
@@ -34,4 +38,5 @@ mod tests {
         assert!(html.contains("<code"));
     }
 }
+
 

@@ -167,9 +167,28 @@ Example:         example::connection_basic
 
 ---
 
-## Test Client (Web UI)
+## Web UI (Interactive Mode)
 
-A web-based interface for testing and exploring the MCP server interactively.
+The server includes a built-in web interface for testing and exploring tools without an MCP client.
+
+```bash
+# Run server in web mode (default port 8080)
+./target/release/vim_mcp_server --web
+
+# Custom port and bind address
+./target/release/vim_mcp_server --web --port 3000 --bind 0.0.0.0
+```
+
+Open `http://localhost:8080` to access the interactive tool explorer.
+
+**Features:**
+- Auto-discovery of all tools
+- Dynamic form generation
+- Markdown rendering of results
+- Dark/Light theme support
+- **In-process execution** (no JSON-RPC overhead)
+
+---
 
 ### Setup
 
