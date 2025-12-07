@@ -16,6 +16,7 @@ use schemars::JsonSchema;
 use std::sync::{Arc, Mutex};
 use tokio::io::{stdin, stdout};
 use tracing::{error, info, warn};
+use clap::Parser;
 #[cfg(not(feature = "embed-model"))]
 use fastembed::InitOptions;
 #[cfg(feature = "embed-model")]
@@ -29,9 +30,35 @@ use vim_mcp_server::property_collector;
 #[cfg(not(feature = "embed-model"))]
 use vim_mcp_server::EMBEDDING_MODEL;
 
+// Web UI module (optional)
+#[cfg(feature = "web-ui")]
+mod web_ui;
+
 // CUDA GPU acceleration (optional)
 #[cfg(feature = "cuda")]
 use ort::execution_providers::CUDAExecutionProvider;
+
+// ============================================================================
+// CLI Arguments
+// ============================================================================
+
+/// CLI arguments for vim_mcp_server
+#[derive(Parser, Debug)]
+#[command(name = "vim_mcp_server")]
+#[command(about = "vSphere API MCP Server for Rust", long_about = None)]
+struct Cli {
+    /// Enable web UI mode (disables stdio MCP mode)
+    #[arg(short = 'w', long = "web")]
+    web: bool,
+    
+    /// Web server port (default: 8080)
+    #[arg(short = 'p', long = "port", default_value = "8080")]
+    port: u16,
+    
+    /// Bind address (default: 127.0.0.1)
+    #[arg(short = 'b', long = "bind", default_value = "127.0.0.1")]
+    bind: String,
+}
 
 // ============================================================================
 // MCP Server
@@ -47,6 +74,40 @@ pub struct McpServer {
     embedding_model: Option<Arc<Mutex<TextEmbedding>>>,
 }
 
+#[derive(Serialize, Deserialize, JsonSchema, Debug, Clone, PartialEq)]
+#[serde(rename_all = "snake_case")]
+enum SearchFilter {
+    All,
+    ManagedObjects,
+    Methods,
+    Structures,
+    Enums,
+    Fields,
+    Examples,
+    Traits,
+}
+
+impl Default for SearchFilter {
+    fn default() -> Self {
+        Self::All
+    }
+}
+
+impl SearchFilter {
+    fn as_str(&self) -> &'static str {
+        match self {
+            Self::All => "all",
+            Self::ManagedObjects => "managed_object",
+            Self::Methods => "method",
+            Self::Structures => "structure",
+            Self::Enums => "enum",
+            Self::Fields => "field",
+            Self::Examples => "example",
+            Self::Traits => "trait",
+        }
+    }
+}
+
 /// Input parameters for semantic search tool
 #[derive(Serialize, Deserialize, JsonSchema)]
 struct SemanticSearchInput {
@@ -60,17 +121,13 @@ struct SemanticSearchInput {
     limit: usize,
 
     /// Filter by item type
-    #[schemars(description = "Filter results by type: 'all', 'managed_objects', 'methods', 'structures', 'enums', 'fields', or 'examples' (default: 'all')")]
-    #[serde(default = "default_filter")]
-    filter: String,
+    #[schemars(description = "Filter results by type")]
+    #[serde(default)]
+    filter: SearchFilter,
 }
 
 fn default_limit() -> usize {
     10
-}
-
-fn default_filter() -> String {
-    "all".to_string()
 }
 
 /// Input parameters for unified get tool
@@ -483,19 +540,8 @@ impl McpServer {
             let (_id, item) = &items[idx];
             
             // Apply filter
-            if filter != "all" {
-                let filter_type = match filter.as_str() {
-                    "methods" => "method",
-                    "structures" => "structure",
-                    "enums" => "enum",
-                    "examples" => "example",
-                    "managed_objects" => "managed_object",
-                    "fields" => "field",
-                    "traits" => "trait",
-                    _ => "all"
-                };
-                
-                if item.item_type() != filter_type {
+            if *filter != SearchFilter::All {
+                if item.item_type() != filter.as_str() {
                     continue;
                 }
             }
@@ -508,8 +554,8 @@ impl McpServer {
             let message = format!("No results found for query: '{}'", params.0.query);
             Ok(CallToolResult::success(vec![Content::text(message)]))
         } else {
-            let filter_info = if params.0.filter != "all" {
-                format!(" (filtered by: {})", params.0.filter)
+            let filter_info = if *filter != SearchFilter::All {
+                format!(" (filtered by: {})", filter.as_str())
             } else {
                 String::new()
             };
@@ -520,6 +566,45 @@ impl McpServer {
                 formatted_results.join("\n")
             );
             Ok(CallToolResult::success(vec![Content::text(message)]))
+        }
+    }
+}
+
+// Additional methods for web UI direct access
+impl McpServer {
+    /// List all available tools (for web UI)
+    pub fn list_tools(&self) -> Vec<Tool> {
+        McpServer::tool_router().list_all()
+    }
+    
+    /// Call a tool directly (for web UI, bypassing JSON-RPC)
+    pub async fn call_tool_direct(&self, tool_name: &str, arguments: serde_json::Value) -> Result<CallToolResult> {
+        match tool_name {
+            "get" => {
+                let params: GetInput = serde_json::from_value(arguments)?;
+                self.get(Parameters(params)).await.map_err(|e| anyhow::anyhow!("{:?}", e))
+            }
+            "get_starter_guide" => {
+                let params: GetStarterGuideInput = serde_json::from_value(arguments.clone()).unwrap_or(GetStarterGuideInput {});
+                self.get_starter_guide(Parameters(params)).await.map_err(|e| anyhow::anyhow!("{:?}", e))
+            }
+            "list_property_collector_root_types" => {
+                let params: ListManagedObjectTypesInput = serde_json::from_value(arguments.clone()).unwrap_or(ListManagedObjectTypesInput {});
+                self.list_property_collector_root_types(Parameters(params)).await.map_err(|e| anyhow::anyhow!("{:?}", e))
+            }
+            "get_property_path" => {
+                let params: GetPropertyPathInput = serde_json::from_value(arguments)?;
+                self.get_property_path(Parameters(params)).await.map_err(|e| anyhow::anyhow!("{:?}", e))
+            }
+            "get_property_tree" => {
+                let params: GetPropertyTreeInput = serde_json::from_value(arguments)?;
+                self.get_property_tree(Parameters(params)).await.map_err(|e| anyhow::anyhow!("{:?}", e))
+            }
+            "search" => {
+                let params: SemanticSearchInput = serde_json::from_value(arguments)?;
+                self.search(Parameters(params)).await.map_err(|e| anyhow::anyhow!("{:?}", e))
+            }
+            _ => Err(anyhow::anyhow!("Unknown tool: {}", tool_name)),
         }
     }
 }
@@ -577,24 +662,42 @@ impl ServerHandler for McpServer {
 
 #[tokio::main]
 async fn main() -> Result<()> {
+    // Parse CLI arguments
+    let cli = Cli::parse();
+    
     // Initialize logging to stderr
     tracing_subscriber::fmt()
         .with_writer(std::io::stderr)
         .with_max_level(tracing::Level::DEBUG)
         .init();
 
-    info!("Starting MCP server");
-
     // Create the server instance
     let server = McpServer::new().await?;
 
-    // Serve using stdio transport
-    info!("MCP server ready");
-    let service = server.serve((stdin(), stdout()))
-        .await
-        .inspect_err(|e| error!("Error serving server: {}", e))?;
+    // Choose mode based on CLI flags
+    if cli.web {
+        #[cfg(feature = "web-ui")]
+        {
+            info!("Starting MCP server in web UI mode");
+            web_ui::start_server(server, &cli.bind, cli.port).await?;
+        }
+        
+        #[cfg(not(feature = "web-ui"))]
+        {
+            error!("Web UI feature not enabled. Rebuild with --features web-ui");
+            return Err(anyhow::anyhow!("Web UI feature not enabled"));
+        }
+    } else {
+        // Serve using stdio transport (default)
+        info!("Starting MCP server in stdio mode");
+        info!("MCP server ready");
+        let service = server.serve((stdin(), stdout()))
+            .await
+            .inspect_err(|e| error!("Error serving server: {}", e))?;
 
-    service.waiting().await?;
+        service.waiting().await?;
+    }
+    
     Ok(())
 }
 

@@ -1,7 +1,12 @@
+//! Generate HTML form inputs from JSON Schema
+
+#[cfg(feature = "web-ui")]
 use serde_json::Value;
+#[cfg(feature = "web-ui")]
 use std::collections::HashSet;
 
 /// Generate HTML form inputs from JSON Schema
+#[cfg(feature = "web-ui")]
 pub fn generate_form_html(schema: &Value, required_fields: &[String]) -> String {
     let required_set: HashSet<&str> = required_fields.iter().map(|s| s.as_str()).collect();
     
@@ -9,6 +14,9 @@ pub fn generate_form_html(schema: &Value, required_fields: &[String]) -> String 
         Some(Value::Object(props)) => props,
         _ => return String::from("<p>No parameters required</p>"),
     };
+    
+    // Get definitions for resolving $ref
+    let definitions = schema.get("definitions").and_then(|v| v.as_object());
 
     let mut html = String::new();
     
@@ -18,6 +26,7 @@ pub fn generate_form_html(schema: &Value, required_fields: &[String]) -> String 
             field_schema,
             required_set.contains(field_name.as_str()),
             0,
+            definitions,
         ));
     }
     
@@ -28,14 +37,30 @@ pub fn generate_form_html(schema: &Value, required_fields: &[String]) -> String 
     html
 }
 
-fn generate_field_html(name: &str, schema: &Value, required: bool, depth: usize) -> String {
-    let field_type = schema
+#[cfg(feature = "web-ui")]
+fn generate_field_html(name: &str, schema: &Value, required: bool, depth: usize, definitions: Option<&serde_json::Map<String, Value>>) -> String {
+    let mut resolved_schema = schema;
+    
+    // Check for $ref and resolve it if possible
+    if let Some(ref_path) = schema.get("$ref").and_then(|v| v.as_str()) {
+        if let Some(def_name) = ref_path.strip_prefix("#/definitions/") {
+            if let Some(defs) = definitions {
+                if let Some(def_schema) = defs.get(def_name) {
+                    resolved_schema = def_schema;
+                }
+            }
+        }
+    }
+    
+    let field_type = resolved_schema
         .get("type")
         .and_then(|v| v.as_str())
         .unwrap_or("string");
     
+    // Prefer description from original schema, fallback to resolved schema
     let description = schema
         .get("description")
+        .or_else(|| resolved_schema.get("description"))
         .and_then(|v| v.as_str())
         .unwrap_or("");
     
@@ -47,13 +72,12 @@ fn generate_field_html(name: &str, schema: &Value, required: bool, depth: usize)
     match field_type {
         "string" => {
             // Check for enum values
-            if let Some(enum_values) = schema.get("enum") {
+            if let Some(enum_values) = resolved_schema.get("enum") {
                 if let Some(values) = enum_values.as_array() {
                     return format!(
                         r#"{indent}<div class="form-group">
 {indent}  <label for="{name}">{name}{required_marker}</label>
-{indent}  <select id="{name}" name="{name}"{required_attr}>
-{indent}    <option value="">-- Select --</option>
+{indent}  <select id="{name}" name="{name}" class="form-control"{required_attr}>
 {options}
 {indent}  </select>
 {indent}  {help}
@@ -66,7 +90,11 @@ fn generate_field_html(name: &str, schema: &Value, required: bool, depth: usize)
                         options = values
                             .iter()
                             .filter_map(|v| v.as_str())
-                            .map(|v| format!(r#"{indent}    <option value="{v}">{v}</option>"#, indent = indent, v = v))
+                            .map(|v| format!(r#"{indent}    <option value="{v}"{selected}>{v}</option>"#, 
+                                indent = indent, 
+                                v = v,
+                                selected = if v == "all" { " selected" } else { "" }
+                            ))
                             .collect::<Vec<_>>()
                             .join("\n"),
                         help = if !description.is_empty() {
@@ -152,8 +180,8 @@ fn generate_field_html(name: &str, schema: &Value, required: bool, depth: usize)
         "object" => {
             let mut inner_html = String::new();
             
-            if let Some(Value::Object(props)) = schema.get("properties") {
-                let inner_required = schema
+            if let Some(Value::Object(props)) = resolved_schema.get("properties") {
+                let inner_required = resolved_schema
                     .get("required")
                     .and_then(|v| v.as_array())
                     .map(|arr| {
@@ -173,6 +201,7 @@ fn generate_field_html(name: &str, schema: &Value, required: bool, depth: usize)
                         field_schema,
                         inner_required_set.contains(field_name.as_str()),
                         depth + 1,
+                        definitions,
                     ));
                 }
             }
@@ -214,6 +243,7 @@ fn generate_field_html(name: &str, schema: &Value, required: bool, depth: usize)
     }
 }
 
+#[cfg(feature = "web-ui")]
 fn html_escape(s: &str) -> String {
     s.replace('&', "&amp;")
         .replace('<', "&lt;")
@@ -222,7 +252,7 @@ fn html_escape(s: &str) -> String {
         .replace('\'', "&#39;")
 }
 
-#[cfg(test)]
+#[cfg(all(test, feature = "web-ui"))]
 mod tests {
     use super::*;
     use serde_json::json;
@@ -233,7 +263,7 @@ mod tests {
             "type": "string",
             "description": "A test field"
         });
-        let html = generate_field_html("test_field", &schema, true, 0);
+        let html = generate_field_html("test_field", &schema, true, 0, None);
         assert!(html.contains("test_field *"));
         assert!(html.contains("required"));
         assert!(html.contains("A test field"));
@@ -245,7 +275,7 @@ mod tests {
             "type": "number",
             "description": "A number field"
         });
-        let html = generate_field_html("num_field", &schema, false, 0);
+        let html = generate_field_html("num_field", &schema, false, 0, None);
         assert!(html.contains("num_field"));
         assert!(!html.contains("required"));
         assert!(html.contains("type=\"number\""));

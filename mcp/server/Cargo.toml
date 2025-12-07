@@ -9,6 +9,7 @@ api_database = { path = "../api_database" }
 
 tokio = { version = "1.42", features = ["full"] }
 serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
 anyhow = "1.0"
 tracing = "0.1"
 tracing-subscriber = "0.3"
@@ -31,13 +32,26 @@ rayon = "1.10"
 # CUDA GPU acceleration (optional, requires CUDA 12.x + cuDNN 9.x runtime)
 ort = { version = "2.0.0-rc.7", optional = true, features = ["cuda", "copy-dylibs"] }
 
+# Web UI dependencies (optional, enabled by default)
+actix-web = { version = "4.9", optional = true }
+actix-files = { version = "0.6", optional = true }
+tera = { version = "1.20", optional = true }
+pulldown-cmark = { version = "0.11", optional = true }
+clap = { version = "4.5", features = ["derive"] }
+
 [build-dependencies]
 # Used to download the embedding model during build if not cached
 fastembed = "5.2.0"
 
+[dev-dependencies]
+# For end-to-end web UI tests
+reqwest = { version = "0.12", features = ["json"] }
+
 [features]
-default = ["embed-model"]
+default = ["embed-model", "web-ui"]
 cuda = ["ort"]
 # Embed the BGE-small-en-v1.5 model directly in the binary (~128MB increase)
 # The build script will download the model if not already cached
 embed-model = []
+# Web UI for testing MCP tools via browser
+web-ui = ["actix-web", "actix-files", "tera", "pulldown-cmark"]
