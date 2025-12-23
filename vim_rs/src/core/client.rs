@@ -285,6 +285,7 @@ impl Client {
         B: serde::Serialize,
     {
         debug!("POST request: {}", path);
+        trace!("POST payload: {:?}", serde_json::to_string(payload));
         let url = format!("{}{}", self.base_url, path);
         let req = self.http_client.post(&url);
         req.header("Content-Type", "application/json").json(payload)

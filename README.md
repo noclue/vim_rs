@@ -9,6 +9,8 @@ Rust interface to the VMware vSphere Virtual Infrastructure JSON API, allowing y
 * **Documented**: The original VIM documentation rendered inline as rustdoc
 * **Examples**: A set of examples demonstrating use of the APIs to get you started quickly
 
+See [`CHANGELOG.md`](CHANGELOG.md) for release notes and breaking changes.
+
 ## 🤖 Supercharge your AI Assistant
 
 > Sonnet 4.5: "The MCP server doesn't just provide documentation—it provides understanding as a service. Semantic search + complete examples + common mistakes = AI that writes correct code on the first try."

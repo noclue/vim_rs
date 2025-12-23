@@ -2112,6 +2112,7 @@ dependencies = [
  "strum_macros 0.27.2",
  "thiserror",
  "tokio",
+ "vim_macros",
 ]
 
 [[package]]
@@ -2121,6 +2122,7 @@ dependencies = [
  "anyhow",
  "chrono",
  "crossterm",
+ "dotenvy",
  "futures",
  "indexmap",
  "log",

@@ -1,9 +1,7 @@
 use indexmap::IndexMap;
-use std::cell::RefCell;
 use std::ops::Index;
-use std::sync::{Arc, RwLock};
+use std::sync::{Arc, RwLock, Mutex};
 use log::{debug, error, warn};
-use std::rc::Rc;
 use crate::core::client::Client;
 use crate::core::pc_helpers;
 use crate::core::pc_helpers::{BoxableError, Error, Queriable};
@@ -31,38 +29,6 @@ pub trait Cache {
 
     /// Apply an update to the cache.
     fn process_update(&mut self, update: Vec<ObjectUpdate>) -> pc_helpers::Result<()>;
-}
-
-/// A proxy for a cache that is shared. This helps to use `Rc<RefCell<T>>` over the cache as it is
-/// not possible to use both dynamic and static dispatch with `Rc<RefCell<T>>`. This proxy implements
-/// the `Cache` trait and forwards calls to the underlying cache object while the cache itself
-/// dispatches statically tp the wrapped in `Rc<RefCell<T>>`. Thus, the proxy allows for caches
-/// holding different data types to be used in the same CacheManager.
-pub struct SharedRefCacheProxy<T: Cache> {
-    /// The cache object
-    cache: Rc<RefCell<T>>,
-}
-
-impl<T: Cache> SharedRefCacheProxy<T> {
-    /// Create a new SharedRefCacheProxy.
-    pub fn new(cache: Rc<RefCell<T>>) -> Self {
-        Self { cache }
-    }
-
-    /// Get the cache object.
-    pub fn get_cache(&self) -> Rc<RefCell<T>> {
-        self.cache.clone()
-    }
-}
-
-impl<T: Cache> Cache for SharedRefCacheProxy<T> {
-    fn prop_spec(&self) -> pc_helpers::Result<PropertySpec> {
-        self.cache.borrow().prop_spec()
-    }
-
-    fn process_update(&mut self, updates: Vec<ObjectUpdate>) -> pc_helpers::Result<()> {
-        self.cache.borrow_mut().process_update(updates)
-    }
 }
 
 /// A thread-safe proxy with read-write locking using Arc<RwLock<T>>
@@ -102,7 +68,7 @@ impl<T: Cache> Cache for ReadWriteCacheProxy<T> {
 /// Listener trait for receiving notifications about objects in an ObjectCache.
 ///
 /// Implementors can react to objects being added, updated, or removed from the cache.
-pub trait ObjectCacheListener<T: Cacheable>
+pub trait ObjectCacheListener<T: Cacheable>: Send
 where
     T::Error: BoxableError
 {
@@ -134,8 +100,8 @@ where
     cache: IndexMap<String, T>,
     /// Optional listener for receiving notifications about objects in the cache.
     /// This is used to notify about new, updated, or removed objects.
-    /// The listener is wrapped in a RefCell to allow for interior mutability.
-    listener: Option<RefCell<Box<dyn ObjectCacheListener<T>>>>,
+    /// The listener is wrapped in a Mutex to allow for interior mutability in a thread-safe manner.
+    listener: Option<Mutex<Box<dyn ObjectCacheListener<T>>>>,
 }
 
 impl<T: Cacheable> ObjectCache<T>
@@ -154,7 +120,7 @@ where
     pub fn new_with_listener(listener: Box<dyn ObjectCacheListener<T>>) -> Self {
         Self {
             cache: IndexMap::new(),
-            listener: Some(RefCell::new(listener)),
+            listener: Some(Mutex::new(listener)),
         }
     }
 
@@ -180,19 +146,31 @@ where
 
     fn notify_new(&self, obj: &T) {
         if let Some(listener) = self.listener.as_ref() {
-            listener.borrow_mut().on_new(obj);
+            if let Ok(mut guard) = listener.lock() {
+                guard.on_new(obj);
+            } else {
+                error!("Failed to acquire listener lock for on_new notification");
+            }
         }
     }
 
     fn notify_update(&self, obj: &T) {
         if let Some(listener) = self.listener.as_ref() {
-            listener.borrow_mut().on_update(obj);
+            if let Ok(mut guard) = listener.lock() {
+                guard.on_update(obj);
+            } else {
+                error!("Failed to acquire listener lock for on_update notification");
+            }
         }
     }
 
     fn notify_remove(&self, obj: T) {
         if let Some(listener) = self.listener.as_ref() {
-            listener.borrow_mut().on_remove(obj);
+            if let Ok(mut guard) = listener.lock() {
+                guard.on_remove(obj);
+            } else {
+                error!("Failed to acquire listener lock for on_remove notification");
+            }
         }
     }
 
@@ -319,7 +297,10 @@ where
 /// A record for a cache object. This is used to store the cache object and its associated view ID.
 struct CacheRecord {
     /// The cache object
-    cache: Box<dyn Cache>,
+    ///
+    /// The cache must be `Send + Sync` because `CacheManager` is used from async tasks
+    /// that may be moved between threads.
+    cache: Box<dyn Cache + Send + Sync>,
     /// Optional view ID if add_container_cache is used
     view: Option<String>,
 }
@@ -383,7 +364,11 @@ impl CacheManager {
     }
 
     /// Add an object cache for a specific type of object in a given container like Folder, Datacenter, etc.
-    pub async fn add_container_cache(&mut self, cache: Box<dyn Cache>, container: &ManagedObjectReference) -> pc_helpers::Result<ManagedObjectReference> {
+    pub async fn add_container_cache(
+        &mut self,
+        cache: Box<dyn Cache + Send + Sync>,
+        container: &ManagedObjectReference,
+    ) -> pc_helpers::Result<ManagedObjectReference> {
         let view = self.view_manager.create_container_view(container,
                                                            Some(&[cache.prop_spec()?.r#type.clone()]),
                                                            true,
@@ -398,7 +383,11 @@ impl CacheManager {
         res
     }
 
-    pub async fn add_list_cache(&mut self, cache: Box<dyn Cache>, obj: &[crate::types::structs::ManagedObjectReference]) -> pc_helpers::Result<ManagedObjectReference> {
+    pub async fn add_list_cache(
+        &mut self,
+        cache: Box<dyn Cache + Send + Sync>,
+        obj: &[crate::types::structs::ManagedObjectReference],
+    ) -> pc_helpers::Result<ManagedObjectReference> {
         let view = self.view_manager.create_list_view(Some(obj)).await?;
 
         let res= self.add_cache(cache, pc_helpers::obj_spec_for_view(view.clone())).await;
@@ -414,7 +403,11 @@ impl CacheManager {
 
     /// Add a cache for a specific type of object. This creates a filter on the server to update
     /// the cache. The filter is created with the given object set.
-    pub async fn add_cache(&mut self, cache: Box<dyn Cache>, object_set: Vec<ObjectSpec>) -> pc_helpers::Result<ManagedObjectReference> {
+    pub async fn add_cache(
+        &mut self,
+        cache: Box<dyn Cache + Send + Sync>,
+        object_set: Vec<ObjectSpec>,
+    ) -> pc_helpers::Result<ManagedObjectReference> {
         let filter_spec = PropertyFilterSpec {
             object_set,
             prop_set: vec![cache.prop_spec()?],

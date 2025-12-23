@@ -64,7 +64,7 @@ struct VmChange {
 }
 
 /// Listens for changes in VM network details
-trait VmChangeListener {
+trait VmChangeListener: Send {
     fn update_vm(&mut self, vm_id: String, vm_details: VmChange);
     fn remove_vm(&mut self, vm_id: String);
 }

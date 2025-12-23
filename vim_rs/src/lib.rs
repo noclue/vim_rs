@@ -302,6 +302,10 @@
 //! These macros significantly reduce boilerplate code when working with vSphere properties
 //! and provide type-safe access to vSphere inventory objects.
 //!
+// Allow proc-macros that generate `vim_rs::...` paths to work within this crate as well.
+// (Without this, `vim_rs::` resolves only as an external crate path.)
+extern crate self as vim_rs;
+
 pub mod core;
 pub mod types;
 

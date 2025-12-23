@@ -18,3 +18,4 @@ log = "0.4"
 simplelog = "0.12"
 indexmap = {  version = "2.9", features = ["serde"] }
 thiserror = "2.0.12"
+dotenvy = "0.15"

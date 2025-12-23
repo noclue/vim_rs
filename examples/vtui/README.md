@@ -25,7 +25,25 @@ displays the VMs in a terminal window using the Ratatui library.
 
 ## Installation
 
-Ensure you have Rust 1.85 installed. Then set the following environment variables:
+Ensure you have Rust 1.85 installed.
+
+Then configure vTUI via environment variables **or** a local `.env` file.
+
+### Option A: `.env` file (recommended)
+
+Create `examples/vtui/.env`:
+
+```bash
+VIM_SERVER=https://your-vcenter.sdk
+VIM_USERNAME=administrator@vsphere.local
+VIM_PASSWORD=your-password
+VIM_INSECURE=true
+LOG_LEVEL=info
+```
+
+### Option B: environment variables
+
+Set the following environment variables:
 - `VIM_SERVER` - FQDN of a vCenter server (version 8.0.2 or later).
 - `VIM_USERNAME` - Username for vCenter authentication.
 - `VIM_PASSWORD` - Password for vCenter authentication.
