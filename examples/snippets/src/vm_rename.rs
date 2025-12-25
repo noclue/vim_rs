@@ -18,7 +18,9 @@
 
 use anyhow::{Context, Result};
 use log::info;
+use tokio::time::sleep;
 use std::env;
+use std::time::Duration;
 use utils::connect;
 use vim_rs::mo::{SearchIndex, VirtualMachine};
 use vim_rs::core::tasks::tracker::TaskTracker;
@@ -80,5 +82,8 @@ async fn main() -> Result<()> {
     let updated_name = vm.name().await?;
     info!("Verified new VM name: {}", updated_name);
 
+    drop(task_tracker);
+    drop(client);
+    sleep(Duration::from_secs(1)).await;
     Ok(())
 }

@@ -68,6 +68,15 @@ impl<T: Cache> Cache for ReadWriteCacheProxy<T> {
 /// Listener trait for receiving notifications about objects in an ObjectCache.
 ///
 /// Implementors can react to objects being added, updated, or removed from the cache.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum CacheAction {
+    /// Keep the object in the cache.
+    Keep,
+    /// Evict the object from the cache after the callback returns. Eviction will trigger
+    /// `ObjectCacheListener::on_remove` with ownership of the removed object.
+    Evict,
+}
+
 pub trait ObjectCacheListener<T: Cacheable>: Send
 where
     T::Error: BoxableError
@@ -76,13 +85,13 @@ where
     ///
     /// # Parameters
     /// * `obj` - Reference to the newly added object
-    fn on_new(&mut self, obj: &T);
+    fn on_new(&mut self, obj: &T) -> CacheAction;
 
     /// Called when an existing object in the cache is updated.
     ///
     /// # Parameters
     /// * `obj` - Reference to the updated object
-    fn on_update(&mut self, obj: &T);
+    fn on_update(&mut self, obj: &T) -> CacheAction;
 
     /// Called when an object is removed from the cache.
     ///
@@ -144,24 +153,26 @@ where
         self.cache.is_empty()
     }
 
-    fn notify_new(&self, obj: &T) {
+    fn notify_new(&self, obj: &T) -> CacheAction {
         if let Some(listener) = self.listener.as_ref() {
             if let Ok(mut guard) = listener.lock() {
-                guard.on_new(obj);
+                return guard.on_new(obj);
             } else {
                 error!("Failed to acquire listener lock for on_new notification");
             }
         }
+        CacheAction::Keep
     }
 
-    fn notify_update(&self, obj: &T) {
+    fn notify_update(&self, obj: &T) -> CacheAction {
         if let Some(listener) = self.listener.as_ref() {
             if let Ok(mut guard) = listener.lock() {
-                guard.on_update(obj);
+                return guard.on_update(obj);
             } else {
                 error!("Failed to acquire listener lock for on_update notification");
             }
         }
+        CacheAction::Keep
     }
 
     fn notify_remove(&self, obj: T) {
@@ -251,10 +262,18 @@ where
                         obj.apply_update(update)?;
 
                         // Notify the listener about the update
-                        if let Some(obj) = self.cache.get(&id) {
-                            self.notify_update(obj);
+                        let action = if let Some(obj) = self.cache.get(&id) {
+                            self.notify_update(obj)
                         } else {
-                            error!("Failed to add object to cache");
+                            error!("Failed to find object in cache after update");
+                            CacheAction::Keep
+                        };
+
+                        if action == CacheAction::Evict {
+                            if let Some(obj) = self.cache.shift_remove(&id) {
+                                debug!("Evicting '{}' object from cache (listener requested)", id);
+                                self.notify_remove(obj);
+                            }
                         }
                     } else {
                         // If the object is not in the cache, try to create it
@@ -263,10 +282,18 @@ where
                                 debug!("Adding '{}' object to cache", id);
                                 self.cache.insert(id.clone(), new_obj);
                                 // Notify the listener about the new object
-                                if let Some(obj) = self.cache.get(&id) {
-                                    self.notify_new(obj);
+                                let action = if let Some(obj) = self.cache.get(&id) {
+                                    self.notify_new(obj)
                                 } else {
-                                    error!("Failed to add object to cache");
+                                    error!("Failed to find object in cache after insert");
+                                    CacheAction::Keep
+                                };
+
+                                if action == CacheAction::Evict {
+                                    if let Some(obj) = self.cache.shift_remove(&id) {
+                                        debug!("Evicting '{}' object from cache (listener requested)", id);
+                                        self.notify_remove(obj);
+                                    }
                                 }
                             }
                             Err(e) => {

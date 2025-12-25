@@ -34,7 +34,7 @@ use log::{debug, info};
 use utils::connect;
 use vim_macros::vim_updatable;
 use vim_rs::core::client::Client;
-use vim_rs::core::pc_cache::{CacheManager, Monitor, ObjectCache, ObjectCacheListener};
+use vim_rs::core::pc_cache::{CacheAction, CacheManager, Monitor, ObjectCache, ObjectCacheListener};
 
 vim_updatable!(
     struct VirtualMachine: VirtualMachine {
@@ -207,14 +207,16 @@ impl VmChangeListenerAdapter {
 }
 
 impl ObjectCacheListener<VirtualMachine> for VmChangeListenerAdapter {
-    fn on_new(&mut self, obj: &VirtualMachine) {
+    fn on_new(&mut self, obj: &VirtualMachine) -> CacheAction {
         self.listener
             .update_vm(obj.id.value.clone(), vm_vm_change(obj));
+        CacheAction::Keep
     }
 
-    fn on_update(&mut self, obj: &VirtualMachine) {
+    fn on_update(&mut self, obj: &VirtualMachine) -> CacheAction {
         self.listener
             .update_vm(obj.id.value.clone(), vm_vm_change(obj));
+        CacheAction::Keep
     }
 
     fn on_remove(&mut self, obj: VirtualMachine) {

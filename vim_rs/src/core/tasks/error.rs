@@ -1,6 +1,6 @@
 use std::fmt;
 
-use serde::Serialize;
+use crate::types::structs::MethodFault;
 
 /// Errors returned by [`crate::core::tasks::TaskTracker`].
 #[derive(Debug)]
@@ -14,25 +14,25 @@ pub enum TaskError {
     /// The task was cancelled.
     Cancelled,
     /// The task completed with an error/fault payload.
-    TaskFailed(serde_json::Value),
+    TaskFailed(MethodFault),
     /// Any other error (usually internal / unexpected).
     Other(String),
 }
 
 impl TaskError {
+    /// Create a generic error with a message (used for unexpected/internal failures).
     pub fn new_other(msg: String) -> Self {
         Self::Other(msg)
     }
 
+    /// Create a cancellation error.
     pub fn new_cancelled() -> Self {
         Self::Cancelled
     }
 
-    pub fn new_task_error<F: Serialize>(fault: F) -> Self {
-        match serde_json::to_value(fault) {
-            Ok(v) => Self::TaskFailed(v),
-            Err(e) => Self::Serde(e),
-        }
+    /// Wrap a vSphere `MethodFault` as a task failure.
+    pub fn new_task_error(fault: MethodFault) -> Self {
+        Self::TaskFailed(fault)
     }
 }
 
@@ -43,7 +43,7 @@ impl fmt::Display for TaskError {
             TaskError::Client(e) => write!(f, "client error: {e}"),
             TaskError::Serde(e) => write!(f, "serde_json error: {e}"),
             TaskError::Cancelled => write!(f, "task cancelled"),
-            TaskError::TaskFailed(v) => write!(f, "task failed: {v}"),
+            TaskError::TaskFailed(v) => write!(f, "task failed: {v:?}"),
             TaskError::Other(msg) => write!(f, "{msg}"),
         }
     }

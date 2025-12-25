@@ -1,6 +1,53 @@
+//! Task completion tracking for async vSphere operations.
+//!
+//! vSphere exposes many operations as `*_Task` methods that return a `Task` managed object
+//! reference. The returned task transitions through states (`queued`/`running`) and eventually
+//! reaches a terminal state (`success`/`error`/`cancelled`).
+//!
+//! `TaskTracker` provides a lightweight way to **wait for completion** of a task by:
+//! - Maintaining a shared `ListView` of tasks being tracked.
+//! - Running a background loop that uses `PropertyCollector::wait_for_updates_ex` (via
+//!   `CacheManager`/`Monitor`) to receive incremental task updates.
+//! - Completing the caller’s `oneshot` when the task reaches a terminal state, and removing the
+//!   task from the view.
+//!
+//! ## Results and narrowing
+//!
+//! `TaskInfo.result` in the vSphere API is `Option<VimAny>`:
+//! - `None` means “no return value”.
+//! - `Some(VimAny::Value(..))` represents primitives / boxed arrays (`ValueElements`).
+//! - `Some(VimAny::Object(..))` represents a data object behind `Box<dyn VimObjectTrait>`.
+//!
+//! This module intentionally exposes the **zero-JSON** API:
+//! - [`TaskTracker::wait_any`] → `Result<Option<VimAny>, TaskError>`
+//!
+//! For convenience, it also provides:
+//! - [`TaskTracker::wait`] which uses `serde_json` to decode the result into a user type `T`.
+//!   This is helpful for cases like `T = ()`, `T = ManagedObjectReference`, etc., but it is not
+//!   a zero-allocation path.
+//!
+//! ## Memory behavior
+//!
+//! Tasks can contain large payloads in `info.result` / `info.error`. The cache/listener plumbing
+//! is configured so that once a terminal state is observed, the task is **immediately evicted**
+//! from the cache (`CacheAction::Evict`) and finalized via `on_remove(TaskUpdate)`.
+//!
+//! ## Example
+//!
+//! ```ignore
+//! let tracker = TaskTracker::new(client.clone());
+//! let task_ref = vm.rename_task("new-name").await?;
+//! let result = tracker.wait_any(task_ref).await?;
+//! if let Some(any) = result {
+//!     match any {
+//!         VimAny::Value(v) => println!("primitive/boxed result: {v:?}"),
+//!         VimAny::Object(o) => println!("object result type: {:?}", o.data_type()),
+//!     }
+//! }
+//! ```
+
 use std::collections::HashMap;
 use std::sync::Arc;
-use serde::Serialize;
 use tokio::sync::{RwLock, oneshot, mpsc};
 use log::{debug, error};
 use serde::de::DeserializeOwned;
@@ -9,103 +56,25 @@ use crate::core::client::Client;
 use crate::mo::{ListView, ViewManager};
 use crate::types::structs::ManagedObjectReference;
 use crate::types::enums::{TaskInfoStateEnum, MoTypesEnum};
+use crate::types::vim_any::VimAny;
 use vim_macros::vim_updatable;
-use crate::core::pc_cache::{CacheManager, ObjectCache, ObjectCacheListener};
+use crate::core::pc_cache::{CacheAction, CacheManager, ObjectCache, ObjectCacheListener};
 
 use super::error::TaskError;
 
-// Define TaskUpdate using vim_updatable!
-vim_updatable!(
-    struct TaskUpdate: Task {
-        info = "info",
-    }
-);
-
-use crate::core::pc_helpers::{obj_spec_for_view};
-
-/// Shared state for the TaskTracker. This is used to store the list view, the list view MOR,
-/// the pending tasks, and the shutdown signal.
-struct SharedState {
-    list_view: Option<ListView>,
-    list_view_mor: Option<ManagedObjectReference>,
-    pending_tasks: HashMap<String, oneshot::Sender<Result<Option<serde_json::Value>, TaskError>>>,
-    is_running: bool,
-    shutdown_signal: Option<oneshot::Sender<()>>,
-}
-
-/// TaskListener is used to listen for TaskUpdate objects and check if the task is complete.
-/// 
-/// It is used to send the result of the task to the caller.
-struct TaskListener {
-    tx: mpsc::UnboundedSender<(String, Result<Option<serde_json::Value>, TaskError>)>,
-}
-
-impl ObjectCacheListener<TaskUpdate> for TaskListener {
-    fn on_new(&mut self, task: &TaskUpdate) {
-        self.check_task(task);
-    }
-
-    fn on_update(&mut self, task: &TaskUpdate) {
-        self.check_task(task);
-    }
-
-    fn on_remove(&mut self, _task: TaskUpdate) {
-        // Do nothing
-    }
-}
-
-/// Clones an object by serializing and deserializing it
-fn clone_object<T: Serialize + DeserializeOwned>(obj: &T) -> Result<T, TaskError> {
-    let val = serde_json::to_value(obj)?;
-    let cloned = serde_json::from_value(val)?;
-    Ok(cloned)
-}
-
-impl TaskListener {
-    fn check_task(&self, task: &TaskUpdate) {
-        let result: Option<Result<Option<serde_json::Value>, TaskError>> = match task.info.state {
-            TaskInfoStateEnum::Success => {
-                // Task Success
-                if let Ok(res) = serde_json::to_value(&task.info.result) {
-                    Some(Ok(Some(res)))
-                } else {
-                    Some(Err(TaskError::new_other("Failed to clone TaskInfo result".to_string())))
-                }
-            }
-            TaskInfoStateEnum::Error => {
-                // Task Error
-                if let Ok(fault) = clone_object(&task.info.error) {
-                    if let Some(fault) = fault {
-                        Some(Err(TaskError::new_task_error(fault)))
-                    } else {
-                        Some(Err(TaskError::new_other("Task failed but no error detail returned".to_string())))
-                    }
-                } else {
-                    Some(Err(TaskError::new_other("Failed to clone MethodFault".to_string())))
-                }
-            }
-            _ => {
-                if task.info.cancelled {
-                    Some(Err(TaskError::new_cancelled()))
-                } else {
-                    None
-                }
-            }
-        };
-
-        if let Some(r) = result {
-            let _ = self.tx.send((task.id.value.clone(), r));
-        }
-    }
-}
-
 #[derive(Clone)]
+/// Tracks vSphere `Task` objects to completion using the PropertyCollector.
+///
+/// Create a `TaskTracker` once per `Client` and reuse it to wait on many `*_Task` operations.
+/// Internally, the tracker maintains a `ListView` of in-flight tasks and runs a background loop
+/// that applies incremental updates until each task reaches a terminal state.
 pub struct TaskTracker {
     client: Arc<Client>,
     state: Arc<RwLock<SharedState>>,
 }
 
 impl TaskTracker {
+    /// Create a new tracker. The background monitoring loop starts lazily on the first wait call.
     pub fn new(client: Arc<Client>) -> Self {
         Self {
             client,
@@ -119,22 +88,14 @@ impl TaskTracker {
         }
     }
 
-    pub async fn wait<T: DeserializeOwned + 'static>(&self, task: ManagedObjectReference) -> Result<T, TaskError> {
-        let val_opt = self.wait_value(task).await?;
-        
-        match val_opt {
-            Some(val) => {
-                let result: T = serde_json::from_value(val)?;
-                Ok(result)
-            },
-            None => {
-                let result: T = serde_json::from_value(serde_json::Value::Null)?;
-                Ok(result)
-            }
-        }
-    }
 
-    pub async fn wait_value(&self, task: ManagedObjectReference) -> Result<Option<serde_json::Value>, TaskError> {
+    /// Wait for a task and return its result as a `VimAny`. This is the most efficient way to get 
+    /// the result of a task with only one conversion from JSON to VimAny.
+    ///
+    /// - `Ok(None)` means the task succeeded but did not return a value.
+    /// - `Ok(Some(VimAny::Value(..)))` is a primitive/boxed-array result.
+    /// - `Ok(Some(VimAny::Object(..)))` is a data-object result behind `Box<dyn VimObjectTrait>`.
+    pub async fn wait_any(&self, task: ManagedObjectReference) -> Result<Option<VimAny>, TaskError> {
         let (tx, rx) = oneshot::channel();
         let task_id = task.value.clone();
 
@@ -155,7 +116,7 @@ impl TaskTracker {
                 let (shutdown_tx, shutdown_rx) = oneshot::channel();
                 state.shutdown_signal = Some(shutdown_tx);
                 state.is_running = true;
-                
+
                 let tracker = self.clone();
                 tokio::spawn(async move {
                     if let Err(e) = tracker.background_loop(shutdown_rx).await {
@@ -186,6 +147,34 @@ impl TaskTracker {
         match rx.await {
             Ok(res) => res,
             Err(_) => Err(TaskError::new_other("TaskTracker channel closed".to_string())),
+        }
+    }
+
+    /// Convenience: wait for a task and deserialize its result into `T` using `serde_json`.
+    ///
+    /// This is useful when you know the expected result type (e.g. `()` for tasks that return no
+    /// value), but it is not a zero-allocation path. Prefer [`TaskTracker::wait_any`] if you want
+    /// to avoid JSON conversion and handle `VimAny` directly.
+    pub async fn wait<T: DeserializeOwned + 'static>(&self, task: ManagedObjectReference) -> Result<T, TaskError> {
+        let val_opt = self.wait_value(task).await?;
+        
+        match val_opt {
+            Some(val) => {
+                let result: T = serde_json::from_value(val)?;
+                Ok(result)
+            },
+            None => {
+                let result: T = serde_json::from_value(serde_json::Value::Null)?;
+                Ok(result)
+            }
+        }
+    }
+
+    async fn wait_value(&self, task: ManagedObjectReference) -> Result<Option<serde_json::Value>, TaskError> {
+        let any_opt = self.wait_any(task).await?;
+        match any_opt {
+            None => Ok(None),
+            Some(any) => Ok(Some(serde_json::to_value(&any)?)),
         }
     }
 
@@ -246,7 +235,7 @@ impl TaskTracker {
         Ok(())
     }
 
-    async fn complete_task(&self, list_view: &ListView, task_id: String, final_result: Result<Option<serde_json::Value>, TaskError>) {
+    async fn complete_task(&self, list_view: &ListView, task_id: String, final_result: Result<Option<VimAny>, TaskError>) {
 
         let tx_opt = {
             let mut state = self.state.write().await;
@@ -267,3 +256,95 @@ impl TaskTracker {
         }
     }
 }
+
+// Define TaskUpdate using vim_updatable!
+vim_updatable!(
+    struct TaskUpdate: Task {
+        info = "info",
+    }
+);
+
+use crate::core::pc_helpers::{obj_spec_for_view};
+
+/// Shared state for the TaskTracker. This is used to store the list view, the list view MOR,
+/// the pending tasks, and the shutdown signal.
+struct SharedState {
+    list_view: Option<ListView>,
+    list_view_mor: Option<ManagedObjectReference>,
+    /// Pending tasks keyed by task MoID. Each sender is completed exactly once on terminal state.
+    pending_tasks: HashMap<String, oneshot::Sender<Result<Option<VimAny>, TaskError>>>,
+    is_running: bool,
+    shutdown_signal: Option<oneshot::Sender<()>>,
+}
+
+/// TaskListener is used to listen for TaskUpdate objects and check if the task is complete.
+/// 
+/// It is used to send the result of the task to the caller.
+struct TaskListener {
+    tx: mpsc::UnboundedSender<(String, Result<Option<VimAny>, TaskError>)>,
+}
+
+impl ObjectCacheListener<TaskUpdate> for TaskListener {
+    fn on_new(&mut self, task: &TaskUpdate) -> CacheAction {
+        self.check_task(task)
+    }
+
+    fn on_update(&mut self, task: &TaskUpdate) -> CacheAction {
+        self.check_task(task)
+    }
+
+    fn on_remove(&mut self, task: TaskUpdate) {
+        self.finish_task(task);
+    }
+}
+
+impl TaskListener {
+    fn check_task(&self, task: &TaskUpdate) -> CacheAction {
+        // If the task reached a terminal state, request immediate eviction.
+        // The owned `TaskUpdate` will be delivered to `on_remove`, where we can move
+        // the result/error out without any cloning.
+        if task.info.cancelled {
+            return CacheAction::Evict;
+        }
+        match task.info.state {
+            TaskInfoStateEnum::Success | TaskInfoStateEnum::Error => CacheAction::Evict,
+            _ => CacheAction::Keep,
+        }
+    }
+
+    fn finish_task(&mut self, task: TaskUpdate) {
+        // This is invoked both for natural Leave updates and for listener-requested eviction.
+        // Only terminal tasks should be evicted by the listener; still, be defensive.
+        let task_id = task.id.value.clone();
+
+        let result: Option<Result<Option<VimAny>, TaskError>> = match task.info.state {
+            TaskInfoStateEnum::Success => {
+                Some(Ok(task.info.result))
+            }
+            TaskInfoStateEnum::Error => {
+                if task.info.cancelled {
+                    Some(Err(TaskError::new_cancelled()))
+                } else {                    
+                    match task.info.error {
+                        None => Some(Err(TaskError::new_other(
+                            "Task failed but no error detail returned".to_string(),
+                        ))),
+                        Some(error) => Some(Err(TaskError::new_task_error(error))),
+                    }
+                }
+            }
+            _ => {
+                if task.info.cancelled {
+                    Some(Err(TaskError::new_cancelled()))
+                } else {
+                    None
+                }
+            }
+        };
+
+        if let Some(r) = result {
+            let _ = self.tx.send((task_id, r));
+        }
+    }
+}
+

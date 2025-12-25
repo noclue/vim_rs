@@ -19,6 +19,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Changed
+
+- **`ObjectCacheListener` now returns `CacheAction` from `on_new/on_update`** so listeners can request immediate eviction of objects (triggering `on_remove(T)` with ownership).
+
 ### Removed
 
 - **`SharedRefCacheProxy`**: removed because `CacheManager` caches must be `Send + Sync` (used from async tasks and may move between threads). Use `ReadWriteCacheProxy` (`Arc<RwLock<_>>`) or pass `ObjectCache<T>` directly.
