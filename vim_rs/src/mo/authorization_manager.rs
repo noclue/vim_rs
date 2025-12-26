@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// This managed object provides operations to query and update
 /// roles and permissions.
 /// 
@@ -58,11 +58,11 @@ use crate::core::client::{Client, Result};
 /// on the primary VM.
 #[derive(Clone)]
 pub struct AuthorizationManager {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl AuthorizationManager {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -98,8 +98,10 @@ impl AuthorizationManager {
     pub async fn add_authorization_role(&self, name: &str, priv_ids: Option<&[String]>) -> Result<i32> {
         let input = AddAuthorizationRoleRequestType {name, priv_ids, };
         let path = format!("/AuthorizationManager/{moId}/AddAuthorizationRole", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: i32 = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Get the list of effective privileges for a user,
     /// either granted explicitly, or through group membership.
@@ -124,8 +126,12 @@ impl AuthorizationManager {
     pub async fn fetch_user_privilege_on_entities(&self, entities: &[crate::types::structs::ManagedObjectReference], user_name: &str) -> Result<Option<Vec<crate::types::structs::UserPrivilegeResult>>> {
         let input = FetchUserPrivilegeOnEntitiesRequestType {entities, user_name, };
         let path = format!("/AuthorizationManager/{moId}/FetchUserPrivilegeOnEntities", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::UserPrivilegeResult>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Check whether a session holds a set of privileges on a set of managed entities.
     /// 
@@ -158,8 +164,12 @@ impl AuthorizationManager {
     pub async fn has_privilege_on_entities(&self, entity: &[crate::types::structs::ManagedObjectReference], session_id: &str, priv_id: Option<&[String]>) -> Result<Option<Vec<crate::types::structs::EntityPrivilege>>> {
         let input = HasPrivilegeOnEntitiesRequestType {entity, session_id, priv_id, };
         let path = format!("/AuthorizationManager/{moId}/HasPrivilegeOnEntities", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::EntityPrivilege>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Check whether a session holds a set of privileges on a managed entity.
     /// 
@@ -192,8 +202,12 @@ impl AuthorizationManager {
     pub async fn has_privilege_on_entity(&self, entity: &crate::types::structs::ManagedObjectReference, session_id: &str, priv_id: Option<&[String]>) -> Result<Option<Vec<bool>>> {
         let input = HasPrivilegeOnEntityRequestType {entity, session_id, priv_id, };
         let path = format!("/AuthorizationManager/{moId}/HasPrivilegeOnEntity", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<bool>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Checks if a user holds a certain set of privileges on a number of
     /// managed entities.
@@ -227,8 +241,12 @@ impl AuthorizationManager {
     pub async fn has_user_privilege_on_entities(&self, entities: &[crate::types::structs::ManagedObjectReference], user_name: &str, priv_id: Option<&[String]>) -> Result<Option<Vec<crate::types::structs::EntityPrivilege>>> {
         let input = HasUserPrivilegeOnEntitiesRequestType {entities, user_name, priv_id, };
         let path = format!("/AuthorizationManager/{moId}/HasUserPrivilegeOnEntities", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::EntityPrivilege>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Reassigns all permissions of a role to another role.
     /// 
@@ -262,7 +280,7 @@ impl AuthorizationManager {
     pub async fn merge_permissions(&self, src_role_id: i32, dst_role_id: i32) -> Result<()> {
         let input = MergePermissionsRequestType {src_role_id, dst_role_id, };
         let path = format!("/AuthorizationManager/{moId}/MergePermissions", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Removes a permission rule from an entity.
@@ -311,7 +329,7 @@ impl AuthorizationManager {
     pub async fn remove_entity_permission(&self, entity: &crate::types::structs::ManagedObjectReference, user: &str, is_group: bool) -> Result<()> {
         let input = RemoveEntityPermissionRequestType {entity, user, is_group, };
         let path = format!("/AuthorizationManager/{moId}/RemoveEntityPermission", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Removes a role.
@@ -338,7 +356,7 @@ impl AuthorizationManager {
     pub async fn remove_authorization_role(&self, role_id: i32, fail_if_used: bool) -> Result<()> {
         let input = RemoveAuthorizationRoleRequestType {role_id, fail_if_used, };
         let path = format!("/AuthorizationManager/{moId}/RemoveAuthorizationRole", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Update the entire set of permissions defined on an entity.
@@ -411,7 +429,7 @@ impl AuthorizationManager {
     pub async fn reset_entity_permissions(&self, entity: &crate::types::structs::ManagedObjectReference, permission: Option<&[crate::types::structs::Permission]>) -> Result<()> {
         let input = ResetEntityPermissionsRequestType {entity, permission, };
         let path = format!("/AuthorizationManager/{moId}/ResetEntityPermissions", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Finds all permissions defined in the system.
@@ -423,7 +441,11 @@ impl AuthorizationManager {
     pub async fn retrieve_all_permissions(&self) -> Result<Option<Vec<crate::types::structs::Permission>>> {
         let path = format!("/AuthorizationManager/{moId}/RetrieveAllPermissions", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::Permission>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Gets permissions defined on or effective on a managed entity.
     /// 
@@ -452,8 +474,12 @@ impl AuthorizationManager {
     pub async fn retrieve_entity_permissions(&self, entity: &crate::types::structs::ManagedObjectReference, inherited: bool) -> Result<Option<Vec<crate::types::structs::Permission>>> {
         let input = RetrieveEntityPermissionsRequestType {entity, inherited, };
         let path = format!("/AuthorizationManager/{moId}/RetrieveEntityPermissions", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::Permission>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Finds all the permissions that use a particular role.
     /// 
@@ -473,8 +499,12 @@ impl AuthorizationManager {
     pub async fn retrieve_role_permissions(&self, role_id: i32) -> Result<Option<Vec<crate::types::structs::Permission>>> {
         let input = RetrieveRolePermissionsRequestType {role_id, };
         let path = format!("/AuthorizationManager/{moId}/RetrieveRolePermissions", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::Permission>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Defines one or more permission rules on an entity or updates rules if already
     /// present for the given user or group on the entity.
@@ -534,7 +564,7 @@ impl AuthorizationManager {
     pub async fn set_entity_permissions(&self, entity: &crate::types::structs::ManagedObjectReference, permission: Option<&[crate::types::structs::Permission]>) -> Result<()> {
         let input = SetEntityPermissionsRequestType {entity, permission, };
         let path = format!("/AuthorizationManager/{moId}/SetEntityPermissions", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Updates a role's name or privileges.
@@ -578,7 +608,7 @@ impl AuthorizationManager {
     pub async fn update_authorization_role(&self, role_id: i32, new_name: &str, priv_ids: Option<&[String]>) -> Result<()> {
         let input = UpdateAuthorizationRoleRequestType {role_id, new_name, priv_ids, };
         let path = format!("/AuthorizationManager/{moId}/UpdateAuthorizationRole", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Static, descriptive strings for system roles and privileges.
@@ -587,7 +617,9 @@ impl AuthorizationManager {
     pub async fn description(&self) -> Result<crate::types::structs::AuthorizationDescription> {
         let path = format!("/AuthorizationManager/{moId}/description", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::AuthorizationDescription = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// The list of system-defined privileges.
     /// 
@@ -595,7 +627,11 @@ impl AuthorizationManager {
     pub async fn privilege_list(&self) -> Result<Option<Vec<crate::types::structs::AuthorizationPrivilege>>> {
         let path = format!("/AuthorizationManager/{moId}/privilegeList", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::AuthorizationPrivilege>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// The currently defined roles in the system, including
     /// static system-defined roles.
@@ -604,7 +640,11 @@ impl AuthorizationManager {
     pub async fn role_list(&self) -> Result<Option<Vec<crate::types::structs::AuthorizationRole>>> {
         let path = format!("/AuthorizationManager/{moId}/roleList", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::AuthorizationRole>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
 }
 #[derive(serde::Serialize)]

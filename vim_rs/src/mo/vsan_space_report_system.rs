@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// This managed object type provides the service interface to report the
 /// vSAN cluster space usage information including the space overview, the
 /// space usage breakdown to various vSAN object types and the vSAN data
@@ -8,11 +8,11 @@ use crate::core::client::{Client, Result};
 /// through vSAN service at vCenter server side.
 #[derive(Clone)]
 pub struct VsanSpaceReportSystem {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl VsanSpaceReportSystem {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -49,8 +49,12 @@ impl VsanSpaceReportSystem {
     pub async fn vsan_query_entity_space_usage(&self, cluster: &crate::types::structs::ManagedObjectReference, query_spec: &crate::types::structs::VsanSpaceQuerySpec) -> Result<Option<Vec<crate::types::structs::VsanEntitySpaceUsage>>> {
         let input = VsanQueryEntitySpaceUsageRequestType {cluster, query_spec, };
         let path = format!("/vsan/VsanSpaceReportSystem/{moId}/VsanQueryEntitySpaceUsage", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VsanEntitySpaceUsage>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Query the vSAN space usage including the space usage overview
     /// and the space usage breakdown according to vSAN object type.
@@ -95,8 +99,10 @@ impl VsanSpaceReportSystem {
     pub async fn vsan_query_space_usage(&self, cluster: &crate::types::structs::ManagedObjectReference, storage_policies: Option<&[Box<dyn crate::types::traits::VirtualMachineProfileSpecTrait>]>, whatif_capacity_only: Option<bool>) -> Result<crate::types::structs::VsanSpaceUsage> {
         let input = VsanQuerySpaceUsageRequestType {cluster, storage_policies, whatif_capacity_only, };
         let path = format!("/vsan/VsanSpaceReportSystem/{moId}/VsanQuerySpaceUsage", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::VsanSpaceUsage = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Query the space usage including the space usage overview and the space usage
     /// breakdown based on different datastore types.
@@ -128,8 +134,10 @@ impl VsanSpaceReportSystem {
     pub async fn query_vsan_managed_storage_space_usage(&self, cluster: &crate::types::structs::ManagedObjectReference, query_spec: &crate::types::structs::QueryVsanManagedStorageSpaceUsageSpec) -> Result<Vec<crate::types::structs::VsanSpaceUsageWithDatastoreType>> {
         let input = QueryVsanManagedStorageSpaceUsageRequestType {cluster, query_spec, };
         let path = format!("/vsan/VsanSpaceReportSystem/{moId}/QueryVsanManagedStorageSpaceUsage", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: Vec<crate::types::structs::VsanSpaceUsageWithDatastoreType> = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
 }
 #[derive(serde::Serialize)]

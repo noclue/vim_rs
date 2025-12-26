@@ -1,14 +1,14 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// The *HostBootDeviceSystem* managed object provides methods to query and update
 /// a host boot device configuration.
 #[derive(Clone)]
 pub struct HostBootDeviceSystem {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl HostBootDeviceSystem {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -29,7 +29,11 @@ impl HostBootDeviceSystem {
     pub async fn query_boot_devices(&self) -> Result<Option<crate::types::structs::HostBootDeviceInfo>> {
         let path = format!("/HostBootDeviceSystem/{moId}/QueryBootDevices", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::HostBootDeviceInfo>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Sets the current boot device for the host system.
     /// 
@@ -43,7 +47,7 @@ impl HostBootDeviceSystem {
     pub async fn update_boot_device(&self, key: &str) -> Result<()> {
         let input = UpdateBootDeviceRequestType {key, };
         let path = format!("/HostBootDeviceSystem/{moId}/UpdateBootDevice", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
 }

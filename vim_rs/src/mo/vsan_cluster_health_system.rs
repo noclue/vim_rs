@@ -1,15 +1,15 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// The vSAN Cluster Health System exposes the vSAN cluster health service API
 /// and serves as an aggregator to collect the result from each of hosts in the vSAN
 /// cluster.
 #[derive(Clone)]
 pub struct VsanClusterHealthSystem {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl VsanClusterHealthSystem {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -38,8 +38,10 @@ impl VsanClusterHealthSystem {
     pub async fn vsan_check_cluster_clomd_liveness(&self, hosts: &[String], esx_root_password: &str) -> Result<crate::types::structs::VsanClusterClomdLivenessResult> {
         let input = VsanCheckClusterClomdLivenessRequestType {hosts, esx_root_password, };
         let path = format!("/vsan/VsanClusterHealthSystem/{moId}/VsanCheckClusterClomdLiveness", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::VsanClusterClomdLivenessResult = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Fetch HCL information about all devices in use by vSAN on all hosts.
     /// 
@@ -64,8 +66,10 @@ impl VsanClusterHealthSystem {
     pub async fn vsan_cluster_get_hcl_info(&self, hosts: &[String], esx_root_password: &str) -> Result<crate::types::structs::VsanClusterHclInfo> {
         let input = VsanClusterGetHclInfoRequestType {hosts, esx_root_password, };
         let path = format!("/vsan/VsanClusterHealthSystem/{moId}/VsanClusterGetHclInfo", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::VsanClusterHclInfo = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Queries vSAN advanced configuration and checks if all of the hosts in a
     /// vSAN cluster have consistent advanced configuration options
@@ -95,8 +99,12 @@ impl VsanClusterHealthSystem {
     pub async fn vsan_query_cluster_adv_cfg_sync(&self, hosts: &[String], esx_root_password: &str, options: Option<&[String]>) -> Result<Option<Vec<crate::types::structs::VsanClusterAdvCfgSyncResult>>> {
         let input = VsanQueryClusterAdvCfgSyncRequestType {hosts, esx_root_password, options, };
         let path = format!("/vsan/VsanClusterHealthSystem/{moId}/VsanQueryClusterAdvCfgSync", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VsanClusterAdvCfgSyncResult>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Captures the vSAN cluster multicast network trace to ensure that all
     /// of hosts in the cluster can receive multicast packets
@@ -147,8 +155,10 @@ impl VsanClusterHealthSystem {
     pub async fn vsan_query_cluster_capture_vsan_pcap(&self, hosts: &[String], esx_root_password: &str, duration: i32, vmknic: Option<&[crate::types::structs::VsanClusterHostVmknicMapping]>, include_raw_pcap: Option<bool>, include_igmp: Option<bool>, cmmds_msg_type_filter: Option<&[String]>, cmmds_ports: Option<&[i32]>, cluster_uuid: Option<&str>) -> Result<crate::types::structs::VsanVsanClusterPcapResult> {
         let input = VsanQueryClusterCaptureVsanPcapRequestType {hosts, esx_root_password, duration, vmknic, include_raw_pcap, include_igmp, cmmds_msg_type_filter, cmmds_ports, cluster_uuid, };
         let path = format!("/vsan/VsanClusterHealthSystem/{moId}/VsanQueryClusterCaptureVsanPcap", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::VsanVsanClusterPcapResult = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Queries the vSAN cluster component limits, disk space and read cache
     /// reservation assuming one host failure
@@ -174,8 +184,10 @@ impl VsanClusterHealthSystem {
     pub async fn vsan_query_cluster_check_limits(&self, hosts: &[String], esx_root_password: &str) -> Result<crate::types::structs::VsanClusterLimitHealthResult> {
         let input = VsanQueryClusterCheckLimitsRequestType {hosts, esx_root_password, };
         let path = format!("/vsan/VsanClusterHealthSystem/{moId}/VsanQueryClusterCheckLimits", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::VsanClusterLimitHealthResult = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Executes VM creation test and checks if a tiny VM can be created on each of
     /// host of the vSAN cluster
@@ -204,8 +216,10 @@ impl VsanClusterHealthSystem {
     pub async fn vsan_query_cluster_create_vm_health_test(&self, hosts: &[String], esx_root_password: &str, timeout: i32) -> Result<crate::types::structs::VsanClusterCreateVmHealthTestResult> {
         let input = VsanQueryClusterCreateVmHealthTestRequestType {hosts, esx_root_password, timeout, };
         let path = format!("/vsan/VsanClusterHealthSystem/{moId}/VsanQueryClusterCreateVmHealthTest", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::VsanClusterCreateVmHealthTestResult = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Queries vSAN health service version number string for each host and
     /// check if all of them are consistent.
@@ -234,8 +248,10 @@ impl VsanClusterHealthSystem {
     pub async fn vsan_query_cluster_health_system_versions(&self, hosts: &[String], esx_root_password: &str) -> Result<crate::types::structs::VsanClusterHealthSystemVersionResult> {
         let input = VsanQueryClusterHealthSystemVersionsRequestType {hosts, esx_root_password, };
         let path = format!("/vsan/VsanClusterHealthSystem/{moId}/VsanQueryClusterHealthSystemVersions", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::VsanClusterHealthSystemVersionResult = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Queries the vSAN network performance and checks if it meets the bandwidth requirements.
     /// 
@@ -268,8 +284,10 @@ impl VsanClusterHealthSystem {
     pub async fn vsan_query_cluster_network_perf_test(&self, hosts: &[String], esx_root_password: &str, multicast: bool, duration_sec: Option<i32>) -> Result<crate::types::structs::VsanClusterNetworkLoadTestResult> {
         let input = VsanQueryClusterNetworkPerfTestRequestType {hosts, esx_root_password, multicast, duration_sec, };
         let path = format!("/vsan/VsanClusterHealthSystem/{moId}/VsanQueryClusterNetworkPerfTest", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::VsanClusterNetworkLoadTestResult = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Queries the vSAN physical disks health on all of vSAN hosts
     /// 
@@ -295,8 +313,12 @@ impl VsanClusterHealthSystem {
     pub async fn vsan_query_cluster_physical_disk_health_summary(&self, hosts: &[String], esx_root_password: &str) -> Result<Option<Vec<crate::types::structs::VsanPhysicalDiskHealthSummary>>> {
         let input = VsanQueryClusterPhysicalDiskHealthSummaryRequestType {hosts, esx_root_password, };
         let path = format!("/vsan/VsanClusterHealthSystem/{moId}/VsanQueryClusterPhysicalDiskHealthSummary", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VsanPhysicalDiskHealthSummary>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Queries the vSAN cluster network setting and connectivity health status
     /// 
@@ -321,8 +343,10 @@ impl VsanClusterHealthSystem {
     pub async fn vsan_query_verify_cluster_network_settings(&self, hosts: &[String], esx_root_password: &str) -> Result<crate::types::structs::VsanClusterNetworkHealthResult> {
         let input = VsanQueryVerifyClusterNetworkSettingsRequestType {hosts, esx_root_password, };
         let path = format!("/vsan/VsanClusterHealthSystem/{moId}/VsanQueryVerifyClusterNetworkSettings", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::VsanClusterNetworkHealthResult = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Fix absent and degraded components in object immediately.
     /// 
@@ -354,8 +378,10 @@ impl VsanClusterHealthSystem {
     pub async fn vsan_repair_cluster_immediate_objects(&self, hosts: &[String], esx_root_password: &str, uuids: Option<&[String]>) -> Result<crate::types::structs::VsanClusterHealthSystemObjectsRepairResult> {
         let input = VsanRepairClusterImmediateObjectsRequestType {hosts, esx_root_password, uuids, };
         let path = format!("/vsan/VsanClusterHealthSystem/{moId}/VsanRepairClusterImmediateObjects", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::VsanClusterHealthSystemObjectsRepairResult = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
 }
 #[derive(serde::Serialize)]

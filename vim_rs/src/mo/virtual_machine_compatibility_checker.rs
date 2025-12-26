@@ -1,14 +1,14 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// A singleton managed object that can answer questions about compatibility
 /// of a virtual machine with a host.
 #[derive(Clone)]
 pub struct VirtualMachineCompatibilityChecker {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl VirtualMachineCompatibilityChecker {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -70,8 +70,10 @@ impl VirtualMachineCompatibilityChecker {
     pub async fn check_compatibility_task(&self, vm: &crate::types::structs::ManagedObjectReference, host: Option<&crate::types::structs::ManagedObjectReference>, pool: Option<&crate::types::structs::ManagedObjectReference>, test_type: Option<&[String]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CheckCompatibilityRequestType {vm, host, pool, test_type, };
         let path = format!("/VirtualMachineCompatibilityChecker/{moId}/CheckCompatibility_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Tests whether the provided virtual machine can be powered on
     /// on the given host and/or resource pool.
@@ -123,8 +125,10 @@ impl VirtualMachineCompatibilityChecker {
     pub async fn check_power_on_task(&self, vm: &crate::types::structs::ManagedObjectReference, host: Option<&crate::types::structs::ManagedObjectReference>, pool: Option<&crate::types::structs::ManagedObjectReference>, test_type: Option<&[String]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CheckPowerOnRequestType {vm, host, pool, test_type, };
         let path = format!("/VirtualMachineCompatibilityChecker/{moId}/CheckPowerOn_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Tests whether the provided virtual machine specification can be applied
     /// on the given host and resource pool.
@@ -182,8 +186,10 @@ impl VirtualMachineCompatibilityChecker {
     pub async fn check_vm_config_task(&self, spec: &crate::types::structs::VirtualMachineConfigSpec, vm: Option<&crate::types::structs::ManagedObjectReference>, host: Option<&crate::types::structs::ManagedObjectReference>, pool: Option<&crate::types::structs::ManagedObjectReference>, test_type: Option<&[String]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CheckVmConfigRequestType {spec, vm, host, pool, test_type, };
         let path = format!("/VirtualMachineCompatibilityChecker/{moId}/CheckVmConfig_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
 }
 #[derive(serde::Serialize)]

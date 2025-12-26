@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// The *PbmComplianceManager* provides methods to verify the compliance
 /// of virtual machine and virtual disk requirement profiles.
 /// 
@@ -16,11 +16,11 @@ use crate::core::client::{Client, Result};
 /// compliance of a virtual machine and all of its virtual disks.
 #[derive(Clone)]
 pub struct PbmComplianceManager {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl PbmComplianceManager {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -80,8 +80,12 @@ impl PbmComplianceManager {
     pub async fn pbm_check_compliance(&self, entities: &[crate::types::structs::PbmServerObjectRef], profile: Option<&crate::types::structs::PbmProfileId>) -> Result<Option<Vec<crate::types::structs::PbmComplianceResult>>> {
         let input = PbmCheckComplianceRequestType {entities, profile, };
         let path = format!("/pbm/PbmComplianceManager/{moId}/PbmCheckCompliance", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::PbmComplianceResult>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Checks rollup compliance of virtual machines and returns the results to your
     /// client.
@@ -126,8 +130,12 @@ impl PbmComplianceManager {
     pub async fn pbm_check_rollup_compliance(&self, entity: &[crate::types::structs::PbmServerObjectRef]) -> Result<Option<Vec<crate::types::structs::PbmRollupComplianceResult>>> {
         let input = PbmCheckRollupComplianceRequestType {entity, };
         let path = format!("/pbm/PbmComplianceManager/{moId}/PbmCheckRollupCompliance", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::PbmRollupComplianceResult>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Retrieves the latest version of *PbmComplianceResult* objects that are
     /// available for the specified entities.
@@ -169,8 +177,12 @@ impl PbmComplianceManager {
     pub async fn pbm_fetch_compliance_result(&self, entities: &[crate::types::structs::PbmServerObjectRef], profile: Option<&crate::types::structs::PbmProfileId>) -> Result<Option<Vec<crate::types::structs::PbmComplianceResult>>> {
         let input = PbmFetchComplianceResultRequestType {entities, profile, };
         let path = format!("/pbm/PbmComplianceManager/{moId}/PbmFetchComplianceResult", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::PbmComplianceResult>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Retrieves the rollup compliance (*PbmRollupComplianceResult*)
     /// of the given virtual machines if present.
@@ -206,8 +218,12 @@ impl PbmComplianceManager {
     pub async fn pbm_fetch_rollup_compliance_result(&self, entity: &[crate::types::structs::PbmServerObjectRef]) -> Result<Option<Vec<crate::types::structs::PbmRollupComplianceResult>>> {
         let input = PbmFetchRollupComplianceResultRequestType {entity, };
         let path = format!("/pbm/PbmComplianceManager/{moId}/PbmFetchRollupComplianceResult", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::PbmRollupComplianceResult>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Returns the virtual machines for the given rollup compliance status.
     /// 
@@ -230,8 +246,12 @@ impl PbmComplianceManager {
     pub async fn pbm_query_by_rollup_compliance_status(&self, status: &str) -> Result<Option<Vec<crate::types::structs::PbmServerObjectRef>>> {
         let input = PbmQueryByRollupComplianceStatusRequestType {status, };
         let path = format!("/pbm/PbmComplianceManager/{moId}/PbmQueryByRollupComplianceStatus", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::PbmServerObjectRef>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
 }
 #[derive(serde::Serialize)]

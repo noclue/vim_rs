@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// This managed object type controls entitlements for a given VMware
 /// platform.
 /// 
@@ -44,11 +44,11 @@ use crate::core::client::{Client, Result};
 ///        +------------------------------+   +--------+
 #[derive(Clone)]
 pub struct LicenseManager {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl LicenseManager {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -72,8 +72,10 @@ impl LicenseManager {
     pub async fn add_license(&self, license_key: &str, labels: Option<&[crate::types::structs::KeyValue]>) -> Result<crate::types::structs::LicenseManagerLicenseInfo> {
         let input = AddLicenseRequestType {license_key, labels, };
         let path = format!("/LicenseManager/{moId}/AddLicense", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::LicenseManagerLicenseInfo = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deprecated as of vSphere API 4.0, use
     /// *LicenseAssignmentManager.QueryAssignedLicenses* instead.
@@ -105,8 +107,10 @@ impl LicenseManager {
     pub async fn check_license_feature(&self, host: Option<&crate::types::structs::ManagedObjectReference>, feature_key: &str) -> Result<bool> {
         let input = CheckLicenseFeatureRequestType {host, feature_key, };
         let path = format!("/LicenseManager/{moId}/CheckLicenseFeature", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: bool = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deprecated as of vSphere API 4.0, use *LicenseManager.UpdateLicense*
     /// instead.
@@ -153,7 +157,7 @@ impl LicenseManager {
     pub async fn configure_license_source(&self, host: Option<&crate::types::structs::ManagedObjectReference>, license_source: &dyn crate::types::traits::LicenseSourceTrait) -> Result<()> {
         let input = ConfigureLicenseSourceRequestType {host, license_source, };
         let path = format!("/LicenseManager/{moId}/ConfigureLicenseSource", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Decodes licensing information on the license specified.
@@ -171,8 +175,10 @@ impl LicenseManager {
     pub async fn decode_license(&self, license_key: &str) -> Result<crate::types::structs::LicenseManagerLicenseInfo> {
         let input = DecodeLicenseRequestType {license_key, };
         let path = format!("/LicenseManager/{moId}/DecodeLicense", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::LicenseManagerLicenseInfo = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deprecated as of vSphere API 4.0, use
     /// *LicenseAssignmentManager.RemoveAssignedLicense* instead.
@@ -205,8 +211,10 @@ impl LicenseManager {
     pub async fn disable_feature(&self, host: Option<&crate::types::structs::ManagedObjectReference>, feature_key: &str) -> Result<bool> {
         let input = DisableFeatureRequestType {host, feature_key, };
         let path = format!("/LicenseManager/{moId}/DisableFeature", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: bool = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deprecated as of vSphere API 4.0, use
     /// *LicenseAssignmentManager.UpdateAssignedLicense* instead.
@@ -240,8 +248,10 @@ impl LicenseManager {
     pub async fn enable_feature(&self, host: Option<&crate::types::structs::ManagedObjectReference>, feature_key: &str) -> Result<bool> {
         let input = EnableFeatureRequestType {host, feature_key, };
         let path = format!("/LicenseManager/{moId}/EnableFeature", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: bool = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deprecated as of vSphere API 4.0, use
     /// *LicenseAssignmentManager.QueryAssignedLicenses* instead.
@@ -260,8 +270,12 @@ impl LicenseManager {
     pub async fn query_license_source_availability(&self, host: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Option<Vec<crate::types::structs::LicenseAvailabilityInfo>>> {
         let input = QueryLicenseSourceAvailabilityRequestType {host, };
         let path = format!("/LicenseManager/{moId}/QueryLicenseSourceAvailability", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::LicenseAvailabilityInfo>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Deprecated as of vSphere API 4.0, use
     /// *LicenseAssignmentManager.QueryAssignedLicenses* instead.
@@ -280,8 +294,12 @@ impl LicenseManager {
     pub async fn query_supported_features(&self, host: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Option<Vec<crate::types::structs::LicenseFeatureInfo>>> {
         let input = QuerySupportedFeaturesRequestType {host, };
         let path = format!("/LicenseManager/{moId}/QuerySupportedFeatures", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::LicenseFeatureInfo>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Deprecated as of vSphere API 4.0, use
     /// *LicenseAssignmentManager.QueryAssignedLicenses* instead.
@@ -308,8 +326,10 @@ impl LicenseManager {
     pub async fn query_license_usage(&self, host: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::LicenseUsageInfo> {
         let input = QueryLicenseUsageRequestType {host, };
         let path = format!("/LicenseManager/{moId}/QueryLicenseUsage", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::LicenseUsageInfo = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Removed a license's label.
     /// 
@@ -325,7 +345,7 @@ impl LicenseManager {
     pub async fn remove_license_label(&self, license_key: &str, label_key: &str) -> Result<()> {
         let input = RemoveLicenseLabelRequestType {license_key, label_key, };
         let path = format!("/LicenseManager/{moId}/RemoveLicenseLabel", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Remove license from the available set.
@@ -339,7 +359,7 @@ impl LicenseManager {
     pub async fn remove_license(&self, license_key: &str) -> Result<()> {
         let input = RemoveLicenseRequestType {license_key, };
         let path = format!("/LicenseManager/{moId}/RemoveLicense", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Deprecated as of vSphere API 4.0, use
@@ -379,7 +399,7 @@ impl LicenseManager {
     pub async fn set_license_edition(&self, host: Option<&crate::types::structs::ManagedObjectReference>, feature_key: Option<&str>) -> Result<()> {
         let input = SetLicenseEditionRequestType {host, feature_key, };
         let path = format!("/LicenseManager/{moId}/SetLicenseEdition", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Update a license's label.
@@ -401,7 +421,7 @@ impl LicenseManager {
     pub async fn update_license_label(&self, license_key: &str, label_key: &str, label_value: &str) -> Result<()> {
         let input = UpdateLicenseLabelRequestType {license_key, label_key, label_value, };
         let path = format!("/LicenseManager/{moId}/UpdateLicenseLabel", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Updates the available licenses to the one provided in licenseKey.
@@ -429,8 +449,10 @@ impl LicenseManager {
     pub async fn update_license(&self, license_key: &str, labels: Option<&[crate::types::structs::KeyValue]>) -> Result<crate::types::structs::LicenseManagerLicenseInfo> {
         let input = UpdateLicenseRequestType {license_key, labels, };
         let path = format!("/LicenseManager/{moId}/UpdateLicense", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::LicenseManagerLicenseInfo = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deprecated as of vSphere API 4.0, this property is not used by the system.
     /// 
@@ -438,13 +460,19 @@ impl LicenseManager {
     pub async fn diagnostics(&self) -> Result<Option<crate::types::structs::LicenseDiagnostics>> {
         let path = format!("/LicenseManager/{moId}/diagnostics", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::LicenseDiagnostics>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// ***Required privileges:*** System.Read
     pub async fn evaluation(&self) -> Result<crate::types::structs::LicenseManagerEvaluationInfo> {
         let path = format!("/LicenseManager/{moId}/evaluation", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::LicenseManagerEvaluationInfo = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deprecated as of VI API 2.5, use *LicenseManager.QuerySupportedFeatures*
     /// instead.
@@ -453,7 +481,11 @@ impl LicenseManager {
     pub async fn feature_info(&self) -> Result<Option<Vec<crate::types::structs::LicenseFeatureInfo>>> {
         let path = format!("/LicenseManager/{moId}/featureInfo", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::LicenseFeatureInfo>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// License Assignment Manager
     /// 
@@ -465,7 +497,11 @@ impl LicenseManager {
     pub async fn license_assignment_manager(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let path = format!("/LicenseManager/{moId}/licenseAssignmentManager", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::ManagedObjectReference>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Deprecated as of vSphere API 4.0, use
     /// *LicenseAssignmentManager.QueryAssignedLicenses* instead.
@@ -480,13 +516,17 @@ impl LicenseManager {
     pub async fn licensed_edition(&self) -> Result<String> {
         let path = format!("/LicenseManager/{moId}/licensedEdition", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Get information about all the licenses available.
     pub async fn licenses(&self) -> Result<Vec<crate::types::structs::LicenseManagerLicenseInfo>> {
         let path = format!("/LicenseManager/{moId}/licenses", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: Vec<crate::types::structs::LicenseManagerLicenseInfo> = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deprecated as of vSphere API 4.0, use
     /// *LicenseAssignmentManager.QueryAssignedLicenses* to get evaluation information.
@@ -495,7 +535,9 @@ impl LicenseManager {
     pub async fn source(&self) -> Result<Box<dyn crate::types::traits::LicenseSourceTrait>> {
         let path = format!("/LicenseManager/{moId}/source", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: Box<dyn crate::types::traits::LicenseSourceTrait> = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deprecated as of vSphere API 4.0, this property is not used.
     /// 
@@ -506,7 +548,9 @@ impl LicenseManager {
     pub async fn source_available(&self) -> Result<bool> {
         let path = format!("/LicenseManager/{moId}/sourceAvailable", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: bool = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
 }
 #[derive(serde::Serialize)]

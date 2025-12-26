@@ -1,14 +1,14 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// FileManager is the managed object that provides APIs
 /// to manipulate the guest operating system files.
 #[derive(Clone)]
 pub struct GuestFileManager {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl GuestFileManager {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -75,7 +75,7 @@ impl GuestFileManager {
     pub async fn change_file_attributes_in_guest(&self, vm: &crate::types::structs::ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait, guest_file_path: &str, file_attributes: &dyn crate::types::traits::GuestFileAttributesTrait) -> Result<()> {
         let input = ChangeFileAttributesInGuestRequestType {vm, auth, guest_file_path, file_attributes, };
         let path = format!("/GuestFileManager/{moId}/ChangeFileAttributesInGuest", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Creates a temporary directory.
@@ -145,8 +145,10 @@ impl GuestFileManager {
     pub async fn create_temporary_directory_in_guest(&self, vm: &crate::types::structs::ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait, prefix: &str, suffix: &str, directory_path: Option<&str>) -> Result<String> {
         let input = CreateTemporaryDirectoryInGuestRequestType {vm, auth, prefix, suffix, directory_path, };
         let path = format!("/GuestFileManager/{moId}/CreateTemporaryDirectoryInGuest", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Creates a temporary file.
     /// 
@@ -215,8 +217,10 @@ impl GuestFileManager {
     pub async fn create_temporary_file_in_guest(&self, vm: &crate::types::structs::ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait, prefix: &str, suffix: &str, directory_path: Option<&str>) -> Result<String> {
         let input = CreateTemporaryFileInGuestRequestType {vm, auth, prefix, suffix, directory_path, };
         let path = format!("/GuestFileManager/{moId}/CreateTemporaryFileInGuest", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deletes a directory in the guest OS.
     ///
@@ -276,7 +280,7 @@ impl GuestFileManager {
     pub async fn delete_directory_in_guest(&self, vm: &crate::types::structs::ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait, directory_path: &str, recursive: bool) -> Result<()> {
         let input = DeleteDirectoryInGuestRequestType {vm, auth, directory_path, recursive, };
         let path = format!("/GuestFileManager/{moId}/DeleteDirectoryInGuest", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Deletes a file in the guest OS
@@ -333,7 +337,7 @@ impl GuestFileManager {
     pub async fn delete_file_in_guest(&self, vm: &crate::types::structs::ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait, file_path: &str) -> Result<()> {
         let input = DeleteFileInGuestRequestType {vm, auth, file_path, };
         let path = format!("/GuestFileManager/{moId}/DeleteFileInGuest", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Initiates an operation to transfer a file from the guest.
@@ -414,8 +418,10 @@ impl GuestFileManager {
     pub async fn initiate_file_transfer_from_guest(&self, vm: &crate::types::structs::ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait, guest_file_path: &str) -> Result<crate::types::structs::FileTransferInformation> {
         let input = InitiateFileTransferFromGuestRequestType {vm, auth, guest_file_path, };
         let path = format!("/GuestFileManager/{moId}/InitiateFileTransferFromGuest", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::FileTransferInformation = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Initiates an operation to transfer a file to the guest.
     /// 
@@ -519,8 +525,10 @@ impl GuestFileManager {
     pub async fn initiate_file_transfer_to_guest(&self, vm: &crate::types::structs::ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait, guest_file_path: &str, file_attributes: &dyn crate::types::traits::GuestFileAttributesTrait, file_size: i64, overwrite: bool) -> Result<String> {
         let input = InitiateFileTransferToGuestRequestType {vm, auth, guest_file_path, file_attributes, file_size, overwrite, };
         let path = format!("/GuestFileManager/{moId}/InitiateFileTransferToGuest", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Returns information about files or directories in the guest.
     /// 
@@ -600,8 +608,10 @@ impl GuestFileManager {
     pub async fn list_files_in_guest(&self, vm: &crate::types::structs::ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait, file_path: &str, index: Option<i32>, max_results: Option<i32>, match_pattern: Option<&str>) -> Result<crate::types::structs::GuestListFileInfo> {
         let input = ListFilesInGuestRequestType {vm, auth, file_path, index, max_results, match_pattern, };
         let path = format!("/GuestFileManager/{moId}/ListFilesInGuest", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::GuestListFileInfo = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Creates a directory in the guest OS
     ///
@@ -661,7 +671,7 @@ impl GuestFileManager {
     pub async fn make_directory_in_guest(&self, vm: &crate::types::structs::ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait, directory_path: &str, create_parent_directories: bool) -> Result<()> {
         let input = MakeDirectoryInGuestRequestType {vm, auth, directory_path, create_parent_directories, };
         let path = format!("/GuestFileManager/{moId}/MakeDirectoryInGuest", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Moves or renames a directory in the guest.
@@ -721,7 +731,7 @@ impl GuestFileManager {
     pub async fn move_directory_in_guest(&self, vm: &crate::types::structs::ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait, src_directory_path: &str, dst_directory_path: &str) -> Result<()> {
         let input = MoveDirectoryInGuestRequestType {vm, auth, src_directory_path, dst_directory_path, };
         let path = format!("/GuestFileManager/{moId}/MoveDirectoryInGuest", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Renames a file in the guest.
@@ -784,7 +794,7 @@ impl GuestFileManager {
     pub async fn move_file_in_guest(&self, vm: &crate::types::structs::ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait, src_file_path: &str, dst_file_path: &str, overwrite: bool) -> Result<()> {
         let input = MoveFileInGuestRequestType {vm, auth, src_file_path, dst_file_path, overwrite, };
         let path = format!("/GuestFileManager/{moId}/MoveFileInGuest", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
 }

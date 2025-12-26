@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// This managed object provides the diagnostics service that operates at cluster
 /// level.
 /// 
@@ -10,11 +10,11 @@ use crate::core::client::{Client, Result};
 /// 'vsan-cluster-diagnostics-system' through vSAN service at at vCenter side.
 #[derive(Clone)]
 pub struct VsanDiagnosticsSystem {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl VsanDiagnosticsSystem {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -53,8 +53,10 @@ impl VsanDiagnosticsSystem {
     pub async fn create_io_trip_analyzer_recurrences(&self, cluster: &crate::types::structs::ManagedObjectReference, recurrences: &[crate::types::structs::VsanIoTripAnalyzerRecurrence]) -> Result<Vec<crate::types::structs::VsanIoTripAnalyzerRecurrence>> {
         let input = CreateIoTripAnalyzerRecurrencesRequestType {cluster, recurrences, };
         let path = format!("/vsan/VsanDiagnosticsSystem/{moId}/CreateIOTripAnalyzerRecurrences", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: Vec<crate::types::structs::VsanIoTripAnalyzerRecurrence> = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Edit the IO trip analyzer recurrences with the given configuration.
     /// 
@@ -88,8 +90,10 @@ impl VsanDiagnosticsSystem {
     pub async fn edit_io_trip_analyzer_recurrences(&self, cluster: &crate::types::structs::ManagedObjectReference, recurrences: &[crate::types::structs::VsanIoTripAnalyzerRecurrence]) -> Result<Vec<crate::types::structs::VsanIoTripAnalyzerRecurrence>> {
         let input = EditIoTripAnalyzerRecurrencesRequestType {cluster, recurrences, };
         let path = format!("/vsan/VsanDiagnosticsSystem/{moId}/EditIOTripAnalyzerRecurrences", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: Vec<crate::types::structs::VsanIoTripAnalyzerRecurrence> = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Get the IO trip analyzer scheduler configurations for the given cluster.
     /// 
@@ -113,8 +117,12 @@ impl VsanDiagnosticsSystem {
     pub async fn get_io_trip_analyzer_scheduler_config(&self, cluster: &crate::types::structs::ManagedObjectReference) -> Result<Option<crate::types::structs::VsanIoTripAnalyzerConfig>> {
         let input = GetIoTripAnalyzerSchedulerConfigRequestType {cluster, };
         let path = format!("/vsan/VsanDiagnosticsSystem/{moId}/GetIOTripAnalyzerSchedulerConfig", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::VsanIoTripAnalyzerConfig>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Get the threshold.
     /// 
@@ -155,8 +163,12 @@ impl VsanDiagnosticsSystem {
     pub async fn vsan_get_thresholds(&self, cluster: &crate::types::structs::ManagedObjectReference, entity_type: Option<&str>, metric: Option<&str>) -> Result<Option<Vec<crate::types::structs::VsanDiagnosticsThreshold>>> {
         let input = VsanGetThresholdsRequestType {cluster, entity_type, metric, };
         let path = format!("/vsan/VsanDiagnosticsSystem/{moId}/VsanGetThresholds", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VsanDiagnosticsThreshold>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Query the completed diagnostics instances by the given query spec.
     ///
@@ -186,8 +198,12 @@ impl VsanDiagnosticsSystem {
     pub async fn query_io_diagnostics_instances(&self, query_spec: &crate::types::structs::VsanIoDiagnosticsInstanceQuerySpec, cluster: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Option<Vec<crate::types::structs::VsanIoDiagnosticsInstance>>> {
         let input = QueryIoDiagnosticsInstancesRequestType {query_spec, cluster, };
         let path = format!("/vsan/VsanDiagnosticsSystem/{moId}/QueryIODiagnosticsInstances", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VsanIoDiagnosticsInstance>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Query the IO diagnostics stats according to the given diagnostics instance
     /// name.
@@ -218,8 +234,12 @@ impl VsanDiagnosticsSystem {
     pub async fn query_io_diagnostics_stats(&self, instance_name: &str, cluster: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Option<Vec<crate::types::structs::VsanIoDiagnosticsTargetStats>>> {
         let input = QueryIoDiagnosticsStatsRequestType {instance_name, cluster, };
         let path = format!("/vsan/VsanDiagnosticsSystem/{moId}/QueryIODiagnosticsStats", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VsanIoDiagnosticsTargetStats>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Get the latest network events that triggered network alarms.
     /// 
@@ -247,8 +267,12 @@ impl VsanDiagnosticsSystem {
     pub async fn vsan_query_network_diagnostics(&self, cluster: &crate::types::structs::ManagedObjectReference, host: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Option<Vec<crate::types::structs::VsanNetworkDiagnostics>>> {
         let input = VsanQueryNetworkDiagnosticsRequestType {cluster, host, };
         let path = format!("/vsan/VsanDiagnosticsSystem/{moId}/VsanQueryNetworkDiagnostics", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VsanNetworkDiagnostics>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Remove the IO trip analyzer recurrence(s) with the given name(s).
     /// 
@@ -274,7 +298,7 @@ impl VsanDiagnosticsSystem {
     pub async fn remove_io_trip_analyzer_recurrences(&self, cluster: &crate::types::structs::ManagedObjectReference, names: &[String]) -> Result<()> {
         let input = RemoveIoTripAnalyzerRecurrencesRequestType {cluster, names, };
         let path = format!("/vsan/VsanDiagnosticsSystem/{moId}/RemoveIOTripAnalyzerRecurrences", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Set the threshold.
@@ -304,7 +328,7 @@ impl VsanDiagnosticsSystem {
     pub async fn vsan_set_thresholds(&self, cluster: &crate::types::structs::ManagedObjectReference, thresholds: Option<&[crate::types::structs::VsanDiagnosticsThreshold]>) -> Result<()> {
         let input = VsanSetThresholdsRequestType {cluster, thresholds, };
         let path = format!("/vsan/VsanDiagnosticsSystem/{moId}/VsanSetThresholds", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Set the policy of the vSAN namespace object that hold the vSAN trace files.
@@ -344,8 +368,10 @@ impl VsanDiagnosticsSystem {
     pub async fn vsan_set_trace_object_policy(&self, cluster: Option<&crate::types::structs::ManagedObjectReference>, trace_object_uuid: &str, profile: Option<&dyn crate::types::traits::VirtualMachineProfileSpecTrait>) -> Result<bool> {
         let input = VsanSetTraceObjectPolicyRequestType {cluster, trace_object_uuid, profile, };
         let path = format!("/vsan/VsanDiagnosticsSystem/{moId}/VsanSetTraceObjectPolicy", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: bool = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Start IO diagnostics task against the given targets running on vSAN datastore.
     /// 
@@ -387,8 +413,10 @@ impl VsanDiagnosticsSystem {
     pub async fn start_io_diagnostics_task(&self, targets: &[crate::types::structs::VsanIoDiagnosticsTarget], cluster: Option<&crate::types::structs::ManagedObjectReference>, duration: Option<i64>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = StartIoDiagnosticsTaskRequestType {targets, cluster, duration, };
         let path = format!("/vsan/VsanDiagnosticsSystem/{moId}/StartIODiagnosticsTask", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
 }
 #[derive(serde::Serialize)]

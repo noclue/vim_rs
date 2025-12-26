@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// This managed object provides an interface
 /// through which you can gather and configure the host CPU scheduler
 /// policies that affect the performance of running virtual machines.
@@ -9,11 +9,11 @@ use crate::core::client::{Client, Result};
 /// of virtual machines.
 #[derive(Clone)]
 pub struct HostCpuSchedulerSystem {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl HostCpuSchedulerSystem {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -61,7 +61,7 @@ impl HostCpuSchedulerSystem {
     pub async fn set_custom_value(&self, key: &str, value: &str) -> Result<()> {
         let input = SetCustomValueRequestType {key, value, };
         let path = format!("/HostCpuSchedulerSystem/{moId}/setCustomValue", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// List of custom field definitions that are valid for the object's type.
@@ -72,7 +72,11 @@ impl HostCpuSchedulerSystem {
     pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
         let path = format!("/HostCpuSchedulerSystem/{moId}/availableField", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::CustomFieldDef>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Information about the current CPU scheduler of the host.
     /// 
@@ -82,7 +86,11 @@ impl HostCpuSchedulerSystem {
     pub async fn cpu_scheduler_info(&self) -> Result<Option<crate::types::structs::HostCpuSchedulerInfo>> {
         let path = format!("/HostCpuSchedulerSystem/{moId}/cpuSchedulerInfo", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::HostCpuSchedulerInfo>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// The hyperthread configuration for the CpuSchedulerSystem.
     /// 
@@ -92,7 +100,11 @@ impl HostCpuSchedulerSystem {
     pub async fn hyperthread_info(&self) -> Result<Option<crate::types::structs::HostHyperThreadScheduleInfo>> {
         let path = format!("/HostCpuSchedulerSystem/{moId}/hyperthreadInfo", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::HostHyperThreadScheduleInfo>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// List of custom field values.
     /// 
@@ -104,7 +116,11 @@ impl HostCpuSchedulerSystem {
     pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/HostCpuSchedulerSystem/{moId}/value", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
 }
 #[derive(serde::Serialize)]

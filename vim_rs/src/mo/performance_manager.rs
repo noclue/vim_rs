@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// This managed object type provides the service interface for obtaining
 /// statistical data about various aspects of system performance, as generated
 /// and maintained by the system's performance providers.
@@ -86,11 +86,11 @@ use crate::core::client::{Client, Result};
 /// See the Programming Guide for more information about using *PerformanceManager*&#46;
 #[derive(Clone)]
 pub struct PerformanceManager {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl PerformanceManager {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -116,7 +116,7 @@ impl PerformanceManager {
     pub async fn create_perf_interval(&self, interval_id: &crate::types::structs::PerfInterval) -> Result<()> {
         let input = CreatePerfIntervalRequestType {interval_id, };
         let path = format!("/PerformanceManager/{moId}/CreatePerfInterval", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Retrieves all performance counters for the specified *managed object* generated during a specified
@@ -162,8 +162,12 @@ impl PerformanceManager {
     pub async fn query_available_perf_metric(&self, entity: &crate::types::structs::ManagedObjectReference, begin_time: Option<&str>, end_time: Option<&str>, interval_id: Option<i32>) -> Result<Option<Vec<crate::types::structs::PerfMetricId>>> {
         let input = QueryAvailablePerfMetricRequestType {entity, begin_time, end_time, interval_id, };
         let path = format!("/PerformanceManager/{moId}/QueryAvailablePerfMetric", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::PerfMetricId>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Retrieves a *PerfCompositeMetric* data object
     /// that comprises statistics for the specified entity and its children
@@ -201,8 +205,10 @@ impl PerformanceManager {
     pub async fn query_perf_composite(&self, query_spec: &crate::types::structs::PerfQuerySpec) -> Result<crate::types::structs::PerfCompositeMetric> {
         let input = QueryPerfCompositeRequestType {query_spec, };
         let path = format!("/PerformanceManager/{moId}/QueryPerfComposite", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::PerfCompositeMetric = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Retrieves counter information for the specified list of counter IDs.
     /// 
@@ -221,8 +227,12 @@ impl PerformanceManager {
     pub async fn query_perf_counter(&self, counter_id: &[i32]) -> Result<Option<Vec<crate::types::structs::PerfCounterInfo>>> {
         let input = QueryPerfCounterRequestType {counter_id, };
         let path = format!("/PerformanceManager/{moId}/QueryPerfCounter", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::PerfCounterInfo>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Retrieves the set of counters that are available at a specified
     /// collection *PerfInterval.level*.
@@ -246,8 +256,10 @@ impl PerformanceManager {
     pub async fn query_perf_counter_by_level(&self, level: i32) -> Result<Vec<crate::types::structs::PerfCounterInfo>> {
         let input = QueryPerfCounterByLevelRequestType {level, };
         let path = format!("/PerformanceManager/{moId}/QueryPerfCounterByLevel", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: Vec<crate::types::structs::PerfCounterInfo> = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Retrieves the *PerfProviderSummary* data object that
     /// defines the capabilities of the specified managed object with respect to
@@ -271,8 +283,10 @@ impl PerformanceManager {
     pub async fn query_perf_provider_summary(&self, entity: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::PerfProviderSummary> {
         let input = QueryPerfProviderSummaryRequestType {entity, };
         let path = format!("/PerformanceManager/{moId}/QueryPerfProviderSummary", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::PerfProviderSummary = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Retrieves the performance metrics for the specified entity (or entities)
     /// based on the properties specified in the *PerfQuerySpec* data object.
@@ -311,8 +325,12 @@ impl PerformanceManager {
     pub async fn query_perf(&self, query_spec: &[crate::types::structs::PerfQuerySpec]) -> Result<Option<Vec<Box<dyn crate::types::traits::PerfEntityMetricBaseTrait>>>> {
         let input = QueryPerfRequestType {query_spec, };
         let path = format!("/PerformanceManager/{moId}/QueryPerf", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::PerfEntityMetricBaseTrait>>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Deprecated as of API 2.5, use *PerformanceManager.UpdatePerfInterval*.
     /// Historical intervals cannot be removed.
@@ -329,7 +347,7 @@ impl PerformanceManager {
     pub async fn remove_perf_interval(&self, sample_period: i32) -> Result<()> {
         let input = RemovePerfIntervalRequestType {sample_period, };
         let path = format!("/PerformanceManager/{moId}/RemovePerfInterval", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Restores a set of performance counters to the default level of data
@@ -347,7 +365,7 @@ impl PerformanceManager {
     pub async fn reset_counter_level_mapping(&self, counters: &[i32]) -> Result<()> {
         let input = ResetCounterLevelMappingRequestType {counters, };
         let path = format!("/PerformanceManager/{moId}/ResetCounterLevelMapping", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Changes the level of data collection for a set of performance counters.
@@ -437,7 +455,7 @@ impl PerformanceManager {
     pub async fn update_counter_level_mapping(&self, counter_level_map: &[crate::types::structs::PerformanceManagerCounterLevelMapping]) -> Result<()> {
         let input = UpdateCounterLevelMappingRequestType {counter_level_map, };
         let path = format!("/PerformanceManager/{moId}/UpdateCounterLevelMapping", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Modifies VirtualCenter Server's built-in *historical intervals*, within certain limits.
@@ -514,7 +532,7 @@ impl PerformanceManager {
     pub async fn update_perf_interval(&self, interval: &crate::types::structs::PerfInterval) -> Result<()> {
         let input = UpdatePerfIntervalRequestType {interval, };
         let path = format!("/PerformanceManager/{moId}/UpdatePerfInterval", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// The static description strings.
@@ -523,7 +541,9 @@ impl PerformanceManager {
     pub async fn description(&self) -> Result<crate::types::structs::PerformanceDescription> {
         let path = format!("/PerformanceManager/{moId}/description", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::PerformanceDescription = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// A list of *intervals* configured on the
     /// system.
@@ -532,7 +552,11 @@ impl PerformanceManager {
     pub async fn historical_interval(&self) -> Result<Option<Vec<crate::types::structs::PerfInterval>>> {
         let path = format!("/PerformanceManager/{moId}/historicalInterval", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::PerfInterval>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// A list of all supported performance counters in the system.
     /// 
@@ -540,7 +564,11 @@ impl PerformanceManager {
     pub async fn perf_counter(&self) -> Result<Option<Vec<crate::types::structs::PerfCounterInfo>>> {
         let path = format!("/PerformanceManager/{moId}/perfCounter", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::PerfCounterInfo>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
 }
 #[derive(serde::Serialize)]

@@ -195,6 +195,11 @@ async fn monitor_vms(client: &Arc<Client>) -> Result<(), Error> {
 ```
 `CacheManager` provides `add_list_cache` method to monitor a predefined list of objects.
 
+## Client abstraction used by managed-object stubs
+
+Managed-object stubs in `vim_rs::mo` accept an `Arc<dyn VimClient>` internally. The concrete
+[`Client`](vim_rs/src/core/client.rs) implements this trait. Most callers can pass `client.clone()`.
+
 ## Working with Polymorphic Types
 The VIM API is conceptualized as a classic object-oriented API, much like the Java or C++ standard libraries. It has a root `Any` object from which all other objects descend. There is `DataObject` that is the root for all data structures. There is also `MethodFault` that is the root for all error types.
 

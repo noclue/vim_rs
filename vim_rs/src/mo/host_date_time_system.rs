@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// This managed object provides for NTP and date/time related
 /// configuration on a host.
 /// 
@@ -8,11 +8,11 @@ use crate::core::client::{Client, Result};
 /// *HostServiceSystem* object.
 #[derive(Clone)]
 pub struct HostDateTimeSystem {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl HostDateTimeSystem {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -30,7 +30,11 @@ impl HostDateTimeSystem {
     pub async fn query_available_time_zones(&self) -> Result<Option<Vec<crate::types::structs::HostDateTimeSystemTimeZone>>> {
         let path = format!("/HostDateTimeSystem/{moId}/QueryAvailableTimeZones", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::HostDateTimeSystemTimeZone>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Get the current DateTime on the host.
     /// 
@@ -42,7 +46,9 @@ impl HostDateTimeSystem {
     pub async fn query_date_time(&self) -> Result<String> {
         let path = format!("/HostDateTimeSystem/{moId}/QueryDateTime", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Refresh the DateTime related settings to pick up any changes that might
     /// have occurred.
@@ -70,7 +76,11 @@ impl HostDateTimeSystem {
     pub async fn test_time_service(&self) -> Result<Option<crate::types::structs::HostDateTimeSystemServiceTestResult>> {
         let path = format!("/HostDateTimeSystem/{moId}/TestTimeService", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::HostDateTimeSystemServiceTestResult>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Update the DateTime configuration of the host.
     /// 
@@ -87,7 +97,7 @@ impl HostDateTimeSystem {
     pub async fn update_date_time_config(&self, config: &crate::types::structs::HostDateTimeConfig) -> Result<()> {
         let input = UpdateDateTimeConfigRequestType {config, };
         let path = format!("/HostDateTimeSystem/{moId}/UpdateDateTimeConfig", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Update the date/time on the host.
@@ -108,7 +118,7 @@ impl HostDateTimeSystem {
     pub async fn update_date_time(&self, date_time: &str) -> Result<()> {
         let input = UpdateDateTimeRequestType {date_time, };
         let path = format!("/HostDateTimeSystem/{moId}/UpdateDateTime", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// The DateTime configuration of the host.
@@ -121,7 +131,9 @@ impl HostDateTimeSystem {
     pub async fn date_time_info(&self) -> Result<crate::types::structs::HostDateTimeInfo> {
         let path = format!("/HostDateTimeSystem/{moId}/dateTimeInfo", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::HostDateTimeInfo = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
 }
 #[derive(serde::Serialize)]

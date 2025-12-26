@@ -1,14 +1,14 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// This managed object provides interfaces for mapping VMkernel NIC to
 /// iSCSI Host Bus Adapter.
 #[derive(Clone)]
 pub struct IscsiManager {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl IscsiManager {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -50,7 +50,7 @@ impl IscsiManager {
     pub async fn bind_vnic(&self, i_scsi_hba_name: &str, vnic_device: &str) -> Result<()> {
         let input = BindVnicRequestType {i_scsi_hba_name, vnic_device, };
         let path = format!("/IscsiManager/{moId}/BindVnic", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Query the list of Virtual NICs that are bound to a given iSCSI HBA.
@@ -76,8 +76,12 @@ impl IscsiManager {
     pub async fn query_bound_vnics(&self, i_scsi_hba_name: &str) -> Result<Option<Vec<crate::types::structs::IscsiPortInfo>>> {
         let input = QueryBoundVnicsRequestType {i_scsi_hba_name, };
         let path = format!("/IscsiManager/{moId}/QueryBoundVnics", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::IscsiPortInfo>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Query the candidate Virtual NICs and Physical NICs that can be used
     /// for Port-Binding.
@@ -109,8 +113,12 @@ impl IscsiManager {
     pub async fn query_candidate_nics(&self, i_scsi_hba_name: &str) -> Result<Option<Vec<crate::types::structs::IscsiPortInfo>>> {
         let input = QueryCandidateNicsRequestType {i_scsi_hba_name, };
         let path = format!("/IscsiManager/{moId}/QueryCandidateNics", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::IscsiPortInfo>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Query the dependency table for a migration operation of a given Physical
     /// NIC.
@@ -130,8 +138,10 @@ impl IscsiManager {
     pub async fn query_migration_dependencies(&self, pnic_device: &[String]) -> Result<crate::types::structs::IscsiMigrationDependency> {
         let input = QueryMigrationDependenciesRequestType {pnic_device, };
         let path = format!("/IscsiManager/{moId}/QueryMigrationDependencies", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::IscsiMigrationDependency = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Query if Physical NIC device is used for iSCSI.
     /// 
@@ -157,8 +167,10 @@ impl IscsiManager {
     pub async fn query_pnic_status(&self, pnic_device: &str) -> Result<crate::types::structs::IscsiStatus> {
         let input = QueryPnicStatusRequestType {pnic_device, };
         let path = format!("/IscsiManager/{moId}/QueryPnicStatus", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::IscsiStatus = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Query the status of Virtual NIC association with the iSCSI.
     /// 
@@ -190,8 +202,10 @@ impl IscsiManager {
     pub async fn query_vnic_status(&self, vnic_device: &str) -> Result<crate::types::structs::IscsiStatus> {
         let input = QueryVnicStatusRequestType {vnic_device, };
         let path = format!("/IscsiManager/{moId}/QueryVnicStatus", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::IscsiStatus = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Unbind Virtual NIC binding from an iSCSI adapter.
     /// 
@@ -227,7 +241,7 @@ impl IscsiManager {
     pub async fn unbind_vnic(&self, i_scsi_hba_name: &str, vnic_device: &str, force: bool) -> Result<()> {
         let input = UnbindVnicRequestType {i_scsi_hba_name, vnic_device, force, };
         let path = format!("/IscsiManager/{moId}/UnbindVnic", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
 }

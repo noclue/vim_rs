@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// Represents a set of physical resources: a single host,
 /// a subset of a host's resources, or resources spanning multiple hosts.
 /// 
@@ -101,11 +101,11 @@ use crate::core::client::{Client, Result};
 /// on the resource pool's parent pool and any virtual machines that are reassigned.
 #[derive(Clone)]
 pub struct ResourcePool {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl ResourcePool {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -152,8 +152,10 @@ impl ResourcePool {
     pub async fn create_resource_pool(&self, name: &str, spec: &crate::types::structs::ResourceConfigSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateResourcePoolRequestType {name, spec, };
         let path = format!("/ResourcePool/{moId}/CreateResourcePool", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Creates a new vApp container.
     /// 
@@ -212,8 +214,10 @@ impl ResourcePool {
     pub async fn create_v_app(&self, name: &str, res_spec: &crate::types::structs::ResourceConfigSpec, config_spec: &crate::types::structs::VAppConfigSpec, vm_folder: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateVAppRequestType {name, res_spec, config_spec, vm_folder, };
         let path = format!("/ResourcePool/{moId}/CreateVApp", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Creates a new virtual machine in a vApp container.
     /// 
@@ -285,8 +289,10 @@ impl ResourcePool {
     pub async fn create_child_vm_task(&self, config: &crate::types::structs::VirtualMachineConfigSpec, host: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateChildVmRequestType {config, host, };
         let path = format!("/ResourcePool/{moId}/CreateChildVM_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Destroys this object, deleting its contents and removing it from its parent
     /// folder (if any).
@@ -312,7 +318,9 @@ impl ResourcePool {
     pub async fn destroy_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/ResourcePool/{moId}/Destroy_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Removes all child resource pools recursively.
     /// 
@@ -432,8 +440,10 @@ impl ResourcePool {
     pub async fn import_v_app(&self, spec: &dyn crate::types::traits::ImportSpecTrait, folder: Option<&crate::types::structs::ManagedObjectReference>, host: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ImportVAppRequestType {spec, folder, host, };
         let path = format!("/ResourcePool/{moId}/ImportVApp", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Moves a set of resource pools, vApps or virtual machines into this pool.
     /// 
@@ -487,7 +497,7 @@ impl ResourcePool {
     pub async fn move_into_resource_pool(&self, list: &[crate::types::structs::ManagedObjectReference]) -> Result<()> {
         let input = MoveIntoResourcePoolRequestType {list, };
         let path = format!("/ResourcePool/{moId}/MoveIntoResourcePool", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Deprecated as of vSphere API 6.5.
@@ -504,7 +514,9 @@ impl ResourcePool {
     pub async fn query_resource_config_option(&self) -> Result<crate::types::structs::ResourceConfigOption> {
         let path = format!("/ResourcePool/{moId}/QueryResourceConfigOption", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ResourceConfigOption = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Refreshes the resource usage data that is available in
     /// *ResourcePoolRuntimeInfo*.
@@ -597,8 +609,10 @@ impl ResourcePool {
     pub async fn register_child_vm_task(&self, path: &str, name: Option<&str>, host: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RegisterChildVmRequestType {path, name, host, };
         let path = format!("/ResourcePool/{moId}/RegisterChildVM_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Reload the entity state.
     /// 
@@ -650,8 +664,10 @@ impl ResourcePool {
     pub async fn rename_task(&self, new_name: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RenameRequestType {new_name, };
         let path = format!("/ResourcePool/{moId}/Rename_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Assigns a value to a custom field.
     /// 
@@ -670,7 +686,7 @@ impl ResourcePool {
     pub async fn set_custom_value(&self, key: &str, value: &str) -> Result<()> {
         let input = SetCustomValueRequestType {key, value, };
         let path = format!("/ResourcePool/{moId}/setCustomValue", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Changes resource configuration of a set of children of this resource pool.
@@ -709,7 +725,7 @@ impl ResourcePool {
     pub async fn update_child_resource_configuration(&self, spec: &[crate::types::structs::ResourceConfigSpec]) -> Result<()> {
         let input = UpdateChildResourceConfigurationRequestType {spec, };
         let path = format!("/ResourcePool/{moId}/UpdateChildResourceConfiguration", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Updates the configuration of the resource pool.
@@ -750,7 +766,7 @@ impl ResourcePool {
     pub async fn update_config(&self, name: Option<&str>, config: Option<&crate::types::structs::ResourceConfigSpec>) -> Result<()> {
         let input = UpdateConfigRequestType {name, config, };
         let path = format!("/ResourcePool/{moId}/UpdateConfig", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Whether alarm actions are enabled for this entity.
@@ -761,7 +777,11 @@ impl ResourcePool {
     pub async fn alarm_actions_enabled(&self) -> Result<Option<bool>> {
         let path = format!("/ResourcePool/{moId}/alarmActionsEnabled", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<bool>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// List of custom field definitions that are valid for the object's type.
     /// 
@@ -771,7 +791,11 @@ impl ResourcePool {
     pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
         let path = format!("/ResourcePool/{moId}/availableField", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::CustomFieldDef>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// The resource configuration of all direct children (VirtualMachine and
     /// ResourcePool) of this resource group.
@@ -782,13 +806,19 @@ impl ResourcePool {
     pub async fn child_configuration(&self) -> Result<Option<Vec<crate::types::structs::ResourceConfigSpec>>> {
         let path = format!("/ResourcePool/{moId}/childConfiguration", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ResourceConfigSpec>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Configuration of this resource pool.
     pub async fn config(&self) -> Result<crate::types::structs::ResourceConfigSpec> {
         let path = format!("/ResourcePool/{moId}/config", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ResourceConfigSpec = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Current configuration issues that have been detected for this entity.
     /// 
@@ -800,7 +830,11 @@ impl ResourcePool {
     pub async fn config_issue(&self) -> Result<Option<Vec<crate::types::structs::Event>>> {
         let path = format!("/ResourcePool/{moId}/configIssue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::Event>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// The configStatus indicates whether or not the system has detected a configuration
     /// issue involving this entity.
@@ -829,7 +863,9 @@ impl ResourcePool {
     pub async fn config_status(&self) -> Result<crate::types::enums::ManagedEntityStatusEnum> {
         let path = format!("/ResourcePool/{moId}/configStatus", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::enums::ManagedEntityStatusEnum = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Custom field values.
     /// 
@@ -837,7 +873,11 @@ impl ResourcePool {
     pub async fn custom_value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/ResourcePool/{moId}/customValue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// A set of alarm states for alarms that apply to this managed entity.
     /// 
@@ -852,7 +892,11 @@ impl ResourcePool {
     pub async fn declared_alarm_state(&self) -> Result<Option<Vec<crate::types::structs::AlarmState>>> {
         let path = format!("/ResourcePool/{moId}/declaredAlarmState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::AlarmState>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// List of operations that are disabled, given the current runtime
     /// state of the entity.
@@ -926,7 +970,11 @@ impl ResourcePool {
     pub async fn disabled_method(&self) -> Result<Option<Vec<String>>> {
         let path = format!("/ResourcePool/{moId}/disabledMethod", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<String>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Access rights the current session has to this entity.
     /// 
@@ -934,7 +982,11 @@ impl ResourcePool {
     pub async fn effective_role(&self) -> Result<Option<Vec<i32>>> {
         let path = format!("/ResourcePool/{moId}/effectiveRole", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<i32>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Name of this entity, unique relative to its parent.
     /// 
@@ -948,7 +1000,9 @@ impl ResourcePool {
     pub async fn name(&self) -> Result<String> {
         let path = format!("/ResourcePool/{moId}/name", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// The namespace with which the ResourcePool is associated.
     /// 
@@ -961,7 +1015,11 @@ impl ResourcePool {
     pub async fn namespace(&self) -> Result<Option<String>> {
         let path = format!("/ResourcePool/{moId}/namespace", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<String>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// General health of this managed entity.
     /// 
@@ -986,7 +1044,9 @@ impl ResourcePool {
     pub async fn overall_status(&self) -> Result<crate::types::enums::ManagedEntityStatusEnum> {
         let path = format!("/ResourcePool/{moId}/overallStatus", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::enums::ManagedEntityStatusEnum = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// The ComputeResource to which this set of one or more nested resource pools
     /// belong.
@@ -999,7 +1059,9 @@ impl ResourcePool {
     pub async fn owner(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/ResourcePool/{moId}/owner", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Parent of this entity.
     /// 
@@ -1015,13 +1077,21 @@ impl ResourcePool {
     pub async fn parent(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let path = format!("/ResourcePool/{moId}/parent", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::ManagedObjectReference>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// List of permissions defined for this entity.
     pub async fn permission(&self) -> Result<Option<Vec<crate::types::structs::Permission>>> {
         let path = format!("/ResourcePool/{moId}/permission", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::Permission>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// The set of recent tasks operating on this managed entity.
     /// 
@@ -1051,7 +1121,11 @@ impl ResourcePool {
     pub async fn recent_task(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/ResourcePool/{moId}/recentTask", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// The set of child resource pools.
     /// 
@@ -1063,7 +1137,11 @@ impl ResourcePool {
     pub async fn resource_pool(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/ResourcePool/{moId}/resourcePool", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Runtime information about a resource pool.
     /// 
@@ -1081,7 +1159,9 @@ impl ResourcePool {
     pub async fn runtime(&self) -> Result<crate::types::structs::ResourcePoolRuntimeInfo> {
         let path = format!("/ResourcePool/{moId}/runtime", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ResourcePoolRuntimeInfo = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Basic information about a resource pool.
     /// 
@@ -1095,7 +1175,9 @@ impl ResourcePool {
     pub async fn summary(&self) -> Result<Box<dyn crate::types::traits::ResourcePoolSummaryTrait>> {
         let path = format!("/ResourcePool/{moId}/summary", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: Box<dyn crate::types::traits::ResourcePoolSummaryTrait> = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// The set of tags associated with this managed entity.
     /// 
@@ -1105,7 +1187,11 @@ impl ResourcePool {
     pub async fn tag(&self) -> Result<Option<Vec<crate::types::structs::Tag>>> {
         let path = format!("/ResourcePool/{moId}/tag", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::Tag>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// A set of alarm states for alarms triggered by this entity
     /// or by its descendants.
@@ -1124,7 +1210,11 @@ impl ResourcePool {
     pub async fn triggered_alarm_state(&self) -> Result<Option<Vec<crate::types::structs::AlarmState>>> {
         let path = format!("/ResourcePool/{moId}/triggeredAlarmState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::AlarmState>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// List of custom field values.
     /// 
@@ -1136,7 +1226,11 @@ impl ResourcePool {
     pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/ResourcePool/{moId}/value", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// The set of virtual machines associated with this resource pool.
     /// 
@@ -1148,7 +1242,11 @@ impl ResourcePool {
     pub async fn vm(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/ResourcePool/{moId}/vm", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
 }
 #[derive(serde::Serialize)]

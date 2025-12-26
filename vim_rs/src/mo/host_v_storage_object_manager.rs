@@ -1,13 +1,13 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// Interface to manage virtual storage object on an ESXi host.
 #[derive(Clone)]
 pub struct HostVStorageObjectManager {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl HostVStorageObjectManager {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -62,8 +62,10 @@ impl HostVStorageObjectManager {
     pub async fn host_v_storage_object_revert_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, snapshot_id: &crate::types::structs::Id) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = HostVStorageObjectRevertRequestType {id, datastore, snapshot_id, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostVStorageObjectRevert_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Clear control flags on VStorageObject.
     /// 
@@ -103,7 +105,7 @@ impl HostVStorageObjectManager {
     pub async fn host_clear_v_storage_object_control_flags(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, control_flags: Option<&[String]>) -> Result<()> {
         let input = HostClearVStorageObjectControlFlagsRequestType {id, datastore, control_flags, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostClearVStorageObjectControlFlags", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Clone a virtual storage object.
@@ -145,8 +147,10 @@ impl HostVStorageObjectManager {
     pub async fn host_clone_v_storage_object_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, spec: &crate::types::structs::VslmCloneSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = HostCloneVStorageObjectRequestType {id, datastore, spec, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostCloneVStorageObject_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Create a virtual disk, which is a storage object with
     /// *disk*
@@ -182,8 +186,10 @@ impl HostVStorageObjectManager {
     pub async fn host_create_disk_task(&self, spec: &crate::types::structs::VslmCreateSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = HostCreateDiskRequestType {spec, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostCreateDisk_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Creates a new Disk from given snapshot of a VStorageObject.
     /// 
@@ -244,8 +250,10 @@ impl HostVStorageObjectManager {
     pub async fn host_v_storage_object_create_disk_from_snapshot_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, snapshot_id: &crate::types::structs::Id, name: &str, profile: Option<&[Box<dyn crate::types::traits::VirtualMachineProfileSpecTrait>]>, crypto: Option<&dyn crate::types::traits::CryptoSpecTrait>, path: Option<&str>, provisioning_type: Option<&str>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = HostVStorageObjectCreateDiskFromSnapshotRequestType {id, datastore, snapshot_id, name, profile, crypto, path, provisioning_type, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostVStorageObjectCreateDiskFromSnapshot_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Creates a snapshot of a given VStorageObject.
     /// 
@@ -283,8 +291,10 @@ impl HostVStorageObjectManager {
     pub async fn host_v_storage_object_create_snapshot_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, description: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = HostVStorageObjectCreateSnapshotRequestType {id, datastore, description, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostVStorageObjectCreateSnapshot_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Creates a snapshot of a given VStorageObject.
     /// 
@@ -326,8 +336,10 @@ impl HostVStorageObjectManager {
     pub async fn v_storage_object_create_snapshot_ex_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, description: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VStorageObjectCreateSnapshotExRequestType {id, datastore, description, };
         let path = format!("/HostVStorageObjectManager/{moId}/VStorageObjectCreateSnapshotEx_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deletes a given snapshot of a VStorageObject.
     /// 
@@ -365,8 +377,10 @@ impl HostVStorageObjectManager {
     pub async fn host_v_storage_object_delete_snapshot_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, snapshot_id: &crate::types::structs::Id) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = HostVStorageObjectDeleteSnapshotRequestType {id, datastore, snapshot_id, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostVStorageObjectDeleteSnapshot_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deletes a given snapshot of a VStorageObject.
     /// 
@@ -408,8 +422,10 @@ impl HostVStorageObjectManager {
     pub async fn v_storage_object_delete_snapshot_ex_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, snapshot_id: &crate::types::structs::Id) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VStorageObjectDeleteSnapshotExRequestType {id, datastore, snapshot_id, };
         let path = format!("/HostVStorageObjectManager/{moId}/VStorageObjectDeleteSnapshotEx_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deletes a given snapshot of a VStorageObject.
     /// 
@@ -449,8 +465,10 @@ impl HostVStorageObjectManager {
     pub async fn v_storage_object_delete_snapshot_ex_2_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, snapshot_id: &crate::types::structs::Id) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VStorageObjectDeleteSnapshotEx2RequestType {id, datastore, snapshot_id, };
         let path = format!("/HostVStorageObjectManager/{moId}/VStorageObjectDeleteSnapshotEx2_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Delete a virtual storage object and its assoicated backings.
     /// 
@@ -495,8 +513,10 @@ impl HostVStorageObjectManager {
     pub async fn host_delete_v_storage_object_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = HostDeleteVStorageObjectRequestType {id, datastore, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostDeleteVStorageObject_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Delete a virtual storage object and its assoicated backings.
     /// 
@@ -540,8 +560,10 @@ impl HostVStorageObjectManager {
     pub async fn host_delete_v_storage_object_ex_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = HostDeleteVStorageObjectExRequestType {id, datastore, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostDeleteVStorageObjectEx_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Expand the capacity of a virtual disk, which is a storage object with
     /// *disk*, to the new
@@ -601,8 +623,10 @@ impl HostVStorageObjectManager {
     pub async fn host_extend_disk_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, new_capacity_in_mb: i64) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = HostExtendDiskRequestType {id, datastore, new_capacity_in_mb, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostExtendDisk_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Expand the capacity of a virtual disk, which is a storage object with
     /// *disk*, to the new
@@ -661,8 +685,10 @@ impl HostVStorageObjectManager {
     pub async fn v_storage_object_extend_disk_ex_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, new_capacity_in_mb: i64) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VStorageObjectExtendDiskExRequestType {id, datastore, new_capacity_in_mb, };
         let path = format!("/HostVStorageObjectManager/{moId}/VStorageObjectExtendDiskEx_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Inflate a sparse or thin-provisioned virtual disk up to the full size.
     /// 
@@ -713,8 +739,10 @@ impl HostVStorageObjectManager {
     pub async fn host_inflate_disk_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = HostInflateDiskRequestType {id, datastore, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostInflateDisk_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// List all virtual storage objects located on a datastore.
     /// 
@@ -743,8 +771,12 @@ impl HostVStorageObjectManager {
     pub async fn host_list_v_storage_object(&self, datastore: &crate::types::structs::ManagedObjectReference) -> Result<Option<Vec<crate::types::structs::Id>>> {
         let input = HostListVStorageObjectRequestType {datastore, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostListVStorageObject", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::Id>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Get the virtual disk UUID.
     /// 
@@ -788,8 +820,10 @@ impl HostVStorageObjectManager {
     pub async fn host_query_virtual_disk_uuid(&self, name: &str) -> Result<String> {
         let input = HostQueryVirtualDiskUuidRequestType {name, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostQueryVirtualDiskUuid", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Reconcile the datastore inventory info of virtual storage objects.
     /// 
@@ -823,8 +857,10 @@ impl HostVStorageObjectManager {
     pub async fn host_reconcile_datastore_inventory_task(&self, datastore: &crate::types::structs::ManagedObjectReference, deep_cleansing: Option<bool>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = HostReconcileDatastoreInventoryRequestType {datastore, deep_cleansing, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostReconcileDatastoreInventory_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Promote a virtual disk to a First Class Disk.
     /// 
@@ -864,8 +900,10 @@ impl HostVStorageObjectManager {
     pub async fn host_register_disk(&self, path: &str, name: Option<&str>, modify_control_flags: Option<bool>) -> Result<crate::types::structs::VStorageObject> {
         let input = HostRegisterDiskRequestType {path, name, modify_control_flags, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostRegisterDisk", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::VStorageObject = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Relocate a virtual storage object.
     /// 
@@ -909,8 +947,10 @@ impl HostVStorageObjectManager {
     pub async fn host_relocate_v_storage_object_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, spec: &crate::types::structs::VslmRelocateSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = HostRelocateVStorageObjectRequestType {id, datastore, spec, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostRelocateVStorageObject_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Rename a virtual storage object.
     /// 
@@ -946,7 +986,7 @@ impl HostVStorageObjectManager {
     pub async fn host_rename_v_storage_object(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, name: &str) -> Result<()> {
         let input = HostRenameVStorageObjectRequestType {id, datastore, name, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostRenameVStorageObject", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Rename a virtual storage object.
@@ -986,8 +1026,10 @@ impl HostVStorageObjectManager {
     pub async fn rename_v_storage_object_ex(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, name: &str) -> Result<crate::types::structs::VslmVClockInfo> {
         let input = RenameVStorageObjectExRequestType {id, datastore, name, };
         let path = format!("/HostVStorageObjectManager/{moId}/RenameVStorageObjectEx", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::VslmVClockInfo = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Retrieves snapshot information of a given VStorageObject.
     /// 
@@ -1018,8 +1060,10 @@ impl HostVStorageObjectManager {
     pub async fn host_v_storage_object_retrieve_snapshot_info(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::VStorageObjectSnapshotInfo> {
         let input = HostVStorageObjectRetrieveSnapshotInfoRequestType {id, datastore, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostVStorageObjectRetrieveSnapshotInfo", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::VStorageObjectSnapshotInfo = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Retrieve virtual storage infrastructure object SBPM policy on given
     /// datastore.
@@ -1052,8 +1096,12 @@ impl HostVStorageObjectManager {
     pub async fn host_retrieve_v_storage_infrastructure_object_policy(&self, datastore: &crate::types::structs::ManagedObjectReference) -> Result<Option<Vec<crate::types::structs::VslmInfrastructureObjectPolicy>>> {
         let input = HostRetrieveVStorageInfrastructureObjectPolicyRequestType {datastore, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostRetrieveVStorageInfrastructureObjectPolicy", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VslmInfrastructureObjectPolicy>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Retrieve a virtual storage object.
     /// 
@@ -1097,8 +1145,10 @@ impl HostVStorageObjectManager {
     pub async fn host_retrieve_v_storage_object(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, disk_info_flags: Option<&[String]>) -> Result<crate::types::structs::VStorageObject> {
         let input = HostRetrieveVStorageObjectRequestType {id, datastore, disk_info_flags, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostRetrieveVStorageObject", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::VStorageObject = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Retrieve metadata KV pairs from a virtual storage object.
     /// 
@@ -1139,8 +1189,12 @@ impl HostVStorageObjectManager {
     pub async fn host_retrieve_v_storage_object_metadata(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, snapshot_id: Option<&crate::types::structs::Id>, prefix: Option<&str>) -> Result<Option<Vec<crate::types::structs::KeyValue>>> {
         let input = HostRetrieveVStorageObjectMetadataRequestType {id, datastore, snapshot_id, prefix, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostRetrieveVStorageObjectMetadata", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::KeyValue>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Retrieve the metadata value by key from a virtual storage object.
     /// 
@@ -1183,8 +1237,10 @@ impl HostVStorageObjectManager {
     pub async fn host_retrieve_v_storage_object_metadata_value(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, snapshot_id: Option<&crate::types::structs::Id>, key: &str) -> Result<String> {
         let input = HostRetrieveVStorageObjectMetadataValueRequestType {id, datastore, snapshot_id, key, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostRetrieveVStorageObjectMetadataValue", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Retrieve a virtual storage object state.
     /// 
@@ -1220,8 +1276,10 @@ impl HostVStorageObjectManager {
     pub async fn host_retrieve_v_storage_object_state(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::VStorageObjectStateInfo> {
         let input = HostRetrieveVStorageObjectStateRequestType {id, datastore, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostRetrieveVStorageObjectState", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::VStorageObjectStateInfo = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Reverts to a given snapshot of a VStorageObject.
     /// 
@@ -1276,8 +1334,10 @@ impl HostVStorageObjectManager {
     pub async fn revert_v_storage_object_ex_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, snapshot_id: &crate::types::structs::Id) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RevertVStorageObjectExRequestType {id, datastore, snapshot_id, };
         let path = format!("/HostVStorageObjectManager/{moId}/RevertVStorageObjectEx_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Schedules reconcile of the datastore inventory info of virtual storage
     /// objects.
@@ -1313,7 +1373,7 @@ impl HostVStorageObjectManager {
     pub async fn host_schedule_reconcile_datastore_inventory(&self, datastore: &crate::types::structs::ManagedObjectReference, deep_cleansing: Option<bool>) -> Result<()> {
         let input = HostScheduleReconcileDatastoreInventoryRequestType {datastore, deep_cleansing, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostScheduleReconcileDatastoreInventory", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Set control flags on VStorageObject.
@@ -1354,7 +1414,7 @@ impl HostVStorageObjectManager {
     pub async fn host_set_v_storage_object_control_flags(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, control_flags: Option<&[String]>) -> Result<()> {
         let input = HostSetVStorageObjectControlFlagsRequestType {id, datastore, control_flags, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostSetVStorageObjectControlFlags", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Set the virtual disk Uuid.
@@ -1403,8 +1463,10 @@ impl HostVStorageObjectManager {
     pub async fn host_set_virtual_disk_uuid_task(&self, name: &str, uuid: Option<&str>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = HostSetVirtualDiskUuidRequestType {name, uuid, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostSetVirtualDiskUuid_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Update metadata KV pairs to a virtual storage object.
     /// 
@@ -1453,8 +1515,10 @@ impl HostVStorageObjectManager {
     pub async fn host_update_v_storage_object_metadata_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, metadata: Option<&[crate::types::structs::KeyValue]>, delete_keys: Option<&[String]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = HostUpdateVStorageObjectMetadataRequestType {id, datastore, metadata, delete_keys, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostUpdateVStorageObjectMetadata_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Update metadata KV pairs to a virtual storage object.
     /// 
@@ -1502,8 +1566,10 @@ impl HostVStorageObjectManager {
     pub async fn host_update_v_storage_object_metadata_ex_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, metadata: Option<&[crate::types::structs::KeyValue]>, delete_keys: Option<&[String]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = HostUpdateVStorageObjectMetadataExRequestType {id, datastore, metadata, delete_keys, };
         let path = format!("/HostVStorageObjectManager/{moId}/HostUpdateVStorageObjectMetadataEx_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
 }
 #[derive(serde::Serialize)]

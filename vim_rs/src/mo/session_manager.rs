@@ -1,15 +1,15 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// This managed object type includes methods for logging on and
 /// logging off clients, determining which clients are currently
 /// logged on, and forcing clients to log off.
 #[derive(Clone)]
 pub struct SessionManager {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl SessionManager {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -42,7 +42,9 @@ impl SessionManager {
     pub async fn acquire_clone_ticket(&self) -> Result<String> {
         let path = format!("/SessionManager/{moId}/AcquireCloneTicket", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Creates and returns a one-time credential that may be used to make the
     /// specified request.
@@ -75,8 +77,10 @@ impl SessionManager {
     pub async fn acquire_generic_service_ticket(&self, spec: &dyn crate::types::traits::SessionManagerServiceRequestSpecTrait) -> Result<crate::types::structs::SessionManagerGenericServiceTicket> {
         let input = AcquireGenericServiceTicketRequestType {spec, };
         let path = format!("/SessionManager/{moId}/AcquireGenericServiceTicket", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::SessionManagerGenericServiceTicket = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Acquires a one-time ticket for mutual authentication between a server and client.
     /// 
@@ -120,8 +124,10 @@ impl SessionManager {
     pub async fn acquire_local_ticket(&self, user_name: &str) -> Result<crate::types::structs::SessionManagerLocalTicket> {
         let input = AcquireLocalTicketRequestType {user_name, };
         let path = format!("/SessionManager/{moId}/AcquireLocalTicket", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::SessionManagerLocalTicket = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Clone the session specified by the clone ticket and associate it with
     /// the current connection.
@@ -151,8 +157,10 @@ impl SessionManager {
     pub async fn clone_session(&self, clone_ticket: &str) -> Result<crate::types::structs::UserSession> {
         let input = CloneSessionRequestType {clone_ticket, };
         let path = format!("/SessionManager/{moId}/CloneSession", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::UserSession = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Converts current session to impersonate the specified user.
     /// 
@@ -187,8 +195,10 @@ impl SessionManager {
     pub async fn impersonate_user(&self, user_name: &str, locale: Option<&str>) -> Result<crate::types::structs::UserSession> {
         let input = ImpersonateUserRequestType {user_name, locale, };
         let path = format!("/SessionManager/{moId}/ImpersonateUser", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::UserSession = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Log on to the server.
     /// 
@@ -235,8 +245,10 @@ impl SessionManager {
     pub async fn login(&self, user_name: &str, password: &str, locale: Option<&str>) -> Result<crate::types::structs::UserSession> {
         let input = LoginRequestType {user_name, password, locale, };
         let path = format!("/SessionManager/{moId}/Login", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::UserSession = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deprecated as of vSphere API 5.1 for VirtualCenter login use SSO style
     /// *SessionManager.LoginByToken*.
@@ -300,8 +312,10 @@ impl SessionManager {
     pub async fn login_by_sspi(&self, base_64_token: &str, locale: Option<&str>) -> Result<crate::types::structs::UserSession> {
         let input = LoginBySspiRequestType {base_64_token, locale, };
         let path = format!("/SessionManager/{moId}/LoginBySSPI", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::UserSession = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Log on to the server through token representing principal identity.
     /// 
@@ -356,8 +370,10 @@ impl SessionManager {
     pub async fn login_by_token(&self, locale: Option<&str>) -> Result<crate::types::structs::UserSession> {
         let input = LoginByTokenRequestType {locale, };
         let path = format!("/SessionManager/{moId}/LoginByToken", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::UserSession = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deprecated as of vSphere API 4.0, use SSO style of login instead
     /// *SessionManager.LoginByToken*.
@@ -403,8 +419,10 @@ impl SessionManager {
     pub async fn login_extension(&self, extension_key: &str, base_64_signed_credentials: &str, locale: Option<&str>) -> Result<crate::types::structs::UserSession> {
         let input = LoginExtensionRequestType {extension_key, base_64_signed_credentials, locale, };
         let path = format!("/SessionManager/{moId}/LoginExtension", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::UserSession = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deprecated as of vSphere API 6.0, use SSO style of login instead
     /// *SessionManager.LoginByToken*.
@@ -451,8 +469,10 @@ impl SessionManager {
     pub async fn login_extension_by_certificate(&self, extension_key: &str, locale: Option<&str>) -> Result<crate::types::structs::UserSession> {
         let input = LoginExtensionByCertificateRequestType {extension_key, locale, };
         let path = format!("/SessionManager/{moId}/LoginExtensionByCertificate", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::UserSession = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deprecated as of vSphere API 6.0, use SSO style of login instead
     /// *SessionManager.LoginByToken*.
@@ -502,8 +522,10 @@ impl SessionManager {
     pub async fn login_extension_by_subject_name(&self, extension_key: &str, locale: Option<&str>) -> Result<crate::types::structs::UserSession> {
         let input = LoginExtensionBySubjectNameRequestType {extension_key, locale, };
         let path = format!("/SessionManager/{moId}/LoginExtensionBySubjectName", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::UserSession = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Log out and terminate the current session.
     /// 
@@ -531,8 +553,10 @@ impl SessionManager {
     pub async fn session_is_active(&self, session_id: &str, user_name: &str) -> Result<bool> {
         let input = SessionIsActiveRequestType {session_id, user_name, };
         let path = format!("/SessionManager/{moId}/SessionIsActive", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: bool = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Sets the session locale.
     /// 
@@ -557,7 +581,7 @@ impl SessionManager {
     pub async fn set_locale(&self, locale: &str) -> Result<()> {
         let input = SetLocaleRequestType {locale, };
         let path = format!("/SessionManager/{moId}/SetLocale", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Log off and terminate the provided list of sessions.
@@ -584,7 +608,7 @@ impl SessionManager {
     pub async fn terminate_session(&self, session_id: &[String]) -> Result<()> {
         let input = TerminateSessionRequestType {session_id, };
         let path = format!("/SessionManager/{moId}/TerminateSession", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Updates the system global message.
@@ -602,7 +626,7 @@ impl SessionManager {
     pub async fn update_service_message(&self, message: &str) -> Result<()> {
         let input = UpdateServiceMessageRequestType {message, };
         let path = format!("/SessionManager/{moId}/UpdateServiceMessage", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// This property contains information about the client's current session.
@@ -613,7 +637,11 @@ impl SessionManager {
     pub async fn current_session(&self) -> Result<Option<crate::types::structs::UserSession>> {
         let path = format!("/SessionManager/{moId}/currentSession", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::UserSession>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// This is the default server locale.
     /// 
@@ -621,7 +649,9 @@ impl SessionManager {
     pub async fn default_locale(&self) -> Result<String> {
         let path = format!("/SessionManager/{moId}/defaultLocale", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// The system global message from the server.
     /// 
@@ -629,7 +659,11 @@ impl SessionManager {
     pub async fn message(&self) -> Result<Option<String>> {
         let path = format!("/SessionManager/{moId}/message", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<String>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Provides the list of locales for which the server has localized messages.
     /// 
@@ -637,7 +671,11 @@ impl SessionManager {
     pub async fn message_locale_list(&self) -> Result<Option<Vec<String>>> {
         let path = format!("/SessionManager/{moId}/messageLocaleList", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<String>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// The list of currently active sessions.
     /// 
@@ -645,7 +683,11 @@ impl SessionManager {
     pub async fn session_list(&self) -> Result<Option<Vec<crate::types::structs::UserSession>>> {
         let path = format!("/SessionManager/{moId}/sessionList", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::UserSession>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Provides the list of locales that the server supports.
     /// 
@@ -658,7 +700,11 @@ impl SessionManager {
     pub async fn supported_locale_list(&self) -> Result<Option<Vec<String>>> {
         let path = format!("/SessionManager/{moId}/supportedLocaleList", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<String>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
 }
 #[derive(serde::Serialize)]

@@ -1,13 +1,13 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// This managed object manages the PciPassthru state of the host.
 #[derive(Clone)]
 pub struct HostPciPassthruSystem {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl HostPciPassthruSystem {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -38,7 +38,7 @@ impl HostPciPassthruSystem {
     pub async fn set_custom_value(&self, key: &str, value: &str) -> Result<()> {
         let input = SetCustomValueRequestType {key, value, };
         let path = format!("/HostPciPassthruSystem/{moId}/setCustomValue", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Updates the PciPassthru configuration, this will
@@ -58,7 +58,7 @@ impl HostPciPassthruSystem {
     pub async fn update_passthru_config(&self, config: &[Box<dyn crate::types::traits::HostPciPassthruConfigTrait>]) -> Result<()> {
         let input = UpdatePassthruConfigRequestType {config, };
         let path = format!("/HostPciPassthruSystem/{moId}/UpdatePassthruConfig", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// List of custom field definitions that are valid for the object's type.
@@ -69,7 +69,11 @@ impl HostPciPassthruSystem {
     pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
         let path = format!("/HostPciPassthruSystem/{moId}/availableField", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::CustomFieldDef>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Array of PciPassthru information
     /// 
@@ -77,7 +81,9 @@ impl HostPciPassthruSystem {
     pub async fn pci_passthru_info(&self) -> Result<Vec<Box<dyn crate::types::traits::HostPciPassthruInfoTrait>>> {
         let path = format!("/HostPciPassthruSystem/{moId}/pciPassthruInfo", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: Vec<Box<dyn crate::types::traits::HostPciPassthruInfoTrait>> = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Array of Sriov Device Pool information
     /// 
@@ -85,7 +91,11 @@ impl HostPciPassthruSystem {
     pub async fn sriov_device_pool_info(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::HostSriovDevicePoolInfoTrait>>>> {
         let path = format!("/HostPciPassthruSystem/{moId}/sriovDevicePoolInfo", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::HostSriovDevicePoolInfoTrait>>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// List of custom field values.
     /// 
@@ -97,7 +107,11 @@ impl HostPciPassthruSystem {
     pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/HostPciPassthruSystem/{moId}/value", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
 }
 #[derive(serde::Serialize)]

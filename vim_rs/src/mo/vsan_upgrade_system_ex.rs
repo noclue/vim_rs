@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// It deprecates vim.VsanUpgradeSystem, to take care of vSAN
 /// upgrade process.
 /// 
@@ -17,11 +17,11 @@ use crate::core::client::{Client, Result};
 /// service at vCenter server side.
 #[derive(Clone)]
 pub struct VsanUpgradeSystemEx {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl VsanUpgradeSystemEx {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -112,8 +112,10 @@ impl VsanUpgradeSystemEx {
     pub async fn perform_vsan_upgrade_ex(&self, cluster: &crate::types::structs::ManagedObjectReference, perform_object_upgrade: Option<bool>, downgrade_format: Option<bool>, allow_reduced_redundancy: Option<bool>, exclude_hosts: Option<&[crate::types::structs::ManagedObjectReference]>, spec: Option<&crate::types::structs::VsanDiskFormatConversionSpec>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = PerformVsanUpgradeExRequestType {cluster, perform_object_upgrade, downgrade_format, allow_reduced_redundancy, exclude_hosts, spec, };
         let path = format!("/vsan/VsanUpgradeSystemEx/{moId}/PerformVsanUpgradeEx", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Perform an upgrade preflight check on a cluster asynchronously.
     /// 
@@ -152,8 +154,10 @@ impl VsanUpgradeSystemEx {
     pub async fn perform_vsan_upgrade_preflight_async_check_task(&self, cluster: &crate::types::structs::ManagedObjectReference, downgrade_format: Option<bool>, spec: Option<&crate::types::structs::VsanDiskFormatConversionSpec>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = PerformVsanUpgradePreflightAsyncCheckRequestType {cluster, downgrade_format, spec, };
         let path = format!("/vsan/VsanUpgradeSystemEx/{moId}/PerformVsanUpgradePreflightAsyncCheck_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Perform an upgrade preflight check on a cluster.
     /// 
@@ -207,8 +211,10 @@ impl VsanUpgradeSystemEx {
     pub async fn perform_vsan_upgrade_preflight_check_ex(&self, cluster: &crate::types::structs::ManagedObjectReference, downgrade_format: Option<bool>, spec: Option<&crate::types::structs::VsanDiskFormatConversionSpec>) -> Result<crate::types::structs::VsanDiskFormatConversionCheckResult> {
         let input = PerformVsanUpgradePreflightCheckExRequestType {cluster, downgrade_format, spec, };
         let path = format!("/vsan/VsanUpgradeSystemEx/{moId}/PerformVsanUpgradePreflightCheckEx", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::VsanDiskFormatConversionCheckResult = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Retrieve the latest status of a running, or the previously completed,
     /// upgrade or precheck process.
@@ -231,8 +237,10 @@ impl VsanUpgradeSystemEx {
     pub async fn vsan_query_upgrade_status_ex(&self, cluster: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::VsanUpgradeStatusEx> {
         let input = VsanQueryUpgradeStatusExRequestType {cluster, };
         let path = format!("/vsan/VsanUpgradeSystemEx/{moId}/VsanQueryUpgradeStatusEx", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::VsanUpgradeStatusEx = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Process a scan and retrieve the highest vSAN disk format
     /// version that given cluster supports, the version is up to version
@@ -258,8 +266,10 @@ impl VsanUpgradeSystemEx {
     pub async fn retrieve_supported_vsan_format_version(&self, cluster: &crate::types::structs::ManagedObjectReference) -> Result<i32> {
         let input = RetrieveSupportedVsanFormatVersionRequestType {cluster, };
         let path = format!("/vsan/VsanUpgradeSystemEx/{moId}/RetrieveSupportedVsanFormatVersion", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: i32 = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
 }
 #[derive(serde::Serialize)]

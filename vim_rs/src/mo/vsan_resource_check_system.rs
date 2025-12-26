@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// This managed object type provides interfaces to perform resource check
 /// and query for various operations, e.g.
 /// 
@@ -10,11 +10,11 @@ use crate::core::client::{Client, Result};
 /// of 'vsan-resource-check-system' on ESXi host.
 #[derive(Clone)]
 pub struct VsanResourceCheckSystem {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl VsanResourceCheckSystem {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -24,7 +24,9 @@ impl VsanResourceCheckSystem {
     pub async fn vsan_host_cancel_resource_check(&self) -> Result<bool> {
         let path = format!("/vsan/VsanResourceCheckSystem/{moId}/VsanHostCancelResourceCheck", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: bool = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Retrieve the status of the latest resource check.
     /// 
@@ -72,8 +74,10 @@ impl VsanResourceCheckSystem {
     pub async fn vsan_get_resource_check_status(&self, resource_check_spec: Option<&crate::types::structs::VsanResourceCheckSpec>, cluster: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::VsanResourceCheckStatus> {
         let input = VsanGetResourceCheckStatusRequestType {resource_check_spec, cluster, };
         let path = format!("/vsan/VsanResourceCheckSystem/{moId}/VsanGetResourceCheckStatus", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::VsanResourceCheckStatus = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Perform a resource check for given spec.
     /// 
@@ -135,8 +139,10 @@ impl VsanResourceCheckSystem {
     pub async fn vsan_perform_resource_check(&self, resource_check_spec: &crate::types::structs::VsanResourceCheckSpec, cluster: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanPerformResourceCheckRequestType {resource_check_spec, cluster, };
         let path = format!("/vsan/VsanResourceCheckSystem/{moId}/VsanPerformResourceCheck", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// ***Required privileges:*** System.Read
     ///
@@ -155,8 +161,10 @@ impl VsanResourceCheckSystem {
     pub async fn vsan_host_perform_resource_check(&self, resource_check_spec: &crate::types::structs::VsanResourceCheckSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanHostPerformResourceCheckRequestType {resource_check_spec, };
         let path = format!("/vsan/VsanResourceCheckSystem/{moId}/VsanHostPerformResourceCheck", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
 }
 #[derive(serde::Serialize)]

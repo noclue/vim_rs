@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// This managed object creates and removes datastores from the host.
 /// 
 /// To a host, a datastore is a storage abstraction that is backed by one
@@ -44,11 +44,11 @@ use crate::core::client::{Client, Result};
 /// See also *Datastore*.
 #[derive(Clone)]
 pub struct HostDatastoreSystem {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl HostDatastoreSystem {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -97,7 +97,7 @@ impl HostDatastoreSystem {
     pub async fn configure_datastore_principal(&self, user_name: &str, password: Option<&str>) -> Result<()> {
         let input = ConfigureDatastorePrincipalRequestType {user_name, password, };
         let path = format!("/HostDatastoreSystem/{moId}/ConfigureDatastorePrincipal", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Creates a new local datastore.
@@ -129,8 +129,10 @@ impl HostDatastoreSystem {
     pub async fn create_local_datastore(&self, name: &str, path: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateLocalDatastoreRequestType {name, path, };
         let path = format!("/HostDatastoreSystem/{moId}/CreateLocalDatastore", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Creates a new network-attached storage datastore.
     /// 
@@ -165,8 +167,10 @@ impl HostDatastoreSystem {
     pub async fn create_nas_datastore(&self, spec: &crate::types::structs::HostNasVolumeSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateNasDatastoreRequestType {spec, };
         let path = format!("/HostDatastoreSystem/{moId}/CreateNasDatastore", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Creates a new VMFS datastore.
     /// 
@@ -197,8 +201,10 @@ impl HostDatastoreSystem {
     pub async fn create_vmfs_datastore(&self, spec: &crate::types::structs::VmfsDatastoreCreateSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateVmfsDatastoreRequestType {spec, };
         let path = format!("/HostDatastoreSystem/{moId}/CreateVmfsDatastore", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Create a Virtual-Volume based datastore
     /// 
@@ -227,8 +233,10 @@ impl HostDatastoreSystem {
     pub async fn create_vvol_datastore(&self, spec: &crate::types::structs::HostDatastoreSystemVvolDatastoreSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateVvolDatastoreRequestType {spec, };
         let path = format!("/HostDatastoreSystem/{moId}/CreateVvolDatastore", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Disable the clustered vmdk support on specified datastore.
     /// 
@@ -253,7 +261,7 @@ impl HostDatastoreSystem {
     pub async fn disable_clustered_vmdk_support(&self, datastore: &crate::types::structs::ManagedObjectReference) -> Result<()> {
         let input = DisableClusteredVmdkSupportRequestType {datastore, };
         let path = format!("/HostDatastoreSystem/{moId}/DisableClusteredVmdkSupport", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Enable the clustered vmdk support on specified datastore.
@@ -276,7 +284,7 @@ impl HostDatastoreSystem {
     pub async fn enable_clustered_vmdk_support(&self, datastore: &crate::types::structs::ManagedObjectReference) -> Result<()> {
         let input = EnableClusteredVmdkSupportRequestType {datastore, };
         let path = format!("/HostDatastoreSystem/{moId}/EnableClusteredVmdkSupport", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Increases the capacity of an existing VMFS datastore by expanding
@@ -311,8 +319,10 @@ impl HostDatastoreSystem {
     pub async fn expand_vmfs_datastore(&self, datastore: &crate::types::structs::ManagedObjectReference, spec: &crate::types::structs::VmfsDatastoreExpandSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ExpandVmfsDatastoreRequestType {datastore, spec, };
         let path = format!("/HostDatastoreSystem/{moId}/ExpandVmfsDatastore", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Increases the capacity of an existing VMFS datastore by adding new
     /// extents to the datastore.
@@ -346,8 +356,10 @@ impl HostDatastoreSystem {
     pub async fn extend_vmfs_datastore(&self, datastore: &crate::types::structs::ManagedObjectReference, spec: &crate::types::structs::VmfsDatastoreExtendSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ExtendVmfsDatastoreRequestType {datastore, spec, };
         let path = format!("/HostDatastoreSystem/{moId}/ExtendVmfsDatastore", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Query to list disks that can be used to contain VMFS datastore extents.
     /// 
@@ -392,8 +404,12 @@ impl HostDatastoreSystem {
     pub async fn query_available_disks_for_vmfs(&self, datastore: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Option<Vec<crate::types::structs::HostScsiDisk>>> {
         let input = QueryAvailableDisksForVmfsRequestType {datastore, };
         let path = format!("/HostDatastoreSystem/{moId}/QueryAvailableDisksForVmfs", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::HostScsiDisk>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Query max queue depth for a specified NFS datastore.
     /// 
@@ -414,8 +430,10 @@ impl HostDatastoreSystem {
     pub async fn query_max_queue_depth(&self, datastore: &crate::types::structs::ManagedObjectReference) -> Result<i64> {
         let input = QueryMaxQueueDepthRequestType {datastore, };
         let path = format!("/HostDatastoreSystem/{moId}/QueryMaxQueueDepth", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: i64 = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Get the list of unbound VMFS volumes.
     /// 
@@ -432,7 +450,11 @@ impl HostDatastoreSystem {
     pub async fn query_unresolved_vmfs_volumes(&self) -> Result<Option<Vec<crate::types::structs::HostUnresolvedVmfsVolume>>> {
         let path = format!("/HostDatastoreSystem/{moId}/QueryUnresolvedVmfsVolumes", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::HostUnresolvedVmfsVolume>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Queries options for creating a new VMFS datastore for a disk.
     /// 
@@ -469,8 +491,12 @@ impl HostDatastoreSystem {
     pub async fn query_vmfs_datastore_create_options(&self, device_path: &str, vmfs_major_version: Option<i32>) -> Result<Option<Vec<crate::types::structs::VmfsDatastoreOption>>> {
         let input = QueryVmfsDatastoreCreateOptionsRequestType {device_path, vmfs_major_version, };
         let path = format!("/HostDatastoreSystem/{moId}/QueryVmfsDatastoreCreateOptions", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VmfsDatastoreOption>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Queries for options for increasing the capacity of an existing VMFS
     /// datastore by expanding (increasing the size of) an existing extent of
@@ -500,8 +526,12 @@ impl HostDatastoreSystem {
     pub async fn query_vmfs_datastore_expand_options(&self, datastore: &crate::types::structs::ManagedObjectReference) -> Result<Option<Vec<crate::types::structs::VmfsDatastoreOption>>> {
         let input = QueryVmfsDatastoreExpandOptionsRequestType {datastore, };
         let path = format!("/HostDatastoreSystem/{moId}/QueryVmfsDatastoreExpandOptions", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VmfsDatastoreOption>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Queries for options for increasing the capacity of an existing VMFS
     /// datastore by adding new extents using space from the specified disk.
@@ -545,8 +575,12 @@ impl HostDatastoreSystem {
     pub async fn query_vmfs_datastore_extend_options(&self, datastore: &crate::types::structs::ManagedObjectReference, device_path: &str, suppress_expand_candidates: Option<bool>) -> Result<Option<Vec<crate::types::structs::VmfsDatastoreOption>>> {
         let input = QueryVmfsDatastoreExtendOptionsRequestType {datastore, device_path, suppress_expand_candidates, };
         let path = format!("/HostDatastoreSystem/{moId}/QueryVmfsDatastoreExtendOptions", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VmfsDatastoreOption>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Removes a datastore from a host.
     /// 
@@ -574,7 +608,7 @@ impl HostDatastoreSystem {
     pub async fn remove_datastore(&self, datastore: &crate::types::structs::ManagedObjectReference) -> Result<()> {
         let input = RemoveDatastoreRequestType {datastore, };
         let path = format!("/HostDatastoreSystem/{moId}/RemoveDatastore", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Remove one or more datastores.
@@ -603,8 +637,10 @@ impl HostDatastoreSystem {
     pub async fn remove_datastore_ex_task(&self, datastore: &[crate::types::structs::ManagedObjectReference]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RemoveDatastoreExRequestType {datastore, };
         let path = format!("/HostDatastoreSystem/{moId}/RemoveDatastoreEx_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Resignature an unbound VMFS volume.
     /// 
@@ -659,8 +695,10 @@ impl HostDatastoreSystem {
     pub async fn resignature_unresolved_vmfs_volume_task(&self, resolution_spec: &crate::types::structs::HostUnresolvedVmfsResignatureSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ResignatureUnresolvedVmfsVolumeRequestType {resolution_spec, };
         let path = format!("/HostDatastoreSystem/{moId}/ResignatureUnresolvedVmfsVolume_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Set max queue depth for a specified NFS datastore.
     /// 
@@ -686,7 +724,7 @@ impl HostDatastoreSystem {
     pub async fn set_max_queue_depth(&self, datastore: &crate::types::structs::ManagedObjectReference, max_qdepth: i64) -> Result<()> {
         let input = SetMaxQueueDepthRequestType {datastore, max_qdepth, };
         let path = format!("/HostDatastoreSystem/{moId}/SetMaxQueueDepth", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Choose the
@@ -724,14 +762,16 @@ impl HostDatastoreSystem {
     pub async fn update_local_swap_datastore(&self, datastore: Option<&crate::types::structs::ManagedObjectReference>) -> Result<()> {
         let input = UpdateLocalSwapDatastoreRequestType {datastore, };
         let path = format!("/HostDatastoreSystem/{moId}/UpdateLocalSwapDatastore", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Capability vector indicating the available product features.
     pub async fn capabilities(&self) -> Result<crate::types::structs::HostDatastoreSystemCapabilities> {
         let path = format!("/HostDatastoreSystem/{moId}/capabilities", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::HostDatastoreSystemCapabilities = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// List of datastores on this host.
     /// 
@@ -743,7 +783,11 @@ impl HostDatastoreSystem {
     pub async fn datastore(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/HostDatastoreSystem/{moId}/datastore", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
 }
 #[derive(serde::Serialize)]

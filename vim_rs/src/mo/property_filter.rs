@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// The *PropertyFilter* managed object type defines a filter
 /// that controls the properties for which a *PropertyCollector* detects
 /// incremental changes.
@@ -10,11 +10,11 @@ use crate::core::client::{Client, Result};
 /// destroyed.
 #[derive(Clone)]
 pub struct PropertyFilter {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl PropertyFilter {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -38,12 +38,16 @@ impl PropertyFilter {
     pub async fn partial_updates(&self) -> Result<bool> {
         let path = format!("/PropertyFilter/{moId}/partialUpdates", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: bool = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Specifications for this filter.
     pub async fn spec(&self) -> Result<crate::types::structs::PropertyFilterSpec> {
         let path = format!("/PropertyFilter/{moId}/spec", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::PropertyFilterSpec = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
 }

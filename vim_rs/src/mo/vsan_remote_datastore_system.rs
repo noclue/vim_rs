@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// The managed object provides support for vSAN remote datastore management
 /// operations.
 /// 
@@ -7,11 +7,11 @@ use crate::core::client::{Client, Result};
 /// through vSAN service at vCenter server side.
 #[derive(Clone)]
 pub struct VsanRemoteDatastoreSystem {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl VsanRemoteDatastoreSystem {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -50,8 +50,10 @@ impl VsanRemoteDatastoreSystem {
     pub async fn vsan_create_datastore_source(&self, datastore_source: &crate::types::structs::VsanHciMeshDatastoreSource) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanCreateDatastoreSourceRequestType {datastore_source, };
         let path = format!("/vsan/VsanRemoteDatastoreSystem/{moId}/VsanCreateDatastoreSource", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Destroy an existing Datastore Source configuration.
     /// 
@@ -86,8 +88,10 @@ impl VsanRemoteDatastoreSystem {
     pub async fn vsan_destroy_datastore_source(&self, datastore_source: &crate::types::structs::VsanHciMeshDatastoreSource) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanDestroyDatastoreSourceRequestType {datastore_source, };
         let path = format!("/vsan/VsanRemoteDatastoreSystem/{moId}/VsanDestroyDatastoreSource", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Checks mount compatibility of a vSAN datastore with given vSAN cluster.
     /// 
@@ -121,8 +125,10 @@ impl VsanRemoteDatastoreSystem {
     pub async fn mount_precheck(&self, cluster: &crate::types::structs::ManagedObjectReference, datastore: &crate::types::structs::ManagedObjectReference, server_cluster_info: Option<&crate::types::structs::VcRemoteVsanServerClusterInfo>) -> Result<Box<dyn crate::types::traits::VsanMountPrecheckResultTrait>> {
         let input = MountPrecheckRequestType {cluster, datastore, server_cluster_info, };
         let path = format!("/vsan/VsanRemoteDatastoreSystem/{moId}/MountPrecheck", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: Box<dyn crate::types::traits::VsanMountPrecheckResultTrait> = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Run prechecks for a Datastore Source.
     /// 
@@ -156,8 +162,10 @@ impl VsanRemoteDatastoreSystem {
     pub async fn vsan_precheck_datastore_source(&self, datastore_source: &crate::types::structs::VsanHciMeshDatastoreSource, operation: Option<&str>) -> Result<crate::types::structs::VsanDatastoreSourcePrecheckResult> {
         let input = VsanPrecheckDatastoreSourceRequestType {datastore_source, operation, };
         let path = format!("/vsan/VsanRemoteDatastoreSystem/{moId}/VsanPrecheckDatastoreSource", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::VsanDatastoreSourcePrecheckResult = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Query Datastore Source information for specified remote vCenters.
     /// 
@@ -183,8 +191,12 @@ impl VsanRemoteDatastoreSystem {
     pub async fn vsan_query_datastore_source(&self, vc_hosts: Option<&[String]>) -> Result<Option<Vec<crate::types::structs::VsanHciMeshDatastoreSource>>> {
         let input = VsanQueryDatastoreSourceRequestType {vc_hosts, };
         let path = format!("/vsan/VsanRemoteDatastoreSystem/{moId}/VsanQueryDatastoreSource", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VsanHciMeshDatastoreSource>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// This method takes a list of VsanXvcQuerySpec, then returns a list of
     /// VsanXvcQueryResultSet.
@@ -227,8 +239,12 @@ impl VsanRemoteDatastoreSystem {
     pub async fn vsan_query_hci_mesh_datastores(&self, query_specs: Option<&[crate::types::structs::VsanXvcQuerySpec]>, extra_vc_infos: Option<&[Box<dyn crate::types::traits::VsanRemoteVcInfoTrait>]>) -> Result<Option<Vec<crate::types::structs::VsanXvcQueryResultSet>>> {
         let input = VsanQueryHciMeshDatastoresRequestType {query_specs, extra_vc_infos, };
         let path = format!("/vsan/VsanRemoteDatastoreSystem/{moId}/VsanQueryHciMeshDatastores", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VsanXvcQueryResultSet>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Checks mount compatibility of a cross VC vSAN datastore with given vSAN
     /// cluster.
@@ -259,8 +275,10 @@ impl VsanRemoteDatastoreSystem {
     pub async fn remote_vc_mount_precheck(&self, cluster: &crate::types::structs::ManagedObjectReference, xvc_datastore: &crate::types::structs::VsanXvcDatastoreInfo) -> Result<Box<dyn crate::types::traits::VsanMountPrecheckResultTrait>> {
         let input = RemoteVcMountPrecheckRequestType {cluster, xvc_datastore, };
         let path = format!("/vsan/VsanRemoteDatastoreSystem/{moId}/RemoteVcMountPrecheck", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: Box<dyn crate::types::traits::VsanMountPrecheckResultTrait> = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Update the configuration of an existing Datastore Source.
     /// 
@@ -297,8 +315,10 @@ impl VsanRemoteDatastoreSystem {
     pub async fn vsan_update_datastore_source(&self, datastore_source: &crate::types::structs::VsanHciMeshDatastoreSource) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanUpdateDatastoreSourceRequestType {datastore_source, };
         let path = format!("/vsan/VsanRemoteDatastoreSystem/{moId}/VsanUpdateDatastoreSource", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
 }
 #[derive(serde::Serialize)]

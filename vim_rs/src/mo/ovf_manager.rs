@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// Service interface to parse and generate OVF descriptors.
 /// 
 /// The purpose of this interface is to make it easier for callers to import VMs and
@@ -62,11 +62,11 @@ use crate::core::client::{Client, Result};
 /// Errors cause processing to abort by definition.
 #[derive(Clone)]
 pub struct OvfManager {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl OvfManager {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -126,8 +126,10 @@ impl OvfManager {
     pub async fn create_descriptor(&self, obj: &crate::types::structs::ManagedObjectReference, cdp: &crate::types::structs::OvfCreateDescriptorParams) -> Result<crate::types::structs::OvfCreateDescriptorResult> {
         let input = CreateDescriptorRequestType {obj, cdp, };
         let path = format!("/OvfManager/{moId}/CreateDescriptor", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::OvfCreateDescriptorResult = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Validate the OVF descriptor against the hardware supported by the
     /// host system.
@@ -180,8 +182,10 @@ impl OvfManager {
     pub async fn create_import_spec(&self, ovf_descriptor: &str, resource_pool: &crate::types::structs::ManagedObjectReference, datastore: &crate::types::structs::ManagedObjectReference, cisp: &dyn crate::types::traits::OvfCreateImportSpecParamsTrait) -> Result<crate::types::structs::OvfCreateImportSpecResult> {
         let input = CreateImportSpecRequestType {ovf_descriptor, resource_pool, datastore, cisp, };
         let path = format!("/OvfManager/{moId}/CreateImportSpec", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::OvfCreateImportSpecResult = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Parse the OVF descriptor and return as much information about it as possible
     /// without knowing the host on which it will be imported.
@@ -222,8 +226,10 @@ impl OvfManager {
     pub async fn parse_descriptor(&self, ovf_descriptor: &str, pdp: &crate::types::structs::OvfParseDescriptorParams) -> Result<crate::types::structs::OvfParseDescriptorResult> {
         let input = ParseDescriptorRequestType {ovf_descriptor, pdp, };
         let path = format!("/OvfManager/{moId}/ParseDescriptor", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::OvfParseDescriptorResult = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Validate that the given OVF can be imported on the host.
     /// 
@@ -264,8 +270,10 @@ impl OvfManager {
     pub async fn validate_host(&self, ovf_descriptor: &str, host: &crate::types::structs::ManagedObjectReference, vhp: &crate::types::structs::OvfValidateHostParams) -> Result<crate::types::structs::OvfValidateHostResult> {
         let input = ValidateHostRequestType {ovf_descriptor, host, vhp, };
         let path = format!("/OvfManager/{moId}/ValidateHost", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::OvfValidateHostResult = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Returns an array of *OvfOptionInfo* object that specifies what options the server
     /// support for exporting an OVF descriptor.
@@ -278,7 +286,11 @@ impl OvfManager {
     pub async fn ovf_export_option(&self) -> Result<Option<Vec<crate::types::structs::OvfOptionInfo>>> {
         let path = format!("/OvfManager/{moId}/ovfExportOption", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::OvfOptionInfo>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Returns an array of *OvfOptionInfo* object that specifies what options the server
     /// support for modifing/relaxing the OVF import process.
@@ -291,7 +303,11 @@ impl OvfManager {
     pub async fn ovf_import_option(&self) -> Result<Option<Vec<crate::types::structs::OvfOptionInfo>>> {
         let path = format!("/OvfManager/{moId}/ovfImportOption", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::OvfOptionInfo>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
 }
 #[derive(serde::Serialize)]

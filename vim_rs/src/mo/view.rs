@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// *View* is the base class for session-specific view objects.
 /// 
 /// A view is a mechanism that supports selection of objects on the server
@@ -22,11 +22,11 @@ use crate::core::client::{Client, Result};
 /// see the description of *ViewManager*.
 #[derive(Clone)]
 pub struct View {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl View {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),

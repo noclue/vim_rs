@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// This is the interface for managing the lifecycle of volumes that are consumed
 /// by containers or pods, in case of Kubernetes.
 /// 
@@ -38,11 +38,11 @@ use crate::core::client::{Client, Result};
 /// the **Required Privileges** section which is not used.
 #[derive(Clone)]
 pub struct CnsVolumeManager {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl CnsVolumeManager {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -117,8 +117,10 @@ impl CnsVolumeManager {
     pub async fn cns_attach_volume(&self, attach_specs: &[crate::types::structs::CnsVolumeAttachDetachSpec]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CnsAttachVolumeRequestType {attach_specs, };
         let path = format!("/vsan/CnsVolumeManager/{moId}/CnsAttachVolume", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Modify the ACL configurations for existing volumes.
     /// 
@@ -163,8 +165,10 @@ impl CnsVolumeManager {
     pub async fn cns_configure_volume_ac_ls(&self, acl_config_specs: &[crate::types::structs::CnsVolumeAclConfigureSpec]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CnsConfigureVolumeAcLsRequestType {acl_config_specs, };
         let path = format!("/vsan/CnsVolumeManager/{moId}/CnsConfigureVolumeACLs", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Creates container volume with given specifications.
     /// 
@@ -228,8 +232,10 @@ impl CnsVolumeManager {
     pub async fn cns_create_volume(&self, create_specs: &[crate::types::structs::CnsVolumeCreateSpec]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CnsCreateVolumeRequestType {create_specs, };
         let path = format!("/vsan/CnsVolumeManager/{moId}/CnsCreateVolume", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Create snapshots of given volumes
     ///   
@@ -276,8 +282,10 @@ impl CnsVolumeManager {
     pub async fn cns_create_snapshots(&self, snapshot_specs: &[crate::types::structs::CnsSnapshotCreateSpec]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CnsCreateSnapshotsRequestType {snapshot_specs, };
         let path = format!("/vsan/CnsVolumeManager/{moId}/CnsCreateSnapshots", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deletes given container volumes.
     /// 
@@ -344,8 +352,10 @@ impl CnsVolumeManager {
     pub async fn cns_delete_volume(&self, volume_ids: &[crate::types::structs::CnsVolumeId], delete_disk: bool) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CnsDeleteVolumeRequestType {volume_ids, delete_disk, };
         let path = format!("/vsan/CnsVolumeManager/{moId}/CnsDeleteVolume", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Delete snapshots with given volumeIds and snapshotIds.
     /// 
@@ -386,8 +396,10 @@ impl CnsVolumeManager {
     pub async fn cns_delete_snapshots(&self, snapshot_delete_specs: &[crate::types::structs::CnsSnapshotDeleteSpec]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CnsDeleteSnapshotsRequestType {snapshot_delete_specs, };
         let path = format!("/vsan/CnsVolumeManager/{moId}/CnsDeleteSnapshots", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Detaches volumes(block volumes only) and makes those volumes unavailable
     /// for consumption.
@@ -444,8 +456,10 @@ impl CnsVolumeManager {
     pub async fn cns_detach_volume(&self, detach_specs: &[crate::types::structs::CnsVolumeAttachDetachSpec]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CnsDetachVolumeRequestType {detach_specs, };
         let path = format!("/vsan/CnsVolumeManager/{moId}/CnsDetachVolume", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Extend the capacity for the container volumes.
     /// 
@@ -494,8 +508,10 @@ impl CnsVolumeManager {
     pub async fn cns_extend_volume(&self, extend_specs: &[crate::types::structs::CnsVolumeExtendSpec]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CnsExtendVolumeRequestType {extend_specs, };
         let path = format!("/vsan/CnsVolumeManager/{moId}/CnsExtendVolume", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Returns container volumes matching criteria set in the filter.
     /// 
@@ -540,8 +556,10 @@ impl CnsVolumeManager {
     pub async fn cns_query_volume(&self, filter: &dyn crate::types::traits::CnsQueryFilterTrait, selection: Option<&crate::types::structs::CnsQuerySelection>) -> Result<crate::types::structs::CnsQueryResult> {
         let input = CnsQueryVolumeRequestType {filter, selection, };
         let path = format!("/vsan/CnsVolumeManager/{moId}/CnsQueryVolume", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::CnsQueryResult = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Returns container volumes matching criteria set in the filter.
     /// 
@@ -589,8 +607,10 @@ impl CnsVolumeManager {
     pub async fn cns_query_async(&self, filter: &dyn crate::types::traits::CnsQueryFilterTrait, selection: Option<&crate::types::structs::CnsQuerySelection>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CnsQueryAsyncRequestType {filter, selection, };
         let path = format!("/vsan/CnsVolumeManager/{moId}/CnsQueryAsync", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Reconfigures the volume with the storage policy.
     /// 
@@ -629,8 +649,10 @@ impl CnsVolumeManager {
     pub async fn cns_reconfig_volume_policy(&self, volume_policy_reconfig_specs: Option<&[crate::types::structs::CnsVolumePolicyReconfigSpec]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CnsReconfigVolumePolicyRequestType {volume_policy_reconfig_specs, };
         let path = format!("/vsan/CnsVolumeManager/{moId}/CnsReconfigVolumePolicy", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Relocate container volume from the current source datastore to another
     /// destination datastore.
@@ -699,8 +721,10 @@ impl CnsVolumeManager {
     pub async fn cns_relocate_volume(&self, relocate_specs: &[Box<dyn crate::types::traits::CnsVolumeRelocateSpecTrait>]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CnsRelocateVolumeRequestType {relocate_specs, };
         let path = format!("/vsan/CnsVolumeManager/{moId}/CnsRelocateVolume", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Updates volume metadata, namely labels and container cluster information for the
     /// container volumes.
@@ -753,8 +777,10 @@ impl CnsVolumeManager {
     pub async fn cns_update_volume_metadata(&self, update_specs: &[crate::types::structs::CnsVolumeMetadataUpdateSpec]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CnsUpdateVolumeMetadataRequestType {update_specs, };
         let path = format!("/vsan/CnsVolumeManager/{moId}/CnsUpdateVolumeMetadata", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
 }
 #[derive(serde::Serialize)]

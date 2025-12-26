@@ -1,13 +1,13 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// Singleton Managed Object used to manage cryptographic keys.
 #[derive(Clone)]
 pub struct CryptoManagerKmip {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl CryptoManagerKmip {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -33,8 +33,10 @@ impl CryptoManagerKmip {
     pub async fn is_kms_cluster_active(&self, cluster: Option<&crate::types::structs::KeyProviderId>) -> Result<bool> {
         let input = IsKmsClusterActiveRequestType {cluster, };
         let path = format!("/CryptoManagerKmip/{moId}/IsKmsClusterActive", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: bool = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Add an existing key.
     /// 
@@ -56,7 +58,7 @@ impl CryptoManagerKmip {
     pub async fn add_key(&self, key: &crate::types::structs::CryptoKeyPlain) -> Result<()> {
         let input = AddKeyRequestType {key, };
         let path = format!("/CryptoManagerKmip/{moId}/AddKey", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Add multiple existing keys.
@@ -78,8 +80,12 @@ impl CryptoManagerKmip {
     pub async fn add_keys(&self, keys: Option<&[crate::types::structs::CryptoKeyPlain]>) -> Result<Option<Vec<crate::types::structs::CryptoKeyResult>>> {
         let input = AddKeysRequestType {keys, };
         let path = format!("/CryptoManagerKmip/{moId}/AddKeys", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::CryptoKeyResult>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Generate a certificate signing request with its private key.
     /// 
@@ -109,8 +115,10 @@ impl CryptoManagerKmip {
     pub async fn generate_client_csr(&self, cluster: &crate::types::structs::KeyProviderId, request: Option<&crate::types::structs::CryptoManagerKmipCertSignRequest>) -> Result<String> {
         let input = GenerateClientCsrRequestType {cluster, request, };
         let path = format!("/CryptoManagerKmip/{moId}/GenerateClientCsr", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Generate new encryption key.
     /// 
@@ -140,8 +148,10 @@ impl CryptoManagerKmip {
     pub async fn generate_key(&self, key_provider: Option<&crate::types::structs::KeyProviderId>, spec: Option<&crate::types::structs::CryptoManagerKmipCustomAttributeSpec>, key_spec: Option<&crate::types::structs::CryptoManagerKmipGenerateKeySpec>) -> Result<crate::types::structs::CryptoKeyResult> {
         let input = GenerateKeyRequestType {key_provider, spec, key_spec, };
         let path = format!("/CryptoManagerKmip/{moId}/GenerateKey", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::CryptoKeyResult = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Generate a self-signed client certificate with its private key.
     /// 
@@ -172,8 +182,10 @@ impl CryptoManagerKmip {
     pub async fn generate_self_signed_client_cert(&self, cluster: &crate::types::structs::KeyProviderId, request: Option<&crate::types::structs::CryptoManagerKmipCertSignRequest>) -> Result<String> {
         let input = GenerateSelfSignedClientCertRequestType {cluster, request, };
         let path = format!("/CryptoManagerKmip/{moId}/GenerateSelfSignedClientCert", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Get the default KMS cluster of the specified managed entity.
     /// 
@@ -200,8 +212,12 @@ impl CryptoManagerKmip {
     pub async fn get_default_kms_cluster(&self, entity: Option<&crate::types::structs::ManagedObjectReference>, defaults_to_parent: Option<bool>) -> Result<Option<crate::types::structs::KeyProviderId>> {
         let input = GetDefaultKmsClusterRequestType {entity, defaults_to_parent, };
         let path = format!("/CryptoManagerKmip/{moId}/GetDefaultKmsCluster", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::KeyProviderId>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// List keys.
     /// 
@@ -223,8 +239,12 @@ impl CryptoManagerKmip {
     pub async fn list_keys(&self, limit: Option<i32>) -> Result<Option<Vec<crate::types::structs::CryptoKeyId>>> {
         let input = ListKeysRequestType {limit, };
         let path = format!("/CryptoManagerKmip/{moId}/ListKeys", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::CryptoKeyId>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// List the registered KMIP servers.
     /// 
@@ -241,8 +261,12 @@ impl CryptoManagerKmip {
     pub async fn list_kmip_servers(&self, limit: Option<i32>) -> Result<Option<Vec<crate::types::structs::KmipClusterInfo>>> {
         let input = ListKmipServersRequestType {limit, };
         let path = format!("/CryptoManagerKmip/{moId}/ListKmipServers", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::KmipClusterInfo>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// List the KMS clusters information.
     /// 
@@ -285,8 +309,12 @@ impl CryptoManagerKmip {
     pub async fn list_kms_clusters(&self, include_kms_servers: Option<bool>, management_type_filter: Option<i32>, status_filter: Option<i32>) -> Result<Option<Vec<crate::types::structs::KmipClusterInfo>>> {
         let input = ListKmsClustersRequestType {include_kms_servers, management_type_filter, status_filter, };
         let path = format!("/CryptoManagerKmip/{moId}/ListKmsClusters", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::KmipClusterInfo>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Set the default KMIP cluster.
     /// 
@@ -299,7 +327,7 @@ impl CryptoManagerKmip {
     pub async fn mark_default(&self, cluster_id: &crate::types::structs::KeyProviderId) -> Result<()> {
         let input = MarkDefaultRequestType {cluster_id, };
         let path = format!("/CryptoManagerKmip/{moId}/MarkDefault", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Check CryptoKey status, such as if VC can access the key, if the key is
@@ -328,8 +356,12 @@ impl CryptoManagerKmip {
     pub async fn query_crypto_key_status(&self, key_ids: Option<&[crate::types::structs::CryptoKeyId]>, check_key_bit_map: i32) -> Result<Option<Vec<crate::types::structs::CryptoManagerKmipCryptoKeyStatus>>> {
         let input = QueryCryptoKeyStatusRequestType {key_ids, check_key_bit_map, };
         let path = format!("/CryptoManagerKmip/{moId}/QueryCryptoKeyStatus", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::CryptoManagerKmipCryptoKeyStatus>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Register a KMIP server.
     /// 
@@ -346,7 +378,7 @@ impl CryptoManagerKmip {
     pub async fn register_kmip_server(&self, server: &crate::types::structs::KmipServerSpec) -> Result<()> {
         let input = RegisterKmipServerRequestType {server, };
         let path = format!("/CryptoManagerKmip/{moId}/RegisterKmipServer", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Register the specified KMS cluster to the CryptoManager.
@@ -366,7 +398,7 @@ impl CryptoManagerKmip {
     pub async fn register_kms_cluster(&self, cluster_id: &crate::types::structs::KeyProviderId, management_type: Option<&str>) -> Result<()> {
         let input = RegisterKmsClusterRequestType {cluster_id, management_type, };
         let path = format!("/CryptoManagerKmip/{moId}/RegisterKmsCluster", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Remove a key (only the UUID is needed to remove).
@@ -393,7 +425,7 @@ impl CryptoManagerKmip {
     pub async fn remove_key(&self, key: &crate::types::structs::CryptoKeyId, force: bool) -> Result<()> {
         let input = RemoveKeyRequestType {key, force, };
         let path = format!("/CryptoManagerKmip/{moId}/RemoveKey", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Remove multiple keys (only the UUID is needed to remove).
@@ -412,8 +444,12 @@ impl CryptoManagerKmip {
     pub async fn remove_keys(&self, keys: Option<&[crate::types::structs::CryptoKeyId]>, force: bool) -> Result<Option<Vec<crate::types::structs::CryptoKeyResult>>> {
         let input = RemoveKeysRequestType {keys, force, };
         let path = format!("/CryptoManagerKmip/{moId}/RemoveKeys", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::CryptoKeyResult>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Remove a KMIP server, even if in use.
     /// 
@@ -429,7 +465,7 @@ impl CryptoManagerKmip {
     pub async fn remove_kmip_server(&self, cluster_id: &crate::types::structs::KeyProviderId, server_name: &str) -> Result<()> {
         let input = RemoveKmipServerRequestType {cluster_id, server_name, };
         let path = format!("/CryptoManagerKmip/{moId}/RemoveKmipServer", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Get the client certificate of the KMIP cluster.
@@ -447,8 +483,10 @@ impl CryptoManagerKmip {
     pub async fn retrieve_client_cert(&self, cluster: &crate::types::structs::KeyProviderId) -> Result<String> {
         let input = RetrieveClientCertRequestType {cluster, };
         let path = format!("/CryptoManagerKmip/{moId}/RetrieveClientCert", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Get the generated client certificate signing request.
     /// 
@@ -468,8 +506,10 @@ impl CryptoManagerKmip {
     pub async fn retrieve_client_csr(&self, cluster: &crate::types::structs::KeyProviderId) -> Result<String> {
         let input = RetrieveClientCsrRequestType {cluster, };
         let path = format!("/CryptoManagerKmip/{moId}/RetrieveClientCsr", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Get the server certficate.
     /// 
@@ -493,8 +533,10 @@ impl CryptoManagerKmip {
     pub async fn retrieve_kmip_server_cert(&self, key_provider: &crate::types::structs::KeyProviderId, server: &crate::types::structs::KmipServerInfo) -> Result<crate::types::structs::CryptoManagerKmipServerCertInfo> {
         let input = RetrieveKmipServerCertRequestType {key_provider, server, };
         let path = format!("/CryptoManagerKmip/{moId}/RetrieveKmipServerCert", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::CryptoManagerKmipServerCertInfo = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Get the status of the KMIP servers.
     /// 
@@ -511,8 +553,10 @@ impl CryptoManagerKmip {
     pub async fn retrieve_kmip_servers_status_task(&self, clusters: Option<&[crate::types::structs::KmipClusterInfo]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RetrieveKmipServersStatusRequestType {clusters, };
         let path = format!("/CryptoManagerKmip/{moId}/RetrieveKmipServersStatus_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Get the generated self signed client certificate.
     /// 
@@ -532,8 +576,10 @@ impl CryptoManagerKmip {
     pub async fn retrieve_self_signed_client_cert(&self, cluster: &crate::types::structs::KeyProviderId) -> Result<String> {
         let input = RetrieveSelfSignedClientCertRequestType {cluster, };
         let path = format!("/CryptoManagerKmip/{moId}/RetrieveSelfSignedClientCert", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Set the default KMS cluster for the specified managed entity.
     /// 
@@ -556,7 +602,7 @@ impl CryptoManagerKmip {
     pub async fn set_default_kms_cluster(&self, entity: Option<&crate::types::structs::ManagedObjectReference>, cluster_id: Option<&crate::types::structs::KeyProviderId>) -> Result<()> {
         let input = SetDefaultKmsClusterRequestType {entity, cluster_id, };
         let path = format!("/CryptoManagerKmip/{moId}/SetDefaultKmsCluster", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Set crypto key's custom attributes.
@@ -579,8 +625,10 @@ impl CryptoManagerKmip {
     pub async fn set_key_custom_attributes(&self, key_id: &crate::types::structs::CryptoKeyId, spec: &crate::types::structs::CryptoManagerKmipCustomAttributeSpec) -> Result<crate::types::structs::CryptoKeyResult> {
         let input = SetKeyCustomAttributesRequestType {key_id, spec, };
         let path = format!("/CryptoManagerKmip/{moId}/SetKeyCustomAttributes", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::CryptoKeyResult = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Unregister the specified KMS cluster from the CryptoManager.
     /// 
@@ -593,7 +641,7 @@ impl CryptoManagerKmip {
     pub async fn unregister_kms_cluster(&self, cluster_id: &crate::types::structs::KeyProviderId) -> Result<()> {
         let input = UnregisterKmsClusterRequestType {cluster_id, };
         let path = format!("/CryptoManagerKmip/{moId}/UnregisterKmsCluster", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Update a KMIP server.
@@ -611,7 +659,7 @@ impl CryptoManagerKmip {
     pub async fn update_kmip_server(&self, server: &crate::types::structs::KmipServerSpec) -> Result<()> {
         let input = UpdateKmipServerRequestType {server, };
         let path = format!("/CryptoManagerKmip/{moId}/UpdateKmipServer", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Set KMS server signed certificate as KMIP client certificate for the KMS
@@ -636,7 +684,7 @@ impl CryptoManagerKmip {
     pub async fn update_kms_signed_csr_client_cert(&self, cluster: &crate::types::structs::KeyProviderId, certificate: &str) -> Result<()> {
         let input = UpdateKmsSignedCsrClientCertRequestType {cluster, certificate, };
         let path = format!("/CryptoManagerKmip/{moId}/UpdateKmsSignedCsrClientCert", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Set a self-signed certificate as KMIP client certificate for the KMS
@@ -661,7 +709,7 @@ impl CryptoManagerKmip {
     pub async fn update_self_signed_client_cert(&self, cluster: &crate::types::structs::KeyProviderId, certificate: &str) -> Result<()> {
         let input = UpdateSelfSignedClientCertRequestType {cluster, certificate, };
         let path = format!("/CryptoManagerKmip/{moId}/UpdateSelfSignedClientCert", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Set a client certificate with private key for the KMIP cluster.
@@ -684,7 +732,7 @@ impl CryptoManagerKmip {
     pub async fn upload_client_cert(&self, cluster: &crate::types::structs::KeyProviderId, certificate: &str, private_key: &str) -> Result<()> {
         let input = UploadClientCertRequestType {cluster, certificate, private_key, };
         let path = format!("/CryptoManagerKmip/{moId}/UploadClientCert", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Upload a server certficate.
@@ -701,20 +749,26 @@ impl CryptoManagerKmip {
     pub async fn upload_kmip_server_cert(&self, cluster: &crate::types::structs::KeyProviderId, certificate: &str) -> Result<()> {
         let input = UploadKmipServerCertRequestType {cluster, certificate, };
         let path = format!("/CryptoManagerKmip/{moId}/UploadKmipServerCert", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Indicate if the encryption feature is enabled.
     pub async fn enabled(&self) -> Result<bool> {
         let path = format!("/CryptoManagerKmip/{moId}/enabled", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: bool = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// A list of registered KMIP servers, grouped by clusters.
     pub async fn kmip_servers(&self) -> Result<Option<Vec<crate::types::structs::KmipClusterInfo>>> {
         let path = format!("/CryptoManagerKmip/{moId}/kmipServers", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::KmipClusterInfo>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
 }
 #[derive(serde::Serialize)]

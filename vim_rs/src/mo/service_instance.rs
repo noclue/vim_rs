@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// The *ServiceInstance* managed object is the singleton root object of the inventory
 /// on both vCenter servers and servers running on standalone host agents.
 /// 
@@ -57,11 +57,11 @@ use crate::core::client::{Client, Result};
 /// but most of the objects are limited to one instance:
 #[derive(Clone)]
 pub struct ServiceInstance {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl ServiceInstance {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -80,7 +80,9 @@ impl ServiceInstance {
     pub async fn current_time(&self) -> Result<String> {
         let path = format!("/ServiceInstance/{moId}/CurrentTime", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deprecated as of vSphere API 4.0, use
     /// *VirtualMachineProvisioningChecker.QueryVMotionCompatibilityEx_Task* instead.
@@ -121,8 +123,12 @@ impl ServiceInstance {
     pub async fn query_v_motion_compatibility(&self, vm: &crate::types::structs::ManagedObjectReference, host: &[crate::types::structs::ManagedObjectReference], compatibility: Option<&[String]>) -> Result<Option<Vec<crate::types::structs::HostVMotionCompatibility>>> {
         let input = QueryVMotionCompatibilityRequestType {vm, host, compatibility, };
         let path = format!("/ServiceInstance/{moId}/QueryVMotionCompatibility", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::HostVMotionCompatibility>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Retrieves the properties of the service instance.
     /// 
@@ -135,7 +141,9 @@ impl ServiceInstance {
     pub async fn retrieve_service_content(&self) -> Result<crate::types::structs::ServiceContent> {
         let path = format!("/ServiceInstance/{moId}/RetrieveServiceContent", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ServiceContent = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Component information for bundled products
     /// 
@@ -143,7 +151,11 @@ impl ServiceInstance {
     pub async fn retrieve_product_components(&self) -> Result<Option<Vec<crate::types::structs::ProductComponentInfo>>> {
         let path = format!("/ServiceInstance/{moId}/RetrieveProductComponents", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ProductComponentInfo>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Deprecated as of vSphere API 4.0, use *VirtualMachineProvisioningChecker*
     /// instead.
@@ -218,8 +230,12 @@ impl ServiceInstance {
     pub async fn validate_migration(&self, vm: &[crate::types::structs::ManagedObjectReference], state: Option<crate::types::enums::VirtualMachinePowerStateEnum>, test_type: Option<&[String]>, pool: Option<&crate::types::structs::ManagedObjectReference>, host: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Option<Vec<crate::types::structs::Event>>> {
         let input = ValidateMigrationRequestType {vm, state, test_type, pool, host, };
         let path = format!("/ServiceInstance/{moId}/ValidateMigration", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::Event>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// API-wide capabilities.
     /// 
@@ -227,7 +243,9 @@ impl ServiceInstance {
     pub async fn capability(&self) -> Result<crate::types::structs::Capability> {
         let path = format!("/ServiceInstance/{moId}/capability", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::Capability = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// The properties of the ServiceInstance managed object.
     /// 
@@ -246,7 +264,9 @@ impl ServiceInstance {
     pub async fn content(&self) -> Result<crate::types::structs::ServiceContent> {
         let path = format!("/ServiceInstance/{moId}/content", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ServiceContent = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Contains the time most recently obtained from the server.
     /// 
@@ -262,7 +282,9 @@ impl ServiceInstance {
     pub async fn server_clock(&self) -> Result<String> {
         let path = format!("/ServiceInstance/{moId}/serverClock", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
 }
 #[derive(serde::Serialize)]

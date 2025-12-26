@@ -1,12 +1,12 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 #[derive(Clone)]
 pub struct CryptoManagerHostKms {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl CryptoManagerHostKms {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -32,7 +32,7 @@ impl CryptoManagerHostKms {
     pub async fn add_key(&self, key: &crate::types::structs::CryptoKeyPlain) -> Result<()> {
         let input = AddKeyRequestType {key, };
         let path = format!("/CryptoManagerHostKMS/{moId}/AddKey", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Add multiple existing keys.
@@ -54,8 +54,12 @@ impl CryptoManagerHostKms {
     pub async fn add_keys(&self, keys: Option<&[crate::types::structs::CryptoKeyPlain]>) -> Result<Option<Vec<crate::types::structs::CryptoKeyResult>>> {
         let input = AddKeysRequestType {keys, };
         let path = format!("/CryptoManagerHostKMS/{moId}/AddKeys", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::CryptoKeyResult>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Change the key used for core dump encryption
     /// Note: *CryptoManagerHost.CryptoManagerHostEnable* must be called first
@@ -80,8 +84,10 @@ impl CryptoManagerHostKms {
     pub async fn change_key_task(&self, new_key: &crate::types::structs::CryptoKeyPlain) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ChangeKeyRequestType {new_key, };
         let path = format!("/CryptoManagerHostKMS/{moId}/ChangeKey_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Disable encryption on host, if host was in crypto safe mode, put it in
     /// pendingIncapable state and host will be crypto incapable after a reboot
@@ -121,7 +127,7 @@ impl CryptoManagerHostKms {
     pub async fn crypto_manager_host_enable(&self, initial_key: &crate::types::structs::CryptoKeyPlain) -> Result<()> {
         let input = CryptoManagerHostEnableRequestType {initial_key, };
         let path = format!("/CryptoManagerHostKMS/{moId}/CryptoManagerHostEnable", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Get the key status on the host.
@@ -141,8 +147,12 @@ impl CryptoManagerHostKms {
     pub async fn get_crypto_key_status(&self, keys: Option<&[crate::types::structs::CryptoKeyId]>) -> Result<Option<Vec<crate::types::structs::CryptoManagerHostKeyStatus>>> {
         let input = GetCryptoKeyStatusRequestType {keys, };
         let path = format!("/CryptoManagerHostKMS/{moId}/GetCryptoKeyStatus", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::CryptoManagerHostKeyStatus>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// List keys.
     /// 
@@ -164,8 +174,12 @@ impl CryptoManagerHostKms {
     pub async fn list_keys(&self, limit: Option<i32>) -> Result<Option<Vec<crate::types::structs::CryptoKeyId>>> {
         let input = ListKeysRequestType {limit, };
         let path = format!("/CryptoManagerHostKMS/{moId}/ListKeys", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::CryptoKeyId>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Prime the host to receive sensitive information and put the host
     /// in *prepared* state
@@ -205,7 +219,7 @@ impl CryptoManagerHostKms {
     pub async fn remove_key(&self, key: &crate::types::structs::CryptoKeyId, force: bool) -> Result<()> {
         let input = RemoveKeyRequestType {key, force, };
         let path = format!("/CryptoManagerHostKMS/{moId}/RemoveKey", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Remove multiple keys (only the UUID is needed to remove).
@@ -224,14 +238,20 @@ impl CryptoManagerHostKms {
     pub async fn remove_keys(&self, keys: Option<&[crate::types::structs::CryptoKeyId]>, force: bool) -> Result<Option<Vec<crate::types::structs::CryptoKeyResult>>> {
         let input = RemoveKeysRequestType {keys, force, };
         let path = format!("/CryptoManagerHostKMS/{moId}/RemoveKeys", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::CryptoKeyResult>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Indicate if the encryption feature is enabled.
     pub async fn enabled(&self) -> Result<bool> {
         let path = format!("/CryptoManagerHostKMS/{moId}/enabled", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: bool = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
 }
 #[derive(serde::Serialize)]

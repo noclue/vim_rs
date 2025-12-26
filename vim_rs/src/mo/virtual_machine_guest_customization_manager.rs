@@ -1,14 +1,14 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// GuestCustomizationManager is a singleton managed object that provides APIs
 /// for guest customization of a running VM.
 #[derive(Clone)]
 pub struct VirtualMachineGuestCustomizationManager {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl VirtualMachineGuestCustomizationManager {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -67,8 +67,10 @@ impl VirtualMachineGuestCustomizationManager {
     pub async fn abort_customization_task(&self, vm: &crate::types::structs::ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = AbortCustomizationRequestType {vm, auth, };
         let path = format!("/VirtualMachineGuestCustomizationManager/{moId}/AbortCustomization_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Customize a running virtual machine.
     /// 
@@ -125,8 +127,10 @@ impl VirtualMachineGuestCustomizationManager {
     pub async fn customize_guest_task(&self, vm: &crate::types::structs::ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait, spec: &crate::types::structs::CustomizationSpec, config_params: Option<&[Box<dyn crate::types::traits::OptionValueTrait>]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CustomizeGuestRequestType {vm, auth, spec, config_params, };
         let path = format!("/VirtualMachineGuestCustomizationManager/{moId}/CustomizeGuest_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Start the network service in the guest, e.g.
     /// 
@@ -176,8 +180,10 @@ impl VirtualMachineGuestCustomizationManager {
     pub async fn start_guest_network_task(&self, vm: &crate::types::structs::ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = StartGuestNetworkRequestType {vm, auth, };
         let path = format!("/VirtualMachineGuestCustomizationManager/{moId}/StartGuestNetwork_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
 }
 #[derive(serde::Serialize)]

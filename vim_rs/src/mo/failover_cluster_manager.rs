@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// FailoverClusterManager provides operations to manage a vCenter
 /// High Availability Cluster (VCHA Cluster).
 /// 
@@ -36,11 +36,11 @@ use crate::core::client::{Client, Result};
 /// to serve client requests even if Passive and Witness nodes are lost.
 #[derive(Clone)]
 pub struct FailoverClusterManager {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl FailoverClusterManager {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -52,7 +52,9 @@ impl FailoverClusterManager {
     pub async fn get_vcha_cluster_health(&self) -> Result<crate::types::structs::VchaClusterHealth> {
         let path = format!("/FailoverClusterManager/{moId}/GetVchaClusterHealth", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::VchaClusterHealth = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Returns current mode of a VCHA Cluster.
     /// 
@@ -60,7 +62,9 @@ impl FailoverClusterManager {
     pub async fn get_cluster_mode(&self) -> Result<String> {
         let path = format!("/FailoverClusterManager/{moId}/getClusterMode", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Allows a caller to initiate a failover from Active vCenter Server node
     /// to the Passive node.
@@ -93,8 +97,10 @@ impl FailoverClusterManager {
     pub async fn initiate_failover_task(&self, planned: bool) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = InitiateFailoverRequestType {planned, };
         let path = format!("/FailoverClusterManager/{moId}/initiateFailover_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// setClusterMode method allows caller to manipulate the mode of a
     /// VCHA Cluster
@@ -126,8 +132,10 @@ impl FailoverClusterManager {
     pub async fn set_cluster_mode_task(&self, mode: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = SetClusterModeRequestType {mode, };
         let path = format!("/FailoverClusterManager/{moId}/setClusterMode_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// A list of method names that must not be called and will throw
     /// a fault due to some other method running that the disabled method
@@ -147,7 +155,11 @@ impl FailoverClusterManager {
     pub async fn disabled_cluster_method(&self) -> Result<Option<Vec<String>>> {
         let path = format!("/FailoverClusterManager/{moId}/disabledClusterMethod", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<String>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
 }
 #[derive(serde::Serialize)]

@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// Generic engine that can install VIBs onto ESX (optimized for vSAN clusters)
 /// using either rolling installs or one-shot.
 /// 
@@ -9,11 +9,11 @@ use crate::core::client::{Client, Result};
 /// host side.
 #[derive(Clone)]
 pub struct VsanUpdateManager {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl VsanUpdateManager {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -72,8 +72,10 @@ impl VsanUpdateManager {
     pub async fn vsan_vib_install_task(&self, cluster: Option<&crate::types::structs::ManagedObjectReference>, vib_specs: Option<&[crate::types::structs::VsanVibSpec]>, scan_results: Option<&[crate::types::structs::VsanVibScanResult]>, firmware_specs: Option<&[crate::types::structs::VsanHclFirmwareUpdateSpec]>, maintenance_spec: Option<&crate::types::structs::HostMaintenanceSpec>, rolling: Option<bool>, no_sig_check: Option<bool>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanVibInstallRequestType {cluster, vib_specs, scan_results, firmware_specs, maintenance_spec, rolling, no_sig_check, };
         let path = format!("/vsan/VsanUpdateManager/{moId}/VsanVibInstall_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Performs pre-flight checks for a VIB install.
     /// 
@@ -99,8 +101,10 @@ impl VsanUpdateManager {
     pub async fn vsan_vib_install_preflight_check(&self, cluster: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::VsanVibInstallPreflightStatus> {
         let input = VsanVibInstallPreflightCheckRequestType {cluster, };
         let path = format!("/vsan/VsanUpdateManager/{moId}/VsanVibInstallPreflightCheck", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::VsanVibInstallPreflightStatus = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Takes a list of VIBs and a list of hosts, and determines which VIBs would
     /// be installed, what the requirements are (e.g.
@@ -132,8 +136,12 @@ impl VsanUpdateManager {
     pub async fn vsan_vib_scan(&self, cluster: Option<&crate::types::structs::ManagedObjectReference>, vib_specs: &[crate::types::structs::VsanVibSpec]) -> Result<Option<Vec<crate::types::structs::VsanVibScanResult>>> {
         let input = VsanVibScanRequestType {cluster, vib_specs, };
         let path = format!("/vsan/VsanUpdateManager/{moId}/VsanVibScan", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VsanVibScanResult>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
 }
 #[derive(serde::Serialize)]

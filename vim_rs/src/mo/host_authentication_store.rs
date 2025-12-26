@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// The *HostAuthenticationStore* base class represents both local user
 /// and host Active Directory authentication for an ESX host.
 /// - Local user authentication is always enabled. The vSphere API
@@ -9,11 +9,11 @@ use crate::core::client::{Client, Result};
 ///   has the authority to add the host to a domain.
 #[derive(Clone)]
 pub struct HostAuthenticationStore {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl HostAuthenticationStore {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -23,6 +23,8 @@ impl HostAuthenticationStore {
     pub async fn info(&self) -> Result<Box<dyn crate::types::traits::HostAuthenticationStoreInfoTrait>> {
         let path = format!("/HostAuthenticationStore/{moId}/info", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: Box<dyn crate::types::traits::HostAuthenticationStoreInfoTrait> = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
 }

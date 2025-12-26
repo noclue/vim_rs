@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// This interface defines an opaque network, in the sense that the detail and configuration
 /// of the network is unknown to vSphere and is managed by a management plane outside of
 /// vSphere.
@@ -8,11 +8,11 @@ use crate::core::client::{Client, Result};
 /// vSphere so that host and virtual machine virtual ethernet device can connect to them.
 #[derive(Clone)]
 pub struct OpaqueNetwork {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl OpaqueNetwork {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -40,7 +40,9 @@ impl OpaqueNetwork {
     pub async fn destroy_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/OpaqueNetwork/{moId}/Destroy_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deprecated as of VI API 2.5 do not use this method. This method throws
     /// *ResourceInUse*. Networks are automatically
@@ -110,8 +112,10 @@ impl OpaqueNetwork {
     pub async fn rename_task(&self, new_name: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RenameRequestType {new_name, };
         let path = format!("/OpaqueNetwork/{moId}/Rename_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Assigns a value to a custom field.
     /// 
@@ -130,7 +134,7 @@ impl OpaqueNetwork {
     pub async fn set_custom_value(&self, key: &str, value: &str) -> Result<()> {
         let input = SetCustomValueRequestType {key, value, };
         let path = format!("/OpaqueNetwork/{moId}/setCustomValue", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Whether alarm actions are enabled for this entity.
@@ -141,7 +145,11 @@ impl OpaqueNetwork {
     pub async fn alarm_actions_enabled(&self) -> Result<Option<bool>> {
         let path = format!("/OpaqueNetwork/{moId}/alarmActionsEnabled", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<bool>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// List of custom field definitions that are valid for the object's type.
     /// 
@@ -151,13 +159,21 @@ impl OpaqueNetwork {
     pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
         let path = format!("/OpaqueNetwork/{moId}/availableField", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::CustomFieldDef>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// The capability of the Opaque Network.
     pub async fn capability(&self) -> Result<Option<crate::types::structs::OpaqueNetworkCapability>> {
         let path = format!("/OpaqueNetwork/{moId}/capability", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::OpaqueNetworkCapability>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Current configuration issues that have been detected for this entity.
     /// 
@@ -169,7 +185,11 @@ impl OpaqueNetwork {
     pub async fn config_issue(&self) -> Result<Option<Vec<crate::types::structs::Event>>> {
         let path = format!("/OpaqueNetwork/{moId}/configIssue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::Event>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// The configStatus indicates whether or not the system has detected a configuration
     /// issue involving this entity.
@@ -198,7 +218,9 @@ impl OpaqueNetwork {
     pub async fn config_status(&self) -> Result<crate::types::enums::ManagedEntityStatusEnum> {
         let path = format!("/OpaqueNetwork/{moId}/configStatus", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::enums::ManagedEntityStatusEnum = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Custom field values.
     /// 
@@ -206,7 +228,11 @@ impl OpaqueNetwork {
     pub async fn custom_value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/OpaqueNetwork/{moId}/customValue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// A set of alarm states for alarms that apply to this managed entity.
     /// 
@@ -221,7 +247,11 @@ impl OpaqueNetwork {
     pub async fn declared_alarm_state(&self) -> Result<Option<Vec<crate::types::structs::AlarmState>>> {
         let path = format!("/OpaqueNetwork/{moId}/declaredAlarmState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::AlarmState>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// List of operations that are disabled, given the current runtime
     /// state of the entity.
@@ -295,7 +325,11 @@ impl OpaqueNetwork {
     pub async fn disabled_method(&self) -> Result<Option<Vec<String>>> {
         let path = format!("/OpaqueNetwork/{moId}/disabledMethod", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<String>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Access rights the current session has to this entity.
     /// 
@@ -303,13 +337,21 @@ impl OpaqueNetwork {
     pub async fn effective_role(&self) -> Result<Option<Vec<i32>>> {
         let path = format!("/OpaqueNetwork/{moId}/effectiveRole", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<i32>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Extra NSX specific properties for opaque network.
     pub async fn extra_config(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::OptionValueTrait>>>> {
         let path = format!("/OpaqueNetwork/{moId}/extraConfig", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::OptionValueTrait>>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Hosts attached to this network.
     ///
@@ -319,7 +361,11 @@ impl OpaqueNetwork {
     pub async fn host(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/OpaqueNetwork/{moId}/host", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Name of this entity, unique relative to its parent.
     /// 
@@ -333,7 +379,9 @@ impl OpaqueNetwork {
     pub async fn name(&self) -> Result<String> {
         let path = format!("/OpaqueNetwork/{moId}/name", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// General health of this managed entity.
     /// 
@@ -358,7 +406,9 @@ impl OpaqueNetwork {
     pub async fn overall_status(&self) -> Result<crate::types::enums::ManagedEntityStatusEnum> {
         let path = format!("/OpaqueNetwork/{moId}/overallStatus", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::enums::ManagedEntityStatusEnum = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Parent of this entity.
     /// 
@@ -374,13 +424,21 @@ impl OpaqueNetwork {
     pub async fn parent(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let path = format!("/OpaqueNetwork/{moId}/parent", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::ManagedObjectReference>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// List of permissions defined for this entity.
     pub async fn permission(&self) -> Result<Option<Vec<crate::types::structs::Permission>>> {
         let path = format!("/OpaqueNetwork/{moId}/permission", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::Permission>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// The set of recent tasks operating on this managed entity.
     /// 
@@ -410,13 +468,19 @@ impl OpaqueNetwork {
     pub async fn recent_task(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/OpaqueNetwork/{moId}/recentTask", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Properties of a network.
     pub async fn summary(&self) -> Result<Box<dyn crate::types::traits::NetworkSummaryTrait>> {
         let path = format!("/OpaqueNetwork/{moId}/summary", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: Box<dyn crate::types::traits::NetworkSummaryTrait> = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// The set of tags associated with this managed entity.
     /// 
@@ -426,7 +490,11 @@ impl OpaqueNetwork {
     pub async fn tag(&self) -> Result<Option<Vec<crate::types::structs::Tag>>> {
         let path = format!("/OpaqueNetwork/{moId}/tag", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::Tag>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// A set of alarm states for alarms triggered by this entity
     /// or by its descendants.
@@ -445,7 +513,11 @@ impl OpaqueNetwork {
     pub async fn triggered_alarm_state(&self) -> Result<Option<Vec<crate::types::structs::AlarmState>>> {
         let path = format!("/OpaqueNetwork/{moId}/triggeredAlarmState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::AlarmState>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// List of custom field values.
     /// 
@@ -457,7 +529,11 @@ impl OpaqueNetwork {
     pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/OpaqueNetwork/{moId}/value", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Virtual machines using this network.
     ///
@@ -467,7 +543,11 @@ impl OpaqueNetwork {
     pub async fn vm(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/OpaqueNetwork/{moId}/vm", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
 }
 #[derive(serde::Serialize)]

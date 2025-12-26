@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// VsanPhoneHomeSystem contains a collection of APIs to perform online health
 /// checks.
 /// 
@@ -7,11 +7,11 @@ use crate::core::client::{Client, Result};
 /// vsan-phonehome-system through vSAN service at vCenter server side.
 #[derive(Clone)]
 pub struct VsanPhoneHomeSystem {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl VsanPhoneHomeSystem {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -35,7 +35,11 @@ impl VsanPhoneHomeSystem {
     pub async fn query_vsan_cloud_health_status(&self) -> Result<Option<crate::types::structs::VsanCloudHealthStatus>> {
         let path = format!("/vsan/VsanPhoneHomeSystem/{moId}/QueryVsanCloudHealthStatus", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::VsanCloudHealthStatus>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// An asynchronous API for performing vSAN online health checks.
     /// 
@@ -68,8 +72,10 @@ impl VsanPhoneHomeSystem {
     pub async fn vsan_perform_online_health_check(&self, cluster: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanPerformOnlineHealthCheckRequestType {cluster, };
         let path = format!("/vsan/VsanPhoneHomeSystem/{moId}/VsanPerformOnlineHealthCheck", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// It is a VC level API that iterates over all hosts
     /// in the clusters to get LSOM wbSize through the
@@ -111,8 +117,12 @@ impl VsanPhoneHomeSystem {
     pub async fn vsan_query_lso_mwbsize(&self, cluster: &crate::types::structs::ManagedObjectReference) -> Result<Option<String>> {
         let input = VsanQueryLsoMwbsizeRequestType {cluster, };
         let path = format!("/vsan/VsanPhoneHomeSystem/{moId}/VsanQueryLSOMwbsize", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<String>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// API to Enhance DDH health state monitoring for
     /// VSAN NVMe disks to check the NVMe critical warnings.
@@ -175,8 +185,12 @@ impl VsanPhoneHomeSystem {
     pub async fn vsan_query_nvme_critical_warning_stats(&self, cluster: &crate::types::structs::ManagedObjectReference) -> Result<Option<String>> {
         let input = VsanQueryNvmeCriticalWarningStatsRequestType {cluster, };
         let path = format!("/vsan/VsanPhoneHomeSystem/{moId}/VsanQueryNvmeCriticalWarningStats", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<String>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// API to get vSAN object snapshot information in a vSAN cluster
     ///
@@ -217,8 +231,12 @@ impl VsanPhoneHomeSystem {
     pub async fn vsan_query_object_snapshots_info(&self, cluster: &crate::types::structs::ManagedObjectReference) -> Result<Option<String>> {
         let input = VsanQueryObjectSnapshotsInfoRequestType {cluster, };
         let path = format!("/vsan/VsanPhoneHomeSystem/{moId}/VsanQueryObjectSnapshotsInfo", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<String>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// VC API to iterate over all hots to collect zDOMscrubber stats
     /// from the path "/vmkModules/vsan/zdom/zdomObjects/&lt;ObjectUuid&gt;/zdomPaused"
@@ -252,8 +270,12 @@ impl VsanPhoneHomeSystem {
     pub async fn vsan_query_zdom_scrubber_data(&self, cluster: &crate::types::structs::ManagedObjectReference) -> Result<Option<String>> {
         let input = VsanQueryZdomScrubberDataRequestType {cluster, };
         let path = format!("/vsan/VsanPhoneHomeSystem/{moId}/VsanQueryZdomScrubberData", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<String>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
 }
 #[derive(serde::Serialize)]

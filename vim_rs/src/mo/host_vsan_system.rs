@@ -1,15 +1,15 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// The VsanSystem managed object type exposes VSAN configuration
 /// primitives and serves as a host-level access point for relevant
 /// VSAN data objects.
 #[derive(Clone)]
 pub struct HostVsanSystem {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl HostVsanSystem {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -51,8 +51,10 @@ impl HostVsanSystem {
     pub async fn add_disks_task(&self, disk: &[crate::types::structs::HostScsiDisk]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = AddDisksRequestType {disk, };
         let path = format!("/vsan/HostVsanSystem/{moId}/AddDisks_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Evacuate this host from VSAN cluster.
     /// 
@@ -92,8 +94,10 @@ impl HostVsanSystem {
     pub async fn evacuate_vsan_node_task(&self, maintenance_spec: &crate::types::structs::HostMaintenanceSpec, timeout: i32) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = EvacuateVsanNodeRequestType {maintenance_spec, timeout, };
         let path = format!("/vsan/HostVsanSystem/{moId}/EvacuateVsanNode_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Initialize and use the sets of disks in the given *VsanHostDiskMapping*
     /// list for the VSAN service on this host.
@@ -131,8 +135,10 @@ impl HostVsanSystem {
     pub async fn initialize_disks_task(&self, mapping: &[crate::types::structs::VsanHostDiskMapping]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = InitializeDisksRequestType {mapping, };
         let path = format!("/vsan/HostVsanSystem/{moId}/InitializeDisks_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Queries disks on this host for suitability to use with the VSAN service,
     /// and returns the result.
@@ -154,8 +160,12 @@ impl HostVsanSystem {
     pub async fn query_disks_for_vsan(&self, canonical_name: Option<&[String]>) -> Result<Option<Vec<Box<dyn crate::types::traits::VsanHostDiskResultTrait>>>> {
         let input = QueryDisksForVsanRequestType {canonical_name, };
         let path = format!("/vsan/HostVsanSystem/{moId}/QueryDisksForVsan", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::VsanHostDiskResultTrait>>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Queries this host's current runtime status for the VSAN service.
     /// 
@@ -167,7 +177,9 @@ impl HostVsanSystem {
     pub async fn query_host_status(&self) -> Result<crate::types::structs::VsanHostClusterStatus> {
         let path = format!("/vsan/HostVsanSystem/{moId}/QueryHostStatus", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::VsanHostClusterStatus = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Recommission this host to VSAN cluster.
     /// 
@@ -193,7 +205,9 @@ impl HostVsanSystem {
     pub async fn recommission_vsan_node_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/vsan/HostVsanSystem/{moId}/RecommissionVsanNode_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Remove the set of given disks from use by the VSAN service on this host.
     /// 
@@ -247,8 +261,10 @@ impl HostVsanSystem {
     pub async fn remove_disk_task(&self, disk: &[crate::types::structs::HostScsiDisk], maintenance_spec: Option<&crate::types::structs::HostMaintenanceSpec>, timeout: Option<i32>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RemoveDiskRequestType {disk, maintenance_spec, timeout, };
         let path = format!("/vsan/HostVsanSystem/{moId}/RemoveDisk_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Delete given set of disk mappings from use by the VSAN service on this host.
     /// 
@@ -294,8 +310,10 @@ impl HostVsanSystem {
     pub async fn remove_disk_mapping_task(&self, mapping: &[crate::types::structs::VsanHostDiskMapping], maintenance_spec: Option<&crate::types::structs::HostMaintenanceSpec>, timeout: Option<i32>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RemoveDiskMappingRequestType {mapping, maintenance_spec, timeout, };
         let path = format!("/vsan/HostVsanSystem/{moId}/RemoveDiskMapping_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Unmount the mounted *VsanHostDiskMapping*.
     /// 
@@ -337,8 +355,10 @@ impl HostVsanSystem {
     pub async fn unmount_disk_mapping_task(&self, mapping: &[crate::types::structs::VsanHostDiskMapping]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = UnmountDiskMappingRequestType {mapping, };
         let path = format!("/vsan/HostVsanSystem/{moId}/UnmountDiskMapping_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Update the VSAN service on this host according to the given host
     /// configuration specification.
@@ -373,8 +393,10 @@ impl HostVsanSystem {
     pub async fn update_vsan_task(&self, config: &dyn crate::types::traits::VsanHostConfigInfoTrait) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = UpdateVsanRequestType {config, };
         let path = format!("/vsan/HostVsanSystem/{moId}/UpdateVsan_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// The current VSAN service configuration information for this host.
     /// 
@@ -382,7 +404,9 @@ impl HostVsanSystem {
     pub async fn config(&self) -> Result<Box<dyn crate::types::traits::VsanHostConfigInfoTrait>> {
         let path = format!("/vsan/HostVsanSystem/{moId}/config", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: Box<dyn crate::types::traits::VsanHostConfigInfoTrait> = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
 }
 #[derive(serde::Serialize)]

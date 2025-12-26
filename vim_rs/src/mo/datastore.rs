@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// Represents a storage location for virtual machine files.
 /// 
 /// A storage location can be a
@@ -40,11 +40,11 @@ use crate::core::client::{Client, Result};
 /// datacenter, a view of the datastores across the datacenter is shown.
 #[derive(Clone)]
 pub struct Datastore {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl Datastore {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -74,7 +74,9 @@ impl Datastore {
     pub async fn destroy_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/Datastore/{moId}/Destroy_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deprecated as of VI API 2.5 do not use this method. This method throws
     /// *ResourceInUse*. Datastores are automatically
@@ -126,7 +128,9 @@ impl Datastore {
     pub async fn datastore_enter_maintenance_mode(&self) -> Result<crate::types::structs::StoragePlacementResult> {
         let path = format!("/Datastore/{moId}/DatastoreEnterMaintenanceMode", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::StoragePlacementResult = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Takes the datastore out of maintenance mode.
     /// 
@@ -147,7 +151,9 @@ impl Datastore {
     pub async fn datastore_exit_maintenance_mode_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/Datastore/{moId}/DatastoreExitMaintenanceMode_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Check whether clustered VMDK feature is enabled on this datastore.
     /// 
@@ -163,7 +169,9 @@ impl Datastore {
     pub async fn is_clustered_vmdk_enabled(&self) -> Result<bool> {
         let path = format!("/Datastore/{moId}/IsClusteredVmdkEnabled", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: bool = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Explicitly refreshes free-space and capacity values in *Datastore.summary*
     /// and *Datastore.info*.
@@ -243,8 +251,10 @@ impl Datastore {
     pub async fn rename_task(&self, new_name: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RenameRequestType {new_name, };
         let path = format!("/Datastore/{moId}/Rename_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deprecated as of vSphere API 4.0, use *ManagedEntity.Rename_Task*.
     /// 
@@ -266,7 +276,7 @@ impl Datastore {
     pub async fn rename_datastore(&self, new_name: &str) -> Result<()> {
         let input = RenameDatastoreRequestType {new_name, };
         let path = format!("/Datastore/{moId}/RenameDatastore", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Assigns a value to a custom field.
@@ -286,7 +296,7 @@ impl Datastore {
     pub async fn set_custom_value(&self, key: &str, value: &str) -> Result<()> {
         let input = SetCustomValueRequestType {key, value, };
         let path = format!("/Datastore/{moId}/setCustomValue", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Scan a VVol storage container to update file paths and objectID pointers
@@ -330,8 +340,10 @@ impl Datastore {
     pub async fn update_v_vol_virtual_machine_files_task(&self, failover_pair: Option<&[crate::types::structs::DatastoreVVolContainerFailoverPair]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = UpdateVVolVirtualMachineFilesRequestType {failover_pair, };
         let path = format!("/Datastore/{moId}/UpdateVVolVirtualMachineFiles_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Update file paths embedded in virtual machine files on the datastore.
     /// 
@@ -400,8 +412,10 @@ impl Datastore {
     pub async fn update_virtual_machine_files_task(&self, mount_path_datastore_mapping: &[crate::types::structs::DatastoreMountPathDatastorePair]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = UpdateVirtualMachineFilesRequestType {mount_path_datastore_mapping, };
         let path = format!("/Datastore/{moId}/UpdateVirtualMachineFiles_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Whether alarm actions are enabled for this entity.
     /// 
@@ -411,7 +425,11 @@ impl Datastore {
     pub async fn alarm_actions_enabled(&self) -> Result<Option<bool>> {
         let path = format!("/Datastore/{moId}/alarmActionsEnabled", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<bool>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// List of custom field definitions that are valid for the object's type.
     /// 
@@ -421,7 +439,11 @@ impl Datastore {
     pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
         let path = format!("/Datastore/{moId}/availableField", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::CustomFieldDef>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// DatastoreBrowser used to browse this datastore.
     ///
@@ -431,13 +453,17 @@ impl Datastore {
     pub async fn browser(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/Datastore/{moId}/browser", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Capabilities of this datastore.
     pub async fn capability(&self) -> Result<crate::types::structs::DatastoreCapability> {
         let path = format!("/Datastore/{moId}/capability", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::DatastoreCapability = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Current configuration issues that have been detected for this entity.
     /// 
@@ -449,7 +475,11 @@ impl Datastore {
     pub async fn config_issue(&self) -> Result<Option<Vec<crate::types::structs::Event>>> {
         let path = format!("/Datastore/{moId}/configIssue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::Event>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// The configStatus indicates whether or not the system has detected a configuration
     /// issue involving this entity.
@@ -478,7 +508,9 @@ impl Datastore {
     pub async fn config_status(&self) -> Result<crate::types::enums::ManagedEntityStatusEnum> {
         let path = format!("/Datastore/{moId}/configStatus", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::enums::ManagedEntityStatusEnum = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Custom field values.
     /// 
@@ -486,7 +518,11 @@ impl Datastore {
     pub async fn custom_value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/Datastore/{moId}/customValue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// A set of alarm states for alarms that apply to this managed entity.
     /// 
@@ -501,7 +537,11 @@ impl Datastore {
     pub async fn declared_alarm_state(&self) -> Result<Option<Vec<crate::types::structs::AlarmState>>> {
         let path = format!("/Datastore/{moId}/declaredAlarmState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::AlarmState>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// List of operations that are disabled, given the current runtime
     /// state of the entity.
@@ -575,7 +615,11 @@ impl Datastore {
     pub async fn disabled_method(&self) -> Result<Option<Vec<String>>> {
         let path = format!("/Datastore/{moId}/disabledMethod", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<String>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Access rights the current session has to this entity.
     /// 
@@ -583,19 +627,29 @@ impl Datastore {
     pub async fn effective_role(&self) -> Result<Option<Vec<i32>>> {
         let path = format!("/Datastore/{moId}/effectiveRole", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<i32>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Hosts attached to this datastore.
     pub async fn host(&self) -> Result<Option<Vec<crate::types::structs::DatastoreHostMount>>> {
         let path = format!("/Datastore/{moId}/host", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::DatastoreHostMount>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Specific information about the datastore.
     pub async fn info(&self) -> Result<Box<dyn crate::types::traits::DatastoreInfoTrait>> {
         let path = format!("/Datastore/{moId}/info", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: Box<dyn crate::types::traits::DatastoreInfoTrait> = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deprecated as of vSphere8.0 U3, and there is no replacement for it.
     /// 
@@ -611,7 +665,11 @@ impl Datastore {
     pub async fn iorm_configuration(&self) -> Result<Option<crate::types::structs::StorageIormInfo>> {
         let path = format!("/Datastore/{moId}/iormConfiguration", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::StorageIormInfo>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Name of this entity, unique relative to its parent.
     /// 
@@ -625,7 +683,9 @@ impl Datastore {
     pub async fn name(&self) -> Result<String> {
         let path = format!("/Datastore/{moId}/name", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// General health of this managed entity.
     /// 
@@ -650,7 +710,9 @@ impl Datastore {
     pub async fn overall_status(&self) -> Result<crate::types::enums::ManagedEntityStatusEnum> {
         let path = format!("/Datastore/{moId}/overallStatus", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::enums::ManagedEntityStatusEnum = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Parent of this entity.
     /// 
@@ -666,13 +728,21 @@ impl Datastore {
     pub async fn parent(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let path = format!("/Datastore/{moId}/parent", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::ManagedObjectReference>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// List of permissions defined for this entity.
     pub async fn permission(&self) -> Result<Option<Vec<crate::types::structs::Permission>>> {
         let path = format!("/Datastore/{moId}/permission", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::Permission>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// The set of recent tasks operating on this managed entity.
     /// 
@@ -702,13 +772,19 @@ impl Datastore {
     pub async fn recent_task(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/Datastore/{moId}/recentTask", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Global properties of the datastore.
     pub async fn summary(&self) -> Result<crate::types::structs::DatastoreSummary> {
         let path = format!("/Datastore/{moId}/summary", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::DatastoreSummary = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// The set of tags associated with this managed entity.
     /// 
@@ -718,7 +794,11 @@ impl Datastore {
     pub async fn tag(&self) -> Result<Option<Vec<crate::types::structs::Tag>>> {
         let path = format!("/Datastore/{moId}/tag", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::Tag>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// A set of alarm states for alarms triggered by this entity
     /// or by its descendants.
@@ -737,7 +817,11 @@ impl Datastore {
     pub async fn triggered_alarm_state(&self) -> Result<Option<Vec<crate::types::structs::AlarmState>>> {
         let path = format!("/Datastore/{moId}/triggeredAlarmState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::AlarmState>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// List of custom field values.
     /// 
@@ -749,7 +833,11 @@ impl Datastore {
     pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/Datastore/{moId}/value", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Virtual machines stored on this datastore.
     ///
@@ -759,7 +847,11 @@ impl Datastore {
     pub async fn vm(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/Datastore/{moId}/vm", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
 }
 #[derive(serde::Serialize)]

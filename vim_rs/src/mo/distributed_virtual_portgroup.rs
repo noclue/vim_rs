@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// The *DistributedVirtualPortgroup* managed object
 /// defines how hosts and virtual machines connect to a network.
 /// 
@@ -16,11 +16,11 @@ use crate::core::client::{Client, Result};
 /// to *DistributedVirtualPortgroup.config*.*DVPortgroupConfigInfo.type*.
 #[derive(Clone)]
 pub struct DistributedVirtualPortgroup {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl DistributedVirtualPortgroup {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -50,7 +50,9 @@ impl DistributedVirtualPortgroup {
     pub async fn destroy_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/DistributedVirtualPortgroup/{moId}/Destroy_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deprecated as of VI API 2.5 do not use this method. This method throws
     /// *ResourceInUse*. Networks are automatically
@@ -120,8 +122,10 @@ impl DistributedVirtualPortgroup {
     pub async fn reconfigure_dv_portgroup_task(&self, spec: &crate::types::structs::DvPortgroupConfigSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ReconfigureDvPortgroupRequestType {spec, };
         let path = format!("/DistributedVirtualPortgroup/{moId}/ReconfigureDVPortgroup_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Reload the entity state.
     /// 
@@ -173,8 +177,10 @@ impl DistributedVirtualPortgroup {
     pub async fn rename_task(&self, new_name: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RenameRequestType {new_name, };
         let path = format!("/DistributedVirtualPortgroup/{moId}/Rename_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// This method determines if the portgroup configuration has changed.
     /// 
@@ -220,8 +226,10 @@ impl DistributedVirtualPortgroup {
     pub async fn dv_portgroup_rollback_task(&self, entity_backup: Option<&crate::types::structs::EntityBackupConfig>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = DvPortgroupRollbackRequestType {entity_backup, };
         let path = format!("/DistributedVirtualPortgroup/{moId}/DVPortgroupRollback_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Assigns a value to a custom field.
     /// 
@@ -240,7 +248,7 @@ impl DistributedVirtualPortgroup {
     pub async fn set_custom_value(&self, key: &str, value: &str) -> Result<()> {
         let input = SetCustomValueRequestType {key, value, };
         let path = format!("/DistributedVirtualPortgroup/{moId}/setCustomValue", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Whether alarm actions are enabled for this entity.
@@ -251,7 +259,11 @@ impl DistributedVirtualPortgroup {
     pub async fn alarm_actions_enabled(&self) -> Result<Option<bool>> {
         let path = format!("/DistributedVirtualPortgroup/{moId}/alarmActionsEnabled", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<bool>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// List of custom field definitions that are valid for the object's type.
     /// 
@@ -261,13 +273,19 @@ impl DistributedVirtualPortgroup {
     pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
         let path = format!("/DistributedVirtualPortgroup/{moId}/availableField", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::CustomFieldDef>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Configuration of the portgroup.
     pub async fn config(&self) -> Result<crate::types::structs::DvPortgroupConfigInfo> {
         let path = format!("/DistributedVirtualPortgroup/{moId}/config", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::DvPortgroupConfigInfo = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Current configuration issues that have been detected for this entity.
     /// 
@@ -279,7 +297,11 @@ impl DistributedVirtualPortgroup {
     pub async fn config_issue(&self) -> Result<Option<Vec<crate::types::structs::Event>>> {
         let path = format!("/DistributedVirtualPortgroup/{moId}/configIssue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::Event>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// The configStatus indicates whether or not the system has detected a configuration
     /// issue involving this entity.
@@ -308,7 +330,9 @@ impl DistributedVirtualPortgroup {
     pub async fn config_status(&self) -> Result<crate::types::enums::ManagedEntityStatusEnum> {
         let path = format!("/DistributedVirtualPortgroup/{moId}/configStatus", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::enums::ManagedEntityStatusEnum = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Custom field values.
     /// 
@@ -316,7 +340,11 @@ impl DistributedVirtualPortgroup {
     pub async fn custom_value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/DistributedVirtualPortgroup/{moId}/customValue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// A set of alarm states for alarms that apply to this managed entity.
     /// 
@@ -331,7 +359,11 @@ impl DistributedVirtualPortgroup {
     pub async fn declared_alarm_state(&self) -> Result<Option<Vec<crate::types::structs::AlarmState>>> {
         let path = format!("/DistributedVirtualPortgroup/{moId}/declaredAlarmState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::AlarmState>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// List of operations that are disabled, given the current runtime
     /// state of the entity.
@@ -405,7 +437,11 @@ impl DistributedVirtualPortgroup {
     pub async fn disabled_method(&self) -> Result<Option<Vec<String>>> {
         let path = format!("/DistributedVirtualPortgroup/{moId}/disabledMethod", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<String>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Access rights the current session has to this entity.
     /// 
@@ -413,7 +449,11 @@ impl DistributedVirtualPortgroup {
     pub async fn effective_role(&self) -> Result<Option<Vec<i32>>> {
         let path = format!("/DistributedVirtualPortgroup/{moId}/effectiveRole", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<i32>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Hosts attached to this network.
     ///
@@ -423,13 +463,19 @@ impl DistributedVirtualPortgroup {
     pub async fn host(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/DistributedVirtualPortgroup/{moId}/host", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Generated UUID of the portgroup.
     pub async fn key(&self) -> Result<String> {
         let path = format!("/DistributedVirtualPortgroup/{moId}/key", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Name of this entity, unique relative to its parent.
     /// 
@@ -443,7 +489,9 @@ impl DistributedVirtualPortgroup {
     pub async fn name(&self) -> Result<String> {
         let path = format!("/DistributedVirtualPortgroup/{moId}/name", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// General health of this managed entity.
     /// 
@@ -468,7 +516,9 @@ impl DistributedVirtualPortgroup {
     pub async fn overall_status(&self) -> Result<crate::types::enums::ManagedEntityStatusEnum> {
         let path = format!("/DistributedVirtualPortgroup/{moId}/overallStatus", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::enums::ManagedEntityStatusEnum = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Parent of this entity.
     /// 
@@ -484,19 +534,31 @@ impl DistributedVirtualPortgroup {
     pub async fn parent(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let path = format!("/DistributedVirtualPortgroup/{moId}/parent", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::ManagedObjectReference>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// List of permissions defined for this entity.
     pub async fn permission(&self) -> Result<Option<Vec<crate::types::structs::Permission>>> {
         let path = format!("/DistributedVirtualPortgroup/{moId}/permission", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::Permission>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Port keys for the set of ports in the portgroup.
     pub async fn port_keys(&self) -> Result<Option<Vec<String>>> {
         let path = format!("/DistributedVirtualPortgroup/{moId}/portKeys", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<String>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// The set of recent tasks operating on this managed entity.
     /// 
@@ -526,13 +588,19 @@ impl DistributedVirtualPortgroup {
     pub async fn recent_task(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/DistributedVirtualPortgroup/{moId}/recentTask", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Properties of a network.
     pub async fn summary(&self) -> Result<Box<dyn crate::types::traits::NetworkSummaryTrait>> {
         let path = format!("/DistributedVirtualPortgroup/{moId}/summary", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: Box<dyn crate::types::traits::NetworkSummaryTrait> = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// The set of tags associated with this managed entity.
     /// 
@@ -542,7 +610,11 @@ impl DistributedVirtualPortgroup {
     pub async fn tag(&self) -> Result<Option<Vec<crate::types::structs::Tag>>> {
         let path = format!("/DistributedVirtualPortgroup/{moId}/tag", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::Tag>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// A set of alarm states for alarms triggered by this entity
     /// or by its descendants.
@@ -561,7 +633,11 @@ impl DistributedVirtualPortgroup {
     pub async fn triggered_alarm_state(&self) -> Result<Option<Vec<crate::types::structs::AlarmState>>> {
         let path = format!("/DistributedVirtualPortgroup/{moId}/triggeredAlarmState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::AlarmState>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// List of custom field values.
     /// 
@@ -573,7 +649,11 @@ impl DistributedVirtualPortgroup {
     pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/DistributedVirtualPortgroup/{moId}/value", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Virtual machines using this network.
     ///
@@ -583,7 +663,11 @@ impl DistributedVirtualPortgroup {
     pub async fn vm(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/DistributedVirtualPortgroup/{moId}/vm", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
 }
 #[derive(serde::Serialize)]

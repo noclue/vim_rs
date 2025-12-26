@@ -2,9 +2,12 @@ use std::sync::Arc;
 
 use tokio::sync::RwLock;
 use super::super::types::structs;
-use log::{warn, debug, trace, log_enabled};
-use log::Level::Trace;
+use log::{warn, debug, trace};
 
+use bytes::Bytes;
+use erased_serde as eserde;
+use std::future::Future;
+use std::pin::Pin;
 use std::ffi::OsStr;
 use crate::mo;
 use crate::types::structs::{ManagedObjectReference, ServiceContent};
@@ -42,6 +45,60 @@ pub enum Error {
 }
 
 pub type Result<T> = std::result::Result<T, Error>;
+
+/// A boxed future used by the object-safe `VimClient` trait.
+pub type BoxFuture<'a, T> = Pin<Box<dyn Future<Output = T> + Send + 'a>>;
+
+/// Wrap an erased-serde payload so it can be passed into APIs expecting `serde::Serialize`.
+///
+/// This enables object-safe JSON request bodies in `VimClient` without forcing callers to build
+/// intermediate `serde_json::Value` trees.
+struct ErasedJson<'a>(&'a dyn eserde::Serialize);
+
+impl serde::Serialize for ErasedJson<'_> {
+    fn serialize<S>(&self, serializer: S) -> std::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        eserde::serialize(self.0, serializer)
+    }
+}
+
+/// Object-safe client abstraction for generated managed-object stubs (`crate::mo::*`).
+///
+/// This trait intentionally mirrors the subset of `Client` used by the generated bindings.
+/// It is **object-safe** so managed objects can store `Arc<dyn VimClient>`, enabling
+/// wrappers/mocks for testing and instrumentation.
+pub trait VimClient: Send + Sync {
+    /// Access vSphere `ServiceContent` (root managed object references).
+    fn service_content(&self) -> &ServiceContent;
+
+    /// Prepare GET request.
+    fn get_request(&self, path: &str) -> reqwest::RequestBuilder;
+
+    /// Prepare POST request with a JSON payload.
+    fn post_json(&self, path: &str, payload: &dyn eserde::Serialize) -> reqwest::RequestBuilder;
+
+    /// Prepare POST request without a body.
+    fn post_bare(&self, path: &str) -> reqwest::RequestBuilder;
+
+    /// Execute a request and return the raw response body.
+    ///
+    /// We return `Bytes` (not `Vec<u8>`) to avoid an extra copy of the response body.
+    fn execute_bytes<'a>(&'a self, req: reqwest::RequestBuilder) -> BoxFuture<'a, Result<Bytes>>;
+
+    /// Execute a request and return an optional JSON value (empty body -> `None`).
+    fn execute_option_bytes<'a>(
+        &'a self,
+        req: reqwest::RequestBuilder,
+    ) -> BoxFuture<'a, Result<Option<Bytes>>>;
+
+    /// Execute a request that returns no response body.
+    fn execute_void<'a>(&'a self, req: reqwest::RequestBuilder) -> BoxFuture<'a, Result<()>>;
+}
+
+/// Convenience handle type used by generated bindings.
+pub type VimClientHandle = Arc<dyn VimClient>;
 
 pub struct ClientBuilder {
     server_address: String,
@@ -279,18 +336,6 @@ impl Client {
         self.http_client.get(&url)
     }
 
-    /// Prepare POST request with a body
-    pub(crate) fn post_request<B>(&self, path: &str, payload: &B) -> reqwest::RequestBuilder
-    where
-        B: serde::Serialize,
-    {
-        debug!("POST request: {}", path);
-        trace!("POST payload: {:?}", serde_json::to_string(payload));
-        let url = format!("{}{}", self.base_url, path);
-        let req = self.http_client.post(&url);
-        req.header("Content-Type", "application/json").json(payload)
-    }
-
     /// Prepare POST request without a body
     pub(crate) fn post_bare(&self, path: &str) -> reqwest::RequestBuilder
     {
@@ -310,30 +355,7 @@ impl Client {
         Ok(content)
     }
 
-    /// Execute a request that optionally returns a response body
-    pub(crate) async fn execute_option<T>(&self, mut req: reqwest::RequestBuilder) -> Result<Option<T>>
-    where T: serde::de::DeserializeOwned 
-    {
-        req = self.prepare(req).await;
-        let res = req.send().await?;
-        let res = self.process_response(res).await?;
-        let bytes = res.bytes().await?;
-        if log_enabled!(Trace) {
-            trace!("Response body: {}", std::str::from_utf8(&bytes).unwrap());
-        }
-        let r: serde_json::Result<T> = serde_json::from_slice(&bytes);
-        let content = match r {
-            Ok(c) => Some(c),
-            Err(e) => {
-                if e.is_eof() {
-                    None
-                } else {
-                    return Err(Error::SerdeError(e));
-                }
-            },
-        };
-        Ok(content)
-    }
+
 
     /// Execute a request that does not return a response body
     pub(crate) async fn execute_void(&self, mut req: reqwest::RequestBuilder) -> Result<()>
@@ -367,6 +389,67 @@ impl Client {
             return Err(Error::MethodFault(fault));
         }
         Ok(res)
+    }
+}
+
+impl VimClient for Client {
+    fn service_content(&self) -> &ServiceContent {
+        Client::service_content(self)
+    }
+
+    fn get_request(&self, path: &str) -> reqwest::RequestBuilder {
+        Client::get_request(self, path)
+    }
+
+    fn post_json(&self, path: &str, payload: &dyn eserde::Serialize) -> reqwest::RequestBuilder {
+        debug!("POST request: {}", path);
+        let erased_json = ErasedJson(payload);
+        // Avoid serializing the payload for logging (can be huge and allocates).
+        if log::log_enabled!(log::Level::Trace) {
+            if let Ok(serialized) = serde_json::to_string_pretty(&erased_json) {
+                trace!("POST payload: {}", serialized);
+            }
+        };
+        let url = format!("{}{}", self.base_url, path);
+        self.http_client
+            .post(&url)
+            .header("Content-Type", "application/json")
+            .json(&erased_json)
+    }
+
+    fn post_bare(&self, path: &str) -> reqwest::RequestBuilder {
+        Client::post_bare(self, path)
+    }
+
+    fn execute_bytes<'a>(&'a self, mut req: reqwest::RequestBuilder) -> BoxFuture<'a, Result<Bytes>> {
+        Box::pin(async move {
+            req = self.prepare(req).await;
+            let res = req.send().await?;
+            let res = self.process_response(res).await?;
+            let bytes = res.bytes().await?;
+            Ok(bytes)
+        })
+    }
+
+    fn execute_option_bytes<'a>(
+        &'a self,
+        mut req: reqwest::RequestBuilder,
+    ) -> BoxFuture<'a, Result<Option<Bytes>>> {
+        Box::pin(async move {
+            req = self.prepare(req).await;
+            let res = req.send().await?;
+            let res = self.process_response(res).await?;
+            let bytes = res.bytes().await?;
+            if bytes.is_empty() {
+                Ok(None)
+            } else {
+                Ok(Some(bytes))
+            }
+        })
+    }
+
+    fn execute_void<'a>(&'a self, req: reqwest::RequestBuilder) -> BoxFuture<'a, Result<()>> {
+        Box::pin(async move { Client::execute_void(self, req).await })
     }
 }
 

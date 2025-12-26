@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// This managed object is the interface for scanning and patching an ESX
 /// server.
 /// 
@@ -8,11 +8,11 @@ use crate::core::client::{Client, Result};
 /// binaries, but its installation and uninstallation are atomic.
 #[derive(Clone)]
 pub struct HostPatchManager {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl HostPatchManager {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -64,8 +64,10 @@ impl HostPatchManager {
     pub async fn check_host_patch_task(&self, meta_urls: Option<&[String]>, bundle_urls: Option<&[String]>, spec: Option<&crate::types::structs::HostPatchManagerPatchManagerOperationSpec>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CheckHostPatchRequestType {meta_urls, bundle_urls, spec, };
         let path = format!("/HostPatchManager/{moId}/CheckHostPatch_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deprecated method is deprecated, use *HostPatchManager.InstallHostPatchV2_Task* instead.
     /// 
@@ -140,8 +142,10 @@ impl HostPatchManager {
     pub async fn install_host_patch_task(&self, repository: &crate::types::structs::HostPatchManagerLocator, update_id: &str, force: Option<bool>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = InstallHostPatchRequestType {repository, update_id, force, };
         let path = format!("/HostPatchManager/{moId}/InstallHostPatch_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deprecated as of vSphere 8.0u3, and there is no replacement available.
     /// 
@@ -190,8 +194,10 @@ impl HostPatchManager {
     pub async fn install_host_patch_v_2_task(&self, meta_urls: Option<&[String]>, bundle_urls: Option<&[String]>, vib_urls: Option<&[String]>, spec: Option<&crate::types::structs::HostPatchManagerPatchManagerOperationSpec>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = InstallHostPatchV2RequestType {meta_urls, bundle_urls, vib_urls, spec, };
         let path = format!("/HostPatchManager/{moId}/InstallHostPatchV2_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deprecated as of vSphere 8.0u3, and there is no replacement available.
     /// 
@@ -225,8 +231,10 @@ impl HostPatchManager {
     pub async fn query_host_patch_task(&self, spec: Option<&crate::types::structs::HostPatchManagerPatchManagerOperationSpec>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = QueryHostPatchRequestType {spec, };
         let path = format!("/HostPatchManager/{moId}/QueryHostPatch_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deprecated as of VI API 4.0, use *HostPatchManager.ScanHostPatchV2_Task*.
     /// 
@@ -281,8 +289,10 @@ impl HostPatchManager {
     pub async fn scan_host_patch_task(&self, repository: &crate::types::structs::HostPatchManagerLocator, update_id: Option<&[String]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ScanHostPatchRequestType {repository, update_id, };
         let path = format!("/HostPatchManager/{moId}/ScanHostPatch_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deprecated as of vSphere 8.0u3, and there is no replacement available.
     /// 
@@ -331,8 +341,10 @@ impl HostPatchManager {
     pub async fn scan_host_patch_v_2_task(&self, meta_urls: Option<&[String]>, bundle_urls: Option<&[String]>, spec: Option<&crate::types::structs::HostPatchManagerPatchManagerOperationSpec>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ScanHostPatchV2RequestType {meta_urls, bundle_urls, spec, };
         let path = format!("/HostPatchManager/{moId}/ScanHostPatchV2_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deprecated as of vSphere 8.0u3, and there is no replacement available.
     /// 
@@ -379,8 +391,10 @@ impl HostPatchManager {
     pub async fn stage_host_patch_task(&self, meta_urls: Option<&[String]>, bundle_urls: Option<&[String]>, vib_urls: Option<&[String]>, spec: Option<&crate::types::structs::HostPatchManagerPatchManagerOperationSpec>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = StageHostPatchRequestType {meta_urls, bundle_urls, vib_urls, spec, };
         let path = format!("/HostPatchManager/{moId}/StageHostPatch_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deprecated as of vSphere 8.0u3, and there is no replacement available.
     /// 
@@ -418,8 +432,10 @@ impl HostPatchManager {
     pub async fn uninstall_host_patch_task(&self, bulletin_ids: Option<&[String]>, spec: Option<&crate::types::structs::HostPatchManagerPatchManagerOperationSpec>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = UninstallHostPatchRequestType {bulletin_ids, spec, };
         let path = format!("/HostPatchManager/{moId}/UninstallHostPatch_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
 }
 #[derive(serde::Serialize)]

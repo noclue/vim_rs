@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// The *PbmServiceInstance* managed object is the root object of the
 /// Storage Policy service.
 /// 
@@ -10,11 +10,11 @@ use crate::core::client::{Client, Result};
 /// access to the Storage Policy managed objects.
 #[derive(Clone)]
 pub struct PbmServiceInstance {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl PbmServiceInstance {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -31,7 +31,9 @@ impl PbmServiceInstance {
     pub async fn pbm_retrieve_service_content(&self) -> Result<crate::types::structs::PbmServiceInstanceContent> {
         let path = format!("/pbm/PbmServiceInstance/{moId}/PbmRetrieveServiceContent", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::PbmServiceInstanceContent = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Contains references to Storage Policy managed objects.
     /// 
@@ -39,6 +41,8 @@ impl PbmServiceInstance {
     pub async fn content(&self) -> Result<crate::types::structs::PbmServiceInstanceContent> {
         let path = format!("/pbm/PbmServiceInstance/{moId}/content", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::PbmServiceInstanceContent = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
 }

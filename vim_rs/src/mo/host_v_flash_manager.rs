@@ -1,14 +1,14 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// The VFlash Manager object is used to configure vFlash resource
 /// and vFlash cache on the ESX host.
 #[derive(Clone)]
 pub struct HostVFlashManager {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl HostVFlashManager {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -33,7 +33,7 @@ impl HostVFlashManager {
     pub async fn host_config_v_flash_cache(&self, spec: &crate::types::structs::HostVFlashManagerVFlashCacheConfigSpec) -> Result<()> {
         let input = HostConfigVFlashCacheRequestType {spec, };
         let path = format!("/HostVFlashManager/{moId}/HostConfigVFlashCache", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Configure vFlash resource on the host by attaching to a backend VFFS volume.
@@ -53,7 +53,7 @@ impl HostVFlashManager {
     pub async fn host_configure_v_flash_resource(&self, spec: &crate::types::structs::HostVFlashManagerVFlashResourceConfigSpec) -> Result<()> {
         let input = HostConfigureVFlashResourceRequestType {spec, };
         let path = format!("/HostVFlashManager/{moId}/HostConfigureVFlashResource", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Configure vFlash resource on a list of SSD disks.
@@ -93,8 +93,10 @@ impl HostVFlashManager {
     pub async fn configure_v_flash_resource_ex_task(&self, device_path: Option<&[String]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ConfigureVFlashResourceExRequestType {device_path, };
         let path = format!("/HostVFlashManager/{moId}/ConfigureVFlashResourceEx_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Retrieve the default supported configuration for a given vFlash module
     /// 
@@ -119,8 +121,10 @@ impl HostVFlashManager {
     pub async fn host_get_v_flash_module_default_config(&self, v_flash_module: &str) -> Result<crate::types::structs::VirtualDiskVFlashCacheConfigInfo> {
         let input = HostGetVFlashModuleDefaultConfigRequestType {v_flash_module, };
         let path = format!("/HostVFlashManager/{moId}/HostGetVFlashModuleDefaultConfig", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::VirtualDiskVFlashCacheConfigInfo = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Remove vFlash resource on the host by destroying the contained VFFS volume.
     /// 
@@ -144,7 +148,11 @@ impl HostVFlashManager {
     pub async fn v_flash_config_info(&self) -> Result<Option<crate::types::structs::HostVFlashManagerVFlashConfigInfo>> {
         let path = format!("/HostVFlashManager/{moId}/vFlashConfigInfo", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::HostVFlashManagerVFlashConfigInfo>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
 }
 #[derive(serde::Serialize)]

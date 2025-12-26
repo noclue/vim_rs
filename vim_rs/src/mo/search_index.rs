@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// The SearchIndex service allows a client to efficiently query the
 /// inventory for a specific managed entity by attributes such as UUID, IP address, DNS
 /// name, or datastore path.
@@ -13,11 +13,11 @@ use crate::core::client::{Client, Result};
 /// matches the search criteria, that object is not returned.
 #[derive(Clone)]
 pub struct SearchIndex {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl SearchIndex {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -56,8 +56,10 @@ impl SearchIndex {
     pub async fn find_all_by_dns_name(&self, datacenter: Option<&crate::types::structs::ManagedObjectReference>, dns_name: &str, vm_search: bool) -> Result<Vec<crate::types::structs::ManagedObjectReference>> {
         let input = FindAllByDnsNameRequestType {datacenter, dns_name, vm_search, };
         let path = format!("/SearchIndex/{moId}/FindAllByDnsName", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: Vec<crate::types::structs::ManagedObjectReference> = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Finds all virtual machines or hosts by IP address, where the IP address is
     /// in dot-decimal notation.
@@ -93,8 +95,10 @@ impl SearchIndex {
     pub async fn find_all_by_ip(&self, datacenter: Option<&crate::types::structs::ManagedObjectReference>, ip: &str, vm_search: bool) -> Result<Vec<crate::types::structs::ManagedObjectReference>> {
         let input = FindAllByIpRequestType {datacenter, ip, vm_search, };
         let path = format!("/SearchIndex/{moId}/FindAllByIp", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: Vec<crate::types::structs::ManagedObjectReference> = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Finds all virtual machines or hosts by UUID.
     /// 
@@ -134,8 +138,10 @@ impl SearchIndex {
     pub async fn find_all_by_uuid(&self, datacenter: Option<&crate::types::structs::ManagedObjectReference>, uuid: &str, vm_search: bool, instance_uuid: Option<bool>) -> Result<Vec<crate::types::structs::ManagedObjectReference>> {
         let input = FindAllByUuidRequestType {datacenter, uuid, vm_search, instance_uuid, };
         let path = format!("/SearchIndex/{moId}/FindAllByUuid", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: Vec<crate::types::structs::ManagedObjectReference> = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Finds a virtual machine by its location on a datastore.
     /// 
@@ -166,8 +172,12 @@ impl SearchIndex {
     pub async fn find_by_datastore_path(&self, datacenter: &crate::types::structs::ManagedObjectReference, path: &str) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let input = FindByDatastorePathRequestType {datacenter, path, };
         let path = format!("/SearchIndex/{moId}/FindByDatastorePath", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::ManagedObjectReference>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Finds a virtual machine or host by DNS name.
     /// 
@@ -202,8 +212,12 @@ impl SearchIndex {
     pub async fn find_by_dns_name(&self, datacenter: Option<&crate::types::structs::ManagedObjectReference>, dns_name: &str, vm_search: bool) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let input = FindByDnsNameRequestType {datacenter, dns_name, vm_search, };
         let path = format!("/SearchIndex/{moId}/FindByDnsName", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::ManagedObjectReference>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Finds a managed entity based on its location in the inventory.
     /// 
@@ -231,8 +245,12 @@ impl SearchIndex {
     pub async fn find_by_inventory_path(&self, inventory_path: &str) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let input = FindByInventoryPathRequestType {inventory_path, };
         let path = format!("/SearchIndex/{moId}/FindByInventoryPath", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::ManagedObjectReference>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Finds a virtual machine or host by IP address, where the IP address is in
     /// dot-decimal notation.
@@ -270,8 +288,12 @@ impl SearchIndex {
     pub async fn find_by_ip(&self, datacenter: Option<&crate::types::structs::ManagedObjectReference>, ip: &str, vm_search: bool) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let input = FindByIpRequestType {datacenter, ip, vm_search, };
         let path = format!("/SearchIndex/{moId}/FindByIp", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::ManagedObjectReference>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Finds a virtual machine or host by BIOS or instance UUID.
     /// 
@@ -310,8 +332,12 @@ impl SearchIndex {
     pub async fn find_by_uuid(&self, datacenter: Option<&crate::types::structs::ManagedObjectReference>, uuid: &str, vm_search: bool, instance_uuid: Option<bool>) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let input = FindByUuidRequestType {datacenter, uuid, vm_search, instance_uuid, };
         let path = format!("/SearchIndex/{moId}/FindByUuid", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::ManagedObjectReference>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Finds a particular child based on a managed entity
     /// name.
@@ -342,8 +368,12 @@ impl SearchIndex {
     pub async fn find_child(&self, entity: &crate::types::structs::ManagedObjectReference, name: &str) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let input = FindChildRequestType {entity, name, };
         let path = format!("/SearchIndex/{moId}/FindChild", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::ManagedObjectReference>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
 }
 #[derive(serde::Serialize)]

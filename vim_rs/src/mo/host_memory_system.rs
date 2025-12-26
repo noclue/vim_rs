@@ -1,15 +1,15 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// The MemoryManagerSystem managed object provides an interface through which
 /// the host memory management policies that affect the performance of running
 /// virtual machines can be gathered and configured.
 #[derive(Clone)]
 pub struct HostMemorySystem {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl HostMemorySystem {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -31,7 +31,7 @@ impl HostMemorySystem {
     pub async fn reconfigure_service_console_reservation(&self, cfg_bytes: i64) -> Result<()> {
         let input = ReconfigureServiceConsoleReservationRequestType {cfg_bytes, };
         let path = format!("/HostMemorySystem/{moId}/ReconfigureServiceConsoleReservation", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Updates the virtual machine reservation information.
@@ -45,7 +45,7 @@ impl HostMemorySystem {
     pub async fn reconfigure_virtual_machine_reservation(&self, spec: &crate::types::structs::VirtualMachineMemoryReservationSpec) -> Result<()> {
         let input = ReconfigureVirtualMachineReservationRequestType {spec, };
         let path = format!("/HostMemorySystem/{moId}/ReconfigureVirtualMachineReservation", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Assigns a value to a custom field.
@@ -65,7 +65,7 @@ impl HostMemorySystem {
     pub async fn set_custom_value(&self, key: &str, value: &str) -> Result<()> {
         let input = SetCustomValueRequestType {key, value, };
         let path = format!("/HostMemorySystem/{moId}/setCustomValue", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// List of custom field definitions that are valid for the object's type.
@@ -76,7 +76,11 @@ impl HostMemorySystem {
     pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
         let path = format!("/HostMemorySystem/{moId}/availableField", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::CustomFieldDef>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Service console reservation information for the memory manager.
     /// 
@@ -86,7 +90,11 @@ impl HostMemorySystem {
     pub async fn console_reservation_info(&self) -> Result<Option<crate::types::structs::ServiceConsoleReservationInfo>> {
         let path = format!("/HostMemorySystem/{moId}/consoleReservationInfo", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::ServiceConsoleReservationInfo>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// List of custom field values.
     /// 
@@ -98,7 +106,11 @@ impl HostMemorySystem {
     pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/HostMemorySystem/{moId}/value", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Virtual machine reservation information for the memory manager.
     /// 
@@ -108,7 +120,11 @@ impl HostMemorySystem {
     pub async fn virtual_machine_reservation_info(&self) -> Result<Option<crate::types::structs::VirtualMachineMemoryReservationInfo>> {
         let path = format!("/HostMemorySystem/{moId}/virtualMachineReservationInfo", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::VirtualMachineMemoryReservationInfo>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
 }
 #[derive(serde::Serialize)]

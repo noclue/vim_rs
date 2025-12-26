@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// The *VmwareDistributedVirtualSwitch* managed object
 /// is the VMware implementation of a distributed virtual switch.
 /// 
@@ -16,11 +16,11 @@ use crate::core::client::{Client, Result};
 /// - *DistributedVirtualPortgroup.DVPortgroupRollback_Task*
 #[derive(Clone)]
 pub struct VmwareDistributedVirtualSwitch {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl VmwareDistributedVirtualSwitch {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -52,7 +52,7 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn add_network_resource_pool(&self, config_spec: &[crate::types::structs::DvsNetworkResourcePoolConfigSpec]) -> Result<()> {
         let input = AddNetworkResourcePoolRequestType {config_spec, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/AddNetworkResourcePool", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Creates a single *DistributedVirtualPortgroup* and adds it
@@ -85,8 +85,10 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn create_dv_portgroup_task(&self, spec: &crate::types::structs::DvPortgroupConfigSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateDvPortgroupRequestType {spec, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/CreateDVPortgroup_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Creates one or more *DistributedVirtualPortgroup*s and adds them to
     /// the distributed virtual switch.
@@ -120,8 +122,10 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn add_dv_portgroup_task(&self, spec: &[crate::types::structs::DvPortgroupConfigSpec]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = AddDvPortgroupRequestType {spec, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/AddDVPortgroup_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Destroys this object, deleting its contents and removing it from its parent
     /// folder (if any).
@@ -147,7 +151,9 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn destroy_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/Destroy_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Enable/Disable network I/O control on the vSphere Distributed Switch.
     /// 
@@ -172,7 +178,7 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn enable_network_resource_management(&self, enable: bool) -> Result<()> {
         let input = EnableNetworkResourceManagementRequestType {enable, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/EnableNetworkResourceManagement", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Return the keys of ports that meet the criteria.
@@ -190,8 +196,12 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn fetch_dv_port_keys(&self, criteria: Option<&crate::types::structs::DistributedVirtualSwitchPortCriteria>) -> Result<Option<Vec<String>>> {
         let input = FetchDvPortKeysRequestType {criteria, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/FetchDVPortKeys", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<String>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Return the ports that meet the criteria.
     /// 
@@ -205,8 +215,12 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn fetch_dv_ports(&self, criteria: Option<&crate::types::structs::DistributedVirtualSwitchPortCriteria>) -> Result<Option<Vec<crate::types::structs::DistributedVirtualPort>>> {
         let input = FetchDvPortsRequestType {criteria, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/FetchDVPorts", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::DistributedVirtualPort>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Returns the portgroup identified by the key within this VDS.
     /// 
@@ -229,8 +243,12 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn lookup_dv_port_group(&self, portgroup_key: &str) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let input = LookupDvPortGroupRequestType {portgroup_key, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/LookupDvPortGroup", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::ManagedObjectReference>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Deprecated as of vSphere API 5.5.
     /// 
@@ -308,8 +326,10 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn merge_dvs_task(&self, dvs: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = MergeDvsRequestType {dvs, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/MergeDvs_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deprecated as of vSphere API 6.0.
     /// 
@@ -348,8 +368,10 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn move_dv_port_task(&self, port_key: &[String], destination_portgroup_key: Option<&str>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = MoveDvPortRequestType {port_key, destination_portgroup_key, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/MoveDVPort_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// This method updates the *DistributedVirtualSwitch* product specifications.
     /// 
@@ -385,8 +407,10 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn perform_dvs_product_spec_operation_task(&self, operation: &str, product_spec: Option<&crate::types::structs::DistributedVirtualSwitchProductSpec>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = PerformDvsProductSpecOperationRequestType {operation, product_spec, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/PerformDvsProductSpecOperation_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Return the used VLAN ID (PVLAN excluded) in the switch.
     /// 
@@ -394,7 +418,11 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn query_used_vlan_id_in_dvs(&self) -> Result<Option<Vec<i32>>> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/QueryUsedVlanIdInDvs", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<i32>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Reconfigures a distributed virtual switch.
     /// 
@@ -467,8 +495,10 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn reconfigure_dvs_task(&self, spec: &dyn crate::types::traits::DvsConfigSpecTrait) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ReconfigureDvsRequestType {spec, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/ReconfigureDvs_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Reconfigure individual ports.
     /// 
@@ -503,8 +533,10 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn reconfigure_dv_port_task(&self, port: &[crate::types::structs::DvPortConfigSpec]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ReconfigureDvPortRequestType {port, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/ReconfigureDVPort_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// reconfigure the Virtual NIC network resource pool configuration.
     /// 
@@ -546,8 +578,10 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn dvs_reconfigure_vm_vnic_network_resource_pool_task(&self, config_spec: &[crate::types::structs::DvsVmVnicResourcePoolConfigSpec]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = DvsReconfigureVmVnicNetworkResourcePoolRequestType {config_spec, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/DvsReconfigureVmVnicNetworkResourcePool_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deprecated as of vSphere API 5.0.
     /// Use
@@ -575,8 +609,10 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn rectify_dvs_host_task(&self, hosts: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RectifyDvsHostRequestType {hosts, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/RectifyDvsHost_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Refresh port states.
     /// 
@@ -594,7 +630,7 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn refresh_dv_port_state(&self, port_keys: Option<&[String]>) -> Result<()> {
         let input = RefreshDvPortStateRequestType {port_keys, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/RefreshDVPortState", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Reload the entity state.
@@ -648,7 +684,7 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn remove_network_resource_pool(&self, key: &[String]) -> Result<()> {
         let input = RemoveNetworkResourcePoolRequestType {key, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/RemoveNetworkResourcePool", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Renames this managed entity.
@@ -682,8 +718,10 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn rename_task(&self, new_name: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RenameRequestType {new_name, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/Rename_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// This method determines if the distributed virtual switch configuration
     /// has changed.
@@ -731,8 +769,10 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn dvs_rollback_task(&self, entity_backup: Option<&crate::types::structs::EntityBackupConfig>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = DvsRollbackRequestType {entity_backup, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/DVSRollback_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Assigns a value to a custom field.
     /// 
@@ -751,7 +791,7 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn set_custom_value(&self, key: &str, value: &str) -> Result<()> {
         let input = SetCustomValueRequestType {key, value, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/setCustomValue", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Set the capability of the switch.
@@ -776,7 +816,7 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn update_dvs_capability(&self, capability: &crate::types::structs::DvsCapability) -> Result<()> {
         let input = UpdateDvsCapabilityRequestType {capability, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/UpdateDvsCapability", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Update health check configuration.
@@ -802,8 +842,10 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn update_dvs_health_check_config_task(&self, health_check_config: &[Box<dyn crate::types::traits::DvsHealthCheckConfigTrait>]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = UpdateDvsHealthCheckConfigRequestType {health_check_config, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/UpdateDVSHealthCheckConfig_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Update Link Aggregation Control Protocol groups.
     /// 
@@ -832,8 +874,10 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn update_dvs_lacp_group_config_task(&self, lacp_group_spec: &[crate::types::structs::VMwareDvsLacpGroupSpec]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = UpdateDvsLacpGroupConfigRequestType {lacp_group_spec, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/UpdateDVSLacpGroupConfig_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deprecated as of vSphere API 6.0
     /// Use *DistributedVirtualSwitch.DvsReconfigureVmVnicNetworkResourcePool_Task* instead
@@ -868,7 +912,7 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn update_network_resource_pool(&self, config_spec: &[crate::types::structs::DvsNetworkResourcePoolConfigSpec]) -> Result<()> {
         let input = UpdateNetworkResourcePoolRequestType {config_spec, };
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/UpdateNetworkResourcePool", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Whether alarm actions are enabled for this entity.
@@ -879,7 +923,11 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn alarm_actions_enabled(&self) -> Result<Option<bool>> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/alarmActionsEnabled", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<bool>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// List of custom field definitions that are valid for the object's type.
     /// 
@@ -889,7 +937,11 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/availableField", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::CustomFieldDef>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Capability of the switch.
     /// 
@@ -901,13 +953,17 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn capability(&self) -> Result<crate::types::structs::DvsCapability> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/capability", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::DvsCapability = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Switch configuration data.
     pub async fn config(&self) -> Result<Box<dyn crate::types::traits::DvsConfigInfoTrait>> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/config", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: Box<dyn crate::types::traits::DvsConfigInfoTrait> = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Current configuration issues that have been detected for this entity.
     /// 
@@ -919,7 +975,11 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn config_issue(&self) -> Result<Option<Vec<crate::types::structs::Event>>> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/configIssue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::Event>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// The configStatus indicates whether or not the system has detected a configuration
     /// issue involving this entity.
@@ -948,7 +1008,9 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn config_status(&self) -> Result<crate::types::enums::ManagedEntityStatusEnum> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/configStatus", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::enums::ManagedEntityStatusEnum = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Custom field values.
     /// 
@@ -956,7 +1018,11 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn custom_value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/customValue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// A set of alarm states for alarms that apply to this managed entity.
     /// 
@@ -971,7 +1037,11 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn declared_alarm_state(&self) -> Result<Option<Vec<crate::types::structs::AlarmState>>> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/declaredAlarmState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::AlarmState>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// List of operations that are disabled, given the current runtime
     /// state of the entity.
@@ -1045,7 +1115,11 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn disabled_method(&self) -> Result<Option<Vec<String>>> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/disabledMethod", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<String>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Access rights the current session has to this entity.
     /// 
@@ -1053,7 +1127,11 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn effective_role(&self) -> Result<Option<Vec<i32>>> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/effectiveRole", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<i32>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Name of this entity, unique relative to its parent.
     /// 
@@ -1067,7 +1145,9 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn name(&self) -> Result<String> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/name", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deprecated as of vSphere API 6.0
     /// Use *DVSConfigInfo.vmVnicNetworkResourcePool*
@@ -1079,7 +1159,11 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn network_resource_pool(&self) -> Result<Option<Vec<crate::types::structs::DvsNetworkResourcePool>>> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/networkResourcePool", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::DvsNetworkResourcePool>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// General health of this managed entity.
     /// 
@@ -1104,7 +1188,9 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn overall_status(&self) -> Result<crate::types::enums::ManagedEntityStatusEnum> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/overallStatus", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::enums::ManagedEntityStatusEnum = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Parent of this entity.
     /// 
@@ -1120,13 +1206,21 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn parent(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/parent", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::ManagedObjectReference>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// List of permissions defined for this entity.
     pub async fn permission(&self) -> Result<Option<Vec<crate::types::structs::Permission>>> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/permission", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::Permission>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Portgroups that are defined on the switch.
     ///
@@ -1136,7 +1230,11 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn portgroup(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/portgroup", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// The set of recent tasks operating on this managed entity.
     /// 
@@ -1166,19 +1264,29 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn recent_task(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/recentTask", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Runtime information of the distributed virtual switch.
     pub async fn runtime(&self) -> Result<Option<crate::types::structs::DvsRuntimeInfo>> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/runtime", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::DvsRuntimeInfo>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Summary of the switch.
     pub async fn summary(&self) -> Result<crate::types::structs::DvsSummary> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/summary", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::DvsSummary = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// The set of tags associated with this managed entity.
     /// 
@@ -1188,7 +1296,11 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn tag(&self) -> Result<Option<Vec<crate::types::structs::Tag>>> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/tag", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::Tag>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// A set of alarm states for alarms triggered by this entity
     /// or by its descendants.
@@ -1207,7 +1319,11 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn triggered_alarm_state(&self) -> Result<Option<Vec<crate::types::structs::AlarmState>>> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/triggeredAlarmState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::AlarmState>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Generated UUID of the switch.
     /// 
@@ -1216,7 +1332,9 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn uuid(&self) -> Result<String> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/uuid", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// List of custom field values.
     /// 
@@ -1228,7 +1346,11 @@ impl VmwareDistributedVirtualSwitch {
     pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/VmwareDistributedVirtualSwitch/{moId}/value", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
 }
 #[derive(serde::Serialize)]

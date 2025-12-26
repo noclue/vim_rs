@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// The DiagnosticSystem managed object is used to configure the diagnostic
 /// mechanisms specific to the host.
 /// 
@@ -11,11 +11,11 @@ use crate::core::client::{Client, Result};
 ///   list of available partitions and could be made active.
 #[derive(Clone)]
 pub struct HostDiagnosticSystem {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl HostDiagnosticSystem {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -52,7 +52,7 @@ impl HostDiagnosticSystem {
     pub async fn create_diagnostic_partition(&self, spec: &crate::types::structs::HostDiagnosticPartitionCreateSpec) -> Result<()> {
         let input = CreateDiagnosticPartitionRequestType {spec, };
         let path = format!("/HostDiagnosticSystem/{moId}/CreateDiagnosticPartition", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Retrieves a list of available diagnostic partitions.
@@ -74,7 +74,11 @@ impl HostDiagnosticSystem {
     pub async fn query_available_partition(&self) -> Result<Option<Vec<crate::types::structs::HostDiagnosticPartition>>> {
         let path = format!("/HostDiagnosticSystem/{moId}/QueryAvailablePartition", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::HostDiagnosticPartition>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// For a disk, query for the diagnostic partition creation description.
     /// 
@@ -109,8 +113,10 @@ impl HostDiagnosticSystem {
     pub async fn query_partition_create_desc(&self, disk_uuid: &str, diagnostic_type: &str) -> Result<crate::types::structs::HostDiagnosticPartitionCreateDescription> {
         let input = QueryPartitionCreateDescRequestType {disk_uuid, diagnostic_type, };
         let path = format!("/HostDiagnosticSystem/{moId}/QueryPartitionCreateDesc", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::HostDiagnosticPartitionCreateDescription = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Retrieves a list of disks that can be used to contain a diagnostic
     /// partition.
@@ -142,8 +148,12 @@ impl HostDiagnosticSystem {
     pub async fn query_partition_create_options(&self, storage_type: &str, diagnostic_type: &str) -> Result<Option<Vec<crate::types::structs::HostDiagnosticPartitionCreateOption>>> {
         let input = QueryPartitionCreateOptionsRequestType {storage_type, diagnostic_type, };
         let path = format!("/HostDiagnosticSystem/{moId}/QueryPartitionCreateOptions", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::HostDiagnosticPartitionCreateOption>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Changes the active diagnostic partition to a different partition.
     /// 
@@ -170,14 +180,18 @@ impl HostDiagnosticSystem {
     pub async fn select_active_partition(&self, partition: Option<&crate::types::structs::HostScsiDiskPartition>) -> Result<()> {
         let input = SelectActivePartitionRequestType {partition, };
         let path = format!("/HostDiagnosticSystem/{moId}/SelectActivePartition", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// The currently active diagnostic partition.
     pub async fn active_partition(&self) -> Result<Option<crate::types::structs::HostDiagnosticPartition>> {
         let path = format!("/HostDiagnosticSystem/{moId}/activePartition", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::HostDiagnosticPartition>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
 }
 #[derive(serde::Serialize)]

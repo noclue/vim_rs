@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// The HostSystem managed object type provides access to a virtualization
 /// host platform.
 /// 
@@ -11,11 +11,11 @@ use crate::core::client::{Client, Result};
 /// *ClusterFailoverHostAdmissionControlPolicy*.
 #[derive(Clone)]
 pub struct HostSystem {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl HostSystem {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -34,7 +34,9 @@ impl HostSystem {
     pub async fn acquire_cim_services_ticket(&self) -> Result<crate::types::structs::HostServiceTicket> {
         let path = format!("/HostSystem/{moId}/AcquireCimServicesTicket", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::HostServiceTicket = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Sets/changes the key to be used for coredump encryption
     /// and puts the host in *safe* state.
@@ -61,7 +63,7 @@ impl HostSystem {
     pub async fn configure_crypto_key(&self, key_id: Option<&crate::types::structs::CryptoKeyId>) -> Result<()> {
         let input = ConfigureCryptoKeyRequestType {key_id, };
         let path = format!("/HostSystem/{moId}/ConfigureCryptoKey", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Destroys this object, deleting its contents and removing it from its parent
@@ -88,7 +90,9 @@ impl HostSystem {
     pub async fn destroy_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/HostSystem/{moId}/Destroy_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Disconnects from a host and instructs the server to stop sending heartbeats.
     /// 
@@ -103,7 +107,9 @@ impl HostSystem {
     pub async fn disconnect_host_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/HostSystem/{moId}/DisconnectHost_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Sets/changes the key to be used for coredump encryption
     /// and puts the host in *safe* state
@@ -123,7 +129,7 @@ impl HostSystem {
     pub async fn enable_crypto(&self, key_plain: &crate::types::structs::CryptoKeyPlain) -> Result<()> {
         let input = EnableCryptoRequestType {key_plain, };
         let path = format!("/HostSystem/{moId}/EnableCrypto", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Deprecated as of vSphere API 6.0, use
@@ -223,8 +229,10 @@ impl HostSystem {
     pub async fn enter_maintenance_mode_task(&self, timeout: i32, evacuate_powered_off_vms: Option<bool>, maintenance_spec: Option<&crate::types::structs::HostMaintenanceSpec>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = EnterMaintenanceModeRequestType {timeout, evacuate_powered_off_vms, maintenance_spec, };
         let path = format!("/HostSystem/{moId}/EnterMaintenanceMode_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Puts the host in standby mode, a mode in which the host is in a
     /// standby state from which it can be powered up remotely.
@@ -295,8 +303,10 @@ impl HostSystem {
     pub async fn power_down_host_to_stand_by_task(&self, timeout_sec: i32, evacuate_powered_off_vms: Option<bool>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = PowerDownHostToStandByRequestType {timeout_sec, evacuate_powered_off_vms, };
         let path = format!("/HostSystem/{moId}/PowerDownHostToStandBy_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deprecated as of vSphere API 6.0, use
     /// *HostAccessManager.ChangeLockdownMode*.
@@ -355,8 +365,10 @@ impl HostSystem {
     pub async fn exit_maintenance_mode_task(&self, timeout: i32) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ExitMaintenanceModeRequestType {timeout, };
         let path = format!("/HostSystem/{moId}/ExitMaintenanceMode_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Takes the host out of standby mode.
     /// 
@@ -405,8 +417,10 @@ impl HostSystem {
     pub async fn power_up_host_from_stand_by_task(&self, timeout_sec: i32) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = PowerUpHostFromStandByRequestType {timeout_sec, };
         let path = format!("/HostSystem/{moId}/PowerUpHostFromStandBy_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Prepare the host for receiving sensitive information
     /// and puts the host in *prepared* mode
@@ -429,7 +443,9 @@ impl HostSystem {
     pub async fn query_host_connection_info(&self) -> Result<crate::types::structs::HostConnectInfo> {
         let path = format!("/HostSystem/{moId}/QueryHostConnectionInfo", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::HostConnectInfo = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deprecated as of VI API 2.5, use *HostSystem.QueryMemoryOverheadEx*.
     /// 
@@ -464,8 +480,10 @@ impl HostSystem {
     pub async fn query_memory_overhead(&self, memory_size: i64, video_ram_size: Option<i32>, num_vcpus: i32) -> Result<i64> {
         let input = QueryMemoryOverheadRequestType {memory_size, video_ram_size, num_vcpus, };
         let path = format!("/HostSystem/{moId}/QueryMemoryOverhead", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: i64 = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deprecated as of VI API 6.0, use
     /// *VirtualMachineConfigInfo.initialOverhead*.
@@ -487,8 +505,10 @@ impl HostSystem {
     pub async fn query_memory_overhead_ex(&self, vm_config_info: &crate::types::structs::VirtualMachineConfigInfo) -> Result<i64> {
         let input = QueryMemoryOverheadExRequestType {vm_config_info, };
         let path = format!("/HostSystem/{moId}/QueryMemoryOverheadEx", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: i64 = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Query the path to VMware Tools repository configured on the host.
     /// 
@@ -507,7 +527,9 @@ impl HostSystem {
     pub async fn query_product_locker_location(&self) -> Result<String> {
         let path = format!("/HostSystem/{moId}/QueryProductLockerLocation", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Basic information about TPM attestation state of the host.
     /// 
@@ -515,7 +537,11 @@ impl HostSystem {
     pub async fn query_tpm_attestation_report(&self) -> Result<Option<crate::types::structs::HostTpmAttestationReport>> {
         let path = format!("/HostSystem/{moId}/QueryTpmAttestationReport", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::HostTpmAttestationReport>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Reboots a host.
     /// 
@@ -552,8 +578,10 @@ impl HostSystem {
     pub async fn reboot_host_task(&self, force: bool) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RebootHostRequestType {force, };
         let path = format!("/HostSystem/{moId}/RebootHost_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Reconfigures the host for vSphere HA.
     /// 
@@ -580,7 +608,9 @@ impl HostSystem {
     pub async fn reconfigure_host_for_das_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/HostSystem/{moId}/ReconfigureHostForDAS_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Reconnects to a host.
     /// 
@@ -656,8 +686,10 @@ impl HostSystem {
     pub async fn reconnect_host_task(&self, cnx_spec: Option<&crate::types::structs::HostConnectSpec>, reconnect_spec: Option<&crate::types::structs::HostSystemReconnectSpec>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ReconnectHostRequestType {cnx_spec, reconnect_spec, };
         let path = format!("/HostSystem/{moId}/ReconnectHost_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Reload the entity state.
     /// 
@@ -709,8 +741,10 @@ impl HostSystem {
     pub async fn rename_task(&self, new_name: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RenameRequestType {new_name, };
         let path = format!("/HostSystem/{moId}/Rename_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Return the amount of free EPC memory on the host in bytes.
     /// 
@@ -718,7 +752,9 @@ impl HostSystem {
     pub async fn retrieve_free_epc_memory(&self) -> Result<i64> {
         let path = format!("/HostSystem/{moId}/RetrieveFreeEpcMemory", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: i64 = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Return the hardware uptime of the host in seconds.
     /// 
@@ -730,7 +766,9 @@ impl HostSystem {
     pub async fn retrieve_hardware_uptime(&self) -> Result<i64> {
         let path = format!("/HostSystem/{moId}/RetrieveHardwareUptime", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: i64 = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Assigns a value to a custom field.
     /// 
@@ -749,7 +787,7 @@ impl HostSystem {
     pub async fn set_custom_value(&self, key: &str, value: &str) -> Result<()> {
         let input = SetCustomValueRequestType {key, value, };
         let path = format!("/HostSystem/{moId}/setCustomValue", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Shuts down a host.
@@ -787,8 +825,10 @@ impl HostSystem {
     pub async fn shutdown_host_task(&self, force: bool) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ShutdownHostRequestType {force, };
         let path = format!("/HostSystem/{moId}/ShutdownHost_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Update flags that are part of the *HostFlagInfo* object.
     /// 
@@ -801,7 +841,7 @@ impl HostSystem {
     pub async fn update_flags(&self, flag_info: &crate::types::structs::HostFlagInfo) -> Result<()> {
         let input = UpdateFlagsRequestType {flag_info, };
         let path = format!("/HostSystem/{moId}/UpdateFlags", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Update fields that are part of the *HostIpmiInfo* object.
@@ -821,7 +861,7 @@ impl HostSystem {
     pub async fn update_ipmi(&self, ipmi_info: &crate::types::structs::HostIpmiInfo) -> Result<()> {
         let input = UpdateIpmiRequestType {ipmi_info, };
         let path = format!("/HostSystem/{moId}/UpdateIpmi", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Change and reconfigure the VMware Tools repository on the host.
@@ -869,8 +909,10 @@ impl HostSystem {
     pub async fn update_product_locker_location_task(&self, path: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = UpdateProductLockerLocationRequestType {path, };
         let path = format!("/HostSystem/{moId}/UpdateProductLockerLocation_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deprecated as of Vsphere API 6.0. Please, contact VMware Support to get
     /// instructions on how to configure system ESX resource pools.
@@ -886,7 +928,7 @@ impl HostSystem {
     pub async fn update_system_resources(&self, resource_info: &crate::types::structs::HostSystemResourceInfo) -> Result<()> {
         let input = UpdateSystemResourcesRequestType {resource_info, };
         let path = format!("/HostSystem/{moId}/UpdateSystemResources", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Update the System Swap Configuration.
@@ -903,7 +945,7 @@ impl HostSystem {
     pub async fn update_system_swap_configuration(&self, sys_swap_config: &crate::types::structs::HostSystemSwapConfiguration) -> Result<()> {
         let input = UpdateSystemSwapConfigurationRequestType {sys_swap_config, };
         let path = format!("/HostSystem/{moId}/UpdateSystemSwapConfiguration", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Whether alarm actions are enabled for this entity.
@@ -914,19 +956,31 @@ impl HostSystem {
     pub async fn alarm_actions_enabled(&self) -> Result<Option<bool>> {
         let path = format!("/HostSystem/{moId}/alarmActionsEnabled", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<bool>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Host answer file validation result.
     pub async fn answer_file_validation_result(&self) -> Result<Option<crate::types::structs::AnswerFileStatusResult>> {
         let path = format!("/HostSystem/{moId}/answerFileValidationResult", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::AnswerFileStatusResult>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Host answer file validation state.
     pub async fn answer_file_validation_state(&self) -> Result<Option<crate::types::structs::AnswerFileStatusResult>> {
         let path = format!("/HostSystem/{moId}/answerFileValidationState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::AnswerFileStatusResult>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// List of custom field definitions that are valid for the object's type.
     /// 
@@ -936,7 +990,11 @@ impl HostSystem {
     pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
         let path = format!("/HostSystem/{moId}/availableField", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::CustomFieldDef>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Host capabilities.
     /// 
@@ -945,19 +1003,31 @@ impl HostSystem {
     pub async fn capability(&self) -> Result<Option<crate::types::structs::HostCapability>> {
         let path = format!("/HostSystem/{moId}/capability", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::HostCapability>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// The host profile compliance check result.
     pub async fn compliance_check_result(&self) -> Result<Option<crate::types::structs::ComplianceResult>> {
         let path = format!("/HostSystem/{moId}/complianceCheckResult", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::ComplianceResult>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// The host profile compliance check state.
     pub async fn compliance_check_state(&self) -> Result<Option<crate::types::structs::HostSystemComplianceCheckState>> {
         let path = format!("/HostSystem/{moId}/complianceCheckState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::HostSystemComplianceCheckState>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Host configuration information.
     /// 
@@ -966,7 +1036,11 @@ impl HostSystem {
     pub async fn config(&self) -> Result<Option<crate::types::structs::HostConfigInfo>> {
         let path = format!("/HostSystem/{moId}/config", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::HostConfigInfo>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Current configuration issues that have been detected for this entity.
     /// 
@@ -978,7 +1052,11 @@ impl HostSystem {
     pub async fn config_issue(&self) -> Result<Option<Vec<crate::types::structs::Event>>> {
         let path = format!("/HostSystem/{moId}/configIssue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::Event>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Host configuration systems.
     /// 
@@ -992,7 +1070,9 @@ impl HostSystem {
     pub async fn config_manager(&self) -> Result<crate::types::structs::HostConfigManager> {
         let path = format!("/HostSystem/{moId}/configManager", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::HostConfigManager = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// The configStatus indicates whether or not the system has detected a configuration
     /// issue involving this entity.
@@ -1021,7 +1101,9 @@ impl HostSystem {
     pub async fn config_status(&self) -> Result<crate::types::enums::ManagedEntityStatusEnum> {
         let path = format!("/HostSystem/{moId}/configStatus", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::enums::ManagedEntityStatusEnum = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Custom field values.
     /// 
@@ -1029,7 +1111,11 @@ impl HostSystem {
     pub async fn custom_value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/HostSystem/{moId}/customValue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// A collection of references to the subset of datastore objects in the datacenter
     /// that are available in this HostSystem.
@@ -1042,7 +1128,11 @@ impl HostSystem {
     pub async fn datastore(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/HostSystem/{moId}/datastore", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// DatastoreBrowser to browse datastores for this host.
     /// 
@@ -1054,7 +1144,9 @@ impl HostSystem {
     pub async fn datastore_browser(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/HostSystem/{moId}/datastoreBrowser", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// A set of alarm states for alarms that apply to this managed entity.
     /// 
@@ -1069,7 +1161,11 @@ impl HostSystem {
     pub async fn declared_alarm_state(&self) -> Result<Option<Vec<crate::types::structs::AlarmState>>> {
         let path = format!("/HostSystem/{moId}/declaredAlarmState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::AlarmState>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// List of operations that are disabled, given the current runtime
     /// state of the entity.
@@ -1143,7 +1239,11 @@ impl HostSystem {
     pub async fn disabled_method(&self) -> Result<Option<Vec<String>>> {
         let path = format!("/HostSystem/{moId}/disabledMethod", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<String>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Access rights the current session has to this entity.
     /// 
@@ -1151,7 +1251,11 @@ impl HostSystem {
     pub async fn effective_role(&self) -> Result<Option<Vec<i32>>> {
         let path = format!("/HostSystem/{moId}/effectiveRole", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<i32>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Hardware configuration of the host.
     /// 
@@ -1160,7 +1264,11 @@ impl HostSystem {
     pub async fn hardware(&self) -> Result<Option<crate::types::structs::HostHardwareInfo>> {
         let path = format!("/HostSystem/{moId}/hardware", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::HostHardwareInfo>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Information about all licensable resources, currently present on this host.
     /// 
@@ -1173,7 +1281,9 @@ impl HostSystem {
     pub async fn licensable_resource(&self) -> Result<crate::types::structs::HostLicensableResourceInfo> {
         let path = format!("/HostSystem/{moId}/licensableResource", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::HostLicensableResourceInfo = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Name of this entity, unique relative to its parent.
     /// 
@@ -1187,7 +1297,9 @@ impl HostSystem {
     pub async fn name(&self) -> Result<String> {
         let path = format!("/HostSystem/{moId}/name", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// A collection of references to the subset of network objects in the datacenter that
     /// are available in this HostSystem.
@@ -1200,7 +1312,11 @@ impl HostSystem {
     pub async fn network(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/HostSystem/{moId}/network", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// General health of this managed entity.
     /// 
@@ -1225,7 +1341,9 @@ impl HostSystem {
     pub async fn overall_status(&self) -> Result<crate::types::enums::ManagedEntityStatusEnum> {
         let path = format!("/HostSystem/{moId}/overallStatus", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::enums::ManagedEntityStatusEnum = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Parent of this entity.
     /// 
@@ -1241,19 +1359,31 @@ impl HostSystem {
     pub async fn parent(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let path = format!("/HostSystem/{moId}/parent", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::ManagedObjectReference>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// List of permissions defined for this entity.
     pub async fn permission(&self) -> Result<Option<Vec<crate::types::structs::Permission>>> {
         let path = format!("/HostSystem/{moId}/permission", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::Permission>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// The host profile precheck-remediation result.
     pub async fn precheck_remediation_result(&self) -> Result<Option<crate::types::structs::ApplyHostProfileConfigurationSpec>> {
         let path = format!("/HostSystem/{moId}/precheckRemediationResult", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::ApplyHostProfileConfigurationSpec>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// The set of recent tasks operating on this managed entity.
     /// 
@@ -1283,38 +1413,58 @@ impl HostSystem {
     pub async fn recent_task(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/HostSystem/{moId}/recentTask", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// The host profile remediation result.
     pub async fn remediation_result(&self) -> Result<Option<crate::types::structs::ApplyHostProfileConfigurationResult>> {
         let path = format!("/HostSystem/{moId}/remediationResult", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::ApplyHostProfileConfigurationResult>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// The host profile remediation state.
     pub async fn remediation_state(&self) -> Result<Option<crate::types::structs::HostSystemRemediationState>> {
         let path = format!("/HostSystem/{moId}/remediationState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::HostSystemRemediationState>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Runtime state information about the host such as connection state.
     pub async fn runtime(&self) -> Result<crate::types::structs::HostRuntimeInfo> {
         let path = format!("/HostSystem/{moId}/runtime", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::HostRuntimeInfo = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Basic information about the host, including connection state.
     pub async fn summary(&self) -> Result<crate::types::structs::HostListSummary> {
         let path = format!("/HostSystem/{moId}/summary", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::HostListSummary = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Reference for the system resource hierarchy, used for configuring the set of
     /// resources reserved to the system and unavailable to virtual machines.
     pub async fn system_resources(&self) -> Result<Option<crate::types::structs::HostSystemResourceInfo>> {
         let path = format!("/HostSystem/{moId}/systemResources", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::HostSystemResourceInfo>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// The set of tags associated with this managed entity.
     /// 
@@ -1324,7 +1474,11 @@ impl HostSystem {
     pub async fn tag(&self) -> Result<Option<Vec<crate::types::structs::Tag>>> {
         let path = format!("/HostSystem/{moId}/tag", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::Tag>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// A set of alarm states for alarms triggered by this entity
     /// or by its descendants.
@@ -1343,7 +1497,11 @@ impl HostSystem {
     pub async fn triggered_alarm_state(&self) -> Result<Option<Vec<crate::types::structs::AlarmState>>> {
         let path = format!("/HostSystem/{moId}/triggeredAlarmState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::AlarmState>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// List of custom field values.
     /// 
@@ -1355,7 +1513,11 @@ impl HostSystem {
     pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/HostSystem/{moId}/value", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// List of virtual machines associated with this host.
     ///
@@ -1365,7 +1527,11 @@ impl HostSystem {
     pub async fn vm(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/HostSystem/{moId}/vm", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
 }
 #[derive(serde::Serialize)]

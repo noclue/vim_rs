@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// The <code>EsxAgentManager</code> is the main entry point for a solution to
 /// create agencies in the vSphere ESX Agent Manager server.
 /// 
@@ -32,11 +32,11 @@ use crate::core::client::{Client, Result};
 /// NOTE: No issues are associated with <code>EsxAgentManager</code> any longer.
 #[derive(Clone)]
 pub struct EsxAgentManager {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl EsxAgentManager {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -86,8 +86,10 @@ impl EsxAgentManager {
     pub async fn create_agency(&self, agency_config_info: &crate::types::structs::AgencyConfigInfo, initial_goal_state: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateAgencyRequestType {agency_config_info, initial_goal_state, };
         let path = format!("/eam/EsxAgentManager/{moId}/CreateAgency", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deprecated as of vSphere 9.0. Please refer to vLCM Image APIs.
     /// 
@@ -104,7 +106,9 @@ impl EsxAgentManager {
     pub async fn get_maintenance_mode_policy(&self) -> Result<String> {
         let path = format!("/eam/EsxAgentManager/{moId}/GetMaintenanceModePolicy", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deprecated use *EsxAgentManager.agency* instead.
     /// 
@@ -127,7 +131,11 @@ impl EsxAgentManager {
     pub async fn query_agency(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/eam/EsxAgentManager/{moId}/QueryAgency", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Current issues that have been detected for this entity.
     /// 
@@ -150,8 +158,12 @@ impl EsxAgentManager {
     pub async fn query_issue(&self, issue_key: Option<&[i32]>) -> Result<Option<Vec<Box<dyn crate::types::traits::IssueTrait>>>> {
         let input = QueryIssueRequestType {issue_key, };
         let path = format!("/eam/EsxAgentManager/{moId}/QueryIssue", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::IssueTrait>>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Resolves the issues specified in the input.
     /// 
@@ -178,8 +190,12 @@ impl EsxAgentManager {
     pub async fn resolve(&self, issue_key: &[i32]) -> Result<Option<Vec<i32>>> {
         let input = ResolveRequestType {issue_key, };
         let path = format!("/eam/EsxAgentManager/{moId}/Resolve", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<i32>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Resolve all outstanding issues.
     /// 
@@ -231,7 +247,7 @@ impl EsxAgentManager {
     pub async fn set_maintenance_mode_policy(&self, policy: &str) -> Result<()> {
         let input = SetMaintenanceModePolicyRequestType {policy, };
         let path = format!("/eam/EsxAgentManager/{moId}/SetMaintenanceModePolicy", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Deprecated as of vSphere 9.0. Please refer to vLCM APIs.
@@ -255,7 +271,11 @@ impl EsxAgentManager {
     pub async fn agency(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/eam/EsxAgentManager/{moId}/agency", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Deprecated this method is deprecated since the EAM object does not
     /// handles issue anymore. At the moment the implementation
@@ -271,7 +291,11 @@ impl EsxAgentManager {
     pub async fn issue(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::IssueTrait>>>> {
         let path = format!("/eam/EsxAgentManager/{moId}/issue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::IssueTrait>>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
 }
 #[derive(serde::Serialize)]

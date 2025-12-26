@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// vSAN optimized methods for performing VDS related operations, especially
 /// migrations from VSS to VDS.
 /// 
@@ -7,11 +7,11 @@ use crate::core::client::{Client, Result};
 /// with the Managed Object ID of 'vsan-vds-system'.
 #[derive(Clone)]
 pub struct VsanVdsSystem {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl VsanVdsSystem {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -42,8 +42,10 @@ impl VsanVdsSystem {
     pub async fn vsan_rollback_vds_to_vss(&self, task: &crate::types::structs::ManagedObjectReference) -> Result<bool> {
         let input = VsanRollbackVdsToVssRequestType {task, };
         let path = format!("/vsan/VsanVdsSystem/{moId}/VsanRollbackVdsToVss", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: bool = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Computes a migration plan to convert the VSS instances per host in
     /// the cluster to a newly created VDS.
@@ -118,8 +120,10 @@ impl VsanVdsSystem {
     pub async fn vsan_vds_get_migration_plan(&self, cluster: &crate::types::structs::ManagedObjectReference, vswitch_name: Option<&str>, vds_name: Option<&str>, vmnic_devices: Option<&[String]>, infra_vm: Option<&[crate::types::structs::ManagedObjectReference]>, vds: Option<&crate::types::structs::ManagedObjectReference>, hosts: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<crate::types::structs::VsanVdsMigrationPlan> {
         let input = VsanVdsGetMigrationPlanRequestType {cluster, vswitch_name, vds_name, vmnic_devices, infra_vm, vds, hosts, };
         let path = format!("/vsan/VsanVdsSystem/{moId}/VsanVdsGetMigrationPlan", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::VsanVdsMigrationPlan = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Perform a migration to convert the VSS instances per host in
     /// the cluster to a newly created VDS.
@@ -217,8 +221,10 @@ impl VsanVdsSystem {
     pub async fn vsan_vds_migrate_vss(&self, cluster: &crate::types::structs::ManagedObjectReference, migration_plan: Option<&crate::types::structs::VsanVdsMigrationPlan>, vswitch_name: Option<&str>, vds_name: Option<&str>, vmnic_devices: Option<&[String]>, infra_vm: Option<&[crate::types::structs::ManagedObjectReference]>, vds: Option<&crate::types::structs::ManagedObjectReference>, hosts: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanVdsMigrateVssRequestType {cluster, migration_plan, vswitch_name, vds_name, vmnic_devices, infra_vm, vds, hosts, };
         let path = format!("/vsan/VsanVdsSystem/{moId}/VsanVdsMigrateVss", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Perform a migration to convert the VDS instance in the cluster to a newly
     /// created VSS on each host.
@@ -284,8 +290,10 @@ impl VsanVdsSystem {
     pub async fn vsan_vss_migrate_vds(&self, cluster: Option<&crate::types::structs::ManagedObjectReference>, hosts: Option<&[crate::types::structs::ManagedObjectReference]>, vds: &crate::types::structs::ManagedObjectReference, vswitch_name: Option<&str>, vmnic_devices: Option<&[String]>, infra_vm: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanVssMigrateVdsRequestType {cluster, hosts, vds, vswitch_name, vmnic_devices, infra_vm, };
         let path = format!("/vsan/VsanVdsSystem/{moId}/VsanVssMigrateVds", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
 }
 #[derive(serde::Serialize)]

@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// The *UserDirectory* managed object provides information about users
 /// and groups on a vSphere server and ESX hosts.
 /// 
@@ -25,11 +25,11 @@ use crate::core::client::{Client, Result};
 ///   RetrieveUserGroups returns information about these accounts as well.
 #[derive(Clone)]
 pub struct UserDirectory {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl UserDirectory {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -101,8 +101,12 @@ impl UserDirectory {
     pub async fn retrieve_user_groups(&self, domain: Option<&str>, search_str: &str, belongs_to_group: Option<&str>, belongs_to_user: Option<&str>, exact_match: bool, find_users: bool, find_groups: bool) -> Result<Option<Vec<Box<dyn crate::types::traits::UserSearchResultTrait>>>> {
         let input = RetrieveUserGroupsRequestType {domain, search_str, belongs_to_group, belongs_to_user, exact_match, find_users, find_groups, };
         let path = format!("/UserDirectory/{moId}/RetrieveUserGroups", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::UserSearchResultTrait>>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// List of Windows domains available for user searches, if the underlying
     /// system supports windows domain membership.
@@ -111,7 +115,11 @@ impl UserDirectory {
     pub async fn domain_list(&self) -> Result<Option<Vec<String>>> {
         let path = format!("/UserDirectory/{moId}/domainList", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<String>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
 }
 #[derive(serde::Serialize)]

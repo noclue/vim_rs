@@ -1,15 +1,15 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// The *HostProfileManager* provides access to a list of
 /// *HostProfile*s and it defines methods to manipulate
 /// profiles and *AnswerFile*s.
 #[derive(Clone)]
 pub struct HostProfileManager {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl HostProfileManager {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -53,8 +53,10 @@ impl HostProfileManager {
     pub async fn apply_entities_config_task(&self, apply_config_specs: Option<&[crate::types::structs::ApplyHostProfileConfigurationSpec]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ApplyEntitiesConfigRequestType {apply_config_specs, };
         let path = format!("/HostProfileManager/{moId}/ApplyEntitiesConfig_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Apply the configuration to the host.
     /// 
@@ -102,8 +104,10 @@ impl HostProfileManager {
     pub async fn apply_host_config_task(&self, host: &crate::types::structs::ManagedObjectReference, config_spec: &crate::types::structs::HostConfigSpec, user_input: Option<&[crate::types::structs::ProfileDeferredPolicyOptionParameter]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ApplyHostConfigRequestType {host, config_spec, user_input, };
         let path = format!("/HostProfileManager/{moId}/ApplyHostConfig_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Check the validity of the answer files for the specified hosts.
     /// 
@@ -130,8 +134,10 @@ impl HostProfileManager {
     pub async fn check_answer_file_status_task(&self, host: &[crate::types::structs::ManagedObjectReference]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CheckAnswerFileStatusRequestType {host, };
         let path = format!("/HostProfileManager/{moId}/CheckAnswerFileStatus_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Composes (merge, replace, delete, disable)
     /// the selected configurations into the target host profiles.
@@ -174,8 +180,10 @@ impl HostProfileManager {
     pub async fn composite_host_profile_task(&self, source: &crate::types::structs::ManagedObjectReference, targets: Option<&[crate::types::structs::ManagedObjectReference]>, to_be_merged: Option<&crate::types::structs::HostApplyProfile>, to_be_replaced_with: Option<&crate::types::structs::HostApplyProfile>, to_be_deleted: Option<&crate::types::structs::HostApplyProfile>, enable_status_to_be_copied: Option<&crate::types::structs::HostApplyProfile>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CompositeHostProfileRequestType {source, targets, to_be_merged, to_be_replaced_with, to_be_deleted, enable_status_to_be_copied, };
         let path = format!("/HostProfileManager/{moId}/CompositeHostProfile_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Create a default subprofile of a given type (for example, a
     /// *VirtualSwitchProfile*).
@@ -220,8 +228,10 @@ impl HostProfileManager {
     pub async fn create_default_profile(&self, profile_type: &str, profile_type_name: Option<&str>, profile: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Box<dyn crate::types::traits::ApplyProfileTrait>> {
         let input = CreateDefaultProfileRequestType {profile_type, profile_type_name, profile, };
         let path = format!("/HostProfileManager/{moId}/CreateDefaultProfile", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: Box<dyn crate::types::traits::ApplyProfileTrait> = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Create a profile from the specified CreateSpec.
     /// 
@@ -249,8 +259,10 @@ impl HostProfileManager {
     pub async fn create_profile(&self, create_spec: &dyn crate::types::traits::ProfileCreateSpecTrait) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateProfileRequestType {create_spec, };
         let path = format!("/HostProfileManager/{moId}/CreateProfile", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Export a host's answer file into a serialized form.
     /// 
@@ -278,8 +290,10 @@ impl HostProfileManager {
     pub async fn export_answer_file_task(&self, host: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ExportAnswerFileRequestType {host, };
         let path = format!("/HostProfileManager/{moId}/ExportAnswerFile_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Get the profile(s) to which this entity is associated.
     /// 
@@ -301,8 +315,12 @@ impl HostProfileManager {
     pub async fn find_associated_profile(&self, entity: &crate::types::structs::ManagedObjectReference) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let input = FindAssociatedProfileRequestType {entity, };
         let path = format!("/HostProfileManager/{moId}/FindAssociatedProfile", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Deprecated as of vSphere API 6.0 use
     /// *HostProfileManager.GenerateHostProfileTaskList_Task*.
@@ -330,8 +348,10 @@ impl HostProfileManager {
     pub async fn generate_config_task_list(&self, config_spec: &crate::types::structs::HostConfigSpec, host: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::HostProfileManagerConfigTaskList> {
         let input = GenerateConfigTaskListRequestType {config_spec, host, };
         let path = format!("/HostProfileManager/{moId}/GenerateConfigTaskList", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::HostProfileManagerConfigTaskList = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// This method generates *ApplyHostProfileConfigurationSpec* data object
     /// for each host which can be passed as input to
@@ -372,8 +392,10 @@ impl HostProfileManager {
     pub async fn generate_host_config_task_spec_task(&self, hosts_info: Option<&[crate::types::structs::StructuredCustomizations]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = GenerateHostConfigTaskSpecRequestType {hosts_info, };
         let path = format!("/HostProfileManager/{moId}/GenerateHostConfigTaskSpec_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Generate a list of configuration tasks that will be performed on the
     /// host during HostProfile application.
@@ -408,8 +430,10 @@ impl HostProfileManager {
     pub async fn generate_host_profile_task_list_task(&self, config_spec: &crate::types::structs::HostConfigSpec, host: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = GenerateHostProfileTaskListRequestType {config_spec, host, };
         let path = format!("/HostProfileManager/{moId}/GenerateHostProfileTaskList_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Returns the status of the answer files associated with specified hosts.
     /// 
@@ -432,8 +456,12 @@ impl HostProfileManager {
     pub async fn query_answer_file_status(&self, host: &[crate::types::structs::ManagedObjectReference]) -> Result<Option<Vec<crate::types::structs::AnswerFileStatusResult>>> {
         let input = QueryAnswerFileStatusRequestType {host, };
         let path = format!("/HostProfileManager/{moId}/QueryAnswerFileStatus", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::AnswerFileStatusResult>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Get the Metadata information for the policyNames.
     /// 
@@ -459,8 +487,12 @@ impl HostProfileManager {
     pub async fn query_policy_metadata(&self, policy_name: Option<&[String]>, profile: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Option<Vec<crate::types::structs::ProfilePolicyMetadata>>> {
         let input = QueryPolicyMetadataRequestType {policy_name, profile, };
         let path = format!("/HostProfileManager/{moId}/QueryPolicyMetadata", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ProfilePolicyMetadata>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Retrieve the metadata for a set of profiles.
     /// 
@@ -483,8 +515,12 @@ impl HostProfileManager {
     pub async fn query_host_profile_metadata(&self, profile_name: Option<&[String]>, profile: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Option<Vec<crate::types::structs::ProfileMetadata>>> {
         let input = QueryHostProfileMetadataRequestType {profile_name, profile, };
         let path = format!("/HostProfileManager/{moId}/QueryHostProfileMetadata", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ProfileMetadata>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Get information about the structure of the profile.
     /// 
@@ -503,8 +539,10 @@ impl HostProfileManager {
     pub async fn query_profile_structure(&self, profile: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ProfileProfileStructure> {
         let input = QueryProfileStructureRequestType {profile, };
         let path = format!("/HostProfileManager/{moId}/QueryProfileStructure", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ProfileProfileStructure = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Returns the answer file associated with a particular host.
     ///
@@ -523,8 +561,12 @@ impl HostProfileManager {
     pub async fn retrieve_answer_file(&self, host: &crate::types::structs::ManagedObjectReference) -> Result<Option<crate::types::structs::AnswerFile>> {
         let input = RetrieveAnswerFileRequestType {host, };
         let path = format!("/HostProfileManager/{moId}/RetrieveAnswerFile", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::AnswerFile>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Returns the answer file associated with a particular host, augmented
     /// with whatever answer file values are required for the supplied host
@@ -548,8 +590,12 @@ impl HostProfileManager {
     pub async fn retrieve_answer_file_for_profile(&self, host: &crate::types::structs::ManagedObjectReference, apply_profile: &crate::types::structs::HostApplyProfile) -> Result<Option<crate::types::structs::AnswerFile>> {
         let input = RetrieveAnswerFileForProfileRequestType {host, apply_profile, };
         let path = format!("/HostProfileManager/{moId}/RetrieveAnswerFileForProfile", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::AnswerFile>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// This is the batch version of
     /// vim.profile.host.ProfileManager@retrieveAnswerFile.
@@ -572,8 +618,12 @@ impl HostProfileManager {
     pub async fn retrieve_host_customizations(&self, hosts: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<Option<Vec<crate::types::structs::StructuredCustomizations>>> {
         let input = RetrieveHostCustomizationsRequestType {hosts, };
         let path = format!("/HostProfileManager/{moId}/RetrieveHostCustomizations", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::StructuredCustomizations>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// This is the batch version of
     /// vim.profile.host.ProfileManager@retrieveAnswerFileForProfile.
@@ -600,8 +650,12 @@ impl HostProfileManager {
     pub async fn retrieve_host_customizations_for_profile(&self, hosts: Option<&[crate::types::structs::ManagedObjectReference]>, apply_profile: &crate::types::structs::HostApplyProfile) -> Result<Option<Vec<crate::types::structs::StructuredCustomizations>>> {
         let input = RetrieveHostCustomizationsForProfileRequestType {hosts, apply_profile, };
         let path = format!("/HostProfileManager/{moId}/RetrieveHostCustomizationsForProfile", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::StructuredCustomizations>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Update the *AnswerFile* for the specified host.
     /// 
@@ -638,8 +692,10 @@ impl HostProfileManager {
     pub async fn update_answer_file_task(&self, host: &crate::types::structs::ManagedObjectReference, config_spec: &dyn crate::types::traits::AnswerFileCreateSpecTrait) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = UpdateAnswerFileRequestType {host, config_spec, };
         let path = format!("/HostProfileManager/{moId}/UpdateAnswerFile_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Validates the proposed host profile composition.
     /// 
@@ -723,8 +779,10 @@ impl HostProfileManager {
     pub async fn validate_host_profile_composition_task(&self, source: &crate::types::structs::ManagedObjectReference, targets: Option<&[crate::types::structs::ManagedObjectReference]>, to_be_merged: Option<&crate::types::structs::HostApplyProfile>, to_replace_with: Option<&crate::types::structs::HostApplyProfile>, to_be_deleted: Option<&crate::types::structs::HostApplyProfile>, enable_status_to_be_copied: Option<&crate::types::structs::HostApplyProfile>, error_only: Option<bool>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ValidateHostProfileCompositionRequestType {source, targets, to_be_merged, to_replace_with, to_be_deleted, enable_status_to_be_copied, error_only, };
         let path = format!("/HostProfileManager/{moId}/ValidateHostProfileComposition_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// A list of profiles known to this ProfileManager.
     /// 
@@ -736,7 +794,11 @@ impl HostProfileManager {
     pub async fn profile(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/HostProfileManager/{moId}/profile", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
 }
 #[derive(serde::Serialize)]

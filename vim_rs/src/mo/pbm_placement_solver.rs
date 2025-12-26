@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// The *PbmPlacementSolver* data object provides methods to identify
 /// placement hubs that support the capabilities to store virtual
 /// machine files.
@@ -8,11 +8,11 @@ use crate::core::client::{Client, Result};
 /// A vSphere API <code>StoragePod</code> corresponds to Storage DRS in the vSphere Web Client.
 #[derive(Clone)]
 pub struct PbmPlacementSolver {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl PbmPlacementSolver {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -64,8 +64,12 @@ impl PbmPlacementSolver {
     pub async fn pbm_check_compatibility(&self, hubs_to_search: Option<&[crate::types::structs::PbmPlacementHub]>, profile: &crate::types::structs::PbmProfileId) -> Result<Option<Vec<crate::types::structs::PbmPlacementCompatibilityResult>>> {
         let input = PbmCheckCompatibilityRequestType {hubs_to_search, profile, };
         let path = format!("/pbm/PbmPlacementSolver/{moId}/PbmCheckCompatibility", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::PbmPlacementCompatibilityResult>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Deprecated as of vSphere 2016, use *PbmPlacementSolver.PbmCheckRequirements* instead in order to retrieve compatibility status for both
     /// compute and storage location.
@@ -105,8 +109,12 @@ impl PbmPlacementSolver {
     pub async fn pbm_check_compatibility_with_spec(&self, hubs_to_search: Option<&[crate::types::structs::PbmPlacementHub]>, profile_spec: &crate::types::structs::PbmCapabilityProfileCreateSpec) -> Result<Option<Vec<crate::types::structs::PbmPlacementCompatibilityResult>>> {
         let input = PbmCheckCompatibilityWithSpecRequestType {hubs_to_search, profile_spec, };
         let path = format!("/pbm/PbmPlacementSolver/{moId}/PbmCheckCompatibilityWithSpec", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::PbmPlacementCompatibilityResult>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Performs placement compatibility checking for the specified object to be placed based on its
     /// specified set of requirements.
@@ -164,8 +172,12 @@ impl PbmPlacementSolver {
     pub async fn pbm_check_requirements(&self, hubs_to_search: Option<&[crate::types::structs::PbmPlacementHub]>, placement_subject_ref: Option<&crate::types::structs::PbmServerObjectRef>, placement_subject_requirement: Option<&[Box<dyn crate::types::traits::PbmPlacementRequirementTrait>]>) -> Result<Option<Vec<crate::types::structs::PbmPlacementCompatibilityResult>>> {
         let input = PbmCheckRequirementsRequestType {hubs_to_search, placement_subject_ref, placement_subject_requirement, };
         let path = format!("/pbm/PbmPlacementSolver/{moId}/PbmCheckRequirements", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::PbmPlacementCompatibilityResult>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Deprecated as of vSphere 2016, use *PbmPlacementSolver.PbmCheckRequirements*
     /// instead in order to retrieve both compatible compute and storage location.
@@ -205,8 +217,12 @@ impl PbmPlacementSolver {
     pub async fn pbm_query_matching_hub(&self, hubs_to_search: Option<&[crate::types::structs::PbmPlacementHub]>, profile: &crate::types::structs::PbmProfileId) -> Result<Option<Vec<crate::types::structs::PbmPlacementHub>>> {
         let input = PbmQueryMatchingHubRequestType {hubs_to_search, profile, };
         let path = format!("/pbm/PbmPlacementSolver/{moId}/PbmQueryMatchingHub", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::PbmPlacementHub>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Deprecated as of vSphere 2016, use *PbmPlacementSolver.PbmCheckRequirements* instead in order to retrieve both compatible compute and storage location.
     /// 
@@ -240,8 +256,12 @@ impl PbmPlacementSolver {
     pub async fn pbm_query_matching_hub_with_spec(&self, hubs_to_search: Option<&[crate::types::structs::PbmPlacementHub]>, create_spec: &crate::types::structs::PbmCapabilityProfileCreateSpec) -> Result<Option<Vec<crate::types::structs::PbmPlacementHub>>> {
         let input = PbmQueryMatchingHubWithSpecRequestType {hubs_to_search, create_spec, };
         let path = format!("/pbm/PbmPlacementSolver/{moId}/PbmQueryMatchingHubWithSpec", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::PbmPlacementHub>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
 }
 #[derive(serde::Serialize)]

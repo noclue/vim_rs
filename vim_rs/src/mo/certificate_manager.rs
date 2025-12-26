@@ -1,14 +1,14 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// CertificateManager provides an interface for managing the SSL
 /// certificates used by the ESX server.
 #[derive(Clone)]
 pub struct CertificateManager {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl CertificateManager {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -33,8 +33,10 @@ impl CertificateManager {
     pub async fn cert_mgr_refresh_ca_certificates_and_cr_ls_task(&self, host: &[crate::types::structs::ManagedObjectReference]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CertMgrRefreshCaCertificatesAndCrLsRequestType {host, };
         let path = format!("/CertificateManager/{moId}/CertMgrRefreshCACertificatesAndCRLs_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Gets CSRs from the hosts and then gets these certificates signed by the
     /// VMware Certificate Service and pushes them down to the hosts.
@@ -54,8 +56,10 @@ impl CertificateManager {
     pub async fn cert_mgr_refresh_certificates_task(&self, host: &[crate::types::structs::ManagedObjectReference]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CertMgrRefreshCertificatesRequestType {host, };
         let path = format!("/CertificateManager/{moId}/CertMgrRefreshCertificates_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Revokes the certificates of some hosts.
     /// 
@@ -74,8 +78,10 @@ impl CertificateManager {
     pub async fn cert_mgr_revoke_certificates_task(&self, host: &[crate::types::structs::ManagedObjectReference]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CertMgrRevokeCertificatesRequestType {host, };
         let path = format!("/CertificateManager/{moId}/CertMgrRevokeCertificates_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
 }
 #[derive(serde::Serialize)]

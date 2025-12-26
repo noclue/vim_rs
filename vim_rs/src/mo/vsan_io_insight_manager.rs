@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// This managed object is designed to provide service interfaces to manage
 /// ioinsight(s) for VMs virtual disks I/O performance metrics monitor and
 /// collection on the target hosts.
@@ -9,11 +9,11 @@ use crate::core::client::{Client, Result};
 /// ESXi host.
 #[derive(Clone)]
 pub struct VsanIoInsightManager {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl VsanIoInsightManager {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -49,7 +49,7 @@ impl VsanIoInsightManager {
     pub async fn delete_io_insight_instance(&self, run_name: &str, cluster: Option<&crate::types::structs::ManagedObjectReference>) -> Result<()> {
         let input = DeleteIoInsightInstanceRequestType {run_name, cluster, };
         let path = format!("/vsan/VsanIoInsightManager/{moId}/DeleteIoInsightInstance", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Retrieve all ioinsight instances
@@ -83,8 +83,12 @@ impl VsanIoInsightManager {
     pub async fn query_io_insight_instances(&self, query_spec: &crate::types::structs::VsanIoInsightInstanceQuerySpec, cluster: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Option<Vec<crate::types::structs::VsanIoInsightInstance>>> {
         let input = QueryIoInsightInstancesRequestType {query_spec, cluster, };
         let path = format!("/vsan/VsanIoInsightManager/{moId}/QueryIoInsightInstances", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VsanIoInsightInstance>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Rename an ioinsight instance which is completed already
     /// (see *VsanIoInsightInstanceState_enum*).
@@ -119,7 +123,7 @@ impl VsanIoInsightManager {
     pub async fn rename_io_insight_instance(&self, old_run_name: &str, new_run_name: &str, cluster: Option<&crate::types::structs::ManagedObjectReference>) -> Result<()> {
         let input = RenameIoInsightInstanceRequestType {old_run_name, new_run_name, cluster, };
         let path = format!("/vsan/VsanIoInsightManager/{moId}/RenameIoInsightInstance", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Start ioinsight tool(s) running on the whole vSAN cluster or on the
@@ -204,8 +208,10 @@ impl VsanIoInsightManager {
     pub async fn start_io_insight(&self, cluster: Option<&crate::types::structs::ManagedObjectReference>, run_name: Option<&str>, duration_sec: Option<i64>, target_hosts: Option<&[crate::types::structs::ManagedObjectReference]>, target_v_ms: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = StartIoInsightRequestType {cluster, run_name, duration_sec, target_hosts, target_v_ms, };
         let path = format!("/vsan/VsanIoInsightManager/{moId}/StartIoInsight", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Stop ioinsight tool(s) running on the ESXi host(s) by given parameters
     /// passed-in.
@@ -270,8 +276,10 @@ impl VsanIoInsightManager {
     pub async fn stop_io_insight(&self, cluster: Option<&crate::types::structs::ManagedObjectReference>, run_name: Option<&str>, hosts_io_insight_infos: Option<&[crate::types::structs::VsanHostIoInsightInfo]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = StopIoInsightRequestType {cluster, run_name, hosts_io_insight_infos, };
         let path = format!("/vsan/VsanIoInsightManager/{moId}/StopIoInsight", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
 }
 #[derive(serde::Serialize)]

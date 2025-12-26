@@ -1,14 +1,14 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// This managed object type provides a way to configure resource usage for
 /// storage resources.
 #[derive(Clone)]
 pub struct StorageResourceManager {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl StorageResourceManager {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -66,8 +66,10 @@ impl StorageResourceManager {
     pub async fn configure_datastore_iorm_task(&self, datastore: &crate::types::structs::ManagedObjectReference, spec: &crate::types::structs::StorageIormConfigSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ConfigureDatastoreIormRequestType {datastore, spec, };
         let path = format!("/StorageResourceManager/{moId}/ConfigureDatastoreIORM_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deprecated as of vSphere8.0 U3, and there is no replacement for it.
     /// 
@@ -90,8 +92,10 @@ impl StorageResourceManager {
     pub async fn query_iorm_config_option(&self, host: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::StorageIormConfigOption> {
         let input = QueryIormConfigOptionRequestType {host, };
         let path = format!("/StorageResourceManager/{moId}/QueryIORMConfigOption", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::StorageIormConfigOption = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Applies a recommendation from the recommendation list that is generated
     /// by SDRS initial placement invoked by RecommendDatastore method.
@@ -120,8 +124,10 @@ impl StorageResourceManager {
     pub async fn apply_storage_drs_recommendation_task(&self, key: &[String]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ApplyStorageDrsRecommendationRequestType {key, };
         let path = format!("/StorageResourceManager/{moId}/ApplyStorageDrsRecommendation_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Applies a recommendation from the recommendation list that is generated
     /// by SDRS load balancing activity.
@@ -154,8 +160,10 @@ impl StorageResourceManager {
     pub async fn apply_storage_drs_recommendation_to_pod_task(&self, pod: &crate::types::structs::ManagedObjectReference, key: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ApplyStorageDrsRecommendationToPodRequestType {pod, key, };
         let path = format!("/StorageResourceManager/{moId}/ApplyStorageDrsRecommendationToPod_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Cancels a recommendation.
     /// 
@@ -171,7 +179,7 @@ impl StorageResourceManager {
     pub async fn cancel_storage_drs_recommendation(&self, key: &[String]) -> Result<()> {
         let input = CancelStorageDrsRecommendationRequestType {key, };
         let path = format!("/StorageResourceManager/{moId}/CancelStorageDrsRecommendation", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Change the storage DRS configuration for a pod *StoragePod*.
@@ -207,8 +215,10 @@ impl StorageResourceManager {
     pub async fn configure_storage_drs_for_pod_task(&self, pod: &crate::types::structs::ManagedObjectReference, spec: &crate::types::structs::StorageDrsConfigSpec, modify: bool) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ConfigureStorageDrsForPodRequestType {pod, spec, modify, };
         let path = format!("/StorageResourceManager/{moId}/ConfigureStorageDrsForPod_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deprecated as of vSphere8.0 U3, and there is no replacement for it.
     /// 
@@ -237,8 +247,12 @@ impl StorageResourceManager {
     pub async fn query_datastore_performance_summary(&self, datastore: &crate::types::structs::ManagedObjectReference) -> Result<Option<Vec<crate::types::structs::StoragePerformanceSummary>>> {
         let input = QueryDatastorePerformanceSummaryRequestType {datastore, };
         let path = format!("/StorageResourceManager/{moId}/QueryDatastorePerformanceSummary", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::StoragePerformanceSummary>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// This method returns a *StoragePlacementResult* object.
     /// 
@@ -310,8 +324,10 @@ impl StorageResourceManager {
     pub async fn recommend_datastores(&self, storage_spec: &crate::types::structs::StoragePlacementSpec) -> Result<crate::types::structs::StoragePlacementResult> {
         let input = RecommendDatastoresRequestType {storage_spec, };
         let path = format!("/StorageResourceManager/{moId}/RecommendDatastores", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::StoragePlacementResult = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Make Storage DRS invoke again on the specified pod *StoragePod*
     /// and return a new list of recommendations.
@@ -332,7 +348,7 @@ impl StorageResourceManager {
     pub async fn refresh_storage_drs_recommendation(&self, pod: &crate::types::structs::ManagedObjectReference) -> Result<()> {
         let input = RefreshStorageDrsRecommendationRequestType {pod, };
         let path = format!("/StorageResourceManager/{moId}/RefreshStorageDrsRecommendation", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Invoke Storage DRS on a specific pod *StoragePod*
@@ -359,8 +375,10 @@ impl StorageResourceManager {
     pub async fn refresh_storage_drs_recommendations_for_pod_task(&self, pod: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RefreshStorageDrsRecommendationsForPodRequestType {pod, };
         let path = format!("/StorageResourceManager/{moId}/RefreshStorageDrsRecommendationsForPod_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Validate the new storage DRS configuration for a pod
     /// *StoragePod*.
@@ -382,8 +400,12 @@ impl StorageResourceManager {
     pub async fn validate_storage_pod_config(&self, pod: &crate::types::structs::ManagedObjectReference, spec: &crate::types::structs::StorageDrsConfigSpec) -> Result<Option<crate::types::structs::MethodFault>> {
         let input = ValidateStoragePodConfigRequestType {pod, spec, };
         let path = format!("/StorageResourceManager/{moId}/ValidateStoragePodConfig", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::MethodFault>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
 }
 #[derive(serde::Serialize)]

@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// The VsanIscsiTargetSystem exposes interfaces from vCenter to perform
 /// vSAN iSCSI target service related operations.
 /// 
@@ -12,11 +12,11 @@ use crate::core::client::{Client, Result};
 /// server and ESXi host side.
 #[derive(Clone)]
 pub struct VsanIscsiTargetSystem {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl VsanIscsiTargetSystem {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -46,7 +46,7 @@ impl VsanIscsiTargetSystem {
     pub async fn vsan_vit_add_iscsi_initiator_group(&self, cluster: &crate::types::structs::ManagedObjectReference, initiator_group_name: &str) -> Result<()> {
         let input = VsanVitAddIscsiInitiatorGroupRequestType {cluster, initiator_group_name, };
         let path = format!("/vsan/VsanIscsiTargetSystem/{moId}/VsanVitAddIscsiInitiatorGroup", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Adds iSCSI initiators to one initiator group.  
@@ -79,7 +79,7 @@ impl VsanIscsiTargetSystem {
     pub async fn vsan_vit_add_iscsi_initiators_to_group(&self, cluster: &crate::types::structs::ManagedObjectReference, initiator_group_name: &str, initiator_names: &[String]) -> Result<()> {
         let input = VsanVitAddIscsiInitiatorsToGroupRequestType {cluster, initiator_group_name, initiator_names, };
         let path = format!("/vsan/VsanIscsiTargetSystem/{moId}/VsanVitAddIscsiInitiatorsToGroup", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Adds iSCSI initiators or initiator groups to one target.  
@@ -113,7 +113,7 @@ impl VsanIscsiTargetSystem {
     pub async fn vsan_vit_add_iscsi_initiators_to_target(&self, cluster: &crate::types::structs::ManagedObjectReference, target_alias: &str, initiator_names: &[String]) -> Result<()> {
         let input = VsanVitAddIscsiInitiatorsToTargetRequestType {cluster, target_alias, initiator_names, };
         let path = format!("/vsan/VsanIscsiTargetSystem/{moId}/VsanVitAddIscsiInitiatorsToTarget", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Adds iSCSI LUN to specified target.  
@@ -155,8 +155,12 @@ impl VsanIscsiTargetSystem {
     pub async fn vsan_vit_add_iscsi_lun(&self, cluster: &crate::types::structs::ManagedObjectReference, target_alias: &str, lun_spec: &crate::types::structs::VsanIscsiLunSpec) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let input = VsanVitAddIscsiLunRequestType {cluster, target_alias, lun_spec, };
         let path = format!("/vsan/VsanIscsiTargetSystem/{moId}/VsanVitAddIscsiLUN", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::ManagedObjectReference>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Adds iSCSI target to this cluster.  
     /// The alias in VsanIscsiTargetSpec
@@ -191,8 +195,12 @@ impl VsanIscsiTargetSystem {
     pub async fn vsan_vit_add_iscsi_target(&self, cluster: &crate::types::structs::ManagedObjectReference, target_spec: &crate::types::structs::VsanIscsiTargetSpec) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let input = VsanVitAddIscsiTargetRequestType {cluster, target_spec, };
         let path = format!("/vsan/VsanIscsiTargetSystem/{moId}/VsanVitAddIscsiTarget", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::ManagedObjectReference>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Adds the iSCSI target to the specified initiator group.  
     /// If the initiator group is not found or the target is already in the
@@ -222,7 +230,7 @@ impl VsanIscsiTargetSystem {
     pub async fn vsan_vit_add_iscsi_target_to_group(&self, cluster: &crate::types::structs::ManagedObjectReference, initiator_group_name: &str, target_alias: &str) -> Result<()> {
         let input = VsanVitAddIscsiTargetToGroupRequestType {cluster, initiator_group_name, target_alias, };
         let path = format!("/vsan/VsanIscsiTargetSystem/{moId}/VsanVitAddIscsiTargetToGroup", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Edits iSCSI LUN in specified target.  
@@ -265,8 +273,12 @@ impl VsanIscsiTargetSystem {
     pub async fn vsan_vit_edit_iscsi_lun(&self, cluster: &crate::types::structs::ManagedObjectReference, target_alias: &str, lun_spec: &crate::types::structs::VsanIscsiLunSpec) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let input = VsanVitEditIscsiLunRequestType {cluster, target_alias, lun_spec, };
         let path = format!("/vsan/VsanIscsiTargetSystem/{moId}/VsanVitEditIscsiLUN", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::ManagedObjectReference>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Edits iSCSI target in this cluster.  
     /// All properties in
@@ -305,8 +317,12 @@ impl VsanIscsiTargetSystem {
     pub async fn vsan_vit_edit_iscsi_target(&self, cluster: &crate::types::structs::ManagedObjectReference, target_spec: &crate::types::structs::VsanIscsiTargetSpec) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let input = VsanVitEditIscsiTargetRequestType {cluster, target_spec, };
         let path = format!("/vsan/VsanIscsiTargetSystem/{moId}/VsanVitEditIscsiTarget", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::ManagedObjectReference>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Gets the home object which stores the metadata for
     /// vSAN iSCSI target service.
@@ -336,8 +352,10 @@ impl VsanIscsiTargetSystem {
     pub async fn vsan_vit_get_home_object(&self, cluster: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::VsanObjectInformation> {
         let input = VsanVitGetHomeObjectRequestType {cluster, };
         let path = format!("/vsan/VsanIscsiTargetSystem/{moId}/VsanVitGetHomeObject", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::VsanObjectInformation = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Gets one iSCSI initiator group.  
     /// If the initiator group doesn't exists, a VsanFault will be raised.
@@ -367,8 +385,12 @@ impl VsanIscsiTargetSystem {
     pub async fn vsan_vit_get_iscsi_initiator_group(&self, cluster: &crate::types::structs::ManagedObjectReference, initiator_group_name: &str) -> Result<Option<crate::types::structs::VsanIscsiInitiatorGroup>> {
         let input = VsanVitGetIscsiInitiatorGroupRequestType {cluster, initiator_group_name, };
         let path = format!("/vsan/VsanIscsiTargetSystem/{moId}/VsanVitGetIscsiInitiatorGroup", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::VsanIscsiInitiatorGroup>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Gets iSCSI initiator group list for one cluster.  
     /// If the operation fails, a VsanFault will be raised.
@@ -392,8 +414,12 @@ impl VsanIscsiTargetSystem {
     pub async fn vsan_vit_get_iscsi_initiator_groups(&self, cluster: &crate::types::structs::ManagedObjectReference) -> Result<Option<Vec<crate::types::structs::VsanIscsiInitiatorGroup>>> {
         let input = VsanVitGetIscsiInitiatorGroupsRequestType {cluster, };
         let path = format!("/vsan/VsanIscsiTargetSystem/{moId}/VsanVitGetIscsiInitiatorGroups", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VsanIscsiInitiatorGroup>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Gets one iSCSI LUN for specified target.  
     /// If the target or the LUN cannot be found, a VsanFault will be raised.
@@ -426,8 +452,12 @@ impl VsanIscsiTargetSystem {
     pub async fn vsan_vit_get_iscsi_lun(&self, cluster: &crate::types::structs::ManagedObjectReference, target_alias: &str, lun_id: i32) -> Result<Option<crate::types::structs::VsanIscsiLun>> {
         let input = VsanVitGetIscsiLunRequestType {cluster, target_alias, lun_id, };
         let path = format!("/vsan/VsanIscsiTargetSystem/{moId}/VsanVitGetIscsiLUN", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::VsanIscsiLun>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Gets iSCSI LUN list for specified target list.  
     /// If some targets cannot be found, a VsanFault will be raised.
@@ -458,8 +488,12 @@ impl VsanIscsiTargetSystem {
     pub async fn vsan_vit_get_iscsi_lu_ns(&self, cluster: &crate::types::structs::ManagedObjectReference, target_aliases: Option<&[String]>) -> Result<Option<Vec<crate::types::structs::VsanIscsiLun>>> {
         let input = VsanVitGetIscsiLuNsRequestType {cluster, target_aliases, };
         let path = format!("/vsan/VsanIscsiTargetSystem/{moId}/VsanVitGetIscsiLUNs", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VsanIscsiLun>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Gets one iSCSI target.
     /// 
@@ -490,8 +524,12 @@ impl VsanIscsiTargetSystem {
     pub async fn vsan_vit_get_iscsi_target(&self, cluster: &crate::types::structs::ManagedObjectReference, target_alias: &str) -> Result<Option<crate::types::structs::VsanIscsiTarget>> {
         let input = VsanVitGetIscsiTargetRequestType {cluster, target_alias, };
         let path = format!("/vsan/VsanIscsiTargetSystem/{moId}/VsanVitGetIscsiTarget", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::VsanIscsiTarget>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Gets iSCSI target list for one cluster.
     /// 
@@ -517,8 +555,12 @@ impl VsanIscsiTargetSystem {
     pub async fn vsan_vit_get_iscsi_targets(&self, cluster: &crate::types::structs::ManagedObjectReference) -> Result<Option<Vec<crate::types::structs::VsanIscsiTarget>>> {
         let input = VsanVitGetIscsiTargetsRequestType {cluster, };
         let path = format!("/vsan/VsanIscsiTargetSystem/{moId}/VsanVitGetIscsiTargets", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VsanIscsiTarget>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Queries iSCSI service version, if version file is not found, a NotFound
     /// exception is raised.
@@ -535,7 +577,9 @@ impl VsanIscsiTargetSystem {
     pub async fn vsan_vit_query_iscsi_target_service_version(&self) -> Result<String> {
         let path = format!("/vsan/VsanIscsiTargetSystem/{moId}/VsanVitQueryIscsiTargetServiceVersion", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Remediates the iSCSI LUNs which runtime status are not consistent
     /// with configuration.  
@@ -572,8 +616,10 @@ impl VsanIscsiTargetSystem {
     pub async fn vsan_remediate_iscsi_luns_runtime_status(&self, cluster: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanRemediateIscsiLunsRuntimeStatusRequestType {cluster, };
         let path = format!("/vsan/VsanIscsiTargetSystem/{moId}/VsanRemediateIscsiLunsRuntimeStatus", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Removes iSCSI initiator group from one cluster.  
     /// If there are initiators in the group, the initiators will be
@@ -602,7 +648,7 @@ impl VsanIscsiTargetSystem {
     pub async fn vsan_vit_remove_iscsi_initiator_group(&self, cluster: &crate::types::structs::ManagedObjectReference, initiator_group_name: &str) -> Result<()> {
         let input = VsanVitRemoveIscsiInitiatorGroupRequestType {cluster, initiator_group_name, };
         let path = format!("/vsan/VsanIscsiTargetSystem/{moId}/VsanVitRemoveIscsiInitiatorGroup", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Removes iSCSI initiators from one initiator group.  
@@ -633,7 +679,7 @@ impl VsanIscsiTargetSystem {
     pub async fn vsan_vit_remove_iscsi_initiators_from_group(&self, cluster: &crate::types::structs::ManagedObjectReference, initiator_group_name: &str, initiator_names: &[String]) -> Result<()> {
         let input = VsanVitRemoveIscsiInitiatorsFromGroupRequestType {cluster, initiator_group_name, initiator_names, };
         let path = format!("/vsan/VsanIscsiTargetSystem/{moId}/VsanVitRemoveIscsiInitiatorsFromGroup", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Removes iSCSI initiator or initiator groups from one target.  
@@ -665,7 +711,7 @@ impl VsanIscsiTargetSystem {
     pub async fn vsan_vit_remove_iscsi_initiators_from_target(&self, cluster: &crate::types::structs::ManagedObjectReference, target_alias: &str, initiator_names: &[String]) -> Result<()> {
         let input = VsanVitRemoveIscsiInitiatorsFromTargetRequestType {cluster, target_alias, initiator_names, };
         let path = format!("/vsan/VsanIscsiTargetSystem/{moId}/VsanVitRemoveIscsiInitiatorsFromTarget", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Removes iSCSI LUN from this target.  
@@ -703,8 +749,12 @@ impl VsanIscsiTargetSystem {
     pub async fn vsan_vit_remove_iscsi_lun(&self, cluster: &crate::types::structs::ManagedObjectReference, target_alias: &str, lun_id: i32) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let input = VsanVitRemoveIscsiLunRequestType {cluster, target_alias, lun_id, };
         let path = format!("/vsan/VsanIscsiTargetSystem/{moId}/VsanVitRemoveIscsiLUN", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::ManagedObjectReference>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Removes iSCSI target from this cluster.  
     /// If the target cannot be found, a VsanFault will be raised.
@@ -736,8 +786,12 @@ impl VsanIscsiTargetSystem {
     pub async fn vsan_vit_remove_iscsi_target(&self, cluster: &crate::types::structs::ManagedObjectReference, target_alias: &str) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let input = VsanVitRemoveIscsiTargetRequestType {cluster, target_alias, };
         let path = format!("/vsan/VsanIscsiTargetSystem/{moId}/VsanVitRemoveIscsiTarget", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::ManagedObjectReference>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Removes accessible iSCSI target from one initiator group.  
     /// If the initiator group is not found or the target is not in the accessible
@@ -767,7 +821,7 @@ impl VsanIscsiTargetSystem {
     pub async fn vsan_vit_remove_iscsi_target_from_group(&self, cluster: &crate::types::structs::ManagedObjectReference, initiator_group_name: &str, target_alias: &str) -> Result<()> {
         let input = VsanVitRemoveIscsiTargetFromGroupRequestType {cluster, initiator_group_name, target_alias, };
         let path = format!("/vsan/VsanIscsiTargetSystem/{moId}/VsanVitRemoveIscsiTargetFromGroup", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
 }

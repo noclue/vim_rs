@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// This managed object type provides access to the environment that a
 /// ComputeResource presents for creating and configuring a virtual machine.
 /// 
@@ -26,11 +26,11 @@ use crate::core::client::{Client, Result};
 ///   machine belongs.
 #[derive(Clone)]
 pub struct EnvironmentBrowser {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl EnvironmentBrowser {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -73,8 +73,12 @@ impl EnvironmentBrowser {
     pub async fn query_config_option(&self, key: Option<&str>, host: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Option<crate::types::structs::VirtualMachineConfigOption>> {
         let input = QueryConfigOptionRequestType {key, host, };
         let path = format!("/EnvironmentBrowser/{moId}/QueryConfigOption", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::VirtualMachineConfigOption>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// The list of ConfigOption keys available on this entity.
     /// 
@@ -82,7 +86,11 @@ impl EnvironmentBrowser {
     pub async fn query_config_option_descriptor(&self) -> Result<Option<Vec<crate::types::structs::VirtualMachineConfigOptionDescriptor>>> {
         let path = format!("/EnvironmentBrowser/{moId}/QueryConfigOptionDescriptor", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VirtualMachineConfigOptionDescriptor>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Query for a virtual machine configuration *option*
     /// matching the key or host or both given in the
@@ -122,8 +130,12 @@ impl EnvironmentBrowser {
     pub async fn query_config_option_ex(&self, spec: Option<&crate::types::structs::EnvironmentBrowserConfigOptionQuerySpec>) -> Result<Option<crate::types::structs::VirtualMachineConfigOption>> {
         let input = QueryConfigOptionExRequestType {spec, };
         let path = format!("/EnvironmentBrowser/{moId}/QueryConfigOptionEx", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::VirtualMachineConfigOption>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Queries for information about a specific target, a "physical" device that
     /// can be used to back virtual devices.
@@ -158,8 +170,12 @@ impl EnvironmentBrowser {
     pub async fn query_config_target(&self, host: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Option<crate::types::structs::ConfigTarget>> {
         let input = QueryConfigTargetRequestType {host, };
         let path = format!("/EnvironmentBrowser/{moId}/QueryConfigTarget", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::ConfigTarget>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Queries for information on the capabilities supported by the ComputeResource
     /// associated with the EnvironmentBrowser.
@@ -192,8 +208,12 @@ impl EnvironmentBrowser {
     pub async fn query_target_capabilities(&self, host: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Option<crate::types::structs::HostCapability>> {
         let input = QueryTargetCapabilitiesRequestType {host, };
         let path = format!("/EnvironmentBrowser/{moId}/QueryTargetCapabilities", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::HostCapability>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// DatastoreBrowser to browse datastores that are available on this entity.
     /// 
@@ -205,7 +225,11 @@ impl EnvironmentBrowser {
     pub async fn datastore_browser(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let path = format!("/EnvironmentBrowser/{moId}/datastoreBrowser", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::ManagedObjectReference>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
 }
 #[derive(serde::Serialize)]

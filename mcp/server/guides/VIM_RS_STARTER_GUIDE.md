@@ -72,6 +72,7 @@ async fn main() -> Result<()> {
 - Use `.basic_authn()` - NOT manual session management
 - Store credentials in environment variables (VIM_SERVER, VIM_USERNAME, VIM_PASSWORD)
 - Client is thread-safe (`Arc<Client>`)
+- Managed-object stubs store an `Arc<dyn VimClient>` internally; `Client` implements `VimClient`.
 
 **Dependencies needed:**
 ```toml
@@ -101,6 +102,8 @@ Notes:
 * **⚠️ IMPORTANT:** Managed object types reside in `vim_rs::mo` module.
 * Managed Objects are proxies to objects living on the server like `VirtualMachine`, `Folder` etc.
 * Managed Objects expose methods that call the remote APIs.
+* The generated stubs store an `Arc<dyn VimClient>` internally. The concrete `Client` implements
+  `VimClient`, so passing `client.clone()` works without changes.
 
 ### Step 3: Data Retrieval with Property Collector (ALWAYS USE THIS PATTERN)
 

@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// VirtualMachine is the managed object type for manipulating virtual machines,
 /// including templates that can be deployed (repeatedly) as new virtual machines.
 /// 
@@ -15,11 +15,11 @@ use crate::core::client::{Client, Result};
 /// from the virtual machine before destroying it.
 #[derive(Clone)]
 pub struct VirtualMachine {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl VirtualMachine {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -47,7 +47,9 @@ impl VirtualMachine {
     pub async fn acquire_mks_ticket(&self) -> Result<crate::types::structs::VirtualMachineMksTicket> {
         let path = format!("/VirtualMachine/{moId}/AcquireMksTicket", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::VirtualMachineMksTicket = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Creates and returns a one-time credential used in establishing a
     /// specific connection to this virtual machine, for example, a ticket
@@ -87,8 +89,10 @@ impl VirtualMachine {
     pub async fn acquire_ticket(&self, ticket_type: &str) -> Result<crate::types::structs::VirtualMachineTicket> {
         let input = AcquireTicketRequestType {ticket_type, };
         let path = format!("/VirtualMachine/{moId}/AcquireTicket", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::VirtualMachineTicket = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Responds to a question that is blocking this virtual machine.
     /// 
@@ -114,7 +118,7 @@ impl VirtualMachine {
     pub async fn answer_vm(&self, question_id: &str, answer_choice: &str) -> Result<()> {
         let input = AnswerVmRequestType {question_id, answer_choice, };
         let path = format!("/VirtualMachine/{moId}/AnswerVM", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Applies the EVC mode masks to the virtual machine.
@@ -153,8 +157,10 @@ impl VirtualMachine {
     pub async fn apply_evc_mode_vm_task(&self, mask: Option<&[crate::types::structs::HostFeatureMask]>, complete_masks: Option<bool>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ApplyEvcModeVmRequestType {mask, complete_masks, };
         let path = format!("/VirtualMachine/{moId}/ApplyEvcModeVM_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Attach an existing disk to this virtual machine.
     /// 
@@ -223,8 +229,10 @@ impl VirtualMachine {
     pub async fn attach_disk_task(&self, disk_id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, controller_key: Option<i32>, unit_number: Option<i32>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = AttachDiskRequestType {disk_id, datastore, controller_key, unit_number, };
         let path = format!("/VirtualMachine/{moId}/AttachDisk_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Checks the customization specification against the virtual machine configuration.
     /// 
@@ -246,7 +254,7 @@ impl VirtualMachine {
     pub async fn check_customization_spec(&self, spec: &crate::types::structs::CustomizationSpec) -> Result<()> {
         let input = CheckCustomizationSpecRequestType {spec, };
         let path = format!("/VirtualMachine/{moId}/CheckCustomizationSpec", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Creates a clone of this virtual machine.
@@ -346,8 +354,10 @@ impl VirtualMachine {
     pub async fn clone_vm_task(&self, folder: &crate::types::structs::ManagedObjectReference, name: &str, spec: &crate::types::structs::VirtualMachineCloneSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CloneVmRequestType {folder, name, spec, };
         let path = format!("/VirtualMachine/{moId}/CloneVM_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Consolidate the virtual disk files of the virtual machine by finding hierarchies
     /// of redo logs that can be combined without violating data dependency.
@@ -391,7 +401,9 @@ impl VirtualMachine {
     pub async fn consolidate_vm_disks_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/VirtualMachine/{moId}/ConsolidateVMDisks_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Create a screen shot of a virtual machine.
     /// 
@@ -415,7 +427,9 @@ impl VirtualMachine {
     pub async fn create_screenshot_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/VirtualMachine/{moId}/CreateScreenshot_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deprecated as of vSphere API 6.0, use *VirtualMachine.CreateSecondaryVMEx_Task* instead.
     /// 
@@ -485,8 +499,10 @@ impl VirtualMachine {
     pub async fn create_secondary_vm_task(&self, host: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateSecondaryVmRequestType {host, };
         let path = format!("/VirtualMachine/{moId}/CreateSecondaryVM_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Creates a secondary virtual machine to be part of this fault tolerant group.
     /// 
@@ -579,8 +595,10 @@ impl VirtualMachine {
     pub async fn create_secondary_vm_ex_task(&self, host: Option<&crate::types::structs::ManagedObjectReference>, spec: Option<&crate::types::structs::FaultToleranceConfigSpec>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateSecondaryVmExRequestType {host, spec, };
         let path = format!("/VirtualMachine/{moId}/CreateSecondaryVMEx_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deprecated as of vSphere 8.0GA, this method is deprecated. Please
     /// use *VirtualMachine.CreateSnapshotEx_Task* instead.
@@ -666,8 +684,10 @@ impl VirtualMachine {
     pub async fn create_snapshot_task(&self, name: &str, description: Option<&str>, memory: bool, quiesce: bool) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateSnapshotRequestType {name, description, memory, quiesce, };
         let path = format!("/VirtualMachine/{moId}/CreateSnapshot_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Creates a new snapshot of this virtual machine.
     /// 
@@ -760,8 +780,10 @@ impl VirtualMachine {
     pub async fn create_snapshot_ex_task(&self, name: &str, description: Option<&str>, memory: bool, quiesce_spec: Option<&dyn crate::types::traits::VirtualMachineGuestQuiesceSpecTrait>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateSnapshotExRequestType {name, description, memory, quiesce_spec, };
         let path = format!("/VirtualMachine/{moId}/CreateSnapshotEx_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Unlocks an encrypted virtual machine by sending the encryption keys for
     /// the Virtual Machine Home and all the Virtual Disks to the ESX Server.
@@ -783,7 +805,9 @@ impl VirtualMachine {
     pub async fn crypto_unlock_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/VirtualMachine/{moId}/CryptoUnlock_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Customizes a virtual machine's guest operating system.
     /// 
@@ -807,8 +831,10 @@ impl VirtualMachine {
     pub async fn customize_vm_task(&self, spec: &crate::types::structs::CustomizationSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CustomizeVmRequestType {spec, };
         let path = format!("/VirtualMachine/{moId}/CustomizeVM_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Defragment all virtual disks attached to this virtual machine.
     /// 
@@ -852,7 +878,9 @@ impl VirtualMachine {
     pub async fn destroy_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/VirtualMachine/{moId}/Destroy_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Detach a disk from this virtual machine.
     /// 
@@ -883,8 +911,10 @@ impl VirtualMachine {
     pub async fn detach_disk_task(&self, disk_id: &crate::types::structs::Id) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = DetachDiskRequestType {disk_id, };
         let path = format!("/VirtualMachine/{moId}/DetachDisk_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Disables the specified secondary virtual machine in this fault tolerant group.
     /// 
@@ -925,8 +955,10 @@ impl VirtualMachine {
     pub async fn disable_secondary_vm_task(&self, vm: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = DisableSecondaryVmRequestType {vm, };
         let path = format!("/VirtualMachine/{moId}/DisableSecondaryVM_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Force the virtual machine to drop the specified connections.
     /// 
@@ -954,8 +986,10 @@ impl VirtualMachine {
     pub async fn drop_connections(&self, list_of_connections: Option<&[Box<dyn crate::types::traits::VirtualMachineConnectionTrait>]>) -> Result<bool> {
         let input = DropConnectionsRequestType {list_of_connections, };
         let path = format!("/VirtualMachine/{moId}/DropConnections", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: bool = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Enables the specified secondary virtual machine in this fault tolerant group.
     /// 
@@ -1026,8 +1060,10 @@ impl VirtualMachine {
     pub async fn enable_secondary_vm_task(&self, vm: &crate::types::structs::ManagedObjectReference, host: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = EnableSecondaryVmRequestType {vm, host, };
         let path = format!("/VirtualMachine/{moId}/EnableSecondaryVM_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Estimate the temporary space required to consolidation disk
     /// files.
@@ -1067,7 +1103,9 @@ impl VirtualMachine {
     pub async fn estimate_storage_for_consolidate_snapshots_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/VirtualMachine/{moId}/EstimateStorageForConsolidateSnapshots_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Obtains an export lease on this virtual machine.
     /// 
@@ -1101,7 +1139,9 @@ impl VirtualMachine {
     pub async fn export_vm(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/VirtualMachine/{moId}/ExportVm", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Returns the OVF environment for a virtual machine.
     /// 
@@ -1118,7 +1158,9 @@ impl VirtualMachine {
     pub async fn extract_ovf_environment(&self) -> Result<String> {
         let path = format!("/VirtualMachine/{moId}/ExtractOvfEnvironment", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Creates a powered-on Instant Clone of a virtual machine.
     /// 
@@ -1178,8 +1220,10 @@ impl VirtualMachine {
     pub async fn instant_clone_task(&self, spec: &crate::types::structs::VirtualMachineInstantCloneSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = InstantCloneRequestType {spec, };
         let path = format!("/VirtualMachine/{moId}/InstantClone_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Makes the specified secondary virtual machine from this fault tolerant group as
     /// the primary virtual machine.
@@ -1217,8 +1261,10 @@ impl VirtualMachine {
     pub async fn make_primary_vm_task(&self, vm: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = MakePrimaryVmRequestType {vm, };
         let path = format!("/VirtualMachine/{moId}/MakePrimaryVM_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Marks a VirtualMachine object as being used as a template.
     /// 
@@ -1286,7 +1332,7 @@ impl VirtualMachine {
     pub async fn mark_as_virtual_machine(&self, pool: &crate::types::structs::ManagedObjectReference, host: Option<&crate::types::structs::ManagedObjectReference>) -> Result<()> {
         let input = MarkAsVirtualMachineRequestType {pool, host, };
         let path = format!("/VirtualMachine/{moId}/MarkAsVirtualMachine", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Deprecated as of vSphere 6.5, use *VirtualMachine.RelocateVM_Task*
@@ -1384,8 +1430,10 @@ impl VirtualMachine {
     pub async fn migrate_vm_task(&self, pool: Option<&crate::types::structs::ManagedObjectReference>, host: Option<&crate::types::structs::ManagedObjectReference>, priority: crate::types::enums::VirtualMachineMovePriorityEnum, state: Option<crate::types::enums::VirtualMachinePowerStateEnum>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = MigrateVmRequestType {pool, host, priority, state, };
         let path = format!("/VirtualMachine/{moId}/MigrateVM_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Mounts the VMware Tools CD installer as a CD-ROM for the guest operating system.
     /// 
@@ -1434,7 +1482,9 @@ impl VirtualMachine {
     pub async fn power_off_vm_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/VirtualMachine/{moId}/PowerOffVM_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Powers on this virtual machine.
     /// 
@@ -1508,8 +1558,10 @@ impl VirtualMachine {
     pub async fn power_on_vm_task(&self, host: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = PowerOnVmRequestType {host, };
         let path = format!("/VirtualMachine/{moId}/PowerOnVM_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Promotes disks on this virtual machine that have delta disk backings.
     /// 
@@ -1570,8 +1622,10 @@ impl VirtualMachine {
     pub async fn promote_disks_task(&self, unlink: bool, disks: Option<&[crate::types::structs::VirtualDisk]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = PromoteDisksRequestType {unlink, disks, };
         let path = format!("/VirtualMachine/{moId}/PromoteDisks_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Inject a sequence of USB HID scan codes into the keyboard.
     /// 
@@ -1588,8 +1642,10 @@ impl VirtualMachine {
     pub async fn put_usb_scan_codes(&self, spec: &crate::types::structs::UsbScanCodeSpec) -> Result<i32> {
         let input = PutUsbScanCodesRequestType {spec, };
         let path = format!("/VirtualMachine/{moId}/PutUsbScanCodes", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: i32 = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Get a list of areas of a virtual disk belonging to this VM that have
     /// been modified since a well-defined point in the past.
@@ -1650,8 +1706,10 @@ impl VirtualMachine {
     pub async fn query_changed_disk_areas(&self, snapshot: Option<&crate::types::structs::ManagedObjectReference>, device_key: i32, start_offset: i64, change_id: &str) -> Result<crate::types::structs::DiskChangeInfo> {
         let input = QueryChangedDiskAreasRequestType {snapshot, device_key, start_offset, change_id, };
         let path = format!("/VirtualMachine/{moId}/QueryChangedDiskAreas", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::DiskChangeInfo = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Ask the virtual machine for a list of connections.
     /// 
@@ -1674,7 +1732,11 @@ impl VirtualMachine {
     pub async fn query_connections(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::VirtualMachineConnectionTrait>>>> {
         let path = format!("/VirtualMachine/{moId}/QueryConnections", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::VirtualMachineConnectionTrait>>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Deprecated as of vSphere API 6.0.
     /// 
@@ -1705,7 +1767,11 @@ impl VirtualMachine {
     pub async fn query_fault_tolerance_compatibility(&self) -> Result<Option<Vec<crate::types::structs::MethodFault>>> {
         let path = format!("/VirtualMachine/{moId}/QueryFaultToleranceCompatibility", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::MethodFault>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// This API can be invoked to determine whether a virtual machine is
     /// compatible for Fault Tolerance.
@@ -1739,8 +1805,12 @@ impl VirtualMachine {
     pub async fn query_fault_tolerance_compatibility_ex(&self, for_legacy_ft: Option<bool>) -> Result<Option<Vec<crate::types::structs::MethodFault>>> {
         let input = QueryFaultToleranceCompatibilityExRequestType {for_legacy_ft, };
         let path = format!("/VirtualMachine/{moId}/QueryFaultToleranceCompatibilityEx", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::MethodFault>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// For all files that belong to the vm, check that the file owner
     /// is set to the current datastore principal user, as set by
@@ -1756,7 +1826,11 @@ impl VirtualMachine {
     pub async fn query_unowned_files(&self) -> Result<Option<Vec<String>>> {
         let path = format!("/VirtualMachine/{moId}/QueryUnownedFiles", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<String>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Issues a command to the guest operating system asking it to perform
     /// a reboot.
@@ -1938,8 +2012,10 @@ impl VirtualMachine {
     pub async fn reconfig_vm_task(&self, spec: &crate::types::structs::VirtualMachineConfigSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ReconfigVmRequestType {spec, };
         let path = format!("/VirtualMachine/{moId}/ReconfigVM_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Explicitly refreshes the storage information of this virtual machine,
     /// updating properties *VirtualMachine.storage*, *VirtualMachine.layoutEx*
@@ -2033,8 +2109,10 @@ impl VirtualMachine {
     pub async fn reload_virtual_machine_from_path_task(&self, configuration_path: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ReloadVirtualMachineFromPathRequestType {configuration_path, };
         let path = format!("/VirtualMachine/{moId}/reloadVirtualMachineFromPath_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Relocates a virtual machine to the location specified by
     /// *VirtualMachineRelocateSpec*.
@@ -2148,8 +2226,10 @@ impl VirtualMachine {
     pub async fn relocate_vm_task(&self, spec: &crate::types::structs::VirtualMachineRelocateSpec, priority: Option<crate::types::enums::VirtualMachineMovePriorityEnum>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RelocateVmRequestType {spec, priority, };
         let path = format!("/VirtualMachine/{moId}/RelocateVM_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Remove all the snapshots associated with this virtual machine.
     /// 
@@ -2198,8 +2278,10 @@ impl VirtualMachine {
     pub async fn remove_all_snapshots_task(&self, consolidate: Option<bool>, spec: Option<&crate::types::structs::SnapshotSelectionSpec>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RemoveAllSnapshotsRequestType {consolidate, spec, };
         let path = format!("/VirtualMachine/{moId}/RemoveAllSnapshots_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Renames this managed entity.
     /// 
@@ -2232,8 +2314,10 @@ impl VirtualMachine {
     pub async fn rename_task(&self, new_name: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RenameRequestType {new_name, };
         let path = format!("/VirtualMachine/{moId}/Rename_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Resets power on this virtual machine.
     /// 
@@ -2273,7 +2357,9 @@ impl VirtualMachine {
     pub async fn reset_vm_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/VirtualMachine/{moId}/ResetVM_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Clears cached guest information.
     /// 
@@ -2375,8 +2461,10 @@ impl VirtualMachine {
     pub async fn revert_to_current_snapshot_task(&self, host: Option<&crate::types::structs::ManagedObjectReference>, suppress_power_on: Option<bool>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RevertToCurrentSnapshotRequestType {host, suppress_power_on, };
         let path = format!("/VirtualMachine/{moId}/RevertToCurrentSnapshot_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Send a non-maskable interrupt (NMI).
     /// 
@@ -2410,7 +2498,7 @@ impl VirtualMachine {
     pub async fn set_custom_value(&self, key: &str, value: &str) -> Result<()> {
         let input = SetCustomValueRequestType {key, value, };
         let path = format!("/VirtualMachine/{moId}/setCustomValue", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Sets the console window's display topology as specified.
@@ -2436,7 +2524,7 @@ impl VirtualMachine {
     pub async fn set_display_topology(&self, displays: &[crate::types::structs::VirtualMachineDisplayTopology]) -> Result<()> {
         let input = SetDisplayTopologyRequestType {displays, };
         let path = format!("/VirtualMachine/{moId}/SetDisplayTopology", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Sets the console window's resolution as specified.
@@ -2464,7 +2552,7 @@ impl VirtualMachine {
     pub async fn set_screen_resolution(&self, width: i32, height: i32) -> Result<()> {
         let input = SetScreenResolutionRequestType {width, height, };
         let path = format!("/VirtualMachine/{moId}/SetScreenResolution", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Issues a command to the guest operating system asking it to perform
@@ -2580,8 +2668,10 @@ impl VirtualMachine {
     pub async fn start_recording_task(&self, name: &str, description: Option<&str>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = StartRecordingRequestType {name, description, };
         let path = format!("/VirtualMachine/{moId}/StartRecording_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deprecated as of vsphere API 5.1.
     /// 
@@ -2648,8 +2738,10 @@ impl VirtualMachine {
     pub async fn start_replaying_task(&self, replay_snapshot: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = StartReplayingRequestType {replay_snapshot, };
         let path = format!("/VirtualMachine/{moId}/StartReplaying_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deprecated as of vsphere API 5.1.
     /// 
@@ -2690,7 +2782,9 @@ impl VirtualMachine {
     pub async fn stop_recording_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/VirtualMachine/{moId}/StopRecording_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deprecated as of vsphere API 5.1.
     /// 
@@ -2731,7 +2825,9 @@ impl VirtualMachine {
     pub async fn stop_replaying_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/VirtualMachine/{moId}/StopReplaying_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Suspends execution in this virtual machine.
     /// 
@@ -2758,7 +2854,9 @@ impl VirtualMachine {
     pub async fn suspend_vm_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/VirtualMachine/{moId}/SuspendVM_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Do an immediate power off of a VM.
     /// 
@@ -2826,8 +2924,10 @@ impl VirtualMachine {
     pub async fn terminate_fault_tolerant_vm_task(&self, vm: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = TerminateFaultTolerantVmRequestType {vm, };
         let path = format!("/VirtualMachine/{moId}/TerminateFaultTolerantVM_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Removes all secondary virtual machines associated with the fault tolerant
     /// group and turns off protection for this virtual machine.
@@ -2857,7 +2957,9 @@ impl VirtualMachine {
     pub async fn turn_off_fault_tolerance_for_vm_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/VirtualMachine/{moId}/TurnOffFaultToleranceForVM_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Unmounts VMware Tools installer CD.
     /// 
@@ -2934,8 +3036,10 @@ impl VirtualMachine {
     pub async fn upgrade_tools_task(&self, installer_options: Option<&str>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = UpgradeToolsRequestType {installer_options, };
         let path = format!("/VirtualMachine/{moId}/UpgradeTools_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Upgrades this virtual machine's virtual hardware to the latest revision
     /// that is supported by the virtual machine's current host.
@@ -2973,8 +3077,10 @@ impl VirtualMachine {
     pub async fn upgrade_vm_task(&self, version: Option<&str>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = UpgradeVmRequestType {version, };
         let path = format!("/VirtualMachine/{moId}/UpgradeVM_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Whether alarm actions are enabled for this entity.
     /// 
@@ -2984,7 +3090,11 @@ impl VirtualMachine {
     pub async fn alarm_actions_enabled(&self) -> Result<Option<bool>> {
         let path = format!("/VirtualMachine/{moId}/alarmActionsEnabled", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<bool>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// List of custom field definitions that are valid for the object's type.
     /// 
@@ -2994,13 +3104,19 @@ impl VirtualMachine {
     pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
         let path = format!("/VirtualMachine/{moId}/availableField", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::CustomFieldDef>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Information about the runtime capabilities of this virtual machine.
     pub async fn capability(&self) -> Result<crate::types::structs::VirtualMachineCapability> {
         let path = format!("/VirtualMachine/{moId}/capability", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::VirtualMachineCapability = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Configuration of this virtual machine, including the name and UUID.
     /// 
@@ -3015,7 +3131,11 @@ impl VirtualMachine {
     pub async fn config(&self) -> Result<Option<crate::types::structs::VirtualMachineConfigInfo>> {
         let path = format!("/VirtualMachine/{moId}/config", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::VirtualMachineConfigInfo>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Current configuration issues that have been detected for this entity.
     /// 
@@ -3027,7 +3147,11 @@ impl VirtualMachine {
     pub async fn config_issue(&self) -> Result<Option<Vec<crate::types::structs::Event>>> {
         let path = format!("/VirtualMachine/{moId}/configIssue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::Event>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// The configStatus indicates whether or not the system has detected a configuration
     /// issue involving this entity.
@@ -3056,7 +3180,9 @@ impl VirtualMachine {
     pub async fn config_status(&self) -> Result<crate::types::enums::ManagedEntityStatusEnum> {
         let path = format!("/VirtualMachine/{moId}/configStatus", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::enums::ManagedEntityStatusEnum = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Custom field values.
     /// 
@@ -3064,7 +3190,11 @@ impl VirtualMachine {
     pub async fn custom_value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/VirtualMachine/{moId}/customValue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// A collection of references to the subset of datastore objects in the datacenter
     /// that is used by this virtual machine.
@@ -3077,7 +3207,11 @@ impl VirtualMachine {
     pub async fn datastore(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/VirtualMachine/{moId}/datastore", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// A set of alarm states for alarms that apply to this managed entity.
     /// 
@@ -3092,7 +3226,11 @@ impl VirtualMachine {
     pub async fn declared_alarm_state(&self) -> Result<Option<Vec<crate::types::structs::AlarmState>>> {
         let path = format!("/VirtualMachine/{moId}/declaredAlarmState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::AlarmState>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// List of operations that are disabled, given the current runtime
     /// state of the entity.
@@ -3166,7 +3304,11 @@ impl VirtualMachine {
     pub async fn disabled_method(&self) -> Result<Option<Vec<String>>> {
         let path = format!("/VirtualMachine/{moId}/disabledMethod", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<String>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Access rights the current session has to this entity.
     /// 
@@ -3174,7 +3316,11 @@ impl VirtualMachine {
     pub async fn effective_role(&self) -> Result<Option<Vec<i32>>> {
         let path = format!("/VirtualMachine/{moId}/effectiveRole", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<i32>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// The current virtual machine's environment browser object.
     /// 
@@ -3189,7 +3335,9 @@ impl VirtualMachine {
     pub async fn environment_browser(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/VirtualMachine/{moId}/environmentBrowser", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Information about VMware Tools and about the virtual machine
     /// from the perspective of VMware Tools.
@@ -3201,7 +3349,11 @@ impl VirtualMachine {
     pub async fn guest(&self) -> Result<Option<crate::types::structs::GuestInfo>> {
         let path = format!("/VirtualMachine/{moId}/guest", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::GuestInfo>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// The guest heartbeat.
     /// 
@@ -3216,7 +3368,9 @@ impl VirtualMachine {
     pub async fn guest_heartbeat_status(&self) -> Result<crate::types::enums::ManagedEntityStatusEnum> {
         let path = format!("/VirtualMachine/{moId}/guestHeartbeatStatus", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::enums::ManagedEntityStatusEnum = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deprecated as of vSphere API 4.0, use *VirtualMachine.layoutEx* instead.
     /// In releases after vSphere API 5.0, vSphere Servers might not
@@ -3231,7 +3385,11 @@ impl VirtualMachine {
     pub async fn layout(&self) -> Result<Option<crate::types::structs::VirtualMachineFileLayout>> {
         let path = format!("/VirtualMachine/{moId}/layout", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::VirtualMachineFileLayout>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Detailed information about the files that comprise this virtual machine.
     /// 
@@ -3246,7 +3404,11 @@ impl VirtualMachine {
     pub async fn layout_ex(&self) -> Result<Option<crate::types::structs::VirtualMachineFileLayoutEx>> {
         let path = format!("/VirtualMachine/{moId}/layoutEx", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::VirtualMachineFileLayoutEx>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Name of this entity, unique relative to its parent.
     /// 
@@ -3260,7 +3422,9 @@ impl VirtualMachine {
     pub async fn name(&self) -> Result<String> {
         let path = format!("/VirtualMachine/{moId}/name", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// A collection of references to the subset of network objects in the datacenter that
     /// is used by this virtual machine.
@@ -3273,7 +3437,11 @@ impl VirtualMachine {
     pub async fn network(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/VirtualMachine/{moId}/network", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// General health of this managed entity.
     /// 
@@ -3298,7 +3466,9 @@ impl VirtualMachine {
     pub async fn overall_status(&self) -> Result<crate::types::enums::ManagedEntityStatusEnum> {
         let path = format!("/VirtualMachine/{moId}/overallStatus", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::enums::ManagedEntityStatusEnum = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Parent of this entity.
     /// 
@@ -3314,7 +3484,11 @@ impl VirtualMachine {
     pub async fn parent(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let path = format!("/VirtualMachine/{moId}/parent", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::ManagedObjectReference>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Reference to the parent vApp.
     ///
@@ -3324,13 +3498,21 @@ impl VirtualMachine {
     pub async fn parent_v_app(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let path = format!("/VirtualMachine/{moId}/parentVApp", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::ManagedObjectReference>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// List of permissions defined for this entity.
     pub async fn permission(&self) -> Result<Option<Vec<crate::types::structs::Permission>>> {
         let path = format!("/VirtualMachine/{moId}/permission", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::Permission>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// The set of recent tasks operating on this managed entity.
     /// 
@@ -3360,7 +3542,11 @@ impl VirtualMachine {
     pub async fn recent_task(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/VirtualMachine/{moId}/recentTask", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// The resource configuration for a virtual machine.
     /// 
@@ -3378,7 +3564,11 @@ impl VirtualMachine {
     pub async fn resource_config(&self) -> Result<Option<crate::types::structs::ResourceConfigSpec>> {
         let path = format!("/VirtualMachine/{moId}/resourceConfig", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::ResourceConfigSpec>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// The current resource pool that specifies resource allocation
     /// for this virtual machine.
@@ -3395,7 +3585,11 @@ impl VirtualMachine {
     pub async fn resource_pool(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let path = format!("/VirtualMachine/{moId}/resourcePool", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::ManagedObjectReference>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// The roots of all snapshot trees for the virtual machine.
     ///
@@ -3405,7 +3599,11 @@ impl VirtualMachine {
     pub async fn root_snapshot(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/VirtualMachine/{moId}/rootSnapshot", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Execution state and history for this virtual machine.
     /// 
@@ -3416,7 +3614,9 @@ impl VirtualMachine {
     pub async fn runtime(&self) -> Result<crate::types::structs::VirtualMachineRuntimeInfo> {
         let path = format!("/VirtualMachine/{moId}/runtime", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::VirtualMachineRuntimeInfo = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Current snapshot and tree.
     /// 
@@ -3432,7 +3632,11 @@ impl VirtualMachine {
     pub async fn snapshot(&self) -> Result<Option<crate::types::structs::VirtualMachineSnapshotInfo>> {
         let path = format!("/VirtualMachine/{moId}/snapshot", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::VirtualMachineSnapshotInfo>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Storage space used by the virtual machine, split by datastore.
     /// 
@@ -3447,7 +3651,11 @@ impl VirtualMachine {
     pub async fn storage(&self) -> Result<Option<crate::types::structs::VirtualMachineStorageInfo>> {
         let path = format!("/VirtualMachine/{moId}/storage", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::VirtualMachineStorageInfo>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Basic information about this virtual machine.
     /// 
@@ -3460,7 +3668,9 @@ impl VirtualMachine {
     pub async fn summary(&self) -> Result<crate::types::structs::VirtualMachineSummary> {
         let path = format!("/VirtualMachine/{moId}/summary", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::VirtualMachineSummary = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// The set of tags associated with this managed entity.
     /// 
@@ -3470,7 +3680,11 @@ impl VirtualMachine {
     pub async fn tag(&self) -> Result<Option<Vec<crate::types::structs::Tag>>> {
         let path = format!("/VirtualMachine/{moId}/tag", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::Tag>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// A set of alarm states for alarms triggered by this entity
     /// or by its descendants.
@@ -3489,7 +3703,11 @@ impl VirtualMachine {
     pub async fn triggered_alarm_state(&self) -> Result<Option<Vec<crate::types::structs::AlarmState>>> {
         let path = format!("/VirtualMachine/{moId}/triggeredAlarmState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::AlarmState>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// List of custom field values.
     /// 
@@ -3501,7 +3719,11 @@ impl VirtualMachine {
     pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/VirtualMachine/{moId}/value", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
 }
 #[derive(serde::Serialize)]

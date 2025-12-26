@@ -1,16 +1,16 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// Deprecated as of vSphere 9.0 APIs with no replacement.
 /// 
 /// Managed object responsible for reading and configuring
 /// Non-Volatile DIMMs.
 #[derive(Clone)]
 pub struct HostNvdimmSystem {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl HostNvdimmSystem {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -66,8 +66,10 @@ impl HostNvdimmSystem {
     pub async fn create_nvdimm_namespace_task(&self, create_spec: &crate::types::structs::NvdimmNamespaceCreateSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateNvdimmNamespaceRequestType {create_spec, };
         let path = format!("/HostNvdimmSystem/{moId}/CreateNvdimmNamespace_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Create persistent memory mode nvd namespace from information passed
     /// in PMemNamespaceCreationSpec.
@@ -116,8 +118,10 @@ impl HostNvdimmSystem {
     pub async fn create_nvdimm_p_mem_namespace_task(&self, create_spec: &crate::types::structs::NvdimmPMemNamespaceCreateSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateNvdimmPMemNamespaceRequestType {create_spec, };
         let path = format!("/HostNvdimmSystem/{moId}/CreateNvdimmPMemNamespace_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Delete all block mode namespaces in the system.
     /// 
@@ -159,7 +163,9 @@ impl HostNvdimmSystem {
     pub async fn delete_nvdimm_block_namespaces_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/HostNvdimmSystem/{moId}/DeleteNvdimmBlockNamespaces_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Delete nvd namespace whose uuid matches passed parameter.
     /// 
@@ -202,8 +208,10 @@ impl HostNvdimmSystem {
     pub async fn delete_nvdimm_namespace_task(&self, delete_spec: &crate::types::structs::NvdimmNamespaceDeleteSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = DeleteNvdimmNamespaceRequestType {delete_spec, };
         let path = format!("/HostNvdimmSystem/{moId}/DeleteNvdimmNamespace_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Host NVDIMM information.
     /// 
@@ -223,7 +231,9 @@ impl HostNvdimmSystem {
     pub async fn nvdimm_system_info(&self) -> Result<crate::types::structs::NvdimmSystemInfo> {
         let path = format!("/HostNvdimmSystem/{moId}/nvdimmSystemInfo", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::NvdimmSystemInfo = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
 }
 #[derive(serde::Serialize)]

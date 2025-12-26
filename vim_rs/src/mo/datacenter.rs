@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// The *Datacenter* managed object provides the interface to the common container
 /// object for hosts, virtual machines, networks, and datastores.
 /// 
@@ -20,11 +20,11 @@ use crate::core::client::{Client, Result};
 /// hierarchy, see the description of the *ServiceInstance* object.
 #[derive(Clone)]
 pub struct Datacenter {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl Datacenter {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -45,8 +45,12 @@ impl Datacenter {
     pub async fn batch_query_connect_info(&self, host_specs: Option<&[crate::types::structs::HostConnectSpec]>) -> Result<Option<Vec<crate::types::structs::DatacenterBasicConnectInfo>>> {
         let input = BatchQueryConnectInfoRequestType {host_specs, };
         let path = format!("/Datacenter/{moId}/BatchQueryConnectInfo", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::DatacenterBasicConnectInfo>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Destroys this object, deleting its contents and removing it from its parent
     /// folder (if any).
@@ -72,7 +76,9 @@ impl Datacenter {
     pub async fn destroy_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/Datacenter/{moId}/Destroy_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Powers on multiple virtual machines in a data center.
     /// 
@@ -121,8 +127,10 @@ impl Datacenter {
     pub async fn power_on_multi_vm_task(&self, vm: &[crate::types::structs::ManagedObjectReference], option: Option<&[Box<dyn crate::types::traits::OptionValueTrait>]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = PowerOnMultiVmRequestType {vm, option, };
         let path = format!("/Datacenter/{moId}/PowerOnMultiVM_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// The list of possible choices for
     /// *DatacenterConfigSpec.defaultHardwareVersionKey*.
@@ -134,7 +142,11 @@ impl Datacenter {
     pub async fn query_datacenter_config_option_descriptor(&self) -> Result<Option<Vec<crate::types::structs::VirtualMachineConfigOptionDescriptor>>> {
         let path = format!("/Datacenter/{moId}/queryDatacenterConfigOptionDescriptor", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VirtualMachineConfigOptionDescriptor>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// This method provides a way of getting basic information about a host without
     /// adding it to a datacenter.
@@ -202,8 +214,10 @@ impl Datacenter {
     pub async fn query_connection_info(&self, hostname: &str, port: i32, username: &str, password: &str, ssl_thumbprint: Option<&str>, ssl_certificate: Option<&str>) -> Result<crate::types::structs::HostConnectInfo> {
         let input = QueryConnectionInfoRequestType {hostname, port, username, password, ssl_thumbprint, ssl_certificate, };
         let path = format!("/Datacenter/{moId}/QueryConnectionInfo", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::HostConnectInfo = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// This method provides a way of getting basic information about a host
     /// without adding it to a datacenter.
@@ -228,8 +242,10 @@ impl Datacenter {
     pub async fn query_connection_info_via_spec(&self, spec: &crate::types::structs::HostConnectSpec) -> Result<crate::types::structs::HostConnectInfo> {
         let input = QueryConnectionInfoViaSpecRequestType {spec, };
         let path = format!("/Datacenter/{moId}/QueryConnectionInfoViaSpec", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::HostConnectInfo = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Change the datacenter configuration.
     /// 
@@ -259,8 +275,10 @@ impl Datacenter {
     pub async fn reconfigure_datacenter_task(&self, spec: &crate::types::structs::DatacenterConfigSpec, modify: bool) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ReconfigureDatacenterRequestType {spec, modify, };
         let path = format!("/Datacenter/{moId}/ReconfigureDatacenter_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Reload the entity state.
     /// 
@@ -312,8 +330,10 @@ impl Datacenter {
     pub async fn rename_task(&self, new_name: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RenameRequestType {new_name, };
         let path = format!("/Datacenter/{moId}/Rename_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Assigns a value to a custom field.
     /// 
@@ -332,7 +352,7 @@ impl Datacenter {
     pub async fn set_custom_value(&self, key: &str, value: &str) -> Result<()> {
         let input = SetCustomValueRequestType {key, value, };
         let path = format!("/Datacenter/{moId}/setCustomValue", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Whether alarm actions are enabled for this entity.
@@ -343,7 +363,11 @@ impl Datacenter {
     pub async fn alarm_actions_enabled(&self) -> Result<Option<bool>> {
         let path = format!("/Datacenter/{moId}/alarmActionsEnabled", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<bool>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// List of custom field definitions that are valid for the object's type.
     /// 
@@ -353,7 +377,11 @@ impl Datacenter {
     pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
         let path = format!("/Datacenter/{moId}/availableField", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::CustomFieldDef>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Current configuration issues that have been detected for this entity.
     /// 
@@ -365,7 +393,11 @@ impl Datacenter {
     pub async fn config_issue(&self) -> Result<Option<Vec<crate::types::structs::Event>>> {
         let path = format!("/Datacenter/{moId}/configIssue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::Event>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// The configStatus indicates whether or not the system has detected a configuration
     /// issue involving this entity.
@@ -394,7 +426,9 @@ impl Datacenter {
     pub async fn config_status(&self) -> Result<crate::types::enums::ManagedEntityStatusEnum> {
         let path = format!("/Datacenter/{moId}/configStatus", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::enums::ManagedEntityStatusEnum = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Configuration of the datacenter.
     /// 
@@ -402,7 +436,9 @@ impl Datacenter {
     pub async fn configuration(&self) -> Result<crate::types::structs::DatacenterConfigInfo> {
         let path = format!("/Datacenter/{moId}/configuration", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::DatacenterConfigInfo = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Custom field values.
     /// 
@@ -410,7 +446,11 @@ impl Datacenter {
     pub async fn custom_value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/Datacenter/{moId}/customValue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// A collection of references to the datastore objects
     /// available in this datacenter.
@@ -421,7 +461,11 @@ impl Datacenter {
     pub async fn datastore(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/Datacenter/{moId}/datastore", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// A reference to the folder hierarchy that contains
     /// the datastores for this datacenter.
@@ -436,7 +480,9 @@ impl Datacenter {
     pub async fn datastore_folder(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/Datacenter/{moId}/datastoreFolder", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// A set of alarm states for alarms that apply to this managed entity.
     /// 
@@ -451,7 +497,11 @@ impl Datacenter {
     pub async fn declared_alarm_state(&self) -> Result<Option<Vec<crate::types::structs::AlarmState>>> {
         let path = format!("/Datacenter/{moId}/declaredAlarmState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::AlarmState>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// List of operations that are disabled, given the current runtime
     /// state of the entity.
@@ -525,7 +575,11 @@ impl Datacenter {
     pub async fn disabled_method(&self) -> Result<Option<Vec<String>>> {
         let path = format!("/Datacenter/{moId}/disabledMethod", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<String>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Access rights the current session has to this entity.
     /// 
@@ -533,7 +587,11 @@ impl Datacenter {
     pub async fn effective_role(&self) -> Result<Option<Vec<i32>>> {
         let path = format!("/Datacenter/{moId}/effectiveRole", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<i32>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// A reference to the folder hierarchy that contains
     /// the compute resources, including hosts and clusters, for this datacenter.
@@ -548,7 +606,9 @@ impl Datacenter {
     pub async fn host_folder(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/Datacenter/{moId}/hostFolder", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Name of this entity, unique relative to its parent.
     /// 
@@ -562,7 +622,9 @@ impl Datacenter {
     pub async fn name(&self) -> Result<String> {
         let path = format!("/Datacenter/{moId}/name", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// A collection of references to the network objects
     /// available in this datacenter.
@@ -573,7 +635,11 @@ impl Datacenter {
     pub async fn network(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/Datacenter/{moId}/network", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// A reference to the folder hierarchy that contains the network entities
     /// for this datacenter.
@@ -592,7 +658,9 @@ impl Datacenter {
     pub async fn network_folder(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/Datacenter/{moId}/networkFolder", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// General health of this managed entity.
     /// 
@@ -617,7 +685,9 @@ impl Datacenter {
     pub async fn overall_status(&self) -> Result<crate::types::enums::ManagedEntityStatusEnum> {
         let path = format!("/Datacenter/{moId}/overallStatus", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::enums::ManagedEntityStatusEnum = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Parent of this entity.
     /// 
@@ -633,13 +703,21 @@ impl Datacenter {
     pub async fn parent(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let path = format!("/Datacenter/{moId}/parent", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::ManagedObjectReference>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// List of permissions defined for this entity.
     pub async fn permission(&self) -> Result<Option<Vec<crate::types::structs::Permission>>> {
         let path = format!("/Datacenter/{moId}/permission", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::Permission>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// The set of recent tasks operating on this managed entity.
     /// 
@@ -669,7 +747,11 @@ impl Datacenter {
     pub async fn recent_task(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/Datacenter/{moId}/recentTask", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// The set of tags associated with this managed entity.
     /// 
@@ -679,7 +761,11 @@ impl Datacenter {
     pub async fn tag(&self) -> Result<Option<Vec<crate::types::structs::Tag>>> {
         let path = format!("/Datacenter/{moId}/tag", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::Tag>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// A set of alarm states for alarms triggered by this entity
     /// or by its descendants.
@@ -698,7 +784,11 @@ impl Datacenter {
     pub async fn triggered_alarm_state(&self) -> Result<Option<Vec<crate::types::structs::AlarmState>>> {
         let path = format!("/Datacenter/{moId}/triggeredAlarmState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::AlarmState>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// List of custom field values.
     /// 
@@ -710,7 +800,11 @@ impl Datacenter {
     pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/Datacenter/{moId}/value", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// A reference to the folder hierarchy that contains *VirtualMachine*
     /// virtual machine templates (identified by the *VirtualMachineConfigInfo.template*
@@ -730,7 +824,9 @@ impl Datacenter {
     pub async fn vm_folder(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/Datacenter/{moId}/vmFolder", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
 }
 #[derive(serde::Serialize)]
