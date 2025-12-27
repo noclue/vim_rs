@@ -52,7 +52,7 @@ use tokio::sync::{RwLock, oneshot, mpsc};
 use log::{debug, error};
 use serde::de::DeserializeOwned;
 
-use crate::core::client::Client;
+use crate::core::client::VimClientHandle;
 use crate::mo::{ListView, ViewManager};
 use crate::types::structs::ManagedObjectReference;
 use crate::types::enums::{TaskInfoStateEnum, MoTypesEnum};
@@ -69,13 +69,13 @@ use super::error::TaskError;
 /// Internally, the tracker maintains a `ListView` of in-flight tasks and runs a background loop
 /// that applies incremental updates until each task reaches a terminal state.
 pub struct TaskTracker {
-    client: Arc<Client>,
+    client: VimClientHandle,
     state: Arc<RwLock<SharedState>>,
 }
 
 impl TaskTracker {
     /// Create a new tracker. The background monitoring loop starts lazily on the first wait call.
-    pub fn new(client: Arc<Client>) -> Self {
+    pub fn new(client: VimClientHandle) -> Self {
         Self {
             client,
             state: Arc::new(RwLock::new(SharedState {

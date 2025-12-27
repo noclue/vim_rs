@@ -2,7 +2,7 @@ use indexmap::IndexMap;
 use std::ops::Index;
 use std::sync::{Arc, RwLock, Mutex};
 use log::{debug, error, warn};
-use crate::core::client::Client;
+use crate::core::client::VimClientHandle;
 use crate::core::pc_helpers;
 use crate::core::pc_helpers::{BoxableError, Error, Queriable};
 use crate::mo::{PropertyCollector, PropertyFilter, View, ViewManager};
@@ -339,7 +339,7 @@ struct CacheRecord {
 ///
 /// Use the `destroy` method to clean up all caches and filters.
 pub struct CacheManager {
-    client: Arc<Client>,
+    client: VimClientHandle,
     property_collector: PropertyCollector,
     view_manager: ViewManager,
     caches: std::collections::HashMap<String, CacheRecord>,
@@ -354,7 +354,7 @@ impl CacheManager {
     /// multiple caches and dispatch updates to them. The default PropertyCollector is used
     /// to create filters for the caches. Only one CacheManager can work correctly with given
     /// PropertyCollector including the default one.
-    pub fn new(client: Arc<Client>) -> pc_helpers::Result<Self> {
+    pub fn new(client: VimClientHandle) -> pc_helpers::Result<Self> {
         let pc_mo_id = &client.service_content().property_collector.value;
         let property_collector = PropertyCollector::new(client.clone(), pc_mo_id);
         let Some(view_manager_moref) = &client.service_content().view_manager else {
@@ -372,7 +372,7 @@ impl CacheManager {
     /// Create a new CacheManager with an existing PropertyCollector. This allows to not use the
     /// default PropertyCollector, have different PropertyCollector instances and different
     /// CacheManager instances.
-    pub fn new_with_property_collector(client: Arc<Client>, property_collector: PropertyCollector) -> pc_helpers::Result<Self> {
+    pub fn new_with_property_collector(client: VimClientHandle, property_collector: PropertyCollector) -> pc_helpers::Result<Self> {
         let Some(view_manager_moref) = &client.service_content().view_manager else {
             return Err(Error::InternalError("cannot find view_manager".to_string()));
         };
