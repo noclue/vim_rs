@@ -3,8 +3,8 @@ use std::ops::Index;
 use std::sync::{Arc, RwLock, Mutex};
 use log::{debug, error, warn};
 use crate::core::client::VimClientHandle;
-use crate::core::pc_helpers;
-use crate::core::pc_helpers::{BoxableError, Error, Queriable};
+use crate::core::error::{Error, Result};
+use crate::core::pc_helpers::{self, BoxableError, Queriable};
 use crate::mo::{PropertyCollector, PropertyFilter, View, ViewManager};
 use crate::types::enums::ObjectUpdateKindEnum;
 use crate::types::structs::{ManagedObjectReference, ObjectSpec, ObjectUpdate, PropertyFilterSpec, PropertyFilterUpdate, PropertySpec, WaitOptions};
@@ -16,7 +16,7 @@ where
     Self::Error: BoxableError
 {
     /// The type of the object.
-    fn apply_update(&mut self, update: ObjectUpdate) -> pc_helpers::Result<()>;
+    fn apply_update(&mut self, update: ObjectUpdate) -> Result<()>;
 
     /// The ID of the object.
     fn id(&self) -> &ManagedObjectReference;
@@ -25,10 +25,10 @@ where
 /// A trait for PropertyCollector caches used by the infrastructure to dispatch updates.
 pub trait Cache {
     /// Property spec for the objects in this cache.
-    fn prop_spec(&self) -> pc_helpers::Result<PropertySpec>;
+    fn prop_spec(&self) -> Result<PropertySpec>;
 
     /// Apply an update to the cache.
-    fn process_update(&mut self, update: Vec<ObjectUpdate>) -> pc_helpers::Result<()>;
+    fn process_update(&mut self, update: Vec<ObjectUpdate>) -> Result<()>;
 }
 
 /// A thread-safe proxy with read-write locking using Arc<RwLock<T>>
@@ -47,20 +47,20 @@ impl<T: Cache> ReadWriteCacheProxy<T> {
 }
 
 impl<T: Cache> Cache for ReadWriteCacheProxy<T> {
-    fn prop_spec(&self) -> pc_helpers::Result<PropertySpec> {
+    fn prop_spec(&self) -> Result<PropertySpec> {
         match self.cache.read() {
             Ok(guard) => guard.prop_spec(),
             Err(e) => {
                 error!("Failed to acquire read lock: {}", e);
-                return Err(Error::PoisonError(format!("Failed to acquire read lock: {}", e)));
+                return Err(Error::lock_poisoned(format!("Failed to acquire read lock: {}", e)));
             }
         }
     }
 
-    fn process_update(&mut self, updates: Vec<ObjectUpdate>) -> pc_helpers::Result<()> {
+    fn process_update(&mut self, updates: Vec<ObjectUpdate>) -> Result<()> {
         match self.cache.write() {
             Ok(mut guard) => guard.process_update(updates),
-            Err(e) => Err(Error::PoisonError(format!("Failed to acquire write lock: {}", e))),
+            Err(e) => Err(Error::lock_poisoned(format!("Failed to acquire write lock: {}", e))),
         }
     }
 }
@@ -247,12 +247,12 @@ where
     T::Error: BoxableError
 {
     /// Get the property spec for the objects in this cache.
-    fn prop_spec(&self) -> pc_helpers::Result<PropertySpec> {
+    fn prop_spec(&self) -> Result<PropertySpec> {
         Ok(T::prop_spec())
     }
 
     /// Process a PropertyCollector update.
-    fn process_update(&mut self, updates: Vec<ObjectUpdate>) -> pc_helpers::Result<()> {
+    fn process_update(&mut self, updates: Vec<ObjectUpdate>) -> Result<()> {
         for update in updates {
             let id = update.obj.value.clone();
             match update.kind {
@@ -354,11 +354,11 @@ impl CacheManager {
     /// multiple caches and dispatch updates to them. The default PropertyCollector is used
     /// to create filters for the caches. Only one CacheManager can work correctly with given
     /// PropertyCollector including the default one.
-    pub fn new(client: VimClientHandle) -> pc_helpers::Result<Self> {
+    pub fn new(client: VimClientHandle) -> Result<Self> {
         let pc_mo_id = &client.service_content().property_collector.value;
         let property_collector = PropertyCollector::new(client.clone(), pc_mo_id);
         let Some(view_manager_moref) = &client.service_content().view_manager else {
-            return Err(Error::InternalError("cannot find view_manager".to_string()));
+            return Err(Error::internal("cannot find view_manager".to_string()));
         };
         let view_manager = ViewManager::new(client.clone(), &view_manager_moref.value);
         Ok(Self {
@@ -372,9 +372,9 @@ impl CacheManager {
     /// Create a new CacheManager with an existing PropertyCollector. This allows to not use the
     /// default PropertyCollector, have different PropertyCollector instances and different
     /// CacheManager instances.
-    pub fn new_with_property_collector(client: VimClientHandle, property_collector: PropertyCollector) -> pc_helpers::Result<Self> {
+    pub fn new_with_property_collector(client: VimClientHandle, property_collector: PropertyCollector) -> Result<Self> {
         let Some(view_manager_moref) = &client.service_content().view_manager else {
-            return Err(Error::InternalError("cannot find view_manager".to_string()));
+            return Err(Error::internal("cannot find view_manager".to_string()));
         };
         let view_manager = ViewManager::new(client.clone(), &view_manager_moref.value);
         Ok(Self {
@@ -386,7 +386,7 @@ impl CacheManager {
     }
 
     /// Create a new Monitor with the same PropertyCollector as the CacheManager.
-    pub fn create_monitor(&self) -> pc_helpers::Result<Monitor> {
+    pub fn create_monitor(&self) -> Result<Monitor> {
         Ok(Monitor::new_with_property_collector(self.property_collector.clone())?)
     }
 
@@ -395,7 +395,7 @@ impl CacheManager {
         &mut self,
         cache: Box<dyn Cache + Send + Sync>,
         container: &ManagedObjectReference,
-    ) -> pc_helpers::Result<ManagedObjectReference> {
+    ) -> Result<ManagedObjectReference> {
         let view = self.view_manager.create_container_view(container,
                                                            Some(&[cache.prop_spec()?.r#type.clone()]),
                                                            true,
@@ -414,7 +414,7 @@ impl CacheManager {
         &mut self,
         cache: Box<dyn Cache + Send + Sync>,
         obj: &[crate::types::structs::ManagedObjectReference],
-    ) -> pc_helpers::Result<ManagedObjectReference> {
+    ) -> Result<ManagedObjectReference> {
         let view = self.view_manager.create_list_view(Some(obj)).await?;
 
         let res= self.add_cache(cache, pc_helpers::obj_spec_for_view(view.clone())).await;
@@ -434,7 +434,7 @@ impl CacheManager {
         &mut self,
         cache: Box<dyn Cache + Send + Sync>,
         object_set: Vec<ObjectSpec>,
-    ) -> pc_helpers::Result<ManagedObjectReference> {
+    ) -> Result<ManagedObjectReference> {
         let filter_spec = PropertyFilterSpec {
             object_set,
             prop_set: vec![cache.prop_spec()?],
@@ -451,7 +451,7 @@ impl CacheManager {
     }
 
     /// Apply updates to the caches. This is used to dispatch updates to the caches.
-    pub fn apply_updates(&mut self, updates: Vec<PropertyFilterUpdate>) -> pc_helpers::Result<()> {
+    pub fn apply_updates(&mut self, updates: Vec<PropertyFilterUpdate>) -> Result<()> {
         for update in updates {
             let filter_id = update.filter.value.clone();
             if let Some(cache_rec) = self.caches.get_mut(&filter_id) {
@@ -468,7 +468,7 @@ impl CacheManager {
     }
 
     /// Remove a cache by its ID. This is used to clean up caches that are no longer needed.
-    pub async fn remove_cache(&mut self, filter: &ManagedObjectReference) -> pc_helpers::Result<()> {
+    pub async fn remove_cache(&mut self, filter: &ManagedObjectReference) -> Result<()> {
         if let Some(cache_rec) = self.caches.remove(&filter.value) {
             self.dispose_filter(&filter.value, &cache_rec).await;
         }
@@ -476,7 +476,7 @@ impl CacheManager {
     }
 
     /// Remove all caches. This is used to clean up all caches that are no longer needed.
-    pub async fn destroy(&mut self) -> pc_helpers::Result<()> {
+    pub async fn destroy(&mut self) -> Result<()> {
         for (filter_id, cache_rec) in self.caches.iter() {
             self.dispose_filter(&filter_id, &cache_rec).await;
         }
@@ -515,7 +515,7 @@ impl Monitor {
     /// Create a new Monitor with an existing PropertyCollector. This allows to not use the
     /// default PropertyCollector, have different PropertyCollector instances and different
     /// CacheManager instances.
-    fn new_with_property_collector(property_collector: PropertyCollector) -> pc_helpers::Result<Self> {
+    fn new_with_property_collector(property_collector: PropertyCollector) -> Result<Self> {
         Ok(Self {
             property_collector,
             version: "".to_string(),
@@ -532,7 +532,7 @@ impl Monitor {
     /// time the server waits for updates. If no updates are received within this time, the server
     /// will return an empty response. This should not exceed several 10s of seconds as to avoid TCP
     /// idle timeouts in network equipment.
-    pub async fn wait_updates(&mut self, delay_s: i32) -> pc_helpers::Result<Option<Vec<PropertyFilterUpdate>>>
+    pub async fn wait_updates(&mut self, delay_s: i32) -> Result<Option<Vec<PropertyFilterUpdate>>>
     {
         let options = WaitOptions {
             max_wait_seconds: Some(delay_s),

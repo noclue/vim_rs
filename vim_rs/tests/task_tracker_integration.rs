@@ -6,7 +6,7 @@ use tokio::sync::mpsc;
 use tokio::time::{timeout, Duration};
 
 use vim_rs::core::tasks::TaskTracker;
-use vim_rs::core::tasks::error::TaskError;
+use vim_rs::core::error::ErrorKind;
 use vim_rs::types::enums::{MoTypesEnum, ObjectUpdateKindEnum, PropertyChangeOpEnum, TaskInfoStateEnum};
 use vim_rs::types::structs::{
     ManagedObjectReference, ObjectUpdate, PropertyChange, PropertyFilterUpdate, TaskInfo, UpdateSet,
@@ -228,8 +228,13 @@ async fn error_single_task() {
     pc_tx.send(PcEvent::Bytes(bytes)).unwrap();
 
     let err = waiter.await.unwrap().unwrap_err();
-    match err {
-        TaskError::TaskFailed(_) => {}
+    match err.kind() {
+        ErrorKind::TaskFailed => {
+            // Access the underlying MethodFault
+            let fault = err.task_fault().expect("TaskFailed should have a fault");
+            // Verify we can access the fault details
+            assert!(fault.type_.is_some());
+        }
         other => panic!("expected TaskFailed, got {other:?}"),
     }
 }
@@ -411,9 +416,13 @@ async fn shutdown_notifies_pending_waiters() {
 
     // The waiter should receive an error
     let err = w1.await.unwrap().unwrap_err();
-    match err {
-        TaskError::Other(msg) if msg.contains("shutdown") => {},
-        other => panic!("expected shutdown error, got {other:?}"),
+    match err.kind() {
+        ErrorKind::Internal => {
+            if !err.to_string().contains("shutdown") {
+                panic!("expected shutdown error, got {err:?}");
+            }
+        },
+        other => panic!("expected Internal error kind, got {other:?}"),
     }
 
     // Verify the loop cleaned up (ListView was destroyed)

@@ -19,7 +19,7 @@
 //! - `Some(VimAny::Object(..))` represents a data object behind `Box<dyn VimObjectTrait>`.
 //!
 //! This module intentionally exposes the **zero-JSON** API:
-//! - [`TaskTracker::wait_any`] → `Result<Option<VimAny>, TaskError>`
+//! - [`TaskTracker::wait_any`] → `Result<Option<VimAny>>`
 //!
 //! For convenience, it also provides:
 //! - [`TaskTracker::wait`] which uses `serde_json` to decode the result into a user type `T`.
@@ -53,14 +53,13 @@ use log::{debug, error};
 use serde::de::DeserializeOwned;
 
 use crate::core::client::VimClientHandle;
+use crate::core::error::{Error, Result};
 use crate::mo::{ListView, ViewManager};
 use crate::types::structs::ManagedObjectReference;
 use crate::types::enums::{TaskInfoStateEnum, MoTypesEnum};
 use crate::types::vim_any::VimAny;
 use vim_macros::vim_updatable;
 use crate::core::pc_cache::{CacheAction, CacheManager, ObjectCache, ObjectCacheListener};
-
-use super::error::TaskError;
 
 #[derive(Clone)]
 /// Tracks vSphere `Task` objects to completion using the PropertyCollector.
@@ -116,7 +115,7 @@ impl TaskTracker {
     /// - `Ok(None)` means the task succeeded but did not return a value.
     /// - `Ok(Some(VimAny::Value(..)))` is a primitive/boxed-array result.
     /// - `Ok(Some(VimAny::Object(..)))` is a data-object result behind `Box<dyn VimObjectTrait>`.
-    pub async fn wait_any(&self, task: ManagedObjectReference) -> Result<Option<VimAny>, TaskError> {
+    pub async fn wait_any(&self, task: ManagedObjectReference) -> Result<Option<VimAny>> {
         let (tx, rx) = oneshot::channel();
         let task_id = task.value.clone();
 
@@ -125,9 +124,9 @@ impl TaskTracker {
 
             if state.list_view.is_none() {
                 let view_manager = self.client.service_content().view_manager.as_ref()
-                    .ok_or_else(|| TaskError::new_other("ViewManager not available".to_string()))?;
+                    .ok_or_else(|| Error::internal("ViewManager not available".to_string()))?;
                 let vm = ViewManager::new(self.client.clone(), &view_manager.value);
-                let lv_mor = vm.create_list_view(Some(&[])).await.map_err(TaskError::from)?;
+                let lv_mor = vm.create_list_view(Some(&[])).await?;
                 state.list_view = Some(ListView::new(self.client.clone(), &lv_mor.value));
                 state.list_view_mor = Some(lv_mor);
             }
@@ -160,7 +159,7 @@ impl TaskTracker {
                         };
                         // Notify pending tasks outside the lock to avoid deadlock
                         for tx in pending_to_notify {
-                            let _ = tx.send(Err(TaskError::new_other("TaskTracker loop terminated.".to_string())));
+                            let _ = tx.send(Err(Error::internal("TaskTracker loop terminated.".to_string())));
                         }
                         // Destroy the list view outside the lock
                         if let Some(lv) = list_view_to_destroy {
@@ -177,12 +176,12 @@ impl TaskTracker {
         if let Err(e) = list_view.modify_list_view(Some(&[task.clone()]), Some(&[])).await {
             let mut state = self.state.write().await;
             state.pending_tasks.remove(&task_id);
-            return Err(TaskError::from(e));
+            return Err(e.into());
         }
 
         match rx.await {
             Ok(res) => res,
-            Err(_) => Err(TaskError::new_other("TaskTracker channel closed".to_string())),
+            Err(_) => Err(Error::internal("TaskTracker channel closed".to_string())),
         }
     }
 
@@ -191,7 +190,7 @@ impl TaskTracker {
     /// This is useful when you know the expected result type (e.g. `()` for tasks that return no
     /// value), but it is not a zero-allocation path. Prefer [`TaskTracker::wait_any`] if you want
     /// to avoid JSON conversion and handle `VimAny` directly.
-    pub async fn wait<T: DeserializeOwned + 'static>(&self, task: ManagedObjectReference) -> Result<T, TaskError> {
+    pub async fn wait<T: DeserializeOwned + 'static>(&self, task: ManagedObjectReference) -> Result<T> {
         let val_opt = self.wait_value(task).await?;
         
         match val_opt {
@@ -206,7 +205,7 @@ impl TaskTracker {
         }
     }
 
-    async fn wait_value(&self, task: ManagedObjectReference) -> Result<Option<serde_json::Value>, TaskError> {
+    async fn wait_value(&self, task: ManagedObjectReference) -> Result<Option<serde_json::Value>> {
         let any_opt = self.wait_any(task).await?;
         match any_opt {
             None => Ok(None),
@@ -214,16 +213,16 @@ impl TaskTracker {
         }
     }
 
-    async fn background_loop(&self, mut shutdown_rx: oneshot::Receiver<()>) -> Result<(), TaskError> {
+    async fn background_loop(&self, mut shutdown_rx: oneshot::Receiver<()>) -> Result<()> {
         let (list_view_mor, list_view) = {
             let state = self.state.read().await;
-            let mor = state.list_view_mor.as_ref().ok_or_else(|| TaskError::new_other("ListView MOR is None in background loop".to_string()))?.clone();
+            let mor = state.list_view_mor.as_ref().ok_or_else(|| Error::internal("ListView MOR is None in background loop".to_string()))?.clone();
             let lv = state.list_view.as_ref().unwrap().clone();
             (mor, lv)
         };
 
-        let mut manager = CacheManager::new(self.client.clone()).map_err(TaskError::from)?;
-        let mut monitor = manager.create_monitor().map_err(TaskError::from)?;
+        let mut manager = CacheManager::new(self.client.clone())?;
+        let mut monitor = manager.create_monitor()?;
 
         let (comp_tx, mut comp_rx) = mpsc::unbounded_channel();
         let listener = TaskListener { tx: comp_tx };
@@ -231,7 +230,7 @@ impl TaskTracker {
         let obj_spec = obj_spec_for_view(list_view_mor);
 
         let cache = ObjectCache::new_with_listener(Box::new(listener));
-        manager.add_cache(Box::new(cache), obj_spec).await.map_err(TaskError::from)?;
+        manager.add_cache(Box::new(cache), obj_spec).await?;
 
         loop {
             let wait_future = monitor.wait_updates(10);
@@ -252,7 +251,7 @@ impl TaskTracker {
                             }
                         }
                         Ok(None) => {}
-                        Err(e) => return Err(TaskError::from(e)),
+                        Err(e) => return Err(e),
                     }
                 }
             }
@@ -276,7 +275,7 @@ impl TaskTracker {
             if should_exit {
                 debug!("No pending tasks, exiting background loop");
                 // Destroy the manager first (cancels the PropertyCollector filter)
-                manager.destroy().await.map_err(TaskError::from)?;
+                manager.destroy().await?;
                 // Destroy the list view outside the lock
                 if let Some(lv) = list_view_to_destroy {
                     let _ = lv.destroy_view().await;
@@ -299,11 +298,11 @@ impl TaskTracker {
         };
         
         // Destroy manager first (cancels PropertyCollector filter)
-        manager.destroy().await.map_err(TaskError::from)?;
+        manager.destroy().await?;
         
         // Notify all pending tasks that we're shutting down
         for tx in pending_to_notify {
-            let _ = tx.send(Err(TaskError::new_other("TaskTracker shutdown requested".to_string())));
+            let _ = tx.send(Err(Error::internal("TaskTracker shutdown requested".to_string())));
         }
         
         // Destroy list view last
@@ -314,7 +313,7 @@ impl TaskTracker {
         Ok(())
     }
 
-    async fn complete_task(&self, list_view: &ListView, task_id: String, final_result: Result<Option<VimAny>, TaskError>) {
+    async fn complete_task(&self, list_view: &ListView, task_id: String, final_result: Result<Option<VimAny>>) {
 
         let tx_opt = {
             let mut state = self.state.write().await;
@@ -351,7 +350,7 @@ struct SharedState {
     list_view: Option<ListView>,
     list_view_mor: Option<ManagedObjectReference>,
     /// Pending tasks keyed by task MoID. Each sender is completed exactly once on terminal state.
-    pending_tasks: HashMap<String, oneshot::Sender<Result<Option<VimAny>, TaskError>>>,
+    pending_tasks: HashMap<String, oneshot::Sender<Result<Option<VimAny>>>>,
     is_running: bool,
     shutdown_signal: Option<oneshot::Sender<()>>,
 }
@@ -360,7 +359,7 @@ struct SharedState {
 /// 
 /// It is used to send the result of the task to the caller.
 struct TaskListener {
-    tx: mpsc::UnboundedSender<(String, Result<Option<VimAny>, TaskError>)>,
+    tx: mpsc::UnboundedSender<(String, Result<Option<VimAny>>)>,
 }
 
 impl ObjectCacheListener<TaskUpdate> for TaskListener {
@@ -396,28 +395,28 @@ impl TaskListener {
         // Only terminal tasks should be evicted by the listener; still, be defensive.
         let task_id = task.id.value.clone();
 
-        let result: Option<Result<Option<VimAny>, TaskError>> = match task.info.state {
+        let result: Option<Result<Option<VimAny>>> = match task.info.state {
             TaskInfoStateEnum::Success => {
                 Some(Ok(task.info.result))
             }
             TaskInfoStateEnum::Error => {
                 if task.info.cancelled {
-                    Some(Err(TaskError::new_cancelled()))
+                    Some(Err(Error::task_cancelled()))
                 } else {                    
                     match task.info.error {
-                        None => Some(Err(TaskError::new_other(
+                        None => Some(Err(Error::internal(
                             "Task failed but no error detail returned".to_string(),
                         ))),
-                        Some(error) => Some(Err(TaskError::new_task_error(error))),
+                        Some(error) => Some(Err(Error::task_failed(error))),
                     }
                 }
             }
             _ => {
                 if task.info.cancelled {
-                    Some(Err(TaskError::new_cancelled()))
+                    Some(Err(Error::task_cancelled()))
                 } else {
                     error!("Task {} removed from cache in unexpected state {:?}", task_id, task.info.state);
-                    Some(Err(TaskError::new_other(format!(
+                    Some(Err(Error::internal(format!(
                         "Task removed in unexpected state: {:?}", task.info.state
                     ))))
                 }

@@ -1,7 +1,7 @@
 use std::sync::Arc;
 use crate::core::client::Client;
-use crate::core::pc_helpers;
-use crate::core::pc_helpers::{obj_spec_for_view, BoxableError, Error, Queriable};
+use crate::core::error::{Error, Result};
+use crate::core::pc_helpers::{obj_spec_for_view, BoxableError, Queriable};
 use crate::mo::{PropertyCollector, View, ViewManager};
 use crate::types::structs::{ManagedObjectReference, ObjectContent, ObjectSpec};
 
@@ -29,11 +29,11 @@ impl ObjectRetriever {
     /// Creates a new ObjectRetriever instance. It initializes PropertyCollector and ViewManager
     /// instances using the provided client. It will fail if the client does not have a
     /// view manager.
-    pub fn new(client: Arc<Client>) -> pc_helpers::Result<Self> {
+    pub fn new(client: Arc<Client>) -> Result<Self> {
         let pc_mo_id = &client.service_content().property_collector.value;
         let property_collector = PropertyCollector::new(client.clone(), pc_mo_id);
         let Some(view_manager_moref) = &client.service_content().view_manager else {
-            return Err(Error::InternalError("cannot find view_manager".to_string()));
+            return Err(Error::internal("cannot find view_manager".to_string()));
         };
         let view_manager = ViewManager::new(client.clone(), &view_manager_moref.value);
         Ok(Self {
@@ -52,7 +52,7 @@ impl ObjectRetriever {
     /// resolving the property paths to the correct Rust types. The macro also generates the
     /// [`Retrievable`] trait implementation for the struct, allowing it to be used with the
     /// [`ObjectRetriever`] API.
-    pub async fn retrieve_objects_from_container<T: Retrievable>(&self, container: &ManagedObjectReference) -> pc_helpers::Result<Vec<T>>
+    pub async fn retrieve_objects_from_container<T: Retrievable>(&self, container: &ManagedObjectReference) -> Result<Vec<T>>
     where
         <T as TryFrom<crate::types::structs::ObjectContent>>::Error: BoxableError
     {
@@ -73,7 +73,7 @@ impl ObjectRetriever {
     /// resolving the property paths to the correct Rust types. The macro also generates the
     /// [`Retrievable`] trait implementation for the struct, allowing it to be used with the
     /// [`ObjectRetriever`] API.
-    pub async fn retrieve_objects_from_list<T: Retrievable>(&self, objs: &[ManagedObjectReference]) -> pc_helpers::Result<Vec<T>>
+    pub async fn retrieve_objects_from_list<T: Retrievable>(&self, objs: &[ManagedObjectReference]) -> Result<Vec<T>>
     where
         <T as TryFrom<crate::types::structs::ObjectContent>>::Error: BoxableError
     {
@@ -83,7 +83,7 @@ impl ObjectRetriever {
 
     /// Retrieves objects of type T from the specified view. The view is destroyed after the
     /// retrieval is complete.
-    async fn retrieve_object_from_view<T: Retrievable>(&self, view_moref: &ManagedObjectReference)-> pc_helpers::Result<Vec<T>>
+    async fn retrieve_object_from_view<T: Retrievable>(&self, view_moref: &ManagedObjectReference)-> Result<Vec<T>>
     where
         <T as TryFrom<crate::types::structs::ObjectContent>>::Error: BoxableError
     {
@@ -103,7 +103,7 @@ impl ObjectRetriever {
     /// resolving the property paths to the correct Rust types. The macro also generates the
     /// [`Retrievable`] trait implementation for the struct, allowing it to be used with the
     /// [`ObjectRetriever`] API.
-    pub async fn retrieve_objects<T: Retrievable>(&self, object_set: Vec<ObjectSpec>) -> pc_helpers::Result<Vec<T>>
+    pub async fn retrieve_objects<T: Retrievable>(&self, object_set: Vec<ObjectSpec>) -> Result<Vec<T>>
     where
         <T as TryFrom<crate::types::structs::ObjectContent>>::Error: BoxableError
     {
@@ -124,7 +124,7 @@ impl ObjectRetriever {
         };
         loop {
             for obj in res.objects {
-                vms.push(obj.try_into().map_err(|e| Error::GenericError(Box::new(e)))?);
+                vms.push(obj.try_into().map_err(|e| -> Error { Error::from(Box::new(e) as Box<dyn std::error::Error + Send + Sync>) })?);
             };
             // Check for more results
             let Some(token) = res.token else {

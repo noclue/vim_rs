@@ -312,7 +312,7 @@ impl Cache for PropertyBrowserState {
                         };
                         debug!("object {:?} update", update.obj);
                         self.apply_update(changes)
-                            .map_err(|e| Error::InternalError(e.to_string()))?;
+                            .map_err(|e| Error::internal(e.to_string()))?;
                         continue;
                     }
                     ObjectUpdateKindEnum::Leave => {
