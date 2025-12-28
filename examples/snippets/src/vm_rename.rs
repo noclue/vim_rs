@@ -23,7 +23,7 @@ use std::env;
 use std::time::Duration;
 use utils::connect;
 use vim_rs::mo::{SearchIndex, VirtualMachine};
-use vim_rs::core::tasks::tracker::TaskTracker;
+use vim_rs::core::tasks::TaskTracker;
 
 #[tokio::main]
 async fn main() -> Result<()> {

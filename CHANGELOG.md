@@ -19,13 +19,31 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+
+- **`TaskTracker`**: High-level API for awaiting vSphere `Task` completion using PropertyCollector.
+  - Efficient background monitoring with shared `ListView` and incremental updates.
+  - Two APIs: `wait::<T>()` for convenient deserialization and `wait_any()` for zero-allocation path.
+  - Automatic resource management: background loop starts lazily and stops when all tasks complete.
+  - Memory efficient: tasks are evicted from cache immediately upon reaching terminal state.
+  - See `examples/snippets/src/vm_rename.rs` and `vim_rs/tests/task_tracker_integration.rs`.
+
 ### Changed
 
-- **`ObjectCacheListener` now returns `CacheAction` from `on_new/on_update`** so listeners can request immediate eviction of objects (triggering `on_remove(T)` with ownership).
+- **BREAKING: Managed object stubs now use `VimClient` dynamic trait** instead of concrete `Client` type.
+  - Stubs store `Arc<dyn VimClient>` internally, allowing for easier testing and mocking.
+  - The concrete `Client` implements `VimClient`, so existing code using `client.clone()` continues to work.
+  
+- **BREAKING: `ObjectCacheListener` now returns `CacheAction` from `on_new/on_update`**.
+  - Listeners can request immediate eviction (`CacheAction::Evict`) to take ownership of cached objects via `on_remove(T)`.
+  - Useful for objects that won't change after reaching a terminal state (e.g., completed Tasks).
+  - ⚠️ **Warning**: Evicting an object that later receives updates from the server will cause an error.
 
 ### Removed
 
-- **`SharedRefCacheProxy`**: removed because `CacheManager` caches must be `Send + Sync` (used from async tasks and may move between threads). Use `ReadWriteCacheProxy` (`Arc<RwLock<_>>`) or pass `ObjectCache<T>` directly.
+- **BREAKING: `SharedRefCacheProxy`** removed.
+  - `CacheManager` requires caches to be `Send + Sync` (used from async tasks, may move between threads).
+  - Use `ReadWriteCacheProxy` (`Arc<RwLock<_>>`) or pass `ObjectCache<T>` directly instead.
 
 ### Fixed
 

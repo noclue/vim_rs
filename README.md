@@ -195,6 +195,70 @@ async fn monitor_vms(client: &Arc<Client>) -> Result<(), Error> {
 ```
 `CacheManager` provides `add_list_cache` method to monitor a predefined list of objects.
 
+## Awaiting Task Completion
+
+Many vSphere operations are asynchronous and return a `Task` managed object reference (via methods ending in `*_Task`). The `TaskTracker` provides an efficient way to wait for these tasks to complete using the PropertyCollector.
+
+### Basic Usage
+
+```rust
+use vim_rs::core::tasks::TaskTracker;
+use vim_rs::mo::VirtualMachine;
+
+async fn rename_vm(client: Arc<Client>, vm_ref: ManagedObjectReference, new_name: &str) -> Result<()> {
+    // Create a TaskTracker (reuse for multiple tasks)
+    let task_tracker = TaskTracker::new(client.clone());
+    
+    // Create a VirtualMachine proxy and call a *_Task method
+    let vm = VirtualMachine::new(client.clone(), &vm_ref.value);
+    let task_ref = vm.rename_task(new_name).await?;
+    
+    // Wait for the task to complete
+    task_tracker.wait::<()>(task_ref).await?;
+    
+    Ok(())
+}
+```
+
+### Two APIs for Task Results
+
+`TaskTracker` provides two methods for awaiting task completion:
+
+**1. `wait::<T>()` - Convenient with Deserialization**
+
+Use when you know the expected result type. The result is automatically deserialized using `serde_json`:
+
+```rust
+// For tasks that return no value (like rename, power operations)
+task_tracker.wait::<()>(task_ref).await?;
+
+// For tasks that return a ManagedObjectReference (like create VM)
+let vm_ref: ManagedObjectReference = task_tracker.wait(task_ref).await?;
+```
+
+**2. `wait_any()` - Zero-Allocation Path**
+
+Use when you want to avoid JSON conversion overhead and work with `VimAny` directly:
+
+```rust
+let result: Option<VimAny> = task_tracker.wait_any(task_ref).await?;
+match result {
+    None => println!("Task completed with no return value"),
+    Some(VimAny::Value(v)) => println!("Primitive result: {:?}", v),
+    Some(VimAny::Object(o)) => println!("Object result: {:?}", o.data_type()),
+}
+```
+
+### Key Points
+
+- **Create once, reuse**: Create a `TaskTracker` per `Client` and reuse it for multiple tasks.
+- **Efficient monitoring**: Uses PropertyCollector with a shared `ListView` to track tasks with minimal overhead.
+- **Automatic cleanup**: Tasks are automatically removed from tracking when they reach a terminal state.
+- **Error handling**: Failed tasks return an `Error::TaskFailed` containing the `MethodFault` details.
+- **Background loop**: The monitoring loop starts lazily on the first `wait_any()` call and stops when all tasks complete.
+
+See [`examples/snippets/src/vm_rename.rs`](examples/snippets/src/vm_rename.rs) for a complete working example.
+
 ## Client abstraction used by managed-object stubs
 
 Managed-object stubs in `vim_rs::mo` accept an `Arc<dyn VimClient>` internally. The concrete
