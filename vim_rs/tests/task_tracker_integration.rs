@@ -541,4 +541,86 @@ async fn recover_from_create_list_view_failure() {
     assert_eq!(df, 1, "Should have destroyed the PropertyFilter");
 }
 
+#[tokio::test]
+async fn cancelled_task_completes_successfully() {
+    // Verify that a task with cancelled=true but state=Success returns success, not error.
+    // This tests the fix for the issue where cancelled flag caused premature eviction.
+    let (pc_tx, pc_rx) = mpsc::unbounded_channel();
+    let client = Arc::new(MockVimClient::new(dummy_service_content(), pc_rx));
+    let tracker = TaskTracker::new(client.clone());
+
+    let t = task_mor("task-1");
+    let waiter = tokio::spawn(async move { tracker.wait_any(t).await });
+
+    // Simulate a task that had cancellation requested but completed successfully anyway.
+    // The cancelled flag is true, but the state is Success - this can happen if the task
+    // completes before the cancellation is processed.
+    let result_mor = ManagedObjectReference {
+        r#type: MoTypesEnum::Datastore,
+        value: "ds-456".to_string(),
+    };
+    let info = make_task_info(
+        "task-1",
+        TaskInfoStateEnum::Success,
+        true,  // cancelled=true
+        Some(VimAny::Object(Box::new(result_mor.clone()))),
+        None,
+    );
+    let us = update_set_for_task("filter-1", "task-1", ObjectUpdateKindEnum::Enter, info);
+    let bytes = Bytes::from(serde_json::to_vec(&us).unwrap());
+    pc_tx.send(PcEvent::Bytes(bytes)).unwrap();
+
+    // The waiter should receive success, not a cancellation error
+    let res = waiter.await.unwrap().expect("Task should succeed despite cancelled flag");
+    assert!(res.is_some(), "Task should return its result");
+    
+    // Verify the result is correct
+    if let Some(VimAny::Object(obj)) = res {
+        let mor = obj.as_any_ref().downcast_ref::<ManagedObjectReference>()
+            .expect("result should be a ManagedObjectReference");
+        assert_eq!(mor.value, "ds-456");
+        assert!(matches!(mor.r#type, MoTypesEnum::Datastore));
+    } else {
+        panic!("expected VimAny::Object result");
+    }
+}
+
+#[tokio::test]
+async fn cancelled_task_with_error_state() {
+    // Verify that a task with cancelled=true and state=Error returns task_cancelled error.
+    let (pc_tx, pc_rx) = mpsc::unbounded_channel();
+    let client = Arc::new(MockVimClient::new(dummy_service_content(), pc_rx));
+    let tracker = TaskTracker::new(client.clone());
+
+    let t = task_mor("task-2");
+    let waiter = tokio::spawn(async move { tracker.wait_any(t).await });
+
+    // Task enters Error state with cancelled=true - this is a true cancellation
+    let fault = vim_rs::types::structs::MethodFault {
+        fault_cause: None,
+        fault_message: None,
+        type_: None,
+        extra_fields_: Default::default(),
+    };
+    let info = make_task_info(
+        "task-2",
+        TaskInfoStateEnum::Error,
+        true,  // cancelled=true
+        None,
+        Some(fault),
+    );
+    let us = update_set_for_task("filter-1", "task-2", ObjectUpdateKindEnum::Modify, info);
+    let bytes = Bytes::from(serde_json::to_vec(&us).unwrap());
+    pc_tx.send(PcEvent::Bytes(bytes)).unwrap();
+
+    // The waiter should receive a task cancelled error
+    let err = waiter.await.unwrap().unwrap_err();
+    match err.kind() {
+        ErrorKind::TaskCancelled => {
+            // This is expected - task was cancelled
+        }
+        other => panic!("expected TaskCancelled, got {other:?}"),
+    }
+}
+
 

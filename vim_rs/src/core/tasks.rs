@@ -297,13 +297,14 @@ impl TaskTracker {
             (lv, pending)
         };
         
-        // Destroy manager first (cancels PropertyCollector filter)
-        manager.destroy().await?;
-        
-        // Notify all pending tasks that we're shutting down
+        // Notify all pending tasks that we're shutting down BEFORE destroying the manager.
+        // This ensures waiters receive the proper shutdown error even if manager.destroy() fails.
         for tx in pending_to_notify {
             let _ = tx.send(Err(Error::internal("TaskTracker shutdown requested".to_string())));
         }
+        
+        // Destroy manager (cancels PropertyCollector filter)
+        manager.destroy().await?;
         
         // Destroy list view last
         if let Some(lv) = list_view_to_destroy {
@@ -381,9 +382,12 @@ impl TaskListener {
         // If the task reached a terminal state, request immediate eviction.
         // The owned `TaskUpdate` will be delivered to `on_remove`, where we can move
         // the result/error out without any cloning.
-        if task.info.cancelled {
-            return CacheAction::Evict;
-        }
+        //
+        // Note: We only evict on terminal states (Success/Error), not on the `cancelled` flag.
+        // The `cancelled` flag indicates cancellation was *requested*, not that it has completed.
+        // A task may have cancelled=true but still reach Success if it completes before the
+        // cancellation is processed. Evicting early would incorrectly report task_cancelled
+        // when the task actually succeeded.
         match task.info.state {
             TaskInfoStateEnum::Success | TaskInfoStateEnum::Error => CacheAction::Evict,
             _ => CacheAction::Keep,
