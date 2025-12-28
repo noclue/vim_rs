@@ -88,6 +88,27 @@ impl TaskTracker {
         }
     }
 
+    /// Request graceful shutdown of the background monitoring loop.
+    ///
+    /// This will initiate asynchronous cleanup of the background loop:
+    /// - Stop the PropertyCollector monitoring
+    /// - Destroy the ListView
+    /// - Notify all pending waiters with an error
+    /// - Clean up all resources
+    ///
+    /// After shutdown, new `wait_any` calls will start a fresh background loop.
+    /// If no background loop is running, this is a no-op.
+    pub async fn shutdown(&self) {
+        let shutdown_tx = {
+            let mut state = self.state.write().await;
+            state.shutdown_signal.take()
+        };
+        if let Some(tx) = shutdown_tx {
+            let _ = tx.send(());
+            // Note: The actual cleanup happens in background_loop's shutdown path
+        }
+    }
+
 
     /// Wait for a task and return its result as a `VimAny`. This is the most efficient way to get 
     /// the result of a task with only one conversion from JSON to VimAny.
@@ -101,7 +122,6 @@ impl TaskTracker {
 
         let list_view = {
             let mut state = self.state.write().await;
-            state.pending_tasks.insert(task_id.clone(), tx);
 
             if state.list_view.is_none() {
                 let view_manager = self.client.service_content().view_manager.as_ref()
@@ -112,6 +132,13 @@ impl TaskTracker {
                 state.list_view_mor = Some(lv_mor);
             }
 
+            // Insert the task into the pending tasks map, so background loop does not exit 
+            // prematurely. We may need to start background loop and create list view before we can
+            // add the task to the list view.
+            // Do ONLY after the list view is created, so we do not leak the map entry in case of
+            // error
+            state.pending_tasks.insert(task_id.clone(), tx);
+
             if !state.is_running {
                 let (shutdown_tx, shutdown_rx) = oneshot::channel();
                 state.shutdown_signal = Some(shutdown_tx);
@@ -121,17 +148,26 @@ impl TaskTracker {
                 tokio::spawn(async move {
                     if let Err(e) = tracker.background_loop(shutdown_rx).await {
                         error!("TaskTracker background loop failed: {}", e);
+                        // Error case: clean up state and notify pending tasks
+                        let (list_view_to_destroy, pending_to_notify) = {
+                            let mut state = tracker.state.write().await;
+                            state.is_running = false;
+                            state.shutdown_signal = None;
+                            let lv = state.list_view.take();
+                            state.list_view_mor = None;
+                            let pending: Vec<_> = state.pending_tasks.drain().map(|(_, tx)| tx).collect();
+                            (lv, pending)
+                        };
+                        // Notify pending tasks outside the lock to avoid deadlock
+                        for tx in pending_to_notify {
+                            let _ = tx.send(Err(TaskError::new_other("TaskTracker loop terminated.".to_string())));
+                        }
+                        // Destroy the list view outside the lock
+                        if let Some(lv) = list_view_to_destroy {
+                            let _ = lv.destroy_view().await;
+                        }
                     }
-                    let mut state = tracker.state.write().await;
-                    state.is_running = false;
-                    state.shutdown_signal = None;
-                    if let Some(lv) = state.list_view.take() {
-                        let _ = lv.destroy_view().await;
-                    }
-                    state.list_view_mor = None;
-                    for (_, tx) in state.pending_tasks.drain() {
-                        let _ = tx.send(Err(TaskError::new_other("TaskTracker loop terminated".to_string())));
-                    }
+                    // For successful exit, cleanup was done atomically in background_loop
                 });
             }
 
@@ -221,17 +257,60 @@ impl TaskTracker {
                 }
             }
             
-            let empty = {
-                 let state = self.state.read().await;
-                 state.pending_tasks.is_empty()
+            // Atomically check if empty AND mark as not running to prevent race with new wait_any calls.
+            // This ensures that any new wait_any arriving during shutdown will see is_running=false
+            // and spawn a fresh loop instead of adding to a dying one.
+            let (should_exit, list_view_to_destroy) = {
+                let mut state = self.state.write().await;
+                if state.pending_tasks.is_empty() {
+                    state.is_running = false;
+                    state.shutdown_signal = None;
+                    // Take the list_view so new wait_any calls create fresh resources
+                    let lv = state.list_view.take();
+                    state.list_view_mor = None;
+                    (true, lv)
+                } else {
+                    (false, None)
+                }
             };
-            if empty {
-                 debug!("No pending tasks, exiting background loop");
-                 break;
+            if should_exit {
+                debug!("No pending tasks, exiting background loop");
+                // Destroy the manager first (cancels the PropertyCollector filter)
+                manager.destroy().await.map_err(TaskError::from)?;
+                // Destroy the list view outside the lock
+                if let Some(lv) = list_view_to_destroy {
+                    let _ = lv.destroy_view().await;
+                }
+                return Ok(());
             }
         }
         
+        // This path is reached only on shutdown signal (not empty exit).
+        // Do cleanup atomically: extract pending tasks and list view, then notify waiters outside the lock.
+        debug!("Shutdown signal path: cleaning up");
+        let (list_view_to_destroy, pending_to_notify) = {
+            let mut state = self.state.write().await;
+            state.is_running = false;
+            state.shutdown_signal = None;
+            let lv = state.list_view.take();
+            state.list_view_mor = None;
+            let pending: Vec<_> = state.pending_tasks.drain().map(|(_, tx)| tx).collect();
+            (lv, pending)
+        };
+        
+        // Destroy manager first (cancels PropertyCollector filter)
         manager.destroy().await.map_err(TaskError::from)?;
+        
+        // Notify all pending tasks that we're shutting down
+        for tx in pending_to_notify {
+            let _ = tx.send(Err(TaskError::new_other("TaskTracker shutdown requested".to_string())));
+        }
+        
+        // Destroy list view last
+        if let Some(lv) = list_view_to_destroy {
+            let _ = lv.destroy_view().await;
+        }
+        
         Ok(())
     }
 
@@ -247,7 +326,7 @@ impl TaskTracker {
         }
 
         let task_mor = ManagedObjectReference { 
-            r#type: MoTypesEnum::Other_("Task".to_string()), 
+            r#type: MoTypesEnum::Task, 
             value: task_id 
         };
         
@@ -337,7 +416,10 @@ impl TaskListener {
                 if task.info.cancelled {
                     Some(Err(TaskError::new_cancelled()))
                 } else {
-                    None
+                    error!("Task {} removed from cache in unexpected state {:?}", task_id, task.info.state);
+                    Some(Err(TaskError::new_other(format!(
+                        "Task removed in unexpected state: {:?}", task.info.state
+                    ))))
                 }
             }
         };

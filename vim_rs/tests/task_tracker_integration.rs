@@ -391,4 +391,145 @@ async fn race_add_task_during_drain_does_not_drop_loop() {
     assert!(w2.await.unwrap().unwrap().is_none());
 }
 
+#[tokio::test]
+async fn shutdown_notifies_pending_waiters() {
+    let (_pc_tx, pc_rx) = mpsc::unbounded_channel();
+    let client = Arc::new(MockVimClient::new(dummy_service_content(), pc_rx));
+    let tracker = TaskTracker::new(client.clone());
+
+    // Start waiting on a task that will never complete
+    let w1 = {
+        let tracker = tracker.clone();
+        tokio::spawn(async move { tracker.wait_any(task_mor("task-1")).await })
+    };
+
+    // Give the background loop time to start
+    tokio::time::sleep(Duration::from_millis(50)).await;
+
+    // Request shutdown
+    tracker.shutdown().await;
+
+    // The waiter should receive an error
+    let err = w1.await.unwrap().unwrap_err();
+    match err {
+        TaskError::Other(msg) if msg.contains("shutdown") => {},
+        other => panic!("expected shutdown error, got {other:?}"),
+    }
+
+    // Verify the loop cleaned up (ListView was destroyed)
+    wait_until(Duration::from_secs(2), || {
+        let (_clv, _mlv, dlv, _cf, _df, _wfu) = client.counters_snapshot();
+        dlv >= 1
+    })
+    .await;
+}
+
+#[tokio::test]
+async fn shutdown_and_restart() {
+    let (pc_tx, pc_rx) = mpsc::unbounded_channel();
+    let client = Arc::new(MockVimClient::new(dummy_service_content(), pc_rx));
+    let tracker = TaskTracker::new(client.clone());
+
+    // Start a task and then shutdown before it completes
+    let w1 = {
+        let tracker = tracker.clone();
+        tokio::spawn(async move { tracker.wait_any(task_mor("task-1")).await })
+    };
+    tokio::time::sleep(Duration::from_millis(50)).await;
+    tracker.shutdown().await;
+    
+    // First waiter should get shutdown error
+    assert!(w1.await.unwrap().is_err());
+
+    // Wait for cleanup to complete
+    wait_until(Duration::from_secs(2), || {
+        let (_clv, _mlv, dlv, _cf, _df, _wfu) = client.counters_snapshot();
+        dlv >= 1
+    })
+    .await;
+
+    // Now start a new task - should create fresh resources
+    let w2 = {
+        let tracker = tracker.clone();
+        tokio::spawn(async move { tracker.wait_any(task_mor("task-2")).await })
+    };
+    
+    // Complete task-2
+    let us2 = update_set_for_task(
+        "filter-1",
+        "task-2",
+        ObjectUpdateKindEnum::Enter,
+        make_task_info("task-2", TaskInfoStateEnum::Success, false, None, None),
+    );
+    pc_tx.send(PcEvent::Bytes(Bytes::from(serde_json::to_vec(&us2).unwrap())))
+        .unwrap();
+    
+    assert!(w2.await.unwrap().unwrap().is_none());
+    
+    // Verify we created a new ListView (counter should be 2)
+    wait_until(Duration::from_secs(2), || {
+        let (clv, _mlv, _dlv, _cf, _df, _wfu) = client.counters_snapshot();
+        clv >= 2
+    })
+    .await;
+}
+
+#[tokio::test]
+async fn recover_from_create_list_view_failure() {
+    let (pc_tx, pc_rx) = mpsc::unbounded_channel();
+    let client = Arc::new(MockVimClient::new(dummy_service_content(), pc_rx));
+    let tracker = TaskTracker::new(client.clone());
+
+    // Configure the mock to fail the first CreateListView call
+    client.fail_create_list_view_once();
+
+    // First wait_any should fail during ListView creation
+    let t1 = task_mor("task-1");
+    let result1 = tracker.wait_any(t1).await;
+    assert!(result1.is_err(), "First wait_any should fail due to ListView creation failure");
+
+    // Verify no ListView was successfully created (counter should be 1 attempt)
+    let (clv_before, _, _, _, _, _) = client.counters_snapshot();
+    assert_eq!(clv_before, 1, "Should have attempted CreateListView once");
+
+    // Second wait_any should succeed in creating ListView and starting the background loop
+    let t2 = task_mor("task-2");
+    let waiter2 = tokio::spawn({
+        let tracker = tracker.clone();
+        async move { tracker.wait_any(t2).await }
+    });
+
+    // Wait a bit to ensure the background loop starts
+    tokio::time::sleep(Duration::from_millis(100)).await;
+
+    // Verify ListView was created successfully (counter should be 2 now)
+    let (clv_after, _, _, _, _, _) = client.counters_snapshot();
+    assert_eq!(clv_after, 2, "Should have successfully created ListView on second attempt");
+
+    // Send a "no update" event to exercise the background loop
+    pc_tx.send(PcEvent::None).unwrap();
+
+    // Complete the task
+    let info2 = make_task_info("task-2", TaskInfoStateEnum::Success, false, None, None);
+    let us2 = update_set_for_task("filter-1", "task-2", ObjectUpdateKindEnum::Enter, info2);
+    pc_tx.send(PcEvent::Bytes(Bytes::from(serde_json::to_vec(&us2).unwrap()))).unwrap();
+
+    // Task should complete successfully
+    let result2 = waiter2.await.unwrap();
+    assert!(result2.is_ok(), "Second task should complete successfully");
+    assert!(result2.unwrap().is_none(), "Task should complete with no result");
+
+    // Wait for the background loop to terminate (it should exit when pending_tasks is empty)
+    wait_until(Duration::from_secs(2), || {
+        let (_, _, dlv, _, df, _) = client.counters_snapshot();
+        dlv >= 1 && df >= 1
+    })
+    .await;
+
+    // Verify the background loop cleaned up properly
+    let (_, _, dlv, _, df, _) = client.counters_snapshot();
+    assert_eq!(dlv, 1, "Should have destroyed the ListView");
+    assert_eq!(df, 1, "Should have destroyed the PropertyFilter");
+}
+
 

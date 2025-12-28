@@ -39,6 +39,12 @@ struct Counters {
     wait_for_updates_ex: usize,
 }
 
+#[derive(Clone)]
+enum CreateListViewBehavior {
+    Success,
+    FailOnce,
+}
+
 /// Scripted `VimClient` used by integration tests.
 ///
 /// This mock uses real `reqwest::RequestBuilder` objects so the production stubs can
@@ -57,6 +63,9 @@ pub struct MockVimClient {
 
     // Optional gate to block the Nth ModifyListView call (used for race tests).
     block_modify_list_view_at: Mutex<Option<(usize, Arc<tokio::sync::Notify>)>>,
+
+    // Control CreateListView behavior.
+    create_list_view_behavior: Mutex<CreateListViewBehavior>,
 }
 
 impl MockVimClient {
@@ -69,7 +78,13 @@ impl MockVimClient {
             counters: Mutex::new(Counters::default()),
             pc_rx: tokio::sync::Mutex::new(pc_rx),
             block_modify_list_view_at: Mutex::new(None),
+            create_list_view_behavior: Mutex::new(CreateListViewBehavior::Success),
         }
+    }
+
+    /// Make CreateListView fail once, then succeed on subsequent calls.
+    pub fn fail_create_list_view_once(&self) {
+        *self.create_list_view_behavior.lock().unwrap() = CreateListViewBehavior::FailOnce;
     }
 
     pub fn requests(&self) -> Vec<RecordedRequest> {
@@ -135,6 +150,26 @@ impl MockVimClient {
         self.record(verb, path);
         if path.contains("/CreateListView") && path.starts_with("/ViewManager/") {
             self.bump(|c| c.create_list_view += 1);
+            
+            // Check if we should fail this call
+            let should_fail = {
+                let mut behavior = self.create_list_view_behavior.lock().unwrap();
+                match *behavior {
+                    CreateListViewBehavior::Success => false,
+                    CreateListViewBehavior::FailOnce => {
+                        *behavior = CreateListViewBehavior::Success;
+                        true
+                    }
+                }
+            };
+            
+            if should_fail {
+                return Err(Error::SerdeError(serde_json::Error::io(std::io::Error::new(
+                    std::io::ErrorKind::Other,
+                    "Simulated CreateListView failure",
+                ))));
+            }
+            
             let mor = vim_rs::types::structs::ManagedObjectReference {
                 r#type: MoTypesEnum::ListView,
                 value: "listview-1".to_string(),
