@@ -2,7 +2,8 @@ use vim_rs::types::structs::{ManagedObjectReference, ObjectSpec};
 use tui_tree_widget::TreeState;
 use std::rc::Rc;
 use std::cell::RefCell;
-use vim_rs::core::pc_cache::{CacheManager, SharedRefCacheProxy};
+use std::sync::{Arc, RwLock};
+use vim_rs::core::pc_cache::{CacheManager, ReadWriteCacheProxy};
 use ratatui::Frame;
 use ratatui::layout::Rect;
 use crossterm::event::{KeyCode, KeyEvent};
@@ -17,7 +18,7 @@ pub struct PropertyBrowserManager {
     /// Property collector filter for the current view
     filter: ManagedObjectReference,
     /// Browser state for managing the current view.
-    browser_state: Rc<RefCell<PropertyBrowserState>>,
+    browser_state: Arc<RwLock<PropertyBrowserState>>,
     /// Object reference for the current view
     obj: ManagedObjectReference,
 }
@@ -27,12 +28,12 @@ impl PropertyBrowserManager {
         cache_mgr: Rc<RefCell<CacheManager>>,
         obj: ManagedObjectReference,
     ) -> anyhow::Result<Self> {
-        let browser_state = Rc::new(RefCell::new(PropertyBrowserState::new(obj.clone(), None).await?));
+        let browser_state = Arc::new(RwLock::new(PropertyBrowserState::new(obj.clone(), None).await?));
 
         let filter = cache_mgr
             .borrow_mut()
             .add_cache(
-                Box::new(SharedRefCacheProxy::new(browser_state.clone())),
+                Box::new(ReadWriteCacheProxy::new(browser_state.clone())),
                 vec![ObjectSpec {
                     obj: obj.clone(),
                     skip: Some(false),
@@ -53,12 +54,12 @@ impl PropertyBrowserManager {
         record: HistoryRecord,
         cache_mgr: Rc<RefCell<CacheManager>>,
     ) -> anyhow::Result<Self> {
-        let browser_state = Rc::new(RefCell::new(PropertyBrowserState::new(record.obj.clone(), Some(record.state)).await?));
+        let browser_state = Arc::new(RwLock::new(PropertyBrowserState::new(record.obj.clone(), Some(record.state)).await?));
 
         let filter = cache_mgr
             .borrow_mut()
             .add_cache(
-                Box::new(SharedRefCacheProxy::new(browser_state.clone())),
+                Box::new(ReadWriteCacheProxy::new(browser_state.clone())),
                 vec![ObjectSpec {
                     obj: record.obj.clone(),
                     skip: Some(false),
@@ -83,7 +84,11 @@ impl PropertyBrowserManager {
     }
 
     pub fn save_state(&mut self, events: &mut EventHandler) {
-        let tree_state = self.browser_state.borrow_mut().replace_tree_state(None);
+        let tree_state = self
+            .browser_state
+            .write()
+            .expect("PropertyBrowserState lock poisoned")
+            .replace_tree_state(None);
         let entry = HistoryRecord {
             obj: self.obj.clone(),
             state: tree_state,
@@ -93,32 +98,51 @@ impl PropertyBrowserManager {
 
     pub fn render(&mut self, frame: &mut Frame, body_area: Rect) {
         let props = PropertyBrowser::new();
+        let mut state = self
+            .browser_state
+            .write()
+            .expect("PropertyBrowserState lock poisoned");
         frame.render_stateful_widget(
             props,
             body_area,
-            self.browser_state.borrow_mut().deref_mut(),
+            state.deref_mut(),
         );
     }
 
     pub async fn handle_key(&mut self, key: &KeyEvent, events: &mut EventHandler) -> anyhow::Result<bool> {
         match key.code {
             KeyCode::Char('w') | KeyCode::Up => {
-                self.browser_state.borrow_mut().up();
+                self.browser_state
+                    .write()
+                    .expect("PropertyBrowserState lock poisoned")
+                    .up();
             }
             KeyCode::Char('s') | KeyCode::Down => {
-                self.browser_state.borrow_mut().down();
+                self.browser_state
+                    .write()
+                    .expect("PropertyBrowserState lock poisoned")
+                    .down();
             }
             KeyCode::Char('a') | KeyCode::Left => {
-                self.browser_state.borrow_mut().left();
+                self.browser_state
+                    .write()
+                    .expect("PropertyBrowserState lock poisoned")
+                    .left();
             }
             KeyCode::Char('d') | KeyCode::Right => {
-                self.browser_state.borrow_mut().right();
+                self.browser_state
+                    .write()
+                    .expect("PropertyBrowserState lock poisoned")
+                    .right();
             }
             KeyCode::Enter => {
                 self.enter(events).await?;
             }
             KeyCode::Char('j') => {
-                self.browser_state.borrow().dump_to_json()?;
+                self.browser_state
+                    .read()
+                    .expect("PropertyBrowserState lock poisoned")
+                    .dump_to_json()?;
             }
             _ => {
                 return Ok(false);
@@ -157,14 +181,15 @@ impl PropertyBrowserManager {
 
         let tree_state = self
             .browser_state
-            .borrow_mut()
+            .write()
+            .expect("PropertyBrowserState lock poisoned")
             .set_obj(self.obj.clone(), new_tree_state)?;
 
         self.filter = self
             .cache_mgr
             .borrow_mut()
             .add_cache(
-                Box::new(SharedRefCacheProxy::new(self.browser_state.clone())),
+                Box::new(ReadWriteCacheProxy::new(self.browser_state.clone())),
                 vec![ObjectSpec {
                     obj: self.obj.clone(),
                     skip: Some(false),
@@ -177,7 +202,12 @@ impl PropertyBrowserManager {
     }
 
     async fn enter(&mut self, events: &mut EventHandler) -> anyhow::Result<bool> {
-        let Some(selected) = self.browser_state.borrow().get_selected_object() else {
+        let selected = self
+            .browser_state
+            .read()
+            .expect("PropertyBrowserState lock poisoned")
+            .get_selected_object();
+        let Some(selected) = selected else {
             return Ok(false);
         };
 

@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// Interface to manage IO Filters installed on the ESXi hosts and
 /// IO Filter configurations on virtual disks.
 /// 
@@ -10,11 +10,11 @@ use crate::core::client::{Client, Result};
 /// This interface is only supported on vCenter server.
 #[derive(Clone)]
 pub struct IoFilterManager {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl IoFilterManager {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -49,8 +49,10 @@ impl IoFilterManager {
     pub async fn initiate_transition_to_vlcm_task(&self, cluster: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = InitiateTransitionToVlcmRequestType {cluster, };
         let path = format!("/IoFilterManager/{moId}/InitiateTransitionToVLCM_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Install an IO Filter on a compute resource.
     /// 
@@ -97,8 +99,10 @@ impl IoFilterManager {
     pub async fn install_io_filter_task(&self, vib_url: &str, comp_res: &crate::types::structs::ManagedObjectReference, vib_ssl_trust: Option<&dyn crate::types::traits::IoFilterManagerSslTrustTrait>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = InstallIoFilterRequestType {vib_url, comp_res, vib_ssl_trust, };
         let path = format!("/IoFilterManager/{moId}/InstallIoFilter_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Return the list of virtual disks that use an IO Filter installed on
     /// a compute resource.
@@ -128,8 +132,10 @@ impl IoFilterManager {
     pub async fn query_disks_using_filter(&self, filter_id: &str, comp_res: &crate::types::structs::ManagedObjectReference) -> Result<Vec<crate::types::structs::VirtualDiskId>> {
         let input = QueryDisksUsingFilterRequestType {filter_id, comp_res, };
         let path = format!("/IoFilterManager/{moId}/QueryDisksUsingFilter", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: Vec<crate::types::structs::VirtualDiskId> = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Return the information for the IO Filters that are installed on the cluster.
     /// 
@@ -151,8 +157,12 @@ impl IoFilterManager {
     pub async fn query_io_filter_info(&self, comp_res: &crate::types::structs::ManagedObjectReference) -> Result<Option<Vec<crate::types::structs::ClusterIoFilterInfo>>> {
         let input = QueryIoFilterInfoRequestType {comp_res, };
         let path = format!("/IoFilterManager/{moId}/QueryIoFilterInfo", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ClusterIoFilterInfo>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Return the issues that occurred during the last installation/uninstallation/upgrade
     /// operation of an IO Filter on a compute resource.
@@ -181,8 +191,10 @@ impl IoFilterManager {
     pub async fn query_io_filter_issues(&self, filter_id: &str, comp_res: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::IoFilterQueryIssueResult> {
         let input = QueryIoFilterIssuesRequestType {filter_id, comp_res, };
         let path = format!("/IoFilterManager/{moId}/QueryIoFilterIssues", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::IoFilterQueryIssueResult = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Resolve the errors occurred during an installation/uninstallation/upgrade
     /// operation of an IO Filter on a cluster.
@@ -224,8 +236,10 @@ impl IoFilterManager {
     pub async fn resolve_installation_errors_on_cluster_task(&self, filter_id: &str, cluster: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ResolveInstallationErrorsOnClusterRequestType {filter_id, cluster, };
         let path = format!("/IoFilterManager/{moId}/ResolveInstallationErrorsOnCluster_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Resolve the errors occurred during an installation/uninstallation/upgrade
     /// operation of an IO Filter on a host.
@@ -267,8 +281,10 @@ impl IoFilterManager {
     pub async fn resolve_installation_errors_on_host_task(&self, filter_id: &str, host: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ResolveInstallationErrorsOnHostRequestType {filter_id, host, };
         let path = format!("/IoFilterManager/{moId}/ResolveInstallationErrorsOnHost_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Uninstall an IO Filter from a compute resource.
     ///
@@ -312,8 +328,10 @@ impl IoFilterManager {
     pub async fn uninstall_io_filter_task(&self, filter_id: &str, comp_res: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = UninstallIoFilterRequestType {filter_id, comp_res, };
         let path = format!("/IoFilterManager/{moId}/UninstallIoFilter_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Upgrade an IO Filter on a compute resource.
     ///
@@ -367,8 +385,10 @@ impl IoFilterManager {
     pub async fn upgrade_io_filter_task(&self, filter_id: &str, comp_res: &crate::types::structs::ManagedObjectReference, vib_url: &str, vib_ssl_trust: Option<&dyn crate::types::traits::IoFilterManagerSslTrustTrait>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = UpgradeIoFilterRequestType {filter_id, comp_res, vib_url, vib_ssl_trust, };
         let path = format!("/IoFilterManager/{moId}/UpgradeIoFilter_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
 }
 #[derive(serde::Serialize)]

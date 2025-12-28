@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// *VslmSessionManager* managed object manages client sessions.
 /// 
 /// Login to VSLM service is done through this interface.
@@ -7,11 +7,11 @@ use crate::core::client::{Client, Result};
 /// This API is intended for internal use only.
 #[derive(Clone)]
 pub struct VslmSessionManager {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl VslmSessionManager {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -47,7 +47,7 @@ impl VslmSessionManager {
     pub async fn vslm_login_by_token(&self, delegated_token_xml: &str) -> Result<()> {
         let input = VslmLoginByTokenRequestType {delegated_token_xml, };
         let path = format!("/vslm/VslmSessionManager/{moId}/VslmLoginByToken", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Logs out of the VSLM Service.

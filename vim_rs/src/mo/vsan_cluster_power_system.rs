@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// This managed object type provides the service interface for vsan cluster
 /// power action.
 /// 
@@ -12,11 +12,11 @@ use crate::core::client::{Client, Result};
 /// at ESXi host side, its scope is only limited to that host.
 #[derive(Clone)]
 pub struct VsanClusterPowerSystem {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl VsanClusterPowerSystem {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -60,8 +60,10 @@ impl VsanClusterPowerSystem {
     pub async fn perform_cluster_power_action(&self, cluster: &crate::types::structs::ManagedObjectReference, spec: &crate::types::structs::PerformClusterPowerActionSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = PerformClusterPowerActionRequestType {cluster, spec, };
         let path = format!("/vsan/VsanClusterPowerSystem/{moId}/PerformClusterPowerAction", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Query the ClusterPowerContext.
     ///
@@ -80,8 +82,10 @@ impl VsanClusterPowerSystem {
     pub async fn query_cluster_power_context(&self, cluster: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ClusterPowerContext> {
         let input = QueryClusterPowerContextRequestType {cluster, };
         let path = format!("/vsan/VsanClusterPowerSystem/{moId}/QueryClusterPowerContext", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ClusterPowerContext = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Update the current cluster power status.
     ///
@@ -111,8 +115,10 @@ impl VsanClusterPowerSystem {
     pub async fn update_cluster_power_status(&self, cluster: &crate::types::structs::ManagedObjectReference, status: &str) -> Result<bool> {
         let input = UpdateClusterPowerStatusRequestType {cluster, status, };
         let path = format!("/vsan/VsanClusterPowerSystem/{moId}/UpdateClusterPowerStatus", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: bool = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
 }
 #[derive(serde::Serialize)]

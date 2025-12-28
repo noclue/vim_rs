@@ -1,14 +1,14 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// A singleton managed object that can answer questions about
 /// the feasibility of certain provisioning operations.
 #[derive(Clone)]
 pub struct VirtualMachineProvisioningChecker {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl VirtualMachineProvisioningChecker {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -71,8 +71,10 @@ impl VirtualMachineProvisioningChecker {
     pub async fn check_clone_task(&self, vm: &crate::types::structs::ManagedObjectReference, folder: &crate::types::structs::ManagedObjectReference, name: &str, spec: &crate::types::structs::VirtualMachineCloneSpec, test_type: Option<&[String]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CheckCloneRequestType {vm, folder, name, spec, test_type, };
         let path = format!("/VirtualMachineProvisioningChecker/{moId}/CheckClone_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Tests the feasibility of a proposed
     /// *VirtualMachine.InstantClone_Task* operation.
@@ -116,8 +118,10 @@ impl VirtualMachineProvisioningChecker {
     pub async fn check_instant_clone_task(&self, vm: &crate::types::structs::ManagedObjectReference, spec: &crate::types::structs::VirtualMachineInstantCloneSpec, test_type: Option<&[String]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CheckInstantCloneRequestType {vm, spec, test_type, };
         let path = format!("/VirtualMachineProvisioningChecker/{moId}/CheckInstantClone_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Tests the feasibility of a proposed
     /// *VirtualMachine.MigrateVM_Task* operation.
@@ -179,8 +183,10 @@ impl VirtualMachineProvisioningChecker {
     pub async fn check_migrate_task(&self, vm: &crate::types::structs::ManagedObjectReference, host: Option<&crate::types::structs::ManagedObjectReference>, pool: Option<&crate::types::structs::ManagedObjectReference>, state: Option<crate::types::enums::VirtualMachinePowerStateEnum>, test_type: Option<&[String]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CheckMigrateRequestType {vm, host, pool, state, test_type, };
         let path = format!("/VirtualMachineProvisioningChecker/{moId}/CheckMigrate_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Tests the feasibility of a proposed
     /// *VirtualMachine.RelocateVM_Task* operation.
@@ -241,8 +247,10 @@ impl VirtualMachineProvisioningChecker {
     pub async fn check_relocate_task(&self, vm: &crate::types::structs::ManagedObjectReference, spec: &crate::types::structs::VirtualMachineRelocateSpec, test_type: Option<&[String]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CheckRelocateRequestType {vm, spec, test_type, };
         let path = format!("/VirtualMachineProvisioningChecker/{moId}/CheckRelocate_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Investigates the general VMotion compatibility of a set of virtual machines
     /// with a set of hosts.
@@ -274,8 +282,10 @@ impl VirtualMachineProvisioningChecker {
     pub async fn query_v_motion_compatibility_ex_task(&self, vm: &[crate::types::structs::ManagedObjectReference], host: &[crate::types::structs::ManagedObjectReference]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = QueryVMotionCompatibilityExRequestType {vm, host, };
         let path = format!("/VirtualMachineProvisioningChecker/{moId}/QueryVMotionCompatibilityEx_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
 }
 #[derive(serde::Serialize)]

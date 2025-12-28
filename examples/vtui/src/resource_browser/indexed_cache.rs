@@ -1,6 +1,5 @@
-use std::cell::RefCell;
 use std::ops::Index;
-use std::rc::Rc;
+use std::sync::{Arc, RwLock};
 use ratatui::layout::Constraint;
 use vim_rs::core::pc_cache::{Cacheable, ObjectCache};
 use vim_rs::core::pc_helpers::BoxableError;
@@ -25,7 +24,7 @@ where
     T::Error: BoxableError,
     for<'a> Row<'static>: From<&'a T>
 {
-    cache: Rc<RefCell<ObjectCache<T>>>,
+    cache: Arc<RwLock<ObjectCache<T>>>,
     indices: Option<Vec<usize>>,  // Filtered/sorted indices into original cache
     filter: Option<String>,       // Current filter criteria
     sort_column: Option<usize>,   // Current sort column
@@ -38,7 +37,7 @@ where
     T::Error: BoxableError,
     for<'a> Row<'static>: From<&'a T>
 {
-    pub fn new(cache: Rc<RefCell<ObjectCache<T>>>) -> Self {
+    pub fn new(cache: Arc<RwLock<ObjectCache<T>>>) -> Self {
         IndexedCache {
             cache,
             indices: None,
@@ -55,7 +54,7 @@ where
 
     fn update_indices(&mut self) {
         // Update the indices based on the current filter and sort criteria
-        let cache = self.cache.borrow();
+        let cache = self.cache.read().expect("ObjectCache lock poisoned");
         let mut indices: Vec<usize> = (0..cache.len()).collect();
 
         if let Some(ref filter) = self.filter {
@@ -125,12 +124,12 @@ where
             panic!("Internal error: No indices found after ensuring indices updated");
         };
 
-        Box::new(indices.iter()
-            .map(|idx| {
-                let cache = self.cache.borrow();
-                let item = &cache[*idx];
-                Row::from(item)
-            }))
+        let cache = self.cache.clone();
+        Box::new(indices.iter().map(move |idx| {
+            let cache = cache.read().expect("ObjectCache lock poisoned");
+            let item = &cache[*idx];
+            Row::from(item)
+        }))
     }
 
     fn is_empty(&mut self) -> bool {
@@ -150,7 +149,7 @@ where
     }
 
     fn total_count(&self) -> usize {
-        self.cache.borrow().len()
+        self.cache.read().expect("ObjectCache lock poisoned").len()
     }
 
     fn column_sizes(&self) -> Vec<Constraint> {
@@ -173,7 +172,7 @@ where
             return None;
         }
         let index = indices[index];
-        let cache = self.cache.borrow();
+        let cache = self.cache.read().expect("ObjectCache lock poisoned");
         if index >= cache.len() {
             return None;
         }

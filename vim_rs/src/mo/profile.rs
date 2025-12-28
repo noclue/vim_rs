@@ -1,14 +1,14 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// The <code>Profile</code> managed object is the base class for host and cluster
 /// profiles.
 #[derive(Clone)]
 pub struct Profile {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl Profile {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -33,7 +33,7 @@ impl Profile {
     pub async fn associate_profile(&self, entity: &[crate::types::structs::ManagedObjectReference]) -> Result<()> {
         let input = AssociateProfileRequestType {entity, };
         let path = format!("/Profile/{moId}/AssociateProfile", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Check compliance of an entity against a Profile.
@@ -59,8 +59,10 @@ impl Profile {
     pub async fn check_profile_compliance_task(&self, entity: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CheckProfileComplianceRequestType {entity, };
         let path = format!("/Profile/{moId}/CheckProfileCompliance_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Destroy the profile.
     /// 
@@ -88,7 +90,7 @@ impl Profile {
     pub async fn dissociate_profile(&self, entity: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<()> {
         let input = DissociateProfileRequestType {entity, };
         let path = format!("/Profile/{moId}/DissociateProfile", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Export the profile in a serialized form.
@@ -106,7 +108,9 @@ impl Profile {
     pub async fn export_profile(&self) -> Result<String> {
         let path = format!("/Profile/{moId}/ExportProfile", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Returns the localizable description for the profile.
     /// 
@@ -118,7 +122,11 @@ impl Profile {
     pub async fn retrieve_description(&self) -> Result<Option<crate::types::structs::ProfileDescription>> {
         let path = format!("/Profile/{moId}/RetrieveDescription", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::ProfileDescription>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Overall compliance of entities associated with this profile.
     /// 
@@ -130,7 +138,9 @@ impl Profile {
     pub async fn compliance_status(&self) -> Result<String> {
         let path = format!("/Profile/{moId}/complianceStatus", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Configuration data for the profile.
     /// 
@@ -138,13 +148,17 @@ impl Profile {
     pub async fn config(&self) -> Result<Box<dyn crate::types::traits::ProfileConfigInfoTrait>> {
         let path = format!("/Profile/{moId}/config", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: Box<dyn crate::types::traits::ProfileConfigInfoTrait> = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Time at which the profile was created.
     pub async fn created_time(&self) -> Result<String> {
         let path = format!("/Profile/{moId}/createdTime", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deprecated as of vSphere API 5.0. use *Profile.RetrieveDescription* instead.
     /// 
@@ -152,7 +166,11 @@ impl Profile {
     pub async fn description(&self) -> Result<Option<crate::types::structs::ProfileDescription>> {
         let path = format!("/Profile/{moId}/description", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::ProfileDescription>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// List of managed entities associated with the profile.
     ///
@@ -162,19 +180,27 @@ impl Profile {
     pub async fn entity(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/Profile/{moId}/entity", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Time at which the profile was last modified.
     pub async fn modified_time(&self) -> Result<String> {
         let path = format!("/Profile/{moId}/modifiedTime", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Name of the profile.
     pub async fn name(&self) -> Result<String> {
         let path = format!("/Profile/{moId}/name", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
 }
 #[derive(serde::Serialize)]

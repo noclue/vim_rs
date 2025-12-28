@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// This managed object type provides properties and methods for
 /// event management support.
 /// 
@@ -7,11 +7,11 @@ use crate::core::client::{Client, Result};
 /// managed entities.
 #[derive(Clone)]
 pub struct EventManager {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl EventManager {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -53,8 +53,12 @@ impl EventManager {
     pub async fn query_events(&self, filter: &crate::types::structs::EventFilterSpec, event_view_spec: Option<&dyn crate::types::traits::EventManagerEventViewSpecTrait>) -> Result<Option<Vec<crate::types::structs::Event>>> {
         let input = QueryEventsRequestType {filter, event_view_spec, };
         let path = format!("/EventManager/{moId}/QueryEvents", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::Event>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Creates an event history collector, which is a specialized history collector
     /// that provides Event objects.
@@ -86,8 +90,10 @@ impl EventManager {
     pub async fn create_collector_for_events(&self, filter: &crate::types::structs::EventFilterSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateCollectorForEventsRequestType {filter, };
         let path = format!("/EventManager/{moId}/CreateCollectorForEvents", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Logs a user defined event against a particular managed entity.
     ///
@@ -107,7 +113,7 @@ impl EventManager {
     pub async fn log_user_event(&self, entity: &crate::types::structs::ManagedObjectReference, msg: &str) -> Result<()> {
         let input = LogUserEventRequestType {entity, msg, };
         let path = format!("/EventManager/{moId}/LogUserEvent", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Posts the specified event, optionally associating it with
@@ -149,7 +155,7 @@ impl EventManager {
     pub async fn post_event(&self, event_to_post: &crate::types::structs::Event, task_info: Option<&crate::types::structs::TaskInfo>) -> Result<()> {
         let input = PostEventRequestType {event_to_post, task_info, };
         let path = format!("/EventManager/{moId}/PostEvent", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Retrieves the argument meta-data for a given Event type
@@ -163,8 +169,12 @@ impl EventManager {
     pub async fn retrieve_argument_description(&self, event_type_id: &str) -> Result<Option<Vec<crate::types::structs::EventArgDesc>>> {
         let input = RetrieveArgumentDescriptionRequestType {event_type_id, };
         let path = format!("/EventManager/{moId}/RetrieveArgumentDescription", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::EventArgDesc>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Static descriptive strings used in events.
     /// 
@@ -172,7 +182,9 @@ impl EventManager {
     pub async fn description(&self) -> Result<crate::types::structs::EventDescription> {
         let path = format!("/EventManager/{moId}/description", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::EventDescription = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// The latest event that happened on the VirtualCenter server.
     /// 
@@ -180,7 +192,11 @@ impl EventManager {
     pub async fn latest_event(&self) -> Result<Option<crate::types::structs::Event>> {
         let path = format!("/EventManager/{moId}/latestEvent", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::Event>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// For each client, the maximum number of event collectors that can exist
     /// simultaneously.
@@ -189,7 +205,9 @@ impl EventManager {
     pub async fn max_collector(&self) -> Result<i32> {
         let path = format!("/EventManager/{moId}/maxCollector", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: i32 = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
 }
 #[derive(serde::Serialize)]

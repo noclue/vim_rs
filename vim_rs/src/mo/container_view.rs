@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// The *ContainerView* managed object provides a means of monitoring the contents of
 /// a single container and, optionally, other containers.
 /// 
@@ -21,11 +21,11 @@ use crate::core::client::{Client, Result};
 /// any subsequent changes that occur.
 #[derive(Clone)]
 pub struct ContainerView {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl ContainerView {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -48,7 +48,9 @@ impl ContainerView {
     pub async fn container(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/ContainerView/{moId}/container", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Whether to include only the immediate children of the container instance,
     /// or to include additional objects by following the paths beyond the
@@ -59,7 +61,9 @@ impl ContainerView {
     pub async fn recursive(&self) -> Result<bool> {
         let path = format!("/ContainerView/{moId}/recursive", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: bool = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// An optional list of types to be applied to the set of objects in the view.
     /// 
@@ -68,12 +72,20 @@ impl ContainerView {
     pub async fn r#type(&self) -> Result<Option<Vec<String>>> {
         let path = format!("/ContainerView/{moId}/type", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<String>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// The list of references to objects mapped by this view.
     pub async fn view(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/ContainerView/{moId}/view", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
 }

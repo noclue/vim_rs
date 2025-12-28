@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// This managed object type provides the service interface for setting the
 /// storage policy to one vSAN object, querying the vSAN object
 /// status information, i.e., its storage profile, its health status.  
@@ -11,11 +11,11 @@ use crate::core::client::{Client, Result};
 /// at ESXi host side, its scope is only limited to that host.
 #[derive(Clone)]
 pub struct VsanObjectSystem {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl VsanObjectSystem {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -60,8 +60,10 @@ impl VsanObjectSystem {
     pub async fn vsan_delete_objects_task(&self, cluster: Option<&crate::types::structs::ManagedObjectReference>, obj_uuids: &[String], force: Option<bool>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanDeleteObjectsRequestType {cluster, obj_uuids, force, };
         let path = format!("/vsan/VsanObjectSystem/{moId}/VsanDeleteObjects_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Query all inaccessible vmswap objects on a vSAN cluster.
     /// 
@@ -87,8 +89,12 @@ impl VsanObjectSystem {
     pub async fn vsan_query_inaccessible_vm_swap_objects(&self, cluster: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Option<Vec<String>>> {
         let input = VsanQueryInaccessibleVmSwapObjectsRequestType {cluster, };
         let path = format!("/vsan/VsanObjectSystem/{moId}/VsanQueryInaccessibleVmSwapObjects", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<String>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Map from vSAN object UUIDs to their identities.
     /// 
@@ -164,8 +170,12 @@ impl VsanObjectSystem {
     pub async fn vsan_query_object_identities(&self, cluster: Option<&crate::types::structs::ManagedObjectReference>, obj_uuids: Option<&[String]>, obj_types: Option<&[String]>, include_health: Option<bool>, include_obj_identity: Option<bool>, include_space_summary: Option<bool>, extra_query_spec: Option<&crate::types::structs::VsanObjIdentityQuerySpec>) -> Result<Option<crate::types::structs::VsanObjectIdentityAndHealth>> {
         let input = VsanQueryObjectIdentitiesRequestType {cluster, obj_uuids, obj_types, include_health, include_obj_identity, include_space_summary, extra_query_spec, };
         let path = format!("/vsan/VsanObjectSystem/{moId}/VsanQueryObjectIdentities", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::VsanObjectIdentityAndHealth>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Query summary information about the syncing objects in this cluster.
     /// 
@@ -194,8 +204,10 @@ impl VsanObjectSystem {
     pub async fn query_syncing_vsan_objects_summary(&self, cluster: &crate::types::structs::ManagedObjectReference, syncing_object_filter: Option<&crate::types::structs::VsanSyncingObjectFilter>) -> Result<crate::types::structs::VsanHostVsanObjectSyncQueryResult> {
         let input = QuerySyncingVsanObjectsSummaryRequestType {cluster, syncing_object_filter, };
         let path = format!("/vsan/VsanObjectSystem/{moId}/QuerySyncingVsanObjectsSummary", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::VsanHostVsanObjectSyncQueryResult = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Get information about the vSAN object/directory.
     /// 
@@ -243,8 +255,12 @@ impl VsanObjectSystem {
     pub async fn vos_query_vsan_object_information(&self, cluster: Option<&crate::types::structs::ManagedObjectReference>, vsan_object_query_specs: &[crate::types::structs::VsanObjectQuerySpec]) -> Result<Option<Vec<crate::types::structs::VsanObjectInformation>>> {
         let input = VosQueryVsanObjectInformationRequestType {cluster, vsan_object_query_specs, };
         let path = format!("/vsan/VsanObjectSystem/{moId}/VosQueryVsanObjectInformation", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VsanObjectInformation>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// The re-layout task for the objects which need change in object format.
     /// 
@@ -273,8 +289,10 @@ impl VsanObjectSystem {
     pub async fn relayout_objects(&self, cluster: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RelayoutObjectsRequestType {cluster, };
         let path = format!("/vsan/VsanObjectSystem/{moId}/RelayoutObjects", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Set the policy of the vSAN object.
     /// 
@@ -336,8 +354,10 @@ impl VsanObjectSystem {
     pub async fn vos_set_vsan_object_policy(&self, cluster: Option<&crate::types::structs::ManagedObjectReference>, vsan_object_uuid: &str, profile: Option<&dyn crate::types::traits::VirtualMachineProfileSpecTrait>) -> Result<bool> {
         let input = VosSetVsanObjectPolicyRequestType {cluster, vsan_object_uuid, profile, };
         let path = format!("/vsan/VsanObjectSystem/{moId}/VosSetVsanObjectPolicy", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: bool = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
 }
 #[derive(serde::Serialize)]

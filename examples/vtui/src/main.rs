@@ -23,6 +23,10 @@ mod history;
 
 #[tokio::main]
 async fn main() -> Result<()> {
+    // Load environment variables from a local `.env` file if present.
+    // This is optional; real environment variables still take precedence.
+    let _ = dotenvy::dotenv();
+
     setup_logging()?;
     
     info!("Starting vtui application!");

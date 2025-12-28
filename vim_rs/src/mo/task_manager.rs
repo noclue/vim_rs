@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// The TaskManager managed object provides an interface for creating and managing
 /// *Task* managed objects.
 /// 
@@ -9,11 +9,11 @@ use crate::core::client::{Client, Result};
 /// accessed through the TaskManager.
 #[derive(Clone)]
 pub struct TaskManager {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl TaskManager {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -48,8 +48,12 @@ impl TaskManager {
     pub async fn read_next_tasks_by_view_spec(&self, view_spec: &dyn crate::types::traits::TaskManagerTaskViewSpecTrait, filter_spec: &crate::types::structs::TaskFilterSpec, info_filter_spec: Option<&crate::types::structs::TaskInfoFilterSpec>) -> Result<Option<Vec<crate::types::structs::TaskInfo>>> {
         let input = ReadNextTasksByViewSpecRequestType {view_spec, filter_spec, info_filter_spec, };
         let path = format!("/TaskManager/{moId}/ReadNextTasksByViewSpec", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::TaskInfo>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Creates a *TaskHistoryCollector*, a
     /// specialized *HistoryCollector* that gathers
@@ -82,8 +86,10 @@ impl TaskManager {
     pub async fn create_collector_for_tasks(&self, filter: &crate::types::structs::TaskFilterSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateCollectorForTasksRequestType {filter, };
         let path = format!("/TaskManager/{moId}/CreateCollectorForTasks", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Creates a *TaskHistoryCollector*, a
     /// specialized *HistoryCollector* that gathers
@@ -121,8 +127,10 @@ impl TaskManager {
     pub async fn create_collector_with_info_filter_for_tasks(&self, filter: &crate::types::structs::TaskFilterSpec, info_filter: Option<&crate::types::structs::TaskInfoFilterSpec>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateCollectorWithInfoFilterForTasksRequestType {filter, info_filter, };
         let path = format!("/TaskManager/{moId}/CreateCollectorWithInfoFilterForTasks", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Creates a new *Task*, specifying the object with which
     /// the *Task* is associated, the type of task,
@@ -164,8 +172,10 @@ impl TaskManager {
     pub async fn create_task(&self, obj: &crate::types::structs::ManagedObjectReference, task_type_id: &str, initiated_by: Option<&str>, cancelable: bool, parent_task_key: Option<&str>, activation_id: Option<&str>) -> Result<crate::types::structs::TaskInfo> {
         let input = CreateTaskRequestType {obj, task_type_id, initiated_by, cancelable, parent_task_key, activation_id, };
         let path = format!("/TaskManager/{moId}/CreateTask", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::TaskInfo = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Locale-specific, static strings that describe *Task*
     /// information to users.
@@ -174,7 +184,9 @@ impl TaskManager {
     pub async fn description(&self) -> Result<crate::types::structs::TaskDescription> {
         let path = format!("/TaskManager/{moId}/description", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::TaskDescription = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Maximum number of *TaskHistoryCollector*
     /// data objects that can exist concurrently, per client.
@@ -183,7 +195,9 @@ impl TaskManager {
     pub async fn max_collector(&self) -> Result<i32> {
         let path = format!("/TaskManager/{moId}/maxCollector", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: i32 = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// A list of *Task* managed objects that completed recently,
     /// that are currently running, or that are queued to run.
@@ -217,7 +231,11 @@ impl TaskManager {
     pub async fn recent_task(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/TaskManager/{moId}/recentTask", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
 }
 #[derive(serde::Serialize)]

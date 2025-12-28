@@ -431,19 +431,19 @@ fn generate_try_from_object_content(struct_name: &Ident, fields: &Vec<FieldInfo>
             field_assignments.push(quote! { #field_name: #field_alias });
         } else {
             let field_name_str = field.field_data.vim_path.as_str();
-            field_assignments.push(quote! { #field_name: #field_alias.ok_or_else(|| vim_rs::core::pc_helpers::Error::NoneValueForRequiredField(#field_name_str.to_string()))? });
+            field_assignments.push(quote! { #field_name: #field_alias.ok_or_else(|| vim_rs::core::error::Error::missing_required_field(#field_name_str.to_string()))? });
         }
         idx += 1;
     }
 
     quote! {
         impl core::convert::TryFrom<vim_rs::types::structs::ObjectContent> for #struct_name {
-            type Error = vim_rs::core::pc_helpers::Error;
+            type Error = vim_rs::core::error::Error;
 
-            fn try_from(row: vim_rs::types::structs::ObjectContent) -> vim_rs::core::pc_helpers::Result<Self> {
+            fn try_from(row: vim_rs::types::structs::ObjectContent) -> vim_rs::core::error::Result<Self> {
                 let id = row.obj;
                 let Some(row) = row.prop_set else {
-                    return Err(vim_rs::core::pc_helpers::Error::NoDataFound);
+                    return Err(vim_rs::core::error::Error::no_data_found());
                 };
 
                 #(#field_declarations)*
@@ -452,7 +452,7 @@ fn generate_try_from_object_content(struct_name: &Ident, fields: &Vec<FieldInfo>
                     match prop.name.as_str() {
                         #(#field_conversions)*
                         name => {
-                            return Err(vim_rs::core::pc_helpers::Error::UnexpectedPropertyPath(name.to_string()));
+                            return Err(vim_rs::core::error::Error::unexpected_property_path(name.to_string()));
                         }
                     }
                 }
@@ -491,19 +491,19 @@ fn generate_try_from_object_update(struct_name: &Ident, fields: &Vec<FieldInfo>)
             field_assignments.push(quote! { #field_name: #field_alias });
         } else {
             let field_name_str = field.field_data.vim_path.as_str();
-            field_assignments.push(quote! { #field_name: #field_alias.ok_or_else(|| vim_rs::core::pc_helpers::Error::NoneValueForRequiredField(#field_name_str.to_string()))? });
+            field_assignments.push(quote! { #field_name: #field_alias.ok_or_else(|| vim_rs::core::error::Error::missing_required_field(#field_name_str.to_string()))? });
         }
         idx += 1;
     }
 
     quote! {
         impl core::convert::TryFrom<vim_rs::types::structs::ObjectUpdate> for #struct_name {
-            type Error = vim_rs::core::pc_helpers::Error;
+            type Error = vim_rs::core::error::Error;
 
-            fn try_from(row: vim_rs::types::structs::ObjectUpdate) -> vim_rs::core::pc_helpers::Result<Self> {
+            fn try_from(row: vim_rs::types::structs::ObjectUpdate) -> vim_rs::core::error::Result<Self> {
                 let id = row.obj;
                 let Some(row) = row.change_set else {
-                    return Err(vim_rs::core::pc_helpers::Error::NoDataFound);
+                    return Err(vim_rs::core::error::Error::no_data_found());
                 };
 
                 #(#field_declarations)*
@@ -522,7 +522,7 @@ fn generate_try_from_object_update(struct_name: &Ident, fields: &Vec<FieldInfo>)
                     match prop.name.as_str() {
                         #(#field_conversions)*
                         name => {
-                            return Err(vim_rs::core::pc_helpers::Error::UnexpectedPropertyPath(name.to_string()));
+                            return Err(vim_rs::core::error::Error::unexpected_property_path(name.to_string()));
                         }
                     }
                 }
@@ -575,7 +575,7 @@ fn generate_apply_update(fields: &Vec<FieldInfo>) -> proc_macro2::TokenStream {
                 match prop.name.as_str() {
                     #(#field_conversions)*
                     name => {
-                        return Err(vim_rs::core::pc_helpers::Error::UnexpectedPropertyPath(name.to_string()));
+                        return Err(vim_rs::core::error::Error::unexpected_property_path(name.to_string()));
                     }
                 }
             }
@@ -590,7 +590,7 @@ fn generate_apply_update(fields: &Vec<FieldInfo>) -> proc_macro2::TokenStream {
 //                 "<property path>" => {
 //                     <field name with ordinal> = match prop.val {
 //                         VimAny::Value(ValueElements::<enum field name>(vd)) => Some(vd),
-//                         ref val => return Err(pc_helpers::Error::InvalidPropertyType { property: "<property path>".to_string(), expected: "<enum field name>".to_string(), got: pc_helpers::type_name(val)}),
+//                         ref val => return Err(pc_helpers::Error::InvalidPropertyType { property: "<property path>".to_string(), "<enum field name>".to_string(), got: pc_helpers::type_name(val)}),
 //                     };
 //                 }
 fn generate_enum_field_from_content(field: &FieldInfo, field_alias: &Ident, enum_field_name: &str) -> proc_macro2::TokenStream {
@@ -600,7 +600,7 @@ fn generate_enum_field_from_content(field: &FieldInfo, field_alias: &Ident, enum
         #path => {
             #field_alias = match prop.val {
                 vim_rs::types::vim_any::VimAny::Value(vim_rs::types::boxed_types::ValueElements::#enum_field(vd)) => Some(vd),
-                ref val => return Err(vim_rs::core::pc_helpers::Error::InvalidPropertyType { property: #path.to_string(), expected: #enum_field_name.to_string(), got: vim_rs::core::pc_helpers::type_name(val)}),
+                ref val => return Err(vim_rs::core::error::Error::invalid_property_type(#path.to_string(), #enum_field_name.to_string(), vim_rs::core::pc_helpers::type_name(val))),
             };
         }
     }
@@ -614,7 +614,7 @@ fn generate_enum_field_from_update(field: &FieldInfo, field_alias: &Ident, enum_
             #field_alias = match prop.val {
                 Some(vim_rs::types::vim_any::VimAny::Value(vim_rs::types::boxed_types::ValueElements::#enum_field(vd))) => Some(vd),
                 None => continue,
-                Some(ref val) => return Err(vim_rs::core::pc_helpers::Error::InvalidPropertyType { property: #path.to_string(), expected: #enum_field_name.to_string(), got: vim_rs::core::pc_helpers::type_name(val)}),
+                Some(ref val) => return Err(vim_rs::core::error::Error::invalid_property_type(#path.to_string(), #enum_field_name.to_string(), vim_rs::core::pc_helpers::type_name(val))),
             };
         }
     }
@@ -630,7 +630,7 @@ fn generate_enum_field_apply(field: &FieldInfo, enum_field_name: &str) -> proc_m
         none_code = quote! { None };
         value_code = quote! { Some(vd) };
     } else {
-        none_code = quote! { return Err(vim_rs::core::pc_helpers::Error::NoneValueForRequiredField(#path.to_string())) };
+        none_code = quote! { return Err(vim_rs::core::error::Error::missing_required_field(#path.to_string())) };
         value_code = quote! { vd };
     };
 
@@ -639,7 +639,7 @@ fn generate_enum_field_apply(field: &FieldInfo, enum_field_name: &str) -> proc_m
             self.#field_name = match prop.val {
                 Some(vim_rs::types::vim_any::VimAny::Value(vim_rs::types::boxed_types::ValueElements::#enum_field(vd))) => #value_code,
                 None => #none_code,
-                Some(ref val) => return Err(vim_rs::core::pc_helpers::Error::InvalidPropertyType { property: #path.to_string(), expected: #enum_field_name.to_string(), got: vim_rs::core::pc_helpers::type_name(val)}),
+                Some(ref val) => return Err(vim_rs::core::error::Error::invalid_property_type(#path.to_string(), #enum_field_name.to_string(), vim_rs::core::pc_helpers::type_name(val))),
             };
         }
     }
@@ -653,10 +653,10 @@ fn generate_enum_field_apply(field: &FieldInfo, enum_field_name: &str) -> proc_m
 //                             let name: &'static str = obj.data_type().into();
 //                             match obj.as_any_box().downcast() {
 //                                 Ok(val) => Some(*val),
-//                                 Err(_) => return Err(pc_helpers::Error::InvalidPropertyType {property: "<property path>".to_string(), expected: "<struct type name>".to_string(), got: name.to_string()}),
+//                                 Err(_) => return Err(pc_helpers::Error::InvalidPropertyType {property: "<property path>".to_string(), "<struct type name>".to_string(), name.to_string())),
 //                             }
 //                         },
-//                         ref val => return Err(pc_helpers::Error::InvalidPropertyType {property: "<property path>".to_string(), expected: "<struct type name>".to_string(), got: pc_helpers::type_name(val)}),
+//                         ref val => return Err(pc_helpers::Error::InvalidPropertyType {property: "<property path>".to_string(), "<struct type name>".to_string(), got: pc_helpers::type_name(val)}),
 //                     };
 //                 }
 fn generate_struct_field_from_content(field: &FieldInfo, field_alias: &Ident, struct_type: &str) -> proc_macro2::TokenStream {
@@ -669,10 +669,10 @@ fn generate_struct_field_from_content(field: &FieldInfo, field_alias: &Ident, st
                     let name: &'static str = obj.data_type().into();
                     match obj.as_any_box().downcast() {
                         Ok(val) => Some(*val),
-                        Err(_) => return Err(vim_rs::core::pc_helpers::Error::InvalidPropertyType {property: #path.to_string(), expected: #struct_type.to_string(), got: name.to_string()}),
+                        Err(_) => return Err(vim_rs::core::error::Error::invalid_property_type( #path.to_string(), #struct_type.to_string(), name.to_string())),
                     }
                 },
-                ref val => return Err(vim_rs::core::pc_helpers::Error::InvalidPropertyType {property: #path.to_string(), expected: #struct_type.to_string(), got: vim_rs::core::pc_helpers::type_name(val)}),
+                ref val => return Err(vim_rs::core::error::Error::invalid_property_type( #path.to_string(), #struct_type.to_string(), vim_rs::core::pc_helpers::type_name(val))),
             };
         }
     }
@@ -687,11 +687,11 @@ fn generate_struct_field_from_update(field: &FieldInfo, field_alias: &Ident, str
                     let name: &'static str = obj.data_type().into();
                     match obj.as_any_box().downcast() {
                         Ok(val) => Some(*val),
-                        Err(_) => return Err(vim_rs::core::pc_helpers::Error::InvalidPropertyType {property: #path.to_string(), expected: #struct_type.to_string(), got: name.to_string()}),
+                        Err(_) => return Err(vim_rs::core::error::Error::invalid_property_type( #path.to_string(), #struct_type.to_string(), name.to_string())),
                     }
                 },
                 None => continue,
-                Some(ref val) => return Err(vim_rs::core::pc_helpers::Error::InvalidPropertyType {property: #path.to_string(), expected: #struct_type.to_string(), got: vim_rs::core::pc_helpers::type_name(val)}),
+                Some(ref val) => return Err(vim_rs::core::error::Error::invalid_property_type( #path.to_string(), #struct_type.to_string(), vim_rs::core::pc_helpers::type_name(val))),
             };
         }
     }
@@ -706,7 +706,7 @@ fn generate_struct_field_apply(field: &FieldInfo, struct_type: &str) -> proc_mac
         none_code = quote! { None };
         value_code = quote! { Some(*val) };
     } else {
-        none_code = quote! { return Err(vim_rs::core::pc_helpers::Error::NoneValueForRequiredField(#path.to_string())) };
+        none_code = quote! { return Err(vim_rs::core::error::Error::missing_required_field(#path.to_string())) };
         value_code = quote! { *val };
     };
     quote! {
@@ -716,11 +716,11 @@ fn generate_struct_field_apply(field: &FieldInfo, struct_type: &str) -> proc_mac
                     let name: &'static str = obj.data_type().into();
                     match obj.as_any_box().downcast() {
                         Ok(val) => #value_code,
-                        Err(_) => return Err(vim_rs::core::pc_helpers::Error::InvalidPropertyType {property: #path.to_string(), expected: #struct_type.to_string(), got: name.to_string()}),
+                        Err(_) => return Err(vim_rs::core::error::Error::invalid_property_type( #path.to_string(), #struct_type.to_string(), name.to_string())),
                     }
                 },
                 None => #none_code,
-                Some(ref val) => return Err(vim_rs::core::pc_helpers::Error::InvalidPropertyType {property: #path.to_string(), expected: #struct_type.to_string(), got: vim_rs::core::pc_helpers::type_name(val)}),
+                Some(ref val) => return Err(vim_rs::core::error::Error::invalid_property_type( #path.to_string(), #struct_type.to_string(), vim_rs::core::pc_helpers::type_name(val))),
             };
         }
     }
@@ -733,10 +733,10 @@ fn generate_struct_field_apply(field: &FieldInfo, struct_type: &str) -> proc_mac
 //                             let name: &'static str = obj.data_type().into();
 //                             match obj.into_box() {
 //                                 Ok(val) => Some(val),
-//                                 Err(_) => return Err(pc_helpers::Error::InvalidPropertyType {property: "<property path>".to_string(), expected: "<trait type name>".to_string(), got: name.to_string()}),
+//                                 Err(_) => return Err(pc_helpers::Error::InvalidPropertyType {property: "<property path>".to_string(), "<trait type name>".to_string(), name.to_string())),
 //                             }
 //                         },
-//                         ref val => return Err(pc_helpers::Error::InvalidPropertyType {property: "<property path>".to_string(), expected: "<trait type name>".to_string(), got: pc_helpers::type_name(val)}),
+//                         ref val => return Err(pc_helpers::Error::InvalidPropertyType {property: "<property path>".to_string(), "<trait type name>".to_string(), got: pc_helpers::type_name(val)}),
 //                     };
 //                 }
 fn generate_trait_field_from_content(field: &FieldInfo, field_alias: &Ident, trait_type: &str) -> proc_macro2::TokenStream {
@@ -748,10 +748,10 @@ fn generate_trait_field_from_content(field: &FieldInfo, field_alias: &Ident, tra
                     let name: &'static str = obj.data_type().into();
                     match vim_rs::types::convert::CastInto::into_box(obj) {
                         Ok(val) => Some(val),
-                        Err(_) => return Err(vim_rs::core::pc_helpers::Error::InvalidPropertyType {property: #path.to_string(), expected: #trait_type.to_string(), got: name.to_string()}),
+                        Err(_) => return Err(vim_rs::core::error::Error::invalid_property_type( #path.to_string(), #trait_type.to_string(), name.to_string())),
                     }
                 },
-                ref val => return Err(vim_rs::core::pc_helpers::Error::InvalidPropertyType {property: #path.to_string(), expected: #trait_type.to_string(), got: vim_rs::core::pc_helpers::type_name(val)}),
+                ref val => return Err(vim_rs::core::error::Error::invalid_property_type( #path.to_string(), #trait_type.to_string(), vim_rs::core::pc_helpers::type_name(val))),
             };
         }
     }
@@ -766,11 +766,11 @@ fn generate_trait_field_from_update(field: &FieldInfo, field_alias: &Ident, trai
                     let name: &'static str = obj.data_type().into();
                     match vim_rs::types::convert::CastInto::into_box(obj) {
                         Ok(val) => Some(val),
-                        Err(_) => return Err(vim_rs::core::pc_helpers::Error::InvalidPropertyType {property: #path.to_string(), expected: #trait_type.to_string(), got: name.to_string()}),
+                        Err(_) => return Err(vim_rs::core::error::Error::invalid_property_type( #path.to_string(), #trait_type.to_string(), name.to_string())),
                     }
                 },
                 None => continue,
-                Some(ref val) => return Err(vim_rs::core::pc_helpers::Error::InvalidPropertyType {property: #path.to_string(), expected: #trait_type.to_string(), got: vim_rs::core::pc_helpers::type_name(val)}),
+                Some(ref val) => return Err(vim_rs::core::error::Error::invalid_property_type( #path.to_string(), #trait_type.to_string(), vim_rs::core::pc_helpers::type_name(val))),
             };
         }
     }
@@ -785,7 +785,7 @@ fn generate_trait_field_apply(field: &FieldInfo, trait_type: &str) -> proc_macro
         none_code = quote! { None };
         value_code = quote! { Some(val) };
     } else {
-        none_code = quote! { return Err(vim_rs::core::pc_helpers::Error::NoneValueForRequiredField(#path.to_string())) };
+        none_code = quote! { return Err(vim_rs::core::error::Error::missing_required_field(#path.to_string())) };
         value_code = quote! { val };
     };
 
@@ -796,11 +796,11 @@ fn generate_trait_field_apply(field: &FieldInfo, trait_type: &str) -> proc_macro
                     let name: &'static str = obj.data_type().into();
                     match vim_rs::types::convert::CastInto::into_box(obj) {
                         Ok(val) => #value_code,
-                        Err(_) => return Err(vim_rs::core::pc_helpers::Error::InvalidPropertyType {property: #path.to_string(), expected: #trait_type.to_string(), got: name.to_string()}),
+                        Err(_) => return Err(vim_rs::core::error::Error::invalid_property_type( #path.to_string(), #trait_type.to_string(), name.to_string())),
                     }
                 },
                 None => #none_code,
-                Some(ref val) => return Err(vim_rs::core::pc_helpers::Error::InvalidPropertyType {property: #path.to_string(), expected: #trait_type.to_string(), got: vim_rs::core::pc_helpers::type_name(val)}),
+                Some(ref val) => return Err(vim_rs::core::error::Error::invalid_property_type( #path.to_string(), #trait_type.to_string(), vim_rs::core::pc_helpers::type_name(val))),
             };
         }
     }

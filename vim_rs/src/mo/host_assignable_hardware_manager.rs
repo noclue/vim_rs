@@ -1,13 +1,13 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// This managed object manages the assignable hardware state of the host.
 #[derive(Clone)]
 pub struct HostAssignableHardwareManager {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl HostAssignableHardwareManager {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -28,7 +28,9 @@ impl HostAssignableHardwareManager {
     pub async fn download_description_tree(&self) -> Result<Vec<u8>> {
         let path = format!("/HostAssignableHardwareManager/{moId}/DownloadDescriptionTree", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: Vec<u8> = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Retrieve PCI Dynamic Passthrough info.
     /// 
@@ -39,7 +41,11 @@ impl HostAssignableHardwareManager {
     pub async fn retrieve_dynamic_passthrough_info(&self) -> Result<Option<Vec<crate::types::structs::VirtualMachineDynamicPassthroughInfo>>> {
         let path = format!("/HostAssignableHardwareManager/{moId}/RetrieveDynamicPassthroughInfo", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VirtualMachineDynamicPassthroughInfo>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Retrieve VendorDeviceGroup info.
     /// 
@@ -51,7 +57,11 @@ impl HostAssignableHardwareManager {
     pub async fn retrieve_vendor_device_group_info(&self) -> Result<Option<Vec<crate::types::structs::VirtualMachineVendorDeviceGroupInfo>>> {
         let path = format!("/HostAssignableHardwareManager/{moId}/RetrieveVendorDeviceGroupInfo", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VirtualMachineVendorDeviceGroupInfo>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Update Assignable Hardware configuration.
     /// 
@@ -70,7 +80,7 @@ impl HostAssignableHardwareManager {
     pub async fn update_assignable_hardware_config(&self, config: &crate::types::structs::HostAssignableHardwareConfig) -> Result<()> {
         let input = UpdateAssignableHardwareConfigRequestType {config, };
         let path = format!("/HostAssignableHardwareManager/{moId}/UpdateAssignableHardwareConfig", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Assignable Hardware bindings
@@ -79,7 +89,11 @@ impl HostAssignableHardwareManager {
     pub async fn binding(&self) -> Result<Option<Vec<crate::types::structs::HostAssignableHardwareBinding>>> {
         let path = format!("/HostAssignableHardwareManager/{moId}/binding", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::HostAssignableHardwareBinding>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Assignable Hardware configuration
     /// 
@@ -87,7 +101,9 @@ impl HostAssignableHardwareManager {
     pub async fn config(&self) -> Result<crate::types::structs::HostAssignableHardwareConfig> {
         let path = format!("/HostAssignableHardwareManager/{moId}/config", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::HostAssignableHardwareConfig = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
 }
 #[derive(serde::Serialize)]

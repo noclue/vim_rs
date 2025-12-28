@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// Deployment engine that allows the deploy of VCSA (Virtual Center Service
 /// Appliance) onto a vSAN datastore.
 /// 
@@ -7,11 +7,11 @@ use crate::core::client::{Client, Result};
 /// MOID of vsan-vcsa-deployer-system at vCenter server and ESXi host side.
 #[derive(Clone)]
 pub struct VsanVcsaDeployerSystem {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl VsanVcsaDeployerSystem {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -52,8 +52,12 @@ impl VsanVcsaDeployerSystem {
     pub async fn vsan_post_config_for_vcsa(&self, spec: &crate::types::structs::VsanVcPostDeployConfigSpec) -> Result<Option<String>> {
         let input = VsanPostConfigForVcsaRequestType {spec, };
         let path = format!("/vsan/VsanVcsaDeployerSystem/{moId}/VsanPostConfigForVcsa", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<String>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Deployment engine that allows the deploy of VCSA (Virtual Center Service
     /// Appliance) onto a vSAN datastore.
@@ -83,8 +87,12 @@ impl VsanVcsaDeployerSystem {
     pub async fn vsan_prepare_vsan_for_vcsa(&self, spec: &crate::types::structs::VsanPrepareVsanForVcsaSpec) -> Result<Option<String>> {
         let input = VsanPrepareVsanForVcsaRequestType {spec, };
         let path = format!("/vsan/VsanVcsaDeployerSystem/{moId}/VsanPrepareVsanForVcsa", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<String>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Fetch the detailed progress of a running or recently completed VCSA
     /// deployment task.
@@ -107,8 +115,10 @@ impl VsanVcsaDeployerSystem {
     pub async fn vsan_vcsa_get_bootstrap_progress(&self, task_id: &[String]) -> Result<Vec<crate::types::structs::VsanVcsaDeploymentProgress>> {
         let input = VsanVcsaGetBootstrapProgressRequestType {task_id, };
         let path = format!("/vsan/VsanVcsaDeployerSystem/{moId}/VsanVcsaGetBootstrapProgress", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: Vec<crate::types::structs::VsanVcsaDeploymentProgress> = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
 }
 #[derive(serde::Serialize)]

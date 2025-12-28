@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// This managed object type provides a way to manage and manipulate files and
 /// folders on datastores.
 /// 
@@ -32,11 +32,11 @@ use crate::core::client::{Client, Result};
 /// See also *HostDatastoreBrowser*.
 #[derive(Clone)]
 pub struct FileManager {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl FileManager {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -65,7 +65,7 @@ impl FileManager {
     pub async fn change_owner(&self, name: &str, datacenter: Option<&crate::types::structs::ManagedObjectReference>, owner: &str) -> Result<()> {
         let input = ChangeOwnerRequestType {name, datacenter, owner, };
         let path = format!("/FileManager/{moId}/ChangeOwner", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Copies the source file or folder to the destination.
@@ -171,8 +171,10 @@ impl FileManager {
     pub async fn copy_datastore_file_task(&self, source_name: &str, source_datacenter: Option<&crate::types::structs::ManagedObjectReference>, destination_name: &str, destination_datacenter: Option<&crate::types::structs::ManagedObjectReference>, force: Option<bool>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CopyDatastoreFileRequestType {source_name, source_datacenter, destination_name, destination_datacenter, force, };
         let path = format!("/FileManager/{moId}/CopyDatastoreFile_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deletes the specified file or folder from the datastore.
     /// 
@@ -232,8 +234,10 @@ impl FileManager {
     pub async fn delete_datastore_file_task(&self, name: &str, datacenter: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = DeleteDatastoreFileRequestType {name, datacenter, };
         let path = format!("/FileManager/{moId}/DeleteDatastoreFile_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Create a folder using the specified name.
     /// 
@@ -285,7 +289,7 @@ impl FileManager {
     pub async fn make_directory(&self, name: &str, datacenter: Option<&crate::types::structs::ManagedObjectReference>, create_parent_directories: Option<bool>) -> Result<()> {
         let input = MakeDirectoryRequestType {name, datacenter, create_parent_directories, };
         let path = format!("/FileManager/{moId}/MakeDirectory", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Moves the source file or folder to the destination.
@@ -392,8 +396,10 @@ impl FileManager {
     pub async fn move_datastore_file_task(&self, source_name: &str, source_datacenter: Option<&crate::types::structs::ManagedObjectReference>, destination_name: &str, destination_datacenter: Option<&crate::types::structs::ManagedObjectReference>, force: Option<bool>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = MoveDatastoreFileRequestType {source_name, source_datacenter, destination_name, destination_datacenter, force, };
         let path = format!("/FileManager/{moId}/MoveDatastoreFile_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Fetches as much information as possible for the file path passed in.
     /// 
@@ -433,8 +439,10 @@ impl FileManager {
     pub async fn query_file_lock_info(&self, path: &str, host: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::FileLockInfoResult> {
         let input = QueryFileLockInfoRequestType {path, host, };
         let path = format!("/FileManager/{moId}/QueryFileLockInfo", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::FileLockInfoResult = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
 }
 #[derive(serde::Serialize)]

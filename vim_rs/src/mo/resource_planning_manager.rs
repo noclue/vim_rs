@@ -1,12 +1,12 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 #[derive(Clone)]
 pub struct ResourcePlanningManager {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl ResourcePlanningManager {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -36,8 +36,10 @@ impl ResourcePlanningManager {
     pub async fn estimate_database_size(&self, db_size_param: &crate::types::structs::DatabaseSizeParam) -> Result<crate::types::structs::DatabaseSizeEstimate> {
         let input = EstimateDatabaseSizeRequestType {db_size_param, };
         let path = format!("/ResourcePlanningManager/{moId}/EstimateDatabaseSize", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::DatabaseSizeEstimate = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
 }
 #[derive(serde::Serialize)]

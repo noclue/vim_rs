@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// The *StoragePod* data object aggregates the storage
 /// resources of associated *Datastore* objects into a single
 /// storage resource for use by virtual machines.
@@ -12,11 +12,11 @@ use crate::core::client::{Client, Result};
 /// to create an instance of this object.
 #[derive(Clone)]
 pub struct StoragePod {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl StoragePod {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -108,8 +108,10 @@ impl StoragePod {
     pub async fn add_standalone_host_task(&self, spec: &crate::types::structs::HostConnectSpec, comp_res_spec: Option<&dyn crate::types::traits::ComputeResourceConfigSpecTrait>, add_connected: bool, license: Option<&str>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = AddStandaloneHostRequestType {spec, comp_res_spec, add_connected, license, };
         let path = format!("/StoragePod/{moId}/AddStandaloneHost_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Adds a set of new and existing hosts to the cluster.
     /// 
@@ -166,8 +168,10 @@ impl StoragePod {
     pub async fn batch_add_hosts_to_cluster_task(&self, cluster: &crate::types::structs::ManagedObjectReference, new_hosts: Option<&[crate::types::structs::FolderNewHostSpec]>, existing_hosts: Option<&[crate::types::structs::ManagedObjectReference]>, comp_res_spec: Option<&dyn crate::types::traits::ComputeResourceConfigSpecTrait>, desired_state: Option<&str>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = BatchAddHostsToClusterRequestType {cluster, new_hosts, existing_hosts, comp_res_spec, desired_state, };
         let path = format!("/StoragePod/{moId}/BatchAddHostsToCluster_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Adds a list of hosts to inventory, as standalone hosts,
     /// in a single invocation.
@@ -205,8 +209,10 @@ impl StoragePod {
     pub async fn batch_add_standalone_hosts_task(&self, new_hosts: Option<&[crate::types::structs::FolderNewHostSpec]>, comp_res_spec: Option<&dyn crate::types::traits::ComputeResourceConfigSpecTrait>, add_connected: bool) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = BatchAddStandaloneHostsRequestType {new_hosts, comp_res_spec, add_connected, };
         let path = format!("/StoragePod/{moId}/BatchAddStandaloneHosts_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deprecated as of VI API 2.5, use *Folder.CreateClusterEx*.
     /// 
@@ -247,8 +253,10 @@ impl StoragePod {
     pub async fn create_cluster(&self, name: &str, spec: &crate::types::structs::ClusterConfigSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateClusterRequestType {name, spec, };
         let path = format!("/StoragePod/{moId}/CreateCluster", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Creates a new cluster compute resource in this folder.
     /// 
@@ -287,8 +295,10 @@ impl StoragePod {
     pub async fn create_cluster_ex(&self, name: &str, spec: &crate::types::structs::ClusterConfigSpecEx) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateClusterExRequestType {name, spec, };
         let path = format!("/StoragePod/{moId}/CreateClusterEx", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Creates a new datacenter with the given name.
     /// 
@@ -324,8 +334,10 @@ impl StoragePod {
     pub async fn create_datacenter(&self, name: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateDatacenterRequestType {name, };
         let path = format!("/StoragePod/{moId}/CreateDatacenter", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Create a *DistributedVirtualSwitch* in the folder according to the
     /// specified *DVSCreateSpec*.
@@ -359,8 +371,10 @@ impl StoragePod {
     pub async fn create_dvs_task(&self, spec: &crate::types::structs::DvsCreateSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateDvsRequestType {spec, };
         let path = format!("/StoragePod/{moId}/CreateDVS_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Creates a new sub-folder with the specified name.
     /// 
@@ -395,8 +409,10 @@ impl StoragePod {
     pub async fn create_folder(&self, name: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateFolderRequestType {name, };
         let path = format!("/StoragePod/{moId}/CreateFolder", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Creates a new storage pod in this folder.
     /// 
@@ -429,8 +445,10 @@ impl StoragePod {
     pub async fn create_storage_pod(&self, name: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateStoragePodRequestType {name, };
         let path = format!("/StoragePod/{moId}/CreateStoragePod", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Creates a new virtual machine in the current folder and attaches it to the
     /// specified resource pool.
@@ -554,8 +572,10 @@ impl StoragePod {
     pub async fn create_vm_task(&self, config: &crate::types::structs::VirtualMachineConfigSpec, pool: &crate::types::structs::ManagedObjectReference, host: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateVmRequestType {config, pool, host, };
         let path = format!("/StoragePod/{moId}/CreateVM_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Destroys this object, deleting its contents and removing it from its parent
     /// folder (if any).
@@ -581,7 +601,9 @@ impl StoragePod {
     pub async fn destroy_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/StoragePod/{moId}/Destroy_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Moves a set of managed entities into this folder.
     /// 
@@ -688,8 +710,10 @@ impl StoragePod {
     pub async fn move_into_folder_task(&self, list: &[crate::types::structs::ManagedObjectReference]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = MoveIntoFolderRequestType {list, };
         let path = format!("/StoragePod/{moId}/MoveIntoFolder_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Adds an existing virtual machine to the folder.
     /// 
@@ -789,8 +813,10 @@ impl StoragePod {
     pub async fn register_vm_task(&self, path: &str, name: Option<&str>, as_template: bool, pool: Option<&crate::types::structs::ManagedObjectReference>, host: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RegisterVmRequestType {path, name, as_template, pool, host, };
         let path = format!("/StoragePod/{moId}/RegisterVM_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Reload the entity state.
     /// 
@@ -840,8 +866,10 @@ impl StoragePod {
     pub async fn rename_task(&self, new_name: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RenameRequestType {new_name, };
         let path = format!("/StoragePod/{moId}/Rename_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Assigns a value to a custom field.
     /// 
@@ -860,7 +888,7 @@ impl StoragePod {
     pub async fn set_custom_value(&self, key: &str, value: &str) -> Result<()> {
         let input = SetCustomValueRequestType {key, value, };
         let path = format!("/StoragePod/{moId}/setCustomValue", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Recursively unregisters all virtual machines and vApps, and destroys
@@ -909,7 +937,9 @@ impl StoragePod {
     pub async fn unregister_and_destroy_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/StoragePod/{moId}/UnregisterAndDestroy_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Whether alarm actions are enabled for this entity.
     /// 
@@ -919,7 +949,11 @@ impl StoragePod {
     pub async fn alarm_actions_enabled(&self) -> Result<Option<bool>> {
         let path = format!("/StoragePod/{moId}/alarmActionsEnabled", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<bool>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// List of custom field definitions that are valid for the object's type.
     /// 
@@ -929,7 +963,11 @@ impl StoragePod {
     pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
         let path = format!("/StoragePod/{moId}/availableField", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::CustomFieldDef>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// An array of managed object references.
     /// 
@@ -943,7 +981,11 @@ impl StoragePod {
     pub async fn child_entity(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/StoragePod/{moId}/childEntity", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Specifies the object types a folder may contain.
     /// 
@@ -976,7 +1018,11 @@ impl StoragePod {
     pub async fn child_type(&self) -> Result<Option<Vec<String>>> {
         let path = format!("/StoragePod/{moId}/childType", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<String>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Current configuration issues that have been detected for this entity.
     /// 
@@ -988,7 +1034,11 @@ impl StoragePod {
     pub async fn config_issue(&self) -> Result<Option<Vec<crate::types::structs::Event>>> {
         let path = format!("/StoragePod/{moId}/configIssue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::Event>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// The configStatus indicates whether or not the system has detected a configuration
     /// issue involving this entity.
@@ -1017,7 +1067,9 @@ impl StoragePod {
     pub async fn config_status(&self) -> Result<crate::types::enums::ManagedEntityStatusEnum> {
         let path = format!("/StoragePod/{moId}/configStatus", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::enums::ManagedEntityStatusEnum = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Custom field values.
     /// 
@@ -1025,7 +1077,11 @@ impl StoragePod {
     pub async fn custom_value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/StoragePod/{moId}/customValue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// A set of alarm states for alarms that apply to this managed entity.
     /// 
@@ -1040,7 +1096,11 @@ impl StoragePod {
     pub async fn declared_alarm_state(&self) -> Result<Option<Vec<crate::types::structs::AlarmState>>> {
         let path = format!("/StoragePod/{moId}/declaredAlarmState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::AlarmState>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// List of operations that are disabled, given the current runtime
     /// state of the entity.
@@ -1114,7 +1174,11 @@ impl StoragePod {
     pub async fn disabled_method(&self) -> Result<Option<Vec<String>>> {
         let path = format!("/StoragePod/{moId}/disabledMethod", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<String>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Access rights the current session has to this entity.
     /// 
@@ -1122,7 +1186,11 @@ impl StoragePod {
     pub async fn effective_role(&self) -> Result<Option<Vec<i32>>> {
         let path = format!("/StoragePod/{moId}/effectiveRole", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<i32>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// The information of externally managed folder.
     /// 
@@ -1132,7 +1200,11 @@ impl StoragePod {
     pub async fn externally_managed_folder_info(&self) -> Result<Option<crate::types::structs::FolderExternallyManagedFolderInfo>> {
         let path = format!("/StoragePod/{moId}/externallyManagedFolderInfo", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::FolderExternallyManagedFolderInfo>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Name of this entity, unique relative to its parent.
     /// 
@@ -1146,7 +1218,9 @@ impl StoragePod {
     pub async fn name(&self) -> Result<String> {
         let path = format!("/StoragePod/{moId}/name", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// The namespace with which the Folder is associated.
     /// 
@@ -1159,7 +1233,11 @@ impl StoragePod {
     pub async fn namespace(&self) -> Result<Option<String>> {
         let path = format!("/StoragePod/{moId}/namespace", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<String>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// General health of this managed entity.
     /// 
@@ -1184,7 +1262,9 @@ impl StoragePod {
     pub async fn overall_status(&self) -> Result<crate::types::enums::ManagedEntityStatusEnum> {
         let path = format!("/StoragePod/{moId}/overallStatus", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::enums::ManagedEntityStatusEnum = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Parent of this entity.
     /// 
@@ -1200,13 +1280,21 @@ impl StoragePod {
     pub async fn parent(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let path = format!("/StoragePod/{moId}/parent", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::ManagedObjectReference>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// List of permissions defined for this entity.
     pub async fn permission(&self) -> Result<Option<Vec<crate::types::structs::Permission>>> {
         let path = format!("/StoragePod/{moId}/permission", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::Permission>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Storage DRS related attributes of the Storage Pod.
     /// 
@@ -1214,7 +1302,11 @@ impl StoragePod {
     pub async fn pod_storage_drs_entry(&self) -> Result<Option<crate::types::structs::PodStorageDrsEntry>> {
         let path = format!("/StoragePod/{moId}/podStorageDrsEntry", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::PodStorageDrsEntry>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// The set of recent tasks operating on this managed entity.
     /// 
@@ -1244,7 +1336,11 @@ impl StoragePod {
     pub async fn recent_task(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/StoragePod/{moId}/recentTask", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Storage pod summary.
     /// 
@@ -1252,7 +1348,11 @@ impl StoragePod {
     pub async fn summary(&self) -> Result<Option<crate::types::structs::StoragePodSummary>> {
         let path = format!("/StoragePod/{moId}/summary", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::StoragePodSummary>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// The set of tags associated with this managed entity.
     /// 
@@ -1262,7 +1362,11 @@ impl StoragePod {
     pub async fn tag(&self) -> Result<Option<Vec<crate::types::structs::Tag>>> {
         let path = format!("/StoragePod/{moId}/tag", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::Tag>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// A set of alarm states for alarms triggered by this entity
     /// or by its descendants.
@@ -1281,7 +1385,11 @@ impl StoragePod {
     pub async fn triggered_alarm_state(&self) -> Result<Option<Vec<crate::types::structs::AlarmState>>> {
         let path = format!("/StoragePod/{moId}/triggeredAlarmState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::AlarmState>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// List of custom field values.
     /// 
@@ -1293,7 +1401,11 @@ impl StoragePod {
     pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/StoragePod/{moId}/value", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
 }
 #[derive(serde::Serialize)]

@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// This managed object type provides the service interface for obtaining
 /// statistical data about various aspects of vSAN performance, as generated
 /// and maintained by the vSAN performance service of the cluster.
@@ -19,11 +19,11 @@ use crate::core::client::{Client, Result};
 /// statistics when receive the request from master then send it back.
 #[derive(Clone)]
 pub struct VsanPerformanceManager {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl VsanPerformanceManager {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -89,8 +89,10 @@ impl VsanPerformanceManager {
     pub async fn vsan_perf_create_stats_object(&self, cluster: Option<&crate::types::structs::ManagedObjectReference>, profile: Option<&dyn crate::types::traits::VirtualMachineProfileSpecTrait>) -> Result<String> {
         let input = VsanPerfCreateStatsObjectRequestType {cluster, profile, };
         let path = format!("/vsan/VsanPerformanceManager/{moId}/VsanPerfCreateStatsObject", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// The asynchronous API of CreateStatsObject.
     /// 
@@ -123,8 +125,10 @@ impl VsanPerformanceManager {
     pub async fn vsan_perf_create_stats_object_task(&self, cluster: Option<&crate::types::structs::ManagedObjectReference>, profile: Option<&dyn crate::types::traits::VirtualMachineProfileSpecTrait>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanPerfCreateStatsObjectTaskRequestType {cluster, profile, };
         let path = format!("/vsan/VsanPerformanceManager/{moId}/VsanPerfCreateStatsObjectTask", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Delete vSAN object/directory containing the vSAN Perf Stats DB.
     /// 
@@ -162,8 +166,10 @@ impl VsanPerformanceManager {
     pub async fn vsan_perf_delete_stats_object(&self, cluster: Option<&crate::types::structs::ManagedObjectReference>) -> Result<bool> {
         let input = VsanPerfDeleteStatsObjectRequestType {cluster, };
         let path = format!("/vsan/VsanPerformanceManager/{moId}/VsanPerfDeleteStatsObject", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: bool = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// The asynchronous API of DeleteStatsObject.
     /// 
@@ -193,8 +199,10 @@ impl VsanPerformanceManager {
     pub async fn vsan_perf_delete_stats_object_task(&self, cluster: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanPerfDeleteStatsObjectTaskRequestType {cluster, };
         let path = format!("/vsan/VsanPerformanceManager/{moId}/VsanPerfDeleteStatsObjectTask", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Delete saved time range in performance service.
     /// 
@@ -214,7 +222,7 @@ impl VsanPerformanceManager {
     pub async fn vsan_perf_delete_time_range(&self, cluster: Option<&crate::types::structs::ManagedObjectReference>, name: &str) -> Result<()> {
         let input = VsanPerfDeleteTimeRangeRequestType {cluster, name, };
         let path = format!("/vsan/VsanPerformanceManager/{moId}/VsanPerfDeleteTimeRange", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Get supported aggregated entity types for front end data-driven
@@ -231,7 +239,11 @@ impl VsanPerformanceManager {
     pub async fn vsan_perf_get_aggregated_entity_types(&self) -> Result<Option<Vec<crate::types::structs::VsanPerfEntityType>>> {
         let path = format!("/vsan/VsanPerformanceManager/{moId}/VsanPerfGetAggregatedEntityTypes", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VsanPerfEntityType>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Get supported performance exceptions for front end data-driven
     /// performance exception reporting
@@ -240,7 +252,11 @@ impl VsanPerformanceManager {
     pub async fn vsan_perf_get_supported_diagnostic_exceptions(&self) -> Result<Option<Vec<crate::types::structs::VsanPerfDiagnosticException>>> {
         let path = format!("/vsan/VsanPerformanceManager/{moId}/VsanPerfGetSupportedDiagnosticExceptions", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VsanPerfDiagnosticException>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// This API is used to build performance graphs in a data-driven and dynamic way.
     /// 
@@ -271,7 +287,11 @@ impl VsanPerformanceManager {
     pub async fn vsan_perf_get_supported_entity_types(&self) -> Result<Option<Vec<crate::types::structs::VsanPerfEntityType>>> {
         let path = format!("/vsan/VsanPerformanceManager/{moId}/VsanPerfGetSupportedEntityTypes", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VsanPerfEntityType>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Returns the diagnosis result from the in memory cache for the supplied
     /// task.
@@ -306,8 +326,12 @@ impl VsanPerformanceManager {
     pub async fn get_vsan_perf_diagnosis_result(&self, task: &crate::types::structs::ManagedObjectReference, cluster: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Option<Vec<crate::types::structs::VsanPerfDiagnosticResult>>> {
         let input = GetVsanPerfDiagnosisResultRequestType {task, cluster, };
         let path = format!("/vsan/VsanPerformanceManager/{moId}/GetVsanPerfDiagnosisResult", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VsanPerfDiagnosticResult>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// This API shall not be used to query the health status for vSAN performance service.
     /// 
@@ -334,8 +358,10 @@ impl VsanPerformanceManager {
     pub async fn vsan_perf_query_cluster_health(&self, cluster: &crate::types::structs::ManagedObjectReference) -> Result<Vec<crate::types::structs::VsanClusterHealthGroup>> {
         let input = VsanPerfQueryClusterHealthRequestType {cluster, };
         let path = format!("/vsan/VsanPerformanceManager/{moId}/VsanPerfQueryClusterHealth", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: Vec<crate::types::structs::VsanClusterHealthGroup> = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Query performance service related information about the node(s).
     /// 
@@ -365,8 +391,12 @@ impl VsanPerformanceManager {
     pub async fn vsan_perf_query_node_information(&self, cluster: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Option<Vec<crate::types::structs::VsanPerfNodeInformation>>> {
         let input = VsanPerfQueryNodeInformationRequestType {cluster, };
         let path = format!("/vsan/VsanPerformanceManager/{moId}/VsanPerfQueryNodeInformation", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VsanPerfNodeInformation>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Query all remote server clusters ever mounted from perf database by the
     /// specified query specification and return their UUIDs.
@@ -398,8 +428,10 @@ impl VsanPerformanceManager {
     pub async fn query_remote_server_clusters(&self, cluster: Option<&crate::types::structs::ManagedObjectReference>, query_spec: Option<&crate::types::structs::VsanRemoteClusterQuerySpec>) -> Result<Vec<String>> {
         let input = QueryRemoteServerClustersRequestType {cluster, query_spec, };
         let path = format!("/vsan/VsanPerformanceManager/{moId}/QueryRemoteServerClusters", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: Vec<String> = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Get information about the vSAN object/directory containing the vSAN Perf Stats DB.
     /// 
@@ -429,8 +461,10 @@ impl VsanPerformanceManager {
     pub async fn vsan_perf_query_stats_object_information(&self, cluster: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::VsanObjectInformation> {
         let input = VsanPerfQueryStatsObjectInformationRequestType {cluster, };
         let path = format!("/vsan/VsanPerformanceManager/{moId}/VsanPerfQueryStatsObjectInformation", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::VsanObjectInformation = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Query saved time ranges in performance service.
     ///
@@ -451,8 +485,12 @@ impl VsanPerformanceManager {
     pub async fn vsan_perf_query_time_ranges(&self, cluster: Option<&crate::types::structs::ManagedObjectReference>, query_spec: &crate::types::structs::VsanPerfTimeRangeQuerySpec) -> Result<Option<Vec<crate::types::structs::VsanPerfTimeRange>>> {
         let input = VsanPerfQueryTimeRangesRequestType {cluster, query_spec, };
         let path = format!("/vsan/VsanPerformanceManager/{moId}/VsanPerfQueryTimeRanges", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VsanPerfTimeRange>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Retrieves the performance metrics for the specified
     /// vSAN entity (or entities) based on the properties specified in
@@ -1117,8 +1155,10 @@ impl VsanPerformanceManager {
     pub async fn vsan_perf_query_perf(&self, query_specs: &[crate::types::structs::VsanPerfQuerySpec], cluster: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Vec<crate::types::structs::VsanPerfEntityMetricCsv>> {
         let input = VsanPerfQueryPerfRequestType {query_specs, cluster, };
         let path = format!("/vsan/VsanPerformanceManager/{moId}/VsanPerfQueryPerf", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: Vec<crate::types::structs::VsanPerfEntityMetricCsv> = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// The API is designed to return a list of hotspot entities that are consuming the
     /// most IOPS, throughput or latency according to given start time and end time in
@@ -1158,8 +1198,10 @@ impl VsanPerformanceManager {
     pub async fn query_vsan_perf_hotspot_entities(&self, cluster: Option<&crate::types::structs::ManagedObjectReference>, query_spec: &crate::types::structs::VsanPerfHotspotQuerySpec) -> Result<Vec<crate::types::structs::VsanPerfHotspotEntitiesMetrics>> {
         let input = QueryVsanPerfHotspotEntitiesRequestType {cluster, query_spec, };
         let path = format!("/vsan/VsanPerformanceManager/{moId}/QueryVsanPerfHotspotEntities", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: Vec<crate::types::structs::VsanPerfHotspotEntitiesMetrics> = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// The API is designed to return a list of top contributors with either type of
     /// VM or disk group that are consuming the most IOPS, throughput or latency in
@@ -1193,8 +1235,10 @@ impl VsanPerformanceManager {
     pub async fn query_vsan_perf_top_entities(&self, cluster: Option<&crate::types::structs::ManagedObjectReference>, query_spec: &crate::types::structs::VsanPerfTopQuerySpec) -> Result<Vec<crate::types::structs::VsanPerfEntityMetricCsv>> {
         let input = QueryVsanPerfTopEntitiesRequestType {cluster, query_spec, };
         let path = format!("/vsan/VsanPerformanceManager/{moId}/QueryVsanPerfTopEntities", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: Vec<crate::types::structs::VsanPerfEntityMetricCsv> = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Save time ranges in performance service.
     /// 
@@ -1214,7 +1258,7 @@ impl VsanPerformanceManager {
     pub async fn vsan_perf_save_time_ranges(&self, cluster: Option<&crate::types::structs::ManagedObjectReference>, time_ranges: &[crate::types::structs::VsanPerfTimeRange]) -> Result<()> {
         let input = VsanPerfSaveTimeRangesRequestType {cluster, time_ranges, };
         let path = format!("/vsan/VsanPerformanceManager/{moId}/VsanPerfSaveTimeRanges", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Set the policy of the vSAN object/directory containing the vSAN Perf Stats DB.
@@ -1280,8 +1324,10 @@ impl VsanPerformanceManager {
     pub async fn vsan_perf_set_stats_object_policy(&self, cluster: Option<&crate::types::structs::ManagedObjectReference>, profile: Option<&dyn crate::types::traits::VirtualMachineProfileSpecTrait>) -> Result<bool> {
         let input = VsanPerfSetStatsObjectPolicyRequestType {cluster, profile, };
         let path = format!("/vsan/VsanPerformanceManager/{moId}/VsanPerfSetStatsObjectPolicy", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: bool = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Toggle vSAN performance service verbose mode.
     /// 
@@ -1301,7 +1347,7 @@ impl VsanPerformanceManager {
     pub async fn vsan_perf_toggle_verbose_mode(&self, cluster: Option<&crate::types::structs::ManagedObjectReference>, verbose_mode: bool) -> Result<()> {
         let input = VsanPerfToggleVerboseModeRequestType {cluster, verbose_mode, };
         let path = format!("/vsan/VsanPerformanceManager/{moId}/VsanPerfToggleVerboseMode", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Deprecated as of vSphere API 6.7, please use VsanPerfDiagnoseTask instead.
@@ -1334,8 +1380,12 @@ impl VsanPerformanceManager {
     pub async fn vsan_perf_diagnose(&self, perf_diagnose_query: &crate::types::structs::VsanPerfDiagnoseQuerySpec, cluster: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Option<Vec<crate::types::structs::VsanPerfDiagnosticResult>>> {
         let input = VsanPerfDiagnoseRequestType {perf_diagnose_query, cluster, };
         let path = format!("/vsan/VsanPerformanceManager/{moId}/VsanPerfDiagnose", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VsanPerfDiagnosticResult>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Runs a diagnostic query to determine performance issues in a vSAN
     /// cluster.
@@ -1381,8 +1431,10 @@ impl VsanPerformanceManager {
     pub async fn vsan_perf_diagnose_task(&self, perf_diagnose_query: &crate::types::structs::VsanPerfDiagnoseQuerySpec, cluster: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanPerfDiagnoseTaskRequestType {perf_diagnose_query, cluster, };
         let path = format!("/vsan/VsanPerformanceManager/{moId}/VsanPerfDiagnoseTask", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
 }
 #[derive(serde::Serialize)]

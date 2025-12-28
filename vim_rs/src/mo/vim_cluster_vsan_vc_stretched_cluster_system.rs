@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// vSAN stretched Cluster is a specific configuration implemented in
 /// environments where disaster/downtime avoidance is a key requirement.
 /// 
@@ -37,11 +37,11 @@ use crate::core::client::{Client, Result};
 /// side.
 #[derive(Clone)]
 pub struct VimClusterVsanVcStretchedClusterSystem {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl VimClusterVsanVcStretchedClusterSystem {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -131,8 +131,10 @@ impl VimClusterVsanVcStretchedClusterSystem {
     pub async fn vsan_vc_add_witness_host(&self, cluster: &crate::types::structs::ManagedObjectReference, witness_host: &crate::types::structs::ManagedObjectReference, preferred_fd: &str, disk_mapping: Option<&crate::types::structs::VsanHostDiskMapping>, metadata_mode: Option<bool>, storage_pool_spec: Option<&crate::types::structs::VsanAddStoragePoolDiskSpec>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanVcAddWitnessHostRequestType {cluster, witness_host, preferred_fd, disk_mapping, metadata_mode, storage_pool_spec, };
         let path = format!("/vsan/VimClusterVsanVcStretchedClusterSystem/{moId}/VSANVcAddWitnessHost", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// This API is used to convert a batch of traditional vSAN clusters into
     /// vSAN stretched clusters sharing the same witness host.
@@ -191,8 +193,10 @@ impl VimClusterVsanVcStretchedClusterSystem {
     pub async fn vsan_vc_add_witness_host_for_clusters(&self, config_spec: &crate::types::structs::VsanVcStretchedClusterConfigSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanVcAddWitnessHostForClustersRequestType {config_spec, };
         let path = format!("/vsan/VimClusterVsanVcStretchedClusterSystem/{moId}/VsanVcAddWitnessHostForClusters", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// This API is used to convert a traditional vSAN cluster to
     /// vSAN stretched cluster.
@@ -283,8 +287,10 @@ impl VimClusterVsanVcStretchedClusterSystem {
     pub async fn vsan_vc_convert_to_stretched_cluster(&self, cluster: &crate::types::structs::ManagedObjectReference, fault_domain_config: &crate::types::structs::VimClusterVsanStretchedClusterFaultDomainConfig, witness_host: &crate::types::structs::ManagedObjectReference, preferred_fd: &str, disk_mapping: Option<&crate::types::structs::VsanHostDiskMapping>, storage_pool_spec: Option<&crate::types::structs::VsanAddStoragePoolDiskSpec>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanVcConvertToStretchedClusterRequestType {cluster, fault_domain_config, witness_host, preferred_fd, disk_mapping, storage_pool_spec, };
         let path = format!("/vsan/VimClusterVsanVcStretchedClusterSystem/{moId}/VSANVcConvertToStretchedCluster", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Query configuration of preferred Fault Domain of specified cluster.
     /// 
@@ -317,8 +323,12 @@ impl VimClusterVsanVcStretchedClusterSystem {
     pub async fn vsan_vc_get_preferred_fault_domain(&self, cluster: &crate::types::structs::ManagedObjectReference) -> Result<Option<crate::types::structs::VimClusterVsanPreferredFaultDomainInfo>> {
         let input = VsanVcGetPreferredFaultDomainRequestType {cluster, };
         let path = format!("/vsan/VimClusterVsanVcStretchedClusterSystem/{moId}/VSANVcGetPreferredFaultDomain", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::VimClusterVsanPreferredFaultDomainInfo>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Query witness host configuration of specified cluster.
     ///
@@ -349,8 +359,12 @@ impl VimClusterVsanVcStretchedClusterSystem {
     pub async fn vsan_vc_get_witness_hosts(&self, cluster: &crate::types::structs::ManagedObjectReference) -> Result<Option<Vec<crate::types::structs::VimClusterVsanWitnessHostInfo>>> {
         let input = VsanVcGetWitnessHostsRequestType {cluster, };
         let path = format!("/vsan/VimClusterVsanVcStretchedClusterSystem/{moId}/VSANVcGetWitnessHosts", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VimClusterVsanWitnessHostInfo>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Check whether specified host is a witness host.
     ///
@@ -374,8 +388,10 @@ impl VimClusterVsanVcStretchedClusterSystem {
     pub async fn vsan_vc_is_witness_host(&self, host: &crate::types::structs::ManagedObjectReference) -> Result<bool> {
         let input = VsanVcIsWitnessHostRequestType {host, };
         let path = format!("/vsan/VimClusterVsanVcStretchedClusterSystem/{moId}/VSANVcIsWitnessHost", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: bool = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Return whether the host is a virtual appliance witness host
     /// for stretched cluster
@@ -402,8 +418,12 @@ impl VimClusterVsanVcStretchedClusterSystem {
     pub async fn vsan_is_witness_virtual_appliance(&self, hosts: &[crate::types::structs::ManagedObjectReference]) -> Result<Option<Vec<crate::types::structs::VsanHostVirtualApplianceInfo>>> {
         let input = VsanIsWitnessVirtualApplianceRequestType {hosts, };
         let path = format!("/vsan/VimClusterVsanVcStretchedClusterSystem/{moId}/VSANIsWitnessVirtualAppliance", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VsanHostVirtualApplianceInfo>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Query whether a given host could be used as shared witness for a group of
     /// specified ROBO clusters.
@@ -451,8 +471,10 @@ impl VimClusterVsanVcStretchedClusterSystem {
     pub async fn query_shared_witness_compatibility(&self, shared_witness_host: &crate::types::structs::ManagedObjectReference, robo_clusters: &[crate::types::structs::ManagedObjectReference]) -> Result<crate::types::structs::VsanSharedWitnessCompatibilityResult> {
         let input = QuerySharedWitnessCompatibilityRequestType {shared_witness_host, robo_clusters, };
         let path = format!("/vsan/VimClusterVsanVcStretchedClusterSystem/{moId}/QuerySharedWitnessCompatibility", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::VsanSharedWitnessCompatibilityResult = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Query cluster runtime information for each cluster associated to given
     /// witness host.
@@ -485,8 +507,12 @@ impl VimClusterVsanVcStretchedClusterSystem {
     pub async fn query_shared_witness_cluster_info(&self, witness_host: &crate::types::structs::ManagedObjectReference, skip_components_count: Option<bool>) -> Result<Option<Vec<crate::types::structs::ClusterRuntimeInfo>>> {
         let input = QuerySharedWitnessClusterInfoRequestType {witness_host, skip_components_count, };
         let path = format!("/vsan/VimClusterVsanVcStretchedClusterSystem/{moId}/QuerySharedWitnessClusterInfo", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ClusterRuntimeInfo>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Remove witness host from the vSAN stretched cluster to disable
     /// vSAN stretched cluster.
@@ -544,8 +570,10 @@ impl VimClusterVsanVcStretchedClusterSystem {
     pub async fn vsan_vc_remove_witness_host(&self, cluster: &crate::types::structs::ManagedObjectReference, witness_host: Option<&crate::types::structs::ManagedObjectReference>, witness_address: Option<&str>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanVcRemoveWitnessHostRequestType {cluster, witness_host, witness_address, };
         let path = format!("/vsan/VimClusterVsanVcStretchedClusterSystem/{moId}/VSANVcRemoveWitnessHost", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Replace witness host for all specified vSAN stretched clusters.
     /// 
@@ -608,8 +636,10 @@ impl VimClusterVsanVcStretchedClusterSystem {
     pub async fn vsan_vc_replace_witness_host_for_clusters(&self, config_spec: &crate::types::structs::VsanVcStretchedClusterConfigSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanVcReplaceWitnessHostForClustersRequestType {config_spec, };
         let path = format!("/vsan/VimClusterVsanVcStretchedClusterSystem/{moId}/VsanVcReplaceWitnessHostForClusters", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Query hosts' capabilities of supporting vSAN stretched cluster,
     /// which reside in specified cluster, to decide whether specified cluster
@@ -652,8 +682,12 @@ impl VimClusterVsanVcStretchedClusterSystem {
     pub async fn vsan_vc_retrieve_stretched_cluster_vc_capability(&self, cluster: &crate::types::structs::ManagedObjectReference, verify_all_connected: Option<bool>) -> Result<Option<Vec<crate::types::structs::VimClusterVsanStretchedClusterCapability>>> {
         let input = VsanVcRetrieveStretchedClusterVcCapabilityRequestType {cluster, verify_all_connected, };
         let path = format!("/vsan/VimClusterVsanVcStretchedClusterSystem/{moId}/VSANVcRetrieveStretchedClusterVcCapability", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VimClusterVsanStretchedClusterCapability>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Set preferred Fault Domain for a vSAN stretched cluster.
     /// 
@@ -693,8 +727,10 @@ impl VimClusterVsanVcStretchedClusterSystem {
     pub async fn vsan_vc_set_preferred_fault_domain(&self, cluster: &crate::types::structs::ManagedObjectReference, preferred_fd: &str, witness_host: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanVcSetPreferredFaultDomainRequestType {cluster, preferred_fd, witness_host, };
         let path = format!("/vsan/VimClusterVsanVcStretchedClusterSystem/{moId}/VSANVcSetPreferredFaultDomain", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
 }
 #[derive(serde::Serialize)]

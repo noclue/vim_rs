@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// Interface to manage virtual storage object on a vCenter.
 /// 
 /// VStorageObjectManager and SPBM policy support:
@@ -11,11 +11,11 @@ use crate::core::client::{Client, Result};
 /// compliance result.
 #[derive(Clone)]
 pub struct VslmVStorageObjectManager {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl VslmVStorageObjectManager {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -96,8 +96,10 @@ impl VslmVStorageObjectManager {
     pub async fn vslm_attach_disk_task(&self, id: &crate::types::structs::Id, vm: &crate::types::structs::ManagedObjectReference, controller_key: Option<i32>, unit_number: Option<i32>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VslmAttachDiskRequestType {id, vm, controller_key, unit_number, };
         let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmAttachDisk_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Attach a tag to a virtual storage object.
     /// 
@@ -123,7 +125,7 @@ impl VslmVStorageObjectManager {
     pub async fn vslm_attach_tag_to_v_storage_object(&self, id: &crate::types::structs::Id, category: &str, tag: &str) -> Result<()> {
         let input = VslmAttachTagToVStorageObjectRequestType {id, category, tag, };
         let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmAttachTagToVStorageObject", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Clear control flags on VStorageObject.
@@ -159,7 +161,7 @@ impl VslmVStorageObjectManager {
     pub async fn vslm_clear_v_storage_object_control_flags(&self, id: &crate::types::structs::Id, control_flags: Option<&[String]>) -> Result<()> {
         let input = VslmClearVStorageObjectControlFlagsRequestType {id, control_flags, };
         let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmClearVStorageObjectControlFlags", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Clone a virtual storage object.
@@ -199,8 +201,10 @@ impl VslmVStorageObjectManager {
     pub async fn vslm_clone_v_storage_object_task(&self, id: &crate::types::structs::Id, spec: &crate::types::structs::VslmCloneSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VslmCloneVStorageObjectRequestType {id, spec, };
         let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmCloneVStorageObject_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Create a virtual disk, which is a storage object with
     /// *disk*
@@ -243,8 +247,10 @@ impl VslmVStorageObjectManager {
     pub async fn vslm_create_disk_task(&self, spec: &crate::types::structs::VslmCreateSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VslmCreateDiskRequestType {spec, };
         let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmCreateDisk_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Creates a new Disk from given snapshot of a VStorageObject.
     /// 
@@ -298,8 +304,10 @@ impl VslmVStorageObjectManager {
     pub async fn vslm_create_disk_from_snapshot_task(&self, id: &crate::types::structs::Id, snapshot_id: &crate::types::structs::Id, name: &str, profile: Option<&[Box<dyn crate::types::traits::VirtualMachineProfileSpecTrait>]>, crypto: Option<&dyn crate::types::traits::CryptoSpecTrait>, path: Option<&str>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VslmCreateDiskFromSnapshotRequestType {id, snapshot_id, name, profile, crypto, path, };
         let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmCreateDiskFromSnapshot_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Creates a snapshot of a given VStorageObject.
     /// 
@@ -333,8 +341,10 @@ impl VslmVStorageObjectManager {
     pub async fn vslm_create_snapshot_task(&self, id: &crate::types::structs::Id, description: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VslmCreateSnapshotRequestType {id, description, };
         let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmCreateSnapshot_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deletes a given snapshot of a VStorageObject.
     /// 
@@ -368,8 +378,10 @@ impl VslmVStorageObjectManager {
     pub async fn vslm_delete_snapshot_task(&self, id: &crate::types::structs::Id, snapshot_id: &crate::types::structs::Id) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VslmDeleteSnapshotRequestType {id, snapshot_id, };
         let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmDeleteSnapshot_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Delete a virtual storage object and its associated backings.
     /// 
@@ -417,8 +429,10 @@ impl VslmVStorageObjectManager {
     pub async fn vslm_delete_v_storage_object_task(&self, id: &crate::types::structs::Id) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VslmDeleteVStorageObjectRequestType {id, };
         let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmDeleteVStorageObject_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Detach a tag from a virtual storage object.
     /// 
@@ -444,7 +458,7 @@ impl VslmVStorageObjectManager {
     pub async fn vslm_detach_tag_from_v_storage_object(&self, id: &crate::types::structs::Id, category: &str, tag: &str) -> Result<()> {
         let input = VslmDetachTagFromVStorageObjectRequestType {id, category, tag, };
         let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmDetachTagFromVStorageObject", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Expand the capacity of a virtual disk, which is a storage object with
@@ -501,8 +515,10 @@ impl VslmVStorageObjectManager {
     pub async fn vslm_extend_disk_task(&self, id: &crate::types::structs::Id, new_capacity_in_mb: i64) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VslmExtendDiskRequestType {id, new_capacity_in_mb, };
         let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmExtendDisk_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Inflate a sparse or thin-provisioned virtual disk up to the full size.
     /// 
@@ -548,8 +564,10 @@ impl VslmVStorageObjectManager {
     pub async fn vslm_inflate_disk_task(&self, id: &crate::types::structs::Id) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VslmInflateDiskRequestType {id, };
         let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmInflateDisk_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Lists all tags attached to virtual storage object.
     ///
@@ -571,8 +589,12 @@ impl VslmVStorageObjectManager {
     pub async fn vslm_list_tags_attached_to_v_storage_object(&self, id: &crate::types::structs::Id) -> Result<Option<Vec<crate::types::structs::VslmTagEntry>>> {
         let input = VslmListTagsAttachedToVStorageObjectRequestType {id, };
         let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmListTagsAttachedToVStorageObject", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VslmTagEntry>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Lists all virtual storage objects attached to the tag.
     ///
@@ -596,8 +618,12 @@ impl VslmVStorageObjectManager {
     pub async fn vslm_list_v_storage_objects_attached_to_tag(&self, category: &str, tag: &str) -> Result<Option<Vec<crate::types::structs::Id>>> {
         let input = VslmListVStorageObjectsAttachedToTagRequestType {category, tag, };
         let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmListVStorageObjectsAttachedToTag", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::Id>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// List virtual storage objects matching all the
     /// *VslmVsoVStorageObjectQuerySpec*.
@@ -632,8 +658,12 @@ impl VslmVStorageObjectManager {
     pub async fn vslm_list_v_storage_object_for_spec(&self, query: Option<&[crate::types::structs::VslmVsoVStorageObjectQuerySpec]>, max_result: i32) -> Result<Option<crate::types::structs::VslmVsoVStorageObjectQueryResult>> {
         let input = VslmListVStorageObjectForSpecRequestType {query, max_result, };
         let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmListVStorageObjectForSpec", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::VslmVsoVStorageObjectQueryResult>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Get a list of areas of a virtual disk that have been modified since a
     /// well-defined point in the past.
@@ -699,8 +729,10 @@ impl VslmVStorageObjectManager {
     pub async fn vslm_query_changed_disk_areas(&self, id: &crate::types::structs::Id, snapshot_id: &crate::types::structs::Id, start_offset: i64, change_id: &str) -> Result<crate::types::structs::DiskChangeInfo> {
         let input = VslmQueryChangedDiskAreasRequestType {id, snapshot_id, start_offset, change_id, };
         let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmQueryChangedDiskAreas", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::DiskChangeInfo = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Gets the synchronization status of the Global Catalog.
     /// 
@@ -713,7 +745,11 @@ impl VslmVStorageObjectManager {
     pub async fn vslm_query_global_catalog_sync_status(&self) -> Result<Option<Vec<crate::types::structs::VslmDatastoreSyncStatus>>> {
         let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmQueryGlobalCatalogSyncStatus", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VslmDatastoreSyncStatus>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Gets the synchronization state of the Global Catalog for the specified datastore.
     ///
@@ -734,8 +770,12 @@ impl VslmVStorageObjectManager {
     pub async fn vslm_query_global_catalog_sync_status_for_datastore(&self, datastore_url: &str) -> Result<Option<crate::types::structs::VslmDatastoreSyncStatus>> {
         let input = VslmQueryGlobalCatalogSyncStatusForDatastoreRequestType {datastore_url, };
         let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmQueryGlobalCatalogSyncStatusForDatastore", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::VslmDatastoreSyncStatus>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Reconcile the datastore inventory info of virtual storage objects.
     /// 
@@ -761,8 +801,10 @@ impl VslmVStorageObjectManager {
     pub async fn vslm_reconcile_datastore_inventory_task(&self, datastore: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VslmReconcileDatastoreInventoryRequestType {datastore, };
         let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmReconcileDatastoreInventory_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Promote a virtual disk to a First Class Disk.
     /// 
@@ -802,8 +844,10 @@ impl VslmVStorageObjectManager {
     pub async fn vslm_register_disk(&self, path: &str, name: Option<&str>) -> Result<crate::types::structs::VStorageObject> {
         let input = VslmRegisterDiskRequestType {path, name, };
         let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmRegisterDisk", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::VStorageObject = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Relocate a virtual storage object.
     /// 
@@ -845,8 +889,10 @@ impl VslmVStorageObjectManager {
     pub async fn vslm_relocate_v_storage_object_task(&self, id: &crate::types::structs::Id, spec: &crate::types::structs::VslmRelocateSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VslmRelocateVStorageObjectRequestType {id, spec, };
         let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmRelocateVStorageObject_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Rename a virtual storage object.
     /// 
@@ -887,7 +933,7 @@ impl VslmVStorageObjectManager {
     pub async fn vslm_rename_v_storage_object(&self, id: &crate::types::structs::Id, name: &str) -> Result<()> {
         let input = VslmRenameVStorageObjectRequestType {id, name, };
         let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmRenameVStorageObject", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Retrieves snapshot disk details of a given snapshot.
@@ -916,8 +962,10 @@ impl VslmVStorageObjectManager {
     pub async fn vslm_retrieve_snapshot_details(&self, id: &crate::types::structs::Id, snapshot_id: &crate::types::structs::Id) -> Result<crate::types::structs::VStorageObjectSnapshotDetails> {
         let input = VslmRetrieveSnapshotDetailsRequestType {id, snapshot_id, };
         let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmRetrieveSnapshotDetails", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::VStorageObjectSnapshotDetails = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Retrieves snapshot information of a given VStorageObject.
     /// 
@@ -944,8 +992,10 @@ impl VslmVStorageObjectManager {
     pub async fn vslm_retrieve_snapshot_info(&self, id: &crate::types::structs::Id) -> Result<crate::types::structs::VStorageObjectSnapshotInfo> {
         let input = VslmRetrieveSnapshotInfoRequestType {id, };
         let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmRetrieveSnapshotInfo", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::VStorageObjectSnapshotInfo = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Retrieve FCD infrastructure object SBPM policy on given datastore.
     /// 
@@ -978,8 +1028,12 @@ impl VslmVStorageObjectManager {
     pub async fn vslm_retrieve_v_storage_infrastructure_object_policy(&self, datastore: &crate::types::structs::ManagedObjectReference) -> Result<Option<Vec<crate::types::structs::VslmInfrastructureObjectPolicy>>> {
         let input = VslmRetrieveVStorageInfrastructureObjectPolicyRequestType {datastore, };
         let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmRetrieveVStorageInfrastructureObjectPolicy", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VslmInfrastructureObjectPolicy>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Retrieve a virtual storage object.
     /// 
@@ -1008,8 +1062,10 @@ impl VslmVStorageObjectManager {
     pub async fn vslm_retrieve_v_storage_object(&self, id: &crate::types::structs::Id) -> Result<crate::types::structs::VStorageObject> {
         let input = VslmRetrieveVStorageObjectRequestType {id, };
         let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmRetrieveVStorageObject", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::VStorageObject = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Retrieve vm associations for each virtual storage object in the query.
     ///
@@ -1025,8 +1081,12 @@ impl VslmVStorageObjectManager {
     pub async fn vslm_retrieve_v_storage_object_associations(&self, ids: Option<&[crate::types::structs::Id]>) -> Result<Option<Vec<crate::types::structs::VslmVsoVStorageObjectAssociations>>> {
         let input = VslmRetrieveVStorageObjectAssociationsRequestType {ids, };
         let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmRetrieveVStorageObjectAssociations", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VslmVsoVStorageObjectAssociations>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Retrieve metadata KV pairs from a virtual storage object.
     /// 
@@ -1062,8 +1122,12 @@ impl VslmVStorageObjectManager {
     pub async fn vslm_retrieve_v_storage_object_metadata(&self, id: &crate::types::structs::Id, snapshot_id: Option<&crate::types::structs::Id>, prefix: Option<&str>) -> Result<Option<Vec<crate::types::structs::KeyValue>>> {
         let input = VslmRetrieveVStorageObjectMetadataRequestType {id, snapshot_id, prefix, };
         let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmRetrieveVStorageObjectMetadata", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::KeyValue>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Retrieve the metadata value by key from a virtual storage object.
     /// 
@@ -1101,8 +1165,10 @@ impl VslmVStorageObjectManager {
     pub async fn vslm_retrieve_v_storage_object_metadata_value(&self, id: &crate::types::structs::Id, snapshot_id: Option<&crate::types::structs::Id>, key: &str) -> Result<String> {
         let input = VslmRetrieveVStorageObjectMetadataValueRequestType {id, snapshot_id, key, };
         let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmRetrieveVStorageObjectMetadataValue", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Retrieve a virtual storage object state.
     /// 
@@ -1132,8 +1198,10 @@ impl VslmVStorageObjectManager {
     pub async fn vslm_retrieve_v_storage_object_state(&self, id: &crate::types::structs::Id) -> Result<crate::types::structs::VStorageObjectStateInfo> {
         let input = VslmRetrieveVStorageObjectStateRequestType {id, };
         let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmRetrieveVStorageObjectState", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::VStorageObjectStateInfo = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Retrieves details of a list of virtual storage objects from cache.
     /// 
@@ -1153,8 +1221,12 @@ impl VslmVStorageObjectManager {
     pub async fn vslm_retrieve_v_storage_objects(&self, ids: Option<&[crate::types::structs::Id]>) -> Result<Option<Vec<crate::types::structs::VslmVsoVStorageObjectResult>>> {
         let input = VslmRetrieveVStorageObjectsRequestType {ids, };
         let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmRetrieveVStorageObjects", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VslmVsoVStorageObjectResult>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Reverts to a given snapshot of a VStorageObject.
     /// 
@@ -1205,8 +1277,10 @@ impl VslmVStorageObjectManager {
     pub async fn vslm_revert_v_storage_object_task(&self, id: &crate::types::structs::Id, snapshot_id: &crate::types::structs::Id) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VslmRevertVStorageObjectRequestType {id, snapshot_id, };
         let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmRevertVStorageObject_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Schedules reconcile of the inventory info of virtual storage objects on
     /// one of the hosts that is connected with the datastore.
@@ -1235,7 +1309,7 @@ impl VslmVStorageObjectManager {
     pub async fn vslm_schedule_reconcile_datastore_inventory(&self, datastore: &crate::types::structs::ManagedObjectReference) -> Result<()> {
         let input = VslmScheduleReconcileDatastoreInventoryRequestType {datastore, };
         let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmScheduleReconcileDatastoreInventory", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Set control flags on VStorageObject.
@@ -1271,7 +1345,7 @@ impl VslmVStorageObjectManager {
     pub async fn vslm_set_v_storage_object_control_flags(&self, id: &crate::types::structs::Id, control_flags: Option<&[String]>) -> Result<()> {
         let input = VslmSetVStorageObjectControlFlagsRequestType {id, control_flags, };
         let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmSetVStorageObjectControlFlags", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Assigns specified SBPM policy to the given FCD infrastructure object.
@@ -1308,8 +1382,10 @@ impl VslmVStorageObjectManager {
     pub async fn vslm_update_v_storage_infrastructure_object_policy_task(&self, spec: &crate::types::structs::VslmInfrastructureObjectPolicySpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VslmUpdateVStorageInfrastructureObjectPolicyRequestType {spec, };
         let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmUpdateVStorageInfrastructureObjectPolicy_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Update the storage crypto on a virtual storage object.
     /// 
@@ -1351,8 +1427,10 @@ impl VslmVStorageObjectManager {
     pub async fn vslm_update_vstorage_object_crypto_task(&self, id: &crate::types::structs::Id, profile: Option<&[Box<dyn crate::types::traits::VirtualMachineProfileSpecTrait>]>, disks_crypto: Option<&crate::types::structs::DiskCryptoSpec>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VslmUpdateVstorageObjectCryptoRequestType {id, profile, disks_crypto, };
         let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmUpdateVstorageObjectCrypto_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Update metadata KV pairs to a virtual storage object.
     /// 
@@ -1403,8 +1481,10 @@ impl VslmVStorageObjectManager {
     pub async fn vslm_update_v_storage_object_metadata_task(&self, id: &crate::types::structs::Id, metadata: Option<&[crate::types::structs::KeyValue]>, delete_keys: Option<&[String]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VslmUpdateVStorageObjectMetadataRequestType {id, metadata, delete_keys, };
         let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmUpdateVStorageObjectMetadata_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Update the storage policy on a virtual storage object.
     /// 
@@ -1443,8 +1523,10 @@ impl VslmVStorageObjectManager {
     pub async fn vslm_update_vstorage_object_policy_task(&self, id: &crate::types::structs::Id, profile: Option<&[Box<dyn crate::types::traits::VirtualMachineProfileSpecTrait>]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VslmUpdateVstorageObjectPolicyRequestType {id, profile, };
         let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmUpdateVstorageObjectPolicy_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
 }
 #[derive(serde::Serialize)]

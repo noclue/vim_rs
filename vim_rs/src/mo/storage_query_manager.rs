@@ -1,14 +1,14 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// This managed object is used to query vCenter Server's storage system
 /// entities.
 #[derive(Clone)]
 pub struct StorageQueryManager {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl StorageQueryManager {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -36,8 +36,12 @@ impl StorageQueryManager {
     pub async fn query_hosts_with_attached_lun(&self, lun_uuid: &str) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let input = QueryHostsWithAttachedLunRequestType {lun_uuid, };
         let path = format!("/StorageQueryManager/{moId}/QueryHostsWithAttachedLun", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
 }
 #[derive(serde::Serialize)]

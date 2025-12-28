@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// The ServiceManager managed object is a singleton object that is used to present
 /// services that are optional and not necessarily formally defined.
 /// 
@@ -10,11 +10,11 @@ use crate::core::client::{Client, Result};
 /// is interested in using.
 #[derive(Clone)]
 pub struct ServiceManager {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl ServiceManager {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -40,8 +40,12 @@ impl ServiceManager {
     pub async fn query_service_list(&self, service_name: Option<&str>, location: Option<&[String]>) -> Result<Option<Vec<crate::types::structs::ServiceManagerServiceInfo>>> {
         let input = QueryServiceListRequestType {service_name, location, };
         let path = format!("/ServiceManager/{moId}/QueryServiceList", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ServiceManagerServiceInfo>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// The full list of services available in this directory.
     /// 
@@ -49,7 +53,11 @@ impl ServiceManager {
     pub async fn service(&self) -> Result<Option<Vec<crate::types::structs::ServiceManagerServiceInfo>>> {
         let path = format!("/ServiceManager/{moId}/service", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ServiceManagerServiceInfo>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
 }
 #[derive(serde::Serialize)]

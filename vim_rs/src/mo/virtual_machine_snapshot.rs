@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// The Snapshot managed object type specifies the interface to individual snapshots
 /// of a virtual machine.
 /// 
@@ -7,11 +7,11 @@ use crate::core::client::{Client, Result};
 /// their virtual machine.
 #[derive(Clone)]
 pub struct VirtualMachineSnapshot {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl VirtualMachineSnapshot {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -47,7 +47,9 @@ impl VirtualMachineSnapshot {
     pub async fn export_snapshot(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/VirtualMachineSnapshot/{moId}/ExportSnapshot", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Removes this snapshot and deletes any associated storage.
     /// 
@@ -75,8 +77,10 @@ impl VirtualMachineSnapshot {
     pub async fn remove_snapshot_task(&self, remove_children: bool, consolidate: Option<bool>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RemoveSnapshotRequestType {remove_children, consolidate, };
         let path = format!("/VirtualMachineSnapshot/{moId}/RemoveSnapshot_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Rename this snapshot with either a new name or a new description or both.
     /// 
@@ -109,7 +113,7 @@ impl VirtualMachineSnapshot {
     pub async fn rename_snapshot(&self, name: Option<&str>, description: Option<&str>) -> Result<()> {
         let input = RenameSnapshotRequestType {name, description, };
         let path = format!("/VirtualMachineSnapshot/{moId}/RenameSnapshot", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Change the execution state of the virtual machine to the state of this snapshot.
@@ -169,8 +173,10 @@ impl VirtualMachineSnapshot {
     pub async fn revert_to_snapshot_task(&self, host: Option<&crate::types::structs::ManagedObjectReference>, suppress_power_on: Option<bool>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RevertToSnapshotRequestType {host, suppress_power_on, };
         let path = format!("/VirtualMachineSnapshot/{moId}/RevertToSnapshot_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Assigns a value to a custom field.
     /// 
@@ -189,7 +195,7 @@ impl VirtualMachineSnapshot {
     pub async fn set_custom_value(&self, key: &str, value: &str) -> Result<()> {
         let input = SetCustomValueRequestType {key, value, };
         let path = format!("/VirtualMachineSnapshot/{moId}/setCustomValue", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// List of custom field definitions that are valid for the object's type.
@@ -200,7 +206,11 @@ impl VirtualMachineSnapshot {
     pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
         let path = format!("/VirtualMachineSnapshot/{moId}/availableField", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::CustomFieldDef>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// All snapshots for which this snapshot is the parent.
     ///
@@ -210,7 +220,11 @@ impl VirtualMachineSnapshot {
     pub async fn child_snapshot(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/VirtualMachineSnapshot/{moId}/childSnapshot", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Information about the configuration of this virtual machine when this snapshot was
     /// taken.
@@ -221,7 +235,9 @@ impl VirtualMachineSnapshot {
     pub async fn config(&self) -> Result<crate::types::structs::VirtualMachineConfigInfo> {
         let path = format!("/VirtualMachineSnapshot/{moId}/config", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::VirtualMachineConfigInfo = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// List of custom field values.
     /// 
@@ -233,7 +249,11 @@ impl VirtualMachineSnapshot {
     pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/VirtualMachineSnapshot/{moId}/value", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// The virtual machine for which the snapshot was taken.
     ///
@@ -243,7 +263,9 @@ impl VirtualMachineSnapshot {
     pub async fn vm(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/VirtualMachineSnapshot/{moId}/vm", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
 }
 #[derive(serde::Serialize)]

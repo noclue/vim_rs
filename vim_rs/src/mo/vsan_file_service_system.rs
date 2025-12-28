@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// This managed object type provides the file service related configuration
 /// and query APIs.
 /// 
@@ -8,11 +8,11 @@ use crate::core::client::{Client, Result};
 /// of 'vsan-file-service-system' on ESXi host for the detailed operation.
 #[derive(Clone)]
 pub struct VsanFileServiceSystem {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl VsanFileServiceSystem {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -62,8 +62,10 @@ impl VsanFileServiceSystem {
     pub async fn vsan_cluster_create_fs_domain(&self, domain_config: &crate::types::structs::VsanFileServiceDomainConfig, cluster: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanClusterCreateFsDomainRequestType {domain_config, cluster, };
         let path = format!("/vsan/VsanFileServiceSystem/{moId}/VsanClusterCreateFsDomain", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Creates a file share in this vSAN cluster.
     ///
@@ -101,8 +103,10 @@ impl VsanFileServiceSystem {
     pub async fn vsan_create_file_share(&self, config: &crate::types::structs::VsanFileShareConfig, cluster: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanCreateFileShareRequestType {config, cluster, };
         let path = format!("/vsan/VsanFileServiceSystem/{moId}/VsanCreateFileShare", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Create a snapshot for a file share in this vSAN cluster.
     ///
@@ -135,8 +139,10 @@ impl VsanFileServiceSystem {
     pub async fn vsan_cluster_create_share_snapshot(&self, config: &crate::types::structs::VsanFileShareSnapshotConfig, cluster: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanClusterCreateShareSnapshotRequestType {config, cluster, };
         let path = format!("/vsan/VsanFileServiceSystem/{moId}/VsanClusterCreateShareSnapshot", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Downloads a file service OVF file of the specified version from VMware
     /// website and install it to the OVF repository in vCenter.
@@ -162,8 +168,10 @@ impl VsanFileServiceSystem {
     pub async fn vsan_download_file_service_ovf(&self, download_url: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanDownloadFileServiceOvfRequestType {download_url, };
         let path = format!("/vsan/VsanFileServiceSystem/{moId}/VsanDownloadFileServiceOvf", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Find a compatible vSAN File Service OVF download URL for the target cluster.
     /// 
@@ -186,8 +194,10 @@ impl VsanFileServiceSystem {
     pub async fn vsan_find_ovf_download_url(&self, cluster: &crate::types::structs::ManagedObjectReference) -> Result<String> {
         let input = VsanFindOvfDownloadUrlRequestType {cluster, };
         let path = format!("/vsan/VsanFileServiceSystem/{moId}/VsanFindOvfDownloadUrl", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Perform a preflight check on a cluster for enabling vSAN file service
     /// and/or for the new file service domain configuration.
@@ -244,8 +254,10 @@ impl VsanFileServiceSystem {
     pub async fn vsan_perform_file_service_enable_preflight_check(&self, cluster: &crate::types::structs::ManagedObjectReference, domain_config: Option<&crate::types::structs::VsanFileServiceDomainConfig>, network: Option<&crate::types::structs::ManagedObjectReference>, scope: Option<&str>, domain_uuid: Option<&str>) -> Result<crate::types::structs::VsanFileServicePreflightCheckResult> {
         let input = VsanPerformFileServiceEnablePreflightCheckRequestType {cluster, domain_config, network, scope, domain_uuid, };
         let path = format!("/vsan/VsanFileServiceSystem/{moId}/VsanPerformFileServiceEnablePreflightCheck", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::VsanFileServicePreflightCheckResult = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Lists all file service domains in the vSAN cluster.
     /// 
@@ -279,8 +291,12 @@ impl VsanFileServiceSystem {
     pub async fn vsan_cluster_query_fs_domains(&self, query_spec: Option<&crate::types::structs::VsanFileServiceDomainQuerySpec>, cluster: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Option<Vec<crate::types::structs::VsanFileServiceDomain>>> {
         let input = VsanClusterQueryFsDomainsRequestType {query_spec, cluster, };
         let path = format!("/vsan/VsanFileServiceSystem/{moId}/VsanClusterQueryFsDomains", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VsanFileServiceDomain>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Lists all available vSAN File Service OVF in this vCenter.
     /// 
@@ -292,7 +308,11 @@ impl VsanFileServiceSystem {
     pub async fn vsan_query_file_service_ovfs(&self) -> Result<Option<Vec<crate::types::structs::VsanFileServiceOvfSpec>>> {
         let path = format!("/vsan/VsanFileServiceSystem/{moId}/VsanQueryFileServiceOvfs", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VsanFileServiceOvfSpec>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// List all the snapshots that match the query spec.
     ///
@@ -322,8 +342,12 @@ impl VsanFileServiceSystem {
     pub async fn vsan_cluster_query_share_snapshots(&self, query_spec: &crate::types::structs::VsanFileShareSnapshotQuerySpec, cluster: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Option<crate::types::structs::VsanFileShareSnapshotQueryResult>> {
         let input = VsanClusterQueryShareSnapshotsRequestType {query_spec, cluster, };
         let path = format!("/vsan/VsanFileServiceSystem/{moId}/VsanClusterQueryShareSnapshots", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::VsanFileShareSnapshotQueryResult>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Lists all file shares in the domain.
     /// 
@@ -361,8 +385,12 @@ impl VsanFileServiceSystem {
     pub async fn vsan_cluster_query_file_shares(&self, query_spec: &crate::types::structs::VsanFileShareQuerySpec, cluster: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Option<crate::types::structs::FileShareQueryResult>> {
         let input = VsanClusterQueryFileSharesRequestType {query_spec, cluster, };
         let path = format!("/vsan/VsanFileServiceSystem/{moId}/VsanClusterQueryFileShares", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::FileShareQueryResult>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// This API is to rebalance file service in cluster.
     /// 
@@ -383,8 +411,10 @@ impl VsanFileServiceSystem {
     pub async fn vsan_rebalance_file_service(&self, cluster: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanRebalanceFileServiceRequestType {cluster, };
         let path = format!("/vsan/VsanFileServiceSystem/{moId}/VsanRebalanceFileService", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Updates a file service domain in the vSAN cluster.
     ///
@@ -436,8 +466,10 @@ impl VsanFileServiceSystem {
     pub async fn vsan_cluster_reconfigure_fs_domain(&self, domain_uuid: &str, domain_config: &crate::types::structs::VsanFileServiceDomainConfig, cluster: Option<&crate::types::structs::ManagedObjectReference>, delete_domain_config_fields: Option<&[String]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanClusterReconfigureFsDomainRequestType {domain_uuid, domain_config, cluster, delete_domain_config_fields, };
         let path = format!("/vsan/VsanFileServiceSystem/{moId}/VsanClusterReconfigureFsDomain", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Reconfigures a file share in this vSAN cluster.
     /// 
@@ -489,8 +521,10 @@ impl VsanFileServiceSystem {
     pub async fn vsan_reconfigure_file_share(&self, share_uuid: &str, config: &crate::types::structs::VsanFileShareConfig, cluster: Option<&crate::types::structs::ManagedObjectReference>, delete_label_keys: Option<&[String]>, force: Option<bool>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanReconfigureFileShareRequestType {share_uuid, config, cluster, delete_label_keys, force, };
         let path = format!("/vsan/VsanFileServiceSystem/{moId}/VsanReconfigureFileShare", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Removes a file service domain in the vSAN cluster.
     /// 
@@ -526,8 +560,10 @@ impl VsanFileServiceSystem {
     pub async fn vsan_cluster_remove_fs_domain(&self, domain_uuid: &str, cluster: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanClusterRemoveFsDomainRequestType {domain_uuid, cluster, };
         let path = format!("/vsan/VsanFileServiceSystem/{moId}/VsanClusterRemoveFsDomain", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Removes a file share in the domain.
     ///
@@ -564,8 +600,10 @@ impl VsanFileServiceSystem {
     pub async fn vsan_cluster_remove_share(&self, share_uuid: &str, cluster: Option<&crate::types::structs::ManagedObjectReference>, force: Option<bool>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanClusterRemoveShareRequestType {share_uuid, cluster, force, };
         let path = format!("/vsan/VsanFileServiceSystem/{moId}/VsanClusterRemoveShare", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Remove a snapshot of a file share in this vSAN cluster.
     /// 
@@ -604,8 +642,10 @@ impl VsanFileServiceSystem {
     pub async fn vsan_cluster_remove_share_snapshot(&self, share_uuid: &str, snapshot_name: &str, cluster: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanClusterRemoveShareSnapshotRequestType {share_uuid, snapshot_name, cluster, };
         let path = format!("/vsan/VsanFileServiceSystem/{moId}/VsanClusterRemoveShareSnapshot", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Upgrade FSVM to latest ovf that is compatible with cluster's host version.
     /// 
@@ -635,8 +675,10 @@ impl VsanFileServiceSystem {
     pub async fn vsan_upgrade_fsvm(&self, cluster: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanUpgradeFsvmRequestType {cluster, };
         let path = format!("/vsan/VsanFileServiceSystem/{moId}/VsanUpgradeFsvm", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
 }
 #[derive(serde::Serialize)]

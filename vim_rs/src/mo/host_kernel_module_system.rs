@@ -1,14 +1,14 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// The KernelModuleSystem managed object controls the configuration
 /// of kernel modules on the host.
 #[derive(Clone)]
 pub struct HostKernelModuleSystem {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl HostKernelModuleSystem {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -36,8 +36,10 @@ impl HostKernelModuleSystem {
     pub async fn query_configured_module_option_string(&self, name: &str) -> Result<String> {
         let input = QueryConfiguredModuleOptionStringRequestType {name, };
         let path = format!("/HostKernelModuleSystem/{moId}/QueryConfiguredModuleOptionString", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Query the set of modules on the host.
     /// 
@@ -45,7 +47,11 @@ impl HostKernelModuleSystem {
     pub async fn query_modules(&self) -> Result<Option<Vec<crate::types::structs::KernelModuleInfo>>> {
         let path = format!("/HostKernelModuleSystem/{moId}/QueryModules", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::KernelModuleInfo>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Specifies the options to be passed to the kernel module when loaded.
     /// 
@@ -66,7 +72,7 @@ impl HostKernelModuleSystem {
     pub async fn update_module_option_string(&self, name: &str, options: &str) -> Result<()> {
         let input = UpdateModuleOptionStringRequestType {name, options, };
         let path = format!("/HostKernelModuleSystem/{moId}/UpdateModuleOptionString", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
 }

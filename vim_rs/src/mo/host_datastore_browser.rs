@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// The DatastoreBrowser managed object type provides access to the contents of one or
 /// more datastores.
 /// 
@@ -59,11 +59,11 @@ use crate::core::client::{Client, Result};
 /// See also *FileInfo*.
 #[derive(Clone)]
 pub struct HostDatastoreBrowser {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl HostDatastoreBrowser {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -97,7 +97,7 @@ impl HostDatastoreBrowser {
     pub async fn delete_file(&self, datastore_path: &str) -> Result<()> {
         let input = DeleteFileRequestType {datastore_path, };
         let path = format!("/HostDatastoreBrowser/{moId}/DeleteFile", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Returns the information for the files that match the given search criteria as a
@@ -138,8 +138,10 @@ impl HostDatastoreBrowser {
     pub async fn search_datastore_task(&self, datastore_path: &str, search_spec: Option<&crate::types::structs::HostDatastoreBrowserSearchSpec>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = SearchDatastoreRequestType {datastore_path, search_spec, };
         let path = format!("/HostDatastoreBrowser/{moId}/SearchDatastore_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Returns the information for the files that match the given search criteria as a
     /// SearchResults\[\] object.
@@ -177,8 +179,10 @@ impl HostDatastoreBrowser {
     pub async fn search_datastore_sub_folders_task(&self, datastore_path: &str, search_spec: Option<&crate::types::structs::HostDatastoreBrowserSearchSpec>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = SearchDatastoreSubFoldersRequestType {datastore_path, search_spec, };
         let path = format!("/HostDatastoreBrowser/{moId}/SearchDatastoreSubFolders_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Set of datastores that can be searched on this DatastoreBrowser.
     /// 
@@ -195,7 +199,11 @@ impl HostDatastoreBrowser {
     pub async fn datastore(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/HostDatastoreBrowser/{moId}/datastore", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// The list of supported file types.
     /// 
@@ -214,7 +222,11 @@ impl HostDatastoreBrowser {
     pub async fn supported_type(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::FileQueryTrait>>>> {
         let path = format!("/HostDatastoreBrowser/{moId}/supportedType", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::FileQueryTrait>>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
 }
 #[derive(serde::Serialize)]

@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// Managed object used to control direct access to the host.
 /// 
 /// This should be used to control users and privileges on the host directly,
@@ -8,11 +8,11 @@ use crate::core::client::{Client, Result};
 /// See *AuthorizationManager* for more information on permissions.
 #[derive(Clone)]
 pub struct HostAccessManager {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl HostAccessManager {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -57,7 +57,7 @@ impl HostAccessManager {
     pub async fn change_access_mode(&self, principal: &str, is_group: bool, access_mode: crate::types::enums::HostAccessModeEnum) -> Result<()> {
         let input = ChangeAccessModeRequestType {principal, is_group, access_mode, };
         let path = format!("/HostAccessManager/{moId}/ChangeAccessMode", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Changes the lockdown state of the ESXi host.
@@ -127,7 +127,7 @@ impl HostAccessManager {
     pub async fn change_lockdown_mode(&self, mode: crate::types::enums::HostLockdownModeEnum) -> Result<()> {
         let input = ChangeLockdownModeRequestType {mode, };
         let path = format!("/HostAccessManager/{moId}/ChangeLockdownMode", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Get the list of users which are exceptions for lockdown mode.
@@ -143,7 +143,11 @@ impl HostAccessManager {
     pub async fn query_lockdown_exceptions(&self) -> Result<Option<Vec<String>>> {
         let path = format!("/HostAccessManager/{moId}/QueryLockdownExceptions", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<String>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Get the list of local system users.
     /// 
@@ -163,7 +167,11 @@ impl HostAccessManager {
     pub async fn query_system_users(&self) -> Result<Option<Vec<String>>> {
         let path = format!("/HostAccessManager/{moId}/QuerySystemUsers", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<String>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Retrieve access entries.
     /// 
@@ -179,7 +187,11 @@ impl HostAccessManager {
     pub async fn retrieve_host_access_control_entries(&self) -> Result<Option<Vec<crate::types::structs::HostAccessControlEntry>>> {
         let path = format!("/HostAccessManager/{moId}/RetrieveHostAccessControlEntries", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::HostAccessControlEntry>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Update the list of users which are exceptions for lockdown mode.
     /// 
@@ -214,7 +226,7 @@ impl HostAccessManager {
     pub async fn update_lockdown_exceptions(&self, users: Option<&[String]>) -> Result<()> {
         let input = UpdateLockdownExceptionsRequestType {users, };
         let path = format!("/HostAccessManager/{moId}/UpdateLockdownExceptions", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Update the list of local system users.
@@ -238,7 +250,7 @@ impl HostAccessManager {
     pub async fn update_system_users(&self, users: Option<&[String]>) -> Result<()> {
         let input = UpdateSystemUsersRequestType {users, };
         let path = format!("/HostAccessManager/{moId}/UpdateSystemUsers", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Current lockdown state of the host.
@@ -247,7 +259,9 @@ impl HostAccessManager {
     pub async fn lockdown_mode(&self) -> Result<crate::types::enums::HostLockdownModeEnum> {
         let path = format!("/HostAccessManager/{moId}/lockdownMode", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::enums::HostLockdownModeEnum = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
 }
 #[derive(serde::Serialize)]

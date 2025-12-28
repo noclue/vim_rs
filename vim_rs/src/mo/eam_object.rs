@@ -1,16 +1,16 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// Deprecated as of vSphere 9.0. Please refer to vLCM APIs.
 /// 
 /// Base class for the <code>Agent</code>, <code>Agency</code> and
 /// <code>EsxAgentManager</code> classes.
 #[derive(Clone)]
 pub struct EamObject {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl EamObject {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -37,8 +37,12 @@ impl EamObject {
     pub async fn query_issue(&self, issue_key: Option<&[i32]>) -> Result<Option<Vec<Box<dyn crate::types::traits::IssueTrait>>>> {
         let input = QueryIssueRequestType {issue_key, };
         let path = format!("/eam/EamObject/{moId}/QueryIssue", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::IssueTrait>>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Resolves the issues specified in the input.
     /// 
@@ -65,8 +69,12 @@ impl EamObject {
     pub async fn resolve(&self, issue_key: &[i32]) -> Result<Option<Vec<i32>>> {
         let input = ResolveRequestType {issue_key, };
         let path = format!("/eam/EamObject/{moId}/Resolve", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<i32>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Resolve all outstanding issues.
     /// 

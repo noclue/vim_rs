@@ -1,13 +1,13 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// Interface handling the Compliance aspects of entities.
 #[derive(Clone)]
 pub struct ProfileComplianceManager {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl ProfileComplianceManager {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -63,8 +63,10 @@ impl ProfileComplianceManager {
     pub async fn check_compliance_task(&self, profile: Option<&[crate::types::structs::ManagedObjectReference]>, entity: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CheckComplianceRequestType {profile, entity, };
         let path = format!("/ProfileComplianceManager/{moId}/CheckCompliance_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Clear the saved ComplianceResult based on profile and entity filtering criteria.
     /// 
@@ -85,7 +87,7 @@ impl ProfileComplianceManager {
     pub async fn clear_compliance_status(&self, profile: Option<&[crate::types::structs::ManagedObjectReference]>, entity: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<()> {
         let input = ClearComplianceStatusRequestType {profile, entity, };
         let path = format!("/ProfileComplianceManager/{moId}/ClearComplianceStatus", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Query the compliance status based on Profile and Entity filter.
@@ -115,8 +117,12 @@ impl ProfileComplianceManager {
     pub async fn query_compliance_status(&self, profile: Option<&[crate::types::structs::ManagedObjectReference]>, entity: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<Option<Vec<crate::types::structs::ComplianceResult>>> {
         let input = QueryComplianceStatusRequestType {profile, entity, };
         let path = format!("/ProfileComplianceManager/{moId}/QueryComplianceStatus", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ComplianceResult>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Query the metadata for the expressions.
     /// 
@@ -135,8 +141,12 @@ impl ProfileComplianceManager {
     pub async fn query_expression_metadata(&self, expression_name: Option<&[String]>, profile: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Option<Vec<crate::types::structs::ProfileExpressionMetadata>>> {
         let input = QueryExpressionMetadataRequestType {expression_name, profile, };
         let path = format!("/ProfileComplianceManager/{moId}/QueryExpressionMetadata", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ProfileExpressionMetadata>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
 }
 #[derive(serde::Serialize)]

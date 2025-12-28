@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// Most VirtualDiskManager APIs will be DEPRECATED as of vSphere 6.5.
 /// 
 /// Please use VStorageObjectManager APIs to manage Virtual disks.
@@ -34,11 +34,11 @@ use crate::core::client::{Client, Result};
 /// See also *HostDatastoreBrowser*.
 #[derive(Clone)]
 pub struct VirtualDiskManager {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl VirtualDiskManager {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -111,8 +111,10 @@ impl VirtualDiskManager {
     pub async fn copy_virtual_disk_task(&self, source_name: &str, source_datacenter: Option<&crate::types::structs::ManagedObjectReference>, dest_name: &str, dest_datacenter: Option<&crate::types::structs::ManagedObjectReference>, dest_spec: Option<&dyn crate::types::traits::VirtualDiskSpecTrait>, force: Option<bool>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CopyVirtualDiskRequestType {source_name, source_datacenter, dest_name, dest_datacenter, dest_spec, force, };
         let path = format!("/VirtualDiskManager/{moId}/CopyVirtualDisk_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deprecated as of vSphere 6.5, use
     /// *HostVStorageObjectManager.HostCreateDisk_Task* instead.
@@ -158,8 +160,10 @@ impl VirtualDiskManager {
     pub async fn create_virtual_disk_task(&self, name: &str, datacenter: Option<&crate::types::structs::ManagedObjectReference>, spec: &dyn crate::types::traits::VirtualDiskSpecTrait) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateVirtualDiskRequestType {name, datacenter, spec, };
         let path = format!("/VirtualDiskManager/{moId}/CreateVirtualDisk_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deprecated as of vSphere 6.5, use
     /// *VirtualMachine.DefragmentAllDisks* instead.
@@ -206,8 +210,10 @@ impl VirtualDiskManager {
     pub async fn defragment_virtual_disk_task(&self, name: &str, datacenter: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = DefragmentVirtualDiskRequestType {name, datacenter, };
         let path = format!("/VirtualDiskManager/{moId}/DefragmentVirtualDisk_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deprecated as of vSphere 6.5, use
     /// *HostVStorageObjectManager.HostDeleteVStorageObject_Task* instead.
@@ -255,8 +261,10 @@ impl VirtualDiskManager {
     pub async fn delete_virtual_disk_task(&self, name: &str, datacenter: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = DeleteVirtualDiskRequestType {name, datacenter, };
         let path = format!("/VirtualDiskManager/{moId}/DeleteVirtualDisk_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Explicitly zero out unaccessed parts zeroedthick disk.
     /// 
@@ -300,8 +308,10 @@ impl VirtualDiskManager {
     pub async fn eager_zero_virtual_disk_task(&self, name: &str, datacenter: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = EagerZeroVirtualDiskRequestType {name, datacenter, };
         let path = format!("/VirtualDiskManager/{moId}/EagerZeroVirtualDisk_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deprecated as of vSphere 6.5, use
     /// *HostVStorageObjectManager.HostExtendDisk_Task* instead.
@@ -361,8 +371,10 @@ impl VirtualDiskManager {
     pub async fn extend_virtual_disk_task(&self, name: &str, datacenter: Option<&crate::types::structs::ManagedObjectReference>, new_capacity_kb: i64, eager_zero: Option<bool>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ExtendVirtualDiskRequestType {name, datacenter, new_capacity_kb, eager_zero, };
         let path = format!("/VirtualDiskManager/{moId}/ExtendVirtualDisk_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Import an unmanaged-snapshot from Virtual-Volume(VVol) enabled
     /// Storage Array.
@@ -407,7 +419,7 @@ impl VirtualDiskManager {
     pub async fn import_unmanaged_snapshot(&self, vdisk: &str, datacenter: Option<&crate::types::structs::ManagedObjectReference>, vvol_id: &str) -> Result<()> {
         let input = ImportUnmanagedSnapshotRequestType {vdisk, datacenter, vvol_id, };
         let path = format!("/VirtualDiskManager/{moId}/ImportUnmanagedSnapshot", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Deprecated as of vSphere 6.5, use
@@ -454,8 +466,10 @@ impl VirtualDiskManager {
     pub async fn inflate_virtual_disk_task(&self, name: &str, datacenter: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = InflateVirtualDiskRequestType {name, datacenter, };
         let path = format!("/VirtualDiskManager/{moId}/InflateVirtualDisk_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Move a virtual disk and all related files from the source location specified
     /// by <code>sourceName</code> and <code>sourceDatacenter</code> to the destination
@@ -520,8 +534,10 @@ impl VirtualDiskManager {
     pub async fn move_virtual_disk_task(&self, source_name: &str, source_datacenter: Option<&crate::types::structs::ManagedObjectReference>, dest_name: &str, dest_datacenter: Option<&crate::types::structs::ManagedObjectReference>, force: Option<bool>, profile: Option<&[Box<dyn crate::types::traits::VirtualMachineProfileSpecTrait>]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = MoveVirtualDiskRequestType {source_name, source_datacenter, dest_name, dest_datacenter, force, profile, };
         let path = format!("/VirtualDiskManager/{moId}/MoveVirtualDisk_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Return the percentage of fragmentation of the sparse virtual disk.
     /// 
@@ -564,8 +580,10 @@ impl VirtualDiskManager {
     pub async fn query_virtual_disk_fragmentation(&self, name: &str, datacenter: Option<&crate::types::structs::ManagedObjectReference>) -> Result<i32> {
         let input = QueryVirtualDiskFragmentationRequestType {name, datacenter, };
         let path = format!("/VirtualDiskManager/{moId}/QueryVirtualDiskFragmentation", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: i32 = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Get the disk geometry information for the virtual disk.
     /// 
@@ -602,8 +620,10 @@ impl VirtualDiskManager {
     pub async fn query_virtual_disk_geometry(&self, name: &str, datacenter: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::HostDiskDimensionsChs> {
         let input = QueryVirtualDiskGeometryRequestType {name, datacenter, };
         let path = format!("/VirtualDiskManager/{moId}/QueryVirtualDiskGeometry", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::HostDiskDimensionsChs = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deprecated as of vSphere 6.5, use
     /// *HostVStorageObjectManager.HostRetrieveVStorageObject*
@@ -645,8 +665,10 @@ impl VirtualDiskManager {
     pub async fn query_virtual_disk_uuid(&self, name: &str, datacenter: Option<&crate::types::structs::ManagedObjectReference>) -> Result<String> {
         let input = QueryVirtualDiskUuidRequestType {name, datacenter, };
         let path = format!("/VirtualDiskManager/{moId}/QueryVirtualDiskUuid", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Release a snapshot previously imported with importUnmanagedSnapshot
     /// 
@@ -675,7 +697,7 @@ impl VirtualDiskManager {
     pub async fn release_managed_snapshot(&self, vdisk: &str, datacenter: Option<&crate::types::structs::ManagedObjectReference>) -> Result<()> {
         let input = ReleaseManagedSnapshotRequestType {vdisk, datacenter, };
         let path = format!("/VirtualDiskManager/{moId}/ReleaseManagedSnapshot", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Deprecated as of vSphere 6.5, use
@@ -717,7 +739,7 @@ impl VirtualDiskManager {
     pub async fn set_virtual_disk_uuid(&self, name: &str, datacenter: Option<&crate::types::structs::ManagedObjectReference>, uuid: &str) -> Result<()> {
         let input = SetVirtualDiskUuidRequestType {name, datacenter, uuid, };
         let path = format!("/VirtualDiskManager/{moId}/SetVirtualDiskUuid", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Deprecated as of vSphere 6.5, use
@@ -772,8 +794,10 @@ impl VirtualDiskManager {
     pub async fn shrink_virtual_disk_task(&self, name: &str, datacenter: Option<&crate::types::structs::ManagedObjectReference>, copy: Option<bool>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ShrinkVirtualDiskRequestType {name, datacenter, copy, };
         let path = format!("/VirtualDiskManager/{moId}/ShrinkVirtualDisk_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Overwrite all blocks of the virtual disk with zeros.
     /// 
@@ -816,8 +840,10 @@ impl VirtualDiskManager {
     pub async fn zero_fill_virtual_disk_task(&self, name: &str, datacenter: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ZeroFillVirtualDiskRequestType {name, datacenter, };
         let path = format!("/VirtualDiskManager/{moId}/ZeroFillVirtualDisk_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
 }
 #[derive(serde::Serialize)]

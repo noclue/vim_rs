@@ -1,14 +1,14 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// The CustomizationSpecManager managed object is used to manage
 /// customization specifications stored on the VirtualCenter server.
 #[derive(Clone)]
 pub struct CustomizationSpecManager {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl CustomizationSpecManager {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -40,7 +40,7 @@ impl CustomizationSpecManager {
     pub async fn check_customization_resources(&self, guest_os: &str) -> Result<()> {
         let input = CheckCustomizationResourcesRequestType {guest_os, };
         let path = format!("/CustomizationSpecManager/{moId}/CheckCustomizationResources", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Creates a new specification.
@@ -60,7 +60,7 @@ impl CustomizationSpecManager {
     pub async fn create_customization_spec(&self, item: &crate::types::structs::CustomizationSpecItem) -> Result<()> {
         let input = CreateCustomizationSpecRequestType {item, };
         let path = format!("/CustomizationSpecManager/{moId}/CreateCustomizationSpec", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Deletes a specification.
@@ -78,7 +78,7 @@ impl CustomizationSpecManager {
     pub async fn delete_customization_spec(&self, name: &str) -> Result<()> {
         let input = DeleteCustomizationSpecRequestType {name, };
         let path = format!("/CustomizationSpecManager/{moId}/DeleteCustomizationSpec", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Duplicates a specification.
@@ -101,7 +101,7 @@ impl CustomizationSpecManager {
     pub async fn duplicate_customization_spec(&self, name: &str, new_name: &str) -> Result<()> {
         let input = DuplicateCustomizationSpecRequestType {name, new_name, };
         let path = format!("/CustomizationSpecManager/{moId}/DuplicateCustomizationSpec", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Whether or not a specification exists.
@@ -115,8 +115,10 @@ impl CustomizationSpecManager {
     pub async fn does_customization_spec_exist(&self, name: &str) -> Result<bool> {
         let input = DoesCustomizationSpecExistRequestType {name, };
         let path = format!("/CustomizationSpecManager/{moId}/DoesCustomizationSpecExist", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: bool = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Obtains a specification for the given name.
     /// 
@@ -133,8 +135,10 @@ impl CustomizationSpecManager {
     pub async fn get_customization_spec(&self, name: &str) -> Result<crate::types::structs::CustomizationSpecItem> {
         let input = GetCustomizationSpecRequestType {name, };
         let path = format!("/CustomizationSpecManager/{moId}/GetCustomizationSpec", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::CustomizationSpecItem = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Whether or not the guest OS is customizable.
     /// 
@@ -150,8 +154,10 @@ impl CustomizationSpecManager {
     pub async fn is_guest_os_customizable(&self, guest_id: &str) -> Result<bool> {
         let input = IsGuestOsCustomizableRequestType {guest_id, };
         let path = format!("/CustomizationSpecManager/{moId}/IsGuestOsCustomizable", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: bool = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Overwrites an existing specification, possibly after retrieving
     /// (by using 'get') and editing it.
@@ -178,7 +184,7 @@ impl CustomizationSpecManager {
     pub async fn overwrite_customization_spec(&self, item: &crate::types::structs::CustomizationSpecItem) -> Result<()> {
         let input = OverwriteCustomizationSpecRequestType {item, };
         let path = format!("/CustomizationSpecManager/{moId}/OverwriteCustomizationSpec", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Renames a specification.
@@ -201,7 +207,7 @@ impl CustomizationSpecManager {
     pub async fn rename_customization_spec(&self, name: &str, new_name: &str) -> Result<()> {
         let input = RenameCustomizationSpecRequestType {name, new_name, };
         let path = format!("/CustomizationSpecManager/{moId}/RenameCustomizationSpec", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Converts a specification item to XML text
@@ -215,8 +221,10 @@ impl CustomizationSpecManager {
     pub async fn customization_spec_item_to_xml(&self, item: &crate::types::structs::CustomizationSpecItem) -> Result<String> {
         let input = CustomizationSpecItemToXmlRequestType {item, };
         let path = format!("/CustomizationSpecManager/{moId}/CustomizationSpecItemToXml", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Converts an XML string to a specification item
     /// 
@@ -233,8 +241,10 @@ impl CustomizationSpecManager {
     pub async fn xml_to_customization_spec_item(&self, spec_item_xml: &str) -> Result<crate::types::structs::CustomizationSpecItem> {
         let input = XmlToCustomizationSpecItemRequestType {spec_item_xml, };
         let path = format!("/CustomizationSpecManager/{moId}/XmlToCustomizationSpecItem", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::CustomizationSpecItem = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Gets a binary public encryption key that can be used to encrypt
     /// passwords in stored specifications.
@@ -243,7 +253,11 @@ impl CustomizationSpecManager {
     pub async fn encryption_key(&self) -> Result<Option<Vec<i8>>> {
         let path = format!("/CustomizationSpecManager/{moId}/encryptionKey", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<i8>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Gets a list of information on available specifications.
     /// 
@@ -251,7 +265,11 @@ impl CustomizationSpecManager {
     pub async fn info(&self) -> Result<Option<Vec<crate::types::structs::CustomizationSpecInfo>>> {
         let path = format!("/CustomizationSpecManager/{moId}/info", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::CustomizationSpecInfo>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
 }
 #[derive(serde::Serialize)]

@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// Deprecated as of vSphere 9.0. Please refer to vLCM APIs.
 /// 
 /// An <code>Agency</code> handles the deployment of a single type of agent
@@ -62,11 +62,11 @@ use crate::core::client::{Client, Result};
 /// The solution can poll *Agency.runtime*.
 #[derive(Clone)]
 pub struct Agency {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl Agency {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -97,8 +97,10 @@ impl Agency {
     pub async fn add_issue(&self, issue: &dyn crate::types::traits::IssueTrait) -> Result<Box<dyn crate::types::traits::IssueTrait>> {
         let input = AddIssueRequestType {issue, };
         let path = format!("/eam/Agency/{moId}/AddIssue", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: Box<dyn crate::types::traits::IssueTrait> = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Destroys this Agency.
     /// 
@@ -157,7 +159,11 @@ impl Agency {
     pub async fn query_agent(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/eam/Agency/{moId}/QueryAgent", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Deprecated use *Agency.config* instead.
     /// 
@@ -174,7 +180,9 @@ impl Agency {
     pub async fn query_config(&self) -> Result<crate::types::structs::AgencyConfigInfo> {
         let path = format!("/eam/Agency/{moId}/QueryConfig", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::AgencyConfigInfo = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Current issues that have been detected for this entity.
     /// 
@@ -197,8 +205,12 @@ impl Agency {
     pub async fn query_issue(&self, issue_key: Option<&[i32]>) -> Result<Option<Vec<Box<dyn crate::types::traits::IssueTrait>>>> {
         let input = QueryIssueRequestType {issue_key, };
         let path = format!("/eam/Agency/{moId}/QueryIssue", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::IssueTrait>>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Deprecated use *Agency.runtime* instead.
     /// 
@@ -212,7 +224,9 @@ impl Agency {
     pub async fn agency_query_runtime(&self) -> Result<Box<dyn crate::types::traits::EamObjectRuntimeInfoTrait>> {
         let path = format!("/eam/Agency/{moId}/AgencyQueryRuntime", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: Box<dyn crate::types::traits::EamObjectRuntimeInfoTrait> = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deprecated use *Agency.solutionId* instead.
     /// 
@@ -231,7 +245,9 @@ impl Agency {
     pub async fn query_solution_id(&self) -> Result<String> {
         let path = format!("/eam/Agency/{moId}/QuerySolutionId", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deprecated use automatically provisioned VMs and register hooks to have
     /// control post provisioning and power on.
@@ -261,8 +277,10 @@ impl Agency {
     pub async fn register_agent_vm(&self, agent_vm: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RegisterAgentVmRequestType {agent_vm, };
         let path = format!("/eam/Agency/{moId}/RegisterAgentVm", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Resolves the issues specified in the input.
     /// 
@@ -289,8 +307,12 @@ impl Agency {
     pub async fn resolve(&self, issue_key: &[i32]) -> Result<Option<Vec<i32>>> {
         let input = ResolveRequestType {issue_key, };
         let path = format!("/eam/Agency/{moId}/Resolve", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<i32>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Resolve all outstanding issues.
     /// 
@@ -350,7 +372,7 @@ impl Agency {
     pub async fn unregister_agent_vm(&self, agent_vm: &crate::types::structs::ManagedObjectReference) -> Result<()> {
         let input = UnregisterAgentVmRequestType {agent_vm, };
         let path = format!("/eam/Agency/{moId}/UnregisterAgentVm", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Updates the agency configuration used by this <code>Agency</code> to
@@ -381,7 +403,7 @@ impl Agency {
     pub async fn update(&self, config: &crate::types::structs::AgencyConfigInfo) -> Result<()> {
         let input = UpdateRequestType {config, };
         let path = format!("/eam/Agency/{moId}/Update", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// An array of agents deployed by this agent manager.
@@ -394,7 +416,11 @@ impl Agency {
     pub async fn agent(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/eam/Agency/{moId}/agent", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// The configuration of this <code>Agency</code>.
     /// 
@@ -409,7 +435,9 @@ impl Agency {
     pub async fn config(&self) -> Result<crate::types::structs::AgencyConfigInfo> {
         let path = format!("/eam/Agency/{moId}/config", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::AgencyConfigInfo = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// The principal name of the user that owns this <code>Agency</code>.
     /// 
@@ -424,7 +452,11 @@ impl Agency {
     pub async fn owner(&self) -> Result<Option<String>> {
         let path = format!("/eam/Agency/{moId}/owner", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<String>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Gets the runtime information for this agency.
     /// 
@@ -436,7 +468,9 @@ impl Agency {
     pub async fn runtime(&self) -> Result<Box<dyn crate::types::traits::EamObjectRuntimeInfoTrait>> {
         let path = format!("/eam/Agency/{moId}/runtime", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: Box<dyn crate::types::traits::EamObjectRuntimeInfoTrait> = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// The ID of the solution that owns this <code>Agency</code>.
     /// 
@@ -453,7 +487,9 @@ impl Agency {
     pub async fn solution_id(&self) -> Result<String> {
         let path = format!("/eam/Agency/{moId}/solutionId", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
 }
 #[derive(serde::Serialize)]

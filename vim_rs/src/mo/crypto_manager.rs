@@ -1,13 +1,13 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// Singleton Managed Object used to manage cryptographic keys.
 #[derive(Clone)]
 pub struct CryptoManager {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl CryptoManager {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -33,7 +33,7 @@ impl CryptoManager {
     pub async fn add_key(&self, key: &crate::types::structs::CryptoKeyPlain) -> Result<()> {
         let input = AddKeyRequestType {key, };
         let path = format!("/CryptoManager/{moId}/AddKey", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Add multiple existing keys.
@@ -55,8 +55,12 @@ impl CryptoManager {
     pub async fn add_keys(&self, keys: Option<&[crate::types::structs::CryptoKeyPlain]>) -> Result<Option<Vec<crate::types::structs::CryptoKeyResult>>> {
         let input = AddKeysRequestType {keys, };
         let path = format!("/CryptoManager/{moId}/AddKeys", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::CryptoKeyResult>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// List keys.
     /// 
@@ -78,8 +82,12 @@ impl CryptoManager {
     pub async fn list_keys(&self, limit: Option<i32>) -> Result<Option<Vec<crate::types::structs::CryptoKeyId>>> {
         let input = ListKeysRequestType {limit, };
         let path = format!("/CryptoManager/{moId}/ListKeys", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::CryptoKeyId>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Remove a key (only the UUID is needed to remove).
     /// 
@@ -105,7 +113,7 @@ impl CryptoManager {
     pub async fn remove_key(&self, key: &crate::types::structs::CryptoKeyId, force: bool) -> Result<()> {
         let input = RemoveKeyRequestType {key, force, };
         let path = format!("/CryptoManager/{moId}/RemoveKey", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Remove multiple keys (only the UUID is needed to remove).
@@ -124,14 +132,20 @@ impl CryptoManager {
     pub async fn remove_keys(&self, keys: Option<&[crate::types::structs::CryptoKeyId]>, force: bool) -> Result<Option<Vec<crate::types::structs::CryptoKeyResult>>> {
         let input = RemoveKeysRequestType {keys, force, };
         let path = format!("/CryptoManager/{moId}/RemoveKeys", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::CryptoKeyResult>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Indicate if the encryption feature is enabled.
     pub async fn enabled(&self) -> Result<bool> {
         let path = format!("/CryptoManager/{moId}/enabled", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: bool = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
 }
 #[derive(serde::Serialize)]

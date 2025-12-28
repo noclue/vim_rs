@@ -1,16 +1,16 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// Provision the SNMP Version 1,2c agent.
 /// 
 /// This object is accessed through the
 /// *HostConfigManager* object.
 #[derive(Clone)]
 pub struct HostSnmpSystem {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl HostSnmpSystem {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -29,7 +29,7 @@ impl HostSnmpSystem {
     pub async fn reconfigure_snmp_agent(&self, spec: &crate::types::structs::HostSnmpConfigSpec) -> Result<()> {
         let input = ReconfigureSnmpAgentRequestType {spec, };
         let path = format!("/HostSnmpSystem/{moId}/ReconfigureSnmpAgent", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// ***Required privileges:*** Global.Settings
@@ -46,13 +46,17 @@ impl HostSnmpSystem {
     pub async fn configuration(&self) -> Result<crate::types::structs::HostSnmpConfigSpec> {
         let path = format!("/HostSnmpSystem/{moId}/configuration", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::HostSnmpConfigSpec = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// ***Required privileges:*** Global.Settings
     pub async fn limits(&self) -> Result<crate::types::structs::HostSnmpSystemAgentLimits> {
         let path = format!("/HostSnmpSystem/{moId}/limits", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::HostSnmpSystemAgentLimits = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
 }
 #[derive(serde::Serialize)]

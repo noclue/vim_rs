@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// This managed object type provides an interface
 /// through which local accounts on a host are managed.
 /// 
@@ -15,11 +15,11 @@ use crate::core::client::{Client, Result};
 /// An InvalidArgument fault is thrown if any of these rules are not obeyed.
 #[derive(Clone)]
 pub struct HostLocalAccountManager {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl HostLocalAccountManager {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -50,7 +50,7 @@ impl HostLocalAccountManager {
     pub async fn assign_user_to_group(&self, user: &str, group: &str) -> Result<()> {
         let input = AssignUserToGroupRequestType {user, group, };
         let path = format!("/HostLocalAccountManager/{moId}/AssignUserToGroup", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Updates the password of a local user account.
@@ -76,7 +76,7 @@ impl HostLocalAccountManager {
     pub async fn change_password(&self, user: &str, old_password: &str, new_password: &str) -> Result<()> {
         let input = ChangePasswordRequestType {user, old_password, new_password, };
         let path = format!("/HostLocalAccountManager/{moId}/ChangePassword", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Deprecated as of vSphere API 5.1, local user groups are not supported
@@ -106,7 +106,7 @@ impl HostLocalAccountManager {
     pub async fn create_group(&self, group: &dyn crate::types::traits::HostAccountSpecTrait) -> Result<()> {
         let input = CreateGroupRequestType {group, };
         let path = format!("/HostLocalAccountManager/{moId}/CreateGroup", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Creates a local user account using the parameters defined in the
@@ -135,7 +135,7 @@ impl HostLocalAccountManager {
     pub async fn create_user(&self, user: &dyn crate::types::traits::HostAccountSpecTrait) -> Result<()> {
         let input = CreateUserRequestType {user, };
         let path = format!("/HostLocalAccountManager/{moId}/CreateUser", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Deprecated as of vSphere API 5.1, local user groups are not supported
@@ -156,7 +156,7 @@ impl HostLocalAccountManager {
     pub async fn remove_group(&self, group_name: &str) -> Result<()> {
         let input = RemoveGroupRequestType {group_name, };
         let path = format!("/HostLocalAccountManager/{moId}/RemoveGroup", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Removes a local user account.
@@ -188,7 +188,7 @@ impl HostLocalAccountManager {
     pub async fn remove_user(&self, user_name: &str) -> Result<()> {
         let input = RemoveUserRequestType {user_name, };
         let path = format!("/HostLocalAccountManager/{moId}/RemoveUser", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Deprecated as of vSphere API 5.1, local user groups are not supported
@@ -215,7 +215,7 @@ impl HostLocalAccountManager {
     pub async fn unassign_user_from_group(&self, user: &str, group: &str) -> Result<()> {
         let input = UnassignUserFromGroupRequestType {user, group, };
         let path = format!("/HostLocalAccountManager/{moId}/UnassignUserFromGroup", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Updates a local user account using the parameters defined in the
@@ -240,7 +240,7 @@ impl HostLocalAccountManager {
     pub async fn update_user(&self, user: &dyn crate::types::traits::HostAccountSpecTrait) -> Result<()> {
         let input = UpdateUserRequestType {user, };
         let path = format!("/HostLocalAccountManager/{moId}/UpdateUser", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
 }

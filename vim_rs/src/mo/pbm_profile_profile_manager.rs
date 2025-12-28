@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// The *PbmProfileProfileManager* supports operations on virtual machine storage profiles.
 /// 
 /// A Storage Policy API profile consists of a set of _subprofiles_.
@@ -69,11 +69,11 @@ use crate::core::client::{Client, Result};
 ///                                        +---------------------------------+         +-------------------------------+
 #[derive(Clone)]
 pub struct PbmProfileProfileManager {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl PbmProfileProfileManager {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -115,7 +115,7 @@ impl PbmProfileProfileManager {
     pub async fn pbm_assign_default_requirement_profile(&self, profile: &crate::types::structs::PbmProfileId, datastores: &[crate::types::structs::PbmPlacementHub]) -> Result<()> {
         let input = PbmAssignDefaultRequirementProfileRequestType {profile, datastores, };
         let path = format!("/pbm/PbmProfileProfileManager/{moId}/PbmAssignDefaultRequirementProfile", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Creates a capability-based storage profile.
@@ -163,8 +163,10 @@ impl PbmProfileProfileManager {
     pub async fn pbm_create(&self, create_spec: &crate::types::structs::PbmCapabilityProfileCreateSpec) -> Result<crate::types::structs::PbmProfileId> {
         let input = PbmCreateRequestType {create_spec, };
         let path = format!("/pbm/PbmProfileProfileManager/{moId}/PbmCreate", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::PbmProfileId = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deletes one or more profiles.
     /// 
@@ -195,8 +197,12 @@ impl PbmProfileProfileManager {
     pub async fn pbm_delete(&self, profile_id: &[crate::types::structs::PbmProfileId]) -> Result<Option<Vec<crate::types::structs::PbmProfileOperationOutcome>>> {
         let input = PbmDeleteRequestType {profile_id, };
         let path = format!("/pbm/PbmProfileProfileManager/{moId}/PbmDelete", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::PbmProfileOperationOutcome>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Retrieves capability metadata.
     /// 
@@ -235,8 +241,12 @@ impl PbmProfileProfileManager {
     pub async fn pbm_fetch_capability_metadata(&self, resource_type: Option<&crate::types::structs::PbmProfileResourceType>, vendor_uuid: Option<&str>) -> Result<Option<Vec<crate::types::structs::PbmCapabilityMetadataPerCategory>>> {
         let input = PbmFetchCapabilityMetadataRequestType {resource_type, vendor_uuid, };
         let path = format!("/pbm/PbmProfileProfileManager/{moId}/PbmFetchCapabilityMetadata", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::PbmCapabilityMetadataPerCategory>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Returns the capability schema objects registered in the system.
     /// 
@@ -269,8 +279,12 @@ impl PbmProfileProfileManager {
     pub async fn pbm_fetch_capability_schema(&self, vendor_uuid: Option<&str>, line_of_service: Option<&[String]>) -> Result<Option<Vec<crate::types::structs::PbmCapabilitySchema>>> {
         let input = PbmFetchCapabilitySchemaRequestType {vendor_uuid, line_of_service, };
         let path = format!("/pbm/PbmProfileProfileManager/{moId}/PbmFetchCapabilitySchema", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::PbmCapabilitySchema>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Retrieves information about various resource types registered with the system.
     /// 
@@ -282,7 +296,11 @@ impl PbmProfileProfileManager {
     pub async fn pbm_fetch_resource_type(&self) -> Result<Option<Vec<crate::types::structs::PbmProfileResourceType>>> {
         let path = format!("/pbm/PbmProfileProfileManager/{moId}/PbmFetchResourceType", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::PbmProfileResourceType>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Retrieve information about various capability metadata owners/vendors
     /// registered with the system, the resource type for which they are registered,
@@ -303,8 +321,12 @@ impl PbmProfileProfileManager {
     pub async fn pbm_fetch_vendor_info(&self, resource_type: Option<&crate::types::structs::PbmProfileResourceType>) -> Result<Option<Vec<crate::types::structs::PbmCapabilityVendorResourceTypeInfo>>> {
         let input = PbmFetchVendorInfoRequestType {resource_type, };
         let path = format!("/pbm/PbmProfileProfileManager/{moId}/PbmFetchVendorInfo", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::PbmCapabilityVendorResourceTypeInfo>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Returns the profiles that can be made as default profile for all the given datastores.
     /// 
@@ -338,8 +360,12 @@ impl PbmProfileProfileManager {
     pub async fn pbm_find_applicable_default_profile(&self, datastores: &[crate::types::structs::PbmPlacementHub]) -> Result<Option<Vec<Box<dyn crate::types::traits::PbmProfileTrait>>>> {
         let input = PbmFindApplicableDefaultProfileRequestType {datastores, };
         let path = format!("/pbm/PbmProfileProfileManager/{moId}/PbmFindApplicableDefaultProfile", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::PbmProfileTrait>>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Returns the virtual machine and disks that are associated with the given
     /// storage policies.
@@ -365,8 +391,12 @@ impl PbmProfileProfileManager {
     pub async fn pbm_query_associated_entities(&self, profiles: Option<&[crate::types::structs::PbmProfileId]>) -> Result<Option<Vec<crate::types::structs::PbmQueryProfileResult>>> {
         let input = PbmQueryAssociatedEntitiesRequestType {profiles, };
         let path = format!("/pbm/PbmProfileProfileManager/{moId}/PbmQueryAssociatedEntities", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::PbmQueryProfileResult>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Retrieves entities associated with the specified profile.
     /// 
@@ -393,8 +423,12 @@ impl PbmProfileProfileManager {
     pub async fn pbm_query_associated_entity(&self, profile: &crate::types::structs::PbmProfileId, entity_type: Option<&str>) -> Result<Option<Vec<crate::types::structs::PbmServerObjectRef>>> {
         let input = PbmQueryAssociatedEntityRequestType {profile, entity_type, };
         let path = format!("/pbm/PbmProfileProfileManager/{moId}/PbmQueryAssociatedEntity", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::PbmServerObjectRef>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Returns identifiers for profiles associated with a virtual machine,
     /// virtual disk, or datastore.
@@ -416,8 +450,12 @@ impl PbmProfileProfileManager {
     pub async fn pbm_query_associated_profile(&self, entity: &crate::types::structs::PbmServerObjectRef) -> Result<Option<Vec<crate::types::structs::PbmProfileId>>> {
         let input = PbmQueryAssociatedProfileRequestType {entity, };
         let path = format!("/pbm/PbmProfileProfileManager/{moId}/PbmQueryAssociatedProfile", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::PbmProfileId>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Returns profiles associated with the specified entities.
     /// 
@@ -442,8 +480,12 @@ impl PbmProfileProfileManager {
     pub async fn pbm_query_associated_profiles(&self, entities: &[crate::types::structs::PbmServerObjectRef]) -> Result<Option<Vec<crate::types::structs::PbmQueryProfileResult>>> {
         let input = PbmQueryAssociatedProfilesRequestType {entities, };
         let path = format!("/pbm/PbmProfileProfileManager/{moId}/PbmQueryAssociatedProfiles", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::PbmQueryProfileResult>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Returns the default requirement profile ID for the given datastore.
     /// 
@@ -472,8 +514,12 @@ impl PbmProfileProfileManager {
     pub async fn pbm_query_default_requirement_profile(&self, hub: &crate::types::structs::PbmPlacementHub) -> Result<Option<crate::types::structs::PbmProfileId>> {
         let input = PbmQueryDefaultRequirementProfileRequestType {hub, };
         let path = format!("/pbm/PbmProfileProfileManager/{moId}/PbmQueryDefaultRequirementProfile", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::PbmProfileId>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Returns the default profiles for the given datastores.
     /// 
@@ -506,8 +552,10 @@ impl PbmProfileProfileManager {
     pub async fn pbm_query_default_requirement_profiles(&self, datastores: &[crate::types::structs::PbmPlacementHub]) -> Result<Vec<crate::types::structs::PbmDefaultProfileInfo>> {
         let input = PbmQueryDefaultRequirementProfilesRequestType {datastores, };
         let path = format!("/pbm/PbmProfileProfileManager/{moId}/PbmQueryDefaultRequirementProfiles", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: Vec<crate::types::structs::PbmDefaultProfileInfo> = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Returns requirement profile ids or resource profile ids, or both.
     /// 
@@ -535,8 +583,12 @@ impl PbmProfileProfileManager {
     pub async fn pbm_query_profile(&self, resource_type: &crate::types::structs::PbmProfileResourceType, profile_category: Option<&str>) -> Result<Option<Vec<crate::types::structs::PbmProfileId>>> {
         let input = PbmQueryProfileRequestType {resource_type, profile_category, };
         let path = format!("/pbm/PbmProfileProfileManager/{moId}/PbmQueryProfile", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::PbmProfileId>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Retrieves space statistics of a datastore.
     /// 
@@ -566,8 +618,12 @@ impl PbmProfileProfileManager {
     pub async fn pbm_query_space_stats_for_storage_container(&self, datastore: &crate::types::structs::PbmServerObjectRef, capability_profile_id: Option<&[crate::types::structs::PbmProfileId]>) -> Result<Option<Vec<crate::types::structs::PbmDatastoreSpaceStatistics>>> {
         let input = PbmQuerySpaceStatsForStorageContainerRequestType {datastore, capability_profile_id, };
         let path = format!("/pbm/PbmProfileProfileManager/{moId}/PbmQuerySpaceStatsForStorageContainer", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::PbmDatastoreSpaceStatistics>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Deprecated since it is not supported.
     /// 
@@ -582,7 +638,7 @@ impl PbmProfileProfileManager {
     pub async fn pbm_reset_default_requirement_profile(&self, profile: Option<&crate::types::structs::PbmProfileId>) -> Result<()> {
         let input = PbmResetDefaultRequirementProfileRequestType {profile, };
         let path = format!("/pbm/PbmProfileProfileManager/{moId}/PbmResetDefaultRequirementProfile", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Resets the system pre-created VSAN default profile to factory defaults.
@@ -612,8 +668,10 @@ impl PbmProfileProfileManager {
     pub async fn pbm_retrieve_content(&self, profile_ids: &[crate::types::structs::PbmProfileId]) -> Result<Vec<Box<dyn crate::types::traits::PbmProfileTrait>>> {
         let input = PbmRetrieveContentRequestType {profile_ids, };
         let path = format!("/pbm/PbmProfileProfileManager/{moId}/PbmRetrieveContent", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: Vec<Box<dyn crate::types::traits::PbmProfileTrait>> = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Updates a storage profile.
     /// 
@@ -635,7 +693,7 @@ impl PbmProfileProfileManager {
     pub async fn pbm_update(&self, profile_id: &crate::types::structs::PbmProfileId, update_spec: &crate::types::structs::PbmCapabilityProfileUpdateSpec) -> Result<()> {
         let input = PbmUpdateRequestType {profile_id, update_spec, };
         let path = format!("/pbm/PbmProfileProfileManager/{moId}/PbmUpdate", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
 }

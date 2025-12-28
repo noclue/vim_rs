@@ -1,13 +1,13 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// Object manager for scheduled tasks.
 #[derive(Clone)]
 pub struct ScheduledTaskManager {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl ScheduledTaskManager {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -51,8 +51,10 @@ impl ScheduledTaskManager {
     pub async fn create_scheduled_task(&self, entity: &crate::types::structs::ManagedObjectReference, spec: &dyn crate::types::traits::ScheduledTaskSpecTrait) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateScheduledTaskRequestType {entity, spec, };
         let path = format!("/ScheduledTaskManager/{moId}/CreateScheduledTask", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Creates a scheduled task.
     ///
@@ -84,8 +86,10 @@ impl ScheduledTaskManager {
     pub async fn create_object_scheduled_task(&self, obj: &crate::types::structs::ManagedObjectReference, spec: &dyn crate::types::traits::ScheduledTaskSpecTrait) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateObjectScheduledTaskRequestType {obj, spec, };
         let path = format!("/ScheduledTaskManager/{moId}/CreateObjectScheduledTask", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Available scheduled tasks defined on the entity.
     /// 
@@ -107,8 +111,12 @@ impl ScheduledTaskManager {
     pub async fn retrieve_entity_scheduled_task(&self, entity: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let input = RetrieveEntityScheduledTaskRequestType {entity, };
         let path = format!("/ScheduledTaskManager/{moId}/RetrieveEntityScheduledTask", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Available scheduled tasks defined on the object.
     /// 
@@ -128,8 +136,12 @@ impl ScheduledTaskManager {
     pub async fn retrieve_object_scheduled_task(&self, obj: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let input = RetrieveObjectScheduledTaskRequestType {obj, };
         let path = format!("/ScheduledTaskManager/{moId}/RetrieveObjectScheduledTask", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Static descriptive strings used in scheduled tasks.
     /// 
@@ -137,7 +149,9 @@ impl ScheduledTaskManager {
     pub async fn description(&self) -> Result<crate::types::structs::ScheduledTaskDescription> {
         let path = format!("/ScheduledTaskManager/{moId}/description", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ScheduledTaskDescription = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// All available scheduled tasks.
     /// 
@@ -149,7 +163,11 @@ impl ScheduledTaskManager {
     pub async fn scheduled_task(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/ScheduledTaskManager/{moId}/scheduledTask", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
 }
 #[derive(serde::Serialize)]

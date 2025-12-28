@@ -1,15 +1,15 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// The *HostActiveDirectoryAuthentication* managed object
 /// indicates domain membership status and provides methods
 /// for adding a host to and removing a host from a domain.
 #[derive(Clone)]
 pub struct HostActiveDirectoryAuthentication {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl HostActiveDirectoryAuthentication {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -82,8 +82,10 @@ impl HostActiveDirectoryAuthentication {
     pub async fn import_certificate_for_cam_task(&self, cert_path: &str, cam_server: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ImportCertificateForCamRequestType {cert_path, cam_server, };
         let path = format!("/HostActiveDirectoryAuthentication/{moId}/ImportCertificateForCAM_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deprecated as of vSphere API 8.0U3, and there is no replacement for it.
     /// 
@@ -103,7 +105,7 @@ impl HostActiveDirectoryAuthentication {
     pub async fn install_smart_card_trust_anchor(&self, cert: &str) -> Result<()> {
         let input = InstallSmartCardTrustAnchorRequestType {cert, };
         let path = format!("/HostActiveDirectoryAuthentication/{moId}/InstallSmartCardTrustAnchor", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Adds the host to an Active Directory domain.
@@ -162,8 +164,10 @@ impl HostActiveDirectoryAuthentication {
     pub async fn join_domain_task(&self, domain_name: &str, user_name: &str, password: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = JoinDomainRequestType {domain_name, user_name, password, };
         let path = format!("/HostActiveDirectoryAuthentication/{moId}/JoinDomain_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Adds the host to an Active Directory domain through CAM service.
     /// 
@@ -222,8 +226,10 @@ impl HostActiveDirectoryAuthentication {
     pub async fn join_domain_with_cam_task(&self, domain_name: &str, cam_server: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = JoinDomainWithCamRequestType {domain_name, cam_server, };
         let path = format!("/HostActiveDirectoryAuthentication/{moId}/JoinDomainWithCAM_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Removes the host from the Active Directory domain to which it belongs.
     /// 
@@ -257,8 +263,10 @@ impl HostActiveDirectoryAuthentication {
     pub async fn leave_current_domain_task(&self, force: bool) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = LeaveCurrentDomainRequestType {force, };
         let path = format!("/HostActiveDirectoryAuthentication/{moId}/LeaveCurrentDomain_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deprecated as of vSphere API 8.0U3, and there is no replacement for it.
     /// 
@@ -277,7 +285,11 @@ impl HostActiveDirectoryAuthentication {
     pub async fn list_smart_card_trust_anchors(&self) -> Result<Option<Vec<String>>> {
         let path = format!("/HostActiveDirectoryAuthentication/{moId}/ListSmartCardTrustAnchors", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<String>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Deprecated please remove by fingerprint/digest instead.
     /// 
@@ -300,7 +312,7 @@ impl HostActiveDirectoryAuthentication {
     pub async fn remove_smart_card_trust_anchor(&self, issuer: &str, serial: &str) -> Result<()> {
         let input = RemoveSmartCardTrustAnchorRequestType {issuer, serial, };
         let path = format!("/HostActiveDirectoryAuthentication/{moId}/RemoveSmartCardTrustAnchor", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Deprecated as of vSphere API 8.0U3, and there is no replacement for it.
@@ -326,7 +338,7 @@ impl HostActiveDirectoryAuthentication {
     pub async fn remove_smart_card_trust_anchor_by_fingerprint(&self, fingerprint: &str, digest: &str) -> Result<()> {
         let input = RemoveSmartCardTrustAnchorByFingerprintRequestType {fingerprint, digest, };
         let path = format!("/HostActiveDirectoryAuthentication/{moId}/RemoveSmartCardTrustAnchorByFingerprint", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Remove a smart card trust anchor certificate from the system
@@ -347,7 +359,7 @@ impl HostActiveDirectoryAuthentication {
     pub async fn remove_smart_card_trust_anchor_certificate(&self, certificate: &str) -> Result<()> {
         let input = RemoveSmartCardTrustAnchorCertificateRequestType {certificate, };
         let path = format!("/HostActiveDirectoryAuthentication/{moId}/RemoveSmartCardTrustAnchorCertificate", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Deprecated as of vSphere API 8.0U3, and there is no replacement for it.
@@ -364,14 +376,16 @@ impl HostActiveDirectoryAuthentication {
     pub async fn replace_smart_card_trust_anchors(&self, certs: Option<&[String]>) -> Result<()> {
         let input = ReplaceSmartCardTrustAnchorsRequestType {certs, };
         let path = format!("/HostActiveDirectoryAuthentication/{moId}/ReplaceSmartCardTrustAnchors", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Information about the authentication store.
     pub async fn info(&self) -> Result<Box<dyn crate::types::traits::HostAuthenticationStoreInfoTrait>> {
         let path = format!("/HostActiveDirectoryAuthentication/{moId}/info", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: Box<dyn crate::types::traits::HostAuthenticationStoreInfoTrait> = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
 }
 #[derive(serde::Serialize)]

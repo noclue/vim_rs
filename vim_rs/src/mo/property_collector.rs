@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// The *PropertyCollector* managed object retrieves and detects changes
 /// to the properties of other managed objects.
 /// 
@@ -19,11 +19,11 @@ use crate::core::client::{Client, Result};
 ///   are automatically destroyed.
 #[derive(Clone)]
 pub struct PropertyCollector {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl PropertyCollector {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -47,7 +47,7 @@ impl PropertyCollector {
     pub async fn cancel_retrieve_properties_ex(&self, token: &str) -> Result<()> {
         let input = CancelRetrievePropertiesExRequestType {token, };
         let path = format!("/PropertyCollector/{moId}/CancelRetrievePropertiesEx", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Attempts to cancel outstanding calls to *PropertyCollector.WaitForUpdates* or *PropertyCollector.WaitForUpdatesEx* in the current session.
@@ -99,8 +99,12 @@ impl PropertyCollector {
     pub async fn check_for_updates(&self, version: Option<&str>) -> Result<Option<crate::types::structs::UpdateSet>> {
         let input = CheckForUpdatesRequestType {version, };
         let path = format!("/PropertyCollector/{moId}/CheckForUpdates", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::UpdateSet>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Retrieves additional results from a retrieval started by *PropertyCollector.RetrievePropertiesEx* on the same session on the same *PropertyCollector*.
     /// 
@@ -124,8 +128,10 @@ impl PropertyCollector {
     pub async fn continue_retrieve_properties_ex(&self, token: &str) -> Result<crate::types::structs::RetrieveResult> {
         let input = ContinueRetrievePropertiesExRequestType {token, };
         let path = format!("/PropertyCollector/{moId}/ContinueRetrievePropertiesEx", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::RetrieveResult = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Creates a new filter for the given set of managed objects.
     /// 
@@ -165,8 +171,10 @@ impl PropertyCollector {
     pub async fn create_filter(&self, spec: &crate::types::structs::PropertyFilterSpec, partial_updates: bool) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateFilterRequestType {spec, partial_updates, };
         let path = format!("/PropertyCollector/{moId}/CreateFilter", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Creates a new session-specific *PropertyCollector* that can
     /// be used to retrieve property updates independent of any other
@@ -219,7 +227,9 @@ impl PropertyCollector {
     pub async fn create_property_collector(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/PropertyCollector/{moId}/CreatePropertyCollector", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Destroys this *PropertyCollector*.
     /// 
@@ -277,8 +287,12 @@ impl PropertyCollector {
     pub async fn retrieve_properties(&self, spec_set: &[crate::types::structs::PropertyFilterSpec]) -> Result<Option<Vec<crate::types::structs::ObjectContent>>> {
         let input = RetrievePropertiesRequestType {spec_set, };
         let path = format!("/PropertyCollector/{moId}/RetrieveProperties", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ObjectContent>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Retrieves the specified properties of the specified managed objects.
     /// 
@@ -323,8 +337,12 @@ impl PropertyCollector {
     pub async fn retrieve_properties_ex(&self, spec_set: &[crate::types::structs::PropertyFilterSpec], options: &crate::types::structs::RetrieveOptions) -> Result<Option<crate::types::structs::RetrieveResult>> {
         let input = RetrievePropertiesExRequestType {spec_set, options, };
         let path = format!("/PropertyCollector/{moId}/RetrievePropertiesEx", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::RetrieveResult>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Deprecated as of vSphere API 4.1, use *PropertyCollector.WaitForUpdatesEx*.
     /// 
@@ -358,8 +376,10 @@ impl PropertyCollector {
     pub async fn wait_for_updates(&self, version: Option<&str>) -> Result<crate::types::structs::UpdateSet> {
         let input = WaitForUpdatesRequestType {version, };
         let path = format!("/PropertyCollector/{moId}/WaitForUpdates", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::UpdateSet = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Calculate the set of updates for each existing filter in the session.
     /// 
@@ -406,8 +426,12 @@ impl PropertyCollector {
     pub async fn wait_for_updates_ex(&self, version: Option<&str>, options: Option<&crate::types::structs::WaitOptions>) -> Result<Option<crate::types::structs::UpdateSet>> {
         let input = WaitForUpdatesExRequestType {version, options, };
         let path = format!("/PropertyCollector/{moId}/WaitForUpdatesEx", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::UpdateSet>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// The filters that this *PropertyCollector* uses to determine the list of
     /// properties for which it detects incremental changes.
@@ -420,7 +444,11 @@ impl PropertyCollector {
     pub async fn filter(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/PropertyCollector/{moId}/filter", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
 }
 #[derive(serde::Serialize)]

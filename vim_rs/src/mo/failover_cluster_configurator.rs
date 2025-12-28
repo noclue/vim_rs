@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// FailoverClusterConfigurator provides operations to create and configure
 /// a vCenter High Availability Cluster (VCHA Cluster).
 /// 
@@ -21,11 +21,11 @@ use crate::core::client::{Client, Result};
 /// created using the VM-Clone operation with Active VM as the source.
 #[derive(Clone)]
 pub struct FailoverClusterConfigurator {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl FailoverClusterConfigurator {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -58,8 +58,10 @@ impl FailoverClusterConfigurator {
     pub async fn configure_vcha_task(&self, config_spec: &crate::types::structs::VchaClusterConfigSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ConfigureVchaRequestType {config_spec, };
         let path = format!("/FailoverClusterConfigurator/{moId}/configureVcha_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Creates a Passive node in a degraded VCHA Cluster with node location
     /// information and pre-existing VCHA Cluster configuration from the
@@ -86,8 +88,10 @@ impl FailoverClusterConfigurator {
     pub async fn create_passive_node_task(&self, passive_deployment_spec: &crate::types::structs::PassiveNodeDeploymentSpec, source_vc_spec: &crate::types::structs::SourceNodeSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreatePassiveNodeRequestType {passive_deployment_spec, source_vc_spec, };
         let path = format!("/FailoverClusterConfigurator/{moId}/createPassiveNode_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Creates a Witness node in a degraded VCHA Cluster with node location
     /// information and pre-existing VCHA Cluster configuration from the
@@ -114,8 +118,10 @@ impl FailoverClusterConfigurator {
     pub async fn create_witness_node_task(&self, witness_deployment_spec: &dyn crate::types::traits::NodeDeploymentSpecTrait, source_vc_spec: &crate::types::structs::SourceNodeSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateWitnessNodeRequestType {witness_deployment_spec, source_vc_spec, };
         let path = format!("/FailoverClusterConfigurator/{moId}/createWitnessNode_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deploys and Configures VCHA on the local vCenter as a single API.
     /// 
@@ -148,8 +154,10 @@ impl FailoverClusterConfigurator {
     pub async fn deploy_vcha_task(&self, deployment_spec: &crate::types::structs::VchaClusterDeploymentSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = DeployVchaRequestType {deployment_spec, };
         let path = format!("/FailoverClusterConfigurator/{moId}/deployVcha_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Destroys the VCHA cluster setup and removes all VCHA specific
     /// configuration from the VCVA appliance.
@@ -170,7 +178,9 @@ impl FailoverClusterConfigurator {
     pub async fn destroy_vcha_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/FailoverClusterConfigurator/{moId}/destroyVcha_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Returns the configuration information for each node that is part of
     /// the VCHA Cluster.
@@ -184,7 +194,9 @@ impl FailoverClusterConfigurator {
     pub async fn get_vcha_config(&self) -> Result<crate::types::structs::VchaClusterConfigInfo> {
         let path = format!("/FailoverClusterConfigurator/{moId}/getVchaConfig", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::VchaClusterConfigInfo = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Prepares the vCenter appliance for a VCHA cluster deployment.
     /// 
@@ -213,8 +225,10 @@ impl FailoverClusterConfigurator {
     pub async fn prepare_vcha_task(&self, network_spec: &crate::types::structs::VchaClusterNetworkSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = PrepareVchaRequestType {network_spec, };
         let path = format!("/FailoverClusterConfigurator/{moId}/prepareVcha_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// A list of method names that must not be called and will throw
     /// a fault due to some other method running that the disabled method
@@ -232,7 +246,11 @@ impl FailoverClusterConfigurator {
     pub async fn disabled_configure_method(&self) -> Result<Option<Vec<String>>> {
         let path = format!("/FailoverClusterConfigurator/{moId}/disabledConfigureMethod", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<String>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
 }
 #[derive(serde::Serialize)]

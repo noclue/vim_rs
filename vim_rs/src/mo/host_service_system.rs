@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// The *HostServiceSystem* managed object describes the configuration
 /// of host services.
 /// 
@@ -8,11 +8,11 @@ use crate::core::client::{Client, Result};
 /// managed object.
 #[derive(Clone)]
 pub struct HostServiceSystem {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl HostServiceSystem {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -49,7 +49,7 @@ impl HostServiceSystem {
     pub async fn restart_service(&self, id: &str) -> Result<()> {
         let input = RestartServiceRequestType {id, };
         let path = format!("/HostServiceSystem/{moId}/RestartService", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Assigns a value to a custom field.
@@ -69,7 +69,7 @@ impl HostServiceSystem {
     pub async fn set_custom_value(&self, key: &str, value: &str) -> Result<()> {
         let input = SetCustomValueRequestType {key, value, };
         let path = format!("/HostServiceSystem/{moId}/setCustomValue", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Starts the service.
@@ -94,7 +94,7 @@ impl HostServiceSystem {
     pub async fn start_service(&self, id: &str) -> Result<()> {
         let input = StartServiceRequestType {id, };
         let path = format!("/HostServiceSystem/{moId}/StartService", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Stops the service.
@@ -119,7 +119,7 @@ impl HostServiceSystem {
     pub async fn stop_service(&self, id: &str) -> Result<()> {
         let input = StopServiceRequestType {id, };
         let path = format!("/HostServiceSystem/{moId}/StopService", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Uninstalls the service.
@@ -147,7 +147,7 @@ impl HostServiceSystem {
     pub async fn uninstall_service(&self, id: &str) -> Result<()> {
         let input = UninstallServiceRequestType {id, };
         let path = format!("/HostServiceSystem/{moId}/UninstallService", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Updates the activation policy of the service.
@@ -175,7 +175,7 @@ impl HostServiceSystem {
     pub async fn update_service_policy(&self, id: &str, policy: &str) -> Result<()> {
         let input = UpdateServicePolicyRequestType {id, policy, };
         let path = format!("/HostServiceSystem/{moId}/UpdateServicePolicy", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// List of custom field definitions that are valid for the object's type.
@@ -186,13 +186,19 @@ impl HostServiceSystem {
     pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
         let path = format!("/HostServiceSystem/{moId}/availableField", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::CustomFieldDef>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Service configuration.
     pub async fn service_info(&self) -> Result<crate::types::structs::HostServiceInfo> {
         let path = format!("/HostServiceSystem/{moId}/serviceInfo", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::HostServiceInfo = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// List of custom field values.
     /// 
@@ -204,7 +210,11 @@ impl HostServiceSystem {
     pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/HostServiceSystem/{moId}/value", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
 }
 #[derive(serde::Serialize)]

@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// The *SmsStorageManager* managed object (SMS) provides methods to retrieve
 /// information about available storage topology, capabilities, and state.
 /// 
@@ -12,11 +12,11 @@ use crate::core::client::{Client, Result};
 ///   which are associated with external storage entities on the storage arrays.
 #[derive(Clone)]
 pub struct SmsStorageManager {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl SmsStorageManager {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -47,8 +47,12 @@ impl SmsStorageManager {
     pub async fn query_array(&self, provider_id: Option<&[String]>) -> Result<Option<Vec<crate::types::structs::StorageArray>>> {
         let input = QueryArrayRequestType {provider_id, };
         let path = format!("/sms/SmsStorageManager/{moId}/QueryArray", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::StorageArray>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Get the StorageArray object that is associated with the
     /// ScsiLun.
@@ -74,8 +78,12 @@ impl SmsStorageManager {
     pub async fn query_array_associated_with_lun(&self, canonical_name: &str) -> Result<Option<crate::types::structs::StorageArray>> {
         let input = QueryArrayAssociatedWithLunRequestType {canonical_name, };
         let path = format!("/sms/SmsStorageManager/{moId}/QueryArrayAssociatedWithLun", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::StorageArray>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Query Backing Storage Pools for StorageLun or StorageFileSystem.
     /// 
@@ -104,8 +112,12 @@ impl SmsStorageManager {
     pub async fn query_associated_backing_storage_pool(&self, entity_id: Option<&str>, entity_type: Option<&str>) -> Result<Option<Vec<crate::types::structs::BackingStoragePool>>> {
         let input = QueryAssociatedBackingStoragePoolRequestType {entity_id, entity_type, };
         let path = format!("/sms/SmsStorageManager/{moId}/QueryAssociatedBackingStoragePool", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::BackingStoragePool>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Query BackingStoragePools for the given set of datastores.
     /// 
@@ -134,8 +146,10 @@ impl SmsStorageManager {
     pub async fn query_datastore_backing_pool_mapping(&self, datastore: &[crate::types::structs::ManagedObjectReference]) -> Result<Vec<crate::types::structs::DatastoreBackingPoolMapping>> {
         let input = QueryDatastoreBackingPoolMappingRequestType {datastore, };
         let path = format!("/sms/SmsStorageManager/{moId}/QueryDatastoreBackingPoolMapping", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: Vec<crate::types::structs::DatastoreBackingPoolMapping> = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Get the capability for the given datastore.
     /// 
@@ -163,8 +177,12 @@ impl SmsStorageManager {
     pub async fn query_datastore_capability(&self, datastore: &crate::types::structs::ManagedObjectReference) -> Result<Option<crate::types::structs::StorageCapability>> {
         let input = QueryDatastoreCapabilityRequestType {datastore, };
         let path = format!("/sms/SmsStorageManager/{moId}/QueryDatastoreCapability", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::StorageCapability>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Deprecated as of SMS API 3.0, use *SmsStorageManager.QueryDrsMigrationCapabilityForPerformanceEx*.
     /// 
@@ -201,8 +219,10 @@ impl SmsStorageManager {
     pub async fn query_drs_migration_capability_for_performance(&self, src_datastore: &crate::types::structs::ManagedObjectReference, dst_datastore: &crate::types::structs::ManagedObjectReference) -> Result<bool> {
         let input = QueryDrsMigrationCapabilityForPerformanceRequestType {src_datastore, dst_datastore, };
         let path = format!("/sms/SmsStorageManager/{moId}/QueryDrsMigrationCapabilityForPerformance", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: bool = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deprecated as of SMS API 5.0.
     /// 
@@ -233,8 +253,10 @@ impl SmsStorageManager {
     pub async fn query_drs_migration_capability_for_performance_ex(&self, datastore: &[crate::types::structs::ManagedObjectReference]) -> Result<crate::types::structs::DrsMigrationCapabilityResult> {
         let input = QueryDrsMigrationCapabilityForPerformanceExRequestType {datastore, };
         let path = format!("/sms/SmsStorageManager/{moId}/QueryDrsMigrationCapabilityForPerformanceEx", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::DrsMigrationCapabilityResult = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Query for fault domains based on the query spec.
     /// 
@@ -263,8 +285,12 @@ impl SmsStorageManager {
     pub async fn query_fault_domain(&self, filter: Option<&crate::types::structs::FaultDomainFilter>) -> Result<Option<Vec<Box<dyn crate::types::traits::FaultDomainIdTrait>>>> {
         let input = QueryFaultDomainRequestType {filter, };
         let path = format!("/sms/SmsStorageManager/{moId}/QueryFaultDomain", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::FaultDomainIdTrait>>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Get the StorageFileSystem data objects for the Array.
     /// 
@@ -290,8 +316,12 @@ impl SmsStorageManager {
     pub async fn query_file_system_associated_with_array(&self, array_id: &str) -> Result<Option<Vec<crate::types::structs::StorageFileSystem>>> {
         let input = QueryFileSystemAssociatedWithArrayRequestType {array_id, };
         let path = format!("/sms/SmsStorageManager/{moId}/QueryFileSystemAssociatedWithArray", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::StorageFileSystem>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Get HostSystem managed entities that share the StorageLun.
     /// 
@@ -322,8 +352,12 @@ impl SmsStorageManager {
     pub async fn query_host_associated_with_lun(&self, scsi_3_id: &str, array_id: &str) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let input = QueryHostAssociatedWithLunRequestType {scsi_3_id, array_id, };
         let path = format!("/sms/SmsStorageManager/{moId}/QueryHostAssociatedWithLun", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Get the list of StorageLun data objects that for the Array.
     /// 
@@ -349,8 +383,12 @@ impl SmsStorageManager {
     pub async fn query_lun_associated_with_array(&self, array_id: &str) -> Result<Option<Vec<crate::types::structs::StorageLun>>> {
         let input = QueryLunAssociatedWithArrayRequestType {array_id, };
         let path = format!("/sms/SmsStorageManager/{moId}/QueryLunAssociatedWithArray", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::StorageLun>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Get the StorageLun data objects that are associated with StoragePort.
     /// 
@@ -380,8 +418,12 @@ impl SmsStorageManager {
     pub async fn query_lun_associated_with_port(&self, port_id: &str, array_id: &str) -> Result<Option<Vec<crate::types::structs::StorageLun>>> {
         let input = QueryLunAssociatedWithPortRequestType {port_id, array_id, };
         let path = format!("/sms/SmsStorageManager/{moId}/QueryLunAssociatedWithPort", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::StorageLun>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Get NFS datastore managed entity that are associated with
     /// StorageFileSystem.
@@ -413,8 +455,12 @@ impl SmsStorageManager {
     pub async fn query_nfs_datastore_associated_with_file_system(&self, file_system_id: &str, array_id: &str) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let input = QueryNfsDatastoreAssociatedWithFileSystemRequestType {file_system_id, array_id, };
         let path = format!("/sms/SmsStorageManager/{moId}/QueryNfsDatastoreAssociatedWithFileSystem", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::ManagedObjectReference>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Get the StoragePort data objects that are associated with Array.
     /// 
@@ -440,8 +486,12 @@ impl SmsStorageManager {
     pub async fn query_port_associated_with_array(&self, array_id: &str) -> Result<Option<Vec<Box<dyn crate::types::traits::StoragePortTrait>>>> {
         let input = QueryPortAssociatedWithArrayRequestType {array_id, };
         let path = format!("/sms/SmsStorageManager/{moId}/QueryPortAssociatedWithArray", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::StoragePortTrait>>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Get the StoragePort data object that is associated with LUN.
     /// 
@@ -470,8 +520,12 @@ impl SmsStorageManager {
     pub async fn query_port_associated_with_lun(&self, scsi_3_id: &str, array_id: &str) -> Result<Option<Box<dyn crate::types::traits::StoragePortTrait>>> {
         let input = QueryPortAssociatedWithLunRequestType {scsi_3_id, array_id, };
         let path = format!("/sms/SmsStorageManager/{moId}/QueryPortAssociatedWithLun", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Box<dyn crate::types::traits::StoragePortTrait>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Get the StoragePort data objects that are associated with Processor.
     /// 
@@ -501,8 +555,12 @@ impl SmsStorageManager {
     pub async fn query_port_associated_with_processor(&self, processor_id: &str, array_id: &str) -> Result<Option<Vec<Box<dyn crate::types::traits::StoragePortTrait>>>> {
         let input = QueryPortAssociatedWithProcessorRequestType {processor_id, array_id, };
         let path = format!("/sms/SmsStorageManager/{moId}/QueryPortAssociatedWithProcessor", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::StoragePortTrait>>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Get the StorageProcessor data objects that are associated with Array.
     /// 
@@ -528,8 +586,12 @@ impl SmsStorageManager {
     pub async fn query_processor_associated_with_array(&self, array_id: &str) -> Result<Option<Vec<crate::types::structs::StorageProcessor>>> {
         let input = QueryProcessorAssociatedWithArrayRequestType {array_id, };
         let path = format!("/sms/SmsStorageManager/{moId}/QueryProcessorAssociatedWithArray", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::StorageProcessor>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Get the list of Providers that are currently registered
     /// with StorageManager.
@@ -549,7 +611,11 @@ impl SmsStorageManager {
     pub async fn query_provider(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/sms/SmsStorageManager/{moId}/QueryProvider", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Query for replication group details based on the query filter spec.
     /// 
@@ -588,8 +654,12 @@ impl SmsStorageManager {
     pub async fn query_replication_group_info(&self, rg_filter: &crate::types::structs::ReplicationGroupFilter) -> Result<Option<Vec<Box<dyn crate::types::traits::GroupOperationResultTrait>>>> {
         let input = QueryReplicationGroupInfoRequestType {rg_filter, };
         let path = format!("/sms/SmsStorageManager/{moId}/QueryReplicationGroupInfo", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::GroupOperationResultTrait>>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Query storage containers that are retrieved from VASA providers.
     /// 
@@ -615,8 +685,12 @@ impl SmsStorageManager {
     pub async fn query_storage_container(&self, container_spec: Option<&crate::types::structs::StorageContainerSpec>) -> Result<Option<crate::types::structs::StorageContainerResult>> {
         let input = QueryStorageContainerRequestType {container_spec, };
         let path = format!("/sms/SmsStorageManager/{moId}/QueryStorageContainer", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::StorageContainerResult>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Get VMFS Datastore managed entity that are associated with
     /// StorageLun.
@@ -647,8 +721,12 @@ impl SmsStorageManager {
     pub async fn query_vmfs_datastore_associated_with_lun(&self, scsi_3_id: &str, array_id: &str) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let input = QueryVmfsDatastoreAssociatedWithLunRequestType {scsi_3_id, array_id, };
         let path = format!("/sms/SmsStorageManager/{moId}/QueryVmfsDatastoreAssociatedWithLun", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::ManagedObjectReference>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// SMS pushes the latest CA root certificates and CRLs to all registered VASA providers.
     /// 
@@ -674,8 +752,10 @@ impl SmsStorageManager {
     pub async fn sms_refresh_ca_certificates_and_cr_ls_task(&self, provider_id: Option<&[String]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = SmsRefreshCaCertificatesAndCrLsRequestType {provider_id, };
         let path = format!("/sms/SmsStorageManager/{moId}/SmsRefreshCACertificatesAndCRLs_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Register the provider and issue a sync operation on it.
     /// 
@@ -705,8 +785,10 @@ impl SmsStorageManager {
     pub async fn register_provider_task(&self, provider_spec: &dyn crate::types::traits::SmsProviderSpecTrait) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RegisterProviderRequestType {provider_spec, };
         let path = format!("/sms/SmsStorageManager/{moId}/RegisterProvider_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Unregister the provider.
     /// 
@@ -734,8 +816,10 @@ impl SmsStorageManager {
     pub async fn unregister_provider_task(&self, provider_id: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = UnregisterProviderRequestType {provider_id, };
         let path = format!("/sms/SmsStorageManager/{moId}/UnregisterProvider_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Upgrade VASA Provider registered to vCenter/SMS to maximum common version supported by both
     /// VASA Provider and SMS.
@@ -758,8 +842,10 @@ impl SmsStorageManager {
     pub async fn upgrade_vasa_provider_task(&self, upgrade_spec: &crate::types::structs::VasaProviderUpgradeSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = UpgradeVasaProviderRequestType {upgrade_spec, };
         let path = format!("/sms/SmsStorageManager/{moId}/UpgradeVASAProvider_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
 }
 #[derive(serde::Serialize)]

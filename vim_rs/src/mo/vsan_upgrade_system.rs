@@ -1,16 +1,16 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// VSAN Upgrade System.
 /// 
 /// Used to perform and monitor VSAN on-disk format
 /// upgrades.
 #[derive(Clone)]
 pub struct VsanUpgradeSystem {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl VsanUpgradeSystem {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -98,8 +98,10 @@ impl VsanUpgradeSystem {
     pub async fn perform_vsan_upgrade_task(&self, cluster: &crate::types::structs::ManagedObjectReference, perform_object_upgrade: Option<bool>, downgrade_format: Option<bool>, allow_reduced_redundancy: Option<bool>, exclude_hosts: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = PerformVsanUpgradeRequestType {cluster, perform_object_upgrade, downgrade_format, allow_reduced_redundancy, exclude_hosts, };
         let path = format!("/vsan/VsanUpgradeSystem/{moId}/PerformVsanUpgrade_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Perform an upgrade pre-flight check on a cluster.
     /// 
@@ -126,8 +128,10 @@ impl VsanUpgradeSystem {
     pub async fn perform_vsan_upgrade_preflight_check(&self, cluster: &crate::types::structs::ManagedObjectReference, downgrade_format: Option<bool>) -> Result<Box<dyn crate::types::traits::VsanUpgradeSystemPreflightCheckResultTrait>> {
         let input = PerformVsanUpgradePreflightCheckRequestType {cluster, downgrade_format, };
         let path = format!("/vsan/VsanUpgradeSystem/{moId}/PerformVsanUpgradePreflightCheck", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: Box<dyn crate::types::traits::VsanUpgradeSystemPreflightCheckResultTrait> = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Retrieve the latest status of a running, or the previously completed,
     /// upgrade process.
@@ -154,8 +158,10 @@ impl VsanUpgradeSystem {
     pub async fn query_vsan_upgrade_status(&self, cluster: &crate::types::structs::ManagedObjectReference) -> Result<Box<dyn crate::types::traits::VsanUpgradeSystemUpgradeStatusTrait>> {
         let input = QueryVsanUpgradeStatusRequestType {cluster, };
         let path = format!("/vsan/VsanUpgradeSystem/{moId}/QueryVsanUpgradeStatus", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: Box<dyn crate::types::traits::VsanUpgradeSystemUpgradeStatusTrait> = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
 }
 #[derive(serde::Serialize)]

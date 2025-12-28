@@ -1,14 +1,14 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// VASA(vStorage APIs for Storage Awareness) provider
 /// definition.
 #[derive(Clone)]
 pub struct VasaProvider {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl VasaProvider {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -55,8 +55,10 @@ impl VasaProvider {
     pub async fn failover_replication_group_task(&self, failover_param: &dyn crate::types::traits::FailoverParamTrait) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = FailoverReplicationGroupRequestType {failover_param, };
         let path = format!("/sms/VasaProvider/{moId}/FailoverReplicationGroup_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Prepare to fail over the specified replication groups.
     /// 
@@ -99,8 +101,10 @@ impl VasaProvider {
     pub async fn prepare_failover_replication_group_task(&self, group_id: Option<&[crate::types::structs::ReplicationGroupId]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = PrepareFailoverReplicationGroupRequestType {group_id, };
         let path = format!("/sms/VasaProvider/{moId}/PrepareFailoverReplicationGroup_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Promotes the replication groups currently *INTEST*
     /// to *FAILEDOVER*.
@@ -146,8 +150,10 @@ impl VasaProvider {
     pub async fn promote_replication_group_task(&self, promote_param: &crate::types::structs::PromoteParam) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = PromoteReplicationGroupRequestType {promote_param, };
         let path = format!("/sms/VasaProvider/{moId}/PromoteReplicationGroup_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Query for the currently active alarms known to this VASA provider.
     /// 
@@ -185,8 +191,12 @@ impl VasaProvider {
     pub async fn query_active_alarm(&self, alarm_filter: Option<&crate::types::structs::AlarmFilter>) -> Result<Option<crate::types::structs::AlarmResult>> {
         let input = QueryActiveAlarmRequestType {alarm_filter, };
         let path = format!("/sms/VasaProvider/{moId}/QueryActiveAlarm", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::AlarmResult>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Query for the point-in-time replicas available at the target location.
     /// 
@@ -232,8 +242,12 @@ impl VasaProvider {
     pub async fn query_point_in_time_replica(&self, group_id: Option<&[crate::types::structs::ReplicationGroupId]>, query_param: Option<&crate::types::structs::QueryPointInTimeReplicaParam>) -> Result<Option<Vec<Box<dyn crate::types::traits::GroupOperationResultTrait>>>> {
         let input = QueryPointInTimeReplicaRequestType {group_id, query_param, };
         let path = format!("/sms/VasaProvider/{moId}/QueryPointInTimeReplica", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::GroupOperationResultTrait>>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Get provider information.
     /// 
@@ -241,7 +255,9 @@ impl VasaProvider {
     pub async fn query_provider_info(&self) -> Result<Box<dyn crate::types::traits::SmsProviderInfoTrait>> {
         let path = format!("/sms/VasaProvider/{moId}/QueryProviderInfo", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: Box<dyn crate::types::traits::SmsProviderInfoTrait> = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Query for the replication group details.
     /// 
@@ -291,8 +307,12 @@ impl VasaProvider {
     pub async fn query_replication_group(&self, group_id: Option<&[crate::types::structs::ReplicationGroupId]>) -> Result<Option<Vec<Box<dyn crate::types::traits::GroupOperationResultTrait>>>> {
         let input = QueryReplicationGroupRequestType {group_id, };
         let path = format!("/sms/VasaProvider/{moId}/QueryReplicationGroup", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::GroupOperationResultTrait>>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Query for the replication peer fault domains.
     /// 
@@ -335,8 +355,12 @@ impl VasaProvider {
     pub async fn query_replication_peer(&self, fault_domain_id: Option<&[Box<dyn crate::types::traits::FaultDomainIdTrait>]>) -> Result<Option<Vec<crate::types::structs::QueryReplicationPeerResult>>> {
         let input = QueryReplicationPeerRequestType {fault_domain_id, };
         let path = format!("/sms/VasaProvider/{moId}/QueryReplicationPeer", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::QueryReplicationPeerResult>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Reconnect to the provider.
     /// 
@@ -365,7 +389,9 @@ impl VasaProvider {
     pub async fn vasa_provider_reconnect_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/sms/VasaProvider/{moId}/VasaProviderReconnect_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Refresh a CA signed certificate for the provider.
     /// 
@@ -387,7 +413,9 @@ impl VasaProvider {
     pub async fn vasa_provider_refresh_certificate_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/sms/VasaProvider/{moId}/VasaProviderRefreshCertificate_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Initiate replication in the reverse way, making the currently
     /// *FAILEDOVER* devices as sources.
@@ -429,8 +457,10 @@ impl VasaProvider {
     pub async fn reverse_replicate_group_task(&self, group_id: Option<&[crate::types::structs::ReplicationGroupId]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ReverseReplicateGroupRequestType {group_id, };
         let path = format!("/sms/VasaProvider/{moId}/ReverseReplicateGroup_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Revoke CA signed certificate of the provider.
     /// 
@@ -451,7 +481,9 @@ impl VasaProvider {
     pub async fn vasa_provider_revoke_certificate_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/sms/VasaProvider/{moId}/VasaProviderRevokeCertificate_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Issue a sync for the given Storage Array.
     /// 
@@ -476,8 +508,10 @@ impl VasaProvider {
     pub async fn vasa_provider_sync_task(&self, array_id: Option<&str>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VasaProviderSyncRequestType {array_id, };
         let path = format!("/sms/VasaProvider/{moId}/VasaProviderSync_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Synchronize the data between source and replica for the specified
     /// replication group.
@@ -524,8 +558,10 @@ impl VasaProvider {
     pub async fn sync_replication_group_task(&self, group_id: Option<&[crate::types::structs::ReplicationGroupId]>, pit_name: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = SyncReplicationGroupRequestType {group_id, pit_name, };
         let path = format!("/sms/VasaProvider/{moId}/SyncReplicationGroup_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Start a test failover for the specified replication groups.
     /// 
@@ -568,8 +604,10 @@ impl VasaProvider {
     pub async fn test_failover_replication_group_start_task(&self, test_failover_param: &crate::types::structs::TestFailoverParam) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = TestFailoverReplicationGroupStartRequestType {test_failover_param, };
         let path = format!("/sms/VasaProvider/{moId}/TestFailoverReplicationGroupStart_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Stop the ongoing test failover.
     /// 
@@ -621,8 +659,10 @@ impl VasaProvider {
     pub async fn test_failover_replication_group_stop_task(&self, group_id: Option<&[crate::types::structs::ReplicationGroupId]>, force: bool) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = TestFailoverReplicationGroupStopRequestType {group_id, force, };
         let path = format!("/sms/VasaProvider/{moId}/TestFailoverReplicationGroupStop_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
 }
 #[derive(serde::Serialize)]

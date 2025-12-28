@@ -1,14 +1,14 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// The alarm manager is a singleton object for managing alarms
 /// within a service instance.
 #[derive(Clone)]
 pub struct AlarmManager {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl AlarmManager {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -40,7 +40,7 @@ impl AlarmManager {
     pub async fn acknowledge_alarm(&self, alarm: &crate::types::structs::ManagedObjectReference, entity: &crate::types::structs::ManagedObjectReference) -> Result<()> {
         let input = AcknowledgeAlarmRequestType {alarm, entity, };
         let path = format!("/AlarmManager/{moId}/AcknowledgeAlarm", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Resets all triggered alarms to green.
@@ -56,7 +56,7 @@ impl AlarmManager {
     pub async fn clear_triggered_alarms(&self, filter: &crate::types::structs::AlarmFilterSpec) -> Result<()> {
         let input = ClearTriggeredAlarmsRequestType {filter, };
         let path = format!("/AlarmManager/{moId}/ClearTriggeredAlarms", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Creates an alarm.
@@ -94,8 +94,10 @@ impl AlarmManager {
     pub async fn create_alarm(&self, entity: &crate::types::structs::ManagedObjectReference, spec: &dyn crate::types::traits::AlarmSpecTrait) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateAlarmRequestType {entity, spec, };
         let path = format!("/AlarmManager/{moId}/CreateAlarm", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Disables alarm for a specific entity.
     ///
@@ -117,7 +119,7 @@ impl AlarmManager {
     pub async fn disable_alarm(&self, alarm: &crate::types::structs::ManagedObjectReference, entity: &crate::types::structs::ManagedObjectReference) -> Result<()> {
         let input = DisableAlarmRequestType {alarm, entity, };
         let path = format!("/AlarmManager/{moId}/DisableAlarm", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Enables alarm for a specific entity.
@@ -140,7 +142,7 @@ impl AlarmManager {
     pub async fn enable_alarm(&self, alarm: &crate::types::structs::ManagedObjectReference, entity: &crate::types::structs::ManagedObjectReference) -> Result<()> {
         let input = EnableAlarmRequestType {alarm, entity, };
         let path = format!("/AlarmManager/{moId}/EnableAlarm", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Available alarms defined on the entity.
@@ -167,8 +169,12 @@ impl AlarmManager {
     pub async fn get_alarm(&self, entity: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let input = GetAlarmRequestType {entity, };
         let path = format!("/AlarmManager/{moId}/GetAlarm", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Returns true if alarm actions are enabled on the specified managed entity.
     ///
@@ -183,8 +189,10 @@ impl AlarmManager {
     pub async fn are_alarm_actions_enabled(&self, entity: &crate::types::structs::ManagedObjectReference) -> Result<bool> {
         let input = AreAlarmActionsEnabledRequestType {entity, };
         let path = format!("/AlarmManager/{moId}/AreAlarmActionsEnabled", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: bool = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// The state of instantiated alarms on the entity.
     ///
@@ -203,8 +211,12 @@ impl AlarmManager {
     pub async fn get_alarm_state(&self, entity: &crate::types::structs::ManagedObjectReference) -> Result<Option<Vec<crate::types::structs::AlarmState>>> {
         let input = GetAlarmStateRequestType {entity, };
         let path = format!("/AlarmManager/{moId}/GetAlarmState", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::AlarmState>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Enables or disables alarms on the specified managed entity.
     ///
@@ -222,7 +234,7 @@ impl AlarmManager {
     pub async fn enable_alarm_actions(&self, entity: &crate::types::structs::ManagedObjectReference, enabled: bool) -> Result<()> {
         let input = EnableAlarmActionsRequestType {entity, enabled, };
         let path = format!("/AlarmManager/{moId}/EnableAlarmActions", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// The default setting for each alarm expression, used to populate the
@@ -232,7 +244,11 @@ impl AlarmManager {
     pub async fn default_expression(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::AlarmExpressionTrait>>>> {
         let path = format!("/AlarmManager/{moId}/defaultExpression", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::AlarmExpressionTrait>>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// The static descriptive strings used in alarms.
     /// 
@@ -240,7 +256,9 @@ impl AlarmManager {
     pub async fn description(&self) -> Result<crate::types::structs::AlarmDescription> {
         let path = format!("/AlarmManager/{moId}/description", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::AlarmDescription = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
 }
 #[derive(serde::Serialize)]

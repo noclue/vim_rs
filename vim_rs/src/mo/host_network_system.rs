@@ -1,15 +1,15 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// This managed object type describes networking host configuration and
 /// serves as the top level container for relevant networking
 /// data objects.
 #[derive(Clone)]
 pub struct HostNetworkSystem {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl HostNetworkSystem {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -41,7 +41,7 @@ impl HostNetworkSystem {
     pub async fn add_port_group(&self, portgrp: &crate::types::structs::HostPortGroupSpec) -> Result<()> {
         let input = AddPortGroupRequestType {portgrp, };
         let path = format!("/HostNetworkSystem/{moId}/AddPortGroup", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Adds a virtual service console network adapter.
@@ -81,8 +81,10 @@ impl HostNetworkSystem {
     pub async fn add_service_console_virtual_nic(&self, portgroup: &str, nic: &crate::types::structs::HostVirtualNicSpec) -> Result<String> {
         let input = AddServiceConsoleVirtualNicRequestType {portgroup, nic, };
         let path = format!("/HostNetworkSystem/{moId}/AddServiceConsoleVirtualNic", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Adds a virtual host/VMkernel network adapter.
     /// 
@@ -127,8 +129,10 @@ impl HostNetworkSystem {
     pub async fn add_virtual_nic(&self, portgroup: &str, nic: &crate::types::structs::HostVirtualNicSpec) -> Result<String> {
         let input = AddVirtualNicRequestType {portgroup, nic, };
         let path = format!("/HostNetworkSystem/{moId}/AddVirtualNic", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Adds a new virtual switch to the system with the given name.
     /// 
@@ -166,7 +170,7 @@ impl HostNetworkSystem {
     pub async fn add_virtual_switch(&self, vswitch_name: &str, spec: Option<&crate::types::structs::HostVirtualSwitchSpec>) -> Result<()> {
         let input = AddVirtualSwitchRequestType {vswitch_name, spec, };
         let path = format!("/HostNetworkSystem/{moId}/AddVirtualSwitch", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Requests network hint information for a physical network adapter.
@@ -201,8 +205,12 @@ impl HostNetworkSystem {
     pub async fn query_network_hint(&self, device: Option<&[String]>) -> Result<Option<Vec<crate::types::structs::PhysicalNicHintInfo>>> {
         let input = QueryNetworkHintRequestType {device, };
         let path = format!("/HostNetworkSystem/{moId}/QueryNetworkHint", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::PhysicalNicHintInfo>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Refresh the network information and settings to pick up any changes
     /// that might have occurred.
@@ -236,7 +244,7 @@ impl HostNetworkSystem {
     pub async fn remove_port_group(&self, pg_name: &str) -> Result<()> {
         let input = RemovePortGroupRequestType {pg_name, };
         let path = format!("/HostNetworkSystem/{moId}/RemovePortGroup", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Removes a virtual service console network adapter.
@@ -266,7 +274,7 @@ impl HostNetworkSystem {
     pub async fn remove_service_console_virtual_nic(&self, device: &str) -> Result<()> {
         let input = RemoveServiceConsoleVirtualNicRequestType {device, };
         let path = format!("/HostNetworkSystem/{moId}/RemoveServiceConsoleVirtualNic", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Removes a virtual host/VMkernel network adapter.
@@ -289,7 +297,7 @@ impl HostNetworkSystem {
     pub async fn remove_virtual_nic(&self, device: &str) -> Result<()> {
         let input = RemoveVirtualNicRequestType {device, };
         let path = format!("/HostNetworkSystem/{moId}/RemoveVirtualNic", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Removes an existing virtual switch from the system.
@@ -315,7 +323,7 @@ impl HostNetworkSystem {
     pub async fn remove_virtual_switch(&self, vswitch_name: &str) -> Result<()> {
         let input = RemoveVirtualSwitchRequestType {vswitch_name, };
         let path = format!("/HostNetworkSystem/{moId}/RemoveVirtualSwitch", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Restart the service console virtual network adapter interface.
@@ -347,7 +355,7 @@ impl HostNetworkSystem {
     pub async fn restart_service_console_virtual_nic(&self, device: &str) -> Result<()> {
         let input = RestartServiceConsoleVirtualNicRequestType {device, };
         let path = format!("/HostNetworkSystem/{moId}/RestartServiceConsoleVirtualNic", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Assigns a value to a custom field.
@@ -367,7 +375,7 @@ impl HostNetworkSystem {
     pub async fn set_custom_value(&self, key: &str, value: &str) -> Result<()> {
         let input = SetCustomValueRequestType {key, value, };
         let path = format!("/HostNetworkSystem/{moId}/setCustomValue", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Launch DPU(Data Processing Unit) failover for a given distributed virtual switch.
@@ -397,7 +405,7 @@ impl HostNetworkSystem {
     pub async fn start_dpu_failover(&self, dvs_name: &str, target_dpu_alias: Option<&str>) -> Result<()> {
         let input = StartDpuFailoverRequestType {dvs_name, target_dpu_alias, };
         let path = format!("/HostNetworkSystem/{moId}/startDpuFailover", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Applies the IP route configuration for the service console.
@@ -422,7 +430,7 @@ impl HostNetworkSystem {
     pub async fn update_console_ip_route_config(&self, config: &dyn crate::types::traits::HostIpRouteConfigTrait) -> Result<()> {
         let input = UpdateConsoleIpRouteConfigRequestType {config, };
         let path = format!("/HostNetworkSystem/{moId}/UpdateConsoleIpRouteConfig", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Deprecated as of vSphere API 5.5, which is moved to
@@ -455,7 +463,7 @@ impl HostNetworkSystem {
     pub async fn update_dns_config(&self, config: &dyn crate::types::traits::HostDnsConfigTrait) -> Result<()> {
         let input = UpdateDnsConfigRequestType {config, };
         let path = format!("/HostNetworkSystem/{moId}/UpdateDnsConfig", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Deprecated as of vSphere API 5.5, which is moved to
@@ -483,7 +491,7 @@ impl HostNetworkSystem {
     pub async fn update_ip_route_config(&self, config: &dyn crate::types::traits::HostIpRouteConfigTrait) -> Result<()> {
         let input = UpdateIpRouteConfigRequestType {config, };
         let path = format!("/HostNetworkSystem/{moId}/UpdateIpRouteConfig", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Deprecated as of vSphere API 5.5, which is moved to
@@ -508,7 +516,7 @@ impl HostNetworkSystem {
     pub async fn update_ip_route_table_config(&self, config: &crate::types::structs::HostIpRouteTableConfig) -> Result<()> {
         let input = UpdateIpRouteTableConfigRequestType {config, };
         let path = format!("/HostNetworkSystem/{moId}/UpdateIpRouteTableConfig", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Applies the network configuration.
@@ -593,8 +601,10 @@ impl HostNetworkSystem {
     pub async fn update_network_config(&self, config: &crate::types::structs::HostNetworkConfig, change_mode: &str) -> Result<crate::types::structs::HostNetworkConfigResult> {
         let input = UpdateNetworkConfigRequestType {config, change_mode, };
         let path = format!("/HostNetworkSystem/{moId}/UpdateNetworkConfig", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::HostNetworkConfigResult = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Configures link speed and duplexity.
     /// 
@@ -629,7 +639,7 @@ impl HostNetworkSystem {
     pub async fn update_physical_nic_link_speed(&self, device: &str, link_speed: Option<&crate::types::structs::PhysicalNicLinkInfo>) -> Result<()> {
         let input = UpdatePhysicalNicLinkSpeedRequestType {device, link_speed, };
         let path = format!("/HostNetworkSystem/{moId}/UpdatePhysicalNicLinkSpeed", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Reconfigures a port group on the virtual switch.
@@ -662,7 +672,7 @@ impl HostNetworkSystem {
     pub async fn update_port_group(&self, pg_name: &str, portgrp: &crate::types::structs::HostPortGroupSpec) -> Result<()> {
         let input = UpdatePortGroupRequestType {pg_name, portgrp, };
         let path = format!("/HostNetworkSystem/{moId}/UpdatePortGroup", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Configures the IP configuration for a virtual service console network
@@ -703,7 +713,7 @@ impl HostNetworkSystem {
     pub async fn update_service_console_virtual_nic(&self, device: &str, nic: &crate::types::structs::HostVirtualNicSpec) -> Result<()> {
         let input = UpdateServiceConsoleVirtualNicRequestType {device, nic, };
         let path = format!("/HostNetworkSystem/{moId}/UpdateServiceConsoleVirtualNic", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Configures virtual host/VMkernel network adapter.
@@ -745,7 +755,7 @@ impl HostNetworkSystem {
     pub async fn update_virtual_nic(&self, device: &str, nic: &crate::types::structs::HostVirtualNicSpec) -> Result<()> {
         let input = UpdateVirtualNicRequestType {device, nic, };
         let path = format!("/HostNetworkSystem/{moId}/UpdateVirtualNic", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Updates the properties of the virtual switch.
@@ -796,7 +806,7 @@ impl HostNetworkSystem {
     pub async fn update_virtual_switch(&self, vswitch_name: &str, spec: &crate::types::structs::HostVirtualSwitchSpec) -> Result<()> {
         let input = UpdateVirtualSwitchRequestType {vswitch_name, spec, };
         let path = format!("/HostNetworkSystem/{moId}/UpdateVirtualSwitch", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// List of custom field definitions that are valid for the object's type.
@@ -807,13 +817,21 @@ impl HostNetworkSystem {
     pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
         let path = format!("/HostNetworkSystem/{moId}/availableField", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::CustomFieldDef>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Capability vector indicating the available product features.
     pub async fn capabilities(&self) -> Result<Option<crate::types::structs::HostNetCapabilities>> {
         let path = format!("/HostNetworkSystem/{moId}/capabilities", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::HostNetCapabilities>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// IP route configuration for the service console.
     /// 
@@ -824,7 +842,11 @@ impl HostNetworkSystem {
     pub async fn console_ip_route_config(&self) -> Result<Option<Box<dyn crate::types::traits::HostIpRouteConfigTrait>>> {
         let path = format!("/HostNetworkSystem/{moId}/consoleIpRouteConfig", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Box<dyn crate::types::traits::HostIpRouteConfigTrait>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Deprecated as of vSphere API 5.5, which is moved to
     /// each NetStackInstance. This only works on the default NetStackInstance.
@@ -833,7 +855,11 @@ impl HostNetworkSystem {
     pub async fn dns_config(&self) -> Result<Option<Box<dyn crate::types::traits::HostDnsConfigTrait>>> {
         let path = format!("/HostNetworkSystem/{moId}/dnsConfig", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Box<dyn crate::types::traits::HostDnsConfigTrait>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Deprecated as of vSphere API 5.5, which is moved to
     /// each NetStackInstance. This only works on the default NetStackInstance.
@@ -842,7 +868,11 @@ impl HostNetworkSystem {
     pub async fn ip_route_config(&self) -> Result<Option<Box<dyn crate::types::traits::HostIpRouteConfigTrait>>> {
         let path = format!("/HostNetworkSystem/{moId}/ipRouteConfig", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Box<dyn crate::types::traits::HostIpRouteConfigTrait>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Network configuration information.
     /// 
@@ -854,13 +884,21 @@ impl HostNetworkSystem {
     pub async fn network_config(&self) -> Result<Option<crate::types::structs::HostNetworkConfig>> {
         let path = format!("/HostNetworkSystem/{moId}/networkConfig", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::HostNetworkConfig>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// The network configuration and runtime information.
     pub async fn network_info(&self) -> Result<Option<crate::types::structs::HostNetworkInfo>> {
         let path = format!("/HostNetworkSystem/{moId}/networkInfo", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::HostNetworkInfo>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Deprecated as of VI API 4.0, the system defaults will be used.
     /// 
@@ -868,7 +906,11 @@ impl HostNetworkSystem {
     pub async fn offload_capabilities(&self) -> Result<Option<crate::types::structs::HostNetOffloadCapabilities>> {
         let path = format!("/HostNetworkSystem/{moId}/offloadCapabilities", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::HostNetOffloadCapabilities>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// List of custom field values.
     /// 
@@ -880,7 +922,11 @@ impl HostNetworkSystem {
     pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/HostNetworkSystem/{moId}/value", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
 }
 #[derive(serde::Serialize)]

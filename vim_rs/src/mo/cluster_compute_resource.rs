@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// The *ClusterComputeResource* data object aggregates the compute
 /// resources of associated *HostSystem* objects into a single
 /// compute resource for use by virtual machines.
@@ -13,11 +13,11 @@ use crate::core::client::{Client, Result};
 /// to create an instance of this object.
 #[derive(Clone)]
 pub struct ClusterComputeResource {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl ClusterComputeResource {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -131,8 +131,10 @@ impl ClusterComputeResource {
     pub async fn add_host_task(&self, spec: &crate::types::structs::HostConnectSpec, as_connected: bool, resource_pool: Option<&crate::types::structs::ManagedObjectReference>, license: Option<&str>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = AddHostRequestType {spec, as_connected, resource_pool, license, };
         let path = format!("/ClusterComputeResource/{moId}/AddHost_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Applies a recommendation from the drsRecommendation or the
     /// recommendation list.
@@ -150,7 +152,7 @@ impl ClusterComputeResource {
     pub async fn apply_recommendation(&self, key: &str) -> Result<()> {
         let input = ApplyRecommendationRequestType {key, };
         let path = format!("/ClusterComputeResource/{moId}/ApplyRecommendation", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Cancels a recommendation.
@@ -164,7 +166,7 @@ impl ClusterComputeResource {
     pub async fn cancel_recommendation(&self, key: &str) -> Result<()> {
         let input = CancelRecommendationRequestType {key, };
         let path = format!("/ClusterComputeResource/{moId}/CancelRecommendation", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Configures the cluster.
@@ -215,8 +217,10 @@ impl ClusterComputeResource {
     pub async fn configure_hci_task(&self, cluster_spec: &crate::types::structs::ClusterComputeResourceHciConfigSpec, host_inputs: Option<&[crate::types::structs::ClusterComputeResourceHostConfigurationInput]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ConfigureHciRequestType {cluster_spec, host_inputs, };
         let path = format!("/ClusterComputeResource/{moId}/ConfigureHCI_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Destroys this object, deleting its contents and removing it from its parent
     /// folder (if any).
@@ -242,7 +246,9 @@ impl ClusterComputeResource {
     pub async fn destroy_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/ClusterComputeResource/{moId}/Destroy_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Disable network boot support for this compute resource.
     /// 
@@ -262,7 +268,9 @@ impl ClusterComputeResource {
     pub async fn disable_network_boot_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/ClusterComputeResource/{moId}/DisableNetworkBoot_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Enable network boot in the specified mode for this compute resource.
     /// 
@@ -291,8 +299,10 @@ impl ClusterComputeResource {
     pub async fn enable_network_boot_task(&self, network_boot_mode: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = EnableNetworkBootRequestType {network_boot_mode, };
         let path = format!("/ClusterComputeResource/{moId}/EnableNetworkBoot_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// The API takes a list of hosts in the cluster as input, and
     /// returns a list of hosts in "ClusterMaintenanceResult" that the
@@ -351,8 +361,10 @@ impl ClusterComputeResource {
     pub async fn cluster_enter_maintenance_mode(&self, host: &[crate::types::structs::ManagedObjectReference], option: Option<&[Box<dyn crate::types::traits::OptionValueTrait>]>, info: Option<&crate::types::structs::ClusterComputeResourceMaintenanceInfo>) -> Result<crate::types::structs::ClusterEnterMaintenanceResult> {
         let input = ClusterEnterMaintenanceModeRequestType {host, option, info, };
         let path = format!("/ClusterComputeResource/{moId}/ClusterEnterMaintenanceMode", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ClusterEnterMaintenanceResult = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// A managed object that controls Enhanced vMotion Compatibility mode for
     /// this cluster.
@@ -365,7 +377,11 @@ impl ClusterComputeResource {
     pub async fn evc_manager(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let path = format!("/ClusterComputeResource/{moId}/EvcManager", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::ManagedObjectReference>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Extend an existing HCI cluster.
     /// 
@@ -407,8 +423,10 @@ impl ClusterComputeResource {
     pub async fn extend_hci_task(&self, host_inputs: Option<&[crate::types::structs::ClusterComputeResourceHostConfigurationInput]>, v_san_config_spec: Option<&dyn crate::types::traits::SddcBaseTrait>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ExtendHciRequestType {host_inputs, v_san_config_spec, };
         let path = format!("/ClusterComputeResource/{moId}/ExtendHCI_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Finds all enabled and disabled VM-VM Affinity and Anti-Affinity rules,
     /// involving the given Virtual Machine.
@@ -424,8 +442,12 @@ impl ClusterComputeResource {
     pub async fn find_rules_for_vm(&self, vm: &crate::types::structs::ManagedObjectReference) -> Result<Option<Vec<Box<dyn crate::types::traits::ClusterRuleInfoTrait>>>> {
         let input = FindRulesForVmRequestType {vm, };
         let path = format!("/ClusterComputeResource/{moId}/FindRulesForVm", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::ClusterRuleInfoTrait>>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// This API can be invoked to get the current CPU, memory and storage usage
     /// in the cluster.
@@ -450,7 +472,9 @@ impl ClusterComputeResource {
     pub async fn get_resource_usage(&self) -> Result<crate::types::structs::ClusterResourceUsageSummary> {
         let path = format!("/ClusterComputeResource/{moId}/GetResourceUsage", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ClusterResourceUsageSummary = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deprecated as of vSphere 9.0 with no replacement. In a future release
     /// of vSphere, the vCLS functionality will be disabled, vCLS
@@ -473,7 +497,11 @@ impl ClusterComputeResource {
     pub async fn get_system_v_ms_restricted_datastores(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/ClusterComputeResource/{moId}/GetSystemVMsRestrictedDatastores", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Moves an existing host into a cluster.
     /// 
@@ -544,8 +572,10 @@ impl ClusterComputeResource {
     pub async fn move_host_into_task(&self, host: &crate::types::structs::ManagedObjectReference, resource_pool: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = MoveHostIntoRequestType {host, resource_pool, };
         let path = format!("/ClusterComputeResource/{moId}/MoveHostInto_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Moves an existing host into a cluster.
     /// 
@@ -618,8 +648,10 @@ impl ClusterComputeResource {
     pub async fn move_into_task(&self, host: &[crate::types::structs::ManagedObjectReference]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = MoveIntoRequestType {host, };
         let path = format!("/ClusterComputeResource/{moId}/MoveInto_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// This method returns a *PlacementResult* object.
     /// 
@@ -676,8 +708,10 @@ impl ClusterComputeResource {
     pub async fn place_vm(&self, placement_spec: &crate::types::structs::PlacementSpec) -> Result<crate::types::structs::PlacementResult> {
         let input = PlaceVmRequestType {placement_spec, };
         let path = format!("/ClusterComputeResource/{moId}/PlaceVm", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::PlacementResult = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deprecated as of VI API 2.5, use *Datacenter.PowerOnMultiVM_Task*.
     /// *ClusterComputeResource.RecommendHostsForVm* cannot make any recommendations if DRS cannot
@@ -724,8 +758,12 @@ impl ClusterComputeResource {
     pub async fn recommend_hosts_for_vm(&self, vm: &crate::types::structs::ManagedObjectReference, pool: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Option<Vec<crate::types::structs::ClusterHostRecommendation>>> {
         let input = RecommendHostsForVmRequestType {vm, pool, };
         let path = format!("/ClusterComputeResource/{moId}/RecommendHostsForVm", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ClusterHostRecommendation>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Deprecated as of VI API 2.5, use *ComputeResource.ReconfigureComputeResource_Task*.
     /// 
@@ -757,8 +795,10 @@ impl ClusterComputeResource {
     pub async fn reconfigure_cluster_task(&self, spec: &crate::types::structs::ClusterConfigSpec, modify: bool) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ReconfigureClusterRequestType {spec, modify, };
         let path = format!("/ClusterComputeResource/{moId}/ReconfigureCluster_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Change the compute resource configuration.
     /// 
@@ -790,8 +830,10 @@ impl ClusterComputeResource {
     pub async fn reconfigure_compute_resource_task(&self, spec: &dyn crate::types::traits::ComputeResourceConfigSpecTrait, modify: bool) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ReconfigureComputeResourceRequestType {spec, modify, };
         let path = format!("/ClusterComputeResource/{moId}/ReconfigureComputeResource_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Make DRS invoke again and return a new list of recommendations.
     /// 
@@ -856,8 +898,10 @@ impl ClusterComputeResource {
     pub async fn rename_task(&self, new_name: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RenameRequestType {new_name, };
         let path = format!("/ClusterComputeResource/{moId}/Rename_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Retrieve DAS advanced runtime info for this cluster.
     /// 
@@ -865,7 +909,11 @@ impl ClusterComputeResource {
     pub async fn retrieve_das_advanced_runtime_info(&self) -> Result<Option<Box<dyn crate::types::traits::ClusterDasAdvancedRuntimeInfoTrait>>> {
         let path = format!("/ClusterComputeResource/{moId}/RetrieveDasAdvancedRuntimeInfo", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Box<dyn crate::types::traits::ClusterDasAdvancedRuntimeInfoTrait>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Set the desired encryption mode and host key for the cluster.
     /// 
@@ -901,7 +949,7 @@ impl ClusterComputeResource {
     pub async fn set_crypto_mode(&self, crypto_mode: &str, policy: Option<&crate::types::structs::ClusterComputeResourceCryptoModePolicy>) -> Result<()> {
         let input = SetCryptoModeRequestType {crypto_mode, policy, };
         let path = format!("/ClusterComputeResource/{moId}/SetCryptoMode", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Assigns a value to a custom field.
@@ -921,7 +969,7 @@ impl ClusterComputeResource {
     pub async fn set_custom_value(&self, key: &str, value: &str) -> Result<()> {
         let input = SetCustomValueRequestType {key, value, };
         let path = format!("/ClusterComputeResource/{moId}/setCustomValue", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Stamp all rules in the cluster with ruleUuid.
@@ -937,7 +985,9 @@ impl ClusterComputeResource {
     pub async fn stamp_all_rules_with_uuid_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/ClusterComputeResource/{moId}/StampAllRulesWithUuid_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Validate HCI configuration in pre-configure and post-configure use-cases.
     /// 1. pre-configure use-case: Validates the HCI configuration to be applied on
@@ -993,14 +1043,22 @@ impl ClusterComputeResource {
     pub async fn validate_hci_configuration(&self, hci_config_spec: Option<&crate::types::structs::ClusterComputeResourceHciConfigSpec>, hosts: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<Option<Vec<Box<dyn crate::types::traits::ClusterComputeResourceValidationResultBaseTrait>>>> {
         let input = ValidateHciConfigurationRequestType {hci_config_spec, hosts, };
         let path = format!("/ClusterComputeResource/{moId}/ValidateHCIConfiguration", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::ClusterComputeResourceValidationResultBaseTrait>>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// The set of actions that have been performed recently.
     pub async fn action_history(&self) -> Result<Option<Vec<crate::types::structs::ClusterActionHistory>>> {
         let path = format!("/ClusterComputeResource/{moId}/actionHistory", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ClusterActionHistory>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Whether alarm actions are enabled for this entity.
     /// 
@@ -1010,7 +1068,11 @@ impl ClusterComputeResource {
     pub async fn alarm_actions_enabled(&self) -> Result<Option<bool>> {
         let path = format!("/ClusterComputeResource/{moId}/alarmActionsEnabled", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<bool>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// List of custom field definitions that are valid for the object's type.
     /// 
@@ -1020,7 +1082,11 @@ impl ClusterComputeResource {
     pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
         let path = format!("/ClusterComputeResource/{moId}/availableField", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::CustomFieldDef>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Current configuration issues that have been detected for this entity.
     /// 
@@ -1032,7 +1098,11 @@ impl ClusterComputeResource {
     pub async fn config_issue(&self) -> Result<Option<Vec<crate::types::structs::Event>>> {
         let path = format!("/ClusterComputeResource/{moId}/configIssue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::Event>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Flag indicating whether or not desired configuration
     /// management platform is enabled on the compute resource.
@@ -1046,7 +1116,11 @@ impl ClusterComputeResource {
     pub async fn config_manager_enabled(&self) -> Result<Option<bool>> {
         let path = format!("/ClusterComputeResource/{moId}/configManagerEnabled", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<bool>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// The configStatus indicates whether or not the system has detected a configuration
     /// issue involving this entity.
@@ -1075,7 +1149,9 @@ impl ClusterComputeResource {
     pub async fn config_status(&self) -> Result<crate::types::enums::ManagedEntityStatusEnum> {
         let path = format!("/ClusterComputeResource/{moId}/configStatus", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::enums::ManagedEntityStatusEnum = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deprecated as of VI API 2.5, use *ComputeResource.configurationEx*,
     /// which is a *ClusterConfigInfoEx* data object..
@@ -1084,7 +1160,9 @@ impl ClusterComputeResource {
     pub async fn configuration(&self) -> Result<crate::types::structs::ClusterConfigInfo> {
         let path = format!("/ClusterComputeResource/{moId}/configuration", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ClusterConfigInfo = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Configuration of the compute resource; applies to both standalone hosts
     /// and clusters.
@@ -1094,7 +1172,9 @@ impl ClusterComputeResource {
     pub async fn configuration_ex(&self) -> Result<Box<dyn crate::types::traits::ComputeResourceConfigInfoTrait>> {
         let path = format!("/ClusterComputeResource/{moId}/configurationEx", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: Box<dyn crate::types::traits::ComputeResourceConfigInfoTrait> = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Custom field values.
     /// 
@@ -1102,7 +1182,11 @@ impl ClusterComputeResource {
     pub async fn custom_value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/ClusterComputeResource/{moId}/customValue", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// The datastore property is the subset of datastore objects in the datacenter
     /// available in this ComputeResource.
@@ -1118,7 +1202,11 @@ impl ClusterComputeResource {
     pub async fn datastore(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/ClusterComputeResource/{moId}/datastore", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// A set of alarm states for alarms that apply to this managed entity.
     /// 
@@ -1133,7 +1221,11 @@ impl ClusterComputeResource {
     pub async fn declared_alarm_state(&self) -> Result<Option<Vec<crate::types::structs::AlarmState>>> {
         let path = format!("/ClusterComputeResource/{moId}/declaredAlarmState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::AlarmState>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// List of operations that are disabled, given the current runtime
     /// state of the entity.
@@ -1207,7 +1299,11 @@ impl ClusterComputeResource {
     pub async fn disabled_method(&self) -> Result<Option<Vec<String>>> {
         let path = format!("/ClusterComputeResource/{moId}/disabledMethod", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<String>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// A collection of the DRS faults generated in the last DRS invocation.
     /// 
@@ -1229,7 +1325,11 @@ impl ClusterComputeResource {
     pub async fn drs_fault(&self) -> Result<Option<Vec<crate::types::structs::ClusterDrsFaults>>> {
         let path = format!("/ClusterComputeResource/{moId}/drsFault", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ClusterDrsFaults>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Deprecated as of VI API 2.5, use
     /// *ClusterComputeResource.recommendation*.
@@ -1241,7 +1341,11 @@ impl ClusterComputeResource {
     pub async fn drs_recommendation(&self) -> Result<Option<Vec<crate::types::structs::ClusterDrsRecommendation>>> {
         let path = format!("/ClusterComputeResource/{moId}/drsRecommendation", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ClusterDrsRecommendation>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Access rights the current session has to this entity.
     /// 
@@ -1249,7 +1353,11 @@ impl ClusterComputeResource {
     pub async fn effective_role(&self) -> Result<Option<Vec<i32>>> {
         let path = format!("/ClusterComputeResource/{moId}/effectiveRole", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<i32>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// The environment browser object that identifies the environments that are supported
     /// on this compute resource.
@@ -1262,14 +1370,22 @@ impl ClusterComputeResource {
     pub async fn environment_browser(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let path = format!("/ClusterComputeResource/{moId}/environmentBrowser", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::ManagedObjectReference>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// This is applicable to clusters which are configured using the HCI
     /// workflow and contains data related to the workflow and specification.
     pub async fn hci_config(&self) -> Result<Option<crate::types::structs::ClusterComputeResourceHciConfigInfo>> {
         let path = format!("/ClusterComputeResource/{moId}/hciConfig", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::ClusterComputeResourceHciConfigInfo>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// List of hosts that are part of this compute resource.
     /// 
@@ -1284,7 +1400,11 @@ impl ClusterComputeResource {
     pub async fn host(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/ClusterComputeResource/{moId}/host", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Flag indicating whether or not the lifecycle of the compute resource is
     /// managed.
@@ -1297,7 +1417,11 @@ impl ClusterComputeResource {
     pub async fn lifecycle_managed(&self) -> Result<Option<bool>> {
         let path = format!("/ClusterComputeResource/{moId}/lifecycleManaged", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<bool>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// The set of migration decisions that have recently been performed.
     /// 
@@ -1305,7 +1429,11 @@ impl ClusterComputeResource {
     pub async fn migration_history(&self) -> Result<Option<Vec<crate::types::structs::ClusterDrsMigration>>> {
         let path = format!("/ClusterComputeResource/{moId}/migrationHistory", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ClusterDrsMigration>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Name of this entity, unique relative to its parent.
     /// 
@@ -1319,7 +1447,9 @@ impl ClusterComputeResource {
     pub async fn name(&self) -> Result<String> {
         let path = format!("/ClusterComputeResource/{moId}/name", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// The subset of network objects available in the datacenter that is available in
     /// this ComputeResource.
@@ -1335,7 +1465,11 @@ impl ClusterComputeResource {
     pub async fn network(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/ClusterComputeResource/{moId}/network", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Managed property indicating whether and what kind of netwoork boot mode
     /// is configured for this compute resource.
@@ -1353,7 +1487,11 @@ impl ClusterComputeResource {
     pub async fn network_boot_mode(&self) -> Result<Option<String>> {
         let path = format!("/ClusterComputeResource/{moId}/networkBootMode", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<String>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// General health of this managed entity.
     /// 
@@ -1378,7 +1516,9 @@ impl ClusterComputeResource {
     pub async fn overall_status(&self) -> Result<crate::types::enums::ManagedEntityStatusEnum> {
         let path = format!("/ClusterComputeResource/{moId}/overallStatus", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::enums::ManagedEntityStatusEnum = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Parent of this entity.
     /// 
@@ -1394,13 +1534,21 @@ impl ClusterComputeResource {
     pub async fn parent(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let path = format!("/ClusterComputeResource/{moId}/parent", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::ManagedObjectReference>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// List of permissions defined for this entity.
     pub async fn permission(&self) -> Result<Option<Vec<crate::types::structs::Permission>>> {
         let path = format!("/ClusterComputeResource/{moId}/permission", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::Permission>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// The set of recent tasks operating on this managed entity.
     /// 
@@ -1430,7 +1578,11 @@ impl ClusterComputeResource {
     pub async fn recent_task(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/ClusterComputeResource/{moId}/recentTask", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// List of recommended actions for the cluster.
     /// 
@@ -1449,7 +1601,11 @@ impl ClusterComputeResource {
     pub async fn recommendation(&self) -> Result<Option<Vec<crate::types::structs::ClusterRecommendation>>> {
         let path = format!("/ClusterComputeResource/{moId}/recommendation", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ClusterRecommendation>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Reference to root resource pool.
     /// 
@@ -1461,7 +1617,11 @@ impl ClusterComputeResource {
     pub async fn resource_pool(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let path = format!("/ClusterComputeResource/{moId}/resourcePool", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::ManagedObjectReference>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Basic runtime information about a compute resource.
     /// 
@@ -1470,7 +1630,9 @@ impl ClusterComputeResource {
     pub async fn summary(&self) -> Result<Box<dyn crate::types::traits::ComputeResourceSummaryTrait>> {
         let path = format!("/ClusterComputeResource/{moId}/summary", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: Box<dyn crate::types::traits::ComputeResourceSummaryTrait> = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deprecated do not use this property.
     /// The same information could be obtained via
@@ -1482,7 +1644,9 @@ impl ClusterComputeResource {
     pub async fn summary_ex(&self) -> Result<crate::types::structs::ClusterComputeResourceSummary> {
         let path = format!("/ClusterComputeResource/{moId}/summaryEx", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ClusterComputeResourceSummary = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// The set of tags associated with this managed entity.
     /// 
@@ -1492,7 +1656,11 @@ impl ClusterComputeResource {
     pub async fn tag(&self) -> Result<Option<Vec<crate::types::structs::Tag>>> {
         let path = format!("/ClusterComputeResource/{moId}/tag", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::Tag>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// A set of alarm states for alarms triggered by this entity
     /// or by its descendants.
@@ -1511,7 +1679,11 @@ impl ClusterComputeResource {
     pub async fn triggered_alarm_state(&self) -> Result<Option<Vec<crate::types::structs::AlarmState>>> {
         let path = format!("/ClusterComputeResource/{moId}/triggeredAlarmState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::AlarmState>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// List of custom field values.
     /// 
@@ -1523,7 +1695,11 @@ impl ClusterComputeResource {
     pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/ClusterComputeResource/{moId}/value", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
 }
 #[derive(serde::Serialize)]

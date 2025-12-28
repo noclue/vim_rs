@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// This managed object type provides a comprehensive way to manage vSAN
 /// cluster configuration in below areas:
 /// - Enable or disable vSAN
@@ -20,11 +20,11 @@ use crate::core::client::{Client, Result};
 /// through vSAN service at vCenter server side.
 #[derive(Clone)]
 pub struct VsanVcClusterConfigSystem {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl VsanVcClusterConfigSystem {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -69,8 +69,10 @@ impl VsanVcClusterConfigSystem {
     pub async fn vsan_cluster_get_claimed_capacity(&self, cluster: &crate::types::structs::ManagedObjectReference) -> Result<i64> {
         let input = VsanClusterGetClaimedCapacityRequestType {cluster, };
         let path = format!("/vsan/VsanVcClusterConfigSystem/{moId}/VsanClusterGetClaimedCapacity", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: i64 = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Get configInfoEx for a vSAN cluster  
     /// We can get vSAN configuration information through this method.
@@ -105,8 +107,10 @@ impl VsanVcClusterConfigSystem {
     pub async fn vsan_cluster_get_config(&self, cluster: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::VsanConfigInfoEx> {
         let input = VsanClusterGetConfigRequestType {cluster, };
         let path = format!("/vsan/VsanVcClusterConfigSystem/{moId}/VsanClusterGetConfig", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::VsanConfigInfoEx = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Get vSAN runtime stats of all hosts reside in specified cluster.
     /// 
@@ -140,8 +144,12 @@ impl VsanVcClusterConfigSystem {
     pub async fn vsan_cluster_get_runtime_stats(&self, cluster: &crate::types::structs::ManagedObjectReference, stats: Option<&[String]>) -> Result<Option<Vec<crate::types::structs::VsanRuntimeStatsHostMap>>> {
         let input = VsanClusterGetRuntimeStatsRequestType {cluster, stats, };
         let path = format!("/vsan/VsanVcClusterConfigSystem/{moId}/VsanClusterGetRuntimeStats", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VsanRuntimeStatsHostMap>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// To support integration between vSAN and DRS, we are expected to report runtime
     /// stats of vSAN member hosts and VMs locate in specified vSAN cluster from storage
@@ -177,8 +185,12 @@ impl VsanVcClusterConfigSystem {
     pub async fn vsan_query_cluster_drs_stats(&self, cluster: &crate::types::structs::ManagedObjectReference, vms: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<Option<Vec<crate::types::structs::VsanHostDrsStats>>> {
         let input = VsanQueryClusterDrsStatsRequestType {cluster, vms, };
         let path = format!("/vsan/VsanVcClusterConfigSystem/{moId}/VsanQueryClusterDrsStats", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VsanHostDrsStats>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Reconfigure a vSAN cluster.
     /// 
@@ -239,8 +251,10 @@ impl VsanVcClusterConfigSystem {
     pub async fn vsan_cluster_reconfig(&self, cluster: &crate::types::structs::ManagedObjectReference, vsan_reconfig_spec: &crate::types::structs::VimVsanReconfigSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanClusterReconfigRequestType {cluster, vsan_reconfig_spec, };
         let path = format!("/vsan/VsanVcClusterConfigSystem/{moId}/VsanClusterReconfig", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Regenerate the key(s) used by vSAN encryption for the given cluster.
     /// 
@@ -296,8 +310,10 @@ impl VsanVcClusterConfigSystem {
     pub async fn vsan_encrypted_cluster_rekey_task(&self, encrypted_cluster: &crate::types::structs::ManagedObjectReference, deep_rekey: Option<bool>, allow_reduced_redundancy: Option<bool>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanEncryptedClusterRekeyRequestType {encrypted_cluster, deep_rekey, allow_reduced_redundancy, };
         let path = format!("/vsan/VsanVcClusterConfigSystem/{moId}/VsanEncryptedClusterRekey_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Run checks for lifecycle operations on a given vSAN cluster.
     /// 
@@ -338,8 +354,10 @@ impl VsanVcClusterConfigSystem {
     pub async fn run_lifecycle_check(&self, cluster: &crate::types::structs::ManagedObjectReference, vsan_lifecycle_check_spec: &crate::types::structs::VsanVcLifecycleCheckSpec) -> Result<crate::types::structs::VsanVcLifecycleCheckResult> {
         let input = RunLifecycleCheckRequestType {cluster, vsan_lifecycle_check_spec, };
         let path = format!("/vsan/VsanVcClusterConfigSystem/{moId}/RunLifecycleCheck", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::VsanVcLifecycleCheckResult = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Validate the vSAN cluster reconfig spec to figure out whether user spec can
     /// be supported by target cluster.
@@ -375,8 +393,12 @@ impl VsanVcClusterConfigSystem {
     pub async fn vsan_validate_config_spec(&self, cluster: &crate::types::structs::ManagedObjectReference, vsan_reconfig_spec: &crate::types::structs::VimVsanReconfigSpec) -> Result<Option<Vec<Box<dyn crate::types::traits::ClusterComputeResourceValidationResultBaseTrait>>>> {
         let input = VsanValidateConfigSpecRequestType {cluster, vsan_reconfig_spec, };
         let path = format!("/vsan/VsanVcClusterConfigSystem/{moId}/VsanValidateConfigSpec", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::ClusterComputeResourceValidationResultBaseTrait>>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
 }
 #[derive(serde::Serialize)]

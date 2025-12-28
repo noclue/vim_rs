@@ -1,13 +1,13 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// A task is used to monitor long running operations.
 #[derive(Clone)]
 pub struct VslmTask {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl VslmTask {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -43,12 +43,18 @@ impl VslmTask {
     pub async fn vslm_query_info(&self) -> Result<crate::types::structs::VslmTaskInfo> {
         let path = format!("/vslm/VslmTask/{moId}/VslmQueryInfo", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::VslmTaskInfo = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Get the result of the task.
     pub async fn vslm_query_task_result(&self) -> Result<Option<crate::types::vim_any::VimAny>> {
         let path = format!("/vslm/VslmTask/{moId}/VslmQueryTaskResult", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::vim_any::VimAny>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
 }

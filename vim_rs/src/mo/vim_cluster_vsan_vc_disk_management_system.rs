@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// VimClusterVsanVcDiskManagementSystem enhances vSAN disk
 /// management part, provides vSAN all flash disk group support,
 /// exposes more detailed information of vSAN disk group, helps
@@ -19,11 +19,11 @@ use crate::core::client::{Client, Result};
 /// server side.
 #[derive(Clone)]
 pub struct VimClusterVsanVcDiskManagementSystem {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl VimClusterVsanVcDiskManagementSystem {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -65,8 +65,10 @@ impl VimClusterVsanVcDiskManagementSystem {
     pub async fn vsan_add_storage_pool_disk(&self, specs: Option<&[crate::types::structs::VsanAddStoragePoolDiskSpec]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanAddStoragePoolDiskRequestType {specs, };
         let path = format!("/vsan/VimClusterVsanVcDiskManagementSystem/{moId}/VsanAddStoragePoolDisk", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// This API can be used to delete a single or multiple disks from storage pool.
     /// 
@@ -95,8 +97,10 @@ impl VimClusterVsanVcDiskManagementSystem {
     pub async fn vsan_delete_storage_pool_disk(&self, cluster: &crate::types::structs::ManagedObjectReference, spec: &crate::types::structs::VsanDeleteStoragePoolDiskSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanDeleteStoragePoolDiskRequestType {cluster, spec, };
         let path = format!("/vsan/VimClusterVsanVcDiskManagementSystem/{moId}/VsanDeleteStoragePoolDisk", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// This API is used to create new vSAN disk groups or attach
     /// more disks into existing vSAN disk group on specified host.
@@ -143,8 +147,10 @@ impl VimClusterVsanVcDiskManagementSystem {
     pub async fn initialize_disk_mappings(&self, spec: &crate::types::structs::VimVsanHostDiskMappingCreationSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = InitializeDiskMappingsRequestType {spec, };
         let path = format!("/vsan/VimClusterVsanVcDiskManagementSystem/{moId}/InitializeDiskMappings", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Retrieve logical capacity, logical capacity used, physical capacity, physical
     /// capacity used and data efficiency metadata of a data efficiency enabled
@@ -165,8 +171,10 @@ impl VimClusterVsanVcDiskManagementSystem {
     pub async fn query_cluster_data_efficiency_capacity_state(&self, cluster: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::VimVsanDataEfficiencyCapacityState> {
         let input = QueryClusterDataEfficiencyCapacityStateRequestType {cluster, };
         let path = format!("/vsan/VimClusterVsanVcDiskManagementSystem/{moId}/QueryClusterDataEfficiencyCapacityState", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::VimVsanDataEfficiencyCapacityState = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Get detailed information of vSAN disk groups managed by specified host,
     /// for each disk group, includes:
@@ -198,8 +206,12 @@ impl VimClusterVsanVcDiskManagementSystem {
     pub async fn query_disk_mappings(&self, host: &crate::types::structs::ManagedObjectReference) -> Result<Option<Vec<crate::types::structs::VimVsanHostDiskMapInfoEx>>> {
         let input = QueryDiskMappingsRequestType {host, };
         let path = format!("/vsan/VimClusterVsanVcDiskManagementSystem/{moId}/QueryDiskMappings", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VimVsanHostDiskMapInfoEx>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Get detailed information of all vSAN managed disks, which
     /// include disk groups, storage pool disks in vSAN datastore and all of
@@ -244,8 +256,12 @@ impl VimClusterVsanVcDiskManagementSystem {
     pub async fn query_vsan_managed_disks(&self, host: &crate::types::structs::ManagedObjectReference, filter_spec: Option<&crate::types::structs::VimVsanHostQueryVsanDisksSpec>) -> Result<Option<crate::types::structs::VimVsanHostVsanManagedDisksInfo>> {
         let input = QueryVsanManagedDisksRequestType {host, filter_spec, };
         let path = format!("/vsan/VimClusterVsanVcDiskManagementSystem/{moId}/QueryVsanManagedDisks", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::VimVsanHostVsanManagedDisksInfo>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// This API is used to rebuild an existing vSAN disk mapping on the
     /// specified host.
@@ -293,8 +309,10 @@ impl VimClusterVsanVcDiskManagementSystem {
     pub async fn rebuild_disk_mapping(&self, host: &crate::types::structs::ManagedObjectReference, mapping: &crate::types::structs::VsanHostDiskMapping, maintenance_spec: &crate::types::structs::HostMaintenanceSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RebuildDiskMappingRequestType {host, mapping, maintenance_spec, };
         let path = format!("/vsan/VimClusterVsanVcDiskManagementSystem/{moId}/RebuildDiskMapping", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Remove vSAN capacity-tier disk(s) from use in a vSAN cluster with the
     /// specified data evacuation mode or remove vSAN direct disk(s).
@@ -358,8 +376,10 @@ impl VimClusterVsanVcDiskManagementSystem {
     pub async fn remove_disk_ex(&self, cluster: &crate::types::structs::ManagedObjectReference, disks: &[crate::types::structs::HostScsiDisk], maintenance_spec: &crate::types::structs::HostMaintenanceSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RemoveDiskExRequestType {cluster, disks, maintenance_spec, };
         let path = format!("/vsan/VimClusterVsanVcDiskManagementSystem/{moId}/RemoveDiskEx", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Remove vSAN disk mapping(s) from use in a vSAN cluster with the
     /// specified data evacuation mode.
@@ -403,8 +423,10 @@ impl VimClusterVsanVcDiskManagementSystem {
     pub async fn remove_disk_mapping_ex(&self, cluster: &crate::types::structs::ManagedObjectReference, mappings: &[crate::types::structs::VsanHostDiskMapping], maintenance_spec: &crate::types::structs::HostMaintenanceSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RemoveDiskMappingExRequestType {cluster, mappings, maintenance_spec, };
         let path = format!("/vsan/VimClusterVsanVcDiskManagementSystem/{moId}/RemoveDiskMappingEx", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Retrieve capabilities for hosts reside in specified cluster,
     /// to figure out whether all flash disk group is supported by
@@ -430,8 +452,12 @@ impl VimClusterVsanVcDiskManagementSystem {
     pub async fn retrieve_all_flash_capabilities(&self, cluster: &crate::types::structs::ManagedObjectReference) -> Result<Option<Vec<crate::types::structs::VimVsanHostVsanHostCapability>>> {
         let input = RetrieveAllFlashCapabilitiesRequestType {cluster, };
         let path = format!("/vsan/VimClusterVsanVcDiskManagementSystem/{moId}/RetrieveAllFlashCapabilities", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VimVsanHostVsanHostCapability>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Unmount vSAN disk mapping(s) in a vSAN cluster with the specified
     /// data evacuation mode.
@@ -475,8 +501,10 @@ impl VimClusterVsanVcDiskManagementSystem {
     pub async fn unmount_disk_mapping_ex(&self, cluster: &crate::types::structs::ManagedObjectReference, mappings: &[crate::types::structs::VsanHostDiskMapping], maintenance_spec: &crate::types::structs::HostMaintenanceSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = UnmountDiskMappingExRequestType {cluster, mappings, maintenance_spec, };
         let path = format!("/vsan/VimClusterVsanVcDiskManagementSystem/{moId}/UnmountDiskMappingEx", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// This API can be used to unmount a single or multiple disks from the storage
     /// pool.
@@ -513,8 +541,10 @@ impl VimClusterVsanVcDiskManagementSystem {
     pub async fn vsan_unmount_storage_pool_disks(&self, cluster: &crate::types::structs::ManagedObjectReference, spec: &crate::types::structs::VsanDeleteStoragePoolDiskSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanUnmountStoragePoolDisksRequestType {cluster, spec, };
         let path = format!("/vsan/VimClusterVsanVcDiskManagementSystem/{moId}/VsanUnmountStoragePoolDisks", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
 }
 #[derive(serde::Serialize)]

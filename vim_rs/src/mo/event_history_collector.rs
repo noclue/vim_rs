@@ -1,15 +1,15 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// EventHistoryCollector provides a mechanism for
 /// retrieving historical data and updates when the server appends new
 /// events.
 #[derive(Clone)]
 pub struct EventHistoryCollector {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl EventHistoryCollector {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -28,8 +28,12 @@ impl EventHistoryCollector {
     pub async fn read_next_events(&self, max_count: i32) -> Result<Option<Vec<crate::types::structs::Event>>> {
         let input = ReadNextEventsRequestType {max_count, };
         let path = format!("/EventHistoryCollector/{moId}/ReadNextEvents", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::Event>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Reads the 'scrollable view' from the current position.
     /// 
@@ -44,8 +48,12 @@ impl EventHistoryCollector {
     pub async fn read_previous_events(&self, max_count: i32) -> Result<Option<Vec<crate::types::structs::Event>>> {
         let input = ReadPreviousEventsRequestType {max_count, };
         let path = format!("/EventHistoryCollector/{moId}/ReadPreviousEvents", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::Event>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Destroys this collector.
     pub async fn destroy_collector(&self) -> Result<()> {
@@ -88,7 +96,7 @@ impl EventHistoryCollector {
     pub async fn set_collector_page_size(&self, max_count: i32) -> Result<()> {
         let input = SetCollectorPageSizeRequestType {max_count, };
         let path = format!("/EventHistoryCollector/{moId}/SetCollectorPageSize", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// The filter used to create this collector.
@@ -98,7 +106,9 @@ impl EventHistoryCollector {
     pub async fn filter(&self) -> Result<crate::types::vim_any::VimAny> {
         let path = format!("/EventHistoryCollector/{moId}/filter", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::vim_any::VimAny = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Indicates whether the *EventHistoryCollector.latestPage* is initialized.
     /// 
@@ -109,7 +119,11 @@ impl EventHistoryCollector {
     pub async fn initialized(&self) -> Result<Option<bool>> {
         let path = format!("/EventHistoryCollector/{moId}/initialized", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<bool>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// The items in the 'viewable latest page'.
     /// 
@@ -126,7 +140,11 @@ impl EventHistoryCollector {
     pub async fn latest_page(&self) -> Result<Option<Vec<crate::types::structs::Event>>> {
         let path = format!("/EventHistoryCollector/{moId}/latestPage", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::Event>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
 }
 #[derive(serde::Serialize)]

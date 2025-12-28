@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// The AutoStartManager allows clients to invoke and set up the auto-start/auto-stop
 /// order of virtual machines on a single host.
 /// 
@@ -9,11 +9,11 @@ use crate::core::client::{Client, Result};
 /// such as an ESX Server machine or through VirtualCenter.
 #[derive(Clone)]
 pub struct HostAutoStartManager {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl HostAutoStartManager {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -68,13 +68,15 @@ impl HostAutoStartManager {
     pub async fn reconfigure_autostart(&self, spec: &crate::types::structs::HostAutoStartManagerConfig) -> Result<()> {
         let input = ReconfigureAutostartRequestType {spec, };
         let path = format!("/HostAutoStartManager/{moId}/ReconfigureAutostart", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     pub async fn config(&self) -> Result<crate::types::structs::HostAutoStartManagerConfig> {
         let path = format!("/HostAutoStartManager/{moId}/config", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::HostAutoStartManagerConfig = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
 }
 #[derive(serde::Serialize)]

@@ -1,13 +1,13 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// Service interface for the Storage Monitoring Service.
 #[derive(Clone)]
 pub struct SmsServiceInstance {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl SmsServiceInstance {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -23,7 +23,9 @@ impl SmsServiceInstance {
     pub async fn query_about_info(&self) -> Result<crate::types::structs::SmsAboutInfo> {
         let path = format!("/sms/SmsServiceInstance/{moId}/QueryAboutInfo", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::SmsAboutInfo = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Retrieves SMS Session Manager managed object.
     /// 
@@ -37,7 +39,9 @@ impl SmsServiceInstance {
     pub async fn query_session_manager(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/sms/SmsServiceInstance/{moId}/QuerySessionManager", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Retrieves Storage Manager managed object.
     /// 
@@ -51,6 +55,8 @@ impl SmsServiceInstance {
     pub async fn query_storage_manager(&self) -> Result<crate::types::structs::ManagedObjectReference> {
         let path = format!("/sms/SmsServiceInstance/{moId}/QueryStorageManager", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
 }

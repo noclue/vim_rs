@@ -1,12 +1,12 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 #[derive(Clone)]
 pub struct HealthUpdateManager {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl HealthUpdateManager {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -48,8 +48,10 @@ impl HealthUpdateManager {
     pub async fn add_filter(&self, provider_id: &str, filter_name: &str, info_ids: Option<&[String]>) -> Result<String> {
         let input = AddFilterRequestType {provider_id, filter_name, info_ids, };
         let path = format!("/HealthUpdateManager/{moId}/AddFilter", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Add entities on which this filter is configured.
     /// 
@@ -81,7 +83,7 @@ impl HealthUpdateManager {
     pub async fn add_filter_entities(&self, filter_id: &str, entities: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<()> {
         let input = AddFilterEntitiesRequestType {filter_id, entities, };
         let path = format!("/HealthUpdateManager/{moId}/AddFilterEntities", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// The provider monitors additional managed entities.
@@ -119,7 +121,7 @@ impl HealthUpdateManager {
     pub async fn add_monitored_entities(&self, provider_id: &str, entities: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<()> {
         let input = AddMonitoredEntitiesRequestType {provider_id, entities, };
         let path = format!("/HealthUpdateManager/{moId}/AddMonitoredEntities", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Check if the managed entity is monitored by the provider.
@@ -150,8 +152,10 @@ impl HealthUpdateManager {
     pub async fn has_monitored_entity(&self, provider_id: &str, entity: &crate::types::structs::ManagedObjectReference) -> Result<bool> {
         let input = HasMonitoredEntityRequestType {provider_id, entity, };
         let path = format!("/HealthUpdateManager/{moId}/HasMonitoredEntity", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: bool = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Verifies if the given provider is registered.
     /// 
@@ -168,8 +172,10 @@ impl HealthUpdateManager {
     pub async fn has_provider(&self, id: &str) -> Result<bool> {
         let input = HasProviderRequestType {id, };
         let path = format!("/HealthUpdateManager/{moId}/HasProvider", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: bool = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Report a change in health status.
     /// 
@@ -205,7 +211,7 @@ impl HealthUpdateManager {
     pub async fn post_health_updates(&self, provider_id: &str, updates: Option<&[crate::types::structs::HealthUpdate]>) -> Result<()> {
         let input = PostHealthUpdatesRequestType {provider_id, updates, };
         let path = format!("/HealthUpdateManager/{moId}/PostHealthUpdates", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Returns the list of entities on which this filter is configured.
@@ -229,8 +235,12 @@ impl HealthUpdateManager {
     pub async fn query_filter_entities(&self, filter_id: &str) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let input = QueryFilterEntitiesRequestType {filter_id, };
         let path = format!("/HealthUpdateManager/{moId}/QueryFilterEntities", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Returns the list of HealthUpdateInfos configured for this filter.
     /// 
@@ -252,8 +262,12 @@ impl HealthUpdateManager {
     pub async fn query_filter_info_ids(&self, filter_id: &str) -> Result<Option<Vec<String>>> {
         let input = QueryFilterInfoIdsRequestType {filter_id, };
         let path = format!("/HealthUpdateManager/{moId}/QueryFilterInfoIds", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<String>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Returns the list of filters.
     /// 
@@ -274,8 +288,12 @@ impl HealthUpdateManager {
     pub async fn query_filter_list(&self, provider_id: &str) -> Result<Option<Vec<String>>> {
         let input = QueryFilterListRequestType {provider_id, };
         let path = format!("/HealthUpdateManager/{moId}/QueryFilterList", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<String>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Returns the filter name.
     /// 
@@ -296,8 +314,10 @@ impl HealthUpdateManager {
     pub async fn query_filter_name(&self, filter_id: &str) -> Result<String> {
         let input = QueryFilterNameRequestType {filter_id, };
         let path = format!("/HealthUpdateManager/{moId}/QueryFilterName", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Returns the list of HealthUpdateInfo configured for the given provider.
     /// 
@@ -318,8 +338,12 @@ impl HealthUpdateManager {
     pub async fn query_health_update_infos(&self, provider_id: &str) -> Result<Option<Vec<crate::types::structs::HealthUpdateInfo>>> {
         let input = QueryHealthUpdateInfosRequestType {provider_id, };
         let path = format!("/HealthUpdateManager/{moId}/QueryHealthUpdateInfos", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::HealthUpdateInfo>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Returns the list of health updates reported by the given provider.
     /// 
@@ -340,8 +364,12 @@ impl HealthUpdateManager {
     pub async fn query_health_updates(&self, provider_id: &str) -> Result<Option<Vec<crate::types::structs::HealthUpdate>>> {
         let input = QueryHealthUpdatesRequestType {provider_id, };
         let path = format!("/HealthUpdateManager/{moId}/QueryHealthUpdates", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::HealthUpdate>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Returns the list of managed entities monitored by the given provider.
     /// 
@@ -364,8 +392,12 @@ impl HealthUpdateManager {
     pub async fn query_monitored_entities(&self, provider_id: &str) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let input = QueryMonitoredEntitiesRequestType {provider_id, };
         let path = format!("/HealthUpdateManager/{moId}/QueryMonitoredEntities", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// The providers.
     /// 
@@ -377,7 +409,11 @@ impl HealthUpdateManager {
     pub async fn query_provider_list(&self) -> Result<Option<Vec<String>>> {
         let path = format!("/HealthUpdateManager/{moId}/QueryProviderList", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<String>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Query the name of the provider.
     /// 
@@ -398,8 +434,10 @@ impl HealthUpdateManager {
     pub async fn query_provider_name(&self, id: &str) -> Result<String> {
         let input = QueryProviderNameRequestType {id, };
         let path = format!("/HealthUpdateManager/{moId}/QueryProviderName", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// The set of hosts that are in the cluster, but not monitored by
     /// the provider.
@@ -429,8 +467,12 @@ impl HealthUpdateManager {
     pub async fn query_unmonitored_hosts(&self, provider_id: &str, cluster: &crate::types::structs::ManagedObjectReference) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let input = QueryUnmonitoredHostsRequestType {provider_id, cluster, };
         let path = format!("/HealthUpdateManager/{moId}/QueryUnmonitoredHosts", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Registers provider.
     /// 
@@ -454,8 +496,10 @@ impl HealthUpdateManager {
     pub async fn register_health_update_provider(&self, name: &str, health_update_info: Option<&[crate::types::structs::HealthUpdateInfo]>) -> Result<String> {
         let input = RegisterHealthUpdateProviderRequestType {name, health_update_info, };
         let path = format!("/HealthUpdateManager/{moId}/RegisterHealthUpdateProvider", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Removes the specified filter.
     /// 
@@ -472,7 +516,7 @@ impl HealthUpdateManager {
     pub async fn remove_filter(&self, filter_id: &str) -> Result<()> {
         let input = RemoveFilterRequestType {filter_id, };
         let path = format!("/HealthUpdateManager/{moId}/RemoveFilter", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Remove entities on which this filter is configured.
@@ -502,7 +546,7 @@ impl HealthUpdateManager {
     pub async fn remove_filter_entities(&self, filter_id: &str, entities: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<()> {
         let input = RemoveFilterEntitiesRequestType {filter_id, entities, };
         let path = format!("/HealthUpdateManager/{moId}/RemoveFilterEntities", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// The provider monitors fewer managed entities.
@@ -541,7 +585,7 @@ impl HealthUpdateManager {
     pub async fn remove_monitored_entities(&self, provider_id: &str, entities: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<()> {
         let input = RemoveMonitoredEntitiesRequestType {provider_id, entities, };
         let path = format!("/HealthUpdateManager/{moId}/RemoveMonitoredEntities", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Unregisters the specified provider, if it exists.
@@ -565,7 +609,7 @@ impl HealthUpdateManager {
     pub async fn unregister_health_update_provider(&self, provider_id: &str) -> Result<()> {
         let input = UnregisterHealthUpdateProviderRequestType {provider_id, };
         let path = format!("/HealthUpdateManager/{moId}/UnregisterHealthUpdateProvider", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
 }

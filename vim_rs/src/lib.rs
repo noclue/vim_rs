@@ -252,12 +252,14 @@
 //! struct ChangeListener {}
 //!
 //! impl ObjectCacheListener<VmDetails> for ChangeListener {
-//!     fn on_new(&mut self, obj: &VmDetails) {
+//!     fn on_new(&mut self, obj: &VmDetails) -> CacheAction {
 //!         info!("New VM: {}", obj);
+//!         CacheAction::Keep
 //!     }
 //!
-//!     fn on_update(&mut self, obj: &VmDetails) {
+//!     fn on_update(&mut self, obj: &VmDetails) -> CacheAction {
 //!         info!("VM updated: {}", obj);
+//!         CacheAction::Keep
 //!     }
 //!
 //!     fn on_remove(&mut self, obj: VmDetails) {
@@ -302,6 +304,10 @@
 //! These macros significantly reduce boilerplate code when working with vSphere properties
 //! and provide type-safe access to vSphere inventory objects.
 //!
+// Allow proc-macros that generate `vim_rs::...` paths to work within this crate as well.
+// (Without this, `vim_rs::` resolves only as an external crate path.)
+extern crate self as vim_rs;
+
 pub mod core;
 pub mod types;
 

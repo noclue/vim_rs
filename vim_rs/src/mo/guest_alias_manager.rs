@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// The GuestAliasManager supports single sign-on for virtual machine access
 /// to perform guest operations.
 /// 
@@ -59,11 +59,11 @@ use crate::core::client::{Client, Result};
 /// need to identify the guest account.
 #[derive(Clone)]
 pub struct GuestAliasManager {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl GuestAliasManager {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -162,7 +162,7 @@ impl GuestAliasManager {
     pub async fn add_guest_alias(&self, vm: &crate::types::structs::ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait, username: &str, map_cert: bool, base_64_cert: &str, alias_info: &crate::types::structs::GuestAuthAliasInfo) -> Result<()> {
         let input = AddGuestAliasRequestType {vm, auth, username, map_cert, base_64_cert, alias_info, };
         let path = format!("/GuestAliasManager/{moId}/AddGuestAlias", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Lists the
@@ -220,8 +220,12 @@ impl GuestAliasManager {
     pub async fn list_guest_aliases(&self, vm: &crate::types::structs::ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait, username: &str) -> Result<Option<Vec<crate::types::structs::GuestAliases>>> {
         let input = ListGuestAliasesRequestType {vm, auth, username, };
         let path = format!("/GuestAliasManager/{moId}/ListGuestAliases", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::GuestAliases>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Lists the
     /// *GuestMappedAliases*
@@ -275,8 +279,12 @@ impl GuestAliasManager {
     pub async fn list_guest_mapped_aliases(&self, vm: &crate::types::structs::ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait) -> Result<Option<Vec<crate::types::structs::GuestMappedAliases>>> {
         let input = ListGuestMappedAliasesRequestType {vm, auth, };
         let path = format!("/GuestAliasManager/{moId}/ListGuestMappedAliases", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::GuestMappedAliases>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Removes an alias from the guest so it can no longer be
     /// used for
@@ -345,7 +353,7 @@ impl GuestAliasManager {
     pub async fn remove_guest_alias(&self, vm: &crate::types::structs::ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait, username: &str, base_64_cert: &str, subject: &dyn crate::types::traits::GuestAuthSubjectTrait) -> Result<()> {
         let input = RemoveGuestAliasRequestType {vm, auth, username, base_64_cert, subject, };
         let path = format!("/GuestAliasManager/{moId}/RemoveGuestAlias", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Removes a VMware SSO Server's certificate and all
@@ -413,7 +421,7 @@ impl GuestAliasManager {
     pub async fn remove_guest_alias_by_cert(&self, vm: &crate::types::structs::ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait, username: &str, base_64_cert: &str) -> Result<()> {
         let input = RemoveGuestAliasByCertRequestType {vm, auth, username, base_64_cert, };
         let path = format!("/GuestAliasManager/{moId}/RemoveGuestAliasByCert", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
 }

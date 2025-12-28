@@ -1,86 +1,29 @@
-//! # Virtual Machine Rename Example
+//! # VM Rename (ManagedEntity::Rename_Task)
 //!
-//! This example demonstrates how to rename a virtual machine using the vSphere API.
+//! Renames a VM’s **inventory display name** by calling `ManagedEntity::Rename_Task` (via
+//! `VirtualMachine::rename_task`) and waiting for the returned `Task` to complete using
+//! `TaskTracker`.
 //!
-//! The rename operation is performed through the ManagedEntity.Rename_Task method,
-//! which is inherited by VirtualMachine. This is an asynchronous operation that
-//! returns a Task object which can be monitored for completion.
+//! ## Required environment variables
+//! - `VIM_SERVER`: vCenter/ESXi URL (e.g. `https://vc.example.com`)
+//! - `VIM_USERNAME`: username
+//! - `VIM_PASSWORD`: password
+//! - `VM_INVENTORY_PATH`: full inventory path (e.g. `"/Datacenter/vm/MyVM"`)
+//! - `NEW_VM_NAME`: new inventory name for the VM
 //!
-//! In this example:
-//! 1. We connect to a vSphere server using credentials from environment variables
-//! 2. We search for a VM by its inventory path using SearchIndex
-//! 3. We create a VirtualMachine managed object proxy
-//! 4. We call rename_task to rename the VM
-//! 5. We wait for the task to complete
-//!
-//! **Important Notes:**
-//! - Renaming a VM changes only the display name in the vCenter inventory
-//! - It does NOT change the VM's hostname, guest OS computer name, or file names
-//! - The VM can be powered on or off during the rename operation
-//! - You need VirtualMachine.Config.Rename privilege to perform this operation
-//!
-//! **Environment Variables Required:**
-//! - VIM_SERVER: vCenter/ESXi server URL
-//! - VIM_USERNAME: Username for authentication
-//! - VIM_PASSWORD: Password for authentication
-//! - VM_INVENTORY_PATH: Full inventory path to the VM (e.g., "/Datacenter/vm/MyVM")
-//! - NEW_VM_NAME: The new name for the virtual machine
+//! ## Notes
+//! - This **only** changes the vCenter inventory name (UI display name).
+//! - It does **not** change guest OS hostname, DNS, or datastore file/folder names.
+//! - Requires `VirtualMachine.Config.Rename` privilege.
 
 use anyhow::{Context, Result};
-use log::{debug, info};
+use log::info;
+use tokio::time::sleep;
 use std::env;
-use std::sync::Arc;
+use std::time::Duration;
 use utils::connect;
-use vim_rs::core::Client;
-use vim_rs::mo::{SearchIndex, Task, VirtualMachine};
-use vim_rs::types::enums::TaskInfoStateEnum;
-use vim_rs::types::structs::ManagedObjectReference;
-
-/// Waits for a vSphere task to complete and returns the result.
-///
-/// This function polls the task state periodically until it reaches a terminal state
-/// (Success or Error). It logs progress updates during execution.
-///
-/// # Arguments
-/// * `client` - The vSphere client connection
-/// * `task_ref` - Reference to the task to monitor
-///
-/// # Returns
-/// * `Ok(())` if the task completes successfully
-/// * `Err` if the task fails or encounters an error
-async fn wait_for_task(client: Arc<Client>, task_ref: &ManagedObjectReference) -> Result<()> {
-    let task = Task::new(client, &task_ref.value);
-
-    loop {
-        let task_info = task.info().await?;
-
-        match task_info.state {
-            TaskInfoStateEnum::Success => {
-                debug!("✅ Task completed successfully");
-                return Ok(());
-            }
-            TaskInfoStateEnum::Error => {
-                let error_msg = task_info
-                    .error
-                    .map(|e| format!("{:?}", e))
-                    .unwrap_or_else(|| "Unknown error".to_string());
-                return Err(anyhow::anyhow!("Task failed: {}", error_msg));
-            }
-            TaskInfoStateEnum::Running => {
-                debug!("Task in progress... ({}%)", task_info.progress.unwrap_or(0));
-                tokio::time::sleep(tokio::time::Duration::from_millis(500)).await;
-            }
-            TaskInfoStateEnum::Queued => {
-                debug!("Task queued...");
-                tokio::time::sleep(tokio::time::Duration::from_millis(500)).await;
-            }
-            TaskInfoStateEnum::Other_(state) => {
-                debug!("Task in unknown state: {}", state);
-                tokio::time::sleep(tokio::time::Duration::from_millis(500)).await;
-            }
-        }
-    }
-}
+use vim_rs::mo::{SearchIndex, VirtualMachine};
+use vim_rs::core::tasks::TaskTracker;
 
 #[tokio::main]
 async fn main() -> Result<()> {
@@ -89,6 +32,8 @@ async fn main() -> Result<()> {
     // Connect to vCenter
     let client = connect(env!("CARGO_PKG_NAME"), env!("CARGO_PKG_VERSION")).await?;
     info!("Connected to {}", client.service_content().about.full_name);
+
+    let task_tracker = TaskTracker::new(client.clone());
 
     // Get VM inventory path and new name from environment
     let vm_path = env::var("VM_INVENTORY_PATH")
@@ -130,12 +75,15 @@ async fn main() -> Result<()> {
     info!("Rename task created: {}", task_ref.value);
 
     // Wait for the task to complete
-    wait_for_task(client.clone(), &task_ref).await?;
+    task_tracker.wait::<()>(task_ref).await?;
     info!("VM successfully renamed to: {}", new_name);
 
     // Verify the new name
     let updated_name = vm.name().await?;
     info!("Verified new VM name: {}", updated_name);
 
+    drop(task_tracker);
+    drop(client);
+    sleep(Duration::from_secs(1)).await;
     Ok(())
 }

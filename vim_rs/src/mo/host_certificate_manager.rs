@@ -1,14 +1,14 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// CertificateManager provides an interface for managing the SSL
 /// certificates used by the server.
 #[derive(Clone)]
 pub struct HostCertificateManager {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl HostCertificateManager {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -47,8 +47,10 @@ impl HostCertificateManager {
     pub async fn generate_certificate_signing_request(&self, use_ip_address_as_common_name: bool, spec: Option<&crate::types::structs::HostCertificateManagerCertificateSpec>) -> Result<String> {
         let input = GenerateCertificateSigningRequestRequestType {use_ip_address_as_common_name, spec, };
         let path = format!("/HostCertificateManager/{moId}/GenerateCertificateSigningRequest", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Requests the server to generate a certificate-signing
     /// request (CSR) for itself.
@@ -78,8 +80,10 @@ impl HostCertificateManager {
     pub async fn generate_certificate_signing_request_by_dn(&self, distinguished_name: &str, spec: Option<&crate::types::structs::HostCertificateManagerCertificateSpec>) -> Result<String> {
         let input = GenerateCertificateSigningRequestByDnRequestType {distinguished_name, spec, };
         let path = format!("/HostCertificateManager/{moId}/GenerateCertificateSigningRequestByDn", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Installs a given SSL certificate on the server.
     /// 
@@ -100,7 +104,7 @@ impl HostCertificateManager {
     pub async fn install_server_certificate(&self, cert: &str) -> Result<()> {
         let input = InstallServerCertificateRequestType {cert, };
         let path = format!("/HostCertificateManager/{moId}/InstallServerCertificate", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Fetches the SSL CRLs of Certificate Authorities that are trusted.
@@ -117,7 +121,11 @@ impl HostCertificateManager {
     pub async fn list_ca_certificate_revocation_lists(&self) -> Result<Option<Vec<String>>> {
         let path = format!("/HostCertificateManager/{moId}/ListCACertificateRevocationLists", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<String>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Fetches the SSL certificates of Certificate Authorities
     /// that are trusted.
@@ -134,7 +142,11 @@ impl HostCertificateManager {
     pub async fn list_ca_certificates(&self) -> Result<Option<Vec<String>>> {
         let path = format!("/HostCertificateManager/{moId}/ListCACertificates", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<String>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Instructs the host services affected by SSL credential changes
     /// by *HostCertificateManager.InstallServerCertificate*
@@ -158,7 +170,7 @@ impl HostCertificateManager {
     pub async fn notify_affected_services(&self, services: Option<&[String]>) -> Result<()> {
         let input = NotifyAffectedServicesRequestType {services, };
         let path = format!("/HostCertificateManager/{moId}/NotifyAffectedServices", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Provisions a given SSL private key on the server for use with a subsequent
@@ -185,7 +197,7 @@ impl HostCertificateManager {
     pub async fn provision_server_private_key(&self, key: &str) -> Result<()> {
         let input = ProvisionServerPrivateKeyRequestType {key, };
         let path = format!("/HostCertificateManager/{moId}/ProvisionServerPrivateKey", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Replaces the trusted Certificate Authority (CA)
@@ -214,7 +226,7 @@ impl HostCertificateManager {
     pub async fn replace_ca_certificates_and_cr_ls(&self, ca_cert: &[String], ca_crl: Option<&[String]>) -> Result<()> {
         let input = ReplaceCaCertificatesAndCrLsRequestType {ca_cert, ca_crl, };
         let path = format!("/HostCertificateManager/{moId}/ReplaceCACertificatesAndCRLs", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// the CertificateInfos of all known Certificates on
@@ -226,7 +238,11 @@ impl HostCertificateManager {
     pub async fn retrieve_certificate_info_list(&self) -> Result<Option<Vec<crate::types::structs::HostCertificateManagerCertificateInfo>>> {
         let path = format!("/HostCertificateManager/{moId}/RetrieveCertificateInfoList", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::HostCertificateManagerCertificateInfo>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// the CertificateInfo of the Host Certificate.
     /// 
@@ -234,7 +250,9 @@ impl HostCertificateManager {
     pub async fn certificate_info(&self) -> Result<crate::types::structs::HostCertificateManagerCertificateInfo> {
         let path = format!("/HostCertificateManager/{moId}/certificateInfo", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::HostCertificateManagerCertificateInfo = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
 }
 #[derive(serde::Serialize)]

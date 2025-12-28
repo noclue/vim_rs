@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// The DatastoreNamespaceManager managed object exposes APIs for
 /// manipulating top-level directories of datastores which do not
 /// support the traditional top-level directory creation.
@@ -7,11 +7,11 @@ use crate::core::client::{Client, Result};
 /// See also *DatastoreCapability.topLevelDirectoryCreateSupported*.
 #[derive(Clone)]
 pub struct DatastoreNamespaceManager {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl DatastoreNamespaceManager {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -51,8 +51,10 @@ impl DatastoreNamespaceManager {
     pub async fn convert_namespace_path_to_uuid_path(&self, datacenter: Option<&crate::types::structs::ManagedObjectReference>, namespace_url: &str) -> Result<String> {
         let input = ConvertNamespacePathToUuidPathRequestType {datacenter, namespace_url, };
         let path = format!("/DatastoreNamespaceManager/{moId}/ConvertNamespacePathToUuidPath", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Creates a top-level directory on the given datastore, using the given
     /// user display name hint and opaque storage policy.
@@ -107,8 +109,10 @@ impl DatastoreNamespaceManager {
     pub async fn create_directory(&self, datastore: &crate::types::structs::ManagedObjectReference, display_name: Option<&str>, policy: Option<&str>, size: Option<i64>) -> Result<String> {
         let input = CreateDirectoryRequestType {datastore, display_name, policy, size, };
         let path = format!("/DatastoreNamespaceManager/{moId}/CreateDirectory", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deletes the given top-level directory from a datastore.
     /// 
@@ -150,7 +154,7 @@ impl DatastoreNamespaceManager {
     pub async fn delete_directory(&self, datacenter: Option<&crate::types::structs::ManagedObjectReference>, datastore_path: &str) -> Result<()> {
         let input = DeleteDirectoryRequestType {datacenter, datastore_path, };
         let path = format!("/DatastoreNamespaceManager/{moId}/DeleteDirectory", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Increase size of the given top-level directory to the given size on
@@ -202,7 +206,7 @@ impl DatastoreNamespaceManager {
     pub async fn increase_directory_size(&self, datacenter: Option<&crate::types::structs::ManagedObjectReference>, stable_name: &str, size: i64) -> Result<()> {
         let input = IncreaseDirectorySizeRequestType {datacenter, stable_name, size, };
         let path = format!("/DatastoreNamespaceManager/{moId}/IncreaseDirectorySize", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Query directory information of the given top-level directory on vSAN
@@ -250,8 +254,10 @@ impl DatastoreNamespaceManager {
     pub async fn query_directory_info(&self, datacenter: Option<&crate::types::structs::ManagedObjectReference>, stable_name: &str) -> Result<crate::types::structs::DatastoreNamespaceManagerDirectoryInfo> {
         let input = QueryDirectoryInfoRequestType {datacenter, stable_name, };
         let path = format!("/DatastoreNamespaceManager/{moId}/QueryDirectoryInfo", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::DatastoreNamespaceManagerDirectoryInfo = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
 }
 #[derive(serde::Serialize)]

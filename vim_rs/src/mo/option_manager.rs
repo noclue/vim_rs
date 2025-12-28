@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// This managed object type is used for managing key/value pair
 /// options.
 /// - You can define options on the fly only if the option is supported
@@ -15,11 +15,11 @@ use crate::core::client::{Client, Result};
 ///   a subset of properties based on the dot notation path.
 #[derive(Clone)]
 pub struct OptionManager {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl OptionManager {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -55,8 +55,12 @@ impl OptionManager {
     pub async fn query_options(&self, name: Option<&str>) -> Result<Option<Vec<Box<dyn crate::types::traits::OptionValueTrait>>>> {
         let input = QueryOptionsRequestType {name, };
         let path = format!("/OptionManager/{moId}/QueryOptions", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::OptionValueTrait>>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Updates one or more options.
     /// 
@@ -88,21 +92,29 @@ impl OptionManager {
     pub async fn update_options(&self, changed_value: &[Box<dyn crate::types::traits::OptionValueTrait>]) -> Result<()> {
         let input = UpdateOptionsRequestType {changed_value, };
         let path = format!("/OptionManager/{moId}/UpdateOptions", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// A list of the current settings for the key/value pair options.
     pub async fn setting(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::OptionValueTrait>>>> {
         let path = format!("/OptionManager/{moId}/setting", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::OptionValueTrait>>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// A list of supported key/value pair options including their
     /// type information.
     pub async fn supported_option(&self) -> Result<Option<Vec<crate::types::structs::OptionDef>>> {
         let path = format!("/OptionManager/{moId}/supportedOption", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::OptionDef>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
 }
 #[derive(serde::Serialize)]

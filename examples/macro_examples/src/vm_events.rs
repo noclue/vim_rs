@@ -51,7 +51,7 @@ use std::fmt::{Display, Formatter};
 use std::time::Instant;
 use utils::connect;
 use vim_macros::vim_updatable;
-use vim_rs::core::pc_cache::{CacheManager, ObjectCache, ObjectCacheListener};
+use vim_rs::core::pc_cache::{CacheAction, CacheManager, ObjectCache, ObjectCacheListener};
 
 vim_updatable!(
     struct VmDetails: VirtualMachine {
@@ -73,12 +73,14 @@ impl Display for VmDetails {
 struct ChangeListener {}
 
 impl ObjectCacheListener<VmDetails> for ChangeListener {
-    fn on_new(&mut self, obj: &VmDetails) {
+    fn on_new(&mut self, obj: &VmDetails) -> CacheAction {
         info!("New VM: {}", obj);
+        CacheAction::Keep
     }
 
-    fn on_update(&mut self, obj: &VmDetails) {
+    fn on_update(&mut self, obj: &VmDetails) -> CacheAction {
         info!("VM updated: {}", obj);
+        CacheAction::Keep
     }
 
     fn on_remove(&mut self, obj: VmDetails) {

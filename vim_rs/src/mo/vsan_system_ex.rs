@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// This managed object provides extended APIs to enrich
 /// *HostVsanSystem*'s functionality, operating at a single
 /// ESXi host level.
@@ -16,11 +16,11 @@ use crate::core::client::{Client, Result};
 /// VsanSystemEx MO.
 #[derive(Clone)]
 pub struct VsanSystemEx {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl VsanSystemEx {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -42,8 +42,10 @@ impl VsanSystemEx {
     pub async fn vsan_host_abort_wipe_disk(&self, disks: &[String]) -> Result<Vec<crate::types::structs::VsanHostAbortWipeDiskStatus>> {
         let input = VsanHostAbortWipeDiskRequestType {disks, };
         let path = format!("/vsan/VsanSystemEx/{moId}/VsanHostAbortWipeDisk", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: Vec<crate::types::structs::VsanHostAbortWipeDiskStatus> = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Query system information of ESXi such as name, type, version, build type
     /// and build number.
@@ -56,7 +58,9 @@ impl VsanSystemEx {
     pub async fn vsan_get_about_info_ex(&self) -> Result<crate::types::structs::VsanHostAboutInfoEx> {
         let path = format!("/vsan/VsanSystemEx/{moId}/VsanGetAboutInfoEx", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::VsanHostAboutInfoEx = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Get vSAN runtime stats of vSAN host.
     /// 
@@ -83,8 +87,10 @@ impl VsanSystemEx {
     pub async fn vsan_host_get_runtime_stats(&self, stats: Option<&[String]>, cluster_uuid: Option<&str>) -> Result<crate::types::structs::VsanHostRuntimeStats> {
         let input = VsanHostGetRuntimeStatsRequestType {stats, cluster_uuid, };
         let path = format!("/vsan/VsanSystemEx/{moId}/VsanHostGetRuntimeStats", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::VsanHostRuntimeStats = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Query vSAN DRS stats of this host and all vSAN VMs registered
     /// on this host.
@@ -122,8 +128,10 @@ impl VsanSystemEx {
     pub async fn vsan_query_host_drs_stats(&self, host_uuids: Option<&[String]>, vms: Option<&[String]>, host_index: Option<i32>) -> Result<crate::types::structs::VsanHostDrsStats> {
         let input = VsanQueryHostDrsStatsRequestType {host_uuids, vms, host_index, };
         let path = format!("/vsan/VsanSystemEx/{moId}/VsanQueryHostDrsStats", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::VsanHostDrsStats = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Query this host's current runtime status for the VSAN service.
     /// 
@@ -144,8 +152,12 @@ impl VsanSystemEx {
     pub async fn vsan_query_host_status_ex(&self, cluster_uuids: Option<&[String]>) -> Result<Option<Vec<crate::types::structs::VsanHostClusterStatus>>> {
         let input = VsanQueryHostStatusExRequestType {cluster_uuids, };
         let path = format!("/vsan/VsanSystemEx/{moId}/VsanQueryHostStatusEx", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VsanHostClusterStatus>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Query information about vSAN objects that are currently syncing data.
     /// 
@@ -178,8 +190,10 @@ impl VsanSystemEx {
     pub async fn vsan_query_syncing_vsan_objects(&self, uuids: Option<&[String]>, start: Option<i32>, limit: Option<i32>, include_summary: Option<bool>) -> Result<crate::types::structs::VsanHostVsanObjectSyncQueryResult> {
         let input = VsanQuerySyncingVsanObjectsRequestType {uuids, start, limit, include_summary, };
         let path = format!("/vsan/VsanSystemEx/{moId}/VsanQuerySyncingVsanObjects", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::VsanHostVsanObjectSyncQueryResult = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Query what it takes for an entity(disk group or host) to be evacuated in
     /// various modes.
@@ -212,8 +226,10 @@ impl VsanSystemEx {
     pub async fn vsan_query_what_if_evacuation_result(&self, evac_entity_uuid: &str) -> Result<crate::types::structs::VsanWhatIfEvacResult> {
         let input = VsanQueryWhatIfEvacuationResultRequestType {evac_entity_uuid, };
         let path = format!("/vsan/VsanSystemEx/{moId}/VsanQueryWhatIfEvacuationResult", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::VsanWhatIfEvacResult = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Query disk level information for securely wipe disk.
     /// 
@@ -235,8 +251,10 @@ impl VsanSystemEx {
     pub async fn vsan_host_query_wipe_disk(&self, disks: &[String]) -> Result<Vec<crate::types::structs::VsanHostWipeDiskStatus>> {
         let input = VsanHostQueryWipeDiskRequestType {disks, };
         let path = format!("/vsan/VsanSystemEx/{moId}/VsanHostQueryWipeDisk", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: Vec<crate::types::structs::VsanHostWipeDiskStatus> = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Unmount vSAN diskgroup, which stops using specified vSAN diskgroup
     /// for any vSAN I/O without destroying it.
@@ -287,8 +305,10 @@ impl VsanSystemEx {
     pub async fn vsan_unmount_disk_mapping_ex(&self, mappings: &[crate::types::structs::VsanHostDiskMapping], maintenance_spec: Option<&crate::types::structs::HostMaintenanceSpec>, timeout: Option<i32>, evac_reason: Option<&str>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanUnmountDiskMappingExRequestType {mappings, maintenance_spec, timeout, evac_reason, };
         let path = format!("/vsan/VsanSystemEx/{moId}/VsanUnmountDiskMappingEx", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Initiate task for securely wipe disk.
     /// 
@@ -319,8 +339,10 @@ impl VsanSystemEx {
     pub async fn vsan_host_wipe_disk(&self, disks: &[String]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanHostWipeDiskRequestType {disks, };
         let path = format!("/vsan/VsanSystemEx/{moId}/VsanHostWipeDisk", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
 }
 #[derive(serde::Serialize)]

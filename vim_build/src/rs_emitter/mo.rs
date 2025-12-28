@@ -46,7 +46,7 @@ impl<'a> ManagedObjectEmitter<'a> {
     fn emit_imports(&mut self) -> Result<()> {
         self.printer.println("use std::sync::Arc;")?;
         self.printer
-            .println("use crate::core::client::{Client, Result};")?;
+            .println("use crate::core::client::{VimClient, Result};")?;
         Ok(())
     }
     
@@ -57,7 +57,7 @@ impl<'a> ManagedObjectEmitter<'a> {
         self.printer
             .println(&format!("pub struct {} {{", struct_name))?;
         self.printer.indent();
-        self.printer.println("client: Arc<Client>,")?;
+        self.printer.println("client: Arc<dyn VimClient>,")?;
         self.printer.println("mo_id: String,")?;
         self.printer.dedent();
         self.printer.println("}")?;
@@ -77,7 +77,7 @@ impl<'a> ManagedObjectEmitter<'a> {
 
     fn emit_new(&mut self) -> Result<()> {
         self.printer
-            .println("pub fn new(client: Arc<Client>, mo_id: &str) -> Self {")?;
+            .println("pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {")?;
         self.printer.indent();
         self.printer.println("Self {")?;
         self.printer.indent();
@@ -158,7 +158,7 @@ impl<'a> ManagedObjectEmitter<'a> {
             HttpMethod::Post => {
                 if request_type.is_some() {
                     self.printer
-                        .println("let req = self.client.post_request(&path, &input);")?;
+                        .println("let req = self.client.post_json(&path, &input);")?;
                 } else {
                     self.printer
                         .println("let req = self.client.post_bare(&path);")?;
@@ -168,12 +168,23 @@ impl<'a> ManagedObjectEmitter<'a> {
 
         match &method.output {
             Some(_) => {
+                let res_type = self.tdf.to_rust_field_type(method.output.as_ref().unwrap())?;
                 if method.optional_response {
                     self.printer
-                        .println("self.client.execute_option(req).await")?;
+                        .println("let bytes_opt = self.client.execute_option_bytes(req).await?;")?;
+                    self.printer.println("match bytes_opt {")?;
+                    self.printer.indent();
+                    self.printer
+                        .println(&format!("Some(bytes) => Ok(Some(serde_json::from_slice::<{}>(bytes.as_ref())?)),", res_type))?;
+                    self.printer.println("None => Ok(None),")?;
+                    self.printer.dedent();
+                    self.printer.println("}")?;
                 } else {
                     self.printer
-                        .println("self.client.execute(req).await")?;
+                        .println("let bytes = self.client.execute_bytes(req).await?;")?;
+                    self.printer
+                        .println(&format!("let result: {} = serde_json::from_slice(bytes.as_ref())?;", res_type))?;
+                    self.printer.println("Ok(result)")?;
                 }
             }
             None => {

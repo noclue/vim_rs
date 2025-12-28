@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// Provides an interface for obtaining diagnostic information on a host
 /// (e.g.
 /// 
@@ -9,11 +9,11 @@ use crate::core::client::{Client, Result};
 /// For an ESX Server host, this includes detailed log files for the VMkernel.
 #[derive(Clone)]
 pub struct DiagnosticManager {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl DiagnosticManager {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -36,7 +36,7 @@ impl DiagnosticManager {
     pub async fn emit_syslog_mark(&self, message: &str) -> Result<()> {
         let input = EmitSyslogMarkRequestType {message, };
         let path = format!("/DiagnosticManager/{moId}/EmitSyslogMark", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Retrieve audit records from their storage on the specified host.
@@ -71,8 +71,10 @@ impl DiagnosticManager {
     pub async fn fetch_audit_records(&self, token: Option<&str>) -> Result<crate::types::structs::DiagnosticManagerAuditRecordResult> {
         let input = FetchAuditRecordsRequestType {token, };
         let path = format!("/DiagnosticManager/{moId}/FetchAuditRecords", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::DiagnosticManagerAuditRecordResult = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Returns part of a log file.
     /// 
@@ -125,8 +127,10 @@ impl DiagnosticManager {
     pub async fn browse_diagnostic_log(&self, host: Option<&crate::types::structs::ManagedObjectReference>, key: &str, start: Option<i32>, lines: Option<i32>) -> Result<crate::types::structs::DiagnosticManagerLogHeader> {
         let input = BrowseDiagnosticLogRequestType {host, key, start, lines, };
         let path = format!("/DiagnosticManager/{moId}/BrowseDiagnosticLog", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::DiagnosticManagerLogHeader = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deprecated since version 5.0 M/N it is recommended to use the CGI
     /// interface for the host bundles, use the address instead:
@@ -185,8 +189,10 @@ impl DiagnosticManager {
     pub async fn generate_log_bundles_task(&self, include_default: bool, host: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = GenerateLogBundlesRequestType {include_default, host, };
         let path = format!("/DiagnosticManager/{moId}/GenerateLogBundles_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Returns a list of diagnostic files for a given system.
     /// 
@@ -205,8 +211,12 @@ impl DiagnosticManager {
     pub async fn query_descriptions(&self, host: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Option<Vec<crate::types::structs::DiagnosticManagerLogDescriptor>>> {
         let input = QueryDescriptionsRequestType {host, };
         let path = format!("/DiagnosticManager/{moId}/QueryDescriptions", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::DiagnosticManagerLogDescriptor>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
 }
 #[derive(serde::Serialize)]

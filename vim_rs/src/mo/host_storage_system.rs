@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// This managed object gets and sets configuration information
 /// about the host's storage subsystem.
 /// 
@@ -9,11 +9,11 @@ use crate::core::client::{Client, Result};
 /// general to both the ESX Server system and the hosted architecture.
 #[derive(Clone)]
 pub struct HostStorageSystem {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl HostStorageSystem {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -42,7 +42,7 @@ impl HostStorageSystem {
     pub async fn add_internet_scsi_send_targets(&self, i_scsi_hba_device: &str, targets: &[crate::types::structs::HostInternetScsiHbaSendTarget]) -> Result<()> {
         let input = AddInternetScsiSendTargetsRequestType {i_scsi_hba_device, targets, };
         let path = format!("/HostStorageSystem/{moId}/AddInternetScsiSendTargets", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Adds Static Target entries to the host bus adapter discovery list.
@@ -67,7 +67,7 @@ impl HostStorageSystem {
     pub async fn add_internet_scsi_static_targets(&self, i_scsi_hba_device: &str, targets: &[crate::types::structs::HostInternetScsiHbaStaticTarget]) -> Result<()> {
         let input = AddInternetScsiStaticTargetsRequestType {i_scsi_hba_device, targets, };
         let path = format!("/HostStorageSystem/{moId}/AddInternetScsiStaticTargets", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Allow I/O issue to the specified detached ScsiLun.
@@ -100,7 +100,7 @@ impl HostStorageSystem {
     pub async fn attach_scsi_lun(&self, lun_uuid: &str) -> Result<()> {
         let input = AttachScsiLunRequestType {lun_uuid, };
         let path = format!("/HostStorageSystem/{moId}/AttachScsiLun", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Attach one or more SCSI LUNs.
@@ -126,8 +126,10 @@ impl HostStorageSystem {
     pub async fn attach_scsi_lun_ex_task(&self, lun_uuid: &[String]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = AttachScsiLunExRequestType {lun_uuid, };
         let path = format!("/HostStorageSystem/{moId}/AttachScsiLunEx_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Extends a VMFS by attaching a disk partition as an extent.
     /// 
@@ -154,7 +156,7 @@ impl HostStorageSystem {
     pub async fn attach_vmfs_extent(&self, vmfs_path: &str, extent: &crate::types::structs::HostScsiDiskPartition) -> Result<()> {
         let input = AttachVmfsExtentRequestType {vmfs_path, extent, };
         let path = format!("/HostStorageSystem/{moId}/AttachVmfsExtent", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Change password for existing NFS user.
@@ -178,7 +180,7 @@ impl HostStorageSystem {
     pub async fn change_nfs_user_password(&self, password: &str) -> Result<()> {
         let input = ChangeNfsUserPasswordRequestType {password, };
         let path = format!("/HostStorageSystem/{moId}/ChangeNFSUserPassword", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Clear the NFS user configured on the esx host
@@ -233,8 +235,10 @@ impl HostStorageSystem {
     pub async fn compute_disk_partition_info(&self, device_path: &str, layout: &crate::types::structs::HostDiskPartitionLayout, partition_format: Option<&str>) -> Result<crate::types::structs::HostDiskPartitionInfo> {
         let input = ComputeDiskPartitionInfoRequestType {device_path, layout, partition_format, };
         let path = format!("/HostStorageSystem/{moId}/ComputeDiskPartitionInfo", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::HostDiskPartitionInfo = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Computes the disk partition information for the purpose of resizing
     /// a given partition.
@@ -274,8 +278,10 @@ impl HostStorageSystem {
     pub async fn compute_disk_partition_info_for_resize(&self, partition: &crate::types::structs::HostScsiDiskPartition, block_range: &crate::types::structs::HostDiskPartitionBlockRange, partition_format: Option<&str>) -> Result<crate::types::structs::HostDiskPartitionInfo> {
         let input = ComputeDiskPartitionInfoForResizeRequestType {partition, block_range, partition_format, };
         let path = format!("/HostStorageSystem/{moId}/ComputeDiskPartitionInfoForResize", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::HostDiskPartitionInfo = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Establish a connection to an NVME controller.
     /// 
@@ -307,7 +313,7 @@ impl HostStorageSystem {
     pub async fn connect_nvme_controller(&self, connect_spec: &crate::types::structs::HostNvmeConnectSpec) -> Result<()> {
         let input = ConnectNvmeControllerRequestType {connect_spec, };
         let path = format!("/HostStorageSystem/{moId}/ConnectNvmeController", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Establish a connection to one or more NVMe controllers.
@@ -343,8 +349,10 @@ impl HostStorageSystem {
     pub async fn connect_nvme_controller_ex_task(&self, connect_spec: Option<&[crate::types::structs::HostNvmeConnectSpec]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ConnectNvmeControllerExRequestType {connect_spec, };
         let path = format!("/HostStorageSystem/{moId}/ConnectNvmeControllerEx_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Creates a software NVME over RDMA adapter.
     /// 
@@ -371,7 +379,7 @@ impl HostStorageSystem {
     pub async fn create_nvme_over_rdma_adapter(&self, rdma_device_name: &str) -> Result<()> {
         let input = CreateNvmeOverRdmaAdapterRequestType {rdma_device_name, };
         let path = format!("/HostStorageSystem/{moId}/CreateNvmeOverRdmaAdapter", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Creates a software host bus adapter based on the provided spec.
@@ -401,7 +409,7 @@ impl HostStorageSystem {
     pub async fn create_software_adapter(&self, spec: &dyn crate::types::traits::HostHbaCreateSpecTrait) -> Result<()> {
         let input = CreateSoftwareAdapterRequestType {spec, };
         let path = format!("/HostStorageSystem/{moId}/CreateSoftwareAdapter", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// For previously detached SCSI Lun, remove the state information from
@@ -431,7 +439,7 @@ impl HostStorageSystem {
     pub async fn delete_scsi_lun_state(&self, lun_canonical_name: &str) -> Result<()> {
         let input = DeleteScsiLunStateRequestType {lun_canonical_name, };
         let path = format!("/HostStorageSystem/{moId}/DeleteScsiLunState", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// For previously unmounted VFFS volume, remove the state information from
@@ -461,7 +469,7 @@ impl HostStorageSystem {
     pub async fn delete_vffs_volume_state(&self, vffs_uuid: &str) -> Result<()> {
         let input = DeleteVffsVolumeStateRequestType {vffs_uuid, };
         let path = format!("/HostStorageSystem/{moId}/DeleteVffsVolumeState", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// For previously unmounted VMFS volume, remove the state information from
@@ -491,7 +499,7 @@ impl HostStorageSystem {
     pub async fn delete_vmfs_volume_state(&self, vmfs_uuid: &str) -> Result<()> {
         let input = DeleteVmfsVolumeStateRequestType {vmfs_uuid, };
         let path = format!("/HostStorageSystem/{moId}/DeleteVmfsVolumeState", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Destroy a VFFS volume.
@@ -513,7 +521,7 @@ impl HostStorageSystem {
     pub async fn destroy_vffs(&self, vffs_path: &str) -> Result<()> {
         let input = DestroyVffsRequestType {vffs_path, };
         let path = format!("/HostStorageSystem/{moId}/DestroyVffs", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Disallow I/O issue to the specified ScsiLun.
@@ -555,7 +563,7 @@ impl HostStorageSystem {
     pub async fn detach_scsi_lun(&self, lun_uuid: &str) -> Result<()> {
         let input = DetachScsiLunRequestType {lun_uuid, };
         let path = format!("/HostStorageSystem/{moId}/DetachScsiLun", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Detach one or more SCSI LUNs.
@@ -581,8 +589,10 @@ impl HostStorageSystem {
     pub async fn detach_scsi_lun_ex_task(&self, lun_uuid: &[String]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = DetachScsiLunExRequestType {lun_uuid, };
         let path = format!("/HostStorageSystem/{moId}/DetachScsiLunEx_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Disables an enabled path for a Logical Unit.
     /// 
@@ -604,7 +614,7 @@ impl HostStorageSystem {
     pub async fn disable_multipath_path(&self, path_name: &str) -> Result<()> {
         let input = DisableMultipathPathRequestType {path_name, };
         let path = format!("/HostStorageSystem/{moId}/DisableMultipathPath", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Disconnect from an NVME controller.
@@ -634,7 +644,7 @@ impl HostStorageSystem {
     pub async fn disconnect_nvme_controller(&self, disconnect_spec: &crate::types::structs::HostNvmeDisconnectSpec) -> Result<()> {
         let input = DisconnectNvmeControllerRequestType {disconnect_spec, };
         let path = format!("/HostStorageSystem/{moId}/DisconnectNvmeController", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Disconnect from one or more NVMe controllers.
@@ -670,8 +680,10 @@ impl HostStorageSystem {
     pub async fn disconnect_nvme_controller_ex_task(&self, disconnect_spec: Option<&[crate::types::structs::HostNvmeDisconnectSpec]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = DisconnectNvmeControllerExRequestType {disconnect_spec, };
         let path = format!("/HostStorageSystem/{moId}/DisconnectNvmeControllerEx_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deprecated as of vSphere API 8.0. Software FCoE not supported.
     /// 
@@ -698,7 +710,7 @@ impl HostStorageSystem {
     pub async fn discover_fcoe_hbas(&self, fcoe_spec: &crate::types::structs::FcoeConfigFcoeSpecification) -> Result<()> {
         let input = DiscoverFcoeHbasRequestType {fcoe_spec, };
         let path = format!("/HostStorageSystem/{moId}/DiscoverFcoeHbas", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Connects to a Discovery Controller and retrieves the Discovery Log
@@ -734,8 +746,10 @@ impl HostStorageSystem {
     pub async fn discover_nvme_controllers(&self, discover_spec: &crate::types::structs::HostNvmeDiscoverSpec) -> Result<crate::types::structs::HostNvmeDiscoveryLog> {
         let input = DiscoverNvmeControllersRequestType {discover_spec, };
         let path = format!("/HostStorageSystem/{moId}/DiscoverNvmeControllers", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::HostNvmeDiscoveryLog = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Enables a disabled path for a Logical Unit.
     /// 
@@ -757,7 +771,7 @@ impl HostStorageSystem {
     pub async fn enable_multipath_path(&self, path_name: &str) -> Result<()> {
         let input = EnableMultipathPathRequestType {path_name, };
         let path = format!("/HostStorageSystem/{moId}/EnableMultipathPath", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Expands a VMFS extent as specified by the Disk partition specification.
@@ -783,7 +797,7 @@ impl HostStorageSystem {
     pub async fn expand_vmfs_extent(&self, vmfs_path: &str, extent: &crate::types::structs::HostScsiDiskPartition) -> Result<()> {
         let input = ExpandVmfsExtentRequestType {vmfs_path, extent, };
         let path = format!("/HostStorageSystem/{moId}/ExpandVmfsExtent", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Extends a VFFS by attaching a SSD.
@@ -819,7 +833,7 @@ impl HostStorageSystem {
     pub async fn extend_vffs(&self, vffs_path: &str, device_path: &str, spec: Option<&crate::types::structs::HostDiskPartitionSpec>) -> Result<()> {
         let input = ExtendVffsRequestType {vffs_path, device_path, spec, };
         let path = format!("/HostStorageSystem/{moId}/ExtendVffs", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Format a new VFFS on a SSD disk
@@ -850,8 +864,10 @@ impl HostStorageSystem {
     pub async fn format_vffs(&self, create_spec: &crate::types::structs::HostVffsSpec) -> Result<crate::types::structs::HostVffsVolume> {
         let input = FormatVffsRequestType {create_spec, };
         let path = format!("/HostStorageSystem/{moId}/FormatVffs", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::HostVffsVolume = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Formats a new VMFS on a disk partition.
     /// 
@@ -880,8 +896,10 @@ impl HostStorageSystem {
     pub async fn format_vmfs(&self, create_spec: &crate::types::structs::HostVmfsSpec) -> Result<crate::types::structs::HostVmfsVolume> {
         let input = FormatVmfsRequestType {create_spec, };
         let path = format!("/HostStorageSystem/{moId}/FormatVmfs", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::HostVmfsVolume = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Mark a disk to local disk, due to the reason that local disks
     /// behind some controllers might not be recongized as local correctly.
@@ -907,8 +925,10 @@ impl HostStorageSystem {
     pub async fn mark_as_local_task(&self, scsi_disk_uuid: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = MarkAsLocalRequestType {scsi_disk_uuid, };
         let path = format!("/HostStorageSystem/{moId}/MarkAsLocal_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Mark a disk to remote disk, which is the opposite operation of
     /// *HostStorageSystem.MarkAsLocal_Task*
@@ -933,8 +953,10 @@ impl HostStorageSystem {
     pub async fn mark_as_non_local_task(&self, scsi_disk_uuid: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = MarkAsNonLocalRequestType {scsi_disk_uuid, };
         let path = format!("/HostStorageSystem/{moId}/MarkAsNonLocal_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Mark a disk to Non-SSD, which is the opposite operation of
     /// *HostStorageSystem.MarkAsSsd_Task*
@@ -959,8 +981,10 @@ impl HostStorageSystem {
     pub async fn mark_as_non_ssd_task(&self, scsi_disk_uuid: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = MarkAsNonSsdRequestType {scsi_disk_uuid, };
         let path = format!("/HostStorageSystem/{moId}/MarkAsNonSsd_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Mark a disk to SSD, due to the reason that SSDs behind some controllers
     /// might not be recongized as SSD correctly.
@@ -986,8 +1010,10 @@ impl HostStorageSystem {
     pub async fn mark_as_ssd_task(&self, scsi_disk_uuid: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = MarkAsSsdRequestType {scsi_disk_uuid, };
         let path = format!("/HostStorageSystem/{moId}/MarkAsSsd_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deprecated as of vSphere API 8.0. Software FCoE not supported.
     /// 
@@ -1018,7 +1044,7 @@ impl HostStorageSystem {
     pub async fn host_storage_system_mark_for_removal(&self, hba_name: &str, remove: bool) -> Result<()> {
         let input = HostStorageSystemMarkForRemovalRequestType {hba_name, remove, };
         let path = format!("/HostStorageSystem/{moId}/HostStorageSystem_MarkForRemoval", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Marks the specified LUN as perennially reserved.
@@ -1042,7 +1068,7 @@ impl HostStorageSystem {
     pub async fn mark_perennially_reserved(&self, lun_uuid: &str, state: bool) -> Result<()> {
         let input = MarkPerenniallyReservedRequestType {lun_uuid, state, };
         let path = format!("/HostStorageSystem/{moId}/MarkPerenniallyReserved", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Marks the specified one or more SCSI LUN's perennially reserved based
@@ -1065,8 +1091,10 @@ impl HostStorageSystem {
     pub async fn mark_perennially_reserved_ex_task(&self, lun_uuid: Option<&[String]>, state: bool) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = MarkPerenniallyReservedExRequestType {lun_uuid, state, };
         let path = format!("/HostStorageSystem/{moId}/MarkPerenniallyReservedEx_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Mount the unmounted VFFS volume.
     /// 
@@ -1097,7 +1125,7 @@ impl HostStorageSystem {
     pub async fn mount_vffs_volume(&self, vffs_uuid: &str) -> Result<()> {
         let input = MountVffsVolumeRequestType {vffs_uuid, };
         let path = format!("/HostStorageSystem/{moId}/MountVffsVolume", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Mount the unmounted Vmfs volume.
@@ -1129,7 +1157,7 @@ impl HostStorageSystem {
     pub async fn mount_vmfs_volume(&self, vmfs_uuid: &str) -> Result<()> {
         let input = MountVmfsVolumeRequestType {vmfs_uuid, };
         let path = format!("/HostStorageSystem/{moId}/MountVmfsVolume", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Mount one or more VMFS volumes.
@@ -1155,8 +1183,10 @@ impl HostStorageSystem {
     pub async fn mount_vmfs_volume_ex_task(&self, vmfs_uuid: &[String]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = MountVmfsVolumeExRequestType {vmfs_uuid, };
         let path = format!("/HostStorageSystem/{moId}/MountVmfsVolumeEx_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Query the list SSD disks that can be used to contain a VFFS volume.
     /// 
@@ -1187,8 +1217,12 @@ impl HostStorageSystem {
     pub async fn query_available_ssds(&self, vffs_path: Option<&str>) -> Result<Option<Vec<crate::types::structs::HostScsiDisk>>> {
         let input = QueryAvailableSsdsRequestType {vffs_path, };
         let path = format!("/HostStorageSystem/{moId}/QueryAvailableSsds", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::HostScsiDisk>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Query the NFS user configured on the esx host
     /// 
@@ -1206,7 +1240,11 @@ impl HostStorageSystem {
     pub async fn query_nfs_user(&self) -> Result<Option<crate::types::structs::HostNasVolumeUserInfo>> {
         let path = format!("/HostStorageSystem/{moId}/QueryNFSUser", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::HostNasVolumeUserInfo>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Queries the set of path selection policy options.
     /// 
@@ -1233,7 +1271,11 @@ impl HostStorageSystem {
     pub async fn query_path_selection_policy_options(&self) -> Result<Option<Vec<crate::types::structs::HostPathSelectionPolicyOption>>> {
         let path = format!("/HostStorageSystem/{moId}/QueryPathSelectionPolicyOptions", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::HostPathSelectionPolicyOption>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Queries the set of storage array type policy options.
     /// 
@@ -1258,7 +1300,11 @@ impl HostStorageSystem {
     pub async fn query_storage_array_type_policy_options(&self) -> Result<Option<Vec<crate::types::structs::HostStorageArrayTypePolicyOption>>> {
         let path = format!("/HostStorageSystem/{moId}/QueryStorageArrayTypePolicyOptions", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::HostStorageArrayTypePolicyOption>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Get the list of unbound VMFS volumes.
     /// 
@@ -1275,7 +1321,11 @@ impl HostStorageSystem {
     pub async fn query_unresolved_vmfs_volume(&self) -> Result<Option<Vec<crate::types::structs::HostUnresolvedVmfsVolume>>> {
         let path = format!("/HostStorageSystem/{moId}/QueryUnresolvedVmfsVolume", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::HostUnresolvedVmfsVolume>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Get the VMFS configuration options, including block size,
     /// unmap granularity.
@@ -1288,7 +1338,11 @@ impl HostStorageSystem {
     pub async fn query_vmfs_config_option(&self) -> Result<Option<Vec<crate::types::structs::VmfsConfigOption>>> {
         let path = format!("/HostStorageSystem/{moId}/QueryVmfsConfigOption", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VmfsConfigOption>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Obtains the latest host storage information related to storage devices, topology,
     /// and file systems.
@@ -1343,7 +1397,7 @@ impl HostStorageSystem {
     pub async fn remove_internet_scsi_send_targets(&self, i_scsi_hba_device: &str, targets: &[crate::types::structs::HostInternetScsiHbaSendTarget], force: Option<bool>) -> Result<()> {
         let input = RemoveInternetScsiSendTargetsRequestType {i_scsi_hba_device, targets, force, };
         let path = format!("/HostStorageSystem/{moId}/RemoveInternetScsiSendTargets", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Removes static target entries from the host bus adapter discovery list.
@@ -1371,7 +1425,7 @@ impl HostStorageSystem {
     pub async fn remove_internet_scsi_static_targets(&self, i_scsi_hba_device: &str, targets: &[crate::types::structs::HostInternetScsiHbaStaticTarget]) -> Result<()> {
         let input = RemoveInternetScsiStaticTargetsRequestType {i_scsi_hba_device, targets, };
         let path = format!("/HostStorageSystem/{moId}/RemoveInternetScsiStaticTargets", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Removes a software NVME over RDMA adapter.
@@ -1395,7 +1449,7 @@ impl HostStorageSystem {
     pub async fn remove_nvme_over_rdma_adapter(&self, hba_device_name: &str) -> Result<()> {
         let input = RemoveNvmeOverRdmaAdapterRequestType {hba_device_name, };
         let path = format!("/HostStorageSystem/{moId}/RemoveNvmeOverRdmaAdapter", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Removes a software host bus adapter, if the adapter type allows it.
@@ -1421,7 +1475,7 @@ impl HostStorageSystem {
     pub async fn remove_software_adapter(&self, hba_device_name: &str) -> Result<()> {
         let input = RemoveSoftwareAdapterRequestType {hba_device_name, };
         let path = format!("/HostStorageSystem/{moId}/RemoveSoftwareAdapter", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Scans all host bus adapters to obtain the current list of devices and device topology.
@@ -1467,7 +1521,7 @@ impl HostStorageSystem {
     pub async fn rescan_hba(&self, hba_device: &str) -> Result<()> {
         let input = RescanHbaRequestType {hba_device, };
         let path = format!("/HostStorageSystem/{moId}/RescanHba", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Rescans for new VFFS.
@@ -1555,8 +1609,12 @@ impl HostStorageSystem {
     pub async fn resolve_multiple_unresolved_vmfs_volumes(&self, resolution_spec: &[crate::types::structs::HostUnresolvedVmfsResolutionSpec]) -> Result<Option<Vec<crate::types::structs::HostUnresolvedVmfsResolutionResult>>> {
         let input = ResolveMultipleUnresolvedVmfsVolumesRequestType {resolution_spec, };
         let path = format!("/HostStorageSystem/{moId}/ResolveMultipleUnresolvedVmfsVolumes", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::HostUnresolvedVmfsResolutionResult>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Resignature or 'Force Mount' list of unbound VMFS volumes.
     /// 
@@ -1616,8 +1674,10 @@ impl HostStorageSystem {
     pub async fn resolve_multiple_unresolved_vmfs_volumes_ex_task(&self, resolution_spec: &[crate::types::structs::HostUnresolvedVmfsResolutionSpec]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ResolveMultipleUnresolvedVmfsVolumesExRequestType {resolution_spec, };
         let path = format!("/HostStorageSystem/{moId}/ResolveMultipleUnresolvedVmfsVolumesEx_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Gets the partition information for the disks named by the device names.
     /// 
@@ -1635,8 +1695,12 @@ impl HostStorageSystem {
     pub async fn retrieve_disk_partition_info(&self, device_path: &[String]) -> Result<Option<Vec<crate::types::structs::HostDiskPartitionInfo>>> {
         let input = RetrieveDiskPartitionInfoRequestType {device_path, };
         let path = format!("/HostStorageSystem/{moId}/RetrieveDiskPartitionInfo", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::HostDiskPartitionInfo>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Assigns a value to a custom field.
     /// 
@@ -1655,7 +1719,7 @@ impl HostStorageSystem {
     pub async fn set_custom_value(&self, key: &str, value: &str) -> Result<()> {
         let input = SetCustomValueRequestType {key, value, };
         let path = format!("/HostStorageSystem/{moId}/setCustomValue", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Updates the path selection policy for a Logical Unit.
@@ -1683,7 +1747,7 @@ impl HostStorageSystem {
     pub async fn set_multipath_lun_policy(&self, lun_id: &str, policy: &dyn crate::types::traits::HostMultipathInfoLogicalUnitPolicyTrait) -> Result<()> {
         let input = SetMultipathLunPolicyRequestType {lun_id, policy, };
         let path = format!("/HostStorageSystem/{moId}/SetMultipathLunPolicy", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Set NFS username and password on the host.
@@ -1717,7 +1781,7 @@ impl HostStorageSystem {
     pub async fn set_nfs_user(&self, user: &str, password: &str) -> Result<()> {
         let input = SetNfsUserRequestType {user, password, };
         let path = format!("/HostStorageSystem/{moId}/SetNFSUser", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Turn off one or more disk locator LEDs.
@@ -1743,8 +1807,10 @@ impl HostStorageSystem {
     pub async fn turn_disk_locator_led_off_task(&self, scsi_disk_uuids: &[String]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = TurnDiskLocatorLedOffRequestType {scsi_disk_uuids, };
         let path = format!("/HostStorageSystem/{moId}/TurnDiskLocatorLedOff_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Turn on one or more disk locator LEDs, duration is the maximum that
     /// hardware can support.
@@ -1770,8 +1836,10 @@ impl HostStorageSystem {
     pub async fn turn_disk_locator_led_on_task(&self, scsi_disk_uuids: &[String]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = TurnDiskLocatorLedOnRequestType {scsi_disk_uuids, };
         let path = format!("/HostStorageSystem/{moId}/TurnDiskLocatorLedOn_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Unmap one or more VMFS volumes.
     /// 
@@ -1795,8 +1863,10 @@ impl HostStorageSystem {
     pub async fn unmap_vmfs_volume_ex_task(&self, vmfs_uuid: &[String]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = UnmapVmfsVolumeExRequestType {vmfs_uuid, };
         let path = format!("/HostStorageSystem/{moId}/UnmapVmfsVolumeEx_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Unmount the 'forceMounted' Vmfs volume.
     /// 
@@ -1824,7 +1894,7 @@ impl HostStorageSystem {
     pub async fn unmount_force_mounted_vmfs_volume(&self, vmfs_uuid: &str) -> Result<()> {
         let input = UnmountForceMountedVmfsVolumeRequestType {vmfs_uuid, };
         let path = format!("/HostStorageSystem/{moId}/UnmountForceMountedVmfsVolume", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Unmount the VFFS volume.
@@ -1863,7 +1933,7 @@ impl HostStorageSystem {
     pub async fn unmount_vffs_volume(&self, vffs_uuid: &str) -> Result<()> {
         let input = UnmountVffsVolumeRequestType {vffs_uuid, };
         let path = format!("/HostStorageSystem/{moId}/UnmountVffsVolume", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Unmount the Vmfs volume.
@@ -1930,7 +2000,7 @@ impl HostStorageSystem {
     pub async fn unmount_vmfs_volume(&self, vmfs_uuid: &str) -> Result<()> {
         let input = UnmountVmfsVolumeRequestType {vmfs_uuid, };
         let path = format!("/HostStorageSystem/{moId}/UnmountVmfsVolume", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Unmount one or more VMFS volumes.
@@ -1956,8 +2026,10 @@ impl HostStorageSystem {
     pub async fn unmount_vmfs_volume_ex_task(&self, vmfs_uuid: &[String]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = UnmountVmfsVolumeExRequestType {vmfs_uuid, };
         let path = format!("/HostStorageSystem/{moId}/UnmountVmfsVolumeEx_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Changes the partitions on the disk by supplying a partition specification
     /// and the device name.
@@ -1983,7 +2055,7 @@ impl HostStorageSystem {
     pub async fn update_disk_partitions(&self, device_path: &str, spec: &crate::types::structs::HostDiskPartitionSpec) -> Result<()> {
         let input = UpdateDiskPartitionsRequestType {device_path, spec, };
         let path = format!("/HostStorageSystem/{moId}/UpdateDiskPartitions", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Updates the path selection policy for a HPP claimed Logical Unit.
@@ -2011,7 +2083,7 @@ impl HostStorageSystem {
     pub async fn update_hpp_multipath_lun_policy(&self, lun_id: &str, policy: &crate::types::structs::HostMultipathInfoHppLogicalUnitPolicy) -> Result<()> {
         let input = UpdateHppMultipathLunPolicyRequestType {lun_id, policy, };
         let path = format!("/HostStorageSystem/{moId}/UpdateHppMultipathLunPolicy", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Updates the advanced options the iSCSI host bus adapter or the
@@ -2039,7 +2111,7 @@ impl HostStorageSystem {
     pub async fn update_internet_scsi_advanced_options(&self, i_scsi_hba_device: &str, target_set: Option<&crate::types::structs::HostInternetScsiHbaTargetSet>, options: &[crate::types::structs::HostInternetScsiHbaParamValue]) -> Result<()> {
         let input = UpdateInternetScsiAdvancedOptionsRequestType {i_scsi_hba_device, target_set, options, };
         let path = format!("/HostStorageSystem/{moId}/UpdateInternetScsiAdvancedOptions", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Updates the alias of an iSCSI host bus adapter.
@@ -2062,7 +2134,7 @@ impl HostStorageSystem {
     pub async fn update_internet_scsi_alias(&self, i_scsi_hba_device: &str, i_scsi_alias: &str) -> Result<()> {
         let input = UpdateInternetScsiAliasRequestType {i_scsi_hba_device, i_scsi_alias, };
         let path = format!("/HostStorageSystem/{moId}/UpdateInternetScsiAlias", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Updates the authentication properties for one or more targets or
@@ -2093,7 +2165,7 @@ impl HostStorageSystem {
     pub async fn update_internet_scsi_authentication_properties(&self, i_scsi_hba_device: &str, authentication_properties: &crate::types::structs::HostInternetScsiHbaAuthenticationProperties, target_set: Option<&crate::types::structs::HostInternetScsiHbaTargetSet>) -> Result<()> {
         let input = UpdateInternetScsiAuthenticationPropertiesRequestType {i_scsi_hba_device, authentication_properties, target_set, };
         let path = format!("/HostStorageSystem/{moId}/UpdateInternetScsiAuthenticationProperties", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Updates the digest properties for the iSCSI host bus adapter or the
@@ -2122,7 +2194,7 @@ impl HostStorageSystem {
     pub async fn update_internet_scsi_digest_properties(&self, i_scsi_hba_device: &str, target_set: Option<&crate::types::structs::HostInternetScsiHbaTargetSet>, digest_properties: &crate::types::structs::HostInternetScsiHbaDigestProperties) -> Result<()> {
         let input = UpdateInternetScsiDigestPropertiesRequestType {i_scsi_hba_device, target_set, digest_properties, };
         let path = format!("/HostStorageSystem/{moId}/UpdateInternetScsiDigestProperties", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Updates the Discovery properties for an iSCSI host bus adapter.
@@ -2145,7 +2217,7 @@ impl HostStorageSystem {
     pub async fn update_internet_scsi_discovery_properties(&self, i_scsi_hba_device: &str, discovery_properties: &crate::types::structs::HostInternetScsiHbaDiscoveryProperties) -> Result<()> {
         let input = UpdateInternetScsiDiscoveryPropertiesRequestType {i_scsi_hba_device, discovery_properties, };
         let path = format!("/HostStorageSystem/{moId}/UpdateInternetScsiDiscoveryProperties", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Updates the IP properties for an iSCSI host bus adapter.
@@ -2169,7 +2241,7 @@ impl HostStorageSystem {
     pub async fn update_internet_scsi_ip_properties(&self, i_scsi_hba_device: &str, ip_properties: &crate::types::structs::HostInternetScsiHbaIpProperties) -> Result<()> {
         let input = UpdateInternetScsiIpPropertiesRequestType {i_scsi_hba_device, ip_properties, };
         let path = format!("/HostStorageSystem/{moId}/UpdateInternetScsiIPProperties", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Updates the name of an iSCSI host bus adapter.
@@ -2192,7 +2264,7 @@ impl HostStorageSystem {
     pub async fn update_internet_scsi_name(&self, i_scsi_hba_device: &str, i_scsi_name: &str) -> Result<()> {
         let input = UpdateInternetScsiNameRequestType {i_scsi_hba_device, i_scsi_name, };
         let path = format!("/HostStorageSystem/{moId}/UpdateInternetScsiName", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Update the mutable display name associated with a ScsiLun.
@@ -2233,7 +2305,7 @@ impl HostStorageSystem {
     pub async fn update_scsi_lun_display_name(&self, lun_uuid: &str, display_name: &str) -> Result<()> {
         let input = UpdateScsiLunDisplayNameRequestType {lun_uuid, display_name, };
         let path = format!("/HostStorageSystem/{moId}/UpdateScsiLunDisplayName", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Enables or disables Software iSCSI.
@@ -2251,7 +2323,7 @@ impl HostStorageSystem {
     pub async fn update_software_internet_scsi_enabled(&self, enabled: bool) -> Result<()> {
         let input = UpdateSoftwareInternetScsiEnabledRequestType {enabled, };
         let path = format!("/HostStorageSystem/{moId}/UpdateSoftwareInternetScsiEnabled", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Update VMFS unmap bandwidth.
@@ -2275,7 +2347,7 @@ impl HostStorageSystem {
     pub async fn update_vmfs_unmap_bandwidth(&self, vmfs_uuid: &str, unmap_bandwidth_spec: &crate::types::structs::VmfsUnmapBandwidthSpec) -> Result<()> {
         let input = UpdateVmfsUnmapBandwidthRequestType {vmfs_uuid, unmap_bandwidth_spec, };
         let path = format!("/HostStorageSystem/{moId}/UpdateVmfsUnmapBandwidth", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Update VMFS unmap priority.
@@ -2295,7 +2367,7 @@ impl HostStorageSystem {
     pub async fn update_vmfs_unmap_priority(&self, vmfs_uuid: &str, unmap_priority: &str) -> Result<()> {
         let input = UpdateVmfsUnmapPriorityRequestType {vmfs_uuid, unmap_priority, };
         let path = format!("/HostStorageSystem/{moId}/UpdateVmfsUnmapPriority", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Iterates over all registered virtual machines.
@@ -2338,7 +2410,7 @@ impl HostStorageSystem {
     pub async fn upgrade_vmfs(&self, vmfs_path: &str) -> Result<()> {
         let input = UpgradeVmfsRequestType {vmfs_path, };
         let path = format!("/HostStorageSystem/{moId}/UpgradeVmfs", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// List of custom field definitions that are valid for the object's type.
@@ -2349,7 +2421,11 @@ impl HostStorageSystem {
     pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
         let path = format!("/HostStorageSystem/{moId}/availableField", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::CustomFieldDef>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// File system volume information for the host.
     /// 
@@ -2359,7 +2435,9 @@ impl HostStorageSystem {
     pub async fn file_system_volume_info(&self) -> Result<crate::types::structs::HostFileSystemVolumeInfo> {
         let path = format!("/HostStorageSystem/{moId}/fileSystemVolumeInfo", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::HostFileSystemVolumeInfo = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Runtime information about the state of a multipath path.
     /// 
@@ -2372,13 +2450,21 @@ impl HostStorageSystem {
     pub async fn multipath_state_info(&self) -> Result<Option<crate::types::structs::HostMultipathStateInfo>> {
         let path = format!("/HostStorageSystem/{moId}/multipathStateInfo", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::HostMultipathStateInfo>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Host storage information up to the device level.
     pub async fn storage_device_info(&self) -> Result<Option<crate::types::structs::HostStorageDeviceInfo>> {
         let path = format!("/HostStorageSystem/{moId}/storageDeviceInfo", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::HostStorageDeviceInfo>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Datastore paths of files used by the host system on
     /// mounted volumes, for instance, the COS vmdk file of the
@@ -2388,7 +2474,11 @@ impl HostStorageSystem {
     pub async fn system_file(&self) -> Result<Option<Vec<String>>> {
         let path = format!("/HostStorageSystem/{moId}/systemFile", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<String>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// List of custom field values.
     /// 
@@ -2400,7 +2490,11 @@ impl HostStorageSystem {
     pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
         let path = format!("/HostStorageSystem/{moId}/value", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
 }
 #[derive(serde::Serialize)]

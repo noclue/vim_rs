@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// The CustomFieldsManager object is used to add and remove custom fields
 /// to managed entities.
 /// 
@@ -11,11 +11,11 @@ use crate::core::client::{Client, Result};
 /// This functionality is only available through VirtualCenter.
 #[derive(Clone)]
 pub struct CustomFieldsManager {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl CustomFieldsManager {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -52,8 +52,10 @@ impl CustomFieldsManager {
     pub async fn add_custom_field_def(&self, name: &str, mo_type: Option<&str>, field_def_policy: Option<&crate::types::structs::PrivilegePolicyDef>, field_policy: Option<&crate::types::structs::PrivilegePolicyDef>) -> Result<crate::types::structs::CustomFieldDef> {
         let input = AddCustomFieldDefRequestType {name, mo_type, field_def_policy, field_policy, };
         let path = format!("/CustomFieldsManager/{moId}/AddCustomFieldDef", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::CustomFieldDef = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Removes a custom field.
     /// 
@@ -69,7 +71,7 @@ impl CustomFieldsManager {
     pub async fn remove_custom_field_def(&self, key: i32) -> Result<()> {
         let input = RemoveCustomFieldDefRequestType {key, };
         let path = format!("/CustomFieldsManager/{moId}/RemoveCustomFieldDef", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Renames a custom field.
@@ -92,7 +94,7 @@ impl CustomFieldsManager {
     pub async fn rename_custom_field_def(&self, key: i32, name: &str) -> Result<()> {
         let input = RenameCustomFieldDefRequestType {key, name, };
         let path = format!("/CustomFieldsManager/{moId}/RenameCustomFieldDef", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Assigns a value to a custom field on an entity.
@@ -112,7 +114,7 @@ impl CustomFieldsManager {
     pub async fn set_field(&self, entity: &crate::types::structs::ManagedObjectReference, key: i32, value: &str) -> Result<()> {
         let input = SetFieldRequestType {entity, key, value, };
         let path = format!("/CustomFieldsManager/{moId}/SetField", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// List of custom fields defined on this server.
@@ -124,7 +126,11 @@ impl CustomFieldsManager {
     pub async fn field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
         let path = format!("/CustomFieldsManager/{moId}/field", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::CustomFieldDef>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
 }
 #[derive(serde::Serialize)]

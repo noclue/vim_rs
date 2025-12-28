@@ -10,3 +10,8 @@ mcp/build-embeddings/.fastembed_cache
 
 # MCP model cache (fastembed downloads)
 mcp/data/model_cache/
+
+# Log files - contain runtime data, IPs, and debug output
+*.log
+**/logs/*.log
+logs/

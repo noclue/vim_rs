@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// A host profile describes ESX Server configuration.
 /// 
 /// The *HostProfile* managed object provides access to profile data and
@@ -100,11 +100,11 @@ use crate::core::client::{Client, Result};
 /// configuration changes that you have made.
 #[derive(Clone)]
 pub struct HostProfile {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl HostProfile {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -142,7 +142,7 @@ impl HostProfile {
     pub async fn associate_profile(&self, entity: &[crate::types::structs::ManagedObjectReference]) -> Result<()> {
         let input = AssociateProfileRequestType {entity, };
         let path = format!("/HostProfile/{moId}/AssociateProfile", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Check compliance of an entity against a Profile.
@@ -168,8 +168,10 @@ impl HostProfile {
     pub async fn check_profile_compliance_task(&self, entity: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CheckProfileComplianceRequestType {entity, };
         let path = format!("/HostProfile/{moId}/CheckProfileCompliance_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Destroy the profile.
     /// 
@@ -197,7 +199,7 @@ impl HostProfile {
     pub async fn dissociate_profile(&self, entity: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<()> {
         let input = DissociateProfileRequestType {entity, };
         let path = format!("/HostProfile/{moId}/DissociateProfile", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Run the Profile Engine to determine the list of configuration changes
@@ -252,8 +254,10 @@ impl HostProfile {
     pub async fn execute_host_profile(&self, host: &crate::types::structs::ManagedObjectReference, deferred_param: Option<&[crate::types::structs::ProfileDeferredPolicyOptionParameter]>) -> Result<Box<dyn crate::types::traits::ProfileExecuteResultTrait>> {
         let input = ExecuteHostProfileRequestType {host, deferred_param, };
         let path = format!("/HostProfile/{moId}/ExecuteHostProfile", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: Box<dyn crate::types::traits::ProfileExecuteResultTrait> = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Export the profile in a serialized form.
     /// 
@@ -270,7 +274,9 @@ impl HostProfile {
     pub async fn export_profile(&self) -> Result<String> {
         let path = format!("/HostProfile/{moId}/ExportProfile", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Returns the localizable description for the profile.
     /// 
@@ -282,7 +288,11 @@ impl HostProfile {
     pub async fn retrieve_description(&self) -> Result<Option<crate::types::structs::ProfileDescription>> {
         let path = format!("/HostProfile/{moId}/RetrieveDescription", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::ProfileDescription>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Update the <code>HostProfile</code> with the specified configuration data.
     /// 
@@ -302,7 +312,7 @@ impl HostProfile {
     pub async fn update_host_profile(&self, config: &dyn crate::types::traits::HostProfileConfigSpecTrait) -> Result<()> {
         let input = UpdateHostProfileRequestType {config, };
         let path = format!("/HostProfile/{moId}/UpdateHostProfile", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Sets the *HostProfile*.*HostProfile.referenceHost* property.
@@ -319,7 +329,7 @@ impl HostProfile {
     pub async fn update_reference_host(&self, host: Option<&crate::types::structs::ManagedObjectReference>) -> Result<()> {
         let input = UpdateReferenceHostRequestType {host, };
         let path = format!("/HostProfile/{moId}/UpdateReferenceHost", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// The latest compliance check time.
@@ -328,7 +338,11 @@ impl HostProfile {
     pub async fn compliance_check_time(&self) -> Result<Option<String>> {
         let path = format!("/HostProfile/{moId}/complianceCheckTime", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<String>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Overall compliance of entities associated with this profile.
     /// 
@@ -340,7 +354,9 @@ impl HostProfile {
     pub async fn compliance_status(&self) -> Result<String> {
         let path = format!("/HostProfile/{moId}/complianceStatus", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Configuration data for the profile.
     /// 
@@ -348,13 +364,17 @@ impl HostProfile {
     pub async fn config(&self) -> Result<Box<dyn crate::types::traits::ProfileConfigInfoTrait>> {
         let path = format!("/HostProfile/{moId}/config", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: Box<dyn crate::types::traits::ProfileConfigInfoTrait> = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Time at which the profile was created.
     pub async fn created_time(&self) -> Result<String> {
         let path = format!("/HostProfile/{moId}/createdTime", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Deprecated as of vSphere API 5.0. use *Profile.RetrieveDescription* instead.
     /// 
@@ -362,7 +382,11 @@ impl HostProfile {
     pub async fn description(&self) -> Result<Option<crate::types::structs::ProfileDescription>> {
         let path = format!("/HostProfile/{moId}/description", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::ProfileDescription>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// List of managed entities associated with the profile.
     ///
@@ -372,19 +396,27 @@ impl HostProfile {
     pub async fn entity(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let path = format!("/HostProfile/{moId}/entity", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Time at which the profile was last modified.
     pub async fn modified_time(&self) -> Result<String> {
         let path = format!("/HostProfile/{moId}/modifiedTime", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Name of the profile.
     pub async fn name(&self) -> Result<String> {
         let path = format!("/HostProfile/{moId}/name", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Reference host in use for this host profile.
     /// 
@@ -400,7 +432,11 @@ impl HostProfile {
     pub async fn reference_host(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let path = format!("/HostProfile/{moId}/referenceHost", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::ManagedObjectReference>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// This object is created or updated if the *HostProfileValidationState_enum*
     /// is Failed.
@@ -410,7 +446,11 @@ impl HostProfile {
     pub async fn validation_failure_info(&self) -> Result<Option<crate::types::structs::HostProfileValidationFailureInfo>> {
         let path = format!("/HostProfile/{moId}/validationFailureInfo", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::HostProfileValidationFailureInfo>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// State of the host profile validation operation.
     /// 
@@ -419,13 +459,21 @@ impl HostProfile {
     pub async fn validation_state(&self) -> Result<Option<String>> {
         let path = format!("/HostProfile/{moId}/validationState", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<String>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Update time of the validation operation.
     pub async fn validation_state_update_time(&self) -> Result<Option<String>> {
         let path = format!("/HostProfile/{moId}/validationStateUpdateTime", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<String>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
 }
 #[derive(serde::Serialize)]

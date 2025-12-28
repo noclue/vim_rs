@@ -1,12 +1,10 @@
 use indexmap::IndexMap;
-use std::cell::RefCell;
 use std::ops::Index;
-use std::sync::{Arc, RwLock};
+use std::sync::{Arc, RwLock, Mutex};
 use log::{debug, error, warn};
-use std::rc::Rc;
-use crate::core::client::Client;
-use crate::core::pc_helpers;
-use crate::core::pc_helpers::{BoxableError, Error, Queriable};
+use crate::core::client::VimClientHandle;
+use crate::core::error::{Error, Result};
+use crate::core::pc_helpers::{self, BoxableError, Queriable};
 use crate::mo::{PropertyCollector, PropertyFilter, View, ViewManager};
 use crate::types::enums::ObjectUpdateKindEnum;
 use crate::types::structs::{ManagedObjectReference, ObjectSpec, ObjectUpdate, PropertyFilterSpec, PropertyFilterUpdate, PropertySpec, WaitOptions};
@@ -18,7 +16,7 @@ where
     Self::Error: BoxableError
 {
     /// The type of the object.
-    fn apply_update(&mut self, update: ObjectUpdate) -> pc_helpers::Result<()>;
+    fn apply_update(&mut self, update: ObjectUpdate) -> Result<()>;
 
     /// The ID of the object.
     fn id(&self) -> &ManagedObjectReference;
@@ -27,42 +25,10 @@ where
 /// A trait for PropertyCollector caches used by the infrastructure to dispatch updates.
 pub trait Cache {
     /// Property spec for the objects in this cache.
-    fn prop_spec(&self) -> pc_helpers::Result<PropertySpec>;
+    fn prop_spec(&self) -> Result<PropertySpec>;
 
     /// Apply an update to the cache.
-    fn process_update(&mut self, update: Vec<ObjectUpdate>) -> pc_helpers::Result<()>;
-}
-
-/// A proxy for a cache that is shared. This helps to use `Rc<RefCell<T>>` over the cache as it is
-/// not possible to use both dynamic and static dispatch with `Rc<RefCell<T>>`. This proxy implements
-/// the `Cache` trait and forwards calls to the underlying cache object while the cache itself
-/// dispatches statically tp the wrapped in `Rc<RefCell<T>>`. Thus, the proxy allows for caches
-/// holding different data types to be used in the same CacheManager.
-pub struct SharedRefCacheProxy<T: Cache> {
-    /// The cache object
-    cache: Rc<RefCell<T>>,
-}
-
-impl<T: Cache> SharedRefCacheProxy<T> {
-    /// Create a new SharedRefCacheProxy.
-    pub fn new(cache: Rc<RefCell<T>>) -> Self {
-        Self { cache }
-    }
-
-    /// Get the cache object.
-    pub fn get_cache(&self) -> Rc<RefCell<T>> {
-        self.cache.clone()
-    }
-}
-
-impl<T: Cache> Cache for SharedRefCacheProxy<T> {
-    fn prop_spec(&self) -> pc_helpers::Result<PropertySpec> {
-        self.cache.borrow().prop_spec()
-    }
-
-    fn process_update(&mut self, updates: Vec<ObjectUpdate>) -> pc_helpers::Result<()> {
-        self.cache.borrow_mut().process_update(updates)
-    }
+    fn process_update(&mut self, update: Vec<ObjectUpdate>) -> Result<()>;
 }
 
 /// A thread-safe proxy with read-write locking using Arc<RwLock<T>>
@@ -81,20 +47,20 @@ impl<T: Cache> ReadWriteCacheProxy<T> {
 }
 
 impl<T: Cache> Cache for ReadWriteCacheProxy<T> {
-    fn prop_spec(&self) -> pc_helpers::Result<PropertySpec> {
+    fn prop_spec(&self) -> Result<PropertySpec> {
         match self.cache.read() {
             Ok(guard) => guard.prop_spec(),
             Err(e) => {
                 error!("Failed to acquire read lock: {}", e);
-                return Err(Error::PoisonError(format!("Failed to acquire read lock: {}", e)));
+                return Err(Error::lock_poisoned(format!("Failed to acquire read lock: {}", e)));
             }
         }
     }
 
-    fn process_update(&mut self, updates: Vec<ObjectUpdate>) -> pc_helpers::Result<()> {
+    fn process_update(&mut self, updates: Vec<ObjectUpdate>) -> Result<()> {
         match self.cache.write() {
             Ok(mut guard) => guard.process_update(updates),
-            Err(e) => Err(Error::PoisonError(format!("Failed to acquire write lock: {}", e))),
+            Err(e) => Err(Error::lock_poisoned(format!("Failed to acquire write lock: {}", e))),
         }
     }
 }
@@ -102,7 +68,16 @@ impl<T: Cache> Cache for ReadWriteCacheProxy<T> {
 /// Listener trait for receiving notifications about objects in an ObjectCache.
 ///
 /// Implementors can react to objects being added, updated, or removed from the cache.
-pub trait ObjectCacheListener<T: Cacheable>
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum CacheAction {
+    /// Keep the object in the cache.
+    Keep,
+    /// Evict the object from the cache after the callback returns. Eviction will trigger
+    /// `ObjectCacheListener::on_remove` with ownership of the removed object.
+    Evict,
+}
+
+pub trait ObjectCacheListener<T: Cacheable>: Send
 where
     T::Error: BoxableError
 {
@@ -110,13 +85,13 @@ where
     ///
     /// # Parameters
     /// * `obj` - Reference to the newly added object
-    fn on_new(&mut self, obj: &T);
+    fn on_new(&mut self, obj: &T) -> CacheAction;
 
     /// Called when an existing object in the cache is updated.
     ///
     /// # Parameters
     /// * `obj` - Reference to the updated object
-    fn on_update(&mut self, obj: &T);
+    fn on_update(&mut self, obj: &T) -> CacheAction;
 
     /// Called when an object is removed from the cache.
     ///
@@ -134,8 +109,8 @@ where
     cache: IndexMap<String, T>,
     /// Optional listener for receiving notifications about objects in the cache.
     /// This is used to notify about new, updated, or removed objects.
-    /// The listener is wrapped in a RefCell to allow for interior mutability.
-    listener: Option<RefCell<Box<dyn ObjectCacheListener<T>>>>,
+    /// The listener is wrapped in a Mutex to allow for interior mutability in a thread-safe manner.
+    listener: Option<Mutex<Box<dyn ObjectCacheListener<T>>>>,
 }
 
 impl<T: Cacheable> ObjectCache<T>
@@ -154,7 +129,7 @@ where
     pub fn new_with_listener(listener: Box<dyn ObjectCacheListener<T>>) -> Self {
         Self {
             cache: IndexMap::new(),
-            listener: Some(RefCell::new(listener)),
+            listener: Some(Mutex::new(listener)),
         }
     }
 
@@ -178,21 +153,35 @@ where
         self.cache.is_empty()
     }
 
-    fn notify_new(&self, obj: &T) {
+    fn notify_new(&self, obj: &T) -> CacheAction {
         if let Some(listener) = self.listener.as_ref() {
-            listener.borrow_mut().on_new(obj);
+            if let Ok(mut guard) = listener.lock() {
+                return guard.on_new(obj);
+            } else {
+                error!("Failed to acquire listener lock for on_new notification");
+            }
         }
+        CacheAction::Keep
     }
 
-    fn notify_update(&self, obj: &T) {
+    fn notify_update(&self, obj: &T) -> CacheAction {
         if let Some(listener) = self.listener.as_ref() {
-            listener.borrow_mut().on_update(obj);
+            if let Ok(mut guard) = listener.lock() {
+                return guard.on_update(obj);
+            } else {
+                error!("Failed to acquire listener lock for on_update notification");
+            }
         }
+        CacheAction::Keep
     }
 
     fn notify_remove(&self, obj: T) {
         if let Some(listener) = self.listener.as_ref() {
-            listener.borrow_mut().on_remove(obj);
+            if let Ok(mut guard) = listener.lock() {
+                guard.on_remove(obj);
+            } else {
+                error!("Failed to acquire listener lock for on_remove notification");
+            }
         }
     }
 
@@ -258,12 +247,12 @@ where
     T::Error: BoxableError
 {
     /// Get the property spec for the objects in this cache.
-    fn prop_spec(&self) -> pc_helpers::Result<PropertySpec> {
+    fn prop_spec(&self) -> Result<PropertySpec> {
         Ok(T::prop_spec())
     }
 
     /// Process a PropertyCollector update.
-    fn process_update(&mut self, updates: Vec<ObjectUpdate>) -> pc_helpers::Result<()> {
+    fn process_update(&mut self, updates: Vec<ObjectUpdate>) -> Result<()> {
         for update in updates {
             let id = update.obj.value.clone();
             match update.kind {
@@ -273,10 +262,18 @@ where
                         obj.apply_update(update)?;
 
                         // Notify the listener about the update
-                        if let Some(obj) = self.cache.get(&id) {
-                            self.notify_update(obj);
+                        let action = if let Some(obj) = self.cache.get(&id) {
+                            self.notify_update(obj)
                         } else {
-                            error!("Failed to add object to cache");
+                            error!("Failed to find object in cache after update");
+                            CacheAction::Keep
+                        };
+
+                        if action == CacheAction::Evict {
+                            if let Some(obj) = self.cache.shift_remove(&id) {
+                                debug!("Evicting '{}' object from cache (listener requested)", id);
+                                self.notify_remove(obj);
+                            }
                         }
                     } else {
                         // If the object is not in the cache, try to create it
@@ -285,10 +282,18 @@ where
                                 debug!("Adding '{}' object to cache", id);
                                 self.cache.insert(id.clone(), new_obj);
                                 // Notify the listener about the new object
-                                if let Some(obj) = self.cache.get(&id) {
-                                    self.notify_new(obj);
+                                let action = if let Some(obj) = self.cache.get(&id) {
+                                    self.notify_new(obj)
                                 } else {
-                                    error!("Failed to add object to cache");
+                                    error!("Failed to find object in cache after insert");
+                                    CacheAction::Keep
+                                };
+
+                                if action == CacheAction::Evict {
+                                    if let Some(obj) = self.cache.shift_remove(&id) {
+                                        debug!("Evicting '{}' object from cache (listener requested)", id);
+                                        self.notify_remove(obj);
+                                    }
                                 }
                             }
                             Err(e) => {
@@ -319,7 +324,10 @@ where
 /// A record for a cache object. This is used to store the cache object and its associated view ID.
 struct CacheRecord {
     /// The cache object
-    cache: Box<dyn Cache>,
+    ///
+    /// The cache must be `Send + Sync` because `CacheManager` is used from async tasks
+    /// that may be moved between threads.
+    cache: Box<dyn Cache + Send + Sync>,
     /// Optional view ID if add_container_cache is used
     view: Option<String>,
 }
@@ -331,7 +339,7 @@ struct CacheRecord {
 ///
 /// Use the `destroy` method to clean up all caches and filters.
 pub struct CacheManager {
-    client: Arc<Client>,
+    client: VimClientHandle,
     property_collector: PropertyCollector,
     view_manager: ViewManager,
     caches: std::collections::HashMap<String, CacheRecord>,
@@ -346,11 +354,11 @@ impl CacheManager {
     /// multiple caches and dispatch updates to them. The default PropertyCollector is used
     /// to create filters for the caches. Only one CacheManager can work correctly with given
     /// PropertyCollector including the default one.
-    pub fn new(client: Arc<Client>) -> pc_helpers::Result<Self> {
+    pub fn new(client: VimClientHandle) -> Result<Self> {
         let pc_mo_id = &client.service_content().property_collector.value;
         let property_collector = PropertyCollector::new(client.clone(), pc_mo_id);
         let Some(view_manager_moref) = &client.service_content().view_manager else {
-            return Err(Error::InternalError("cannot find view_manager".to_string()));
+            return Err(Error::internal("cannot find view_manager".to_string()));
         };
         let view_manager = ViewManager::new(client.clone(), &view_manager_moref.value);
         Ok(Self {
@@ -364,9 +372,9 @@ impl CacheManager {
     /// Create a new CacheManager with an existing PropertyCollector. This allows to not use the
     /// default PropertyCollector, have different PropertyCollector instances and different
     /// CacheManager instances.
-    pub fn new_with_property_collector(client: Arc<Client>, property_collector: PropertyCollector) -> pc_helpers::Result<Self> {
+    pub fn new_with_property_collector(client: VimClientHandle, property_collector: PropertyCollector) -> Result<Self> {
         let Some(view_manager_moref) = &client.service_content().view_manager else {
-            return Err(Error::InternalError("cannot find view_manager".to_string()));
+            return Err(Error::internal("cannot find view_manager".to_string()));
         };
         let view_manager = ViewManager::new(client.clone(), &view_manager_moref.value);
         Ok(Self {
@@ -378,12 +386,16 @@ impl CacheManager {
     }
 
     /// Create a new Monitor with the same PropertyCollector as the CacheManager.
-    pub fn create_monitor(&self) -> pc_helpers::Result<Monitor> {
+    pub fn create_monitor(&self) -> Result<Monitor> {
         Ok(Monitor::new_with_property_collector(self.property_collector.clone())?)
     }
 
     /// Add an object cache for a specific type of object in a given container like Folder, Datacenter, etc.
-    pub async fn add_container_cache(&mut self, cache: Box<dyn Cache>, container: &ManagedObjectReference) -> pc_helpers::Result<ManagedObjectReference> {
+    pub async fn add_container_cache(
+        &mut self,
+        cache: Box<dyn Cache + Send + Sync>,
+        container: &ManagedObjectReference,
+    ) -> Result<ManagedObjectReference> {
         let view = self.view_manager.create_container_view(container,
                                                            Some(&[cache.prop_spec()?.r#type.clone()]),
                                                            true,
@@ -398,7 +410,11 @@ impl CacheManager {
         res
     }
 
-    pub async fn add_list_cache(&mut self, cache: Box<dyn Cache>, obj: &[crate::types::structs::ManagedObjectReference]) -> pc_helpers::Result<ManagedObjectReference> {
+    pub async fn add_list_cache(
+        &mut self,
+        cache: Box<dyn Cache + Send + Sync>,
+        obj: &[crate::types::structs::ManagedObjectReference],
+    ) -> Result<ManagedObjectReference> {
         let view = self.view_manager.create_list_view(Some(obj)).await?;
 
         let res= self.add_cache(cache, pc_helpers::obj_spec_for_view(view.clone())).await;
@@ -414,7 +430,11 @@ impl CacheManager {
 
     /// Add a cache for a specific type of object. This creates a filter on the server to update
     /// the cache. The filter is created with the given object set.
-    pub async fn add_cache(&mut self, cache: Box<dyn Cache>, object_set: Vec<ObjectSpec>) -> pc_helpers::Result<ManagedObjectReference> {
+    pub async fn add_cache(
+        &mut self,
+        cache: Box<dyn Cache + Send + Sync>,
+        object_set: Vec<ObjectSpec>,
+    ) -> Result<ManagedObjectReference> {
         let filter_spec = PropertyFilterSpec {
             object_set,
             prop_set: vec![cache.prop_spec()?],
@@ -431,7 +451,7 @@ impl CacheManager {
     }
 
     /// Apply updates to the caches. This is used to dispatch updates to the caches.
-    pub fn apply_updates(&mut self, updates: Vec<PropertyFilterUpdate>) -> pc_helpers::Result<()> {
+    pub fn apply_updates(&mut self, updates: Vec<PropertyFilterUpdate>) -> Result<()> {
         for update in updates {
             let filter_id = update.filter.value.clone();
             if let Some(cache_rec) = self.caches.get_mut(&filter_id) {
@@ -448,7 +468,7 @@ impl CacheManager {
     }
 
     /// Remove a cache by its ID. This is used to clean up caches that are no longer needed.
-    pub async fn remove_cache(&mut self, filter: &ManagedObjectReference) -> pc_helpers::Result<()> {
+    pub async fn remove_cache(&mut self, filter: &ManagedObjectReference) -> Result<()> {
         if let Some(cache_rec) = self.caches.remove(&filter.value) {
             self.dispose_filter(&filter.value, &cache_rec).await;
         }
@@ -456,7 +476,7 @@ impl CacheManager {
     }
 
     /// Remove all caches. This is used to clean up all caches that are no longer needed.
-    pub async fn destroy(&mut self) -> pc_helpers::Result<()> {
+    pub async fn destroy(&mut self) -> Result<()> {
         for (filter_id, cache_rec) in self.caches.iter() {
             self.dispose_filter(&filter_id, &cache_rec).await;
         }
@@ -495,7 +515,7 @@ impl Monitor {
     /// Create a new Monitor with an existing PropertyCollector. This allows to not use the
     /// default PropertyCollector, have different PropertyCollector instances and different
     /// CacheManager instances.
-    fn new_with_property_collector(property_collector: PropertyCollector) -> pc_helpers::Result<Self> {
+    fn new_with_property_collector(property_collector: PropertyCollector) -> Result<Self> {
         Ok(Self {
             property_collector,
             version: "".to_string(),
@@ -512,7 +532,7 @@ impl Monitor {
     /// time the server waits for updates. If no updates are received within this time, the server
     /// will return an empty response. This should not exceed several 10s of seconds as to avoid TCP
     /// idle timeouts in network equipment.
-    pub async fn wait_updates(&mut self, delay_s: i32) -> pc_helpers::Result<Option<Vec<PropertyFilterUpdate>>>
+    pub async fn wait_updates(&mut self, delay_s: i32) -> Result<Option<Vec<PropertyFilterUpdate>>>
     {
         let options = WaitOptions {
             max_wait_seconds: Some(delay_s),

@@ -72,6 +72,7 @@ async fn main() -> Result<()> {
 - Use `.basic_authn()` - NOT manual session management
 - Store credentials in environment variables (VIM_SERVER, VIM_USERNAME, VIM_PASSWORD)
 - Client is thread-safe (`Arc<Client>`)
+- Managed-object stubs store an `Arc<dyn VimClient>` internally; `Client` implements `VimClient`.
 
 **Dependencies needed:**
 ```toml
@@ -88,19 +89,38 @@ To call any API on vSphere:
 
 1. Create a proxy to a managed object using a `vim_rs::core::Client` and id from `ManagedObjectReference`.
 2. Call the method and await the results
+3. **If the method ends in `*_Task`, use `TaskTracker` to wait for completion** (see Step 4)
 
-**Example:**
+**Example - Property Accessor (returns immediately):**
 ```rust
 // Create a VirtualMachine managed object from the reference
 let vm = vim_rs::mo::VirtualMachine::new(client.clone(), &vm_ref.value);
 
-// Call power_on_vm_task with None for host (let vCenter choose)
-let task_ref = vm.power_on_vm_task(None).await?;
+// Call a property accessor - returns immediately
+let name = vm.name().await?;
 ```
+
+**Example - Task Method (returns Task reference):**
+```rust
+// Create a VirtualMachine managed object from the reference
+let vm = vim_rs::mo::VirtualMachine::new(client.clone(), &vm_ref.value);
+
+// Call power_on_vm_task - returns a Task reference
+let task_ref = vm.power_on_vm_task(None).await?;
+
+// ⚠️ MUST wait for task completion! (see Step 4)
+let task_tracker = TaskTracker::new(client.clone());
+task_tracker.wait::<()>(task_ref).await?;
+```
+
 Notes:
 * **⚠️ IMPORTANT:** Managed object types reside in `vim_rs::mo` module.
 * Managed Objects are proxies to objects living on the server like `VirtualMachine`, `Folder` etc.
 * Managed Objects expose methods that call the remote APIs.
+* Methods ending in `*_Task` are asynchronous operations that return a Task reference - you MUST wait for completion using TaskTracker (see Step 4).
+* Property accessors (like `name()`, `runtime()`) return values directly without tasks.
+* The generated stubs store an `Arc<dyn VimClient>` internally. The concrete `Client` implements
+  `VimClient`, so passing `client.clone()` works without changes.
 
 ### Step 3: Data Retrieval with Property Collector (ALWAYS USE THIS PATTERN)
 
@@ -377,7 +397,104 @@ for device in devices {
 - Use `device.as_ref().into_ref()` to cast
 - Use `eth.get_mac_address()` to get the MAC
 
-### Step 4: Common Patterns
+---
+
+## Step 4: Awaiting Task Completion with TaskTracker (CRITICAL FOR ASYNC OPERATIONS)
+
+**⚠️ IMPORTANT: Many vSphere operations are ASYNCHRONOUS and return Task references!**
+
+### Understanding vSphere Tasks
+
+Methods ending in `*_Task` (e.g., `power_on_vm_task`, `rename_task`, `reconfigure_vm_task`) return a `ManagedObjectReference` to a `Task` object instead of completing immediately. You MUST wait for these tasks to complete to know if the operation succeeded.
+
+**The WRONG way:**
+```rust
+// ❌ DON'T DO THIS - The operation is NOT complete yet!
+let task_ref = vm.power_on_vm_task(None).await?;
+println!("VM powered on!");  // WRONG - task might still be running!
+```
+
+**The CORRECT way:**
+```rust
+// ✅ DO THIS - Wait for the task to complete
+use vim_rs::core::tasks::TaskTracker;
+
+let task_tracker = TaskTracker::new(client.clone());
+let task_ref = vm.power_on_vm_task(None).await?;
+task_tracker.wait::<()>(task_ref).await?;
+println!("VM powered on!");  // NOW it's actually powered on
+```
+
+### ALWAYS USE THIS PATTERN for Tasks
+
+**Step 1: Create a TaskTracker once and reuse it**
+
+```rust
+use vim_rs::core::tasks::TaskTracker;
+
+// Create once per Client
+let task_tracker = TaskTracker::new(client.clone());
+
+// Reuse for multiple tasks
+task_tracker.wait::<()>(task1_ref).await?;
+task_tracker.wait::<()>(task2_ref).await?;
+```
+
+**Step 2: Call the *_Task method**
+
+```rust
+// Methods ending in *_Task return ManagedObjectReference to a Task
+let task_ref = vm.power_on_vm_task(None).await?;
+let task_ref = vm.rename_task("NewName").await?;
+let task_ref = vm.reconfigure_vm_task(spec).await?;
+```
+
+**Step 3: Wait for completion using one of two APIs**
+
+### API Option 1: `wait::<T>()` - Most Common
+
+Use `wait::<T>()` when you know the expected result type. It automatically deserializes the result.
+
+```rust
+// For tasks that return nothing (most common)
+task_tracker.wait::<()>(task_ref).await?;
+
+// For tasks that return a ManagedObjectReference
+let vm_ref: ManagedObjectReference = task_tracker.wait(task_ref).await?;
+
+// For tasks that return custom data
+let result: CustomType = task_tracker.wait(task_ref).await?;
+```
+
+**Common task return types:**
+- `()` - No return value (rename, power operations, reconfigure, etc.)
+- `ManagedObjectReference` - Created object reference (create VM, clone VM, etc.)
+- Custom types - Depends on the specific operation
+
+### API Option 2: `wait_any()` - Zero-Allocation Path
+
+Use `wait_any()` for maximum efficiency when you want to handle `VimAny` directly:
+
+```rust
+let result: Option<VimAny> = task_tracker.wait_any(task_ref).await?;
+match result {
+    None => println!("Task completed with no return value"),
+    Some(VimAny::Value(v)) => {
+        // Handle primitive/boxed-array result
+        println!("Primitive result: {:?}", v);
+    }
+    Some(VimAny::Object(o)) => {
+        // Handle data object result
+        println!("Object type: {:?}", o.data_type());
+        // Downcast to concrete type if needed
+        if let Some(mor) = o.as_any_ref().downcast_ref::<ManagedObjectReference>() {
+            println!("Created object: {}", mor.value);
+        }
+    }
+}
+```
+
+### Step 5: Common Patterns
 
 **Pattern: Filter objects by property**
 ```rust
@@ -542,6 +659,70 @@ if let Some(mac) = eth.get_mac_address() {
 }
 ```
 
+---
+
+❌ **DON'T** forget to await task completion:
+```rust
+// WRONG - Task might still be running!
+let task_ref = vm.power_on_vm_task(None).await?;
+println!("VM powered on!");  // Operation may not be complete yet!
+```
+
+✅ **DO** use TaskTracker to wait for tasks:
+```rust
+use vim_rs::core::tasks::TaskTracker;
+
+let task_tracker = TaskTracker::new(client.clone());
+let task_ref = vm.power_on_vm_task(None).await?;
+task_tracker.wait::<()>(task_ref).await?;
+println!("VM powered on!");  // Now it's actually complete
+```
+
+---
+
+❌ **DON'T** create a new TaskTracker for every task:
+```rust
+// WRONG - inefficient, creates new ListView for each task
+for vm in vms {
+    let tracker = TaskTracker::new(client.clone());  // Don't do this in a loop!
+    let task = vm.power_on_vm_task(None).await?;
+    tracker.wait::<()>(task).await?;
+}
+```
+
+✅ **DO** create once and reuse:
+```rust
+// RIGHT - single TaskTracker for all tasks
+let task_tracker = TaskTracker::new(client.clone());
+for vm in vms {
+    let task = vm.power_on_vm_task(None).await?;
+    task_tracker.wait::<()>(task).await?;
+}
+```
+
+---
+
+❌ **DON'T** confuse property accessors with task methods:
+```rust
+// Property accessor - returns value directly, no task
+let name: String = vm.name().await?;
+
+// Task method - returns Task reference, must wait for completion
+let task_ref = vm.rename_task("NewName").await?;
+// ❌ WRONG: Missing task wait!
+```
+
+✅ **DO** understand the difference:
+```rust
+// Property accessor - no TaskTracker needed
+let name: String = vm.name().await?;
+
+// Task method - MUST use TaskTracker
+let task_tracker = TaskTracker::new(client.clone());
+let task_ref = vm.rename_task("NewName").await?;
+task_tracker.wait::<()>(task_ref).await?;  // ✅ Correct!
+```
+
 ## Understanding API Navigation Paths
 
 When you use `get()` or `search()`, results for structures and fields include **paths** showing how to reach that type from a managed object. Understanding this notation helps you build property collector queries and navigate the API.
@@ -606,6 +787,7 @@ VirtualMachine::config?.hardware.device[*]→VirtualEthernetCard
 **Service Objects:**
 - `ServiceInstance` - Root of inventory (from `client.service_content()`)
 - `PropertyCollector` - Bulk property retrieval (use `ObjectRetriever` wrapper)
+- `Task` - Represents async operations (use `TaskTracker` to wait for completion)
 - `TaskManager` - Task tracking
 - `SessionManager` - Session handling (handled by ClientBuilder)
 - `SearchIndex` - Lookup Virtual Machines, Hosts, Datatores by inventory path, IP, DNS, UUID etc.
@@ -798,6 +980,7 @@ use std::env;
 use std::sync::Arc;
 use log::info;
 use vim_rs::core::{Client, ClientBuilder};
+use vim_rs::core::tasks::TaskTracker;
 use vim_macros::vim_retrievable;
 use vim_rs::core::pc_retrieve::ObjectRetriever;
 
@@ -834,6 +1017,9 @@ async fn main() -> Result<()> {
     // Connect
     let client = connect(env!("CARGO_PKG_NAME"), env!("CARGO_PKG_VERSION")).await?;
 
+    // Create TaskTracker if you'll be calling *_Task methods
+    let task_tracker = TaskTracker::new(client.clone());
+
     // Retrieve data
     let retriever = ObjectRetriever::new(client.clone())?;
     let objects: Vec<MyObject> = retriever
@@ -843,6 +1029,10 @@ async fn main() -> Result<()> {
     // Process data
     for obj in objects {
         info!("Object: {} ({})", obj.name, obj.id.value);
+        
+        // Example: Call a task method if needed
+        // let task_ref = obj_proxy.some_method_task().await?;
+        // task_tracker.wait::<()>(task_ref).await?;
     }
 
     Ok(())
@@ -865,10 +1055,13 @@ log = "0.4"
 1. **Always** use `ClientBuilder` for connections
 2. **Always** use `vim_retrievable!` macro for data retrieval
 3. **Always** use `ObjectRetriever` for fetching objects
-5. **Always** check code examples first before inventing patterns
-6. **Never** manually construct PropertyCollector specs
-7. **Never** fetch objects one-by-one in loops
-8. **Never** use `.unwrap()` in production code
+4. **Always** use `TaskTracker` to wait for `*_Task` method completion
+5. **Always** create TaskTracker once and reuse it for multiple tasks
+6. **Always** check code examples first before inventing patterns
+7. **Never** manually construct PropertyCollector specs
+8. **Never** fetch objects one-by-one in loops
+9. **Never** forget to await task completion after calling `*_Task` methods
+10. **Never** use `.unwrap()` in production code
 
 
 This workflow ensures your vim_rs code will work correctly on the first try!

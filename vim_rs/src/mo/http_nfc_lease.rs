@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use crate::core::client::{Client, Result};
+use crate::core::client::{VimClient, Result};
 /// Represents a lease on a *VirtualMachine* or
 /// a *VirtualApp*, which can be used to import or export
 /// disks for the entity.
@@ -42,11 +42,11 @@ use crate::core::client::{Client, Result};
 /// the lease is held.
 #[derive(Clone)]
 pub struct HttpNfcLease {
-    client: Arc<Client>,
+    client: Arc<dyn VimClient>,
     mo_id: String,
 }
 impl HttpNfcLease {
-    pub fn new(client: Arc<Client>, mo_id: &str) -> Self {
+    pub fn new(client: Arc<dyn VimClient>, mo_id: &str) -> Self {
         Self {
             client,
             mo_id: mo_id.to_string(),
@@ -76,7 +76,7 @@ impl HttpNfcLease {
     pub async fn http_nfc_lease_abort(&self, fault: Option<&crate::types::structs::MethodFault>) -> Result<()> {
         let input = HttpNfcLeaseAbortRequestType {fault, };
         let path = format!("/HttpNfcLease/{moId}/HttpNfcLeaseAbort", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Completes the import/export and releases this lease.
@@ -108,7 +108,11 @@ impl HttpNfcLease {
     pub async fn http_nfc_lease_get_manifest(&self) -> Result<Option<Vec<crate::types::structs::HttpNfcLeaseManifestEntry>>> {
         let path = format!("/HttpNfcLease/{moId}/HttpNfcLeaseGetManifest", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::HttpNfcLeaseManifestEntry>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Perform a series of validations on the target host to see if
     /// it can succesfully perform PullFromUrls.
@@ -134,8 +138,12 @@ impl HttpNfcLease {
     pub async fn http_nfc_lease_probe_urls(&self, files: Option<&[crate::types::structs::HttpNfcLeaseSourceFile]>, timeout: Option<i32>) -> Result<Option<Vec<crate::types::structs::HttpNfcLeaseProbeResult>>> {
         let input = HttpNfcLeaseProbeUrlsRequestType {files, timeout, };
         let path = format!("/HttpNfcLease/{moId}/HttpNfcLeaseProbeUrls", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute_option(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::HttpNfcLeaseProbeResult>>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Sets the disk up/download progress, and renews this lease.
     /// 
@@ -157,7 +165,7 @@ impl HttpNfcLease {
     pub async fn http_nfc_lease_progress(&self, percent: i32) -> Result<()> {
         let input = HttpNfcLeaseProgressRequestType {percent, };
         let path = format!("/HttpNfcLease/{moId}/HttpNfcLeaseProgress", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Upgrades current lease from push to pull mode.
@@ -180,8 +188,10 @@ impl HttpNfcLease {
     pub async fn http_nfc_lease_pull_from_urls_task(&self, files: Option<&[crate::types::structs::HttpNfcLeaseSourceFile]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = HttpNfcLeasePullFromUrlsRequestType {files, };
         let path = format!("/HttpNfcLease/{moId}/HttpNfcLeasePullFromUrls_Task", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
-        self.client.execute(req).await
+        let req = self.client.post_json(&path, &input);
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Sets desired checksum algorithm per each file that will be returned in
     /// ManifestEntry.
@@ -201,7 +211,7 @@ impl HttpNfcLease {
     pub async fn http_nfc_lease_set_manifest_checksum_type(&self, device_urls_to_checksum_types: Option<&[crate::types::structs::KeyValue]>) -> Result<()> {
         let input = HttpNfcLeaseSetManifestChecksumTypeRequestType {device_urls_to_checksum_types, };
         let path = format!("/HttpNfcLease/{moId}/HttpNfcLeaseSetManifestChecksumType", moId = &self.mo_id);
-        let req = self.client.post_request(&path, &input);
+        let req = self.client.post_json(&path, &input);
         self.client.execute_void(req).await
     }
     /// Current supported capabilities by this lease
@@ -209,14 +219,20 @@ impl HttpNfcLease {
     pub async fn capabilities(&self) -> Result<crate::types::structs::HttpNfcLeaseCapabilities> {
         let path = format!("/HttpNfcLease/{moId}/capabilities", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::structs::HttpNfcLeaseCapabilities = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// If the lease is in the error state, this property contains the
     /// error that caused the lease to be aborted.
     pub async fn error(&self) -> Result<Option<crate::types::structs::MethodFault>> {
         let path = format!("/HttpNfcLease/{moId}/error", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::MethodFault>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Provides information on the objects contained in this lease.
     /// 
@@ -225,7 +241,11 @@ impl HttpNfcLease {
     pub async fn info(&self) -> Result<Option<crate::types::structs::HttpNfcLeaseInfo>> {
         let path = format!("/HttpNfcLease/{moId}/info", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute_option(req).await
+        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        match bytes_opt {
+            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::HttpNfcLeaseInfo>(bytes.as_ref())?)),
+            None => Ok(None),
+        }
     }
     /// Provides progress information (0-100 percent) for the initializing state
     /// of the lease.
@@ -234,7 +254,9 @@ impl HttpNfcLease {
     pub async fn initialize_progress(&self) -> Result<i32> {
         let path = format!("/HttpNfcLease/{moId}/initializeProgress", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: i32 = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Current mode of the lease.
     /// 
@@ -242,13 +264,17 @@ impl HttpNfcLease {
     pub async fn mode(&self) -> Result<String> {
         let path = format!("/HttpNfcLease/{moId}/mode", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// The current state of the lease.
     pub async fn state(&self) -> Result<crate::types::enums::HttpNfcLeaseStateEnum> {
         let path = format!("/HttpNfcLease/{moId}/state", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: crate::types::enums::HttpNfcLeaseStateEnum = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
     /// Provides progress information (0-100 percent) for current transfer.
     /// 
@@ -257,7 +283,9 @@ impl HttpNfcLease {
     pub async fn transfer_progress(&self) -> Result<i32> {
         let path = format!("/HttpNfcLease/{moId}/transferProgress", moId = &self.mo_id);
         let req = self.client.get_request(&path);
-        self.client.execute(req).await
+        let bytes = self.client.execute_bytes(req).await?;
+        let result: i32 = serde_json::from_slice(bytes.as_ref())?;
+        Ok(result)
     }
 }
 #[derive(serde::Serialize)]
